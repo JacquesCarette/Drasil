@@ -11,16 +11,18 @@ import Utils.Drasil
 import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc,
   DocSection(ReqrmntSec, SSDSec), Field(..), Fields, InclUnits(IncludeUnits),
   ProblemDescription(PDProg), ReqrmntSec(..), ReqsSub(..),
-  SCSSub(Assumptions, CorrSolnPpties, DDs, GDs, IMs, TMs), SSDSec(..),
-  SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), Verbosity(Verbose),
-  generateTraceMap, generateTraceMap', goalStmtF, mkDoc, mkEnumSimpleD)
+  SCSSub(Assumptions, Constraints, CorrSolnPpties, DDs, GDs, IMs, TMs),
+  SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), Verbosity(Verbose),
+  dataConstraintUncertainty, generateTraceMap, generateTraceMap', goalStmtF,
+  inDataConstTbl, mkDoc, mkEnumSimpleD, outDataConstTbl)
 
+import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, doccon, doccon',
   funcReqDom, input_, nonFuncReqDom, output_, srs, system)
-import Data.Drasil.Concepts.Math (angle, constraint, equation, perp, vector)
+import Data.Drasil.Concepts.Math (angle, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (physicCon, position, speed, twoD)
-import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Concepts.Software (errMsg, program)
 
 import Data.Drasil.Quantities.Physics (physicscon)
 
@@ -37,7 +39,7 @@ import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
   nonfuncReqs, propsDeriv)
 import Drasil.Projectile.TMods (tMods)
-import Drasil.Projectile.Unitals (unitalIdeas, unitalQuants)
+import Drasil.Projectile.Unitals (inConstraints, outConstraints, unitalIdeas, unitalQuants)
 
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
@@ -53,6 +55,11 @@ mkSRS = [
         , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [EmptyS] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
+        , Constraints EmptyS dataConstraintUncertainty EmptyS
+                      {-(foldlSent [makeRef2S $ valsOfAuxCons [] [],
+                      S "gives", plural value `ofThe` S "specification",
+                      plural parameter, S "used in", makeRef2S inDataCons])-}
+                      [inDataCons, outDataCons]
         , CorrSolnPpties propsDeriv
         ]
       ],
@@ -84,9 +91,9 @@ systInfo = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ unitalQuants)
-  (nw projectileTitle : nw mass : nw twoD : map nw doccon ++ map nw doccon' ++
-    map nw physicscon ++ map nw physicCon ++ map nw concepts ++ unitalIdeas ++
-    map nw [angle, constraint, equation, perp, program, vector])
+  (nw projectileTitle : nw mass : nw twoD : nw inParam : [nw errMsg, nw program] ++
+    map nw doccon ++ map nw doccon' ++ map nw physicscon ++ map nw physicCon ++
+    map nw mathcon ++ map nw concepts ++ unitalIdeas)
   [assumpDom, funcReqDom, nonFuncReqDom] ([] :: [UnitDefn]) label refBy
   dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
@@ -131,3 +138,11 @@ probEnding = foldlSent_ [S "interpret the", plural input_,
 goalStmts :: Section
 goalStmts = goalStmtF [(phrase angle `sAnd` phrase speed) `ofThe` phrase projectile]
   (mkEnumSimpleD goals)
+
+----------------------
+-- Data Constraints --
+----------------------
+
+inDataCons, outDataCons :: LabelledContent
+inDataCons  = inDataConstTbl  inConstraints
+outDataCons = outDataConstTbl outConstraints

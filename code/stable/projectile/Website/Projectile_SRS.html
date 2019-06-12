@@ -1161,6 +1161,60 @@
                 </div>
               </div>
             </div>
+            <div id="Sec:DataConstraints">
+              <div class="subsubsection">
+                <h3>Data Constraints</h3>
+                <p class="paragraph">
+                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+                </p>
+                <div id="Table:InDataConstraints">
+                  <table class="table">
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                      <th>Typical Value</th>
+                      <th>Uncert.</th>
+                    </tr>
+                    <tr>
+                      <td><em>p<sub>target</sub></em></td>
+                      <td><em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>100</em> m</td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>v<sup>i</sup></em></td>
+                      <td><em>v<sup>i</sup>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>100</em> m/s</td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>θ</em></td>
+                      <td><em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;90</em></td>
+                      <td><em>45</em> &deg;</td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                  </table>
+                  <p class="caption">Input Data Constraints</p>
+                </div>
+                <div id="Table:OutDataConstraints">
+                  <table class="table">
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                    </tr>
+                    <tr>
+                      <td><em>p'</em></td>
+                      <td><em>p'&thinsp;&gt;&thinsp;0</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>d<sub>offset</sub></em></td>
+                      <td><em>d<sub>offset</sub>&thinsp;&gt;&thinsp;0</em></td>
+                    </tr>
+                  </table>
+                  <p class="caption">Output Data Constraints</p>
+                </div>
+              </div>
+            </div>
             <div id="Sec:CorSolProps">
               <div class="subsubsection">
                 <h3>Properties of a Correct Solution</h3>
@@ -1189,7 +1243,11 @@
                   Input-Parameters: Input the quantities from <a href=#Table:ReqInputs>Table:ReqInputs</a>, which define the launch angle, launch speed, and target position.
                 </div>
               </p>
-              <p><div id="verifyParams">Verify-Params: FIXME</div></p>
+              <p>
+                <div id="verifyParams">
+                  Verify-Parameters: Check the entered input parameters to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Section: Data Constraints</a>. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
+                </div>
+              </p>
               <p><div id="calcValues">Calculate-Values: FIXME</div></p>
               <p><div id="outputValues">Output-Values: FIXME</div></p>
             </div>

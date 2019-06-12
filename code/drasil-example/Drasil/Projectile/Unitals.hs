@@ -13,6 +13,7 @@ import Data.Drasil.Units.Physics (velU)
 
 import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
   launchDur, launchSpeed, projectile, targetPos, target)
+import qualified Drasil.Projectile.Concepts as C (offset)
 
 inputs :: [QuantityDict]
 inputs = map qw [launAngle, launSpeed, targPos]
@@ -23,19 +24,33 @@ unitalQuants = quantDicts ++ map qw constrained
 unitalIdeas :: [IdeaDict]
 unitalIdeas = map nw quantDicts ++ map nw constrained
 
+inConstraints :: [UncertQ]
+inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]
+
+outConstraints :: [UncertQ]
+outConstraints = [landPosUnc, offsetUnc]
+
 constrained :: [ConstrConcept]
-constrained = [landPos, launAngle, launDur, launSpeed, targPos]
+constrained = [landPos, launAngle, launDur, launSpeed, offset, targPos]
 
 quantDicts :: [QuantityDict]
-quantDicts = [isShort, offset, isHit]
+quantDicts = [isShort, isHit]
 
 ---
-landPos, launAngle, launDur, launSpeed, targPos :: ConstrConcept
+landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ
+landPosUnc   = uq landPos   defaultUncrt
+launAngleUnc = uq launAngle defaultUncrt
+launSpeedUnc = uq launSpeed defaultUncrt
+offsetUnc    = uq offset    defaultUncrt
+targPosUnc   = uq targPos   defaultUncrt
+
+landPos, launAngle, launDur, launSpeed, offset, targPos :: ConstrConcept
 landPos   = constrained' (dqd' landPosConcept   (const $ Concat [lP, Atomic "'"])  Real (Just metre))  [gtZeroConstr] (dbl 1)
-launAngle = constrained' (dqd' launAngleConcept (const lTheta)                     Real (Just degree)) [gtZeroConstr] (dbl 1)
+launAngle = constrained' (dqd' launAngleConcept (const lTheta)                     Real (Just degree)) [physc $ Bounded (Exc, 0) (Exc, 90)] (int 45)
 launDur   = constrained' (dqd' launDurConcept   (const $ Concat [lT, Atomic "'"])  Real (Just second)) [gtZeroConstr] (dbl 1)
-launSpeed = constrained' (dqd' launSpeedConcept (const $ sup lV lI)                Real (Just velU))   [gtZeroConstr] (dbl 1)
-targPos   = constrained' (dqd' targPosConcept   (const $ sub lP $ Atomic "target") Real (Just metre))  [gtZeroConstr] (dbl 1)
+launSpeed = constrained' (dqd' launSpeedConcept (const $ sup lV lI)                Real (Just velU))   [gtZeroConstr] (int 100)
+offset    = constrained' (dqd' offsetConcept    (const $ sub lD $ Atomic "offset") Real (Just metre))  [gtZeroConstr] (dbl 1)
+targPos   = constrained' (dqd' targPosConcept   (const $ sub lP $ Atomic "target") Real (Just metre))  [gtZeroConstr] (int 100)
 
 landPosConcept :: ConceptChunk
 landPosConcept = cc' landingPos
@@ -49,6 +64,9 @@ launAngleConcept = cc' launchAngle
 
 launSpeedConcept :: ConceptChunk
 launSpeedConcept = cc' launchSpeed (phrase iSpeed `ofThe'` phrase projectile +:+. S "when launched")
+
+offsetConcept :: ConceptChunk
+offsetConcept = cc' C.offset (S "The offset between the" +:+. (phrase targetPos `andThe` phrase landingPos))
 
 targPosConcept :: ConceptChunk
 targPosConcept = cc' targetPos
@@ -64,11 +82,6 @@ isShort = vc "isShort"
   (nounPhraseSent (S "variable that is assigned true when the" +:+ phrase targetPos +:+
    S "is greater than the" +:+ phrase landingPos))
   (Atomic "isShort") Boolean
-
-offset :: QuantityDict
-offset = vcUnit "offset"
-  (nounPhraseSent (S "offset between the" +:+ phrase targetPos `andThe` phrase landingPos))
-  (sub lD $ Atomic "offset") Real metre
 
 isHit :: QuantityDict
 isHit = vc "isHit"

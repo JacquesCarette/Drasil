@@ -628,6 +628,39 @@ Source & --
 RefBy & 
 \\ \bottomrule \end{tabular}
 \end{minipage}
+\subsubsection{Data Constraints}
+\label{Sec:DataConstraints}
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+\begin{longtable}{l l l l}
+\toprule
+Var & Physical Constraints & Typical Value & Uncert.
+\\
+\midrule
+\endhead
+${p_{target}}$ & ${p_{target}}>0$ & $100$ m & 10$\%$
+\\
+${v^{i}}$ & ${v^{i}}>0$ & $100$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
+\\
+$θ$ & $0<θ<90$ & $45$ ${}^{\circ}$ & 10$\%$
+\\
+\bottomrule
+\caption{Input Data Constraints}
+\label{Table:InDataConstraints}
+\end{longtable}
+\begin{longtable}{l l}
+\toprule
+Var & Physical Constraints
+\\
+\midrule
+\endhead
+$p'$ & $p'>0$
+\\
+${d_{offset}}$ & ${d_{offset}}>0$
+\\
+\bottomrule
+\caption{Output Data Constraints}
+\label{Table:OutDataConstraints}
+\end{longtable}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
 FIXME.
@@ -639,7 +672,7 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
 \item[Input-Parameters:\phantomsection\label{inputParams}]Input the quantities from \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the launch angle, launch speed, and target position.
-\item[Verify-Params:\phantomsection\label{verifyParams}]FIXME
+\item[Verify-Parameters:\phantomsection\label{verifyParams}]Check the entered input parameters to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
 \item[Calculate-Values:\phantomsection\label{calcValues}]FIXME
 \item[Output-Values:\phantomsection\label{outputValues}]FIXME
 \end{itemize}

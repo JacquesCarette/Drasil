@@ -786,7 +786,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
+                          <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> <a href=#calcValues>FR: Calculate-Values</a>.
                         </p>
                       </td>
                     </tr>
@@ -915,7 +915,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#calcValues>FR: Calculate-Values</a>.
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -1016,7 +1020,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#calcValues>FR: Calculate-Values</a>.
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -1079,7 +1087,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#calcValues>FR: Calculate-Values</a>.
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -1155,7 +1167,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputValues>FR: Output-Values</a> <a href=#outputValues>FR: Output-Values</a> <a href=#calcValues>FR: Calculate-Values</a>.
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -1248,8 +1264,16 @@
                   Verify-Parameters: Check the entered input parameters to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Section: Data Constraints</a>. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
                 </div>
               </p>
-              <p><div id="calcValues">Calculate-Values: FIXME</div></p>
-              <p><div id="outputValues">Output-Values: FIXME</div></p>
+              <p>
+                <div id="calcValues">
+                  Calculate-Values: Calculate the following quantities: <em>t'</em> (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>), <em>p'</em> (from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>), <em>isShort</em> (from <a href=#IM:shortIM>IM: shortIM</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>), and <em>isHit</em> (from <a href=#IM:hitIM>IM: hitIM</a>).
+                </div>
+              </p>
+              <p>
+                <div id="outputValues">
+                  Output-Values: If <em>isHit</em> (from <a href=#IM:hitIM>IM: hitIM</a>), output the message &quot;The target was hit.&quot; Otherwise, if <em>isShort</em> (from <a href=#IM:hitIM>IM: hitIM</a>), output the message &quot;The projectile fell short.&quot; and <em>d<sub>offset</sub></em>. Otherwise, output the message &quot;The projectile went long.&quot; and <em>d<sub>offset</sub></em>.
+                </div>
+              </p>
             </div>
             <div id="Table:ReqInputs">
               <table class="table">

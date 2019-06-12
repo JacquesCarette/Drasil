@@ -8,8 +8,12 @@ import Data.Drasil.IdeaDicts (physics)
 import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (position, speed)
 
-concepts :: [NamedChunk]
-concepts = [landingPos, launch, launchAngle, launchSpeed, launcher, offset, projectile, target, targetPos]
+concepts :: [IdeaDict]
+concepts = map nw [landingPos, launch, launchAngle, launchSpeed, launcher,
+    offset, projectile, target, targetPos] ++ map nw messages
+
+messages :: [ConceptChunk]
+messages = [hitMessage, shortMessage, longMessage]
 
 projectileTitle :: CI
 projectileTitle = commonIdeaWithDict "projectileTitle" (pn "Projectile") "Projectile" [physics]
@@ -28,3 +32,9 @@ launchAngle = compoundNC launch angle
 launchDur   = compoundNC launch duration
 launchSpeed = compoundNC launch speed
 targetPos   = compoundNC target position
+
+---
+hitMessage, shortMessage, longMessage :: ConceptChunk
+hitMessage   = dcc "hitMessage"   (nounPhraseSP "hit")   "The target was hit."
+shortMessage = dcc "shortMessage" (nounPhraseSP "short") "The projectile fell short."
+longMessage  = dcc "longMessage"  (nounPhraseSP "long")  "The projectile went long."

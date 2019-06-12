@@ -93,7 +93,7 @@ symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ unitalQuants)
   (nw projectileTitle : nw mass : nw twoD : nw inParam : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicscon ++ map nw physicCon ++
-    map nw mathcon ++ map nw concepts ++ unitalIdeas)
+    map nw mathcon ++ concepts ++ unitalIdeas)
   [assumpDom, funcReqDom, nonFuncReqDom] ([] :: [UnitDefn]) label refBy
   dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])

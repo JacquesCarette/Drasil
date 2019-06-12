@@ -5,7 +5,7 @@ import Language.Drasil.ShortHands
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (distance, iSpeed, position)
+import Data.Drasil.Concepts.Physics (distance, iSpeed, position, time)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, second)
@@ -69,11 +69,10 @@ offsetConcept :: ConceptChunk
 offsetConcept = cc' C.offset (S "The offset between the" +:+. (phrase targetPos `andThe` phrase landingPos))
 
 targPosConcept :: ConceptChunk
-targPosConcept = cc' targetPos
-  (foldlSent [S "The", phrase distance, S "from the", phrase launcher `toThe` phrase target])
+targPosConcept = cc' targetPos $ foldlSent [S "The", phrase distance, S "from the", phrase launcher `toThe` phrase target]
 
 launDurConcept :: ConceptChunk
-launDurConcept = cc' launchDur (S "The time when the" +:+ phrase projectile +:+. S "lands")
+launDurConcept = cc' launchDur $ foldlSent [S "The", phrase time, S "when the", phrase projectile, S "lands"]
 
 ---
 

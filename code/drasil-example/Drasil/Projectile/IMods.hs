@@ -1,4 +1,4 @@
-module Drasil.Projectile.IMods (iMods) where
+module Drasil.Projectile.IMods (iMods, timeIM, distanceIM, shortIM, offsetIM, hitIM) where
 
 import Prelude hiding (cos, sin)
 

@@ -19,7 +19,7 @@ import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
 import qualified Data.Map as Map
-import Data.Maybe (maybeToList)
+import Data.Maybe (maybeToList, catMaybes)
 
 import Prelude hiding (const)
 
@@ -49,7 +49,7 @@ data CodeSpec where
   vMap :: VarMap,
   eMap :: ModExportMap,
   constMap :: FunctionMap,
-  const :: [Const],
+  constants :: [Const],
   mods :: [Mod],  -- medium hack
   dMap :: ModDepMap,
   sysinfodb :: ChunkDB
@@ -76,7 +76,7 @@ getStr (P s) = symbToCodeName s
 getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
 getStr _ = error "Term is not a string" 
 
-codeSpec :: SystemInformation -> [Mod] -> CodeSpec
+codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys
               , _quants = q
               , _definitions = defs'
@@ -84,14 +84,14 @@ codeSpec SI {_sys = sys
               , _inputs = ins
               , _outputs = outs
               , _constraints = cs
-              , _constants = constants
-              , _sysinfodb = db} ms = 
+              , _constants = consts
+              , _sysinfodb = db} chs ms = 
   let inputs' = map codevar ins
-      const' = map qtov constants
+      const' = map qtov consts
       derived = map qtov $ getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc (defs' ++ map qdFromDD ddefs) \\ derived
       mods' = prefixFunctions $ packmod "Calculations" (map FCD rels) : ms 
-      mem   = modExportMap mods' inputs' const'
+      mem   = modExportMap chs mods' inputs' const' derived
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
@@ -107,7 +107,7 @@ codeSpec SI {_sys = sys
         vMap = assocToMap (map codevar q),
         eMap = mem,
         constMap = assocToMap const',
-        const = const',
+        constants = const',
         mods = mods',
         dMap = modDepMap db mem mods',
         sysinfodb = db
@@ -234,12 +234,12 @@ asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 
-modExportMap :: [Mod] -> [Input] -> [Const] -> ModExportMap
-modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
+modExportMap :: Choices -> [Mod] -> [Input] -> [Const] -> [Derived] -> ModExportMap
+modExportMap chs ms ins _ ds = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ map codeName ins `zip` repeat "InputParameters"
-                        ++ [ ("derived_values", "DerivedValues"),
-                             ("input_constraints", "InputConstraints"),
+                        ++ getExportDerived chs ds
+                        ++ [ ("input_constraints", "InputConstraints"),
                              ("write_output", "OutputFormat") ]  -- hardcoded for now
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
@@ -248,12 +248,7 @@ type ModDepMap = Map.Map String [String]
 
 modDepMap :: ChunkDB -> ModExportMap -> [Mod] -> ModDepMap
 modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
-                                   ++ [("Control", [ "InputParameters",  
-                                                     "DerivedValues",
-                                                     "InputConstraints",
-                                                     "InputFormat",
-                                                     "OutputFormat",
-                                                     "Calculations" ] ),
+                                   ++ [("Control", getDepsControl mem),
                                        ("DerivedValues", [ "InputParameters" ] ),
                                        ("InputConstraints", [ "InputParameters" ] )]  -- hardcoded for now
                                                                           -- will fix later
@@ -342,6 +337,22 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
                         ++ " and Knowns as " ++ show (map (^. uid) k) )
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
+type Export = (String, String)
+
+getExportDerived :: Choices -> [Derived] -> [Export]
+getExportDerived _ [] = []
+getExportDerived chs _ = [("derived_values", dMod $ inputStructure chs)]
+  where dMod Loose = "InputParameters"
+        dMod AsClass = "DerivedValues"
+
+getDepsControl :: ModExportMap -> [String]
+getDepsControl mem = let dv = Map.lookup "derived_values" mem
+                         ic = Map.lookup "input_constraints" mem
+  in catMaybes [dv, ic] ++ ["InputParameters",
+                        "InputFormat",
+                        "Calculations",
+                        "OutputFormat"]
+
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs
 

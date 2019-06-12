@@ -60,7 +60,7 @@ outputValuesDesc = foldlSent [S "If", ch isHit,
   S "Otherwise, if", ch isShort, sParen (S "from" +:+ makeRef2S hitIM) `sC`
   phrase output_, S "the", phrase message +:+. (Quote (shortMessage ^. defn) `sAnd`
   ch offset), S "Otherwise" `sC` phrase output_, S "the", phrase message,
-  (Quote (longMessage ^. defn)) `sAnd` ch offset]
+  Quote (longMessage ^. defn) `sAnd` ch offset]
 
 {--Nonfunctional Requirements--}
 

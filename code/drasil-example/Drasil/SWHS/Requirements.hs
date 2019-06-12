@@ -87,7 +87,7 @@ inputInitQuantsEqn = sy wMass $= sy wVol * sy wDensity $=
   (sy tankVol - sy pcmVol) * sy wDensity $=
   (sy pi_ * ((sy diam / 2) $^ 2) * sy tankLength - sy pcmVol) * sy wDensity -- FIXME: Ref Hack
 
-findMassEqn = (sy pcmMass) $= (sy pcmVol) * (sy pcmDensity) -- FIXME: Ref Hack
+findMassEqn = sy pcmMass $= sy pcmVol * sy pcmDensity -- FIXME: Ref Hack
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",

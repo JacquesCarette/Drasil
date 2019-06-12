@@ -32,14 +32,14 @@ mkExamples :: String -> FilePath -> FilePath -> IO [Example]
 mkExamples repoRoot path srsDir = do
   names <- sort <$> (listDirectory path >>= filterM (\x -> doesDirectoryExist $ path ++ x))
   sources <- mapM (\x -> doesFileExist (path ++ x ++ "/src") >>=
-      \y -> if y then (Just . (++) repoRoot . rstrip) <$> readFile (path ++ x ++ "/src") else return Nothing) names
+      \y -> if y then Just . (++) repoRoot . rstrip <$> readFile (path ++ x ++ "/src") else return Nothing) names
   srss <- mapM (\x -> sort . getSRS <$> listDirectory (srsPath path x srsDir)) names
   return $ map (\(name, source, srs) -> E name source srs) $ zip3 names sources srss
 
 maybeField :: String -> (Item a -> Compiler (Maybe String)) -> Context a
 maybeField s f = Context $ \k _ i -> do
   val <- f i
-  if k == s && (isJust val) then
+  if k == s && isJust val then
     return $ StringField $ fromJust val
   else
     fail $ "maybeField " ++ s ++ " used when really Nothing. Wrap in `$if(" ++ s ++ ")$` block."
@@ -62,7 +62,7 @@ mkExampleCtx exampleDir srsDir =
     example = snd . itemBody
 
 mkGraphs :: FilePath -> IO [FilePath]
-mkGraphs path = (sort . filter (endswith ".pdf")) <$> listDirectory path
+mkGraphs path = sort . filter (endswith ".pdf") <$> listDirectory path
 
 mkGraphCtx :: FilePath -> Context FilePath
 mkGraphCtx graphRoot =

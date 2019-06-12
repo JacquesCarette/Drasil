@@ -5,7 +5,8 @@ module Data.Drasil.Concepts.Physics
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, weight, fbd, angular, linear, tension, compression, stress
   , strain , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint
-  , damping , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy
+  , damping , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy, chgInVelocity
+  , potEnergy
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -18,26 +19,23 @@ import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
 physicCon = [rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
-  cartesian, rightHand, restitutionCoef, acceleration,
+  cartesian, rightHand, restitutionCoef, acceleration, height,
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure, height, cohesion, isotropy, kEnergy]
-
+  joint, damping, pressure, cohesion, isotropy, kEnergy, chgInVelocity, potEnergy]
 
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
 
 rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
-  cartesian, rightHand, restitutionCoef, acceleration,
+  cartesian, rightHand, restitutionCoef, acceleration, height, 
   momentOfInertia, force, impulseS, impulseV, displacement,
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure, height, cohesion, isotropy, kEnergy :: ConceptChunk
-
-  -- joint, damping, pressure, cohesion, isotropy :: ConceptChunk
+  joint, damping, pressure,cohesion, isotropy, kEnergy, chgInVelocity, potEnergy:: ConceptChunk
 
 twoD, threeD :: CI
 
@@ -96,6 +94,10 @@ pressure     = dccWDS "pressure" (cn' "pressure")
   (S "A" +:+ phrase force +:+ S "exerted over an area")
 height       = dccWDS "height" (cn' "height") (S "The" +:+ phrase distance +:+ 
   S "above a reference point for a point of interest.")
+
+potEnergy  = dccWDS "potEnergy" (cn "potential energy")
+  (S "The measure of the" +:+ phrase energy +:+ 
+   S "held by an object because of its" +:+  phrase position)
 
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" 
@@ -161,6 +163,9 @@ cohesion = dccWDS "cohesion" (cn "cohesion") (S "An attractive" +:+
 isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
   phrase value `sOf` S "a" +:+ phrase property +:+ S "is independent of" +:+
   S "the direction in which it is measured.")
+
+chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity") (S "The" +:+ phrase chgInVelocity +:+
+ S "of a" +:+ phrase rigidBody)
 
 twoD = commonIdeaWithDict "twoD" (pn "two-dimensional") "2D" [physics]
 

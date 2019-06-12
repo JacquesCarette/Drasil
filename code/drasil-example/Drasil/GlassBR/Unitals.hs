@@ -9,7 +9,6 @@ import Control.Lens ((^.))
 import Prelude hiding (log)
 
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.SentenceStructures (displayConstrntsAsSet)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac, 
@@ -32,8 +31,9 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 {--}
 
 constrained :: [ConstrainedChunk]
-constrained = map cnstrw inputsWUncrtn ++ 
-  map cnstrw inputsWUnitsUncrtn ++ [cnstrw probBr, cnstrw probFail] 
+constrained = map cnstrw inputsWUncrtn ++ map cnstrw inputsWUnitsUncrtn ++ 
+  map cnstrw derivedInsWUnitsUncrtn ++ map cnstrw derivedInsWUncrtn ++ 
+  [cnstrw probBr, cnstrw probFail] 
 
 plateLen, plateWidth, charWeight, standOffDist :: UncertQ
 aspectRatio, pbTol, tNT :: UncertainChunk
@@ -47,11 +47,19 @@ inputs = map qw inputsWUnitsUncrtn ++ map qw inputsWUncrtn ++
 
 --inputs with units and uncertainties
 inputsWUnitsUncrtn :: [UncertQ]
-inputsWUnitsUncrtn = [plateLen, plateWidth, standOffDist, charWeight]
+inputsWUnitsUncrtn = [plateLen, plateWidth, charWeight]
+
+--derived inputs with units and uncertainties
+derivedInsWUnitsUncrtn :: [UncertQ]
+derivedInsWUnitsUncrtn = [standOffDist]
 
 --inputs with uncertainties and no units
 inputsWUncrtn :: [UncertainChunk]
-inputsWUncrtn = [aspectRatio, pbTol, tNT]
+inputsWUncrtn = [pbTol, tNT]
+
+--derived inputs with uncertainties and no units
+derivedInsWUncrtn :: [UncertainChunk]
+derivedInsWUncrtn = [aspectRatio]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: [ConstrainedChunk]
@@ -59,7 +67,8 @@ inputsNoUncrtn = [glassTypeCon, nomThick]
 
 inputDataConstraints :: [UncertainChunk]
 inputDataConstraints = map uncrtnw inputsWUnitsUncrtn ++ 
-  map uncrtnw inputsWUncrtn
+  map uncrtnw inputsWUncrtn ++ map uncrtnw derivedInsWUnitsUncrtn ++ 
+  map uncrtnw derivedInsWUncrtn
 
 plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 

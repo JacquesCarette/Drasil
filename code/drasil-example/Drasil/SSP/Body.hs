@@ -25,7 +25,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   mkEnumSimpleD, probDescF, termDefnF,
   tsymb'', getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
-  getSCSSub, physSystDescriptionLabel, generateTraceMap', generateTraceTable)
+  getSCSSub, physSystDescriptionLabel, generateTraceMap', traceMatStandard)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
   genDefn, dataDefn, datCon)
@@ -34,9 +34,9 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, definition, design, document, effect, endUser,
   environment, goal, information, input_, interest, issue, loss, method_,
   model, organization, physical, physics, problem, purpose, requirement,
-  section_, software, softwareSys, srsDomains, symbol_, sysCont,
-  system, systemConstraint, template, type_, user, value, variable,
-  physSyst, doccon, doccon')
+  software, softwareSys, srsDomains, symbol_, sysCont, system,
+  systemConstraint, template, type_, user, value, variable, physSyst,
+  doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
@@ -152,8 +152,8 @@ mkSRS = [RefSec $ RefProg intro
   ],
   LCsSec $ LCsProg likelyChgsCon,
   UCsSec $ UCsProg unlikelyChgsCon,
-  TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
-    [LlC traceyMatrix] [],
+  TraceabilitySec $ TraceabilityProg (map fst traceyMatrix) (map (foldlList Comma List . snd) traceyMatrix)
+    (map (LlC . fst) traceyMatrix) [],
   AuxConstntSec $ AuxConsProg ssp [],
   Bibliography]
 
@@ -194,11 +194,8 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 code :: CodeSpec
 code = codeSpec si [inputMod]
 
-traceyMatrix :: LabelledContent
-traceyMatrix = generateTraceTable si
-
-traceTrailing :: [Sentence]
-traceTrailing = [S "items of different" +:+ plural section_ +:+ S "on each other"]
+traceyMatrix :: [(LabelledContent, [Sentence])]
+traceyMatrix = traceMatStandard si
 
 
 -- SYMBOL MAP HELPERS --

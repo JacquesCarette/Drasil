@@ -312,8 +312,8 @@ unlikeChgDom :: ConceptChunk
 unlikeChgDom = ccs (mkIdea "unlikeChgDom" (unlikelyChg ^. term) $ Just "UC") EmptyS [chgProbDom]
 -- | List of domains for SRS
 srsDomains :: [ConceptChunk]
-srsDomains = [goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom,
-  likeChgDom, unlikeChgDom]
+srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom,
+  chgProbDom, likeChgDom, unlikeChgDom]
 
 -- FIXME: fterms is here instead of Utils because of cyclic import
 -- | Apply a binary function to the terms of two named ideas, instead of to the named

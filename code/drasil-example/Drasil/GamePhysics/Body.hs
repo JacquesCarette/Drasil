@@ -17,29 +17,26 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
   LCsSec(..), UCsSec(..), AuxConstntSec(..), generateTraceMap',
-  dataConstraintUncertainty, goalStmtF,
-  inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  mkEnumSimpleD, outDataConstTbl, termDefnF,
-  traceMGF, tsymb, getDocDesc, egetDocDesc, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
-  getSCSSub, generateTraceTable, solutionLabel)
+  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
+  outDataConstTbl, mkEnumSimpleD, outDataConstTbl, termDefnF, tsymb,
+  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
+  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  traceMatStandard, solutionLabel)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
-  condition, consumer, datumConstraint, document, endUser, environment, game,
-  goalStmt, guide, information, input_, interface, item, model, object,
-  organization, physical, physicalSim, physics, problem, product_, project,
-  quantity, realtime, reference, requirement, section_, simulation, software,
-  softwareSys, srsDomains, system, systemConstraint, sysCont, task, template,
-  traceyMatrix, user, doccon, doccon')
+  condition, consumer, document, endUser, environment, game, goalStmt, guide,
+  information, input_, interface, model, object, organization, physical,
+  physicalSim, physics, problem, product_, project, quantity, realtime,
+  reference, section_, simulation, software, softwareSys, srsDomains, system,
+  systemConstraint, sysCont, task, template, user, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
 import Data.Drasil.People (alex, luthfi)
-import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
@@ -58,8 +55,7 @@ import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
-import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs,
-    propsDeriv, requirements)
+import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, propsDeriv)
 import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
@@ -109,9 +105,8 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     LCsSec $ LCsProg likelyChangesListwithIntro,
     UCsSec $ UCsProg unlikelyChangeswithIntro,
     ExistingSolnSec $ ExistSolnProg offShelfSols,
-    TraceabilitySec $ TraceabilityProg [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump,
-      traceMatTabDefnModel] traceabilityMatricesAndGraphTraces
-      (map LlC [traceTable1, traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) [],
+    TraceabilitySec $ TraceabilityProg (map fst traceabilityMatrices)
+      (map (foldlList Comma List . snd) traceabilityMatrices) (map (LlC . fst) traceabilityMatrices) [],
     AuxConstntSec $ AuxConsProg chipmunk [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
@@ -515,244 +510,9 @@ offShelfSols3DList = LlC $ enumBullet solutionLabel [
 -----------------------------------------------------
 -- SECTION 8 : Traceability Matrices and Graph    --
 -----------------------------------------------------
-traceTable1 :: LabelledContent
-traceTable1 = generateTraceTable sysInfo
 
-traceabilityMatricesAndGraph :: Section
-traceabilityMatricesAndGraph = traceMGF [traceMatTabReqGoalOther, traceMatTabAssump,
-  traceMatTabDefnModel] traceabilityMatricesAndGraphTraces
-  (map LlC [traceMatTabReqGoalOther, traceMatTabAssump, traceMatTabDefnModel]) []
-
-traceabilityMatricesAndGraphTraces, traceability_matrices_and_graph_trace1,
-  traceability_matrices_and_graph_trace2, traceability_matrices_and_graph_trace3 :: [Sentence]
-traceabilityMatricesAndGraphTraces = map (foldlList Comma List) 
-  [traceability_matrices_and_graph_trace1, traceability_matrices_and_graph_trace2,
-   traceability_matrices_and_graph_trace3]
-
-traceability_matrices_and_graph_trace1 = [plural goalStmt, 
-  plural requirement, plural inModel, plural datumConstraint +:+. S "with each other"]
-
-traceability_matrices_and_graph_trace2 = [plural thModel, plural genDefn, plural dataDefn, 
-  plural inModel, S "on the" +:+. plural assumption]
-
-traceability_matrices_and_graph_trace3 = [plural thModel, plural genDefn, plural dataDefn, 
-  plural inModel +:+ S "on each other"]
-
--- these look like they could be generated by the sections above
-traceMatInstaModel, traceMatAssump, traceMatFuncReq, traceMatData,
-  traceMatGoalStmt, traceMatTheoryModel, traceMatGenDef, traceMatDataDef,
-  traceMatLikelyChg :: [String]
-
-traceMatInstaModelRef, traceMatAssumpRef, traceMatFuncReqRef, traceMatGoalStmtRef,
-  traceMatTheoryModelRef, traceMatGenDefRef, traceMatDataDefRef,
-  traceMatLikelyChgRef, traceMatDataRef :: [Sentence]
-
-traceMatInstaModel = ["IM1", "IM2", "IM3"]
-traceMatInstaModelRef = map makeRef2S iModelsNew
-
-traceMatTheoryModel = ["T1", "T2", "T3", "T4", "T5"]
-traceMatTheoryModelRef = map makeRef2S tModsNew
-
-traceMatDataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-traceMatDataDefRef = map makeRef2S dataDefns
-
-traceMatAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
-traceMatAssumpRef = map makeRef2S assumptions
-
-traceMatFuncReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
-traceMatFuncReqRef = map makeRef2S funcReqs
-
-traceMatData = ["Data Constraints"]
-traceMatDataRef = [makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])]
-
-traceMatGoalStmt = ["GS1", "GS2", "GS3", "GS4"]
-traceMatGoalStmtRef = makeListRef goals probDescription
-
-traceMatGenDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
-traceMatGenDefRef = replicate (length traceMatGenDef) (makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])) -- FIXME: hack?
-
-traceMatLikelyChg = ["LC1", "LC2", "LC3", "LC4"]
-traceMatLikelyChgRef = map makeRef2S likelyChangesList'
-
-
-{-- Matrices generation below --}
-
-traceMatTabReqGoalOtherGS1, traceMatTabReqGoalOtherGS2, traceMatTabReqGoalOtherGS3,
-  traceMatTabReqGoalOtherGS4, traceMatTabReqGoalOtherReq1, traceMatTabReqGoalOtherReq2,
-  traceMatTabReqGoalOtherReq3, traceMatTabReqGoalOtherReq4, traceMatTabReqGoalOtherReq5,
-  traceMatTabReqGoalOtherReq6, traceMatTabReqGoalOtherReq7,
-  traceMatTabReqGoalOtherReq8 :: [String]
-traceMatTabReqGoalOtherGS1 = ["IM1"]
-traceMatTabReqGoalOtherGS2 = ["IM2"]
-traceMatTabReqGoalOtherGS3 = ["IM3"]
-traceMatTabReqGoalOtherGS4 = ["IM3", "R7"]
-traceMatTabReqGoalOtherReq1 = []
-traceMatTabReqGoalOtherReq2 = ["IM1", "IM2", "R4"]
-traceMatTabReqGoalOtherReq3 = ["IM3", "R4"]
-traceMatTabReqGoalOtherReq4 = ["Data Constraints"]
-traceMatTabReqGoalOtherReq5 = ["IM1"]
-traceMatTabReqGoalOtherReq6 = ["IM2"]
-traceMatTabReqGoalOtherReq7 = ["R1"]
-traceMatTabReqGoalOtherReq8 = ["IM3", "R7"]
-
-traceMatTabReqGoalOtherRowHead, traceMatTabReqGoalOtherColHead :: [Sentence]
-traceMatTabReqGoalOtherRowHead = zipWith itemRefToSent traceMatTabReqGoalOtherRow
-  (traceMatInstaModelRef ++ take 3 traceMatFuncReqRef ++ traceMatDataRef)
-traceMatTabReqGoalOtherColHead = zipWith itemRefToSent (traceMatGoalStmt ++
-  traceMatFuncReq) (traceMatGoalStmtRef ++ traceMatFuncReqRef)
-
-traceMatTabReqGoalOtherRow :: [String]
-traceMatTabReqGoalOtherRow = traceMatInstaModel ++ ["R1","R4","R7"] ++
-  traceMatData
-
-traceMatTabReqGoalOtherCol :: [[String]]
-traceMatTabReqGoalOtherCol = [traceMatTabReqGoalOtherGS1, traceMatTabReqGoalOtherGS2,
-  traceMatTabReqGoalOtherGS3, traceMatTabReqGoalOtherGS4, traceMatTabReqGoalOtherReq1,
-  traceMatTabReqGoalOtherReq2, traceMatTabReqGoalOtherReq3, traceMatTabReqGoalOtherReq4,
-  traceMatTabReqGoalOtherReq5, traceMatTabReqGoalOtherReq6, traceMatTabReqGoalOtherReq7,
-  traceMatTabReqGoalOtherReq8]
-
-traceMatTabReqGoalOther :: LabelledContent
-traceMatTabReqGoalOther = llcc (makeTabRef "TraceyReqGoalsOther") $ Table 
-  (EmptyS : traceMatTabReqGoalOtherRowHead)
-  (makeTMatrix traceMatTabReqGoalOtherColHead traceMatTabReqGoalOtherCol
-  traceMatTabReqGoalOtherRow)
-  (showingCxnBw traceyMatrix (titleize' requirement +:+ sParen (makeRef2S requirements)
-  `sC` titleize' goalStmt +:+ sParen (makeRef2S probDescription) `sAnd` S "Other" +:+
-  titleize' item)) True
-
-traceMatTabAssumpCol' :: [[String]]
-traceMatTabAssumpCol' = [traceMatTabAssumpMT1, traceMatTabAssumpMT2,
-  traceMatTabAssumpMT3, traceMatTabAssumpMT4, traceMatTabAssumpMT5,
-  traceMatTabAssumpGD1, traceMatTabAssumpGD2, traceMatTabAssumpGD3,
-  traceMatTabAssumpGD4, traceMatTabAssumpGD5, traceMatTabAssumpGD6,
-  traceMatTabAssumpGD7, traceMatTabAssumpDD1, traceMatTabAssumpDD2,
-  traceMatTabAssumpDD3, traceMatTabAssumpDD4, traceMatTabAssumpDD5,
-  traceMatTabAssumpDD6, traceMatTabAssumpDD7, traceMatTabAssumpDD8,
-  traceMatTabAssumpIM1, traceMatTabAssumpIM2, traceMatTabAssumpIM3,
-  traceMatTabAssumpLC1, traceMatTabAssumpLC2, traceMatTabAssumpLC3,
-  traceMatTabAssumpLC4]
-
-traceMatTabAssumpMT1, traceMatTabAssumpMT2, traceMatTabAssumpMT3,
-  traceMatTabAssumpMT4, traceMatTabAssumpMT5, traceMatTabAssumpGD1,
-  traceMatTabAssumpGD2, traceMatTabAssumpGD3, traceMatTabAssumpGD4,
-  traceMatTabAssumpGD5, traceMatTabAssumpGD6, traceMatTabAssumpGD7,
-  traceMatTabAssumpDD1, traceMatTabAssumpDD2, traceMatTabAssumpDD3,
-  traceMatTabAssumpDD4, traceMatTabAssumpDD5, traceMatTabAssumpDD6,
-  traceMatTabAssumpDD7, traceMatTabAssumpDD8, traceMatTabAssumpIM1,
-  traceMatTabAssumpIM2, traceMatTabAssumpIM3, traceMatTabAssumpLC1,
-  traceMatTabAssumpLC2, traceMatTabAssumpLC3, traceMatTabAssumpLC4 :: [String]
-traceMatTabAssumpMT1 = []
-traceMatTabAssumpMT2 = []
-traceMatTabAssumpMT3 = []
-traceMatTabAssumpMT4 = ["A1"]
-traceMatTabAssumpMT5 = []
-traceMatTabAssumpGD1 = []
-traceMatTabAssumpGD2 = []
-traceMatTabAssumpGD3 = ["A2","A3"]
-traceMatTabAssumpGD4 = []
-traceMatTabAssumpGD5 = []
-traceMatTabAssumpGD6 = []
-traceMatTabAssumpGD7 = []
-traceMatTabAssumpDD1 = ["A1","A2"]
-traceMatTabAssumpDD2 = ["A1","A2","A6"]
-traceMatTabAssumpDD3 = ["A1","A2","A6"]
-traceMatTabAssumpDD4 = ["A1","A2","A6"]
-traceMatTabAssumpDD5 = ["A1","A2","A6"]
-traceMatTabAssumpDD6 = ["A1","A2","A6"]
-traceMatTabAssumpDD7 = ["A1","A2","A6"]
-traceMatTabAssumpDD8 = ["A1","A2","A4","A5"]
-traceMatTabAssumpIM1 = ["A1","A2","A6","A7"]
-traceMatTabAssumpIM2 = ["A1","A2","A4","A6","A7"]
-traceMatTabAssumpIM3 = ["A1","A2","A5","A6","A7"]
-traceMatTabAssumpLC1 = []
-traceMatTabAssumpLC2 = ["A5"]
-traceMatTabAssumpLC3 = ["A6"]
-traceMatTabAssumpLC4 = ["A7"]
-
-traceMatTabAssumpRow, traceMatTabAssumpCol :: [String]
-traceMatTabAssumpRow = traceMatAssump
-
-traceMatTabAssumpCol = traceMatTheoryModel ++ traceMatGenDef ++
-  traceMatDataDef ++ traceMatInstaModel ++ traceMatLikelyChg
-traceMatTabAssumpColRef :: [Sentence]
-traceMatTabAssumpColRef = traceMatTheoryModelRef ++ traceMatGenDefRef ++
-  traceMatDataDefRef ++ traceMatInstaModelRef ++ traceMatLikelyChgRef
-
-traceMatTabAssumpRowHead, traceMatTabAssumpColHead :: [Sentence]
-traceMatTabAssumpRowHead = zipWith itemRefToSent traceMatTabAssumpRow
-  traceMatAssumpRef
-traceMatTabAssumpColHead = zipWith itemRefToSent traceMatTabAssumpCol
-  traceMatTabAssumpColRef
-
-traceMatTabAssump :: LabelledContent
-traceMatTabAssump = llcc (makeTabRef "TraceyAssumpsOther") $ Table
-  (EmptyS:traceMatTabAssumpRowHead)
-  (makeTMatrix traceMatTabAssumpColHead traceMatTabAssumpCol' traceMatTabAssumpRow)
-  (showingCxnBw traceyMatrix (titleize' assumption +:+ sParen (makeRef2S probDescription)
-  `sAnd` S "Other" +:+ titleize' item)) True
-
-traceMatTabDefnModelCol :: [[String]]
-traceMatTabDefnModelCol = [traceMatTabDefnModelTM1, traceMatTabDefnModelTM2,
-  traceMatTabDefnModelTM3, traceMatTabDefnModelTM4, traceMatTabDefnModelTM5,
-  traceMatTabDefnModelGD1, traceMatTabDefnModelGD2, traceMatTabDefnModelGD3,
-  traceMatTabDefnModelGD4, traceMatTabDefnModelGD5, traceMatTabDefnModelGD6,
-  traceMatTabDefnModelGD7, traceMatTabDefnModelDD1, traceMatTabDefnModelDD2,
-  traceMatTabDefnModelDD3, traceMatTabDefnModelDD4, traceMatTabDefnModelDD5,
-  traceMatTabDefnModelDD6, traceMatTabDefnModelDD7, traceMatTabDefnModelDD8,
-  traceMatTabDefnModelIM1, traceMatTabDefnModelIM2, traceMatTabDefnModelIM3]
-
-traceMatTabDefnModelTM1, traceMatTabDefnModelTM2, traceMatTabDefnModelTM3,
-  traceMatTabDefnModelTM4, traceMatTabDefnModelTM5, traceMatTabDefnModelGD1,
-  traceMatTabDefnModelGD2, traceMatTabDefnModelGD3, traceMatTabDefnModelGD4,
-  traceMatTabDefnModelGD5, traceMatTabDefnModelGD6, traceMatTabDefnModelGD7,
-  traceMatTabDefnModelDD1, traceMatTabDefnModelDD2, traceMatTabDefnModelDD3,
-  traceMatTabDefnModelDD4, traceMatTabDefnModelDD5, traceMatTabDefnModelDD6,
-  traceMatTabDefnModelDD7, traceMatTabDefnModelDD8, traceMatTabDefnModelIM1,
-  traceMatTabDefnModelIM2, traceMatTabDefnModelIM3 :: [String]
-
-traceMatTabDefnModelTM1 = []
-traceMatTabDefnModelTM2 = []
-traceMatTabDefnModelTM3 = []
-traceMatTabDefnModelTM4 = []
-traceMatTabDefnModelTM5 = ["GD6", "GD7"]
-traceMatTabDefnModelGD1 = ["T1"]
-traceMatTabDefnModelGD2 = ["T2", "GD1"]
-traceMatTabDefnModelGD3 = ["T1", "T3"]
-traceMatTabDefnModelGD4 = []
-traceMatTabDefnModelGD5 = ["GD4"]
-traceMatTabDefnModelGD6 = []
-traceMatTabDefnModelGD7 = []
-traceMatTabDefnModelDD1 = []
-traceMatTabDefnModelDD2 = []
-traceMatTabDefnModelDD3 = []
-traceMatTabDefnModelDD4 = []
-traceMatTabDefnModelDD5 = []
-traceMatTabDefnModelDD6 = []
-traceMatTabDefnModelDD7 = []
-traceMatTabDefnModelDD8 = ["T4", "GD1","GD4","GD5","GD7","IM3"]
-traceMatTabDefnModelIM1 = ["T1", "GD3", "DD1","DD2","DD3","DD4"]
-traceMatTabDefnModelIM2 = ["T5", "DD1", "DD2", "DD3", "DD4"]
-traceMatTabDefnModelIM3 = ["GD1", "GD2", "GD6", "GD7", "DD1", "DD8"]
-
-traceMatTabDefnModelRow :: [String]
-traceMatTabDefnModelRowRef :: [Sentence]
-traceMatTabDefnModelRow = traceMatTheoryModel ++ traceMatGenDef ++
-  traceMatDataDef ++ traceMatInstaModel
-traceMatTabDefnModelRowRef = traceMatTheoryModelRef ++ traceMatGenDefRef ++
-  traceMatDataDefRef ++ traceMatInstaModelRef
-
-traceMatTabDefnModelColHead, traceMatTabDefnModelRowHead :: [Sentence]
-traceMatTabDefnModelColHead = zipWith itemRefToSent traceMatTabDefnModelRow
-  traceMatTabDefnModelRowRef
-traceMatTabDefnModelRowHead = traceMatTabDefnModelColHead
-
-traceMatTabDefnModel :: LabelledContent
-traceMatTabDefnModel = llcc (makeTabRef "TraceyItemsSecs") $ Table 
-  (EmptyS:traceMatTabDefnModelRowHead)
-  (makeTMatrix traceMatTabDefnModelColHead traceMatTabDefnModelCol
-  traceMatTabDefnModelRow) (showingCxnBw traceyMatrix (titleize' item `sAnd`
-  S "Other" +:+ titleize' section_)) True
+traceabilityMatrices :: [(LabelledContent, [Sentence])]
+traceabilityMatrices = traceMatStandard sysInfo
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

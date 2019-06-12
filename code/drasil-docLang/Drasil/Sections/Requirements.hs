@@ -7,7 +7,6 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (description, functionalRequirement,
   input_, nonfunctionalRequirement, section_, software, symbol_)
 import Data.Drasil.Concepts.Math (unit_)
-import Data.Drasil.SentenceStructures (follows)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)

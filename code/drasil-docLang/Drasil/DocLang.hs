@@ -31,7 +31,10 @@ module Drasil.DocLang (
     -- Sections.TableOfSymbols
     -- Sections.TableOfUnits
     -- Sections.TraceabilityMandGs
-    traceGIntro, traceMGF, generateTraceTable,
+    traceGIntro, traceMGF, generateTraceTable, generateTraceTableView,
+    traceMatStandard, tvAssumps, tvDataDefns, tvGenDefns, tvTheoryModels,
+    tvInsModels, tvGoals, tvReqs, tvChanges, traceMatAssumpOther,
+    traceMatRefinement, traceMatOtherReq,
     -- ExtractDocDesc
     getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
     -- Tracetable
@@ -68,7 +71,10 @@ import Drasil.Sections.SpecificSystemDescription (assumpF,
 --import Drasil.Sections.TableOfAbbAndAcronyms
 --import Drasil.Sections.TableOfSymbols
 --import Drasil.Sections.TableOfUnits
-import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF, generateTraceTable)
+import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF, generateTraceTable,
+    generateTraceTableView, traceMatStandard, tvAssumps, tvDataDefns, tvGenDefns,
+    tvTheoryModels, tvInsModels, tvGoals, tvReqs, tvChanges, traceMatAssumpOther,
+    traceMatRefinement, traceMatOtherReq)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc)
 import Drasil.TraceTable (generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
     getTraceMapFromDD, getTraceMapFromIM, getSCSSub, generateTraceMap')

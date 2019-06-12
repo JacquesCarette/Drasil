@@ -24,10 +24,10 @@ void input_constraints(InputParameters &inParams) {
     if (!(((0.1 <= inParams.b) && (inParams.b <= 5.0)))) {
         throw("InputError");
     }
-    if (!(((6.0 <= inParams.SD) && (inParams.SD <= 130.0)))) {
+    if (!(((4.5 <= inParams.w) && (inParams.w <= 910.0)))) {
         throw("InputError");
     }
-    if (!(((4.5 <= inParams.w) && (inParams.w <= 910.0)))) {
+    if (!(((6.0 <= inParams.SD) && (inParams.SD <= 130.0)))) {
         throw("InputError");
     }
     if (!((inParams.AR <= 5.0))) {
@@ -43,19 +43,19 @@ void input_constraints(InputParameters &inParams) {
     if (!(((0 < inParams.b) && (inParams.b <= inParams.a)))) {
         throw("InputError");
     }
-    if (!((inParams.SD > 0))) {
-        throw("InputError");
-    }
     if (!((inParams.w > 0))) {
-        throw("InputError");
-    }
-    if (!((inParams.AR >= 1))) {
         throw("InputError");
     }
     if (!(((0 < inParams.P_btol) && (inParams.P_btol < 1)))) {
         throw("InputError");
     }
     if (!((inParams.TNT > 0))) {
+        throw("InputError");
+    }
+    if (!((inParams.SD > 0))) {
+        throw("InputError");
+    }
+    if (!((inParams.AR >= 1))) {
         throw("InputError");
     }
 }

@@ -31,7 +31,7 @@ import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit),
   Data(Line, Lines, JunkData, Singleton), DataDesc, getInputs)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
-import Data.List (intersperse, (\\), stripPrefix)
+import Data.List (nub, intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
@@ -39,6 +39,7 @@ import Data.Maybe (fromMaybe, maybe, maybeToList)
 import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
+import Control.Lens ((^.))
 import qualified Prelude as P ((<>))
 
 -- Private State, used to push these options around the generator
@@ -215,11 +216,14 @@ genInputConstraints :: (RenderSym repr) => Reader (State repr)
   (repr (Method repr))
 genInputConstraints = do
   g <- ask
-  let varsList = inputs $ codeSpec g
-      cm       = cMap $ codeSpec g
+  let cm       = cMap $ codeSpec g
+      varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
+      reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v 
+        (sysinfodb $ codeSpec g) (eMap $ codeSpec g)) (getConstraints cm 
+        varsList)
       sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
       physCs   = concatMap (renderC . physLookup cm) varsList
-  parms <- getParams varsList
+  parms <- getParams reqdVals
   sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
     sfwrCBody g x)]}) sfwrCs
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 

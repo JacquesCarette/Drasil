@@ -7,7 +7,7 @@ import Database.Drasil(ChunkDB, SystemInformation(SI), symbLookup, symbolTable,
   _constraints, _datadefs,
   _definitions, _inputs, _outputs,
   _quants, _sys, _sysinfodb)
-import Language.Drasil.Development (dep, names')
+import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, ConstraintMap,
@@ -19,7 +19,7 @@ import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
 import qualified Data.Map as Map
-import Data.Maybe (maybeToList, catMaybes)
+import Data.Maybe (maybeToList, catMaybes, mapMaybe)
 
 import Prelude hiding (const)
 
@@ -364,6 +364,10 @@ getDepsControl mem = let dv = Map.lookup "derived_values" mem
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs
 
+-- | Get a list of Constraints for a list of CodeChunks
+getConstraints :: ConstraintMap -> [CodeChunk] -> [Constraint]
+getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
+
 -- | Get a list of CodeChunks from an equation
 codevars :: Expr -> ChunkDB -> [CodeChunk]
 codevars e m = map resolve $ dep e
@@ -380,3 +384,11 @@ codevarsandfuncs e m mem = map resolve $ dep e
   where resolve x 
           | Map.member (funcPrefix ++ x) mem = codefunc (symbLookup x $ symbolTable m)
           | otherwise = codevar (symbLookup x $ symbolTable m)
+
+-- | Get a list of CodeChunks from a constraint, where the CodeChunks are correctly parameterized by either Var or Func
+constraintvarsandfuncs :: Constraint -> ChunkDB -> ModExportMap ->  [CodeChunk]
+constraintvarsandfuncs (Range _ ri) m mem = map resolve $ nub $ namesRI ri
+  where resolve x 
+          | Map.member (funcPrefix ++ x) mem = codefunc (symbLookup x $ symbolTable m)
+          | otherwise = codevar (symbLookup x $ symbolTable m)
+constraintvarsandfuncs _ _ _ = []

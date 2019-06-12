@@ -1,4 +1,4 @@
-module Language.Drasil.Expr.Extract(dep, names, names') where
+module Language.Drasil.Expr.Extract(dep, names, names', namesRI) where
 
 import Data.List (nub)
 

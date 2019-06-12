@@ -7,8 +7,9 @@ import Theory.Drasil (DataDefinition, dd, ddNoRefs, mkQuantDef)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (value)
+import Data.Drasil.Concepts.Thermodynamics (heat)
 
-import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.Physics (energy, pressure, time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
@@ -93,7 +94,14 @@ htFusionEqn = sy latentHeat / sy mass
 -- FIXME: need to allow page references in references.
 dd3HtFusion :: DataDefinition
 dd3HtFusion = dd dd3HtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
-  [] "htFusion" []
+  [] "htFusion" dd3HtFusionNotes
+
+dd3HtFusionNotes :: [Sentence]
+dd3HtFusionNotes = [foldlSent [S "The", phrase htFusion,
+  sParen (S "also known as the enthalpy of fusion"), S "of a substance is the",
+  phrase heat, phrase energy, S "required", sParen (ch latentHeat), S "to change the state of a unit of the",
+  phrase mass, sParen (ch mass), S "of the substance from solid to liquid" `sC`
+  S "at constant", phrase pressure]]
 
 ----
 

@@ -24,7 +24,7 @@ public class InputParameters {
     public static double T_W = 0.0;
     public static double E_W = 0.0;
     
-    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double A_tol, double R_tol, double T_W, double E_W) throws Exception {
+    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) throws Exception {
         if (!((inParams.A_C <= 100000))) {
             System.out.println("Warning: constraint violated");
         }

@@ -11,7 +11,7 @@ module Database.Drasil.ChunkDB
   , insmodelLookup, gendefLookup, theoryModelLookup, conceptinsLookup
   , sectionLookup, labelledconLookup
   , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
-  , conceptinsTable, sectionTable, labelledcontentTable, asOrderedList
+  , conceptinsTable, sectionTable, labelledcontentTable, asOrderedList, UMap
   ) where
 
 import Language.Drasil hiding (sec)

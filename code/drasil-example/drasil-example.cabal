@@ -1,5 +1,5 @@
 Name:		drasil-example
-Version:	0.1.22
+Version:	0.1.23
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -59,12 +59,12 @@ executable glassbr
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.11,
+    drasil-data >= 0.1.12,
     drasil-code >= 0.1.7,
-    drasil-database >= 0.1.0,
+    drasil-database >= 0.1.1,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.24,
+    drasil-docLang >= 0.1.25,
     drasil-theory >= 0.1.0,
     drasil-utils >= 0.1.0
   default-language: Haskell2010
@@ -107,12 +107,12 @@ executable nopcm
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.11,
+    drasil-data >= 0.1.12,
     drasil-code >= 0.1.7,
-    drasil-database >= 0.1.0,
+    drasil-database >= 0.1.1,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.24,
+    drasil-docLang >= 0.1.25,
     drasil-theory >= 0.1.0,
     drasil-utils >= 0.1.0
   default-language: Haskell2010
@@ -144,12 +144,12 @@ executable swhs
     mtl >= 2.2.1,
     directory >= 1.2.6.2,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.11,
+    drasil-data >= 0.1.12,
     drasil-code >= 0.1.7,
-    drasil-database >= 0.1.0,
+    drasil-database >= 0.1.1,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.24,
+    drasil-docLang >= 0.1.25,
     drasil-theory >= 0.1.0,
     drasil-utils >= 0.1.0
   default-language: Haskell2010
@@ -184,12 +184,12 @@ executable ssp
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.11,
+    drasil-data >= 0.1.12,
     drasil-code >= 0.1.7,
-    drasil-database >= 0.1.0,
+    drasil-database >= 0.1.1,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.24,
+    drasil-docLang >= 0.1.25,
     drasil-theory >= 0.1.0,
     drasil-utils >= 0.1.0
   default-language: Haskell2010
@@ -219,12 +219,12 @@ executable chipmunkdocs
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.11,
+    drasil-data >= 0.1.12,
     drasil-code >= 0.1.7,
-    drasil-database >= 0.1.0,
+    drasil-database >= 0.1.1,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.24,
+    drasil-docLang >= 0.1.25,
     drasil-theory >= 0.1.0,
     drasil-utils >= 0.1.0
   default-language: Haskell2010
@@ -253,12 +253,12 @@ executable projectile
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.11,
+    drasil-data >= 0.1.12,
     drasil-code >= 0.1.7,
-    drasil-database >= 0.1.0,
+    drasil-database >= 0.1.1,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.24,
+    drasil-docLang >= 0.1.25,
     drasil-theory >= 0.1.0,
     drasil-utils >= 0.1.0
   default-language: Haskell2010
@@ -278,12 +278,12 @@ executable template
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     drasil-lang >= 0.1.58,
-    drasil-data >= 0.1.11,
+    drasil-data >= 0.1.12,
     drasil-code >= 0.1.7,
-    drasil-database >= 0.1.0,
+    drasil-database >= 0.1.1,
     drasil-printers >= 0.1.8,
     drasil-gen >= 0.1.3,
-    drasil-docLang >= 0.1.24,
+    drasil-docLang >= 0.1.25,
     drasil-theory >= 0.1.0,
     drasil-utils >= 0.1.0
   default-language: Haskell2010

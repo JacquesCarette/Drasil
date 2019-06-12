@@ -1200,227 +1200,151 @@ This section provides the non-functional requirements, the qualities that the so
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of theoretical models, instance models, and data definitions with each other. \hyperref[Table:TraceyItemSecs]{Table:TraceyItemSecs} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. \hyperref[Table:TraceyReqsItems]{Table:TraceyReqsItems} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
-\toprule
- & \hyperref[assumpSV]{A: standardValues} & \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} & \hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions} & \hyperref[inputGlassProps]{FR: Input-Glass-Props} & \hyperref[outputQuants]{FR: Output-Quantities} & \hyperref[DD:tolLoad]{DD: tolLoad} & \hyperref[DD:stressDistFac]{DD: stressDistFac} & \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions} & \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk} & \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite} & \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} & \hyperref[DD:loadDurFactor]{DD: loadDurFactor} & \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass} & \hyperref[DD:sdfTol]{DD: sdfTol} & \hyperref[DD:nFL]{DD: nFL} & \hyperref[assumpLDFC]{A: ldfConstant} & \hyperref[assumpGC]{A: glassCondition} & \hyperref[IM:isSafeLR]{IM: isSafeLR} & \hyperref[DD:calofDemand]{DD: calofDemand} & \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} & \hyperref[DD:riskFun]{DD: riskFun} & \hyperref[IM:isSafePb]{IM: isSafePb} & \hyperref[DD:probOfBreak]{DD: probOfBreak} & \hyperref[TM:isSafeProb]{TM: isSafeProb} & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety} & \hyperref[TM:isSafeLoad]{TM: isSafeLoad}
-\\
-\midrule
-\endhead
-\hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[Sec:DataConstraints]{Section: Data Constraints} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[Table:ReqAssignments]{Table:ReqAssignments} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[Table:ReqInputs]{Table:ReqInputs} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[Table:ReqOutputs]{Table:ReqOutputs} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:aspectRatio]{DD: aspectRatio} &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[assumpBC]{A: boundaryConditions} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[assumpES]{A: explainScenario} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[assumpGC]{A: glassCondition} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[assumpGL]{A: glassLite} &  &  &  &  &  &  &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[assumpLDFC]{A: ldfConstant} &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[assumpRT]{A: responseType} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[assumpSV]{A: standardValues} &  &  &  &  &  &  &  &  &  &  &  & X &  & X & X &  & X & X & X &  &  &  &  &  &  &  &  &  & 
-\\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:calofDemand]{DD: calofDemand} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
-\\
-\hyperref[Figure:demandVSsod]{Fig:demandVSsod} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
-\\
-\hyperref[DD:dimlessLoad]{DD: dimlessLoad} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect} &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:eqTNTW]{DD: eqTNTW} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
-\\
-\hyperref[DD:gTF]{DD: gTF} &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[inputGlassProps]{FR: Input-Glass-Props} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
-\\
-\hyperref[DD:calofCapacity]{DD: calofCapacity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:loadDurFactor]{DD: loadDurFactor} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X &  &  &  &  & 
-\\
-\hyperref[DD:minThick]{DD: minThick} &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X & X &  &  &  &  &  & X &  &  &  &  & 
-\\
-\hyperref[DD:nFL]{DD: nFL} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:probOfBreak]{DD: probOfBreak} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
-\\
-\hyperref[DD:riskFun]{DD: riskFun} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
-\\
-\hyperref[TM:isSafeLoad]{TM: isSafeLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X & 
-\\
-\hyperref[TM:isSafeProb]{TM: isSafeProb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X
-\\
-\hyperref[IM:isSafeLR]{IM: isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
-\\
-\hyperref[IM:isSafePb]{IM: isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:sdfTol]{DD: sdfTol} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:standOffDist]{DD: standOffDist} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
-\\
-\hyperref[DD:stressDistFac]{DD: stressDistFac} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & 
-\\
-\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
-\\
-\hyperref[DD:tolLoad]{DD: tolLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
-\label{Table:Tracey}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l}
-\toprule
- & T1 (\hyperref[TM:isSafeProb]{TM: isSafeProb}) & T2 (\hyperref[TM:isSafeLoad]{TM: isSafeLoad}) & IM1 (\hyperref[IM:isSafePb]{IM: isSafePb}) & IM2 (\hyperref[IM:isSafeLR]{IM: isSafeLR}) & IM3 (\hyperref[DD:riskFun]{DD: riskFun}) & DD1 (\hyperref[DD:minThick]{DD: minThick}) & DD2 (\hyperref[DD:loadDurFactor]{DD: loadDurFactor}) & DD3 (\hyperref[DD:stressDistFac]{DD: stressDistFac}) & DD4 (\hyperref[DD:nFL]{DD: nFL}) & DD5 (\hyperref[DD:gTF]{DD: gTF}) & DD6 (\hyperref[DD:dimlessLoad]{DD: dimlessLoad}) & DD7 (\hyperref[DD:tolLoad]{DD: tolLoad}) & DD8 (\hyperref[DD:sdfTol]{DD: sdfTol})
-\\
-\midrule
-\endhead
-T1 (\hyperref[TM:isSafeProb]{TM: isSafeProb}) &  & X & X &  &  &  &  &  &  &  &  &  & 
-\\
-T2 (\hyperref[TM:isSafeLoad]{TM: isSafeLoad}) & X &  &  & X & X &  &  &  &  &  &  &  & 
-\\
-IM1 (\hyperref[IM:isSafePb]{IM: isSafePb}) &  &  &  &  &  & X & X & X &  &  &  &  & 
-\\
-IM2 (\hyperref[IM:isSafeLR]{IM: isSafeLR}) &  &  &  &  &  &  &  &  & X & X &  &  & 
-\\
-IM3 (\hyperref[DD:riskFun]{DD: riskFun}) &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD1 (\hyperref[DD:minThick]{DD: minThick}) &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD2 (\hyperref[DD:loadDurFactor]{DD: loadDurFactor}) &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD3 (\hyperref[DD:stressDistFac]{DD: stressDistFac}) &  &  &  &  &  &  &  &  &  &  & X &  & 
-\\
-DD4 (\hyperref[DD:nFL]{DD: nFL}) &  &  &  &  &  &  & X &  &  &  & X &  & 
-\\
-DD5 (\hyperref[DD:gTF]{DD: gTF}) &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD6 (\hyperref[DD:dimlessLoad]{DD: dimlessLoad}) &  &  &  &  & X &  & X &  &  & X &  &  & 
-\\
-DD7 (\hyperref[DD:tolLoad]{DD: tolLoad}) &  &  &  &  &  &  &  &  &  &  &  &  & X
-\\
-DD8 (\hyperref[DD:sdfTol]{DD: sdfTol}) &  &  &  &  &  &  & X &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
-\label{Table:TraceyItemSecs}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
-\toprule
- & T1 (\hyperref[TM:isSafeProb]{TM: isSafeProb}) & T2 (\hyperref[TM:isSafeLoad]{TM: isSafeLoad}) & IM1 (\hyperref[IM:isSafePb]{IM: isSafePb}) & IM2 (\hyperref[IM:isSafeLR]{IM: isSafeLR}) & IM3 (\hyperref[DD:riskFun]{DD: riskFun}) & DD1 (\hyperref[DD:minThick]{DD: minThick}) & DD2 (\hyperref[DD:loadDurFactor]{DD: loadDurFactor}) & DD3 (\hyperref[DD:stressDistFac]{DD: stressDistFac}) & DD4 (\hyperref[DD:nFL]{DD: nFL}) & DD5 (\hyperref[DD:gTF]{DD: gTF}) & DD6 (\hyperref[DD:dimlessLoad]{DD: dimlessLoad}) & DD7 (\hyperref[DD:tolLoad]{DD: tolLoad}) & DD8 (\hyperref[DD:sdfTol]{DD: sdfTol}) & Data Constraints (\hyperref[Sec:DataConstraints]{Section: Data Constraints}) & R1 (\hyperref[inputGlassProps]{FR: Input-Glass-Props}) & R2 (\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}) & R3 (\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}) & R4 (\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}) & R5 (\hyperref[checkGlassSafety]{FR: Check-Glass-Safety}) & R6 (\hyperref[outputQuants]{FR: Output-Quantities})
-\\
-\midrule
-\endhead
-R1 (in \hyperref[inputGlassProps]{FR: Input-Glass-Props}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-R2 (in \hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-R3 (in \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
-\\
-R4 (in \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
-\\
-R5 (in \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-R6 (in \hyperref[outputQuants]{FR: Output-Quantities}) &  &  & X & X & X &  & X & X & X & X & X & X & X &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}
-\label{Table:TraceyReqsItems}
-\end{longtable}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements on the data definitions, theoretical models, general definitions, and instance models.
 \begin{longtable}{l l l l l l l l l}
 \toprule
- & A1 (\hyperref[assumpGT]{A: glassType}) & A2 (\hyperref[assumpGC]{A: glassCondition}) & A3 (\hyperref[assumpES]{A: explainScenario}) & A4 (\hyperref[assumpSV]{A: standardValues}) & A5 (\hyperref[assumpGL]{A: glassLite}) & A6 (\hyperref[assumpBC]{A: boundaryConditions}) & A7 (\hyperref[assumpRT]{A: responseType}) & A8 (\hyperref[assumpLDFC]{A: ldfConstant})
+ & \hyperref[assumpGT]{A: glassType} & \hyperref[assumpGC]{A: glassCondition} & \hyperref[assumpES]{A: explainScenario} & \hyperref[assumpSV]{A: standardValues} & \hyperref[assumpGL]{A: glassLite} & \hyperref[assumpBC]{A: boundaryConditions} & \hyperref[assumpRT]{A: responseType} & \hyperref[assumpLDFC]{A: ldfConstant}
 \\
 \midrule
 \endhead
-T1 (\hyperref[TM:isSafeProb]{TM: isSafeProb}) &  &  &  &  &  &  &  & 
+\hyperref[DD:riskFun]{DD: riskFun} &  &  &  &  &  &  &  & 
 \\
-T2 (\hyperref[TM:isSafeLoad]{TM: isSafeLoad}) &  &  &  &  &  &  &  & 
+\hyperref[DD:minThick]{DD: minThick} &  &  &  &  &  &  &  & 
 \\
-IM1 (\hyperref[IM:isSafePb]{IM: isSafePb}) &  &  &  & X &  & X & X & 
+\hyperref[DD:loadDurFactor]{DD: loadDurFactor} &  &  &  & X &  &  &  & X
 \\
-IM2 (\hyperref[IM:isSafeLR]{IM: isSafeLR}) & X & X &  &  & X &  &  & 
+\hyperref[DD:stressDistFac]{DD: stressDistFac} &  &  &  &  &  &  &  & 
 \\
-IM3 (\hyperref[DD:riskFun]{DD: riskFun}) &  &  &  &  &  &  &  & 
+\hyperref[DD:nFL]{DD: nFL} &  &  &  & X &  &  &  & 
 \\
-DD1 (\hyperref[DD:minThick]{DD: minThick}) &  &  &  &  &  &  &  & 
+\hyperref[DD:gTF]{DD: gTF} &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:loadDurFactor]{DD: loadDurFactor}) &  &  &  &  &  &  &  & 
+\hyperref[DD:dimlessLoad]{DD: dimlessLoad} &  &  &  & X & X &  &  & 
 \\
-DD3 (\hyperref[DD:stressDistFac]{DD: stressDistFac}) &  &  &  &  &  &  &  & 
+\hyperref[DD:tolLoad]{DD: tolLoad} &  &  &  &  &  &  &  & 
 \\
-DD4 (\hyperref[DD:nFL]{DD: nFL}) &  &  &  & X &  &  &  & 
+\hyperref[DD:sdfTol]{DD: sdfTol} &  &  &  & X &  &  &  & 
 \\
-DD5 (\hyperref[DD:gTF]{DD: gTF}) &  &  &  &  &  &  &  & 
+\hyperref[DD:standOffDist]{DD: standOffDist} &  &  &  &  &  &  &  & 
 \\
-DD6 (\hyperref[DD:dimlessLoad]{DD: dimlessLoad}) &  &  &  &  & X &  &  & 
+\hyperref[DD:aspectRatio]{DD: aspectRatio} &  &  &  &  &  &  &  & 
 \\
-DD7 (\hyperref[DD:tolLoad]{DD: tolLoad}) &  &  &  &  &  &  &  & 
+\hyperref[DD:eqTNTW]{DD: eqTNTW} &  &  &  &  &  &  &  & 
 \\
-DD8 (\hyperref[DD:sdfTol]{DD: sdfTol}) &  &  &  & X &  &  &  & 
+\hyperref[DD:probOfBreak]{DD: probOfBreak} &  &  &  &  &  &  &  & 
 \\
-LC1 (\hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk}) &  &  & X &  &  &  &  & 
+\hyperref[DD:calofCapacity]{DD: calofCapacity} &  &  &  &  & X &  &  & 
 \\
-LC2 (\hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E}) &  &  &  & X &  &  &  & X
+\hyperref[DD:calofDemand]{DD: calofDemand} &  &  &  &  &  &  &  & 
 \\
-LC3 (\hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}) &  &  &  &  & X &  &  & 
+\hyperref[TM:isSafeProb]{TM: isSafeProb} &  &  &  &  &  &  &  & 
 \\
-LC4 (\hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions}) &  &  &  &  &  & X &  & 
+\hyperref[TM:isSafeLoad]{TM: isSafeLoad} &  &  &  &  &  &  &  & 
 \\
-LC5 (\hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass}) &  &  &  &  &  &  & X & 
+\hyperref[IM:isSafePb]{IM: isSafePb} &  &  &  &  &  &  &  & 
 \\
-R1 (\hyperref[inputGlassProps]{FR: Input-Glass-Props}) &  &  &  &  &  &  &  & 
+\hyperref[IM:isSafeLR]{IM: isSafeLR} &  &  &  &  &  &  &  & 
 \\
-R2 (\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}) &  &  &  & X & X &  &  & X
+\hyperref[inputGlassProps]{FR: Input-Glass-Props} &  &  &  &  &  &  &  & 
 \\
-R3 (\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}) &  &  &  &  &  &  &  & 
+\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  & 
 \\
-R4 (\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}) &  &  &  &  &  &  &  & 
+\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} &  &  &  &  &  &  &  & 
 \\
-R5 (\hyperref[checkGlassSafety]{FR: Check-Glass-Safety}) &  &  &  &  &  &  &  & 
+\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} &  &  &  &  &  &  &  & 
 \\
-R6 (\hyperref[outputQuants]{FR: Output-Quantities}) &  &  &  &  &  &  &  & 
+\hyperref[checkGlassSafety]{FR: Check-Glass-Safety} &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputQuants]{FR: Output-Quantities} &  &  &  &  &  &  &  & 
+\\
+\hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk} &  &  & X &  &  &  &  & 
+\\
+\hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} &  &  &  & X &  &  &  & X
+\\
+\hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite} &  &  &  &  & X &  &  & 
+\\
+\hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions} &  &  &  &  &  & X &  & 
+\\
+\hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass} &  &  &  &  &  &  & X & 
+\\
+\hyperref[predictWithstandOfCertDeg]{UC: Predict-Withstanding-of-Certain-Degree} &  &  &  &  &  &  &  & 
+\\
+\hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass} &  & X &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-\label{Table:TraceyAssumpsOthers}
+\label{Table:TraceMatAvsAll}
 \end{longtable}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceyItemSecs]{Fig:TraceyItemSecs} shows the dependencies of theoretical models, instance models, and data definitions on each other. \hyperref[Figure:TraceyReqsItems]{Fig:TraceyReqsItems} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. \hyperref[Figure:TraceyAssumpsOthers]{Fig:TraceyAssumpsOthers} shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
-\begin{figure}
-\begin{center}
-\includegraphics[width=\textwidth]{../../../datafiles/GlassBR/Trace.png}
-\caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
-\label{Figure:TraceyItemSecs}
-\end{center}
-\end{figure}
-\begin{figure}
-\begin{center}
-\includegraphics[width=\textwidth]{../../../datafiles/GlassBR/RTrace.png}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
+\toprule
+ & \hyperref[DD:riskFun]{DD: riskFun} & \hyperref[DD:minThick]{DD: minThick} & \hyperref[DD:loadDurFactor]{DD: loadDurFactor} & \hyperref[DD:stressDistFac]{DD: stressDistFac} & \hyperref[DD:nFL]{DD: nFL} & \hyperref[DD:gTF]{DD: gTF} & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & \hyperref[DD:tolLoad]{DD: tolLoad} & \hyperref[DD:sdfTol]{DD: sdfTol} & \hyperref[DD:standOffDist]{DD: standOffDist} & \hyperref[DD:aspectRatio]{DD: aspectRatio} & \hyperref[DD:eqTNTW]{DD: eqTNTW} & \hyperref[DD:probOfBreak]{DD: probOfBreak} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[DD:calofDemand]{DD: calofDemand} & \hyperref[TM:isSafeProb]{TM: isSafeProb} & \hyperref[TM:isSafeLoad]{TM: isSafeLoad} & \hyperref[IM:isSafePb]{IM: isSafePb} & \hyperref[IM:isSafeLR]{IM: isSafeLR}
+\\
+\midrule
+\endhead
+\hyperref[DD:riskFun]{DD: riskFun} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:minThick]{DD: minThick} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:loadDurFactor]{DD: loadDurFactor} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:stressDistFac]{DD: stressDistFac} &  &  &  &  &  &  & X &  &  &  & X &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:nFL]{DD: nFL} &  & X &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:gTF]{DD: gTF} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:dimlessLoad]{DD: dimlessLoad} &  & X &  &  &  & X &  &  &  &  &  &  &  &  & X &  &  &  & 
+\\
+\hyperref[DD:tolLoad]{DD: tolLoad} &  &  &  &  &  &  &  &  & X &  & X &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:sdfTol]{DD: sdfTol} &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:standOffDist]{DD: standOffDist} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:aspectRatio]{DD: aspectRatio} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:eqTNTW]{DD: eqTNTW} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:probOfBreak]{DD: probOfBreak} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:calofCapacity]{DD: calofCapacity} &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:calofDemand]{DD: calofDemand} &  &  &  &  &  &  &  &  &  & X &  & X &  &  &  &  &  &  & 
+\\
+\hyperref[TM:isSafeProb]{TM: isSafeProb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\\
+\hyperref[TM:isSafeLoad]{TM: isSafeLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+\\
+\hyperref[IM:isSafePb]{IM: isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & X
+\\
+\hyperref[IM:isSafeLR]{IM: isSafeLR} &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
+\label{Table:TraceMatRefvsRef}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l}
+\toprule
+ & \hyperref[DD:riskFun]{DD: riskFun} & \hyperref[DD:minThick]{DD: minThick} & \hyperref[DD:loadDurFactor]{DD: loadDurFactor} & \hyperref[DD:stressDistFac]{DD: stressDistFac} & \hyperref[DD:nFL]{DD: nFL} & \hyperref[DD:gTF]{DD: gTF} & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & \hyperref[DD:tolLoad]{DD: tolLoad} & \hyperref[DD:sdfTol]{DD: sdfTol} & \hyperref[DD:standOffDist]{DD: standOffDist} & \hyperref[DD:aspectRatio]{DD: aspectRatio} & \hyperref[DD:eqTNTW]{DD: eqTNTW} & \hyperref[DD:probOfBreak]{DD: probOfBreak} & \hyperref[DD:calofCapacity]{DD: calofCapacity} & \hyperref[DD:calofDemand]{DD: calofDemand} & \hyperref[TM:isSafeProb]{TM: isSafeProb} & \hyperref[TM:isSafeLoad]{TM: isSafeLoad} & \hyperref[IM:isSafePb]{IM: isSafePb} & \hyperref[IM:isSafeLR]{IM: isSafeLR} & \hyperref[inputGlassProps]{FR: Input-Glass-Props} & \hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions} & \hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} & \hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety} & \hyperref[outputQuants]{FR: Output-Quantities}
+\\
+\midrule
+\endhead
+\hyperref[inputGlassProps]{FR: Input-Glass-Props} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+\\
+\hyperref[checkGlassSafety]{FR: Check-Glass-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputQuants]{FR: Output-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}
-\label{Figure:TraceyReqsItems}
-\end{center}
-\end{figure}
-\begin{figure}
-\begin{center}
-\includegraphics[width=\textwidth]{../../../datafiles/GlassBR/ATrace.png}
-\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-\label{Figure:TraceyAssumpsOthers}
-\end{center}
-\end{figure}
+\label{Table:TraceMatAllvsR}
+\end{longtable}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 This section contains the standard values that are used for calculations in GlassBR.

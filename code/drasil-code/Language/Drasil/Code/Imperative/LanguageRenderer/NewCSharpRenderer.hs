@@ -47,7 +47,7 @@ import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
-  equals, semi, vcat, lbrace, rbrace, colon, render)
+  equals, semi, vcat, lbrace, rbrace, colon, render, isEmpty)
 
 newtype CSharpCode a = CSC {unCSC :: a}
 
@@ -69,7 +69,8 @@ instance PackageSym CSharpCode where
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (if isEmpty (modDoc (unCSC code)) then return empty else
+    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 

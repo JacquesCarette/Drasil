@@ -74,7 +74,8 @@ instance PackageSym JavaCode where
 instance RenderSym JavaCode where
   type RenderFile JavaCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (if isEmpty (modDoc (unJC code)) then return empty else
+    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top _ = liftA3 jtop endStatement (include "") (list static)
   bottom = return empty
 

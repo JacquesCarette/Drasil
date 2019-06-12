@@ -67,9 +67,10 @@ zipSentList acc _ []           = acc
 zipSentList acc [] r           = acc ++ map (EmptyS:) r
 zipSentList acc (x:xs) (y:ys)  = zipSentList (acc ++ [x:y]) xs ys
 
--- | makes a traceability matrix from list of column rows and list of rows
+-- | makes a traceability matrix from list of row title, list of rows
+--   of "checked" columns, and a list of columns.
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
-makeTMatrix colName col row = zipSentList [] colName [zipFTable' x row | x <- col] 
+makeTMatrix rowName rows cols = zipSentList [] rowName [zipFTable' x cols | x <- rows]
   where
     zipFTable' content = concatMap (\x -> if x `elem` content then [S "X"] else [EmptyS])
 

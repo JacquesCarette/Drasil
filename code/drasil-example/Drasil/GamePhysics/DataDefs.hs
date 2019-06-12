@@ -6,7 +6,6 @@ import Language.Drasil
 import Database.Drasil (Block(Parallel))
 import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 import Utils.Drasil
-import Data.Drasil.SentenceStructures (getTandS)
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 
@@ -269,7 +268,7 @@ impulseVDerivSentences = map foldlSentCol [impulseVDerivSentence1,
  impulseVDerivSentence2, impulseVDerivSentence3]  
 
 impulseVDerivSentence1 :: [Sentence]
-impulseVDerivSentence1 = [S " Derivation" `sOf` phrase QP.impulseV, S "-", 
+impulseVDerivSentence1 = [S "Derivation" `sOf` phrase QP.impulseV, S "-", 
   S "Newton's second law of motion states"]
 
 impulseVDerivSentence2 :: [Sentence]
@@ -363,7 +362,7 @@ potEnergy :: QDefinition
 potEnergy = mkQuantDef QP.potEnergy potEnergyEqn
 
 potEnergyEqn :: Expr
-potEnergyEqn = (sy QPP.mass * sy QP.gravitationalAccel * sy QP.height)
+potEnergyEqn = sy QPP.mass * sy QP.gravitationalAccel * sy QP.height
 
 potEnergyDesc :: Sentence
 potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy,

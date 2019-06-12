@@ -584,11 +584,12 @@ instance Monad CppSrcCode where
 instance PackageSym CppSrcCode where
   type Package CppSrcCode = ([ModData], Label)
   packMods n ms = liftPairFst (sequence ms, n)
-
+  
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code)
-    (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (if isEmpty (modDoc (unCPPSC code)) then return empty else
+    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
 

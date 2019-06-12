@@ -60,7 +60,8 @@ instance PackageSym PythonCode where
 instance RenderSym PythonCode where
   type RenderFile PythonCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (if isEmpty (modDoc (unPC code)) then return empty else
+    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top _ = return pytop
   bottom = return empty
 

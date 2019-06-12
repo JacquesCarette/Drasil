@@ -13,9 +13,7 @@ class InputParameters {
     public:
         double a;
         double b;
-        double SD;
         double w;
-        double AR;
         double P_btol;
         double TNT;
         string g;
@@ -26,6 +24,8 @@ class InputParameters {
         double h;
         double LDF;
         double GTF;
+        double SD;
+        double AR;
         double w_TNT;
         
         InputParameters();

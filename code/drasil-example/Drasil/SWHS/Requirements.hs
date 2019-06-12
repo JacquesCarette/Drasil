@@ -87,7 +87,7 @@ inputInitQuantsEqn = sy wMass $= sy wVol * sy wDensity $=
   (sy tankVol - sy pcmVol) * sy wDensity $=
   (sy pi_ * ((sy diam / 2) $^ 2) * sy tankLength - sy pcmVol) * sy wDensity -- FIXME: Ref Hack
 
-findMassEqn = (sy pcmMass) $= (sy pcmVol) * (sy pcmDensity) -- FIXME: Ref Hack
+findMassEqn = sy pcmMass $= sy pcmVol * sy pcmDensity -- FIXME: Ref Hack
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
@@ -140,10 +140,9 @@ calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" (foldlSent [
 verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (ch watE :+: sParen (ch time) `sAnd` ch pcmE :+:
-  sParen (ch time)), S "follow the", phrase CT.lawConsEnergy, {-`sC`
-  S "as outlined in"
-  --FIXME , makeRefS s4_2_7 `sC` -}
-  S "with relative error no greater than 0.001%"])
+  sParen (ch time)), S "follow the", phrase CT.lawConsEnergy `sC`
+  S "as outlined in", makeRef2S (propCorSol propsDeriv []) `sC`
+  S "with relative error no greater than 0.001%"] )
   "Verify-Energy-Output-Follow-Conservation-of-Energy" funcReqDom
 --
 calcPCMMeltBegin = cic "calcPCMMeltBegin" (foldlSent [
@@ -251,7 +250,7 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", makeRef2S verifyEnergyOutput]
+  plural eq, S "should be less than", addPercent (0.001 :: Double), makeRef2S verifyEnergyOutput]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).

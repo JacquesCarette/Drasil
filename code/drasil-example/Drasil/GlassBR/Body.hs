@@ -54,9 +54,7 @@ import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
-import Data.Drasil.SentenceStructures (showingCxnBw, tAndDOnly, tAndDWAcc,
-  tAndDWSym, underConsidertn)
-  
+
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
   unlikelyChgsList)
@@ -199,8 +197,8 @@ systInfo = SI {
                  concatMap (^. defined_quant) tMods ++
                  concatMap (^. defined_fun) tMods,
   _datadefs    = dataDefns,
-  _inputs      = map qw inputs,
-  _outputs     = map qw outputs,
+  _inputs      = inputs,
+  _outputs     = outputs,
   _defSequence = qDefns,
   _constraints = constrained,
   _constants   = constants,

@@ -1,9 +1,16 @@
-module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, enumBullet,
-  enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', fmtU, itemRefToSent,
-  makeListRef, makeTMatrix, mkEnumAbbrevList, mkTableFromColumns, noRefs, noRefsLT,
-  sortBySymbol, sortBySymbolTuple, typUncr, unwrap, weave, zipSentList) where
+module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, chgsStart,
+  displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple, enumSimpleU,
+  eqN, eqUnR, eqUnR', fmtU, follows, getTandS, itemRefToSent, makeListRef,
+  makeTMatrix, maybeChanged, maybeExpanded, maybeWOVerb, mkEnumAbbrevList,
+  mkTableFromColumns, noRefs, noRefsLT, refineChain, showingCxnBw,
+  sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym,
+  typUncr, underConsidertn, unwrap, weave, zipSentList) where
 
 import Language.Drasil
+import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
+import Utils.Drasil.Sentence (sAre, toThe)
+
+import Control.Lens ((^.))
 
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.Function (on)
@@ -24,6 +31,11 @@ eqUnR e lbl = llcc lbl $ EqnBlock e
 
 eqUnR' :: Expr -> Contents
 eqUnR' e = UlC $ ulcc $ EqnBlock e
+
+--Ideally this would create a reference to the equation too
+--Doesn't use equation concept so utils doesn't depend on data
+eqN :: Int -> Sentence
+eqN n = S "Equation" +:+ sParen (S $ show n)
 
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
 -- s - the number from which the enumeration should start from
@@ -129,3 +141,58 @@ noRefs a = zip a $ repeat Nothing
 -- a ListTuple which can be used with Contents but not directly referable.
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
+
+--Doesn't use connection phrase so utils doesn't depend on data
+showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
+showingCxnBw traceyVar contents = titleize traceyVar +:+
+  S "Showing the Connections Between" +:+ contents
+
+underConsidertn :: ConceptChunk -> Sentence
+underConsidertn chunk = S "The" +:+ phrase chunk +:+ 
+  S "under consideration is" +:+. (chunk ^. defn)
+
+-- | Create a list in the pattern of "The __ are refined to the __".
+-- Note: Order matters!
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) `sAre` S "refined" `toThe` plural (fst y)
+refineChain (x:y:xs) = foldlList Comma List (refineChain [x,y] : rc (y : xs))
+  where
+    rc [a, b]   = [rcSent a b +:+. sParen (makeRef2S $ snd b)]
+    rc (a:b:as) =  rcSent a b : rc (b : as)
+    rc _        = error "refineChain helper encountered an unexpected empty list"
+    rcSent a b  = S "the" +:+ plural (fst a) +:+ sParen (makeRef2S $ snd a) `toThe` plural (fst b)
+refineChain _ = error "refineChain encountered an unexpected empty list"
+
+-- | helper functions for making likely change statements
+likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
+likelyFrame a verb x = foldlSent [S "The", a, S "may be", verb, x]
+maybeWOVerb, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
+maybeWOVerb a   = likelyFrame a EmptyS
+maybeChanged a  = likelyFrame a (S "changed")
+maybeExpanded a = likelyFrame a (S "expanded")
+
+-- | helpful combinators for making Sentences for Terminologies with Definitions
+-- term (acc) - definition
+tAndDWAcc :: Concept s => s -> ItemType
+tAndDWAcc temp = Flat $ atStart temp +:+ (sParen (short temp) `sDash` (temp ^. defn))
+-- term (symbol) - definition
+tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
+tAndDWSym tD sym = Flat $ atStart tD +:+ (sParen (ch sym) `sDash` (tD ^. defn))
+-- term - definition
+tAndDOnly :: Concept s => s -> ItemType
+tAndDOnly chunk  = Flat $ atStart chunk `sDash` (chunk ^. defn)
+
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+preceding `follows` ref = preceding +:+ S "following" +:+ makeRef2S ref
+
+-- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
+getTandS :: (Quantity a) => a -> Sentence
+getTandS a = phrase a +:+ ch a
+
+--Produces a sentence that displays the constraints in a {}.
+displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
+displayConstrntsAsSet sym listOfVals = E $ sy sym `isin` DiscreteS listOfVals
+
+--Produces a common beginning of a likely change of the form "reference - sentence"
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
+chgsStart = sDash . makeRef2S

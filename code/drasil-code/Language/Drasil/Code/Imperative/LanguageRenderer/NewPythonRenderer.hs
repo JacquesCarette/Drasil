@@ -94,8 +94,8 @@ instance KeywordSym PythonCode where
 
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
-  static = return staticDocD
-  dynamic = return dynamicDocD
+  static_ = return staticDocD
+  dynamic_ = return dynamicDocD
 
 instance BodySym PythonCode where
   type Body PythonCode = Doc
@@ -292,7 +292,7 @@ instance FunctionSym PythonCode where
   type Function PythonCode = Doc
   func l vs = fmap funcDocD (funcApp l vs)
   cast targT _ = targT
-  castListToInt = cast int (listType static int)
+  castListToInt = cast int (listType static_ int)
   get n = fmap funcDocD (var n)
   set n v = fmap funcDocD (mkVal . fst <$> assign (var n) v)
 
@@ -342,7 +342,7 @@ instance StatementSym PythonCode where
 
   varDec _ _ = return (mkStNoEnd empty)
   varDecDef l _ v = mkStNoEnd <$> fmap (pyVarDecDef l) v
-  listDec l _ t = mkStNoEnd <$> fmap (pyListDec l) (listType static t)
+  listDec l _ t = mkStNoEnd <$> fmap (pyListDec l) (listType static_ t)
   listDecDef l _ vs = mkStNoEnd <$> fmap (pyListDecDef l) (liftList 
     callFuncParamList vs)
   objDecDef = varDecDef
@@ -474,15 +474,15 @@ instance MethodSym PythonCode where
   type Method PythonCode = (Doc, Bool)
   method n _ _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) self (liftList 
     paramListDocD ps) b, False)
-  getMethod n c t = method (getterName n) c public dynamic t [] getBody
+  getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self $-> var n)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic
+  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_
     void [stateParam paramLbl t] setBody
     where setBody = oneLiner $ (self $-> var setLbl) &=. paramLbl
   mainMethod _ b = liftPairFst (b, True)
-  privMethod n c = method n c private dynamic
-  pubMethod n c = method n c public dynamic
-  constructor n = method initName n public dynamic (construct n)
+  privMethod n c = method n c private dynamic_
+  pubMethod n c = method n c public dynamic_
+  constructor n = method initName n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Python"
 
 
@@ -492,9 +492,9 @@ instance MethodSym PythonCode where
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ _ _ = return empty
-  privMVar del l = stateVar del l private dynamic
-  pubMVar del l = stateVar del l public dynamic
-  pubGVar del l = stateVar del l public static
+  privMVar del l = stateVar del l private dynamic_
+  pubMVar del l = stateVar del l public dynamic_
+  pubGVar del l = stateVar del l public static_
   listStateVar = stateVar
 
 instance ClassSym PythonCode where

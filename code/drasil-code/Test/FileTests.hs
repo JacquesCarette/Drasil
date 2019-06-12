@@ -33,7 +33,7 @@ writeStory = block [
   varDec "fileLine" string,
   getFileInputLine (var "fileToRead") (var "fileLine"),
   discardFileLine (var "fileToRead"),
-  listDec "fileContents" 0 (listType dynamic string)]
+  listDec "fileContents" 0 (listType dynamic_ string)]
 
 readStory :: (RenderSym repr) => repr (Statement repr)
 readStory = getFileInputAll (var "fileToRead") (var "fileContents")

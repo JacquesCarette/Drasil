@@ -10,10 +10,10 @@ observer :: (RenderSym repr) => repr (RenderFile repr)
 observer = fileDoc (buildModule "Observer" [] [] [] [helperClass])
 
 helperClass :: (RenderSym repr) => repr (Class repr)
-helperClass = pubClass "Observer" Nothing [stateVar 0 "x" public dynamic int] [observerConstructor, printNumMethod]
+helperClass = pubClass "Observer" Nothing [stateVar 0 "x" public dynamic_ int] [observerConstructor, printNumMethod]
 
 observerConstructor :: (RenderSym repr) => repr (Method repr)
 observerConstructor = constructor "Observer" [] (oneLiner (assign (objVarSelf "x") (litInt 5)))
 
 printNumMethod :: (RenderSym repr) => repr (Method repr)
-printNumMethod = method "printNum" "Observer" public dynamic void [] (oneLiner (printLn int (objVarSelf "x")))
+printNumMethod = method "printNum" "Observer" public dynamic_ void [] (oneLiner (printLn int (objVarSelf "x")))

@@ -8,16 +8,15 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 
-import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc, DocSection(SSDSec),
-  Field(..), Fields, InclUnits(IncludeUnits), ProblemDescription(PDProg),
-  SCSSub(Assumptions, DDs, GDs, IMs, TMs), SSDSec(..),
+import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc,
+  DocSection(ReqrmntSec, SSDSec), Field(..), Fields, InclUnits(IncludeUnits),
+  ProblemDescription(PDProg), ReqrmntSec(..), ReqsSub(..),
+  SCSSub(Assumptions, CorrSolnPpties, DDs, GDs, IMs, TMs), SSDSec(..),
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), Verbosity(Verbose),
   generateTraceMap, generateTraceMap', goalStmtF, mkDoc, mkEnumSimpleD)
 
-import Data.Drasil.Concepts.Documentation as Doc (assumpDom, assumption, coordinate,
-  datum, general, goalStmt, information, input_, model, output_,
-  physicalSystem, problemDescription, problem, section_,
-  solutionCharacteristic, specification, srs, symbol_, system, value)
+import Data.Drasil.Concepts.Documentation as Doc (assumpDom, doccon, doccon',
+  funcReqDom, input_, nonFuncReqDom, output_, srs, system)
 import Data.Drasil.Concepts.Math (angle, constraint, equation, perp, vector)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (physicCon, position, speed, twoD)
@@ -25,7 +24,6 @@ import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Quantities.Physics (physicscon)
 
-import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.People (samCrawford)
 
 import qualified Data.Map as Map
@@ -36,6 +34,7 @@ import Drasil.Projectile.DataDefs (dataDefns)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
+import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, propsDeriv)
 import Drasil.Projectile.TMods (tMods)
 import Drasil.Projectile.Unitals (unitalIdeas, unitalQuants)
 
@@ -53,7 +52,13 @@ mkSRS = [
         , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [EmptyS] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
+        , CorrSolnPpties propsDeriv
         ]
+      ],
+  ReqrmntSec $
+    ReqsProg
+      [ FReqsSub funcReqs []
+      , NonFReqsSub nonfuncReqs
       ]
   ]
 
@@ -78,18 +83,16 @@ systInfo = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ unitalQuants)
-  (nw projectileTitle : nw mass : nw twoD : map nw [angle, constraint, equation, perp, program, vector] ++
-    map nw [coordinate, datum, general, information, input_, model, output_, physicalSystem, problemDescription,
-    problem, section_, solutionCharacteristic, specification, symbol_, system, value] ++
-    map nw [assumption, dataDefn, genDefn, goalStmt, inModel, thModel] ++
-    map nw concepts ++ map nw physicscon ++ map nw physicCon ++ unitalIdeas)
-  [assumpDom] ([] :: [UnitDefn]) label refBy
+  (nw projectileTitle : nw mass : nw twoD : map nw doccon ++ map nw doccon' ++
+    map nw physicscon ++ map nw physicCon ++ map nw concepts ++ unitalIdeas ++
+    map nw [angle, constraint, equation, perp, program, vector])
+  [assumpDom, funcReqDom, nonFuncReqDom] ([] :: [UnitDefn]) label refBy
   dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) [assumpDom] ([] :: [UnitDefn]) label refBy
-  dataDefns iMods genDefns tMods
+usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) [assumpDom, funcReqDom, nonFuncReqDom]
+  ([] :: [UnitDefn]) label refBy dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 stdFields :: Fields
@@ -99,7 +102,7 @@ refDB :: ReferenceDB
 refDB = rdb [] concIns
 
 concIns :: [ConceptInstance]
-concIns = assumptions
+concIns = assumptions ++ funcReqs ++ nonfuncReqs
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns

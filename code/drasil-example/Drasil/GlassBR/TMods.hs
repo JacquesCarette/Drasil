@@ -40,10 +40,10 @@ lrIsSafe = tm (cw lrIsSafeRC)
 
 lrIsSafeRC :: RelationConcept
 lrIsSafeRC = makeRC "safetyLoad" (nounPhraseSP "Safety Load")
-  lrIsSafeDesc ( (sy isSafeLoad) $= (sy tmLRe) $> (sy tmDemand))
+  lrIsSafeDesc (sy isSafeLoad $= sy tmLRe $> sy tmDemand)
 
 lrIsSafeDesc :: Sentence
-lrIsSafeDesc = tModDesc (isSafeLoad) s ending
+lrIsSafeDesc = tModDesc isSafeLoad s ending
   where 
     s = ch isSafeProb +:+ sParen (S "from" +:+ makeRef2S pbIsSafe) `sAnd` ch isSafeLoad
     ending = short lResistance `isThe` phrase lResistance +:+ 
@@ -64,7 +64,7 @@ pbIsSafeRC = makeRC "safetyProbability" (nounPhraseSP "Safety Probability")
   pbIsSafeDesc (sy isSafeProb $= sy probFail $< sy pbTolfail)
 
 pbIsSafeDesc :: Sentence
-pbIsSafeDesc = tModDesc (isSafeProb) s ending
+pbIsSafeDesc = tModDesc isSafeProb s ending
   where 
     s = ch isSafeProb `sAnd` ch isSafeLoad +:+ sParen (S "from" +:+
       makeRef2S lrIsSafe)

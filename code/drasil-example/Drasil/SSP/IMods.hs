@@ -8,12 +8,10 @@ import Utils.Drasil
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint,
-  definition, first, goal, method_, physical, problem, 
-  solution, value)
+  definition, first, goal, method_, physical, problem, solution, value)
 import Data.Drasil.Concepts.Math (angle, equation)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (force)
-import Data.Drasil.SentenceStructures (eqN, getTandS)
 
 import Drasil.SSP.Assumptions (assumpSSC, assumpINSFL, 
   assumpES, assumpSF, assumpSL)

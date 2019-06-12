@@ -1,5 +1,5 @@
 Name:		drasil-data
-Version:	0.1.11
+Version:	0.1.12
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -10,7 +10,6 @@ library
     Data.Drasil.People
     Data.Drasil.Citations
     Data.Drasil.Constraints
-    Data.Drasil.SentenceStructures
     Data.Drasil.SI_Units
     Data.Drasil.Concepts.Computation
     Data.Drasil.Concepts.Documentation

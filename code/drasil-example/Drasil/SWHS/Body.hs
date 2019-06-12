@@ -21,22 +21,20 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   GSDSec(..), GSDSub(..),
-  dataConstraintUncertainty, intro, mkDoc,
-  mkEnumSimpleD, outDataConstTbl, physSystDesc, goalStmtF, termDefnF, 
-  traceGIntro, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
-  generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, 
-  getTraceMapFromIM, getSCSSub, generateTraceTable, physSystDescriptionLabel)
+  dataConstraintUncertainty, intro, mkDoc, mkEnumSimpleD, outDataConstTbl,
+  physSystDesc, goalStmtF, termDefnF, tsymb'', getDocDesc, egetDocDesc,
+  ciGetDocDesc, generateTraceMap, generateTraceMap', getTraceMapFromTM,
+  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  physSystDescriptionLabel, traceMatStandard)
 import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, unlikeChg, inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
-import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition, constraint, 
-  content, dataConst, datum, definition, document, environment, goalStmt, information, 
-  input_, item, likelyChg, model, organization, output_, physical, physics, physSyst,
-  problem, property, purpose, quantity, reference, requirement, section_, software,
-  softwareSys, srs, srsDomains, sysCont, system, traceyGraph, traceyMatrix, user, value,
-  variable, doccon, doccon')
-import Data.Drasil.IdeaDicts as Doc (genDefn, inModel, thModel)
-import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
+import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
+  constraint, content, datum, definition, document, environment, goalStmt,
+  information, input_, model, organization, output_, physical, physics, physSyst,
+  problem, property, purpose, quantity, reference, software, softwareSys, srs,
+  srsDomains, sysCont, system, user, value, variable, doccon, doccon')
+import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
@@ -51,7 +49,6 @@ import Data.Drasil.Quantities.Physics (energy, time, physicscon)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
-import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
@@ -70,12 +67,12 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
 import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
 import Drasil.SWHS.Requirements (dataConTable1, funcReqs, inputInitQuantsTable,
   nfRequirements, propsDeriv)
-import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE, tMods)
+import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW,
   htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcmE,
   pcmHTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
   outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, tempC,
-  tempPCM, tempW, thFluxVect, thickness, volHtGen, watE, wMass, absTol, relTol, consTol)
+  tempPCM, tempW, thFluxVect, thickness, volHtGen, watE, wMass, absTol, relTol)
 
 -------------------------------------------------------------------------------
 
@@ -115,7 +112,7 @@ resourcePath = "../../../datafiles/SWHS/"
 symMap :: ChunkDB
 symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
-  ++ map nw thermocon ++ map nw thisSi ++ map nw [m_2, m_3] ++ map nw [absTol, relTol, consTol]
+  ++ map nw thermocon ++ map nw thisSi ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
@@ -193,9 +190,8 @@ mkSRS = [RefSec $ RefProg intro [
   LCsSec $ LCsProg likelyChgsList,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
-    TraceabilityProg traceRefList traceTrailing (map LlC traceRefList ++
-  map UlC traceIntro2 ++
-  [LlC traceFig1, LlC traceFig2]) [],
+    TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
+      (map (LlC . fst) traceabilityMatrices) [],
   AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]
 
@@ -226,7 +222,7 @@ theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
+concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 section :: [Section]
 section = sec
@@ -499,176 +495,8 @@ unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
 
-traceRefList :: [LabelledContent]
-traceRefList = [traceTableAll, traceTable1, traceTable2, traceTable3]
-
-traceTableAll :: LabelledContent
-traceTableAll = generateTraceTable si
-
-traceTrailing :: [Sentence]
-traceTrailing = [traceTrailing1, traceTrailing2, traceTrailing3]
-
-traceInstaModel, traceData, traceFuncReq, traceLikelyChg, traceDataDefs, traceGenDefs,
-  traceAssump, traceTheories :: [String]
-  
-traceDataRef, traceFuncReqRef, traceInstaModelRef, traceAssumpRef, traceTheoriesRef,
-  traceDataDefRef, traceLikelyChgRef, traceGenDefRef :: [Sentence]
-
-traceInstaModel = ["IM1", "IM2", "IM3", "IM4"]
-traceInstaModelRef = map makeRef2S iMods --FIXME: iMods is a hack?
-
-traceFuncReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
-  "R11"]
-traceFuncReqRef = map makeRef2S funcReqs
-
-traceData = ["Data Constraints"]
-traceDataRef = [makeRef2S dataConTable1] --FIXME: Reference section?
-
-traceAssump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
-  "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-traceAssumpRef = map makeRef2S assumptions
-
-traceTheories = ["T1", "T2", "T3"]
-traceTheoriesRef = map makeRef2S tMods
-
-traceGenDefs = ["GD1", "GD2"]
-traceGenDefRef = map makeRef2S genDefs --FIXME: genDefs is a hack?
-
-traceDataDefs = ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6"]
-traceDataDefRef = map makeRef2S dataDefs
-
-traceLikelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
-traceLikelyChgRef = map makeRef2S likelyChgs
-
-{-Traceability Matrix 1-}
-
-traceMRow1 :: [String]
-traceMRow1 = traceTheories ++ traceGenDefs ++ traceDataDefs ++ traceInstaModel
-
-traceMRowHeader1 :: [Sentence]
-traceMRowHeader1 = zipWith itemRefToSent traceMRow1 
-  (traceTheoriesRef ++ traceGenDefRef ++ traceDataDefRef ++ traceInstaModelRef)
-
-traceMColumns1 :: [[String]]
-traceMColumns1 = [trace1T1, trace1T2, trace1T3, trace1GD1, trace1GD2, trace1DD1,
-  trace1DD2, trace1DD3, trace1DD4, trace1DD5, trace1DD6, trace1IM1, trace1IM2, trace1IM3, trace1IM4]
-
-trace1T1, trace1T2, trace1T3, trace1GD1, trace1GD2, trace1DD1, trace1DD2,
-  trace1DD3, trace1DD4, trace1DD5, trace1DD6, trace1IM1, trace1IM2, trace1IM3,
-  trace1IM4 :: [String]
-
---list of each item that "X" item requires for traceability matrix
-trace1T1 = []
-trace1T2 = ["T3"]
-trace1T3 = []
-trace1GD1 = []
-trace1GD2 = ["T1"]
-trace1DD1 = ["GD1"]
-trace1DD2 = ["GD1"]
-trace1DD3 = []
-trace1DD4 = []
-trace1DD5 = []
-trace1DD6 = ["DD3"]
-trace1IM1 = ["GD2", "DD1", "DD2", "IM2"]
-trace1IM2 = ["GD2", "DD2", "DD3", "DD4", "DD6", "IM1", "IM4"]
-trace1IM3 = ["T2"]
-trace1IM4 = ["T2", "T3", "DD2", "DD4", "DD5", "IM2"]
-
-{-Traceability Matrix 2-}
-
-traceMRow2 :: [String]
-traceMRow2 = traceInstaModel ++ traceData ++ traceFuncReq
-
---column header
-traceMRowHeader2 :: [Sentence]
-traceMRowHeader2 = zipWith itemRefToSent traceMRow2 
-  (traceInstaModelRef ++ traceDataRef ++ traceFuncReqRef)
-
---row header
-traceMColHeader2 :: [Sentence]
-traceMColHeader2 = zipWith itemRefToSent (traceInstaModel ++ traceFuncReq)
-  (traceInstaModelRef ++ traceFuncReqRef)
-
-traceMColumns2 :: [[String]]
-traceMColumns2 = [trace2IM1, trace2IM2, trace2IM3, trace2IM4, trace2R1, 
-  trace2R2, trace2R3, trace2R4, trace2R5, trace2R6, trace2R7, trace2R8, 
-  trace2R9, trace2R10, trace2R11]
-
-trace2IM1, trace2IM2, trace2IM3, trace2IM4, trace2R1, trace2R2,
-  trace2R3, trace2R4, trace2R5, trace2R6, trace2R7, trace2R8, 
-  trace2R9, trace2R10, trace2R11 :: [String]
-
---list of each item that "X" item requires for traceability matrix
-trace2IM1 = ["IM2", "R1", "R2"]
-trace2IM2 = ["IM1", "IM4", "R1", "R2"]
-trace2IM3 = ["R1", "R2"]
-trace2IM4 = ["IM2", "R1", "R2"]
-trace2R1 = []
-trace2R2 = ["R1"]
-trace2R3 = ["Data Constraints"]
-trace2R4 = ["IM1", "IM2", "R1", "R2"]
-trace2R5 = ["IM1"]
-trace2R6 = ["IM2"]
-trace2R7 = ["IM3"]
-trace2R8 = ["IM4"]
-trace2R9 = ["IM3", "IM4"]
-trace2R10 = ["IM2"]
-trace2R11 = ["IM2"]
-
-traceTable2 :: LabelledContent
-traceTable2 = llcc (makeTabRef "Tracey1") $
-  Table (EmptyS : traceMRowHeader2)
-  (makeTMatrix traceMColHeader2 traceMColumns2 traceMRow2)
-  (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True
-
-{-Traceability Matrix 3-}
-
-traceMRow3 :: [String]
-traceMRow3 = traceAssump
-
-traceMRowHeader3, traceMColHeader3 :: [Sentence]
-traceMRowHeader3 = zipWith itemRefToSent traceAssump traceAssumpRef
-
-traceMColHeader3 = zipWith itemRefToSent
-  (traceTheories ++ traceGenDefs ++ traceDataDefs ++ traceInstaModel ++ traceLikelyChg)
-  (traceTheoriesRef ++ traceGenDefRef ++ traceDataDefRef ++ traceInstaModelRef ++ 
-    traceLikelyChgRef)
-
-traceMColumns3 :: [[String]]
-traceMColumns3 = [trace3T1, trace3T2, trace3T3, trace3GD1, trace3GD2, trace3DD1,
-  trace3DD2, trace3DD3, trace3DD4, trace3DD5, trace3DD6, trace3IM1, trace3IM2, trace3IM3, trace3IM4,
-  trace3LC1, trace3LC2, trace3LC3, trace3LC4, trace3LC5, trace3LC6]
-
-trace3T1, trace3T2, trace3T3, trace3GD1, trace3GD2, trace3DD1, trace3DD2, 
-  trace3DD3, trace3DD4, trace3DD5, trace3DD6, trace3IM1, trace3IM2, trace3IM3, trace3IM4, trace3LC1,
-  trace3LC2, trace3LC3, trace3LC4, trace3LC5, trace3LC6 :: [String]
-
-trace3T1  = ["A1"]
-trace3T2  = []
-trace3T3  = []
-trace3GD1 = ["A2"]
-trace3GD2 = ["A3", "A4", "A5", "A6"]
-trace3DD1 = ["A7", "A8", "A9"]
-trace3DD2 = ["A3", "A4", "A10"]
-trace3DD3 = []
-trace3DD4 = []
-trace3DD5 = []
-trace3DD6 = []
-trace3IM1 = ["A11", "A12", "A14", "A15", "A16", "A19"]
-trace3IM2 = ["A12", "A13", "A16", "A17", "A18"]
-trace3IM3 = ["A14", "A19"]
-trace3IM4 = ["A13", "A18"]
-trace3LC1 = ["A4"]
-trace3LC2 = ["A8"]
-trace3LC3 = ["A9"]
-trace3LC4 = ["A11"]
-trace3LC5 = ["A12"]
-trace3LC6 = ["A15"]
-
-
--- These matrices can probably be generated automatically when enough info is
--- abstracted out.
+traceabilityMatrices :: [(LabelledContent, [Sentence])]
+traceabilityMatrices = traceMatStandard si
 
 ------------------------
 -- Traceabilty Graphs --
@@ -1222,57 +1050,6 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
-
-renameList1, renameList2 :: [CI]
-renameList1  = [thModel, genDefn, Doc.dataDefn, inModel, likelyChg, assumption]
-renameList2  = [inModel, requirement, dataConst]
-
-traceTrailing1, traceTrailing2, traceTrailing3 :: Sentence
-
-traceTrailing1 = foldlSent [foldlList Comma List $ map plural (take 4 renameList1), 
-  S "with each other"]
-
-traceTrailing2 = foldlSent [foldlList Comma List $ map plural renameList2, 
-  S "on each other"]
-
-traceTrailing3 = foldlSent_ [foldlList Comma List $ map plural (take 5 renameList1),
-  S "on the", plural assumption]
-
-traceTable1 :: LabelledContent
-traceTable1 = llcc (makeTabRef "Tracey2") $ Table
-  (EmptyS:traceMRowHeader1)
-  (makeTMatrix traceMRowHeader1 traceMColumns1 traceMRow1)
-  (showingCxnBw traceyMatrix
-  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
-
-traceTable3 :: LabelledContent
-traceTable3 = llcc (makeTabRef "Tracey3") $ Table
-  (EmptyS:traceMRowHeader3)
-  (makeTMatrix traceMColHeader3 traceMColumns3 traceMRow3)
-  (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
-  titleize' item)) True
-
--- These matrices can probably be generated automatically when enough info is
--- abstracted out.
-
-------------------------
--- Traceabilty Graphs --
-------------------------
-
-traceIntro2 :: [UnlabelledContent]
-traceIntro2 = traceGIntro [traceFig1, traceFig2]
-
-  [foldlSent [foldlList Comma List $ map plural renameList1, S "on each other"],
-
-  foldlSent_ [foldlList Comma List $ map plural renameList2, S "on each other"]]
-
-traceFig1 :: LabelledContent
-traceFig1 = llcc (makeFigRef "TraceyA") $ fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) $ resourcePath ++ "ATrace.png"
-
-traceFig2 :: LabelledContent
-traceFig2 = llcc (makeFigRef "TraceyR") $ fig (showingCxnBw traceyGraph (foldlList Comma List
-  $ map titleize' renameList2)) $ resourcePath ++ "RTrace.png"
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

@@ -36,8 +36,8 @@ assumpS3 =
   S "same throughout the entire", phrase tank]
 
 assumpS4 = 
-  (foldlSent [S "The", phrase wDensity, S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire", phrase vol])
+  foldlSent [S "The", phrase wDensity, S "has no spatial variation; that is"
+  `sC` S "it is constant over their entire", phrase vol]
 
 assumpDWCoW = cic "assumpDWCoW" assumpS4
   "Density-Water-Constant-over-Volume" assumpDom

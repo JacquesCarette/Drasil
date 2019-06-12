@@ -107,7 +107,7 @@ publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label ->
   Reader (State repr) (repr (Method repr))
 publicMethod mt l pl u = do
   g <- ask
-  genMethodCall public static (commented g) (logKind g) mt l pl u
+  genMethodCall public static_ (commented g) (logKind g) mt l pl u
 
 generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
   ([ModData], Label)] -> State repr -> IO ()
@@ -564,7 +564,7 @@ convType C.Integer = int
 convType C.Float = float
 convType C.Char = char
 convType C.String = string
-convType (C.List t) = getListTypeFunc t dynamic
+convType (C.List t) = getListTypeFunc t dynamic_
 convType (C.Object n) = obj n
 convType C.File = error "convType: File ?"
 
@@ -718,7 +718,7 @@ convStmt (FTry t c) = do
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmt FContinue = return continue
 convStmt (FDec v (C.List t)) = return $ listDec (codeName v) 0 
-  (getListTypeFunc t dynamic)
+  (getListTypeFunc t dynamic_)
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
 convStmt (FProcCall n l) = do
   e' <- convExpr (FCall (asExpr n) l)
@@ -746,8 +746,8 @@ genDataFunc nameTitle ddef = do
       return [block $ [
       varDec l_infile infile,
       varDec l_line string,
-      listDec l_lines 0 (listType dynamic string),
-      listDec l_linetokens 0 (listType dynamic string),
+      listDec l_lines 0 (listType dynamic_ string),
+      listDec l_linetokens 0 (listType dynamic_ string),
       openFileR v_infile v_filename ] ++
       concat inD ++ [
       closeFile v_infile ]]

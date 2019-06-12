@@ -5,7 +5,6 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (model, likeChgDom, unlikeChgDom)
 import Data.Drasil.Concepts.Thermodynamics (temp)
-import Data.Drasil.SentenceStructures (chgsStart)
 
 import Drasil.NoPCM.Assumptions(assumpCTNTD, assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)

@@ -17,10 +17,7 @@ R_tol = 0.0
 T_W = 0.0
 E_W = 0.0
 
-def derived_values():
-    None
-
-def input_constraints(inParams):
+def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, A_tol, R_tol, T_W, E_W):
     if (not((inParams.A_C <= 100000))) :
         print("Warning: constraint violated")
     if (not(((4170 < inParams.C_W) and (inParams.C_W < 4210)))) :

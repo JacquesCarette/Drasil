@@ -13,12 +13,12 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-#include "InputParameters.hpp"
 #include "DerivedValues.hpp"
 #include "InputConstraints.hpp"
+#include "InputParameters.hpp"
 #include "InputFormat.hpp"
-#include "OutputFormat.hpp"
 #include "Calculations.hpp"
+#include "OutputFormat.hpp"
 
 int main(int argc, const char *argv[]) {
     string inputfile = argv[1];

@@ -67,8 +67,7 @@ script:
  - ci_export_funcs
  - cd code
  - >-
-     ci_fstep "CI: HLint" "{ travis_retry curl --max-time 60 -#L https://github.com/ndmitchell/hlint/releases/download/v2.1.22/hlint-2.1.22-x86_64-linux.tar.gz | tar -xzf - -C/tmp/ ; } && /tmp/hlint-2.1.22/hlint ."
-# "curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s ." ## FIXME: Re-enable using the latest version of HLint when it finishes its move to ghc-lib-parser
+     ci_fstep "CI: HLint" "curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s ."
  - >-
      ci_fstep "CI: Build" make prog stackArgs="--no-terminal" GHCFLAGS=-Werror
  - >-

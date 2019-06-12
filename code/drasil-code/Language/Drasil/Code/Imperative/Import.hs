@@ -231,13 +231,11 @@ genInputDerived :: (RenderSym repr) => Reader (State repr)
 genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
-      reqdVals = concatMap (flip codevars (sysinfodb $ codeSpec g) . codeEquat) 
-        dvals
-      genDerived :: (RenderSym repr) => Maybe String -> Reader (State repr) 
+  let genDerived :: (RenderSym repr) => Maybe String -> Reader (State repr) 
         (Maybe (repr (Method repr)))
       genDerived Nothing = return Nothing
       genDerived (Just _) = do
-        parms <- getParams reqdVals
+        parms <- getDerivedParams
         inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (codeEquat x)) dvals
         mthd <- publicMethod void "derived_values" parms (return inps)
         return $ Just mthd
@@ -426,18 +424,18 @@ getDerivedCall = do
   let getCall Nothing = return Nothing
       getCall (Just m) = do
         ps <- getDerivedParams
-        val <- fApp' m "derived_values" ps
+        let pvals = map (var . paramName) ps
+        val <- fApp' m "derived_values" pvals
         return $ Just $ valState val
   getCall $ Map.lookup "derived_values" (eMap $ codeSpec g)
 
-getDerivedParams :: (RenderSym repr) => Reader (State repr) [repr (Value repr)]
+getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
       reqdVals = concatMap (flip codevars (sysinfodb $ codeSpec g) . codeEquat) 
         dvals
-  parms <- getParams reqdVals
-  return $ map (var . paramName) parms
+  getParams reqdVals
 
 -----
 

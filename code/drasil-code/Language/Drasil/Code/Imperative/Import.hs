@@ -178,11 +178,12 @@ liftS = fmap (: [])
 genInputModClass :: (RenderSym repr) => Reader (State repr) [repr (Module repr)]
 genInputModClass = do
   derived <- genInputDerived
+  constrs <- genInputConstraints
   let dl = maybeToList derived
+      cl = maybeToList constrs
   sequence [ genModule "InputParameters" Nothing (Just $ liftS genInputClass),
              genModule "DerivedValues" (Just $ return dl) Nothing,
-             genModule "InputConstraints" (Just $ liftS genInputConstraints)
-               Nothing
+             genModule "InputConstraints" (Just $ return cl) Nothing
            ]
 
 genInputModNoClass :: (RenderSym repr) => Reader (State repr)
@@ -195,7 +196,7 @@ genInputModNoClass = do
   return [ buildModule "InputParameters" []
            (map (\x -> varDecDef (codeName x) (convType $ codeType x)
              (getDefaultValue $ codeType x)) ins)
-           (maybeToList inpDer ++ [inpConstr])
+           (catMaybes [inpDer, inpConstr])
            []
          ]
 
@@ -213,26 +214,34 @@ genInputClass = do
     ++ asgs)]) ]
 
 genInputConstraints :: (RenderSym repr) => Reader (State repr) 
-  (repr (Method repr))
+  (Maybe (repr (Method repr)))
 genInputConstraints = do
   g <- ask
   let cm       = cMap $ codeSpec g
-      varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
-      sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
-      physCs   = concatMap (renderC . physLookup cm) varsList
-  parms <- getConstraintParams
-  sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
-    sfwrCBody g x)]}) sfwrCs
-  hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
-    physCBody g x)]}) physCs
-  publicMethod void "input_constraints" parms (return [block sf, block hw])
+      genConstraints :: (RenderSym repr) => Maybe String -> Reader (State repr) 
+        (Maybe (repr (Method repr)))
+      genConstraints Nothing = return Nothing
+      genConstraints (Just _) = do
+        h <- ask
+        parms <- getConstraintParams
+        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec h)
+            sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
+            physCs   = concatMap (renderC . physLookup cm) varsList
+        sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
+          sfwrCBody h x)]}) sfwrCs
+        hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
+          physCBody h x)]}) physCs
+        mthd <- publicMethod void "input_constraints" parms (return [block sf, 
+          block hw])
+        return $ Just mthd
+  genConstraints $ Map.lookup "input_constraints" (eMap $ codeSpec g)
 
 genInputDerived :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Method repr)))
 genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
-  let genDerived :: (RenderSym repr) => Maybe String -> Reader (State repr) 
+      genDerived :: (RenderSym repr) => Maybe String -> Reader (State repr) 
         (Maybe (repr (Method repr)))
       genDerived Nothing = return Nothing
       genDerived (Just _) = do

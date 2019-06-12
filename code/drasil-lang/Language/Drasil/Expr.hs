@@ -39,6 +39,7 @@ data Expr where
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
   Str      :: String -> Expr
+  Perc     :: Integer -> Integer -> Expr
   AssocA   :: ArithOper -> [Expr] -> Expr
   AssocB   :: BoolOper  -> [Expr] -> Expr
   Deriv    :: DerivType -> Expr -> UID -> Expr

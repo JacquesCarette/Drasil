@@ -463,7 +463,7 @@ tankLengthMin, tankLengthMax, pcmDensityMin,
   htCapWMin, htCapWMax, coilHTCMin, coilHTCMax, pcmHTCMin,
   pcmHTCMax, timeFinalMax, fracMinAux, consTolAux :: QDefinition
 
-consTolAux = mkQuantDef consTol $ dbl 0.00001
+consTolAux = mkQuantDef consTol $ perc 1 5
 
 -- Used in Constraint 1
 tankLengthMin = mkQuantDef (unitary "tankLengthMin"

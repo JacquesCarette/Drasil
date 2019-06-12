@@ -31,6 +31,6 @@ patternTestMainMethod = mainMethod "PatternTest" (body [block [
     varDecDef "obs1" (obj "Observer") (extStateObj "Observer" (obj "Observer") []), 
     varDecDef "obs2" (obj "Observer") (extStateObj "Observer" (obj "Observer") [])],
   block [
-    initObserverList (listType static (obj "Observer")) [var "obs1"], 
+    initObserverList (listType static_ (obj "Observer")) [var "obs1"], 
     addObserver (obj "Observer") (var "obs2"),
-    notifyObservers "printNum" (listType static (obj "Observer")) []]])
+    notifyObservers "printNum" (listType static_ (obj "Observer")) []]])

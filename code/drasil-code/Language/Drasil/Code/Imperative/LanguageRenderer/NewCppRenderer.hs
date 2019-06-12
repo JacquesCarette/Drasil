@@ -101,8 +101,8 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   type Permanence (p CppSrcCode CppHdrCode) = Doc
-  static = pair static static
-  dynamic = pair dynamic dynamic
+  static_ = pair static_ static_
+  dynamic_ = pair dynamic_ dynamic_
 
 instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
   type Body (p CppSrcCode CppHdrCode) = Doc
@@ -584,12 +584,13 @@ instance Monad CppSrcCode where
 instance PackageSym CppSrcCode where
   type Package CppSrcCode = ([ModData], Label)
   packMods n ms = liftPairFst (sequence ms, n)
-
+  
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code)
-    (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
-  top m = liftA3 cppstop m (list dynamic) endStatement
+    (if isEmpty (modDoc (unCPPSC code)) then return empty else
+    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+  top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
 
 instance KeywordSym CppSrcCode where
@@ -621,8 +622,8 @@ instance KeywordSym CppSrcCode where
 
 instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = Doc
-  static = return staticDocD
-  dynamic = return dynamicDocD
+  static_ = return staticDocD
+  dynamic_ = return dynamicDocD
 
 instance BodySym CppSrcCode where
   type Body CppSrcCode = Doc
@@ -648,10 +649,10 @@ instance StateTypeSym CppSrcCode where
   listType p st = liftA2 listTypeDocD st (list p)
   intListType p = listType p int
   floatListType p = listType p float
-  boolListType = listType dynamic bool
+  boolListType = listType dynamic_ bool
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
-  iterator t = fmap cppIterTypeDoc (listType dynamic t)
+  iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
 
 instance ControlBlockSym CppSrcCode where
   runStrategy l strats rv av = maybe
@@ -827,7 +828,7 @@ instance FunctionSym CppSrcCode where
   type Function CppSrcCode = Doc
   func l vs = fmap funcDocD (funcApp l vs)
   cast targT _ = fmap castDocD targT
-  castListToInt = cast (listType static int) int
+  castListToInt = cast (listType static_ int) int
   get n = fmap funcDocD (funcApp (getterName n) [])
   set n v = fmap funcDocD (funcApp (setterName n) [v])
 
@@ -1046,16 +1047,16 @@ instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
   method n c s _ t ps b = liftA2 (mthd False) (fmap snd s) (liftA5 
     (cppsMethod n c) t (liftList paramListDocD ps) b blockStart blockEnd)
-  getMethod n c t = method (getterName n) c public dynamic t [] getBody
+  getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self $-> var n)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic 
+  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
     void [stateParam paramLbl t] setBody
     where setBody = oneLiner $ (self $-> var setLbl) &=. paramLbl
   mainMethod _ b = fmap (mthd True Pub) (liftA4 cppMainMethod int b blockStart 
     blockEnd)
-  privMethod n c = method n c private dynamic
-  pubMethod n c = method n c public dynamic
-  constructor n = method n n public dynamic (construct n)
+  privMethod n c = method n c private dynamic_
+  pubMethod n c = method n c public dynamic_
+  constructor n = method n n public dynamic_ (construct n)
   destructor n vs = 
     let i = "i"
         deleteStatements = map (fmap destructSts) vs
@@ -1072,9 +1073,9 @@ instance StateVarSym CppSrcCode where
   stateVar del l s p t = liftA3 svd (fmap snd s) (liftA4 (stateVarDocD l) 
     (fst <$> includeScope s) p t endStatement) (if del < alwaysDel then
     return (mkStNoEnd empty) else free $ var l)
-  privMVar del l = stateVar del l private dynamic
-  pubMVar del l = stateVar del l public dynamic
-  pubGVar del l = stateVar del l public static
+  privMVar del l = stateVar del l private dynamic_
+  pubMVar del l = stateVar del l public dynamic_
+  pubGVar del l = stateVar del l public static_
   listStateVar del l s p t = 
     let i = "i"
         guard = var i ?< (var l $. listSize)
@@ -1135,7 +1136,7 @@ instance RenderSym CppHdrCode where
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
     (if isEmpty (modDoc (unCPPHC code)) then return empty else 
     liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
-  top m = liftA3 cpphtop m (list dynamic) endStatement
+  top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
 
 instance KeywordSym CppHdrCode where
@@ -1167,8 +1168,8 @@ instance KeywordSym CppHdrCode where
 
 instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = Doc
-  static = return staticDocD
-  dynamic = return dynamicDocD
+  static_ = return staticDocD
+  dynamic_ = return dynamicDocD
 
 instance BodySym CppHdrCode where
   type Body CppHdrCode = Doc
@@ -1194,10 +1195,10 @@ instance StateTypeSym CppHdrCode where
   listType p st = liftA2 listTypeDocD st (list p)
   intListType p = listType p int
   floatListType p = listType p float
-  boolListType = listType dynamic bool
+  boolListType = listType dynamic_ bool
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
-  iterator t = fmap cppIterTypeDoc (listType dynamic t)
+  iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
 
 instance ControlBlockSym CppHdrCode where
   runStrategy _ _ _ _ = return empty
@@ -1514,13 +1515,13 @@ instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
   method n _ s _ t ps _ = liftA2 (mthd False) (fmap snd s) 
     (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement)
-  getMethod n c t = method (getterName n) c public dynamic t [] (return empty)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic 
+  getMethod n c t = method (getterName n) c public dynamic_ t [] (return empty)
+  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
     void [stateParam paramLbl t] (return empty)
   mainMethod _ _ = return (mthd True Pub empty)
-  privMethod n c = method n c private dynamic
-  pubMethod n c = method n c public dynamic
-  constructor n = method n n public dynamic (construct n)
+  privMethod n c = method n c private dynamic_
+  pubMethod n c = method n c public dynamic_
+  constructor n = method n n public dynamic_ (construct n)
   destructor n _ = pubMethod ('~':n) n void [] (return empty)
 
   function n = method n ""
@@ -1529,9 +1530,9 @@ instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar _ l s p t = liftA3 svd (fmap snd s) (liftA4 (stateVarDocD l) 
     (fmap fst (includeScope s)) p t endStatement) (return (mkStNoEnd empty))
-  privMVar del l = stateVar del l private dynamic
-  pubMVar del l = stateVar del l public dynamic
-  pubGVar del l = stateVar del l public static
+  privMVar del l = stateVar del l private dynamic_
+  pubMVar del l = stateVar del l public dynamic_
+  pubGVar del l = stateVar del l public static_
   listStateVar = stateVar
 
 instance ClassSym CppHdrCode where

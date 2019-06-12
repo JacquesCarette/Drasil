@@ -17,7 +17,7 @@ using std::ofstream;
 
 #include "InputParameters.hpp"
 
-double func_q_C(InputParameters &inParams, double t) {
+double func_q_C(double h_C, double T_C, double t) {
     return (inParams.h_C * (inParams.T_C - func_T_W(t)));
 }
 

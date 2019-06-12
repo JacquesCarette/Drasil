@@ -80,6 +80,8 @@ ${C^{S}}$ & Specific heat capacity of a solid & $\frac{\text{J}}{(\text{kg}{}^{\
 \\
 ${C^{V}}$ & Specific heat capacity of a vapour & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
+${C_{tol}}$ & Relative tolerance for conservation of energy & --
+\\
 ${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${{C_{P}}^{L}}$ & Specific heat capacity of PCM as a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
@@ -1056,7 +1058,7 @@ In addition, the change in heat energy in the PCM should equal the energy input 
 \begin{displaymath}
 {E_{P}}=\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
 \end{displaymath}
-Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity'' checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 1.0e-3$\%$ \hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy}.
+Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity'' checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than ${C_{tol}}$ \hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy}.
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -1072,7 +1074,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Calculate-Temperature-PCM-Over-Time:\phantomsection\label{calcTempPCMOverTime}]Calculate and output the temperature of the phase change material (${T_{P}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
 \item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).
 \item[Calculate-Change-Heat\_Energy-PCM-Over-Time:\phantomsection\label{calcChgHeatEnergyPCMOverTime}]Calculate and output the change in heat energy in the PCM (${E_{P}}$($t$)) over the simulation time (from \hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
-\item[Verify-Energy-Output-Follow-Conservation-of-Energy:\phantomsection\label{verifyEnergyOutput}]Verify that the energy outputs (${E_{W}}$($t$) and ${E_{P}}$($t$)) follow the law of conservation of energy, as outlined in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}, with relative error no greater than 0.001%.
+\item[Verify-Energy-Output-Follow-Conservation-of-Energy:\phantomsection\label{verifyEnergyOutput}]Verify that the energy outputs (${E_{W}}$($t$) and ${E_{P}}$($t$)) follow the law of conservation of energy, as outlined in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}, with relative error no greater than ${C_{tol}}$.
 \item[Calculate-PCM-Melt-Begin-Time:\phantomsection\label{calcPCMMeltBegin}]Calculate and output the time at which the PCM begins to melt ${{t_{melt}}^{init}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
 \item[Calculate-PCM-Melt-End-Time:\phantomsection\label{calcPCMMeltEnd}]Calculate and output the time at which the PCM stops melting ${{t_{melt}}^{final}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
 \end{itemize}
@@ -1327,7 +1329,7 @@ Symbol & Description & Value & Unit
 \endhead
 ${{A_{C}}^{max}}$ & maximum surface area of coil & $100000$ & $\text{m}^{2}$
 \\
-${C_{tol}}$ & relative tolerance for conservation of energy & $10.0\cdot{}10^{-6}$ & --
+${C_{tol}}$ & relative tolerance for conservation of energy & $1.0e-3\%$ & --
 \\
 ${{C_{W}}^{max}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\

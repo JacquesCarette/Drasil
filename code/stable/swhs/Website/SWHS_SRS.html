@@ -119,6 +119,11 @@
                   <td>J/(kg&sdot;&deg;C)</td>
                 </tr>
                 <tr>
+                  <td><em>C<sub>tol</sub></em></td>
+                  <td>Relative tolerance for conservation of energy</td>
+                  <td>--</td>
+                </tr>
+                <tr>
                   <td><em>C<sub>W</sub></em></td>
                   <td>Specific heat capacity of water</td>
                   <td>J/(kg&sdot;&deg;C)</td>
@@ -2552,7 +2557,7 @@
                   <em>E<sub>P</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
                 </div>
                 <p class="paragraph">
-                  Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot; checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 1.0e-3<em>%</em> <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>.
+                  Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot; checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than <em>C<sub>tol</sub></em> <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>.
                 </p>
               </div>
             </div>
@@ -2622,7 +2627,7 @@
               </p>
               <p>
                 <div id="verifyEnergyOutput">
-                  Verify-Energy-Output-Follow-Conservation-of-Energy: Verify that the energy outputs (<em>E<sub>W</sub></em>(<em>t</em>) and <em>E<sub>P</sub></em>(<em>t</em>)) follow the law of conservation of energy, as outlined in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>, with relative error no greater than 0.001%.
+                  Verify-Energy-Output-Follow-Conservation-of-Energy: Verify that the energy outputs (<em>E<sub>W</sub></em>(<em>t</em>) and <em>E<sub>P</sub></em>(<em>t</em>)) follow the law of conservation of energy, as outlined in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>, with relative error no greater than <em>C<sub>tol</sub></em>.
                 </div>
               </p>
               <p>
@@ -4558,7 +4563,7 @@
             <tr>
               <td><em>C<sub>tol</sub></em></td>
               <td>relative tolerance for conservation of energy</td>
-              <td><em>10.0&sdot;10<sup>-6</sup></em></td>
+              <td><em>1.0e-3%</em></td>
               <td>--</td>
             </tr>
             <tr>

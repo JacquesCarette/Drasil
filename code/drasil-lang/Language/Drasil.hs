@@ -9,7 +9,7 @@ module Language.Drasil (
   -- Expr.Math
   , log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, square, euclidean
-  , dim, idx, int, dbl, str, isin, case_
+  , dim, idx, int, dbl, str, perc, isin, case_
   , sumAll, defsum, prodAll, defprod, defint, intAll
   , realInterval
   , deriv, pderiv
@@ -183,7 +183,7 @@ import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), Deri
 import Language.Drasil.Expr.Extract (dep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
-          dim, idx, int, dbl, str, isin, case_,
+          dim, idx, int, dbl, str, perc, isin, case_,
           sumAll, defsum, prodAll, defprod,
           realInterval,
           apply, apply1, apply2,

@@ -25,7 +25,7 @@ import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
-import Drasil.SWHS.Unitals (inputs, inputConstraints, coilHTC, coilSA,
+import Drasil.SWHS.Unitals (inputs, inputConstraints, coilHTC, coilSA, consTol,
   diam, eta, pcmE, pcmHTC, pcmSA, pcmDensity, pcmMass, pcmVol, simTime,
   tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP, tauW, tempC,
   tempPCM, tempW, watE, wDensity, wMass, wVol)
@@ -142,7 +142,7 @@ verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   sParen (ch watE :+: sParen (ch time) `sAnd` ch pcmE :+:
   sParen (ch time)), S "follow the", phrase CT.lawConsEnergy `sC`
   S "as outlined in", makeRef2S (propCorSol propsDeriv []) `sC`
-  S "with relative error no greater than 0.001%"] )
+  S "with relative error no greater than", ch consTol])
   "Verify-Energy-Output-Follow-Conservation-of-Energy" funcReqDom
 --
 calcPCMMeltBegin = cic "calcPCMMeltBegin" (foldlSent [
@@ -250,7 +250,7 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than", addPercent (0.001 :: Double), makeRef2S verifyEnergyOutput]
+  plural eq, S "should be less than", ch consTol, makeRef2S verifyEnergyOutput]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).

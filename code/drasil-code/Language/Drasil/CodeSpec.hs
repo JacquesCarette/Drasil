@@ -240,7 +240,8 @@ modExportMap chs cm ms ins _ ds = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ map codeName ins `zip` repeat "InputParameters"
                         ++ getExportDerived chs ds
-                        ++ getExportConstraints chs cm
+                        ++ getExportConstraints chs (getConstraints cm 
+                          (ins ++ map codevar ds))
                         ++ [ ("write_output", "OutputFormat") ]  -- hardcoded for now
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
@@ -346,10 +347,9 @@ getExportDerived chs _ = [("derived_values", dMod $ inputStructure chs)]
   where dMod Loose = "InputParameters"
         dMod AsClass = "DerivedValues"
 
-getExportConstraints :: Choices -> ConstraintMap -> [Export]
-getExportConstraints chs cm 
-  | null cm = []
-  | otherwise = [("input_constraints", cMod $ inputStructure chs)]
+getExportConstraints :: Choices -> [Constraint] -> [Export]
+getExportConstraints _ [] = []
+getExportConstraints chs _ = [("input_constraints", cMod $ inputStructure chs)]
   where cMod Loose = "InputParameters"
         cMod AsClass = "InputConstraints"
 

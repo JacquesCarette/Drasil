@@ -174,11 +174,12 @@ liftS = fmap (: [])
 
 ------- INPUT ----------
 
-genInputModClass :: (RenderSym repr) => Reader (State repr) 
-  [repr (Module repr)]
-genInputModClass =
+genInputModClass :: (RenderSym repr) => Reader (State repr) [repr (Module repr)]
+genInputModClass = do
+  derived <- genInputDerived
+  let dl = maybeToList derived
   sequence [ genModule "InputParameters" Nothing (Just $ liftS genInputClass),
-             genModule "DerivedValues" (Just $ liftS genInputDerived) Nothing,
+             genModule "DerivedValues" (Just $ return dl) Nothing,
              genModule "InputConstraints" (Just $ liftS genInputConstraints)
                Nothing
            ]
@@ -193,7 +194,7 @@ genInputModNoClass = do
   return [ buildModule "InputParameters" []
            (map (\x -> varDecDef (codeName x) (convType $ codeType x)
              (getDefaultValue $ codeType x)) ins)
-           [inpDer , inpConstr]
+           (maybeToList inpDer ++ [inpConstr])
            []
          ]
 
@@ -225,15 +226,22 @@ genInputConstraints = do
     physCBody g x)]}) physCs
   publicMethod void "input_constraints" parms (return [block sf, block hw])
 
-genInputDerived :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
+genInputDerived :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Method repr)))
 genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
       reqdVals = concatMap (flip codevars (sysinfodb $ codeSpec g) . codeEquat) 
         dvals
-  parms <- getParams reqdVals
-  inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (codeEquat x)) dvals
-  publicMethod void "derived_values" parms (return inps)
+      genDerived :: (RenderSym repr) => Maybe String -> Reader (State repr) 
+        (Maybe (repr (Method repr)))
+      genDerived Nothing = return Nothing
+      genDerived (Just _) = do
+        parms <- getParams reqdVals
+        inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (codeEquat x)) dvals
+        mthd <- publicMethod void "derived_values" parms (return inps)
+        return $ Just mthd
+  genDerived $ Map.lookup "derived_values" (eMap $ codeSpec g)
 
 -- need Expr -> String to print constraint
 constrWarn :: (RenderSym repr) => Expr -> repr (Body repr)

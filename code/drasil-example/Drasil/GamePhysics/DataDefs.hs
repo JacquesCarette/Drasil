@@ -6,7 +6,6 @@ import Language.Drasil
 import Database.Drasil (Block(Parallel))
 import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 import Utils.Drasil
-import Data.Drasil.SentenceStructures (getTandS)
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 

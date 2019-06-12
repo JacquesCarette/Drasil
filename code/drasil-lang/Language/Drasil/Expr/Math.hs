@@ -69,7 +69,7 @@ dim = UnaryOp Dim
 idx :: Expr -> Expr -> Expr
 idx = BinaryOp Index
 
--- | Smart constructors for integers, doubles, strings
+-- | Smart constructors for integers, doubles, strings, percents
 int :: Integer -> Expr
 int = Int
 
@@ -78,6 +78,9 @@ dbl = Dbl
 
 str :: String -> Expr
 str = Str
+
+perc :: Integer -> Integer -> Expr
+perc = Perc
 
 -- | Smart constructor for set membership
 -- FIXME: first argument really ought to be restricted to a

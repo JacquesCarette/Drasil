@@ -367,11 +367,11 @@ momentOfInertia :: QDefinition
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
-momentOfInertiaEqn = (sumAll (Atomic "i")((sy massI)*(sy  rRot $^ 2)))
+momentOfInertiaEqn = sumAll (Atomic "i") (sy massI) * (sy rRot $^ 2)
 
 momentOfInertiaDesc :: Sentence
-momentOfInertiaDesc = foldlSent [S "The", (phrase QP.momentOfInertia), (ch QP.momentOfInertia),
- S "of a body measures how much", (phrase QP.torque),
+momentOfInertiaDesc = foldlSent [S "The", phrase QP.momentOfInertia, ch QP.momentOfInertia,
+ S "of a body measures how much", phrase QP.torque,
  S "is needed for the body to achieve angular acceleration about the axis of rotation"]
 
 ---------------------------DD17 Potential Energy-------------------------------------------
@@ -384,7 +384,7 @@ potEnergy :: QDefinition
 potEnergy = mkQuantDef QP.potEnergy potEnergyEqn
 
 potEnergyEqn :: Expr
-potEnergyEqn = (sy QPP.mass * sy QP.gravitationalAccel * sy QP.height)
+potEnergyEqn = sy QPP.mass * sy QP.gravitationalAccel * sy QP.height
 
 potEnergyDesc :: Sentence
 potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy,

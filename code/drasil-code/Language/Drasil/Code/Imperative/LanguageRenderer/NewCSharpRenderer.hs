@@ -102,8 +102,8 @@ instance KeywordSym CSharpCode where
 
 instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc
-  static = return staticDocD
-  dynamic = return dynamicDocD
+  static_ = return staticDocD
+  dynamic_ = return dynamicDocD
 
 instance BodySym CSharpCode where
   type Body CSharpCode = Doc
@@ -129,7 +129,7 @@ instance StateTypeSym CSharpCode where
   listType p st = liftA2 listTypeDocD st (list p)
   intListType p = listType p int
   floatListType p = listType p float
-  boolListType = listType dynamic bool
+  boolListType = listType dynamic_ bool
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in C#"
@@ -310,7 +310,7 @@ instance FunctionSym CSharpCode where
   type Function CSharpCode = Doc
   func l vs = fmap funcDocD (funcApp l vs)
   cast targT _ = fmap castDocD targT
-  castListToInt = cast (listType static int) int
+  castListToInt = cast (listType static_ int) int
   get n = fmap funcDocD (funcApp (getterName n) [])
   set n v = fmap funcDocD (funcApp (setterName n) [v])
 
@@ -429,7 +429,7 @@ instance StatementSym CSharpCode where
 
   getFileInputLine = getStringFileInput
   discardFileLine f = valState $ fmap csFileInput f
-  stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic string) 
+  stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic_ string) 
     [s $. func "Split" [litChar d]]
 
   break = return (mkSt breakDocD)
@@ -513,16 +513,16 @@ instance MethodSym CSharpCode where
   type Method CSharpCode = (Doc, Bool)
   method n _ s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t 
     (liftList paramListDocD ps) b, False)
-  getMethod n c t = method (getterName n) c public dynamic t [] getBody
+  getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self $-> var n)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic 
+  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
     void [stateParam paramLbl t] setBody
     where setBody = oneLiner $ (self $-> var setLbl) &=. paramLbl
-  mainMethod c b = setMain <$> method "Main" c public static void 
+  mainMethod c b = setMain <$> method "Main" c public static_ void 
     [return $ text "string[] args"] b
-  privMethod n c = method n c private dynamic
-  pubMethod n c = method n c public dynamic
-  constructor n = method n n public dynamic (construct n)
+  privMethod n c = method n c private dynamic_
+  pubMethod n c = method n c public dynamic_
+  constructor n = method n n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in C#"
 
   function n = method n ""
@@ -530,9 +530,9 @@ instance MethodSym CSharpCode where
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
   stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
-  privMVar del l = stateVar del l private dynamic
-  pubMVar del l = stateVar del l public dynamic
-  pubGVar del l = stateVar del l public static
+  privMVar del l = stateVar del l private dynamic_
+  pubMVar del l = stateVar del l public dynamic_
+  pubGVar del l = stateVar del l public static_
   listStateVar = stateVar
 
 instance ClassSym CSharpCode where
@@ -551,7 +551,7 @@ instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
   buildModule n _ vs ms cs = fmap (md n (any (snd . unCSC) ms || 
     any (snd . unCSC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
-    else pubClass n Nothing (map (liftA4 statementsToStateVars public static 
+    else pubClass n Nothing (map (liftA4 statementsToStateVars public static_ 
     endStatement) vs) ms : cs))
 
 cstop :: Doc -> Doc -> Doc

@@ -6,7 +6,6 @@ import Language.Drasil
 import Database.Drasil (Block(Parallel))
 import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 import Utils.Drasil
-import Data.Drasil.SentenceStructures (getTandS)
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 
@@ -363,7 +362,7 @@ potEnergy :: QDefinition
 potEnergy = mkQuantDef QP.potEnergy potEnergyEqn
 
 potEnergyEqn :: Expr
-potEnergyEqn = (sy QPP.mass * sy QP.gravitationalAccel * sy QP.height)
+potEnergyEqn = sy QPP.mass * sy QP.gravitationalAccel * sy QP.height
 
 potEnergyDesc :: Sentence
 potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy,

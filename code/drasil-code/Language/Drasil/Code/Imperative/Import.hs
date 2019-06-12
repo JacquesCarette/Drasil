@@ -742,7 +742,7 @@ genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)
 genDataFunc nameTitle ddef = do
     parms <- getParams $ getInputs ddef
     inD <- mapM inData ddef
-    publicMethod void nameTitle ((PD p_filename string l_filename) : parms) $
+    publicMethod void nameTitle (PD p_filename string l_filename : parms) $
       return [block $ [
       varDec l_infile infile,
       varDec l_line string,

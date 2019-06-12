@@ -12,8 +12,7 @@ import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
-import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpLCCCW,
-  assumpTHCCoT, assumpTHCCoL, assumpLCCWP)
+import Drasil.SWHS.Assumptions (assumpLCCCW, assumpTHCCoT)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (meltFrac, latentEP, htFusion, pcmMass,
   tempW, tempPCM, htFluxP, pcmHTC, coilHTC, tempC, htFluxC, htCapSP,
@@ -42,7 +41,7 @@ htFluxCEqn = sy coilHTC * (sy tempC - apply1 tempW time)
 
 dd1HtFluxC :: DataDefinition
 dd1HtFluxC = dd dd1HtFluxCQD [makeCite koothoor2013] [] "htFluxC"
-  [makeRef2S assumpLCCCW, makeRef2S assumpTHCCoT, makeRef2S assumpTHCCoL]
+  [makeRef2S assumpLCCCW, makeRef2S assumpTHCCoT]
 
 --Can't include info in description beyond definition of variables?
 ----
@@ -55,7 +54,7 @@ htFluxPEqn = sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
 
 dd2HtFluxP :: DataDefinition
 dd2HtFluxP = dd dd2HtFluxPQD [makeCite koothoor2013] [] "htFluxP"
-  [makeRef2S assumpCWTAT, makeRef2S assumpTPCAV, makeRef2S assumpLCCWP]
+  [makeRef2S assumpLCCCW]
 
 ----
 

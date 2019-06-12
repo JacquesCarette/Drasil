@@ -7,8 +7,6 @@
 
 
 # Warnings currently triggered by your code
-- ignore: {name: "Redundant bracket"}
-- ignore: {name: "Use camelCase"}
 
 
 # Specify additional command line arguments

@@ -107,7 +107,7 @@ publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label -> [repr
   [repr (Block repr)] -> Reader (State repr) (repr (Method repr))
 publicMethod mt l pl st v u = do
   g <- ask
-  genMethodCall public static (commented g) (logKind g) mt l pl st v u
+  genMethodCall public static_ (commented g) (logKind g) mt l pl st v u
 
 generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
   ([ModData], Label)] -> State repr -> IO ()
@@ -538,24 +538,25 @@ convType C.Integer = int
 convType C.Float = float
 convType C.Char = char
 convType C.String = string
-convType (C.List t) = getListTypeFunc t dynamic
+convType (C.List t) = getListTypeFunc t dynamic_
 convType (C.Object n) = obj n
 convType C.File = error "convType: File ?"
 
 convExpr :: (RenderSym repr) => Expr -> Reader (State repr) (repr (Value repr))
-convExpr (Dbl d)      = return $ litFloat d
-convExpr (Int i)      = return $ litInt i
-convExpr (Str s)      = return $ litString s
-convExpr (AssocA Add l)  = foldr1 (#+) <$> mapM convExpr l
-convExpr (AssocA Mul l)  = foldr1 (#*) <$> mapM convExpr l
-convExpr (AssocB And l)  = foldr1 (?&&) <$> mapM convExpr l
-convExpr (AssocB Or l)   = foldr1 (?||) <$> mapM convExpr l
+convExpr (Dbl d) = return $ litFloat d
+convExpr (Int i) = return $ litInt i
+convExpr (Str s) = return $ litString s
+convExpr Perc{}  = error "convExpr: Perc"
+convExpr (AssocA Add l) = foldr1 (#+)  <$> mapM convExpr l
+convExpr (AssocA Mul l) = foldr1 (#*)  <$> mapM convExpr l
+convExpr (AssocB And l) = foldr1 (?&&) <$> mapM convExpr l
+convExpr (AssocB Or l)  = foldr1 (?||) <$> mapM convExpr l
 convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
-convExpr (C c)         = do
+convExpr (C c)   = do
   g <- ask
   variable $ codeName $ codevar (symbLookup c (symbolTable $ sysinfodb $ 
     codeSpec g))
-convExpr  (FCall (C c) x)  = do
+convExpr (FCall (C c) x) = do
   g <- ask
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
@@ -567,8 +568,8 @@ convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division
 convExpr (BinaryOp Eq a b@(Str _)) = liftM2 stringEqual (convExpr a) 
   (convExpr b) -- hack to deal with string equality
-convExpr  (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
-convExpr  (Case l)      = doit l -- FIXME this is sub-optimal
+convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
+convExpr (Case l)      = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen"
     doit [(e,_)] = convExpr e -- should always be the else clause
@@ -694,7 +695,7 @@ convStmt (FTry t c) = do
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmt FContinue = return continue
 convStmt (FDec v (C.List t)) = return $ listDec (codeName v) 0 
-  (getListTypeFunc t dynamic)
+  (getListTypeFunc t dynamic_)
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
 convStmt (FProcCall n l) = do
   e' <- convExpr (FCall (asExpr n) l)
@@ -725,8 +726,8 @@ genDataFunc nameTitle ddef = do
       return [block $ [
       varDec l_infile infile,
       varDec l_line string,
-      listDec l_lines 0 (listType dynamic string),
-      listDec l_linetokens 0 (listType dynamic string),
+      listDec l_lines 0 (listType dynamic_ string),
+      listDec l_linetokens 0 (listType dynamic_ string),
       openFileR v_infile v_filename ] ++
       concat inD ++ [
       closeFile v_infile ]]

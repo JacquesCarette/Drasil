@@ -6,9 +6,7 @@ class InputParameters:
     def __init__(self):
         self.a = 0.0
         self.b = 0.0
-        self.SD = 0.0
         self.w = 0.0
-        self.AR = 0.0
         self.P_btol = 0.0
         self.TNT = 0.0
         self.g = ""
@@ -19,5 +17,7 @@ class InputParameters:
         self.h = 0.0
         self.LDF = 0.0
         self.GTF = 0.0
+        self.SD = 0.0
+        self.AR = 0.0
         self.w_TNT = 0.0
 

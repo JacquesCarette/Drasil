@@ -79,9 +79,9 @@ digitsProcess [] pos coun ex
 -- https://en.wikipedia.org/wiki/Scientific_notation
 processExpo :: Int -> (Int, Int)
 processExpo a 
-  | mod (a-1)  3 == 0 = (1, a-1)
-  | mod (a-1)  3 == 1 = (2, a-2)
-  | mod (a-1)  3 == 2 = (3, a-3)
+  | mod (a-1) 3 == 0 = (1, a-1)
+  | mod (a-1) 3 == 1 = (2, a-2)
+  | mod (a-1) 3 == 2 = (3, a-3)
   | otherwise = error "The cases of processExpo should be exhaustive!"
 
 -- | expr translation function from Drasil to layout AST
@@ -92,7 +92,10 @@ expr (Dbl d)           sm = case sm ^. getSetting of
      (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
   Scientific           ->  P.Dbl d
 expr (Int i)            _ = P.Int i
-expr (Str s)            _ = P.Str   s
+expr (Str s)            _ = P.Str s
+expr (Perc a b)         _ = P.Row [P.Dbl val, P.MO P.Perc]
+  where
+    val = fromIntegral a / (10 ** fromIntegral (b - 2))
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
 expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
 expr (AssocA Add l)    sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
@@ -145,7 +148,7 @@ expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b)   sm = pow sm a b
 expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
 expr (Operator o d e)     sm = eop sm o d e
-expr (IsIn  a b)          sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
+expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space b]
 expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. ckdb) c) ri
 
 lookupC :: ChunkDB -> UID -> Symbol

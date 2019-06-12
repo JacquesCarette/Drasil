@@ -55,8 +55,8 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
 
 class PermanenceSym repr where
   type Permanence repr
-  static  :: repr (Permanence repr)
-  dynamic :: repr (Permanence repr)
+  static_  :: repr (Permanence repr)
+  dynamic_ :: repr (Permanence repr)
 
 class (BlockSym repr) => BodySym repr where
   type Body repr

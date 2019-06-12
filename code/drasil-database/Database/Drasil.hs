@@ -1,7 +1,7 @@
 {- re-export many things to simplify external use -}
 module Database.Drasil (
   -- ChunkDB
-  ChunkDB, RefbyMap, TraceMap
+  ChunkDB, RefbyMap, TraceMap, UMap
   , asOrderedList, cdb, collectUnits, conceptMap, conceptinsLookup
   , conceptinsTable, dataDefnTable, datadefnLookup, defLookup, defTable
   , gendefLookup, gendefTable, generateRefbyMap, insmodelLookup, insmodelTable

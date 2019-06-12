@@ -74,8 +74,9 @@ instance PackageSym JavaCode where
 instance RenderSym JavaCode where
   type RenderFile JavaCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
-  top _ = liftA3 jtop endStatement (include "") (list static)
+    (if isEmpty (modDoc (unJC code)) then return empty else
+    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+  top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
 
 instance KeywordSym JavaCode where
@@ -107,8 +108,8 @@ instance KeywordSym JavaCode where
 
 instance PermanenceSym JavaCode where
   type Permanence JavaCode = Doc
-  static = return staticDocD
-  dynamic = return dynamicDocD
+  static_ = return staticDocD
+  dynamic_ = return dynamicDocD
 
 instance BodySym JavaCode where
   type Body JavaCode = Doc
@@ -134,7 +135,7 @@ instance StateTypeSym JavaCode where
   listType p st = liftA2 listTypeDocD st (list p)
   intListType p = fmap jIntListTypeDoc (list p)
   floatListType p = fmap jFloatListTypeDoc (list p)
-  boolListType = listType dynamic bool
+  boolListType = listType dynamic_ bool
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in Java"
@@ -441,7 +442,7 @@ instance StatementSym JavaCode where
   getFileInputLine f v = v &= f $. func "nextLine" []
   discardFileLine f = valState $ f $. func "nextLine" []
   stringSplit d vnew s = mkSt <$> liftA3 jStringSplit vnew 
-    (listType dynamic string) 
+    (listType dynamic_ string) 
     (funcApp "Arrays.asList" [s $. func "split" [litString [d]]])
 
   break = return (mkSt breakDocD)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
@@ -525,16 +526,16 @@ instance MethodSym JavaCode where
   type Method JavaCode = (Doc, Bool)
   method n _ s p t ps b = liftPairFst (liftA5 (jMethod n) s p t (liftList 
     paramListDocD ps) b, False)
-  getMethod n c t = method (getterName n) c public dynamic t [] getBody
+  getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self $-> var n)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic 
+  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
     void [stateParam paramLbl t] setBody
     where setBody = oneLiner $ (self $-> var setLbl) &=. paramLbl
-  mainMethod c b = setMain <$> method "main" c public static void 
+  mainMethod c b = setMain <$> method "main" c public static_ void 
     [return $ text "String[] args"] b
-  privMethod n c = method n c private dynamic
-  pubMethod n c = method n c public dynamic
-  constructor n = method n n public dynamic (construct n)
+  privMethod n c = method n c private dynamic_
+  pubMethod n c = method n c public dynamic_
+  constructor n = method n n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Java"
 
   function n = method n ""
@@ -542,9 +543,9 @@ instance MethodSym JavaCode where
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
   stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
-  privMVar del l = stateVar del l private dynamic
-  pubMVar del l = stateVar del l public dynamic
-  pubGVar del l = stateVar del l public static
+  privMVar del l = stateVar del l private dynamic_
+  pubMVar del l = stateVar del l public dynamic_
+  pubGVar del l = stateVar del l public static_
   listStateVar = stateVar
 
 instance ClassSym JavaCode where
@@ -563,7 +564,7 @@ instance ModuleSym JavaCode where
   type Module JavaCode = ModData
   buildModule n _ vs ms cs = fmap (md n (any (snd . unJC) ms || 
     any (snd . unJC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
-    else pubClass n Nothing (map (liftA4 statementsToStateVars public static
+    else pubClass n Nothing (map (liftA4 statementsToStateVars public static_
     endStatement) vs) ms : cs))
 
 enumsEqualInts :: Bool

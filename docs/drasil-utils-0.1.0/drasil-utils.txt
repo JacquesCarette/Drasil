@@ -62,6 +62,8 @@ bulletFlat :: [Sentence] -> ListType
 -- | bulletNested applies Bullets and headers to a Nested ListType. t -
 --   Headers of the Nested lists. l - Lists of ListType.
 bulletNested :: [Sentence] -> [ListType] -> ListType
+chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
+displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
 enumBullet :: Reference -> [Sentence] -> LabelledContent
@@ -72,12 +74,18 @@ enumBulletU :: [Sentence] -> Contents
 --   be enumerated
 enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
 enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
+eqN :: Int -> Sentence
 eqUnR :: Expr -> Reference -> LabelledContent
 eqUnR' :: Expr -> Contents
 
 -- | takes a amount and adds a unit to it n - sentenc representing an
 --   amount u - unit we want to attach to amount
 fmtU :: (MayHaveUnit a) => Sentence -> a -> Sentence
+follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
+
+-- | Used when you want to say a term followed by its symbol. ex. "...using
+--   the Force F in..."
+getTandS :: (Quantity a) => a -> Sentence
 
 -- | makes sentences from an item and its reference a - String title of
 --   reference b - Sentence containing the full reference
@@ -87,8 +95,12 @@ itemRefToSent :: String -> Sentence -> Sentence
 --   match the length of the list l - list whos length is to be matched
 makeListRef :: [a] -> Section -> [Sentence]
 
--- | makes a traceability matrix from list of column rows and list of rows
+-- | makes a traceability matrix from list of row title, list of rows of
+--   "checked" columns, and a list of columns.
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
+maybeChanged :: Sentence -> Sentence -> Sentence
+maybeExpanded :: Sentence -> Sentence -> Sentence
+maybeWOVerb :: Sentence -> Sentence -> Sentence
 
 -- | zip helper function enumerates abbreviation and zips it with list of
 --   itemtype s - the number from which the enumeration should start from t
@@ -106,12 +118,24 @@ noRefs :: [ItemType] -> [(ItemType, Maybe String)]
 --   a ListTuple which can be used with Contents but not directly
 --   referable.
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
+
+-- | Create a list in the pattern of "The <b> are refined to the </b>".
+--   Note: Order matters!
+refineChain :: NamedIdea c => [(c, Section)] -> Sentence
+showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 sortBySymbol :: HasSymbol a => [a] -> [a]
 sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
+tAndDOnly :: Concept s => s -> ItemType
+
+-- | helpful combinators for making Sentences for Terminologies with
+--   Definitions term (acc) - definition
+tAndDWAcc :: Concept s => s -> ItemType
+tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
 
 -- | extracts the typical uncertainty to be displayed from something that
 --   has an uncertainty
 typUncr :: HasUncertainty c => c -> Sentence
+underConsidertn :: ConceptChunk -> Sentence
 
 -- | get a unit symbol if there is one
 unwrap :: Maybe UnitDefn -> Sentence

@@ -378,6 +378,7 @@ data Expr
 [Dbl] :: Double -> Expr
 [Int] :: Integer -> Expr
 [Str] :: String -> Expr
+[Perc] :: Integer -> Integer -> Expr
 [AssocA] :: ArithOper -> [Expr] -> Expr
 [AssocB] :: BoolOper -> [Expr] -> Expr
 [Deriv] :: DerivType -> Expr -> UID -> Expr
@@ -508,10 +509,11 @@ dim :: Expr -> Expr
 -- | Smart constructor for indexing
 idx :: Expr -> Expr -> Expr
 
--- | Smart constructors for integers, doubles, strings
+-- | Smart constructors for integers, doubles, strings, percents
 int :: Integer -> Expr
 dbl :: Double -> Expr
 str :: String -> Expr
+perc :: Integer -> Integer -> Expr
 
 -- | Smart constructor for set membership FIXME: first argument really
 --   ought to be restricted to a <tt>variable</tt>, as IsIn should only be

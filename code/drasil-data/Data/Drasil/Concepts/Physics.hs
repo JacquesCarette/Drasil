@@ -6,6 +6,7 @@ module Data.Drasil.Concepts.Physics
   , time, torque, weight, fbd, angular, linear, tension, compression, stress
   , strain , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint
   , damping , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy, chgInVelocity
+  , potEnergy
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -23,8 +24,7 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mechEnergy, coll
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure, cohesion, isotropy, kEnergy, chgInVelocity]
-
+  joint, damping, pressure, cohesion, isotropy, kEnergy, chgInVelocity, potEnergy]
 
 physicCon' :: [CI]
 physicCon' = [twoD, threeD]
@@ -35,7 +35,7 @@ rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, weight, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping, pressure,cohesion, isotropy, kEnergy, chgInVelocity:: ConceptChunk
+  joint, damping, pressure,cohesion, isotropy, kEnergy, chgInVelocity, potEnergy:: ConceptChunk
 
 twoD, threeD :: CI
 
@@ -94,6 +94,10 @@ pressure     = dccWDS "pressure" (cn' "pressure")
   (S "A" +:+ phrase force +:+ S "exerted over an area")
 height       = dccWDS "height" (cn' "height") (S "The" +:+ phrase distance +:+ 
   S "above a reference point for a point of interest.")
+
+potEnergy  = dccWDS "potEnergy" (cn "potential energy")
+  (S "The measure of the" +:+ phrase energy +:+ 
+   S "held by an object because of its" +:+  phrase position)
 
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" 

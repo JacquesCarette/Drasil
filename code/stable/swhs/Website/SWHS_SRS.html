@@ -538,7 +538,7 @@
               The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#dParnas1972>dParnas1972</a> and <a href=#parnasClements1984>parnasClements1984</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models, and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The instance models to be solved are referred to as <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
+              The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The instance models to be solved are referred to as <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
             </p>
           </div>
         </div>
@@ -727,12 +727,12 @@
                   </p>
                   <p>
                     <div id="assumpCWTAT">
-                      Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#DD:htFluxP>DD: htFluxP</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+                      Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
                     </div>
                   </p>
                   <p>
                     <div id="assumpTPCAV">
-                      Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#DD:htFluxP>DD: htFluxP</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+                      Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. <a href=#GD:rocTempSimp>GD: rocTempSimp</a> <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
                     </div>
                   </p>
                   <p>
@@ -747,7 +747,7 @@
                   </p>
                   <p>
                     <div id="assumpLCCCW">
-                      Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. <a href=#DD:htFluxC>DD: htFluxC</a>.
+                      Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. <a href=#DD:htFluxP>DD: htFluxP</a> <a href=#DD:htFluxC>DD: htFluxC</a>.
                     </div>
                   </p>
                   <p>
@@ -757,12 +757,12 @@
                   </p>
                   <p>
                     <div id="assumpTHCCoL">
-                      Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. <a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a> <a href=#DD:htFluxC>DD: htFluxC</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+                      Temp-Heating-Coil-Constant-over-Length: The temperature of the heating coil does not vary along its length. <a href=#likeChgTCVOL>LC: Temperature-Coil-Variable-Over-Length</a> <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
                     </div>
                   </p>
                   <p>
                     <div id="assumpLCCWP">
-                      Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM. <a href=#DD:htFluxP>DD: htFluxP</a>.
+                      Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM.
                     </div>
                   </p>
                   <p>
@@ -1210,7 +1210,7 @@
                                                                                                                                                         </div>&#8239;dV</em>
                 </div>
                 <p class="paragraph">
-                  Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>, <a href=#assumpDWPCoV>A: Density-Water-PCM-Constant-over-Volume</a>, and <a href=#assumpSHECov>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
+                  Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. The integral over the surface could be simplified because the thermal flux is assumed constant over <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> and <em>0</em> on all other surfaces. Outward flux is considered positive. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>, <a href=#assumpDWPCoV>A: Density-Water-PCM-Constant-over-Volume</a>, and <a href=#assumpSHECov>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
                 </p>
                 <div class="equation">
                   <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
@@ -1288,9 +1288,6 @@
                         <p class="paragraph">
                           <a href=#assumpTHCCoT>A: Temp-Heating-Coil-Constant-over-Time</a>
                         </p>
-                        <p class="paragraph">
-                          <a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>
-                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1355,13 +1352,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>
-                        </p>
-                        <p class="paragraph">
-                          <a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>
-                        </p>
-                        <p class="paragraph">
-                          <a href=#assumpLCCWP>A: Law-Convective-Cooling-Water-PCM</a>
+                          <a href=#assumpLCCCW>A: Newton-Law-Convective-Cooling-Coil-Water</a>
                         </p>
                       </td>
                     </tr>
@@ -2561,7 +2552,7 @@
                   <em>E<sub>P</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
                 </div>
                 <p class="paragraph">
-                  Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot; checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>.
+                  Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot; checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 1.0e-3<em>%</em> <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>.
                 </p>
               </div>
             </div>
@@ -2631,7 +2622,7 @@
               </p>
               <p>
                 <div id="verifyEnergyOutput">
-                  Verify-Energy-Output-Follow-Conservation-of-Energy: Verify that the energy outputs (<em>E<sub>W</sub></em>(<em>t</em>) and <em>E<sub>P</sub></em>(<em>t</em>)) follow the law of conservation of energy with relative error no greater than 0.001%.
+                  Verify-Energy-Output-Follow-Conservation-of-Energy: Verify that the energy outputs (<em>E<sub>W</sub></em>(<em>t</em>) and <em>E<sub>P</sub></em>(<em>t</em>)) follow the law of conservation of energy, as outlined in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>, with relative error no greater than 0.001%.
                 </div>
               </p>
               <p>
@@ -2864,6 +2855,9 @@
             <tr>
               <th></th>
               <th>
+                <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>
+              </th>
+              <th>
                 <a href=#checkWithPhysConsts>FR: Check-Input-with-Physical_Constraints</a>
               </th>
               <th><a href=#inputInitQuants>FR: Input-Initial-Quantities</a></th>
@@ -2871,8 +2865,8 @@
               <th><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></th>
               <th><a href=#likeChgDT>LC: Discharging-Tank</a></th>
               <th><a href=#GD:rocTempSimp>GD: rocTempSimp</a></th>
-              <th><a href=#DD:htFluxP>DD: htFluxP</a></th>
               <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
+              <th><a href=#DD:htFluxP>DD: htFluxP</a></th>
               <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
               <th><a href=#unlikeChgWPFS>UC: Water-PCM-Fixed-States</a></th>
               <th><a href=#unlikeChgNGS>UC: No-Gaseous-State</a></th>
@@ -2922,8 +2916,47 @@
             </tr>
             <tr>
               <td>
+                <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>
+              </td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
                 <a href=#Table:InDataConstraints>Table:InDataConstraints</a>
               </td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -2960,6 +2993,7 @@
             <tr>
               <td><a href=#Table:ReqInputs>Table:ReqInputs</a></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -2994,6 +3028,7 @@
             </tr>
             <tr>
               <td><a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -3034,6 +3069,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
               <td></td>
@@ -3071,10 +3107,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
-              <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3105,6 +3142,7 @@
               <td>
                 <a href=#assumpDWPCoV>A: Density-Water-PCM-Constant-over-Volume</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3172,6 +3210,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
@@ -3186,43 +3225,7 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>
-                <a href=#assumpLCCWP>A: Law-Convective-Cooling-Water-PCM</a>
-              </td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3249,6 +3252,7 @@
             </tr>
             <tr>
               <td><a href=#assumpNGSP>A: No-Gaseous-State-PCM</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3286,6 +3290,7 @@
               <td>
                 <a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3332,6 +3337,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
               <td></td>
@@ -3356,6 +3362,7 @@
             </tr>
             <tr>
               <td><a href=#assumpPIT>A: Perfect-Insulation-Tank</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3398,6 +3405,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3428,6 +3436,7 @@
             </tr>
             <tr>
               <td><a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3480,6 +3489,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3503,12 +3513,13 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3537,6 +3548,7 @@
               <td>
                 <a href=#assumpTHCCoT>A: Temp-Heating-Coil-Constant-over-Time</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3577,10 +3589,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
-              <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3611,6 +3624,7 @@
               <td>
                 <a href=#assumpVCMPN>A: Volume-Change-Melting-PCM-Negligible</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3667,6 +3681,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3681,6 +3696,7 @@
             </tr>
             <tr>
               <td><a href=#assumpWAL>A: Water-Always-Liquid</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -3721,6 +3737,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3751,6 +3768,7 @@
             </tr>
             <tr>
               <td><a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3786,6 +3804,7 @@
             </tr>
             <tr>
               <td><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3843,6 +3862,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3856,6 +3876,7 @@
             </tr>
             <tr>
               <td><a href=#IM:heatEInPCM>IM: heatEInPCM</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3912,6 +3933,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3926,6 +3948,7 @@
             </tr>
             <tr>
               <td><a href=#DD:htFluxC>DD: htFluxC</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3964,6 +3987,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -3996,6 +4020,7 @@
             </tr>
             <tr>
               <td><a href=#DD:htFusion>DD: htFusion</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4052,6 +4077,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
               <td></td>
@@ -4066,6 +4092,7 @@
             </tr>
             <tr>
               <td><a href=#TM:latentHtE>TM: latentHtE</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4104,6 +4131,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -4139,6 +4167,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td>X</td>
@@ -4171,6 +4200,7 @@
             </tr>
             <tr>
               <td><a href=#TM:sensHtE>TM: sensHtE</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -4218,6 +4248,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -4241,6 +4272,7 @@
             </tr>
             <tr>
               <td><a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -5496,6 +5528,12 @@
               <td>maximum surface area of coil</td>
               <td><em>100000</em></td>
               <td>m<sup>2</sup></td>
+            </tr>
+            <tr>
+              <td><em>C<sub>tol</sub></em></td>
+              <td>relative tolerance for conservation of energy</td>
+              <td><em>10.0&sdot;10<sup>-6</sup></em></td>
+              <td>--</td>
             </tr>
             <tr>
               <td><em>C<sub>W</sub><sup>max</sup></em></td>

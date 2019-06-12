@@ -52,7 +52,6 @@ import Data.Drasil.Quantities.Physics (energy, time, physicscon)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
-import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
@@ -77,7 +76,7 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW,
   htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcmE,
   pcmHTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
   outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, tempC,
-  tempPCM, tempW, thFluxVect, thickness, volHtGen, watE, wMass, absTol, relTol, consTol)
+  tempPCM, tempW, thFluxVect, thickness, volHtGen, watE, wMass, absTol, relTol)
 
 -------------------------------------------------------------------------------
 
@@ -117,7 +116,7 @@ resourcePath = "../../../datafiles/SWHS/"
 symMap :: ChunkDB
 symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
-  ++ map nw thermocon ++ map nw thisSi ++ map nw [m_2, m_3] ++ map nw [absTol, relTol, consTol]
+  ++ map nw thermocon ++ map nw thisSi ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks

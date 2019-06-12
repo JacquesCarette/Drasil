@@ -39,7 +39,6 @@ import Data.Drasil.Quantities.Math (gradient, pi_, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 
-import Data.Drasil.SentenceStructures (showingCxnBw)
 import Data.Drasil.Software.Products (compPro, prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
@@ -71,10 +70,9 @@ import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012,
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
 import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
-import Drasil.SWHS.Unitals ( coilSAMax, deltaT, eta, htFluxC, htFluxIn, 
+import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn, 
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempEnv, 
-  tempW, thFluxVect, volHtGen, watE, wMass, wVol, unitalChuncks, absTol, relTol,
-  consTol)
+  tempW, thFluxVect, volHtGen, watE, wMass, wVol, unitalChuncks, absTol, relTol)
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
@@ -108,7 +106,7 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ map qw specParamValList ++ 
   map qw [coilSAMax] ++ map qw [tauW] ++ map qw [eta] ++
-  map qw [absTol, relTol, consTol]
+  map qw [absTol, relTol]
 
 units :: [UnitaryConceptDict]
 units = map ucw [density, tau, inSA, outSA,
@@ -240,7 +238,7 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans] ++ map nw checkSi
-  ++ map nw [absTol, relTol, consTol] ++ [nw materialProprty])
+  ++ map nw [absTol, relTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains)
   thisSi label refBy dataDefn iMods genDef theory
   concIns section labCon

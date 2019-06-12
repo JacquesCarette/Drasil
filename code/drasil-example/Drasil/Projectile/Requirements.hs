@@ -1,15 +1,18 @@
-module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, propsDeriv) where
+module Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
+  nonfuncReqs, propsDeriv) where
 
 import Language.Drasil
+import Drasil.DocLang (mkInputPropsTable)
+import Drasil.DocLang.SRS (propCorSol)
 import Utils.Drasil
 
-import Drasil.DocLang.SRS (propCorSol)
-
 import Data.Drasil.Concepts.Documentation (assumption, code, environment,
-  funcReqDom, likelyChg, mg, mis, module_, nonFuncReqDom, output_, property,
-  requirement, srs, traceyMatrix, unlikelyChg, vavPlan)
+  funcReqDom, input_, likelyChg, mg, mis, module_, nonFuncReqDom, output_,
+  property, quantity, requirement, srs, traceyMatrix, unlikelyChg, vavPlan)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
+
+import Drasil.Projectile.Unitals (inputs, launAngle, launSpeed, targPos)
 
 {--Functional Requirements--}
 
@@ -23,8 +26,13 @@ verifyParams = cic "verifyParams" verifyParamsDesc "Verify-Params"    funcReqDom
 calcValues   = cic "calcValues"   calcValuesDesc   "Calculate-Values" funcReqDom
 outputValues = cic "outputValues" outputValuesDesc "Output-Values"    funcReqDom
 
+inputParamsTable :: LabelledContent
+inputParamsTable = mkInputPropsTable inputs inputParams
+
 inputParamsDesc, verifyParamsDesc, calcValuesDesc, outputValuesDesc :: Sentence
-inputParamsDesc  = S "FIXME"
+inputParamsDesc  = foldlSent [atStart input_, S "the", plural quantity, S "from",
+  makeRef2S inputParamsTable `sC` S "which define the" +:+
+  foldlList Comma List (map phrase [launAngle, launSpeed, targPos])]
 verifyParamsDesc = S "FIXME"
 calcValuesDesc   = S "FIXME"
 outputValuesDesc = S "FIXME"

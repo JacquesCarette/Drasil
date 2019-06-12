@@ -11,6 +11,7 @@
 \usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
+\usepackage{caption}
 \setmathfont{Latin Modern Math}
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
@@ -637,11 +638,27 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
-\item[Input-Parameters:\phantomsection\label{inputParams}]FIXME
+\item[Input-Parameters:\phantomsection\label{inputParams}]Input the quantities from \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the launch angle, launch speed, and target position.
 \item[Verify-Params:\phantomsection\label{verifyParams}]FIXME
 \item[Calculate-Values:\phantomsection\label{calcValues}]FIXME
 \item[Output-Values:\phantomsection\label{outputValues}]FIXME
 \end{itemize}
+\begin{longtable}{l l l}
+\toprule
+Symbol & Description & Units
+\\
+\midrule
+\endhead
+${p_{target}}$ & Target position & m
+\\
+${v^{i}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
+\\
+$θ$ & Launch angle & ${}^{\circ}$
+\\
+\bottomrule
+\caption{Required Inputs following \hyperref[inputParams]{FR: Input-Parameters}}
+\label{Table:ReqInputs}
+\end{longtable}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.

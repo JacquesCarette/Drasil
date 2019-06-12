@@ -14,6 +14,9 @@ import Data.Drasil.Units.Physics (velU)
 import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
   launchDur, launchSpeed, projectile, targetPos, target)
 
+inputs :: [QuantityDict]
+inputs = map qw [launAngle, launSpeed, targPos]
+
 unitalQuants :: [QuantityDict]
 unitalQuants = quantDicts ++ map qw constrained
 

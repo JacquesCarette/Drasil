@@ -34,7 +34,8 @@ import Drasil.Projectile.DataDefs (dataDefns)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
-import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, propsDeriv)
+import Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
+  nonfuncReqs, propsDeriv)
 import Drasil.Projectile.TMods (tMods)
 import Drasil.Projectile.Unitals (unitalIdeas, unitalQuants)
 
@@ -57,7 +58,7 @@ mkSRS = [
       ],
   ReqrmntSec $
     ReqsProg
-      [ FReqsSub funcReqs []
+      [ FReqsSub funcReqs [inputParamsTable]
       , NonFReqsSub nonfuncReqs
       ]
   ]

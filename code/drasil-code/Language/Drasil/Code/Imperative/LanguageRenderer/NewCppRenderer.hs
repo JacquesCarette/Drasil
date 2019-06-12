@@ -101,7 +101,7 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   type Permanence (p CppSrcCode CppHdrCode) = Doc
-  static = pair static static
+  static_ = pair static_ static_
   dynamic = pair dynamic dynamic
 
 instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
@@ -621,7 +621,7 @@ instance KeywordSym CppSrcCode where
 
 instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = Doc
-  static = return staticDocD
+  static_ = return staticDocD
   dynamic = return dynamicDocD
 
 instance BodySym CppSrcCode where
@@ -827,7 +827,7 @@ instance FunctionSym CppSrcCode where
   type Function CppSrcCode = Doc
   func l vs = fmap funcDocD (funcApp l vs)
   cast targT _ = fmap castDocD targT
-  castListToInt = cast (listType static int) int
+  castListToInt = cast (listType static_ int) int
   get n = fmap funcDocD (funcApp (getterName n) [])
   set n v = fmap funcDocD (funcApp (setterName n) [v])
 
@@ -1074,7 +1074,7 @@ instance StateVarSym CppSrcCode where
     return (mkStNoEnd empty) else free $ var l)
   privMVar del l = stateVar del l private dynamic
   pubMVar del l = stateVar del l public dynamic
-  pubGVar del l = stateVar del l public static
+  pubGVar del l = stateVar del l public static_
   listStateVar del l s p t = 
     let i = "i"
         guard = var i ?< (var l $. listSize)
@@ -1167,7 +1167,7 @@ instance KeywordSym CppHdrCode where
 
 instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = Doc
-  static = return staticDocD
+  static_ = return staticDocD
   dynamic = return dynamicDocD
 
 instance BodySym CppHdrCode where
@@ -1531,7 +1531,7 @@ instance StateVarSym CppHdrCode where
     (fmap fst (includeScope s)) p t endStatement) (return (mkStNoEnd empty))
   privMVar del l = stateVar del l private dynamic
   pubMVar del l = stateVar del l public dynamic
-  pubGVar del l = stateVar del l public static
+  pubGVar del l = stateVar del l public static_
   listStateVar = stateVar
 
 instance ClassSym CppHdrCode where

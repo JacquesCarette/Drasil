@@ -75,7 +75,7 @@ instance RenderSym JavaCode where
   type RenderFile JavaCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
     (liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
-  top _ = liftA3 jtop endStatement (include "") (list static)
+  top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
 
 instance KeywordSym JavaCode where
@@ -107,7 +107,7 @@ instance KeywordSym JavaCode where
 
 instance PermanenceSym JavaCode where
   type Permanence JavaCode = Doc
-  static = return staticDocD
+  static_ = return staticDocD
   dynamic = return dynamicDocD
 
 instance BodySym JavaCode where
@@ -530,7 +530,7 @@ instance MethodSym JavaCode where
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic 
     void [stateParam paramLbl t] setBody
     where setBody = oneLiner $ (self $-> var setLbl) &=. paramLbl
-  mainMethod c b = setMain <$> method "main" c public static void 
+  mainMethod c b = setMain <$> method "main" c public static_ void 
     [return $ text "String[] args"] b
   privMethod n c = method n c private dynamic
   pubMethod n c = method n c public dynamic
@@ -544,7 +544,7 @@ instance StateVarSym JavaCode where
   stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
   privMVar del l = stateVar del l private dynamic
   pubMVar del l = stateVar del l public dynamic
-  pubGVar del l = stateVar del l public static
+  pubGVar del l = stateVar del l public static_
   listStateVar = stateVar
 
 instance ClassSym JavaCode where
@@ -563,7 +563,7 @@ instance ModuleSym JavaCode where
   type Module JavaCode = ModData
   buildModule n _ vs ms cs = fmap (md n (any (snd . unJC) ms || 
     any (snd . unJC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
-    else pubClass n Nothing (map (liftA4 statementsToStateVars public static
+    else pubClass n Nothing (map (liftA4 statementsToStateVars public static_
     endStatement) vs) ms : cs))
 
 enumsEqualInts :: Bool

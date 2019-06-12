@@ -102,7 +102,7 @@ instance KeywordSym CSharpCode where
 
 instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc
-  static = return staticDocD
+  static_ = return staticDocD
   dynamic = return dynamicDocD
 
 instance BodySym CSharpCode where
@@ -310,7 +310,7 @@ instance FunctionSym CSharpCode where
   type Function CSharpCode = Doc
   func l vs = fmap funcDocD (funcApp l vs)
   cast targT _ = fmap castDocD targT
-  castListToInt = cast (listType static int) int
+  castListToInt = cast (listType static_ int) int
   get n = fmap funcDocD (funcApp (getterName n) [])
   set n v = fmap funcDocD (funcApp (setterName n) [v])
 
@@ -518,7 +518,7 @@ instance MethodSym CSharpCode where
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic 
     void [stateParam paramLbl t] setBody
     where setBody = oneLiner $ (self $-> var setLbl) &=. paramLbl
-  mainMethod c b = setMain <$> method "Main" c public static void 
+  mainMethod c b = setMain <$> method "Main" c public static_ void 
     [return $ text "string[] args"] b
   privMethod n c = method n c private dynamic
   pubMethod n c = method n c public dynamic
@@ -532,7 +532,7 @@ instance StateVarSym CSharpCode where
   stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
   privMVar del l = stateVar del l private dynamic
   pubMVar del l = stateVar del l public dynamic
-  pubGVar del l = stateVar del l public static
+  pubGVar del l = stateVar del l public static_
   listStateVar = stateVar
 
 instance ClassSym CSharpCode where
@@ -551,7 +551,7 @@ instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
   buildModule n _ vs ms cs = fmap (md n (any (snd . unCSC) ms || 
     any (snd . unCSC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
-    else pubClass n Nothing (map (liftA4 statementsToStateVars public static 
+    else pubClass n Nothing (map (liftA4 statementsToStateVars public static_ 
     endStatement) vs) ms : cs))
 
 cstop :: Doc -> Doc -> Doc

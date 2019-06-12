@@ -35,7 +35,7 @@ import Data.List (intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (fromMaybe, maybe)
+import Data.Maybe (fromMaybe, maybe, maybeToList)
 import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
@@ -395,7 +395,7 @@ genMainFunc =
     let args1 x = getArgs $ codevars' (codeEquat x) $ sysinfodb $ codeSpec g
     args2 <- getArgs $ outputs $ codeSpec g
     gi <- fApp (funcPrefix ++ "get_input") [v_filename, v_params]
-    dv <- fApp "derived_values" [v_params]
+    dv <- getDerivedCall
     ic <- fApp "input_constraints" [v_params]
     varDef <- mapM (\x -> do
       args <- args1 x
@@ -406,10 +406,30 @@ genMainFunc =
     return $ mainMethod "" $ bodyStatements $ [
       varDecDef l_filename string $ arg 0 ,
       extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
-      valState gi,
-      valState dv,
-      valState ic
+      valState gi] ++ 
+      maybeToList dv ++
+      [valState ic
       ] ++ varDef ++ [ valState wo ]
+
+getDerivedCall :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Statement repr)))
+getDerivedCall = do
+  g <- ask
+  let getCall Nothing = return Nothing
+      getCall (Just m) = do
+        ps <- getDerivedParams
+        val <- fApp' m "derived_values" ps
+        return $ Just $ valState val
+  getCall $ Map.lookup "derived_values" (eMap $ codeSpec g)
+
+getDerivedParams :: (RenderSym repr) => Reader (State repr) [repr (Value repr)]
+getDerivedParams = do
+  g <- ask
+  let dvals = derivedInputs $ codeSpec g
+      reqdVals = concatMap (flip codevars (sysinfodb $ codeSpec g) . codeEquat) 
+        dvals
+  parms <- getParams reqdVals
+  return $ map (var . paramName) parms
 
 -----
 
@@ -462,6 +482,13 @@ fApp s' vl' = do
           (Map.lookup s (eMap $ codeSpec g))
                 | otherwise = funcApp s vl
   return $ doit s' vl'
+
+-- This function should replace fApp eventually
+fApp' :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
+  Reader (State repr) (repr (Value repr))
+fApp' m s vl = do
+  g <- ask
+  return $ if m /= currentModule g then extFuncApp m s vl else funcApp s vl
 
 data ParamData repr = PD {
   param :: (ParameterSym repr) => repr (Parameter repr),

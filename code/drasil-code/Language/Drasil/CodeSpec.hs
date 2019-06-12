@@ -19,7 +19,7 @@ import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
 import qualified Data.Map as Map
-import Data.Maybe (maybeToList)
+import Data.Maybe (maybeToList, catMaybes)
 
 import Prelude hiding (const)
 
@@ -248,12 +248,7 @@ type ModDepMap = Map.Map String [String]
 
 modDepMap :: ChunkDB -> ModExportMap -> [Mod] -> ModDepMap
 modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
-                                   ++ [("Control", [ "InputParameters",  
-                                                     "DerivedValues",
-                                                     "InputConstraints",
-                                                     "InputFormat",
-                                                     "OutputFormat",
-                                                     "Calculations" ] ),
+                                   ++ [("Control", getDepsControl mem),
                                        ("DerivedValues", [ "InputParameters" ] ),
                                        ("InputConstraints", [ "InputParameters" ] )]  -- hardcoded for now
                                                                           -- will fix later
@@ -349,6 +344,14 @@ getExportDerived _ [] = []
 getExportDerived chs _ = [("derived_values", dMod $ inputStructure chs)]
   where dMod Loose = "InputParameters"
         dMod AsClass = "DerivedValues"
+
+getDepsControl :: ModExportMap -> [String]
+getDepsControl mem = let dv = Map.lookup "derived_values" mem
+                         ic = Map.lookup "input_constraints" mem
+  in catMaybes [dv, ic] ++ ["InputParameters",
+                        "InputFormat",
+                        "Calculations",
+                        "OutputFormat"]
 
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs

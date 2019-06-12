@@ -91,7 +91,8 @@ codeSpec SI {_sys = sys
       derived = map qtov $ getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc (defs' ++ map qdFromDD ddefs) \\ derived
       mods' = prefixFunctions $ packmod "Calculations" (map FCD rels) : ms 
-      mem   = modExportMap chs mods' inputs' const' derived
+      conMap = constraintMap cs
+      mem   = modExportMap chs conMap mods' inputs' const' derived
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
@@ -102,7 +103,7 @@ codeSpec SI {_sys = sys
         outputs = outs',
         relations = rels,
         execOrder = getExecOrder rels (allInputs ++ map codevar const') outs' db,
-        cMap = constraintMap cs,
+        cMap = conMap,
         fMap = assocToMap rels,
         vMap = assocToMap (map codevar q),
         eMap = mem,
@@ -234,13 +235,13 @@ asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 
-modExportMap :: Choices -> [Mod] -> [Input] -> [Const] -> [Derived] -> ModExportMap
-modExportMap chs ms ins _ ds = Map.fromList $ concatMap mpair ms
+modExportMap :: Choices -> ConstraintMap -> [Mod] -> [Input] -> [Const] -> [Derived] -> ModExportMap
+modExportMap chs cm ms ins _ ds = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ map codeName ins `zip` repeat "InputParameters"
                         ++ getExportDerived chs ds
-                        ++ [ ("input_constraints", "InputConstraints"),
-                             ("write_output", "OutputFormat") ]  -- hardcoded for now
+                        ++ getExportConstraints chs cm
+                        ++ [ ("write_output", "OutputFormat") ]  -- hardcoded for now
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
           
@@ -344,6 +345,13 @@ getExportDerived _ [] = []
 getExportDerived chs _ = [("derived_values", dMod $ inputStructure chs)]
   where dMod Loose = "InputParameters"
         dMod AsClass = "DerivedValues"
+
+getExportConstraints :: Choices -> ConstraintMap -> [Export]
+getExportConstraints chs cm 
+  | null cm = []
+  | otherwise = [("input_constraints", cMod $ inputStructure chs)]
+  where cMod Loose = "InputParameters"
+        cMod AsClass = "InputConstraints"
 
 getDepsControl :: ModExportMap -> [String]
 getDepsControl mem = let dv = Map.lookup "derived_values" mem

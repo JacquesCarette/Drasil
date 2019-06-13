@@ -366,8 +366,8 @@ momentOfInertia :: QDefinition
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
-momentOfInertiaEqn = sumAll (Atomic "i") ((sy massI) * (sy rRot $^ 2))
-
+momentOfInertiaEqn = sumAll (Atomic "i") $ sy massI * (sy rRot $^ 2)
+--sumAll (Atomic "i") ((sy massI) * (sy rRot 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", phrase QP.momentOfInertia, ch QP.momentOfInertia,
  S "of a body measures how much", phrase QP.torque,

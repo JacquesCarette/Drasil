@@ -564,7 +564,9 @@ instance ClassSym JavaCode where
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
   buildModule n _ vs ms cs = fmap (md n (any (snd . unJC) ms || 
-    any (snd . unJC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
+    any (snd . unJC) cs)) (if all (isEmpty . fst . unJC) cs && all 
+    (isEmpty . fst . unJC) ms then return empty else 
+    liftList moduleDocD (if null vs && null ms then cs 
     else pubClass n Nothing (map (liftA4 statementsToStateVars public static_
     endStatement) vs) ms : cs))
 

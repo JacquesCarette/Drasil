@@ -552,7 +552,9 @@ instance ClassSym CSharpCode where
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
   buildModule n _ vs ms cs = fmap (md n (any (snd . unCSC) ms || 
-    any (snd . unCSC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
+    any (snd . unCSC) cs)) (if all (isEmpty . fst . unCSC) cs && all 
+    (isEmpty . fst . unCSC) ms then return empty else 
+    liftList moduleDocD (if null vs && null ms then cs 
     else pubClass n Nothing (map (liftA4 statementsToStateVars public static_ 
     endStatement) vs) ms : cs))
 

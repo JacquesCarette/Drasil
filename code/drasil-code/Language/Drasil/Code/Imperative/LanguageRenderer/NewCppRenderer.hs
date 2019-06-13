@@ -583,7 +583,8 @@ instance Monad CppSrcCode where
 
 instance PackageSym CppSrcCode where
   type Package CppSrcCode = ([ModData], Label)
-  packMods n ms = liftPairFst (sequence ms, n)
+  packMods n ms = liftPairFst (sequence mods, n)
+    where mods = filter (not . isEmpty . modDoc . unCPPSC) ms
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = ModData
@@ -1101,7 +1102,7 @@ instance ClassSym CppSrcCode where
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
   buildModule n l _ ms cs = fmap (md n (any (snd . unCPPSC) cs || 
-    any (isMainMthd . unCPPSC) ms)) (liftA5 cppModuleDoc (liftList vcat (map 
+    any (isMainMthd . unCPPSC) ms)) (liftA5 cppModuleDoc (liftList vcat (map
     include l)) (if not (null l) && any (not . isEmpty . fst . unCPPSC) cs then
     return blank else return empty) (liftList methodListDocD (map (fmap 
     (\(MthD b _ d) -> (d,b))) ms)) (if (any (not . isEmpty . fst . unCPPSC) cs 

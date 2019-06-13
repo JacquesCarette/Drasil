@@ -69,7 +69,8 @@ instance Monad JavaCode where
 
 instance PackageSym JavaCode where
   type Package JavaCode = ([ModData], Label)
-  packMods n ms = liftPairFst (mapM (liftA2 (packageDocD n) endStatement) ms, n)
+  packMods n ms = liftPairFst (mapM (liftA2 (packageDocD n) endStatement) mods, n)
+    where mods = filter (not . isEmpty . modDoc . unJC) ms
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = ModData

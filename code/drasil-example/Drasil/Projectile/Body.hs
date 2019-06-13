@@ -26,7 +26,7 @@ import Data.Drasil.Concepts.Software (errMsg, program)
 
 import Data.Drasil.Quantities.Physics (physicscon)
 
-import Data.Drasil.People (samCrawford)
+import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 
 import qualified Data.Map as Map
 
@@ -74,7 +74,7 @@ systInfo :: SystemInformation
 systInfo = SI {
   _sys         = projectileTitle,
   _kind        = Doc.srs,
-  _authors     = [samCrawford],
+  _authors     = [samCrawford, brooks, spencerSmith],
   _quants      = [] :: [QuantityDict],
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],

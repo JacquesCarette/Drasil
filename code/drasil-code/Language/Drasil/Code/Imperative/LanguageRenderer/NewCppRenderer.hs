@@ -1102,8 +1102,10 @@ instance ClassSym CppSrcCode where
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
   buildModule n l _ ms cs = fmap (md n (any (snd . unCPPSC) cs || 
-    any (isMainMthd . unCPPSC) ms)) (liftA5 cppModuleDoc (liftList vcat (map
-    include l)) (if not (null l) && any (not . isEmpty . fst . unCPPSC) cs then
+    any (isMainMthd . unCPPSC) ms)) (if all (isEmpty . fst . unCPPSC) cs && all 
+    (isEmpty . mthdDoc . unCPPSC) ms then return empty else
+    liftA5 cppModuleDoc (liftList vcat (map include l)) 
+    (if not (null l) && any (not . isEmpty . fst . unCPPSC) cs then
     return blank else return empty) (liftList methodListDocD (map (fmap 
     (\(MthD b _ d) -> (d,b))) ms)) (if (any (not . isEmpty . fst . unCPPSC) cs 
     || (all (isEmpty . fst . unCPPSC) cs && not (null l))) && 

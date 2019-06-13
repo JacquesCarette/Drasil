@@ -513,7 +513,9 @@ instance ClassSym PythonCode where
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
   buildModule n ls vs fs cs = fmap (md n (any (snd . unPC) fs || 
-    any (snd . unPC) cs)) (liftA4 pyModule (liftList pyModuleImportList (map 
+    any (snd . unPC) cs)) (if all (isEmpty . fst . unPC) cs && all 
+    (isEmpty . fst . unPC) fs then return empty else
+    liftA4 pyModule (liftList pyModuleImportList (map 
     include ls)) (liftList pyModuleVarList (map state vs)) (liftList 
     methodListDocD fs) (liftList pyModuleClassList cs))
 

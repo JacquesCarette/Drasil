@@ -62,12 +62,6 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 
-authors :: People
-authors = [alex, luthfi]
-
-auths :: Sentence
-auths = S $ manyNames authors
-
 srs :: Document
 srs = mkDoc mkSRS for' sysInfo
 
@@ -147,7 +141,7 @@ sysInfo :: SystemInformation
 sysInfo = SI {
   _sys = chipmunk,
   _kind = Doc.srs,
-  _authors = authors,
+  _authors = [alex, luthfi],
   _quants = symbTT, 
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,

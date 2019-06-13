@@ -229,7 +229,7 @@ newtype AppndxSec = AppndxProg [Contents]
 -- | Creates a document from a document description and system information
 mkDoc :: DocDesc -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc l comb si@SI {_sys = sys, _kind = kind, _authors = authors} = Document
-  (nw kind `comb` nw sys) (S $ manyNames authors) (mkSections si l)
+  (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) (mkSections si l)
 
 -- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]

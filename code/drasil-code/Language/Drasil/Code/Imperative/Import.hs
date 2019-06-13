@@ -279,15 +279,13 @@ genCalcMod n defs = buildModule n [] [] (map genCalcFunc (filter (validExpr . co
 genCalcFunc :: (RenderSym repr) => CodeDefinition -> Reader (State repr) (repr
   (Method repr))
 genCalcFunc cdef = do
-  g <- ask
-  parms <- getParams $ codecs g
+  parms <- getCalcParams cdef
   blck <- genCalcBlock CalcReturn (codeName cdef) (codeEquat cdef)
   publicMethod
     (mState $ convType (codeType cdef))
     (codeName cdef)
     parms
     (return [blck])
-  where codecs g = codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
 

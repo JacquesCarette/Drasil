@@ -9,12 +9,12 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
 import Utils.Drasil
 
 import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc,
-  DocSection(ReqrmntSec, SSDSec), Field(..), Fields, InclUnits(IncludeUnits),
-  ProblemDescription(PDProg), ReqrmntSec(..), ReqsSub(..),
+  DocSection(RefSec, ReqrmntSec, SSDSec), Field(..), Fields, InclUnits(IncludeUnits),
+  ProblemDescription(PDProg), RefSec(..), RefTab(TUnits, TAandA), ReqrmntSec(..), ReqsSub(..),
   SCSSub(Assumptions, Constraints, CorrSolnPpties, DDs, GDs, IMs, TMs),
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), Verbosity(Verbose),
   dataConstraintUncertainty, generateTraceMap, generateTraceMap', goalStmtF,
-  inDataConstTbl, mkDoc, mkEnumSimpleD, outDataConstTbl)
+  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl)--, tsymb'')
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, doccon, doccon',
@@ -46,6 +46,12 @@ srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
 
 mkSRS :: DocDesc
 mkSRS = [
+  RefSec $
+    RefProg intro
+      [ TUnits
+     -- , tsymb'' tableOfSymbIntro TAD
+      , TAandA
+      ],
   SSDSec $
     SSDProg
       [ SSDProblem   $ PDProg  probStart projectileTitle probEnding [goalStmts]

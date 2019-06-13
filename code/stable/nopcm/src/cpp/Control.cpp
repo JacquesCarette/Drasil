@@ -14,18 +14,16 @@ using std::ifstream;
 using std::ofstream;
 
 #include "InputParameters.hpp"
-#include "DerivedValues.hpp"
-#include "InputConstraints.hpp"
+#include "InputParameters.hpp"
 #include "InputFormat.hpp"
-#include "OutputFormat.hpp"
 #include "Calculations.hpp"
+#include "OutputFormat.hpp"
 
 int main(int argc, const char *argv[]) {
     string inputfile = argv[1];
     InputParameters inParams = InputParameters();
     func_get_input(inputfile, inParams);
-    derived_values(inParams);
-    input_constraints(inParams);
+    input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W);
     write_output(inParams);
     return 0;
 }

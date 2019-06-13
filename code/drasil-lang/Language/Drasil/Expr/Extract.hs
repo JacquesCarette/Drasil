@@ -1,4 +1,4 @@
-module Language.Drasil.Expr.Extract(dep, names, names') where
+module Language.Drasil.Expr.Extract(dep, names, names', namesRI) where
 
 import Data.List (nub)
 
@@ -11,9 +11,10 @@ names (AssocA _ l)     = concatMap names l
 names (AssocB _ l)     = concatMap names l
 names (Deriv _ a b)    = b : names a
 names (C c)            = [c]
-names (Int _)          = []
-names (Dbl _)          = []
-names (Str _)          = []
+names Int{}            = []
+names Dbl{}            = []
+names Str{}            = []
+names Perc{}           = []
 names (FCall f x)      = names f ++ concatMap names x
 names (Case ls)        = concatMap (names . fst) ls ++ concatMap (names . snd) ls
 names (UnaryOp _ u)    = names u
@@ -36,9 +37,10 @@ names' (AssocA _ l)     = concatMap names' l
 names' (AssocB _ l)     = concatMap names' l
 names' (Deriv _ a b)    = b : names' a
 names' (C c)            = [c]
-names' (Int _)          = []
-names' (Dbl _)          = []
-names' (Str _)          = []
+names' Int{}            = []
+names' Dbl{}            = []
+names' Str{}            = []
+names' Perc{}           = []
 names' (FCall _ x)      = concatMap names' x
 names' (Case ls)        = concatMap (names' . fst) ls ++ concatMap (names' . snd) ls
 names' (UnaryOp _ u)    = names' u

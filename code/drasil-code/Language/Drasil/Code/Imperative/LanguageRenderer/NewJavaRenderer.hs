@@ -69,7 +69,8 @@ instance Monad JavaCode where
 
 instance PackageSym JavaCode where
   type Package JavaCode = ([ModData], Label)
-  packMods n ms = liftPairFst (mapM (liftA2 (packageDocD n) endStatement) ms, n)
+  packMods n ms = liftPairFst (mapM (liftA2 (packageDocD n) endStatement) mods, n)
+    where mods = filter (not . isEmpty . modDoc . unJC) ms
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = ModData
@@ -563,7 +564,9 @@ instance ClassSym JavaCode where
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
   buildModule n _ vs ms cs = fmap (md n (any (snd . unJC) ms || 
-    any (snd . unJC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
+    any (snd . unJC) cs)) (if all (isEmpty . fst . unJC) cs && all 
+    (isEmpty . fst . unJC) ms then return empty else 
+    liftList moduleDocD (if null vs && null ms then cs 
     else pubClass n Nothing (map (liftA4 statementsToStateVars public static_
     endStatement) vs) ms : cs))
 

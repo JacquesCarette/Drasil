@@ -3,7 +3,7 @@ module Language.Drasil.Development (
   -- NounPhrase
     NounPhrase(phraseNP,pluralNP)
   -- Expr.Extract
-  , dep, names, names'
+  , dep, names, names', namesRI
   -- Sentence.Extract
   , sdep, lnames, lnames'
   -- Expr.Precendence
@@ -11,6 +11,6 @@ module Language.Drasil.Development (
   ) where
 
 import Language.Drasil.NounPhrase (NounPhrase(phraseNP,pluralNP))
-import Language.Drasil.Expr.Extract (dep, names', names)
+import Language.Drasil.Expr.Extract (dep, names', names, namesRI)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.Extract(sdep, lnames, lnames')

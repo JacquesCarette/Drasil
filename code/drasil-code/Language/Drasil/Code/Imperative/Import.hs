@@ -419,41 +419,35 @@ genMainFunc =
       catMaybes ([dv, ic] ++ varDef)
       ++ [ valState wo ]
 
-getDerivedCall :: (RenderSym repr) => Reader (State repr) 
-  (Maybe (repr (Statement repr)))
-getDerivedCall = do
+getFuncCall :: (RenderSym repr) => String -> Reader (State repr) 
+  [ParamData repr] -> Reader (State repr) (Maybe (repr (Value repr)))
+getFuncCall n funcPs = do
   g <- ask
   let getCall Nothing = return Nothing
       getCall (Just m) = do
-        ps <- getDerivedParams
+        ps <- funcPs
         let pvals = getArgs ps
-        val <- fApp' m "derived_values" pvals
-        return $ Just $ valState val
-  getCall $ Map.lookup "derived_values" (eMap $ codeSpec g)
+        val <- fApp' m n pvals
+        return $ Just val
+  getCall $ Map.lookup n (eMap $ codeSpec g)
+
+getDerivedCall :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Statement repr)))
+getDerivedCall = do
+  val <- getFuncCall "derived_values" getDerivedParams
+  return $ fmap valState val
 
 getConstraintCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
 getConstraintCall = do
-  g <- ask
-  let getCall Nothing = return Nothing
-      getCall (Just m) = do
-        ps <- getConstraintParams
-        let pvals = getArgs ps
-        val <- fApp' m "input_constraints" pvals
-        return $ Just $ valState val
-  getCall $ Map.lookup "input_constraints" (eMap $ codeSpec g)
+  val <- getFuncCall "input_constraints" getConstraintParams
+  return $ fmap valState val
 
 getCalcCall :: (RenderSym repr) => CodeDefinition -> Reader (State repr) 
   (Maybe (repr (Statement repr)))
 getCalcCall c = do
-  g <- ask
-  let getCall Nothing = return Nothing
-      getCall (Just m) = do
-        ps <- getCalcParams c
-        let pvals = getArgs ps
-        val <- fApp' m (codeName c) pvals
-        return $ Just $ varDecDef (nopfx $ codeName c) (convType $ codeType c) val
-  getCall $ Map.lookup (codeName c) (eMap $ codeSpec g)
+  val <- getFuncCall (codeName c) (getCalcParams c)
+  return $ fmap (varDecDef (nopfx $ codeName c) (convType $ codeType c)) val
 
 getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do

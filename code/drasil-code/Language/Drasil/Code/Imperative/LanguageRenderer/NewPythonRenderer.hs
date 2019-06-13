@@ -55,7 +55,8 @@ instance Monad PythonCode where
 
 instance PackageSym PythonCode where
   type Package PythonCode = ([ModData], Label)
-  packMods n ms = liftPairFst (sequence ms, n)
+  packMods n ms = liftPairFst (sequence mods, n)
+    where mods = filter (not . isEmpty . modDoc . unPC) ms
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = ModData

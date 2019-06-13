@@ -583,7 +583,8 @@ instance Monad CppSrcCode where
 
 instance PackageSym CppSrcCode where
   type Package CppSrcCode = ([ModData], Label)
-  packMods n ms = liftPairFst (sequence ms, n)
+  packMods n ms = liftPairFst (sequence mods, n)
+    where mods = filter (not . isEmpty . modDoc . unCPPSC) ms
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = ModData

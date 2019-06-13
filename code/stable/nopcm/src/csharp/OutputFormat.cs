@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class OutputFormat {
     
-    public static void write_output(InputParameters inParams) {
+    public static void write_output(double T_W, double E_W) {
         StreamWriter outputfile;
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("T_W = ");

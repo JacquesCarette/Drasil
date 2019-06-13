@@ -1,8 +1,7 @@
-module Drasil.HGHC.HGHC (srsBody, thisCode, allSymbols, printSetting) where
+module Drasil.HGHC.HGHC (srsBody, thisSI, allSymbols, printSetting) where
 
 import qualified Data.Map as Map
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
-import Language.Drasil.Code (CodeSpec, codeSpec)
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), DocDesc, 
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
@@ -22,9 +21,6 @@ import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs,
 import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs, doccon, doccon')
-
-thisCode :: CodeSpec
-thisCode = codeSpec thisSI []
   
 thisSI :: SystemInformation
 thisSI = SI {

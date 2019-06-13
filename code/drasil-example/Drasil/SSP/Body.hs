@@ -1,7 +1,6 @@
-module Drasil.SSP.Body (srs, code, symMap, printSetting) where
+module Drasil.SSP.Body (srs, si, symMap, printSetting) where
 
 import Language.Drasil hiding (number, organization, Verb, section, sec)
-import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
   SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
@@ -25,7 +24,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   mkEnumSimpleD, probDescF, termDefnF,
   tsymb'', getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
-  getSCSSub, physSystDescriptionLabel, generateTraceMap', generateTraceTable)
+  getSCSSub, physSystDescriptionLabel, generateTraceMap', traceMatStandard)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
   genDefn, dataDefn, datCon)
@@ -34,9 +33,9 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, definition, design, document, effect, endUser,
   environment, goal, information, input_, interest, issue, loss, method_,
   model, organization, physical, physics, problem, purpose, requirement,
-  section_, software, softwareSys, srsDomains, symbol_, sysCont,
-  system, systemConstraint, template, type_, user, value, variable,
-  physSyst, doccon, doccon')
+  software, softwareSys, srsDomains, symbol_, sysCont, system,
+  systemConstraint, template, type_, user, value, variable, physSyst,
+  doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
@@ -61,7 +60,6 @@ import Drasil.SSP.Changes (likelyChgs, likelyChgsCon, unlikelyChgs,
   unlikelyChgsCon)
 import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
 import Drasil.SSP.DataDefs (dataDefns)
-import Drasil.SSP.DataDesc (inputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
   slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, defs, defs',
@@ -152,8 +150,8 @@ mkSRS = [RefSec $ RefProg intro
   ],
   LCsSec $ LCsProg likelyChgsCon,
   UCsSec $ UCsProg unlikelyChgsCon,
-  TraceabilitySec $ TraceabilityProg [traceyMatrix] traceTrailing 
-    [LlC traceyMatrix] [],
+  TraceabilitySec $ TraceabilityProg (map fst traceyMatrix) (map (foldlList Comma List . snd) traceyMatrix)
+    (map (LlC . fst) traceyMatrix) [],
   AuxConstntSec $ AuxConsProg ssp [],
   Bibliography]
 
@@ -190,15 +188,9 @@ labCon = [figPhysSyst, figIndexConv, figForceActing,
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-  
-code :: CodeSpec
-code = codeSpec si [inputMod]
 
-traceyMatrix :: LabelledContent
-traceyMatrix = generateTraceTable si
-
-traceTrailing :: [Sentence]
-traceTrailing = [S "items of different" +:+ plural section_ +:+ S "on each other"]
+traceyMatrix :: [(LabelledContent, [Sentence])]
+traceyMatrix = traceMatStandard si
 
 
 -- SYMBOL MAP HELPERS --

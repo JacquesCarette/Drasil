@@ -139,7 +139,10 @@ s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
 s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  makeRef2S rocTempSimp, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
+  makeRef2S rocTempSimp, S "The integral over the", phrase surface, 
+  S "could be simplified because the thermal flux is assumed constant over",
+  ch inSA `sAnd` ch outSA `sAnd` E 0, S "on all other" +:+. plural surface +:+.
+  S "Outward flux is considered positive", S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   foldlList Comma List assumps `sC` S "we have"]
 

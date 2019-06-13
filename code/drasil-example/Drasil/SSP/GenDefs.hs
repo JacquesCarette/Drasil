@@ -23,8 +23,6 @@ import Data.Drasil.Quantities.Physics (displacement, force, height,
   pressure, torque)
 import Data.Drasil.Theories.Physics (weightGD, hsPressureGD, torqueDD)
 
-import Data.Drasil.SentenceStructures (getTandS)
-
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE, assumpNESSS,
   assumpHFSM)

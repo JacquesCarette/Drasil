@@ -3,7 +3,7 @@ module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Language.Drasil hiding (organization, section, sec)
-import Language.Drasil.Code (CodeSpec, codeSpec, relToQD)
+import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
   TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
@@ -64,7 +64,6 @@ import Drasil.GlassBR.DataDefs (dataDefns, qDefns)
 import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
-import Drasil.GlassBR.ModuleDefs (allMods)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
 import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs, propsDeriv)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
@@ -207,9 +206,6 @@ systInfo = SI {
    refdb       = refDB
 }
   --FIXME: All named ideas, not just acronyms.
-
-code :: CodeSpec
-code = codeSpec systInfo allMods
 
 termsAndDesc, physSystDescription, goalStmts :: Section
 

@@ -15,10 +15,7 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-void derived_values() {
-}
-
-void input_constraints(InputParameters &inParams) {
+void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
     if (!((inParams.A_C <= 100000))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }

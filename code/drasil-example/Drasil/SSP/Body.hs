@@ -1,7 +1,6 @@
-module Drasil.SSP.Body (srs, code, symMap, printSetting) where
+module Drasil.SSP.Body (srs, si, symMap, printSetting) where
 
 import Language.Drasil hiding (number, organization, Verb, section, sec)
-import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
   SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
@@ -61,7 +60,6 @@ import Drasil.SSP.Changes (likelyChgs, likelyChgsCon, unlikelyChgs,
   unlikelyChgsCon)
 import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
 import Drasil.SSP.DataDefs (dataDefns)
-import Drasil.SSP.DataDesc (inputMod)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
   slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, defs, defs',
@@ -190,9 +188,6 @@ labCon = [figPhysSyst, figIndexConv, figForceActing,
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-  
-code :: CodeSpec
-code = codeSpec si [inputMod]
 
 traceyMatrix :: [(LabelledContent, [Sentence])]
 traceyMatrix = traceMatStandard si

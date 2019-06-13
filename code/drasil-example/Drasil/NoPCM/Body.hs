@@ -1,7 +1,6 @@
 module Drasil.NoPCM.Body where
 
 import Language.Drasil hiding (section, sec)
-import Language.Drasil.Code (CodeSpec, codeSpec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
   SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
@@ -74,7 +73,6 @@ import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn,
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
-import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
@@ -222,10 +220,6 @@ si = SI {
 
 refDB :: ReferenceDB
 refDB = rdb referencesRefList concIns
-
-code :: CodeSpec
-code = codeSpec si [inputMod]
--- Sub interpolation mod into list when possible              ^
 
 srs :: Document
 srs = mkDoc mkSRS for si

@@ -7,7 +7,7 @@ import Database.Drasil(ChunkDB, SystemInformation(SI), symbLookup, symbolTable,
   _constraints, _datadefs,
   _definitions, _inputs, _outputs,
   _quants, _sys, _sysinfodb)
-import Language.Drasil.Development (dep, names')
+import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, ConstraintMap,
@@ -19,7 +19,7 @@ import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
 import qualified Data.Map as Map
-import Data.Maybe (maybeToList)
+import Data.Maybe (maybeToList, catMaybes, mapMaybe)
 
 import Prelude hiding (const)
 
@@ -49,7 +49,7 @@ data CodeSpec where
   vMap :: VarMap,
   eMap :: ModExportMap,
   constMap :: FunctionMap,
-  const :: [Const],
+  constants :: [Const],
   mods :: [Mod],  -- medium hack
   dMap :: ModDepMap,
   sysinfodb :: ChunkDB
@@ -76,7 +76,7 @@ getStr (P s) = symbToCodeName s
 getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
 getStr _ = error "Term is not a string" 
 
-codeSpec :: SystemInformation -> [Mod] -> CodeSpec
+codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys
               , _quants = q
               , _definitions = defs'
@@ -84,14 +84,15 @@ codeSpec SI {_sys = sys
               , _inputs = ins
               , _outputs = outs
               , _constraints = cs
-              , _constants = constants
-              , _sysinfodb = db} ms = 
+              , _constants = consts
+              , _sysinfodb = db} chs ms = 
   let inputs' = map codevar ins
-      const' = map qtov constants
+      const' = map qtov consts
       derived = map qtov $ getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc (defs' ++ map qdFromDD ddefs) \\ derived
       mods' = prefixFunctions $ packmod "Calculations" (map FCD rels) : ms 
-      mem   = modExportMap mods' inputs' const'
+      conMap = constraintMap cs
+      mem   = modExportMap chs conMap mods' inputs' const' derived
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
@@ -102,12 +103,12 @@ codeSpec SI {_sys = sys
         outputs = outs',
         relations = rels,
         execOrder = getExecOrder rels (allInputs ++ map codevar const') outs' db,
-        cMap = constraintMap cs,
+        cMap = conMap,
         fMap = assocToMap rels,
         vMap = assocToMap (map codevar q),
         eMap = mem,
         constMap = assocToMap const',
-        const = const',
+        constants = const',
         mods = mods',
         dMap = modDepMap db mem mods',
         sysinfodb = db
@@ -234,13 +235,14 @@ asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 
-modExportMap :: [Mod] -> [Input] -> [Const] -> ModExportMap
-modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
+modExportMap :: Choices -> ConstraintMap -> [Mod] -> [Input] -> [Const] -> [Derived] -> ModExportMap
+modExportMap chs cm ms ins _ ds = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ map codeName ins `zip` repeat "InputParameters"
-                        ++ [ ("derived_values", "DerivedValues"),
-                             ("input_constraints", "InputConstraints"),
-                             ("write_output", "OutputFormat") ]  -- hardcoded for now
+                        ++ getExportDerived chs ds
+                        ++ getExportConstraints chs (getConstraints cm 
+                          (ins ++ map codevar ds))
+                        ++ [ ("write_output", "OutputFormat") ]  -- hardcoded for now
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
           
@@ -248,12 +250,7 @@ type ModDepMap = Map.Map String [String]
 
 modDepMap :: ChunkDB -> ModExportMap -> [Mod] -> ModDepMap
 modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
-                                   ++ [("Control", [ "InputParameters",  
-                                                     "DerivedValues",
-                                                     "InputConstraints",
-                                                     "InputFormat",
-                                                     "OutputFormat",
-                                                     "Calculations" ] ),
+                                   ++ [("Control", getDepsControl mem),
                                        ("DerivedValues", [ "InputParameters" ] ),
                                        ("InputConstraints", [ "InputParameters" ] )]  -- hardcoded for now
                                                                           -- will fix later
@@ -342,8 +339,34 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
                         ++ " and Knowns as " ++ show (map (^. uid) k) )
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
+type Export = (String, String)
+
+getExportDerived :: Choices -> [Derived] -> [Export]
+getExportDerived _ [] = []
+getExportDerived chs _ = [("derived_values", dMod $ inputStructure chs)]
+  where dMod Loose = "InputParameters"
+        dMod AsClass = "DerivedValues"
+
+getExportConstraints :: Choices -> [Constraint] -> [Export]
+getExportConstraints _ [] = []
+getExportConstraints chs _ = [("input_constraints", cMod $ inputStructure chs)]
+  where cMod Loose = "InputParameters"
+        cMod AsClass = "InputConstraints"
+
+getDepsControl :: ModExportMap -> [String]
+getDepsControl mem = let dv = Map.lookup "derived_values" mem
+                         ic = Map.lookup "input_constraints" mem
+  in catMaybes [dv, ic] ++ ["InputParameters",
+                        "InputFormat",
+                        "Calculations",
+                        "OutputFormat"]
+
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs
+
+-- | Get a list of Constraints for a list of CodeChunks
+getConstraints :: ConstraintMap -> [CodeChunk] -> [Constraint]
+getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
 -- | Get a list of CodeChunks from an equation
 codevars :: Expr -> ChunkDB -> [CodeChunk]
@@ -361,3 +384,11 @@ codevarsandfuncs e m mem = map resolve $ dep e
   where resolve x 
           | Map.member (funcPrefix ++ x) mem = codefunc (symbLookup x $ symbolTable m)
           | otherwise = codevar (symbLookup x $ symbolTable m)
+
+-- | Get a list of CodeChunks from a constraint, where the CodeChunks are correctly parameterized by either Var or Func
+constraintvarsandfuncs :: Constraint -> ChunkDB -> ModExportMap ->  [CodeChunk]
+constraintvarsandfuncs (Range _ ri) m mem = map resolve $ nub $ namesRI ri
+  where resolve x 
+          | Map.member (funcPrefix ++ x) mem = codefunc (symbLookup x $ symbolTable m)
+          | otherwise = codevar (symbLookup x $ symbolTable m)
+constraintvarsandfuncs _ _ _ = []

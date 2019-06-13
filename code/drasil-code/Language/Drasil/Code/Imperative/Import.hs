@@ -408,23 +408,18 @@ genMainFunc =
       v_params = var l_params
   in do
     g <- ask
-    let args1 x = getArgs $ codevars' (codeEquat x) $ sysinfodb $ codeSpec g
-    args2 <- getArgs $ outputs $ codeSpec g
+    args2 <- getParams $ outputs $ codeSpec g
     gi <- fApp (funcPrefix ++ "get_input") [v_filename, v_params]
     dv <- getDerivedCall
     ic <- getConstraintCall
-    varDef <- mapM (\x -> do
-      args <- args1 x
-      cnargs <- fApp (codeName x) args
-      return $ varDecDef (nopfx $ codeName x) (convType $ codeType x) cnargs)
-        (execOrder $ codeSpec g)
-    wo <- fApp "write_output" args2
+    varDef <- mapM getCalcCall (execOrder $ codeSpec g)
+    wo <- fApp "write_output" (getArgs args2)
     return $ mainMethod "" $ bodyStatements $ [
       varDecDef l_filename string $ arg 0 ,
       extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
       valState gi] ++ 
-      catMaybes [dv, ic] ++
-      varDef ++ [ valState wo ]
+      catMaybes ([dv, ic] ++ varDef)
+      ++ [ valState wo ]
 
 getDerivedCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -433,7 +428,7 @@ getDerivedCall = do
   let getCall Nothing = return Nothing
       getCall (Just m) = do
         ps <- getDerivedParams
-        let pvals = map (var . paramName) ps
+        let pvals = getArgs ps
         val <- fApp' m "derived_values" pvals
         return $ Just $ valState val
   getCall $ Map.lookup "derived_values" (eMap $ codeSpec g)
@@ -445,10 +440,22 @@ getConstraintCall = do
   let getCall Nothing = return Nothing
       getCall (Just m) = do
         ps <- getConstraintParams
-        let pvals = map (var . paramName) ps
+        let pvals = getArgs ps
         val <- fApp' m "input_constraints" pvals
         return $ Just $ valState val
   getCall $ Map.lookup "input_constraints" (eMap $ codeSpec g)
+
+getCalcCall :: (RenderSym repr) => CodeDefinition -> Reader (State repr) 
+  (Maybe (repr (Statement repr)))
+getCalcCall c = do
+  g <- ask
+  let getCall Nothing = return Nothing
+      getCall (Just m) = do
+        ps <- getCalcParams c
+        let pvals = getArgs ps
+        val <- fApp' m (codeName c) pvals
+        return $ Just $ varDecDef (nopfx $ codeName c) (convType $ codeType c) val
+  getCall $ Map.lookup (codeName c) (eMap $ codeSpec g)
 
 getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do
@@ -468,6 +475,12 @@ getConstraintParams = do
       reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v db 
         mem) (getConstraints cm varsList)
   getParams reqdVals
+
+getCalcParams :: (RenderSym repr) => CodeDefinition -> Reader (State repr) 
+  [ParamData repr]
+getCalcParams c = do
+  g <- ask
+  getParams $ codevars' (codeEquat c) $ sysinfodb $ codeSpec g
 
 -----
 
@@ -567,18 +580,8 @@ getInputParams AsClass _ = [PD (pointerParam pName pType) pType pName]
 getConstParams :: [CodeChunk] -> [ParamData repr]
 getConstParams _ = []
 
-getArgs :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
-  [repr (Value repr)]
-getArgs cs = do
-  g <- ask
-  let ins = inputs $ codeSpec g
-      csSubIns = cs \\ ins
-      args = map (var . codeName)
-            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g))
-              csSubIns)
-  return $ if length csSubIns < length cs
-           then var "inParams" : args  -- todo:  make general
-           else args
+getArgs :: (RenderSym repr) => [ParamData repr] -> [repr (Value repr)]
+getArgs = map (var . paramName)
 
 getDefaultValue :: (RenderSym repr) => C.CodeType -> repr (Value repr)
 getDefaultValue C.Boolean = defaultBool

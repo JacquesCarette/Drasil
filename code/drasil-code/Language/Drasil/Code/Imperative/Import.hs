@@ -31,14 +31,15 @@ import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit),
   Data(Line, Lines, JunkData, Singleton), DataDesc, getInputs)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
-import Data.List (intersperse, (\\), stripPrefix)
+import Data.List (nub, intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (fromMaybe, maybe, maybeToList)
+import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes)
 import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
+import Control.Lens ((^.))
 import qualified Prelude as P ((<>))
 
 -- Private State, used to push these options around the generator
@@ -177,11 +178,12 @@ liftS = fmap (: [])
 genInputModClass :: (RenderSym repr) => Reader (State repr) [repr (Module repr)]
 genInputModClass = do
   derived <- genInputDerived
+  constrs <- genInputConstraints
   let dl = maybeToList derived
+      cl = maybeToList constrs
   sequence [ genModule "InputParameters" Nothing (Just $ liftS genInputClass),
              genModule "DerivedValues" (Just $ return dl) Nothing,
-             genModule "InputConstraints" (Just $ liftS genInputConstraints)
-               Nothing
+             genModule "InputConstraints" (Just $ return cl) Nothing
            ]
 
 genInputModNoClass :: (RenderSym repr) => Reader (State repr)
@@ -194,7 +196,7 @@ genInputModNoClass = do
   return [ buildModule "InputParameters" []
            (map (\x -> varDecDef (codeName x) (convType $ codeType x)
              (getDefaultValue $ codeType x)) ins)
-           (maybeToList inpDer ++ [inpConstr])
+           (catMaybes [inpDer, inpConstr])
            []
          ]
 
@@ -212,26 +214,34 @@ genInputClass = do
     ++ asgs)]) ]
 
 genInputConstraints :: (RenderSym repr) => Reader (State repr) 
-  (repr (Method repr))
+  (Maybe (repr (Method repr)))
 genInputConstraints = do
   g <- ask
-  let varsList = inputs $ codeSpec g
-      cm       = cMap $ codeSpec g
-      sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
-      physCs   = concatMap (renderC . physLookup cm) varsList
-  parms <- getParams varsList
-  sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
-    sfwrCBody g x)]}) sfwrCs
-  hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
-    physCBody g x)]}) physCs
-  publicMethod void "input_constraints" parms (return [block sf, block hw])
+  let cm       = cMap $ codeSpec g
+      genConstraints :: (RenderSym repr) => Maybe String -> Reader (State repr) 
+        (Maybe (repr (Method repr)))
+      genConstraints Nothing = return Nothing
+      genConstraints (Just _) = do
+        h <- ask
+        parms <- getConstraintParams
+        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec h)
+            sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
+            physCs   = concatMap (renderC . physLookup cm) varsList
+        sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
+          sfwrCBody h x)]}) sfwrCs
+        hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
+          physCBody h x)]}) physCs
+        mthd <- publicMethod void "input_constraints" parms (return [block sf, 
+          block hw])
+        return $ Just mthd
+  genConstraints $ Map.lookup "input_constraints" (eMap $ codeSpec g)
 
 genInputDerived :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Method repr)))
 genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
-  let genDerived :: (RenderSym repr) => Maybe String -> Reader (State repr) 
+      genDerived :: (RenderSym repr) => Maybe String -> Reader (State repr) 
         (Maybe (repr (Method repr)))
       genDerived Nothing = return Nothing
       genDerived (Just _) = do
@@ -402,7 +412,7 @@ genMainFunc =
     args2 <- getArgs $ outputs $ codeSpec g
     gi <- fApp (funcPrefix ++ "get_input") [v_filename, v_params]
     dv <- getDerivedCall
-    ic <- fApp "input_constraints" [v_params]
+    ic <- getConstraintCall
     varDef <- mapM (\x -> do
       args <- args1 x
       cnargs <- fApp (codeName x) args
@@ -413,9 +423,8 @@ genMainFunc =
       varDecDef l_filename string $ arg 0 ,
       extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
       valState gi] ++ 
-      maybeToList dv ++
-      [valState ic
-      ] ++ varDef ++ [ valState wo ]
+      catMaybes [dv, ic] ++
+      varDef ++ [ valState wo ]
 
 getDerivedCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -429,12 +438,35 @@ getDerivedCall = do
         return $ Just $ valState val
   getCall $ Map.lookup "derived_values" (eMap $ codeSpec g)
 
+getConstraintCall :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Statement repr)))
+getConstraintCall = do
+  g <- ask
+  let getCall Nothing = return Nothing
+      getCall (Just m) = do
+        ps <- getConstraintParams
+        let pvals = map (var . paramName) ps
+        val <- fApp' m "input_constraints" pvals
+        return $ Just $ valState val
+  getCall $ Map.lookup "input_constraints" (eMap $ codeSpec g)
+
 getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
       reqdVals = concatMap (flip codevars (sysinfodb $ codeSpec g) . codeEquat) 
         dvals
+  getParams reqdVals
+
+getConstraintParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
+getConstraintParams = do 
+  g <- ask
+  let cm = cMap $ codeSpec g
+      mem = eMap $ codeSpec g
+      db = sysinfodb $ codeSpec g
+      varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
+      reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v db 
+        mem) (getConstraints cm varsList)
   getParams reqdVals
 
 -----

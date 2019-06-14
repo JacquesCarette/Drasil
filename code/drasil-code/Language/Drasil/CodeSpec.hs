@@ -92,7 +92,7 @@ codeSpec SI {_sys = sys
       rels = map qtoc (defs' ++ map qdFromDD ddefs) \\ derived
       mods' = prefixFunctions $ packmod "Calculations" (map FCD exOrder) : ms 
       conMap = constraintMap cs
-      mem   = modExportMap chs conMap mods' inputs' const' derived
+      mem   = modExportMap chs conMap mods' inputs' const' derived outs'
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
       exOrder = getExecOrder rels (allInputs ++ map codevar const') outs' db
@@ -111,7 +111,7 @@ codeSpec SI {_sys = sys
         constMap = assocToMap const',
         constants = const',
         mods = mods',
-        dMap = modDepMap db mem mods' exOrder,
+        dMap = modDepMap db mem mods' allInputs exOrder,
         sysinfodb = db
       }
 
@@ -236,22 +236,22 @@ asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 
-modExportMap :: Choices -> ConstraintMap -> [Mod] -> [Input] -> [Const] -> [Derived] -> ModExportMap
-modExportMap chs cm ms ins _ ds = Map.fromList $ concatMap mpair ms
+modExportMap :: Choices -> ConstraintMap -> [Mod] -> [Input] -> [Const] -> [Derived] -> [Output] -> ModExportMap
+modExportMap chs cm ms ins _ ds outs = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
-                        ++ map codeName ins `zip` repeat "InputParameters"
+                        ++ getExportInput chs (ins ++ map codevar ds)
                         ++ getExportDerived chs ds
                         ++ getExportConstraints chs (getConstraints cm 
                           (ins ++ map codevar ds))
-                        ++ [ ("write_output", "OutputFormat") ]  -- hardcoded for now
+                        ++ getExportOutput outs
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
           
 type ModDepMap = Map.Map String [String]
 
-modDepMap :: ChunkDB -> ModExportMap -> [Mod] -> [Def] -> ModDepMap
-modDepMap sm mem ms eo = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
-                                   ++ [("Control", getDepsControl mem eo),
+modDepMap :: ChunkDB -> ModExportMap -> [Mod] -> [Input] -> [Def] -> ModDepMap
+modDepMap sm mem ms ins eo = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
+                                   ++ [("Control", getDepsControl mem ins eo),
                                        ("DerivedValues", [ "InputParameters" ] ),
                                        ("InputConstraints", [ "InputParameters" ] )]  -- hardcoded for now
                                                                           -- will fix later
@@ -342,6 +342,12 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   
 type Export = (String, String)
 
+getExportInput :: Choices -> [Input] -> [Export]
+getExportInput _ [] = []
+getExportInput chs ins = inExp $ inputStructure chs
+  where inExp Loose = []
+        inExp AsClass = map codeName ins `zip` repeat "InputParameters"
+
 getExportDerived :: Choices -> [Derived] -> [Export]
 getExportDerived _ [] = []
 getExportDerived chs _ = [("derived_values", dMod $ inputStructure chs)]
@@ -354,13 +360,18 @@ getExportConstraints chs _ = [("input_constraints", cMod $ inputStructure chs)]
   where cMod Loose = "InputParameters"
         cMod AsClass = "InputConstraints"
 
-getDepsControl :: ModExportMap -> [Def] -> [String]
-getDepsControl mem eo = let dv = Map.lookup "derived_values" mem
-                            ic = Map.lookup "input_constraints" mem
-                            calcs = map (\x -> Map.lookup (codeName x) mem) eo
-  in nub $ catMaybes ([dv, ic] ++ calcs) ++ ["InputParameters",
-                                             "InputFormat",
-                                             "OutputFormat"]
+getExportOutput :: [Output] -> [Export]
+getExportOutput [] = []
+getExportOutput _ = [("write_output", "OutputFormat")]
+
+getDepsControl :: ModExportMap -> [Input] -> [Def] -> [String]
+getDepsControl mem ins eo = let ip = map (\x -> Map.lookup (codeName x) mem) ins
+                                inf = Map.lookup (funcPrefix ++ "get_input") mem
+                                dv = Map.lookup "derived_values" mem
+                                ic = Map.lookup "input_constraints" mem
+                                wo = Map.lookup "write_output" mem
+                                calcs = map (\x -> Map.lookup (codeName x) mem) eo
+  in nub $ catMaybes (ip ++ [inf, dv, ic, wo] ++ calcs)
 
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs

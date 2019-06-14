@@ -15,9 +15,9 @@ using std::ofstream;
 
 #include "DerivedValues.hpp"
 #include "InputConstraints.hpp"
+#include "Calculations.hpp"
 #include "InputParameters.hpp"
 #include "InputFormat.hpp"
-#include "Calculations.hpp"
 #include "OutputFormat.hpp"
 
 int main(int argc, const char *argv[]) {

@@ -12,30 +12,26 @@ using std::ofstream;
 #include "InputParameters.hpp"
 #include "Interpolation.hpp"
 
-bool func_is_safePb(InputParameters &inParams, double P_b);
+double func_J_tol(InputParameters &inParams);
 
-bool func_is_safeLR(double LR, double q);
-
-bool func_is_safeProb(double P_f, double P_ftol);
-
-bool func_is_safeLoad(double capacity, double Load);
-
-double func_B(InputParameters &inParams, double J);
-
-double func_J(InputParameters &inParams, double q_hat);
-
-double func_NFL(InputParameters &inParams, double q_hat_tol);
+double func_q(InputParameters &inParams);
 
 double func_q_hat(InputParameters &inParams, double q);
 
 double func_q_hat_tol(InputParameters &inParams, double J_tol);
 
-double func_J_tol(InputParameters &inParams);
+double func_J(InputParameters &inParams, double q_hat);
 
-double func_P_b(double B);
+double func_NFL(InputParameters &inParams, double q_hat_tol);
+
+double func_B(InputParameters &inParams, double J);
 
 double func_LR(InputParameters &inParams, double NFL);
 
-double func_q(InputParameters &inParams);
+bool func_is_safeLR(double LR, double q);
+
+double func_P_b(double B);
+
+bool func_is_safePb(InputParameters &inParams, double P_b);
 
 #endif

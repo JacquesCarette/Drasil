@@ -1,16 +1,15 @@
 module Drasil.Projectile.Goals (goals) where
 
 import Language.Drasil
-import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 
-import Drasil.Projectile.Concepts (landingPos, projectile)
+import Drasil.Projectile.Concepts (projectile, target)
 
 goals :: [ConceptInstance]
-goals = [calcPosition]
+goals = [targetHit]
 
-calcPosition :: ConceptInstance
-calcPosition = cic "calcPosition" 
-  (S "Calculate" +:+. (phrase landingPos `ofThe` phrase projectile))
-  "calcLandingPosition" goalStmtDom
+targetHit :: ConceptInstance
+targetHit = cic "targetHit" 
+  (S "Determine if the" +:+ phrase projectile +:+ S "hits the" +:+. phrase target)
+  "targetHit" goalStmtDom

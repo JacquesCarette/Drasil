@@ -21,9 +21,9 @@ import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc,
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, doccon, doccon',
   funcReqDom, input_, nonFuncReqDom, output_, physicalSystem, physSyst, srs, system)
-import Data.Drasil.Concepts.Math (angle, mathcon)
+import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (physicCon, position, speed, twoD)
+import Data.Drasil.Concepts.Physics (iVel, physicCon, position, twoD)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
 import Data.Drasil.Quantities.Physics (iSpeed, physicscon)
@@ -121,7 +121,7 @@ refDB :: ReferenceDB
 refDB = rdb [] concIns
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ funcReqs ++ nonfuncReqs
+concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
@@ -187,7 +187,7 @@ figLaunch = llcc (makeFigRef "Launch") $ figWithWidth (S "The" +:+ phrase physic
 ---------------------
 
 goalStmts :: Section
-goalStmts = goalStmtF [(phrase angle `sAnd` phrase speed) `ofThe` phrase projectile]
+goalStmts = goalStmtF [(phrase iVel +:+ S "vector") `ofThe` phrase projectile]
   (mkEnumSimpleD goals)
 
 ----------------------

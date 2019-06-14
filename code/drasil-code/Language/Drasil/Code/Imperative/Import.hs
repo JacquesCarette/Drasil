@@ -308,7 +308,7 @@ genCaseBlock t v cs = do
 
 genOutputMod :: (RenderSym repr) => Reader (State repr) [repr
   (Module repr)]
-genOutputMod = liftS $ genModule "OutputFormat" (Just $ liftS $ 
+genOutputMod = liftS $ genModule "OutputFormat" (Just $ liftS 
   genOutputFormat) Nothing
 
 genOutputFormat :: (RenderSym repr) => Reader (State repr) (repr 
@@ -407,18 +407,16 @@ genMainFunc =
       v_params = var l_params
   in do
     g <- ask
-    args2 <- getParams $ outputs $ codeSpec g
     gi <- fApp (funcPrefix ++ "get_input") [v_filename, v_params]
     dv <- getDerivedCall
     ic <- getConstraintCall
     varDef <- mapM getCalcCall (execOrder $ codeSpec g)
-    wo <- fApp "write_output" (getArgs args2)
+    wo <- getOutputCall
     return $ mainMethod "" $ bodyStatements $ [
       varDecDef l_filename string $ arg 0 ,
       extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
       valState gi] ++ 
-      catMaybes ([dv, ic] ++ varDef)
-      ++ [ valState wo ]
+      catMaybes ([dv, ic] ++ varDef ++ [wo])
 
 getFuncCall :: (RenderSym repr) => String -> Reader (State repr) 
   [ParamData repr] -> Reader (State repr) (Maybe (repr (Value repr)))
@@ -449,6 +447,12 @@ getCalcCall :: (RenderSym repr) => CodeDefinition -> Reader (State repr)
 getCalcCall c = do
   val <- getFuncCall (codeName c) (getCalcParams c)
   return $ fmap (varDecDef (nopfx $ codeName c) (convType $ codeType c)) val
+
+getOutputCall :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Statement repr)))
+getOutputCall = do
+  val <- getFuncCall "write_output" getOutputParams
+  return $ fmap valState val
 
 getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do

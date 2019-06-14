@@ -1,6 +1,6 @@
 module Drasil.Projectile.Body where
 
-import Language.Drasil
+import Language.Drasil hiding (Vector)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
   TraceMap, cdb, generateRefbyMap, rdb, refdb, _authors, _concepts, _constants,
@@ -9,12 +9,13 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
 import Utils.Drasil
 
 import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc,
-  DocSection(RefSec, ReqrmntSec, SSDSec), Field(..), Fields, InclUnits(IncludeUnits),
-  ProblemDescription(PDProg), RefSec(..), RefTab(TUnits, TAandA), ReqrmntSec(..), ReqsSub(..),
-  SCSSub(Assumptions, Constraints, CorrSolnPpties, DDs, GDs, IMs, TMs),
-  SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), Verbosity(Verbose),
+  DocSection(RefSec, ReqrmntSec, SSDSec), Emphasis(Bold), Field(..),
+  Fields, InclUnits(IncludeUnits), ProblemDescription(PDProg), RefSec(..),
+  RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
+  SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
+  TSIntro(..), Verbosity(Verbose),
   dataConstraintUncertainty, generateTraceMap, generateTraceMap', goalStmtF,
-  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl)--, tsymb'')
+  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, doccon, doccon',
@@ -50,7 +51,7 @@ mkSRS = [
   RefSec $
     RefProg intro
       [ TUnits
-     -- , tsymb'' tableOfSymbIntro TAD
+      , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder]
       , TAandA
       ],
   SSDSec $

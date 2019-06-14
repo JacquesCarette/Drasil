@@ -45,7 +45,7 @@ intro_ = mkParagraph $ foldlSent [S "This", phrase section_, S "first presents t
   phrase problemDescription `sC` S "which gives a high-level view of the",
   phrase problem, S "to be solved. This is followed by the", plural solutionCharacteristic,
   phrase specification `sC`  S "which presents the",
-  foldlList Comma List ([plural assumption, plural theory, plural definition]), S "that are used"]
+  foldlList Comma List [plural assumption, plural theory, plural definition], S "that are used"]
 
 -- give starting sentence(s), the program name, and finish the last sentence
 probDescF :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> Section

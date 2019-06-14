@@ -108,7 +108,7 @@ mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
 helperRefs :: HasUID t => t -> SystemInformation -> Sentence
-helperRefs t s = foldlSent $ map (`helpToRefField` s) $ refbyLookup (t ^. uid) (_sysinfodb s ^. refbyTable)
+helperRefs t s = foldlList Comma List $ map (`helpToRefField` s) $ refbyLookup (t ^. uid) (_sysinfodb s ^. refbyTable)
 
 helpToRefField :: UID -> SystemInformation -> Sentence
 helpToRefField t si

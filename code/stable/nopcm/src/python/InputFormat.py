@@ -2,8 +2,6 @@ from __future__ import print_function
 import sys
 import math
 
-import InputParameters
-
 def func_get_input(filename, L, D, A_C, T_C, rho_W, C_W, h_C, T_init, t_step, t_final, A_tol, R_tol):
     lines = []
     linetokens = []

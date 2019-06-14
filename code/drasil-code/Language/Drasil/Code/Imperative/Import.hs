@@ -421,8 +421,8 @@ genMainFunc =
     ic <- getConstraintCall
     varDef <- mapM getCalcCall (execOrder $ codeSpec g)
     wo <- getOutputCall
-    return $ mainMethod "" $ bodyStatements $ [
-      varDecDef l_filename string $ arg 0] ++
+    return $ mainMethod "" $ bodyStatements $
+      varDecDef l_filename string (arg 0) :
       catMaybes ([ip, gi, dv, ic] ++ varDef ++ [wo])
 
 getInputDecl :: (RenderSym repr) => Reader (State repr) (Maybe (repr (

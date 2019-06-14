@@ -361,10 +361,10 @@ getExportOutput _ = [("write_output", "OutputFormat")]
 getDepsControl :: ModExportMap -> [Def] -> [String]
 getDepsControl mem eo = let dv = Map.lookup "derived_values" mem
                             ic = Map.lookup "input_constraints" mem
+                            wo = Map.lookup "write_output" mem
                             calcs = map (\x -> Map.lookup (codeName x) mem) eo
-  in nub $ catMaybes ([dv, ic] ++ calcs) ++ ["InputParameters",
-                                             "InputFormat",
-                                             "OutputFormat"]
+  in nub $ catMaybes ([dv, ic, wo] ++ calcs) ++ ["InputParameters",
+                                                 "InputFormat"]
 
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs

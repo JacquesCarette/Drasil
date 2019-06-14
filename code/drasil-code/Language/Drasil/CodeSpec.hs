@@ -239,7 +239,7 @@ type ModExportMap = Map.Map String String
 modExportMap :: Choices -> ConstraintMap -> [Mod] -> [Input] -> [Const] -> [Derived] -> ModExportMap
 modExportMap chs cm ms ins _ ds = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
-                        ++ map codeName ins `zip` repeat "InputParameters"
+                        ++ getExportInput chs (ins ++ map codevar ds)
                         ++ getExportDerived chs ds
                         ++ getExportConstraints chs (getConstraints cm 
                           (ins ++ map codevar ds))
@@ -341,6 +341,12 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
 type Export = (String, String)
+
+getExportInput :: Choices -> [CodeChunk] -> [Export]
+getExportInput _ [] = []
+getExportInput chs ins = inExp $ inputStructure chs
+  where inExp Loose = []
+        inExp AsClass = map codeName ins `zip` repeat "InputParameters"
 
 getExportDerived :: Choices -> [Derived] -> [Export]
 getExportDerived _ [] = []

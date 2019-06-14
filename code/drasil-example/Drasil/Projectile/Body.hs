@@ -10,8 +10,9 @@ import Utils.Drasil
 import Control.Lens ((^.))
 
 import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc,
-  DocSection(RefSec, ReqrmntSec, SSDSec), Emphasis(Bold), Field(..),
-  Fields, InclUnits(IncludeUnits), ProblemDescription(PDProg), RefSec(..),
+  DocSection(IntroSec, RefSec, ReqrmntSec, SSDSec), Emphasis(Bold),
+  Field(..), Fields, InclUnits(IncludeUnits), IntroSec(IntroProg),
+  IntroSub(IScope), ProblemDescription(PDProg), RefSec(..),
   RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
   TSIntro(..), Verbosity(Verbose), dataConstraintUncertainty, generateTraceMap,
@@ -19,8 +20,8 @@ import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc,
   outDataConstTbl, physSystDesc, physSystDescriptionLabel, termDefnF, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
-import Data.Drasil.Concepts.Documentation as Doc (assumpDom, doccon, doccon',
-  funcReqDom, input_, nonFuncReqDom, output_, physicalSystem, physSyst, srs, system)
+import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', input_,
+  output_, physicalSystem, physics, physSyst, problem, srsDomains, srs, system)
 import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (iVel, physicCon, position, twoD)
@@ -56,6 +57,10 @@ mkSRS = [
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder]
       , TAandA
       ],
+  IntroSec $
+    IntroProg justification (phrase projectileTitle)
+      [ IScope scope1 scope2
+      ],
   SSDSec $
     SSDProg
       [ SSDProblem   $ PDProg  probStart projectileTitle probEnding
@@ -65,7 +70,7 @@ mkSRS = [
         , TMs [] (Label : stdFields) tMods
         , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs [EmptyS] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
         , Constraints EmptyS dataConstraintUncertainty EmptyS
                       {-(foldlSent [makeRef2S $ valsOfAuxCons [] [],
                       S "gives", plural value `ofThe` S "specification",
@@ -81,10 +86,17 @@ mkSRS = [
       ]
   ]
 
+justification, scope1, scope2 :: Sentence
+justification = foldlSent [atStart projectile, S "motion" `sIs` S "an incredibly common" +:+.
+  (phrase problem `sIn` phrase physics), S "Therefore" `sC` S "it" `sIs` S "useful to have a",
+  phrase program, S "to solve and model these types" `sOf` plural problem]
+scope1 = foldlSent_ [S "the", phrase analysis `sOf` S "a", phrase projectile, S "motion", phrase problem]
+scope2 = foldlSent_ [S "determines if the", phrase projectile, S "hits the", phrase target]
+
 systInfo :: SystemInformation
 systInfo = SI {
   _sys         = projectileTitle,
-  _kind        = Doc.srs,
+  _kind        = srs,
   _authors     = [samCrawford, brooks, spencerSmith],
   _quants      = [] :: [QuantityDict],
   _concepts    = [] :: [DefinedQuantityDict],
@@ -105,12 +117,12 @@ symbMap = cdb (map qw physicscon ++ unitalQuants)
   (nw projectileTitle : nw mass : nw twoD : nw inParam : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicscon ++ map nw physicCon ++
     map nw mathcon ++ concepts ++ unitalIdeas ++ map nw acronyms)
-  [assumpDom, funcReqDom, nonFuncReqDom] ([] :: [UnitDefn]) label refBy
+  srsDomains ([] :: [UnitDefn]) label refBy
   dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms) [assumpDom, funcReqDom, nonFuncReqDom]
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms) srsDomains
   ([] :: [UnitDefn]) label refBy dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 

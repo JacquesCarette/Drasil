@@ -111,7 +111,7 @@ codeSpec SI {_sys = sys
         constMap = assocToMap const',
         constants = const',
         mods = mods',
-        dMap = modDepMap db mem mods' exOrder,
+        dMap = modDepMap db mem mods' allInputs exOrder,
         sysinfodb = db
       }
 
@@ -249,9 +249,9 @@ modExportMap chs cm ms ins _ ds outs = Map.fromList $ concatMap mpair ms
           
 type ModDepMap = Map.Map String [String]
 
-modDepMap :: ChunkDB -> ModExportMap -> [Mod] -> [Def] -> ModDepMap
-modDepMap sm mem ms eo = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
-                                   ++ [("Control", getDepsControl mem eo),
+modDepMap :: ChunkDB -> ModExportMap -> [Mod] -> [Input] -> [Def] -> ModDepMap
+modDepMap sm mem ms ins eo = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
+                                   ++ [("Control", getDepsControl mem ins eo),
                                        ("DerivedValues", [ "InputParameters" ] ),
                                        ("InputConstraints", [ "InputParameters" ] )]  -- hardcoded for now
                                                                           -- will fix later
@@ -342,7 +342,7 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   
 type Export = (String, String)
 
-getExportInput :: Choices -> [CodeChunk] -> [Export]
+getExportInput :: Choices -> [Input] -> [Export]
 getExportInput _ [] = []
 getExportInput chs ins = inExp $ inputStructure chs
   where inExp Loose = []
@@ -364,13 +364,14 @@ getExportOutput :: [Output] -> [Export]
 getExportOutput [] = []
 getExportOutput _ = [("write_output", "OutputFormat")]
 
-getDepsControl :: ModExportMap -> [Def] -> [String]
-getDepsControl mem eo = let inf = Map.lookup (funcPrefix ++ "get_input") mem
-                            dv = Map.lookup "derived_values" mem
-                            ic = Map.lookup "input_constraints" mem
-                            wo = Map.lookup "write_output" mem
-                            calcs = map (\x -> Map.lookup (codeName x) mem) eo
-  in nub $ catMaybes ([inf, dv, ic, wo] ++ calcs) ++ ["InputParameters"]
+getDepsControl :: ModExportMap -> [Input] -> [Def] -> [String]
+getDepsControl mem ins eo = let ip = map (\x -> Map.lookup (codeName x) mem) ins
+                                inf = Map.lookup (funcPrefix ++ "get_input") mem
+                                dv = Map.lookup "derived_values" mem
+                                ic = Map.lookup "input_constraints" mem
+                                wo = Map.lookup "write_output" mem
+                                calcs = map (\x -> Map.lookup (codeName x) mem) eo
+  in nub $ catMaybes (ip ++ [inf, dv, ic, wo] ++ calcs)
 
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs

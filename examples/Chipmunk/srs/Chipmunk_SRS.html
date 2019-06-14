@@ -223,6 +223,13 @@
                   <td>m</td>
                 </tr>
                 <tr>
+                  <td><em>r<sub>j</sub></em></td>
+                  <td>
+                    Distance Between the J-Th Particle and the Axis of Rotation
+                  </td>
+                  <td>m</td>
+                </tr>
+                <tr>
                   <td><em><b>r</b></em></td>
                   <td>Displacement</td>
                   <td>m</td>
@@ -649,7 +656,7 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:potEnergy>DD: potEnergy</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulseV>DD: impulseV</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
+                      objectTy: All objects are rigid bodies. <a href=#DD:chalses>DD: chalses</a> <a href=#DD:chalses>DD: chalses</a> <a href=#DD:reVeInColl>DD: reVeInColl</a> <a href=#IM:transMot>IM: transMot</a> <a href=#IM:rotMot>IM: rotMot</a> <a href=#DD:potEnergy>DD: potEnergy</a> <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:momentOfInertia>DD: momentOfInertia</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linAcc>DD: linAcc</a> <a href=#DD:kEnergy>DD: kEnergy</a> <a href=#DD:impulseV>DD: impulseV</a> <a href=#DD:impulse>DD: impulse</a> <a href=#IM:col2D>IM: col2D</a> <a href=#TM:ChaslesThm>TM: ChaslesThm</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angAccel>DD: angAccel</a>.
                     </div>
                   </p>
                   <p>
@@ -1879,6 +1886,63 @@
                     </tr>
                   </table>
                 </div>
+                <div id="DD:momentOfInertia">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Moment of inertia</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em><b>I</b></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">kg&sdot;m<sup>2</sup></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        <div class="equation">
+                          <em><b>I</b> = &sum;m<sub>j</sub>&#8239;r<sub>j</sub><sup>2</sup></em>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
+                          </li>
+                          <li>
+                            <em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
+                          </li>
+                          <li>
+                            <em>r<sub>j</sub></em> is the distance between the j-th particle and the axis of rotation (m)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The moment of inertia <em><b>I</b></em> of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.
+                        </p>
+                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -2632,6 +2696,16 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#DD:momentOfInertia>DD: momentOfInertia</a></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a></td>
               <td></td>
               <td></td>
@@ -2907,6 +2981,7 @@
               <th><a href=#DD:reVeInColl>DD: reVeInColl</a></th>
               <th><a href=#DD:impulseV>DD: impulseV</a></th>
               <th><a href=#DD:potEnergy>DD: potEnergy</a></th>
+              <th><a href=#DD:momentOfInertia>DD: momentOfInertia</a></th>
               <th><a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a></th>
               <th><a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a></th>
               <th><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></th>
@@ -2918,6 +2993,7 @@
             </tr>
             <tr>
               <td><a href=#DD:ctrOfMass>DD: ctrOfMass</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2967,9 +3043,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:linVel>DD: linVel</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3019,9 +3097,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:angDisp>DD: angDisp</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3071,9 +3151,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:angAccel>DD: angAccel</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3123,9 +3205,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:chalses>DD: chalses</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3175,9 +3259,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:kEnergy>DD: kEnergy</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3227,9 +3313,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:reVeInColl>DD: reVeInColl</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3279,9 +3367,38 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:potEnergy>DD: potEnergy</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:momentOfInertia>DD: momentOfInertia</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3331,9 +3448,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3383,9 +3502,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:ChaslesThm>TM: ChaslesThm</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3435,6 +3556,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:transMot>IM: transMot</a></td>
@@ -3442,6 +3564,7 @@
               <td>X</td>
               <td>X</td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3487,6 +3610,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:col2D>IM: col2D</a></td>
@@ -3498,6 +3622,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3538,6 +3663,7 @@
               <th><a href=#DD:reVeInColl>DD: reVeInColl</a></th>
               <th><a href=#DD:impulseV>DD: impulseV</a></th>
               <th><a href=#DD:potEnergy>DD: potEnergy</a></th>
+              <th><a href=#DD:momentOfInertia>DD: momentOfInertia</a></th>
               <th><a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a></th>
               <th><a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a></th>
               <th><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></th>
@@ -3600,11 +3726,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#inputInitialConds>FR: Input-Initial-Conditions</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3672,11 +3800,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#verifyPhysCons>FR: Verify-Physical_Constraints</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3744,11 +3874,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#calcRotOverTime>FR: Calculate-Rotation-Over-Time</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3814,11 +3946,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#deterCollRespOverTime>FR: Determine-Collision-Response-Over-Time</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

@@ -67,7 +67,7 @@ termDefnF end otherContents = SRS.termAndDefn (intro:otherContents) []
 physSystDesc :: Sentence -> LabelledContent -> [Contents] -> Section
 physSystDesc progName fg otherContents = SRS.physSyst (intro:otherContents) []
   where intro = mkParagraph $ foldlSentCol
-                [S "The", phrase physicalSystem, S "of", progName `sC`
+                [S "The", phrase physicalSystem `sOf` progName `sC`
                 S "as shown in", makeRef2S fg `sC` S "includes the following", 
                 plural element]
 

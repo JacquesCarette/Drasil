@@ -16,17 +16,17 @@ import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc,
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
   TSIntro(..), Verbosity(Verbose), dataConstraintUncertainty, generateTraceMap,
   generateTraceMap', goalStmtF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
-  outDataConstTbl, termDefnF, tsymb)
+  outDataConstTbl, physSystDesc, physSystDescriptionLabel, termDefnF, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, doccon, doccon',
-  funcReqDom, input_, nonFuncReqDom, output_, srs, system)
+  funcReqDom, input_, nonFuncReqDom, output_, physicalSystem, physSyst, srs, system)
 import Data.Drasil.Concepts.Math (angle, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (physicCon, position, speed, twoD)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
-import Data.Drasil.Quantities.Physics (physicscon)
+import Data.Drasil.Quantities.Physics (iSpeed, physicscon)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 
@@ -42,8 +42,8 @@ import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
   nonfuncReqs, propsDeriv)
 import Drasil.Projectile.TMods (tMods)
-import Drasil.Projectile.Unitals (acronyms, inConstraints, outConstraints,
-  unitalIdeas, unitalQuants)
+import Drasil.Projectile.Unitals (acronyms, inConstraints, launAngle,
+  outConstraints, unitalIdeas, unitalQuants)
 
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
@@ -58,7 +58,8 @@ mkSRS = [
       ],
   SSDSec $
     SSDProg
-      [ SSDProblem   $ PDProg  probStart projectileTitle probEnding [termsAndDefs, goalStmts]
+      [ SSDProblem   $ PDProg  probStart projectileTitle probEnding
+        [termsAndDefs, physSystDescription, goalStmts]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tMods
@@ -131,6 +132,9 @@ refBy = generateRefbyMap label
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
 
+resourcePath :: String
+resourcePath = "../../../datafiles/Projectile/"
+
 -------------------------
 -- Problem Description --
 -------------------------
@@ -145,6 +149,10 @@ probEnding = foldlSent_ [S "interpret the", plural input_,
   S "to give out the", plural output_, S "which predict the landing",
   phrase position, S "of a", phrase projectile]
 
+---------------------------------
+-- Terminology and Definitions --
+---------------------------------
+
 termsAndDefs :: Section
 termsAndDefs = termDefnF Nothing [termsAndDefsBullets]
 
@@ -153,6 +161,30 @@ termsAndDefsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $
   map tAndDMap [launcher, projectile, target]
   where
     tAndDMap c = Flat $ foldlSent [atStart c +: EmptyS, c ^. defn]
+
+---------------------------------
+-- Physical System Description --
+---------------------------------
+
+physSystDescription :: Section
+physSystDescription = physSystDesc (short projectileTitle) figLaunch [physSystDescList, LlC figLaunch]
+
+physSystDescList :: Contents
+physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ systDescList
+
+systDescList :: [Sentence]
+systDescList = map foldlSent [
+  [S "The", phrase launcher],
+  [S "The", phrase projectile, sParen (S "with" +:+ getTandS iSpeed `sAnd` getTandS launAngle)],
+  [S "The", phrase target]]
+
+figLaunch :: LabelledContent
+figLaunch = llcc (makeFigRef "Launch") $ figWithWidth (S "The" +:+ phrase physicalSystem)
+  (resourcePath ++ "Launch.jpg") 70
+
+---------------------
+-- Goal Statements --
+---------------------
 
 goalStmts :: Section
 goalStmts = goalStmtF [(phrase angle `sAnd` phrase speed) `ofThe` phrase projectile]

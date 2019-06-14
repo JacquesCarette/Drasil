@@ -24,7 +24,7 @@ import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', input_,
   output_, physicalSystem, physics, physSyst, problem, srsDomains, srs, system)
 import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (iVel, physicCon, position, twoD)
+import Data.Drasil.Concepts.Physics (constAccel, iVel, physicCon, position, twoD)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
 import Data.Drasil.Quantities.Physics (iSpeed, physicscon)
@@ -90,7 +90,8 @@ justification, scope1, scope2 :: Sentence
 justification = foldlSent [atStart projectile, S "motion" `sIs` S "an incredibly common" +:+.
   (phrase problem `sIn` phrase physics), S "Therefore" `sC` S "it" `sIs` S "useful to have a",
   phrase program, S "to solve and model these types" `sOf` plural problem]
-scope1 = foldlSent_ [S "the", phrase analysis `sOf` S "a", phrase projectile, S "motion", phrase problem]
+scope1 = foldlSent_ [S "the", phrase analysis `sOf` S "a", phrase twoD, phrase projectile,
+  S "motion", phrase problem, S "with", phrase constAccel]
 scope2 = foldlSent_ [S "determines if the", phrase projectile, S "hits the", phrase target]
 
 systInfo :: SystemInformation

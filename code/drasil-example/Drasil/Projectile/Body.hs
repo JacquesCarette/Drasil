@@ -7,15 +7,16 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
+import Control.Lens ((^.))
 
 import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc,
   DocSection(RefSec, ReqrmntSec, SSDSec), Emphasis(Bold), Field(..),
   Fields, InclUnits(IncludeUnits), ProblemDescription(PDProg), RefSec(..),
   RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
-  TSIntro(..), Verbosity(Verbose),
-  dataConstraintUncertainty, generateTraceMap, generateTraceMap', goalStmtF,
-  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, tsymb)
+  TSIntro(..), Verbosity(Verbose), dataConstraintUncertainty, generateTraceMap,
+  generateTraceMap', goalStmtF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
+  outDataConstTbl, termDefnF, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, doccon, doccon',
@@ -32,7 +33,8 @@ import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import qualified Data.Map as Map
 
 import Drasil.Projectile.Assumptions (assumptions)
-import Drasil.Projectile.Concepts (concepts, projectileTitle, projectile)
+import Drasil.Projectile.Concepts (concepts, projectileTitle, launcher,
+  projectile, target)
 import Drasil.Projectile.DataDefs (dataDefns)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
@@ -56,7 +58,7 @@ mkSRS = [
       ],
   SSDSec $
     SSDProg
-      [ SSDProblem   $ PDProg  probStart projectileTitle probEnding [goalStmts]
+      [ SSDProblem   $ PDProg  probStart projectileTitle probEnding [termsAndDefs, goalStmts]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tMods
@@ -142,6 +144,15 @@ probEnding :: Sentence
 probEnding = foldlSent_ [S "interpret the", plural input_,
   S "to give out the", plural output_, S "which predict the landing",
   phrase position, S "of a", phrase projectile]
+
+termsAndDefs :: Section
+termsAndDefs = termDefnF Nothing [termsAndDefsBullets]
+
+termsAndDefsBullets :: Contents
+termsAndDefsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $
+  map tAndDMap [launcher, projectile, target]
+  where
+    tAndDMap c = Flat $ foldlSent [atStart c +: EmptyS, c ^. defn]
 
 goalStmts :: Section
 goalStmts = goalStmtF [(phrase angle `sAnd` phrase speed) `ofThe` phrase projectile]

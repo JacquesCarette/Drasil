@@ -191,8 +191,6 @@ genInputModClass = do
 genInputModNoClass :: (RenderSym repr) => Reader (State repr)
   [repr (Module repr)]
 genInputModNoClass = do
-  g <- ask
-  let ins = inputs $ codeSpec g
   inpDer    <- genInputDerived
   inpConstr <- genInputConstraints
   return [ buildModule "InputParameters" [] []
@@ -208,7 +206,7 @@ genInputClass = do
       genClass :: (RenderSym repr) => [String] -> Reader (State repr) (Maybe 
         (repr (Class repr)))
       genClass [] = return Nothing 
-      genClass xs = do
+      genClass _ = do
         let inputVars = map (\x -> pubMVar 0 (codeName x) (convType $ 
               codeType x)) ins
             varsList  = map (objVarSelf . codeName) ins
@@ -415,7 +413,6 @@ genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genMainFunc =
   let l_filename = "inputfile"
-      l_params = "inParams"
   in do
     g <- ask
     ip <- getInputDecl
@@ -438,7 +435,7 @@ getInputDecl = do
       getDecl _ [] = Nothing
       getDecl Loose ins = Just $ multi $ map (\x -> varDecDef (codeName x) 
         (convType $ codeType x) (getDefaultValue $ codeType x)) ins
-      getDecl AsClass ins = Just $ extObjDecNewVoid l_params "InputParameters" 
+      getDecl AsClass _ = Just $ extObjDecNewVoid l_params "InputParameters" 
         (obj "InputParameters") 
   return $ getDecl (inStruct g) (inputs $ codeSpec g)
 

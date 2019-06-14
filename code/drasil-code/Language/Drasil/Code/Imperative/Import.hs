@@ -409,21 +409,18 @@ genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genMainFunc =
   let l_filename = "inputfile"
-      v_filename = var l_filename
       l_params = "inParams"
-      v_params = var l_params
   in do
     g <- ask
-    gi <- fApp (funcPrefix ++ "get_input") [v_filename, v_params]
+    gi <- getInputCall
     dv <- getDerivedCall
     ic <- getConstraintCall
     varDef <- mapM getCalcCall (execOrder $ codeSpec g)
     wo <- getOutputCall
     return $ mainMethod "" $ bodyStatements $ [
       varDecDef l_filename string $ arg 0 ,
-      extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
-      valState gi] ++ 
-      catMaybes ([dv, ic] ++ varDef ++ [wo])
+      extObjDecNewVoid l_params "InputParameters" (obj "InputParameters")] ++ 
+      catMaybes ([gi, dv, ic] ++ varDef ++ [wo])
 
 getFuncCall :: (RenderSym repr) => String -> Reader (State repr) 
   [ParamData repr] -> Reader (State repr) (Maybe (repr (Value repr)))
@@ -436,6 +433,12 @@ getFuncCall n funcPs = do
         val <- fApp' m n pvals
         return $ Just val
   getCall $ Map.lookup n (eMap $ codeSpec g)
+
+getInputCall :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Statement repr)))
+getInputCall = do
+  val <- getFuncCall (funcPrefix ++ "get_input") getInputFormatParams
+  return $ fmap valState val
 
 getDerivedCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -460,6 +463,14 @@ getOutputCall :: (RenderSym repr) => Reader (State repr)
 getOutputCall = do
   val <- getFuncCall "write_output" getOutputParams
   return $ fmap valState val
+
+getInputFormatParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
+getInputFormatParams = do 
+  g <- ask
+  let ins = extInputs $ codeSpec g
+      l_filename = "inputfile"
+  ps <- getParams ins
+  return $ PD (stateParam l_filename infile) infile l_filename : ps
 
 getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do

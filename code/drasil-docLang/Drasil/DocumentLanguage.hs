@@ -171,7 +171,7 @@ data SSDSub where
 
 -- | Problem Description section
 data ProblemDescription where
-  PDProg :: Sentence -> CI -> Sentence -> [Section] -> ProblemDescription
+  PDProg :: Sentence -> [Section] -> ProblemDescription
 
 -- | Solution Characteristics Specification section
 data SolChSpec where
@@ -420,8 +420,7 @@ mkSSDSec si (SSDProg l) =
     mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
-mkSSDProb _ (PDProg start progName end subSec) =
-  SSD.probDescF start progName end subSec
+mkSSDProb _ (PDProg prob subSec) = SSD.probDescF prob subSec
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =

@@ -23,10 +23,9 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint, datum
   datumConstraint, definition, element, general, goalStmt, information, input_,
   limitation, model, output_, physical, physicalConstraint, physicalSystem, problem,
   problemDescription, purpose, quantity, requirement, section_, softwareConstraint,
-  solutionCharacteristic, specification, symbol_, theory, typUnc, uncertainty, user,
-  value, variable)
+  solutionCharacteristic, specification, symbol_, system, theory, typUnc, uncertainty,
+  user, value, variable)
 import Data.Drasil.Concepts.Math (equation)
-import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.IdeaDicts (inModel, thModel)
 
@@ -47,11 +46,9 @@ intro_ = mkParagraph $ foldlSent [S "This", phrase section_, S "first presents t
   phrase specification `sC`  S "which presents the",
   foldlList Comma List [plural assumption, plural theory, plural definition], S "that are used"]
 
--- give starting sentence(s), the program name, and finish the last sentence
-probDescF :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> Section
-probDescF start progName ending = SRS.probDesc [mkParagraph intro]
-  where intro = foldlSent [start, short progName, S "is a computer",
-                phrase program, S "developed to", ending]
+-- describe what a system is needed to accomplist
+probDescF :: Sentence -> [Section] -> Section
+probDescF prob = SRS.probDesc [mkParagraph $ foldlSent [S "A", phrase system, S "is needed to", prob]]
                   
 --can take a (Just sentence) if needed or Nothing if not
 termDefnF :: Maybe Sentence -> [Contents] -> Section

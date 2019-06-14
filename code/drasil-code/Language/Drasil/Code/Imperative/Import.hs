@@ -137,7 +137,7 @@ genModules = do
   let s = codeSpec g
   mn     <- genMain
   inp    <- chooseInStructure $ inStruct g
-  out    <- genOutputMod $ outputs s
+  out    <- genOutputMod
   moddef <- traverse genModDef (mods s) -- hack ?
   return $ mn : inp ++ out ++ moddef
 
@@ -306,28 +306,36 @@ genCaseBlock t v cs = do
 
 ----- OUTPUT -------
 
-genOutputMod :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) [repr
+genOutputMod :: (RenderSym repr) => Reader (State repr) [repr
   (Module repr)]
-genOutputMod outs = liftS $ genModule "OutputFormat" (Just $ liftS $ 
-  genOutputFormat outs) Nothing
+genOutputMod = do
+  outformat <- genOutputFormat
+  let outf = maybeToList outformat
+  liftS $ genModule "OutputFormat" (Just $ return outf) Nothing
 
-genOutputFormat :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) (repr 
-  (Method repr))
-genOutputFormat outs =
-  let l_outfile = "outputfile"
-      v_outfile = var l_outfile
-  in do
-    parms <- getParams outs
-    outp <- mapM (\x -> do
-        v <- variable $ codeName x
-        return [ printFileStr v_outfile (codeName x ++ " = "),
-                 printFileLn v_outfile (convType $ codeType x) v
-               ] ) outs
-    publicMethod void "write_output" parms (return [block $
-      [
-      varDec l_outfile outfile,
-      openFileW v_outfile (litString "output.txt") ] ++
-      concat outp ++ [ closeFile v_outfile ]])
+genOutputFormat :: (RenderSym repr) => Reader (State repr) (Maybe (repr 
+  (Method repr)))
+genOutputFormat = do
+  g <- ask
+  let genOutput :: (RenderSym repr) => Maybe String -> Reader (State repr) 
+        (Maybe (repr (Method repr)))
+      genOutput Nothing = return Nothing
+      genOutput (Just _) = do
+        let l_outfile = "outputfile"
+            v_outfile = var l_outfile
+        parms <- getOutputParams
+        outp <- mapM (\x -> do
+          v <- variable $ codeName x
+          return [ printFileStr v_outfile (codeName x ++ " = "),
+                   printFileLn v_outfile (convType $ codeType x) v
+                 ] ) (outputs $ codeSpec g)
+        mthd <- publicMethod void "write_output" parms (return [block $
+          [
+          varDec l_outfile outfile,
+          openFileW v_outfile (litString "output.txt") ] ++
+          concat outp ++ [ closeFile v_outfile ]])
+        return $ Just mthd
+  genOutput $ Map.lookup "write_output" (eMap $ codeSpec g)
 
 -----
 
@@ -401,23 +409,18 @@ genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genMainFunc =
   let l_filename = "inputfile"
-      v_filename = var l_filename
       l_params = "inParams"
-      v_params = var l_params
   in do
     g <- ask
-    args2 <- getParams $ outputs $ codeSpec g
-    gi <- fApp (funcPrefix ++ "get_input") [v_filename, v_params]
+    gi <- getInputCall
     dv <- getDerivedCall
     ic <- getConstraintCall
     varDef <- mapM getCalcCall (execOrder $ codeSpec g)
-    wo <- fApp "write_output" (getArgs args2)
+    wo <- getOutputCall
     return $ mainMethod "" $ bodyStatements $ [
       varDecDef l_filename string $ arg 0 ,
-      extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
-      valState gi] ++ 
-      catMaybes ([dv, ic] ++ varDef)
-      ++ [ valState wo ]
+      extObjDecNewVoid l_params "InputParameters" (obj "InputParameters")] ++ 
+      catMaybes ([gi, dv, ic] ++ varDef ++ [wo])
 
 getFuncCall :: (RenderSym repr) => String -> Reader (State repr) 
   [ParamData repr] -> Reader (State repr) (Maybe (repr (Value repr)))
@@ -427,9 +430,15 @@ getFuncCall n funcPs = do
       getCall (Just m) = do
         ps <- funcPs
         let pvals = getArgs ps
-        val <- fApp' m n pvals
+        val <- fApp m n pvals
         return $ Just val
   getCall $ Map.lookup n (eMap $ codeSpec g)
+
+getInputCall :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Statement repr)))
+getInputCall = do
+  val <- getFuncCall (funcPrefix ++ "get_input") getInputFormatParams
+  return $ fmap valState val
 
 getDerivedCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -448,6 +457,20 @@ getCalcCall :: (RenderSym repr) => CodeDefinition -> Reader (State repr)
 getCalcCall c = do
   val <- getFuncCall (codeName c) (getCalcParams c)
   return $ fmap (varDecDef (nopfx $ codeName c) (convType $ codeType c)) val
+
+getOutputCall :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Statement repr)))
+getOutputCall = do
+  val <- getFuncCall "write_output" getOutputParams
+  return $ fmap valState val
+
+getInputFormatParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
+getInputFormatParams = do 
+  g <- ask
+  let ins = extInputs $ codeSpec g
+      l_filename = "inputfile"
+  ps <- getParams ins
+  return $ PD (stateParam l_filename infile) infile l_filename : ps
 
 getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do
@@ -473,6 +496,11 @@ getCalcParams :: (RenderSym repr) => CodeDefinition -> Reader (State repr)
 getCalcParams c = do
   g <- ask
   getParams $ codevars' (codeEquat c) $ sysinfodb $ codeSpec g
+
+getOutputParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
+getOutputParams = do
+  g <- ask
+  getParams $ outputs $ codeSpec g
 
 -----
 
@@ -512,24 +540,9 @@ variable s' = do
              | otherwise                         = return $ var s
   doit s'
   
-fApp :: (RenderSym repr) => String -> [repr (Value repr)] -> Reader 
-  (State repr) (repr (Value repr))
-fApp s' vl' = do
-  g <- ask
-  let doit :: (RenderSym repr) => String -> [repr (Value repr)] -> repr
-        (Value repr)
-      doit s vl | member s (eMap $ codeSpec g) =
-        maybe (error "impossible")
-          (\x -> if x /= currentModule g then extFuncApp x s vl else 
-            funcApp s vl)
-          (Map.lookup s (eMap $ codeSpec g))
-                | otherwise = funcApp s vl
-  return $ doit s' vl'
-
--- This function should replace fApp eventually
-fApp' :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
+fApp :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
   Reader (State repr) (repr (Value repr))
-fApp' m s vl = do
+fApp m s vl = do
   g <- ask
   return $ if m /= currentModule g then extFuncApp m s vl else funcApp s vl
 
@@ -610,9 +623,11 @@ convExpr (C c)   = do
 convExpr (FCall (C c) x) = do
   g <- ask
   let info = sysinfodb $ codeSpec g
+      mem = eMap $ codeSpec g
+      funcNm = codeName (codefunc (symbLookup c (symbolTable info)))
   args <- mapM convExpr x
-
-  fApp (codeName (codefunc (symbLookup c (symbolTable info)))) args
+  maybe (error $ "Call to non-existent function" ++ funcNm) 
+    (\f -> fApp f funcNm args) (Map.lookup funcNm mem)
 convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =

@@ -92,7 +92,7 @@ codeSpec SI {_sys = sys
       rels = map qtoc (defs' ++ map qdFromDD ddefs) \\ derived
       mods' = prefixFunctions $ packmod "Calculations" (map FCD exOrder) : ms 
       conMap = constraintMap cs
-      mem   = modExportMap chs conMap mods' inputs' const' derived
+      mem   = modExportMap chs conMap mods' inputs' const' derived outs'
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
       exOrder = getExecOrder rels (allInputs ++ map codevar const') outs' db
@@ -236,14 +236,14 @@ asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 
-modExportMap :: Choices -> ConstraintMap -> [Mod] -> [Input] -> [Const] -> [Derived] -> ModExportMap
-modExportMap chs cm ms ins _ ds = Map.fromList $ concatMap mpair ms
+modExportMap :: Choices -> ConstraintMap -> [Mod] -> [Input] -> [Const] -> [Derived] -> [Output] -> ModExportMap
+modExportMap chs cm ms ins _ ds outs = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ getExportInput chs (ins ++ map codevar ds)
                         ++ getExportDerived chs ds
                         ++ getExportConstraints chs (getConstraints cm 
                           (ins ++ map codevar ds))
-                        ++ [ ("write_output", "OutputFormat") ]  -- hardcoded for now
+                        ++ getExportOutput outs
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
           
@@ -360,13 +360,17 @@ getExportConstraints chs _ = [("input_constraints", cMod $ inputStructure chs)]
   where cMod Loose = "InputParameters"
         cMod AsClass = "InputConstraints"
 
+getExportOutput :: [Output] -> [Export]
+getExportOutput [] = []
+getExportOutput _ = [("write_output", "OutputFormat")]
+
 getDepsControl :: ModExportMap -> [Def] -> [String]
-getDepsControl mem eo = let dv = Map.lookup "derived_values" mem
+getDepsControl mem eo = let inf = Map.lookup (funcPrefix ++ "get_input") mem
+                            dv = Map.lookup "derived_values" mem
                             ic = Map.lookup "input_constraints" mem
+                            wo = Map.lookup "write_output" mem
                             calcs = map (\x -> Map.lookup (codeName x) mem) eo
-  in nub $ catMaybes ([dv, ic] ++ calcs) ++ ["InputParameters",
-                                             "InputFormat",
-                                             "OutputFormat"]
+  in nub $ catMaybes ([inf, dv, ic, wo] ++ calcs) ++ ["InputParameters"]
 
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs

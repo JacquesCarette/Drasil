@@ -35,7 +35,7 @@ import Data.List (nub, intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes)
+import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes, mapMaybe)
 import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
@@ -177,11 +177,13 @@ liftS = fmap (: [])
 
 genInputModClass :: (RenderSym repr) => Reader (State repr) [repr (Module repr)]
 genInputModClass = do
+  inputClass <- genInputClass
   derived <- genInputDerived
   constrs <- genInputConstraints
-  let dl = maybeToList derived
+  let ic = maybeToList inputClass
+      dl = maybeToList derived
       cl = maybeToList constrs
-  sequence [ genModule "InputParameters" Nothing (Just $ liftS genInputClass),
+  sequence [ genModule "InputParameters" Nothing (Just $ return ic),
              genModule "DerivedValues" (Just $ return dl) Nothing,
              genModule "InputConstraints" (Just $ return cl) Nothing
            ]
@@ -198,18 +200,24 @@ genInputModNoClass = do
            []
          ]
 
-genInputClass :: (RenderSym repr) => Reader (State repr) (repr (Class repr))
+genInputClass :: (RenderSym repr) => Reader (State repr) (Maybe (repr (Class 
+  repr)))
 genInputClass = do
   g <- ask
-  let ins          = inputs $ codeSpec g
-      inputVars    =
-          map (\x -> pubMVar 0 (codeName x) (convType $ codeType x)) ins
-      varsList     = map (objVarSelf . codeName) ins
-      vals         = map (getDefaultValue . codeType) ins
-  asgs <- zipWithM assign' varsList vals
-  return $ pubClass "InputParameters" Nothing inputVars
-    [ constructor "InputParameters" [] (body [block (initLogFileVar (logKind g) 
-    ++ asgs)]) ]
+  let ins       = inputs $ codeSpec g
+      genClass :: (RenderSym repr) => [String] -> Reader (State repr) (Maybe 
+        (repr (Class repr)))
+      genClass [] = return Nothing 
+      genClass xs = do
+        let inputVars = map (\x -> pubMVar 0 (codeName x) (convType $ 
+              codeType x)) ins
+            varsList  = map (objVarSelf . codeName) ins
+            vals      = map (getDefaultValue . codeType) ins
+        asgs <- zipWithM assign' varsList vals
+        return $ Just $ pubClass "InputParameters" Nothing inputVars
+          [ constructor "InputParameters" [] (body [block (initLogFileVar 
+          (logKind g) ++ asgs)]) ]
+  genClass $ mapMaybe (\x -> Map.lookup (codeName x) (eMap $ codeSpec g)) ins
 
 genInputConstraints :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Method repr)))

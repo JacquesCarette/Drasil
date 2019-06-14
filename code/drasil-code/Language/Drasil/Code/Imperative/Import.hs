@@ -430,7 +430,7 @@ getFuncCall n funcPs = do
       getCall (Just m) = do
         ps <- funcPs
         let pvals = getArgs ps
-        val <- fApp' m n pvals
+        val <- fApp m n pvals
         return $ Just val
   getCall $ Map.lookup n (eMap $ codeSpec g)
 
@@ -540,24 +540,9 @@ variable s' = do
              | otherwise                         = return $ var s
   doit s'
   
-fApp :: (RenderSym repr) => String -> [repr (Value repr)] -> Reader 
-  (State repr) (repr (Value repr))
-fApp s' vl' = do
-  g <- ask
-  let doit :: (RenderSym repr) => String -> [repr (Value repr)] -> repr
-        (Value repr)
-      doit s vl | member s (eMap $ codeSpec g) =
-        maybe (error "impossible")
-          (\x -> if x /= currentModule g then extFuncApp x s vl else 
-            funcApp s vl)
-          (Map.lookup s (eMap $ codeSpec g))
-                | otherwise = funcApp s vl
-  return $ doit s' vl'
-
--- This function should replace fApp eventually
-fApp' :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
+fApp :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
   Reader (State repr) (repr (Value repr))
-fApp' m s vl = do
+fApp m s vl = do
   g <- ask
   return $ if m /= currentModule g then extFuncApp m s vl else funcApp s vl
 
@@ -638,9 +623,11 @@ convExpr (C c)   = do
 convExpr (FCall (C c) x) = do
   g <- ask
   let info = sysinfodb $ codeSpec g
+      mem = eMap $ codeSpec g
+      funcNm = codeName (codefunc (symbLookup c (symbolTable info)))
   args <- mapM convExpr x
-
-  fApp (codeName (codefunc (symbLookup c (symbolTable info)))) args
+  maybe (error $ "Call to non-existent function" ++ funcNm) 
+    (\f -> fApp f funcNm args) (Map.lookup funcNm mem)
 convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =

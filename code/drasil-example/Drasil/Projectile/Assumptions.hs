@@ -6,25 +6,23 @@ import Language.Drasil
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumpDom)
-import Data.Drasil.Concepts.Math (perp)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (acceleration, cartesian, collision,
-  distance, rightHand, time, twoD)
+  distance, time, twoD)
 
 import Drasil.Projectile.Concepts (launcher, projectile, target)
 
 assumptions :: [ConceptInstance]
-assumptions = [twoDMotion, cartSyst, yAxisPerpend, rightHandAxes, launchOrigin,
+assumptions = [twoDMotion, cartSyst, yAxisGravity, launchOrigin,
   targetXAxis, posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag,
-  constMass, pointMass, freeFlight, neglectCurv, timeStartZero]
+  pointMass, freeFlight, neglectCurv, timeStartZero]
 
-twoDMotion, cartSyst, yAxisPerpend, rightHandAxes, launchOrigin, targetXAxis,
-  posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, constMass,
+twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis,
+  posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag,
   pointMass, freeFlight, neglectCurv, timeStartZero :: ConceptInstance
 twoDMotion      = cic "twoDMotion"      twoDMotionDesc      "twoDMotion"      assumpDom
 cartSyst        = cic "cartSyst"        cartSystDesc        "cartSyst"        assumpDom
-yAxisPerpend    = cic "yAxisPerpend"    yAxisPerpendDesc    "yAxisPerpend"    assumpDom
-rightHandAxes   = cic "rightHandAxes"   rightHandAxesDesc   "rightHandAxes"   assumpDom
+yAxisGravity    = cic "yAxisGravity"    yAxisGravityDesc    "yAxisGravity"    assumpDom
 launchOrigin    = cic "launchOrigin"    launchOriginDesc    "launchOrigin"    assumpDom
 targetXAxis     = cic "targetXAxis"     targetXAxisDesc     "targetXAxis"     assumpDom
 posXDirection   = cic "posXDirection"   posXDirectionDesc   "posXDirection"   assumpDom
@@ -32,23 +30,19 @@ constAccel      = cic "constAccel"      constAccelDesc      "constAccel"      as
 accelXZero      = cic "accelXZero"      accelXZeroDesc      "accelXZero"      assumpDom
 accelYGravity   = cic "accelYGravity"   accelYGravityDesc   "accelYGravity"   assumpDom
 neglectDrag     = cic "neglectDrag"     neglectDragDesc     "neglectDrag"     assumpDom
-constMass       = cic "constMass"       constMassDesc       "constMass"       assumpDom
 pointMass       = cic "pointMass"       pointMassDesc       "pointMass"       assumpDom
 freeFlight      = cic "freeFlight"      freeFlightDesc      "freeFlight"      assumpDom
 neglectCurv     = cic "neglectCurv"     neglectCurvDesc     "neglectCurv"     assumpDom
 timeStartZero   = cic "timeStartZero"   timeStartZeroDesc   "timeStartZero"   assumpDom
 
 twoDMotionDesc :: Sentence
-twoDMotionDesc = S "The" +:+ phrase projectile +:+ S "motion" `sIs` S "in" +:+. getAcc twoD
+twoDMotionDesc = S "The" +:+ phrase projectile +:+ S "motion" `sIs` phrase twoD +:+. sParen (getAcc twoD)
 
 cartSystDesc :: Sentence
 cartSystDesc = S "A" +:+ (phrase cartesian `sIs` S "used") +:+. sParen (S "from" +:+ makeRef2S neglectCurv)
 
-yAxisPerpendDesc :: Sentence
-yAxisPerpendDesc = S "The y-axis" `sIs` phrase perp `toThe` S "x-axis."
-
-rightHandAxesDesc :: Sentence
-rightHandAxesDesc = S "The axes" `sAre` S "defined using a" +:+. phrase rightHand
+yAxisGravityDesc :: Sentence
+yAxisGravityDesc = S "direction" `ofThe'` S "y-axis is directed opposite to gravity."
 
 launchOriginDesc :: Sentence
 launchOriginDesc = S "The" +:+. (phrase launcher `sIs` S "coincident with the origin")  
@@ -68,13 +62,10 @@ accelXZeroDesc = S "The" +:+ phrase acceleration +:+. (S "in the x-direction" `s
 
 accelYGravityDesc :: Sentence
 accelYGravityDesc = S "The" +:+ phrase acceleration +:+ S "in the y-direction" `isThe`
-                    phrase acceleration +:+. S "due to gravity"
+                    phrase acceleration +:+ S "due to gravity" +:+. sParen (S "from" +:+ makeRef2S yAxisGravity)
 
 neglectDragDesc :: Sentence
 neglectDragDesc = S "Air drag" `sIs` S "neglected."
-
-constMassDesc :: Sentence
-constMassDesc = phrase mass `ofThe'` phrase projectile `sIs` S "constant."
 
 pointMassDesc :: Sentence
 pointMassDesc = (S "size" `sAnd` S "shape") `ofThe'` phrase projectile `sAre`

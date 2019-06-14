@@ -2,10 +2,13 @@ module Drasil.Projectile.Unitals where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
+import Data.Drasil.IdeaDicts
 import Utils.Drasil
 
+import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
+  requirement, srs, typUnc)
 import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (distance, iSpeed, position, time)
+import Data.Drasil.Concepts.Physics (distance, iSpeed, position, time, twoD)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, second)
@@ -14,6 +17,10 @@ import Data.Drasil.Units.Physics (velU)
 import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
   launchDur, launchSpeed, projectile, targetPos, target)
 import qualified Drasil.Projectile.Concepts as C (offset)
+
+-- FIXME: Move to Defs?
+acronyms :: [CI]
+acronyms = [twoD, assumption, dataDefn, genDefn, goalStmt, inModel, physSyst, requirement, srs, thModel, typUnc]
 
 inputs :: [QuantityDict]
 inputs = map qw [launAngle, launSpeed, targPos]

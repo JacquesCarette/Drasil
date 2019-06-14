@@ -450,8 +450,8 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims
     mkSubSCS si' Assumptions =
-      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
-      map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
+      SSD.assumpF $ mkEnumSimpleD . map (`helperCI` si') .
+      filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
       asOrderedList $ _sysinfodb si' ^. conceptinsTable
       {-where
         -- Duplicated here to avoid "leaking" the definition from drasil-lang

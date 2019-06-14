@@ -1,6 +1,8 @@
 module Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, coeffRestitutionDD, reVelInCollDD, impulseVDD) where
+  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, 
+  coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD
+  ) where
 
 import Language.Drasil
 import Database.Drasil (Block(Parallel))
@@ -11,7 +13,8 @@ import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, a
 
 import Drasil.GamePhysics.Unitals (initRelVel, massA, massB, massI,
   momtInertA, momtInertB, mTot, normalLen, normalVect,
-  perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP, velo_1, velo_2, timeT, time_1, time_2)
+  perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP, rRot,
+  velo_1, velo_2, timeT, time_1, time_2)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 
@@ -20,7 +23,8 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
-  force, kEnergy, energy, impulseV, chgInVelocity, acceleration, potEnergy, height, gravitationalAccel)
+  force, torque, kEnergy, energy, impulseV, chgInVelocity, acceleration, potEnergy,
+  height, gravitationalAccel, momentOfInertia)
 
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.Theories.Physics (torque, torqueDD)
@@ -29,11 +33,12 @@ import Data.Drasil.Theories.Physics (torque, torqueDD)
 dataDefns :: [DataDefinition]
 dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD,
- coeffRestitutionDD, reVelInCollDD, impulseVDD, potEnergyDD]
+ coeffRestitutionDD, reVelInCollDD, impulseVDD, potEnergyDD, momentOfInertiaDD]
 
 qDefs :: [QDefinition]
 qDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse, chasles, torque, kEnergy, coeffRestitution, potEnergy]
+  angVel, angAccel, impulse, chasles, torque, kEnergy,
+  coeffRestitution, potEnergy, momentOfInertia]
 
 blockQDefs :: [Block QDefinition]
 blockQDefs = map (\x -> Parallel x []) qDefs
@@ -351,6 +356,22 @@ kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [S "The", phrase QP.kEnergy,
  S "of an object is the", phrase QP.energy,
  S "it possess due to its motion"]
+-----------------------DD16 Moment Of Inertia--------------------------------------------------------
+
+momentOfInertiaDD :: DataDefinition
+momentOfInertiaDD = ddNoRefs momentOfInertia [{-- Derivation --}] "momentOfInertia"
+ [momentOfInertiaDesc, makeRef2S assumpOT] 
+
+momentOfInertia :: QDefinition
+momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
+
+momentOfInertiaEqn :: Expr
+momentOfInertiaEqn = sumAll (Atomic "i") $ sy massI * (sy rRot $^ 2)
+--sumAll (Atomic "i") ((sy massI) * (sy rRot 
+momentOfInertiaDesc :: Sentence
+momentOfInertiaDesc = foldlSent [S "The", phrase QP.momentOfInertia, ch QP.momentOfInertia,
+ S "of a body measures how much", phrase QP.torque,
+ S "is needed for the body to achieve angular acceleration about the axis of rotation"]
 
 ---------------------------DD17 Potential Energy-------------------------------------------
 

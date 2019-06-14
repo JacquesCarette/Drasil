@@ -374,14 +374,16 @@ getDepsControl mem ins eo = let ip = map (\x -> Map.lookup (codeName x) mem) ins
                                 calcs = map (\x -> Map.lookup (codeName x) mem) eo
   in nub $ catMaybes (ip ++ [inf, dv, ic, wo] ++ calcs)
 
-getDepsDerived :: ChunkDB -> ModExportMap -> Choices -> [Derived] -> Maybe (String, [String])
+getDepsDerived :: ChunkDB -> ModExportMap -> Choices -> [Derived] -> 
+  Maybe (String, [String])
 getDepsDerived db mem chs ds = derivedDeps $ inputStructure chs
   where derivedDeps Loose = Nothing
         derivedDeps AsClass = Just ("DerivedValues", nub $ mapMaybe (
           (`Map.lookup` mem) . codeName) (concatMap (flip codevars db . 
           codeEquat) ds))
 
-getDepsConstraints :: ChunkDB -> ModExportMap -> ConstraintMap -> Choices -> [Input] -> Maybe (String, [String])
+getDepsConstraints :: ChunkDB -> ModExportMap -> ConstraintMap -> Choices -> 
+  [Input] -> Maybe (String, [String])
 getDepsConstraints db mem cm chs ins = constraintDeps $ inputStructure chs
   where constraintDeps Loose = Nothing
         constraintDeps AsClass = Just ("InputConstraints", nub $ mapMaybe (

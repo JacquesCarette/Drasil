@@ -137,7 +137,7 @@ genModules = do
   let s = codeSpec g
   mn     <- genMain
   inp    <- chooseInStructure $ inStruct g
-  out    <- genOutputMod $ outputs s
+  out    <- genOutputMod
   moddef <- traverse genModDef (mods s) -- hack ?
   return $ mn : inp ++ out ++ moddef
 
@@ -306,23 +306,24 @@ genCaseBlock t v cs = do
 
 ----- OUTPUT -------
 
-genOutputMod :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) [repr
+genOutputMod :: (RenderSym repr) => Reader (State repr) [repr
   (Module repr)]
-genOutputMod outs = liftS $ genModule "OutputFormat" (Just $ liftS $ 
-  genOutputFormat outs) Nothing
+genOutputMod = liftS $ genModule "OutputFormat" (Just $ liftS $ 
+  genOutputFormat) Nothing
 
-genOutputFormat :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) (repr 
+genOutputFormat :: (RenderSym repr) => Reader (State repr) (repr 
   (Method repr))
-genOutputFormat outs =
+genOutputFormat =
   let l_outfile = "outputfile"
       v_outfile = var l_outfile
   in do
-    parms <- getParams outs
+    g <- ask
+    parms <- getOutputParams
     outp <- mapM (\x -> do
         v <- variable $ codeName x
         return [ printFileStr v_outfile (codeName x ++ " = "),
                  printFileLn v_outfile (convType $ codeType x) v
-               ] ) outs
+               ] ) (outputs $ codeSpec g)
     publicMethod void "write_output" parms (return [block $
       [
       varDec l_outfile outfile,
@@ -473,6 +474,11 @@ getCalcParams :: (RenderSym repr) => CodeDefinition -> Reader (State repr)
 getCalcParams c = do
   g <- ask
   getParams $ codevars' (codeEquat c) $ sysinfodb $ codeSpec g
+
+getOutputParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
+getOutputParams = do
+  g <- ask
+  getParams $ outputs $ codeSpec g
 
 -----
 

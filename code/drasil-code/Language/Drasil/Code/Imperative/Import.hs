@@ -308,27 +308,34 @@ genCaseBlock t v cs = do
 
 genOutputMod :: (RenderSym repr) => Reader (State repr) [repr
   (Module repr)]
-genOutputMod = liftS $ genModule "OutputFormat" (Just $ liftS 
-  genOutputFormat) Nothing
+genOutputMod = do
+  outformat <- genOutputFormat
+  let outf = maybeToList outformat
+  liftS $ genModule "OutputFormat" (Just $ return outf) Nothing
 
-genOutputFormat :: (RenderSym repr) => Reader (State repr) (repr 
-  (Method repr))
-genOutputFormat =
-  let l_outfile = "outputfile"
-      v_outfile = var l_outfile
-  in do
-    g <- ask
-    parms <- getOutputParams
-    outp <- mapM (\x -> do
-        v <- variable $ codeName x
-        return [ printFileStr v_outfile (codeName x ++ " = "),
-                 printFileLn v_outfile (convType $ codeType x) v
-               ] ) (outputs $ codeSpec g)
-    publicMethod void "write_output" parms (return [block $
-      [
-      varDec l_outfile outfile,
-      openFileW v_outfile (litString "output.txt") ] ++
-      concat outp ++ [ closeFile v_outfile ]])
+genOutputFormat :: (RenderSym repr) => Reader (State repr) (Maybe (repr 
+  (Method repr)))
+genOutputFormat = do
+  g <- ask
+  let genOutput :: (RenderSym repr) => Maybe String -> Reader (State repr) 
+        (Maybe (repr (Method repr)))
+      genOutput Nothing = return Nothing
+      genOutput (Just _) = do
+        let l_outfile = "outputfile"
+            v_outfile = var l_outfile
+        parms <- getOutputParams
+        outp <- mapM (\x -> do
+          v <- variable $ codeName x
+          return [ printFileStr v_outfile (codeName x ++ " = "),
+                   printFileLn v_outfile (convType $ codeType x) v
+                 ] ) (outputs $ codeSpec g)
+        mthd <- publicMethod void "write_output" parms (return [block $
+          [
+          varDec l_outfile outfile,
+          openFileW v_outfile (litString "output.txt") ] ++
+          concat outp ++ [ closeFile v_outfile ]])
+        return $ Just mthd
+  genOutput $ Map.lookup "write_output" (eMap $ codeSpec g)
 
 -----
 

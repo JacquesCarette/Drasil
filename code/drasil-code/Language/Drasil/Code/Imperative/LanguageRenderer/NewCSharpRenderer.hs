@@ -64,7 +64,8 @@ instance Monad CSharpCode where
 
 instance PackageSym CSharpCode where
   type Package CSharpCode = ([ModData], Label)
-  packMods n ms = liftPairFst (sequence ms, n)
+  packMods n ms = liftPairFst (sequence mods, n)
+    where mods = filter (not . isEmpty . modDoc . unCSC) ms
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = ModData

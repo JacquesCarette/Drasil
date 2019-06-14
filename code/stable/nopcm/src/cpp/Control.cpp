@@ -14,9 +14,7 @@ using std::ifstream;
 using std::ofstream;
 
 #include "InputParameters.hpp"
-#include "InputParameters.hpp"
 #include "InputFormat.hpp"
-#include "Calculations.hpp"
 #include "OutputFormat.hpp"
 
 int main(int argc, const char *argv[]) {
@@ -24,7 +22,7 @@ int main(int argc, const char *argv[]) {
     InputParameters inParams = InputParameters();
     func_get_input(inputfile, inParams);
     input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W);
-    write_output(inParams);
+    write_output(T_W, E_W);
     return 0;
 }
 

@@ -4,9 +4,9 @@ import math
 
 import DerivedValues
 import InputConstraints
+import Calculations
 import InputParameters
 import InputFormat
-import Calculations
 import OutputFormat
 
 inputfile = sys.argv[1]

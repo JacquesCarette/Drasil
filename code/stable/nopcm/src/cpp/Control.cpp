@@ -14,8 +14,8 @@ using std::ifstream;
 using std::ofstream;
 
 #include "InputParameters.hpp"
-#include "InputFormat.hpp"
 #include "OutputFormat.hpp"
+#include "InputFormat.hpp"
 
 int main(int argc, const char *argv[]) {
     string inputfile = argv[1];

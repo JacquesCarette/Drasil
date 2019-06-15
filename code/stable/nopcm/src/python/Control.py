@@ -3,8 +3,8 @@ import sys
 import math
 
 import InputParameters
-import InputFormat
 import OutputFormat
+import InputFormat
 
 inputfile = sys.argv[1]
 inParams = InputParameters.InputParameters()

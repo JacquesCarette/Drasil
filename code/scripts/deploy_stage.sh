@@ -30,7 +30,13 @@ CUR_DIR="$PWD/"
 
 
 copy_docs() {
+  # The doc directory can be in two locations (as of Stack 2.1.1) depending on which arguments are
+  # passed to `stack haddock`. The first directory is when no arguments are specified. The second
+  # is used when `--no-haddock-deps` is passed as an argument.
   DOC_DIR=$(cd "$CUR_DIR" && stack path --local-doc-root)/
+  if [ ! -d "$DOC_DIR" ]; then
+    DOC_DIR=$(cd "$CUR_DIR" && stack path --local-install-root)/doc/
+  fi
   rm -r "$DOC_DEST" >/dev/null 2>&1  # Printing an error message that a directory doesn't exist isn't the most useful.
   mkdir -p "$DOC_DEST"
   cp -r "$DOC_DIR". "$DOC_DEST"

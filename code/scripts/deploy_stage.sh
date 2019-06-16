@@ -30,7 +30,7 @@ CUR_DIR="$PWD/"
 
 
 copy_docs() {
-  DOC_DIR=$(stack path | grep local-doc-root | cut -d":" -f2 | sed -e "s/^ //")/
+  DOC_DIR=$(cd "$CUR_DIR" && stack path --local-doc-root)/
   rm -r "$DOC_DEST" >/dev/null 2>&1  # Printing an error message that a directory doesn't exist isn't the most useful.
   mkdir -p "$DOC_DEST"
   cp -r "$DOC_DIR". "$DOC_DEST"

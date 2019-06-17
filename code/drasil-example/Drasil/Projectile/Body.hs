@@ -46,7 +46,7 @@ import Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
   nonfuncReqs, propsDeriv)
 import Drasil.Projectile.TMods (tMods)
 import Drasil.Projectile.Unitals (acronyms, inConstraints, launAngle,
-  outConstraints, unitalIdeas, unitalQuants)
+  outConstraints, symbols, unitalIdeas, unitalQuants)
 
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
@@ -101,7 +101,7 @@ systInfo = SI {
   _sys         = projectileTitle,
   _kind        = srs,
   _authors     = [samCrawford, brooks, spencerSmith],
-  _quants      = [] :: [QuantityDict],
+  _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],
   _datadefs    = dataDefns,
@@ -116,16 +116,17 @@ systInfo = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants)
+symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
   (nw projectileTitle : nw mass : nw inParam : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
-    map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++ map nw acronyms)
+    map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
+    map nw acronyms ++ map nw symbols)
   (cw pi_ : srsDomains) ([] :: [UnitDefn]) label refBy dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms) (cw pi_ : srsDomains)
-  ([] :: [UnitDefn]) label refBy dataDefns iMods genDefns tMods
+usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
+  (cw pi_ : srsDomains) ([] :: [UnitDefn]) label refBy dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 stdFields :: Fields

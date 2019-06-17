@@ -8,8 +8,13 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
   requirement, srs, typUnc)
 import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (distance, iSpeed, oneD, position, time, twoD)
+import Data.Drasil.Concepts.Physics (distance, oneD, twoD)
 
+import Data.Drasil.Quantities.Physics (acceleration, constAccel, gravitationalAccel,
+  iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
+  position, scalarPos, speed, time, velocity,
+  xAccel, xConstAccel, xPos, xVel,
+  yAccel, yConstAccel, yPos, yVel)
 import Data.Drasil.Quantities.Math (pi_)
 
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -19,6 +24,14 @@ import Data.Drasil.Units.Physics (velU)
 import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
   launchSpeed, projectile, targetPos, target)
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset)
+
+symbols :: [QuantityDict]
+symbols = qw pi_ : map qw constrained ++ map qw [
+  acceleration, constAccel, gravitationalAccel,
+  iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
+  position, scalarPos, speed, time, velocity,
+  xAccel, xConstAccel, xPos, xVel,
+  yAccel, yConstAccel, yPos, yVel] ++ quantDicts
 
 -- FIXME: Move to Defs?
 acronyms :: [CI]
@@ -84,8 +97,7 @@ targPosConcept = cc' targetPos $ foldlSent [S "The", phrase distance, S "from th
 flightDurConcept :: ConceptChunk
 flightDurConcept = cc' C.flightDur $ foldlSent [S "The", phrase time, S "when the", phrase projectile, S "lands"]
 
----
-
+---FIXME: To be reworked
 isShort :: QuantityDict
 isShort = vc "isShort"
   (nounPhraseSent (S "variable that is assigned true when the" +:+ phrase targetPos +:+

@@ -3,9 +3,9 @@ module Drasil.Projectile.Body where
 import Language.Drasil hiding (Vector)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
-  TraceMap, cdb, generateRefbyMap, rdb, refdb, _authors, _concepts, _constants,
-  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb)
+  TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors, _concepts,
+  _constants, _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind,
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 import Control.Lens ((^.))
 
@@ -31,6 +31,7 @@ import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.Physics (iVel, physicscon)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
+import Data.Drasil.SI_Units (metre, radian, second)
 
 import qualified Data.Map as Map
 
@@ -120,14 +121,17 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
   (nw projectileTitle : nw mass : nw inParam : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
-    map nw acronyms ++ map nw symbols)
-  (cw pi_ : srsDomains) ([] :: [UnitDefn]) label refBy dataDefns iMods genDefns tMods
+    map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : srsDomains)
+  (map unitWrapper [metre, radian, second]) label refBy dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
-  (cw pi_ : srsDomains) ([] :: [UnitDefn]) label refBy dataDefns iMods genDefns tMods
+usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols ++ map nw units)
+  (cw pi_ : srsDomains) units label refBy dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
+
+units :: [UnitDefn]
+units = collectUnits symbMap symbols 
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

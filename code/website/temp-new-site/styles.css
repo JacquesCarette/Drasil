@@ -34,9 +34,6 @@ footer {
 #center {
   text-align: center;
 }
-#artLink:link {
-  font-size: 14px;
-}
 a:link {
   text-decoration: none;
   color: blue;
@@ -49,21 +46,6 @@ a:visited:active {
 }
 a:active {
   opacity: 0.5;
-}
-table {
-  border-collapse: collapse;
-}
-th, td {
-  border: 1px solid black;
-}
-#tdArtifact {
-  width: 170px;
-  height: 130px;
-  vertical-align: top;
-  text-align: left;
-  padding-top: 30px;
-  padding-left: 30px;
-  padding-right: 30px;
 }
 li {
   padding-bottom: 10px;

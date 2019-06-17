@@ -1,0 +1,61 @@
+body {
+  background-color: rgb(236, 236, 236);
+  font-family: Roboto;
+  padding-left: 3%;
+  padding-right: 3%;
+  padding-top: 10px;
+}
+h2 {
+  text-align: center;
+}
+h3 {
+  font-weight: normal;
+}
+h4 {
+  font-size: 18px;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+p {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+footer {
+    text-align: center;
+    font-size: smaller;
+}
+#center {
+  text-align: center;
+}
+#artLink:link {
+  font-size: 14px;
+}
+a:link {
+  text-decoration: none;
+  color: blue;
+}
+a:hover, a:visited:hover  {
+  background-color: greenyellow;
+}
+a:visited:active {
+  color: purple;
+}
+a:active {
+  opacity: 0.5;
+}
+table {
+  border-collapse: collapse;
+}
+th, td {
+  border: 1px solid black;
+}
+#tdArtifact {
+  width: 170px;
+  height: 130px;
+  vertical-align: top;
+  text-align: left;
+  padding-top: 30px;
+  padding-left: 30px;
+  padding-right: 30px;
+}

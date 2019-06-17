@@ -262,17 +262,13 @@ modExportMap CSI {
 type ModDepMap = Map.Map String [String]
 
 modDepMap :: CodeSystInfo -> ModExportMap -> Choices -> ModDepMap
-modDepMap CSI {
-  extInputs = ins,
-  derivedInputs = ds,
-  execOrder = eo,
-  cMap = cm,
+modDepMap csi'@CSI {
   mods = ms,
   sysinfodb = sm
   } mem chs = Map.fromList $ map (\(Mod n _) -> n) ms  `zip` map getModDep ms 
-  ++ ("Control", getDepsControl mem (ins ++ map codevar ds) eo)
-  : catMaybes [getDepsDerived sm mem chs ds,
-               getDepsConstraints sm mem cm chs (ins ++ map codevar ds)]
+  ++ ("Control", getDepsControl csi' mem)
+  : catMaybes [getDepsDerived csi' mem chs,
+               getDepsConstraints csi' mem chs]
   where getModDep (Mod name' funcs) =
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)
@@ -382,29 +378,43 @@ getExportOutput :: [Output] -> [Export]
 getExportOutput [] = []
 getExportOutput _ = [("write_output", "OutputFormat")]
 
-getDepsControl :: ModExportMap -> [Input] -> [Def] -> [String]
-getDepsControl mem ins eo = let ip = map (\x -> Map.lookup (codeName x) mem) ins
-                                inf = Map.lookup (funcPrefix ++ "get_input") mem
-                                dv = Map.lookup "derived_values" mem
-                                ic = Map.lookup "input_constraints" mem
-                                wo = Map.lookup "write_output" mem
-                                calcs = map (\x -> Map.lookup (codeName x) mem) eo
+getDepsControl :: CodeSystInfo -> ModExportMap -> [String]
+getDepsControl CSI {
+  extInputs = extins,
+  derivedInputs = ds,
+  execOrder = eo
+  } mem = let ins = extins ++ map codevar ds
+              ip = map (\x -> Map.lookup (codeName x) mem) ins
+              inf = Map.lookup (funcPrefix ++ "get_input") mem
+              dv = Map.lookup "derived_values" mem
+              ic = Map.lookup "input_constraints" mem
+              wo = Map.lookup "write_output" mem
+              calcs = map (\x -> Map.lookup (codeName x) mem) eo
   in nub $ catMaybes (ip ++ [inf, dv, ic, wo] ++ calcs)
 
-getDepsDerived :: ChunkDB -> ModExportMap -> Choices -> [Derived] -> 
+getDepsDerived :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
-getDepsDerived db mem chs ds = derivedDeps $ inputStructure chs
+getDepsDerived CSI {
+  derivedInputs = ds,
+  sysinfodb = db
+  } mem chs = derivedDeps $ inputStructure chs
   where derivedDeps Loose = Nothing
         derivedDeps AsClass = Just ("DerivedValues", nub $ mapMaybe (
           (`Map.lookup` mem) . codeName) (concatMap (flip codevars db . 
           codeEquat) ds))
 
-getDepsConstraints :: ChunkDB -> ModExportMap -> ConstraintMap -> Choices -> 
-  [Input] -> Maybe (String, [String])
-getDepsConstraints db mem cm chs ins = constraintDeps $ inputStructure chs
+getDepsConstraints :: CodeSystInfo -> ModExportMap -> Choices -> 
+  Maybe (String, [String])
+getDepsConstraints CSI {
+  extInputs = extins,
+  derivedInputs = ds,
+  cMap = cm,
+  sysinfodb = db
+  } mem chs = constraintDeps $ inputStructure chs
   where constraintDeps Loose = Nothing
         constraintDeps AsClass = Just ("InputConstraints", nub $ mapMaybe (
           (`Map.lookup` mem) .codeName) reqdVals)
+        ins = extins ++ map codevar ds
         varsList = filter (\i -> Map.member (i ^. uid) cm) ins
         reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v
           db mem) (getConstraints cm varsList)

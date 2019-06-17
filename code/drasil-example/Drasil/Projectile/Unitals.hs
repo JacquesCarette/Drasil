@@ -73,7 +73,7 @@ landPos   = constrained' (dqd' landPosConcept   (const $ Concat [lP, Atomic "'"]
 launAngle = constrained' (dqd' launAngleConcept (const lTheta)                     Real (Just radian)) [physc $ Bounded (Exc, 0) (Exc, sy pi_ / 2)] (sy pi_ / 4)
 launSpeed = constrained' (dqd' launSpeedConcept (const $ sup lV lI)                Real (Just velU))   [gtZeroConstr] (int 100)
 offset    = constrained' (dqd' offsetConcept    (const $ sub lD $ Atomic "offset") Real (Just metre))  [gtZeroConstr] (dbl 1)
-targPos   = constrained' (dqd' targPosConcept   (const $ sub lP $ Atomic "target") Real (Just metre))  [gtZeroConstr] (int 100)
+targPos   = constrained' (dqd' targPosConcept   (const $ sub lP $ Atomic "target") Real (Just metre))  [gtZeroConstr] (int 1000)
 
 landPosConcept :: ConceptChunk
 landPosConcept = cc' landingPos

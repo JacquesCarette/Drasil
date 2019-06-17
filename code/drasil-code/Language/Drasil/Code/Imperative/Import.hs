@@ -7,7 +7,7 @@ import Language.Drasil hiding (int, ($.), log, ln, exp,
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char, 
   Float, Object, String, Boolean, Integer))
-import Language.Drasil.Code.Imperative.New (Label,
+import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Helpers (ModData(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
+import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer 
   (jNameOpts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
@@ -409,21 +409,18 @@ genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genMainFunc =
   let l_filename = "inputfile"
-      v_filename = var l_filename
       l_params = "inParams"
-      v_params = var l_params
   in do
     g <- ask
-    gi <- fApp (funcPrefix ++ "get_input") [v_filename, v_params]
+    gi <- getInputCall
     dv <- getDerivedCall
     ic <- getConstraintCall
     varDef <- mapM getCalcCall (execOrder $ codeSpec g)
     wo <- getOutputCall
     return $ mainMethod "" $ bodyStatements $ [
       varDecDef l_filename string $ arg 0 ,
-      extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
-      valState gi] ++ 
-      catMaybes ([dv, ic] ++ varDef ++ [wo])
+      extObjDecNewVoid l_params "InputParameters" (obj "InputParameters")] ++ 
+      catMaybes ([gi, dv, ic] ++ varDef ++ [wo])
 
 getFuncCall :: (RenderSym repr) => String -> Reader (State repr) 
   [ParamData repr] -> Reader (State repr) (Maybe (repr (Value repr)))
@@ -433,9 +430,15 @@ getFuncCall n funcPs = do
       getCall (Just m) = do
         ps <- funcPs
         let pvals = getArgs ps
-        val <- fApp' m n pvals
+        val <- fApp m n pvals
         return $ Just val
   getCall $ Map.lookup n (eMap $ codeSpec g)
+
+getInputCall :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Statement repr)))
+getInputCall = do
+  val <- getFuncCall (funcPrefix ++ "get_input") getInputFormatParams
+  return $ fmap valState val
 
 getDerivedCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -460,6 +463,14 @@ getOutputCall :: (RenderSym repr) => Reader (State repr)
 getOutputCall = do
   val <- getFuncCall "write_output" getOutputParams
   return $ fmap valState val
+
+getInputFormatParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
+getInputFormatParams = do 
+  g <- ask
+  let ins = extInputs $ codeSpec g
+      l_filename = "inputfile"
+  ps <- getParams ins
+  return $ PD (stateParam l_filename infile) infile l_filename : ps
 
 getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do
@@ -529,24 +540,9 @@ variable s' = do
              | otherwise                         = return $ var s
   doit s'
   
-fApp :: (RenderSym repr) => String -> [repr (Value repr)] -> Reader 
-  (State repr) (repr (Value repr))
-fApp s' vl' = do
-  g <- ask
-  let doit :: (RenderSym repr) => String -> [repr (Value repr)] -> repr
-        (Value repr)
-      doit s vl | member s (eMap $ codeSpec g) =
-        maybe (error "impossible")
-          (\x -> if x /= currentModule g then extFuncApp x s vl else 
-            funcApp s vl)
-          (Map.lookup s (eMap $ codeSpec g))
-                | otherwise = funcApp s vl
-  return $ doit s' vl'
-
--- This function should replace fApp eventually
-fApp' :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
+fApp :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
   Reader (State repr) (repr (Value repr))
-fApp' m s vl = do
+fApp m s vl = do
   g <- ask
   return $ if m /= currentModule g then extFuncApp m s vl else funcApp s vl
 
@@ -627,9 +623,11 @@ convExpr (C c)   = do
 convExpr (FCall (C c) x) = do
   g <- ask
   let info = sysinfodb $ codeSpec g
+      mem = eMap $ codeSpec g
+      funcNm = codeName (codefunc (symbLookup c (symbolTable info)))
   args <- mapM convExpr x
-
-  fApp (codeName (codefunc (symbLookup c (symbolTable info)))) args
+  maybe (error $ "Call to non-existent function" ++ funcNm) 
+    (\f -> fApp f funcNm args) (Map.lookup funcNm mem)
 convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =

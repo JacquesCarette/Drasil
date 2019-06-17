@@ -1,6 +1,6 @@
 module Test.Observer (observer) where
 
-import Language.Drasil.Code.Imperative.New (
+import Language.Drasil.Code.Imperative.Symantics (
   RenderSym(..), PermanenceSym(..),
   BodySym(..), StateTypeSym(..), StatementSym(..), ValueSym(..), ScopeSym(..), 
   MethodTypeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))

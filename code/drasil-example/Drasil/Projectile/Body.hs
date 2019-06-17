@@ -27,6 +27,7 @@ import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (constAccel, physicCon, physicCon', position, twoD)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
+import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.Physics (iVel, physicscon)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
@@ -115,16 +116,15 @@ systInfo = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw physicscon ++ unitalQuants)
+symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants)
   (nw projectileTitle : nw mass : nw inParam : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++ map nw acronyms)
-  srsDomains ([] :: [UnitDefn]) label refBy
-  dataDefns iMods genDefns tMods
+  (cw pi_ : srsDomains) ([] :: [UnitDefn]) label refBy dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms) srsDomains
+usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms) (cw pi_ : srsDomains)
   ([] :: [UnitDefn]) label refBy dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 

@@ -10,8 +10,10 @@ import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
 import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (distance, iSpeed, position, time, twoD)
 
+import Data.Drasil.Quantities.Math (pi_)
+
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.SI_Units (degree, metre, second)
+import Data.Drasil.SI_Units (radian, metre, second)
 import Data.Drasil.Units.Physics (velU)
 
 import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
@@ -54,7 +56,7 @@ targPosUnc   = uq targPos   defaultUncrt
 flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
 flightDur = constrained' (dqd' flightDurConcept (const $ Concat [lT, Atomic "'"])  Real (Just second)) [gtZeroConstr] (dbl 1)
 landPos   = constrained' (dqd' landPosConcept   (const $ Concat [lP, Atomic "'"])  Real (Just metre))  [gtZeroConstr] (dbl 1)
-launAngle = constrained' (dqd' launAngleConcept (const lTheta)                     Real (Just degree)) [physc $ Bounded (Exc, 0) (Exc, 90)] (int 45)
+launAngle = constrained' (dqd' launAngleConcept (const lTheta)                     Real (Just radian)) [physc $ Bounded (Exc, 0) (Exc, sy pi_ / 2)] (sy pi_ / 4)
 launSpeed = constrained' (dqd' launSpeedConcept (const $ sup lV lI)                Real (Just velU))   [gtZeroConstr] (int 100)
 offset    = constrained' (dqd' offsetConcept    (const $ sub lD $ Atomic "offset") Real (Just metre))  [gtZeroConstr] (dbl 1)
 targPos   = constrained' (dqd' targPosConcept   (const $ sub lP $ Atomic "target") Real (Just metre))  [gtZeroConstr] (int 100)

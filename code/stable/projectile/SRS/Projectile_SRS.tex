@@ -436,7 +436,7 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{${{v_{x}}^{i}}$ is the x-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${\mathbf{v}^{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the launch angle (${}^{\circ}$)}
+              \item{$θ$ is the launch angle (rad)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${\mathbf{v}^{i}}$ and $θ$ are shown in \hyperref[Figure:Launch]{Fig:Launch}.
@@ -467,7 +467,7 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{${{v_{y}}^{i}}$ is the y-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${\mathbf{v}^{i}}$ is the initial velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the launch angle (${}^{\circ}$)}
+              \item{$θ$ is the launch angle (rad)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${\mathbf{v}^{i}}$ and $θ$ are shown in \hyperref[Figure:Launch]{Fig:Launch}.
@@ -498,7 +498,7 @@ Input Constraints & \begin{displaymath}
                     {v^{i}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    0<θ<90
+                    0<θ<\frac{π}{2}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
@@ -512,7 +512,7 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{$t'$ is the flight duration (s)}
               \item{${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the launch angle (${}^{\circ}$)}
+              \item{$θ$ is the launch angle (rad)}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -562,7 +562,7 @@ Input Constraints & \begin{displaymath}
                     {v^{i}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    0<θ<90
+                    0<θ<\frac{π}{2}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
@@ -576,7 +576,7 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{$p'$ is the landing position (m)}
               \item{${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
-              \item{$θ$ is the launch angle (${}^{\circ}$)}
+              \item{$θ$ is the launch angle (rad)}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -737,7 +737,7 @@ ${p_{target}}$ & ${p_{target}}>0$ & $100$ m & 10$\%$
 \\
 ${v^{i}}$ & ${v^{i}}>0$ & $100$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
-$θ$ & $0<θ<90$ & $45$ ${}^{\circ}$ & 10$\%$
+$θ$ & $0<θ<\frac{π}{2}$ & $\frac{π}{4}$ rad & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -782,7 +782,7 @@ ${p_{target}}$ & Target position & m
 \\
 ${v^{i}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
 \\
-$θ$ & Launch angle & ${}^{\circ}$
+$θ$ & Launch angle & rad
 \\
 \bottomrule
 \caption{Required Inputs following \hyperref[inputParams]{FR: Input-Parameters}}

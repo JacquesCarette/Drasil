@@ -11,6 +11,8 @@ import Data.Drasil.Concepts.Math (constraint, equation)
 import Data.Drasil.Quantities.Physics (distance, gravitationalAccel, iSpeed,
   ixPos, ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
 
+import Data.Drasil.Quantities.Math (pi_)
+
 import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, launchOrigin,
   posXDirection, targetXAxis)
 import Drasil.Projectile.Concepts (projectile, target)
@@ -25,7 +27,7 @@ iMods = [timeIM, distanceIM, shortIM, offsetIM, hitIM]
 ---
 timeIM :: InstanceModel
 timeIM = imNoRefs timeRC [qw launSpeed, qw launAngle]
-  [sy launSpeed $> 0, 0 $< sy launAngle $< 90] (qw flightDur)
+  [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw flightDur)
   [sy flightDur $> 0] timeDeriv "calOfLandingTime" [timeNotes]
 
 timeRC :: RelationConcept
@@ -72,7 +74,7 @@ timeDerivEqn5 = sy flightDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitat
 ---
 distanceIM :: InstanceModel
 distanceIM = imNoRefs distanceRC [qw launSpeed, qw launAngle]
-  [sy launSpeed $> 0, 0 $< sy launAngle $< 90] (qw landPos)
+  [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw landPos)
   [sy landPos $> 0] distanceDeriv "calOfLandingDist" [distanceNotes]
 
 distanceExpr :: Expr

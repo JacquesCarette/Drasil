@@ -795,7 +795,7 @@
                           <li>
                             <em><b>v</b><sup>i</sup></em> is the initial velocity (m/s)
                           </li>
-                          <li><em>θ</em> is the launch angle (&deg;)</li>
+                          <li><em>θ</em> is the launch angle (rad)</li>
                         </ul>
                       </td>
                     </tr>
@@ -855,7 +855,7 @@
                           <li>
                             <em><b>v</b><sup>i</sup></em> is the initial velocity (m/s)
                           </li>
-                          <li><em>θ</em> is the launch angle (&deg;)</li>
+                          <li><em>θ</em> is the launch angle (rad)</li>
                         </ul>
                       </td>
                     </tr>
@@ -912,7 +912,10 @@
                           <em>v<sup>i</sup>&thinsp;&gt;&thinsp;0</em>
                         </div>
                         <div class="equation">
-                          <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;90</em>
+                          <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
+                                                                          <span class="fup">π</span>
+                                                                          <span class="fdn">2</span>
+                                                                        </div></em>
                         </div>
                       </td>
                     </tr>
@@ -939,7 +942,7 @@
                         <ul class="hide-list-style-no-indent">
                           <li><em>t'</em> is the flight duration (s)</li>
                           <li><em>v<sup>i</sup></em> is the initial speed (m/s)</li>
-                          <li><em>θ</em> is the launch angle (&deg;)</li>
+                          <li><em>θ</em> is the launch angle (rad)</li>
                           <li>
                             <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
                           </li>
@@ -1037,7 +1040,10 @@
                           <em>v<sup>i</sup>&thinsp;&gt;&thinsp;0</em>
                         </div>
                         <div class="equation">
-                          <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;90</em>
+                          <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
+                                                                          <span class="fup">π</span>
+                                                                          <span class="fdn">2</span>
+                                                                        </div></em>
                         </div>
                       </td>
                     </tr>
@@ -1066,7 +1072,7 @@
                         <ul class="hide-list-style-no-indent">
                           <li><em>p'</em> is the landing position (m)</li>
                           <li><em>v<sup>i</sup></em> is the initial speed (m/s)</li>
-                          <li><em>θ</em> is the launch angle (&deg;)</li>
+                          <li><em>θ</em> is the launch angle (rad)</li>
                           <li>
                             <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
                           </li>
@@ -1377,8 +1383,18 @@
                     </tr>
                     <tr>
                       <td><em>θ</em></td>
-                      <td><em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;90</em></td>
-                      <td><em>45</em> &deg;</td>
+                      <td>
+                        <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
+                                                                        <span class="fup">π</span>
+                                                                        <span class="fdn">2</span>
+                                                                      </div></em>
+                      </td>
+                      <td>
+                        <em><div class="fraction">
+                              <span class="fup">π</span>
+                              <span class="fdn">4</span>
+                            </div></em> rad
+                      </td>
                       <td>10<em>%</em></td>
                     </tr>
                   </table>
@@ -1467,7 +1483,7 @@
                 <tr>
                   <td><em>θ</em></td>
                   <td>Launch angle</td>
-                  <td>&deg;</td>
+                  <td>rad</td>
                 </tr>
               </table>
               <p class="caption">

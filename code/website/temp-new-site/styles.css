@@ -21,9 +21,14 @@ p {
   margin-left: 5%;
   margin-right: 5%;
 }
+ul {
+  margin-left: 3%;
+  margin-right: 3%;
+}
 footer {
     text-align: center;
     font-size: smaller;
+    padding: 10px;
 }
 #center {
   text-align: center;

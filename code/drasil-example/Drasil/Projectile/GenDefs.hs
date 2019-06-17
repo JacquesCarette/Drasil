@@ -22,7 +22,7 @@ genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
 ----------
 rectVelGD :: GenDefn
-rectVelGD = gdNoRefs rectVelRC (getUnit speed) rectVelDeriv "rectVel" [EmptyS]
+rectVelGD = gdNoRefs rectVelRC (getUnit speed) rectVelDeriv "rectVel" [{-Notes-}]
 
 rectVelRC :: RelationConcept
 rectVelRC = makeRC "rectVelRC" (nounPhraseSent $ foldlSent_ 
@@ -53,7 +53,7 @@ rectVelDerivEqn2 = defint (eqSymb speed) (sy iSpeed) (sy speed) 1 $=
 
 ----------
 rectPosGD :: GenDefn
-rectPosGD = gdNoRefs rectPosRC (getUnit scalarPos) rectPosDeriv "rectPos" [EmptyS]
+rectPosGD = gdNoRefs rectPosRC (getUnit scalarPos) rectPosDeriv "rectPos" [{-Notes-}]
 
 rectPosRC :: RelationConcept
 rectPosRC = makeRC "rectPosRC" (nounPhraseSent $ foldlSent_ 
@@ -86,7 +86,7 @@ rectPosDerivEqn3 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) 1 $=
 
 ----------
 velVecGD :: GenDefn
-velVecGD = gdNoRefs velVecRC (getUnit velocity) velVecDeriv "velVec" [EmptyS]
+velVecGD = gdNoRefs velVecRC (getUnit velocity) velVecDeriv "velVec" [{-Notes-}]
 
 velVecRC :: RelationConcept
 velVecRC = makeRC "velVecRC" (nounPhraseSent $ foldlSent_ 
@@ -106,7 +106,7 @@ velVecDerivSent = vecDeriv [(velocity, velocityXYEqnS), (acceleration, accelerat
 
 ----------
 posVecGD :: GenDefn
-posVecGD = gdNoRefs posVecRC (getUnit position) posVecDeriv "posVec" [EmptyS]
+posVecGD = gdNoRefs posVecRC (getUnit position) posVecDeriv "posVec" [{-Notes-}]
 
 posVecRC :: RelationConcept
 posVecRC = makeRC "posVecRC" (nounPhraseSent $ foldlSent_ 

@@ -301,8 +301,6 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & 
-\\ \midrule \\
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:rectPos]{GD: rectPos}.
@@ -344,8 +342,6 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
-\\ \midrule \\
-Notes & 
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -396,8 +392,6 @@ Description & \begin{symbDescription}
               \item{${{v_{y}}^{i}}$ is the y-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${{a_{y}}^{c}}$ is the y-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
-\\ \midrule \\
-Notes & 
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -453,8 +447,6 @@ Description & \begin{symbDescription}
               \item{${{v_{y}}^{i}}$ is the y-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${{a_{y}}^{c}}$ is the y-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
-\\ \midrule \\
-Notes & 
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -750,7 +742,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[calcValues]{FR: Calculate-Values}.
+RefBy & \hyperref[IM:hitIM]{IM: hitIM} \hyperref[calcValues]{FR: Calculate-Values}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -777,7 +769,7 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           isHit={d_{offset}}<\frac{1}{50} {p_{target}}
+           isHit=\frac{{d_{offset}}}{{p_{target}}}<\frac{1}{50}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -785,6 +777,8 @@ Description & \begin{symbDescription}
               \item{${d_{offset}}$ is the offset between the target position and the landing position (m)}
               \item{${p_{target}}$ is the target position (m)}
               \end{symbDescription}
+\\ \midrule \\
+Notes & ${d_{offset}}$ is from \hyperref[IM:offsetIM]{IM: offsetIM}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\

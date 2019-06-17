@@ -83,10 +83,6 @@ distanceRC :: RelationConcept
 distanceRC = makeRC "distanceRC" (nounPhraseSP "calculation of landing distance")
   posDistNote distanceExpr
 
-posDistNote :: Sentence
-posDistNote = S "The" +:+ phrase constraint +:+ E (sy landPos $> 0) `sIs`
-              S "from" +:+. makeRef2S posXDirection
-
 distanceDeriv :: Derivation
 distanceDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase landPos)) :
                weave [distanceDerivSents, map E distanceDerivEqns]
@@ -136,15 +132,22 @@ offsetRC = makeRC "offsetRC" (nounPhraseSP "offset")
 ---
 hitIM :: InstanceModel
 hitIM = imNoDerivNoRefs hitRC [qw offset, qw targPos]
-  [sy offset $> 0, sy targPos $> 0] (qw isHit) [] "hitIM" [{-Notes-}]
+  [sy offset $> 0, sy targPos $> 0] (qw isHit) [] "hitIM" [offsetNote]
 
 hitRC :: RelationConcept
 hitRC = makeRC "hitRC" (nounPhraseSP "isHit") 
-  EmptyS $ sy isHit $= sy offset $< (0.02 * sy targPos)
+  EmptyS $ sy isHit $= (sy offset / sy targPos) $< 0.02
 
----
-angleConstraintNote :: Sentence
+--- Notes
+
+angleConstraintNote, offsetNote, posDistNote :: Sentence
+
 angleConstraintNote = foldlSent [S "The", phrase constraint,
   E (0 $< sy launAngle $< (sy pi_ / 2)) `sIs` S "from",
   makeRef2S posXDirection `sAnd` makeRef2S yAxisGravity `sC`
   S "and is shown" `sIn` makeRef2S figLaunch]
+
+offsetNote = ch offset `sIs` S "from" +:+. makeRef2S offsetIM
+
+posDistNote = S "The" +:+ phrase constraint +:+ E (sy landPos $> 0) `sIs`
+              S "from" +:+. makeRef2S posXDirection

@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Language.Drasil.Code.Imperative.New (
+module Language.Drasil.Code.Imperative.Symantics (
   -- Types
   Label, Library,
   -- Typeclasses

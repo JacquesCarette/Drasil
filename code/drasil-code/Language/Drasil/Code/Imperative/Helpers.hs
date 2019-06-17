@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   lift3Pair, lift4Pair, liftPairFst
 ) where
 
-import Language.Drasil.Code.Imperative.New (Label)
+import Language.Drasil.Code.Imperative.Symantics (Label)
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)

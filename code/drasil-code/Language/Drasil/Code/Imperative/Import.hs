@@ -7,7 +7,7 @@ import Language.Drasil hiding (int, ($.), log, ln, exp,
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char, 
   Float, Object, String, Boolean, Integer))
-import Language.Drasil.Code.Imperative.New (Label,
+import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Helpers (ModData(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
+import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer 
   (jNameOpts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,

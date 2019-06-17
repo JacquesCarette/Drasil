@@ -10,7 +10,8 @@ library
     Utils.Drasil
 
   other-modules:
-     Utils.Drasil.English
+     Utils.Drasil.Document
+   , Utils.Drasil.English
    , Utils.Drasil.Fold
    , Utils.Drasil.Misc
    , Utils.Drasil.Phrase

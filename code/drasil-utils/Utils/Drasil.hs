@@ -1,4 +1,6 @@
 module Utils.Drasil (
+  -- Document
+  indent, indentList,
   -- English
   capitalize,
   -- Fold
@@ -22,6 +24,7 @@ module Utils.Drasil (
   sVersus, sAnd, sAre, sIn, sIs, toThe
 ) where
 
+import Utils.Drasil.Document
 import Utils.Drasil.English
 import Utils.Drasil.Fold
 import Utils.Drasil.Misc

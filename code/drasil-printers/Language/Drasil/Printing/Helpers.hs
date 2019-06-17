@@ -2,7 +2,7 @@
 module Language.Drasil.Printing.Helpers where
 
 import Prelude hiding ((<>))
-import Text.PrettyPrint (text, Doc, nest, (<>))
+import Text.PrettyPrint (text, Doc, (<>))
 import Data.Char (toUpper, toLower)
 
 -- | Basic text-rendering helper function
@@ -31,10 +31,6 @@ unders = text "_"
 sq,br :: String -> Doc
 sq t = text $ "[" ++ t ++ "]"
 br t = text $ "{" ++ t ++ "}"
-
--- | indent helper
-indent :: Doc -> Doc
-indent = nest 4
 
 dot, comm :: Doc -> Doc
 dot  = (<> text ".")

@@ -6,6 +6,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
   PythonCode(..)
 ) where
 
+import Utils.Drasil (indent)
+
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
@@ -30,7 +32,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName,
   addCommentsDocD, callFuncParamList, getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  blank, oneTab, vibcat, liftA4, liftA5, liftList, lift1List, lift4Pair, 
+  blank, vibcat, liftA4, liftA5, liftList, lift1List, lift4Pair, 
   liftPairFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -594,24 +596,24 @@ pyForRange :: Label -> Doc ->  (Doc, Maybe String) ->  (Doc, Maybe String) ->
 pyForRange i inLabel (initv, _) (finalv, _) (stepv, _) b = vcat [
   forLabel <+> text i <+> inLabel <+> text "range" <> parens (initv <> 
     text ", " <> finalv <> text ", " <> stepv) <> colon,
-  oneTab b]
+  indent b]
 
 pyForEach :: Label -> Doc -> Doc ->  (Doc, Maybe String) -> Doc -> Doc
 pyForEach i forEachLabel inLabel (lstVar, _) b = vcat [
   forEachLabel <+> text i <+> inLabel <+> lstVar <> colon,
-  oneTab b]
+  indent b]
 
 pyWhile ::  (Doc, Maybe String) -> Doc -> Doc
 pyWhile (v, _) b = vcat [
   text "while" <+> v <> colon,
-  oneTab b]
+  indent b]
 
 pyTryCatch :: Doc -> Doc -> Doc
 pyTryCatch tryB catchB = vcat [
   text "try" <+> colon,
-  oneTab tryB,
+  indent tryB,
   text "except" <+> text "Exception" <+> text "as" <+> text "exc" <+> colon,
-  oneTab catchB]
+  indent catchB]
 
 pyListSlice :: (Doc, Maybe String) -> (Doc, Maybe String) -> 
   (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
@@ -621,7 +623,7 @@ pyListSlice (vnew, _) (vold, _) (b, _) (e, _) (s, _) = vnew <+> equals <+>
 pyMethod :: Label ->  (Doc, Maybe String) -> Doc -> Doc -> Doc
 pyMethod n (slf, _) ps b = vcat [
   text "def" <+> text n <> parens (slf <> oneParam <> ps) <> colon,
-  oneTab bodyD]
+  indent bodyD]
       where oneParam | isEmpty ps = empty
                      | otherwise  = text ", "
             bodyD | isEmpty b = text "None"
@@ -630,14 +632,14 @@ pyMethod n (slf, _) ps b = vcat [
 pyFunction :: Label -> Doc -> Doc -> Doc
 pyFunction n ps b = vcat [
   text "def" <+> text n <> parens ps <> colon,
-  oneTab bodyD]
+  indent bodyD]
   where bodyD | isEmpty b = text "None"
               | otherwise = b
 
 pyClass :: Label -> Doc -> Doc -> Doc
 pyClass n pn fs = vcat [
   classDec <+> text n <> pn <> colon,
-  oneTab fs]
+  indent fs]
 
 pyModuleImportList :: [Doc] -> Doc
 pyModuleImportList = vcat

@@ -21,7 +21,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
   yAccel, yConstAccel, yDist, yPos, yVel]
 
 physicCon' :: [CI]
-physicCon' = [twoD, threeD]
+physicCon' = [oneD, twoD, threeD]
 
 acceleration, angAccel, angDisp, angVelo, angular, cartesian, chgInVelocity,
   cohesion, collision, compression, constAccel, constAccelV, damping,
@@ -34,7 +34,8 @@ acceleration, angAccel, angDisp, angVelo, angular, cartesian, chgInVelocity,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel,
   yConstAccel, yDist, yPos, yVel :: ConceptChunk
 
-twoD, threeD :: CI
+oneD, twoD, threeD :: CI
+oneD   = commonIdeaWithDict "oneD"   (pn "one-dimensional")   "1D" [physics]
 twoD   = commonIdeaWithDict "twoD"   (pn "two-dimensional")   "2D" [physics]
 threeD = commonIdeaWithDict "threeD" (pn "three-dimensional") "3D" [physics]
 

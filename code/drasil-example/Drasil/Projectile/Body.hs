@@ -24,7 +24,7 @@ import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', input_,
   output_, physicalSystem, physics, physSyst, problem, srsDomains, srs, system)
 import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (constAccel, iVel, physicCon, position, twoD)
+import Data.Drasil.Concepts.Physics (constAccel, iVel, physicCon, physicCon', position, twoD)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
 import Data.Drasil.Quantities.Physics (iSpeed, physicscon)
@@ -115,9 +115,9 @@ systInfo = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ unitalQuants)
-  (nw projectileTitle : nw mass : nw twoD : nw inParam : [nw errMsg, nw program] ++
-    map nw doccon ++ map nw doccon' ++ map nw physicscon ++ map nw physicCon ++
-    map nw mathcon ++ concepts ++ unitalIdeas ++ map nw acronyms)
+  (nw projectileTitle : nw mass : nw inParam : [nw errMsg, nw program] ++
+    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
+    map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++ map nw acronyms)
   srsDomains ([] :: [UnitDefn]) label refBy
   dataDefns iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
@@ -183,7 +183,7 @@ physSystDescription :: Section
 physSystDescription = physSystDesc (short projectileTitle) figLaunch [physSystDescList, LlC figLaunch]
 
 physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ systDescList
+physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) systDescList
 
 systDescList :: [Sentence]
 systDescList = map foldlSent [

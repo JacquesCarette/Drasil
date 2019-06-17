@@ -137,7 +137,7 @@ genModules = do
   let s = codeSpec g
   mn     <- genMain
   inp    <- chooseInStructure $ inStruct g
-  out    <- genOutputMod $ outputs s
+  out    <- genOutputMod
   moddef <- traverse genModDef (mods s) -- hack ?
   return $ mn : inp ++ out ++ moddef
 
@@ -306,28 +306,36 @@ genCaseBlock t v cs = do
 
 ----- OUTPUT -------
 
-genOutputMod :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) [repr
+genOutputMod :: (RenderSym repr) => Reader (State repr) [repr
   (Module repr)]
-genOutputMod outs = liftS $ genModule "OutputFormat" (Just $ liftS $ 
-  genOutputFormat outs) Nothing
+genOutputMod = do
+  outformat <- genOutputFormat
+  let outf = maybeToList outformat
+  liftS $ genModule "OutputFormat" (Just $ return outf) Nothing
 
-genOutputFormat :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) (repr 
-  (Method repr))
-genOutputFormat outs =
-  let l_outfile = "outputfile"
-      v_outfile = var l_outfile
-  in do
-    parms <- getParams outs
-    outp <- mapM (\x -> do
-        v <- variable $ codeName x
-        return [ printFileStr v_outfile (codeName x ++ " = "),
-                 printFileLn v_outfile (convType $ codeType x) v
-               ] ) outs
-    publicMethod void "write_output" parms (return [block $
-      [
-      varDec l_outfile outfile,
-      openFileW v_outfile (litString "output.txt") ] ++
-      concat outp ++ [ closeFile v_outfile ]])
+genOutputFormat :: (RenderSym repr) => Reader (State repr) (Maybe (repr 
+  (Method repr)))
+genOutputFormat = do
+  g <- ask
+  let genOutput :: (RenderSym repr) => Maybe String -> Reader (State repr) 
+        (Maybe (repr (Method repr)))
+      genOutput Nothing = return Nothing
+      genOutput (Just _) = do
+        let l_outfile = "outputfile"
+            v_outfile = var l_outfile
+        parms <- getOutputParams
+        outp <- mapM (\x -> do
+          v <- variable $ codeName x
+          return [ printFileStr v_outfile (codeName x ++ " = "),
+                   printFileLn v_outfile (convType $ codeType x) v
+                 ] ) (outputs $ codeSpec g)
+        mthd <- publicMethod void "write_output" parms (return [block $
+          [
+          varDec l_outfile outfile,
+          openFileW v_outfile (litString "output.txt") ] ++
+          concat outp ++ [ closeFile v_outfile ]])
+        return $ Just mthd
+  genOutput $ Map.lookup "write_output" (eMap $ codeSpec g)
 
 -----
 
@@ -406,18 +414,16 @@ genMainFunc =
       v_params = var l_params
   in do
     g <- ask
-    args2 <- getParams $ outputs $ codeSpec g
     gi <- fApp (funcPrefix ++ "get_input") [v_filename, v_params]
     dv <- getDerivedCall
     ic <- getConstraintCall
     varDef <- mapM getCalcCall (execOrder $ codeSpec g)
-    wo <- fApp "write_output" (getArgs args2)
+    wo <- getOutputCall
     return $ mainMethod "" $ bodyStatements $ [
       varDecDef l_filename string $ arg 0 ,
       extObjDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
       valState gi] ++ 
-      catMaybes ([dv, ic] ++ varDef)
-      ++ [ valState wo ]
+      catMaybes ([dv, ic] ++ varDef ++ [wo])
 
 getFuncCall :: (RenderSym repr) => String -> Reader (State repr) 
   [ParamData repr] -> Reader (State repr) (Maybe (repr (Value repr)))
@@ -449,6 +455,12 @@ getCalcCall c = do
   val <- getFuncCall (codeName c) (getCalcParams c)
   return $ fmap (varDecDef (nopfx $ codeName c) (convType $ codeType c)) val
 
+getOutputCall :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Statement repr)))
+getOutputCall = do
+  val <- getFuncCall "write_output" getOutputParams
+  return $ fmap valState val
+
 getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do
   g <- ask
@@ -473,6 +485,11 @@ getCalcParams :: (RenderSym repr) => CodeDefinition -> Reader (State repr)
 getCalcParams c = do
   g <- ask
   getParams $ codevars' (codeEquat c) $ sysinfodb $ codeSpec g
+
+getOutputParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
+getOutputParams = do
+  g <- ask
+  getParams $ outputs $ codeSpec g
 
 -----
 

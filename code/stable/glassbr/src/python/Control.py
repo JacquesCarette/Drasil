@@ -4,10 +4,10 @@ import math
 
 import DerivedValues
 import InputConstraints
+import OutputFormat
 import Calculations
 import InputParameters
 import InputFormat
-import OutputFormat
 
 inputfile = sys.argv[1]
 inParams = InputParameters.InputParameters()

@@ -35,24 +35,29 @@ data Lang = Cpp
           | Python
           deriving Eq
 
+data CodeSystInfo where
+  CSI :: {
+  extInputs :: [Input],
+  derivedInputs :: [Derived],
+  outputs :: [Output],
+  execOrder :: [Def],
+  cMap :: ConstraintMap,
+  constants :: [Const],
+  mods :: [Mod],  -- medium hack
+  sysinfodb :: ChunkDB
+  } -> CodeSystInfo
+
 data CodeSpec where
   CodeSpec :: CommonIdea a => {
   program :: a,
   inputs :: [Input],
-  extInputs :: [Input],
-  derivedInputs :: [Derived],
-  outputs :: [Output],
   relations :: [Def],
-  execOrder :: [Def],
-  cMap :: ConstraintMap,
   fMap :: FunctionMap,
   vMap :: VarMap,
   eMap :: ModExportMap,
   constMap :: FunctionMap,
-  constants :: [Const],
-  mods :: [Mod],  -- medium hack
   dMap :: ModDepMap,
-  sysinfodb :: ChunkDB
+  csi :: CodeSystInfo
   } -> CodeSpec
 
 type FunctionMap = Map.Map String CodeDefinition
@@ -90,29 +95,30 @@ codeSpec SI {_sys = sys
       const' = map qtov consts
       derived = map qtov $ getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc (defs' ++ map qdFromDD ddefs) \\ derived
-      mods' = prefixFunctions $ packmod "Calculations" (map FCD exOrder) : ms 
-      conMap = constraintMap cs
-      mem   = modExportMap chs conMap mods' inputs' const' derived outs'
+      mem   = modExportMap csi' chs
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
       exOrder = getExecOrder rels (allInputs ++ map codevar const') outs' db
-  in  CodeSpec {
-        program = sys,
-        inputs = allInputs,
+      csi' = CSI {
         extInputs = inputs',
         derivedInputs = derived,
         outputs = outs',
-        relations = rels,
         execOrder = exOrder,
-        cMap = conMap,
+        cMap = constraintMap cs,
+        constants = const',
+        mods = prefixFunctions $ packmod "Calculations" (map FCD exOrder) : ms,
+        sysinfodb = db
+      }
+  in  CodeSpec {
+        program = sys,
+        inputs = allInputs,
+        relations = rels,
         fMap = assocToMap rels,
         vMap = assocToMap (map codevar q),
         eMap = mem,
         constMap = assocToMap const',
-        constants = const',
-        mods = mods',
-        dMap = modDepMap db mem conMap chs mods' inputs' derived exOrder,
-        sysinfodb = db
+        dMap = modDepMap csi' mem chs,
+        csi = csi'
       }
 
 data Choices = Choices {
@@ -236,8 +242,17 @@ asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 
-modExportMap :: Choices -> ConstraintMap -> [Mod] -> [Input] -> [Const] -> [Derived] -> [Output] -> ModExportMap
-modExportMap chs cm ms ins _ ds outs = Map.fromList $ concatMap mpair ms
+modExportMap :: CodeSystInfo -> Choices -> ModExportMap
+modExportMap CSI {
+  extInputs = ins,
+  derivedInputs = ds,
+  outputs = outs,
+  execOrder = _,
+  cMap = cm,
+  constants = _,
+  mods = ms,
+  sysinfodb = _
+  } chs = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ getExportInput chs (ins ++ map codevar ds)
                         ++ getExportDerived chs ds
@@ -249,10 +264,17 @@ modExportMap chs cm ms ins _ ds outs = Map.fromList $ concatMap mpair ms
           
 type ModDepMap = Map.Map String [String]
 
-modDepMap :: ChunkDB -> ModExportMap -> ConstraintMap -> Choices -> [Mod] -> 
-  [Input] -> [Derived] -> [Def] -> ModDepMap
-modDepMap sm mem cm chs ms ins ds eo = Map.fromList $ map (\(Mod n _) -> n) 
-  ms  `zip` map getModDep ms 
+modDepMap :: CodeSystInfo -> ModExportMap -> Choices -> ModDepMap
+modDepMap CSI {
+  extInputs = ins,
+  derivedInputs = ds,
+  outputs = _,
+  execOrder = eo,
+  cMap = cm,
+  constants = _,
+  mods = ms,
+  sysinfodb = sm
+  } mem chs = Map.fromList $ map (\(Mod n _) -> n) ms  `zip` map getModDep ms 
   ++ ("Control", getDepsControl mem (ins ++ map codevar ds) eo)
   : catMaybes [getDepsDerived sm mem chs ds,
                getDepsConstraints sm mem cm chs (ins ++ map codevar ds)]

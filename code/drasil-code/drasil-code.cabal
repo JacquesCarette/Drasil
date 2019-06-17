@@ -12,16 +12,16 @@ library
       Language.Drasil.Chunk.Code
     , Language.Drasil.Code.Code
     , Language.Drasil.Code.DataDesc
-    , Language.Drasil.Code.Imperative.New
+    , Language.Drasil.Code.Imperative.Symantics
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.Helpers
     , Language.Drasil.Code.Imperative.Import
-    , Language.Drasil.Code.Imperative.NewLanguageRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.NewPythonRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.NewCSharpRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.NewCppRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.CodeSpec
 
@@ -37,6 +37,7 @@ library
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
     drasil-lang >= 0.1.52,
+    drasil-utils >= 0.1.1,
     drasil-build >= 0.1.1,
     drasil-theory >= 0.1.0,
     drasil-database >= 0.1.0
@@ -56,16 +57,16 @@ executable codegenTest
     , Language.Drasil.Code
     , Language.Drasil.Code.Code
     , Language.Drasil.Code.DataDesc
-    , Language.Drasil.Code.Imperative.New
+    , Language.Drasil.Code.Imperative.Symantics
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.Helpers
     , Language.Drasil.Code.Imperative.Import
-    , Language.Drasil.Code.Imperative.NewLanguageRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.NewPythonRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.NewCSharpRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.NewCppRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer
+    , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.CodeSpec
   Build-Depends:
@@ -80,6 +81,7 @@ executable codegenTest
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
     drasil-lang >= 0.1.52,
+    drasil-utils >= 0.1.1,
     drasil-build >= 0.1.1,
     drasil-theory >= 0.1.0,
     drasil-database >= 0.1.0

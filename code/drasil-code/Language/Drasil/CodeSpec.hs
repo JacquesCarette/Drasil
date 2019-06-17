@@ -243,38 +243,33 @@ asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 type ModExportMap = Map.Map String String
 
 modExportMap :: CodeSystInfo -> Choices -> ModExportMap
-modExportMap CSI {
+modExportMap cs@CSI {
   extInputs = ins,
-  derivedInputs = ds,
-  outputs = outs,
-  cMap = cm,
-  mods = ms
-  } chs = Map.fromList $ concatMap mpair ms
+  derivedInputs = ds
+  } chs = Map.fromList $ concatMap mpair (mods cs)
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ getExportInput chs (ins ++ map codevar ds)
                         ++ getExportDerived chs ds
-                        ++ getExportConstraints chs (getConstraints cm 
+                        ++ getExportConstraints chs (getConstraints (cMap cs) 
                           (ins ++ map codevar ds))
-                        ++ getExportOutput outs
+                        ++ getExportOutput (outputs cs)
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
           
 type ModDepMap = Map.Map String [String]
 
 modDepMap :: CodeSystInfo -> ModExportMap -> Choices -> ModDepMap
-modDepMap csi'@CSI {
-  mods = ms,
-  sysinfodb = sm
-  } mem chs = Map.fromList $ map (\(Mod n _) -> n) ms  `zip` map getModDep ms 
-  ++ ("Control", getDepsControl csi' mem)
-  : catMaybes [getDepsDerived csi' mem chs,
-               getDepsConstraints csi' mem chs]
+modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _) -> (n, getModDep m)) 
+  (mods cs) ++ ("Control", getDepsControl cs mem)
+  : catMaybes [getDepsDerived cs mem chs,
+               getDepsConstraints cs mem chs]
   where getModDep (Mod name' funcs) =
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)
         fdep (FCD cd) = codeName cd:map codeName (codevarsandfuncs (codeEquat cd) sm mem)
         fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
-        fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
+        fdep (FData (FuncData _ d)) = map codeName $ getInputs d
+        sm = sysinfodb cs
 
 fstdep :: ChunkDB -> FuncStmt -> [CodeChunk]
 fstdep _  (FDec cch _) = [cch]
@@ -379,45 +374,35 @@ getExportOutput [] = []
 getExportOutput _ = [("write_output", "OutputFormat")]
 
 getDepsControl :: CodeSystInfo -> ModExportMap -> [String]
-getDepsControl CSI {
-  extInputs = extins,
-  derivedInputs = ds,
-  execOrder = eo
-  } mem = let ins = extins ++ map codevar ds
-              ip = map (\x -> Map.lookup (codeName x) mem) ins
-              inf = Map.lookup (funcPrefix ++ "get_input") mem
-              dv = Map.lookup "derived_values" mem
-              ic = Map.lookup "input_constraints" mem
-              wo = Map.lookup "write_output" mem
-              calcs = map (\x -> Map.lookup (codeName x) mem) eo
+getDepsControl cs mem = 
+  let ins = (extInputs cs) ++ map codevar (derivedInputs cs)
+      ip = map (\x -> Map.lookup (codeName x) mem) ins
+      inf = Map.lookup (funcPrefix ++ "get_input") mem
+      dv = Map.lookup "derived_values" mem
+      ic = Map.lookup "input_constraints" mem
+      wo = Map.lookup "write_output" mem
+      calcs = map (\x -> Map.lookup (codeName x) mem) (execOrder cs)
   in nub $ catMaybes (ip ++ [inf, dv, ic, wo] ++ calcs)
 
 getDepsDerived :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
-getDepsDerived CSI {
-  derivedInputs = ds,
-  sysinfodb = db
-  } mem chs = derivedDeps $ inputStructure chs
+getDepsDerived cs mem chs = derivedDeps $ inputStructure chs
   where derivedDeps Loose = Nothing
         derivedDeps AsClass = Just ("DerivedValues", nub $ mapMaybe (
-          (`Map.lookup` mem) . codeName) (concatMap (flip codevars db . 
-          codeEquat) ds))
+          (`Map.lookup` mem) . codeName) (concatMap (flip codevars 
+          (sysinfodb cs) . codeEquat) (derivedInputs cs)))
 
 getDepsConstraints :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
-getDepsConstraints CSI {
-  extInputs = extins,
-  derivedInputs = ds,
-  cMap = cm,
-  sysinfodb = db
-  } mem chs = constraintDeps $ inputStructure chs
+getDepsConstraints cs mem chs = constraintDeps $ inputStructure chs
   where constraintDeps Loose = Nothing
         constraintDeps AsClass = Just ("InputConstraints", nub $ mapMaybe (
           (`Map.lookup` mem) .codeName) reqdVals)
-        ins = extins ++ map codevar ds
+        ins = extInputs cs ++ map codevar (derivedInputs cs)
+        cm = cMap cs
         varsList = filter (\i -> Map.member (i ^. uid) cm) ins
         reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v
-          db mem) (getConstraints cm varsList)
+          (sysinfodb cs) mem) (getConstraints cm varsList)
 
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs

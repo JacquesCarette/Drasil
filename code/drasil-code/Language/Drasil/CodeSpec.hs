@@ -247,11 +247,8 @@ modExportMap CSI {
   extInputs = ins,
   derivedInputs = ds,
   outputs = outs,
-  execOrder = _,
   cMap = cm,
-  constants = _,
-  mods = ms,
-  sysinfodb = _
+  mods = ms
   } chs = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ getExportInput chs (ins ++ map codevar ds)
@@ -268,10 +265,8 @@ modDepMap :: CodeSystInfo -> ModExportMap -> Choices -> ModDepMap
 modDepMap CSI {
   extInputs = ins,
   derivedInputs = ds,
-  outputs = _,
   execOrder = eo,
   cMap = cm,
-  constants = _,
   mods = ms,
   sysinfodb = sm
   } mem chs = Map.fromList $ map (\(Mod n _) -> n) ms  `zip` map getModDep ms 

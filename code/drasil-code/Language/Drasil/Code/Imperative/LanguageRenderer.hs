@@ -35,8 +35,10 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
 
 import Language.Drasil.Code.Imperative.Symantics (Label, Library)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  angles,blank, doubleQuotedText, oneTab,capitalize,oneTabbed,hicat,vibcat,
+  angles,blank, doubleQuotedText, oneTab,oneTabbed,hicat,vibcat,
   vmap)
+
+import Utils.Drasil (capitalize)
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))

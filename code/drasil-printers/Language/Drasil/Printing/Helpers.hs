@@ -48,18 +48,12 @@ dollar  x = "$" ++ x ++ "$"
 sqbrac  x = "[" ++ x ++ "]"
 angbrac x = "<" ++ x ++ ">"
 
--- | String capitalization
-capitalize :: String -> String
-capitalize [] = []
-capitalize (c:cs) = toUpper c:map toLower cs
-
 -- | Format strings and convert to Doc
 upcase, lowcase :: String -> Doc
 upcase []      = text []
 upcase (c:cs)  = text $ toUpper c:cs --capitalize first letter of string
 lowcase []     = text []
 lowcase (c:cs) = text $ toLower c:cs --make first letter lowercase
-
 
 --FIXME: move this. It is here for not since TeX and HTML
 --       use this for bibliography rendering

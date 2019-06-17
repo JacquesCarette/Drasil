@@ -2,7 +2,7 @@
 
 module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   ScopeTag(..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
-  blank,oneTabbed,oneTab,verticalComma, angles,doubleQuotedText,capitalize,
+  blank,oneTabbed,oneTab,verticalComma, angles,doubleQuotedText,
   himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, mapPairSnd, liftA4, 
   liftA5, liftA6, liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, 
   lift3Pair, lift4Pair, liftPairFst
@@ -12,7 +12,6 @@ import Language.Drasil.Code.Imperative.Symantics (Label)
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
-import Data.Char (toUpper)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
   (<>), comma, punctuate, nest)
@@ -60,10 +59,6 @@ angles d = char '<' <> d <> char '>'
 
 doubleQuotedText :: String -> Doc
 doubleQuotedText = doubleQuotes . text
-
-capitalize :: String -> String
-capitalize [] = error "capitalize called on an empty String"
-capitalize (c:cs) = toUpper c : cs
 
 himap :: Doc -> (a -> Doc) -> [a] -> Doc
 himap c f = hcat . intersperse c . map f

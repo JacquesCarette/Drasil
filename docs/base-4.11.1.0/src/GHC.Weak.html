@@ -1,0 +1,157 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Unsafe #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude
+           , BangPatterns
+           , MagicHash
+           , UnboxedTuples
+           , StandaloneDeriving
+  #-}</span><span>
+</span><a name="line-8"></a><span class="hs-pragma">{-# OPTIONS_HADDOCK hide #-}</span><span>
+</span><a name="line-9"></a><span>
+</span><a name="line-10"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Module      :  GHC.Weak</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow, 1998-2002</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License     :  see libraries/base/LICENSE</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Maintainer  :  cvs-ghc@haskell.org</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- Stability   :  internal</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- Portability :  non-portable (GHC Extensions)</span><span>
+</span><a name="line-19"></a><span class="hs-comment">--</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- Weak pointers.</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-23"></a><span>
+</span><a name="line-24"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.Weak</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-25"></a><span>        </span><a href="GHC.Weak.html#Weak"><span class="hs-identifier hs-type">Weak</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-26"></a><span>        </span><a href="GHC.Weak.html#mkWeak"><span class="hs-identifier hs-var">mkWeak</span></a><span class="hs-special">,</span><span>
+</span><a name="line-27"></a><span>        </span><a href="GHC.Weak.html#deRefWeak"><span class="hs-identifier hs-var">deRefWeak</span></a><span class="hs-special">,</span><span>
+</span><a name="line-28"></a><span>        </span><a href="GHC.Weak.html#finalize"><span class="hs-identifier hs-var">finalize</span></a><span class="hs-special">,</span><span>
+</span><a name="line-29"></a><span>        </span><a href="GHC.Weak.html#runFinalizerBatch"><span class="hs-identifier hs-var">runFinalizerBatch</span></a><span>
+</span><a name="line-30"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-31"></a><span>
+</span><a name="line-32"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-33"></a><span>
+</span><a name="line-34"></a><span class="hs-comment">{-|
+A weak pointer object with a key and a value.  The value has type @v@.
+
+A weak pointer expresses a relationship between two objects, the
+/key/ and the /value/:  if the key is considered to be alive by the
+garbage collector, then the value is also alive.  A reference from
+the value to the key does /not/ keep the key alive.
+
+A weak pointer may also have a finalizer of type @IO ()@; if it does,
+then the finalizer will be run at most once, at a time after the key
+has become unreachable by the program (\&quot;dead\&quot;).  The storage manager
+attempts to run the finalizer(s) for an object soon after the object
+dies, but promptness is not guaranteed.
+
+It is not guaranteed that a finalizer will eventually run, and no
+attempt is made to run outstanding finalizers when the program exits.
+Therefore finalizers should not be relied on to clean up resources -
+other methods (eg. exception handlers) should be employed, possibly in
+addition to finalizers.
+
+References from the finalizer to the key are treated in the same way
+as references from the value to the key: they do not keep the key
+alive.  A finalizer may therefore ressurrect the key, perhaps by
+storing it in the same data structure.
+
+The finalizer, and the relationship between the key and the value,
+exist regardless of whether the program keeps a reference to the
+'Weak' object or not.
+
+There may be multiple weak pointers with the same key.  In this
+case, the finalizers for each of these weak pointers will all be
+run in some arbitrary order, or perhaps concurrently, when the key
+dies.  If the programmer specifies a finalizer that assumes it has
+the only reference to an object (for example, a file that it wishes
+to close), then the programmer must ensure that there is only one
+such finalizer.
+
+If there are no other threads to run, the runtime system will check
+for runnable finalizers before declaring the system to be deadlocked.
+
+WARNING: weak pointers to ordinary non-primitive Haskell types are
+particularly fragile, because the compiler is free to optimise away or
+duplicate the underlying data structure.  Therefore attempting to
+place a finalizer on an ordinary Haskell type may well result in the
+finalizer running earlier than you expected.  This is not a problem
+for caches and memo tables where early finalization is benign.
+
+Finalizers /can/ be used reliably for types that are created explicitly
+and have identity, such as @IORef@ and @MVar@.  However, to place a
+finalizer on one of these types, you should use the specific operation
+provided for that type, e.g. @mkWeakIORef@ and @addMVarFinalizer@
+respectively (the non-uniformity is accidental).  These operations
+attach the finalizer to the primitive object inside the box
+(e.g. @MutVar#@ in the case of @IORef@), because attaching the
+finalizer to the box itself fails when the outer box is optimised away
+by the compiler.
+
+-}</span><span>
+</span><a name="line-92"></a><span class="hs-keyword">data</span><span> </span><a name="Weak"><a href="GHC.Weak.html#Weak"><span class="hs-identifier">Weak</span></a></a><span> </span><a name="local-6989586621679054950"><a href="#local-6989586621679054950"><span class="hs-identifier">v</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="Weak"><a href="GHC.Weak.html#Weak"><span class="hs-identifier">Weak</span></a></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#Weak%23"><span class="hs-identifier hs-type">Weak#</span></a><span> </span><a href="#local-6989586621679054950"><span class="hs-identifier hs-type">v</span></a><span class="hs-special">)</span><span>
+</span><a name="line-93"></a><span>
+</span><a name="line-94"></a><span class="hs-comment">-- | Establishes a weak pointer to @k@, with value @v@ and a finalizer.</span><span>
+</span><a name="line-95"></a><span class="hs-comment">--</span><span>
+</span><a name="line-96"></a><span class="hs-comment">-- This is the most general interface for building a weak pointer.</span><span>
+</span><a name="line-97"></a><span class="hs-comment">--</span><span>
+</span><a name="line-98"></a><span class="hs-identifier">mkWeak</span><span>  </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679054953"><span class="hs-identifier hs-type">k</span></a><span>                            </span><span class="hs-comment">-- ^ key</span><span>
+</span><a name="line-99"></a><span>        </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679054954"><span class="hs-identifier hs-type">v</span></a><span>                            </span><span class="hs-comment">-- ^ value</span><span>
+</span><a name="line-100"></a><span>        </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Base.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span>                </span><span class="hs-comment">-- ^ finalizer</span><span>
+</span><a name="line-101"></a><span>        </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Weak.html#Weak"><span class="hs-identifier hs-type">Weak</span></a><span> </span><a href="#local-6989586621679054954"><span class="hs-identifier hs-type">v</span></a><span class="hs-special">)</span><span>                  </span><span class="hs-comment">-- ^ returns: a weak pointer object</span><span>
+</span><a name="line-102"></a><span>
+</span><a name="line-103"></a><a name="mkWeak"><a href="GHC.Weak.html#mkWeak"><span class="hs-identifier">mkWeak</span></a></a><span> </span><a name="local-6989586621679054955"><a href="#local-6989586621679054955"><span class="hs-identifier">key</span></a></a><span> </span><a name="local-6989586621679054956"><a href="#local-6989586621679054956"><span class="hs-identifier">val</span></a></a><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#Just"><span class="hs-identifier hs-var">Just</span></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a name="local-6989586621679054957"><a href="#local-6989586621679054957"><span class="hs-identifier">finalizer</span></a></a><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679054958"><a href="#local-6989586621679054958"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-104"></a><span>   </span><span class="hs-keyword">case</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#mkWeak%23"><span class="hs-identifier hs-var">mkWeak#</span></a><span> </span><a href="#local-6989586621679054955"><span class="hs-identifier hs-var">key</span></a><span> </span><a href="#local-6989586621679054956"><span class="hs-identifier hs-var">val</span></a><span> </span><a href="#local-6989586621679054957"><span class="hs-identifier hs-var">finalizer</span></a><span> </span><a href="#local-6989586621679054958"><span class="hs-identifier hs-var">s</span></a><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-special">{</span><span> </span><span class="hs-special">(#</span><span> </span><a name="local-6989586621679054959"><a href="#local-6989586621679054959"><span class="hs-identifier">s1</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679054960"><a href="#local-6989586621679054960"><span class="hs-identifier">w</span></a></a><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="#local-6989586621679054959"><span class="hs-identifier hs-var">s1</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Weak.html#Weak"><span class="hs-identifier hs-var">Weak</span></a><span> </span><a href="#local-6989586621679054960"><span class="hs-identifier hs-var">w</span></a><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-special">}</span><span>
+</span><a name="line-105"></a><span class="hs-identifier">mkWeak</span><span> </span><a name="local-6989586621679054961"><a href="#local-6989586621679054961"><span class="hs-identifier">key</span></a></a><span> </span><a name="local-6989586621679054962"><a href="#local-6989586621679054962"><span class="hs-identifier">val</span></a></a><span> </span><a href="GHC.Base.html#Nothing"><span class="hs-identifier hs-var">Nothing</span></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679054963"><a href="#local-6989586621679054963"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-106"></a><span>   </span><span class="hs-keyword">case</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#mkWeakNoFinalizer%23"><span class="hs-identifier hs-var">mkWeakNoFinalizer#</span></a><span> </span><a href="#local-6989586621679054961"><span class="hs-identifier hs-var">key</span></a><span> </span><a href="#local-6989586621679054962"><span class="hs-identifier hs-var">val</span></a><span> </span><a href="#local-6989586621679054963"><span class="hs-identifier hs-var">s</span></a><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-special">{</span><span> </span><span class="hs-special">(#</span><span> </span><a name="local-6989586621679054964"><a href="#local-6989586621679054964"><span class="hs-identifier">s1</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679054965"><a href="#local-6989586621679054965"><span class="hs-identifier">w</span></a></a><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="#local-6989586621679054964"><span class="hs-identifier hs-var">s1</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Weak.html#Weak"><span class="hs-identifier hs-var">Weak</span></a><span> </span><a href="#local-6989586621679054965"><span class="hs-identifier hs-var">w</span></a><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-special">}</span><span>
+</span><a name="line-107"></a><span>
+</span><a name="line-108"></a><span class="hs-comment">{-|
+Dereferences a weak pointer.  If the key is still alive, then
+@'Just' v@ is returned (where @v@ is the /value/ in the weak pointer), otherwise
+'Nothing' is returned.
+
+The return value of 'deRefWeak' depends on when the garbage collector
+runs, hence it is in the 'IO' monad.
+-}</span><span>
+</span><a name="line-116"></a><span class="hs-identifier">deRefWeak</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Weak.html#Weak"><span class="hs-identifier hs-type">Weak</span></a><span> </span><a href="#local-6989586621679054952"><span class="hs-identifier hs-type">v</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a><span> </span><a href="#local-6989586621679054952"><span class="hs-identifier hs-type">v</span></a><span class="hs-special">)</span><span>
+</span><a name="line-117"></a><a name="deRefWeak"><a href="GHC.Weak.html#deRefWeak"><span class="hs-identifier">deRefWeak</span></a></a><span> </span><span class="hs-special">(</span><a href="GHC.Weak.html#Weak"><span class="hs-identifier hs-var">Weak</span></a><span> </span><a name="local-6989586621679054966"><a href="#local-6989586621679054966"><span class="hs-identifier">w</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679054967"><a href="#local-6989586621679054967"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-118"></a><span>   </span><span class="hs-keyword">case</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#deRefWeak%23"><span class="hs-identifier hs-var">deRefWeak#</span></a><span> </span><a href="#local-6989586621679054966"><span class="hs-identifier hs-var">w</span></a><span> </span><a href="#local-6989586621679054967"><span class="hs-identifier hs-var">s</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-119"></a><span>        </span><span class="hs-special">(#</span><span> </span><a name="local-6989586621679054968"><a href="#local-6989586621679054968"><span class="hs-identifier">s1</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679054969"><a href="#local-6989586621679054969"><span class="hs-identifier">flag</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679054970"><a href="#local-6989586621679054970"><span class="hs-identifier">p</span></a></a><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><a href="#local-6989586621679054969"><span class="hs-identifier hs-var">flag</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-120"></a><span>                                </span><span class="hs-number">0#</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="#local-6989586621679054968"><span class="hs-identifier hs-var">s1</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Base.html#Nothing"><span class="hs-identifier hs-var">Nothing</span></a><span> </span><span class="hs-special">#)</span><span>
+</span><a name="line-121"></a><span>                                </span><span class="hs-identifier">_</span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="#local-6989586621679054968"><span class="hs-identifier hs-var">s1</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Base.html#Just"><span class="hs-identifier hs-var">Just</span></a><span> </span><a href="#local-6989586621679054970"><span class="hs-identifier hs-var">p</span></a><span> </span><span class="hs-special">#)</span><span>
+</span><a name="line-122"></a><span>
+</span><a name="line-123"></a><span class="hs-comment">-- | Causes a the finalizer associated with a weak pointer to be run</span><span>
+</span><a name="line-124"></a><span class="hs-comment">-- immediately.</span><span>
+</span><a name="line-125"></a><span class="hs-identifier">finalize</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Weak.html#Weak"><span class="hs-identifier hs-type">Weak</span></a><span> </span><a href="#local-6989586621679054951"><span class="hs-identifier hs-type">v</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-126"></a><a name="finalize"><a href="GHC.Weak.html#finalize"><span class="hs-identifier">finalize</span></a></a><span> </span><span class="hs-special">(</span><a href="GHC.Weak.html#Weak"><span class="hs-identifier hs-var">Weak</span></a><span> </span><a name="local-6989586621679054971"><a href="#local-6989586621679054971"><span class="hs-identifier">w</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679054972"><a href="#local-6989586621679054972"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-127"></a><span>   </span><span class="hs-keyword">case</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#finalizeWeak%23"><span class="hs-identifier hs-var">finalizeWeak#</span></a><span> </span><a href="#local-6989586621679054971"><span class="hs-identifier hs-var">w</span></a><span> </span><a href="#local-6989586621679054972"><span class="hs-identifier hs-var">s</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-128"></a><span>        </span><span class="hs-special">(#</span><span> </span><a name="local-6989586621679054973"><a href="#local-6989586621679054973"><span class="hs-identifier">s1</span></a></a><span class="hs-special">,</span><span> </span><span class="hs-number">0#</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="#local-6989586621679054973"><span class="hs-identifier hs-var">s1</span></a><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-comment">-- already dead, or no finalizer</span><span>
+</span><a name="line-129"></a><span>        </span><span class="hs-special">(#</span><span> </span><a name="local-6989586621679054974"><a href="#local-6989586621679054974"><span class="hs-identifier">s1</span></a></a><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">,</span><span>  </span><a name="local-6989586621679054975"><a href="#local-6989586621679054975"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679054975"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="#local-6989586621679054974"><span class="hs-identifier hs-var">s1</span></a><span>
+</span><a name="line-130"></a><span>
+</span><a name="line-131"></a><span class="hs-comment">{-
+Instance Eq (Weak v) where
+  (Weak w1) == (Weak w2) = w1 `sameWeak#` w2
+-}</span><span>
+</span><a name="line-135"></a><span>
+</span><a name="line-136"></a><span>
+</span><a name="line-137"></a><span class="hs-comment">-- run a batch of finalizers from the garbage collector.  We're given</span><span>
+</span><a name="line-138"></a><span class="hs-comment">-- an array of finalizers and the length of the array, and we just</span><span>
+</span><a name="line-139"></a><span class="hs-comment">-- call each one in turn.</span><span>
+</span><a name="line-140"></a><span class="hs-comment">--</span><span>
+</span><a name="line-141"></a><span class="hs-comment">-- the IO primitives are inlined by hand here to get the optimal</span><span>
+</span><a name="line-142"></a><span class="hs-comment">-- code (sigh) --SDM.</span><span>
+</span><a name="line-143"></a><span>
+</span><a name="line-144"></a><span class="hs-identifier">runFinalizerBatch</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#Array%23"><span class="hs-identifier hs-type">Array#</span></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#State%23"><span class="hs-identifier hs-type">State#</span></a><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#RealWorld"><span class="hs-identifier hs-type">RealWorld</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#State%23"><span class="hs-identifier hs-type">State#</span></a><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#RealWorld"><span class="hs-identifier hs-type">RealWorld</span></a><span class="hs-special">)</span><span>
+</span><a name="line-145"></a><span>                  </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-146"></a><a name="runFinalizerBatch"><a href="GHC.Weak.html#runFinalizerBatch"><span class="hs-identifier">runFinalizerBatch</span></a></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#I%23"><span class="hs-identifier hs-var">I#</span></a><span> </span><a name="local-6989586621679054976"><a href="#local-6989586621679054976"><span class="hs-identifier">n</span></a></a><span class="hs-special">)</span><span> </span><a name="local-6989586621679054977"><a href="#local-6989586621679054977"><span class="hs-identifier">arr</span></a></a><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-147"></a><span>   </span><span class="hs-keyword">let</span><span>  </span><a name="local-6989586621679054978"><a href="#local-6989586621679054978"><span class="hs-identifier">go</span></a></a><span> </span><a name="local-6989586621679054979"><a href="#local-6989586621679054979"><span class="hs-identifier">m</span></a></a><span>  </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679054980"><a href="#local-6989586621679054980"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-148"></a><span>                  </span><span class="hs-keyword">case</span><span> </span><a href="#local-6989586621679054979"><span class="hs-identifier hs-var">m</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-149"></a><span>                  </span><span class="hs-number">0#</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="#local-6989586621679054980"><span class="hs-identifier hs-var">s</span></a><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span> </span><span class="hs-special">#)</span><span>
+</span><a name="line-150"></a><span>                  </span><span class="hs-identifier">_</span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">let</span><span> </span><span class="hs-glyph">!</span><a name="local-6989586621679054981"><a href="#local-6989586621679054981"><span class="hs-identifier">m'</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679054979"><span class="hs-identifier hs-var">m</span></a><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#-%23"><span class="hs-operator hs-var">-#</span></a><span> </span><span class="hs-number">1#</span><span> </span><span class="hs-keyword">in</span><span>
+</span><a name="line-151"></a><span>                        </span><span class="hs-keyword">case</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#indexArray%23"><span class="hs-identifier hs-var">indexArray#</span></a><span> </span><a href="#local-6989586621679054977"><span class="hs-identifier hs-var">arr</span></a><span> </span><a href="#local-6989586621679054981"><span class="hs-identifier hs-var">m'</span></a><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-special">{</span><span> </span><span class="hs-special">(#</span><span> </span><a name="local-6989586621679054982"><a href="#local-6989586621679054982"><span class="hs-identifier">io</span></a></a><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-152"></a><span>                        </span><span class="hs-keyword">case</span><span> </span><a href="#local-6989586621679054982"><span class="hs-identifier hs-var">io</span></a><span> </span><a href="#local-6989586621679054980"><span class="hs-identifier hs-var">s</span></a><span> </span><span class="hs-keyword">of</span><span>          </span><span class="hs-special">{</span><span> </span><a name="local-6989586621679054983"><a href="#local-6989586621679054983"><span class="hs-identifier">s'</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-153"></a><span>                        </span><a href="GHC.Base.html#unIO"><span class="hs-identifier hs-var">unIO</span></a><span> </span><span class="hs-special">(</span><a href="#local-6989586621679054978"><span class="hs-identifier hs-var">go</span></a><span> </span><a href="#local-6989586621679054981"><span class="hs-identifier hs-var">m'</span></a><span class="hs-special">)</span><span> </span><a href="#local-6989586621679054983"><span class="hs-identifier hs-var">s'</span></a><span>
+</span><a name="line-154"></a><span>                        </span><span class="hs-special">}</span><span class="hs-special">}</span><span>
+</span><a name="line-155"></a><span>   </span><span class="hs-keyword">in</span><span>
+</span><a name="line-156"></a><span>        </span><a href="#local-6989586621679054978"><span class="hs-identifier hs-var">go</span></a><span> </span><a href="#local-6989586621679054976"><span class="hs-identifier hs-var">n</span></a><span>
+</span><a name="line-157"></a></pre></body></html>

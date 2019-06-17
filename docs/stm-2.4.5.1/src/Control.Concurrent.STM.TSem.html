@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-2"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- Module      :  Control.Concurrent.STM.TSem</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2012</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-6"></a><span class="hs-comment">--</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Portability :  non-portable (requires STM)</span><span>
+</span><a name="line-10"></a><span class="hs-comment">--</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- 'TSem': transactional semaphores.</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- @since 2.4.2</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-15"></a><span>
+</span><a name="line-16"></a><span class="hs-pragma">{-# LANGUAGE DeriveDataTypeable #-}</span><span>
+</span><a name="line-17"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Control.Concurrent.STM.TSem</span><span>
+</span><a name="line-18"></a><span>  </span><span class="hs-special">(</span><span> </span><a href="Control.Concurrent.STM.TSem.html#TSem"><span class="hs-identifier hs-type">TSem</span></a><span>
+</span><a name="line-19"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Control.Concurrent.STM.TSem.html#newTSem"><span class="hs-identifier hs-var">newTSem</span></a><span>
+</span><a name="line-20"></a><span>
+</span><a name="line-21"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Control.Concurrent.STM.TSem.html#waitTSem"><span class="hs-identifier hs-var">waitTSem</span></a><span>
+</span><a name="line-22"></a><span>
+</span><a name="line-23"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Control.Concurrent.STM.TSem.html#signalTSem"><span class="hs-identifier hs-var">signalTSem</span></a><span>
+</span><a name="line-24"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="Control.Concurrent.STM.TSem.html#signalTSemN"><span class="hs-identifier hs-var">signalTSemN</span></a><span>
+</span><a name="line-25"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-26"></a><span>
+</span><a name="line-27"></a><span class="hs-keyword">import</span><span> </span><a href="Control.Concurrent.STM.html"><span class="hs-identifier">Control.Concurrent.STM</span></a><span>
+</span><a name="line-28"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Control.Monad.html"><span class="hs-identifier">Control.Monad</span></a><span>
+</span><a name="line-29"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Typeable.html"><span class="hs-identifier">Data.Typeable</span></a><span>
+</span><a name="line-30"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Word.html"><span class="hs-identifier">Data.Word</span></a><span> </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">Word</span><span>
+</span><a name="line-31"></a><span>
+</span><a name="line-32"></a><span class="hs-comment">-- | 'TSem' is a transactional semaphore.  It holds a certain number</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- of units, and units may be acquired or released by 'waitTSem' and</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- 'signalTSem' respectively.  When the 'TSem' is empty, 'waitTSem'</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- blocks.</span><span>
+</span><a name="line-36"></a><span class="hs-comment">--</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- Note that 'TSem' has no concept of fairness, and there is no</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- guarantee that threads blocked in `waitTSem` will be unblocked in</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- the same order; in fact they will all be unblocked at the same time</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- and will fight over the 'TSem'.  Hence 'TSem' is not suitable if</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- you expect there to be a high number of threads contending for the</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- resource.  However, like other STM abstractions, 'TSem' is</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- composable.</span><span>
+</span><a name="line-44"></a><span class="hs-comment">--</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- @since 2.4.2</span><span>
+</span><a name="line-46"></a><span class="hs-keyword">newtype</span><span> </span><a name="TSem"><a href="Control.Concurrent.STM.TSem.html#TSem"><span class="hs-identifier">TSem</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="TSem"><a href="Control.Concurrent.STM.TSem.html#TSem"><span class="hs-identifier">TSem</span></a></a><span> </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#TVar"><span class="hs-identifier hs-type">TVar</span></a><span> </span><span class="hs-identifier hs-type">Integer</span><span class="hs-special">)</span><span>
+</span><a name="line-47"></a><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-type">Eq</span><span class="hs-special">,</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Typeable.Internal.html#Typeable"><span class="hs-identifier hs-type">Typeable</span></a><span class="hs-special">)</span><span>
+</span><a name="line-48"></a><span>
+</span><a name="line-49"></a><span class="hs-comment">-- | Construct new 'TSem' with an initial counter value.</span><span>
+</span><a name="line-50"></a><span class="hs-comment">--</span><span>
+</span><a name="line-51"></a><span class="hs-comment">-- A positive initial counter value denotes availability of</span><span>
+</span><a name="line-52"></a><span class="hs-comment">-- units 'waitTSem' can acquire.</span><span>
+</span><a name="line-53"></a><span class="hs-comment">--</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- The initial counter value can be negative which denotes a resource</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- \&quot;debt\&quot; that requires a respective amount of 'signalTSem'</span><span>
+</span><a name="line-56"></a><span class="hs-comment">-- operations to counter-balance.</span><span>
+</span><a name="line-57"></a><span class="hs-comment">--</span><span>
+</span><a name="line-58"></a><span class="hs-comment">-- @since 2.4.2</span><span>
+</span><a name="line-59"></a><span class="hs-identifier">newTSem</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">Int</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#STM"><span class="hs-identifier hs-type">STM</span></a><span> </span><a href="Control.Concurrent.STM.TSem.html#TSem"><span class="hs-identifier hs-type">TSem</span></a><span>
+</span><a name="line-60"></a><a name="newTSem"><a href="Control.Concurrent.STM.TSem.html#newTSem"><span class="hs-identifier">newTSem</span></a></a><span> </span><a name="local-6989586621679031988"><a href="#local-6989586621679031988"><span class="hs-identifier">i</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#fmap"><span class="hs-identifier hs-var">fmap</span></a><span> </span><a href="Control.Concurrent.STM.TSem.html#TSem"><span class="hs-identifier hs-var">TSem</span></a><span> </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#newTVar"><span class="hs-identifier hs-var">newTVar</span></a><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#%24%21"><span class="hs-operator hs-var">$!</span></a><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Real.html#toInteger"><span class="hs-identifier hs-var">toInteger</span></a><span> </span><a href="#local-6989586621679031988"><span class="hs-identifier hs-var">i</span></a><span class="hs-special">)</span><span>
+</span><a name="line-61"></a><span>
+</span><a name="line-62"></a><span class="hs-comment">-- NOTE: we can't expose a good `TSem -&gt; STM Int' operation as blocked</span><span>
+</span><a name="line-63"></a><span class="hs-comment">-- 'waitTSem' aren't reliably reflected in a negative counter value.</span><span>
+</span><a name="line-64"></a><span>
+</span><a name="line-65"></a><span class="hs-comment">-- | Wait on 'TSem' (aka __P__ operation).</span><span>
+</span><a name="line-66"></a><span class="hs-comment">--</span><span>
+</span><a name="line-67"></a><span class="hs-comment">-- This operation acquires a unit from the semaphore (i.e. decreases</span><span>
+</span><a name="line-68"></a><span class="hs-comment">-- the internal counter) and blocks (via 'retry') if no units are</span><span>
+</span><a name="line-69"></a><span class="hs-comment">-- available (i.e. if the counter is /not/ positive).</span><span>
+</span><a name="line-70"></a><span class="hs-comment">--</span><span>
+</span><a name="line-71"></a><span class="hs-comment">-- @since 2.4.2</span><span>
+</span><a name="line-72"></a><span class="hs-identifier">waitTSem</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Control.Concurrent.STM.TSem.html#TSem"><span class="hs-identifier hs-type">TSem</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#STM"><span class="hs-identifier hs-type">STM</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-73"></a><a name="waitTSem"><a href="Control.Concurrent.STM.TSem.html#waitTSem"><span class="hs-identifier">waitTSem</span></a></a><span> </span><span class="hs-special">(</span><a href="Control.Concurrent.STM.TSem.html#TSem"><span class="hs-identifier hs-var">TSem</span></a><span> </span><a name="local-6989586621679032500"><a href="#local-6989586621679032500"><span class="hs-identifier">t</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-74"></a><span>  </span><a name="local-6989586621679032501"><a href="#local-6989586621679032501"><span class="hs-identifier">i</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#readTVar"><span class="hs-identifier hs-var">readTVar</span></a><span> </span><a href="#local-6989586621679032500"><span class="hs-identifier hs-var">t</span></a><span>
+</span><a name="line-75"></a><span>  </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#when"><span class="hs-identifier hs-var">when</span></a><span> </span><span class="hs-special">(</span><a href="#local-6989586621679032501"><span class="hs-identifier hs-var">i</span></a><span> </span><span class="hs-operator hs-var">&lt;=</span><span> </span><span class="hs-number">0</span><span class="hs-special">)</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#retry"><span class="hs-identifier hs-var">retry</span></a><span>
+</span><a name="line-76"></a><span>  </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#writeTVar"><span class="hs-identifier hs-var">writeTVar</span></a><span> </span><a href="#local-6989586621679032500"><span class="hs-identifier hs-var">t</span></a><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#%24%21"><span class="hs-operator hs-var">$!</span></a><span> </span><span class="hs-special">(</span><a href="#local-6989586621679032501"><span class="hs-identifier hs-var">i</span></a><span class="hs-glyph">-</span><span class="hs-number">1</span><span class="hs-special">)</span><span>
+</span><a name="line-77"></a><span>
+</span><a name="line-78"></a><span>
+</span><a name="line-79"></a><span class="hs-comment">-- Alternatively, the implementation could block (via 'retry') when</span><span>
+</span><a name="line-80"></a><span class="hs-comment">-- the next increment would overflow, i.e. testing for 'maxBound'</span><span>
+</span><a name="line-81"></a><span>
+</span><a name="line-82"></a><span class="hs-comment">-- | Signal a 'TSem' (aka __V__ operation).</span><span>
+</span><a name="line-83"></a><span class="hs-comment">--</span><span>
+</span><a name="line-84"></a><span class="hs-comment">-- This operation adds\/releases a unit back to the semaphore</span><span>
+</span><a name="line-85"></a><span class="hs-comment">-- (i.e. increments the internal counter).</span><span>
+</span><a name="line-86"></a><span class="hs-comment">--</span><span>
+</span><a name="line-87"></a><span class="hs-comment">-- @since 2.4.2</span><span>
+</span><a name="line-88"></a><span class="hs-identifier">signalTSem</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Control.Concurrent.STM.TSem.html#TSem"><span class="hs-identifier hs-type">TSem</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#STM"><span class="hs-identifier hs-type">STM</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-89"></a><a name="signalTSem"><a href="Control.Concurrent.STM.TSem.html#signalTSem"><span class="hs-identifier">signalTSem</span></a></a><span> </span><span class="hs-special">(</span><a href="Control.Concurrent.STM.TSem.html#TSem"><span class="hs-identifier hs-var">TSem</span></a><span> </span><a name="local-6989586621679032502"><a href="#local-6989586621679032502"><span class="hs-identifier">t</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-90"></a><span>  </span><a name="local-6989586621679032503"><a href="#local-6989586621679032503"><span class="hs-identifier">i</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#readTVar"><span class="hs-identifier hs-var">readTVar</span></a><span> </span><a href="#local-6989586621679032502"><span class="hs-identifier hs-var">t</span></a><span>
+</span><a name="line-91"></a><span>  </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#writeTVar"><span class="hs-identifier hs-var">writeTVar</span></a><span> </span><a href="#local-6989586621679032502"><span class="hs-identifier hs-var">t</span></a><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#%24%21"><span class="hs-operator hs-var">$!</span></a><span> </span><a href="#local-6989586621679032503"><span class="hs-identifier hs-var">i</span></a><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a><span class="hs-number">1</span><span>
+</span><a name="line-92"></a><span>
+</span><a name="line-93"></a><span>
+</span><a name="line-94"></a><span class="hs-comment">-- | Multi-signal a 'TSem'</span><span>
+</span><a name="line-95"></a><span class="hs-comment">--</span><span>
+</span><a name="line-96"></a><span class="hs-comment">-- This operation adds\/releases multiple units back to the semaphore</span><span>
+</span><a name="line-97"></a><span class="hs-comment">-- (i.e. increments the internal counter).</span><span>
+</span><a name="line-98"></a><span class="hs-comment">--</span><span>
+</span><a name="line-99"></a><span class="hs-comment">-- &gt; signalTSem == signalTSemN 1</span><span>
+</span><a name="line-100"></a><span class="hs-comment">--</span><span>
+</span><a name="line-101"></a><span class="hs-comment">-- @since 2.4.5</span><span>
+</span><a name="line-102"></a><span class="hs-identifier">signalTSemN</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier hs-type">Word.Word</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Control.Concurrent.STM.TSem.html#TSem"><span class="hs-identifier hs-type">TSem</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#STM"><span class="hs-identifier hs-type">STM</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-103"></a><a name="signalTSemN"><a href="Control.Concurrent.STM.TSem.html#signalTSemN"><span class="hs-identifier">signalTSemN</span></a></a><span> </span><span class="hs-number">0</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-104"></a><span class="hs-identifier">signalTSemN</span><span> </span><span class="hs-number">1</span><span> </span><a name="local-6989586621679032504"><a href="#local-6989586621679032504"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Control.Concurrent.STM.TSem.html#signalTSem"><span class="hs-identifier hs-var">signalTSem</span></a><span> </span><a href="#local-6989586621679032504"><span class="hs-identifier hs-var">s</span></a><span>
+</span><a name="line-105"></a><span class="hs-identifier">signalTSemN</span><span> </span><a name="local-6989586621679032505"><a href="#local-6989586621679032505"><span class="hs-identifier">n</span></a></a><span> </span><span class="hs-special">(</span><a href="Control.Concurrent.STM.TSem.html#TSem"><span class="hs-identifier hs-var">TSem</span></a><span> </span><a name="local-6989586621679032506"><a href="#local-6989586621679032506"><span class="hs-identifier">t</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-106"></a><span>  </span><a name="local-6989586621679032507"><a href="#local-6989586621679032507"><span class="hs-identifier">i</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#readTVar"><span class="hs-identifier hs-var">readTVar</span></a><span> </span><a href="#local-6989586621679032506"><span class="hs-identifier hs-var">t</span></a><span>
+</span><a name="line-107"></a><span>  </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Conc.Sync.html#writeTVar"><span class="hs-identifier hs-var">writeTVar</span></a><span> </span><a href="#local-6989586621679032506"><span class="hs-identifier hs-var">t</span></a><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#%24%21"><span class="hs-operator hs-var">$!</span></a><span> </span><a href="#local-6989586621679032507"><span class="hs-identifier hs-var">i</span></a><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Num.html#%2B"><span class="hs-operator hs-var">+</span></a><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Real.html#toInteger"><span class="hs-identifier hs-var">toInteger</span></a><span> </span><a href="#local-6989586621679032505"><span class="hs-identifier hs-var">n</span></a><span class="hs-special">)</span><span>
+</span><a name="line-108"></a></pre></body></html>

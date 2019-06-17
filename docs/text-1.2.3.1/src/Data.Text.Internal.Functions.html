@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP, DeriveDataTypeable #-}</span><span>
+</span><a name="line-2"></a><span>
+</span><a name="line-3"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- Module      : Data.Text.Internal.Functions</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- Copyright   : 2010 Bryan O'Sullivan</span><span>
+</span><a name="line-6"></a><span class="hs-comment">--</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- License     : BSD-style</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Maintainer  : bos@serpentine.com</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Stability   : experimental</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Portability : GHC</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- /Warning/: this is an internal module, and does not have a stable</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- API or name. Functions in this module may not check or enforce</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- preconditions expected by public modules. Use at your own risk!</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Useful functions.</span><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Text.Internal.Functions</span><span>
+</span><a name="line-19"></a><span>    </span><span class="hs-special">(</span><span>
+</span><a name="line-20"></a><span>      </span><a href="Data.Text.Internal.Functions.html#intersperse"><span class="hs-identifier hs-var">intersperse</span></a><span>
+</span><a name="line-21"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-22"></a><span>
+</span><a name="line-23"></a><span class="hs-comment">-- | A lazier version of Data.List.intersperse.  The other version</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- causes space leaks!</span><span>
+</span><a name="line-25"></a><span class="hs-identifier">intersperse</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679032631"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><a href="#local-6989586621679032631"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><a href="#local-6989586621679032631"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">]</span><span>
+</span><a name="line-26"></a><a name="intersperse"><a href="Data.Text.Internal.Functions.html#intersperse"><span class="hs-identifier">intersperse</span></a></a><span> </span><span class="hs-identifier">_</span><span>   </span><span class="hs-special">[</span><span class="hs-special">]</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a name="line-27"></a><span class="hs-identifier">intersperse</span><span> </span><a name="local-6989586621679032632"><a href="#local-6989586621679032632"><span class="hs-identifier">sep</span></a></a><span> </span><span class="hs-special">(</span><a name="local-6989586621679032633"><a href="#local-6989586621679032633"><span class="hs-identifier">x</span></a></a><span class="hs-glyph">:</span><a name="local-6989586621679032634"><a href="#local-6989586621679032634"><span class="hs-identifier">xs</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679032633"><span class="hs-identifier hs-var">x</span></a><span> </span><span class="hs-glyph">:</span><span> </span><a href="#local-6989586621679032635"><span class="hs-identifier hs-var">go</span></a><span> </span><a href="#local-6989586621679032634"><span class="hs-identifier hs-var">xs</span></a><span>
+</span><a name="line-28"></a><span>  </span><span class="hs-keyword">where</span><span>
+</span><a name="line-29"></a><span>    </span><a name="local-6989586621679032635"><a href="#local-6989586621679032635"><span class="hs-identifier">go</span></a></a><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a name="line-30"></a><span>    </span><span class="hs-identifier">go</span><span> </span><span class="hs-special">(</span><a name="local-6989586621679032636"><a href="#local-6989586621679032636"><span class="hs-identifier">y</span></a></a><span class="hs-glyph">:</span><a name="local-6989586621679032637"><a href="#local-6989586621679032637"><span class="hs-identifier">ys</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679032632"><span class="hs-identifier hs-var">sep</span></a><span> </span><span class="hs-glyph">:</span><span> </span><a href="#local-6989586621679032636"><span class="hs-identifier hs-var">y</span></a><span class="hs-glyph">:</span><span> </span><a href="#local-6989586621679032635"><span class="hs-identifier hs-var">go</span></a><span> </span><a href="#local-6989586621679032637"><span class="hs-identifier hs-var">ys</span></a><span>
+</span><a name="line-31"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">intersperse</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-32"></a></pre></body></html>

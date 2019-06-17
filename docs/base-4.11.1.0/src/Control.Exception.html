@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude, ExistentialQuantification #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Module      :  Control.Exception</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Portability :  non-portable (extended exceptions)</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- This module provides support for raising and catching both built-in</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- and user-defined exceptions.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- In addition to exceptions thrown by 'IO' operations, exceptions may</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- be thrown by pure code (imprecise exceptions) or by external events</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- (asynchronous exceptions), but may only be caught in the 'IO' monad.</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- For more details, see:</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">--  * /A semantics for imprecise exceptions/, by Simon Peyton Jones,</span><span>
+</span><a name="line-23"></a><span class="hs-comment">--    Alastair Reid, Tony Hoare, Simon Marlow, Fergus Henderson,</span><span>
+</span><a name="line-24"></a><span class="hs-comment">--    in /PLDI'99/.</span><span>
+</span><a name="line-25"></a><span class="hs-comment">--</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--  * /Asynchronous exceptions in Haskell/, by Simon Marlow, Simon Peyton</span><span>
+</span><a name="line-27"></a><span class="hs-comment">--    Jones, Andy Moran and John Reppy, in /PLDI'01/.</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-comment">--  * /An Extensible Dynamically-Typed Hierarchy of Exceptions/,</span><span>
+</span><a name="line-30"></a><span class="hs-comment">--    by Simon Marlow, in /Haskell '06/.</span><span>
+</span><a name="line-31"></a><span class="hs-comment">--</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-33"></a><span>
+</span><a name="line-34"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Control.Exception</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-35"></a><span>
+</span><a name="line-36"></a><span>        </span><span class="hs-comment">-- * The Exception type</span><span>
+</span><a name="line-37"></a><span>        </span><a href="GHC.Exception.html#SomeException"><span class="hs-identifier hs-type">SomeException</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-38"></a><span>        </span><a href="GHC.Exception.html#Exception"><span class="hs-identifier hs-type">Exception</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- class</span><span>
+</span><a name="line-39"></a><span>        </span><a href="GHC.IO.Exception.html#IOException"><span class="hs-identifier hs-type">IOException</span></a><span class="hs-special">,</span><span>            </span><span class="hs-comment">-- instance Eq, Ord, Show, Typeable, Exception</span><span>
+</span><a name="line-40"></a><span>        </span><a href="GHC.Exception.html#ArithException"><span class="hs-identifier hs-type">ArithException</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- instance Eq, Ord, Show, Typeable, Exception</span><span>
+</span><a name="line-41"></a><span>        </span><a href="GHC.IO.Exception.html#ArrayException"><span class="hs-identifier hs-type">ArrayException</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- instance Eq, Ord, Show, Typeable, Exception</span><span>
+</span><a name="line-42"></a><span>        </span><a href="GHC.IO.Exception.html#AssertionFailed"><span class="hs-identifier hs-type">AssertionFailed</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-43"></a><span>        </span><a href="GHC.IO.Exception.html#SomeAsyncException"><span class="hs-identifier hs-type">SomeAsyncException</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-44"></a><span>        </span><a href="GHC.IO.Exception.html#AsyncException"><span class="hs-identifier hs-type">AsyncException</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>     </span><span class="hs-comment">-- instance Eq, Ord, Show, Typeable, Exception</span><span>
+</span><a name="line-45"></a><span>        </span><a href="GHC.IO.Exception.html#asyncExceptionToException"><span class="hs-identifier hs-var">asyncExceptionToException</span></a><span class="hs-special">,</span><span> </span><a href="GHC.IO.Exception.html#asyncExceptionFromException"><span class="hs-identifier hs-var">asyncExceptionFromException</span></a><span class="hs-special">,</span><span>
+</span><a name="line-46"></a><span>
+</span><a name="line-47"></a><span>        </span><a href="Control.Exception.Base.html#NonTermination"><span class="hs-identifier hs-type">NonTermination</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-48"></a><span>        </span><a href="Control.Exception.Base.html#NestedAtomically"><span class="hs-identifier hs-type">NestedAtomically</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-49"></a><span>        </span><a href="GHC.IO.Exception.html#BlockedIndefinitelyOnMVar"><span class="hs-identifier hs-type">BlockedIndefinitelyOnMVar</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-50"></a><span>        </span><a href="GHC.IO.Exception.html#BlockedIndefinitelyOnSTM"><span class="hs-identifier hs-type">BlockedIndefinitelyOnSTM</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-51"></a><span>        </span><a href="GHC.IO.Exception.html#AllocationLimitExceeded"><span class="hs-identifier hs-type">AllocationLimitExceeded</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-52"></a><span>        </span><a href="GHC.IO.Exception.html#CompactionFailed"><span class="hs-identifier hs-type">CompactionFailed</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-53"></a><span>        </span><a href="GHC.IO.Exception.html#Deadlock"><span class="hs-identifier hs-type">Deadlock</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-54"></a><span>        </span><a href="Control.Exception.Base.html#NoMethodError"><span class="hs-identifier hs-type">NoMethodError</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-55"></a><span>        </span><a href="Control.Exception.Base.html#PatternMatchFail"><span class="hs-identifier hs-type">PatternMatchFail</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-56"></a><span>        </span><a href="Control.Exception.Base.html#RecConError"><span class="hs-identifier hs-type">RecConError</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-57"></a><span>        </span><a href="Control.Exception.Base.html#RecSelError"><span class="hs-identifier hs-type">RecSelError</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-58"></a><span>        </span><a href="Control.Exception.Base.html#RecUpdError"><span class="hs-identifier hs-type">RecUpdError</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-59"></a><span>        </span><a href="GHC.Exception.html#ErrorCall"><span class="hs-identifier hs-type">ErrorCall</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-60"></a><span>        </span><a href="Control.Exception.Base.html#TypeError"><span class="hs-identifier hs-type">TypeError</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-61"></a><span>
+</span><a name="line-62"></a><span>        </span><span class="hs-comment">-- * Throwing exceptions</span><span>
+</span><a name="line-63"></a><span>        </span><a href="GHC.Exception.html#throw"><span class="hs-identifier hs-var">throw</span></a><span class="hs-special">,</span><span>
+</span><a name="line-64"></a><span>        </span><a href="GHC.IO.html#throwIO"><span class="hs-identifier hs-var">throwIO</span></a><span class="hs-special">,</span><span>
+</span><a name="line-65"></a><span>        </span><a href="GHC.IO.Exception.html#ioError"><span class="hs-identifier hs-var">ioError</span></a><span class="hs-special">,</span><span>
+</span><a name="line-66"></a><span>        </span><a href="GHC.Conc.Sync.html#throwTo"><span class="hs-identifier hs-var">throwTo</span></a><span class="hs-special">,</span><span>
+</span><a name="line-67"></a><span>
+</span><a name="line-68"></a><span>        </span><span class="hs-comment">-- * Catching Exceptions</span><span>
+</span><a name="line-69"></a><span>
+</span><a name="line-70"></a><span>        </span><span class="hs-comment">-- $catching</span><span>
+</span><a name="line-71"></a><span>
+</span><a name="line-72"></a><span>        </span><span class="hs-comment">-- ** Catching all exceptions</span><span>
+</span><a name="line-73"></a><span>
+</span><a name="line-74"></a><span>        </span><span class="hs-comment">-- $catchall</span><span>
+</span><a name="line-75"></a><span>
+</span><a name="line-76"></a><span>        </span><span class="hs-comment">-- ** The @catch@ functions</span><span>
+</span><a name="line-77"></a><span>        </span><a href="GHC.IO.html#catch"><span class="hs-identifier hs-var">catch</span></a><span class="hs-special">,</span><span>
+</span><a name="line-78"></a><span>        </span><a href="Control.Exception.html#catches"><span class="hs-identifier hs-var">catches</span></a><span class="hs-special">,</span><span> </span><a href="Control.Exception.html#Handler"><span class="hs-identifier hs-type">Handler</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-79"></a><span>        </span><a href="Control.Exception.Base.html#catchJust"><span class="hs-identifier hs-var">catchJust</span></a><span class="hs-special">,</span><span>
+</span><a name="line-80"></a><span>
+</span><a name="line-81"></a><span>        </span><span class="hs-comment">-- ** The @handle@ functions</span><span>
+</span><a name="line-82"></a><span>        </span><a href="Control.Exception.Base.html#handle"><span class="hs-identifier hs-var">handle</span></a><span class="hs-special">,</span><span>
+</span><a name="line-83"></a><span>        </span><a href="Control.Exception.Base.html#handleJust"><span class="hs-identifier hs-var">handleJust</span></a><span class="hs-special">,</span><span>
+</span><a name="line-84"></a><span>
+</span><a name="line-85"></a><span>        </span><span class="hs-comment">-- ** The @try@ functions</span><span>
+</span><a name="line-86"></a><span>        </span><a href="Control.Exception.Base.html#try"><span class="hs-identifier hs-var">try</span></a><span class="hs-special">,</span><span>
+</span><a name="line-87"></a><span>        </span><a href="Control.Exception.Base.html#tryJust"><span class="hs-identifier hs-var">tryJust</span></a><span class="hs-special">,</span><span>
+</span><a name="line-88"></a><span>
+</span><a name="line-89"></a><span>        </span><span class="hs-comment">-- ** The @evaluate@ function</span><span>
+</span><a name="line-90"></a><span>        </span><a href="GHC.IO.html#evaluate"><span class="hs-identifier hs-var">evaluate</span></a><span class="hs-special">,</span><span>
+</span><a name="line-91"></a><span>
+</span><a name="line-92"></a><span>        </span><span class="hs-comment">-- ** The @mapException@ function</span><span>
+</span><a name="line-93"></a><span>        </span><a href="Control.Exception.Base.html#mapException"><span class="hs-identifier hs-var">mapException</span></a><span class="hs-special">,</span><span>
+</span><a name="line-94"></a><span>
+</span><a name="line-95"></a><span>        </span><span class="hs-comment">-- * Asynchronous Exceptions</span><span>
+</span><a name="line-96"></a><span>
+</span><a name="line-97"></a><span>        </span><span class="hs-comment">-- $async</span><span>
+</span><a name="line-98"></a><span>
+</span><a name="line-99"></a><span>        </span><span class="hs-comment">-- ** Asynchronous exception control</span><span>
+</span><a name="line-100"></a><span>
+</span><a name="line-101"></a><span>        </span><span class="hs-comment">-- |The following functions allow a thread to control delivery of</span><span>
+</span><a name="line-102"></a><span>        </span><span class="hs-comment">-- asynchronous exceptions during a critical region.</span><span>
+</span><a name="line-103"></a><span>
+</span><a name="line-104"></a><span>        </span><a href="GHC.IO.html#mask"><span class="hs-identifier hs-var">mask</span></a><span class="hs-special">,</span><span>
+</span><a name="line-105"></a><span>        </span><a href="GHC.IO.html#mask_"><span class="hs-identifier hs-var">mask_</span></a><span class="hs-special">,</span><span>
+</span><a name="line-106"></a><span>        </span><a href="GHC.IO.html#uninterruptibleMask"><span class="hs-identifier hs-var">uninterruptibleMask</span></a><span class="hs-special">,</span><span>
+</span><a name="line-107"></a><span>        </span><a href="GHC.IO.html#uninterruptibleMask_"><span class="hs-identifier hs-var">uninterruptibleMask_</span></a><span class="hs-special">,</span><span>
+</span><a name="line-108"></a><span>        </span><a href="GHC.IO.html#MaskingState"><span class="hs-identifier hs-type">MaskingState</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-109"></a><span>        </span><a href="GHC.IO.html#getMaskingState"><span class="hs-identifier hs-var">getMaskingState</span></a><span class="hs-special">,</span><span>
+</span><a name="line-110"></a><span>        </span><a href="GHC.IO.html#interruptible"><span class="hs-identifier hs-var">interruptible</span></a><span class="hs-special">,</span><span>
+</span><a name="line-111"></a><span>        </span><a href="Control.Exception.html#allowInterrupt"><span class="hs-identifier hs-var">allowInterrupt</span></a><span class="hs-special">,</span><span>
+</span><a name="line-112"></a><span>
+</span><a name="line-113"></a><span>        </span><span class="hs-comment">-- *** Applying @mask@ to an exception handler</span><span>
+</span><a name="line-114"></a><span>
+</span><a name="line-115"></a><span>        </span><span class="hs-comment">-- $block_handler</span><span>
+</span><a name="line-116"></a><span>
+</span><a name="line-117"></a><span>        </span><span class="hs-comment">-- *** Interruptible operations</span><span>
+</span><a name="line-118"></a><span>
+</span><a name="line-119"></a><span>        </span><span class="hs-comment">-- $interruptible</span><span>
+</span><a name="line-120"></a><span>
+</span><a name="line-121"></a><span>        </span><span class="hs-comment">-- * Assertions</span><span>
+</span><a name="line-122"></a><span>
+</span><a name="line-123"></a><span>        </span><a href="GHC.Base.html#assert"><span class="hs-identifier hs-var">assert</span></a><span class="hs-special">,</span><span>
+</span><a name="line-124"></a><span>
+</span><a name="line-125"></a><span>        </span><span class="hs-comment">-- * Utilities</span><span>
+</span><a name="line-126"></a><span>
+</span><a name="line-127"></a><span>        </span><a href="Control.Exception.Base.html#bracket"><span class="hs-identifier hs-var">bracket</span></a><span class="hs-special">,</span><span>
+</span><a name="line-128"></a><span>        </span><a href="Control.Exception.Base.html#bracket_"><span class="hs-identifier hs-var">bracket_</span></a><span class="hs-special">,</span><span>
+</span><a name="line-129"></a><span>        </span><a href="Control.Exception.Base.html#bracketOnError"><span class="hs-identifier hs-var">bracketOnError</span></a><span class="hs-special">,</span><span>
+</span><a name="line-130"></a><span>
+</span><a name="line-131"></a><span>        </span><a href="Control.Exception.Base.html#finally"><span class="hs-identifier hs-var">finally</span></a><span class="hs-special">,</span><span>
+</span><a name="line-132"></a><span>        </span><a href="Control.Exception.Base.html#onException"><span class="hs-identifier hs-var">onException</span></a><span class="hs-special">,</span><span>
+</span><a name="line-133"></a><span>
+</span><a name="line-134"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-135"></a><span>
+</span><a name="line-136"></a><span class="hs-keyword">import</span><span> </span><a href="Control.Exception.Base.html"><span class="hs-identifier">Control.Exception.Base</span></a><span>
+</span><a name="line-137"></a><span>
+</span><a name="line-138"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-139"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.IO.html"><span class="hs-identifier">GHC.IO</span></a><span> </span><span class="hs-special">(</span><a href="GHC.IO.html#interruptible"><span class="hs-identifier hs-var">interruptible</span></a><span class="hs-special">)</span><span>
+</span><a name="line-140"></a><span>
+</span><a name="line-141"></a><span class="hs-comment">-- | You need this when using 'catches'.</span><span>
+</span><a name="line-142"></a><span class="hs-keyword">data</span><span> </span><a name="Handler"><a href="Control.Exception.html#Handler"><span class="hs-identifier">Handler</span></a></a><span> </span><a name="local-6989586621679287160"><a href="#local-6989586621679287160"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">forall</span><span> </span><a name="local-6989586621679287161"><a href="#local-6989586621679287161"><span class="hs-identifier">e</span></a></a><span> </span><span class="hs-operator">.</span><span> </span><a href="GHC.Exception.html#Exception"><span class="hs-identifier hs-type">Exception</span></a><span> </span><a href="#local-6989586621679287161"><span class="hs-identifier hs-type">e</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a name="Handler"><a href="Control.Exception.html#Handler"><span class="hs-identifier">Handler</span></a></a><span> </span><span class="hs-special">(</span><a href="#local-6989586621679287161"><span class="hs-identifier hs-type">e</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><a href="#local-6989586621679287160"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span>
+</span><a name="line-143"></a><span>
+</span><a name="line-144"></a><span class="hs-comment">-- | @since 4.6.0.0</span><span>
+</span><a name="line-145"></a><span class="hs-keyword">instance</span><span> </span><a href="GHC.Base.html#Functor"><span class="hs-identifier hs-type">Functor</span></a><span> </span><a href="Control.Exception.html#Handler"><span class="hs-identifier hs-type">Handler</span></a><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-146"></a><span>     </span><a name="local-3458764513820541101"><a href="GHC.Base.html#fmap"><span class="hs-identifier">fmap</span></a></a><span> </span><a name="local-6989586621679287162"><a href="#local-6989586621679287162"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-special">(</span><a href="Control.Exception.html#Handler"><span class="hs-identifier hs-var">Handler</span></a><span> </span><a name="local-6989586621679287163"><a href="#local-6989586621679287163"><span class="hs-identifier">h</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="Control.Exception.html#Handler"><span class="hs-identifier hs-var">Handler</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#fmap"><span class="hs-identifier hs-var">fmap</span></a><span> </span><a href="#local-6989586621679287162"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="GHC.Base.html#."><span class="hs-operator hs-var">.</span></a><span> </span><a href="#local-6989586621679287163"><span class="hs-identifier hs-var">h</span></a><span class="hs-special">)</span><span>
+</span><a name="line-147"></a><span>
+</span><a name="line-148"></a><span class="hs-comment">{- |
+Sometimes you want to catch two different sorts of exception. You could
+do something like
+
+&gt; f = expr `catch` \ (ex :: ArithException) -&gt; handleArith ex
+&gt;          `catch` \ (ex :: IOException)    -&gt; handleIO    ex
+
+However, there are a couple of problems with this approach. The first is
+that having two exception handlers is inefficient. However, the more
+serious issue is that the second exception handler will catch exceptions
+in the first, e.g. in the example above, if @handleArith@ throws an
+@IOException@ then the second exception handler will catch it.
+
+Instead, we provide a function 'catches', which would be used thus:
+
+&gt; f = expr `catches` [Handler (\ (ex :: ArithException) -&gt; handleArith ex),
+&gt;                     Handler (\ (ex :: IOException)    -&gt; handleIO    ex)]
+-}</span><span>
+</span><a name="line-166"></a><span class="hs-identifier">catches</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><a href="#local-6989586621679287165"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><a href="Control.Exception.html#Handler"><span class="hs-identifier hs-type">Handler</span></a><span> </span><a href="#local-6989586621679287165"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><a href="#local-6989586621679287165"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-167"></a><a name="catches"><a href="Control.Exception.html#catches"><span class="hs-identifier">catches</span></a></a><span> </span><a name="local-6989586621679287166"><a href="#local-6989586621679287166"><span class="hs-identifier">io</span></a></a><span> </span><a name="local-6989586621679287167"><a href="#local-6989586621679287167"><span class="hs-identifier">handlers</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679287166"><span class="hs-identifier hs-var">io</span></a><span> </span><span class="hs-special">`</span><a href="GHC.IO.html#catch"><span class="hs-identifier hs-var">catch</span></a><span class="hs-special">`</span><span> </span><a href="Control.Exception.html#catchesHandler"><span class="hs-identifier hs-var">catchesHandler</span></a><span> </span><a href="#local-6989586621679287167"><span class="hs-identifier hs-var">handlers</span></a><span>
+</span><a name="line-168"></a><span>
+</span><a name="line-169"></a><span class="hs-identifier">catchesHandler</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><a href="Control.Exception.html#Handler"><span class="hs-identifier hs-type">Handler</span></a><span> </span><a href="#local-6989586621679287164"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Exception.html#SomeException"><span class="hs-identifier hs-type">SomeException</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><a href="#local-6989586621679287164"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-170"></a><a name="catchesHandler"><a href="Control.Exception.html#catchesHandler"><span class="hs-identifier">catchesHandler</span></a></a><span> </span><a name="local-6989586621679287168"><a href="#local-6989586621679287168"><span class="hs-identifier">handlers</span></a></a><span> </span><a name="local-6989586621679287169"><a href="#local-6989586621679287169"><span class="hs-identifier">e</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Base.html#foldr"><span class="hs-identifier hs-var">foldr</span></a><span> </span><a href="#local-6989586621679287170"><span class="hs-identifier hs-var">tryHandler</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Exception.html#throw"><span class="hs-identifier hs-var">throw</span></a><span> </span><a href="#local-6989586621679287169"><span class="hs-identifier hs-var">e</span></a><span class="hs-special">)</span><span> </span><a href="#local-6989586621679287168"><span class="hs-identifier hs-var">handlers</span></a><span>
+</span><a name="line-171"></a><span>    </span><span class="hs-keyword">where</span><span> </span><a name="local-6989586621679287170"><a href="#local-6989586621679287170"><span class="hs-identifier">tryHandler</span></a></a><span> </span><span class="hs-special">(</span><a href="Control.Exception.html#Handler"><span class="hs-identifier hs-var">Handler</span></a><span> </span><a name="local-6989586621679287171"><a href="#local-6989586621679287171"><span class="hs-identifier">handler</span></a></a><span class="hs-special">)</span><span> </span><a name="local-6989586621679287172"><a href="#local-6989586621679287172"><span class="hs-identifier">res</span></a></a><span>
+</span><a name="line-172"></a><span>              </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><a href="GHC.Exception.html#fromException"><span class="hs-identifier hs-var">fromException</span></a><span> </span><a href="#local-6989586621679287169"><span class="hs-identifier hs-var">e</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-173"></a><span>                </span><a href="GHC.Base.html#Just"><span class="hs-identifier hs-var">Just</span></a><span> </span><a name="local-6989586621679287173"><a href="#local-6989586621679287173"><span class="hs-identifier">e'</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679287171"><span class="hs-identifier hs-var">handler</span></a><span> </span><a href="#local-6989586621679287173"><span class="hs-identifier hs-var">e'</span></a><span>
+</span><a name="line-174"></a><span>                </span><a href="GHC.Base.html#Nothing"><span class="hs-identifier hs-var">Nothing</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679287172"><span class="hs-identifier hs-var">res</span></a><span>
+</span><a name="line-175"></a><span>
+</span><a name="line-176"></a><span class="hs-comment">-- -----------------------------------------------------------------------------</span><span>
+</span><a name="line-177"></a><span class="hs-comment">-- Catching exceptions</span><span>
+</span><a name="line-178"></a><span>
+</span><a name="line-179"></a><span class="hs-comment">{- $catching
+
+There are several functions for catching and examining
+exceptions; all of them may only be used from within the
+'IO' monad.
+
+Here's a rule of thumb for deciding which catch-style function to
+use:
+
+ * If you want to do some cleanup in the event that an exception
+   is raised, use 'finally', 'bracket' or 'onException'.
+
+ * To recover after an exception and do something else, the best
+   choice is to use one of the 'try' family.
+
+ * ... unless you are recovering from an asynchronous exception, in which
+   case use 'catch' or 'catchJust'.
+
+The difference between using 'try' and 'catch' for recovery is that in
+'catch' the handler is inside an implicit 'mask' (see \&quot;Asynchronous
+Exceptions\&quot;) which is important when catching asynchronous
+exceptions, but when catching other kinds of exception it is
+unnecessary.  Furthermore it is possible to accidentally stay inside
+the implicit 'mask' by tail-calling rather than returning from the
+handler, which is why we recommend using 'try' rather than 'catch' for
+ordinary exception recovery.
+
+A typical use of 'tryJust' for recovery looks like this:
+
+&gt;  do r &lt;- tryJust (guard . isDoesNotExistError) $ getEnv &quot;HOME&quot;
+&gt;     case r of
+&gt;       Left  e    -&gt; ...
+&gt;       Right home -&gt; ...
+
+-}</span><span>
+</span><a name="line-214"></a><span>
+</span><a name="line-215"></a><span class="hs-comment">-- -----------------------------------------------------------------------------</span><span>
+</span><a name="line-216"></a><span class="hs-comment">-- Asynchronous exceptions</span><span>
+</span><a name="line-217"></a><span>
+</span><a name="line-218"></a><span class="hs-comment">-- | When invoked inside 'mask', this function allows a masked</span><span>
+</span><a name="line-219"></a><span class="hs-comment">-- asynchronous exception to be raised, if one exists.  It is</span><span>
+</span><a name="line-220"></a><span class="hs-comment">-- equivalent to performing an interruptible operation (see</span><span>
+</span><a name="line-221"></a><span class="hs-comment">-- #interruptible), but does not involve any actual blocking.</span><span>
+</span><a name="line-222"></a><span class="hs-comment">--</span><span>
+</span><a name="line-223"></a><span class="hs-comment">-- When called outside 'mask', or inside 'uninterruptibleMask', this</span><span>
+</span><a name="line-224"></a><span class="hs-comment">-- function has no effect.</span><span>
+</span><a name="line-225"></a><span class="hs-comment">--</span><span>
+</span><a name="line-226"></a><span class="hs-comment">-- @since 4.4.0.0</span><span>
+</span><a name="line-227"></a><span class="hs-identifier">allowInterrupt</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-228"></a><a name="allowInterrupt"><a href="Control.Exception.html#allowInterrupt"><span class="hs-identifier">allowInterrupt</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.html#interruptible"><span class="hs-identifier hs-var">interruptible</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-229"></a><span>
+</span><a name="line-230"></a><span class="hs-comment">{- $async
+
+ #AsynchronousExceptions# Asynchronous exceptions are so-called because they arise due to
+external influences, and can be raised at any point during execution.
+'StackOverflow' and 'HeapOverflow' are two examples of
+system-generated asynchronous exceptions.
+
+The primary source of asynchronous exceptions, however, is
+'throwTo':
+
+&gt;  throwTo :: ThreadId -&gt; Exception -&gt; IO ()
+
+'throwTo' (also 'Control.Concurrent.killThread') allows one
+running thread to raise an arbitrary exception in another thread.  The
+exception is therefore asynchronous with respect to the target thread,
+which could be doing anything at the time it receives the exception.
+Great care should be taken with asynchronous exceptions; it is all too
+easy to introduce race conditions by the over zealous use of
+'throwTo'.
+-}</span><span>
+</span><a name="line-250"></a><span>
+</span><a name="line-251"></a><span class="hs-comment">{- $block_handler
+There\'s an implied 'mask' around every exception handler in a call
+to one of the 'catch' family of functions.  This is because that is
+what you want most of the time - it eliminates a common race condition
+in starting an exception handler, because there may be no exception
+handler on the stack to handle another exception if one arrives
+immediately.  If asynchronous exceptions are masked on entering the
+handler, though, we have time to install a new exception handler
+before being interrupted.  If this weren\'t the default, one would have
+to write something like
+
+&gt;      mask $ \restore -&gt;
+&gt;           catch (restore (...))
+&gt;                 (\e -&gt; handler)
+
+If you need to unmask asynchronous exceptions again in the exception
+handler, 'restore' can be used there too.
+
+Note that 'try' and friends /do not/ have a similar default, because
+there is no exception handler in this case.  Don't use 'try' for
+recovering from an asynchronous exception.
+-}</span><span>
+</span><a name="line-273"></a><span>
+</span><a name="line-274"></a><span class="hs-comment">{- $interruptible
+
+ #interruptible#
+Some operations are /interruptible/, which means that they can receive
+asynchronous exceptions even in the scope of a 'mask'.  Any function
+which may itself block is defined as interruptible; this includes
+'Control.Concurrent.MVar.takeMVar'
+(but not 'Control.Concurrent.MVar.tryTakeMVar'),
+and most operations which perform
+some I\/O with the outside world.  The reason for having
+interruptible operations is so that we can write things like
+
+&gt;      mask $ \restore -&gt; do
+&gt;         a &lt;- takeMVar m
+&gt;         catch (restore (...))
+&gt;               (\e -&gt; ...)
+
+if the 'Control.Concurrent.MVar.takeMVar' was not interruptible,
+then this particular
+combination could lead to deadlock, because the thread itself would be
+blocked in a state where it can\'t receive any asynchronous exceptions.
+With 'Control.Concurrent.MVar.takeMVar' interruptible, however, we can be
+safe in the knowledge that the thread can receive exceptions right up
+until the point when the 'Control.Concurrent.MVar.takeMVar' succeeds.
+Similar arguments apply for other interruptible operations like
+'System.IO.openFile'.
+
+It is useful to think of 'mask' not as a way to completely prevent
+asynchronous exceptions, but as a way to switch from asynchronous mode
+to polling mode.  The main difficulty with asynchronous
+exceptions is that they normally can occur anywhere, but within a
+'mask' an asynchronous exception is only raised by operations that are
+interruptible (or call other interruptible operations).  In many cases
+these operations may themselves raise exceptions, such as I\/O errors,
+so the caller will usually be prepared to handle exceptions arising from the
+operation anyway.  To perform an explicit poll for asynchronous exceptions
+inside 'mask', use 'allowInterrupt'.
+
+Sometimes it is too onerous to handle exceptions in the middle of a
+critical piece of stateful code.  There are three ways to handle this
+kind of situation:
+
+ * Use STM.  Since a transaction is always either completely executed
+   or not at all, transactions are a good way to maintain invariants
+   over state in the presence of asynchronous (and indeed synchronous)
+   exceptions.
+
+ * Use 'mask', and avoid interruptible operations.  In order to do
+   this, we have to know which operations are interruptible.  It is
+   impossible to know for any given library function whether it might
+   invoke an interruptible operation internally; so instead we give a
+   list of guaranteed-not-to-be-interruptible operations below.
+
+ * Use 'uninterruptibleMask'.  This is generally not recommended,
+   unless you can guarantee that any interruptible operations invoked
+   during the scope of 'uninterruptibleMask' can only ever block for
+   a short time.  Otherwise, 'uninterruptibleMask' is a good way to
+   make your program deadlock and be unresponsive to user interrupts.
+
+The following operations are guaranteed not to be interruptible:
+
+ * operations on 'IORef' from &quot;Data.IORef&quot;
+
+ * STM transactions that do not use 'retry'
+
+ * everything from the @Foreign@ modules
+
+ * everything from @Control.Exception@ except for 'throwTo'
+
+ * @tryTakeMVar@, @tryPutMVar@, @isEmptyMVar@
+
+ * @takeMVar@ if the @MVar@ is definitely full, and conversely @putMVar@ if the @MVar@ is definitely empty
+
+ * @newEmptyMVar@, @newMVar@
+
+ * @forkIO@, @forkIOUnmasked@, @myThreadId@
+
+-}</span><span>
+</span><a name="line-352"></a><span>
+</span><a name="line-353"></a><span class="hs-comment">{- $catchall
+
+It is possible to catch all exceptions, by using the type 'SomeException':
+
+&gt; catch f (\e -&gt; ... (e :: SomeException) ...)
+
+HOWEVER, this is normally not what you want to do!
+
+For example, suppose you want to read a file, but if it doesn't exist
+then continue as if it contained \&quot;\&quot;.  You might be tempted to just
+catch all exceptions and return \&quot;\&quot; in the handler. However, this has
+all sorts of undesirable consequences.  For example, if the user
+presses control-C at just the right moment then the 'UserInterrupt'
+exception will be caught, and the program will continue running under
+the belief that the file contains \&quot;\&quot;.  Similarly, if another thread
+tries to kill the thread reading the file then the 'ThreadKilled'
+exception will be ignored.
+
+Instead, you should only catch exactly the exceptions that you really
+want. In this case, this would likely be more specific than even
+\&quot;any IO exception\&quot;; a permissions error would likely also want to be
+handled differently. Instead, you would probably want something like:
+
+&gt; e &lt;- tryJust (guard . isDoesNotExistError) (readFile f)
+&gt; let str = either (const &quot;&quot;) id e
+
+There are occasions when you really do need to catch any sort of
+exception. However, in most cases this is just so you can do some
+cleaning up; you aren't actually interested in the exception itself.
+For example, if you open a file then you want to close it again,
+whether processing the file executes normally or throws an exception.
+However, in these cases you can use functions like 'bracket', 'finally'
+and 'onException', which never actually pass you the exception, but
+just call the cleanup functions at the appropriate points.
+
+But sometimes you really do need to catch any exception, and actually
+see what the exception is. One example is at the very top-level of a
+program, you may wish to catch any exception, print it to a logfile or
+the screen, and then exit gracefully. For these cases, you can use
+'catch' (or one of the other exception-catching functions) with the
+'SomeException' type.
+-}</span><span>
+</span><a name="line-395"></a><span>
+</span><a name="line-396"></a></pre></body></html>

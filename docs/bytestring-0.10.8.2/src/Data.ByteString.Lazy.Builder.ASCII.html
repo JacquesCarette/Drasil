@@ -1,0 +1,25 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
+</span><a name="line-2"></a><span class="hs-comment">-- | We decided to rename the Builder modules. Sorry about that.</span><span>
+</span><a name="line-3"></a><span class="hs-comment">--</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- In additon, the ASCII module has been merged into the main</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- &quot;Data.ByteString.Builder&quot; module.</span><span>
+</span><a name="line-6"></a><span class="hs-comment">--</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- The old names will hang about for at least once release cycle before we</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- deprecate them and then later remove them.</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.ByteString.Lazy.Builder.ASCII</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-11"></a><span>  </span><span class="hs-keyword">module</span><span> </span><a href="Data.ByteString.Builder.html"><span class="hs-identifier">Data.ByteString.Builder</span></a><span>
+</span><a name="line-12"></a><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Lazy.Builder.ASCII.html#byteStringHexFixed"><span class="hs-identifier hs-var">byteStringHexFixed</span></a><span>
+</span><a name="line-13"></a><span class="hs-special">,</span><span> </span><a href="Data.ByteString.Lazy.Builder.ASCII.html#lazyByteStringHexFixed"><span class="hs-identifier hs-var">lazyByteStringHexFixed</span></a><span>
+</span><a name="line-14"></a><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-15"></a><span>
+</span><a name="line-16"></a><span class="hs-keyword">import</span><span> </span><a href="Data.ByteString.Builder.html"><span class="hs-identifier">Data.ByteString.Builder</span></a><span>
+</span><a name="line-17"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="Data.ByteString.html"><span class="hs-identifier">Data.ByteString</span></a><span>      </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">S</span><span>
+</span><a name="line-18"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="Data.ByteString.Lazy.html"><span class="hs-identifier">Data.ByteString.Lazy</span></a><span> </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">L</span><span>
+</span><a name="line-19"></a><span>
+</span><a name="line-20"></a><span class="hs-identifier">byteStringHexFixed</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Data.ByteString.Internal.html#ByteString"><span class="hs-identifier hs-type">S.ByteString</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-21"></a><a name="byteStringHexFixed"><a href="Data.ByteString.Lazy.Builder.ASCII.html#byteStringHexFixed"><span class="hs-identifier">byteStringHexFixed</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.ASCII.html#byteStringHex"><span class="hs-identifier hs-var">byteStringHex</span></a><span>
+</span><a name="line-22"></a><span>
+</span><a name="line-23"></a><span class="hs-identifier">lazyByteStringHexFixed</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Data.ByteString.Lazy.Internal.html#ByteString"><span class="hs-identifier hs-type">L.ByteString</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.ByteString.Builder.Internal.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-24"></a><a name="lazyByteStringHexFixed"><a href="Data.ByteString.Lazy.Builder.ASCII.html#lazyByteStringHexFixed"><span class="hs-identifier">lazyByteStringHexFixed</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.ByteString.Builder.ASCII.html#lazyByteStringHex"><span class="hs-identifier hs-var">lazyByteStringHex</span></a><span>
+</span><a name="line-25"></a></pre></body></html>

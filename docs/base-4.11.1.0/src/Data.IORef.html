@@ -1,0 +1,156 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude, MagicHash, UnboxedTuples #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Module      :  Data.IORef</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- </span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Mutable references in the IO monad.</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.IORef</span><span>
+</span><a name="line-19"></a><span>  </span><span class="hs-special">(</span><span>
+</span><a name="line-20"></a><span>        </span><span class="hs-comment">-- * IORefs</span><span>
+</span><a name="line-21"></a><span>        </span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span class="hs-special">,</span><span>                </span><span class="hs-comment">-- abstract, instance of: Eq, Typeable</span><span>
+</span><a name="line-22"></a><span>        </span><a href="GHC.IORef.html#newIORef"><span class="hs-identifier hs-var">newIORef</span></a><span class="hs-special">,</span><span>
+</span><a name="line-23"></a><span>        </span><a href="GHC.IORef.html#readIORef"><span class="hs-identifier hs-var">readIORef</span></a><span class="hs-special">,</span><span>
+</span><a name="line-24"></a><span>        </span><a href="GHC.IORef.html#writeIORef"><span class="hs-identifier hs-var">writeIORef</span></a><span class="hs-special">,</span><span>
+</span><a name="line-25"></a><span>        </span><a href="Data.IORef.html#modifyIORef"><span class="hs-identifier hs-var">modifyIORef</span></a><span class="hs-special">,</span><span>
+</span><a name="line-26"></a><span>        </span><a href="Data.IORef.html#modifyIORef%27"><span class="hs-identifier hs-var">modifyIORef'</span></a><span class="hs-special">,</span><span>
+</span><a name="line-27"></a><span>        </span><a href="Data.IORef.html#atomicModifyIORef"><span class="hs-identifier hs-var">atomicModifyIORef</span></a><span class="hs-special">,</span><span>
+</span><a name="line-28"></a><span>        </span><a href="Data.IORef.html#atomicModifyIORef%27"><span class="hs-identifier hs-var">atomicModifyIORef'</span></a><span class="hs-special">,</span><span>
+</span><a name="line-29"></a><span>        </span><a href="Data.IORef.html#atomicWriteIORef"><span class="hs-identifier hs-var">atomicWriteIORef</span></a><span class="hs-special">,</span><span>
+</span><a name="line-30"></a><span>        </span><a href="Data.IORef.html#mkWeakIORef"><span class="hs-identifier hs-var">mkWeakIORef</span></a><span class="hs-special">,</span><span>
+</span><a name="line-31"></a><span>        </span><span class="hs-comment">-- ** Memory Model</span><span>
+</span><a name="line-32"></a><span>
+</span><a name="line-33"></a><span>        </span><span class="hs-comment">-- $memmodel</span><span>
+</span><a name="line-34"></a><span>
+</span><a name="line-35"></a><span>        </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-36"></a><span>
+</span><a name="line-37"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-38"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.STRef.html"><span class="hs-identifier">GHC.STRef</span></a><span>
+</span><a name="line-39"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.IORef.html"><span class="hs-identifier">GHC.IORef</span></a><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><a href="GHC.IORef.html#atomicModifyIORef"><span class="hs-identifier hs-var">atomicModifyIORef</span></a><span class="hs-special">)</span><span>
+</span><a name="line-40"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="GHC.IORef.html"><span class="hs-identifier">GHC.IORef</span></a><span>
+</span><a name="line-41"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Weak.html"><span class="hs-identifier">GHC.Weak</span></a><span>
+</span><a name="line-42"></a><span>
+</span><a name="line-43"></a><span class="hs-comment">-- |Make a 'Weak' pointer to an 'IORef', using the second argument as a finalizer</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- to run when 'IORef' is garbage-collected</span><span>
+</span><a name="line-45"></a><span class="hs-identifier">mkWeakIORef</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><a href="#local-6989586621679214581"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Weak.html#Weak"><span class="hs-identifier hs-type">Weak</span></a><span> </span><span class="hs-special">(</span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><a href="#local-6989586621679214581"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-46"></a><a name="mkWeakIORef"><a href="Data.IORef.html#mkWeakIORef"><span class="hs-identifier">mkWeakIORef</span></a></a><span> </span><a name="local-6989586621679214582"><a href="#local-6989586621679214582"><span class="hs-identifier">r</span></a></a><span class="hs-glyph">@</span><span class="hs-special">(</span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-var">IORef</span></a><span> </span><span class="hs-special">(</span><a href="GHC.STRef.html#STRef"><span class="hs-identifier hs-var">STRef</span></a><span> </span><a name="local-6989586621679214583"><a href="#local-6989586621679214583"><span class="hs-identifier">r#</span></a></a><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a name="local-6989586621679214584"><a href="#local-6989586621679214584"><span class="hs-identifier">finalizer</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679214585"><a href="#local-6989586621679214585"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-47"></a><span>    </span><span class="hs-keyword">case</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#mkWeak%23"><span class="hs-identifier hs-var">mkWeak#</span></a><span> </span><a href="#local-6989586621679214583"><span class="hs-identifier hs-var">r#</span></a><span> </span><a href="#local-6989586621679214582"><span class="hs-identifier hs-var">r</span></a><span> </span><a href="#local-6989586621679214584"><span class="hs-identifier hs-var">finalizer</span></a><span> </span><a href="#local-6989586621679214585"><span class="hs-identifier hs-var">s</span></a><span> </span><span class="hs-keyword">of</span><span> </span><span class="hs-special">(#</span><span> </span><a name="local-6989586621679214586"><a href="#local-6989586621679214586"><span class="hs-identifier">s1</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679214587"><a href="#local-6989586621679214587"><span class="hs-identifier">w</span></a></a><span> </span><span class="hs-special">#)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="#local-6989586621679214586"><span class="hs-identifier hs-var">s1</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Weak.html#Weak"><span class="hs-identifier hs-var">Weak</span></a><span> </span><a href="#local-6989586621679214587"><span class="hs-identifier hs-var">w</span></a><span> </span><span class="hs-special">#)</span><span>
+</span><a name="line-48"></a><span>
+</span><a name="line-49"></a><span class="hs-comment">-- |Mutate the contents of an 'IORef'.</span><span>
+</span><a name="line-50"></a><span class="hs-comment">--</span><span>
+</span><a name="line-51"></a><span class="hs-comment">-- Be warned that 'modifyIORef' does not apply the function strictly.  This</span><span>
+</span><a name="line-52"></a><span class="hs-comment">-- means if the program calls 'modifyIORef' many times, but seldomly uses the</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- value, thunks will pile up in memory resulting in a space leak.  This is a</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- common mistake made when using an IORef as a counter.  For example, the</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- following will likely produce a stack overflow:</span><span>
+</span><a name="line-56"></a><span class="hs-comment">--</span><span>
+</span><a name="line-57"></a><span class="hs-comment">-- &gt;ref &lt;- newIORef 0</span><span>
+</span><a name="line-58"></a><span class="hs-comment">-- &gt;replicateM_ 1000000 $ modifyIORef ref (+1)</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- &gt;readIORef ref &gt;&gt;= print</span><span>
+</span><a name="line-60"></a><span class="hs-comment">--</span><span>
+</span><a name="line-61"></a><span class="hs-comment">-- To avoid this problem, use 'modifyIORef'' instead.</span><span>
+</span><a name="line-62"></a><span class="hs-identifier">modifyIORef</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><a href="#local-6989586621679214580"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679214580"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679214580"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-63"></a><a name="modifyIORef"><a href="Data.IORef.html#modifyIORef"><span class="hs-identifier">modifyIORef</span></a></a><span> </span><a name="local-6989586621679214588"><a href="#local-6989586621679214588"><span class="hs-identifier">ref</span></a></a><span> </span><a name="local-6989586621679214589"><a href="#local-6989586621679214589"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IORef.html#readIORef"><span class="hs-identifier hs-var">readIORef</span></a><span> </span><a href="#local-6989586621679214588"><span class="hs-identifier hs-var">ref</span></a><span> </span><a href="GHC.Base.html#%3E%3E%3D"><span class="hs-operator hs-var">&gt;&gt;=</span></a><span> </span><a href="GHC.IORef.html#writeIORef"><span class="hs-identifier hs-var">writeIORef</span></a><span> </span><a href="#local-6989586621679214588"><span class="hs-identifier hs-var">ref</span></a><span> </span><a href="GHC.Base.html#."><span class="hs-operator hs-var">.</span></a><span> </span><a href="#local-6989586621679214589"><span class="hs-identifier hs-var">f</span></a><span>
+</span><a name="line-64"></a><span>
+</span><a name="line-65"></a><span class="hs-comment">-- |Strict version of 'modifyIORef'</span><span>
+</span><a name="line-66"></a><span class="hs-comment">--</span><span>
+</span><a name="line-67"></a><span class="hs-comment">-- @since 4.6.0.0</span><span>
+</span><a name="line-68"></a><span class="hs-identifier">modifyIORef'</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><a href="#local-6989586621679214579"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679214579"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679214579"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-69"></a><a name="modifyIORef%27"><a href="Data.IORef.html#modifyIORef%27"><span class="hs-identifier">modifyIORef'</span></a></a><span> </span><a name="local-6989586621679214590"><a href="#local-6989586621679214590"><span class="hs-identifier">ref</span></a></a><span> </span><a name="local-6989586621679214591"><a href="#local-6989586621679214591"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-70"></a><span>    </span><a name="local-6989586621679214592"><a href="#local-6989586621679214592"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="GHC.IORef.html#readIORef"><span class="hs-identifier hs-var">readIORef</span></a><span> </span><a href="#local-6989586621679214590"><span class="hs-identifier hs-var">ref</span></a><span>
+</span><a name="line-71"></a><span>    </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679214593"><a href="#local-6989586621679214593"><span class="hs-identifier">x'</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679214591"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="#local-6989586621679214592"><span class="hs-identifier hs-var">x</span></a><span>
+</span><a name="line-72"></a><span>    </span><a href="#local-6989586621679214593"><span class="hs-identifier hs-var">x'</span></a><span> </span><span class="hs-special">`</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#seq"><span class="hs-identifier hs-var">seq</span></a><span class="hs-special">`</span><span> </span><a href="GHC.IORef.html#writeIORef"><span class="hs-identifier hs-var">writeIORef</span></a><span> </span><a href="#local-6989586621679214590"><span class="hs-identifier hs-var">ref</span></a><span> </span><a href="#local-6989586621679214593"><span class="hs-identifier hs-var">x'</span></a><span>
+</span><a name="line-73"></a><span>
+</span><a name="line-74"></a><span class="hs-comment">-- |Atomically modifies the contents of an 'IORef'.</span><span>
+</span><a name="line-75"></a><span class="hs-comment">--</span><span>
+</span><a name="line-76"></a><span class="hs-comment">-- This function is useful for using 'IORef' in a safe way in a multithreaded</span><span>
+</span><a name="line-77"></a><span class="hs-comment">-- program.  If you only have one 'IORef', then using 'atomicModifyIORef' to</span><span>
+</span><a name="line-78"></a><span class="hs-comment">-- access and modify it will prevent race conditions.</span><span>
+</span><a name="line-79"></a><span class="hs-comment">--</span><span>
+</span><a name="line-80"></a><span class="hs-comment">-- Extending the atomicity to multiple 'IORef's is problematic, so it</span><span>
+</span><a name="line-81"></a><span class="hs-comment">-- is recommended that if you need to do anything more complicated</span><span>
+</span><a name="line-82"></a><span class="hs-comment">-- then using 'Control.Concurrent.MVar.MVar' instead is a good idea.</span><span>
+</span><a name="line-83"></a><span class="hs-comment">--</span><span>
+</span><a name="line-84"></a><span class="hs-comment">-- 'atomicModifyIORef' does not apply the function strictly.  This is important</span><span>
+</span><a name="line-85"></a><span class="hs-comment">-- to know even if all you are doing is replacing the value.  For example, this</span><span>
+</span><a name="line-86"></a><span class="hs-comment">-- will leak memory:</span><span>
+</span><a name="line-87"></a><span class="hs-comment">--</span><span>
+</span><a name="line-88"></a><span class="hs-comment">-- &gt;ref &lt;- newIORef '1'</span><span>
+</span><a name="line-89"></a><span class="hs-comment">-- &gt;forever $ atomicModifyIORef ref (\_ -&gt; ('2', ()))</span><span>
+</span><a name="line-90"></a><span class="hs-comment">--</span><span>
+</span><a name="line-91"></a><span class="hs-comment">-- Use 'atomicModifyIORef'' or 'atomicWriteIORef' to avoid this problem.</span><span>
+</span><a name="line-92"></a><span class="hs-comment">--</span><span>
+</span><a name="line-93"></a><span class="hs-identifier">atomicModifyIORef</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><a href="#local-6989586621679214577"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679214577"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679214577"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">,</span><a href="#local-6989586621679214578"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><a href="#local-6989586621679214578"><span class="hs-identifier hs-type">b</span></a><span>
+</span><a name="line-94"></a><a name="atomicModifyIORef"><a href="Data.IORef.html#atomicModifyIORef"><span class="hs-identifier">atomicModifyIORef</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IORef.html#atomicModifyIORef"><span class="hs-identifier hs-var">GHC.IORef.atomicModifyIORef</span></a><span>
+</span><a name="line-95"></a><span>
+</span><a name="line-96"></a><span class="hs-comment">-- | Strict version of 'atomicModifyIORef'.  This forces both the value stored</span><span>
+</span><a name="line-97"></a><span class="hs-comment">-- in the 'IORef' as well as the value returned.</span><span>
+</span><a name="line-98"></a><span class="hs-comment">--</span><span>
+</span><a name="line-99"></a><span class="hs-comment">-- @since 4.6.0.0</span><span>
+</span><a name="line-100"></a><span class="hs-identifier">atomicModifyIORef'</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><a href="#local-6989586621679214575"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679214575"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679214575"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">,</span><a href="#local-6989586621679214576"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><a href="#local-6989586621679214576"><span class="hs-identifier hs-type">b</span></a><span>
+</span><a name="line-101"></a><a name="atomicModifyIORef%27"><a href="Data.IORef.html#atomicModifyIORef%27"><span class="hs-identifier">atomicModifyIORef'</span></a></a><span> </span><a name="local-6989586621679214594"><a href="#local-6989586621679214594"><span class="hs-identifier">ref</span></a></a><span> </span><a name="local-6989586621679214595"><a href="#local-6989586621679214595"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-102"></a><span>    </span><a name="local-6989586621679214599"><a href="#local-6989586621679214599"><span class="hs-identifier">b</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="Data.IORef.html#atomicModifyIORef"><span class="hs-identifier hs-var">atomicModifyIORef</span></a><span> </span><a href="#local-6989586621679214594"><span class="hs-identifier hs-var">ref</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679214596"><a href="#local-6989586621679214596"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-103"></a><span>            </span><span class="hs-keyword">case</span><span> </span><a href="#local-6989586621679214595"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="#local-6989586621679214596"><span class="hs-identifier hs-var">a</span></a><span> </span><span class="hs-keyword">of</span><span>
+</span><a name="line-104"></a><span>                </span><a name="local-6989586621679214597"><a href="#local-6989586621679214597"><span class="hs-identifier">v</span></a></a><span class="hs-glyph">@</span><span class="hs-special">(</span><a name="local-6989586621679214598"><a href="#local-6989586621679214598"><span class="hs-identifier">a'</span></a></a><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679214598"><span class="hs-identifier hs-var">a'</span></a><span> </span><span class="hs-special">`</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#seq"><span class="hs-identifier hs-var">seq</span></a><span class="hs-special">`</span><span> </span><a href="#local-6989586621679214597"><span class="hs-identifier hs-var">v</span></a><span>
+</span><a name="line-105"></a><span>    </span><a href="#local-6989586621679214599"><span class="hs-identifier hs-var">b</span></a><span> </span><span class="hs-special">`</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#seq"><span class="hs-identifier hs-var">seq</span></a><span class="hs-special">`</span><span> </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><a href="#local-6989586621679214599"><span class="hs-identifier hs-var">b</span></a><span>
+</span><a name="line-106"></a><span>
+</span><a name="line-107"></a><span class="hs-comment">-- | Variant of 'writeIORef' with the \&quot;barrier to reordering\&quot; property that</span><span>
+</span><a name="line-108"></a><span class="hs-comment">-- 'atomicModifyIORef' has.</span><span>
+</span><a name="line-109"></a><span class="hs-comment">--</span><span>
+</span><a name="line-110"></a><span class="hs-comment">-- @since 4.6.0.0</span><span>
+</span><a name="line-111"></a><span class="hs-identifier">atomicWriteIORef</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.IORef.html#IORef"><span class="hs-identifier hs-type">IORef</span></a><span> </span><a href="#local-6989586621679214574"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679214574"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-112"></a><a name="atomicWriteIORef"><a href="Data.IORef.html#atomicWriteIORef"><span class="hs-identifier">atomicWriteIORef</span></a></a><span> </span><a name="local-6989586621679214600"><a href="#local-6989586621679214600"><span class="hs-identifier">ref</span></a></a><span> </span><a name="local-6989586621679214601"><a href="#local-6989586621679214601"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-113"></a><span>    </span><a name="local-6989586621679214602"><a href="#local-6989586621679214602"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="Data.IORef.html#atomicModifyIORef"><span class="hs-identifier hs-var">atomicModifyIORef</span></a><span> </span><a href="#local-6989586621679214600"><span class="hs-identifier hs-var">ref</span></a><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679214601"><span class="hs-identifier hs-var">a</span></a><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-114"></a><span>    </span><a href="#local-6989586621679214602"><span class="hs-identifier hs-var">x</span></a><span> </span><span class="hs-special">`</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#seq"><span class="hs-identifier hs-var">seq</span></a><span class="hs-special">`</span><span> </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-115"></a><span>
+</span><a name="line-116"></a><span class="hs-comment">{- $memmodel
+
+  In a concurrent program, 'IORef' operations may appear out-of-order
+  to another thread, depending on the memory model of the underlying
+  processor architecture.  For example, on x86, loads can move ahead
+  of stores, so in the following example:
+
+&gt;  maybePrint :: IORef Bool -&gt; IORef Bool -&gt; IO ()
+&gt;  maybePrint myRef yourRef = do
+&gt;    writeIORef myRef True
+&gt;    yourVal &lt;- readIORef yourRef
+&gt;    unless yourVal $ putStrLn &quot;critical section&quot;
+&gt;
+&gt;  main :: IO ()
+&gt;  main = do
+&gt;    r1 &lt;- newIORef False
+&gt;    r2 &lt;- newIORef False
+&gt;    forkIO $ maybePrint r1 r2
+&gt;    forkIO $ maybePrint r2 r1
+&gt;    threadDelay 1000000
+
+  it is possible that the string @&quot;critical section&quot;@ is printed
+  twice, even though there is no interleaving of the operations of the
+  two threads that allows that outcome.  The memory model of x86
+  allows 'readIORef' to happen before the earlier 'writeIORef'.
+
+  The implementation is required to ensure that reordering of memory
+  operations cannot cause type-correct code to go wrong.  In
+  particular, when inspecting the value read from an 'IORef', the
+  memory writes that created that value must have occurred from the
+  point of view of the current thread.
+
+  'atomicModifyIORef' acts as a barrier to reordering.  Multiple
+  'atomicModifyIORef' operations occur in strict program order.  An
+  'atomicModifyIORef' is never observed to take place ahead of any
+  earlier (in program order) 'IORef' operations, or after any later
+  'IORef' operations.
+
+-}</span><span>
+</span><a name="line-155"></a><span>
+</span><a name="line-156"></a></pre></body></html>

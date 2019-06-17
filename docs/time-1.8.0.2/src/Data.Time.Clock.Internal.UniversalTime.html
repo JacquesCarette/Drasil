@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-cpp">#include &quot;HsConfigure.h&quot;
+</span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Time.Clock.Internal.UniversalTime</span><span>
+</span><a name="line-3"></a><span>    </span><span class="hs-special">(</span><span>
+</span><a name="line-4"></a><span>    </span><span class="hs-comment">-- * Universal Time</span><span>
+</span><a name="line-5"></a><span>    </span><span class="hs-comment">-- | Time as measured by the Earth.</span><span>
+</span><a name="line-6"></a><span>    </span><a href="Data.Time.Clock.Internal.UniversalTime.html#UniversalTime"><span class="hs-identifier hs-type">UniversalTime</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-7"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-8"></a><span>
+</span><a name="line-9"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Typeable.html"><span class="hs-identifier">Data.Typeable</span></a><span>
+</span><a name="line-10"></a><span class="hs-cpp">#if LANGUAGE_Rank2Types
+</span><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Data.html"><span class="hs-identifier">Data.Data</span></a><span>
+</span><a name="line-12"></a><span class="hs-cpp">#endif
+</span><span class="hs-keyword">import</span><span> </span><a href="../deepseq-1.4.3.0/src/%{MODULE/./-}.html#%{NAME}/Control.DeepSeq.html"><span class="hs-identifier">Control.DeepSeq</span></a><span>
+</span><a name="line-14"></a><span>
+</span><a name="line-15"></a><span>
+</span><a name="line-16"></a><span class="hs-comment">-- | The Modified Julian Date is the day with the fraction of the day, measured from UT midnight.</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- It's used to represent UT1, which is time as measured by the earth's rotation, adjusted for various wobbles.</span><span>
+</span><a name="line-18"></a><span class="hs-keyword">newtype</span><span> </span><a name="UniversalTime"><a href="Data.Time.Clock.Internal.UniversalTime.html#UniversalTime"><span class="hs-identifier">UniversalTime</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="ModJulianDate"><a href="Data.Time.Clock.Internal.UniversalTime.html#ModJulianDate"><span class="hs-identifier">ModJulianDate</span></a></a><span> </span><span class="hs-special">{</span><a name="getModJulianDate"><a href="Data.Time.Clock.Internal.UniversalTime.html#getModJulianDate"><span class="hs-identifier">getModJulianDate</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Real.html#Rational"><span class="hs-identifier hs-type">Rational</span></a><span class="hs-special">}</span><span> </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span class="hs-identifier hs-type">Eq</span><span class="hs-special">,</span><span class="hs-identifier hs-type">Ord</span><span>
+</span><a name="line-19"></a><span class="hs-cpp">#if LANGUAGE_DeriveDataTypeable
+#if LANGUAGE_Rank2Types
+</span><span>    </span><span class="hs-special">,</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Data.html#Data"><span class="hs-identifier hs-type">Data</span></a><span class="hs-special">,</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Typeable.Internal.html#Typeable"><span class="hs-identifier hs-type">Typeable</span></a><span>
+</span><a name="line-22"></a><span class="hs-cpp">#endif
+#endif
+</span><span>    </span><span class="hs-special">)</span><span>
+</span><a name="line-25"></a><span>
+</span><a name="line-26"></a><span class="hs-comment">-- necessary because H98 doesn't have &quot;cunning newtype&quot; derivation</span><span>
+</span><a name="line-27"></a><span class="hs-keyword">instance</span><span> </span><a href="../deepseq-1.4.3.0/src/%{MODULE/./-}.html#%{NAME}/Control.DeepSeq.html#NFData"><span class="hs-identifier hs-type">NFData</span></a><span> </span><a href="Data.Time.Clock.Internal.UniversalTime.html#UniversalTime"><span class="hs-identifier hs-type">UniversalTime</span></a><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-28"></a><span>    </span><a name="local-8214565720323790238"><a href="../deepseq-1.4.3.0/src/%{MODULE/./-}.html#%{NAME}/Control.DeepSeq.html#rnf"><span class="hs-identifier">rnf</span></a></a><span> </span><span class="hs-special">(</span><a href="Data.Time.Clock.Internal.UniversalTime.html#ModJulianDate"><span class="hs-identifier hs-var">ModJulianDate</span></a><span> </span><a name="local-6989586621679046970"><a href="#local-6989586621679046970"><span class="hs-identifier">a</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../deepseq-1.4.3.0/src/%{MODULE/./-}.html#%{NAME}/Control.DeepSeq.html#rnf"><span class="hs-identifier hs-var">rnf</span></a><span> </span><a href="#local-6989586621679046970"><span class="hs-identifier hs-var">a</span></a><span>
+</span><a name="line-29"></a></pre></body></html>

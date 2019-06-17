@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE BangPatterns, CPP, Rank2Types #-}</span><span>
+</span><a name="line-2"></a><span class="hs-cpp">#if __GLASGOW_HASKELL__ &gt;= 702
+</span><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-4"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Module      : Data.Text.Lazy.Builder</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Copyright   : (c) 2013 Bryan O'Sullivan</span><span>
+</span><a name="line-10"></a><span class="hs-comment">--               (c) 2010 Johan Tibell</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- License     : BSD-style (see LICENSE)</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Maintainer  : Johan Tibell &lt;johan.tibell@gmail.com&gt;</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Portability : portable to Hugs and GHC</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Efficient construction of lazy @Text@ values.  The principal</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- operations on a @Builder@ are @singleton@, @fromText@, and</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- @fromLazyText@, which construct new builders, and 'mappend', which</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- concatenates two builders.</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-- To get maximum performance when building lazy @Text@ values using a</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- builder, associate @mappend@ calls to the right.  For example,</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- prefer</span><span>
+</span><a name="line-24"></a><span class="hs-comment">--</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- &gt; singleton 'a' `mappend` (singleton 'b' `mappend` singleton 'c')</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- to</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-comment">-- &gt; singleton 'a' `mappend` singleton 'b' `mappend` singleton 'c'</span><span>
+</span><a name="line-30"></a><span class="hs-comment">--</span><span>
+</span><a name="line-31"></a><span class="hs-comment">-- as the latter associates @mappend@ to the left. Or, equivalently,</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- prefer</span><span>
+</span><a name="line-33"></a><span class="hs-comment">--</span><span>
+</span><a name="line-34"></a><span class="hs-comment">--  &gt; singleton 'a' &lt;&gt; singleton 'b' &lt;&gt; singleton 'c'</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- since the '&lt;&gt;' from recent versions of 'Data.Monoid' associates</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- to the right.</span><span>
+</span><a name="line-38"></a><span>
+</span><a name="line-39"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-40"></a><span>
+</span><a name="line-41"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Text.Lazy.Builder</span><span>
+</span><a name="line-42"></a><span>   </span><span class="hs-special">(</span><span> </span><span class="hs-comment">-- * The Builder type</span><span>
+</span><a name="line-43"></a><span>     </span><a href="Data.Text.Internal.Builder.html#Builder"><span class="hs-identifier hs-type">Builder</span></a><span>
+</span><a name="line-44"></a><span>   </span><span class="hs-special">,</span><span> </span><a href="Data.Text.Internal.Builder.html#toLazyText"><span class="hs-identifier hs-var">toLazyText</span></a><span>
+</span><a name="line-45"></a><span>   </span><span class="hs-special">,</span><span> </span><a href="Data.Text.Internal.Builder.html#toLazyTextWith"><span class="hs-identifier hs-var">toLazyTextWith</span></a><span>
+</span><a name="line-46"></a><span>
+</span><a name="line-47"></a><span>     </span><span class="hs-comment">-- * Constructing Builders</span><span>
+</span><a name="line-48"></a><span>   </span><span class="hs-special">,</span><span> </span><a href="Data.Text.Internal.Builder.html#singleton"><span class="hs-identifier hs-var">singleton</span></a><span>
+</span><a name="line-49"></a><span>   </span><span class="hs-special">,</span><span> </span><a href="Data.Text.Internal.Builder.html#fromText"><span class="hs-identifier hs-var">fromText</span></a><span>
+</span><a name="line-50"></a><span>   </span><span class="hs-special">,</span><span> </span><a href="Data.Text.Internal.Builder.html#fromLazyText"><span class="hs-identifier hs-var">fromLazyText</span></a><span>
+</span><a name="line-51"></a><span>   </span><span class="hs-special">,</span><span> </span><a href="Data.Text.Internal.Builder.html#fromString"><span class="hs-identifier hs-var">fromString</span></a><span>
+</span><a name="line-52"></a><span>
+</span><a name="line-53"></a><span>     </span><span class="hs-comment">-- * Flushing the buffer state</span><span>
+</span><a name="line-54"></a><span>   </span><span class="hs-special">,</span><span> </span><a href="Data.Text.Internal.Builder.html#flush"><span class="hs-identifier hs-var">flush</span></a><span>
+</span><a name="line-55"></a><span>   </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-56"></a><span>
+</span><a name="line-57"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Text.Internal.Builder.html"><span class="hs-identifier">Data.Text.Internal.Builder</span></a><span>
+</span><a name="line-58"></a></pre></body></html>

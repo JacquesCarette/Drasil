@@ -1,0 +1,132 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span class="hs-cpp">#if !defined(TESTING) &amp;&amp; __GLASGOW_HASKELL__ &gt;= 703
+</span><span class="hs-pragma">{-# LANGUAGE Safe #-}</span><span>
+</span><a name="line-4"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-6"></a><span class="hs-cpp">#include &quot;containers.h&quot;
+</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Module      :  Data.Map</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Copyright   :  (c) Daan Leijen 2002</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--                (c) Andriy Palamarchuk 2008</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- License     :  BSD-style</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- /Note:/ You should use &quot;Data.Map.Strict&quot; instead of this module if:</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- * You will eventually need all the values stored.</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-- * The stored values don't represent large virtual data structures</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- to be lazily computed.</span><span>
+</span><a name="line-23"></a><span class="hs-comment">--</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- An efficient implementation of ordered maps from keys to values</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- (dictionaries).</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- These modules are intended to be imported qualified, to avoid name</span><span>
+</span><a name="line-28"></a><span class="hs-comment">-- clashes with Prelude functions, e.g.</span><span>
+</span><a name="line-29"></a><span class="hs-comment">--</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- &gt;  import qualified Data.Map as Map</span><span>
+</span><a name="line-31"></a><span class="hs-comment">--</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- The implementation of 'Map' is based on /size balanced/ binary trees (or</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- trees of /bounded balance/) as described by:</span><span>
+</span><a name="line-34"></a><span class="hs-comment">--</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--    * Stephen Adams, \&quot;/Efficient sets: a balancing act/\&quot;,</span><span>
+</span><a name="line-36"></a><span class="hs-comment">--     Journal of Functional Programming 3(4):553-562, October 1993,</span><span>
+</span><a name="line-37"></a><span class="hs-comment">--     &lt;http://www.swiss.ai.mit.edu/~adams/BB/&gt;.</span><span>
+</span><a name="line-38"></a><span class="hs-comment">--    * J. Nievergelt and E.M. Reingold,</span><span>
+</span><a name="line-39"></a><span class="hs-comment">--      \&quot;/Binary search trees of bounded balance/\&quot;,</span><span>
+</span><a name="line-40"></a><span class="hs-comment">--      SIAM journal of computing 2(1), March 1973.</span><span>
+</span><a name="line-41"></a><span class="hs-comment">--</span><span>
+</span><a name="line-42"></a><span class="hs-comment">--  Bounds for 'union', 'intersection', and 'difference' are as given</span><span>
+</span><a name="line-43"></a><span class="hs-comment">--  by</span><span>
+</span><a name="line-44"></a><span class="hs-comment">--</span><span>
+</span><a name="line-45"></a><span class="hs-comment">--    * Guy Blelloch, Daniel Ferizovic, and Yihan Sun,</span><span>
+</span><a name="line-46"></a><span class="hs-comment">--      \&quot;/Just Join for Parallel Ordered Sets/\&quot;,</span><span>
+</span><a name="line-47"></a><span class="hs-comment">--      &lt;https://arxiv.org/abs/1602.02120v3&gt;.</span><span>
+</span><a name="line-48"></a><span class="hs-comment">--</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- Note that the implementation is /left-biased/ -- the elements of a</span><span>
+</span><a name="line-50"></a><span class="hs-comment">-- first argument are always preferred to the second, for example in</span><span>
+</span><a name="line-51"></a><span class="hs-comment">-- 'union' or 'insert'.</span><span>
+</span><a name="line-52"></a><span class="hs-comment">--</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- /Warning/: The size of the map must not exceed @maxBound::Int@. Violation of</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- this condition is not detected and if the size limit is exceeded, its</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- behaviour is undefined.</span><span>
+</span><a name="line-56"></a><span class="hs-comment">--</span><span>
+</span><a name="line-57"></a><span class="hs-comment">-- Operation comments contain the operation time complexity in</span><span>
+</span><a name="line-58"></a><span class="hs-comment">-- the Big-O notation (&lt;http://en.wikipedia.org/wiki/Big_O_notation&gt;).</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-60"></a><span>
+</span><a name="line-61"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Map</span><span>
+</span><a name="line-62"></a><span>    </span><span class="hs-special">(</span><span> </span><span class="hs-keyword">module</span><span> </span><a href="Data.Map.Lazy.html"><span class="hs-identifier">Data.Map.Lazy</span></a><span>
+</span><a name="line-63"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.html#insertWith%27"><span class="hs-identifier hs-var">insertWith'</span></a><span>
+</span><a name="line-64"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.html#insertWithKey%27"><span class="hs-identifier hs-var">insertWithKey'</span></a><span>
+</span><a name="line-65"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.html#insertLookupWithKey%27"><span class="hs-identifier hs-var">insertLookupWithKey'</span></a><span>
+</span><a name="line-66"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.html#fold"><span class="hs-identifier hs-var">fold</span></a><span>
+</span><a name="line-67"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.html#foldWithKey"><span class="hs-identifier hs-var">foldWithKey</span></a><span>
+</span><a name="line-68"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-69"></a><span>
+</span><a name="line-70"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Prelude.html"><span class="hs-identifier">Prelude</span></a><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Data.Foldable.html#foldr"><span class="hs-identifier hs-var">foldr</span></a><span class="hs-special">)</span><span>
+</span><a name="line-71"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Map.Lazy.html"><span class="hs-identifier">Data.Map.Lazy</span></a><span>
+</span><a name="line-72"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="Data.Map.Strict.html"><span class="hs-identifier">Data.Map.Strict</span></a><span> </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">Strict</span><span>
+</span><a name="line-73"></a><span>
+</span><a name="line-74"></a><span class="hs-comment">-- | /O(log n)/. Same as 'insertWith', but the value being inserted to the map is</span><span>
+</span><a name="line-75"></a><span class="hs-comment">-- evaluated to WHNF beforehand.</span><span>
+</span><a name="line-76"></a><span class="hs-comment">--</span><span>
+</span><a name="line-77"></a><span class="hs-comment">-- For example, to update a counter:</span><span>
+</span><a name="line-78"></a><span class="hs-comment">--</span><span>
+</span><a name="line-79"></a><span class="hs-comment">-- &gt; insertWith' (+) k 1 m</span><span>
+</span><a name="line-80"></a><span class="hs-comment">--</span><span>
+</span><a name="line-81"></a><span class="hs-pragma">{-# DEPRECATED</span><span> </span><span class="hs-pragma">insertWith'</span><span> </span><span class="hs-pragma">&quot;As of version 0.5, replaced by 'Data.Map.Strict.insertWith'.&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-82"></a><span class="hs-identifier">insertWith'</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Ord"><span class="hs-identifier hs-type">Ord</span></a><span> </span><a href="#local-6989586621679126368"><span class="hs-identifier hs-type">k</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679126369"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126369"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126369"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126368"><span class="hs-identifier hs-type">k</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126369"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span> </span><a href="#local-6989586621679126368"><span class="hs-identifier hs-type">k</span></a><span> </span><a href="#local-6989586621679126369"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span> </span><a href="#local-6989586621679126368"><span class="hs-identifier hs-type">k</span></a><span> </span><a href="#local-6989586621679126369"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-83"></a><a name="insertWith%27"><a href="Data.Map.html#insertWith%27"><span class="hs-identifier">insertWith'</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Map.Strict.Internal.html#insertWith"><span class="hs-identifier hs-var">Strict.insertWith</span></a><span>
+</span><a name="line-84"></a><span class="hs-cpp">#if __GLASGOW_HASKELL__
+</span><span class="hs-pragma">{-# INLINABLE</span><span> </span><span class="hs-pragma">insertWith'</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-86"></a><span class="hs-cpp">#else
+</span><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">insertWith'</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-88"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-90"></a><span class="hs-comment">-- | /O(log n)/. Same as 'insertWithKey', but the value being inserted to the map is</span><span>
+</span><a name="line-91"></a><span class="hs-comment">-- evaluated to WHNF beforehand.</span><span>
+</span><a name="line-92"></a><span class="hs-pragma">{-# DEPRECATED</span><span> </span><span class="hs-pragma">insertWithKey'</span><span> </span><span class="hs-pragma">&quot;As of version 0.5, replaced by 'Data.Map.Strict.insertWithKey'.&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-93"></a><span class="hs-identifier">insertWithKey'</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Ord"><span class="hs-identifier hs-type">Ord</span></a><span> </span><a href="#local-6989586621679126366"><span class="hs-identifier hs-type">k</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679126366"><span class="hs-identifier hs-type">k</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126367"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126367"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126367"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126366"><span class="hs-identifier hs-type">k</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126367"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span> </span><a href="#local-6989586621679126366"><span class="hs-identifier hs-type">k</span></a><span> </span><a href="#local-6989586621679126367"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span> </span><a href="#local-6989586621679126366"><span class="hs-identifier hs-type">k</span></a><span> </span><a href="#local-6989586621679126367"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-94"></a><span class="hs-comment">-- We do not reuse Data.Map.Strict.insertWithKey, because it is stricter -- it</span><span>
+</span><a name="line-95"></a><span class="hs-comment">-- forces evaluation of the given value.</span><span>
+</span><a name="line-96"></a><a name="insertWithKey%27"><a href="Data.Map.html#insertWithKey%27"><span class="hs-identifier">insertWithKey'</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Map.Strict.Internal.html#insertWithKey"><span class="hs-identifier hs-var">Strict.insertWithKey</span></a><span>
+</span><a name="line-97"></a><span class="hs-cpp">#if __GLASGOW_HASKELL__
+</span><span class="hs-pragma">{-# INLINABLE</span><span> </span><span class="hs-pragma">insertWithKey'</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-99"></a><span class="hs-cpp">#else
+</span><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">insertWithKey'</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-101"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-103"></a><span class="hs-comment">-- | /O(log n)/. Same as 'insertLookupWithKey', but the value being inserted to</span><span>
+</span><a name="line-104"></a><span class="hs-comment">-- the map is evaluated to WHNF beforehand.</span><span>
+</span><a name="line-105"></a><span class="hs-pragma">{-# DEPRECATED</span><span> </span><span class="hs-pragma">insertLookupWithKey'</span><span> </span><span class="hs-pragma">&quot;As of version 0.5, replaced by 'Data.Map.Strict.insertLookupWithKey'.&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-106"></a><span class="hs-identifier">insertLookupWithKey'</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Ord"><span class="hs-identifier hs-type">Ord</span></a><span> </span><a href="#local-6989586621679126364"><span class="hs-identifier hs-type">k</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679126364"><span class="hs-identifier hs-type">k</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126365"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126365"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126365"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126364"><span class="hs-identifier hs-type">k</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126365"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span> </span><a href="#local-6989586621679126364"><span class="hs-identifier hs-type">k</span></a><span> </span><a href="#local-6989586621679126365"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-107"></a><span>                     </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Base.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a><span> </span><a href="#local-6989586621679126365"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span> </span><a href="#local-6989586621679126364"><span class="hs-identifier hs-type">k</span></a><span> </span><a href="#local-6989586621679126365"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span>
+</span><a name="line-108"></a><span class="hs-comment">-- We do not reuse Data.Map.Strict.insertLookupWithKey, because it is stricter -- it</span><span>
+</span><a name="line-109"></a><span class="hs-comment">-- forces evaluation of the given value.</span><span>
+</span><a name="line-110"></a><a name="insertLookupWithKey%27"><a href="Data.Map.html#insertLookupWithKey%27"><span class="hs-identifier">insertLookupWithKey'</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Map.Strict.Internal.html#insertLookupWithKey"><span class="hs-identifier hs-var">Strict.insertLookupWithKey</span></a><span>
+</span><a name="line-111"></a><span class="hs-cpp">#if __GLASGOW_HASKELL__
+</span><span class="hs-pragma">{-# INLINABLE</span><span> </span><span class="hs-pragma">insertLookupWithKey'</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-113"></a><span class="hs-cpp">#else
+</span><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">insertLookupWithKey'</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-115"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-117"></a><span class="hs-comment">-- | /O(n)/. Fold the values in the map using the given right-associative</span><span>
+</span><a name="line-118"></a><span class="hs-comment">-- binary operator. This function is an equivalent of 'foldr' and is present</span><span>
+</span><a name="line-119"></a><span class="hs-comment">-- for compatibility only.</span><span>
+</span><a name="line-120"></a><span class="hs-pragma">{-# DEPRECATED</span><span> </span><span class="hs-pragma">fold</span><span> </span><span class="hs-pragma">&quot;As of version 0.5, replaced by 'foldr'.&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-121"></a><span class="hs-identifier">fold</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679126361"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126362"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126362"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126362"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span> </span><a href="#local-6989586621679126363"><span class="hs-identifier hs-type">k</span></a><span> </span><a href="#local-6989586621679126361"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126362"><span class="hs-identifier hs-type">b</span></a><span>
+</span><a name="line-122"></a><a name="fold"><a href="Data.Map.html#fold"><span class="hs-identifier">fold</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Map.Internal.html#foldr"><span class="hs-identifier hs-var">foldr</span></a><span>
+</span><a name="line-123"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">fold</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-124"></a><span>
+</span><a name="line-125"></a><span class="hs-comment">-- | /O(n)/. Fold the keys and values in the map using the given right-associative</span><span>
+</span><a name="line-126"></a><span class="hs-comment">-- binary operator. This function is an equivalent of 'foldrWithKey' and is present</span><span>
+</span><a name="line-127"></a><span class="hs-comment">-- for compatibility only.</span><span>
+</span><a name="line-128"></a><span class="hs-pragma">{-# DEPRECATED</span><span> </span><span class="hs-pragma">foldWithKey</span><span> </span><span class="hs-pragma">&quot;As of version 0.4, replaced by 'foldrWithKey'.&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-129"></a><span class="hs-identifier">foldWithKey</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679126358"><span class="hs-identifier hs-type">k</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126359"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126360"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126360"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126360"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span> </span><a href="#local-6989586621679126358"><span class="hs-identifier hs-type">k</span></a><span> </span><a href="#local-6989586621679126359"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679126360"><span class="hs-identifier hs-type">b</span></a><span>
+</span><a name="line-130"></a><a name="foldWithKey"><a href="Data.Map.html#foldWithKey"><span class="hs-identifier">foldWithKey</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Map.Internal.html#foldrWithKey"><span class="hs-identifier hs-var">foldrWithKey</span></a><span>
+</span><a name="line-131"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">foldWithKey</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-132"></a></pre></body></html>

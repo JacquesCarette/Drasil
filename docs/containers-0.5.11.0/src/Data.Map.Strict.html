@@ -1,0 +1,280 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE BangPatterns #-}</span><span>
+</span><a name="line-3"></a><span class="hs-cpp">#if __GLASGOW_HASKELL__ &gt;= 703
+</span><span class="hs-pragma">{-# LANGUAGE Safe #-}</span><span>
+</span><a name="line-5"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-7"></a><span class="hs-cpp">#include &quot;containers.h&quot;
+</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Module      :  Data.Map.Strict</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Copyright   :  (c) Daan Leijen 2002</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--                (c) Andriy Palamarchuk 2008</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- License     :  BSD-style</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-17"></a><span class="hs-comment">--</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- = Finite Maps (strict interface)</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-- The @'Map' k v@ type represents a finite map (sometimes called a dictionary)</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- from keys of type @k@ to values of type @v@.</span><span>
+</span><a name="line-23"></a><span class="hs-comment">--</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Each function in this module is careful to force values before installing</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- them in a 'Map'. This is usually more efficient when laziness is not</span><span>
+</span><a name="line-26"></a><span class="hs-comment">-- necessary. When laziness /is/ required, use the functions in &quot;Data.Map.Lazy&quot;.</span><span>
+</span><a name="line-27"></a><span class="hs-comment">--</span><span>
+</span><a name="line-28"></a><span class="hs-comment">-- In particular, the functions in this module obey the following law:</span><span>
+</span><a name="line-29"></a><span class="hs-comment">--</span><span>
+</span><a name="line-30"></a><span class="hs-comment">--  - If all values stored in all maps in the arguments are in WHNF, then all</span><span>
+</span><a name="line-31"></a><span class="hs-comment">--    values stored in all maps in the results will be in WHNF once those maps</span><span>
+</span><a name="line-32"></a><span class="hs-comment">--    are evaluated.</span><span>
+</span><a name="line-33"></a><span class="hs-comment">--</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- When deciding if this is the correct data structure to use, consider:</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- * If you are using 'Int' keys, you will get much better performance for most</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- operations using &quot;Data.IntMap.Strict&quot;.</span><span>
+</span><a name="line-38"></a><span class="hs-comment">--</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- * If you don't care about ordering, consider use @Data.HashMap.Strict@ from the</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- &lt;https://hackage.haskell.org/package/unordered-containers unordered-containers&gt;</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- package instead.</span><span>
+</span><a name="line-42"></a><span class="hs-comment">--</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- For a walkthrough of the most commonly used functions see the</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- &lt;https://haskell-containers.readthedocs.io/en/latest/map.html maps introduction&gt;.</span><span>
+</span><a name="line-45"></a><span class="hs-comment">--</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- This module is intended to be imported qualified, to avoid name clashes with</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- Prelude functions:</span><span>
+</span><a name="line-48"></a><span class="hs-comment">--</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- &gt; import qualified Data.Map.Strict as Map</span><span>
+</span><a name="line-50"></a><span class="hs-comment">--</span><span>
+</span><a name="line-51"></a><span class="hs-comment">-- Note that the implementation is generally /left-biased/. Functions that take</span><span>
+</span><a name="line-52"></a><span class="hs-comment">-- two maps as arguments and combine them, such as `union` and `intersection`,</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- prefer the values in the first argument to those in the second.</span><span>
+</span><a name="line-54"></a><span class="hs-comment">--</span><span>
+</span><a name="line-55"></a><span class="hs-comment">--</span><span>
+</span><a name="line-56"></a><span class="hs-comment">-- == Detailed performance information</span><span>
+</span><a name="line-57"></a><span class="hs-comment">--</span><span>
+</span><a name="line-58"></a><span class="hs-comment">-- The amortized running time is given for each operation, with /n/ referring to</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- the number of entries in the map.</span><span>
+</span><a name="line-60"></a><span class="hs-comment">--</span><span>
+</span><a name="line-61"></a><span class="hs-comment">-- Benchmarks comparing &quot;Data.Map.Strict&quot; with other dictionary implementations</span><span>
+</span><a name="line-62"></a><span class="hs-comment">-- can be found at https://github.com/haskell-perf/dictionaries.</span><span>
+</span><a name="line-63"></a><span class="hs-comment">--</span><span>
+</span><a name="line-64"></a><span class="hs-comment">--</span><span>
+</span><a name="line-65"></a><span class="hs-comment">-- == Warning</span><span>
+</span><a name="line-66"></a><span class="hs-comment">--</span><span>
+</span><a name="line-67"></a><span class="hs-comment">-- The size of a 'Map' must not exceed @maxBound::Int@. Violation of this</span><span>
+</span><a name="line-68"></a><span class="hs-comment">-- condition is not detected and if the size limit is exceeded, its behaviour is</span><span>
+</span><a name="line-69"></a><span class="hs-comment">-- undefined.</span><span>
+</span><a name="line-70"></a><span class="hs-comment">--</span><span>
+</span><a name="line-71"></a><span class="hs-comment">-- The 'Map' type is shared between the lazy and strict modules, meaning that</span><span>
+</span><a name="line-72"></a><span class="hs-comment">-- the same 'Map' value can be passed to functions in both modules. This means</span><span>
+</span><a name="line-73"></a><span class="hs-comment">-- that the 'Functor', 'Traversable' and 'Data' instances are the same as for</span><span>
+</span><a name="line-74"></a><span class="hs-comment">-- the &quot;Data.Map.Lazy&quot; module, so if they are used on strict maps, the resulting</span><span>
+</span><a name="line-75"></a><span class="hs-comment">-- maps may contain suspended values (thunks).</span><span>
+</span><a name="line-76"></a><span class="hs-comment">--</span><span>
+</span><a name="line-77"></a><span class="hs-comment">--</span><span>
+</span><a name="line-78"></a><span class="hs-comment">-- == Implementation</span><span>
+</span><a name="line-79"></a><span class="hs-comment">--</span><span>
+</span><a name="line-80"></a><span class="hs-comment">-- The implementation of 'Map' is based on /size balanced/ binary trees (or</span><span>
+</span><a name="line-81"></a><span class="hs-comment">-- trees of /bounded balance/) as described by:</span><span>
+</span><a name="line-82"></a><span class="hs-comment">--</span><span>
+</span><a name="line-83"></a><span class="hs-comment">--    * Stephen Adams, \&quot;/Efficient sets: a balancing act/\&quot;,</span><span>
+</span><a name="line-84"></a><span class="hs-comment">--     Journal of Functional Programming 3(4):553-562, October 1993,</span><span>
+</span><a name="line-85"></a><span class="hs-comment">--     &lt;http://www.swiss.ai.mit.edu/~adams/BB/&gt;.</span><span>
+</span><a name="line-86"></a><span class="hs-comment">--    * J. Nievergelt and E.M. Reingold,</span><span>
+</span><a name="line-87"></a><span class="hs-comment">--      \&quot;/Binary search trees of bounded balance/\&quot;,</span><span>
+</span><a name="line-88"></a><span class="hs-comment">--      SIAM journal of computing 2(1), March 1973.</span><span>
+</span><a name="line-89"></a><span class="hs-comment">--</span><span>
+</span><a name="line-90"></a><span class="hs-comment">--  Bounds for 'union', 'intersection', and 'difference' are as given</span><span>
+</span><a name="line-91"></a><span class="hs-comment">--  by</span><span>
+</span><a name="line-92"></a><span class="hs-comment">--</span><span>
+</span><a name="line-93"></a><span class="hs-comment">--    * Guy Blelloch, Daniel Ferizovic, and Yihan Sun,</span><span>
+</span><a name="line-94"></a><span class="hs-comment">--      \&quot;/Just Join for Parallel Ordered Sets/\&quot;,</span><span>
+</span><a name="line-95"></a><span class="hs-comment">--      &lt;https://arxiv.org/abs/1602.02120v3&gt;.</span><span>
+</span><a name="line-96"></a><span class="hs-comment">--</span><span>
+</span><a name="line-97"></a><span class="hs-comment">--</span><span>
+</span><a name="line-98"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-99"></a><span>
+</span><a name="line-100"></a><span class="hs-comment">-- See the notes at the beginning of Data.Map.Internal.</span><span>
+</span><a name="line-101"></a><span>
+</span><a name="line-102"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Map.Strict</span><span>
+</span><a name="line-103"></a><span>    </span><span class="hs-special">(</span><span>
+</span><a name="line-104"></a><span>    </span><span class="hs-comment">-- * Map type</span><span>
+</span><a name="line-105"></a><span>    </span><a href="Data.Map.Internal.html#Map"><span class="hs-identifier hs-type">Map</span></a><span>              </span><span class="hs-comment">-- instance Eq,Show,Read</span><span>
+</span><a name="line-106"></a><span>
+</span><a name="line-107"></a><span>    </span><span class="hs-comment">-- * Operators</span><span>
+</span><a name="line-108"></a><span>    </span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">!</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><a href="Data.Map.Internal.html#%21%3F"><span class="hs-operator hs-var">!?</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><a href="Data.Map.Internal.html#%5C%5C"><span class="hs-operator hs-var">\\</span></a><span class="hs-special">)</span><span>
+</span><a name="line-109"></a><span>
+</span><a name="line-110"></a><span>    </span><span class="hs-comment">-- * Query</span><span>
+</span><a name="line-111"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#null"><span class="hs-identifier hs-var">null</span></a><span>
+</span><a name="line-112"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#size"><span class="hs-identifier hs-var">size</span></a><span>
+</span><a name="line-113"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#member"><span class="hs-identifier hs-var">member</span></a><span>
+</span><a name="line-114"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#notMember"><span class="hs-identifier hs-var">notMember</span></a><span>
+</span><a name="line-115"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#lookup"><span class="hs-identifier hs-var">lookup</span></a><span>
+</span><a name="line-116"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#findWithDefault"><span class="hs-identifier hs-var">findWithDefault</span></a><span>
+</span><a name="line-117"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#lookupLT"><span class="hs-identifier hs-var">lookupLT</span></a><span>
+</span><a name="line-118"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#lookupGT"><span class="hs-identifier hs-var">lookupGT</span></a><span>
+</span><a name="line-119"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#lookupLE"><span class="hs-identifier hs-var">lookupLE</span></a><span>
+</span><a name="line-120"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#lookupGE"><span class="hs-identifier hs-var">lookupGE</span></a><span>
+</span><a name="line-121"></a><span>
+</span><a name="line-122"></a><span>    </span><span class="hs-comment">-- * Construction</span><span>
+</span><a name="line-123"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#empty"><span class="hs-identifier hs-var">empty</span></a><span>
+</span><a name="line-124"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#singleton"><span class="hs-identifier hs-var">singleton</span></a><span>
+</span><a name="line-125"></a><span>
+</span><a name="line-126"></a><span>    </span><span class="hs-comment">-- ** Insertion</span><span>
+</span><a name="line-127"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#insert"><span class="hs-identifier hs-var">insert</span></a><span>
+</span><a name="line-128"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#insertWith"><span class="hs-identifier hs-var">insertWith</span></a><span>
+</span><a name="line-129"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#insertWithKey"><span class="hs-identifier hs-var">insertWithKey</span></a><span>
+</span><a name="line-130"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#insertLookupWithKey"><span class="hs-identifier hs-var">insertLookupWithKey</span></a><span>
+</span><a name="line-131"></a><span>
+</span><a name="line-132"></a><span>    </span><span class="hs-comment">-- ** Delete\/Update</span><span>
+</span><a name="line-133"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#delete"><span class="hs-identifier hs-var">delete</span></a><span>
+</span><a name="line-134"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#adjust"><span class="hs-identifier hs-var">adjust</span></a><span>
+</span><a name="line-135"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#adjustWithKey"><span class="hs-identifier hs-var">adjustWithKey</span></a><span>
+</span><a name="line-136"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#update"><span class="hs-identifier hs-var">update</span></a><span>
+</span><a name="line-137"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#updateWithKey"><span class="hs-identifier hs-var">updateWithKey</span></a><span>
+</span><a name="line-138"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#updateLookupWithKey"><span class="hs-identifier hs-var">updateLookupWithKey</span></a><span>
+</span><a name="line-139"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#alter"><span class="hs-identifier hs-var">alter</span></a><span>
+</span><a name="line-140"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#alterF"><span class="hs-identifier hs-var">alterF</span></a><span>
+</span><a name="line-141"></a><span>
+</span><a name="line-142"></a><span>    </span><span class="hs-comment">-- * Combine</span><span>
+</span><a name="line-143"></a><span>
+</span><a name="line-144"></a><span>    </span><span class="hs-comment">-- ** Union</span><span>
+</span><a name="line-145"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#union"><span class="hs-identifier hs-var">union</span></a><span>
+</span><a name="line-146"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#unionWith"><span class="hs-identifier hs-var">unionWith</span></a><span>
+</span><a name="line-147"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#unionWithKey"><span class="hs-identifier hs-var">unionWithKey</span></a><span>
+</span><a name="line-148"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#unions"><span class="hs-identifier hs-var">unions</span></a><span>
+</span><a name="line-149"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#unionsWith"><span class="hs-identifier hs-var">unionsWith</span></a><span>
+</span><a name="line-150"></a><span>
+</span><a name="line-151"></a><span>    </span><span class="hs-comment">-- ** Difference</span><span>
+</span><a name="line-152"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#difference"><span class="hs-identifier hs-var">difference</span></a><span>
+</span><a name="line-153"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#differenceWith"><span class="hs-identifier hs-var">differenceWith</span></a><span>
+</span><a name="line-154"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#differenceWithKey"><span class="hs-identifier hs-var">differenceWithKey</span></a><span>
+</span><a name="line-155"></a><span>
+</span><a name="line-156"></a><span>    </span><span class="hs-comment">-- ** Intersection</span><span>
+</span><a name="line-157"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#intersection"><span class="hs-identifier hs-var">intersection</span></a><span>
+</span><a name="line-158"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#intersectionWith"><span class="hs-identifier hs-var">intersectionWith</span></a><span>
+</span><a name="line-159"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#intersectionWithKey"><span class="hs-identifier hs-var">intersectionWithKey</span></a><span>
+</span><a name="line-160"></a><span>
+</span><a name="line-161"></a><span>    </span><span class="hs-comment">-- ** General combining functions</span><span>
+</span><a name="line-162"></a><span>    </span><span class="hs-comment">-- | See &quot;Data.Map.Merge.Strict&quot;</span><span>
+</span><a name="line-163"></a><span>
+</span><a name="line-164"></a><span>    </span><span class="hs-comment">-- ** Deprecated general combining function</span><span>
+</span><a name="line-165"></a><span>
+</span><a name="line-166"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mergeWithKey"><span class="hs-identifier hs-var">mergeWithKey</span></a><span>
+</span><a name="line-167"></a><span>
+</span><a name="line-168"></a><span>    </span><span class="hs-comment">-- * Traversal</span><span>
+</span><a name="line-169"></a><span>    </span><span class="hs-comment">-- ** Map</span><span>
+</span><a name="line-170"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#map"><span class="hs-identifier hs-var">map</span></a><span>
+</span><a name="line-171"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapWithKey"><span class="hs-identifier hs-var">mapWithKey</span></a><span>
+</span><a name="line-172"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#traverseWithKey"><span class="hs-identifier hs-var">traverseWithKey</span></a><span>
+</span><a name="line-173"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#traverseMaybeWithKey"><span class="hs-identifier hs-var">traverseMaybeWithKey</span></a><span>
+</span><a name="line-174"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapAccum"><span class="hs-identifier hs-var">mapAccum</span></a><span>
+</span><a name="line-175"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapAccumWithKey"><span class="hs-identifier hs-var">mapAccumWithKey</span></a><span>
+</span><a name="line-176"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapAccumRWithKey"><span class="hs-identifier hs-var">mapAccumRWithKey</span></a><span>
+</span><a name="line-177"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#mapKeys"><span class="hs-identifier hs-var">mapKeys</span></a><span>
+</span><a name="line-178"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapKeysWith"><span class="hs-identifier hs-var">mapKeysWith</span></a><span>
+</span><a name="line-179"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#mapKeysMonotonic"><span class="hs-identifier hs-var">mapKeysMonotonic</span></a><span>
+</span><a name="line-180"></a><span>
+</span><a name="line-181"></a><span>    </span><span class="hs-comment">-- * Folds</span><span>
+</span><a name="line-182"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#foldr"><span class="hs-identifier hs-var">foldr</span></a><span>
+</span><a name="line-183"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#foldl"><span class="hs-identifier hs-var">foldl</span></a><span>
+</span><a name="line-184"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#foldrWithKey"><span class="hs-identifier hs-var">foldrWithKey</span></a><span>
+</span><a name="line-185"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#foldlWithKey"><span class="hs-identifier hs-var">foldlWithKey</span></a><span>
+</span><a name="line-186"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#foldMapWithKey"><span class="hs-identifier hs-var">foldMapWithKey</span></a><span>
+</span><a name="line-187"></a><span>
+</span><a name="line-188"></a><span>    </span><span class="hs-comment">-- ** Strict folds</span><span>
+</span><a name="line-189"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#foldr%27"><span class="hs-identifier hs-var">foldr'</span></a><span>
+</span><a name="line-190"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#foldl%27"><span class="hs-identifier hs-var">foldl'</span></a><span>
+</span><a name="line-191"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#foldrWithKey%27"><span class="hs-identifier hs-var">foldrWithKey'</span></a><span>
+</span><a name="line-192"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#foldlWithKey%27"><span class="hs-identifier hs-var">foldlWithKey'</span></a><span>
+</span><a name="line-193"></a><span>
+</span><a name="line-194"></a><span>    </span><span class="hs-comment">-- * Conversion</span><span>
+</span><a name="line-195"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#elems"><span class="hs-identifier hs-var">elems</span></a><span>
+</span><a name="line-196"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#keys"><span class="hs-identifier hs-var">keys</span></a><span>
+</span><a name="line-197"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#assocs"><span class="hs-identifier hs-var">assocs</span></a><span>
+</span><a name="line-198"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#keysSet"><span class="hs-identifier hs-var">keysSet</span></a><span>
+</span><a name="line-199"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromSet"><span class="hs-identifier hs-var">fromSet</span></a><span>
+</span><a name="line-200"></a><span>
+</span><a name="line-201"></a><span>    </span><span class="hs-comment">-- ** Lists</span><span>
+</span><a name="line-202"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#toList"><span class="hs-identifier hs-var">toList</span></a><span>
+</span><a name="line-203"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromList"><span class="hs-identifier hs-var">fromList</span></a><span>
+</span><a name="line-204"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromListWith"><span class="hs-identifier hs-var">fromListWith</span></a><span>
+</span><a name="line-205"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromListWithKey"><span class="hs-identifier hs-var">fromListWithKey</span></a><span>
+</span><a name="line-206"></a><span>
+</span><a name="line-207"></a><span>    </span><span class="hs-comment">-- ** Ordered lists</span><span>
+</span><a name="line-208"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#toAscList"><span class="hs-identifier hs-var">toAscList</span></a><span>
+</span><a name="line-209"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#toDescList"><span class="hs-identifier hs-var">toDescList</span></a><span>
+</span><a name="line-210"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromAscList"><span class="hs-identifier hs-var">fromAscList</span></a><span>
+</span><a name="line-211"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromAscListWith"><span class="hs-identifier hs-var">fromAscListWith</span></a><span>
+</span><a name="line-212"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromAscListWithKey"><span class="hs-identifier hs-var">fromAscListWithKey</span></a><span>
+</span><a name="line-213"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromDistinctAscList"><span class="hs-identifier hs-var">fromDistinctAscList</span></a><span>
+</span><a name="line-214"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromDescList"><span class="hs-identifier hs-var">fromDescList</span></a><span>
+</span><a name="line-215"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromDescListWith"><span class="hs-identifier hs-var">fromDescListWith</span></a><span>
+</span><a name="line-216"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromDescListWithKey"><span class="hs-identifier hs-var">fromDescListWithKey</span></a><span>
+</span><a name="line-217"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#fromDistinctDescList"><span class="hs-identifier hs-var">fromDistinctDescList</span></a><span>
+</span><a name="line-218"></a><span>
+</span><a name="line-219"></a><span>    </span><span class="hs-comment">-- * Filter</span><span>
+</span><a name="line-220"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#filter"><span class="hs-identifier hs-var">filter</span></a><span>
+</span><a name="line-221"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#filterWithKey"><span class="hs-identifier hs-var">filterWithKey</span></a><span>
+</span><a name="line-222"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#restrictKeys"><span class="hs-identifier hs-var">restrictKeys</span></a><span>
+</span><a name="line-223"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#withoutKeys"><span class="hs-identifier hs-var">withoutKeys</span></a><span>
+</span><a name="line-224"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#partition"><span class="hs-identifier hs-var">partition</span></a><span>
+</span><a name="line-225"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#partitionWithKey"><span class="hs-identifier hs-var">partitionWithKey</span></a><span>
+</span><a name="line-226"></a><span>
+</span><a name="line-227"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#takeWhileAntitone"><span class="hs-identifier hs-var">takeWhileAntitone</span></a><span>
+</span><a name="line-228"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#dropWhileAntitone"><span class="hs-identifier hs-var">dropWhileAntitone</span></a><span>
+</span><a name="line-229"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#spanAntitone"><span class="hs-identifier hs-var">spanAntitone</span></a><span>
+</span><a name="line-230"></a><span>
+</span><a name="line-231"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapMaybe"><span class="hs-identifier hs-var">mapMaybe</span></a><span>
+</span><a name="line-232"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapMaybeWithKey"><span class="hs-identifier hs-var">mapMaybeWithKey</span></a><span>
+</span><a name="line-233"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapEither"><span class="hs-identifier hs-var">mapEither</span></a><span>
+</span><a name="line-234"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapEitherWithKey"><span class="hs-identifier hs-var">mapEitherWithKey</span></a><span>
+</span><a name="line-235"></a><span>
+</span><a name="line-236"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#split"><span class="hs-identifier hs-var">split</span></a><span>
+</span><a name="line-237"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#splitLookup"><span class="hs-identifier hs-var">splitLookup</span></a><span>
+</span><a name="line-238"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#splitRoot"><span class="hs-identifier hs-var">splitRoot</span></a><span>
+</span><a name="line-239"></a><span>
+</span><a name="line-240"></a><span>    </span><span class="hs-comment">-- * Submap</span><span>
+</span><a name="line-241"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#isSubmapOf"><span class="hs-identifier hs-var">isSubmapOf</span></a><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#isSubmapOfBy"><span class="hs-identifier hs-var">isSubmapOfBy</span></a><span>
+</span><a name="line-242"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#isProperSubmapOf"><span class="hs-identifier hs-var">isProperSubmapOf</span></a><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#isProperSubmapOfBy"><span class="hs-identifier hs-var">isProperSubmapOfBy</span></a><span>
+</span><a name="line-243"></a><span>
+</span><a name="line-244"></a><span>    </span><span class="hs-comment">-- * Indexed</span><span>
+</span><a name="line-245"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#lookupIndex"><span class="hs-identifier hs-var">lookupIndex</span></a><span>
+</span><a name="line-246"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#findIndex"><span class="hs-identifier hs-var">findIndex</span></a><span>
+</span><a name="line-247"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#elemAt"><span class="hs-identifier hs-var">elemAt</span></a><span>
+</span><a name="line-248"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#updateAt"><span class="hs-identifier hs-var">updateAt</span></a><span>
+</span><a name="line-249"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#deleteAt"><span class="hs-identifier hs-var">deleteAt</span></a><span>
+</span><a name="line-250"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#take"><span class="hs-identifier hs-var">take</span></a><span>
+</span><a name="line-251"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#drop"><span class="hs-identifier hs-var">drop</span></a><span>
+</span><a name="line-252"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#splitAt"><span class="hs-identifier hs-var">splitAt</span></a><span>
+</span><a name="line-253"></a><span>
+</span><a name="line-254"></a><span>    </span><span class="hs-comment">-- * Min\/Max</span><span>
+</span><a name="line-255"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#lookupMin"><span class="hs-identifier hs-var">lookupMin</span></a><span>
+</span><a name="line-256"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#lookupMax"><span class="hs-identifier hs-var">lookupMax</span></a><span>
+</span><a name="line-257"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#findMin"><span class="hs-identifier hs-var">findMin</span></a><span>
+</span><a name="line-258"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#findMax"><span class="hs-identifier hs-var">findMax</span></a><span>
+</span><a name="line-259"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#deleteMin"><span class="hs-identifier hs-var">deleteMin</span></a><span>
+</span><a name="line-260"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#deleteMax"><span class="hs-identifier hs-var">deleteMax</span></a><span>
+</span><a name="line-261"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#deleteFindMin"><span class="hs-identifier hs-var">deleteFindMin</span></a><span>
+</span><a name="line-262"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#deleteFindMax"><span class="hs-identifier hs-var">deleteFindMax</span></a><span>
+</span><a name="line-263"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#updateMin"><span class="hs-identifier hs-var">updateMin</span></a><span>
+</span><a name="line-264"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#updateMax"><span class="hs-identifier hs-var">updateMax</span></a><span>
+</span><a name="line-265"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#updateMinWithKey"><span class="hs-identifier hs-var">updateMinWithKey</span></a><span>
+</span><a name="line-266"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#updateMaxWithKey"><span class="hs-identifier hs-var">updateMaxWithKey</span></a><span>
+</span><a name="line-267"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#minView"><span class="hs-identifier hs-var">minView</span></a><span>
+</span><a name="line-268"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#maxView"><span class="hs-identifier hs-var">maxView</span></a><span>
+</span><a name="line-269"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#minViewWithKey"><span class="hs-identifier hs-var">minViewWithKey</span></a><span>
+</span><a name="line-270"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#maxViewWithKey"><span class="hs-identifier hs-var">maxViewWithKey</span></a><span>
+</span><a name="line-271"></a><span>
+</span><a name="line-272"></a><span>    </span><span class="hs-comment">-- * Debugging</span><span>
+</span><a name="line-273"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.DeprecatedShowTree.html#showTree"><span class="hs-identifier hs-var">showTree</span></a><span>
+</span><a name="line-274"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.DeprecatedShowTree.html#showTreeWith"><span class="hs-identifier hs-var">showTreeWith</span></a><span>
+</span><a name="line-275"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.Debug.html#valid"><span class="hs-identifier hs-var">valid</span></a><span>
+</span><a name="line-276"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-277"></a><span>
+</span><a name="line-278"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Map.Strict.Internal.html"><span class="hs-identifier">Data.Map.Strict.Internal</span></a><span>
+</span><a name="line-279"></a><span class="hs-keyword">import</span><span> </span><a href="../base-4.11.1.0/src/%{MODULE/./-}.html#%{NAME}/Prelude.html"><span class="hs-identifier">Prelude</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-280"></a></pre></body></html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE BangPatterns #-}</span><span>
+</span><a name="line-3"></a><span class="hs-cpp">#if __GLASGOW_HASKELL__
+</span><span class="hs-pragma">{-# LANGUAGE DeriveDataTypeable, StandaloneDeriving #-}</span><span>
+</span><a name="line-5"></a><span class="hs-cpp">#endif
+#if !defined(TESTING) &amp;&amp; __GLASGOW_HASKELL__ &gt;= 703
+</span><span class="hs-pragma">{-# LANGUAGE Safe #-}</span><span>
+</span><a name="line-8"></a><span class="hs-cpp">#endif
+#if __GLASGOW_HASKELL__ &gt;= 708
+</span><span class="hs-pragma">{-# LANGUAGE RoleAnnotations #-}</span><span>
+</span><a name="line-11"></a><span class="hs-pragma">{-# LANGUAGE TypeFamilies #-}</span><span>
+</span><a name="line-12"></a><span class="hs-cpp">#define USE_MAGIC_PROXY 1
+#endif
+</span><span>
+</span><a name="line-15"></a><span class="hs-cpp">#if USE_MAGIC_PROXY
+</span><span class="hs-pragma">{-# LANGUAGE MagicHash #-}</span><span>
+</span><a name="line-17"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-19"></a><span class="hs-cpp">#include &quot;containers.h&quot;
+</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- Module      :  Data.Map.Merge.Strict</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- Copyright   :  (c) David Feuer 2016</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- License     :  BSD-style</span><span>
+</span><a name="line-26"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-comment">-- This module defines an API for writing functions that merge two</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- maps. The key functions are 'merge' and 'mergeA'.</span><span>
+</span><a name="line-31"></a><span class="hs-comment">-- Each of these can be used with several different \&quot;merge tactics\&quot;.</span><span>
+</span><a name="line-32"></a><span class="hs-comment">--</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- The 'merge' and 'mergeA' functions are shared by</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- the lazy and strict modules. Only the choice of merge tactics</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- determines strictness. If you use 'Data.Map.Merge.Strict.mapMissing'</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- from this module then the results will be forced before they are</span><span>
+</span><a name="line-37"></a><span class="hs-comment">-- inserted. If you use 'Data.Map.Merge.Lazy.mapMissing' from</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- &quot;Data.Map.Merge.Lazy&quot; then they will not.</span><span>
+</span><a name="line-39"></a><span class="hs-comment">--</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- == Efficiency note</span><span>
+</span><a name="line-41"></a><span class="hs-comment">--</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- The 'Category', 'Applicative', and 'Monad' instances for 'WhenMissing'</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- tactics are included because they are valid. However, they are</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- inefficient in many cases and should usually be avoided. The instances</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- for 'WhenMatched' tactics should not pose any major efficiency problems.</span><span>
+</span><a name="line-46"></a><span class="hs-comment">--</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- @since 0.5.9</span><span>
+</span><a name="line-48"></a><span>
+</span><a name="line-49"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Map.Merge.Strict</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-50"></a><span>    </span><span class="hs-comment">-- ** Simple merge tactic types</span><span>
+</span><a name="line-51"></a><span>      </span><a href="Data.Map.Internal.html#SimpleWhenMissing"><span class="hs-identifier hs-type">SimpleWhenMissing</span></a><span>
+</span><a name="line-52"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#SimpleWhenMatched"><span class="hs-identifier hs-type">SimpleWhenMatched</span></a><span>
+</span><a name="line-53"></a><span>
+</span><a name="line-54"></a><span>    </span><span class="hs-comment">-- ** General combining function</span><span>
+</span><a name="line-55"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#merge"><span class="hs-identifier hs-var">merge</span></a><span>
+</span><a name="line-56"></a><span>
+</span><a name="line-57"></a><span>    </span><span class="hs-comment">-- *** @WhenMatched@ tactics</span><span>
+</span><a name="line-58"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#zipWithMaybeMatched"><span class="hs-identifier hs-var">zipWithMaybeMatched</span></a><span>
+</span><a name="line-59"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#zipWithMatched"><span class="hs-identifier hs-var">zipWithMatched</span></a><span>
+</span><a name="line-60"></a><span>
+</span><a name="line-61"></a><span>    </span><span class="hs-comment">-- *** @WhenMissing@ tactics</span><span>
+</span><a name="line-62"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapMaybeMissing"><span class="hs-identifier hs-var">mapMaybeMissing</span></a><span>
+</span><a name="line-63"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#dropMissing"><span class="hs-identifier hs-var">dropMissing</span></a><span>
+</span><a name="line-64"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#preserveMissing"><span class="hs-identifier hs-var">preserveMissing</span></a><span>
+</span><a name="line-65"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapMissing"><span class="hs-identifier hs-var">mapMissing</span></a><span>
+</span><a name="line-66"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#filterMissing"><span class="hs-identifier hs-var">filterMissing</span></a><span>
+</span><a name="line-67"></a><span>
+</span><a name="line-68"></a><span>    </span><span class="hs-comment">-- ** Applicative merge tactic types</span><span>
+</span><a name="line-69"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#WhenMissing"><span class="hs-identifier hs-type">WhenMissing</span></a><span>
+</span><a name="line-70"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#WhenMatched"><span class="hs-identifier hs-type">WhenMatched</span></a><span>
+</span><a name="line-71"></a><span>
+</span><a name="line-72"></a><span>    </span><span class="hs-comment">-- ** Applicative general combining function</span><span>
+</span><a name="line-73"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#mergeA"><span class="hs-identifier hs-var">mergeA</span></a><span>
+</span><a name="line-74"></a><span>
+</span><a name="line-75"></a><span>    </span><span class="hs-comment">-- *** @WhenMatched@ tactics</span><span>
+</span><a name="line-76"></a><span>    </span><span class="hs-comment">-- | The tactics described for 'merge' work for</span><span>
+</span><a name="line-77"></a><span>    </span><span class="hs-comment">-- 'mergeA' as well. Furthermore, the following</span><span>
+</span><a name="line-78"></a><span>    </span><span class="hs-comment">-- are available.</span><span>
+</span><a name="line-79"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#zipWithMaybeAMatched"><span class="hs-identifier hs-var">zipWithMaybeAMatched</span></a><span>
+</span><a name="line-80"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#zipWithAMatched"><span class="hs-identifier hs-var">zipWithAMatched</span></a><span>
+</span><a name="line-81"></a><span>
+</span><a name="line-82"></a><span>    </span><span class="hs-comment">-- *** @WhenMissing@ tactics</span><span>
+</span><a name="line-83"></a><span>    </span><span class="hs-comment">-- | The tactics described for 'merge' work for</span><span>
+</span><a name="line-84"></a><span>    </span><span class="hs-comment">-- 'mergeA' as well. Furthermore, the following</span><span>
+</span><a name="line-85"></a><span>    </span><span class="hs-comment">-- are available.</span><span>
+</span><a name="line-86"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#traverseMaybeMissing"><span class="hs-identifier hs-var">traverseMaybeMissing</span></a><span>
+</span><a name="line-87"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#traverseMissing"><span class="hs-identifier hs-var">traverseMissing</span></a><span>
+</span><a name="line-88"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#filterAMissing"><span class="hs-identifier hs-var">filterAMissing</span></a><span>
+</span><a name="line-89"></a><span>
+</span><a name="line-90"></a><span>    </span><span class="hs-comment">-- ** Covariant maps for tactics</span><span>
+</span><a name="line-91"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapWhenMissing"><span class="hs-identifier hs-var">mapWhenMissing</span></a><span>
+</span><a name="line-92"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Strict.Internal.html#mapWhenMatched"><span class="hs-identifier hs-var">mapWhenMatched</span></a><span>
+</span><a name="line-93"></a><span>
+</span><a name="line-94"></a><span>    </span><span class="hs-comment">-- ** Miscellaneous functions on tactics</span><span>
+</span><a name="line-95"></a><span>
+</span><a name="line-96"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#runWhenMatched"><span class="hs-identifier hs-var">runWhenMatched</span></a><span>
+</span><a name="line-97"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="Data.Map.Internal.html#runWhenMissing"><span class="hs-identifier hs-var">runWhenMissing</span></a><span>
+</span><a name="line-98"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-99"></a><span>
+</span><a name="line-100"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Map.Strict.Internal.html"><span class="hs-identifier">Data.Map.Strict.Internal</span></a><span>
+</span><a name="line-101"></a></pre></body></html>

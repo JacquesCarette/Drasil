@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Unsafe #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE MagicHash #-}</span><span>
+</span><a name="line-3"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-4"></a><span class="hs-pragma">{-# LANGUAGE UnboxedTuples #-}</span><span>
+</span><a name="line-5"></a><span>
+</span><a name="line-6"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Module      :  Debug.Trace</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-11"></a><span class="hs-comment">--</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Stability   :  provisional</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Functions for tracing and monitoring execution.</span><span>
+</span><a name="line-17"></a><span class="hs-comment">--</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- These can be useful for investigating bugs or performance problems.</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- They should /not/ be used in production code.</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-22"></a><span>
+</span><a name="line-23"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Debug.Trace</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-24"></a><span>        </span><span class="hs-comment">-- * Tracing</span><span>
+</span><a name="line-25"></a><span>        </span><span class="hs-comment">-- $tracing</span><span>
+</span><a name="line-26"></a><span>        </span><a href="Debug.Trace.html#trace"><span class="hs-identifier hs-var">trace</span></a><span class="hs-special">,</span><span>
+</span><a name="line-27"></a><span>        </span><a href="Debug.Trace.html#traceId"><span class="hs-identifier hs-var">traceId</span></a><span class="hs-special">,</span><span>
+</span><a name="line-28"></a><span>        </span><a href="Debug.Trace.html#traceShow"><span class="hs-identifier hs-var">traceShow</span></a><span class="hs-special">,</span><span>
+</span><a name="line-29"></a><span>        </span><a href="Debug.Trace.html#traceShowId"><span class="hs-identifier hs-var">traceShowId</span></a><span class="hs-special">,</span><span>
+</span><a name="line-30"></a><span>        </span><a href="Debug.Trace.html#traceStack"><span class="hs-identifier hs-var">traceStack</span></a><span class="hs-special">,</span><span>
+</span><a name="line-31"></a><span>        </span><a href="Debug.Trace.html#traceIO"><span class="hs-identifier hs-var">traceIO</span></a><span class="hs-special">,</span><span>
+</span><a name="line-32"></a><span>        </span><a href="Debug.Trace.html#traceM"><span class="hs-identifier hs-var">traceM</span></a><span class="hs-special">,</span><span>
+</span><a name="line-33"></a><span>        </span><a href="Debug.Trace.html#traceShowM"><span class="hs-identifier hs-var">traceShowM</span></a><span class="hs-special">,</span><span>
+</span><a name="line-34"></a><span>        </span><a href="Debug.Trace.html#putTraceMsg"><span class="hs-identifier hs-var">putTraceMsg</span></a><span class="hs-special">,</span><span>
+</span><a name="line-35"></a><span>
+</span><a name="line-36"></a><span>        </span><span class="hs-comment">-- * Eventlog tracing</span><span>
+</span><a name="line-37"></a><span>        </span><span class="hs-comment">-- $eventlog_tracing</span><span>
+</span><a name="line-38"></a><span>        </span><a href="Debug.Trace.html#traceEvent"><span class="hs-identifier hs-var">traceEvent</span></a><span class="hs-special">,</span><span>
+</span><a name="line-39"></a><span>        </span><a href="Debug.Trace.html#traceEventIO"><span class="hs-identifier hs-var">traceEventIO</span></a><span class="hs-special">,</span><span>
+</span><a name="line-40"></a><span>
+</span><a name="line-41"></a><span>        </span><span class="hs-comment">-- * Execution phase markers</span><span>
+</span><a name="line-42"></a><span>        </span><span class="hs-comment">-- $markers</span><span>
+</span><a name="line-43"></a><span>        </span><a href="Debug.Trace.html#traceMarker"><span class="hs-identifier hs-var">traceMarker</span></a><span class="hs-special">,</span><span>
+</span><a name="line-44"></a><span>        </span><a href="Debug.Trace.html#traceMarkerIO"><span class="hs-identifier hs-var">traceMarkerIO</span></a><span class="hs-special">,</span><span>
+</span><a name="line-45"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-46"></a><span>
+</span><a name="line-47"></a><span class="hs-keyword">import</span><span> </span><a href="System.IO.Unsafe.html"><span class="hs-identifier">System.IO.Unsafe</span></a><span>
+</span><a name="line-48"></a><span>
+</span><a name="line-49"></a><span class="hs-keyword">import</span><span> </span><a href="Foreign.C.String.html"><span class="hs-identifier">Foreign.C.String</span></a><span>
+</span><a name="line-50"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-51"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><a href="GHC.Foreign.html"><span class="hs-identifier">GHC.Foreign</span></a><span>
+</span><a name="line-52"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.IO.Encoding.html"><span class="hs-identifier">GHC.IO.Encoding</span></a><span>
+</span><a name="line-53"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Ptr.html"><span class="hs-identifier">GHC.Ptr</span></a><span>
+</span><a name="line-54"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Show.html"><span class="hs-identifier">GHC.Show</span></a><span>
+</span><a name="line-55"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Stack.html"><span class="hs-identifier">GHC.Stack</span></a><span>
+</span><a name="line-56"></a><span class="hs-keyword">import</span><span> </span><a href="Data.List.html"><span class="hs-identifier">Data.List</span></a><span>
+</span><a name="line-57"></a><span>
+</span><a name="line-58"></a><span class="hs-comment">-- $setup</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- &gt;&gt;&gt; import Prelude</span><span>
+</span><a name="line-60"></a><span>
+</span><a name="line-61"></a><span class="hs-comment">-- $tracing</span><span>
+</span><a name="line-62"></a><span class="hs-comment">--</span><span>
+</span><a name="line-63"></a><span class="hs-comment">-- The 'trace', 'traceShow' and 'traceIO' functions print messages to an output</span><span>
+</span><a name="line-64"></a><span class="hs-comment">-- stream. They are intended for \&quot;printf debugging\&quot;, that is: tracing the flow</span><span>
+</span><a name="line-65"></a><span class="hs-comment">-- of execution and printing interesting values.</span><span>
+</span><a name="line-66"></a><span class="hs-comment">--</span><span>
+</span><a name="line-67"></a><span class="hs-comment">-- All these functions evaluate the message completely before printing</span><span>
+</span><a name="line-68"></a><span class="hs-comment">-- it; so if the message is not fully defined, none of it will be</span><span>
+</span><a name="line-69"></a><span class="hs-comment">-- printed.</span><span>
+</span><a name="line-70"></a><span class="hs-comment">--</span><span>
+</span><a name="line-71"></a><span class="hs-comment">-- The usual output stream is 'System.IO.stderr'. For Windows GUI applications</span><span>
+</span><a name="line-72"></a><span class="hs-comment">-- (that have no stderr) the output is directed to the Windows debug console.</span><span>
+</span><a name="line-73"></a><span class="hs-comment">-- Some implementations of these functions may decorate the string that\'s</span><span>
+</span><a name="line-74"></a><span class="hs-comment">-- output to indicate that you\'re tracing.</span><span>
+</span><a name="line-75"></a><span>
+</span><a name="line-76"></a><span class="hs-comment">-- | The 'traceIO' function outputs the trace message from the IO monad.</span><span>
+</span><a name="line-77"></a><span class="hs-comment">-- This sequences the output with respect to other IO actions.</span><span>
+</span><a name="line-78"></a><span class="hs-comment">--</span><span>
+</span><a name="line-79"></a><span class="hs-comment">-- @since 4.5.0.0</span><span>
+</span><a name="line-80"></a><span class="hs-identifier">traceIO</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-81"></a><a name="traceIO"><a href="Debug.Trace.html#traceIO"><span class="hs-identifier">traceIO</span></a></a><span> </span><a name="local-6989586621679326051"><a href="#local-6989586621679326051"><span class="hs-identifier">msg</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-82"></a><span>    </span><a href="Foreign.C.String.html#withCString"><span class="hs-identifier hs-var">withCString</span></a><span> </span><span class="hs-string">&quot;%s\n&quot;</span><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679326052"><a href="#local-6989586621679326052"><span class="hs-identifier">cfmt</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-83"></a><span>     </span><span class="hs-comment">-- NB: debugBelch can't deal with null bytes, so filter them</span><span>
+</span><a name="line-84"></a><span>     </span><span class="hs-comment">-- out so we don't accidentally truncate the message.  See Trac #9395</span><span>
+</span><a name="line-85"></a><span>     </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><a name="local-6989586621679326053"><a href="#local-6989586621679326053"><span class="hs-identifier">nulls</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679326054"><a href="#local-6989586621679326054"><span class="hs-identifier">msg'</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.OldList.html#partition"><span class="hs-identifier hs-var">partition</span></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#%3D%3D"><span class="hs-operator hs-var">==</span></a><span class="hs-char">'\0'</span><span class="hs-special">)</span><span> </span><a href="#local-6989586621679326051"><span class="hs-identifier hs-var">msg</span></a><span>
+</span><a name="line-86"></a><span>     </span><a href="Foreign.C.String.html#withCString"><span class="hs-identifier hs-var">withCString</span></a><span> </span><a href="#local-6989586621679326054"><span class="hs-identifier hs-var">msg'</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679326055"><a href="#local-6989586621679326055"><span class="hs-identifier">cmsg</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-87"></a><span>      </span><a href="Debug.Trace.html#debugBelch"><span class="hs-identifier hs-var">debugBelch</span></a><span> </span><a href="#local-6989586621679326052"><span class="hs-identifier hs-var">cfmt</span></a><span> </span><a href="#local-6989586621679326055"><span class="hs-identifier hs-var">cmsg</span></a><span>
+</span><a name="line-88"></a><span>     </span><a href="GHC.Base.html#when"><span class="hs-identifier hs-var">when</span></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#not"><span class="hs-identifier hs-var">not</span></a><span> </span><span class="hs-special">(</span><a href="Data.Foldable.html#null"><span class="hs-identifier hs-var">null</span></a><span> </span><a href="#local-6989586621679326053"><span class="hs-identifier hs-var">nulls</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span>
+</span><a name="line-89"></a><span>       </span><a href="Foreign.C.String.html#withCString"><span class="hs-identifier hs-var">withCString</span></a><span> </span><span class="hs-string">&quot;WARNING: previous trace message had null bytes&quot;</span><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679326056"><a href="#local-6989586621679326056"><span class="hs-identifier">cmsg</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-90"></a><span>         </span><a href="Debug.Trace.html#debugBelch"><span class="hs-identifier hs-var">debugBelch</span></a><span> </span><a href="#local-6989586621679326052"><span class="hs-identifier hs-var">cfmt</span></a><span> </span><a href="#local-6989586621679326056"><span class="hs-identifier hs-var">cmsg</span></a><span>
+</span><a name="line-91"></a><span>
+</span><a name="line-92"></a><span class="hs-comment">-- don't use debugBelch() directly, because we cannot call varargs functions</span><span>
+</span><a name="line-93"></a><span class="hs-comment">-- using the FFI.</span><span>
+</span><a name="line-94"></a><span class="hs-keyword">foreign</span><span> </span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">ccall</span><span> </span><span class="hs-keyword">unsafe</span><span> </span><span class="hs-string">&quot;HsBase.h debugBelch2&quot;</span><span>
+</span><a name="line-95"></a><span>   </span><span class="hs-identifier">debugBelch</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Foreign.C.String.html#CString"><span class="hs-identifier hs-type">CString</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Foreign.C.String.html#CString"><span class="hs-identifier hs-type">CString</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-96"></a><span>
+</span><a name="line-97"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-98"></a><span class="hs-identifier">putTraceMsg</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-99"></a><a name="putTraceMsg"><a href="Debug.Trace.html#putTraceMsg"><span class="hs-identifier">putTraceMsg</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Debug.Trace.html#traceIO"><span class="hs-identifier hs-var">traceIO</span></a><span>
+</span><a name="line-100"></a><span class="hs-pragma">{-# DEPRECATED</span><span> </span><span class="hs-pragma">putTraceMsg</span><span> </span><span class="hs-pragma">&quot;Use 'Debug.Trace.traceIO'&quot;</span><span> </span><span class="hs-pragma">#-}</span><span> </span><span class="hs-comment">-- deprecated in 7.4</span><span>
+</span><a name="line-101"></a><span>
+</span><a name="line-102"></a><span>
+</span><a name="line-103"></a><span class="hs-pragma">{-# NOINLINE</span><span> </span><span class="hs-pragma">trace</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-104"></a><span class="hs-comment">{-|
+The 'trace' function outputs the trace message given as its first argument,
+before returning the second argument as its result.
+
+For example, this returns the value of @f x@ but first outputs the message.
+
+&gt;&gt;&gt; let x = 123; f = show
+&gt;&gt;&gt; trace (&quot;calling f with x = &quot; ++ show x) (f x)
+&quot;calling f with x = 123
+123&quot;
+
+The 'trace' function should /only/ be used for debugging, or for monitoring
+execution. The function is not referentially transparent: its type indicates
+that it is a pure function but it has the side effect of outputting the
+trace message.
+-}</span><span>
+</span><a name="line-120"></a><span class="hs-identifier">trace</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326050"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326050"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-121"></a><a name="trace"><a href="Debug.Trace.html#trace"><span class="hs-identifier">trace</span></a></a><span> </span><a name="local-6989586621679326057"><a href="#local-6989586621679326057"><span class="hs-identifier">string</span></a></a><span> </span><a name="local-6989586621679326058"><a href="#local-6989586621679326058"><span class="hs-identifier">expr</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Unsafe.html#unsafePerformIO"><span class="hs-identifier hs-var">unsafePerformIO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-122"></a><span>    </span><a href="Debug.Trace.html#traceIO"><span class="hs-identifier hs-var">traceIO</span></a><span> </span><a href="#local-6989586621679326057"><span class="hs-identifier hs-var">string</span></a><span>
+</span><a name="line-123"></a><span>    </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><a href="#local-6989586621679326058"><span class="hs-identifier hs-var">expr</span></a><span>
+</span><a name="line-124"></a><span>
+</span><a name="line-125"></a><span class="hs-comment">{-|
+Like 'trace' but returns the message instead of a third value.
+
+&gt;&gt;&gt; traceId &quot;hello&quot;
+&quot;hello
+hello&quot;
+
+@since 4.7.0.0
+-}</span><span>
+</span><a name="line-134"></a><span class="hs-identifier">traceId</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span>
+</span><a name="line-135"></a><a name="traceId"><a href="Debug.Trace.html#traceId"><span class="hs-identifier">traceId</span></a></a><span> </span><a name="local-6989586621679326059"><a href="#local-6989586621679326059"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Debug.Trace.html#trace"><span class="hs-identifier hs-var">trace</span></a><span> </span><a href="#local-6989586621679326059"><span class="hs-identifier hs-var">a</span></a><span> </span><a href="#local-6989586621679326059"><span class="hs-identifier hs-var">a</span></a><span>
+</span><a name="line-136"></a><span>
+</span><a name="line-137"></a><span class="hs-comment">{-|
+Like 'trace', but uses 'show' on the argument to convert it to a 'String'.
+
+This makes it convenient for printing the values of interesting variables or
+expressions inside a function. For example here we print the value of the
+variables @x@ and @y@:
+
+&gt;&gt;&gt; let f x y = traceShow (x,y) (x + y) in f (1+2) 5
+(3,5)
+8
+
+-}</span><span>
+</span><a name="line-149"></a><span class="hs-identifier">traceShow</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span> </span><a href="#local-6989586621679326048"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a href="#local-6989586621679326048"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326049"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326049"><span class="hs-identifier hs-type">b</span></a><span>
+</span><a name="line-150"></a><a name="traceShow"><a href="Debug.Trace.html#traceShow"><span class="hs-identifier">traceShow</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Debug.Trace.html#trace"><span class="hs-identifier hs-var">trace</span></a><span> </span><a href="GHC.Base.html#."><span class="hs-operator hs-var">.</span></a><span> </span><a href="GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a><span>
+</span><a name="line-151"></a><span>
+</span><a name="line-152"></a><span class="hs-comment">{-|
+Like 'traceShow' but returns the shown value instead of a third value.
+
+&gt;&gt;&gt; traceShowId (1+2+3, &quot;hello&quot; ++ &quot;world&quot;)
+(6,&quot;helloworld&quot;)
+(6,&quot;helloworld&quot;)
+
+@since 4.7.0.0
+-}</span><span>
+</span><a name="line-161"></a><span class="hs-identifier">traceShowId</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span> </span><a href="#local-6989586621679326047"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a href="#local-6989586621679326047"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326047"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-162"></a><a name="traceShowId"><a href="Debug.Trace.html#traceShowId"><span class="hs-identifier">traceShowId</span></a></a><span> </span><a name="local-6989586621679326060"><a href="#local-6989586621679326060"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Debug.Trace.html#trace"><span class="hs-identifier hs-var">trace</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a><span> </span><a href="#local-6989586621679326060"><span class="hs-identifier hs-var">a</span></a><span class="hs-special">)</span><span> </span><a href="#local-6989586621679326060"><span class="hs-identifier hs-var">a</span></a><span>
+</span><a name="line-163"></a><span>
+</span><a name="line-164"></a><span class="hs-comment">{-|
+Like 'trace' but returning unit in an arbitrary 'Applicative' context. Allows
+for convenient use in do-notation.
+
+Note that the application of 'traceM' is not an action in the 'Applicative'
+context, as 'traceIO' is in the 'IO' type. While the fresh bindings in the
+following example will force the 'traceM' expressions to be reduced every time
+the @do@-block is executed, @traceM &quot;not crashed&quot;@ would only be reduced once,
+and the message would only be printed once.  If your monad is in 'MonadIO',
+@liftIO . traceIO@ may be a better option.
+
+&gt;&gt;&gt; :{
+do
+    x &lt;- Just 3
+    traceM (&quot;x: &quot; ++ show x)
+    y &lt;- pure 12
+    traceM (&quot;y: &quot; ++ show y)
+    pure (x*2 + y)
+:}
+x: 3
+y: 12
+Just 18
+
+@since 4.7.0.0
+-}</span><span>
+</span><a name="line-189"></a><span class="hs-identifier">traceM</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#Applicative"><span class="hs-identifier hs-type">Applicative</span></a><span> </span><a href="#local-6989586621679326046"><span class="hs-identifier hs-type">f</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326046"><span class="hs-identifier hs-type">f</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-190"></a><a name="traceM"><a href="Debug.Trace.html#traceM"><span class="hs-identifier">traceM</span></a></a><span> </span><a name="local-6989586621679326061"><a href="#local-6989586621679326061"><span class="hs-identifier">string</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Debug.Trace.html#trace"><span class="hs-identifier hs-var">trace</span></a><span> </span><a href="#local-6989586621679326061"><span class="hs-identifier hs-var">string</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><a href="GHC.Base.html#pure"><span class="hs-identifier hs-var">pure</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-191"></a><span>
+</span><a name="line-192"></a><span class="hs-comment">{-|
+Like 'traceM', but uses 'show' on the argument to convert it to a 'String'.
+
+&gt;&gt;&gt; :{
+do
+    x &lt;- Just 3
+    traceShowM x
+    y &lt;- pure 12
+    traceShowM y
+    pure (x*2 + y)
+:}
+3
+12
+Just 18
+
+@since 4.7.0.0
+-}</span><span>
+</span><a name="line-209"></a><span class="hs-identifier">traceShowM</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span> </span><a href="#local-6989586621679326044"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Base.html#Applicative"><span class="hs-identifier hs-type">Applicative</span></a><span> </span><a href="#local-6989586621679326045"><span class="hs-identifier hs-type">f</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a href="#local-6989586621679326044"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326045"><span class="hs-identifier hs-type">f</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-210"></a><a name="traceShowM"><a href="Debug.Trace.html#traceShowM"><span class="hs-identifier">traceShowM</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="Debug.Trace.html#traceM"><span class="hs-identifier hs-var">traceM</span></a><span> </span><a href="GHC.Base.html#."><span class="hs-operator hs-var">.</span></a><span> </span><a href="GHC.Show.html#show"><span class="hs-identifier hs-var">show</span></a><span>
+</span><a name="line-211"></a><span>
+</span><a name="line-212"></a><span class="hs-comment">-- | like 'trace', but additionally prints a call stack if one is</span><span>
+</span><a name="line-213"></a><span class="hs-comment">-- available.</span><span>
+</span><a name="line-214"></a><span class="hs-comment">--</span><span>
+</span><a name="line-215"></a><span class="hs-comment">-- In the current GHC implementation, the call stack is only</span><span>
+</span><a name="line-216"></a><span class="hs-comment">-- available if the program was compiled with @-prof@; otherwise</span><span>
+</span><a name="line-217"></a><span class="hs-comment">-- 'traceStack' behaves exactly like 'trace'.  Entries in the call</span><span>
+</span><a name="line-218"></a><span class="hs-comment">-- stack correspond to @SCC@ annotations, so it is a good idea to use</span><span>
+</span><a name="line-219"></a><span class="hs-comment">-- @-fprof-auto@ or @-fprof-auto-calls@ to add SCC annotations automatically.</span><span>
+</span><a name="line-220"></a><span class="hs-comment">--</span><span>
+</span><a name="line-221"></a><span class="hs-comment">-- @since 4.5.0.0</span><span>
+</span><a name="line-222"></a><span class="hs-identifier">traceStack</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326043"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326043"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-223"></a><a name="traceStack"><a href="Debug.Trace.html#traceStack"><span class="hs-identifier">traceStack</span></a></a><span> </span><a name="local-6989586621679326062"><a href="#local-6989586621679326062"><span class="hs-identifier">str</span></a></a><span> </span><a name="local-6989586621679326063"><a href="#local-6989586621679326063"><span class="hs-identifier">expr</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Unsafe.html#unsafePerformIO"><span class="hs-identifier hs-var">unsafePerformIO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-224"></a><span>   </span><a href="Debug.Trace.html#traceIO"><span class="hs-identifier hs-var">traceIO</span></a><span> </span><a href="#local-6989586621679326062"><span class="hs-identifier hs-var">str</span></a><span>
+</span><a name="line-225"></a><span>   </span><a name="local-6989586621679326064"><a href="#local-6989586621679326064"><span class="hs-identifier">stack</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="GHC.Stack.CCS.html#currentCallStack"><span class="hs-identifier hs-var">currentCallStack</span></a><span>
+</span><a name="line-226"></a><span>   </span><a href="GHC.Base.html#when"><span class="hs-identifier hs-var">when</span></a><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#not"><span class="hs-identifier hs-var">not</span></a><span> </span><span class="hs-special">(</span><a href="Data.Foldable.html#null"><span class="hs-identifier hs-var">null</span></a><span> </span><a href="#local-6989586621679326064"><span class="hs-identifier hs-var">stack</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><a href="Debug.Trace.html#traceIO"><span class="hs-identifier hs-var">traceIO</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Stack.CCS.html#renderStack"><span class="hs-identifier hs-var">renderStack</span></a><span> </span><a href="#local-6989586621679326064"><span class="hs-identifier hs-var">stack</span></a><span class="hs-special">)</span><span>
+</span><a name="line-227"></a><span>   </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><a href="#local-6989586621679326063"><span class="hs-identifier hs-var">expr</span></a><span>
+</span><a name="line-228"></a><span>
+</span><a name="line-229"></a><span>
+</span><a name="line-230"></a><span class="hs-comment">-- $eventlog_tracing</span><span>
+</span><a name="line-231"></a><span class="hs-comment">--</span><span>
+</span><a name="line-232"></a><span class="hs-comment">-- Eventlog tracing is a performance profiling system. These functions emit</span><span>
+</span><a name="line-233"></a><span class="hs-comment">-- extra events into the eventlog. In combination with eventlog profiling</span><span>
+</span><a name="line-234"></a><span class="hs-comment">-- tools these functions can be used for monitoring execution and</span><span>
+</span><a name="line-235"></a><span class="hs-comment">-- investigating performance problems.</span><span>
+</span><a name="line-236"></a><span class="hs-comment">--</span><span>
+</span><a name="line-237"></a><span class="hs-comment">-- Currently only GHC provides eventlog profiling, see the GHC user guide for</span><span>
+</span><a name="line-238"></a><span class="hs-comment">-- details on how to use it. These function exists for other Haskell</span><span>
+</span><a name="line-239"></a><span class="hs-comment">-- implementations but no events are emitted. Note that the string message is</span><span>
+</span><a name="line-240"></a><span class="hs-comment">-- always evaluated, whether or not profiling is available or enabled.</span><span>
+</span><a name="line-241"></a><span>
+</span><a name="line-242"></a><span class="hs-pragma">{-# NOINLINE</span><span> </span><span class="hs-pragma">traceEvent</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-243"></a><span class="hs-comment">-- | The 'traceEvent' function behaves like 'trace' with the difference that</span><span>
+</span><a name="line-244"></a><span class="hs-comment">-- the message is emitted to the eventlog, if eventlog profiling is available</span><span>
+</span><a name="line-245"></a><span class="hs-comment">-- and enabled at runtime.</span><span>
+</span><a name="line-246"></a><span class="hs-comment">--</span><span>
+</span><a name="line-247"></a><span class="hs-comment">-- It is suitable for use in pure code. In an IO context use 'traceEventIO'</span><span>
+</span><a name="line-248"></a><span class="hs-comment">-- instead.</span><span>
+</span><a name="line-249"></a><span class="hs-comment">--</span><span>
+</span><a name="line-250"></a><span class="hs-comment">-- Note that when using GHC's SMP runtime, it is possible (but rare) to get</span><span>
+</span><a name="line-251"></a><span class="hs-comment">-- duplicate events emitted if two CPUs simultaneously evaluate the same thunk</span><span>
+</span><a name="line-252"></a><span class="hs-comment">-- that uses 'traceEvent'.</span><span>
+</span><a name="line-253"></a><span class="hs-comment">--</span><span>
+</span><a name="line-254"></a><span class="hs-comment">-- @since 4.5.0.0</span><span>
+</span><a name="line-255"></a><span class="hs-identifier">traceEvent</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326042"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326042"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-256"></a><a name="traceEvent"><a href="Debug.Trace.html#traceEvent"><span class="hs-identifier">traceEvent</span></a></a><span> </span><a name="local-6989586621679326065"><a href="#local-6989586621679326065"><span class="hs-identifier">msg</span></a></a><span> </span><a name="local-6989586621679326066"><a href="#local-6989586621679326066"><span class="hs-identifier">expr</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Unsafe.html#unsafeDupablePerformIO"><span class="hs-identifier hs-var">unsafeDupablePerformIO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-257"></a><span>    </span><a href="Debug.Trace.html#traceEventIO"><span class="hs-identifier hs-var">traceEventIO</span></a><span> </span><a href="#local-6989586621679326065"><span class="hs-identifier hs-var">msg</span></a><span>
+</span><a name="line-258"></a><span>    </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><a href="#local-6989586621679326066"><span class="hs-identifier hs-var">expr</span></a><span>
+</span><a name="line-259"></a><span>
+</span><a name="line-260"></a><span class="hs-comment">-- | The 'traceEventIO' function emits a message to the eventlog, if eventlog</span><span>
+</span><a name="line-261"></a><span class="hs-comment">-- profiling is available and enabled at runtime.</span><span>
+</span><a name="line-262"></a><span class="hs-comment">--</span><span>
+</span><a name="line-263"></a><span class="hs-comment">-- Compared to 'traceEvent', 'traceEventIO' sequences the event with respect to</span><span>
+</span><a name="line-264"></a><span class="hs-comment">-- other IO actions.</span><span>
+</span><a name="line-265"></a><span class="hs-comment">--</span><span>
+</span><a name="line-266"></a><span class="hs-comment">-- @since 4.5.0.0</span><span>
+</span><a name="line-267"></a><span class="hs-identifier">traceEventIO</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-268"></a><a name="traceEventIO"><a href="Debug.Trace.html#traceEventIO"><span class="hs-identifier">traceEventIO</span></a></a><span> </span><a name="local-6989586621679326067"><a href="#local-6989586621679326067"><span class="hs-identifier">msg</span></a></a><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-269"></a><span>  </span><a href="GHC.Foreign.html#withCString"><span class="hs-identifier hs-var">GHC.Foreign.withCString</span></a><span> </span><a href="GHC.IO.Encoding.html#utf8"><span class="hs-identifier hs-var">utf8</span></a><span> </span><a href="#local-6989586621679326067"><span class="hs-identifier hs-var">msg</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><span class="hs-special">(</span><a href="GHC.Ptr.html#Ptr"><span class="hs-identifier hs-var">Ptr</span></a><span> </span><a name="local-6989586621679326068"><a href="#local-6989586621679326068"><span class="hs-identifier">p</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679326069"><a href="#local-6989586621679326069"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-270"></a><span>    </span><span class="hs-keyword">case</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#traceEvent%23"><span class="hs-identifier hs-var">traceEvent#</span></a><span> </span><a href="#local-6989586621679326068"><span class="hs-identifier hs-var">p</span></a><span> </span><a href="#local-6989586621679326069"><span class="hs-identifier hs-var">s</span></a><span> </span><span class="hs-keyword">of</span><span> </span><a name="local-6989586621679326070"><a href="#local-6989586621679326070"><span class="hs-identifier">s'</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="#local-6989586621679326070"><span class="hs-identifier hs-var">s'</span></a><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span> </span><span class="hs-special">#)</span><span>
+</span><a name="line-271"></a><span>
+</span><a name="line-272"></a><span class="hs-comment">-- $markers</span><span>
+</span><a name="line-273"></a><span class="hs-comment">--</span><span>
+</span><a name="line-274"></a><span class="hs-comment">-- When looking at a profile for the execution of a program we often want to</span><span>
+</span><a name="line-275"></a><span class="hs-comment">-- be able to mark certain points or phases in the execution and see that</span><span>
+</span><a name="line-276"></a><span class="hs-comment">-- visually in the profile.</span><span>
+</span><a name="line-277"></a><span>
+</span><a name="line-278"></a><span class="hs-comment">-- For example, a program might have several distinct phases with different</span><span>
+</span><a name="line-279"></a><span class="hs-comment">-- performance or resource behaviour in each phase. To properly interpret the</span><span>
+</span><a name="line-280"></a><span class="hs-comment">-- profile graph we really want to see when each phase starts and ends.</span><span>
+</span><a name="line-281"></a><span class="hs-comment">--</span><span>
+</span><a name="line-282"></a><span class="hs-comment">-- Markers let us do this: we can annotate the program to emit a marker at</span><span>
+</span><a name="line-283"></a><span class="hs-comment">-- an appropriate point during execution and then see that in a profile.</span><span>
+</span><a name="line-284"></a><span class="hs-comment">--</span><span>
+</span><a name="line-285"></a><span class="hs-comment">-- Currently this feature is only supported in GHC by the eventlog tracing</span><span>
+</span><a name="line-286"></a><span class="hs-comment">-- system, but in future it may also be supported by the heap profiling or</span><span>
+</span><a name="line-287"></a><span class="hs-comment">-- other profiling tools. These function exists for other Haskell</span><span>
+</span><a name="line-288"></a><span class="hs-comment">-- implementations but they have no effect. Note that the string message is</span><span>
+</span><a name="line-289"></a><span class="hs-comment">-- always evaluated, whether or not profiling is available or enabled.</span><span>
+</span><a name="line-290"></a><span>
+</span><a name="line-291"></a><span class="hs-pragma">{-# NOINLINE</span><span> </span><span class="hs-pragma">traceMarker</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-292"></a><span class="hs-comment">-- | The 'traceMarker' function emits a marker to the eventlog, if eventlog</span><span>
+</span><a name="line-293"></a><span class="hs-comment">-- profiling is available and enabled at runtime. The @String@ is the name of</span><span>
+</span><a name="line-294"></a><span class="hs-comment">-- the marker. The name is just used in the profiling tools to help you keep</span><span>
+</span><a name="line-295"></a><span class="hs-comment">-- clear which marker is which.</span><span>
+</span><a name="line-296"></a><span class="hs-comment">--</span><span>
+</span><a name="line-297"></a><span class="hs-comment">-- This function is suitable for use in pure code. In an IO context use</span><span>
+</span><a name="line-298"></a><span class="hs-comment">-- 'traceMarkerIO' instead.</span><span>
+</span><a name="line-299"></a><span class="hs-comment">--</span><span>
+</span><a name="line-300"></a><span class="hs-comment">-- Note that when using GHC's SMP runtime, it is possible (but rare) to get</span><span>
+</span><a name="line-301"></a><span class="hs-comment">-- duplicate events emitted if two CPUs simultaneously evaluate the same thunk</span><span>
+</span><a name="line-302"></a><span class="hs-comment">-- that uses 'traceMarker'.</span><span>
+</span><a name="line-303"></a><span class="hs-comment">--</span><span>
+</span><a name="line-304"></a><span class="hs-comment">-- @since 4.7.0.0</span><span>
+</span><a name="line-305"></a><span class="hs-identifier">traceMarker</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326041"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326041"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-306"></a><a name="traceMarker"><a href="Debug.Trace.html#traceMarker"><span class="hs-identifier">traceMarker</span></a></a><span> </span><a name="local-6989586621679326071"><a href="#local-6989586621679326071"><span class="hs-identifier">msg</span></a></a><span> </span><a name="local-6989586621679326072"><a href="#local-6989586621679326072"><span class="hs-identifier">expr</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.IO.Unsafe.html#unsafeDupablePerformIO"><span class="hs-identifier hs-var">unsafeDupablePerformIO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-307"></a><span>    </span><a href="Debug.Trace.html#traceMarkerIO"><span class="hs-identifier hs-var">traceMarkerIO</span></a><span> </span><a href="#local-6989586621679326071"><span class="hs-identifier hs-var">msg</span></a><span>
+</span><a name="line-308"></a><span>    </span><a href="GHC.Base.html#return"><span class="hs-identifier hs-var">return</span></a><span> </span><a href="#local-6989586621679326072"><span class="hs-identifier hs-var">expr</span></a><span>
+</span><a name="line-309"></a><span>
+</span><a name="line-310"></a><span class="hs-comment">-- | The 'traceMarkerIO' function emits a marker to the eventlog, if eventlog</span><span>
+</span><a name="line-311"></a><span class="hs-comment">-- profiling is available and enabled at runtime.</span><span>
+</span><a name="line-312"></a><span class="hs-comment">--</span><span>
+</span><a name="line-313"></a><span class="hs-comment">-- Compared to 'traceMarker', 'traceMarkerIO' sequences the event with respect to</span><span>
+</span><a name="line-314"></a><span class="hs-comment">-- other IO actions.</span><span>
+</span><a name="line-315"></a><span class="hs-comment">--</span><span>
+</span><a name="line-316"></a><span class="hs-comment">-- @since 4.7.0.0</span><span>
+</span><a name="line-317"></a><span class="hs-identifier">traceMarkerIO</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-318"></a><a name="traceMarkerIO"><a href="Debug.Trace.html#traceMarkerIO"><span class="hs-identifier">traceMarkerIO</span></a></a><span> </span><a name="local-6989586621679326073"><a href="#local-6989586621679326073"><span class="hs-identifier">msg</span></a></a><span> </span><span class="hs-glyph">=</span><span>
+</span><a name="line-319"></a><span>  </span><a href="GHC.Foreign.html#withCString"><span class="hs-identifier hs-var">GHC.Foreign.withCString</span></a><span> </span><a href="GHC.IO.Encoding.html#utf8"><span class="hs-identifier hs-var">utf8</span></a><span> </span><a href="#local-6989586621679326073"><span class="hs-identifier hs-var">msg</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><span class="hs-special">(</span><a href="GHC.Ptr.html#Ptr"><span class="hs-identifier hs-var">Ptr</span></a><span> </span><a name="local-6989586621679326074"><a href="#local-6989586621679326074"><span class="hs-identifier">p</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-var">IO</span></a><span> </span><a href="GHC.Base.html#%24"><span class="hs-operator hs-var">$</span></a><span> </span><span class="hs-glyph">\</span><a name="local-6989586621679326075"><a href="#local-6989586621679326075"><span class="hs-identifier">s</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span>
+</span><a name="line-320"></a><span>    </span><span class="hs-keyword">case</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#traceMarker%23"><span class="hs-identifier hs-var">traceMarker#</span></a><span> </span><a href="#local-6989586621679326074"><span class="hs-identifier hs-var">p</span></a><span> </span><a href="#local-6989586621679326075"><span class="hs-identifier hs-var">s</span></a><span> </span><span class="hs-keyword">of</span><span> </span><a name="local-6989586621679326076"><a href="#local-6989586621679326076"><span class="hs-identifier">s'</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="#local-6989586621679326076"><span class="hs-identifier hs-var">s'</span></a><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span> </span><span class="hs-special">#)</span><span>
+</span><a name="line-321"></a></pre></body></html>

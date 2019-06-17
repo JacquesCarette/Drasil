@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Module      :  Data.Bool</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- The 'Bool' type and related functions.</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Bool</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-19"></a><span>   </span><span class="hs-comment">-- * Booleans</span><span>
+</span><a name="line-20"></a><span>   </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-21"></a><span>   </span><span class="hs-comment">-- ** Operations</span><span>
+</span><a name="line-22"></a><span>   </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#%26%26"><span class="hs-operator hs-var">&amp;&amp;</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-23"></a><span>   </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#%7C%7C"><span class="hs-operator hs-var">||</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-24"></a><span>   </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#not"><span class="hs-identifier hs-var">not</span></a><span class="hs-special">,</span><span>
+</span><a name="line-25"></a><span>   </span><a href="GHC.Base.html#otherwise"><span class="hs-identifier hs-var">otherwise</span></a><span class="hs-special">,</span><span>
+</span><a name="line-26"></a><span>   </span><a href="Data.Bool.html#bool"><span class="hs-identifier hs-var">bool</span></a><span class="hs-special">,</span><span>
+</span><a name="line-27"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-28"></a><span>
+</span><a name="line-29"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-30"></a><span>
+</span><a name="line-31"></a><span class="hs-comment">-- | Case analysis for the 'Bool' type. @'bool' x y p@ evaluates to @x@</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- when @p@ is 'False', and evaluates to @y@ when @p@ is 'True'.</span><span>
+</span><a name="line-33"></a><span class="hs-comment">--</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- This is equivalent to @if p then y else x@; that is, one can</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- think of it as an if-then-else construct with its arguments</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- reordered.</span><span>
+</span><a name="line-37"></a><span class="hs-comment">--</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- @since 4.7.0.0</span><span>
+</span><a name="line-39"></a><span class="hs-comment">--</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-41"></a><span class="hs-comment">--</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-43"></a><span class="hs-comment">--</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- &gt;&gt;&gt; bool &quot;foo&quot; &quot;bar&quot; True</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- &quot;bar&quot;</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- &gt;&gt;&gt; bool &quot;foo&quot; &quot;bar&quot; False</span><span>
+</span><a name="line-47"></a><span class="hs-comment">-- &quot;foo&quot;</span><span>
+</span><a name="line-48"></a><span class="hs-comment">--</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- Confirm that @'bool' x y p@ and @if p then y else x@ are</span><span>
+</span><a name="line-50"></a><span class="hs-comment">-- equivalent:</span><span>
+</span><a name="line-51"></a><span class="hs-comment">--</span><span>
+</span><a name="line-52"></a><span class="hs-comment">-- &gt;&gt;&gt; let p = True; x = &quot;bar&quot;; y = &quot;foo&quot;</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- &gt;&gt;&gt; bool x y p == if p then y else x</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- &gt;&gt;&gt; let p = False</span><span>
+</span><a name="line-56"></a><span class="hs-comment">-- &gt;&gt;&gt; bool x y p == if p then y else x</span><span>
+</span><a name="line-57"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-58"></a><span class="hs-comment">--</span><span>
+</span><a name="line-59"></a><span class="hs-identifier">bool</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679045892"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679045892"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679045892"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-60"></a><a name="bool"><a href="Data.Bool.html#bool"><span class="hs-identifier">bool</span></a></a><span> </span><a name="local-6989586621679045893"><a href="#local-6989586621679045893"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-identifier">_</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679045893"><span class="hs-identifier hs-var">f</span></a><span>
+</span><a name="line-61"></a><span class="hs-identifier">bool</span><span> </span><span class="hs-identifier">_</span><span> </span><a name="local-6989586621679045894"><a href="#local-6989586621679045894"><span class="hs-identifier">t</span></a></a><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>  </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679045894"><span class="hs-identifier hs-var">t</span></a><span>
+</span><a name="line-62"></a></pre></body></html>

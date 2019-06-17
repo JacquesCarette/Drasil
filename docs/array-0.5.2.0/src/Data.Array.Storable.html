@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-2"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- Module      :  Data.Array.Storable</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-6"></a><span class="hs-comment">--</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Portability :  non-portable (uses Data.Array.MArray)</span><span>
+</span><a name="line-10"></a><span class="hs-comment">--</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- A storable array is an IO-mutable array which stores its</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- contents in a contiguous memory block living in the C</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- heap. Elements are stored according to the class 'Storable'.</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- You can obtain the pointer to the array contents to manipulate</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- elements from languages like C.</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- It is similar to 'Data.Array.IO.IOUArray' but slower.</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- Its advantage is that it's compatible with C.</span><span>
+</span><a name="line-19"></a><span class="hs-comment">--</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-21"></a><span>
+</span><a name="line-22"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Array.Storable</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-23"></a><span>    </span><span class="hs-comment">-- * Arrays of 'Storable' things.</span><span>
+</span><a name="line-24"></a><span>    </span><a href="Data.Array.Storable.Internals.html#StorableArray"><span class="hs-identifier hs-type">StorableArray</span></a><span class="hs-special">,</span><span> </span><span class="hs-comment">-- data StorableArray index element</span><span>
+</span><a name="line-25"></a><span>                   </span><span class="hs-comment">--  + index type must be in class Ix</span><span>
+</span><a name="line-26"></a><span>                   </span><span class="hs-comment">--  + element type must be in class Storable</span><span>
+</span><a name="line-27"></a><span>
+</span><a name="line-28"></a><span>    </span><span class="hs-comment">-- * Overloaded mutable array interface</span><span>
+</span><a name="line-29"></a><span>    </span><span class="hs-comment">-- | Module &quot;Data.Array.MArray&quot; provides the interface of storable arrays.</span><span>
+</span><a name="line-30"></a><span>    </span><span class="hs-comment">-- They are instances of class 'MArray' (with the 'IO' monad).</span><span>
+</span><a name="line-31"></a><span>    </span><span class="hs-keyword">module</span><span> </span><a href="Data.Array.MArray.html"><span class="hs-identifier">Data.Array.MArray</span></a><span class="hs-special">,</span><span>
+</span><a name="line-32"></a><span>
+</span><a name="line-33"></a><span>    </span><span class="hs-comment">-- * Accessing the pointer to the array contents</span><span>
+</span><a name="line-34"></a><span>    </span><a href="Data.Array.Storable.Internals.html#withStorableArray"><span class="hs-identifier hs-var">withStorableArray</span></a><span class="hs-special">,</span><span>  </span><span class="hs-comment">-- :: StorableArray i e -&gt; (Ptr e -&gt; IO a) -&gt; IO a</span><span>
+</span><a name="line-35"></a><span>
+</span><a name="line-36"></a><span>    </span><a href="Data.Array.Storable.Internals.html#touchStorableArray"><span class="hs-identifier hs-var">touchStorableArray</span></a><span class="hs-special">,</span><span> </span><span class="hs-comment">-- :: StorableArray i e -&gt; IO ()</span><span>
+</span><a name="line-37"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-38"></a><span>
+</span><a name="line-39"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Array.MArray.html"><span class="hs-identifier">Data.Array.MArray</span></a><span>
+</span><a name="line-40"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Array.Storable.Internals.html"><span class="hs-identifier">Data.Array.Storable.Internals</span></a><span>
+</span><a name="line-41"></a></pre></body></html>

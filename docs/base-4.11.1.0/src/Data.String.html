@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE FlexibleInstances #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE GeneralizedNewtypeDeriving #-}</span><span>
+</span><a name="line-3"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-4"></a><span class="hs-pragma">{-# LANGUAGE StandaloneDeriving #-}</span><span>
+</span><a name="line-5"></a><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-6"></a><span class="hs-pragma">{-# LANGUAGE TypeFamilies #-}</span><span>
+</span><a name="line-7"></a><span>
+</span><a name="line-8"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Module      :  Data.String</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2007</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-17"></a><span class="hs-comment">--</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- The @String@ type and associated operations.</span><span>
+</span><a name="line-19"></a><span class="hs-comment">--</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-21"></a><span>
+</span><a name="line-22"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.String</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-23"></a><span>   </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span>
+</span><a name="line-24"></a><span> </span><span class="hs-special">,</span><span> </span><a href="Data.String.html#IsString"><span class="hs-identifier hs-type">IsString</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><a name="line-25"></a><span>
+</span><a name="line-26"></a><span> </span><span class="hs-comment">-- * Functions on strings</span><span>
+</span><a name="line-27"></a><span> </span><span class="hs-special">,</span><span> </span><a href="Data.OldList.html#lines"><span class="hs-identifier hs-var">lines</span></a><span>
+</span><a name="line-28"></a><span> </span><span class="hs-special">,</span><span> </span><a href="Data.OldList.html#words"><span class="hs-identifier hs-var">words</span></a><span>
+</span><a name="line-29"></a><span> </span><span class="hs-special">,</span><span> </span><a href="Data.OldList.html#unlines"><span class="hs-identifier hs-var">unlines</span></a><span>
+</span><a name="line-30"></a><span> </span><span class="hs-special">,</span><span> </span><a href="Data.OldList.html#unwords"><span class="hs-identifier hs-var">unwords</span></a><span>
+</span><a name="line-31"></a><span> </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-32"></a><span>
+</span><a name="line-33"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-34"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Functor.Const.html"><span class="hs-identifier">Data.Functor.Const</span></a><span> </span><span class="hs-special">(</span><a href="Data.Functor.Const.html#Const"><span class="hs-identifier hs-type">Const</span></a><span> </span><span class="hs-special">(</span><a href="Data.Functor.Const.html#Const"><span class="hs-identifier hs-var">Const</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-35"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Functor.Identity.html"><span class="hs-identifier">Data.Functor.Identity</span></a><span> </span><span class="hs-special">(</span><a href="Data.Functor.Identity.html#Identity"><span class="hs-identifier hs-type">Identity</span></a><span> </span><span class="hs-special">(</span><a href="Data.Functor.Identity.html#Identity"><span class="hs-identifier hs-var">Identity</span></a><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a name="line-36"></a><span class="hs-keyword">import</span><span> </span><a href="Data.List.html"><span class="hs-identifier">Data.List</span></a><span> </span><span class="hs-special">(</span><a href="Data.OldList.html#lines"><span class="hs-identifier hs-var">lines</span></a><span class="hs-special">,</span><span> </span><a href="Data.OldList.html#words"><span class="hs-identifier hs-var">words</span></a><span class="hs-special">,</span><span> </span><a href="Data.OldList.html#unlines"><span class="hs-identifier hs-var">unlines</span></a><span class="hs-special">,</span><span> </span><a href="Data.OldList.html#unwords"><span class="hs-identifier hs-var">unwords</span></a><span class="hs-special">)</span><span>
+</span><a name="line-37"></a><span>
+</span><a name="line-38"></a><span class="hs-comment">-- | Class for string-like datastructures; used by the overloaded string</span><span>
+</span><a name="line-39"></a><span class="hs-comment">--   extension (-XOverloadedStrings in GHC).</span><span>
+</span><a name="line-40"></a><span class="hs-keyword">class</span><span> </span><a name="IsString"><a href="Data.String.html#IsString"><span class="hs-identifier">IsString</span></a></a><span> </span><a name="local-6989586621679326442"><a href="#local-6989586621679326442"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-41"></a><span>    </span><a name="fromString"><a href="Data.String.html#fromString"><span class="hs-identifier">fromString</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679326442"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-42"></a><span>
+</span><a name="line-43"></a><span class="hs-comment">{- Note [IsString String]
+~~~~~~~~~~~~~~~~~~~~~~~~~
+Previously, the IsString instance that covered String was a flexible
+instance for [Char]. This is in some sense the most accurate choice,
+but there are cases where it can lead to an ambiguity, for instance:
+
+  show $ &quot;foo&quot; ++ &quot;bar&quot;
+
+The use of (++) ensures that &quot;foo&quot; and &quot;bar&quot; must have type [t] for
+some t, but a flexible instance for [Char] will _only_ match if
+something further determines t to be Char, and nothing in the above
+example actually does.
+
+So, the above example generates an error about the ambiguity of t,
+and what's worse, the above behavior can be generated by simply
+typing:
+
+   &quot;foo&quot; ++ &quot;bar&quot;
+
+into GHCi with the OverloadedStrings extension enabled.
+
+The new instance fixes this by defining an instance that matches all
+[a], and forces a to be Char. This instance, of course, overlaps
+with things that the [Char] flexible instance doesn't, but this was
+judged to be an acceptable cost, for the gain of providing a less
+confusing experience for people experimenting with overloaded strings.
+
+It may be possible to fix this via (extended) defaulting. Currently,
+the rules are not able to default t to Char in the above example. If
+a more flexible system that enabled this defaulting were put in place,
+then it would probably make sense to revert to the flexible [Char]
+instance, since extended defaulting is enabled in GHCi. However, it
+is not clear at the time of this note exactly what such a system
+would be, and it certainly hasn't been implemented.
+
+A test case (should_run/overloadedstringsrun01.hs) has been added to
+ensure the good behavior of the above example remains in the future.
+-}</span><span>
+</span><a name="line-81"></a><span>
+</span><a name="line-82"></a><span class="hs-comment">-- | @(a ~ Char)@ context was introduced in @4.9.0.0@</span><span>
+</span><a name="line-83"></a><span class="hs-comment">--</span><span>
+</span><a name="line-84"></a><span class="hs-comment">-- @since 2.01</span><span>
+</span><a name="line-85"></a><span class="hs-keyword">instance</span><span> </span><span class="hs-special">(</span><a href="Data.Type.Equality.html#~"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">~</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a href="Data.String.html#IsString"><span class="hs-identifier hs-type">IsString</span></a><span> </span><span class="hs-special">[</span><a href="#local-6989586621679326443"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">]</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-86"></a><span>         </span><span class="hs-comment">-- See Note [IsString String]</span><span>
+</span><a name="line-87"></a><span>    </span><a name="local-3458764513820541114"><a href="Data.String.html#fromString"><span class="hs-identifier">fromString</span></a></a><span> </span><a name="local-6989586621679326444"><a href="#local-6989586621679326444"><span class="hs-identifier">xs</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679326444"><span class="hs-identifier hs-var">xs</span></a><span>
+</span><a name="line-88"></a><span>
+</span><a name="line-89"></a><span class="hs-comment">-- | @since 4.9.0.0</span><span>
+</span><a name="line-90"></a><span class="hs-keyword">deriving</span><span> </span><span class="hs-keyword">instance</span><span> </span><a href="Data.String.html#IsString"><span class="hs-identifier hs-type">IsString</span></a><span> </span><a href="#local-6989586621679326446"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a href="Data.String.html#IsString"><span class="hs-identifier hs-type">IsString</span></a><span> </span><span class="hs-special">(</span><a href="Data.Functor.Const.html#Const"><span class="hs-identifier hs-type">Const</span></a><span> </span><a href="#local-6989586621679326446"><span class="hs-identifier hs-type">a</span></a><span> </span><a href="#local-6989586621679326447"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">)</span><span>
+</span><a name="line-91"></a><span class="hs-keyword">deriving</span><span> </span><span class="hs-keyword">instance</span><span> </span><a href="Data.String.html#IsString"><span class="hs-identifier hs-type">IsString</span></a><span> </span><a href="#local-6989586621679326445"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">=&gt;</span><span> </span><a href="Data.String.html#IsString"><span class="hs-identifier hs-type">IsString</span></a><span> </span><span class="hs-special">(</span><a href="Data.Functor.Identity.html#Identity"><span class="hs-identifier hs-type">Identity</span></a><span> </span><a href="#local-6989586621679326445"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span>
+</span><a name="line-92"></a></pre></body></html>

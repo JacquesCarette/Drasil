@@ -1,0 +1,471 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE MagicHash, NoImplicitPrelude, TypeFamilies, UnboxedTuples,
+             MultiParamTypeClasses, RoleAnnotations, CPP, TypeOperators,
+             PolyKinds #-}</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Module      :  GHC.Types</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2009</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- License     :  see libraries/ghc-prim/LICENSE</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Maintainer  :  cvs-ghc@haskell.org</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Stability   :  internal</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Portability :  non-portable (GHC Extensions)</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- GHC type definitions.</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Use GHC.Exts from the base package instead of importing this</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- module directly.</span><span>
+</span><a name="line-17"></a><span class="hs-comment">--</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-19"></a><span>
+</span><a name="line-20"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.Types</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-21"></a><span>        </span><span class="hs-comment">-- Data types that are built-in syntax</span><span>
+</span><a name="line-22"></a><span>        </span><span class="hs-comment">-- They are defined here, but not explicitly exported</span><span>
+</span><a name="line-23"></a><span>        </span><span class="hs-comment">--</span><span>
+</span><a name="line-24"></a><span>        </span><span class="hs-comment">--    Lists:          []( [], (:) )</span><span>
+</span><a name="line-25"></a><span>        </span><span class="hs-comment">--    Type equality:  (~)( Eq# )</span><span>
+</span><a name="line-26"></a><span>
+</span><a name="line-27"></a><span>        </span><a href="GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#Word"><span class="hs-identifier hs-type">Word</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-28"></a><span>        </span><a href="GHC.Types.html#Float"><span class="hs-identifier hs-type">Float</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#Double"><span class="hs-identifier hs-type">Double</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-29"></a><span>        </span><a href="GHC.Types.html#Ordering"><span class="hs-identifier hs-type">Ordering</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-30"></a><span>        </span><a href="GHC.Types.html#isTrue%23"><span class="hs-identifier hs-var">isTrue#</span></a><span class="hs-special">,</span><span>
+</span><a name="line-31"></a><span>        </span><a href="GHC.Types.html#SPEC"><span class="hs-identifier hs-type">SPEC</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-32"></a><span>        </span><a href="GHC.Types.html#Nat"><span class="hs-identifier hs-type">Nat</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#Symbol"><span class="hs-identifier hs-type">Symbol</span></a><span class="hs-special">,</span><span>
+</span><a name="line-33"></a><span>        </span><a href="GHC.Types.html#Any"><span class="hs-identifier hs-type">Any</span></a><span class="hs-special">,</span><span>
+</span><a name="line-34"></a><span>        </span><span class="hs-keyword">type</span><span> </span><span class="hs-special">(</span><a href="GHC.Types.html#~~"><span class="hs-operator hs-type">~~</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#Coercible"><span class="hs-identifier hs-type">Coercible</span></a><span class="hs-special">,</span><span>
+</span><a name="line-35"></a><span>        </span><a href="GHC.Prim.html#TYPE"><span class="hs-identifier hs-type">TYPE</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#RuntimeRep"><span class="hs-identifier hs-type">RuntimeRep</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#Type"><span class="hs-identifier hs-type">Type</span></a><span class="hs-special">,</span><span> </span><span class="hs-keyword">type</span><span> </span><span class="hs-special">(</span><a href="GHC.Types.html#%2A"><span class="hs-operator hs-type">*</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-keyword">type</span><span> </span><span class="hs-special">(</span><a href="GHC.Types.html#%2605"><span class="hs-operator hs-type">&#9733;</span></a><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#Constraint"><span class="hs-identifier hs-type">Constraint</span></a><span class="hs-special">,</span><span>
+</span><a name="line-36"></a><span>          </span><span class="hs-comment">-- The historical type * should ideally be written as</span><span>
+</span><a name="line-37"></a><span>          </span><span class="hs-comment">-- `type *`, without the parentheses. But that's a true</span><span>
+</span><a name="line-38"></a><span>          </span><span class="hs-comment">-- pain to parse, and for little gain.</span><span>
+</span><a name="line-39"></a><span>        </span><a href="GHC.Types.html#VecCount"><span class="hs-identifier hs-type">VecCount</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#VecElem"><span class="hs-identifier hs-type">VecElem</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-40"></a><span>
+</span><a name="line-41"></a><span>        </span><span class="hs-comment">-- * Runtime type representation</span><span>
+</span><a name="line-42"></a><span>        </span><a href="GHC.Types.html#Module"><span class="hs-identifier hs-type">Module</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#TrName"><span class="hs-identifier hs-type">TrName</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#TyCon"><span class="hs-identifier hs-type">TyCon</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#TypeLitSort"><span class="hs-identifier hs-type">TypeLitSort</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-43"></a><span>        </span><a href="GHC.Types.html#KindRep"><span class="hs-identifier hs-type">KindRep</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><a href="GHC.Types.html#KindBndr"><span class="hs-identifier hs-type">KindBndr</span></a><span>
+</span><a name="line-44"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-45"></a><span>
+</span><a name="line-46"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Prim.html"><span class="hs-identifier">GHC.Prim</span></a><span>
+</span><a name="line-47"></a><span>
+</span><a name="line-48"></a><span class="hs-keyword">infixr</span><span> </span><span class="hs-number">5</span><span> </span><span class="hs-glyph">:</span><span>
+</span><a name="line-49"></a><span>
+</span><a name="line-50"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+                  Kinds
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-55"></a><span>
+</span><a name="line-56"></a><span class="hs-comment">-- | The kind of constraints, like @Show a@</span><span>
+</span><a name="line-57"></a><span class="hs-keyword">data</span><span> </span><a name="Constraint"><a href="GHC.Types.html#Constraint"><span class="hs-identifier">Constraint</span></a></a><span>
+</span><a name="line-58"></a><span>
+</span><a name="line-59"></a><span class="hs-comment">-- | The kind of types with values. For example @Int :: Type@.</span><span>
+</span><a name="line-60"></a><span class="hs-keyword">type</span><span> </span><a name="Type"><a href="GHC.Types.html#Type"><span class="hs-identifier">Type</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Prim.html#TYPE"><span class="hs-identifier hs-type">TYPE</span></a><span> </span><span class="hs-special">'</span><a href="GHC.Types.html#LiftedRep"><span class="hs-identifier hs-type">LiftedRep</span></a><span>
+</span><a name="line-61"></a><span>
+</span><a name="line-62"></a><span class="hs-comment">-- | A backward-compatible (pre-GHC 8.0) synonym for 'Type'</span><span>
+</span><a name="line-63"></a><span class="hs-keyword">type</span><span> </span><a name="%2A"><a href="GHC.Types.html#%2A"><span class="hs-operator">*</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Prim.html#TYPE"><span class="hs-identifier hs-type">TYPE</span></a><span> </span><span class="hs-special">'</span><a href="GHC.Types.html#LiftedRep"><span class="hs-identifier hs-type">LiftedRep</span></a><span>
+</span><a name="line-64"></a><span>
+</span><a name="line-65"></a><span class="hs-comment">-- | A unicode backward-compatible (pre-GHC 8.0) synonym for 'Type'</span><span>
+</span><a name="line-66"></a><span class="hs-keyword">type</span><span> </span><a name="%2605"><a href="GHC.Types.html#%2605"><span class="hs-operator">&#9733;</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Prim.html#TYPE"><span class="hs-identifier hs-type">TYPE</span></a><span> </span><span class="hs-special">'</span><a href="GHC.Types.html#LiftedRep"><span class="hs-identifier hs-type">LiftedRep</span></a><span>
+</span><a name="line-67"></a><span>
+</span><a name="line-68"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+                  Nat and Symbol
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-73"></a><span>
+</span><a name="line-74"></a><span class="hs-comment">-- | (Kind) This is the kind of type-level natural numbers.</span><span>
+</span><a name="line-75"></a><span class="hs-keyword">data</span><span> </span><a name="Nat"><a href="GHC.Types.html#Nat"><span class="hs-identifier">Nat</span></a></a><span>
+</span><a name="line-76"></a><span>
+</span><a name="line-77"></a><span class="hs-comment">-- | (Kind) This is the kind of type-level symbols.</span><span>
+</span><a name="line-78"></a><span class="hs-comment">-- Declared here because class IP needs it</span><span>
+</span><a name="line-79"></a><span class="hs-keyword">data</span><span> </span><a name="Symbol"><a href="GHC.Types.html#Symbol"><span class="hs-identifier">Symbol</span></a></a><span>
+</span><a name="line-80"></a><span>
+</span><a name="line-81"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+                  Any
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-86"></a><span>
+</span><a name="line-87"></a><span class="hs-comment">-- | The type constructor 'Any' is type to which you can unsafely coerce any</span><span>
+</span><a name="line-88"></a><span class="hs-comment">-- lifted type, and back. More concretely, for a lifted type @t@ and</span><span>
+</span><a name="line-89"></a><span class="hs-comment">-- value @x :: t@, -- @unsafeCoerce (unsafeCoerce x :: Any) :: t@ is equivalent</span><span>
+</span><a name="line-90"></a><span class="hs-comment">-- to @x@.</span><span>
+</span><a name="line-91"></a><span class="hs-comment">--</span><span>
+</span><a name="line-92"></a><span class="hs-keyword">type</span><span> </span><span class="hs-keyword">family</span><span> </span><a name="Any"><a href="GHC.Types.html#Any"><span class="hs-identifier">Any</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679009804"><span class="hs-identifier hs-type">k</span></a><span> </span><span class="hs-keyword">where</span><span> </span><span class="hs-special">{</span><span> </span><span class="hs-special">}</span><span>
+</span><a name="line-93"></a><span class="hs-comment">-- See Note [Any types] in TysWiredIn. Also, for a bit of history on Any see</span><span>
+</span><a name="line-94"></a><span class="hs-comment">-- #10886. Note that this must be a *closed* type family: we need to ensure</span><span>
+</span><a name="line-95"></a><span class="hs-comment">-- that this can't reduce to a `data` type for the results discussed in</span><span>
+</span><a name="line-96"></a><span class="hs-comment">-- Note [Any types].</span><span>
+</span><a name="line-97"></a><span>
+</span><a name="line-98"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+                  Lists
+
+   NB: lists are built-in syntax, and hence not explicitly exported
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-105"></a><span>
+</span><a name="line-106"></a><span class="hs-keyword">data</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><a name="local-6989586621679009803"><a href="#local-6989586621679009803"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">|</span><span> </span><a href="#local-6989586621679009803"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">:</span><span> </span><span class="hs-special">[</span><a href="#local-6989586621679009803"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">]</span><span>
+</span><a name="line-107"></a><span>
+</span><a name="line-108"></a><span>
+</span><a name="line-109"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+                  Ordering
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-114"></a><span>
+</span><a name="line-115"></a><span class="hs-keyword">data</span><span> </span><a name="Ordering"><a href="GHC.Types.html#Ordering"><span class="hs-identifier">Ordering</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="LT"><a href="GHC.Types.html#LT"><span class="hs-identifier">LT</span></a></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="EQ"><a href="GHC.Types.html#EQ"><span class="hs-identifier">EQ</span></a></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="GT"><a href="GHC.Types.html#GT"><span class="hs-identifier">GT</span></a></a><span>
+</span><a name="line-116"></a><span>
+</span><a name="line-117"></a><span>
+</span><a name="line-118"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+                  Int, Char, Word, Float, Double
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-123"></a><span>
+</span><a name="line-124"></a><span class="hs-comment">{- | The character type 'Char' is an enumeration whose values represent
+Unicode (or equivalently ISO\/IEC 10646) code points (i.e. characters, see
+&lt;http://www.unicode.org/&gt; for details).  This set extends the ISO 8859-1
+(Latin-1) character set (the first 256 characters), which is itself an extension
+of the ASCII character set (the first 128 characters).  A character literal in
+Haskell has type 'Char'.
+
+To convert a 'Char' to or from the corresponding 'Int' value defined
+by Unicode, use 'Prelude.toEnum' and 'Prelude.fromEnum' from the
+'Prelude.Enum' class respectively (or equivalently 'ord' and 'chr').
+-}</span><span>
+</span><a name="line-135"></a><span class="hs-keyword">data</span><span> </span><span class="hs-pragma">{-# CTYPE</span><span> </span><span class="hs-pragma">&quot;HsChar&quot;</span><span> </span><span class="hs-pragma">#-}</span><span> </span><a name="Char"><a href="GHC.Types.html#Char"><span class="hs-identifier">Char</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="C%23"><a href="GHC.Types.html#C%23"><span class="hs-identifier">C#</span></a></a><span> </span><a href="GHC.Prim.html#Char%23"><span class="hs-identifier hs-type">Char#</span></a><span>
+</span><a name="line-136"></a><span>
+</span><a name="line-137"></a><span class="hs-comment">-- | A fixed-precision integer type with at least the range @[-2^29 .. 2^29-1]@.</span><span>
+</span><a name="line-138"></a><span class="hs-comment">-- The exact range for a given implementation can be determined by using</span><span>
+</span><a name="line-139"></a><span class="hs-comment">-- 'Prelude.minBound' and 'Prelude.maxBound' from the 'Prelude.Bounded' class.</span><span>
+</span><a name="line-140"></a><span class="hs-keyword">data</span><span> </span><span class="hs-pragma">{-# CTYPE</span><span> </span><span class="hs-pragma">&quot;HsInt&quot;</span><span> </span><span class="hs-pragma">#-}</span><span> </span><a name="Int"><a href="GHC.Types.html#Int"><span class="hs-identifier">Int</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="I%23"><a href="GHC.Types.html#I%23"><span class="hs-identifier">I#</span></a></a><span> </span><a href="GHC.Prim.html#Int%23"><span class="hs-identifier hs-type">Int#</span></a><span>
+</span><a name="line-141"></a><span>
+</span><a name="line-142"></a><span class="hs-comment">-- |A 'Word' is an unsigned integral type, with the same size as 'Int'.</span><span>
+</span><a name="line-143"></a><span class="hs-keyword">data</span><span> </span><span class="hs-pragma">{-# CTYPE</span><span> </span><span class="hs-pragma">&quot;HsWord&quot;</span><span> </span><span class="hs-pragma">#-}</span><span> </span><a name="Word"><a href="GHC.Types.html#Word"><span class="hs-identifier">Word</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="W%23"><a href="GHC.Types.html#W%23"><span class="hs-identifier">W#</span></a></a><span> </span><a href="GHC.Prim.html#Word%23"><span class="hs-identifier hs-type">Word#</span></a><span>
+</span><a name="line-144"></a><span>
+</span><a name="line-145"></a><span class="hs-comment">-- | Single-precision floating point numbers.</span><span>
+</span><a name="line-146"></a><span class="hs-comment">-- It is desirable that this type be at least equal in range and precision</span><span>
+</span><a name="line-147"></a><span class="hs-comment">-- to the IEEE single-precision type.</span><span>
+</span><a name="line-148"></a><span class="hs-keyword">data</span><span> </span><span class="hs-pragma">{-# CTYPE</span><span> </span><span class="hs-pragma">&quot;HsFloat&quot;</span><span> </span><span class="hs-pragma">#-}</span><span> </span><a name="Float"><a href="GHC.Types.html#Float"><span class="hs-identifier">Float</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="F%23"><a href="GHC.Types.html#F%23"><span class="hs-identifier">F#</span></a></a><span> </span><a href="GHC.Prim.html#Float%23"><span class="hs-identifier hs-type">Float#</span></a><span>
+</span><a name="line-149"></a><span>
+</span><a name="line-150"></a><span class="hs-comment">-- | Double-precision floating point numbers.</span><span>
+</span><a name="line-151"></a><span class="hs-comment">-- It is desirable that this type be at least equal in range and precision</span><span>
+</span><a name="line-152"></a><span class="hs-comment">-- to the IEEE double-precision type.</span><span>
+</span><a name="line-153"></a><span class="hs-keyword">data</span><span> </span><span class="hs-pragma">{-# CTYPE</span><span> </span><span class="hs-pragma">&quot;HsDouble&quot;</span><span> </span><span class="hs-pragma">#-}</span><span> </span><a name="Double"><a href="GHC.Types.html#Double"><span class="hs-identifier">Double</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="D%23"><a href="GHC.Types.html#D%23"><span class="hs-identifier">D#</span></a></a><span> </span><a href="GHC.Prim.html#Double%23"><span class="hs-identifier hs-type">Double#</span></a><span>
+</span><a name="line-154"></a><span>
+</span><a name="line-155"></a><span>
+</span><a name="line-156"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+                    IO
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-161"></a><span>
+</span><a name="line-162"></a><span class="hs-comment">{- |
+A value of type @'IO' a@ is a computation which, when performed,
+does some I\/O before returning a value of type @a@.
+
+There is really only one way to \&quot;perform\&quot; an I\/O action: bind it to
+@Main.main@ in your program.  When your program is run, the I\/O will
+be performed.  It isn't possible to perform I\/O from an arbitrary
+function, unless that function is itself in the 'IO' monad and called
+at some point, directly or indirectly, from @Main.main@.
+
+'IO' is a monad, so 'IO' actions can be combined using either the do-notation
+or the '&gt;&gt;' and '&gt;&gt;=' operations from the 'Monad' class.
+-}</span><span>
+</span><a name="line-175"></a><span class="hs-keyword">newtype</span><span> </span><a name="IO"><a href="GHC.Types.html#IO"><span class="hs-identifier">IO</span></a></a><span> </span><a name="local-6989586621679009802"><a href="#local-6989586621679009802"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="IO"><a href="GHC.Types.html#IO"><span class="hs-identifier">IO</span></a></a><span> </span><span class="hs-special">(</span><a href="GHC.Prim.html#State%23"><span class="hs-identifier hs-type">State#</span></a><span> </span><a href="GHC.Prim.html#RealWorld"><span class="hs-identifier hs-type">RealWorld</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(#</span><span> </span><a href="GHC.Prim.html#State%23"><span class="hs-identifier hs-type">State#</span></a><span> </span><a href="GHC.Prim.html#RealWorld"><span class="hs-identifier hs-type">RealWorld</span></a><span class="hs-special">,</span><span> </span><a href="#local-6989586621679009802"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-special">#)</span><span class="hs-special">)</span><span>
+</span><a name="line-176"></a><span class="hs-keyword">type</span><span> </span><span class="hs-keyword">role</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">representational</span><span>
+</span><a name="line-177"></a><span>
+</span><a name="line-178"></a><span class="hs-comment">{- The 'type role' role annotation for IO is redundant but is included
+because this role is significant in the normalisation of FFI
+types. Specifically, if this role were to become nominal (which would
+be very strange, indeed!), changes elsewhere in GHC would be
+necessary. See [FFI type roles] in TcForeign.  -}</span><span>
+</span><a name="line-183"></a><span>
+</span><a name="line-184"></a><span>
+</span><a name="line-185"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+                    (~) and Coercible
+
+   NB: (~) is built-in syntax, and hence not explicitly exported
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-192"></a><span>
+</span><a name="line-193"></a><span class="hs-comment">{-
+Note [Kind-changing of (~) and Coercible]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+(~) and Coercible are tricky to define. To the user, they must appear as
+constraints, but we cannot define them as such in Haskell. But we also cannot
+just define them only in GHC.Prim (like (-&gt;)), because we need a real module
+for them, e.g. to compile the constructor's info table.
+
+Furthermore the type of MkCoercible cannot be written in Haskell
+(no syntax for ~#R).
+
+So we define them as regular data types in GHC.Types, and do magic in TysWiredIn,
+inside GHC, to change the kind and type.
+-}</span><span>
+</span><a name="line-208"></a><span>
+</span><a name="line-209"></a><span>
+</span><a name="line-210"></a><span class="hs-comment">-- | Lifted, heterogeneous equality. By lifted, we mean that it</span><span>
+</span><a name="line-211"></a><span class="hs-comment">-- can be bogus (deferred type error). By heterogeneous, the two</span><span>
+</span><a name="line-212"></a><span class="hs-comment">-- types @a@ and @b@ might have different kinds. Because @~~@ can</span><span>
+</span><a name="line-213"></a><span class="hs-comment">-- appear unexpectedly in error messages to users who do not care</span><span>
+</span><a name="line-214"></a><span class="hs-comment">-- about the difference between heterogeneous equality @~~@ and</span><span>
+</span><a name="line-215"></a><span class="hs-comment">-- homogeneous equality @~@, this is printed as @~@ unless</span><span>
+</span><a name="line-216"></a><span class="hs-comment">-- @-fprint-equality-relations@ is set.</span><span>
+</span><a name="line-217"></a><span class="hs-keyword">class</span><span> </span><a name="local-6989586621679009800"><a href="#local-6989586621679009800"><span class="hs-identifier">a</span></a></a><span> </span><a name="~~"><a href="GHC.Types.html#~~"><span class="hs-operator">~~</span></a></a><span> </span><a name="local-6989586621679009801"><a href="#local-6989586621679009801"><span class="hs-identifier">b</span></a></a><span>
+</span><a name="line-218"></a><span>  </span><span class="hs-comment">-- See also Note [The equality types story] in TysPrim</span><span>
+</span><a name="line-219"></a><span>
+</span><a name="line-220"></a><span class="hs-comment">-- | @Coercible@ is a two-parameter class that has instances for types @a@ and @b@ if</span><span>
+</span><a name="line-221"></a><span class="hs-comment">--      the compiler can infer that they have the same representation. This class</span><span>
+</span><a name="line-222"></a><span class="hs-comment">--      does not have regular instances; instead they are created on-the-fly during</span><span>
+</span><a name="line-223"></a><span class="hs-comment">--      type-checking. Trying to manually declare an instance of @Coercible@</span><span>
+</span><a name="line-224"></a><span class="hs-comment">--      is an error.</span><span>
+</span><a name="line-225"></a><span class="hs-comment">--</span><span>
+</span><a name="line-226"></a><span class="hs-comment">--      Nevertheless one can pretend that the following three kinds of instances</span><span>
+</span><a name="line-227"></a><span class="hs-comment">--      exist. First, as a trivial base-case:</span><span>
+</span><a name="line-228"></a><span class="hs-comment">--</span><span>
+</span><a name="line-229"></a><span class="hs-comment">--      @instance Coercible a a@</span><span>
+</span><a name="line-230"></a><span class="hs-comment">--</span><span>
+</span><a name="line-231"></a><span class="hs-comment">--      Furthermore, for every type constructor there is</span><span>
+</span><a name="line-232"></a><span class="hs-comment">--      an instance that allows to coerce under the type constructor. For</span><span>
+</span><a name="line-233"></a><span class="hs-comment">--      example, let @D@ be a prototypical type constructor (@data@ or</span><span>
+</span><a name="line-234"></a><span class="hs-comment">--      @newtype@) with three type arguments, which have roles @nominal@,</span><span>
+</span><a name="line-235"></a><span class="hs-comment">--      @representational@ resp. @phantom@. Then there is an instance of</span><span>
+</span><a name="line-236"></a><span class="hs-comment">--      the form</span><span>
+</span><a name="line-237"></a><span class="hs-comment">--</span><span>
+</span><a name="line-238"></a><span class="hs-comment">--      @instance Coercible b b\' =&gt; Coercible (D a b c) (D a b\' c\')@</span><span>
+</span><a name="line-239"></a><span class="hs-comment">--</span><span>
+</span><a name="line-240"></a><span class="hs-comment">--      Note that the @nominal@ type arguments are equal, the</span><span>
+</span><a name="line-241"></a><span class="hs-comment">--      @representational@ type arguments can differ, but need to have a</span><span>
+</span><a name="line-242"></a><span class="hs-comment">--      @Coercible@ instance themself, and the @phantom@ type arguments can be</span><span>
+</span><a name="line-243"></a><span class="hs-comment">--      changed arbitrarily.</span><span>
+</span><a name="line-244"></a><span class="hs-comment">--</span><span>
+</span><a name="line-245"></a><span class="hs-comment">--      The third kind of instance exists for every @newtype NT = MkNT T@ and</span><span>
+</span><a name="line-246"></a><span class="hs-comment">--      comes in two variants, namely</span><span>
+</span><a name="line-247"></a><span class="hs-comment">--</span><span>
+</span><a name="line-248"></a><span class="hs-comment">--      @instance Coercible a T =&gt; Coercible a NT@</span><span>
+</span><a name="line-249"></a><span class="hs-comment">--</span><span>
+</span><a name="line-250"></a><span class="hs-comment">--      @instance Coercible T b =&gt; Coercible NT b@</span><span>
+</span><a name="line-251"></a><span class="hs-comment">--</span><span>
+</span><a name="line-252"></a><span class="hs-comment">--      This instance is only usable if the constructor @MkNT@ is in scope.</span><span>
+</span><a name="line-253"></a><span class="hs-comment">--</span><span>
+</span><a name="line-254"></a><span class="hs-comment">--      If, as a library author of a type constructor like @Set a@, you</span><span>
+</span><a name="line-255"></a><span class="hs-comment">--      want to prevent a user of your module to write</span><span>
+</span><a name="line-256"></a><span class="hs-comment">--      @coerce :: Set T -&gt; Set NT@,</span><span>
+</span><a name="line-257"></a><span class="hs-comment">--      you need to set the role of @Set@\'s type parameter to @nominal@,</span><span>
+</span><a name="line-258"></a><span class="hs-comment">--      by writing</span><span>
+</span><a name="line-259"></a><span class="hs-comment">--</span><span>
+</span><a name="line-260"></a><span class="hs-comment">--      @type role Set nominal@</span><span>
+</span><a name="line-261"></a><span class="hs-comment">--</span><span>
+</span><a name="line-262"></a><span class="hs-comment">--      For more details about this feature, please refer to</span><span>
+</span><a name="line-263"></a><span class="hs-comment">--      &lt;http://www.cis.upenn.edu/~eir/papers/2014/coercible/coercible.pdf Safe Coercions&gt;</span><span>
+</span><a name="line-264"></a><span class="hs-comment">--      by Joachim Breitner, Richard A. Eisenberg, Simon Peyton Jones and Stephanie Weirich.</span><span>
+</span><a name="line-265"></a><span class="hs-comment">--</span><span>
+</span><a name="line-266"></a><span class="hs-comment">--      @since 4.7.0.0</span><span>
+</span><a name="line-267"></a><span class="hs-keyword">class</span><span> </span><a name="Coercible"><a href="GHC.Types.html#Coercible"><span class="hs-identifier">Coercible</span></a></a><span> </span><a name="local-6989586621679009798"><a href="#local-6989586621679009798"><span class="hs-identifier">a</span></a></a><span> </span><a name="local-6989586621679009799"><a href="#local-6989586621679009799"><span class="hs-identifier">b</span></a></a><span>
+</span><a name="line-268"></a><span>  </span><span class="hs-comment">-- See also Note [The equality types story] in TysPrim</span><span>
+</span><a name="line-269"></a><span>
+</span><a name="line-270"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+                   Bool, and isTrue#
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-275"></a><span>
+</span><a name="line-276"></a><span class="hs-keyword">data</span><span> </span><span class="hs-pragma">{-# CTYPE</span><span> </span><span class="hs-pragma">&quot;HsBool&quot;</span><span> </span><span class="hs-pragma">#-}</span><span> </span><a name="Bool"><a href="GHC.Types.html#Bool"><span class="hs-identifier">Bool</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="False"><a href="GHC.Types.html#False"><span class="hs-identifier">False</span></a></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="True"><a href="GHC.Types.html#True"><span class="hs-identifier">True</span></a></a><span>
+</span><a name="line-277"></a><span>
+</span><a name="line-278"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">isTrue#</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-279"></a><span class="hs-comment">-- | Alias for 'tagToEnum#'. Returns True if its parameter is 1# and False</span><span>
+</span><a name="line-280"></a><span class="hs-comment">--   if it is 0#.</span><span>
+</span><a name="line-281"></a><span class="hs-identifier">isTrue#</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Prim.html#Int%23"><span class="hs-identifier hs-type">Int#</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span>   </span><span class="hs-comment">-- See Note [Optimizing isTrue#]</span><span>
+</span><a name="line-282"></a><a name="isTrue%23"><a href="GHC.Types.html#isTrue%23"><span class="hs-identifier">isTrue#</span></a></a><span> </span><a name="local-6989586621679009805"><a href="#local-6989586621679009805"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Prim.html#tagToEnum%23"><span class="hs-identifier hs-var">tagToEnum#</span></a><span> </span><a href="#local-6989586621679009805"><span class="hs-identifier hs-var">x</span></a><span>
+</span><a name="line-283"></a><span>
+</span><a name="line-284"></a><span class="hs-comment">{- Note [Optimizing isTrue#]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Current definition of isTrue# is a temporary workaround. We would like to
+have functions isTrue# and isFalse# defined like this:
+
+    isTrue# :: Int# -&gt; Bool
+    isTrue# 1# = True
+    isTrue# _  = False
+
+    isFalse# :: Int# -&gt; Bool
+    isFalse# 0# = True
+    isFalse# _  = False
+
+These functions would allow us to safely check if a tag can represent True
+or False. Using isTrue# and isFalse# as defined above will not introduce
+additional case into the code. When we scrutinize return value of isTrue#
+or isFalse#, either explicitly in a case expression or implicitly in a guard,
+the result will always be a single case expression (given that optimizations
+are turned on). This results from case-of-case transformation. Consider this
+code (this is both valid Haskell and Core):
+
+case isTrue# (a &gt;# b) of
+    True  -&gt; e1
+    False -&gt; e2
+
+Inlining isTrue# gives:
+
+case (case (a &gt;# b) of { 1# -&gt; True; _ -&gt; False } ) of
+    True  -&gt; e1
+    False -&gt; e2
+
+Case-of-case transforms that to:
+
+case (a &gt;# b) of
+  1# -&gt; case True of
+          True  -&gt; e1
+          False -&gt; e2
+  _  -&gt; case False of
+          True  -&gt; e1
+          False -&gt; e2
+
+Which is then simplified by case-of-known-constructor:
+
+case (a &gt;# b) of
+  1# -&gt; e1
+  _  -&gt; e2
+
+While we get good Core here, the code generator will generate very bad Cmm
+if e1 or e2 do allocation. It will push heap checks into case alternatives
+which results in about 2.5% increase in code size. Until this is improved we
+just make isTrue# an alias to tagToEnum#. This is a temporary solution (if
+you're reading this in 2023 then things went wrong). See #8326.
+-}</span><span>
+</span><a name="line-337"></a><span>
+</span><a name="line-338"></a><span>
+</span><a name="line-339"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+                    SPEC
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-344"></a><span>
+</span><a name="line-345"></a><span class="hs-comment">-- | 'SPEC' is used by GHC in the @SpecConstr@ pass in order to inform</span><span>
+</span><a name="line-346"></a><span class="hs-comment">-- the compiler when to be particularly aggressive. In particular, it</span><span>
+</span><a name="line-347"></a><span class="hs-comment">-- tells GHC to specialize regardless of size or the number of</span><span>
+</span><a name="line-348"></a><span class="hs-comment">-- specializations. However, not all loops fall into this category.</span><span>
+</span><a name="line-349"></a><span class="hs-comment">--</span><span>
+</span><a name="line-350"></a><span class="hs-comment">-- Libraries can specify this by using 'SPEC' data type to inform which</span><span>
+</span><a name="line-351"></a><span class="hs-comment">-- loops should be aggressively specialized.</span><span>
+</span><a name="line-352"></a><span class="hs-keyword">data</span><span> </span><a name="SPEC"><a href="GHC.Types.html#SPEC"><span class="hs-identifier">SPEC</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="SPEC"><a href="GHC.Types.html#SPEC"><span class="hs-identifier">SPEC</span></a></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="SPEC2"><a href="GHC.Types.html#SPEC2"><span class="hs-identifier">SPEC2</span></a></a><span>
+</span><a name="line-353"></a><span>
+</span><a name="line-354"></a><span>
+</span><a name="line-355"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+                    Levity polymorphism
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-360"></a><span>
+</span><a name="line-361"></a><span>
+</span><a name="line-362"></a><span class="hs-comment">-- | GHC maintains a property that the kind of all inhabited types</span><span>
+</span><a name="line-363"></a><span class="hs-comment">-- (as distinct from type constructors or type-level data) tells us</span><span>
+</span><a name="line-364"></a><span class="hs-comment">-- the runtime representation of values of that type. This datatype</span><span>
+</span><a name="line-365"></a><span class="hs-comment">-- encodes the choice of runtime value.</span><span>
+</span><a name="line-366"></a><span class="hs-comment">-- Note that 'TYPE' is parameterised by 'RuntimeRep'; this is precisely</span><span>
+</span><a name="line-367"></a><span class="hs-comment">-- what we mean by the fact that a type's kind encodes the runtime</span><span>
+</span><a name="line-368"></a><span class="hs-comment">-- representation.</span><span>
+</span><a name="line-369"></a><span class="hs-comment">--</span><span>
+</span><a name="line-370"></a><span class="hs-comment">-- For boxed values (that is, values that are represented by a pointer),</span><span>
+</span><a name="line-371"></a><span class="hs-comment">-- a further distinction is made, between lifted types (that contain &#8869;),</span><span>
+</span><a name="line-372"></a><span class="hs-comment">-- and unlifted ones (that don't).</span><span>
+</span><a name="line-373"></a><span class="hs-keyword">data</span><span> </span><a name="RuntimeRep"><a href="GHC.Types.html#RuntimeRep"><span class="hs-identifier">RuntimeRep</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="VecRep"><a href="GHC.Types.html#VecRep"><span class="hs-identifier">VecRep</span></a></a><span> </span><a href="GHC.Types.html#VecCount"><span class="hs-identifier hs-type">VecCount</span></a><span> </span><a href="GHC.Types.html#VecElem"><span class="hs-identifier hs-type">VecElem</span></a><span>   </span><span class="hs-comment">-- ^ a SIMD vector type</span><span>
+</span><a name="line-374"></a><span>                </span><span class="hs-glyph">|</span><span> </span><a name="TupleRep"><a href="GHC.Types.html#TupleRep"><span class="hs-identifier">TupleRep</span></a></a><span> </span><span class="hs-special">[</span><a href="GHC.Types.html#RuntimeRep"><span class="hs-identifier hs-type">RuntimeRep</span></a><span class="hs-special">]</span><span>     </span><span class="hs-comment">-- ^ An unboxed tuple of the given reps</span><span>
+</span><a name="line-375"></a><span>                </span><span class="hs-glyph">|</span><span> </span><a name="SumRep"><a href="GHC.Types.html#SumRep"><span class="hs-identifier">SumRep</span></a></a><span> </span><span class="hs-special">[</span><a href="GHC.Types.html#RuntimeRep"><span class="hs-identifier hs-type">RuntimeRep</span></a><span class="hs-special">]</span><span>       </span><span class="hs-comment">-- ^ An unboxed sum of the given reps</span><span>
+</span><a name="line-376"></a><span>                </span><span class="hs-glyph">|</span><span> </span><a name="LiftedRep"><a href="GHC.Types.html#LiftedRep"><span class="hs-identifier">LiftedRep</span></a></a><span>       </span><span class="hs-comment">-- ^ lifted; represented by a pointer</span><span>
+</span><a name="line-377"></a><span>                </span><span class="hs-glyph">|</span><span> </span><a name="UnliftedRep"><a href="GHC.Types.html#UnliftedRep"><span class="hs-identifier">UnliftedRep</span></a></a><span>     </span><span class="hs-comment">-- ^ unlifted; represented by a pointer</span><span>
+</span><a name="line-378"></a><span>                </span><span class="hs-glyph">|</span><span> </span><a name="IntRep"><a href="GHC.Types.html#IntRep"><span class="hs-identifier">IntRep</span></a></a><span>          </span><span class="hs-comment">-- ^ signed, word-sized value</span><span>
+</span><a name="line-379"></a><span>                </span><span class="hs-glyph">|</span><span> </span><a name="WordRep"><a href="GHC.Types.html#WordRep"><span class="hs-identifier">WordRep</span></a></a><span>         </span><span class="hs-comment">-- ^ unsigned, word-sized value</span><span>
+</span><a name="line-380"></a><span>                </span><span class="hs-glyph">|</span><span> </span><a name="Int64Rep"><a href="GHC.Types.html#Int64Rep"><span class="hs-identifier">Int64Rep</span></a></a><span>        </span><span class="hs-comment">-- ^ signed, 64-bit value (on 32-bit only)</span><span>
+</span><a name="line-381"></a><span>                </span><span class="hs-glyph">|</span><span> </span><a name="Word64Rep"><a href="GHC.Types.html#Word64Rep"><span class="hs-identifier">Word64Rep</span></a></a><span>       </span><span class="hs-comment">-- ^ unsigned, 64-bit value (on 32-bit only)</span><span>
+</span><a name="line-382"></a><span>                </span><span class="hs-glyph">|</span><span> </span><a name="AddrRep"><a href="GHC.Types.html#AddrRep"><span class="hs-identifier">AddrRep</span></a></a><span>         </span><span class="hs-comment">-- ^ A pointer, but /not/ to a Haskell value</span><span>
+</span><a name="line-383"></a><span>                </span><span class="hs-glyph">|</span><span> </span><a name="FloatRep"><a href="GHC.Types.html#FloatRep"><span class="hs-identifier">FloatRep</span></a></a><span>        </span><span class="hs-comment">-- ^ a 32-bit floating point number</span><span>
+</span><a name="line-384"></a><span>                </span><span class="hs-glyph">|</span><span> </span><a name="DoubleRep"><a href="GHC.Types.html#DoubleRep"><span class="hs-identifier">DoubleRep</span></a></a><span>       </span><span class="hs-comment">-- ^ a 64-bit floating point number</span><span>
+</span><a name="line-385"></a><span>
+</span><a name="line-386"></a><span class="hs-comment">-- See also Note [Wiring in RuntimeRep] in TysWiredIn</span><span>
+</span><a name="line-387"></a><span>
+</span><a name="line-388"></a><span class="hs-comment">-- | Length of a SIMD vector type</span><span>
+</span><a name="line-389"></a><span class="hs-keyword">data</span><span> </span><a name="VecCount"><a href="GHC.Types.html#VecCount"><span class="hs-identifier">VecCount</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="Vec2"><a href="GHC.Types.html#Vec2"><span class="hs-identifier">Vec2</span></a></a><span>
+</span><a name="line-390"></a><span>              </span><span class="hs-glyph">|</span><span> </span><a name="Vec4"><a href="GHC.Types.html#Vec4"><span class="hs-identifier">Vec4</span></a></a><span>
+</span><a name="line-391"></a><span>              </span><span class="hs-glyph">|</span><span> </span><a name="Vec8"><a href="GHC.Types.html#Vec8"><span class="hs-identifier">Vec8</span></a></a><span>
+</span><a name="line-392"></a><span>              </span><span class="hs-glyph">|</span><span> </span><a name="Vec16"><a href="GHC.Types.html#Vec16"><span class="hs-identifier">Vec16</span></a></a><span>
+</span><a name="line-393"></a><span>              </span><span class="hs-glyph">|</span><span> </span><a name="Vec32"><a href="GHC.Types.html#Vec32"><span class="hs-identifier">Vec32</span></a></a><span>
+</span><a name="line-394"></a><span>              </span><span class="hs-glyph">|</span><span> </span><a name="Vec64"><a href="GHC.Types.html#Vec64"><span class="hs-identifier">Vec64</span></a></a><span>
+</span><a name="line-395"></a><span class="hs-comment">-- Enum, Bounded instances in GHC.Enum</span><span>
+</span><a name="line-396"></a><span>
+</span><a name="line-397"></a><span class="hs-comment">-- | Element of a SIMD vector type</span><span>
+</span><a name="line-398"></a><span class="hs-keyword">data</span><span> </span><a name="VecElem"><a href="GHC.Types.html#VecElem"><span class="hs-identifier">VecElem</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="Int8ElemRep"><a href="GHC.Types.html#Int8ElemRep"><span class="hs-identifier">Int8ElemRep</span></a></a><span>
+</span><a name="line-399"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="Int16ElemRep"><a href="GHC.Types.html#Int16ElemRep"><span class="hs-identifier">Int16ElemRep</span></a></a><span>
+</span><a name="line-400"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="Int32ElemRep"><a href="GHC.Types.html#Int32ElemRep"><span class="hs-identifier">Int32ElemRep</span></a></a><span>
+</span><a name="line-401"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="Int64ElemRep"><a href="GHC.Types.html#Int64ElemRep"><span class="hs-identifier">Int64ElemRep</span></a></a><span>
+</span><a name="line-402"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="Word8ElemRep"><a href="GHC.Types.html#Word8ElemRep"><span class="hs-identifier">Word8ElemRep</span></a></a><span>
+</span><a name="line-403"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="Word16ElemRep"><a href="GHC.Types.html#Word16ElemRep"><span class="hs-identifier">Word16ElemRep</span></a></a><span>
+</span><a name="line-404"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="Word32ElemRep"><a href="GHC.Types.html#Word32ElemRep"><span class="hs-identifier">Word32ElemRep</span></a></a><span>
+</span><a name="line-405"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="Word64ElemRep"><a href="GHC.Types.html#Word64ElemRep"><span class="hs-identifier">Word64ElemRep</span></a></a><span>
+</span><a name="line-406"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="FloatElemRep"><a href="GHC.Types.html#FloatElemRep"><span class="hs-identifier">FloatElemRep</span></a></a><span>
+</span><a name="line-407"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="DoubleElemRep"><a href="GHC.Types.html#DoubleElemRep"><span class="hs-identifier">DoubleElemRep</span></a></a><span>
+</span><a name="line-408"></a><span class="hs-comment">-- Enum, Bounded instances in GHC.Enum</span><span>
+</span><a name="line-409"></a><span>
+</span><a name="line-410"></a><span class="hs-comment">{- *********************************************************************
+*                                                                      *
+             Runtime representation of TyCon
+*                                                                      *
+********************************************************************* -}</span><span>
+</span><a name="line-415"></a><span>
+</span><a name="line-416"></a><span class="hs-comment">{- Note [Runtime representation of modules and tycons]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+We generate a binding for M.$modName and M.$tcT for every module M and
+data type T.  Things to think about
+
+  - We want them to be economical on space; ideally pure data with no thunks.
+
+  - We do this for every module (except this module GHC.Types), so we can't
+    depend on anything else (eg string unpacking code)
+
+That's why we have these terribly low-level representations.  The TrName
+type lets us use the TrNameS constructor when allocating static data;
+but we also need TrNameD for the case where we are deserialising a TyCon
+or Module (for example when deserialising a TypeRep), in which case we
+can't conveniently come up with an Addr#.
+-}</span><span>
+</span><a name="line-432"></a><span>
+</span><a name="line-433"></a><span class="hs-cpp">#include &quot;MachDeps.h&quot;
+</span><span>
+</span><a name="line-435"></a><span class="hs-keyword">data</span><span> </span><a name="Module"><a href="GHC.Types.html#Module"><span class="hs-identifier">Module</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="Module"><a href="GHC.Types.html#Module"><span class="hs-identifier">Module</span></a></a><span>
+</span><a name="line-436"></a><span>                </span><a href="GHC.Types.html#TrName"><span class="hs-identifier hs-type">TrName</span></a><span>   </span><span class="hs-comment">-- Package name</span><span>
+</span><a name="line-437"></a><span>                </span><a href="GHC.Types.html#TrName"><span class="hs-identifier hs-type">TrName</span></a><span>   </span><span class="hs-comment">-- Module name</span><span>
+</span><a name="line-438"></a><span>
+</span><a name="line-439"></a><span class="hs-keyword">data</span><span> </span><a name="TrName"><a href="GHC.Types.html#TrName"><span class="hs-identifier">TrName</span></a></a><span>
+</span><a name="line-440"></a><span>  </span><span class="hs-glyph">=</span><span> </span><a name="TrNameS"><a href="GHC.Types.html#TrNameS"><span class="hs-identifier">TrNameS</span></a></a><span> </span><a href="GHC.Prim.html#Addr%23"><span class="hs-identifier hs-type">Addr#</span></a><span>  </span><span class="hs-comment">-- Static</span><span>
+</span><a name="line-441"></a><span>  </span><span class="hs-glyph">|</span><span> </span><a name="TrNameD"><a href="GHC.Types.html#TrNameD"><span class="hs-identifier">TrNameD</span></a></a><span> </span><span class="hs-special">[</span><a href="GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Dynamic</span><span>
+</span><a name="line-442"></a><span>
+</span><a name="line-443"></a><span class="hs-comment">-- | A de Bruijn index for a binder within a 'KindRep'.</span><span>
+</span><a name="line-444"></a><span class="hs-keyword">type</span><span> </span><a name="KindBndr"><a href="GHC.Types.html#KindBndr"><span class="hs-identifier">KindBndr</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Types.html#Int"><span class="hs-identifier hs-type">Int</span></a><span>
+</span><a name="line-445"></a><span>
+</span><a name="line-446"></a><span class="hs-cpp">#if WORD_SIZE_IN_BITS &lt; 64
+#define WORD64_TY Word64#
+#else
+#define WORD64_TY Word#
+#endif
+</span><span>
+</span><a name="line-452"></a><span class="hs-comment">-- | The representation produced by GHC for conjuring up the kind of a</span><span>
+</span><a name="line-453"></a><span class="hs-comment">-- 'TypeRep'.  See Note [Representing TyCon kinds: KindRep] in TcTypeable.</span><span>
+</span><a name="line-454"></a><span class="hs-keyword">data</span><span> </span><a name="KindRep"><a href="GHC.Types.html#KindRep"><span class="hs-identifier">KindRep</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="KindRepTyConApp"><a href="GHC.Types.html#KindRepTyConApp"><span class="hs-identifier">KindRepTyConApp</span></a></a><span> </span><a href="GHC.Types.html#TyCon"><span class="hs-identifier hs-type">TyCon</span></a><span> </span><span class="hs-special">[</span><a href="GHC.Types.html#KindRep"><span class="hs-identifier hs-type">KindRep</span></a><span class="hs-special">]</span><span>
+</span><a name="line-455"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="KindRepVar"><a href="GHC.Types.html#KindRepVar"><span class="hs-identifier">KindRepVar</span></a></a><span> </span><span class="hs-glyph">!</span><a href="GHC.Types.html#KindBndr"><span class="hs-identifier hs-type">KindBndr</span></a><span>
+</span><a name="line-456"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="KindRepApp"><a href="GHC.Types.html#KindRepApp"><span class="hs-identifier">KindRepApp</span></a></a><span> </span><a href="GHC.Types.html#KindRep"><span class="hs-identifier hs-type">KindRep</span></a><span> </span><a href="GHC.Types.html#KindRep"><span class="hs-identifier hs-type">KindRep</span></a><span>
+</span><a name="line-457"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="KindRepFun"><a href="GHC.Types.html#KindRepFun"><span class="hs-identifier">KindRepFun</span></a></a><span> </span><a href="GHC.Types.html#KindRep"><span class="hs-identifier hs-type">KindRep</span></a><span> </span><a href="GHC.Types.html#KindRep"><span class="hs-identifier hs-type">KindRep</span></a><span>
+</span><a name="line-458"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="KindRepTYPE"><a href="GHC.Types.html#KindRepTYPE"><span class="hs-identifier">KindRepTYPE</span></a></a><span> </span><span class="hs-glyph">!</span><a href="GHC.Types.html#RuntimeRep"><span class="hs-identifier hs-type">RuntimeRep</span></a><span>
+</span><a name="line-459"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="KindRepTypeLitS"><a href="GHC.Types.html#KindRepTypeLitS"><span class="hs-identifier">KindRepTypeLitS</span></a></a><span> </span><a href="GHC.Types.html#TypeLitSort"><span class="hs-identifier hs-type">TypeLitSort</span></a><span> </span><a href="GHC.Prim.html#Addr%23"><span class="hs-identifier hs-type">Addr#</span></a><span>
+</span><a name="line-460"></a><span>             </span><span class="hs-glyph">|</span><span> </span><a name="KindRepTypeLitD"><a href="GHC.Types.html#KindRepTypeLitD"><span class="hs-identifier">KindRepTypeLitD</span></a></a><span> </span><a href="GHC.Types.html#TypeLitSort"><span class="hs-identifier hs-type">TypeLitSort</span></a><span> </span><span class="hs-special">[</span><a href="GHC.Types.html#Char"><span class="hs-identifier hs-type">Char</span></a><span class="hs-special">]</span><span>
+</span><a name="line-461"></a><span>
+</span><a name="line-462"></a><span class="hs-keyword">data</span><span> </span><a name="TypeLitSort"><a href="GHC.Types.html#TypeLitSort"><span class="hs-identifier">TypeLitSort</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="TypeLitSymbol"><a href="GHC.Types.html#TypeLitSymbol"><span class="hs-identifier">TypeLitSymbol</span></a></a><span>
+</span><a name="line-463"></a><span>                 </span><span class="hs-glyph">|</span><span> </span><a name="TypeLitNat"><a href="GHC.Types.html#TypeLitNat"><span class="hs-identifier">TypeLitNat</span></a></a><span>
+</span><a name="line-464"></a><span>
+</span><a name="line-465"></a><span class="hs-comment">-- Show instance for TyCon found in GHC.Show</span><span>
+</span><a name="line-466"></a><span class="hs-keyword">data</span><span> </span><a name="TyCon"><a href="GHC.Types.html#TyCon"><span class="hs-identifier">TyCon</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a name="TyCon"><a href="GHC.Types.html#TyCon"><span class="hs-identifier">TyCon</span></a></a><span> </span><span class="hs-identifier">WORD64_TY</span><span> </span><span class="hs-identifier">WORD64_TY</span><span>   </span><span class="hs-comment">-- Fingerprint</span><span>
+</span><a name="line-467"></a><span>                   </span><a href="GHC.Types.html#Module"><span class="hs-identifier hs-type">Module</span></a><span>                </span><span class="hs-comment">-- Module in which this is defined</span><span>
+</span><a name="line-468"></a><span>                   </span><a href="GHC.Types.html#TrName"><span class="hs-identifier hs-type">TrName</span></a><span>                </span><span class="hs-comment">-- Type constructor name</span><span>
+</span><a name="line-469"></a><span>                   </span><a href="GHC.Prim.html#Int%23"><span class="hs-identifier hs-type">Int#</span></a><span>                  </span><span class="hs-comment">-- How many kind variables do we accept?</span><span>
+</span><a name="line-470"></a><span>                   </span><a href="GHC.Types.html#KindRep"><span class="hs-identifier hs-type">KindRep</span></a><span>               </span><span class="hs-comment">-- A representation of the type's kind</span><span>
+</span><a name="line-471"></a></pre></body></html>

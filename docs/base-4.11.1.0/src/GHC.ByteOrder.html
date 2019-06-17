@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span>
+</span><a name="line-3"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- Module      :  GHC.ByteOrder</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow, 1994-2000</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- License     :  see libraries/base/LICENSE</span><span>
+</span><a name="line-8"></a><span class="hs-comment">--</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Maintainer  :  cvs-ghc@haskell.org</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Stability   :  internal</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Portability :  non-portable (GHC extensions)</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Target byte ordering.</span><span>
+</span><a name="line-14"></a><span class="hs-comment">--</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-16"></a><span>
+</span><a name="line-17"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.ByteOrder</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-18"></a><span>
+</span><a name="line-19"></a><span class="hs-comment">-- | Byte ordering.</span><span>
+</span><a name="line-20"></a><span class="hs-keyword">data</span><span> </span><a name="ByteOrder"><a href="GHC.ByteOrder.html#ByteOrder"><span class="hs-identifier">ByteOrder</span></a></a><span>
+</span><a name="line-21"></a><span>    </span><span class="hs-glyph">=</span><span> </span><a name="BigEndian"><a href="GHC.ByteOrder.html#BigEndian"><span class="hs-identifier">BigEndian</span></a></a><span>    </span><span class="hs-comment">-- ^ most-significant-byte occurs in lowest address.</span><span>
+</span><a name="line-22"></a><span>    </span><span class="hs-glyph">|</span><span> </span><a name="LittleEndian"><a href="GHC.ByteOrder.html#LittleEndian"><span class="hs-identifier">LittleEndian</span></a></a><span> </span><span class="hs-comment">-- ^ least-significant-byte occurs in lowest address.</span><span>
+</span><a name="line-23"></a><span>    </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Eq"><span class="hs-identifier hs-type">Eq</span></a><span class="hs-special">,</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Ord"><span class="hs-identifier hs-type">Ord</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Enum.html#Bounded"><span class="hs-identifier hs-type">Bounded</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Enum.html#Enum"><span class="hs-identifier hs-type">Enum</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Read.html#Read"><span class="hs-identifier hs-type">Read</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span class="hs-special">)</span><span>
+</span><a name="line-24"></a><span>
+</span><a name="line-25"></a><span class="hs-comment">-- | The byte ordering of the target machine.</span><span>
+</span><a name="line-26"></a><span class="hs-identifier">targetByteOrder</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.ByteOrder.html#ByteOrder"><span class="hs-identifier hs-type">ByteOrder</span></a><span>
+</span><a name="line-27"></a><span class="hs-cpp">#if defined(WORDS_BIGENDIAN)
+</span><span class="hs-identifier">targetByteOrder</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">BigEndian</span><span>
+</span><a name="line-29"></a><span class="hs-cpp">#else
+</span><a name="targetByteOrder"><a href="GHC.ByteOrder.html#targetByteOrder"><span class="hs-identifier">targetByteOrder</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.ByteOrder.html#LittleEndian"><span class="hs-identifier hs-var">LittleEndian</span></a><span>
+</span><a name="line-31"></a><span class="hs-cpp">#endif
+</span></pre></body></html>

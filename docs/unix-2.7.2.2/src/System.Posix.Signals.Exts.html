@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">1</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Signals/Exts.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-3"></a><span class="hs-pragma">{-# LANGUAGE Safe #-}</span><span>
+</span><a name="line-4"></a><span>
+</span><a name="line-5"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Module      :  System.Posix.Signals.Exts</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2002</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-10"></a><span class="hs-comment">--</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Stability   :  provisional</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Portability :  non-portable (requires POSIX, includes Linuxisms/BSDisms)</span><span>
+</span><a name="line-14"></a><span class="hs-comment">--</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- non-POSIX signal support commonly available</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-18"></a><span>
+</span><a name="line-19"></a><span>
+</span><a name="line-20"></a><span class="hs-cpp">#include &quot;HsUnixConfig.h&quot;
+</span><span>
+</span><a name="line-22"></a><span>
+</span><a name="line-23"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">22</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Signals/Exts.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-24"></a><span>
+</span><a name="line-25"></a><span>
+</span><a name="line-26"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">24</span><span> </span><span class="hs-pragma">&quot;libraries/unix/System/Posix/Signals/Exts.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-27"></a><span>
+</span><a name="line-28"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">System.Posix.Signals.Exts</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-29"></a><span>  </span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">System.Posix.Signals</span><span>
+</span><a name="line-30"></a><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">sigINFO</span><span>
+</span><a name="line-31"></a><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">sigWINCH</span><span>
+</span><a name="line-32"></a><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">infoEvent</span><span>
+</span><a name="line-33"></a><span>  </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">windowChange</span><span>
+</span><a name="line-34"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-35"></a><span>
+</span><a name="line-36"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">Foreign.C</span><span>
+</span><a name="line-37"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">System.Posix.Signals</span><span>
+</span><a name="line-38"></a><span>
+</span><a name="line-39"></a><span class="hs-identifier">sigINFO</span><span>   </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CInt</span><span>
+</span><a name="line-40"></a><span class="hs-identifier">sigINFO</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">CONST_SIGINFO</span><span>
+</span><a name="line-41"></a><span>
+</span><a name="line-42"></a><span class="hs-identifier">sigWINCH</span><span>   </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">CInt</span><span>
+</span><a name="line-43"></a><span class="hs-identifier">sigWINCH</span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">CONST_SIGWINCH</span><span>
+</span><a name="line-44"></a><span>
+</span><a name="line-45"></a><span>
+</span><a name="line-46"></a><span class="hs-identifier">infoEvent</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Signal</span><span>
+</span><a name="line-47"></a><span class="hs-identifier">infoEvent</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">sigINFO</span><span>
+</span><a name="line-48"></a><span>
+</span><a name="line-49"></a><span class="hs-identifier">windowChange</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Signal</span><span>
+</span><a name="line-50"></a><span class="hs-identifier">windowChange</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">sigWINCH</span><span>
+</span><a name="line-51"></a></pre></body></html>

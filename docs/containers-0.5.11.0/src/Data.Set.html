@@ -1,0 +1,180 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span class="hs-cpp">#if !defined(TESTING) &amp;&amp; __GLASGOW_HASKELL__ &gt;= 703
+</span><span class="hs-pragma">{-# LANGUAGE Safe #-}</span><span>
+</span><a name="line-4"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-6"></a><span class="hs-cpp">#include &quot;containers.h&quot;
+</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Module      :  Data.Set</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Copyright   :  (c) Daan Leijen 2002</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- License     :  BSD-style</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-15"></a><span class="hs-comment">--</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- = Finite Sets</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- The @'Set' e@ type represents a set of elements of type @e@. Most operations</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- require that @e@ be an instance of the 'Ord' class. A 'Set' is strict in its</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-- elements.</span><span>
+</span><a name="line-22"></a><span class="hs-comment">--</span><span>
+</span><a name="line-23"></a><span class="hs-comment">-- For a walkthrough of the most commonly used functions see the</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- &lt;https://haskell-containers.readthedocs.io/en/latest/set.html sets introduction&gt;.</span><span>
+</span><a name="line-25"></a><span class="hs-comment">--</span><span>
+</span><a name="line-26"></a><span class="hs-comment">-- Note that the implementation is generally /left-biased/. Functions that take</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- two sets as arguments and combine them, such as `union` and `intersection`,</span><span>
+</span><a name="line-28"></a><span class="hs-comment">-- prefer the entries in the first argument to those in the second. Of course,</span><span>
+</span><a name="line-29"></a><span class="hs-comment">-- this bias can only be observed when equality is an equivalence relation</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-- instead of structural equality.</span><span>
+</span><a name="line-31"></a><span class="hs-comment">--</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- These modules are intended to be imported qualified, to avoid name</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- clashes with Prelude functions, e.g.</span><span>
+</span><a name="line-34"></a><span class="hs-comment">--</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- &gt;  import Data.Set (Set)</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- &gt;  import qualified Data.Set as Set</span><span>
+</span><a name="line-37"></a><span class="hs-comment">--</span><span>
+</span><a name="line-38"></a><span class="hs-comment">--</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- == Warning</span><span>
+</span><a name="line-40"></a><span class="hs-comment">--</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- The size of the set must not exceed @maxBound::Int@. Violation of</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- this condition is not detected and if the size limit is exceeded, its</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- behaviour is undefined.</span><span>
+</span><a name="line-44"></a><span class="hs-comment">--</span><span>
+</span><a name="line-45"></a><span class="hs-comment">--</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- == Implementation</span><span>
+</span><a name="line-47"></a><span class="hs-comment">--</span><span>
+</span><a name="line-48"></a><span class="hs-comment">-- The implementation of 'Set' is based on /size balanced/ binary trees (or</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- trees of /bounded balance/) as described by:</span><span>
+</span><a name="line-50"></a><span class="hs-comment">--</span><span>
+</span><a name="line-51"></a><span class="hs-comment">--    * Stephen Adams, \&quot;/Efficient sets: a balancing act/\&quot;,</span><span>
+</span><a name="line-52"></a><span class="hs-comment">--      Journal of Functional Programming 3(4):553-562, October 1993,</span><span>
+</span><a name="line-53"></a><span class="hs-comment">--      &lt;http://www.swiss.ai.mit.edu/~adams/BB/&gt;.</span><span>
+</span><a name="line-54"></a><span class="hs-comment">--    * J. Nievergelt and E.M. Reingold,</span><span>
+</span><a name="line-55"></a><span class="hs-comment">--      \&quot;/Binary search trees of bounded balance/\&quot;,</span><span>
+</span><a name="line-56"></a><span class="hs-comment">--      SIAM journal of computing 2(1), March 1973.</span><span>
+</span><a name="line-57"></a><span class="hs-comment">--</span><span>
+</span><a name="line-58"></a><span class="hs-comment">--  Bounds for 'union', 'intersection', and 'difference' are as given</span><span>
+</span><a name="line-59"></a><span class="hs-comment">--  by</span><span>
+</span><a name="line-60"></a><span class="hs-comment">--</span><span>
+</span><a name="line-61"></a><span class="hs-comment">--    * Guy Blelloch, Daniel Ferizovic, and Yihan Sun,</span><span>
+</span><a name="line-62"></a><span class="hs-comment">--      \&quot;/Just Join for Parallel Ordered Sets/\&quot;,</span><span>
+</span><a name="line-63"></a><span class="hs-comment">--      &lt;https://arxiv.org/abs/1602.02120v3&gt;.</span><span>
+</span><a name="line-64"></a><span class="hs-comment">--</span><span>
+</span><a name="line-65"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-66"></a><span>
+</span><a name="line-67"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Set</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-68"></a><span>            </span><span class="hs-comment">-- * Set type</span><span>
+</span><a name="line-69"></a><span class="hs-cpp">#if !defined(TESTING)
+</span><span>              </span><a href="Data.Set.Internal.html#Set"><span class="hs-identifier hs-type">Set</span></a><span>          </span><span class="hs-comment">-- instance Eq,Ord,Show,Read,Data,Typeable</span><span>
+</span><a name="line-71"></a><span class="hs-cpp">#else
+</span><span>              </span><span class="hs-identifier">Set</span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><a name="line-73"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-75"></a><span>            </span><span class="hs-comment">-- * Operators</span><span>
+</span><a name="line-76"></a><span>            </span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><a href="Data.Set.Internal.html#%5C%5C"><span class="hs-operator hs-var">\\</span></a><span class="hs-special">)</span><span>
+</span><a name="line-77"></a><span>
+</span><a name="line-78"></a><span>            </span><span class="hs-comment">-- * Query</span><span>
+</span><a name="line-79"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#null"><span class="hs-identifier hs-var">S.null</span></a><span>
+</span><a name="line-80"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#size"><span class="hs-identifier hs-var">size</span></a><span>
+</span><a name="line-81"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#member"><span class="hs-identifier hs-var">member</span></a><span>
+</span><a name="line-82"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#notMember"><span class="hs-identifier hs-var">notMember</span></a><span>
+</span><a name="line-83"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#lookupLT"><span class="hs-identifier hs-var">lookupLT</span></a><span>
+</span><a name="line-84"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#lookupGT"><span class="hs-identifier hs-var">lookupGT</span></a><span>
+</span><a name="line-85"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#lookupLE"><span class="hs-identifier hs-var">lookupLE</span></a><span>
+</span><a name="line-86"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#lookupGE"><span class="hs-identifier hs-var">lookupGE</span></a><span>
+</span><a name="line-87"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#isSubsetOf"><span class="hs-identifier hs-var">isSubsetOf</span></a><span>
+</span><a name="line-88"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#isProperSubsetOf"><span class="hs-identifier hs-var">isProperSubsetOf</span></a><span>
+</span><a name="line-89"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#disjoint"><span class="hs-identifier hs-var">disjoint</span></a><span>
+</span><a name="line-90"></a><span>
+</span><a name="line-91"></a><span>            </span><span class="hs-comment">-- * Construction</span><span>
+</span><a name="line-92"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#empty"><span class="hs-identifier hs-var">empty</span></a><span>
+</span><a name="line-93"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#singleton"><span class="hs-identifier hs-var">singleton</span></a><span>
+</span><a name="line-94"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#insert"><span class="hs-identifier hs-var">insert</span></a><span>
+</span><a name="line-95"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#delete"><span class="hs-identifier hs-var">delete</span></a><span>
+</span><a name="line-96"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#powerSet"><span class="hs-identifier hs-var">powerSet</span></a><span>
+</span><a name="line-97"></a><span>
+</span><a name="line-98"></a><span>            </span><span class="hs-comment">-- * Combine</span><span>
+</span><a name="line-99"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#union"><span class="hs-identifier hs-var">union</span></a><span>
+</span><a name="line-100"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#unions"><span class="hs-identifier hs-var">unions</span></a><span>
+</span><a name="line-101"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#difference"><span class="hs-identifier hs-var">difference</span></a><span>
+</span><a name="line-102"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#intersection"><span class="hs-identifier hs-var">intersection</span></a><span>
+</span><a name="line-103"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#cartesianProduct"><span class="hs-identifier hs-var">cartesianProduct</span></a><span>
+</span><a name="line-104"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#disjointUnion"><span class="hs-identifier hs-var">disjointUnion</span></a><span>
+</span><a name="line-105"></a><span>
+</span><a name="line-106"></a><span>            </span><span class="hs-comment">-- * Filter</span><span>
+</span><a name="line-107"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#filter"><span class="hs-identifier hs-var">S.filter</span></a><span>
+</span><a name="line-108"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#takeWhileAntitone"><span class="hs-identifier hs-var">takeWhileAntitone</span></a><span>
+</span><a name="line-109"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#dropWhileAntitone"><span class="hs-identifier hs-var">dropWhileAntitone</span></a><span>
+</span><a name="line-110"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#spanAntitone"><span class="hs-identifier hs-var">spanAntitone</span></a><span>
+</span><a name="line-111"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#partition"><span class="hs-identifier hs-var">partition</span></a><span>
+</span><a name="line-112"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#split"><span class="hs-identifier hs-var">split</span></a><span>
+</span><a name="line-113"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#splitMember"><span class="hs-identifier hs-var">splitMember</span></a><span>
+</span><a name="line-114"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#splitRoot"><span class="hs-identifier hs-var">splitRoot</span></a><span>
+</span><a name="line-115"></a><span>
+</span><a name="line-116"></a><span>            </span><span class="hs-comment">-- * Indexed</span><span>
+</span><a name="line-117"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#lookupIndex"><span class="hs-identifier hs-var">lookupIndex</span></a><span>
+</span><a name="line-118"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#findIndex"><span class="hs-identifier hs-var">findIndex</span></a><span>
+</span><a name="line-119"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#elemAt"><span class="hs-identifier hs-var">elemAt</span></a><span>
+</span><a name="line-120"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#deleteAt"><span class="hs-identifier hs-var">deleteAt</span></a><span>
+</span><a name="line-121"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#take"><span class="hs-identifier hs-var">S.take</span></a><span>
+</span><a name="line-122"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#drop"><span class="hs-identifier hs-var">S.drop</span></a><span>
+</span><a name="line-123"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#splitAt"><span class="hs-identifier hs-var">S.splitAt</span></a><span>
+</span><a name="line-124"></a><span>
+</span><a name="line-125"></a><span>            </span><span class="hs-comment">-- * Map</span><span>
+</span><a name="line-126"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#map"><span class="hs-identifier hs-var">S.map</span></a><span>
+</span><a name="line-127"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#mapMonotonic"><span class="hs-identifier hs-var">mapMonotonic</span></a><span>
+</span><a name="line-128"></a><span>
+</span><a name="line-129"></a><span>            </span><span class="hs-comment">-- * Folds</span><span>
+</span><a name="line-130"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#foldr"><span class="hs-identifier hs-var">S.foldr</span></a><span>
+</span><a name="line-131"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#foldl"><span class="hs-identifier hs-var">S.foldl</span></a><span>
+</span><a name="line-132"></a><span>            </span><span class="hs-comment">-- ** Strict folds</span><span>
+</span><a name="line-133"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#foldr%27"><span class="hs-identifier hs-var">foldr'</span></a><span>
+</span><a name="line-134"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#foldl%27"><span class="hs-identifier hs-var">foldl'</span></a><span>
+</span><a name="line-135"></a><span>            </span><span class="hs-comment">-- ** Legacy folds</span><span>
+</span><a name="line-136"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#fold"><span class="hs-identifier hs-var">fold</span></a><span>
+</span><a name="line-137"></a><span>
+</span><a name="line-138"></a><span>            </span><span class="hs-comment">-- * Min\/Max</span><span>
+</span><a name="line-139"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#lookupMin"><span class="hs-identifier hs-var">lookupMin</span></a><span>
+</span><a name="line-140"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#lookupMax"><span class="hs-identifier hs-var">lookupMax</span></a><span>
+</span><a name="line-141"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#findMin"><span class="hs-identifier hs-var">findMin</span></a><span>
+</span><a name="line-142"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#findMax"><span class="hs-identifier hs-var">findMax</span></a><span>
+</span><a name="line-143"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#deleteMin"><span class="hs-identifier hs-var">deleteMin</span></a><span>
+</span><a name="line-144"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#deleteMax"><span class="hs-identifier hs-var">deleteMax</span></a><span>
+</span><a name="line-145"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#deleteFindMin"><span class="hs-identifier hs-var">deleteFindMin</span></a><span>
+</span><a name="line-146"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#deleteFindMax"><span class="hs-identifier hs-var">deleteFindMax</span></a><span>
+</span><a name="line-147"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#maxView"><span class="hs-identifier hs-var">maxView</span></a><span>
+</span><a name="line-148"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#minView"><span class="hs-identifier hs-var">minView</span></a><span>
+</span><a name="line-149"></a><span>
+</span><a name="line-150"></a><span>            </span><span class="hs-comment">-- * Conversion</span><span>
+</span><a name="line-151"></a><span>
+</span><a name="line-152"></a><span>            </span><span class="hs-comment">-- ** List</span><span>
+</span><a name="line-153"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#elems"><span class="hs-identifier hs-var">elems</span></a><span>
+</span><a name="line-154"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#toList"><span class="hs-identifier hs-var">toList</span></a><span>
+</span><a name="line-155"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#fromList"><span class="hs-identifier hs-var">fromList</span></a><span>
+</span><a name="line-156"></a><span>
+</span><a name="line-157"></a><span>            </span><span class="hs-comment">-- ** Ordered list</span><span>
+</span><a name="line-158"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#toAscList"><span class="hs-identifier hs-var">toAscList</span></a><span>
+</span><a name="line-159"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#toDescList"><span class="hs-identifier hs-var">toDescList</span></a><span>
+</span><a name="line-160"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#fromAscList"><span class="hs-identifier hs-var">fromAscList</span></a><span>
+</span><a name="line-161"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#fromDescList"><span class="hs-identifier hs-var">fromDescList</span></a><span>
+</span><a name="line-162"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#fromDistinctAscList"><span class="hs-identifier hs-var">fromDistinctAscList</span></a><span>
+</span><a name="line-163"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#fromDistinctDescList"><span class="hs-identifier hs-var">fromDistinctDescList</span></a><span>
+</span><a name="line-164"></a><span>
+</span><a name="line-165"></a><span>            </span><span class="hs-comment">-- * Debugging</span><span>
+</span><a name="line-166"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#showTree"><span class="hs-identifier hs-var">showTree</span></a><span>
+</span><a name="line-167"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#showTreeWith"><span class="hs-identifier hs-var">showTreeWith</span></a><span>
+</span><a name="line-168"></a><span>            </span><span class="hs-special">,</span><span> </span><a href="Data.Set.Internal.html#valid"><span class="hs-identifier hs-var">valid</span></a><span>
+</span><a name="line-169"></a><span>
+</span><a name="line-170"></a><span class="hs-cpp">#if defined(TESTING)
+</span><span>            </span><span class="hs-comment">-- Internals (for testing)</span><span>
+</span><a name="line-172"></a><span>            </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">bin</span><span>
+</span><a name="line-173"></a><span>            </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">balanced</span><span>
+</span><a name="line-174"></a><span>            </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">link</span><span>
+</span><a name="line-175"></a><span>            </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">merge</span><span>
+</span><a name="line-176"></a><span class="hs-cpp">#endif
+</span><span>            </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-178"></a><span>
+</span><a name="line-179"></a><span class="hs-keyword">import</span><span> </span><a href="Data.Set.Internal.html"><span class="hs-identifier">Data.Set.Internal</span></a><span> </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">S</span><span>
+</span><a name="line-180"></a></pre></body></html>

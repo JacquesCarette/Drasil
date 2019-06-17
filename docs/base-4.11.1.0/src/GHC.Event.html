@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-3"></a><span>
+</span><a name="line-4"></a><span class="hs-comment">-- ----------------------------------------------------------------------------</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- | This module provides scalable event notification for file</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- descriptors and timeouts.</span><span>
+</span><a name="line-7"></a><span class="hs-comment">--</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- This module should be considered GHC internal.</span><span>
+</span><a name="line-9"></a><span class="hs-comment">--</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- ----------------------------------------------------------------------------</span><span>
+</span><a name="line-11"></a><span>
+</span><a name="line-12"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.Event</span><span>
+</span><a name="line-13"></a><span>    </span><span class="hs-special">(</span><span> </span><span class="hs-comment">-- * Types</span><span>
+</span><a name="line-14"></a><span>      </span><a href="GHC.Event.Manager.html#EventManager"><span class="hs-identifier hs-type">EventManager</span></a><span>
+</span><a name="line-15"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.TimerManager.html#TimerManager"><span class="hs-identifier hs-type">TimerManager</span></a><span>
+</span><a name="line-16"></a><span>
+</span><a name="line-17"></a><span>      </span><span class="hs-comment">-- * Creation</span><span>
+</span><a name="line-18"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Thread.html#getSystemEventManager"><span class="hs-identifier hs-var">getSystemEventManager</span></a><span>
+</span><a name="line-19"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Manager.html#new"><span class="hs-identifier hs-var">new</span></a><span>
+</span><a name="line-20"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Thread.html#getSystemTimerManager"><span class="hs-identifier hs-var">getSystemTimerManager</span></a><span>
+</span><a name="line-21"></a><span>
+</span><a name="line-22"></a><span>      </span><span class="hs-comment">-- * Registering interest in I/O events</span><span>
+</span><a name="line-23"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Internal.html#Event"><span class="hs-identifier hs-type">Event</span></a><span>
+</span><a name="line-24"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Internal.html#evtRead"><span class="hs-identifier hs-var">evtRead</span></a><span>
+</span><a name="line-25"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Internal.html#evtWrite"><span class="hs-identifier hs-var">evtWrite</span></a><span>
+</span><a name="line-26"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Manager.html#IOCallback"><span class="hs-identifier hs-type">IOCallback</span></a><span>
+</span><a name="line-27"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Manager.html#FdKey"><span class="hs-identifier hs-type">FdKey</span></a><span class="hs-special">(</span><span class="hs-identifier">keyFd</span><span class="hs-special">)</span><span>
+</span><a name="line-28"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Internal.html#Lifetime"><span class="hs-identifier hs-type">Lifetime</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><a name="line-29"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Manager.html#registerFd"><span class="hs-identifier hs-var">registerFd</span></a><span>
+</span><a name="line-30"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Manager.html#unregisterFd"><span class="hs-identifier hs-var">unregisterFd</span></a><span>
+</span><a name="line-31"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Manager.html#unregisterFd_"><span class="hs-identifier hs-var">unregisterFd_</span></a><span>
+</span><a name="line-32"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.Manager.html#closeFd"><span class="hs-identifier hs-var">closeFd</span></a><span>
+</span><a name="line-33"></a><span>
+</span><a name="line-34"></a><span>      </span><span class="hs-comment">-- * Registering interest in timeout events</span><span>
+</span><a name="line-35"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.TimerManager.html#TimeoutCallback"><span class="hs-identifier hs-type">TimeoutCallback</span></a><span>
+</span><a name="line-36"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.TimerManager.html#TimeoutKey"><span class="hs-identifier hs-type">TimeoutKey</span></a><span>
+</span><a name="line-37"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.TimerManager.html#registerTimeout"><span class="hs-identifier hs-var">registerTimeout</span></a><span>
+</span><a name="line-38"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.TimerManager.html#updateTimeout"><span class="hs-identifier hs-var">updateTimeout</span></a><span>
+</span><a name="line-39"></a><span>    </span><span class="hs-special">,</span><span> </span><a href="GHC.Event.TimerManager.html#unregisterTimeout"><span class="hs-identifier hs-var">unregisterTimeout</span></a><span>
+</span><a name="line-40"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-41"></a><span>
+</span><a name="line-42"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Event.Manager.html"><span class="hs-identifier">GHC.Event.Manager</span></a><span>
+</span><a name="line-43"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Event.TimerManager.html"><span class="hs-identifier">GHC.Event.TimerManager</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Event.TimerManager.html#TimeoutCallback"><span class="hs-identifier hs-type">TimeoutCallback</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Event.TimerManager.html#TimeoutKey"><span class="hs-identifier hs-type">TimeoutKey</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Event.TimerManager.html#registerTimeout"><span class="hs-identifier hs-var">registerTimeout</span></a><span class="hs-special">,</span><span>
+</span><a name="line-44"></a><span>                               </span><a href="GHC.Event.TimerManager.html#updateTimeout"><span class="hs-identifier hs-var">updateTimeout</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Event.TimerManager.html#unregisterTimeout"><span class="hs-identifier hs-var">unregisterTimeout</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Event.TimerManager.html#TimerManager"><span class="hs-identifier hs-type">TimerManager</span></a><span class="hs-special">)</span><span>
+</span><a name="line-45"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Event.Thread.html"><span class="hs-identifier">GHC.Event.Thread</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Event.Thread.html#getSystemEventManager"><span class="hs-identifier hs-var">getSystemEventManager</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Event.Thread.html#getSystemTimerManager"><span class="hs-identifier hs-var">getSystemTimerManager</span></a><span class="hs-special">)</span><span>
+</span><a name="line-46"></a><span>
+</span><a name="line-47"></a></pre></body></html>

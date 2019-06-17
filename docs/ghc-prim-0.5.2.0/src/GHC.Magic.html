@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-3"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-4"></a><span class="hs-pragma">{-# LANGUAGE MagicHash #-}</span><span>
+</span><a name="line-5"></a><span class="hs-pragma">{-# LANGUAGE UnboxedTuples #-}</span><span>
+</span><a name="line-6"></a><span class="hs-pragma">{-# LANGUAGE TypeInType #-}</span><span>
+</span><a name="line-7"></a><span class="hs-pragma">{-# LANGUAGE ScopedTypeVariables #-}</span><span>
+</span><a name="line-8"></a><span>
+</span><a name="line-9"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Module      :  GHC.Magic</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2009</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- License     :  see libraries/ghc-prim/LICENSE</span><span>
+</span><a name="line-14"></a><span class="hs-comment">--</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Maintainer  :  cvs-ghc@haskell.org</span><span>
+</span><a name="line-16"></a><span class="hs-comment">-- Stability   :  internal</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- Portability :  non-portable (GHC Extensions)</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-- GHC magic.</span><span>
+</span><a name="line-20"></a><span class="hs-comment">--</span><span>
+</span><a name="line-21"></a><span class="hs-comment">-- Use GHC.Exts from the base package instead of importing this</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- module directly.</span><span>
+</span><a name="line-23"></a><span class="hs-comment">--</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-25"></a><span>
+</span><a name="line-26"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.Magic</span><span> </span><span class="hs-special">(</span><span> </span><a href="GHC.Magic.html#inline"><span class="hs-identifier hs-var">inline</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Magic.html#noinline"><span class="hs-identifier hs-var">noinline</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Magic.html#lazy"><span class="hs-identifier hs-var">lazy</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Magic.html#oneShot"><span class="hs-identifier hs-var">oneShot</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Magic.html#runRW%23"><span class="hs-identifier hs-var">runRW#</span></a><span> </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-27"></a><span>
+</span><a name="line-28"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Prim.html"><span class="hs-identifier">GHC.Prim</span></a><span>
+</span><a name="line-29"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.CString.html"><span class="hs-identifier">GHC.CString</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-30"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Types.html"><span class="hs-identifier">GHC.Types</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Types.html#RuntimeRep"><span class="hs-identifier hs-type">RuntimeRep</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Prim.html#TYPE"><span class="hs-identifier hs-type">TYPE</span></a><span class="hs-special">)</span><span>
+</span><a name="line-31"></a><span>
+</span><a name="line-32"></a><span class="hs-comment">-- | The call @inline f@ arranges that 'f' is inlined, regardless of</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- its size. More precisely, the call @inline f@ rewrites to the</span><span>
+</span><a name="line-34"></a><span class="hs-comment">-- right-hand side of @f@'s definition. This allows the programmer to</span><span>
+</span><a name="line-35"></a><span class="hs-comment">-- control inlining from a particular call site rather than the</span><span>
+</span><a name="line-36"></a><span class="hs-comment">-- definition site of the function (c.f. 'INLINE' pragmas).</span><span>
+</span><a name="line-37"></a><span class="hs-comment">--</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- This inlining occurs regardless of the argument to the call or the</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- size of @f@'s definition; it is unconditional. The main caveat is</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- that @f@'s definition must be visible to the compiler; it is</span><span>
+</span><a name="line-41"></a><span class="hs-comment">-- therefore recommended to mark the function with an 'INLINABLE'</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- pragma at its definition so that GHC guarantees to record its</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- unfolding regardless of size.</span><span>
+</span><a name="line-44"></a><span class="hs-comment">--</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- If no inlining takes place, the 'inline' function expands to the</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- identity function in Phase zero, so its use imposes no overhead.</span><span>
+</span><a name="line-47"></a><span class="hs-pragma">{-# NOINLINE</span><span class="hs-pragma">[</span><span class="hs-pragma">0</span><span class="hs-pragma">]</span><span> </span><span class="hs-pragma">inline</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-48"></a><span class="hs-identifier">inline</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679056988"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679056988"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-49"></a><a name="inline"><a href="GHC.Magic.html#inline"><span class="hs-identifier">inline</span></a></a><span> </span><a name="local-6989586621679056989"><a href="#local-6989586621679056989"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679056989"><span class="hs-identifier hs-var">x</span></a><span>
+</span><a name="line-50"></a><span>
+</span><a name="line-51"></a><span class="hs-comment">-- | The call @noinline f@ arranges that 'f' will not be inlined.</span><span>
+</span><a name="line-52"></a><span class="hs-comment">-- It is removed during CorePrep so that its use imposes no overhead</span><span>
+</span><a name="line-53"></a><span class="hs-comment">-- (besides the fact that it blocks inlining.)</span><span>
+</span><a name="line-54"></a><span class="hs-pragma">{-# NOINLINE</span><span> </span><span class="hs-pragma">noinline</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-55"></a><span class="hs-identifier">noinline</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679056987"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679056987"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-56"></a><a name="noinline"><a href="GHC.Magic.html#noinline"><span class="hs-identifier">noinline</span></a></a><span> </span><a name="local-6989586621679056990"><a href="#local-6989586621679056990"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679056990"><span class="hs-identifier hs-var">x</span></a><span>
+</span><a name="line-57"></a><span>
+</span><a name="line-58"></a><span class="hs-comment">-- | The 'lazy' function restrains strictness analysis a little. The</span><span>
+</span><a name="line-59"></a><span class="hs-comment">-- call @lazy e@ means the same as 'e', but 'lazy' has a magical</span><span>
+</span><a name="line-60"></a><span class="hs-comment">-- property so far as strictness analysis is concerned: it is lazy in</span><span>
+</span><a name="line-61"></a><span class="hs-comment">-- its first argument, even though its semantics is strict. After</span><span>
+</span><a name="line-62"></a><span class="hs-comment">-- strictness analysis has run, calls to 'lazy' are inlined to be the</span><span>
+</span><a name="line-63"></a><span class="hs-comment">-- identity function.</span><span>
+</span><a name="line-64"></a><span class="hs-comment">--</span><span>
+</span><a name="line-65"></a><span class="hs-comment">-- This behaviour is occasionally useful when controlling evaluation</span><span>
+</span><a name="line-66"></a><span class="hs-comment">-- order. Notably, 'lazy' is used in the library definition of</span><span>
+</span><a name="line-67"></a><span class="hs-comment">-- 'Control.Parallel.par':</span><span>
+</span><a name="line-68"></a><span class="hs-comment">--</span><span>
+</span><a name="line-69"></a><span class="hs-comment">-- &gt; par :: a -&gt; b -&gt; b</span><span>
+</span><a name="line-70"></a><span class="hs-comment">-- &gt; par x y = case (par# x) of _ -&gt; lazy y</span><span>
+</span><a name="line-71"></a><span class="hs-comment">--</span><span>
+</span><a name="line-72"></a><span class="hs-comment">-- If 'lazy' were not lazy, 'par' would look strict in 'y' which</span><span>
+</span><a name="line-73"></a><span class="hs-comment">-- would defeat the whole purpose of 'par'.</span><span>
+</span><a name="line-74"></a><span class="hs-comment">--</span><span>
+</span><a name="line-75"></a><span class="hs-comment">-- Like 'seq', the argument of 'lazy' can have an unboxed type.</span><span>
+</span><a name="line-76"></a><span class="hs-identifier">lazy</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679056986"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679056986"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-77"></a><a name="lazy"><a href="GHC.Magic.html#lazy"><span class="hs-identifier">lazy</span></a></a><span> </span><a name="local-6989586621679056991"><a href="#local-6989586621679056991"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679056991"><span class="hs-identifier hs-var">x</span></a><span>
+</span><a name="line-78"></a><span class="hs-comment">-- Implementation note: its strictness and unfolding are over-ridden</span><span>
+</span><a name="line-79"></a><span class="hs-comment">-- by the definition in MkId.hs; in both cases to nothing at all.</span><span>
+</span><a name="line-80"></a><span class="hs-comment">-- That way, 'lazy' does not get inlined, and the strictness analyser</span><span>
+</span><a name="line-81"></a><span class="hs-comment">-- sees it as lazy.  Then the worker/wrapper phase inlines it.</span><span>
+</span><a name="line-82"></a><span class="hs-comment">-- Result: happiness</span><span>
+</span><a name="line-83"></a><span>
+</span><a name="line-84"></a><span>
+</span><a name="line-85"></a><span class="hs-comment">-- | The 'oneShot' function can be used to give a hint to the compiler that its</span><span>
+</span><a name="line-86"></a><span class="hs-comment">-- argument will be called at most once, which may (or may not) enable certain</span><span>
+</span><a name="line-87"></a><span class="hs-comment">-- optimizations. It can be useful to improve the performance of code in continuation</span><span>
+</span><a name="line-88"></a><span class="hs-comment">-- passing style.</span><span>
+</span><a name="line-89"></a><span class="hs-comment">--</span><span>
+</span><a name="line-90"></a><span class="hs-comment">-- If 'oneShot' is used wrongly, then it may be that computations whose result</span><span>
+</span><a name="line-91"></a><span class="hs-comment">-- that would otherwise be shared are re-evaluated every time they are used. Otherwise,</span><span>
+</span><a name="line-92"></a><span class="hs-comment">-- the use of `oneShot` is safe.</span><span>
+</span><a name="line-93"></a><span class="hs-comment">--</span><span>
+</span><a name="line-94"></a><span class="hs-comment">-- 'oneShot' is representation polymorphic: the type variables may refer to lifted</span><span>
+</span><a name="line-95"></a><span class="hs-comment">-- or unlifted types.</span><span>
+</span><a name="line-96"></a><span class="hs-identifier">oneShot</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-keyword">forall</span><span> </span><span class="hs-special">(</span><a name="local-6989586621679056982"><a href="#local-6989586621679056982"><span class="hs-identifier">q</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Types.html#RuntimeRep"><span class="hs-identifier hs-type">RuntimeRep</span></a><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><a name="local-6989586621679056983"><a href="#local-6989586621679056983"><span class="hs-identifier">r</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Types.html#RuntimeRep"><span class="hs-identifier hs-type">RuntimeRep</span></a><span class="hs-special">)</span><span>
+</span><a name="line-97"></a><span>                  </span><span class="hs-special">(</span><a name="local-6989586621679056984"><a href="#local-6989586621679056984"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Prim.html#TYPE"><span class="hs-identifier hs-type">TYPE</span></a><span> </span><a href="#local-6989586621679056982"><span class="hs-identifier hs-type">q</span></a><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><a name="local-6989586621679056985"><a href="#local-6989586621679056985"><span class="hs-identifier">b</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Prim.html#TYPE"><span class="hs-identifier hs-type">TYPE</span></a><span> </span><a href="#local-6989586621679056983"><span class="hs-identifier hs-type">r</span></a><span class="hs-special">)</span><span class="hs-operator">.</span><span>
+</span><a name="line-98"></a><span>           </span><span class="hs-special">(</span><a href="#local-6989586621679056984"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679056985"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679056984"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679056985"><span class="hs-identifier hs-type">b</span></a><span>
+</span><a name="line-99"></a><a name="oneShot"><a href="GHC.Magic.html#oneShot"><span class="hs-identifier">oneShot</span></a></a><span> </span><a name="local-6989586621679056992"><a href="#local-6989586621679056992"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679056992"><span class="hs-identifier hs-var">f</span></a><span>
+</span><a name="line-100"></a><span class="hs-comment">-- Implementation note: This is wired in in MkId.hs, so the code here is</span><span>
+</span><a name="line-101"></a><span class="hs-comment">-- mostly there to have a place for the documentation.</span><span>
+</span><a name="line-102"></a><span>
+</span><a name="line-103"></a><span class="hs-comment">-- | Apply a function to a 'State# RealWorld' token. When manually applying</span><span>
+</span><a name="line-104"></a><span class="hs-comment">-- a function to `realWorld#`, it is necessary to use `NOINLINE` to prevent</span><span>
+</span><a name="line-105"></a><span class="hs-comment">-- semantically undesirable floating. `runRW#` is inlined, but only very late</span><span>
+</span><a name="line-106"></a><span class="hs-comment">-- in compilation after all floating is complete.</span><span>
+</span><a name="line-107"></a><span>
+</span><a name="line-108"></a><span class="hs-comment">-- 'runRW#' is representation polymorphic: the result may have a lifted or</span><span>
+</span><a name="line-109"></a><span class="hs-comment">-- unlifted type.</span><span>
+</span><a name="line-110"></a><span>
+</span><a name="line-111"></a><span class="hs-identifier">runRW#</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-keyword">forall</span><span> </span><span class="hs-special">(</span><a name="local-6989586621679056980"><a href="#local-6989586621679056980"><span class="hs-identifier">r</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Types.html#RuntimeRep"><span class="hs-identifier hs-type">RuntimeRep</span></a><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><a name="local-6989586621679056981"><a href="#local-6989586621679056981"><span class="hs-identifier">o</span></a></a><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.Prim.html#TYPE"><span class="hs-identifier hs-type">TYPE</span></a><span> </span><a href="#local-6989586621679056980"><span class="hs-identifier hs-type">r</span></a><span class="hs-special">)</span><span class="hs-operator">.</span><span>
+</span><a name="line-112"></a><span>          </span><span class="hs-special">(</span><a href="GHC.Prim.html#State%23"><span class="hs-identifier hs-type">State#</span></a><span> </span><a href="GHC.Prim.html#RealWorld"><span class="hs-identifier hs-type">RealWorld</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679056981"><span class="hs-identifier hs-type">o</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679056981"><span class="hs-identifier hs-type">o</span></a><span>
+</span><a name="line-113"></a><span class="hs-comment">-- See Note [runRW magic] in MkId</span><span>
+</span><a name="line-114"></a><span class="hs-cpp">#if !defined(__HADDOCK_VERSION__)
+</span><span class="hs-identifier">runRW#</span><span> </span><span class="hs-identifier">m</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">m</span><span> </span><span class="hs-identifier">realWorld#</span><span>
+</span><a name="line-116"></a><span class="hs-cpp">#else
+</span><a name="runRW%23"><a href="GHC.Magic.html#runRW%23"><span class="hs-identifier">runRW#</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Magic.html#runRW%23"><span class="hs-identifier hs-var">runRW#</span></a><span>   </span><span class="hs-comment">-- The realWorld# is too much for haddock</span><span>
+</span><a name="line-118"></a><span class="hs-cpp">#endif
+</span><span class="hs-pragma">{-# NOINLINE</span><span> </span><span class="hs-pragma">runRW#</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-120"></a><span class="hs-comment">-- This is inlined manually in CorePrep</span><span>
+</span><a name="line-121"></a></pre></body></html>

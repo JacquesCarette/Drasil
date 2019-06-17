@@ -1,0 +1,340 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE CPP #-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-3"></a><span class="hs-pragma">{-# LANGUAGE NoImplicitPrelude #-}</span><span>
+</span><a name="line-4"></a><span class="hs-pragma">{-# LANGUAGE StandaloneDeriving #-}</span><span>
+</span><a name="line-5"></a><span class="hs-pragma">{-# LANGUAGE PolyKinds, DataKinds, TypeFamilies, TypeOperators, UndecidableInstances #-}</span><span>
+</span><a name="line-6"></a><span>
+</span><a name="line-7"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Module      :  Data.Either</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- Portability :  portable</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- The Either type, and associated operations.</span><span>
+</span><a name="line-18"></a><span class="hs-comment">--</span><span>
+</span><a name="line-19"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-20"></a><span>
+</span><a name="line-21"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Either</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-22"></a><span>   </span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a name="line-23"></a><span>   </span><a href="Data.Either.html#either"><span class="hs-identifier hs-var">either</span></a><span class="hs-special">,</span><span>
+</span><a name="line-24"></a><span>   </span><a href="Data.Either.html#lefts"><span class="hs-identifier hs-var">lefts</span></a><span class="hs-special">,</span><span>
+</span><a name="line-25"></a><span>   </span><a href="Data.Either.html#rights"><span class="hs-identifier hs-var">rights</span></a><span class="hs-special">,</span><span>
+</span><a name="line-26"></a><span>   </span><a href="Data.Either.html#isLeft"><span class="hs-identifier hs-var">isLeft</span></a><span class="hs-special">,</span><span>
+</span><a name="line-27"></a><span>   </span><a href="Data.Either.html#isRight"><span class="hs-identifier hs-var">isRight</span></a><span class="hs-special">,</span><span>
+</span><a name="line-28"></a><span>   </span><a href="Data.Either.html#fromLeft"><span class="hs-identifier hs-var">fromLeft</span></a><span class="hs-special">,</span><span>
+</span><a name="line-29"></a><span>   </span><a href="Data.Either.html#fromRight"><span class="hs-identifier hs-var">fromRight</span></a><span class="hs-special">,</span><span>
+</span><a name="line-30"></a><span>   </span><a href="Data.Either.html#partitionEithers"><span class="hs-identifier hs-var">partitionEithers</span></a><span class="hs-special">,</span><span>
+</span><a name="line-31"></a><span> </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-32"></a><span>
+</span><a name="line-33"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Base.html"><span class="hs-identifier">GHC.Base</span></a><span>
+</span><a name="line-34"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Show.html"><span class="hs-identifier">GHC.Show</span></a><span>
+</span><a name="line-35"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.Read.html"><span class="hs-identifier">GHC.Read</span></a><span>
+</span><a name="line-36"></a><span>
+</span><a name="line-37"></a><span class="hs-comment">-- $setup</span><span>
+</span><a name="line-38"></a><span class="hs-comment">-- Allow the use of some Prelude functions in doctests.</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- &gt;&gt;&gt; import Prelude ( (+), (*), length, putStrLn )</span><span>
+</span><a name="line-40"></a><span>
+</span><a name="line-41"></a><span class="hs-comment">{-
+-- just for testing
+import Test.QuickCheck
+-}</span><span>
+</span><a name="line-45"></a><span>
+</span><a name="line-46"></a><span class="hs-comment">{-|
+
+The 'Either' type represents values with two possibilities: a value of
+type @'Either' a b@ is either @'Left' a@ or @'Right' b@.
+
+The 'Either' type is sometimes used to represent a value which is
+either correct or an error; by convention, the 'Left' constructor is
+used to hold an error value and the 'Right' constructor is used to
+hold a correct value (mnemonic: \&quot;right\&quot; also means \&quot;correct\&quot;).
+
+==== __Examples__
+
+The type @'Either' 'String' 'Int'@ is the type of values which can be either
+a 'String' or an 'Int'. The 'Left' constructor can be used only on
+'String's, and the 'Right' constructor can be used only on 'Int's:
+
+&gt;&gt;&gt; let s = Left &quot;foo&quot; :: Either String Int
+&gt;&gt;&gt; s
+Left &quot;foo&quot;
+&gt;&gt;&gt; let n = Right 3 :: Either String Int
+&gt;&gt;&gt; n
+Right 3
+&gt;&gt;&gt; :type s
+s :: Either String Int
+&gt;&gt;&gt; :type n
+n :: Either String Int
+
+The 'fmap' from our 'Functor' instance will ignore 'Left' values, but
+will apply the supplied function to values contained in a 'Right':
+
+&gt;&gt;&gt; let s = Left &quot;foo&quot; :: Either String Int
+&gt;&gt;&gt; let n = Right 3 :: Either String Int
+&gt;&gt;&gt; fmap (*2) s
+Left &quot;foo&quot;
+&gt;&gt;&gt; fmap (*2) n
+Right 6
+
+The 'Monad' instance for 'Either' allows us to chain together multiple
+actions which may fail, and fail overall if any of the individual
+steps failed. First we'll write a function that can either parse an
+'Int' from a 'Char', or fail.
+
+&gt;&gt;&gt; import Data.Char ( digitToInt, isDigit )
+&gt;&gt;&gt; :{
+    let parseEither :: Char -&gt; Either String Int
+        parseEither c
+          | isDigit c = Right (digitToInt c)
+          | otherwise = Left &quot;parse error&quot;
+&gt;&gt;&gt; :}
+
+The following should work, since both @\'1\'@ and @\'2\'@ can be
+parsed as 'Int's.
+
+&gt;&gt;&gt; :{
+    let parseMultiple :: Either String Int
+        parseMultiple = do
+          x &lt;- parseEither '1'
+          y &lt;- parseEither '2'
+          return (x + y)
+&gt;&gt;&gt; :}
+
+&gt;&gt;&gt; parseMultiple
+Right 3
+
+But the following should fail overall, since the first operation where
+we attempt to parse @\'m\'@ as an 'Int' will fail:
+
+&gt;&gt;&gt; :{
+    let parseMultiple :: Either String Int
+        parseMultiple = do
+          x &lt;- parseEither 'm'
+          y &lt;- parseEither '2'
+          return (x + y)
+&gt;&gt;&gt; :}
+
+&gt;&gt;&gt; parseMultiple
+Left &quot;parse error&quot;
+
+-}</span><span>
+</span><a name="line-125"></a><span class="hs-keyword">data</span><span>  </span><a name="Either"><a href="Data.Either.html#Either"><span class="hs-identifier">Either</span></a></a><span> </span><a name="local-6989586621679150255"><a href="#local-6989586621679150255"><span class="hs-identifier">a</span></a></a><span> </span><a name="local-6989586621679150256"><a href="#local-6989586621679150256"><span class="hs-identifier">b</span></a></a><span>  </span><span class="hs-glyph">=</span><span>  </span><a name="Left"><a href="Data.Either.html#Left"><span class="hs-identifier">Left</span></a></a><span> </span><a href="#local-6989586621679150255"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">|</span><span> </span><a name="Right"><a href="Data.Either.html#Right"><span class="hs-identifier">Right</span></a></a><span> </span><a href="#local-6989586621679150256"><span class="hs-identifier hs-type">b</span></a><span>
+</span><a name="line-126"></a><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Eq"><span class="hs-identifier hs-type">Eq</span></a><span class="hs-special">,</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Classes.html#Ord"><span class="hs-identifier hs-type">Ord</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Read.html#Read"><span class="hs-identifier hs-type">Read</span></a><span class="hs-special">,</span><span> </span><a href="GHC.Show.html#Show"><span class="hs-identifier hs-type">Show</span></a><span class="hs-special">)</span><span>
+</span><a name="line-127"></a><span>
+</span><a name="line-128"></a><span class="hs-comment">-- | @since 3.0</span><span>
+</span><a name="line-129"></a><span class="hs-keyword">instance</span><span> </span><a href="GHC.Base.html#Functor"><span class="hs-identifier hs-type">Functor</span></a><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150269"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-130"></a><span>    </span><a name="local-3458764513820541101"><a href="GHC.Base.html#fmap"><span class="hs-identifier">fmap</span></a></a><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span> </span><a name="local-6989586621679150270"><a href="#local-6989586621679150270"><span class="hs-identifier">x</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span> </span><a href="#local-6989586621679150270"><span class="hs-identifier hs-var">x</span></a><span>
+</span><a name="line-131"></a><span>    </span><span class="hs-identifier">fmap</span><span> </span><a name="local-6989586621679150271"><a href="#local-6989586621679150271"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Right"><span class="hs-identifier hs-var">Right</span></a><span> </span><a name="local-6989586621679150272"><a href="#local-6989586621679150272"><span class="hs-identifier">y</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Either.html#Right"><span class="hs-identifier hs-var">Right</span></a><span> </span><span class="hs-special">(</span><a href="#local-6989586621679150271"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="#local-6989586621679150272"><span class="hs-identifier hs-var">y</span></a><span class="hs-special">)</span><span>
+</span><a name="line-132"></a><span>
+</span><a name="line-133"></a><span class="hs-comment">-- | @since 4.9.0.0</span><span>
+</span><a name="line-134"></a><span class="hs-keyword">instance</span><span> </span><a href="GHC.Base.html#Semigroup"><span class="hs-identifier hs-type">Semigroup</span></a><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150265"><span class="hs-identifier hs-type">a</span></a><span> </span><a href="#local-6989586621679150266"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-135"></a><span>    </span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span> </span><span class="hs-identifier">_</span><span> </span><a name="local-3458764513820541482"><a href="GHC.Base.html#%3C%3E"><span class="hs-operator">&lt;&gt;</span></a></a><span> </span><a name="local-6989586621679150267"><a href="#local-6989586621679150267"><span class="hs-identifier">b</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679150267"><span class="hs-identifier hs-var">b</span></a><span>
+</span><a name="line-136"></a><span>    </span><a name="local-6989586621679150268"><a href="#local-6989586621679150268"><span class="hs-identifier">a</span></a></a><span>      </span><span class="hs-operator">&lt;&gt;</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679150268"><span class="hs-identifier hs-var">a</span></a><span>
+</span><a name="line-137"></a><span class="hs-cpp">#if !defined(__HADDOCK_VERSION__)
+</span><span>    </span><span class="hs-comment">-- workaround https://github.com/haskell/haddock/issues/680</span><span>
+</span><a name="line-139"></a><span>    </span><span class="hs-identifier">stimes</span><span> </span><span class="hs-identifier">n</span><span> </span><span class="hs-identifier">x</span><span>
+</span><a name="line-140"></a><span>      </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">n</span><span> </span><span class="hs-operator">&lt;=</span><span> </span><span class="hs-number">0</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">errorWithoutStackTrace</span><span> </span><span class="hs-string">&quot;stimes: positive multiplier expected&quot;</span><span>
+</span><a name="line-141"></a><span>      </span><span class="hs-glyph">|</span><span> </span><span class="hs-identifier">otherwise</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">x</span><span>
+</span><a name="line-142"></a><span class="hs-cpp">#endif
+</span><span>
+</span><a name="line-144"></a><span class="hs-comment">-- | @since 3.0</span><span>
+</span><a name="line-145"></a><span class="hs-keyword">instance</span><span> </span><a href="GHC.Base.html#Applicative"><span class="hs-identifier hs-type">Applicative</span></a><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150261"><span class="hs-identifier hs-type">e</span></a><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-146"></a><span>    </span><a name="local-3458764513820541680"><a href="GHC.Base.html#pure"><span class="hs-identifier">pure</span></a></a><span>          </span><span class="hs-glyph">=</span><span> </span><a href="Data.Either.html#Right"><span class="hs-identifier hs-var">Right</span></a><span>
+</span><a name="line-147"></a><span>    </span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span>  </span><a name="local-6989586621679150262"><a href="#local-6989586621679150262"><span class="hs-identifier">e</span></a></a><span> </span><a name="local-3458764513820541679"><a href="GHC.Base.html#%3C%2A%3E"><span class="hs-operator">&lt;*&gt;</span></a></a><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span> </span><a href="#local-6989586621679150262"><span class="hs-identifier hs-var">e</span></a><span>
+</span><a name="line-148"></a><span>    </span><a href="Data.Either.html#Right"><span class="hs-identifier hs-var">Right</span></a><span> </span><a name="local-6989586621679150263"><a href="#local-6989586621679150263"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-operator">&lt;*&gt;</span><span> </span><a name="local-6989586621679150264"><a href="#local-6989586621679150264"><span class="hs-identifier">r</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Base.html#fmap"><span class="hs-identifier hs-var">fmap</span></a><span> </span><a href="#local-6989586621679150263"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="#local-6989586621679150264"><span class="hs-identifier hs-var">r</span></a><span>
+</span><a name="line-149"></a><span>
+</span><a name="line-150"></a><span class="hs-comment">-- | @since 4.4.0.0</span><span>
+</span><a name="line-151"></a><span class="hs-keyword">instance</span><span> </span><a href="GHC.Base.html#Monad"><span class="hs-identifier hs-type">Monad</span></a><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150257"><span class="hs-identifier hs-type">e</span></a><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-152"></a><span>    </span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span>  </span><a name="local-6989586621679150258"><a href="#local-6989586621679150258"><span class="hs-identifier">l</span></a></a><span> </span><a name="local-3458764513820541099"><a href="GHC.Base.html#%3E%3E%3D"><span class="hs-operator">&gt;&gt;=</span></a></a><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span> </span><a href="#local-6989586621679150258"><span class="hs-identifier hs-var">l</span></a><span>
+</span><a name="line-153"></a><span>    </span><a href="Data.Either.html#Right"><span class="hs-identifier hs-var">Right</span></a><span> </span><a name="local-6989586621679150259"><a href="#local-6989586621679150259"><span class="hs-identifier">r</span></a></a><span> </span><span class="hs-operator">&gt;&gt;=</span><span> </span><a name="local-6989586621679150260"><a href="#local-6989586621679150260"><span class="hs-identifier">k</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679150260"><span class="hs-identifier hs-var">k</span></a><span> </span><a href="#local-6989586621679150259"><span class="hs-identifier hs-var">r</span></a><span>
+</span><a name="line-154"></a><span>
+</span><a name="line-155"></a><span class="hs-comment">-- | Case analysis for the 'Either' type.</span><span>
+</span><a name="line-156"></a><span class="hs-comment">-- If the value is @'Left' a@, apply the first function to @a@;</span><span>
+</span><a name="line-157"></a><span class="hs-comment">-- if it is @'Right' b@, apply the second function to @b@.</span><span>
+</span><a name="line-158"></a><span class="hs-comment">--</span><span>
+</span><a name="line-159"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-160"></a><span class="hs-comment">--</span><span>
+</span><a name="line-161"></a><span class="hs-comment">-- We create two values of type @'Either' 'String' 'Int'@, one using the</span><span>
+</span><a name="line-162"></a><span class="hs-comment">-- 'Left' constructor and another using the 'Right' constructor. Then</span><span>
+</span><a name="line-163"></a><span class="hs-comment">-- we apply \&quot;either\&quot; the 'length' function (if we have a 'String')</span><span>
+</span><a name="line-164"></a><span class="hs-comment">-- or the \&quot;times-two\&quot; function (if we have an 'Int'):</span><span>
+</span><a name="line-165"></a><span class="hs-comment">--</span><span>
+</span><a name="line-166"></a><span class="hs-comment">-- &gt;&gt;&gt; let s = Left &quot;foo&quot; :: Either String Int</span><span>
+</span><a name="line-167"></a><span class="hs-comment">-- &gt;&gt;&gt; let n = Right 3 :: Either String Int</span><span>
+</span><a name="line-168"></a><span class="hs-comment">-- &gt;&gt;&gt; either length (*2) s</span><span>
+</span><a name="line-169"></a><span class="hs-comment">-- 3</span><span>
+</span><a name="line-170"></a><span class="hs-comment">-- &gt;&gt;&gt; either length (*2) n</span><span>
+</span><a name="line-171"></a><span class="hs-comment">-- 6</span><span>
+</span><a name="line-172"></a><span class="hs-comment">--</span><span>
+</span><a name="line-173"></a><span class="hs-identifier">either</span><span>                  </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679150287"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679150288"><span class="hs-identifier hs-type">c</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679150289"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679150288"><span class="hs-identifier hs-type">c</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150287"><span class="hs-identifier hs-type">a</span></a><span> </span><a href="#local-6989586621679150289"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679150288"><span class="hs-identifier hs-type">c</span></a><span>
+</span><a name="line-174"></a><a name="either"><a href="Data.Either.html#either"><span class="hs-identifier">either</span></a></a><span> </span><a name="local-6989586621679150290"><a href="#local-6989586621679150290"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span> </span><a name="local-6989586621679150291"><a href="#local-6989586621679150291"><span class="hs-identifier">x</span></a></a><span class="hs-special">)</span><span>     </span><span class="hs-glyph">=</span><span>  </span><a href="#local-6989586621679150290"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="#local-6989586621679150291"><span class="hs-identifier hs-var">x</span></a><span>
+</span><a name="line-175"></a><span class="hs-identifier">either</span><span> </span><span class="hs-identifier">_</span><span> </span><a name="local-6989586621679150292"><a href="#local-6989586621679150292"><span class="hs-identifier">g</span></a></a><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Right"><span class="hs-identifier hs-var">Right</span></a><span> </span><a name="local-6989586621679150293"><a href="#local-6989586621679150293"><span class="hs-identifier">y</span></a></a><span class="hs-special">)</span><span>    </span><span class="hs-glyph">=</span><span>  </span><a href="#local-6989586621679150292"><span class="hs-identifier hs-var">g</span></a><span> </span><a href="#local-6989586621679150293"><span class="hs-identifier hs-var">y</span></a><span>
+</span><a name="line-176"></a><span>
+</span><a name="line-177"></a><span>
+</span><a name="line-178"></a><span class="hs-comment">-- | Extracts from a list of 'Either' all the 'Left' elements.</span><span>
+</span><a name="line-179"></a><span class="hs-comment">-- All the 'Left' elements are extracted in order.</span><span>
+</span><a name="line-180"></a><span class="hs-comment">--</span><span>
+</span><a name="line-181"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-182"></a><span class="hs-comment">--</span><span>
+</span><a name="line-183"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-184"></a><span class="hs-comment">--</span><span>
+</span><a name="line-185"></a><span class="hs-comment">-- &gt;&gt;&gt; let list = [ Left &quot;foo&quot;, Right 3, Left &quot;bar&quot;, Right 7, Left &quot;baz&quot; ]</span><span>
+</span><a name="line-186"></a><span class="hs-comment">-- &gt;&gt;&gt; lefts list</span><span>
+</span><a name="line-187"></a><span class="hs-comment">-- [&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;]</span><span>
+</span><a name="line-188"></a><span class="hs-comment">--</span><span>
+</span><a name="line-189"></a><span class="hs-identifier">lefts</span><span>   </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150285"><span class="hs-identifier hs-type">a</span></a><span> </span><a href="#local-6989586621679150286"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><a href="#local-6989586621679150285"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">]</span><span>
+</span><a name="line-190"></a><a name="lefts"><a href="Data.Either.html#lefts"><span class="hs-identifier">lefts</span></a></a><span> </span><a name="local-6989586621679150294"><a href="#local-6989586621679150294"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><a href="#local-6989586621679150295"><span class="hs-identifier hs-var">a</span></a><span> </span><span class="hs-glyph">|</span><span> </span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span> </span><a name="local-6989586621679150295"><a href="#local-6989586621679150295"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="#local-6989586621679150294"><span class="hs-identifier hs-var">x</span></a><span class="hs-special">]</span><span>
+</span><a name="line-191"></a><span class="hs-pragma">{-# INLINEABLE</span><span> </span><span class="hs-pragma">lefts</span><span> </span><span class="hs-pragma">#-}</span><span> </span><span class="hs-comment">-- otherwise doesnt get an unfolding, see #13689</span><span>
+</span><a name="line-192"></a><span>
+</span><a name="line-193"></a><span class="hs-comment">-- | Extracts from a list of 'Either' all the 'Right' elements.</span><span>
+</span><a name="line-194"></a><span class="hs-comment">-- All the 'Right' elements are extracted in order.</span><span>
+</span><a name="line-195"></a><span class="hs-comment">--</span><span>
+</span><a name="line-196"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-197"></a><span class="hs-comment">--</span><span>
+</span><a name="line-198"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-199"></a><span class="hs-comment">--</span><span>
+</span><a name="line-200"></a><span class="hs-comment">-- &gt;&gt;&gt; let list = [ Left &quot;foo&quot;, Right 3, Left &quot;bar&quot;, Right 7, Left &quot;baz&quot; ]</span><span>
+</span><a name="line-201"></a><span class="hs-comment">-- &gt;&gt;&gt; rights list</span><span>
+</span><a name="line-202"></a><span class="hs-comment">-- [3,7]</span><span>
+</span><a name="line-203"></a><span class="hs-comment">--</span><span>
+</span><a name="line-204"></a><span class="hs-identifier">rights</span><span>   </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150283"><span class="hs-identifier hs-type">a</span></a><span> </span><a href="#local-6989586621679150284"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><a href="#local-6989586621679150284"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">]</span><span>
+</span><a name="line-205"></a><a name="rights"><a href="Data.Either.html#rights"><span class="hs-identifier">rights</span></a></a><span> </span><a name="local-6989586621679150296"><a href="#local-6989586621679150296"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><a href="#local-6989586621679150297"><span class="hs-identifier hs-var">a</span></a><span> </span><span class="hs-glyph">|</span><span> </span><a href="Data.Either.html#Right"><span class="hs-identifier hs-var">Right</span></a><span> </span><a name="local-6989586621679150297"><a href="#local-6989586621679150297"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="#local-6989586621679150296"><span class="hs-identifier hs-var">x</span></a><span class="hs-special">]</span><span>
+</span><a name="line-206"></a><span class="hs-pragma">{-# INLINEABLE</span><span> </span><span class="hs-pragma">rights</span><span> </span><span class="hs-pragma">#-}</span><span> </span><span class="hs-comment">-- otherwise doesnt get an unfolding, see #13689</span><span>
+</span><a name="line-207"></a><span>
+</span><a name="line-208"></a><span class="hs-comment">-- | Partitions a list of 'Either' into two lists.</span><span>
+</span><a name="line-209"></a><span class="hs-comment">-- All the 'Left' elements are extracted, in order, to the first</span><span>
+</span><a name="line-210"></a><span class="hs-comment">-- component of the output.  Similarly the 'Right' elements are extracted</span><span>
+</span><a name="line-211"></a><span class="hs-comment">-- to the second component of the output.</span><span>
+</span><a name="line-212"></a><span class="hs-comment">--</span><span>
+</span><a name="line-213"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-214"></a><span class="hs-comment">--</span><span>
+</span><a name="line-215"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-216"></a><span class="hs-comment">--</span><span>
+</span><a name="line-217"></a><span class="hs-comment">-- &gt;&gt;&gt; let list = [ Left &quot;foo&quot;, Right 3, Left &quot;bar&quot;, Right 7, Left &quot;baz&quot; ]</span><span>
+</span><a name="line-218"></a><span class="hs-comment">-- &gt;&gt;&gt; partitionEithers list</span><span>
+</span><a name="line-219"></a><span class="hs-comment">-- ([&quot;foo&quot;,&quot;bar&quot;,&quot;baz&quot;],[3,7])</span><span>
+</span><a name="line-220"></a><span class="hs-comment">--</span><span>
+</span><a name="line-221"></a><span class="hs-comment">-- The pair returned by @'partitionEithers' x@ should be the same</span><span>
+</span><a name="line-222"></a><span class="hs-comment">-- pair as @('lefts' x, 'rights' x)@:</span><span>
+</span><a name="line-223"></a><span class="hs-comment">--</span><span>
+</span><a name="line-224"></a><span class="hs-comment">-- &gt;&gt;&gt; let list = [ Left &quot;foo&quot;, Right 3, Left &quot;bar&quot;, Right 7, Left &quot;baz&quot; ]</span><span>
+</span><a name="line-225"></a><span class="hs-comment">-- &gt;&gt;&gt; partitionEithers list == (lefts list, rights list)</span><span>
+</span><a name="line-226"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-227"></a><span class="hs-comment">--</span><span>
+</span><a name="line-228"></a><span class="hs-identifier">partitionEithers</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150281"><span class="hs-identifier hs-type">a</span></a><span> </span><a href="#local-6989586621679150282"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><a href="#local-6989586621679150281"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">]</span><span class="hs-special">,</span><span class="hs-special">[</span><a href="#local-6989586621679150282"><span class="hs-identifier hs-type">b</span></a><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><a name="line-229"></a><a name="partitionEithers"><a href="Data.Either.html#partitionEithers"><span class="hs-identifier">partitionEithers</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Base.html#foldr"><span class="hs-identifier hs-var">foldr</span></a><span> </span><span class="hs-special">(</span><a href="Data.Either.html#either"><span class="hs-identifier hs-var">either</span></a><span> </span><a href="#local-6989586621679150298"><span class="hs-identifier hs-var">left</span></a><span> </span><a href="#local-6989586621679150299"><span class="hs-identifier hs-var">right</span></a><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><a name="line-230"></a><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-231"></a><span>  </span><a name="local-6989586621679150298"><a href="#local-6989586621679150298"><span class="hs-identifier">left</span></a></a><span>  </span><a name="local-6989586621679150300"><a href="#local-6989586621679150300"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">~</span><span class="hs-special">(</span><a name="local-6989586621679150301"><a href="#local-6989586621679150301"><span class="hs-identifier">l</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679150302"><a href="#local-6989586621679150302"><span class="hs-identifier">r</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679150300"><span class="hs-identifier hs-var">a</span></a><span class="hs-glyph">:</span><a href="#local-6989586621679150301"><span class="hs-identifier hs-var">l</span></a><span class="hs-special">,</span><span> </span><a href="#local-6989586621679150302"><span class="hs-identifier hs-var">r</span></a><span class="hs-special">)</span><span>
+</span><a name="line-232"></a><span>  </span><a name="local-6989586621679150299"><a href="#local-6989586621679150299"><span class="hs-identifier">right</span></a></a><span> </span><a name="local-6989586621679150303"><a href="#local-6989586621679150303"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-glyph">~</span><span class="hs-special">(</span><a name="local-6989586621679150304"><a href="#local-6989586621679150304"><span class="hs-identifier">l</span></a></a><span class="hs-special">,</span><span> </span><a name="local-6989586621679150305"><a href="#local-6989586621679150305"><span class="hs-identifier">r</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679150304"><span class="hs-identifier hs-var">l</span></a><span class="hs-special">,</span><span> </span><a href="#local-6989586621679150303"><span class="hs-identifier hs-var">a</span></a><span class="hs-glyph">:</span><a href="#local-6989586621679150305"><span class="hs-identifier hs-var">r</span></a><span class="hs-special">)</span><span>
+</span><a name="line-233"></a><span>
+</span><a name="line-234"></a><span class="hs-comment">-- | Return `True` if the given value is a `Left`-value, `False` otherwise.</span><span>
+</span><a name="line-235"></a><span class="hs-comment">--</span><span>
+</span><a name="line-236"></a><span class="hs-comment">-- @since 4.7.0.0</span><span>
+</span><a name="line-237"></a><span class="hs-comment">--</span><span>
+</span><a name="line-238"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-239"></a><span class="hs-comment">--</span><span>
+</span><a name="line-240"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-241"></a><span class="hs-comment">--</span><span>
+</span><a name="line-242"></a><span class="hs-comment">-- &gt;&gt;&gt; isLeft (Left &quot;foo&quot;)</span><span>
+</span><a name="line-243"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-244"></a><span class="hs-comment">-- &gt;&gt;&gt; isLeft (Right 3)</span><span>
+</span><a name="line-245"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-246"></a><span class="hs-comment">--</span><span>
+</span><a name="line-247"></a><span class="hs-comment">-- Assuming a 'Left' value signifies some sort of error, we can use</span><span>
+</span><a name="line-248"></a><span class="hs-comment">-- 'isLeft' to write a very simple error-reporting function that does</span><span>
+</span><a name="line-249"></a><span class="hs-comment">-- absolutely nothing in the case of success, and outputs \&quot;ERROR\&quot; if</span><span>
+</span><a name="line-250"></a><span class="hs-comment">-- any error occurred.</span><span>
+</span><a name="line-251"></a><span class="hs-comment">--</span><span>
+</span><a name="line-252"></a><span class="hs-comment">-- This example shows how 'isLeft' might be used to avoid pattern</span><span>
+</span><a name="line-253"></a><span class="hs-comment">-- matching when one does not care about the value contained in the</span><span>
+</span><a name="line-254"></a><span class="hs-comment">-- constructor:</span><span>
+</span><a name="line-255"></a><span class="hs-comment">--</span><span>
+</span><a name="line-256"></a><span class="hs-comment">-- &gt;&gt;&gt; import Control.Monad ( when )</span><span>
+</span><a name="line-257"></a><span class="hs-comment">-- &gt;&gt;&gt; let report e = when (isLeft e) $ putStrLn &quot;ERROR&quot;</span><span>
+</span><a name="line-258"></a><span class="hs-comment">-- &gt;&gt;&gt; report (Right 1)</span><span>
+</span><a name="line-259"></a><span class="hs-comment">-- &gt;&gt;&gt; report (Left &quot;parse error&quot;)</span><span>
+</span><a name="line-260"></a><span class="hs-comment">-- ERROR</span><span>
+</span><a name="line-261"></a><span class="hs-comment">--</span><span>
+</span><a name="line-262"></a><span class="hs-identifier">isLeft</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150279"><span class="hs-identifier hs-type">a</span></a><span> </span><a href="#local-6989586621679150280"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span>
+</span><a name="line-263"></a><a name="isLeft"><a href="Data.Either.html#isLeft"><span class="hs-identifier">isLeft</span></a></a><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span>  </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-264"></a><span class="hs-identifier">isLeft</span><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Right"><span class="hs-identifier hs-var">Right</span></a><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span>
+</span><a name="line-265"></a><span>
+</span><a name="line-266"></a><span class="hs-comment">-- | Return `True` if the given value is a `Right`-value, `False` otherwise.</span><span>
+</span><a name="line-267"></a><span class="hs-comment">--</span><span>
+</span><a name="line-268"></a><span class="hs-comment">-- @since 4.7.0.0</span><span>
+</span><a name="line-269"></a><span class="hs-comment">--</span><span>
+</span><a name="line-270"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-271"></a><span class="hs-comment">--</span><span>
+</span><a name="line-272"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-273"></a><span class="hs-comment">--</span><span>
+</span><a name="line-274"></a><span class="hs-comment">-- &gt;&gt;&gt; isRight (Left &quot;foo&quot;)</span><span>
+</span><a name="line-275"></a><span class="hs-comment">-- False</span><span>
+</span><a name="line-276"></a><span class="hs-comment">-- &gt;&gt;&gt; isRight (Right 3)</span><span>
+</span><a name="line-277"></a><span class="hs-comment">-- True</span><span>
+</span><a name="line-278"></a><span class="hs-comment">--</span><span>
+</span><a name="line-279"></a><span class="hs-comment">-- Assuming a 'Left' value signifies some sort of error, we can use</span><span>
+</span><a name="line-280"></a><span class="hs-comment">-- 'isRight' to write a very simple reporting function that only</span><span>
+</span><a name="line-281"></a><span class="hs-comment">-- outputs \&quot;SUCCESS\&quot; when a computation has succeeded.</span><span>
+</span><a name="line-282"></a><span class="hs-comment">--</span><span>
+</span><a name="line-283"></a><span class="hs-comment">-- This example shows how 'isRight' might be used to avoid pattern</span><span>
+</span><a name="line-284"></a><span class="hs-comment">-- matching when one does not care about the value contained in the</span><span>
+</span><a name="line-285"></a><span class="hs-comment">-- constructor:</span><span>
+</span><a name="line-286"></a><span class="hs-comment">--</span><span>
+</span><a name="line-287"></a><span class="hs-comment">-- &gt;&gt;&gt; import Control.Monad ( when )</span><span>
+</span><a name="line-288"></a><span class="hs-comment">-- &gt;&gt;&gt; let report e = when (isRight e) $ putStrLn &quot;SUCCESS&quot;</span><span>
+</span><a name="line-289"></a><span class="hs-comment">-- &gt;&gt;&gt; report (Left &quot;parse error&quot;)</span><span>
+</span><a name="line-290"></a><span class="hs-comment">-- &gt;&gt;&gt; report (Right 1)</span><span>
+</span><a name="line-291"></a><span class="hs-comment">-- SUCCESS</span><span>
+</span><a name="line-292"></a><span class="hs-comment">--</span><span>
+</span><a name="line-293"></a><span class="hs-identifier">isRight</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150277"><span class="hs-identifier hs-type">a</span></a><span> </span><a href="#local-6989586621679150278"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#Bool"><span class="hs-identifier hs-type">Bool</span></a><span>
+</span><a name="line-294"></a><a name="isRight"><a href="Data.Either.html#isRight"><span class="hs-identifier">isRight</span></a></a><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span>  </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#False"><span class="hs-identifier hs-var">False</span></a><span>
+</span><a name="line-295"></a><span class="hs-identifier">isRight</span><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Right"><span class="hs-identifier hs-var">Right</span></a><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#True"><span class="hs-identifier hs-var">True</span></a><span>
+</span><a name="line-296"></a><span>
+</span><a name="line-297"></a><span class="hs-comment">-- | Return the contents of a 'Left'-value or a default value otherwise.</span><span>
+</span><a name="line-298"></a><span class="hs-comment">--</span><span>
+</span><a name="line-299"></a><span class="hs-comment">-- @since 4.10.0.0</span><span>
+</span><a name="line-300"></a><span class="hs-comment">--</span><span>
+</span><a name="line-301"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-302"></a><span class="hs-comment">--</span><span>
+</span><a name="line-303"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-304"></a><span class="hs-comment">--</span><span>
+</span><a name="line-305"></a><span class="hs-comment">-- &gt;&gt;&gt; fromLeft 1 (Left 3)</span><span>
+</span><a name="line-306"></a><span class="hs-comment">-- 3</span><span>
+</span><a name="line-307"></a><span class="hs-comment">-- &gt;&gt;&gt; fromLeft 1 (Right &quot;foo&quot;)</span><span>
+</span><a name="line-308"></a><span class="hs-comment">-- 1</span><span>
+</span><a name="line-309"></a><span class="hs-comment">--</span><span>
+</span><a name="line-310"></a><span class="hs-identifier">fromLeft</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679150275"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150275"><span class="hs-identifier hs-type">a</span></a><span> </span><a href="#local-6989586621679150276"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679150275"><span class="hs-identifier hs-type">a</span></a><span>
+</span><a name="line-311"></a><a name="fromLeft"><a href="Data.Either.html#fromLeft"><span class="hs-identifier">fromLeft</span></a></a><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Left"><span class="hs-identifier hs-var">Left</span></a><span> </span><a name="local-6989586621679150306"><a href="#local-6989586621679150306"><span class="hs-identifier">a</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679150306"><span class="hs-identifier hs-var">a</span></a><span>
+</span><a name="line-312"></a><span class="hs-identifier">fromLeft</span><span> </span><a name="local-6989586621679150307"><a href="#local-6989586621679150307"><span class="hs-identifier">a</span></a></a><span> </span><span class="hs-identifier">_</span><span>        </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679150307"><span class="hs-identifier hs-var">a</span></a><span>
+</span><a name="line-313"></a><span>
+</span><a name="line-314"></a><span class="hs-comment">-- | Return the contents of a 'Right'-value or a default value otherwise.</span><span>
+</span><a name="line-315"></a><span class="hs-comment">--</span><span>
+</span><a name="line-316"></a><span class="hs-comment">-- @since 4.10.0.0</span><span>
+</span><a name="line-317"></a><span class="hs-comment">--</span><span>
+</span><a name="line-318"></a><span class="hs-comment">-- ==== __Examples__</span><span>
+</span><a name="line-319"></a><span class="hs-comment">--</span><span>
+</span><a name="line-320"></a><span class="hs-comment">-- Basic usage:</span><span>
+</span><a name="line-321"></a><span class="hs-comment">--</span><span>
+</span><a name="line-322"></a><span class="hs-comment">-- &gt;&gt;&gt; fromRight 1 (Right 3)</span><span>
+</span><a name="line-323"></a><span class="hs-comment">-- 3</span><span>
+</span><a name="line-324"></a><span class="hs-comment">-- &gt;&gt;&gt; fromRight 1 (Left &quot;foo&quot;)</span><span>
+</span><a name="line-325"></a><span class="hs-comment">-- 1</span><span>
+</span><a name="line-326"></a><span class="hs-comment">--</span><span>
+</span><a name="line-327"></a><span class="hs-identifier">fromRight</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="#local-6989586621679150273"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="Data.Either.html#Either"><span class="hs-identifier hs-type">Either</span></a><span> </span><a href="#local-6989586621679150274"><span class="hs-identifier hs-type">a</span></a><span> </span><a href="#local-6989586621679150273"><span class="hs-identifier hs-type">b</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679150273"><span class="hs-identifier hs-type">b</span></a><span>
+</span><a name="line-328"></a><a name="fromRight"><a href="Data.Either.html#fromRight"><span class="hs-identifier">fromRight</span></a></a><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><a href="Data.Either.html#Right"><span class="hs-identifier hs-var">Right</span></a><span> </span><a name="local-6989586621679150308"><a href="#local-6989586621679150308"><span class="hs-identifier">b</span></a></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679150308"><span class="hs-identifier hs-var">b</span></a><span>
+</span><a name="line-329"></a><span class="hs-identifier">fromRight</span><span> </span><a name="local-6989586621679150309"><a href="#local-6989586621679150309"><span class="hs-identifier">b</span></a></a><span> </span><span class="hs-identifier">_</span><span>         </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679150309"><span class="hs-identifier hs-var">b</span></a><span>
+</span><a name="line-330"></a><span>
+</span><a name="line-331"></a><span class="hs-comment">{-
+{--------------------------------------------------------------------
+  Testing
+--------------------------------------------------------------------}
+prop_partitionEithers :: [Either Int Int] -&gt; Bool
+prop_partitionEithers x =
+  partitionEithers x == (lefts x, rights x)
+-}</span><span>
+</span><a name="line-339"></a><span>
+</span><a name="line-340"></a></pre></body></html>

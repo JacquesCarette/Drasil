@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">1</span><span> </span><span class="hs-pragma">&quot;libraries/base/GHC/Event/KQueue.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-2"></a><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-3"></a><span class="hs-pragma">{-# LANGUAGE CApiFFI
+           , GeneralizedNewtypeDeriving
+           , NoImplicitPrelude
+           , RecordWildCards
+           , BangPatterns
+  #-}</span><span>
+</span><a name="line-9"></a><span>
+</span><a name="line-10"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.Event.KQueue</span><span>
+</span><a name="line-11"></a><span>    </span><span class="hs-special">(</span><span>
+</span><a name="line-12"></a><span>      </span><span class="hs-identifier">new</span><span>
+</span><a name="line-13"></a><span>    </span><span class="hs-special">,</span><span> </span><span class="hs-identifier">available</span><span>
+</span><a name="line-14"></a><span>    </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-15"></a><span>
+</span><a name="line-16"></a><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="hs-identifier">GHC.Event.Internal</span><span> </span><span class="hs-keyword">as</span><span> </span><span class="hs-identifier">E</span><span>
+</span><a name="line-17"></a><span>
+</span><a name="line-18"></a><span>
+</span><a name="line-19"></a><span>
+</span><a name="line-20"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">19</span><span> </span><span class="hs-pragma">&quot;libraries/base/GHC/Event/KQueue.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-21"></a><span class="hs-keyword">import</span><span> </span><span class="hs-identifier">GHC.Base</span><span>
+</span><a name="line-22"></a><span>
+</span><a name="line-23"></a><span class="hs-identifier">new</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">IO</span><span> </span><span class="hs-identifier">E.Backend</span><span>
+</span><a name="line-24"></a><span class="hs-identifier">new</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">errorWithoutStackTrace</span><span> </span><span class="hs-string">&quot;KQueue back end not implemented for this platform&quot;</span><span>
+</span><a name="line-25"></a><span>
+</span><a name="line-26"></a><span class="hs-identifier">available</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-identifier">Bool</span><span>
+</span><a name="line-27"></a><span class="hs-identifier">available</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-identifier">False</span><span>
+</span><a name="line-28"></a><span class="hs-pragma">{-# INLINE</span><span> </span><span class="hs-pragma">available</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-29"></a><span>
+</span><a name="line-30"></a><span class="hs-pragma">{-# LINE</span><span> </span><span class="hs-pragma">294</span><span> </span><span class="hs-pragma">&quot;libraries/base/GHC/Event/KQueue.hsc&quot;</span><span> </span><span class="hs-pragma">#-}</span><span>
+</span><a name="line-31"></a></pre></body></html>

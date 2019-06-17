@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE Trustworthy #-}</span><span>
+</span><a name="line-2"></a><span>
+</span><a name="line-3"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- Module      :  Data.STRef</span><span>
+</span><a name="line-6"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2001</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- License     :  BSD-style (see the file libraries/base/LICENSE)</span><span>
+</span><a name="line-8"></a><span class="hs-comment">--</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Maintainer  :  libraries@haskell.org</span><span>
+</span><a name="line-10"></a><span class="hs-comment">-- Stability   :  experimental</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- Portability :  non-portable (uses Control.Monad.ST)</span><span>
+</span><a name="line-12"></a><span class="hs-comment">--</span><span>
+</span><a name="line-13"></a><span class="hs-comment">-- Mutable references in the (strict) ST monad.</span><span>
+</span><a name="line-14"></a><span class="hs-comment">--</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-16"></a><span>
+</span><a name="line-17"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.STRef</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-18"></a><span>        </span><span class="hs-comment">-- * STRefs</span><span>
+</span><a name="line-19"></a><span>        </span><a href="GHC.STRef.html#STRef"><span class="hs-identifier hs-type">STRef</span></a><span class="hs-special">,</span><span>          </span><span class="hs-comment">-- abstract</span><span>
+</span><a name="line-20"></a><span>        </span><a href="GHC.STRef.html#newSTRef"><span class="hs-identifier hs-var">newSTRef</span></a><span class="hs-special">,</span><span>
+</span><a name="line-21"></a><span>        </span><a href="GHC.STRef.html#readSTRef"><span class="hs-identifier hs-var">readSTRef</span></a><span class="hs-special">,</span><span>
+</span><a name="line-22"></a><span>        </span><a href="GHC.STRef.html#writeSTRef"><span class="hs-identifier hs-var">writeSTRef</span></a><span class="hs-special">,</span><span>
+</span><a name="line-23"></a><span>        </span><a href="Data.STRef.html#modifySTRef"><span class="hs-identifier hs-var">modifySTRef</span></a><span class="hs-special">,</span><span>
+</span><a name="line-24"></a><span>        </span><a href="Data.STRef.html#modifySTRef%27"><span class="hs-identifier hs-var">modifySTRef'</span></a><span>
+</span><a name="line-25"></a><span> </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-26"></a><span>
+</span><a name="line-27"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.ST.html"><span class="hs-identifier">GHC.ST</span></a><span>
+</span><a name="line-28"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.STRef.html"><span class="hs-identifier">GHC.STRef</span></a><span>
+</span><a name="line-29"></a><span>
+</span><a name="line-30"></a><span class="hs-comment">-- | Mutate the contents of an 'STRef'.</span><span>
+</span><a name="line-31"></a><span class="hs-comment">--</span><span>
+</span><a name="line-32"></a><span class="hs-comment">-- &gt;&gt;&gt; :{</span><span>
+</span><a name="line-33"></a><span class="hs-comment">-- runST (do</span><span>
+</span><a name="line-34"></a><span class="hs-comment">--     ref &lt;- newSTRef &quot;&quot;</span><span>
+</span><a name="line-35"></a><span class="hs-comment">--     modifySTRef ref (const &quot;world&quot;)</span><span>
+</span><a name="line-36"></a><span class="hs-comment">--     modifySTRef ref (++ &quot;!&quot;)</span><span>
+</span><a name="line-37"></a><span class="hs-comment">--     modifySTRef ref (&quot;Hello, &quot; ++)</span><span>
+</span><a name="line-38"></a><span class="hs-comment">--     readSTRef ref )</span><span>
+</span><a name="line-39"></a><span class="hs-comment">-- :}</span><span>
+</span><a name="line-40"></a><span class="hs-comment">-- &quot;Hello, world!&quot;</span><span>
+</span><a name="line-41"></a><span class="hs-comment">--</span><span>
+</span><a name="line-42"></a><span class="hs-comment">-- Be warned that 'modifySTRef' does not apply the function strictly.  This</span><span>
+</span><a name="line-43"></a><span class="hs-comment">-- means if the program calls 'modifySTRef' many times, but seldomly uses the</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- value, thunks will pile up in memory resulting in a space leak.  This is a</span><span>
+</span><a name="line-45"></a><span class="hs-comment">-- common mistake made when using an STRef as a counter.  For example, the</span><span>
+</span><a name="line-46"></a><span class="hs-comment">-- following will leak memory and may produce a stack overflow:</span><span>
+</span><a name="line-47"></a><span class="hs-comment">--</span><span>
+</span><a name="line-48"></a><span class="hs-comment">-- &gt;&gt;&gt; import Control.Monad (replicateM_)</span><span>
+</span><a name="line-49"></a><span class="hs-comment">-- &gt;&gt;&gt; :{</span><span>
+</span><a name="line-50"></a><span class="hs-comment">-- print (runST (do</span><span>
+</span><a name="line-51"></a><span class="hs-comment">--     ref &lt;- newSTRef 0</span><span>
+</span><a name="line-52"></a><span class="hs-comment">--     replicateM_ 1000 $ modifySTRef ref (+1)</span><span>
+</span><a name="line-53"></a><span class="hs-comment">--     readSTRef ref ))</span><span>
+</span><a name="line-54"></a><span class="hs-comment">-- :}</span><span>
+</span><a name="line-55"></a><span class="hs-comment">-- 1000</span><span>
+</span><a name="line-56"></a><span class="hs-comment">--</span><span>
+</span><a name="line-57"></a><span class="hs-comment">-- To avoid this problem, use 'modifySTRef'' instead.</span><span>
+</span><a name="line-58"></a><span class="hs-identifier">modifySTRef</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.STRef.html#STRef"><span class="hs-identifier hs-type">STRef</span></a><span> </span><a href="#local-6989586621679334996"><span class="hs-identifier hs-type">s</span></a><span> </span><a href="#local-6989586621679334997"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679334997"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679334997"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.ST.html#ST"><span class="hs-identifier hs-type">ST</span></a><span> </span><a href="#local-6989586621679334996"><span class="hs-identifier hs-type">s</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-59"></a><a name="modifySTRef"><a href="Data.STRef.html#modifySTRef"><span class="hs-identifier">modifySTRef</span></a></a><span> </span><a name="local-6989586621679334998"><a href="#local-6989586621679334998"><span class="hs-identifier">ref</span></a></a><span> </span><a name="local-6989586621679334999"><a href="#local-6989586621679334999"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.STRef.html#writeSTRef"><span class="hs-identifier hs-var">writeSTRef</span></a><span> </span><a href="#local-6989586621679334998"><span class="hs-identifier hs-var">ref</span></a><span> </span><a href="GHC.Base.html#."><span class="hs-operator hs-var">.</span></a><span> </span><a href="#local-6989586621679334999"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="GHC.Base.html#%3D%3C%3C"><span class="hs-operator hs-var">=&lt;&lt;</span></a><span> </span><a href="GHC.STRef.html#readSTRef"><span class="hs-identifier hs-var">readSTRef</span></a><span> </span><a href="#local-6989586621679334998"><span class="hs-identifier hs-var">ref</span></a><span>
+</span><a name="line-60"></a><span>
+</span><a name="line-61"></a><span class="hs-comment">-- | Strict version of 'modifySTRef'</span><span>
+</span><a name="line-62"></a><span class="hs-comment">--</span><span>
+</span><a name="line-63"></a><span class="hs-comment">-- @since 4.6.0.0</span><span>
+</span><a name="line-64"></a><span class="hs-identifier">modifySTRef'</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="GHC.STRef.html#STRef"><span class="hs-identifier hs-type">STRef</span></a><span> </span><a href="#local-6989586621679334994"><span class="hs-identifier hs-type">s</span></a><span> </span><a href="#local-6989586621679334995"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><a href="#local-6989586621679334995"><span class="hs-identifier hs-type">a</span></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="#local-6989586621679334995"><span class="hs-identifier hs-type">a</span></a><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.ST.html#ST"><span class="hs-identifier hs-type">ST</span></a><span> </span><a href="#local-6989586621679334994"><span class="hs-identifier hs-type">s</span></a><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><a name="line-65"></a><a name="modifySTRef%27"><a href="Data.STRef.html#modifySTRef%27"><span class="hs-identifier">modifySTRef'</span></a></a><span> </span><a name="local-6989586621679335000"><a href="#local-6989586621679335000"><span class="hs-identifier">ref</span></a></a><span> </span><a name="local-6989586621679335001"><a href="#local-6989586621679335001"><span class="hs-identifier">f</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a name="line-66"></a><span>    </span><a name="local-6989586621679335002"><a href="#local-6989586621679335002"><span class="hs-identifier">x</span></a></a><span> </span><span class="hs-glyph">&lt;-</span><span> </span><a href="GHC.STRef.html#readSTRef"><span class="hs-identifier hs-var">readSTRef</span></a><span> </span><a href="#local-6989586621679335000"><span class="hs-identifier hs-var">ref</span></a><span>
+</span><a name="line-67"></a><span>    </span><span class="hs-keyword">let</span><span> </span><a name="local-6989586621679335003"><a href="#local-6989586621679335003"><span class="hs-identifier">x'</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="#local-6989586621679335001"><span class="hs-identifier hs-var">f</span></a><span> </span><a href="#local-6989586621679335002"><span class="hs-identifier hs-var">x</span></a><span>
+</span><a name="line-68"></a><span>    </span><a href="#local-6989586621679335003"><span class="hs-identifier hs-var">x'</span></a><span> </span><span class="hs-special">`</span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Prim.html#seq"><span class="hs-identifier hs-var">seq</span></a><span class="hs-special">`</span><span> </span><a href="GHC.STRef.html#writeSTRef"><span class="hs-identifier hs-var">writeSTRef</span></a><span> </span><a href="#local-6989586621679335000"><span class="hs-identifier hs-var">ref</span></a><span> </span><a href="#local-6989586621679335003"><span class="hs-identifier hs-var">x'</span></a><span>
+</span><a name="line-69"></a></pre></body></html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-2"></a><span class="hs-comment">-- |</span><span>
+</span><a name="line-3"></a><span class="hs-comment">-- Module      :  GHC.ExecutionStack</span><span>
+</span><a name="line-4"></a><span class="hs-comment">-- Copyright   :  (c) The University of Glasgow 2013-2015</span><span>
+</span><a name="line-5"></a><span class="hs-comment">-- License     :  see libraries/base/LICENSE</span><span>
+</span><a name="line-6"></a><span class="hs-comment">--</span><span>
+</span><a name="line-7"></a><span class="hs-comment">-- Maintainer  :  cvs-ghc@haskell.org</span><span>
+</span><a name="line-8"></a><span class="hs-comment">-- Stability   :  internal</span><span>
+</span><a name="line-9"></a><span class="hs-comment">-- Portability :  non-portable (GHC Extensions)</span><span>
+</span><a name="line-10"></a><span class="hs-comment">--</span><span>
+</span><a name="line-11"></a><span class="hs-comment">-- This is a module for efficient stack traces. This stack trace implementation</span><span>
+</span><a name="line-12"></a><span class="hs-comment">-- is considered low overhead. Basic usage looks like this:</span><span>
+</span><a name="line-13"></a><span class="hs-comment">--</span><span>
+</span><a name="line-14"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-15"></a><span class="hs-comment">-- import GHC.ExecutionStack</span><span>
+</span><a name="line-16"></a><span class="hs-comment">--</span><span>
+</span><a name="line-17"></a><span class="hs-comment">-- myFunction :: IO ()</span><span>
+</span><a name="line-18"></a><span class="hs-comment">-- myFunction = do</span><span>
+</span><a name="line-19"></a><span class="hs-comment">--      putStrLn =&lt;&lt; showStackTrace</span><span>
+</span><a name="line-20"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-21"></a><span class="hs-comment">--</span><span>
+</span><a name="line-22"></a><span class="hs-comment">-- Your GHC must have been built with @libdw@ support for this to work.</span><span>
+</span><a name="line-23"></a><span class="hs-comment">--</span><span>
+</span><a name="line-24"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-25"></a><span class="hs-comment">-- user@host:~$ ghc --info | grep libdw</span><span>
+</span><a name="line-26"></a><span class="hs-comment">--  ,(&quot;RTS expects libdw&quot;,&quot;YES&quot;)</span><span>
+</span><a name="line-27"></a><span class="hs-comment">-- @</span><span>
+</span><a name="line-28"></a><span class="hs-comment">--</span><span>
+</span><a name="line-29"></a><span class="hs-comment">-- @since 4.9.0.0</span><span>
+</span><a name="line-30"></a><span class="hs-comment">-----------------------------------------------------------------------------</span><span>
+</span><a name="line-31"></a><span>
+</span><a name="line-32"></a><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">GHC.ExecutionStack</span><span> </span><span class="hs-special">(</span><span>
+</span><a name="line-33"></a><span>    </span><a href="GHC.ExecutionStack.Internal.html#Location"><span class="hs-identifier hs-type">Location</span></a><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><a name="line-34"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="GHC.ExecutionStack.Internal.html#SrcLoc"><span class="hs-identifier hs-type">SrcLoc</span></a><span> </span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><a name="line-35"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="GHC.ExecutionStack.html#getStackTrace"><span class="hs-identifier hs-var">getStackTrace</span></a><span>
+</span><a name="line-36"></a><span>  </span><span class="hs-special">,</span><span> </span><a href="GHC.ExecutionStack.html#showStackTrace"><span class="hs-identifier hs-var">showStackTrace</span></a><span>
+</span><a name="line-37"></a><span>  </span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><a name="line-38"></a><span>
+</span><a name="line-39"></a><span class="hs-keyword">import</span><span> </span><a href="Control.Monad.html"><span class="hs-identifier">Control.Monad</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#join"><span class="hs-identifier hs-var">join</span></a><span class="hs-special">)</span><span>
+</span><a name="line-40"></a><span class="hs-keyword">import</span><span> </span><a href="GHC.ExecutionStack.Internal.html"><span class="hs-identifier">GHC.ExecutionStack.Internal</span></a><span>
+</span><a name="line-41"></a><span>
+</span><a name="line-42"></a><span class="hs-comment">-- | Get a trace of the current execution stack state.</span><span>
+</span><a name="line-43"></a><span class="hs-comment">--</span><span>
+</span><a name="line-44"></a><span class="hs-comment">-- Returns @Nothing@ if stack trace support isn't available on host machine.</span><span>
+</span><a name="line-45"></a><span class="hs-identifier">getStackTrace</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a><span> </span><span class="hs-special">[</span><a href="GHC.ExecutionStack.Internal.html#Location"><span class="hs-identifier hs-type">Location</span></a><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><a name="line-46"></a><a name="getStackTrace"><a href="GHC.ExecutionStack.html#getStackTrace"><span class="hs-identifier">getStackTrace</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#join"><span class="hs-identifier hs-var">join</span></a><span> </span><a href="GHC.Base.html#."><span class="hs-operator hs-var">.</span></a><span> </span><a href="GHC.Base.html#fmap"><span class="hs-identifier hs-var">fmap</span></a><span> </span><a href="GHC.ExecutionStack.Internal.html#stackFrames"><span class="hs-identifier hs-var">stackFrames</span></a><span class="hs-special">)</span><span> </span><span class="hs-special">`</span><a href="GHC.Base.html#fmap"><span class="hs-identifier hs-var">fmap</span></a><span class="hs-special">`</span><span> </span><a href="GHC.ExecutionStack.Internal.html#collectStackTrace"><span class="hs-identifier hs-var">collectStackTrace</span></a><span>
+</span><a name="line-47"></a><span>
+</span><a name="line-48"></a><span class="hs-comment">-- | Get a string representation of the current execution stack state.</span><span>
+</span><a name="line-49"></a><span class="hs-identifier">showStackTrace</span><span> </span><span class="hs-glyph">::</span><span> </span><a href="../ghc-prim-0.5.2.0/src/%{MODULE/./-}.html#%{NAME}/GHC.Types.html#IO"><span class="hs-identifier hs-type">IO</span></a><span> </span><span class="hs-special">(</span><a href="GHC.Base.html#Maybe"><span class="hs-identifier hs-type">Maybe</span></a><span> </span><a href="GHC.Base.html#String"><span class="hs-identifier hs-type">String</span></a><span class="hs-special">)</span><span>
+</span><a name="line-50"></a><a name="showStackTrace"><a href="GHC.ExecutionStack.html#showStackTrace"><span class="hs-identifier">showStackTrace</span></a></a><span> </span><span class="hs-glyph">=</span><span> </span><a href="GHC.Base.html#fmap"><span class="hs-identifier hs-var">fmap</span></a><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><a name="local-6989586621679347337"><a href="#local-6989586621679347337"><span class="hs-identifier">st</span></a></a><span> </span><span class="hs-glyph">-&gt;</span><span> </span><a href="GHC.ExecutionStack.Internal.html#showStackFrames"><span class="hs-identifier hs-var">showStackFrames</span></a><span> </span><a href="#local-6989586621679347337"><span class="hs-identifier hs-var">st</span></a><span> </span><span class="hs-string">&quot;&quot;</span><span class="hs-special">)</span><span> </span><span class="hs-special">`</span><a href="GHC.Base.html#fmap"><span class="hs-identifier hs-var">fmap</span></a><span class="hs-special">`</span><span> </span><a href="GHC.ExecutionStack.html#getStackTrace"><span class="hs-identifier hs-var">getStackTrace</span></a><span>
+</span><a name="line-51"></a></pre></body></html>

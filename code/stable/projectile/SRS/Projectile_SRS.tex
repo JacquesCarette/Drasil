@@ -209,10 +209,10 @@ This section simplifies the original problem and helps in developing the theoret
 \begin{itemize}
 \item[twoDMotion:\phantomsection\label{twoDMotion}]The projectile motion is two-dimensional (2D). \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
 \item[cartSyst:\phantomsection\label{cartSyst}]A Cartesian coordinate system is used (from \hyperref[neglectCurv]{A: neglectCurv}). \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
-\item[yAxisGravity:\phantomsection\label{yAxisGravity}]The direction of the y-axis is directed opposite to gravity. \hyperref[accelYGravity]{A: accelYGravity}.
+\item[yAxisGravity:\phantomsection\label{yAxisGravity}]The direction of the y-axis is directed opposite to gravity. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[accelYGravity]{A: accelYGravity}.
 \item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the x-axis (from \hyperref[neglectCurv]{A: neglectCurv}). \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
-\item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target. \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
+\item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant (from \hyperref[accelXZero]{A: accelXZero}, \hyperref[accelYGravity]{A: accelYGravity}, \hyperref[neglectDrag]{A: neglectDrag}, and \hyperref[freeFlight]{A: freeFlight}). \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
 \item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero. \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[constAccel]{A: constAccel}.
 \item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A: yAxisGravity}). \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[constAccel]{A: constAccel}.
@@ -588,7 +588,7 @@ Description & \begin{symbDescription}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & 
+Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -653,6 +653,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The constraint $p'>0$ is from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -709,8 +710,6 @@ Description & \begin{symbDescription}
               \item{$p'$ is the landing position (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & 
-\\ \midrule \\
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[calcValues]{FR: Calculate-Values}.
@@ -749,8 +748,6 @@ Description & \begin{symbDescription}
               \item{$p'$ is the landing position (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & 
-\\ \midrule \\
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[calcValues]{FR: Calculate-Values}.
@@ -788,8 +785,6 @@ Description & \begin{symbDescription}
               \item{${d_{offset}}$ is the offset between the target position and the landing position (m)}
               \item{${p_{target}}$ is the target position (m)}
               \end{symbDescription}
-\\ \midrule \\
-Notes & 
 \\ \midrule \\
 Source & --
 \\ \midrule \\

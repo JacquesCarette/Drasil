@@ -8,15 +8,16 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Math (constraint, equation)
+
+import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.Physics (distance, gravitationalAccel, iSpeed,
   ixPos, ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
 
-import Data.Drasil.Quantities.Math (pi_)
-
 import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, launchOrigin,
-  posXDirection, targetXAxis)
+  posXDirection, targetXAxis, yAxisGravity)
 import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
+import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (posVecGD)
 import Drasil.Projectile.Unitals (isHit, isShort, launAngle, landPos,
   flightDur, launSpeed, offset, targPos)
@@ -28,14 +29,11 @@ iMods = [timeIM, distanceIM, shortIM, offsetIM, hitIM]
 timeIM :: InstanceModel
 timeIM = imNoRefs timeRC [qw launSpeed, qw launAngle]
   [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw flightDur)
-  [sy flightDur $> 0] timeDeriv "calOfLandingTime" [timeNotes]
+  [sy flightDur $> 0] timeDeriv "calOfLandingTime" [angleConstraintNote]
 
 timeRC :: RelationConcept
 timeRC = makeRC "timeRC" (nounPhraseSP "calculation of landing time")
-  timeNotes $ sy flightDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
-
-timeNotes :: Sentence
-timeNotes = EmptyS
+  EmptyS $ sy flightDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
 
 timeDeriv :: Derivation
 timeDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase flightDur)) :
@@ -75,17 +73,19 @@ timeDerivEqn5 = sy flightDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitat
 distanceIM :: InstanceModel
 distanceIM = imNoRefs distanceRC [qw launSpeed, qw launAngle]
   [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw landPos)
-  [sy landPos $> 0] distanceDeriv "calOfLandingDist" [distanceNotes]
+  [sy landPos $> 0] distanceDeriv "calOfLandingDist" [posDistNote, angleConstraintNote]
 
 distanceExpr :: Expr
 distanceExpr = sy landPos $= 2 * square (sy iSpeed) * sin (sy launAngle) *
                                 cos (sy launAngle) / sy gravitationalAccel
 
 distanceRC :: RelationConcept
-distanceRC = makeRC "distanceRC" (nounPhraseSP "calculation of landing distance") distanceNotes distanceExpr
+distanceRC = makeRC "distanceRC" (nounPhraseSP "calculation of landing distance")
+  posDistNote distanceExpr
 
-distanceNotes :: Sentence
-distanceNotes = S "The" +:+ phrase constraint +:+ E (sy landPos $> 0) `sIs` S "from" +:+. makeRef2S posXDirection
+posDistNote :: Sentence
+posDistNote = S "The" +:+ phrase constraint +:+ E (sy landPos $> 0) `sIs`
+              S "from" +:+. makeRef2S posXDirection
 
 distanceDeriv :: Derivation
 distanceDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase landPos)) :
@@ -118,38 +118,33 @@ distanceDerivEqn3 = sy landPos $= sy iSpeed * cos (sy launAngle) * 2 * sy iSpeed
 ---
 shortIM :: InstanceModel
 shortIM = imNoDerivNoRefs shortRC [qw targPos, qw landPos]
-  [sy targPos $> 0, sy landPos $> 0] (qw isShort) []
-  "shortIM" [shortNotes]
+  [sy targPos $> 0, sy landPos $> 0] (qw isShort) [] "shortIM" [{-Notes-}]
 
 shortRC :: RelationConcept
 shortRC = makeRC "shortRC" (nounPhraseSP "isShort") 
-  shortNotes $ sy isShort $= sy targPos $> sy landPos
-  
-shortNotes :: Sentence
-shortNotes = EmptyS
+  EmptyS $ sy isShort $= sy targPos $> sy landPos
 
 ---
 offsetIM :: InstanceModel
 offsetIM = imNoDerivNoRefs offsetRC [qw targPos, qw landPos]
-  [sy targPos $> 0, sy landPos $> 0] (qw offset) []
-  "offsetIM" [offsetNotes]
+  [sy targPos $> 0, sy landPos $> 0] (qw offset) [] "offsetIM" [{-Notes-}]
 
 offsetRC :: RelationConcept
 offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") 
-  offsetNotes $ sy offset $= UnaryOp Abs (sy targPos - sy landPos)
-  
-offsetNotes :: Sentence
-offsetNotes = EmptyS
+  EmptyS $ sy offset $= UnaryOp Abs (sy targPos - sy landPos)
 
 ---
 hitIM :: InstanceModel
 hitIM = imNoDerivNoRefs hitRC [qw offset, qw targPos]
-  [sy offset $> 0, sy targPos $> 0] (qw isHit) []
-  "hitIM" [hitNotes]
+  [sy offset $> 0, sy targPos $> 0] (qw isHit) [] "hitIM" [{-Notes-}]
 
 hitRC :: RelationConcept
 hitRC = makeRC "hitRC" (nounPhraseSP "isHit") 
-  hitNotes $ sy isHit $= sy offset $< (0.02 * sy targPos)
-  
-hitNotes :: Sentence
-hitNotes = EmptyS
+  EmptyS $ sy isHit $= sy offset $< (0.02 * sy targPos)
+
+---
+angleConstraintNote :: Sentence
+angleConstraintNote = foldlSent [S "The", phrase constraint,
+  E (0 $< sy launAngle $< (sy pi_ / 2)) `sIs` S "from",
+  makeRef2S posXDirection `sAnd` makeRef2S yAxisGravity `sC`
+  S "and is shown" `sIn` makeRef2S figLaunch]

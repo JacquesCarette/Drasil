@@ -402,7 +402,7 @@
                   </p>
                   <p>
                     <div id="yAxisGravity">
-                      yAxisGravity: The direction of the y-axis is directed opposite to gravity. <a href=#accelYGravity>A: accelYGravity</a>.
+                      yAxisGravity: The direction of the y-axis is directed opposite to gravity. <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> <a href=#accelYGravity>A: accelYGravity</a>.
                     </div>
                   </p>
                   <p>
@@ -417,7 +417,7 @@
                   </p>
                   <p>
                     <div id="posXDirection">
-                      posXDirection: The positive x-direction is from the launcher to the target. <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
+                      posXDirection: The positive x-direction is from the launcher to the target. <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
                     </div>
                   </p>
                   <p>
@@ -1133,7 +1133,18 @@
                     </tr>
                     <tr>
                       <th>Notes</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
+                                                                                         <span class="fup">
+                                                                                           π
+                                                                                         </span>
+                                                                                         <span class="fdn">
+                                                                                           2
+                                                                                         </span>
+                                                                                       </div></em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
+                        </p>
+                      </td>
                     </tr>
                     <tr>
                       <th>Source</th>
@@ -1267,6 +1278,16 @@
                         <p class="paragraph">
                           The constraint <em>p'&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A: posXDirection</a>.
                         </p>
+                        <p class="paragraph">
+                          The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
+                                                                                         <span class="fup">
+                                                                                           π
+                                                                                         </span>
+                                                                                         <span class="fdn">
+                                                                                           2
+                                                                                         </span>
+                                                                                       </div></em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1371,10 +1392,6 @@
                       </td>
                     </tr>
                     <tr>
-                      <th>Notes</th>
-                      <td><p class="paragraph"></p></td>
-                    </tr>
-                    <tr>
                       <th>Source</th>
                       <td><p class="paragraph">--</p></td>
                     </tr>
@@ -1436,10 +1453,6 @@
                           <li><em>p'</em> is the landing position (m)</li>
                         </ul>
                       </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td><p class="paragraph"></p></td>
                     </tr>
                     <tr>
                       <th>Source</th>
@@ -1516,10 +1529,6 @@
                           <li><em>p<sub>target</sub></em> is the target position (m)</li>
                         </ul>
                       </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td><p class="paragraph"></p></td>
                     </tr>
                     <tr>
                       <th>Source</th>

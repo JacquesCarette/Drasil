@@ -1,6 +1,6 @@
 module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
   assumptions, constAccel, launchOrigin, pointMass, posXDirection, targetXAxis,
-  timeStartZero, twoDMotion) where
+  timeStartZero, twoDMotion, yAxisGravity) where
 
 import Language.Drasil
 import Utils.Drasil

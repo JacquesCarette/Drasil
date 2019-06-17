@@ -2,20 +2,18 @@
 
 module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   ScopeTag(..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
-  blank,oneTabbed,oneTab,verticalComma, angles,doubleQuotedText,capitalize,
-  himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, mapPairSnd, liftA4, 
-  liftA5, liftA6, liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, 
-  lift3Pair, lift4Pair, liftPairFst
+  blank,verticalComma, angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,
+  vimap,vibmap, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, 
+  liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst
 ) where
 
 import Language.Drasil.Code.Imperative.Symantics (Label)
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
-import Data.Char (toUpper)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
-  (<>), comma, punctuate, nest)
+  (<>), comma, punctuate)
 
 class Pair p where
   pfst :: p x y a -> x a
@@ -46,12 +44,6 @@ svd = SVD
 blank :: Doc
 blank = text ""
 
-oneTabbed :: [Doc] -> Doc
-oneTabbed = vcat . map oneTab
-
-oneTab :: Doc -> Doc
-oneTab = nest 4
-
 verticalComma :: (a -> Doc) -> [a] -> Doc
 verticalComma f = vcat . punctuate comma . map f
 
@@ -60,10 +52,6 @@ angles d = char '<' <> d <> char '>'
 
 doubleQuotedText :: String -> Doc
 doubleQuotedText = doubleQuotes . text
-
-capitalize :: String -> String
-capitalize [] = error "capitalize called on an empty String"
-capitalize (c:cs) = toUpper c : cs
 
 himap :: Doc -> (a -> Doc) -> [a] -> Doc
 himap c f = hcat . intersperse c . map f

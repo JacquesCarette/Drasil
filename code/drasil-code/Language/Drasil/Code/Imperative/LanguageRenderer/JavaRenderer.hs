@@ -7,6 +7,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
   JavaCode(..), jNameOpts
 ) where
 
+import Utils.Drasil (indent)
+
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
@@ -38,7 +40,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName,
   setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  angles, oneTab, liftA4, liftA5, liftA6, liftA7, liftList, lift1List, 
+  angles, liftA4, liftA5, liftA6, liftA7, liftList, lift1List, 
   lift3Pair, lift4Pair, liftPairFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -614,10 +616,10 @@ jThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg
 jTryCatch :: Doc -> Doc -> Doc
 jTryCatch tb cb = vcat [
   text "try" <+> lbrace,
-  oneTab tb,
+  indent tb,
   rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> 
     lbrace,
-  oneTab cb,
+  indent cb,
   rbrace]
 
 jDiscardInput :: (Doc, Maybe String) -> Doc
@@ -653,7 +655,7 @@ jStringSplit (vnew, _) t (s, _) = vnew <+> equals <+> new <+> t
 jMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 jMethod n s p t ps b = vcat [
   s <+> p <+> t <+> text n <> parens ps <+> text "throws Exception" <+> lbrace,
-  oneTab b,
+  indent b,
   rbrace]
 
 jListIndexExists :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc

@@ -33,10 +33,11 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   statementsToStateVars
 ) where
 
+import Utils.Drasil (capitalize, indent, indentList)
+
 import Language.Drasil.Code.Imperative.Symantics (Label, Library)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  angles,blank, doubleQuotedText, oneTab,capitalize,oneTabbed,hicat,vibcat,
-  vmap)
+  angles,blank, doubleQuotedText,hicat,vibcat,vmap)
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
@@ -86,7 +87,7 @@ moduleDocD cs = vibcat (map fst cs)
 classDocD :: Label -> Maybe Label -> Doc -> Doc -> Doc -> Doc -> Doc
 classDocD n p inherit s vs fs = vcat [
   s <+> classDec <+> text n <+> baseClass <+> lbrace, 
-  oneTabbed [
+  indentList [
     vs,
     blank,
     fs],
@@ -97,7 +98,7 @@ classDocD n p inherit s vs fs = vcat [
 enumDocD :: Label -> Doc -> Doc -> Doc
 enumDocD n es s = vcat [
   s <+> text "enum" <+> text n <+> lbrace,
-  oneTab es,
+  indent es,
   rbrace]
 
 enumElementsDocD :: [Label] -> Bool -> Doc
@@ -193,7 +194,7 @@ paramListDocD = hicat (text ", ")
 methodDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 methodDocD n s p t ps b = vcat [
   s <+> p <+> t <+> text n <> parens ps <+> lbrace,
-  oneTab b,
+  indent b,
   rbrace]
 
 methodListDocD :: [(Doc, Bool)] -> Doc
@@ -218,15 +219,15 @@ ifCondDocD _ _ _ _ [] = error "if condition created with no cases"
 ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) = 
   let ifSect ((v, _), b) = vcat [
         text "if" <+> parens v <+> ifStart,
-        oneTab b,
+        indent b,
         blockEnd]
       elseIfSect ((v, _), b) = vcat [
         elseIf <+> parens v <+> ifStart,
-        oneTab b,
+        indent b,
         blockEnd]
       elseSect = if isEmpty elseBody then empty else vcat [
         text "else" <+> ifStart,
-        oneTab elseBody,
+        indent elseBody,
         blockEnd]
   in vcat [
     ifSect c,
@@ -238,17 +239,17 @@ switchDocD :: (Doc, Terminator) -> (Doc, Maybe String) -> Doc ->
 switchDocD breakState (v, _) defBody cs = 
   let caseDoc ((l, _), result) = vcat [
         text "case" <+> l <> colon,
-        oneTabbed [
+        indentList [
           result,
           fst breakState]]
       defaultSection = vcat [
         text "default" <> colon,
-        oneTabbed [
+        indentList [
           defBody,
           fst breakState]]
   in vcat [
       text "switch" <> parens v <+> lbrace,
-      oneTabbed [
+      indentList [
         vmap caseDoc cs,
         defaultSection],
       rbrace]
@@ -260,7 +261,7 @@ forDocD :: Doc -> Doc -> (Doc, Terminator) -> (Doc, Maybe String) ->
 forDocD blockStart blockEnd sInit (vGuard, _) sUpdate b = vcat [
   forLabel <+> parens (fst sInit <> semi <+> vGuard <> semi <+> fst sUpdate) 
     <+> blockStart,
-  oneTab b,
+  indent b,
   blockEnd]
 
 forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> 
@@ -268,22 +269,22 @@ forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc ->
 forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel t (v, _) b =
   vcat [iterForEachLabel <+> parens (t <+> text l <+> iterInLabel <+> v) <+>
     blockStart,
-  oneTab b,
+  indent b,
   blockEnd]
 
 whileDocD :: Doc -> Doc -> (Doc, Maybe String) -> Doc -> Doc
 whileDocD blockStart blockEnd (v, _) b = vcat [
   text "while" <+> parens v <+> blockStart,
-  oneTab b,
+  indent b,
   blockEnd]
 
 tryCatchDocD :: Doc -> Doc -> Doc 
 tryCatchDocD tb cb = vcat [
   text "try" <+> lbrace,
-  oneTab tb,
+  indent tb,
   rbrace <+> text "catch" <+> parens (text "System.Exception" <+> text "exc") 
     <+> lbrace,
-  oneTab cb,
+  indent cb,
   rbrace]
 
 stratDocD :: Doc -> (Doc, Terminator) -> Doc

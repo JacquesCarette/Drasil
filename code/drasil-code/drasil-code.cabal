@@ -37,6 +37,7 @@ library
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
     drasil-lang >= 0.1.52,
+    drasil-utils >= 0.1.1,
     drasil-build >= 0.1.1,
     drasil-theory >= 0.1.0,
     drasil-database >= 0.1.0
@@ -80,6 +81,7 @@ executable codegenTest
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
     drasil-lang >= 0.1.52,
+    drasil-utils >= 0.1.1,
     drasil-build >= 0.1.1,
     drasil-theory >= 0.1.0,
     drasil-database >= 0.1.0

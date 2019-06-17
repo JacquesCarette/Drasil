@@ -8,6 +8,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
   CppSrcCode(..), CppHdrCode(..), CppCode(..), unSrc, unHdr
 ) where
 
+import Utils.Drasil (indent, indentList)
+
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
@@ -37,7 +39,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
-  angles, blank, doubleQuotedText, oneTab, oneTabbed, mapPairFst, mapPairSnd, 
+  angles, blank, doubleQuotedText, mapPairFst, mapPairSnd, 
   vibcat, liftA4, liftA5, liftA6, liftA8, liftList, lift2Lists, lift1List, 
   lift3Pair, lift4Pair, liftPairFst)
 
@@ -1654,9 +1656,9 @@ cppThrowDoc (errMsg, _) = text "throw" <> parens errMsg
 cppTryCatch :: Doc -> Doc -> Doc
 cppTryCatch tb cb= vcat [
   text "try" <+> lbrace,
-  oneTab tb,
+  indent tb,
   rbrace <+> text "catch" <+> parens (text "...") <+> lbrace,
-  oneTab cb,
+  indent cb,
   rbrace]
 
 cppDiscardInput :: Label -> (Doc, Maybe String) -> Doc
@@ -1684,14 +1686,14 @@ cppPointerParamDoc n t = t <+> text "&" <> text n
 cppsMethod :: Label -> Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 
   text n <> parens ps <+> bStart,
-  oneTab b,
+  indent b,
   bEnd]
   where ttype | isDtor n = empty
               | otherwise = t
 
 cppsFunction :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsFunction n t ps b bStart bEnd = vcat [t <+> text n <> parens ps <+> bStart,
-  oneTab b,
+  indent b,
   bEnd]
 
 cpphMethod :: Label -> Doc -> Doc -> Doc -> Doc
@@ -1701,9 +1703,9 @@ cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
 cppMainMethod :: Doc -> Doc -> Doc -> Doc -> Doc
 cppMainMethod t b bStart bEnd = vcat [
   t <+> text "main" <> parens (text "int argc, const char *argv[]") <+> bStart,
-  oneTab b,
+  indent b,
   blank,
-  oneTab $ text "return 0;",
+  indent $ text "return 0;",
   bEnd]
 
 cpphVarsFuncsList :: ScopeTag -> [StateVarData] -> [MethodData] -> Doc
@@ -1719,12 +1721,12 @@ cpphClass n p pubs privs pub priv inhrt bStart bEnd end =
                             Just pn -> inhrt <+> pub <+> text pn
   in vcat [
       classDec <+> text n <+> baseClass <+> bStart,
-      oneTabbed [
+      indentList [
         pub <> colon,
-        oneTab pubs,
+        indent pubs,
         blank,
         priv <> colon,
-        oneTab privs],
+        indent privs],
       bEnd <> end]
 
 cppMainClass :: Bool -> Doc -> Doc -> Doc
@@ -1736,7 +1738,7 @@ cppMainClass b vs fs = vcat [
 cpphEnum :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
 cpphEnum n es bStart bEnd end = vcat [
   text "enum" <+> text n <+> bStart,
-  oneTab es,
+  indent es,
   bEnd <> end]
 
 cppModuleDoc :: Doc -> Doc -> Doc -> Doc -> Doc -> Doc

@@ -7,6 +7,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (
   CSharpCode(..)
 ) where
 
+import Utils.Drasil (indent)
+
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
@@ -39,8 +41,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   addCommentsDocD, callFuncParamList, getterName, setterName, setMain, setEmpty,
   statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  oneTab,  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
-  lift4Pair, liftPairFst)
+  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
+  liftPairFst)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -578,10 +580,10 @@ csThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg
 csTryCatch :: Doc -> Doc -> Doc
 csTryCatch tb cb= vcat [
   text "try" <+> lbrace,
-  oneTab tb,
+  indent tb,
   rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> 
     lbrace,
-  oneTab cb,
+  indent cb,
   rbrace]
 
 csDiscardInput :: (Doc, Maybe String) -> Doc

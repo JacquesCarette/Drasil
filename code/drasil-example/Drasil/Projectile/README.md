@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 28, 2019
+Last updated: June 17, 2019
 --------------------------------------------------
 
 **src**
@@ -17,6 +17,9 @@ Concepts.hs
 
 DataDefs.hs
   - The data definitions for Projectile
+
+Figures.hs
+  - The figures for Projectile
 
 GenDefs.hs
   - The general definitions for Projectile

@@ -21,13 +21,13 @@ import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc,
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', input_,
-  output_, physicalSystem, physics, physSyst, problem, srsDomains, srs, system)
+  output_, physics, physSyst, problem, srsDomains, srs, system)
 import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (constAccel, iVel, physicCon, physicCon', position, twoD)
+import Data.Drasil.Concepts.Physics (constAccel, physicCon, physicCon', position, twoD)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
-import Data.Drasil.Quantities.Physics (iSpeed, physicscon)
+import Data.Drasil.Quantities.Physics (iVel, physicscon)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 
@@ -37,6 +37,7 @@ import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, projectileTitle, launcher,
   projectile, target)
 import Drasil.Projectile.DataDefs (dataDefns)
+import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
@@ -145,9 +146,6 @@ refBy = generateRefbyMap label
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
 
-resourcePath :: String
-resourcePath = "../../../datafiles/Projectile/"
-
 -------------------------
 -- Problem Description --
 -------------------------
@@ -188,12 +186,8 @@ physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) 
 systDescList :: [Sentence]
 systDescList = map foldlSent [
   [S "The", phrase launcher],
-  [S "The", phrase projectile, sParen (S "with" +:+ getTandS iSpeed `sAnd` getTandS launAngle)],
+  [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `sAnd` getTandS launAngle)],
   [S "The", phrase target]]
-
-figLaunch :: LabelledContent
-figLaunch = llcc (makeFigRef "Launch") $ figWithWidth (S "The" +:+ phrase physicalSystem)
-  (resourcePath ++ "Launch.jpg") 70
 
 ---------------------
 -- Goal Statements --

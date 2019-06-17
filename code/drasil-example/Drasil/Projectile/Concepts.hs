@@ -21,14 +21,14 @@ messages = [hitMessage, shortMessage, longMessage]
 projectileTitle :: CI
 projectileTitle = commonIdeaWithDict "projectileTitle" (pn "Projectile") "Projectile" [physics]
 
-duration, landingPos, launch, launchAngle, launchDur, launchSpeed, offset, targetPos :: NamedChunk
+duration, flightDur, landingPos, launch, launchAngle, launchSpeed, offset, targetPos :: NamedChunk
 duration   = nc "duration" (nounPhraseSP "duration")
 launch     = nc "launch"   (nounPhraseSP "launch") -- FIXME: Used as adjective
 offset     = nc "offset"   (nounPhraseSent $ S "offset between the" +:+ phrase targetPos `andThe` phrase landingPos)
 
+flightDur   = compoundNC (nc "flight"  (nounPhraseSP "flight" )) duration
 landingPos  = compoundNC (nc "landing" (nounPhraseSP "landing")) position
 launchAngle = compoundNC launch angle
-launchDur   = compoundNC launch duration
 launchSpeed = compoundNC launch speed
 targetPos   = compoundNC target position
 

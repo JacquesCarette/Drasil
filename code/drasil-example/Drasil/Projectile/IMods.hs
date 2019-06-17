@@ -17,7 +17,7 @@ import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import Drasil.Projectile.GenDefs (posVecGD)
 import Drasil.Projectile.Unitals (isHit, isShort, launAngle, landPos,
-  launDur, launSpeed, offset, targPos)
+  flightDur, launSpeed, offset, targPos)
 
 iMods :: [InstanceModel]
 iMods = [timeIM, distanceIM, shortIM, offsetIM, hitIM]
@@ -25,18 +25,18 @@ iMods = [timeIM, distanceIM, shortIM, offsetIM, hitIM]
 ---
 timeIM :: InstanceModel
 timeIM = imNoRefs timeRC [qw launSpeed, qw launAngle]
-  [sy launSpeed $> 0, 0 $< sy launAngle $< 90] (qw launDur)
-  [sy launDur $> 0] timeDeriv "calOfLandingTime" [timeNotes]
+  [sy launSpeed $> 0, 0 $< sy launAngle $< 90] (qw flightDur)
+  [sy flightDur $> 0] timeDeriv "calOfLandingTime" [timeNotes]
 
 timeRC :: RelationConcept
 timeRC = makeRC "timeRC" (nounPhraseSP "calculation of landing time")
-  timeNotes $ sy launDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
+  timeNotes $ sy flightDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
 
 timeNotes :: Sentence
 timeNotes = EmptyS
 
 timeDeriv :: Derivation
-timeDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase launDur)) :
+timeDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase flightDur)) :
                weave [timeDerivSents, map E timeDerivEqns]
 
 timeDerivSents :: [Sentence]
@@ -50,24 +50,24 @@ timeDerivSent1 = foldlSentCol [S "We know that" +:+.
   S "Substituting these", plural value, S "into the y-direction" `sOf`
   makeRef2S posVecGD, S "gives us"]
 timeDerivSent2 = foldlSentCol [S "To find the", phrase time, S "that the",
-  phrase projectile, S "lands" `sC` S "we want to find the", E (sy time), 
-  phrase value, sParen (E (sy launDur)), S "where", E (sy yPos $= 0) +:+.
+  phrase projectile, S "lands" `sC` S "we want to find the", ch time,
+  phrase value, sParen (ch flightDur), S "where", E (sy yPos $= 0) +:+.
   sParen (S "since the" +:+ phrase target `sIs` S "on the x-axis from" +:+
   makeRef2S targetXAxis), S "From the", phrase equation, S "above", S "we get"]
-timeDerivSent3 = foldlSentCol [S "Divide by", E (sy launDur),
-  sParen (S "with the" +:+ phrase constraint +:+ E (sy launDur $> 0)),
-  S "to get"]
-timeDerivSent4 = S "Solving for" +:+ E (sy launDur) +: S "gives us"
+timeDerivSent3 = foldlSentCol [S "Dividing by", ch flightDur,
+  sParen (S "with the" +:+ phrase constraint +:+ E (sy flightDur $> 0)),
+  S "gives us"]
+timeDerivSent4 = S "Solving for" +:+ ch flightDur +: S "gives us"
 
 timeDerivEqns :: [Expr]
 timeDerivEqns = [timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4, timeDerivEqn5]
 
 timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4, timeDerivEqn5 :: Expr
 timeDerivEqn1 = sy yPos $= sy iyVel * sy time - sy gravitationalAccel * square (sy time) / 2
-timeDerivEqn2 = sy iyVel * sy launDur - sy gravitationalAccel * square (sy launDur) / 2 $= 0
-timeDerivEqn3 = sy iyVel - sy gravitationalAccel * sy launDur / 2 $= 0
-timeDerivEqn4 = sy launDur $= 2 * sy iyVel / sy gravitationalAccel
-timeDerivEqn5 = sy launDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
+timeDerivEqn2 = sy iyVel * sy flightDur - sy gravitationalAccel * square (sy flightDur) / 2 $= 0
+timeDerivEqn3 = sy iyVel - sy gravitationalAccel * sy flightDur / 2 $= 0
+timeDerivEqn4 = sy flightDur $= 2 * sy iyVel / sy gravitationalAccel
+timeDerivEqn5 = sy flightDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
 
 ---
 distanceIM :: InstanceModel
@@ -100,8 +100,8 @@ distanceDerivSent1 = foldlSentCol [S "We know that" +:+.
   S "Substituting these", plural value, S "into the x-direction" `sOf`
   makeRef2S posVecGD, S "gives us"]
 distanceDerivSent2 = foldlSentCol [S "To find the horizontal", phrase distance,
-  S "travelled" `sC` S "we want to find the", E (sy xPos), phrase value,
-  sParen (E (sy landPos)), S "at", phrase launDur,
+  S "travelled" `sC` S "we want to find the", ch xPos, phrase value,
+  sParen (ch landPos), S "at", phrase flightDur,
   sParen (S "from" +:+ makeRef2S timeIM)]
 distanceDerivSent3 = S "Rearranging this" +:+ phrase equation +: S "gives us"
 

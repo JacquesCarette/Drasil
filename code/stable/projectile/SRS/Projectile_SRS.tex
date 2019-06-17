@@ -510,7 +510,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$t'$ is the launch duration (s)}
+              \item{$t'$ is the flight duration (s)}
               \item{${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (${}^{\circ}$)}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
@@ -523,7 +523,7 @@ Source & --
 RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[calcValues]{FR: Calculate-Values}.
 \\ \bottomrule \end{tabular}
 \end{minipage}
-Detailed derivation of launch duration:
+Detailed derivation of flight duration:
 We know that ${{p_{y}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{y}}^{c}}=-g$ (\hyperref[accelYGravity]{A: accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
 \begin{displaymath}
 {p_{y}}={{v_{y}}^{i}} t-\frac{g t^{2}}{2}
@@ -532,7 +532,7 @@ To find the time that the projectile lands, we want to find the $t$ value ($t'$)
 \begin{displaymath}
 {{v_{y}}^{i}} t'-\frac{g t'^{2}}{2}=0
 \end{displaymath}
-Divide by $t'$ (with the constraint $t'>0$) to get:
+Dividing by $t'$ (with the constraint $t'>0$) gives us:
 \begin{displaymath}
 {{v_{y}}^{i}}-\frac{g t'}{2}=0
 \end{displaymath}
@@ -592,7 +592,7 @@ We know that ${{p_{x}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${
 \begin{displaymath}
 {p_{x}}={{v_{x}}^{i}} t
 \end{displaymath}
-To find the horizontal distance travelled, we want to find the ${p_{x}}$ value ($p'$) at launch duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
+To find the horizontal distance travelled, we want to find the ${p_{x}}$ value ($p'$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
 \begin{displaymath}
 p'=\frac{{{v_{x}}^{i}}\cdot{}2 {v^{i}} \sin\left(θ\right)}{g}
 \end{displaymath}

@@ -19,8 +19,8 @@ import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.Projectile.Concepts (hitMessage, longMessage, shortMessage)
 import Drasil.Projectile.IMods (timeIM, distanceIM, shortIM, offsetIM, hitIM)
-import Drasil.Projectile.Unitals (inputs, isHit, isShort, landPos, launAngle,
-  launDur, launSpeed, offset, targPos)
+import Drasil.Projectile.Unitals (flightDur, inputs, isHit, isShort, landPos,
+  launAngle, launSpeed, offset, targPos)
 
 {--Functional Requirements--}
 
@@ -48,11 +48,11 @@ verifyParamsDesc = foldlSent [S "Check the entered", plural inParam,
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
 calcValuesDesc = foldlSent [S "Calculate the following" +: plural quantity,
   foldlList Comma List [
-    ch launDur +:+ sParen (S "from" +:+ makeRef2S timeIM),
-    ch landPos +:+ sParen (S "from" +:+ makeRef2S distanceIM),
-    ch isShort +:+ sParen (S "from" +:+ makeRef2S shortIM),
-    ch offset  +:+ sParen (S "from" +:+ makeRef2S offsetIM),
-    ch isHit   +:+ sParen (S "from" +:+ makeRef2S hitIM)
+    ch flightDur +:+ sParen (S "from" +:+ makeRef2S timeIM),
+    ch landPos   +:+ sParen (S "from" +:+ makeRef2S distanceIM),
+    ch isShort   +:+ sParen (S "from" +:+ makeRef2S shortIM),
+    ch offset    +:+ sParen (S "from" +:+ makeRef2S offsetIM),
+    ch isHit     +:+ sParen (S "from" +:+ makeRef2S hitIM)
   ]]
 outputValuesDesc = foldlSent [S "If", ch isHit,
   sParen (S "from" +:+ makeRef2S hitIM) `sC` phrase output_, S "the",

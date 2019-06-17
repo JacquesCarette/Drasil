@@ -15,8 +15,8 @@ import Data.Drasil.SI_Units (degree, metre, second)
 import Data.Drasil.Units.Physics (velU)
 
 import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
-  launchDur, launchSpeed, projectile, targetPos, target)
-import qualified Drasil.Projectile.Concepts as C (offset)
+  launchSpeed, projectile, targetPos, target)
+import qualified Drasil.Projectile.Concepts as C (flightDur, offset)
 
 -- FIXME: Move to Defs?
 acronyms :: [CI]
@@ -38,7 +38,7 @@ outConstraints :: [UncertQ]
 outConstraints = [landPosUnc, offsetUnc]
 
 constrained :: [ConstrConcept]
-constrained = [landPos, launAngle, launDur, launSpeed, offset, targPos]
+constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 
 quantDicts :: [QuantityDict]
 quantDicts = [isShort, isHit]
@@ -51,10 +51,10 @@ launSpeedUnc = uq launSpeed defaultUncrt
 offsetUnc    = uq offset    defaultUncrt
 targPosUnc   = uq targPos   defaultUncrt
 
-landPos, launAngle, launDur, launSpeed, offset, targPos :: ConstrConcept
+flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
+flightDur = constrained' (dqd' flightDurConcept (const $ Concat [lT, Atomic "'"])  Real (Just second)) [gtZeroConstr] (dbl 1)
 landPos   = constrained' (dqd' landPosConcept   (const $ Concat [lP, Atomic "'"])  Real (Just metre))  [gtZeroConstr] (dbl 1)
 launAngle = constrained' (dqd' launAngleConcept (const lTheta)                     Real (Just degree)) [physc $ Bounded (Exc, 0) (Exc, 90)] (int 45)
-launDur   = constrained' (dqd' launDurConcept   (const $ Concat [lT, Atomic "'"])  Real (Just second)) [gtZeroConstr] (dbl 1)
 launSpeed = constrained' (dqd' launSpeedConcept (const $ sup lV lI)                Real (Just velU))   [gtZeroConstr] (int 100)
 offset    = constrained' (dqd' offsetConcept    (const $ sub lD $ Atomic "offset") Real (Just metre))  [gtZeroConstr] (dbl 1)
 targPos   = constrained' (dqd' targPosConcept   (const $ sub lP $ Atomic "target") Real (Just metre))  [gtZeroConstr] (int 100)
@@ -78,8 +78,8 @@ offsetConcept = cc' C.offset (S "The offset between the" +:+. (phrase targetPos 
 targPosConcept :: ConceptChunk
 targPosConcept = cc' targetPos $ foldlSent [S "The", phrase distance, S "from the", phrase launcher `toThe` phrase target]
 
-launDurConcept :: ConceptChunk
-launDurConcept = cc' launchDur $ foldlSent [S "The", phrase time, S "when the", phrase projectile, S "lands"]
+flightDurConcept :: ConceptChunk
+flightDurConcept = cc' C.flightDur $ foldlSent [S "The", phrase time, S "when the", phrase projectile, S "lands"]
 
 ---
 

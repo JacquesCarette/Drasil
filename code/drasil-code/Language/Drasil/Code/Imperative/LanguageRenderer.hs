@@ -28,8 +28,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  addCommentsDocD, callFuncParamList, getterName, setterName, setMain, setEmpty,
-  statementsToStateVars
+  addCommentsDocD, callFuncParamList, appendToBody, getterName, setterName, 
+  setMain, setEmpty, statementsToStateVars
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -651,6 +651,10 @@ dashes s l = replicate (l - length s) '-'
 
 callFuncParamList :: [ValData] -> Doc
 callFuncParamList vs = hcat (intersperse (text ", ") (map valDoc vs))
+
+appendToBody :: Doc -> (Doc, Terminator) -> Doc
+appendToBody b (s, _) = vcat [b, maybeBlank, s]
+  where maybeBlank = if isEmpty b then empty else blank
 
 getterName :: String -> String
 getterName s = "Get" ++ capitalize s

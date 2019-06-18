@@ -480,7 +480,7 @@ instance MethodSym PythonCode where
     paramListDocD ps) b, False)
 
   inOutFunc n s p ins [] b = function n s p void (map (uncurry stateParam) ins) b
-  inOutFunc n _ _ ins outs b = liftPairFst (liftA3 (pyInOutFunc n) (liftList paramListDocD (map (uncurry stateParam) ins)) b (multiReturn (map fst outs)), False)
+  inOutFunc n s p ins outs b = function n s p void (map (uncurry stateParam) ins) (liftA2 appendToBody b (state $ multiReturn (map fst outs)))
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
@@ -609,15 +609,6 @@ pyFunction :: Label -> Doc -> Doc -> Doc
 pyFunction n ps b = vcat [
   text "def" <+> text n <> parens ps <> colon,
   indent bodyD]
-  where bodyD | isEmpty b = text "None"
-              | otherwise = b
-
-pyInOutFunc :: Label -> Doc -> Doc -> (Doc, Terminator) -> Doc
-pyInOutFunc n ps b rs = vcat [
-  text "def" <+> text n <> parens ps <> colon,
-  indent bodyD,
-  blank,
-  indent $ fst rs]
   where bodyD | isEmpty b = text "None"
               | otherwise = b
 

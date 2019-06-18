@@ -36,7 +36,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   objVarDocD, inlineIfDocD, funcAppDocD, funcDocD, castDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD,
   publicDocD, classDec, dot, observerListName, doubleSlash, addCommentsDocD, 
-  callFuncParamList, getterName, setterName, setEmpty)
+  callFuncParamList, appendToBody, getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
@@ -510,6 +510,7 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
 
   function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
+  inOutFunc n s p ins outs b = pair (inOutFunc n (pfst s) (pfst p) (map (mapPairSnd pfst) ins) (map (mapPairSnd pfst) outs) (pfst b)) (inOutFunc n (psnd s) (psnd p) (map (mapPairSnd psnd) ins) (map (mapPairSnd psnd) outs) (psnd b))
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -1027,6 +1028,8 @@ instance MethodSym CppSrcCode where
   function n s _ t ps b = liftA2 (mthd False) (fmap snd s) (liftA5 
     (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
 
+  inOutFunc n s p ins outs b = method n "" s p void (map (uncurry pointerParam) outs ++ map (uncurry stateParam) (filter (\(l,_) -> not $ l `elem` (map fst outs)) ins)) b
+
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
   stateVar del l s p t = liftA3 svd (fmap snd s) (liftA4 (stateVarDocD l) 
@@ -1462,6 +1465,10 @@ instance MethodSym CppHdrCode where
   destructor n _ = pubMethod ('~':n) n void [] (return empty)
 
   function n = method n ""
+  -- Need type info to determine whether to use stateParam or pointerParam
+  inOutFunc n s p ins [] b = function n s p void (map (uncurry stateParam) ins) b
+  inOutFunc n s p ins [(l,t)] b = function n s p t (map (uncurry stateParam) ins) (liftA2 appendToBody b $ state $ returnVar l)
+  inOutFunc n s p ins outs b = function n s p void (map (uncurry pointerParam) outs ++ map (uncurry stateParam) (filter (\(l,_) -> notElem l (map fst outs)) ins)) b
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData

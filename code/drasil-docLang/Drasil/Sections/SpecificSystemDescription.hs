@@ -19,12 +19,12 @@ module Drasil.Sections.SpecificSystemDescription
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (assumption, column, constraint, datum,
-  datumConstraint, definition, element, general, goalStmt, information, input_,
-  limitation, model, output_, physical, physicalConstraint, physicalSystem, problem,
-  problemDescription, purpose, quantity, requirement, section_, softwareConstraint,
-  solutionCharacteristic, specification, symbol_, system, theory, typUnc, uncertainty,
-  user, value, variable)
+import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
+  datum, datumConstraint, definition, element, general, goalStmt, information,
+  input_, limitation, model, output_, physical, physicalConstraint, physicalSystem,
+  problem, problemDescription, purpose, quantity, requirement, scope, section_,
+  softwareConstraint, solutionCharacteristic, specification, symbol_, system,
+  theory, typUnc, uncertainty, user, value, variable)
 import Data.Drasil.Concepts.Math (equation)
 
 import Data.Drasil.IdeaDicts (inModel, thModel)
@@ -48,11 +48,11 @@ intro_ = mkParagraph $ foldlSent [S "This", phrase section_, S "first presents t
 
 -- describe what a system is needed to accomplist
 probDescF :: Sentence -> [Section] -> Section
-probDescF prob = SRS.probDesc [mkParagraph $ foldlSent [S "A", phrase system, S "is needed to", prob]]
+probDescF prob = SRS.probDesc [mkParagraph $ foldlSent [S "A", phrase system `sIs` S "needed to", prob]]
                   
 --can take a (Just sentence) if needed or Nothing if not
 termDefnF :: Maybe Sentence -> [Contents] -> Section
-termDefnF end otherContents = SRS.termAndDefn (intro:otherContents) []
+termDefnF end otherContents = SRS.termAndDefn (intro : otherContents) []
       where lastF Nothing  = EmptyS
             lastF (Just s) = S "." +:+ s
             intro = foldlSP [S "This subsection provides a list of terms", 
@@ -91,8 +91,10 @@ assumpF otherContents = SRS.assumpt (assumpIntro : otherContents) []
   where
     assumpIntro = mkParagraph $ foldlSent 
       [S "This", phrase section_, S "simplifies the original", phrase problem,
-      S "and helps in developing the", plural thModel, S "by filling in the", 
-      S "missing", phrase information, S "for the", phrase physicalSystem]
+       S "and helps in developing the", plural thModel, S "by filling in the", 
+       S "missing", phrase information, S "for the" +:+. phrase physicalSystem,
+       S "The", plural assumption, S "refine the", phrase scope,
+       S "by providing more detail"]
 
 --wrapper for thModelIntro
 thModF :: (Idea a) => a -> [Contents] -> Section

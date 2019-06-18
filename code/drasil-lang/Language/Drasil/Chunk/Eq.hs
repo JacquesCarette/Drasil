@@ -40,9 +40,8 @@ fromEqn nm desc def symb sp un =
   EC (mkQuant nm desc symb sp (Just $ unitWrapper un) Nothing) def
 
 -- | Same as fromEqn, but has no units.
---FIXME: Space hack
-fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
-fromEqn' nm desc def symb = EC (mkQuant nm desc symb Real Nothing Nothing) def
+fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> Expr -> QDefinition
+fromEqn' nm desc def symb sp = EC (mkQuant nm desc symb sp Nothing Nothing) def
 
 -- | For when the symbol changes depending on the stage
 --FIXME: Space hack

@@ -406,7 +406,8 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   continue :: repr (Statement repr)
 
   returnState :: repr (Value repr) -> repr (Statement repr)
-  returnVar :: Label -> repr (StateType repr) -> repr (Statement repr)
+  returnVar :: Label -> repr (Statement repr) -> repr (Statement repr)
+  multiReturn :: [repr (Value repr)] -> repr (Statement repr)
 
   valState :: repr (Value repr) -> repr (Statement repr)
 
@@ -499,6 +500,11 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr) 
+
+  -- The two lists are inputs and outputs, respectively
+  inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
+    [(Label, repr (StateType repr))] -> [(Label, repr (StateType repr))] -> 
+    repr (Body repr) -> repr (Method repr)
 
 class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => 
   StateVarSym repr where

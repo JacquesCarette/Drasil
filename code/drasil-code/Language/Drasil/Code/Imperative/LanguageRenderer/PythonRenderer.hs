@@ -389,6 +389,7 @@ instance StatementSym PythonCode where
 
   returnState v = mkStNoEnd <$> fmap returnDocD v
   returnVar l t = mkStNoEnd <$> fmap returnDocD (var l t)
+  multiReturn vs = mkStNoEnd <$> fmap returnDocD (liftList callFuncParamList vs)
 
   valState v = mkStNoEnd <$> fmap valDoc v
 
@@ -475,9 +476,11 @@ instance MethodSym PythonCode where
   constructor n = method initName n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Python"
 
-
   function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList 
     paramListDocD ps) b, False)
+
+  inOutFunc n s p ins [] b = function n s p void (map (uncurry stateParam) ins) b
+  inOutFunc n _ _ ins outs b = liftPairFst (liftA3 (pyInOutFunc n) (liftList paramListDocD (map (uncurry stateParam) ins)) b (multiReturn (map fst outs)), False)
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
@@ -606,6 +609,15 @@ pyFunction :: Label -> Doc -> Doc -> Doc
 pyFunction n ps b = vcat [
   text "def" <+> text n <> parens ps <> colon,
   indent bodyD]
+  where bodyD | isEmpty b = text "None"
+              | otherwise = b
+
+pyInOutFunc :: Label -> Doc -> Doc -> (Doc, Terminator) -> Doc
+pyInOutFunc n ps b rs = vcat [
+  text "def" <+> text n <> parens ps <> colon,
+  indent bodyD,
+  blank,
+  indent $ fst rs]
   where bodyD | isEmpty b = text "None"
               | otherwise = b
 

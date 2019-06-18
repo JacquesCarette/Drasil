@@ -19,10 +19,9 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
-  ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..),
-  dataConstraintUncertainty, goalStmtF, intro, mkDoc,
-  mkEnumSimpleD, probDescF, termDefnF,
-  tsymb'', getDocDesc, egetDocDesc, generateTraceMap,
+  ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
+  dataConstraintUncertainty, goalStmtF, intro, mkDoc, mkEnumSimpleD,
+  termDefnF, tsymb'', getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
   getSCSSub, physSystDescriptionLabel, generateTraceMap', traceMatStandard)
 
@@ -30,12 +29,11 @@ import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
   genDefn, dataDefn, datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
-  constant, constraint, definition, design, document, effect, endUser,
-  environment, goal, information, input_, interest, issue, loss, method_,
-  model, organization, physical, physics, problem, purpose, requirement,
-  software, softwareSys, srsDomains, symbol_, sysCont, system,
-  systemConstraint, template, type_, user, value, variable, physSyst,
-  doccon, doccon')
+  constant, constraint, definition, document, effect, endUser, environment,
+  goal, information, input_, interest, loss, method_, model, organization,
+  physical, physics, physSyst, problem, purpose, requirement, software,
+  softwareSys, srsDomains, symbol_, sysCont, system, systemConstraint,
+  template, type_, user, value, variable, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
@@ -78,11 +76,10 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index,
 
 tableOfSymbIntro :: [TSIntro]
 
-problemDesc, termsDefs, physSysDesc, goalStmt :: Section
+termsDefs, physSysDesc, goalStmt :: Section
 termsDefsList, physSysIntro, physSysConv, 
   physSysDescBullets, physSysFbd :: Contents
 goalsList :: [Contents]
-
 
 --Document Setup--
 thisSi :: [UnitDefn]
@@ -131,7 +128,8 @@ mkSRS = [RefSec $ RefProg intro
     GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
       UsrChars [userCharIntro], SystCons [sysConstraints] []],
     SSDSec $
-      SSDProg [SSDSubVerb problemDesc
+      SSDProg
+        [ SSDProblem   $ PDProg prob [termsDefs, physSysDesc, goalStmt]
         , SSDSolChSpec $ SCSProg
           [Assumptions
           , TMs [] (Label : stdFields) tMods
@@ -383,15 +381,17 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-problemDesc = probDescF EmptyS ssp ending [termsDefs, physSysDesc, goalStmt]
-  where ending = foldlSent_ [S "evaluate the", phrase fs `sOf` S "a",
-          phrasePoss slope, phrase slpSrf, S "and identify",
-          phrase crtSlpSrf `ofThe` phrase slope `sC` S "as well as the",
-          phrase intrslce, phrase normForce `sAnd` phrase shearForce,
-          S "along the" +:+. phrase crtSlpSrf, S "It is intended to be",
-          S "used as an educational tool for introducing", phrase slope,
-          S "stability", plural issue `sC` S "and to facilitate the",
-          phrase analysis `sAnd` phrase design `sOf` S "a safe", phrase slope]
+prob :: Sentence
+prob = foldlSent_ [S "evaluate the", phrase fs `sOf` S "a", phrasePoss slope,
+  phrase slpSrf `sAnd` S "identify", phrase crtSlpSrf `ofThe` phrase slope `sC`
+  S "as well as the", phrase intrslce, phrase normForce `sAnd` phrase shearForce,
+  S "along the", phrase crtSlpSrf]
+
+{-
+From when solution was used in Problem Description:
+  It is intended to be used as an educational tool for introducing slope stability
+  issues and to facilitate the analysis and design of a safe slope.
+-}
 
 -- SECTION 4.1.1 --
 termsDefs = termDefnF Nothing [termsDefsList]
@@ -412,7 +412,7 @@ physSysDesc = SRS.physSyst
 physSysIntro = physSystIntro ssp figPhysSyst
 
 physSystIntro :: (Idea a, HasShortName d, Referable d) => a -> d -> Contents
-physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst, S "of",
+physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst `sOf`
   short what `sC` S "as shown in", makeRef2S indexref `sC` 
   S "includes the following elements"]
 

@@ -1458,7 +1458,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:messageIM>IM: messageIM</a> <a href=#IM:hitIM>IM: hitIM</a> <a href=#calcValues>FR: Calculate-Values</a>.
+                          <a href=#outputValues>FR: Output-Values</a> <a href=#IM:messageIM>IM: messageIM</a> <a href=#IM:hitIM>IM: hitIM</a> <a href=#calcValues>FR: Calculate-Values</a>.
                         </p>
                       </td>
                     </tr>
@@ -1559,7 +1559,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputValues>FR: Output-Values</a> <a href=#calcValues>FR: Calculate-Values</a>.
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -1640,7 +1644,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR: Output-Values</a> <a href=#outputValues>FR: Output-Values</a> <a href=#calcValues>FR: Calculate-Values</a>.
+                          <a href=#calcValues>FR: Calculate-Values</a>.
                         </p>
                       </td>
                     </tr>
@@ -1747,12 +1751,12 @@
               </p>
               <p>
                 <div id="calcValues">
-                  Calculate-Values: Calculate the following quantities: <em>t'</em> (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>), <em>p'</em> (from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>), <em>isShort</em> (from <a href=#IM:shortIM>IM: shortIM</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>), and <em>isHit</em> (from <a href=#IM:hitIM>IM: hitIM</a>).
+                  Calculate-Values: Calculate the following quantities: <em>t'</em> (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>), <em>p'</em> (from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>), <em>isShort</em> (from <a href=#IM:shortIM>IM: shortIM</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>), <em>s</em> (from <a href=#IM:messageIM>IM: messageIM</a>), and <em>isHit</em> (from <a href=#IM:hitIM>IM: hitIM</a>).
                 </div>
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: If <em>isHit</em> (from <a href=#IM:hitIM>IM: hitIM</a>), output the output message as a string &quot;The target was hit.&quot; Otherwise, if <em>isShort</em> (from <a href=#IM:hitIM>IM: hitIM</a>), output the output message as a string &quot;The projectile fell short.&quot; and <em>d<sub>offset</sub></em>. Otherwise, output the output message as a string &quot;The projectile went long.&quot; and <em>d<sub>offset</sub></em>.
+                  Output-Values: Output <em>s</em> (from <a href=#IM:messageIM>IM: messageIM</a>) and <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>).
                 </div>
               </p>
             </div>

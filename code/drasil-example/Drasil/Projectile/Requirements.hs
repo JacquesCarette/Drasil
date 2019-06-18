@@ -5,11 +5,10 @@ import Language.Drasil
 import Drasil.DocLang (mkInputPropsTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Utils.Drasil
-import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (assumption, code, datumConstraint,
-  environment, funcReqDom, input_, likelyChg, message, mg, mis, module_,
+  environment, funcReqDom, input_, likelyChg, mg, mis, module_,
   nonFuncReqDom, output_, property, quantity, requirement, srs, traceyMatrix,
   unlikelyChg, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)
@@ -17,10 +16,9 @@ import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
-import Drasil.Projectile.Concepts (hitMessage, longMessage, shortMessage)
-import Drasil.Projectile.IMods (timeIM, distanceIM, shortIM, offsetIM, hitIM)
+import Drasil.Projectile.IMods (timeIM, distanceIM, messageIM, shortIM, offsetIM, hitIM)
 import Drasil.Projectile.Unitals (flightDur, inputs, isHit, isShort, landPos,
-  launAngle, launSpeed, offset, targPos)
+  launAngle, launSpeed, message, offset, targPos)
 
 {--Functional Requirements--}
 
@@ -52,15 +50,12 @@ calcValuesDesc = foldlSent [S "Calculate the following" +: plural quantity,
     ch landPos   +:+ sParen (S "from" +:+ makeRef2S distanceIM),
     ch isShort   +:+ sParen (S "from" +:+ makeRef2S shortIM),
     ch offset    +:+ sParen (S "from" +:+ makeRef2S offsetIM),
+    ch message   +:+ sParen (S "from" +:+ makeRef2S messageIM),
     ch isHit     +:+ sParen (S "from" +:+ makeRef2S hitIM)
   ]]
-outputValuesDesc = foldlSent [S "If", ch isHit,
-  sParen (S "from" +:+ makeRef2S hitIM) `sC` phrase output_, S "the",
-  phrase message, Quote (hitMessage ^. defn),
-  S "Otherwise, if", ch isShort, sParen (S "from" +:+ makeRef2S hitIM) `sC`
-  phrase output_, S "the", phrase message +:+. (Quote (shortMessage ^. defn) `sAnd`
-  ch offset), S "Otherwise" `sC` phrase output_, S "the", phrase message,
-  Quote (longMessage ^. defn) `sAnd` ch offset]
+outputValuesDesc = foldlSent [atStart output_, ch message,
+  sParen (S "from" +:+ makeRef2S messageIM) `sAnd` ch offset,
+  sParen (S "from" +:+ makeRef2S offsetIM)]
 
 {--Nonfunctional Requirements--}
 

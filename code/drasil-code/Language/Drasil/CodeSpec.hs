@@ -375,7 +375,7 @@ getExportOutput _ = [("write_output", "OutputFormat")]
 
 getDepsControl :: CodeSystInfo -> ModExportMap -> [String]
 getDepsControl cs mem = 
-  let ins = (extInputs cs) ++ map codevar (derivedInputs cs)
+  let ins = extInputs cs ++ map codevar (derivedInputs cs)
       ip = map (\x -> Map.lookup (codeName x) mem) ins
       inf = Map.lookup (funcPrefix ++ "get_input") mem
       dv = Map.lookup "derived_values" mem

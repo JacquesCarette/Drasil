@@ -37,7 +37,7 @@ acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, srs, thModel, typUnc]
 
 constants :: [QDefinition]
-constants = [tol]
+constants = [grav, tol]
 
 inputs :: [QuantityDict]
 inputs = map qw [launAngle, launSpeed, targPos]
@@ -100,5 +100,8 @@ message :: QuantityDict
 message = vc "message" (nounPhraseSent (S "output message as a string")) lS String
 
 ---
+grav :: QDefinition
+grav = mkQuantDef gravitationalAccel (dbl 9.8)
+
 tol :: QDefinition
 tol = mkQuantDef (vc "tol" (nounPhraseSP "tolerance for a hit") vEpsilon Rational) (Perc 2 2)

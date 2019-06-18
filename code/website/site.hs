@@ -11,29 +11,42 @@ import System.Directory (doesDirectoryExist, doesFileExist, listDirectory)
 import System.Environment (getEnv, lookupEnv)
 import System.FilePath (takeBaseName, takeExtension)
 
+-- type FilePath = String -- from System.FilePath
 type Name = String
 type SourceLocation = Maybe String
 type SRSVariants = [(Name, String)]
 data Example = E Name SourceLocation SRSVariants
 
+-- Returns FilePath of the SRS
 srsPath :: FilePath -> FilePath -> FilePath -> FilePath
 srsPath baseDir ex srs = baseDir ++ ex ++ "/" ++ srs
 
+-- Returns the Uppercase String of the given extension
 getExtensionName :: String -> String
 getExtensionName [] = error "Expected some file extension. Got none."
 getExtensionName [_] = error "Expected file extension. Got a single character."
 getExtensionName ('.':xs) = map toUpper xs
 getExtensionName _ = error "Expected some extension."
 
+-- returns a list of tuples, where each tuple is (Name, string) where string is "HTML" or "PDF"
 getSRS :: [Name] -> SRSVariants
 getSRS = map (\x -> (x, getExtensionName $ takeExtension x)) . filter (\x -> any (`endswith` x) [".pdf", ".html"])
 
 mkExamples :: String -> FilePath -> FilePath -> IO [Example]
 mkExamples repoRoot path srsDir = do
+  -- names will be a list of example names (Chipmunk, GlassBR, etc. of type FilePath)
   names <- sort <$> (listDirectory path >>= filterM (\x -> doesDirectoryExist $ path ++ x))
+
+  -- returns a list of Just sources or Nothing based on existence and contents of src file.
   sources <- mapM (\x -> doesFileExist (path ++ x ++ "/src") >>=
       \y -> if y then Just . (++) repoRoot . rstrip <$> readFile (path ++ x ++ "/src") else return Nothing) names
+
+  -- creates a list of SRSVariants, so a list of list of tuples.
+  -- the outer list has an element for each example.
   srss <- mapM (\x -> sort . getSRS <$> listDirectory (srsPath path x srsDir)) names
+
+  -- returns the IO list of examples with constructor E containing
+  -- the name of the example, sources (if applicable), and the list of Variants.
   return $ map (\(name, source, srs) -> E name source srs) $ zip3 names sources srss
 
 maybeField :: String -> (Item a -> Compiler (Maybe String)) -> Context a

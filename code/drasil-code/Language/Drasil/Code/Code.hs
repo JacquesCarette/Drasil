@@ -16,4 +16,5 @@ data CodeType = Boolean
               | String
               | File
               | List CodeType
+              | Iterator CodeType
               | Object String

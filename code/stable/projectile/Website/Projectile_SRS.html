@@ -210,6 +210,11 @@
                   <td>m/s</td>
                 </tr>
                 <tr>
+                  <td><em>ε</em></td>
+                  <td>Tolerance for a hit</td>
+                  <td>--</td>
+                </tr>
+                <tr>
                   <td><em>θ</em></td>
                   <td>Launch angle</td>
                   <td>rad</td>
@@ -1442,14 +1447,7 @@
                                                                  <span class="fdn">
                                                                    p<sub>target</sub>
                                                                  </span>
-                                                               </div>|&thinsp;&lt;&thinsp;<div class="fraction">
-                                                                                            <span class="fup">
-                                                                                              1
-                                                                                            </span>
-                                                                                            <span class="fdn">
-                                                                                              50
-                                                                                            </span>
-                                                                                          </div>
+                                                               </div>|&thinsp;&lt;&thinsp;ε
                                                             </span>
                                     </span>
                                     <span>
@@ -1475,6 +1473,7 @@
                             <em>d<sub>offset</sub></em> is the offset between the target position and the landing position (m)
                           </li>
                           <li><em>p<sub>target</sub></em> is the target position (m)</li>
+                          <li><em>ε</em> is the tolerance for a hit (Unitless)</li>
                         </ul>
                       </td>
                     </tr>
@@ -1677,6 +1676,31 @@
               </p>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:AuxConstants">
+      <div class="section">
+        <h1>Values of Auxiliary Constants</h1>
+        <p class="paragraph">
+          This section contains the standard values that are used for calculations in Projectile.
+        </p>
+        <div id="Table:TAuxConsts">
+          <table class="table">
+            <tr>
+              <th>Symbol</th>
+              <th>Description</th>
+              <th>Value</th>
+              <th>Unit</th>
+            </tr>
+            <tr>
+              <td><em>ε</em></td>
+              <td>tolerance for a hit</td>
+              <td><em>2.0e0%</em></td>
+              <td>--</td>
+            </tr>
+          </table>
+          <p class="caption">Auxiliary Constants</p>
         </div>
       </div>
     </div>

@@ -9,11 +9,12 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
 import Utils.Drasil
 import Control.Lens ((^.))
 
-import Drasil.DocLang (DerivationDisplay(ShowDerivation), DocDesc,
-  DocSection(IntroSec, RefSec, ReqrmntSec, SSDSec), Emphasis(Bold),
-  Field(..), Fields, InclUnits(IncludeUnits), IntroSec(IntroProg),
-  IntroSub(IScope), ProblemDescription(PDProg), RefSec(..),
-  RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
+import Drasil.DocLang (AuxConstntSec(AuxConsProg),
+  DerivationDisplay(ShowDerivation), DocDesc,
+  DocSection(AuxConstntSec, IntroSec, RefSec, ReqrmntSec, SSDSec),
+  Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
+  IntroSec(IntroProg), IntroSub(IScope), ProblemDescription(PDProg),
+  RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
   TSIntro(..), Verbosity(Verbose), dataConstraintUncertainty, generateTraceMap,
   generateTraceMap', goalStmtF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
@@ -47,8 +48,8 @@ import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
   nonfuncReqs, propsDeriv)
 import Drasil.Projectile.TMods (tMods)
-import Drasil.Projectile.Unitals (acronyms, inConstraints, launAngle,
-  outConstraints, symbols, unitalIdeas, unitalQuants)
+import Drasil.Projectile.Unitals (acronyms, constants, inConstraints,
+  launAngle, outConstraints, symbols, unitalIdeas, unitalQuants)
 
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
@@ -87,7 +88,9 @@ mkSRS = [
     ReqsProg
       [ FReqsSub funcReqs [inputParamsTable]
       , NonFReqsSub nonfuncReqs
-      ]
+      ],
+  AuxConstntSec $
+    AuxConsProg projectileTitle constants
   ]
 
 justification, scope1, scope2 :: Sentence

@@ -20,7 +20,7 @@ import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (posVecGD)
 import Drasil.Projectile.Unitals (flightDur, landPos, launAngle, launSpeed,
-  message, offset, targPos)
+  message, offset, targPos, tol)
 
 iMods :: [InstanceModel]
 iMods = [timeIM, distanceIM, offsetIM, messageIM]
@@ -128,7 +128,7 @@ messageIM = imNoDerivNoRefs messageRC [qw offset, qw targPos]
 messageRC :: RelationConcept
 messageRC = makeRC "messageRC" (nounPhraseSP "output message") 
   EmptyS $ sy message $= case_ [case1, case2, case3]
-  where case1 = (Str "The target was hit.",        UnaryOp Abs (sy offset / sy targPos) $< 0.02)
+  where case1 = (Str "The target was hit.",        UnaryOp Abs (sy offset / sy targPos) $< sy tol)
         case2 = (Str "The projectile fell short.", sy offset $< 0)
         case3 = (Str "The projectile went long.",  sy offset $> 0)
 

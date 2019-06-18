@@ -3,6 +3,7 @@ module Drasil.Projectile.Unitals where
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Data.Drasil.IdeaDicts
+import Theory.Drasil (mkQuantDef)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
@@ -25,7 +26,7 @@ import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset)
 
 symbols :: [QuantityDict]
-symbols = qw pi_ : unitalQuants ++ map qw [
+symbols = qw pi_ : unitalQuants ++ map qw constants ++ map qw [
   acceleration, constAccel, gravitationalAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, speed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
@@ -34,6 +35,9 @@ symbols = qw pi_ : unitalQuants ++ map qw [
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, srs, thModel, typUnc]
+
+constants :: [QDefinition]
+constants = [tol]
 
 inputs :: [QuantityDict]
 inputs = map qw [launAngle, launSpeed, targPos]
@@ -94,3 +98,7 @@ flightDurConcept = cc' C.flightDur $ foldlSent [S "The", phrase time, S "when th
 ---
 message :: QuantityDict
 message = vc "message" (nounPhraseSent (S "output message as a string")) lS String
+
+---
+tol :: QDefinition
+tol = mkQuantDef (vc "tol" (nounPhraseSP "tolerance for a hit") vEpsilon Rational) (Perc 2 2)

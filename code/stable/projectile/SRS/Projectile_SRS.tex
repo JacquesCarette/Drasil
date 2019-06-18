@@ -112,6 +112,8 @@ ${\mathbf{v}^{i}}$ & Initial velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
+$ε$ & Tolerance for a hit & --
+\\
 $θ$ & Launch angle & rad
 \\
 $π$ & Circumference to diameter ratio & --
@@ -732,7 +734,7 @@ Output Constraints &
 \\ \midrule \\
 Equation & \begin{displaymath}
            s=\begin{cases}
-The target was hit., & |\frac{{d_{offset}}}{{p_{target}}}|<\frac{1}{50}\\
+The target was hit., & |\frac{{d_{offset}}}{{p_{target}}}|<ε\\
 The projectile fell short., & {d_{offset}}<0\\
 The projectile went long., & {d_{offset}}>0
 \end{cases}
@@ -742,6 +744,7 @@ Description & \begin{symbDescription}
               \item{$s$ is the output message as a string (Unitless)}
               \item{${d_{offset}}$ is the offset between the target position and the landing position (m)}
               \item{${p_{target}}$ is the target position (m)}
+              \item{$ε$ is the tolerance for a hit (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${d_{offset}}$ is from \hyperref[IM:offsetIM]{IM: offsetIM}.
@@ -827,4 +830,19 @@ This section provides the non-functional requirements, the qualities that the so
 \item[Maintainable:\phantomsection\label{maintainable}]The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
 \item[Portable:\phantomsection\label{portable}]The code is able to be run in different environments.
 \end{itemize}
+\section{Values of Auxiliary Constants}
+\label{Sec:AuxConstants}
+This section contains the standard values that are used for calculations in Projectile.
+\begin{longtable}{l l l l}
+\toprule
+Symbol & Description & Value & Unit
+\\
+\midrule
+\endhead
+$ε$ & tolerance for a hit & $2.0e0\%$ & --
+\\
+\bottomrule
+\caption{Auxiliary Constants}
+\label{Table:TAuxConsts}
+\end{longtable}
 \end{document}

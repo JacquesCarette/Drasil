@@ -8,7 +8,7 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (assumpDom)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (acceleration, cartesian, collision,
-  distance, time, twoD)
+  distance, gravity, time, twoD)
 
 import Drasil.Projectile.Concepts (launcher, projectile, target)
 
@@ -42,7 +42,7 @@ cartSystDesc :: Sentence
 cartSystDesc = S "A" +:+ (phrase cartesian `sIs` S "used") +:+. sParen (S "from" +:+ makeRef2S neglectCurv)
 
 yAxisGravityDesc :: Sentence
-yAxisGravityDesc = S "direction" `ofThe'` S "y-axis is directed opposite to gravity."
+yAxisGravityDesc = S "direction" `ofThe'` S "y-axis is directed opposite to" +:+. phrase gravity
 
 launchOriginDesc :: Sentence
 launchOriginDesc = S "The" +:+. (phrase launcher `sIs` S "coincident with the origin")  
@@ -61,8 +61,8 @@ accelXZeroDesc :: Sentence
 accelXZeroDesc = S "The" +:+ phrase acceleration +:+. (S "in the x-direction" `sIs` S "zero")
 
 accelYGravityDesc :: Sentence
-accelYGravityDesc = S "The" +:+ phrase acceleration +:+ S "in the y-direction" `isThe`
-                    phrase acceleration +:+ S "due to gravity" +:+. sParen (S "from" +:+ makeRef2S yAxisGravity)
+accelYGravityDesc = S "The" +:+ phrase acceleration +:+ S "in the y-direction" `isThe` phrase acceleration +:+
+                    S "due to" +:+ phrase gravity +:+. sParen (S "from" +:+ makeRef2S yAxisGravity)
 
 neglectDragDesc :: Sentence
 neglectDragDesc = S "Air drag" `sIs` S "neglected."

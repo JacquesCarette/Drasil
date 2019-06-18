@@ -12,8 +12,8 @@ physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
   chgInVelocity, cohesion, collision, compression, constAccel, constAccelV,
   damping, displacement, distance, elasticity, energy, fSpeed, fVel, fbd,
-  force, friction, gravitationalAccel, gravitationalConst, height, iPos,
-  iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel,
+  force, friction, gravity, gravitationalAccel, gravitationalConst, height,
+  iPos, iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel,
   joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rightHand,
   rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
@@ -26,8 +26,8 @@ physicCon' = [oneD, twoD, threeD]
 acceleration, angAccel, angDisp, angVelo, angular, cartesian, chgInVelocity,
   cohesion, collision, compression, constAccel, constAccelV, damping,
   displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
-  friction, gravitationalAccel, gravitationalConst, height, iPos, iSpeed,
-  iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel, joint,
+  friction, gravity, gravitationalAccel, gravitationalConst, height, iPos,
+  iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel, joint,
   kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
   position, potEnergy, pressure, restitutionCoef, rightHand, rigidBody,
   scalarAccel, scalarPos, space, speed, strain, stress, tension, time, torque,
@@ -172,6 +172,7 @@ impulseV   = dcc "impulseV" (cn "impulse (vector)")
    "A force acting briefly on a body and producing a finite change of momentum in a given direction" 
 impulseS   = dcc "impulseS" (cn "impulse (scalar)") "A force acting briefly on a body and producing a finite change of momentum" 
 
+gravity = dcc "gravity" (cn "gravity") "The force that attracts one physical body with mass to another"
 gravitationalAccel = dcc "gravitationalAccel" 
   (cn "gravitational acceleration") "An expression used in physics to indicate the intensity of a gravitational field"
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant" )
@@ -197,8 +198,7 @@ damping = dcc "damping" (cn' "damping")
   "An effect that tends to reduce the amplitude of vibrations"
 
 cohesion = dccWDS "cohesion" (cn "cohesion") (S "An attractive" +:+ 
-  phrase force +:+ S "between adjacent particles that holds the matter" +:+
-  S "together.")
+  phrase force +:+. S "between adjacent particles that holds the matter together")
 
 isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
   phrase value `sOf` S "a" +:+ phrase property +:+ S "is independent of" +:+

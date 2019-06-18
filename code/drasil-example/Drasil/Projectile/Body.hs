@@ -24,7 +24,8 @@ import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', input_,
   output_, physics, physSyst, problem, srsDomains, srs, system)
 import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (constAccel, physicCon, physicCon', position, twoD)
+import Data.Drasil.Concepts.Physics (constAccel, gravity, physicCon, physicCon',
+  position, twoD)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
 import Data.Drasil.Quantities.Math (pi_)
@@ -174,7 +175,7 @@ termsAndDefs = termDefnF Nothing [termsAndDefsBullets]
 
 termsAndDefsBullets :: Contents
 termsAndDefsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $
-  map tAndDMap [launcher, projectile, target]
+  map tAndDMap [launcher, projectile, target, gravity]
   where
     tAndDMap c = Flat $ foldlSent [atStart c +: EmptyS, c ^. defn]
 

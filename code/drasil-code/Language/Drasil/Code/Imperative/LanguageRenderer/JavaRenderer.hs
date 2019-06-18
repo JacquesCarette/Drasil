@@ -435,7 +435,8 @@ instance StatementSym JavaCode where
   continue = return (mkSt continueDocD)
 
   returnState v = mkSt <$> fmap returnDocD v
-  returnVar l t = mkSt <$> fmap returnDocD (var l t)
+  returnVar l = mkSt <$> fmap returnDocD (var l t)
+  multiReturn _ = error "Cannot return multiple values in Java"
 
   valState v = mkSt <$> fmap valDoc v
 

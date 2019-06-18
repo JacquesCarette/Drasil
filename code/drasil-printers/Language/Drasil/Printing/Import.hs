@@ -90,17 +90,17 @@ expr (Dbl d)           sm = case sm ^. getSetting of
   Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
      (fst $ processExpo $ snd $ floatToDigits 10 d) 0
      (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
-  Scientific           ->  P.Dbl d
+  Scientific  ->  P.Dbl d
 expr (Int i)            _ = P.Int i
 expr (Str s)            _ = P.Str s
-expr (Perc a b)         _ = P.Row [P.Dbl val, P.MO P.Perc]
+expr (Perc a b)        sm = P.Row [expr (Dbl val) sm, P.MO P.Perc]
   where
     val = fromIntegral a / (10 ** fromIntegral (b - 2))
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
 expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
 expr (AssocA Add l)    sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
 expr (AssocA Mul l)    sm = P.Row $ mulExpr l sm
-expr (Deriv Part a b) sm =
+expr (Deriv Part a b)  sm =
   P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
         (P.Row [P.Spec Partial, P.Spc P.Thin,
                 symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb])

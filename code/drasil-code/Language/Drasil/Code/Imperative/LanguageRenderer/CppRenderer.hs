@@ -131,9 +131,6 @@ instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
   outfile = pair outfile outfile
   listType p st = pair (listType (pfst p) (pfst st)) (listType (psnd p) 
     (psnd st))
-  intListType p = pair (intListType $ pfst p) (intListType $ psnd p)
-  floatListType p = pair (floatListType $ pfst p) (floatListType $ psnd p)
-  boolListType = pair boolListType boolListType
   obj t = pair (obj t) (obj t)
   enumType t = pair (enumType t) (enumType t)
   iterator t = pair (iterator $ pfst t) (iterator $ psnd t)

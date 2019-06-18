@@ -211,7 +211,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[yAxisGravity:\phantomsection\label{yAxisGravity}]The direction of the y-axis is directed opposite to gravity. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[accelYGravity]{A: accelYGravity}.
 \item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the x-axis (from \hyperref[neglectCurv]{A: neglectCurv}). \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
-\item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
+\item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:offsetIM]{IM: offsetIM} \hyperref[IM:messageIM]{IM: messageIM} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant (from \hyperref[accelXZero]{A: accelXZero}, \hyperref[accelYGravity]{A: accelYGravity}, \hyperref[neglectDrag]{A: neglectDrag}, and \hyperref[freeFlight]{A: freeFlight}). \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
 \item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero. \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[constAccel]{A: constAccel}.
 \item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A: yAxisGravity}). \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[constAccel]{A: constAccel}.
@@ -219,7 +219,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass. \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectPos]{GD: rectPos}.
 \item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile. \hyperref[constAccel]{A: constAccel}.
 \item[neglectCurv:\phantomsection\label{neglectCurv}]The distance is small enough that the curvature of the Earth can be neglected. \hyperref[targetXAxis]{A: targetXAxis} \hyperref[cartSyst]{A: cartSyst}.
-\item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero. \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectPos]{GD: rectPos}.
+\item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectPos]{GD: rectPos}.
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -580,6 +580,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+        The constraint $t'>0$ is from \hyperref[timeStartZero]{A: timeStartZero}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -643,8 +644,8 @@ Description & \begin{symbDescription}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The constraint $p'>0$ is from \hyperref[posXDirection]{A: posXDirection}.
-        The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+        The constraint $p'>0$ is from \hyperref[posXDirection]{A: posXDirection}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -678,20 +679,18 @@ p'=\frac{2 {v^{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
 \\ \midrule \\
 Label & Offset
 \\ \midrule \\
-Input & ${p_{target}}$, $p'$
+Input & $p'$, ${p_{target}}$
 \\ \midrule \\
 Output & ${d_{offset}}$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {p_{target}}>0
-                    \end{displaymath}
-                    \begin{displaymath}
                     p'>0
                     \end{displaymath}
+                    \begin{displaymath}
+                    {p_{target}}>0
+                    \end{displaymath}
 \\ \midrule \\
-Output Constraints & \begin{displaymath}
-                     {d_{offset}}>0
-                     \end{displaymath}
+Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
            {d_{offset}}=p'-{p_{target}}
@@ -704,6 +703,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $p'$ is from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
+        The constraints $p'>0$ and ${p_{target}}>0$ are from \hyperref[posXDirection]{A: posXDirection}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -745,6 +745,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${d_{offset}}$ is from \hyperref[IM:offsetIM]{IM: offsetIM}.
+        The constraint ${p_{target}}>0$ is from \hyperref[posXDirection]{A: posXDirection}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\

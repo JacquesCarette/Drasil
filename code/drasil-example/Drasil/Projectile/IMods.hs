@@ -14,7 +14,7 @@ import Data.Drasil.Quantities.Physics (distance, gravitationalAccel, iSpeed,
   ixPos, ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
 
 import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, launchOrigin,
-  posXDirection, targetXAxis, yAxisGravity)
+  posXDirection, targetXAxis, timeStartZero, yAxisGravity)
 import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import Drasil.Projectile.Figures (figLaunch)
@@ -29,7 +29,7 @@ iMods = [timeIM, distanceIM, offsetIM, messageIM]
 timeIM :: InstanceModel
 timeIM = imNoRefs timeRC [qw launSpeed, qw launAngle]
   [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw flightDur)
-  [sy flightDur $> 0] timeDeriv "calOfLandingTime" [angleConstraintNote]
+  [sy flightDur $> 0] timeDeriv "calOfLandingTime" [angleConstraintNote, timeConsNote]
 
 timeRC :: RelationConcept
 timeRC = makeRC "timeRC" (nounPhraseSP "calculation of landing time")
@@ -73,7 +73,7 @@ timeDerivEqn5 = sy flightDur $= 2 * sy iSpeed * sin (sy launAngle) / sy gravitat
 distanceIM :: InstanceModel
 distanceIM = imNoRefs distanceRC [qw launSpeed, qw launAngle]
   [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw landPos)
-  [sy landPos $> 0] distanceDeriv "calOfLandingDist" [posDistNote, angleConstraintNote]
+  [sy landPos $> 0] distanceDeriv "calOfLandingDist" [angleConstraintNote, landPosConsNote]
 
 distanceExpr :: Expr
 distanceExpr = sy landPos $= 2 * square (sy iSpeed) * sin (sy launAngle) *
@@ -81,7 +81,7 @@ distanceExpr = sy landPos $= 2 * square (sy iSpeed) * sin (sy launAngle) *
 
 distanceRC :: RelationConcept
 distanceRC = makeRC "distanceRC" (nounPhraseSP "calculation of landing distance")
-  posDistNote distanceExpr
+  landPosConsNote distanceExpr
 
 distanceDeriv :: Derivation
 distanceDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase landPos)) :
@@ -113,8 +113,8 @@ distanceDerivEqn3 = sy landPos $= sy iSpeed * cos (sy launAngle) * 2 * sy iSpeed
 
 ---
 offsetIM :: InstanceModel
-offsetIM = imNoDerivNoRefs offsetRC [qw targPos, qw landPos]
-  [sy targPos $> 0, sy landPos $> 0] (qw offset) [sy offset $> 0] "offsetIM" [landPosNote]
+offsetIM = imNoDerivNoRefs offsetRC [qw landPos, qw targPos]
+  [sy landPos $> 0, sy targPos $> 0] (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
 offsetRC :: RelationConcept
 offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") 
@@ -123,7 +123,7 @@ offsetRC = makeRC "offsetRC" (nounPhraseSP "offset")
 ---
 messageIM :: InstanceModel
 messageIM = imNoDerivNoRefs messageRC [qw offset, qw targPos]
-  [sy targPos $> 0] (qw message) [] "messageIM" [offsetNote]
+  [sy targPos $> 0] (qw message) [] "messageIM" [offsetNote, targPosConsNote]
 
 messageRC :: RelationConcept
 messageRC = makeRC "messageRC" (nounPhraseSP "output message") 
@@ -134,16 +134,25 @@ messageRC = makeRC "messageRC" (nounPhraseSP "output message")
 
 --- Notes
 
-angleConstraintNote, landPosNote, offsetNote, posDistNote :: Sentence
+angleConstraintNote, landAndTargPosConsNote, landPosNote, landPosConsNote, offsetNote, targPosConsNote, timeConsNote :: Sentence
 
 angleConstraintNote = foldlSent [S "The", phrase constraint,
   E (0 $< sy launAngle $< (sy pi_ / 2)) `sIs` S "from",
   makeRef2S posXDirection `sAnd` makeRef2S yAxisGravity `sC`
   S "and is shown" `sIn` makeRef2S figLaunch]
 
+landAndTargPosConsNote = S "The" +:+ plural constraint +:+
+  E (sy landPos $> 0) `sAnd` E (sy targPos $> 0) `sAre` S "from" +:+. makeRef2S posXDirection
+
 landPosNote = ch landPos `sIs` S "from" +:+. makeRef2S distanceIM
+
+landPosConsNote = S "The" +:+ phrase constraint +:+
+  E (sy landPos $> 0) `sIs` S "from" +:+. makeRef2S posXDirection
 
 offsetNote = ch offset `sIs` S "from" +:+. makeRef2S offsetIM
 
-posDistNote = S "The" +:+ phrase constraint +:+ E (sy landPos $> 0) `sIs`
-              S "from" +:+. makeRef2S posXDirection
+targPosConsNote = S "The" +:+ phrase constraint +:+
+  E (sy targPos $> 0) `sIs` S "from" +:+. makeRef2S posXDirection
+
+timeConsNote = S "The" +:+ phrase constraint +:+
+  E (sy flightDur $> 0) `sIs` S "from" +:+. makeRef2S timeStartZero

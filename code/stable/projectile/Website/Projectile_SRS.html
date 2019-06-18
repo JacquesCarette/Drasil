@@ -411,7 +411,7 @@
                   </p>
                   <p>
                     <div id="posXDirection">
-                      posXDirection: The positive x-direction is from the launcher to the target. <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
+                      posXDirection: The positive x-direction is from the launcher to the target. <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#IM:offsetIM>IM: offsetIM</a> <a href=#IM:messageIM>IM: messageIM</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
                     </div>
                   </p>
                   <p>
@@ -451,7 +451,7 @@
                   </p>
                   <p>
                     <div id="timeStartZero">
-                      timeStartZero: Time starts at zero. <a href=#GD:rectVel>GD: rectVel</a> <a href=#GD:rectPos>GD: rectPos</a>.
+                      timeStartZero: Time starts at zero. <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#GD:rectVel>GD: rectVel</a> <a href=#GD:rectPos>GD: rectPos</a>.
                     </div>
                   </p>
                 </div>
@@ -1122,6 +1122,9 @@
                                                                                          </span>
                                                                                        </div></em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
+                        <p class="paragraph">
+                          The constraint <em>t'&thinsp;&gt;&thinsp;0</em> is from <a href=#timeStartZero>A: timeStartZero</a>.
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1254,9 +1257,6 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The constraint <em>p'&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A: posXDirection</a>.
-                        </p>
-                        <p class="paragraph">
                           The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
                                                                                          <span class="fup">
                                                                                            π
@@ -1265,6 +1265,9 @@
                                                                                            2
                                                                                          </span>
                                                                                        </div></em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
+                        </p>
+                        <p class="paragraph">
+                          The constraint <em>p'&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A: posXDirection</a>.
                         </p>
                       </td>
                     </tr>
@@ -1329,7 +1332,7 @@
                     <tr>
                       <th>Input</th>
                       <td>
-                        <p class="paragraph"><em>p<sub>target</sub></em>, <em>p'</em></p>
+                        <p class="paragraph"><em>p'</em>, <em>p<sub>target</sub></em></p>
                       </td>
                     </tr>
                     <tr>
@@ -1339,19 +1342,15 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
+                        <div class="equation"><em>p'&thinsp;&gt;&thinsp;0</em></div>
                         <div class="equation">
                           <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
                         </div>
-                        <div class="equation"><em>p'&thinsp;&gt;&thinsp;0</em></div>
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                      </td>
+                      <td></td>
                     </tr>
                     <tr>
                       <th>Equation</th>
@@ -1378,6 +1377,9 @@
                       <td>
                         <p class="paragraph">
                           <em>p'</em> is from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
+                        </p>
+                        <p class="paragraph">
+                          The constraints <em>p'&thinsp;&gt;&thinsp;0</em> and <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em> are from <a href=#posXDirection>A: posXDirection</a>.
                         </p>
                       </td>
                     </tr>
@@ -1481,6 +1483,9 @@
                       <td>
                         <p class="paragraph">
                           <em>d<sub>offset</sub></em> is from <a href=#IM:offsetIM>IM: offsetIM</a>.
+                        </p>
+                        <p class="paragraph">
+                          The constraint <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A: posXDirection</a>.
                         </p>
                       </td>
                     </tr>

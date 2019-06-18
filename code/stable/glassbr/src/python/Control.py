@@ -2,12 +2,12 @@ from __future__ import print_function
 import sys
 import math
 
+import InputParameters
 import InputFormat
 import DerivedValues
 import InputConstraints
 import OutputFormat
 import Calculations
-import InputParameters
 
 inputfile = sys.argv[1]
 inParams = InputParameters.InputParameters()

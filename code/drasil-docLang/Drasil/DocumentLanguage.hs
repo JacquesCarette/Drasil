@@ -171,7 +171,7 @@ data SSDSub where
 
 -- | Problem Description section
 data ProblemDescription where
-  PDProg :: Sentence -> CI -> Sentence -> [Section] -> ProblemDescription
+  PDProg :: Sentence -> [Section] -> ProblemDescription
 
 -- | Solution Characteristics Specification section
 data SolChSpec where
@@ -420,12 +420,11 @@ mkSSDSec si (SSDProg l) =
     mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
-mkSSDProb _ (PDProg start progName end subSec) =
-  SSD.probDescF start progName end subSec
+mkSSDProb _ (PDProg prob subSec) = SSD.probDescF prob subSec
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
-  SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) inModSec] $
+  SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) imStub] $
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
@@ -450,8 +449,7 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims
     mkSubSCS si' Assumptions =
-      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
-      map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
+      SSD.assumpF $ mkEnumSimpleD . map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
       asOrderedList $ _sysinfodb si' ^. conceptinsTable
       {-where
         -- Duplicated here to avoid "leaking" the definition from drasil-lang
@@ -462,24 +460,24 @@ mkSolChSpec si (SCSProg l) =
           show (length u) ++ " instead."-}
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
-    inModSec = SRS.inModel [mkParagraph EmptyS] []
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and
     -- then error out if necessary.
 
 helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
-helperCI a c = over defn (\x -> foldlSent_ [x, helperRefs a c]) a
+helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
+  where
+    refby EmptyS = EmptyS
+    refby sent   = sParen $ S "RefBy:" +:+. sent
+
 {--}
 
 -- | Section stubs for implicit referencing
-tmStub, gdStub, ddStub, imStub, lcStub, ucStub, pdStub:: Section
+tmStub, ddStub, imStub, pdStub :: Section
 tmStub = SRS.thModel   [] []
-gdStub = SRS.genDefn   [] []
 ddStub = SRS.dataDefn  [] []
 imStub = SRS.inModel   [] []
-lcStub = SRS.likeChg   [] []
-ucStub = SRS.unlikeChg [] []
 pdStub = SRS.probDesc  [] []
 
 -- | Helper for making the 'Requirements' section
@@ -487,7 +485,7 @@ mkReqrmntSec :: ReqrmntSec -> Section
 mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
-    mkSubs (FReqsSub frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
+    mkSubs (FReqsSub frs tbs) = R.fReqF  (mkEnumSimpleD frs ++ map LlC tbs)
     mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 {--}

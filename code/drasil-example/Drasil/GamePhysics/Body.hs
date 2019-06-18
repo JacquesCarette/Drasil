@@ -72,7 +72,7 @@ mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
   IntroSec $ IntroProg para1_introduction_intro (short chipmunk)
   [IPurpose para1_purpose_of_document_intro,
-   IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2,
+   IScope scope_of_requirements_intro_p1 EmptyS,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
    IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
    GSDSec $ GSDProg2 [
@@ -232,7 +232,7 @@ programDescription = foldlSent_ [phrase openSource, getAcc twoD,
 para1_purpose_of_document_param :: (Idea a, NamedIdea b) => a -> b -> Sentence -> Sentence ->
   [Sentence] -> Sentence
 para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldlSent 
-  [S "This", phrase typeOf, S "descibes the modeling of an",
+  [S "This", phrase typeOf, S "describes the modeling of an",
   progDescrip, S "used for" +:+. appOf, S "The", 
   foldlList Comma List listOf, S "used in", short progName, 
   S "are provided. This", phrase typeOf, 
@@ -243,15 +243,17 @@ para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldl
 ---------------------------------
 -- 2.2 : Scope of Requirements --
 ---------------------------------
-scope_of_requirements_intro_p1, scope_of_requirements_intro_p2 :: Sentence
+scope_of_requirements_intro_p1 :: Sentence
 
 scope_of_requirements_intro_p1 = foldlSent_
   [S "the", phrase physicalSim `sOf` getAcc twoD, 
   plural CP.rigidBody, S "acted on by", plural QP.force]
-  
-scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these", 
-  plural CP.rigidBody, S "interact with one another"]
 
+--scope_of_requirements_intro_p2 = EmptyS
+  
+{-scope_of_requirements_intro_p2 = foldlSent_ [S "simulates how these", 
+  plural CP.rigidBody, S "interact with one another"]
+-}
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------

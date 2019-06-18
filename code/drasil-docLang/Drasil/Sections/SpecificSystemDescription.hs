@@ -20,15 +20,14 @@ import Language.Drasil
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
-  datum, datumConstraint, element, general, goalStmt, information, input_,
-  likelyChg, limitation, model, output_, physical, physicalConstraint,
-  physicalSystem, problem, problemDescription, purpose, quantity, requirement,
-  section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
-  typUnc, uncertainty, unlikelyChg, user, value, variable)
+  datum, datumConstraint, definition, element, general, goalStmt, information,
+  input_, limitation, model, output_, physical, physicalConstraint, physicalSystem,
+  problem, problemDescription, purpose, quantity, requirement, scope, section_,
+  softwareConstraint, solutionCharacteristic, specification, symbol_, system,
+  theory, typUnc, uncertainty, user, value, variable)
 import Data.Drasil.Concepts.Math (equation)
-import Data.Drasil.Concepts.Software (program)
 
-import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.IdeaDicts (inModel, thModel)
 
 import qualified Drasil.DocLang.SRS as SRS
 
@@ -42,19 +41,18 @@ specSysDescr = SRS.specSysDes [intro_]
 -- Generates an introduction based on the system.
 intro_ :: Contents
 intro_ = mkParagraph $ foldlSent [S "This", phrase section_, S "first presents the", 
-  phrase problemDescription `sC` S "which gives a high-level view of the", phrase problem,
-  S "to be solved. This is followed by the", plural solutionCharacteristic, phrase specification `sC` 
-  S "which presents the", foldlList Comma List (map S ["assumptions", "theories", "definitions"]), S "that are used"]
+  phrase problemDescription `sC` S "which gives a high-level view of the",
+  phrase problem, S "to be solved. This is followed by the", plural solutionCharacteristic,
+  phrase specification `sC`  S "which presents the",
+  foldlList Comma List [plural assumption, plural theory, plural definition], S "that are used"]
 
--- give starting sentence(s), the program name, and finish the last sentence
-probDescF :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> Section
-probDescF start progName ending = SRS.probDesc [mkParagraph intro]
-  where intro = foldlSent [start, short progName, S "is a computer",
-                phrase program, S "developed to", ending]
+-- describe what a system is needed to accomplist
+probDescF :: Sentence -> [Section] -> Section
+probDescF prob = SRS.probDesc [mkParagraph $ foldlSent [S "A", phrase system `sIs` S "needed to", prob]]
                   
 --can take a (Just sentence) if needed or Nothing if not
 termDefnF :: Maybe Sentence -> [Contents] -> Section
-termDefnF end otherContents = SRS.termAndDefn (intro:otherContents) []
+termDefnF end otherContents = SRS.termAndDefn (intro : otherContents) []
       where lastF Nothing  = EmptyS
             lastF (Just s) = S "." +:+ s
             intro = foldlSP [S "This subsection provides a list of terms", 
@@ -88,24 +86,15 @@ solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inMod
 
 
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
-assumpF :: Section -> Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
-assumpF theMod genDef dataDef inMod likeChg unlikeChg otherContents = 
-      SRS.assumpt (assumpIntro theMod genDef dataDef inMod likeChg unlikeChg : otherContents) []
-
-
--- takes a bunch of references to things discribed in the wrapper
-assumpIntro :: Section -> Section -> Section -> Section -> Section -> Section-> Contents
-assumpIntro r1 r2 r3 r4 r5 r6 = mkParagraph $ foldlSent 
-          [S "This", phrase section_, S "simplifies the original", phrase problem,
-          S "and helps in developing the", phrase thModel, S "by filling in the", 
-          S "missing", phrase information, S "for the" +:+. phrase physicalSystem, 
-          S "The numbers given in the square brackets refer to the", 
-          foldr1 sC (map refs itemsAndRefs) `sC` refs (likelyChg, r5) `sC` S "or", 
-          refs (unlikelyChg, r6) `sC` S "in which the respective", 
-          phrase assumption, S "is used"] --FIXME: use some clever "zipWith"
-          where refs (chunk, ref) = titleize' chunk +:+ (Ref $ makeRef2 ref) 
-                itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3), 
-                                (inModel, r4)]
+assumpF :: [Contents] -> Section
+assumpF otherContents = SRS.assumpt (assumpIntro : otherContents) []
+  where
+    assumpIntro = mkParagraph $ foldlSent 
+      [S "This", phrase section_, S "simplifies the original", phrase problem,
+       S "and helps in developing the", plural thModel, S "by filling in the", 
+       S "missing", phrase information, S "for the" +:+. phrase physicalSystem,
+       S "The", plural assumption, S "refine the", phrase scope,
+       S "by providing more detail"]
 
 --wrapper for thModelIntro
 thModF :: (Idea a) => a -> [Contents] -> Section
@@ -113,10 +102,8 @@ thModF progName otherContents = SRS.thModel (thModIntro progName : otherContents
 
 -- generalized theoretical model introduction: identifies key word pertaining to topic
 thModIntro :: (Idea a) => a -> Contents
-thModIntro progName = foldlSP
-          [S "This", phrase section_, S "focuses on", 
-          S "the", phrase general, plural equation, S "and", 
-          S "laws that", short progName, S "is based on"]
+thModIntro progName = foldlSP [S "This", phrase section_, S "focuses on the",
+  phrase general, plural equation `sAnd` S "laws that", short progName, S "is based on"]
 
 -- just supply the other contents for General Definition. Use empty list if none needed
 genDefnF :: [Contents] -> Section

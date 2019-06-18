@@ -35,24 +35,29 @@ data Lang = Cpp
           | Python
           deriving Eq
 
+data CodeSystInfo where
+  CSI :: {
+  extInputs :: [Input],
+  derivedInputs :: [Derived],
+  outputs :: [Output],
+  execOrder :: [Def],
+  cMap :: ConstraintMap,
+  constants :: [Const],
+  mods :: [Mod],  -- medium hack
+  sysinfodb :: ChunkDB
+  } -> CodeSystInfo
+
 data CodeSpec where
   CodeSpec :: CommonIdea a => {
   program :: a,
   inputs :: [Input],
-  extInputs :: [Input],
-  derivedInputs :: [Derived],
-  outputs :: [Output],
   relations :: [Def],
-  execOrder :: [Def],
-  cMap :: ConstraintMap,
   fMap :: FunctionMap,
   vMap :: VarMap,
   eMap :: ModExportMap,
   constMap :: FunctionMap,
-  constants :: [Const],
-  mods :: [Mod],  -- medium hack
   dMap :: ModDepMap,
-  sysinfodb :: ChunkDB
+  csi :: CodeSystInfo
   } -> CodeSpec
 
 type FunctionMap = Map.Map String CodeDefinition
@@ -90,28 +95,30 @@ codeSpec SI {_sys = sys
       const' = map qtov consts
       derived = map qtov $ getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc (defs' ++ map qdFromDD ddefs) \\ derived
-      mods' = prefixFunctions $ packmod "Calculations" (map FCD rels) : ms 
-      conMap = constraintMap cs
-      mem   = modExportMap chs conMap mods' inputs' const' derived
+      mem   = modExportMap csi' chs
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
-  in  CodeSpec {
-        program = sys,
-        inputs = allInputs,
+      exOrder = getExecOrder rels (allInputs ++ map codevar const') outs' db
+      csi' = CSI {
         extInputs = inputs',
         derivedInputs = derived,
         outputs = outs',
+        execOrder = exOrder,
+        cMap = constraintMap cs,
+        constants = const',
+        mods = prefixFunctions $ packmod "Calculations" (map FCD exOrder) : ms,
+        sysinfodb = db
+      }
+  in  CodeSpec {
+        program = sys,
+        inputs = allInputs,
         relations = rels,
-        execOrder = getExecOrder rels (allInputs ++ map codevar const') outs' db,
-        cMap = conMap,
         fMap = assocToMap rels,
         vMap = assocToMap (map codevar q),
         eMap = mem,
         constMap = assocToMap const',
-        constants = const',
-        mods = mods',
-        dMap = modDepMap db mem mods',
-        sysinfodb = db
+        dMap = modDepMap csi' mem chs,
+        csi = csi'
       }
 
 data Choices = Choices {
@@ -235,31 +242,34 @@ asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 
-modExportMap :: Choices -> ConstraintMap -> [Mod] -> [Input] -> [Const] -> [Derived] -> ModExportMap
-modExportMap chs cm ms ins _ ds = Map.fromList $ concatMap mpair ms
+modExportMap :: CodeSystInfo -> Choices -> ModExportMap
+modExportMap cs@CSI {
+  extInputs = ins,
+  derivedInputs = ds
+  } chs = Map.fromList $ concatMap mpair (mods cs)
   where mpair (Mod n fs) = map fname fs `zip` repeat n
-                        ++ map codeName ins `zip` repeat "InputParameters"
+                        ++ getExportInput chs (ins ++ map codevar ds)
                         ++ getExportDerived chs ds
-                        ++ getExportConstraints chs (getConstraints cm 
+                        ++ getExportConstraints chs (getConstraints (cMap cs) 
                           (ins ++ map codevar ds))
-                        ++ [ ("write_output", "OutputFormat") ]  -- hardcoded for now
+                        ++ getExportOutput (outputs cs)
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
           
 type ModDepMap = Map.Map String [String]
 
-modDepMap :: ChunkDB -> ModExportMap -> [Mod] -> ModDepMap
-modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
-                                   ++ [("Control", getDepsControl mem),
-                                       ("DerivedValues", [ "InputParameters" ] ),
-                                       ("InputConstraints", [ "InputParameters" ] )]  -- hardcoded for now
-                                                                          -- will fix later
+modDepMap :: CodeSystInfo -> ModExportMap -> Choices -> ModDepMap
+modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _) -> (n, getModDep m)) 
+  (mods cs) ++ ("Control", getDepsControl cs mem)
+  : catMaybes [getDepsDerived cs mem chs,
+               getDepsConstraints cs mem chs]
   where getModDep (Mod name' funcs) =
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)
         fdep (FCD cd) = codeName cd:map codeName (codevarsandfuncs (codeEquat cd) sm mem)
         fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
-        fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
+        fdep (FData (FuncData _ d)) = map codeName $ getInputs d
+        sm = sysinfodb cs
 
 fstdep :: ChunkDB -> FuncStmt -> [CodeChunk]
 fstdep _  (FDec cch _) = [cch]
@@ -341,6 +351,12 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   
 type Export = (String, String)
 
+getExportInput :: Choices -> [Input] -> [Export]
+getExportInput _ [] = []
+getExportInput chs ins = inExp $ inputStructure chs
+  where inExp Loose = []
+        inExp AsClass = map codeName ins `zip` repeat "InputParameters"
+
 getExportDerived :: Choices -> [Derived] -> [Export]
 getExportDerived _ [] = []
 getExportDerived chs _ = [("derived_values", dMod $ inputStructure chs)]
@@ -353,13 +369,40 @@ getExportConstraints chs _ = [("input_constraints", cMod $ inputStructure chs)]
   where cMod Loose = "InputParameters"
         cMod AsClass = "InputConstraints"
 
-getDepsControl :: ModExportMap -> [String]
-getDepsControl mem = let dv = Map.lookup "derived_values" mem
-                         ic = Map.lookup "input_constraints" mem
-  in catMaybes [dv, ic] ++ ["InputParameters",
-                        "InputFormat",
-                        "Calculations",
-                        "OutputFormat"]
+getExportOutput :: [Output] -> [Export]
+getExportOutput [] = []
+getExportOutput _ = [("write_output", "OutputFormat")]
+
+getDepsControl :: CodeSystInfo -> ModExportMap -> [String]
+getDepsControl cs mem = 
+  let ins = extInputs cs ++ map codevar (derivedInputs cs)
+      ip = map (\x -> Map.lookup (codeName x) mem) ins
+      inf = Map.lookup (funcPrefix ++ "get_input") mem
+      dv = Map.lookup "derived_values" mem
+      ic = Map.lookup "input_constraints" mem
+      wo = Map.lookup "write_output" mem
+      calcs = map (\x -> Map.lookup (codeName x) mem) (execOrder cs)
+  in nub $ catMaybes (ip ++ [inf, dv, ic, wo] ++ calcs)
+
+getDepsDerived :: CodeSystInfo -> ModExportMap -> Choices -> 
+  Maybe (String, [String])
+getDepsDerived cs mem chs = derivedDeps $ inputStructure chs
+  where derivedDeps Loose = Nothing
+        derivedDeps AsClass = Just ("DerivedValues", nub $ mapMaybe (
+          (`Map.lookup` mem) . codeName) (concatMap (flip codevars 
+          (sysinfodb cs) . codeEquat) (derivedInputs cs)))
+
+getDepsConstraints :: CodeSystInfo -> ModExportMap -> Choices -> 
+  Maybe (String, [String])
+getDepsConstraints cs mem chs = constraintDeps $ inputStructure chs
+  where constraintDeps Loose = Nothing
+        constraintDeps AsClass = Just ("InputConstraints", nub $ mapMaybe (
+          (`Map.lookup` mem) .codeName) reqdVals)
+        ins = extInputs cs ++ map codevar (derivedInputs cs)
+        cm = cMap cs
+        varsList = filter (\i -> Map.member (i ^. uid) cm) ins
+        reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v
+          (sysinfodb cs) mem) (getConstraints cm varsList)
 
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs

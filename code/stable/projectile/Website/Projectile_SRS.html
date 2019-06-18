@@ -105,13 +105,6 @@
                   <td>m/s<sup>2</sup></td>
                 </tr>
                 <tr>
-                  <td><em>isShort</em></td>
-                  <td>
-                    Variable that is assigned true when the target position is greater than the landing position
-                  </td>
-                  <td>--</td>
-                </tr>
-                <tr>
                   <td><em>p</em></td>
                   <td>Scalar position</td>
                   <td>m</td>
@@ -1283,7 +1276,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#calcValues>FR: Calculate-Values</a>.
+                          <a href=#IM:offsetIM>IM: offsetIM</a> <a href=#calcValues>FR: Calculate-Values</a>.
                         </p>
                       </td>
                     </tr>
@@ -1326,69 +1319,6 @@
                              </span>
                              <span class="fdn">g</span>
                            </div></em>
-                </div>
-                <div id="IM:shortIM">
-                  <table class="idefn">
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">IsShort</p></td>
-                    </tr>
-                    <tr>
-                      <th>Input</th>
-                      <td>
-                        <p class="paragraph"><em>p<sub>target</sub></em>, <em>p'</em></p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Output</th>
-                      <td><p class="paragraph"><em>isShort</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Input Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation"><em>p'&thinsp;&gt;&thinsp;0</em></div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Output Constraints</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>isShort = p<sub>target</sub>&thinsp;&gt;&thinsp;p'</em>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>isShort</em> is the variable that is assigned true when the target position is greater than the landing position (Unitless)
-                          </li>
-                          <li><em>p<sub>target</sub></em> is the target position (m)</li>
-                          <li><em>p'</em> is the landing position (m)</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#calcValues>FR: Calculate-Values</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
                 </div>
                 <div id="IM:offsetIM">
                   <table class="idefn">
@@ -1441,6 +1371,14 @@
                           <li><em>p'</em> is the landing position (m)</li>
                           <li><em>p<sub>target</sub></em> is the target position (m)</li>
                         </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>p'</em> is from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1661,7 +1599,7 @@
               </p>
               <p>
                 <div id="calcValues">
-                  Calculate-Values: Calculate the following quantities: <em>t'</em> (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>), <em>p'</em> (from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>), <em>isShort</em> (from <a href=#IM:shortIM>IM: shortIM</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>), and <em>s</em> (from <a href=#IM:messageIM>IM: messageIM</a>).
+                  Calculate-Values: Calculate the following quantities: <em>t'</em> (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>), <em>p'</em> (from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>), and <em>s</em> (from <a href=#IM:messageIM>IM: messageIM</a>).
                 </div>
               </p>
               <p>

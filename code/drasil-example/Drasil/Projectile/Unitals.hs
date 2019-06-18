@@ -10,11 +10,10 @@ import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
 import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (distance, oneD, twoD)
 
-import Data.Drasil.Quantities.Physics (acceleration, constAccel, gravitationalAccel,
-  iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
-  position, scalarPos, speed, time, velocity,
-  xAccel, xConstAccel, xPos, xVel,
-  yAccel, yConstAccel, yPos, yVel)
+import Data.Drasil.Quantities.Physics (acceleration, constAccel,
+  gravitationalAccel, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
+  position, scalarPos, speed, time, velocity, xAccel, xConstAccel, xPos,
+  xVel, yAccel, yConstAccel, yPos, yVel)
 import Data.Drasil.Quantities.Math (pi_)
 
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -26,12 +25,10 @@ import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset)
 
 symbols :: [QuantityDict]
-symbols = qw pi_ : map qw constrained ++ map qw [
-  acceleration, constAccel, gravitationalAccel,
-  iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
-  position, scalarPos, speed, time, velocity,
-  xAccel, xConstAccel, xPos, xVel,
-  yAccel, yConstAccel, yPos, yVel] ++ quantDicts
+symbols = qw pi_ : unitalQuants ++ map qw [
+  acceleration, constAccel, gravitationalAccel, iPos, iSpeed, iVel, ixPos,
+  iyPos, ixVel, iyVel, position, scalarPos, speed, time, velocity, xAccel,
+  xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
 
 -- FIXME: Move to Defs?
 acronyms :: [CI]
@@ -42,10 +39,10 @@ inputs :: [QuantityDict]
 inputs = map qw [launAngle, launSpeed, targPos]
 
 unitalQuants :: [QuantityDict]
-unitalQuants = quantDicts ++ map qw constrained
+unitalQuants = message : map qw constrained
 
 unitalIdeas :: [IdeaDict]
-unitalIdeas = map nw quantDicts ++ map nw constrained
+unitalIdeas = nw message : map nw constrained
 
 inConstraints :: [UncertQ]
 inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]
@@ -55,9 +52,6 @@ outConstraints = [landPosUnc, offsetUnc]
 
 constrained :: [ConstrConcept]
 constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
-
-quantDicts :: [QuantityDict]
-quantDicts = [isShort, message]
 
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ
@@ -97,12 +91,6 @@ targPosConcept = cc' targetPos $ foldlSent [S "The", phrase distance, S "from th
 flightDurConcept :: ConceptChunk
 flightDurConcept = cc' C.flightDur $ foldlSent [S "The", phrase time, S "when the", phrase projectile, S "lands"]
 
----FIXME: To be reworked
-isShort :: QuantityDict
-isShort = vc "isShort"
-  (nounPhraseSent (S "variable that is assigned true when the" +:+ phrase targetPos +:+
-   S "is greater than the" +:+ phrase landingPos))
-  (Atomic "isShort") Boolean
-
+---
 message :: QuantityDict
 message = vc "message" (nounPhraseSent (S "output message as a string")) lS String

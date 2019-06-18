@@ -1,4 +1,4 @@
-module Drasil.Projectile.IMods (distanceIM, iMods, messageIM, offsetIM, shortIM, timeIM) where
+module Drasil.Projectile.IMods (distanceIM, iMods, messageIM, offsetIM, timeIM) where
 
 import Prelude hiding (cos, sin)
 
@@ -19,11 +19,11 @@ import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (posVecGD)
-import Drasil.Projectile.Unitals (flightDur, isShort, landPos, launAngle,
-  launSpeed, message, offset, targPos)
+import Drasil.Projectile.Unitals (flightDur, landPos, launAngle, launSpeed,
+  message, offset, targPos)
 
 iMods :: [InstanceModel]
-iMods = [timeIM, distanceIM, shortIM, offsetIM, messageIM]
+iMods = [timeIM, distanceIM, offsetIM, messageIM]
 
 ---
 timeIM :: InstanceModel
@@ -112,18 +112,9 @@ distanceDerivEqn2 = sy landPos $= sy ixVel * 2 * sy iSpeed * sin (sy launAngle) 
 distanceDerivEqn3 = sy landPos $= sy iSpeed * cos (sy launAngle) * 2 * sy iSpeed * sin (sy launAngle) / sy gravitationalAccel
 
 ---
-shortIM :: InstanceModel
-shortIM = imNoDerivNoRefs shortRC [qw targPos, qw landPos]
-  [sy targPos $> 0, sy landPos $> 0] (qw isShort) [] "shortIM" [{-Notes-}]
-
-shortRC :: RelationConcept
-shortRC = makeRC "shortRC" (nounPhraseSP "isShort") 
-  EmptyS $ sy isShort $= sy targPos $> sy landPos
-
----
 offsetIM :: InstanceModel
 offsetIM = imNoDerivNoRefs offsetRC [qw targPos, qw landPos]
-  [sy targPos $> 0, sy landPos $> 0] (qw offset) [sy offset $> 0] "offsetIM" [{-Notes-}]
+  [sy targPos $> 0, sy landPos $> 0] (qw offset) [sy offset $> 0] "offsetIM" [landPosNote]
 
 offsetRC :: RelationConcept
 offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") 
@@ -143,12 +134,14 @@ messageRC = makeRC "messageRC" (nounPhraseSP "output message")
 
 --- Notes
 
-angleConstraintNote, offsetNote, posDistNote :: Sentence
+angleConstraintNote, landPosNote, offsetNote, posDistNote :: Sentence
 
 angleConstraintNote = foldlSent [S "The", phrase constraint,
   E (0 $< sy launAngle $< (sy pi_ / 2)) `sIs` S "from",
   makeRef2S posXDirection `sAnd` makeRef2S yAxisGravity `sC`
   S "and is shown" `sIn` makeRef2S figLaunch]
+
+landPosNote = ch landPos `sIs` S "from" +:+. makeRef2S distanceIM
 
 offsetNote = ch offset `sIs` S "from" +:+. makeRef2S offsetIM
 

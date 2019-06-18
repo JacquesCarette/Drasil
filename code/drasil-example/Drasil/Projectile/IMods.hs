@@ -1,5 +1,4 @@
-module Drasil.Projectile.IMods (iMods, timeIM, distanceIM, shortIM, offsetIM,
-  messageIM, hitIM) where
+module Drasil.Projectile.IMods (distanceIM, iMods, messageIM, offsetIM, shortIM, timeIM) where
 
 import Prelude hiding (cos, sin)
 
@@ -20,11 +19,11 @@ import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (posVecGD)
-import Drasil.Projectile.Unitals (flightDur, isHit, isShort, landPos, launAngle,
+import Drasil.Projectile.Unitals (flightDur, isShort, landPos, launAngle,
   launSpeed, message, offset, targPos)
 
 iMods :: [InstanceModel]
-iMods = [timeIM, distanceIM, shortIM, offsetIM, messageIM, hitIM]
+iMods = [timeIM, distanceIM, shortIM, offsetIM, messageIM]
 
 ---
 timeIM :: InstanceModel
@@ -141,15 +140,6 @@ messageRC = makeRC "messageRC" (nounPhraseSP "output message")
   where case1 = (Str "The target was hit.",        ((UnaryOp Abs (sy offset / sy targPos)) $< 0.02))
         case2 = (Str "The projectile fell short.", (sy offset $< 0))
         case3 = (Str "The projectile went long.",  (sy offset $> 0))
-
----
-hitIM :: InstanceModel
-hitIM = imNoDerivNoRefs hitRC [qw offset, qw targPos]
-  [sy offset $> 0, sy targPos $> 0] (qw isHit) [] "hitIM" [offsetNote]
-
-hitRC :: RelationConcept
-hitRC = makeRC "hitRC" (nounPhraseSP "isHit") 
-  EmptyS $ sy isHit $= (sy offset / sy targPos) $< 0.02
 
 --- Notes
 

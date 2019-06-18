@@ -105,13 +105,6 @@
                   <td>m/s<sup>2</sup></td>
                 </tr>
                 <tr>
-                  <td><em>isHit</em></td>
-                  <td>
-                    Variable that is assigned true when the landing position is within a degree of tolerance of the target position
-                  </td>
-                  <td>--</td>
-                </tr>
-                <tr>
                   <td><em>isShort</em></td>
                   <td>
                     Variable that is assigned true when the target position is greater than the landing position
@@ -1458,7 +1451,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR: Output-Values</a> <a href=#IM:messageIM>IM: messageIM</a> <a href=#IM:hitIM>IM: hitIM</a> <a href=#calcValues>FR: Calculate-Values</a>.
+                          <a href=#outputValues>FR: Output-Values</a> <a href=#IM:messageIM>IM: messageIM</a> <a href=#calcValues>FR: Calculate-Values</a>.
                         </p>
                       </td>
                     </tr>
@@ -1567,89 +1560,6 @@
                     </tr>
                   </table>
                 </div>
-                <div id="IM:hitIM">
-                  <table class="idefn">
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">IsHit</p></td>
-                    </tr>
-                    <tr>
-                      <th>Input</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>d<sub>offset</sub></em>, <em>p<sub>target</sub></em>
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Output</th>
-                      <td><p class="paragraph"><em>isHit</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Input Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation">
-                          <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Output Constraints</th>
-                      <td></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>isHit = <div class="fraction">
-                                        <span class="fup">d<sub>offset</sub></span>
-                                        <span class="fdn">p<sub>target</sub></span>
-                                      </div>&thinsp;&lt;&thinsp;<div class="fraction">
-                                                                  <span class="fup">1</span>
-                                                                  <span class="fdn">50</span>
-                                                                </div></em>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em>isHit</em> is the variable that is assigned true when the landing position is within a degree of tolerance of the target position (Unitless)
-                          </li>
-                          <li>
-                            <em>d<sub>offset</sub></em> is the offset between the target position and the landing position (m)
-                          </li>
-                          <li><em>p<sub>target</sub></em> is the target position (m)</li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          <em>d<sub>offset</sub></em> is from <a href=#IM:offsetIM>IM: offsetIM</a>.
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td>
-                        <p class="paragraph">
-                          <a href=#calcValues>FR: Calculate-Values</a>.
-                        </p>
-                      </td>
-                    </tr>
-                  </table>
-                </div>
               </div>
             </div>
             <div id="Sec:DataConstraints">
@@ -1751,7 +1661,7 @@
               </p>
               <p>
                 <div id="calcValues">
-                  Calculate-Values: Calculate the following quantities: <em>t'</em> (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>), <em>p'</em> (from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>), <em>isShort</em> (from <a href=#IM:shortIM>IM: shortIM</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>), <em>s</em> (from <a href=#IM:messageIM>IM: messageIM</a>), and <em>isHit</em> (from <a href=#IM:hitIM>IM: hitIM</a>).
+                  Calculate-Values: Calculate the following quantities: <em>t'</em> (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>), <em>p'</em> (from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>), <em>isShort</em> (from <a href=#IM:shortIM>IM: shortIM</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>), and <em>s</em> (from <a href=#IM:messageIM>IM: messageIM</a>).
                 </div>
               </p>
               <p>

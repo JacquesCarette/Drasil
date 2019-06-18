@@ -16,8 +16,8 @@ import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
-import Drasil.Projectile.IMods (timeIM, distanceIM, messageIM, shortIM, offsetIM, hitIM)
-import Drasil.Projectile.Unitals (flightDur, inputs, isHit, isShort, landPos,
+import Drasil.Projectile.IMods (distanceIM, messageIM, offsetIM, shortIM, timeIM)
+import Drasil.Projectile.Unitals (flightDur, inputs, isShort, landPos,
   launAngle, launSpeed, message, offset, targPos)
 
 {--Functional Requirements--}
@@ -50,8 +50,7 @@ calcValuesDesc = foldlSent [S "Calculate the following" +: plural quantity,
     ch landPos   +:+ sParen (S "from" +:+ makeRef2S distanceIM),
     ch isShort   +:+ sParen (S "from" +:+ makeRef2S shortIM),
     ch offset    +:+ sParen (S "from" +:+ makeRef2S offsetIM),
-    ch message   +:+ sParen (S "from" +:+ makeRef2S messageIM),
-    ch isHit     +:+ sParen (S "from" +:+ makeRef2S hitIM)
+    ch message   +:+ sParen (S "from" +:+ makeRef2S messageIM)
   ]]
 outputValuesDesc = foldlSent [atStart output_, ch message,
   sParen (S "from" +:+ makeRef2S messageIM) `sAnd` ch offset,

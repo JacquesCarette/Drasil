@@ -302,7 +302,7 @@ getSSDSub (SSDProblem pd)    = getProblem pd
 getSSDSub (SSDSolChSpec sss) = getSol sss
 
 getProblem :: ProblemDescription -> [Sentence]
-getProblem (PDProg s x) = [s] ++ concatMap getSec x
+getProblem (PDProg s x) = s : concatMap getSec x
 
 getSol :: SolChSpec -> [Sentence]
 getSol (SCSProg x) = concatMap getSCSSub x

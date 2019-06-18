@@ -475,9 +475,9 @@ htPCMDesc = foldlSent [S "The above", phrase equation `sIs` S "derived using" +:
 -----------
 
 instModIntro :: Sentence
-instModIntro = foldlSent [S "The", plural goal, (foldlList Comma List $
-  map makeRef2S [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]) `sAre`
-  S "solved by" +:+. (foldlList Comma List $ map makeRef2S
+instModIntro = foldlSent [S "The", plural goal, foldlList Comma List
+  (map makeRef2S [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]) `sAre`
+  S "solved by" +:+. foldlList Comma List (map makeRef2S
   [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]), S "The",
   plural solution, S "for", makeRef2S eBalanceOnWtr `sAnd`
   makeRef2S eBalanceOnPCM `sAre` S "coupled since the", plural solution,

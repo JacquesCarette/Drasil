@@ -9,20 +9,6 @@ import java.io.File;
 import java.util.ArrayList;
 
 public class InputParameters {
-    public static double A_C = 0.0;
-    public static double C_W = 0.0;
-    public static double h_C = 0.0;
-    public static double T_init = 0.0;
-    public static double t_final = 0.0;
-    public static double L = 0.0;
-    public static double T_C = 0.0;
-    public static double t_step = 0.0;
-    public static double rho_W = 0.0;
-    public static double D = 0.0;
-    public static double A_tol = 0.0;
-    public static double R_tol = 0.0;
-    public static double T_W = 0.0;
-    public static double E_W = 0.0;
     
     public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) throws Exception {
         if (!((inParams.A_C <= 100000))) {

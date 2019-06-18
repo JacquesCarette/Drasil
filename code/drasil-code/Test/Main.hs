@@ -1,10 +1,10 @@
 module Test.Main (main) where
 
-import Language.Drasil.Code.Imperative.New (Label, PackageSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer (JavaCode(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewPythonRenderer (PythonCode(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewCSharpRenderer (CSharpCode(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewCppRenderer (CppSrcCode(..), CppHdrCode(..))
+import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..))
+import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (JavaCode(..))
+import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (PythonCode(..))
+import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (CSharpCode(..))
+import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (CppSrcCode(..), CppHdrCode(..))
 import Language.Drasil.Code.Imperative.Helpers (ModData(..))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)

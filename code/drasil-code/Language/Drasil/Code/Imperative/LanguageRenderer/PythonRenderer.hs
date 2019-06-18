@@ -8,6 +8,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
 
 import Utils.Drasil (indent)
 
+import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
@@ -33,7 +34,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   addCommentsDocD, callFuncParamList, getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
   blank, vibcat, liftA4, liftA5, liftList, lift1List, lift4Pair, 
-  liftPairFst)
+  liftPairFst, liftPairSnd)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -113,18 +114,15 @@ instance BlockSym PythonCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
 instance StateTypeSym PythonCode where
-  type StateType PythonCode = Doc
-  bool = return empty
+  type StateType PythonCode = (Doc, CodeType)
+  bool = return (empty, Boolean)
   int = return intTypeDocD
   float = return floatTypeDocD
-  char = return empty
+  char = return (empty, Char)
   string = return pyStringType
-  infile = return empty
-  outfile = return empty
-  listType _ _ = return $ brackets empty
-  intListType _ = return $ brackets empty
-  floatListType _ = return $ brackets empty
-  boolListType = return $ brackets empty
+  infile = return (empty, File)
+  outfile = return (empty, File)
+  listType _ t = liftPairSnd (brackets empty, fmap (List . snd) t)
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in Python"
@@ -264,7 +262,7 @@ instance ValueExpression PythonCode where
     vs)
   extStateObj l t vs = mkVal <$> liftA2 (pyExtStateObj l) t (liftList 
     callFuncParamList vs)
-  listStateObj t _ = mkVal <$> t
+  listStateObj t _ = mkVal <$> fmap fst t
 
   exists v = v ?!= var "None"
   notNull = exists
@@ -294,7 +292,7 @@ instance Selector PythonCode where
 instance FunctionSym PythonCode where
   type Function PythonCode = Doc
   func l vs = fmap funcDocD (funcApp l vs)
-  cast targT _ = targT
+  cast targT _ = fmap fst targT
   castListToInt = cast int (listType static_ int)
   get n = fmap funcDocD (var n)
   set n v = fmap funcDocD (mkVal . fst <$> assign (var n) v)
@@ -464,7 +462,7 @@ instance ScopeSym PythonCode where
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = Doc
-  mState t = t
+  mState = fmap fst
   void = return voidDocD
   construct n = return $ constructDocD n
 
@@ -542,11 +540,11 @@ pyLogOp = text "math.log10"
 pyLnOp :: Doc
 pyLnOp = text "math.log"
 
-pyStateObj :: Doc -> Doc -> Doc
-pyStateObj t vs = t <> parens vs
+pyStateObj :: (Doc, CodeType) -> Doc -> Doc
+pyStateObj (t, _) vs = t <> parens vs
 
-pyExtStateObj :: Label -> Doc -> Doc -> Doc
-pyExtStateObj l t vs = text l <> dot <> t <> parens vs
+pyExtStateObj :: Label -> (Doc, CodeType) -> Doc -> Doc
+pyExtStateObj l (t, _) vs = text l <> dot <> t <> parens vs
 
 pyInlineIf :: (Doc, Maybe String) -> (Doc, Maybe String) -> 
   (Doc, Maybe String) -> Doc
@@ -559,8 +557,8 @@ pyListPopAccess (v, _) f = v <+> equals <+> f
 pyListSizeAccess :: (Doc, Maybe String) -> Doc -> Doc
 pyListSizeAccess (v, _) f = f <> parens v
 
-pyStringType :: Doc
-pyStringType = text "str"
+pyStringType :: (Doc, CodeType)
+pyStringType = (text "str", String)
 
 pyListPop :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 pyListPop (dftVal, _) (size, _) = brackets dftVal <+> text "*" <+> size
@@ -576,8 +574,8 @@ pyListExtendList ns = dot <> text "append" <> parens (nestedList ns)
 pyVarDecDef :: Label ->  (Doc, Maybe String) -> Doc
 pyVarDecDef l (v, _) = text l <+> equals <+> v
 
-pyListDec :: Label -> Doc -> Doc
-pyListDec l t = text l <+> equals <+> t
+pyListDec :: Label -> (Doc, CodeType) -> Doc
+pyListDec l (t, _) = text l <+> equals <+> t
 
 pyListDecDef :: Label -> Doc -> Doc
 pyListDecDef l vs = text l <+> equals <+> brackets vs

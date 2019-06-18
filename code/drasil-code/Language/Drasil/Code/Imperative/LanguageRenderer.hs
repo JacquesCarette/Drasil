@@ -35,6 +35,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
 
 import Utils.Drasil (capitalize, indent, indentList)
 
+import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
   angles,blank, doubleQuotedText,hicat,vibcat,vmap)
@@ -149,29 +150,29 @@ printFileDocD fn (f, _) = f <> dot <> text fn
 
 -- Type Printers --
 
-boolTypeDocD :: Doc
-boolTypeDocD = text "Boolean" -- capital B?
+boolTypeDocD :: (Doc, CodeType)
+boolTypeDocD = (text "Boolean", Boolean) -- capital B?
 
-intTypeDocD :: Doc
-intTypeDocD = text "int"
+intTypeDocD :: (Doc, CodeType)
+intTypeDocD = (text "int", Integer)
 
-floatTypeDocD :: Doc
-floatTypeDocD = text "float"
+floatTypeDocD :: (Doc, CodeType)
+floatTypeDocD = (text "float", Float)
 
-charTypeDocD :: Doc
-charTypeDocD = text "char"
+charTypeDocD :: (Doc, CodeType)
+charTypeDocD = (text "char", Char)
 
-stringTypeDocD :: Doc
-stringTypeDocD = text "string"
+stringTypeDocD :: (Doc, CodeType)
+stringTypeDocD = (text "string", String)
 
-fileTypeDocD :: Doc
-fileTypeDocD = text "File"
+fileTypeDocD :: (Doc, CodeType)
+fileTypeDocD = (text "File", File)
 
-typeDocD :: Label -> Doc
-typeDocD = text
+typeDocD :: Label -> (Doc, CodeType)
+typeDocD t = (text t, Object t)
 
-listTypeDocD :: Doc -> Doc -> Doc
-listTypeDocD st list = list <> angles st
+listTypeDocD :: (Doc, CodeType) -> Doc -> (Doc, CodeType)
+listTypeDocD (td, t) list = (list <> angles td, List t)
 
 -- Method Types --
 

@@ -319,15 +319,15 @@ varDecDefDocD l (st, _) (v, _) = st <+> text l <+> equals <+> v
 listDecDocD :: Label -> (Doc, Maybe String) -> (Doc, CodeType) -> Doc
 listDecDocD l (n, _) (st, _) = st <+> text l <+> equals <+> new <+> st <> parens n
 
-listDecDefDocD :: Label -> Doc -> [(Doc, Maybe String)] -> Doc
-listDecDefDocD l st vs = st <+> text l <+> equals <+> new <+> st <+> 
+listDecDefDocD :: Label -> (Doc, CodeType) -> [(Doc, Maybe String)] -> Doc
+listDecDefDocD l (st, _) vs = st <+> text l <+> equals <+> new <+> st <+> 
   braces (callFuncParamList vs)
 
 objDecDefDocD :: Label -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc
 objDecDefDocD = varDecDefDocD
 
-constDecDefDocD :: Label -> Doc -> (Doc, Maybe String) -> Doc -- can this be done without StateType (infer from value)?
-constDecDefDocD l st (v, _) = text "const" <+> st <+> text l <+> equals <+> v
+constDecDefDocD :: Label -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc -- can this be done without StateType (infer from value)?
+constDecDefDocD l (st, _) (v, _) = text "const" <+> st <+> text l <+> equals <+> v
 
 returnDocD :: (Doc, Maybe String) -> Doc
 returnDocD (v, _) = text "return" <+> v

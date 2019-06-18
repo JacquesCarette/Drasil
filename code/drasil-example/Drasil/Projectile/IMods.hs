@@ -144,7 +144,7 @@ angleConstraintNote = foldlSent [S "The", phrase constraint,
   makeRef2S posXDirection `sAnd` makeRef2S yAxisGravity `sC`
   S "and is shown" `sIn` makeRef2S figLaunch]
 
-gravNote = ch grav `sIs` S "defined in" +:+. (makeRef2S $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
+gravNote = ch grav `sIs` S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
 
 landAndTargPosConsNote = S "The" +:+ plural constraint +:+
   E (sy landPos $> 0) `sAnd` E (sy targPos $> 0) `sAre` S "from" +:+. makeRef2S posXDirection
@@ -162,4 +162,4 @@ targPosConsNote = S "The" +:+ phrase constraint +:+
 timeConsNote = S "The" +:+ phrase constraint +:+
   E (sy flightDur $> 0) `sIs` S "from" +:+. makeRef2S timeStartZero
 
-tolNote = ch tol `sIs` S "defined in" +:+. (makeRef2S $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
+tolNote = ch tol `sIs` S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))

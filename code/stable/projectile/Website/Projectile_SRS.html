@@ -320,7 +320,7 @@
           <div class="subsection">
             <h2>Problem Description</h2>
             <p class="paragraph">
-              A system is needed to efficiently and correctly predict the landing position of a projectile. Projectile is a computer program developed to interpret the inputs to give out the outputs which predict the landing position of a projectile.
+              A system is needed to efficiently and correctly predict the landing position of a projectile.
             </p>
             <div id="Sec:TermDefs">
               <div class="subsubsection">
@@ -386,77 +386,77 @@
               <div class="subsubsection">
                 <h3>Assumptions</h3>
                 <p class="paragraph">
-                  This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models <a href=#Sec:TMs>Section: Theoretical Models</a>, General Definitions <a href=#Sec:GDs>Section: General Definitions</a>, Data Definitions <a href=#Sec:DDs>Section: Data Definitions</a>, Instance Models <a href=#Sec:IMs>Section: Instance Models</a>, Likely Changes <a href=#Sec:LCs>Section: Likely Changes</a>, or Unlikely Changes <a href=#Sec:UCs>Section: Unlikely Changes</a>, in which the respective assumption is used.
+                  This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
                 </p>
                 <div class="list">
                   <p>
                     <div id="twoDMotion">
-                      twoDMotion: The projectile motion is two-dimensional (2D). <a href=#GD:velVec>GD: velVec</a> <a href=#GD:posVec>GD: posVec</a>.
+                      twoDMotion: The projectile motion is two-dimensional (2D). (RefBy: <a href=#GD:velVec>GD: velVec</a> and <a href=#GD:posVec>GD: posVec</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="cartSyst">
-                      cartSyst: A Cartesian coordinate system is used (from <a href=#neglectCurv>A: neglectCurv</a>). <a href=#GD:velVec>GD: velVec</a> <a href=#GD:posVec>GD: posVec</a>.
+                      cartSyst: A Cartesian coordinate system is used (from <a href=#neglectCurv>A: neglectCurv</a>). (RefBy: <a href=#GD:velVec>GD: velVec</a> and <a href=#GD:posVec>GD: posVec</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="yAxisGravity">
-                      yAxisGravity: The direction of the y-axis is directed opposite to gravity. <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> <a href=#accelYGravity>A: accelYGravity</a>.
+                      yAxisGravity: The direction of the y-axis is directed opposite to gravity. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>, and <a href=#accelYGravity>A: accelYGravity</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="launchOrigin">
-                      launchOrigin: The launcher is coincident with the origin. <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
+                      launchOrigin: The launcher is coincident with the origin. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> and <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="targetXAxis">
-                      targetXAxis: The target lies on the x-axis (from <a href=#neglectCurv>A: neglectCurv</a>). <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>.
+                      targetXAxis: The target lies on the x-axis (from <a href=#neglectCurv>A: neglectCurv</a>). (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="posXDirection">
-                      posXDirection: The positive x-direction is from the launcher to the target. <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#IM:offsetIM>IM: offsetIM</a> <a href=#IM:messageIM>IM: messageIM</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
+                      posXDirection: The positive x-direction is from the launcher to the target. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#IM:offsetIM>IM: offsetIM</a>, <a href=#IM:messageIM>IM: messageIM</a>, and <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="constAccel">
-                      constAccel: The acceleration is constant (from <a href=#accelXZero>A: accelXZero</a>, <a href=#accelYGravity>A: accelYGravity</a>, <a href=#neglectDrag>A: neglectDrag</a>, and <a href=#freeFlight>A: freeFlight</a>). <a href=#GD:velVec>GD: velVec</a> <a href=#GD:posVec>GD: posVec</a>.
+                      constAccel: The acceleration is constant (from <a href=#accelXZero>A: accelXZero</a>, <a href=#accelYGravity>A: accelYGravity</a>, <a href=#neglectDrag>A: neglectDrag</a>, and <a href=#freeFlight>A: freeFlight</a>). (RefBy: <a href=#GD:velVec>GD: velVec</a> and <a href=#GD:posVec>GD: posVec</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="accelXZero">
-                      accelXZero: The acceleration in the x-direction is zero. <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> <a href=#constAccel>A: constAccel</a>.
+                      accelXZero: The acceleration in the x-direction is zero. (RefBy: <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> and <a href=#constAccel>A: constAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="accelYGravity">
-                      accelYGravity: The acceleration in the y-direction is the acceleration due to gravity (from <a href=#yAxisGravity>A: yAxisGravity</a>). <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#constAccel>A: constAccel</a>.
+                      accelYGravity: The acceleration in the y-direction is the acceleration due to gravity (from <a href=#yAxisGravity>A: yAxisGravity</a>). (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> and <a href=#constAccel>A: constAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="neglectDrag">
-                      neglectDrag: Air drag is neglected. <a href=#constAccel>A: constAccel</a>.
+                      neglectDrag: Air drag is neglected. (RefBy: <a href=#constAccel>A: constAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="pointMass">
-                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. <a href=#GD:rectVel>GD: rectVel</a> <a href=#GD:rectPos>GD: rectPos</a>.
+                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectVel>GD: rectVel</a> and <a href=#GD:rectPos>GD: rectPos</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="freeFlight">
-                      freeFlight: The flight is free; there are no collisions during the trajectory of the projectile. <a href=#constAccel>A: constAccel</a>.
+                      freeFlight: The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: <a href=#constAccel>A: constAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="neglectCurv">
-                      neglectCurv: The distance is small enough that the curvature of the Earth can be neglected. <a href=#targetXAxis>A: targetXAxis</a> <a href=#cartSyst>A: cartSyst</a>.
+                      neglectCurv: The distance is small enough that the curvature of the Earth can be neglected. (RefBy: <a href=#targetXAxis>A: targetXAxis</a> and <a href=#cartSyst>A: cartSyst</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="timeStartZero">
-                      timeStartZero: Time starts at zero. <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#GD:rectVel>GD: rectVel</a> <a href=#GD:rectPos>GD: rectPos</a>.
+                      timeStartZero: Time starts at zero. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#GD:rectVel>GD: rectVel</a>, and <a href=#GD:rectPos>GD: rectPos</a>.)
                     </div>
                   </p>
                 </div>
@@ -506,9 +506,7 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph">
-                          <a href=#GD:rectVel>GD: rectVel</a> <a href=#GD:rectVel>GD: rectVel</a>.
-                        </p>
+                        <p class="paragraph"><a href=#GD:rectVel>GD: rectVel</a></p>
                       </td>
                     </tr>
                   </table>
@@ -551,9 +549,7 @@
                     <tr>
                       <th>RefBy</th>
                       <td>
-                        <p class="paragraph">
-                          <a href=#GD:rectPos>GD: rectPos</a> <a href=#GD:rectPos>GD: rectPos</a>.
-                        </p>
+                        <p class="paragraph"><a href=#GD:rectPos>GD: rectPos</a></p>
                       </td>
                     </tr>
                   </table>
@@ -609,7 +605,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#GD:velVec>GD: velVec</a> <a href=#GD:rectPos>GD: rectPos</a>.
+                          <a href=#GD:velVec>GD: velVec</a> and <a href=#GD:rectPos>GD: rectPos</a>
                         </p>
                       </td>
                     </tr>
@@ -684,9 +680,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td>
-                        <p class="paragraph"><a href=#GD:posVec>GD: posVec</a>.</p>
-                      </td>
+                      <td><p class="paragraph"><a href=#GD:posVec>GD: posVec</a></p></td>
                     </tr>
                   </table>
                 </div>
@@ -873,7 +867,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
+                          <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> and <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>
                         </p>
                       </td>
                     </tr>
@@ -980,7 +974,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
+                          <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>
                         </p>
                       </td>
                     </tr>
@@ -1040,7 +1034,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>.
+                          <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>
                         </p>
                       </td>
                     </tr>
@@ -1143,7 +1137,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> <a href=#calcValues>FR: Calculate-Values</a>.
+                          <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> and <a href=#calcValues>FR: Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1290,7 +1284,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:offsetIM>IM: offsetIM</a> <a href=#calcValues>FR: Calculate-Values</a>.
+                          <a href=#IM:offsetIM>IM: offsetIM</a> and <a href=#calcValues>FR: Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1402,7 +1396,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR: Output-Values</a> <a href=#IM:messageIM>IM: messageIM</a> <a href=#calcValues>FR: Calculate-Values</a>.
+                          <a href=#outputValues>FR: Output-Values</a>, <a href=#IM:messageIM>IM: messageIM</a>, and <a href=#calcValues>FR: Calculate-Values</a>
                         </p>
                       </td>
                     </tr>
@@ -1505,7 +1499,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputValues>FR: Output-Values</a> <a href=#calcValues>FR: Calculate-Values</a>.
+                          <a href=#outputValues>FR: Output-Values</a> and <a href=#calcValues>FR: Calculate-Values</a>
                         </p>
                       </td>
                     </tr>

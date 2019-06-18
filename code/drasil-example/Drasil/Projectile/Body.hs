@@ -21,12 +21,11 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   outDataConstTbl, physSystDesc, physSystDescriptionLabel, termDefnF, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
-import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', input_,
-  output_, physics, physSyst, problem, srsDomains, srs, system)
+import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
+  physSyst, problem, srsDomains, srs)
 import Data.Drasil.Concepts.Math (mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (constAccel, gravity, physicCon, physicCon',
-  position, twoD)
+import Data.Drasil.Concepts.Physics (constAccel, gravity, physicCon, physicCon', twoD)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
 import Data.Drasil.Quantities.Math (pi_)
@@ -38,8 +37,8 @@ import Data.Drasil.SI_Units (metre, radian, second)
 import qualified Data.Map as Map
 
 import Drasil.Projectile.Assumptions (assumptions)
-import Drasil.Projectile.Concepts (concepts, projectileTitle, launcher,
-  projectile, target)
+import Drasil.Projectile.Concepts (concepts, projectileTitle, landingPos,
+  launcher, projectile, target)
 import Drasil.Projectile.DataDefs (dataDefns)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (genDefns)
@@ -68,7 +67,7 @@ mkSRS = [
       ],
   SSDSec $
     SSDProg
-      [ SSDProblem   $ PDProg  probStart projectileTitle probEnding
+      [ SSDProblem   $ PDProg prob
         [termsAndDefs, physSystDescription, goalStmts]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -159,15 +158,9 @@ printSetting = PI symbMap defaultConfiguration
 -- Problem Description --
 -------------------------
 
-probStart :: Sentence
-probStart = foldlSent [S "A", phrase system,
-  S "is needed to efficiently" `sAnd` S "correctly predict the landing",
-  phrase position, S "of a", phrase projectile]
-
-probEnding :: Sentence
-probEnding = foldlSent_ [S "interpret the", plural input_,
-  S "to give out the", plural output_, S "which predict the landing",
-  phrase position, S "of a", phrase projectile]
+prob :: Sentence
+prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict the",
+  phrase landingPos, S "of a", phrase projectile]
 
 ---------------------------------
 -- Terminology and Definitions --

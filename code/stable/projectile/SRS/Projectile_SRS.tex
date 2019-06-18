@@ -170,7 +170,7 @@ The scope of the requirements includes the analysis of a two-dimensional project
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-A system is needed to efficiently and correctly predict the landing position of a projectile. Projectile is a computer program developed to interpret the inputs to give out the outputs which predict the landing position of a projectile.
+A system is needed to efficiently and correctly predict the landing position of a projectile.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
@@ -206,22 +206,22 @@ Given the initial velocity vector of the projectile, the goal statements are:
 The instance models that govern Projectile are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 \begin{itemize}
-\item[twoDMotion:\phantomsection\label{twoDMotion}]The projectile motion is two-dimensional (2D). \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
-\item[cartSyst:\phantomsection\label{cartSyst}]A Cartesian coordinate system is used (from \hyperref[neglectCurv]{A: neglectCurv}). \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
-\item[yAxisGravity:\phantomsection\label{yAxisGravity}]The direction of the y-axis is directed opposite to gravity. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[accelYGravity]{A: accelYGravity}.
-\item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
-\item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the x-axis (from \hyperref[neglectCurv]{A: neglectCurv}). \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
-\item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:offsetIM]{IM: offsetIM} \hyperref[IM:messageIM]{IM: messageIM} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
-\item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant (from \hyperref[accelXZero]{A: accelXZero}, \hyperref[accelYGravity]{A: accelYGravity}, \hyperref[neglectDrag]{A: neglectDrag}, and \hyperref[freeFlight]{A: freeFlight}). \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:posVec]{GD: posVec}.
-\item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero. \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[constAccel]{A: constAccel}.
-\item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A: yAxisGravity}). \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[constAccel]{A: constAccel}.
-\item[neglectDrag:\phantomsection\label{neglectDrag}]Air drag is neglected. \hyperref[constAccel]{A: constAccel}.
-\item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass. \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectPos]{GD: rectPos}.
-\item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile. \hyperref[constAccel]{A: constAccel}.
-\item[neglectCurv:\phantomsection\label{neglectCurv}]The distance is small enough that the curvature of the Earth can be neglected. \hyperref[targetXAxis]{A: targetXAxis} \hyperref[cartSyst]{A: cartSyst}.
-\item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero. \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectPos]{GD: rectPos}.
+\item[twoDMotion:\phantomsection\label{twoDMotion}]The projectile motion is two-dimensional (2D). (RefBy: \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:posVec]{GD: posVec}.)
+\item[cartSyst:\phantomsection\label{cartSyst}]A Cartesian coordinate system is used (from \hyperref[neglectCurv]{A: neglectCurv}). (RefBy: \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:posVec]{GD: posVec}.)
+\item[yAxisGravity:\phantomsection\label{yAxisGravity}]The direction of the y-axis is directed opposite to gravity. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}, and \hyperref[accelYGravity]{A: accelYGravity}.)
+\item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)
+\item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the x-axis (from \hyperref[neglectCurv]{A: neglectCurv}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.)
+\item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[IM:offsetIM]{IM: offsetIM}, \hyperref[IM:messageIM]{IM: messageIM}, and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)
+\item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant (from \hyperref[accelXZero]{A: accelXZero}, \hyperref[accelYGravity]{A: accelYGravity}, \hyperref[neglectDrag]{A: neglectDrag}, and \hyperref[freeFlight]{A: freeFlight}). (RefBy: \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:posVec]{GD: posVec}.)
+\item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[constAccel]{A: constAccel}.)
+\item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A: yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[constAccel]{A: constAccel}.)
+\item[neglectDrag:\phantomsection\label{neglectDrag}]Air drag is neglected. (RefBy: \hyperref[constAccel]{A: constAccel}.)
+\item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD: rectVel} and \hyperref[GD:rectPos]{GD: rectPos}.)
+\item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A: constAccel}.)
+\item[neglectCurv:\phantomsection\label{neglectCurv}]The distance is small enough that the curvature of the Earth can be neglected. (RefBy: \hyperref[targetXAxis]{A: targetXAxis} and \hyperref[cartSyst]{A: cartSyst}.)
+\item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectVel]{GD: rectVel}, and \hyperref[GD:rectPos]{GD: rectPos}.)
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -248,7 +248,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \hyperref{https://en.wikipedia.org/wiki/Acceleration}{}{}{Definition of Acceleration}
 \\ \midrule \\
-RefBy & \hyperref[GD:rectVel]{GD: rectVel} \hyperref[GD:rectVel]{GD: rectVel}.
+RefBy & \hyperref[GD:rectVel]{GD: rectVel}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -273,7 +273,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \hyperref{https://en.wikipedia.org/wiki/Velocity}{}{}{Definition of Velocity}
 \\ \midrule \\
-RefBy & \hyperref[GD:rectPos]{GD: rectPos} \hyperref[GD:rectPos]{GD: rectPos}.
+RefBy & \hyperref[GD:rectPos]{GD: rectPos}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
@@ -304,7 +304,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[GD:velVec]{GD: velVec} \hyperref[GD:rectPos]{GD: rectPos}.
+RefBy & \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:rectPos]{GD: rectPos}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear velocity:
@@ -346,7 +346,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[GD:posVec]{GD: posVec}.
+RefBy & \hyperref[GD:posVec]{GD: posVec}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear position:
@@ -451,7 +451,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
+RefBy & \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of position vector:
@@ -508,7 +508,7 @@ Notes & ${\mathbf{v}^{i}}$ and $θ$ are shown in \hyperref[Figure:Launch]{Fig:La
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
+RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -539,7 +539,7 @@ Notes & ${\mathbf{v}^{i}}$ and $θ$ are shown in \hyperref[Figure:Launch]{Fig:La
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.
+RefBy & \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
@@ -587,7 +587,7 @@ Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: p
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} \hyperref[calcValues]{FR: Calculate-Values}.
+RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[calcValues]{FR: Calculate-Values}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of flight duration:
@@ -653,7 +653,7 @@ Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: p
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:offsetIM]{IM: offsetIM} \hyperref[calcValues]{FR: Calculate-Values}.
+RefBy & \hyperref[IM:offsetIM]{IM: offsetIM} and \hyperref[calcValues]{FR: Calculate-Values}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of landing position:
@@ -711,7 +711,7 @@ Notes & $p'$ is from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[outputValues]{FR: Output-Values} \hyperref[IM:messageIM]{IM: messageIM} \hyperref[calcValues]{FR: Calculate-Values}.
+RefBy & \hyperref[outputValues]{FR: Output-Values}, \hyperref[IM:messageIM]{IM: messageIM}, and \hyperref[calcValues]{FR: Calculate-Values}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -755,7 +755,7 @@ Notes & ${d_{offset}}$ is from \hyperref[IM:offsetIM]{IM: offsetIM}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[outputValues]{FR: Output-Values} \hyperref[calcValues]{FR: Calculate-Values}.
+RefBy & \hyperref[outputValues]{FR: Output-Values} and \hyperref[calcValues]{FR: Calculate-Values}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{Data Constraints}

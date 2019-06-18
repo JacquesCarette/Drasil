@@ -19,11 +19,11 @@ import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (posVecGD)
-import Drasil.Projectile.Unitals (isHit, isShort, launAngle, landPos,
-  flightDur, launSpeed, offset, targPos)
+import Drasil.Projectile.Unitals (flightDur, isHit, isShort, landPos, launAngle,
+  launSpeed, message, offset, targPos)
 
 iMods :: [InstanceModel]
-iMods = [timeIM, distanceIM, shortIM, offsetIM, hitIM]
+iMods = [timeIM, distanceIM, shortIM, offsetIM, messageIM, hitIM]
 
 ---
 timeIM :: InstanceModel
@@ -123,11 +123,23 @@ shortRC = makeRC "shortRC" (nounPhraseSP "isShort")
 ---
 offsetIM :: InstanceModel
 offsetIM = imNoDerivNoRefs offsetRC [qw targPos, qw landPos]
-  [sy targPos $> 0, sy landPos $> 0] (qw offset) [] "offsetIM" [{-Notes-}]
+  [sy targPos $> 0, sy landPos $> 0] (qw offset) [sy offset $> 0] "offsetIM" [{-Notes-}]
 
 offsetRC :: RelationConcept
 offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") 
-  EmptyS $ sy offset $= UnaryOp Abs (sy targPos - sy landPos)
+  EmptyS $ sy offset $= sy landPos - sy targPos
+
+---
+messageIM :: InstanceModel
+messageIM = imNoDerivNoRefs messageRC [qw offset, qw targPos]
+  [sy targPos $> 0] (qw message) [] "messageIM" [offsetNote]
+
+messageRC :: RelationConcept
+messageRC = makeRC "messageRC" (nounPhraseSP "output message") 
+  EmptyS $ sy message $= case_ [case1, case2, case3]
+  where case1 = (Str "The target was hit.",        ((UnaryOp Abs (sy offset / sy targPos)) $< 0.02))
+        case2 = (Str "The projectile fell short.", (sy offset $< 0))
+        case3 = (Str "The projectile went long.",  (sy offset $> 0))
 
 ---
 hitIM :: InstanceModel

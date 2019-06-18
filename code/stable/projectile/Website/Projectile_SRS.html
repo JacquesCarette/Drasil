@@ -164,6 +164,11 @@
                   <td>m</td>
                 </tr>
                 <tr>
+                  <td><em>s</em></td>
+                  <td>Output message as a string</td>
+                  <td>--</td>
+                </tr>
+                <tr>
                   <td><em>t</em></td>
                   <td>Time</td>
                   <td>s</td>
@@ -1419,13 +1424,17 @@
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td></td>
+                      <td>
+                        <div class="equation">
+                          <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;0</em>
+                        </div>
+                      </td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>d<sub>offset</sub> = |p<sub>target</sub>&minus;p'|</em>
+                          <em>d<sub>offset</sub> = p'&minus;p<sub>target</sub></em>
                         </div>
                       </td>
                     </tr>
@@ -1436,8 +1445,8 @@
                           <li>
                             <em>d<sub>offset</sub></em> is the offset between the target position and the landing position (m)
                           </li>
-                          <li><em>p<sub>target</sub></em> is the target position (m)</li>
                           <li><em>p'</em> is the landing position (m)</li>
+                          <li><em>p<sub>target</sub></em> is the target position (m)</li>
                         </ul>
                       </td>
                     </tr>
@@ -1449,9 +1458,108 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:hitIM>IM: hitIM</a> <a href=#calcValues>FR: Calculate-Values</a>.
+                          <a href=#IM:messageIM>IM: messageIM</a> <a href=#IM:hitIM>IM: hitIM</a> <a href=#calcValues>FR: Calculate-Values</a>.
                         </p>
                       </td>
+                    </tr>
+                  </table>
+                </div>
+                <div id="IM:messageIM">
+                  <table class="idefn">
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Output message</p></td>
+                    </tr>
+                    <tr>
+                      <th>Input</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>d<sub>offset</sub></em>, <em>p<sub>target</sub></em>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output</th>
+                      <td><p class="paragraph"><em>s</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Input Constraints</th>
+                      <td>
+                        <div class="equation">
+                          <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Output Constraints</th>
+                      <td></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        <div class="equation">
+                          <em>s = <span class="casebr">{</span>
+                                  <div class="cases">
+                                    <span>
+                                      The target was hit. , <span class="case">
+                                                              |<div class="fraction">
+                                                                 <span class="fup">
+                                                                   d<sub>offset</sub>
+                                                                 </span>
+                                                                 <span class="fdn">
+                                                                   p<sub>target</sub>
+                                                                 </span>
+                                                               </div>|&thinsp;&lt;&thinsp;<div class="fraction">
+                                                                                            <span class="fup">
+                                                                                              1
+                                                                                            </span>
+                                                                                            <span class="fdn">
+                                                                                              50
+                                                                                            </span>
+                                                                                          </div>
+                                                            </span>
+                                    </span>
+                                    <span>
+                                      The projectile fell short. , <span class="case">
+                                                                     d<sub>offset</sub>&thinsp;&lt;&thinsp;0
+                                                                   </span>
+                                    </span>
+                                    <span>
+                                      The projectile went long. , <span class="case">
+                                                                    d<sub>offset</sub>&thinsp;&gt;&thinsp;0
+                                                                  </span>
+                                    </span>
+                                  </div></em>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>s</em> is the output message as a string (Unitless)</li>
+                          <li>
+                            <em>d<sub>offset</sub></em> is the offset between the target position and the landing position (m)
+                          </li>
+                          <li><em>p<sub>target</sub></em> is the target position (m)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          <em>d<sub>offset</sub></em> is from <a href=#IM:offsetIM>IM: offsetIM</a>.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -1644,7 +1752,7 @@
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: If <em>isHit</em> (from <a href=#IM:hitIM>IM: hitIM</a>), output the message &quot;The target was hit.&quot; Otherwise, if <em>isShort</em> (from <a href=#IM:hitIM>IM: hitIM</a>), output the message &quot;The projectile fell short.&quot; and <em>d<sub>offset</sub></em>. Otherwise, output the message &quot;The projectile went long.&quot; and <em>d<sub>offset</sub></em>.
+                  Output-Values: If <em>isHit</em> (from <a href=#IM:hitIM>IM: hitIM</a>), output the output message as a string &quot;The target was hit.&quot; Otherwise, if <em>isShort</em> (from <a href=#IM:hitIM>IM: hitIM</a>), output the output message as a string &quot;The projectile fell short.&quot; and <em>d<sub>offset</sub></em>. Otherwise, output the output message as a string &quot;The projectile went long.&quot; and <em>d<sub>offset</sub></em>.
                 </div>
               </p>
             </div>

@@ -57,7 +57,7 @@ constrained :: [ConstrConcept]
 constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 
 quantDicts :: [QuantityDict]
-quantDicts = [isShort, isHit]
+quantDicts = [isShort, isHit, message]
 
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ
@@ -109,3 +109,6 @@ isHit = vc "isHit"
   (nounPhraseSent (S "variable that is assigned true when the" +:+ phrase landingPos +:+
    S "is within a degree of tolerance of the" +:+ phrase targetPos))
   (Atomic "isHit") Boolean
+
+message :: QuantityDict
+message = vc "message" (nounPhraseSent (S "output message as a string")) lS String

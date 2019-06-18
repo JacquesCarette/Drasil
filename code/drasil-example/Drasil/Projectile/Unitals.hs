@@ -104,4 +104,4 @@ grav :: QDefinition
 grav = mkQuantDef gravitationalAccel (dbl 9.8)
 
 tol :: QDefinition
-tol = mkQuantDef (vc "tol" (nounPhraseSP "tolerance for a hit") vEpsilon Rational) (Perc 2 2)
+tol = mkQuantDef (vc "tol" (nounPhraseSP "hit tolerance") vEpsilon Rational) (Perc 2 2)

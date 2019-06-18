@@ -61,7 +61,7 @@ nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, portable]
 
 propsDeriv :: [Contents]
-propsDeriv = [foldlSP [S "FIXME"]]
+propsDeriv = [mkParagraph $ S "Not applicable."]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [

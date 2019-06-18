@@ -6,7 +6,7 @@ import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List, File, Char, 
-  Float, Object, String, Boolean, Integer))
+  Float, Object, String, Boolean, Integer, Iterator))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -619,7 +619,8 @@ convType C.Integer = int
 convType C.Float = float
 convType C.Char = char
 convType C.String = string
-convType (C.List t) = getListTypeFunc t dynamic_
+convType (C.List t) = listType dynamic_ (convType t)
+convType (C.Iterator t) = iterator $ convType t
 convType (C.Object n) = obj n
 convType C.File = error "convType: File ?"
 
@@ -776,7 +777,7 @@ convStmt (FTry t c) = do
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmt FContinue = return continue
 convStmt (FDec v (C.List t)) = return $ listDec (codeName v) 0 
-  (getListTypeFunc t dynamic_)
+  (listType dynamic_ (convType t))
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
 convStmt (FProcCall n l) = do
   e' <- convExpr (FCall (asExpr n) l)
@@ -785,14 +786,6 @@ convStmt (FAppend a b) = do
   a' <- convExpr a
   b' <- convExpr b
   return $ valState $ a' $. listAppend b'
-
-getListTypeFunc :: (RenderSym repr) => C.CodeType -> repr (Permanence repr) ->
-  repr (StateType repr)
-getListTypeFunc C.Integer p = intListType p
-getListTypeFunc C.Float p = floatListType p
-getListTypeFunc C.Boolean _ = boolListType
-getListTypeFunc (C.List t) p = listType p $ getListTypeFunc t p
-getListTypeFunc t p = listType p (convType t)
 
 -- this is really ugly!!
 genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)

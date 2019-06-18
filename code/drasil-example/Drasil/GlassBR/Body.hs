@@ -34,8 +34,8 @@ import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon,
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   assumption, characteristic, company, condition, content, dataConst, datum,
   definition, doccon, doccon', document, emphasis, environment, goal,
-  information, input_, interface, model, organization, output_, physical,
-  physSyst, problem, product_, purpose, reference, software, softwareConstraint,
+  information, input_, interface, model, organization, physical, physSyst,
+  problem, product_, purpose, reference, software, softwareConstraint,
   softwareSys, srsDomains, standard, sysCont, system, template, term_, user,
   value, variable)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, code)
@@ -154,7 +154,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
-      [SSDProblem $ PDProg probStart glassBR probEnding [termsAndDesc, physSystDescription, goalStmts],
+      [SSDProblem $ PDProg prob [termsAndDesc, physSystDescription, goalStmts],
        SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tMods
@@ -382,14 +382,9 @@ userCharacteristicsIntro = LlC $ enumBullet characteristicsLabel $ map foldlSent
 
 {--PROBLEM DESCRIPTION--}
 
-probStart, probEnding :: Sentence
-probStart = foldlSent [S "A", phrase system,
-  S "is needed to efficiently" `sAnd` S "correctly predict the",
-  phrase blastRisk +:+ S "involved with the glass"]
-probEnding = foldl (+:+) EmptyS [S "interpret the", plural input_,
-  S "to give out the", plural output_,
-  S "which predict whether the", phrase glaSlab,
-  S "can withstand the", phrase blast, S "under the",
+prob :: Sentence
+prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict whether a",
+  phrase glaSlab, S "can withstand a", phrase blast, S "under given",
   plural condition]
 
 {--Terminology and Definitions--}

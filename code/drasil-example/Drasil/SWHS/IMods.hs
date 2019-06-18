@@ -475,16 +475,14 @@ htPCMDesc = foldlSent [S "The above", phrase equation `sIs` S "derived using" +:
 -----------
 
 instModIntro :: Sentence
-instModIntro = S "The" +:+ plural goal +:+ makeRef2S waterTempGS `sC` 
-  makeRef2S pcmTempGS `sC` makeRef2S waterEnergyGS `sC` S "and" +:+ 
-  makeRef2S pcmEnergyGS +:+ S "are solved by" +:+ makeRef2S eBalanceOnWtr `sC`
-  makeRef2S eBalanceOnPCM `sC` makeRef2S heatEInWtr `sC` S "and" +:+.
-  makeRef2S heatEInPCM +:+ S "The" +:+ plural solution +:+ S "for" +:+
-  makeRef2S eBalanceOnWtr `sAnd` makeRef2S eBalanceOnPCM +:+ 
-  S "are coupled since the" +:+ plural solution +:+ S "for" +:+ ch tempW `sAnd`
-  ch tempPCM +:+. S "depend on one another" +:+ makeRef2S heatEInWtr +:+
-  S "can be solved once" +:+ makeRef2S eBalanceOnWtr +:+. 
-  S "has been solved" +:+ S "The" +:+ plural solution `sOf` 
-  makeRef2S eBalanceOnPCM `sAnd` makeRef2S heatEInPCM +:+ 
-  S "are also coupled" `sC` S "since the" +:+ phrase tempPCM `andThe` 
-  phrase pcmE +:+ S "depend on the" +:+. phrase phaseChange
+instModIntro = foldlSent [S "The", plural goal, foldlList Comma List
+  (map makeRef2S [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]) `sAre`
+  S "solved by" +:+. foldlList Comma List (map makeRef2S
+  [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]), S "The",
+  plural solution, S "for", makeRef2S eBalanceOnWtr `sAnd`
+  makeRef2S eBalanceOnPCM `sAre` S "coupled since the", plural solution,
+  S "for", ch tempW `sAnd` ch tempPCM +:+. S "depend on one another",
+  makeRef2S heatEInWtr, S "can be solved once", makeRef2S eBalanceOnWtr +:+.
+  S "has been solved", S "The", plural solution `sOf` makeRef2S eBalanceOnPCM `sAnd`
+  makeRef2S heatEInPCM `sAre` S "also coupled" `sC` S "since the",
+  phrase tempPCM `andThe` phrase pcmE,S "depend on the", phrase phaseChange]

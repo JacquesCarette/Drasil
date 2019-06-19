@@ -1028,7 +1028,13 @@ instance MethodSym CppSrcCode where
   function n s _ t ps b = liftA2 (mthd False) (fmap snd s) (liftA5 
     (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
 
-  inOutFunc n s p ins outs b = method n "" s p void (map (uncurry pointerParam) outs ++ map (uncurry stateParam) (filter (\(l,_) -> not $ l `elem` (map fst outs)) ins)) b
+  inOutFunc n s p ins [] b = function n s p void (map (fmap (uncurry getParam) 
+    . liftPairSnd) ins) b
+  inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (fmap (uncurry 
+    getParam) . liftPairSnd) ins) (liftA2 appendToBody b $ state $ returnVar l)
+  inOutFunc n s p ins outs b = function n s p void (map (uncurry pointerParam) 
+    outs ++ map (fmap (uncurry getParam) . liftPairSnd) (filter (\(l,_) -> l 
+    `notElem` map fst outs) ins)) b
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1465,10 +1471,14 @@ instance MethodSym CppHdrCode where
   destructor n _ = pubMethod ('~':n) n void [] (return empty)
 
   function n = method n ""
-  -- Need type info to determine whether to use stateParam or pointerParam
-  inOutFunc n s p ins [] b = function n s p void (map (uncurry stateParam) ins) b
-  inOutFunc n s p ins [(l,t)] b = function n s p t (map (uncurry stateParam) ins) (liftA2 appendToBody b $ state $ returnVar l)
-  inOutFunc n s p ins outs b = function n s p void (map (uncurry pointerParam) outs ++ map (uncurry stateParam) (filter (\(l,_) -> notElem l (map fst outs)) ins)) b
+
+  inOutFunc n s p ins [] b = function n s p void (map (fmap (uncurry getParam) 
+    . liftPairSnd) ins) b
+  inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (fmap (uncurry 
+    getParam) . liftPairSnd) ins) (liftA2 appendToBody b $ state $ returnVar l)
+  inOutFunc n s p ins outs b = function n s p void (map (uncurry pointerParam) 
+    outs ++ map (fmap (uncurry getParam) . liftPairSnd) (filter (\(l,_) -> l 
+    `notElem` map fst outs) ins)) b
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
@@ -1512,6 +1522,11 @@ isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
+getParam :: Label -> (Doc, CodeType) -> Doc
+getParam l st@(_, List _) = cppPointerParamDoc l st
+getParam l st@(_, Object _) = cppPointerParamDoc l st
+getParam l st = stateParamDocD l st
+ 
 -- convenience
 enumsEqualInts :: Bool
 enumsEqualInts = False

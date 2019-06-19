@@ -299,7 +299,6 @@ instance Selector JavaCode where
 
   selfAccess = objAccess self
 
-  listPopulateAccess _ _ = return (mkVal empty)
   listSizeAccess v = objAccess v listSize
 
   listIndexExists l i = mkVal <$> liftA3 jListIndexExists greaterOp l i
@@ -323,11 +322,6 @@ instance FunctionSym JavaCode where
 
   listSize = fmap funcDocD (funcApp "size" [])
   listAdd i v = fmap funcDocD (funcApp "add" [i, v])
-  listPopulateInt _ = return empty
-  listPopulateFloat _ = return empty
-  listPopulateChar _ = return empty
-  listPopulateBool _ = return empty
-  listPopulateString _ = return empty
   listAppend v = fmap funcDocD (funcApp "add" [v])
   listExtendInt = fmap jListExtend defaultInt 
   listExtendFloat = fmap jListExtend defaultFloat 

@@ -257,17 +257,17 @@ pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
 -- | Print a RealInterval
 renderRealInt :: PrintingInformation -> Symbol -> RealInterval Expr Expr -> P.Expr
 renderRealInt st s (Bounded (Inc,a) (Inc,b)) = 
-  P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
+  P.Row [expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
 renderRealInt st s (Bounded (Inc,a) (Exc,b)) =
-  P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.Lt, expr b st]
+  P.Row [expr a st, P.MO P.LEq, symbol s, P.MO P.Lt, expr b st]
 renderRealInt st s (Bounded (Exc,a) (Inc,b)) =
-  P.Row [ expr a st, P.MO P.Lt, symbol s, P.MO P.LEq, expr b st]
+  P.Row [expr a st, P.MO P.Lt, symbol s, P.MO P.LEq, expr b st]
 renderRealInt st s (Bounded (Exc,a) (Exc,b)) =
-  P.Row [ expr a st, P.MO P.Lt, symbol s, P.MO P.Lt, expr b st]
-renderRealInt st s (UpTo (Inc,a))    = P.Row [ symbol s, P.MO P.LEq, expr a st]
-renderRealInt st s (UpTo (Exc,a))    = P.Row [ symbol s, P.MO P.Lt, expr a st]
-renderRealInt st s (UpFrom (Inc,a))  = P.Row [ symbol s, P.MO P.GEq, expr a st]
-renderRealInt st s (UpFrom (Exc,a))  = P.Row [ symbol s, P.MO P.Gt, expr a st]
+  P.Row [expr a st, P.MO P.Lt, symbol s, P.MO P.Lt, expr b st]
+renderRealInt st s (UpTo (Inc,a))   = P.Row [symbol s, P.MO P.LEq, expr a st]
+renderRealInt st s (UpTo (Exc,a))   = P.Row [symbol s, P.MO P.Lt,  expr a st]
+renderRealInt st s (UpFrom (Inc,a)) = P.Row [symbol s, P.MO P.GEq, expr a st]
+renderRealInt st s (UpFrom (Exc,a)) = P.Row [symbol s, P.MO P.Gt,  expr a st]
 
 
 -- | Translates Sentence to the Printing representation of Sentence ('Spec')
@@ -276,7 +276,17 @@ spec :: PrintingInformation -> Sentence -> P.Spec
 spec sm (EmptyS :+: b) = spec sm b
 spec sm (a :+: EmptyS) = spec sm a
 spec sm (a :+: b)      = spec sm a P.:+: spec sm b
-spec _ (S s)           = P.S s
+spec _ (S s)           = P.S $ checkValid invalidChars
+  where
+    checkValid []  = s
+    checkValid [x]
+      | x `elem` s = charError x
+      | otherwise  = s
+    checkValid (x:xs)
+      | x `elem` s = charError x
+      | otherwise  = checkValid xs
+    charError x    = error $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']
+    invalidChars   = ['<', '>', '\\', '%']
 spec _ (Sy s)          = P.Sy s
 spec _ Percent         = P.E $ P.MO P.Perc
 spec _ (P s)           = P.E $ symbol s

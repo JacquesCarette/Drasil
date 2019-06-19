@@ -24,7 +24,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
   physSyst, problem, srsDomains, srs)
-import Data.Drasil.Concepts.Math (mathcon)
+import Data.Drasil.Concepts.Math (cartesian, mathcon, rightHand)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (constAccel, gravity, physicCon, physicCon',
   rectilinear, twoD)
@@ -176,9 +176,9 @@ termsAndDefs = termDefnF Nothing [termsAndDefsBullets]
 
 termsAndDefsBullets :: Contents
 termsAndDefsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $
-  map tAndDMap [launcher, projectile, target, gravity, rectilinear]
+  map tAndDMap [launcher, projectile, target, gravity, cartesian, rightHand, rectilinear]
   where
-    tAndDMap c = Flat $ foldlSent [atStart c +: EmptyS, c ^. defn]
+    tAndDMap c = Flat $ foldlSent_ [atStart c +: EmptyS, c ^. defn]
 
 ---------------------------------
 -- Physical System Description --

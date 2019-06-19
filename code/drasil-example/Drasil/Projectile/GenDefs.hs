@@ -6,8 +6,8 @@ import Theory.Drasil (GenDefn, TheoryModel, gdNoRefs)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
-import Data.Drasil.Concepts.Math (vector)
-import Data.Drasil.Concepts.Physics (cartesian, oneD, rectilinear, twoD)
+import Data.Drasil.Concepts.Math (cartesian, vector)
+import Data.Drasil.Concepts.Physics (oneD, rectilinear, twoD)
 
 import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
   iVel, ixPos, ixVel, iyPos, iyVel, position, scalarAccel, scalarPos, speed,

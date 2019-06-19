@@ -7,18 +7,18 @@ import Utils.Drasil
 import Control.Lens ((^.))
 
 mathcon :: [ConceptChunk]
-mathcon = [angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
-  graph, law, matrix, norm, normal, normalV, number, orient, parameter, perp, 
-  perpV, pi_, probability, shape, surArea, surface, unit_, unitV, vector, rate, 
-  change, rOfChng, constraint]
+mathcon = [angle, area, calculation, cartesian, change, constraint, diameter,
+  equation, euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal,
+  normalV, number, orient, parameter, perp, perpV, pi_, probability, rOfChng,
+  rate, rightHand, shape, surArea, surface, unitV, unit_, vector]
 
 mathcon' :: [CI]
 mathcon' = [pde, ode, de]
 
-angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
-  graph, law, matrix, norm, normal, normalV, number, orient, parameter, perp, 
-  perpV, pi_, probability, shape, surArea, surface, unit_, unitV, vector, rate, 
-  change, rOfChng, constraint :: ConceptChunk
+angle, area, calculation, cartesian, change, constraint, diameter, equation,
+  euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal, normalV,
+  number, orient, parameter, perp, perpV, pi_, probability, rOfChng, rate,
+  rightHand, shape, surArea, surface, unitV, unit_, vector :: ConceptChunk
 
 pde, ode, de :: CI
 
@@ -26,6 +26,8 @@ angle        = dcc "angle"        (cn' "angle")                   ("The amount o
                                                                   "coincidence with another")
 area         = dcc "area"         (cn' "area")                    "A part of an object or surface"
 calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
+cartesian    = dcc "cartesian"    (pn' "Cartesian coordinate system") ("A coordinate system that specifies each point uniquely in a plane by a " ++
+                                                                      "pair of numerical coordinates.")
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
 constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
@@ -44,9 +46,10 @@ number       = dcc "number"       (cn' "number")                  "A mathematica
 parameter    = dcc "parameter"    (cn' "parameter")               "A quantity whose value is selected depending on particular circumstances"
 --FIXME: Should "parameter" be in math?
 perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
-pi_          = dcc "pi"           (cn' "circumference to diameter ratio")                                                                         "The ratio of a circle's circumference to its diameter"
+pi_          = dcc "pi"           (cn' "circumference to diameter ratio") "The ratio of a circle's circumference to its diameter"
 probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"
+rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen."
 shape        = dcc "shape"        (cn' "shape")                   "The outline of an area or figure"
 surface      = dcc "surface"      (cn' "surface")                 "The outer or topmost boundary of an object"
 unit_        = dcc "unit"         (cn' "unit")                    "Identity element"

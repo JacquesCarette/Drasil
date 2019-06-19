@@ -34,9 +34,9 @@ targetPos   = compoundNC target position
 
 ---
 hitMessage, launcher, longMessage, projectile, shortMessage, target :: ConceptChunk
-launcher   = dcc "launcher"   (nounPhraseSP "launcher")   "Where the projectile is launched from"
-projectile = dcc "projectile" (nounPhraseSP "projectile") "The object to be launched at the target"
-target     = dcc "target"     (nounPhraseSP "target")     "Where the projectile should be launched to"
+launcher   = dcc "launcher"   (nounPhraseSP "launcher")   "Where the projectile is launched from."
+projectile = dcc "projectile" (nounPhraseSP "projectile") "The object to be launched at the target."
+target     = dcc "target"     (nounPhraseSP "target")     "Where the projectile should be launched to."
 
 hitMessage   = dcc "hitMessage"   (nounPhraseSP "hit")   "The target was hit."
 shortMessage = dcc "shortMessage" (nounPhraseSP "short") "The projectile fell short."

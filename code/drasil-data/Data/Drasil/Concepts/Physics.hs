@@ -9,30 +9,30 @@ import Data.Drasil.Concepts.Documentation (property, value)
 import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
-physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
-  chgInVelocity, cohesion, collision, compression, constAccel, constAccelV,
-  damping, displacement, distance, elasticity, energy, fSpeed, fVel, fbd,
-  force, friction, gravity, gravitationalAccel, gravitationalConst, height,
-  iPos, iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel,
+physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
+  cohesion, collision, compression, constAccel, constAccelV, damping,
+  displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
+  friction, gravity, gravitationalAccel, gravitationalConst, height, iPos,
+  iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel,
   joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
-  rightHand, rigidBody, scalarAccel, scalarPos, space, speed, strain, stress,
-  tension, time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos,
-  xVel, yAccel, yConstAccel, yDist, yPos, yVel]
+  rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
+  time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
+  yAccel, yConstAccel, yDist, yPos, yVel]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
 
-acceleration, angAccel, angDisp, angVelo, angular, cartesian, chgInVelocity,
-  cohesion, collision, compression, constAccel, constAccelV, damping,
-  displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
-  friction, gravity, gravitationalAccel, gravitationalConst, height, iPos,
-  iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel, joint,
-  kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
-  position, potEnergy, pressure, rectilinear, restitutionCoef, rightHand,
-  rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
-  time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
-  yAccel, yConstAccel, yDist, yPos, yVel :: ConceptChunk
+acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
+  collision, compression, constAccel, constAccelV, damping, displacement,
+  distance, elasticity, energy, fSpeed, fVel, fbd, force, friction, gravity,
+  gravitationalAccel, gravitationalConst, height, iPos, iSpeed, iVel, impulseS,
+  impulseV, isotropy, ixPos, ixVel, iyPos, iyVel, joint, kEnergy, linAccel,
+  linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, potEnergy,
+  pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
+  space, speed, strain, stress, tension, time, torque, velocity, weight,
+  xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
+  yPos, yVel :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (pn "one-dimensional")   "1D" [physics]
@@ -60,13 +60,8 @@ collision    = dcc "collision" (cn' "collision")
 space        = dcc "space" (cn' "space") 
   ("A two-dimensional extent where objects and " ++
   "events have relative positions and directions.")
-cartesian    = dcc "cartesian" (pn' "Cartesian coordinate system") 
-  ("A coordinate system that specifies each point uniquely in a plane by a " ++
-  "pair of numerical coordinates.")
-rightHand    = dcc "rightHand" (cn' "right-handed coordinate system")
-  "A coordinate system where the positive z-axis comes out of the screen."
 rectilinear  = dcc "rectilinear" (cn "rectilinear")
-  "Occuring in one dimension"
+  "Occuring in one dimension."
   
 joint        = dcc "joint"    (cn' "joint") ("a connection between two rigid " ++ 
   "bodies which allows movement with one or more degrees of freedom")
@@ -174,7 +169,7 @@ impulseV   = dcc "impulseV" (cn "impulse (vector)")
    "A force acting briefly on a body and producing a finite change of momentum in a given direction" 
 impulseS   = dcc "impulseS" (cn "impulse (scalar)") "A force acting briefly on a body and producing a finite change of momentum" 
 
-gravity = dcc "gravity" (cn "gravity") "The force that attracts one physical body with mass to another"
+gravity = dcc "gravity" (cn "gravity") "The force that attracts one physical body with mass to another."
 gravitationalAccel = dcc "gravitationalAccel" 
   (cn "gravitational acceleration") "An expression used in physics to indicate the intensity of a gravitational field"
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant" )

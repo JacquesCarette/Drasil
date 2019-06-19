@@ -7,8 +7,8 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (body, component, constant, material_,
   value)
-import Data.Drasil.Concepts.Math (equation, vector)
-import Data.Drasil.Concepts.Physics (cartesian, gravity, twoD)
+import Data.Drasil.Concepts.Math (cartesian, equation, vector)
+import Data.Drasil.Concepts.Physics (gravity, twoD)
 import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)

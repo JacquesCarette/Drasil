@@ -6,9 +6,9 @@ import Language.Drasil
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumpDom)
+import Data.Drasil.Concepts.Math (cartesian)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (acceleration, cartesian, collision,
-  distance, gravity, time, twoD)
+import Data.Drasil.Concepts.Physics (acceleration, collision, distance, gravity, time, twoD)
 
 import Drasil.Projectile.Concepts (launcher, projectile, target)
 

@@ -37,8 +37,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  observerListName, doubleSlash, addCommentsDocD, callFuncParamList, getterName,
-  setterName, setMain, setEmpty, statementsToStateVars)
+  observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
+  appendToBody, getterName, setterName, setMain, setEmpty, 
+  statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -525,6 +526,21 @@ instance MethodSym JavaCode where
   destructor _ _ = error "Destructors not allowed in Java"
 
   function n = method n ""
+
+  inOutFunc n s p ins [] b = function n s p void (map (uncurry stateParam) ins)
+    b
+  inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (uncurry 
+    stateParam) ins) (liftA2 appendToBody b (state $ returnVar l))
+  inOutFunc n s p ins outs b = function n s p (return $ text "Object[]") (map 
+    (uncurry stateParam) ins) (liftA2 appendToBody b (multi (
+      varDecDef "outputs" (return (text "Object[]", List $ Object "Object")) 
+        (var $ "new Object[" ++ show (length outs) ++ "]")
+      : assignArray 0 outs
+      ++ [returnVar "outputs"])))
+      where assignArray :: (StatementSym repr) => Int -> [(Label, repr (StateType repr))] -> [repr (Statement repr)]
+            assignArray _ [] = []
+            assignArray c ((l,_):ls) = (("outputs[" ++ show n ++ "]") &.= var l)
+              : assignArray (c+1) ls
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc

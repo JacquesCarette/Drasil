@@ -102,7 +102,7 @@ velVecDeriv = [S "Detailed derivation" `sOf` phrase velocity +: phrase vector,
                velVecDerivSent, E velVecRel]
 
 velVecDerivSent :: Sentence
-velVecDerivSent = vecDeriv [(velocity, velocityXYEqnS), (acceleration, accelerationXYEqnS)] rectVelGD
+velVecDerivSent = vecDeriv [(velocity, velocityXY), (acceleration, accelerationXY)] rectVelGD
 
 ----------
 posVecGD :: GenDefn
@@ -124,7 +124,7 @@ posVecDeriv = [S "Detailed derivation" `sOf` phrase position +: phrase vector,
                posVecDerivSent, E posVecRel]
 
 posVecDerivSent :: Sentence
-posVecDerivSent = vecDeriv [(position, positionXYEqnS), (velocity, velocityXYEqnS), (acceleration, accelerationXYEqnS)] rectPosGD
+posVecDerivSent = vecDeriv [(position, positionXY), (velocity, velocityXY), (acceleration, accelerationXY)] rectPosGD
 
 -- Helper for making rectilinear derivations
 rectDeriv :: UnitalChunk -> UnitalChunk -> Sentence -> UnitalChunk -> TheoryModel -> Sentence
@@ -150,21 +150,21 @@ rearrAndIntSent   = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "hav
 performIntSent    = S "Performing the integration" `sC` S "we" +: S "have"
 
 -- Helper for making vector derivations
-vecDeriv :: [(UnitalChunk, Sentence)] -> GenDefn -> Sentence
+vecDeriv :: [(UnitalChunk, Expr)] -> GenDefn -> Sentence
 vecDeriv vecs gdef = foldlSentCol [
   S "For a", phrase twoD, phrase cartesian, sParen (makeRef2S twoDMotion `sAnd` makeRef2S cartSyst) `sC`
   S "we can represent" +:+. foldlList Comma List 
-  (map (\(c, e) -> foldlSent_ [S "the", phrase c, phrase vector, S "as", e]) vecs),
+  (map (\(c, e) -> foldlSent_ [S "the", phrase c, phrase vector, S "as", E e]) vecs),
   S "The", phrase acceleration `sIs` S "assumed to be constant",sParen (makeRef2S constAccel) `andThe`
-  phrase constAccelV `sIs` S "represented as" +:+. constAccelXYEqnS, S "The",
+  phrase constAccelV `sIs` S "represented as" +:+. E constAccelXY, S "The",
   phrase iVel, sParen (S "at" +:+ E (sy time $= 0) `sC` S "from" +:+ makeRef2S timeStartZero) `sIs`
   S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), S "Since we have a",
   phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phrase coordinate `sOf`
   S "the", phrase ((fst . head) vecs), phrase vector, S "to yield"]
 
--- Helper sentences that represent the vectors of quantities as components
-positionXYEqnS, velocityXYEqnS, accelerationXYEqnS, constAccelXYEqnS :: Sentence
-positionXYEqnS     = E $ sy position     $= vec2D (sy xPos)        (sy yPos)
-velocityXYEqnS     = E $ sy velocity     $= vec2D (sy xVel)        (sy yVel)
-accelerationXYEqnS = E $ sy acceleration $= vec2D (sy xAccel)      (sy yAccel)
-constAccelXYEqnS   = E $ sy constAccelV  $= vec2D (sy xConstAccel) (sy yConstAccel)
+-- Helper expressions that represent the vectors of quantities as components
+positionXY, velocityXY, accelerationXY, constAccelXY :: Expr
+positionXY     = sy position     $= vec2D (sy xPos)        (sy yPos)
+velocityXY     = sy velocity     $= vec2D (sy xVel)        (sy yVel)
+accelerationXY = sy acceleration $= vec2D (sy xAccel)      (sy yAccel)
+constAccelXY   = sy constAccelV  $= vec2D (sy xConstAccel) (sy yConstAccel)

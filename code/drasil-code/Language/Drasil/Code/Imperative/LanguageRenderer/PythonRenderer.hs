@@ -30,8 +30,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
   funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD, 
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, classDec, dot, 
-  forLabel, observerListName, addCommentsDocD, callFuncParamList, getterName, 
-  setterName)
+  forLabel, observerListName, addCommentsDocD, valList, getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
   liftA5, liftList, lift1List, lift4Pair, liftPairFst, getInnerType, convType)
@@ -259,10 +258,9 @@ instance ValueExpression PythonCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 pyStateObj t (liftList 
-    callFuncParamList vs))
+  stateObj t vs = liftA2 mkVal t (liftA2 pyStateObj t (liftList valList vs))
   extStateObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
-    callFuncParamList vs))
+    valList vs))
   listStateObj t _ = liftA2 mkVal t (fmap typeDoc t)
 
   exists v = v ?!= var "None" void
@@ -320,8 +318,8 @@ instance StatementSym PythonCode where
   type Statement PythonCode = (Doc, Terminator)
   assign v1 v2 = mkStNoEnd <$> liftA2 assignDocD v1 v2
   assignToListIndex lst index v = valState $ lst $. listSet index v
-  multiAssign outs vs = assign (mkVal <$> liftList callFuncParamList outs) 
-    (mkVal <$> liftList callFuncParamList vs)
+  multiAssign outs vs = assign (mkVal <$> liftList valList outs) 
+    (mkVal <$> liftList valList vs)
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
   (&+=) v1 v2 = mkStNoEnd <$> liftA3 plusEqualsDocD' v1 plusOp v2
@@ -332,7 +330,7 @@ instance StatementSym PythonCode where
   varDecDef l _ v = mkStNoEnd <$> fmap (pyVarDecDef l) v
   listDec l _ t = mkStNoEnd <$> fmap (pyListDec l) (listType static_ t)
   listDecDef l _ vs = mkStNoEnd <$> fmap (pyListDecDef l) (liftList 
-    callFuncParamList vs)
+    valList vs)
   objDecDef = varDecDef
   objDecNew l t vs = varDecDef l t (stateObj t vs)
   extObjDecNew l lib t vs = varDecDef l t (extStateObj lib t vs)
@@ -391,7 +389,8 @@ instance StatementSym PythonCode where
 
   returnState v = mkStNoEnd <$> fmap returnDocD v
   returnVar l t = mkStNoEnd <$> fmap returnDocD (var l t)
-  multiReturn vs = mkStNoEnd <$> fmap returnDocD (liftList callFuncParamList vs)
+  multiReturn [] = error "Attempt to write return statement with no return variables"
+  multiReturn vs = mkStNoEnd <$> fmap returnDocD (mkVal <$> liftList valList vs)
 
   valState v = mkStNoEnd <$> fmap valDoc v
 

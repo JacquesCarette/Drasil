@@ -36,7 +36,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   objVarDocD, inlineIfDocD, funcAppDocD, funcDocD, castDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD,
   publicDocD, classDec, dot, observerListName, doubleSlash, addCommentsDocD, 
-  callFuncParamList, appendToBody, getterName, setterName, setEmpty)
+  valList, appendToBody, getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
@@ -768,8 +768,7 @@ instance ValueExpression CppSrcCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp _ = funcApp
-  stateObj t vs = liftA2 mkVal t (liftA2 cppStateObjDoc t (liftList 
-    callFuncParamList vs))
+  stateObj t vs = liftA2 mkVal t (liftA2 cppStateObjDoc t (liftList valList vs))
   extStateObj _ = stateObj
   listStateObj = stateObj
 
@@ -838,7 +837,7 @@ instance StatementSym CppSrcCode where
   varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
   listDec l n t = mkSt <$> liftA2 (cppListDecDoc l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> liftA2 (cppListDecDefDoc l) t (liftList 
-    callFuncParamList vs)
+    valList vs)
   objDecDef l t v = mkSt <$> liftA2 (objDecDefDocD l) t v
   objDecNew l t vs = mkSt <$> liftA2 (objDecDefDocD l) t (stateObj t vs)
   extObjDecNew l _ = objDecNew l

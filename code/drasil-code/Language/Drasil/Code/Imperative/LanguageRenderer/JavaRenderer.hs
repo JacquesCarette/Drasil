@@ -37,9 +37,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
-  appendToBody, getterName, setterName, setMain, setEmpty, 
-  statementsToStateVars)
+  observerListName, doubleSlash, addCommentsDocD, valList, appendToBody, 
+  getterName, setterName, setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -284,11 +283,10 @@ instance ValueExpression JavaCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t 
-    (liftList callFuncParamList vs))
+  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t (liftList valList vs))
   extStateObj _ = stateObj
   listStateObj t vs = liftA2 mkVal t (liftA3 listStateObjDocD listObj t 
-    (liftList callFuncParamList vs))
+    (liftList valList vs))
 
   exists = notNull
   notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (var "null"
@@ -355,7 +353,7 @@ instance StatementSym JavaCode where
   varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
   listDec l n t = mkSt <$> liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> liftA2 (jListDecDef l) t (liftList 
-    callFuncParamList vs)
+    valList vs)
   objDecDef l t v = mkSt <$> liftA2 (objDecDefDocD l) t v
   objDecNew l t vs = mkSt <$> liftA2 (objDecDefDocD l) t (stateObj t vs)
   extObjDecNew l _ = objDecNew l

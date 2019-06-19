@@ -38,8 +38,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
   listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, observerListName,
-  doubleSlash, addCommentsDocD, callFuncParamList, appendToBody, getterName, 
-  setterName, setMain, setEmpty, statementsToStateVars)
+  doubleSlash, addCommentsDocD, valList, appendToBody, getterName, setterName, 
+  setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, liftA4, liftA5, 
   liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, liftPairFst, 
@@ -278,11 +278,10 @@ instance ValueExpression CSharpCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t 
-    (liftList callFuncParamList vs))
+  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t (liftList valList vs))
   extStateObj _ = stateObj
   listStateObj t vs = liftA2 mkVal t (liftA3 listStateObjDocD listObj t 
-    (liftList callFuncParamList vs))
+    (liftList valList vs))
 
   exists = notNull
   notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (var "null" 

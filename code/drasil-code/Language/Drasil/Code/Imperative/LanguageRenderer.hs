@@ -28,7 +28,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  addCommentsDocD, callFuncParamList, appendToBody, getterName, setterName, 
+  addCommentsDocD, valList, appendToBody, getterName, setterName, 
   setMain, setEmpty, statementsToStateVars
 ) where
 
@@ -323,7 +323,7 @@ listDecDocD l n st = typeDoc st <+> text l <+> equals <+> new <+>
 
 listDecDefDocD :: Label -> TypeData -> [ValData] -> Doc
 listDecDefDocD l st vs = typeDoc st <+> text l <+> equals <+> new <+> 
-  typeDoc st <+> braces (callFuncParamList vs)
+  typeDoc st <+> braces (valList vs)
 
 objDecDefDocD :: Label -> TypeData -> ValData -> Doc
 objDecDefDocD = varDecDefDocD
@@ -552,7 +552,7 @@ inlineIfDocD c v1 v2 = parens
   (parens (valDoc c) <+> text "?" <+> valDoc v1 <+> text ":" <+> valDoc v2)
 
 funcAppDocD :: Label -> [ValData] -> Doc
-funcAppDocD n vs = text n <> parens (callFuncParamList vs)
+funcAppDocD n vs = text n <> parens (valList vs)
 
 extFuncAppDocD :: Library -> Label -> [ValData] -> Doc
 extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
@@ -649,8 +649,8 @@ dashes s l = replicate (l - length s) '-'
 
 -- Helper Functions --
 
-callFuncParamList :: [ValData] -> Doc
-callFuncParamList vs = hcat (intersperse (text ", ") (map valDoc vs))
+valList :: [ValData] -> Doc
+valList vs = hcat (intersperse (text ", ") (map valDoc vs))
 
 appendToBody :: Doc -> (Doc, Terminator) -> Doc
 appendToBody b (s, _) = vcat [b, maybeBlank, s]

@@ -6,7 +6,7 @@ import Language.Drasil
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumpDom)
-import Data.Drasil.Concepts.Math (cartesian)
+import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (acceleration, collision, distance, gravity, time, twoD)
 
@@ -42,13 +42,13 @@ cartSystDesc :: Sentence
 cartSystDesc = S "A" +:+ (phrase cartesian `sIs` S "used") +:+. sParen (S "from" +:+ makeRef2S neglectCurv)
 
 yAxisGravityDesc :: Sentence
-yAxisGravityDesc = S "direction" `ofThe'` S "y-axis is directed opposite to" +:+. phrase gravity
+yAxisGravityDesc = S "direction" `ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
 
 launchOriginDesc :: Sentence
 launchOriginDesc = S "The" +:+. (phrase launcher `sIs` S "coincident with the origin")  
 
 targetXAxisDesc :: Sentence
-targetXAxisDesc = S "The" +:+ phrase target +:+ S "lies on the x-axis" +:+. sParen (S "from" +:+ makeRef2S neglectCurv)
+targetXAxisDesc = S "The" +:+ phrase target +:+ S "lies on the" +:+ phrase xAxis +:+. sParen (S "from" +:+ makeRef2S neglectCurv)
 
 posXDirectionDesc :: Sentence
 posXDirectionDesc = S "The positive x-direction" `sIs` S "from the" +:+. (phrase launcher `toThe` phrase target)

@@ -1,6 +1,7 @@
 module Data.Drasil.Concepts.Math where
 
 import Language.Drasil hiding (number)
+import Language.Drasil.ShortHands (lX, lY, lZ)
 import Data.Drasil.IdeaDicts
 import Utils.Drasil
 
@@ -10,7 +11,8 @@ mathcon :: [ConceptChunk]
 mathcon = [angle, area, calculation, cartesian, change, constraint, diameter,
   equation, euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal,
   normalV, number, orient, parameter, perp, perpV, pi_, probability, rOfChng,
-  rate, rightHand, shape, surArea, surface, unitV, unit_, vector]
+  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xDir,
+  yAxis, yDir, zAxis, zDir]
 
 mathcon' :: [CI]
 mathcon' = [pde, ode, de]
@@ -18,7 +20,8 @@ mathcon' = [pde, ode, de]
 angle, area, calculation, cartesian, change, constraint, diameter, equation,
   euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal, normalV,
   number, orient, parameter, perp, perpV, pi_, probability, rOfChng, rate,
-  rightHand, shape, surArea, surface, unitV, unit_, vector :: ConceptChunk
+  rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xDir,
+  yAxis, yDir, zAxis, zDir :: ConceptChunk
 
 pde, ode, de :: CI
 
@@ -55,6 +58,14 @@ surface      = dcc "surface"      (cn' "surface")                 "The outer or 
 unit_        = dcc "unit"         (cn' "unit")                    "Identity element"
 vector       = dcc "vector"       (cn' "vector")                  "Object with magnitude and direction"
 orient       = dcc "orientation"  (cn' "orientation")             "The relative physical position or direction of something"
+
+xAxis = dcc "xAxis" (nounPhraseSent $ P lX :+: S "-axis") "the primary axis of a system of coordinates"
+yAxis = dcc "yAxis" (nounPhraseSent $ P lY :+: S "-axis") "the secondary axis of a system of coordinates"
+zAxis = dcc "zAxis" (nounPhraseSent $ P lZ :+: S "-axis") "the tertiary axis of a system of coordinates"
+
+xDir = dcc "xDir" (nounPhraseSent $ P lX :+: S "-direction") "the direction aligned with the x-axis"
+yDir = dcc "yDir" (nounPhraseSent $ P lY :+: S "-direction") "the direction aligned with the y-axis"
+zDir = dcc "zDir" (nounPhraseSent $ P lZ :+: S "-direction") "the direction aligned with the z-axis"
 
 --FIXME: use nounphrase instead of cn'
 de           = commonIdeaWithDict "de"     (cn' "differential equation")          "DE"   [mathematics]

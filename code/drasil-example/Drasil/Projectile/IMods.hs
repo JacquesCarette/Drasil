@@ -9,7 +9,7 @@ import Utils.Drasil
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 
 import Data.Drasil.Concepts.Documentation (value)
-import Data.Drasil.Concepts.Math (constraint, equation)
+import Data.Drasil.Concepts.Math (constraint, equation, xAxis)
 
 import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.Physics (distance, iSpeed, ixPos, ixVel, iyPos,
@@ -52,10 +52,10 @@ timeDerivSent1 = foldlSentCol [S "We know that" +:+.
   S "Substituting these", plural value, S "into the y-direction" `sOf`
   makeRef2S posVecGD, S "gives us"]
 timeDerivSent2 = foldlSentCol [S "To find the", phrase time, S "that the",
-  phrase projectile, S "lands" `sC` S "we want to find the", ch time,
-  phrase value, sParen (ch flightDur), S "where", E (sy yPos $= 0) +:+.
-  sParen (S "since the" +:+ phrase target `sIs` S "on the x-axis from" +:+
-  makeRef2S targetXAxis), S "From the", phrase equation, S "above", S "we get"]
+  phrase projectile, S "lands" `sC` S "we want to find the", ch time, phrase value,
+  sParen (ch flightDur), S "where", E (sy yPos $= 0) +:+. sParen (S "since the" +:+
+  phrase target `sIs` S "on the" +:+ phrase xAxis +:+ S "from" +:+ makeRef2S targetXAxis),
+  S "From the", phrase equation, S "above",S "we get"]
 timeDerivSent3 = foldlSentCol [S "Dividing by", ch flightDur,
   sParen (S "with the" +:+ phrase constraint +:+ E (sy flightDur $> 0)),
   S "gives us"]

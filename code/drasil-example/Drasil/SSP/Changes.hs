@@ -8,7 +8,7 @@ import Drasil.DocLang (mkEnumSimpleD)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (analysis, likeChgDom, model, system, unlikeChgDom)
-import Data.Drasil.Concepts.Math (calculation)
+import Data.Drasil.Concepts.Math (calculation, zDir)
 import Data.Drasil.Concepts.Physics (force, stress, threeD, twoD)
 
 import Drasil.SSP.Assumptions (assumpSLH, assumpINSFL, assumpENSL, 
@@ -68,9 +68,9 @@ ucNASLODesc = foldlSent [S "Changes related to",
 
 uc2AODesc = foldlSent [makeRef2S assumpENSL, S "allows for", short twoD, 
   phrase analysis, S "with these", plural model, S "only because", 
-  phrase stress, S "along the" +:+. (ch zcoord :+: S "-direction is zero"), 
+  phrase stress, S "along the" +:+. (phrase zDir `sIs` S "zero"), 
   S "These", plural model, S "do not take into account", phrase stress, 
-  S "in the", ch zcoord :+: S "-direction, and therefore cannot be used",
+  S "in the", phrase zDir `sC` S "and therefore cannot be used",
   S "without manipulation to attempt", phrase threeD, phrase analysis]
 
 ucIntro :: Contents

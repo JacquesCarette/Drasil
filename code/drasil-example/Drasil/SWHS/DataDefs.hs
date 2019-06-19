@@ -1,7 +1,6 @@
 module Drasil.SWHS.DataDefs where --exports all of it
 
 import Language.Drasil
-import Control.Lens ((^.))
 import Drasil.DocLang (ModelDB, mdb)
 import Theory.Drasil (DataDefinition, dd, ddNoRefs, mkQuantDef)
 import Utils.Drasil
@@ -106,9 +105,7 @@ dd3HtFusionNotes = [foldlSent [S "The", phrase htFusion,
 ----
 
 dd4MeltFracQD :: QDefinition
-dd4MeltFracQD = fromEqn' (meltFrac ^. uid) -- FIXME Should (^. id) be used
-  (meltFrac ^. term) (S "fraction of the PCM that is liquid")
-  (eqSymb meltFrac) meltFracEqn 
+dd4MeltFracQD = mkQuantDef meltFrac meltFracEqn
 
 --FIXME: "Phi is the melt fraction" is produced; 
   --"Phi is the fraction of the PCM that is liquid" is what is supposed to be

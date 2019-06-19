@@ -9,6 +9,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (
 
 import Utils.Drasil (indent)
 
+import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
@@ -122,7 +123,7 @@ instance BlockSym CSharpCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
 instance StateTypeSym CSharpCode where
-  type StateType CSharpCode = Doc
+  type StateType CSharpCode = (Doc, CodeType)
   bool = return boolTypeDocD
   int = return intTypeDocD
   float = return csFloatTypeDoc
@@ -131,9 +132,6 @@ instance StateTypeSym CSharpCode where
   infile = return csInfileTypeDoc
   outfile = return csOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
-  intListType p = listType p int
-  floatListType p = listType p float
-  boolListType = listType dynamic_ bool
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in C#"
@@ -503,7 +501,7 @@ instance ScopeSym CSharpCode where
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = Doc
-  mState t = t
+  mState = fmap fst
   void = return voidDocD
   construct n = return $ constructDocD n
 
@@ -565,14 +563,14 @@ cstop end inc = vcat [
   inc <+> text "System.Collections" <> end,
   inc <+> text "System.Collections.Generic" <> end]
 
-csFloatTypeDoc :: Doc
-csFloatTypeDoc = text "double" -- Same as Java, maybe make a common function
+csFloatTypeDoc :: (Doc, CodeType)
+csFloatTypeDoc = (text "double", Float) -- Same as Java, maybe make a common function
 
-csInfileTypeDoc :: Doc
-csInfileTypeDoc = text "StreamReader"
+csInfileTypeDoc :: (Doc, CodeType)
+csInfileTypeDoc = (text "StreamReader", File)
 
-csOutfileTypeDoc :: Doc
-csOutfileTypeDoc = text "StreamWriter"
+csOutfileTypeDoc :: (Doc, CodeType)
+csOutfileTypeDoc = (text "StreamWriter", File)
 
 csThrowDoc :: (Doc, Maybe String) -> Doc
 csThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg
@@ -595,16 +593,16 @@ csInput it (v, _) (inFn, _) = v <+> equals <+> text it <> parens inFn
 csFileInput :: (Doc, Maybe String) -> (Doc, Maybe String)
 csFileInput (f, s) = (f <> dot <> text "ReadLine()", s)
 
-csOpenFileR :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc -> Doc
-csOpenFileR (f, _) (n, _) r = f <+> equals <+> new <+> r <> parens n
+csOpenFileR :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, CodeType) -> Doc
+csOpenFileR (f, _) (n, _) (r, _) = f <+> equals <+> new <+> r <> parens n
 
-csOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc -> 
-  (Doc, Maybe String) -> Doc
-csOpenFileWorA (f, _) (n, _) w (a, _) = f <+> equals <+> new <+> w <> parens 
+csOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, CodeType) 
+  -> (Doc, Maybe String) -> Doc
+csOpenFileWorA (f, _) (n, _) (w, _) (a, _) = f <+> equals <+> new <+> w <> parens 
   (n <> comma <+> a)
 
 csListExtend :: (Doc, Maybe String) -> Doc
 csListExtend (v, _) = dot <> text "Add" <> parens v
 
-csListExtendList :: Doc -> Doc
-csListExtendList t = dot <> text "Add" <> parens (new <+> t <> parens empty)
+csListExtendList :: (Doc, CodeType) -> Doc
+csListExtendList (t, _) = dot <> text "Add" <> parens (new <+> t <> parens empty)

@@ -9,6 +9,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
 
 import Utils.Drasil (indent)
 
+import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
@@ -127,7 +128,7 @@ instance BlockSym JavaCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst .state) sts)
 
 instance StateTypeSym JavaCode where
-  type StateType JavaCode = Doc
+  type StateType JavaCode = (Doc, CodeType)
   bool = return boolTypeDocD
   int = return intTypeDocD
   float = return jFloatTypeDocD
@@ -135,10 +136,7 @@ instance StateTypeSym JavaCode where
   string = return jStringTypeDoc
   infile = return jInfileTypeDoc
   outfile = return jOutfileTypeDoc
-  listType p st = liftA2 listTypeDocD st (list p)
-  intListType p = fmap jIntListTypeDoc (list p)
-  floatListType p = fmap jFloatListTypeDoc (list p)
-  boolListType = listType dynamic_ bool
+  listType p st = liftA2 jListType st (list p)
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in Java"
@@ -515,7 +513,7 @@ instance ScopeSym JavaCode where
 
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = Doc
-  mState t = t
+  mState = fmap fst
   void = return voidDocD
   construct n = return $ constructDocD n
 
@@ -583,32 +581,31 @@ jtop end inc lst = vcat [
   inc <+> text "java.io.File" <> end,
   inc <+> text ("java.util." ++ render lst) <> end]
 
-jFloatTypeDocD :: Doc
-jFloatTypeDocD = text "double"
+jFloatTypeDocD :: (Doc, CodeType)
+jFloatTypeDocD = (text "double", Float)
 
-jStringTypeDoc :: Doc
-jStringTypeDoc = text "String"
+jStringTypeDoc :: (Doc, CodeType)
+jStringTypeDoc = (text "String", String)
 
-jInfileTypeDoc :: Doc
-jInfileTypeDoc = text "Scanner"
+jInfileTypeDoc :: (Doc, CodeType)
+jInfileTypeDoc = (text "Scanner", File)
 
-jOutfileTypeDoc :: Doc
-jOutfileTypeDoc = text "PrintWriter"
+jOutfileTypeDoc :: (Doc, CodeType)
+jOutfileTypeDoc = (text "PrintWriter", File)
 
-jIntListTypeDoc :: Doc -> Doc
-jIntListTypeDoc lst = lst <> angles (text "Integer")
+jListType :: (Doc, CodeType) -> Doc -> (Doc, CodeType)
+jListType (_, Integer) lst = (lst <> angles (text "Integer"), List Integer)
+jListType (_, Float) lst = (lst <> angles (text "Double"), List Float)
+jListType t lst = listTypeDocD t lst
 
-jFloatListTypeDoc :: Doc -> Doc
-jFloatListTypeDoc lst = lst <> angles (text "Double")
-
-jListDecDef :: Label -> Doc -> Doc -> Doc
-jListDecDef l st vs = st <+> text l <+> equals <+> new <+> st <+> parens
+jListDecDef :: Label -> (Doc, CodeType) -> Doc -> Doc
+jListDecDef l (st, _) vs = st <+> text l <+> equals <+> new <+> st <+> parens
   listElements
   where listElements = if isEmpty vs then empty else text "Arrays.asList" <> 
                          parens vs
 
-jConstDecDef :: Label -> Doc -> (Doc, Maybe String) -> Doc
-jConstDecDef l st (v, _) = text "final" <+> st <+> text l <+> equals <+> v
+jConstDecDef :: Label -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc
+jConstDecDef l (st, _) (v, _) = text "final" <+> st <+> text l <+> equals <+> v
 
 jThrowDoc :: (Doc, Maybe String) -> Doc
 jThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg
@@ -645,11 +642,11 @@ jOpenFileWorA (f, _) (n, _) (wa, _) = f <+> equals <+> new <+>
 jListExtend :: (Doc, Maybe String) -> Doc
 jListExtend (v, _) = dot <> text "add" <> parens v
 
-jListExtendList :: Doc -> Doc
-jListExtendList t = dot <> text "add" <> parens (new <+> t <> parens empty)
+jListExtendList :: (Doc, CodeType) -> Doc
+jListExtendList (t, _) = dot <> text "add" <> parens (new <+> t <> parens empty)
 
-jStringSplit :: (Doc, Maybe String) -> Doc -> (Doc, Maybe String) -> Doc
-jStringSplit (vnew, _) t (s, _) = vnew <+> equals <+> new <+> t
+jStringSplit :: (Doc, Maybe String) -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc
+jStringSplit (vnew, _) (t, _) (s, _) = vnew <+> equals <+> new <+> t
   <> parens s
 
 jMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc

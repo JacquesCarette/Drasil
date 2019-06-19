@@ -10,6 +10,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
 
 import Utils.Drasil (indent, indentList)
 
+import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
@@ -120,7 +121,7 @@ instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   block sts = pair (block $ map pfst sts) (block $ map psnd sts)
 
 instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
-  type StateType (p CppSrcCode CppHdrCode) = Doc
+  type StateType (p CppSrcCode CppHdrCode) = (Doc, CodeType)
   bool = pair bool bool
   int = pair int int
   float = pair float float
@@ -130,9 +131,6 @@ instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
   outfile = pair outfile outfile
   listType p st = pair (listType (pfst p) (pfst st)) (listType (psnd p) 
     (psnd st))
-  intListType p = pair (intListType $ pfst p) (intListType $ psnd p)
-  floatListType p = pair (floatListType $ pfst p) (floatListType $ psnd p)
-  boolListType = pair boolListType boolListType
   obj t = pair (obj t) (obj t)
   enumType t = pair (enumType t) (enumType t)
   iterator t = pair (iterator $ pfst t) (iterator $ psnd t)
@@ -641,7 +639,7 @@ instance BlockSym CppSrcCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
 instance StateTypeSym CppSrcCode where
-  type StateType CppSrcCode = Doc
+  type StateType CppSrcCode = (Doc, CodeType)
   bool = return cppBoolTypeDoc
   int = return intTypeDocD
   float = return cppFloatTypeDoc
@@ -650,9 +648,6 @@ instance StateTypeSym CppSrcCode where
   infile = return cppInfileTypeDoc
   outfile = return cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
-  intListType p = listType p int
-  floatListType p = listType p float
-  boolListType = listType dynamic_ bool
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
@@ -1037,7 +1032,7 @@ instance ScopeSym CppSrcCode where
 
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = Doc
-  mState t = t
+  mState = fmap fst
   void = return voidDocD
   construct n = return $ constructDocD n
 
@@ -1189,7 +1184,7 @@ instance BlockSym CppHdrCode where
   block _ = return empty
 
 instance StateTypeSym CppHdrCode where
-  type StateType CppHdrCode = Doc
+  type StateType CppHdrCode = (Doc, CodeType)
   bool = return cppBoolTypeDoc
   int = return intTypeDocD
   float = return cppFloatTypeDoc
@@ -1198,9 +1193,6 @@ instance StateTypeSym CppHdrCode where
   infile = return cppInfileTypeDoc
   outfile = return cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
-  intListType p = listType p int
-  floatListType p = listType p float
-  boolListType = listType dynamic_ bool
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
@@ -1507,7 +1499,7 @@ instance ScopeSym CppHdrCode where
 
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = Doc
-  mState t = t
+  mState = fmap fst
   void = return voidDocD
   construct n = return $ constructDocD n
 
@@ -1619,32 +1611,32 @@ usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <>
   text m <> end
 usingNameSpace n Nothing end = text "using namespace" <+> text n <> end
 
-cppBoolTypeDoc :: Doc
-cppBoolTypeDoc = text "bool"
+cppBoolTypeDoc :: (Doc, CodeType)
+cppBoolTypeDoc = (text "bool", Boolean)
 
-cppFloatTypeDoc :: Doc
-cppFloatTypeDoc = text "double"
+cppFloatTypeDoc :: (Doc, CodeType)
+cppFloatTypeDoc = (text "double", Float)
 
-cppInfileTypeDoc :: Doc
-cppInfileTypeDoc = text "ifstream"
+cppInfileTypeDoc :: (Doc, CodeType)
+cppInfileTypeDoc = (text "ifstream", File)
 
-cppOutfileTypeDoc :: Doc
-cppOutfileTypeDoc = text "ofstream"
+cppOutfileTypeDoc :: (Doc, CodeType)
+cppOutfileTypeDoc = (text "ofstream", File)
 
-cppIterTypeDoc :: Doc -> Doc
-cppIterTypeDoc t = text "std::" <> t <> text "::iterator"
+cppIterTypeDoc :: (Doc, CodeType) -> (Doc, CodeType)
+cppIterTypeDoc (td, t) = (text "std::" <> td <> text "::iterator", Iterator t)
 
-cppStateObjDoc :: Doc -> Doc -> Doc
-cppStateObjDoc t ps = t <> parens ps
+cppStateObjDoc :: (Doc, CodeType) -> Doc -> Doc
+cppStateObjDoc (t, _) ps = t <> parens ps
 
 cppListSetDoc :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 cppListSetDoc (i, _) (v, _) = dot <> text "at" <> parens i <+> equals <+> v
 
-cppListDecDoc :: Label -> (Doc, Maybe String) -> Doc -> Doc
-cppListDecDoc l (n, _) t = t <+> text l <> parens n
+cppListDecDoc :: Label -> (Doc, Maybe String) -> (Doc, CodeType) -> Doc
+cppListDecDoc l (n, _) (t, _) = t <+> text l <> parens n
 
-cppListDecDefDoc :: Label -> Doc -> Doc -> Doc
-cppListDecDefDoc l t vs = t <+> text l <> braces vs
+cppListDecDefDoc :: Label -> (Doc, CodeType) -> Doc -> Doc
+cppListDecDefDoc l (t, _) vs = t <+> text l <> braces vs
 
 cppPrintDocD :: Bool -> Doc -> (Doc, Maybe String) -> Doc
 cppPrintDocD newLn printFn (v, _) = printFn <+> text "<<" <+> v <+> end
@@ -1676,12 +1668,12 @@ cppOpenFile :: Label -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 cppOpenFile mode (f, _) (n, _) = f <> dot <> text "open" <> 
   parens (n <> comma <+> text mode)
 
-cppListExtendList :: Doc -> Doc
-cppListExtendList t = dot <> text "push_back" <> 
+cppListExtendList :: (Doc, CodeType) -> Doc
+cppListExtendList (t, _) = dot <> text "push_back" <> 
   parens (t <> parens (integer 0))
 
-cppPointerParamDoc :: Label -> Doc -> Doc
-cppPointerParamDoc n t = t <+> text "&" <> text n
+cppPointerParamDoc :: Label -> (Doc, CodeType)  -> Doc
+cppPointerParamDoc n (t, _) = t <+> text "&" <> text n
 
 cppsMethod :: Label -> Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 
@@ -1700,8 +1692,8 @@ cpphMethod :: Label -> Doc -> Doc -> Doc -> Doc
 cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
                       | otherwise = t <+> text n <> parens ps <> end
 
-cppMainMethod :: Doc -> Doc -> Doc -> Doc -> Doc
-cppMainMethod t b bStart bEnd = vcat [
+cppMainMethod :: (Doc, CodeType)  -> Doc -> Doc -> Doc -> Doc
+cppMainMethod (t, _) b bStart bEnd = vcat [
   t <+> text "main" <> parens (text "int argc, const char *argv[]") <+> bStart,
   indent b,
   blank,

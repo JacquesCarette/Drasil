@@ -80,11 +80,6 @@ class (PermanenceSym repr) => StateTypeSym repr where
   infile        :: repr (StateType repr)
   outfile       :: repr (StateType repr)
   listType      :: repr (Permanence repr) -> repr (StateType repr) -> repr (StateType repr)
-  intListType   :: repr (Permanence repr) -> repr (StateType repr)
-  intListType p = listType p int
-  floatListType :: repr (Permanence repr) -> repr (StateType repr)
-  floatListType p = listType p float
-  boolListType  :: repr (StateType repr)
   obj           :: Label -> repr (StateType repr)
   enumType      :: Label -> repr (StateType repr)
   iterator      :: repr (StateType repr) -> repr (StateType repr)

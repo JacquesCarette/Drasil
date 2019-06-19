@@ -35,6 +35,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
 
 import Utils.Drasil (capitalize, indent, indentList)
 
+import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
   angles,blank, doubleQuotedText,hicat,vibcat,vmap)
@@ -149,29 +150,29 @@ printFileDocD fn (f, _) = f <> dot <> text fn
 
 -- Type Printers --
 
-boolTypeDocD :: Doc
-boolTypeDocD = text "Boolean" -- capital B?
+boolTypeDocD :: (Doc, CodeType)
+boolTypeDocD = (text "Boolean", Boolean) -- capital B?
 
-intTypeDocD :: Doc
-intTypeDocD = text "int"
+intTypeDocD :: (Doc, CodeType)
+intTypeDocD = (text "int", Integer)
 
-floatTypeDocD :: Doc
-floatTypeDocD = text "float"
+floatTypeDocD :: (Doc, CodeType)
+floatTypeDocD = (text "float", Float)
 
-charTypeDocD :: Doc
-charTypeDocD = text "char"
+charTypeDocD :: (Doc, CodeType)
+charTypeDocD = (text "char", Char)
 
-stringTypeDocD :: Doc
-stringTypeDocD = text "string"
+stringTypeDocD :: (Doc, CodeType)
+stringTypeDocD = (text "string", String)
 
-fileTypeDocD :: Doc
-fileTypeDocD = text "File"
+fileTypeDocD :: (Doc, CodeType)
+fileTypeDocD = (text "File", File)
 
-typeDocD :: Label -> Doc
-typeDocD = text
+typeDocD :: Label -> (Doc, CodeType)
+typeDocD t = (text t, Object t)
 
-listTypeDocD :: Doc -> Doc -> Doc
-listTypeDocD st list = list <> angles st
+listTypeDocD :: (Doc, CodeType) -> Doc -> (Doc, CodeType)
+listTypeDocD (td, t) list = (list <> angles td, List t)
 
 -- Method Types --
 
@@ -183,8 +184,8 @@ constructDocD _ = empty
 
 -- Parameters --
 
-stateParamDocD :: Label -> Doc -> Doc
-stateParamDocD n t = t <+> text n
+stateParamDocD :: Label -> (Doc, CodeType) -> Doc
+stateParamDocD n (t, _) = t <+> text n
 
 paramListDocD :: [Doc] -> Doc
 paramListDocD = hicat (text ", ")
@@ -203,8 +204,8 @@ methodListDocD ms = vibcat methods
 
 -- StateVar --
 
-stateVarDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc
-stateVarDocD l s p t end = s <+> p <+> t <+> text l <> end
+stateVarDocD :: Label -> Doc -> Doc -> (Doc, CodeType) -> Doc -> Doc
+stateVarDocD l s p (t, _) end = s <+> p <+> t <+> text l <> end
 
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat
@@ -264,9 +265,9 @@ forDocD blockStart blockEnd sInit (vGuard, _) sUpdate b = vcat [
   indent b,
   blockEnd]
 
-forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> 
+forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> (Doc, CodeType) -> 
   (Doc, Maybe String) -> Doc -> Doc
-forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel t (v, _) b =
+forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel (t, _) (v, _) b =
   vcat [iterForEachLabel <+> parens (t <+> text l <+> iterInLabel <+> v) <+>
     blockStart,
   indent b,
@@ -309,24 +310,24 @@ plusPlusDocD (v, _) = v <> text "++"
 plusPlusDocD' :: (Doc, Maybe String) -> Doc -> Doc
 plusPlusDocD' (v, _) plusOp = v <+> equals <+> v <+> plusOp <+> int 1
 
-varDecDocD :: Label -> Doc -> Doc
-varDecDocD l st = st <+> text l
+varDecDocD :: Label -> (Doc, CodeType) -> Doc
+varDecDocD l (st, _) = st <+> text l
 
-varDecDefDocD :: Label -> Doc -> (Doc, Maybe String) -> Doc
-varDecDefDocD l st (v, _) = st <+> text l <+> equals <+> v
+varDecDefDocD :: Label -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc
+varDecDefDocD l (st, _) (v, _) = st <+> text l <+> equals <+> v
 
-listDecDocD :: Label -> (Doc, Maybe String) -> Doc -> Doc
-listDecDocD l (n, _) st = st <+> text l <+> equals <+> new <+> st <> parens n
+listDecDocD :: Label -> (Doc, Maybe String) -> (Doc, CodeType) -> Doc
+listDecDocD l (n, _) (st, _) = st <+> text l <+> equals <+> new <+> st <> parens n
 
-listDecDefDocD :: Label -> Doc -> [(Doc, Maybe String)] -> Doc
-listDecDefDocD l st vs = st <+> text l <+> equals <+> new <+> st <+> 
+listDecDefDocD :: Label -> (Doc, CodeType) -> [(Doc, Maybe String)] -> Doc
+listDecDefDocD l (st, _) vs = st <+> text l <+> equals <+> new <+> st <+> 
   braces (callFuncParamList vs)
 
-objDecDefDocD :: Label -> Doc -> (Doc, Maybe String) -> Doc
+objDecDefDocD :: Label -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc
 objDecDefDocD = varDecDefDocD
 
-constDecDefDocD :: Label -> Doc -> (Doc, Maybe String) -> Doc -- can this be done without StateType (infer from value)?
-constDecDefDocD l st (v, _) = text "const" <+> st <+> text l <+> equals <+> v
+constDecDefDocD :: Label -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc -- can this be done without StateType (infer from value)?
+constDecDefDocD l (st, _) (v, _) = text "const" <+> st <+> text l <+> equals <+> v
 
 returnDocD :: (Doc, Maybe String) -> Doc
 returnDocD (v, _) = text "return" <+> v
@@ -559,11 +560,11 @@ funcAppDocD n vs = text n <> parens (callFuncParamList vs)
 extFuncAppDocD :: Library -> Label -> [(Doc, Maybe String)] -> Doc
 extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
 
-stateObjDocD :: Doc -> Doc -> Doc
-stateObjDocD st vs = new <+> st <> parens vs
+stateObjDocD :: (Doc, CodeType) -> Doc -> Doc
+stateObjDocD (st, _) vs = new <+> st <> parens vs
 
-listStateObjDocD :: Doc -> Doc -> Doc -> Doc
-listStateObjDocD lstObj st vs = lstObj <+> st <> parens vs
+listStateObjDocD :: Doc -> (Doc, CodeType) -> Doc -> Doc
+listStateObjDocD lstObj (st, _) vs = lstObj <+> st <> parens vs
 
 notNullDocD :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 notNullDocD = binOpDocD
@@ -577,8 +578,8 @@ listIndexExistsDocD greater (lst, _) (index, _) = parens (lst <>
 funcDocD :: (Doc, Maybe String) -> Doc
 funcDocD (fnApp, _) = dot <> fnApp
 
-castDocD :: Doc -> Doc
-castDocD = parens
+castDocD :: (Doc, CodeType) -> Doc
+castDocD (t, _) = parens t
 
 sizeDocD :: Doc
 sizeDocD = dot <> text "Count"

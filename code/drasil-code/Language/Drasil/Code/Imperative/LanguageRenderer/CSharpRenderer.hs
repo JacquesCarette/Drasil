@@ -324,12 +324,6 @@ instance FunctionSym CSharpCode where
   listPopulateBool _ = return empty
   listPopulateString _ = return empty
   listAppend v = fmap funcDocD (funcApp "Add" [v])
-  listExtendInt = fmap csListExtend defaultInt 
-  listExtendFloat = fmap csListExtend defaultFloat 
-  listExtendChar = fmap csListExtend defaultChar 
-  listExtendBool = fmap csListExtend defaultBool
-  listExtendString = fmap csListExtend defaultString
-  listExtendList _ = fmap csListExtendList
 
   iterBegin = fmap funcDocD (funcApp "begin" [])
   iterEnd = fmap funcDocD (funcApp "end" [])
@@ -600,9 +594,3 @@ csOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, CodeType)
   -> (Doc, Maybe String) -> Doc
 csOpenFileWorA (f, _) (n, _) (w, _) (a, _) = f <+> equals <+> new <+> w <> parens 
   (n <> comma <+> a)
-
-csListExtend :: (Doc, Maybe String) -> Doc
-csListExtend (v, _) = dot <> text "Add" <> parens v
-
-csListExtendList :: (Doc, CodeType) -> Doc
-csListExtendList (t, _) = dot <> text "Add" <> parens (new <+> t <> parens empty)

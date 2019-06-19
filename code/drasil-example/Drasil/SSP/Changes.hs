@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Physics (force, stress, threeD, twoD)
 import Drasil.SSP.Assumptions (assumpSLH, assumpINSFL, assumpENSL, 
   assumpSF, assumpSL)
 import Drasil.SSP.Defs (slope, soil, soilPrpty)
-import Drasil.SSP.Unitals (intNormForce, intShrForce, surfLoad, zcoord)
+import Drasil.SSP.Unitals (intNormForce, intShrForce, surfLoad)
 
 likelyChgsCon :: [Contents]
 likelyChgsCon = mkEnumSimpleD likelyChgs

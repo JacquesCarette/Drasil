@@ -4,7 +4,7 @@ module Data.Drasil.Concepts.Physics where
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.IdeaDicts (physics)
+import Data.Drasil.IdeaDicts (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
 import Control.Lens((^.)) --need for parametrization hack
 
@@ -35,9 +35,9 @@ acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
   yPos, yVel :: ConceptChunk
 
 oneD, twoD, threeD :: CI
-oneD   = commonIdeaWithDict "oneD"   (pn "one-dimensional")   "1D" [physics]
-twoD   = commonIdeaWithDict "twoD"   (pn "two-dimensional")   "2D" [physics]
-threeD = commonIdeaWithDict "threeD" (pn "three-dimensional") "3D" [physics]
+oneD   = commonIdeaWithDict "oneD"   (pn "one-dimensional")   "1D" [mathematics, physics]
+twoD   = commonIdeaWithDict "twoD"   (pn "two-dimensional")   "2D" [mathematics, physics]
+threeD = commonIdeaWithDict "threeD" (pn "three-dimensional") "3D" [mathematics, physics]
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."

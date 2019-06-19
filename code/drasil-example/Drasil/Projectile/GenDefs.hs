@@ -41,7 +41,7 @@ rectVelDerivSents :: [Sentence]
 rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent]
   where
     motSent = foldlSent [S "The motion" `sIn` makeRef2S accelerationTM `sIs` S "now", phrase oneD,
-                         S "with a",phrase QP.constAccel `sC` S "represented by", E (sy QP.constAccel)]
+                         S "with a", phrase QP.constAccel `sC` S "represented by", E (sy QP.constAccel)]
 
 rectVelDerivEqns :: [Expr]
 rectVelDerivEqns = [rectVelDerivEqn1, rectVelDerivEqn2, rectVelRel]
@@ -130,7 +130,7 @@ posVecDerivSent = vecDeriv [(position, positionXYEqnS), (velocity, velocityXYEqn
 rectDeriv :: UnitalChunk -> UnitalChunk -> Sentence -> UnitalChunk -> TheoryModel -> Sentence
 rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
   S "Assume we have", phrase rectilinear, S "motion" `sOf` S "a particle",
-  sParen (S "of negligible size" `sAnd` S "shape" +:+ makeRef2S pointMass) :+:
+  sParen (S "of negligible size" `sAnd` S "shape" `sC` S "from" +:+ makeRef2S pointMass) :+:
   S ";" +:+. (S "that is" `sC` S "motion" `sIn` S "a straight line"), S "The" +:+.
   (phrase c1 `sIs` getScalar c1 `andThe` phrase c2 `sIs` getScalar c2), motSent,
   S "The", phrase initc, sParen (S "at" +:+ E (sy time $= 0) `sC` S "from" +:+
@@ -151,16 +151,16 @@ performIntSent    = S "Performing the integration" `sC` S "we" +: S "have"
 
 -- Helper for making vector derivations
 vecDeriv :: [(UnitalChunk, Sentence)] -> GenDefn -> Sentence
-vecDeriv vecs gdef = foldlSent_ [
+vecDeriv vecs gdef = foldlSentCol [
   S "For a", phrase twoD, phrase cartesian, sParen (makeRef2S twoDMotion `sAnd` makeRef2S cartSyst) `sC`
   S "we can represent" +:+. foldlList Comma List 
   (map (\(c, e) -> foldlSent_ [S "the", phrase c, phrase vector, S "as", e]) vecs),
-  S "The", phrase acceleration `sIs` S "assumed to be constant", sParen (makeRef2S constAccel) `andThe`
-  phrase constAccelV `sIs` S "represented as" +:+. constAccelXYEqnS,
-  S "The", phrase iVel, sParen (S "at" +:+ E (sy time $= 0)) `sIs`
+  S "The", phrase acceleration `sIs` S "assumed to be constant",sParen (makeRef2S constAccel) `andThe`
+  phrase constAccelV `sIs` S "represented as" +:+. constAccelXYEqnS, S "The",
+  phrase iVel, sParen (S "at" +:+ E (sy time $= 0) `sC` S "from" +:+ makeRef2S timeStartZero) `sIs`
   S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), S "Since we have a",
   phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phrase coordinate `sOf`
-  S "the", phrase ((fst . head) vecs), phrase vector +: S "to yield"]
+  S "the", phrase ((fst . head) vecs), phrase vector, S "to yield"]
 
 -- Helper sentences that represent the vectors of quantities as components
 positionXYEqnS, velocityXYEqnS, accelerationXYEqnS, constAccelXYEqnS :: Sentence

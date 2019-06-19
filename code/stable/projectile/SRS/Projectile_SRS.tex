@@ -82,9 +82,9 @@ ${p_{x}}$ & X-component of position & m
 \\
 ${p_{y}}$ & Y-component of position & m
 \\
-${{p_{x}}^{i}}$ & X-component of initial position & $\frac{\text{m}}{\text{s}}$
+${{p_{x}}^{i}}$ & X-component of initial position & m
 \\
-${{p_{y}}^{i}}$ & Y-component of initial position & $\frac{\text{m}}{\text{s}}$
+${{p_{y}}^{i}}$ & Y-component of initial position & m
 \\
 $\mathbf{p}$ & Position & m
 \\
@@ -177,7 +177,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \begin{itemize}
 \item{Launcher: Where the projectile is launched from.}
 \item{Projectile: The object to be launched at the target.}
-\item{Target: Where the projectile should be launched.}
+\item{Target: Where the projectile should be launched to.}
 \item{Gravity: The force that attracts one physical body with mass to another.}
 \item{Rectilinear: Occuring in one dimension.}
 \end{itemize}
@@ -222,7 +222,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD: rectVel} and \hyperref[GD:rectPos]{GD: rectPos}.)
 \item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A: constAccel}.)
 \item[neglectCurv:\phantomsection\label{neglectCurv}]The distance is small enough that the curvature of the Earth can be neglected. (RefBy: \hyperref[targetXAxis]{A: targetXAxis} and \hyperref[cartSyst]{A: cartSyst}.)
-\item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectVel]{GD: rectVel}, and \hyperref[GD:rectPos]{GD: rectPos}.)
+\item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD: velVec}, \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectVel]{GD: rectVel}, \hyperref[GD:rectPos]{GD: rectPos}, and \hyperref[GD:posVec]{GD: posVec}.)
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -309,7 +309,7 @@ RefBy & \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:rectPos]{GD: rectPos}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear velocity:
-Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${v^{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${v^{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
 \begin{displaymath}
 {a^{c}}=\frac{d\,v}{d\,t}
 \end{displaymath}
@@ -351,7 +351,7 @@ RefBy & \hyperref[GD:posVec]{GD: posVec}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Detailed derivation of rectilinear position:
-Assume we have rectilinear motion of a particle (of negligible size and shape \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM: velocity} is now one-dimensional. The initial position (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${p^{i}}$. From \hyperref[TM:velocity]{TM: velocity}, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM: velocity} is now one-dimensional. The initial position (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${p^{i}}$. From \hyperref[TM:velocity]{TM: velocity}, using the above symbols we have:
 \begin{displaymath}
 v=\frac{d\,p}{d\,t}
 \end{displaymath}
@@ -410,7 +410,7 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
 \end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration vector is represented as ${\mathbf{a}^{c}}=\begin{bmatrix}
 {{a_{x}}^{c}}\\
 {{a_{y}}^{c}}
-\end{bmatrix}$. The initial velocity (at $t=0$) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
+\end{bmatrix}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
 {{v_{x}}^{i}}\\
 {{v_{y}}^{i}}
 \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectVel]{GD: rectVel} can be applied to each coordinate of the velocity vector to yield:
@@ -441,11 +441,11 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{p}$ is the position (m)}
-              \item{${{p_{x}}^{i}}$ is the x-component of initial position ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{p_{x}}^{i}}$ is the x-component of initial position (m)}
               \item{${{v_{x}}^{i}}$ is the x-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$t$ is the time (s)}
               \item{${{a_{x}}^{c}}$ is the x-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{${{p_{y}}^{i}}$ is the y-component of initial position ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{p_{y}}^{i}}$ is the y-component of initial position (m)}
               \item{${{v_{y}}^{i}}$ is the y-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{${{a_{y}}^{c}}$ is the y-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
@@ -468,7 +468,7 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
 \end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration vector is represented as ${\mathbf{a}^{c}}=\begin{bmatrix}
 {{a_{x}}^{c}}\\
 {{a_{y}}^{c}}
-\end{bmatrix}$. The initial velocity (at $t=0$) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
+\end{bmatrix}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
 {{v_{x}}^{i}}\\
 {{v_{y}}^{i}}
 \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectPos]{GD: rectPos} can be applied to each coordinate of the position vector to yield:

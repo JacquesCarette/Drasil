@@ -78,8 +78,8 @@ iPos = uc CP.iPos (sup lP lI) metre
 xPos = uc CP.xPos (sub lP lX) metre
 yPos = uc CP.yPos (sub lP lY) metre
 
-ixPos = uc CP.ixPos (sup (sub lP lX) lI) velU
-iyPos = uc CP.iyPos (sup (sub lP lY) lI) velU
+ixPos = uc CP.ixPos (sup (sub lP lX) lI) metre
+iyPos = uc CP.iyPos (sup (sub lP lY) lI) metre
 
 fSpeed = uc CP.fSpeed (sup lV lF) velU
 iSpeed = uc CP.iSpeed (sup lV lI) velU

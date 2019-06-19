@@ -37,21 +37,22 @@ import Data.Drasil.Quantities.Math (gradient, pi_, surface, uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
 
-import Data.Drasil.Software.Products (compPro, prodtcon)
+import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
-import qualified Drasil.DocLang.SRS as SRS (probDesc, inModel)
+import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
-  SolChSpec(..), SSDSec(..), DocSection(..), GSDSec(..), GSDSub(..), AuxConstntSec(AuxConsProg),
-  IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  ReqrmntSec(..), ReqsSub(..), LCsSec(..), UCsSec(..),
-  RefSec(RefProg), RefTab(TAandA, TUnits), TraceabilitySec(TraceabilityProg),
-  TSIntro(SymbOrder, SymbConvention, TSPurpose), dataConstraintUncertainty,
-  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  termDefnF, tsymb, getDocDesc, egetDocDesc, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  SolChSpec(..), SSDSec(..), DocSection(..), GSDSec(..), GSDSub(..),
+  AuxConstntSec(AuxConsProg), IntroSec(IntroProg), LCsSec(..), UCsSec(..),
+  IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
+  ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
+  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
+  ProblemDescription(PDProg), dataConstraintUncertainty, inDataConstTbl,
+  intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc, termDefnF,
+  tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
+  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   goalStmtF, physSystDescriptionLabel, generateTraceMap', traceMatStandard)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
@@ -111,7 +112,7 @@ units = map ucw [density, tau, inSA, outSA,
   deltaT, tempEnv, thFluxVect, time, htFluxC,
   vol, wMass, wVol, tauW, QT.sensHeat]
 
-probDescription, termAndDefn, physSystDescription, goalStates :: Section
+termsAndDefns, physSystDescription, goalStates :: Section
 
 -------------------
 --INPUT INFORMATION
@@ -139,7 +140,8 @@ mkSRS = [RefSec $ RefProg intro
     , SystCons [] []
     ],
   SSDSec $
-    SSDProg [SSDSubVerb probDescription
+    SSDProg
+    [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, physSystDescription, goalStates]
     , SSDSolChSpec $ SCSProg
       [ Assumptions
       , TMs [] (Label : stdFields) theoreticalModels
@@ -341,18 +343,13 @@ orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
 --Section 4.1 : PROBLEM DESCRIPTION
 -----------------------------------
 
-probDescription = SRS.probDesc [probDescIntro progName compPro water sWHT]
-  [termAndDefn, physSystDescription, goalStates]
+probDescIntro :: Sentence
+probDescIntro = foldlSent_ [S "investigate the heating" `sOf` phrase water, S "in a", phrase sWHT]
 
-probDescIntro :: CI -> NamedChunk -> ConceptChunk -> ConceptChunk -> Contents
-probDescIntro pro cp wa sw = foldlSP [getAcc pro, S "is a",
-  phrase cp, S "developed to investigate",
-  S "the heating of", phrase wa, S "in a", phrase sw]
+termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
 
-termAndDefn = termDefnF Nothing [termAndDefnBullets]
-
-termAndDefnBullets :: Contents
-termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
+termsAndDefnsBullets :: Contents
+termsAndDefnsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
   map (\x -> Flat $
   atStart x :+: S ":" +:+ (x ^. defn))
   [htFlux, heatCapSpec, thermalConduction, transient]

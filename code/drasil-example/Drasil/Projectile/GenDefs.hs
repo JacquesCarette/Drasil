@@ -7,7 +7,7 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (vector)
-import Data.Drasil.Concepts.Physics (cartesian, oneD, twoD)
+import Data.Drasil.Concepts.Physics (cartesian, oneD, rectilinear, twoD)
 
 import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
   iVel, ixPos, ixVel, iyPos, iyVel, position, scalarAccel, scalarPos, speed,
@@ -26,15 +26,15 @@ rectVelGD = gdNoRefs rectVelRC (getUnit speed) rectVelDeriv "rectVel" [{-Notes-}
 
 rectVelRC :: RelationConcept
 rectVelRC = makeRC "rectVelRC" (nounPhraseSent $ foldlSent_ 
-            [S "rectilinear", sParen $ getAcc oneD, phrase velocity, S "as a function" `sOf`
-             phrase time, S "for", phrase QP.constAccel])
+            [atStart rectilinear, sParen $ getAcc oneD, phrase velocity,
+             S "as a function" `sOf` phrase time, S "for", phrase QP.constAccel])
             EmptyS rectVelRel
 
 rectVelRel :: Relation
 rectVelRel = sy speed $= sy iSpeed + sy QP.constAccel * sy time
 
 rectVelDeriv :: Derivation
-rectVelDeriv = (S "Detailed derivation" `sOf` S "rectilinear" +: phrase velocity) :
+rectVelDeriv = (S "Detailed derivation" `sOf` phrase rectilinear +: phrase velocity) :
                weave [rectVelDerivSents, map E rectVelDerivEqns]
 
 rectVelDerivSents :: [Sentence]
@@ -57,15 +57,15 @@ rectPosGD = gdNoRefs rectPosRC (getUnit scalarPos) rectPosDeriv "rectPos" [{-Not
 
 rectPosRC :: RelationConcept
 rectPosRC = makeRC "rectPosRC" (nounPhraseSent $ foldlSent_ 
-            [S "rectilinear", sParen $ getAcc oneD, phrase position, S "as a function" `sOf`
-             phrase time, S "for", phrase QP.constAccel])
+            [atStart rectilinear, sParen $ getAcc oneD, phrase position,
+             S "as a function" `sOf` phrase time, S "for", phrase QP.constAccel])
             EmptyS rectPosRel
 
 rectPosRel :: Relation
 rectPosRel = sy scalarPos $= sy iPos + sy iSpeed * sy time + sy QP.constAccel * square (sy time) / 2
 
 rectPosDeriv :: Derivation
-rectPosDeriv = (S "Detailed derivation" `sOf` S "rectilinear" +: phrase position) :
+rectPosDeriv = (S "Detailed derivation" `sOf` phrase rectilinear +: phrase position) :
                weave [rectPosDerivSents, map E rectPosDerivEqns]
 
 rectPosDerivSents :: [Sentence]
@@ -129,7 +129,7 @@ posVecDerivSent = vecDeriv [(position, positionXYEqnS), (velocity, velocityXYEqn
 -- Helper for making rectilinear derivations
 rectDeriv :: UnitalChunk -> UnitalChunk -> Sentence -> UnitalChunk -> TheoryModel -> Sentence
 rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
-  S "Assume we have rectilinear motion" `sOf` S "a particle",
+  S "Assume we have", phrase rectilinear, S "motion" `sOf` S "a particle",
   sParen (S "of negligible size" `sAnd` S "shape" +:+ makeRef2S pointMass) :+:
   S ";" +:+. (S "that is" `sC` S "motion" `sIn` S "a straight line"), S "The" +:+.
   (phrase c1 `sIs` getScalar c1 `andThe` phrase c2 `sIs` getScalar c2), motSent,

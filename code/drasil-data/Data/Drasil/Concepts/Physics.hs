@@ -15,10 +15,10 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, cartesian,
   force, friction, gravity, gravitationalAccel, gravitationalConst, height,
   iPos, iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel,
   joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
-  momentOfInertia, position, potEnergy, pressure, restitutionCoef, rightHand,
-  rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
-  time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
-  yAccel, yConstAccel, yDist, yPos, yVel]
+  momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
+  rightHand, rigidBody, scalarAccel, scalarPos, space, speed, strain, stress,
+  tension, time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos,
+  xVel, yAccel, yConstAccel, yDist, yPos, yVel]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
@@ -29,10 +29,10 @@ acceleration, angAccel, angDisp, angVelo, angular, cartesian, chgInVelocity,
   friction, gravity, gravitationalAccel, gravitationalConst, height, iPos,
   iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel, joint,
   kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy, momentOfInertia,
-  position, potEnergy, pressure, restitutionCoef, rightHand, rigidBody,
-  scalarAccel, scalarPos, space, speed, strain, stress, tension, time, torque,
-  velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel,
-  yConstAccel, yDist, yPos, yVel :: ConceptChunk
+  position, potEnergy, pressure, rectilinear, restitutionCoef, rightHand,
+  rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
+  time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
+  yAccel, yConstAccel, yDist, yPos, yVel :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (pn "one-dimensional")   "1D" [physics]
@@ -65,6 +65,8 @@ cartesian    = dcc "cartesian" (pn' "Cartesian coordinate system")
   "pair of numerical coordinates.")
 rightHand    = dcc "rightHand" (cn' "right-handed coordinate system")
   "A coordinate system where the positive z-axis comes out of the screen."
+rectilinear  = dcc "rectilinear" (cn "rectilinear")
+  "Occuring in one dimension"
   
 joint        = dcc "joint"    (cn' "joint") ("a connection between two rigid " ++ 
   "bodies which allows movement with one or more degrees of freedom")

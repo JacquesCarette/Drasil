@@ -11,14 +11,15 @@ import Control.Lens ((^.))
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation), DocDesc,
-  DocSection(AuxConstntSec, IntroSec, RefSec, ReqrmntSec, SSDSec),
+  DocSection(AuxConstntSec, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
   IntroSec(IntroProg), IntroSub(IScope), ProblemDescription(PDProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
-  TSIntro(..), Verbosity(Verbose), dataConstraintUncertainty, generateTraceMap,
-  generateTraceMap', goalStmtF, inDataConstTbl, intro, mkDoc, mkEnumSimpleD,
-  outDataConstTbl, physSystDesc, physSystDescriptionLabel, termDefnF, tsymb)
+  TSIntro(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
+  dataConstraintUncertainty, generateTraceMap, generateTraceMap', goalStmtF,
+  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
+  physSystDescriptionLabel, termDefnF, traceMatStandard, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -89,6 +90,9 @@ mkSRS = [
       [ FReqsSub funcReqs [inputParamsTable]
       , NonFReqsSub nonfuncReqs
       ],
+  TraceabilitySec $
+    TraceabilityProg
+      (map fst traceMats) (map (foldlList Comma List . snd) traceMats) (map (LlC . fst) traceMats) [],
   AuxConstntSec $
     AuxConsProg projectileTitle constants
   ]
@@ -207,3 +211,10 @@ goalStmts = goalStmtF [(phrase iVel +:+ S "vector") `ofThe` phrase projectile]
 inDataCons, outDataCons :: LabelledContent
 inDataCons  = inDataConstTbl  inConstraints
 outDataCons = outDataConstTbl outConstraints
+
+--------------------------
+-- Traceabilty Matrices --
+--------------------------
+
+traceMats :: [(LabelledContent, [Sentence])]
+traceMats = traceMatStandard systInfo

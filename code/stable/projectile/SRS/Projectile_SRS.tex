@@ -834,6 +834,129 @@ This section provides the non-functional requirements, the qualities that the so
 \item[Maintainable:\phantomsection\label{maintainable}]The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
 \item[Portable:\phantomsection\label{portable}]The code is able to be run in different environments.
 \end{itemize}
+\section{Traceability Matrices and Graphs}
+\label{Sec:TraceMatrices}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+\begin{longtable}{l l l l l l l l l l l l l l l}
+\toprule
+ & \hyperref[twoDMotion]{A: twoDMotion} & \hyperref[cartSyst]{A: cartSyst} & \hyperref[yAxisGravity]{A: yAxisGravity} & \hyperref[launchOrigin]{A: launchOrigin} & \hyperref[targetXAxis]{A: targetXAxis} & \hyperref[posXDirection]{A: posXDirection} & \hyperref[constAccel]{A: constAccel} & \hyperref[accelXZero]{A: accelXZero} & \hyperref[accelYGravity]{A: accelYGravity} & \hyperref[neglectDrag]{A: neglectDrag} & \hyperref[pointMass]{A: pointMass} & \hyperref[freeFlight]{A: freeFlight} & \hyperref[neglectCurv]{A: neglectCurv} & \hyperref[timeStartZero]{A: timeStartZero}
+\\
+\midrule
+\endhead
+\hyperref[DD:speedIX]{DD: speedIX} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:speedIY]{DD: speedIY} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:acceleration]{TM: acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:velocity]{TM: velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:rectVel]{GD: rectVel} &  &  &  &  &  &  &  &  &  &  & X &  &  & X
+\\
+\hyperref[GD:rectPos]{GD: rectPos} &  &  &  &  &  &  &  &  &  &  & X &  &  & X
+\\
+\hyperref[GD:velVec]{GD: velVec} & X & X &  &  &  &  & X &  &  &  &  &  &  & X
+\\
+\hyperref[GD:posVec]{GD: posVec} & X & X &  &  &  &  & X &  &  &  &  &  &  & X
+\\
+\hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} &  &  & X & X & X & X &  &  & X &  &  &  &  & X
+\\
+\hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} &  &  & X & X &  & X &  & X &  &  &  &  &  & 
+\\
+\hyperref[IM:offsetIM]{IM: offsetIM} &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\\
+\hyperref[IM:messageIM]{IM: messageIM} &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\\
+\hyperref[inputParams]{FR: Input-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifyParams]{FR: Verify-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[calcValues]{FR: Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputValues]{FR: Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR: Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
+\label{Table:TraceMatAvsAll}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l}
+\toprule
+ & \hyperref[DD:speedIX]{DD: speedIX} & \hyperref[DD:speedIY]{DD: speedIY} & \hyperref[TM:acceleration]{TM: acceleration} & \hyperref[TM:velocity]{TM: velocity} & \hyperref[GD:rectVel]{GD: rectVel} & \hyperref[GD:rectPos]{GD: rectPos} & \hyperref[GD:velVec]{GD: velVec} & \hyperref[GD:posVec]{GD: posVec} & \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} & \hyperref[IM:offsetIM]{IM: offsetIM} & \hyperref[IM:messageIM]{IM: messageIM}
+\\
+\midrule
+\endhead
+\hyperref[DD:speedIX]{DD: speedIX} &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:speedIY]{DD: speedIY} &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:acceleration]{TM: acceleration} &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:velocity]{TM: velocity} &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:rectVel]{GD: rectVel} &  &  & X &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:rectPos]{GD: rectPos} &  &  &  & X & X &  &  &  &  &  &  & 
+\\
+\hyperref[GD:velVec]{GD: velVec} &  &  &  &  & X &  &  &  &  &  &  & 
+\\
+\hyperref[GD:posVec]{GD: posVec} &  &  &  &  &  & X &  &  &  &  &  & 
+\\
+\hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} &  & X &  &  &  &  &  & X &  &  &  & 
+\\
+\hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} & X &  &  &  &  &  &  & X & X &  &  & 
+\\
+\hyperref[IM:offsetIM]{IM: offsetIM} &  &  &  &  &  &  &  &  &  & X &  & 
+\\
+\hyperref[IM:messageIM]{IM: messageIM} &  &  &  &  &  &  &  &  &  &  & X & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
+\label{Table:TraceMatRefvsRef}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l}
+\toprule
+ & \hyperref[DD:speedIX]{DD: speedIX} & \hyperref[DD:speedIY]{DD: speedIY} & \hyperref[TM:acceleration]{TM: acceleration} & \hyperref[TM:velocity]{TM: velocity} & \hyperref[GD:rectVel]{GD: rectVel} & \hyperref[GD:rectPos]{GD: rectPos} & \hyperref[GD:velVec]{GD: velVec} & \hyperref[GD:posVec]{GD: posVec} & \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} & \hyperref[IM:offsetIM]{IM: offsetIM} & \hyperref[IM:messageIM]{IM: messageIM} & \hyperref[inputParams]{FR: Input-Parameters} & \hyperref[verifyParams]{FR: Verify-Parameters} & \hyperref[calcValues]{FR: Calculate-Values} & \hyperref[outputValues]{FR: Output-Values} & \hyperref[correct]{NFR: Correct} & \hyperref[verifiable]{NFR: Verifiable} & \hyperref[understandable]{NFR: Understandable} & \hyperref[reusable]{NFR: Reusable} & \hyperref[maintainable]{NFR: Maintainable} & \hyperref[portable]{NFR: Portable}
+\\
+\midrule
+\endhead
+\hyperref[targetHit]{GS: targetHit} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[inputParams]{FR: Input-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifyParams]{FR: Verify-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[calcValues]{FR: Calculate-Values} &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputValues]{FR: Output-Values} &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR: Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}
+\label{Table:TraceMatAllvsR}
+\end{longtable}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 This section contains the standard values that are used for calculations in Projectile.

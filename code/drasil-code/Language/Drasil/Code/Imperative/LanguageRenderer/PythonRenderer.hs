@@ -316,10 +316,12 @@ instance SelectorFunction PythonCode where
   at t l = listAccess t (var l int)
 
 instance StatementSym PythonCode where
-  -- Terminator determines how statements end to end in a separator
+  -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   assign v1 v2 = mkStNoEnd <$> liftA2 assignDocD v1 v2
   assignToListIndex lst index v = valState $ lst $. listSet index v
+  multiAssign outs vs = assign (mkVal <$> liftList callFuncParamList outs) 
+    (mkVal <$> liftList callFuncParamList vs)
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
   (&+=) v1 v2 = mkStNoEnd <$> liftA3 plusEqualsDocD' v1 plusOp v2
@@ -407,6 +409,9 @@ instance StatementSym PythonCode where
   addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = listSizeAccess obsList
+
+  inOutCall n ins [] = valState $ funcApp n ins
+  inOutCall n ins outs = multiAssign outs [funcApp n ins]
 
   state = fmap statementDocD
   loopState = fmap statementDocD 

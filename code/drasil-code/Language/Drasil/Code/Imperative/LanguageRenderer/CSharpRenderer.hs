@@ -38,8 +38,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
   listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, observerListName,
-  doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName, 
-  setMain, setEmpty, statementsToStateVars)
+  doubleSlash, addCommentsDocD, callFuncParamList, appendToBody, getterName, 
+  setterName, setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, liftA4, liftA5, 
   liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, liftPairFst, 
@@ -515,6 +515,10 @@ instance MethodSym CSharpCode where
 
   function n = method n ""
 
+  inOutFunc n s p ins [] b = function n s p void (map (uncurry stateParam) ins) b
+  inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (uncurry stateParam) ins) (liftA2 appendToBody b $ state $ returnVar l)
+  inOutFunc n s p ins outs b = function n s p void (map (fmap csRefParam . uncurry stateParam) outs ++ map (uncurry stateParam) (filter (\(l,_) -> l `notElem` map fst outs) ins)) b
+
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
   stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
@@ -588,3 +592,6 @@ csOpenFileWorA :: ValData -> ValData -> TypeData
   -> ValData -> Doc
 csOpenFileWorA f n w a = valDoc f <+> equals <+> new <+> typeDoc w <> 
   parens (valDoc n <> comma <+> valDoc a)
+
+csRefParam :: Doc -> Doc
+csRefParam p = text "ref" <+> p

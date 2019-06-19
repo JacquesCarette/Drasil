@@ -279,14 +279,11 @@ spec sm (a :+: b)      = spec sm a P.:+: spec sm b
 spec _ (S s)           = P.S $ checkValid invalidChars
   where
     checkValid []  = s
-    checkValid [x]
-      | x `elem` s = charError x
-      | otherwise  = s
     checkValid (x:xs)
       | x `elem` s = charError x
       | otherwise  = checkValid xs
     charError x    = error $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']
-    invalidChars   = ['<', '>', '\\', '%']
+    invalidChars   = ['<', '>', '\"', '&', '#', '$', '%', '&', '~', '^', '\\', '{', '}'] 
 spec _ (Sy s)          = P.Sy s
 spec _ Percent         = P.E $ P.MO P.Perc
 spec _ (P s)           = P.E $ symbol s

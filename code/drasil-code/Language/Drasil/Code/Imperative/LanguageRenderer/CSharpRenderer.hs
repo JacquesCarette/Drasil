@@ -294,7 +294,6 @@ instance Selector CSharpCode where
 
   selfAccess = objAccess self
 
-  listPopulateAccess _ _ = return (mkVal empty)
   listSizeAccess v = objAccess v listSize
 
   listIndexExists l i = mkVal <$> liftA3 listIndexExistsDocD greaterOp l i
@@ -318,18 +317,7 @@ instance FunctionSym CSharpCode where
 
   listSize = fmap funcDocD (var "Count")
   listAdd i v = fmap funcDocD (funcApp "Insert" [i, v])
-  listPopulateInt _ = return empty
-  listPopulateFloat _ = return empty
-  listPopulateChar _ = return empty
-  listPopulateBool _ = return empty
-  listPopulateString _ = return empty
   listAppend v = fmap funcDocD (funcApp "Add" [v])
-  listExtendInt = fmap csListExtend defaultInt 
-  listExtendFloat = fmap csListExtend defaultFloat 
-  listExtendChar = fmap csListExtend defaultChar 
-  listExtendBool = fmap csListExtend defaultBool
-  listExtendString = fmap csListExtend defaultString
-  listExtendList _ = fmap csListExtendList
 
   iterBegin = fmap funcDocD (funcApp "begin" [])
   iterEnd = fmap funcDocD (funcApp "end" [])
@@ -600,9 +588,3 @@ csOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, CodeType)
   -> (Doc, Maybe String) -> Doc
 csOpenFileWorA (f, _) (n, _) (w, _) (a, _) = f <+> equals <+> new <+> w <> parens 
   (n <> comma <+> a)
-
-csListExtend :: (Doc, Maybe String) -> Doc
-csListExtend (v, _) = dot <> text "Add" <> parens v
-
-csListExtendList :: (Doc, CodeType) -> Doc
-csListExtendList (t, _) = dot <> text "Add" <> parens (new <+> t <> parens empty)

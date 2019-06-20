@@ -49,8 +49,7 @@ import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
-  empty, equals, integer, semi, vcat, lbrace, rbrace, quotes, render, colon,
-  isEmpty)
+  empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
 
 data CppCode x y a = CPPC {src :: x a, hdr :: y a}
 
@@ -283,8 +282,6 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
 
   selfAccess f = pair (selfAccess $ pfst f) (selfAccess $ psnd f)
 
-  listPopulateAccess v f = pair (listPopulateAccess (pfst v) (pfst f)) 
-    (listPopulateAccess (psnd v) (psnd f))
   listSizeAccess v = pair (listSizeAccess $ pfst v) (listSizeAccess $ psnd v)
 
   listIndexExists v i = pair (listIndexExists (pfst v) (pfst i)) 
@@ -310,23 +307,7 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
 
   listSize = pair listSize listSize
   listAdd i v = pair (listAdd (pfst i) (pfst v)) (listAdd (psnd i) (psnd v))
-  listPopulateInt v = pair (listPopulateInt $ pfst v) (listPopulateInt $ psnd v)
-  listPopulateFloat v = pair (listPopulateFloat $ pfst v) 
-    (listPopulateFloat $ psnd v)
-  listPopulateChar v = pair (listPopulateChar $ pfst v) 
-    (listPopulateChar $ psnd v)
-  listPopulateBool v = pair (listPopulateBool $ pfst v) 
-    (listPopulateBool $ psnd v)
-  listPopulateString v = pair (listPopulateString $ pfst v) 
-    (listPopulateString $ psnd v)
   listAppend v = pair (listAppend $ pfst v) (listAppend $ psnd v)
-  listExtendInt = pair listExtendInt listExtendInt
-  listExtendFloat = pair listExtendFloat listExtendFloat
-  listExtendChar = pair listExtendChar listExtendChar
-  listExtendBool = pair listExtendBool listExtendBool
-  listExtendString = pair listExtendString listExtendString
-  listExtendList i t = pair (listExtendList i $ pfst t) 
-    (listExtendList i $ psnd t)
 
   iterBegin = pair iterBegin iterBegin
   iterEnd = pair iterEnd iterEnd
@@ -808,7 +789,6 @@ instance Selector CppSrcCode where
 
   selfAccess = objAccess self
 
-  listPopulateAccess _ _ = return (mkVal empty)
   listSizeAccess v = objAccess v listSize
 
   listIndexExists v i = listSizeAccess v ?> i
@@ -832,18 +812,7 @@ instance FunctionSym CppSrcCode where
 
   listSize = func "size" []
   listAdd _ v = fmap funcDocD (funcApp "push_back" [v])
-  listPopulateInt _ = return empty
-  listPopulateFloat _ = return empty
-  listPopulateChar _ = return empty
-  listPopulateBool _ = return empty
-  listPopulateString _ = return empty
   listAppend v = fmap funcDocD (funcApp "push_back" [v])
-  listExtendInt = listAppend defaultInt 
-  listExtendFloat = listAppend defaultFloat 
-  listExtendChar = listAppend defaultChar 
-  listExtendBool = listAppend defaultBool
-  listExtendString = listAppend defaultString
-  listExtendList _ = fmap cppListExtendList
 
   iterBegin = fmap funcDocD (funcApp "begin" [])
   iterEnd = fmap funcDocD (funcApp "end" [])
@@ -1332,7 +1301,6 @@ instance Selector CppHdrCode where
 
   selfAccess _ = return (mkVal empty)
 
-  listPopulateAccess _ _ = return (mkVal empty)
   listSizeAccess _ = return (mkVal empty)
 
   listIndexExists _ _ = return (mkVal empty)
@@ -1355,18 +1323,7 @@ instance FunctionSym CppHdrCode where
 
   listSize = return empty
   listAdd _ _ = return empty
-  listPopulateInt _ = return empty
-  listPopulateFloat _ = return empty
-  listPopulateChar _ = return empty
-  listPopulateBool _ = return empty
-  listPopulateString _ = return empty
   listAppend _ = return empty
-  listExtendInt = return empty
-  listExtendFloat = return empty
-  listExtendChar = return empty
-  listExtendBool = return empty
-  listExtendString = return empty
-  listExtendList _ _ = return empty
 
   iterBegin = return empty
   iterEnd = return empty
@@ -1667,10 +1624,6 @@ cppInput (v, _) (inFn, _) end = vcat [
 cppOpenFile :: Label -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 cppOpenFile mode (f, _) (n, _) = f <> dot <> text "open" <> 
   parens (n <> comma <+> text mode)
-
-cppListExtendList :: (Doc, CodeType) -> Doc
-cppListExtendList (t, _) = dot <> text "push_back" <> 
-  parens (t <> parens (integer 0))
 
 cppPointerParamDoc :: Label -> (Doc, CodeType)  -> Doc
 cppPointerParamDoc n (t, _) = t <+> text "&" <> text n

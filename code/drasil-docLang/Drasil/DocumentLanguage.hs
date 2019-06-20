@@ -69,8 +69,6 @@ data DocSection = RefSec RefSec
                 | AppndxSec AppndxSec
                 | ExistingSolnSec ExistingSolnSec
 
---FIXME: anything with 'Verb' in it should eventually go
-
 {--}
 
 -- | Reference section. Contents are top level followed by a list of subsections.
@@ -165,7 +163,6 @@ newtype SSDSec = SSDProg [SSDSub]
 
 -- | Specific system description subsections
 data SSDSub where
-  SSDSubVerb :: Section -> SSDSub
   SSDProblem :: ProblemDescription -> SSDSub
   SSDSolChSpec :: SolChSpec -> SSDSub
 
@@ -415,7 +412,6 @@ mkSSDSec si (SSDProg l) =
   SSD.specSysDescr $ map (mkSubSSD si) l
   where
     mkSubSSD :: SystemInformation -> SSDSub -> Section
-    mkSubSSD _ (SSDSubVerb s)        = s
     mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
     mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 

@@ -40,7 +40,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
-  angles, blank, doubleQuotedText, mapPairFst, mapPairSnd, 
+  TypeData(..), td, angles, blank, doubleQuotedText, mapPairFst, mapPairSnd, 
   vibcat, liftA4, liftA5, liftA6, liftA8, liftList, lift2Lists, lift1List, 
   lift3Pair, lift4Pair, liftPairFst)
 
@@ -120,7 +120,7 @@ instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   block sts = pair (block $ map pfst sts) (block $ map psnd sts)
 
 instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
-  type StateType (p CppSrcCode CppHdrCode) = (Doc, CodeType)
+  type StateType (p CppSrcCode CppHdrCode) = TypeData
   bool = pair bool bool
   int = pair int int
   float = pair float float
@@ -620,7 +620,7 @@ instance BlockSym CppSrcCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
 instance StateTypeSym CppSrcCode where
-  type StateType CppSrcCode = (Doc, CodeType)
+  type StateType CppSrcCode = TypeData
   bool = return cppBoolTypeDoc
   int = return intTypeDocD
   float = return cppFloatTypeDoc
@@ -1001,7 +1001,7 @@ instance ScopeSym CppSrcCode where
 
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = Doc
-  mState = fmap fst
+  mState = fmap typeDoc
   void = return voidDocD
   construct n = return $ constructDocD n
 
@@ -1153,7 +1153,7 @@ instance BlockSym CppHdrCode where
   block _ = return empty
 
 instance StateTypeSym CppHdrCode where
-  type StateType CppHdrCode = (Doc, CodeType)
+  type StateType CppHdrCode = TypeData
   bool = return cppBoolTypeDoc
   int = return intTypeDocD
   float = return cppFloatTypeDoc
@@ -1456,7 +1456,7 @@ instance ScopeSym CppHdrCode where
 
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = Doc
-  mState = fmap fst
+  mState = fmap typeDoc
   void = return voidDocD
   construct n = return $ constructDocD n
 
@@ -1568,32 +1568,33 @@ usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <>
   text m <> end
 usingNameSpace n Nothing end = text "using namespace" <+> text n <> end
 
-cppBoolTypeDoc :: (Doc, CodeType)
-cppBoolTypeDoc = (text "bool", Boolean)
+cppBoolTypeDoc :: TypeData
+cppBoolTypeDoc = td Boolean (text "bool")
 
-cppFloatTypeDoc :: (Doc, CodeType)
-cppFloatTypeDoc = (text "double", Float)
+cppFloatTypeDoc :: TypeData
+cppFloatTypeDoc = td Float (text "double")
 
-cppInfileTypeDoc :: (Doc, CodeType)
-cppInfileTypeDoc = (text "ifstream", File)
+cppInfileTypeDoc :: TypeData
+cppInfileTypeDoc = td File (text "ifstream")
 
-cppOutfileTypeDoc :: (Doc, CodeType)
-cppOutfileTypeDoc = (text "ofstream", File)
+cppOutfileTypeDoc :: TypeData
+cppOutfileTypeDoc = td File (text "ofstream")
 
-cppIterTypeDoc :: (Doc, CodeType) -> (Doc, CodeType)
-cppIterTypeDoc (td, t) = (text "std::" <> td <> text "::iterator", Iterator t)
+cppIterTypeDoc :: TypeData -> TypeData
+cppIterTypeDoc (TD t tdoc) = td (Iterator t) (text "std::" <> tdoc <>
+  text "::iterator")
 
-cppStateObjDoc :: (Doc, CodeType) -> Doc -> Doc
-cppStateObjDoc (t, _) ps = t <> parens ps
+cppStateObjDoc :: TypeData -> Doc -> Doc
+cppStateObjDoc (TD _ t) ps = t <> parens ps
 
 cppListSetDoc :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 cppListSetDoc (i, _) (v, _) = dot <> text "at" <> parens i <+> equals <+> v
 
-cppListDecDoc :: Label -> (Doc, Maybe String) -> (Doc, CodeType) -> Doc
-cppListDecDoc l (n, _) (t, _) = t <+> text l <> parens n
+cppListDecDoc :: Label -> (Doc, Maybe String) -> TypeData -> Doc
+cppListDecDoc l (n, _) (TD _ t) = t <+> text l <> parens n
 
-cppListDecDefDoc :: Label -> (Doc, CodeType) -> Doc -> Doc
-cppListDecDefDoc l (t, _) vs = t <+> text l <> braces vs
+cppListDecDefDoc :: Label -> TypeData -> Doc -> Doc
+cppListDecDefDoc l (TD _ t) vs = t <+> text l <> braces vs
 
 cppPrintDocD :: Bool -> Doc -> (Doc, Maybe String) -> Doc
 cppPrintDocD newLn printFn (v, _) = printFn <+> text "<<" <+> v <+> end
@@ -1625,8 +1626,8 @@ cppOpenFile :: Label -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 cppOpenFile mode (f, _) (n, _) = f <> dot <> text "open" <> 
   parens (n <> comma <+> text mode)
 
-cppPointerParamDoc :: Label -> (Doc, CodeType)  -> Doc
-cppPointerParamDoc n (t, _) = t <+> text "&" <> text n
+cppPointerParamDoc :: Label -> TypeData  -> Doc
+cppPointerParamDoc n (TD _ t) = t <+> text "&" <> text n
 
 cppsMethod :: Label -> Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 
@@ -1645,8 +1646,8 @@ cpphMethod :: Label -> Doc -> Doc -> Doc -> Doc
 cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
                       | otherwise = t <+> text n <> parens ps <> end
 
-cppMainMethod :: (Doc, CodeType)  -> Doc -> Doc -> Doc -> Doc
-cppMainMethod (t, _) b bStart bEnd = vcat [
+cppMainMethod :: TypeData  -> Doc -> Doc -> Doc -> Doc
+cppMainMethod (TD _ t) b bStart bEnd = vcat [
   t <+> text "main" <> parens (text "int argc, const char *argv[]") <+> bStart,
   indent b,
   blank,

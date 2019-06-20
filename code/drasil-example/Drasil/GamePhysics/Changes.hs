@@ -1,14 +1,11 @@
-module Drasil.GamePhysics.Changes where
+module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs) where
 
 --A list of likely and unlikely changes for GamePhysics
 
 import Language.Drasil
-import Drasil.DocLang (mkEnumSimpleD)
-import qualified Drasil.DocLang.SRS as SRS (unlikeChg)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation as Doc (section_, unlikelyChg,
-  physics, game, library, likeChgDom, unlikeChgDom)
+import Data.Drasil.Concepts.Documentation as Doc (library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
 import Data.Drasil.Concepts.Computation (algorithm)
 import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, joint)
@@ -51,27 +48,12 @@ likelyChgs = [lcVODES, lcEC, lcID, lcIJC]
 --UNLIKELY CHANGES --
 --------------------------------
 
-unlikelyChanges :: Section
-unlikelyChangesIntro :: Contents
+unlikelyChangesStmt1, unlikelyChangesStmt2, unlikelyChangesStmt3, unlikelyChangesStmt4 :: Sentence
 
-unlikelyChangeswithIntro :: [Contents]
-unlikelyChangeswithIntro = unlikelyChangesIntro : unlikelyChangesList
-
-unlikelyChanges = SRS.unlikeChg unlikelyChangeswithIntro []
-
-unlikelyChangesIntro = foldlSP [S "This", phrase section_, S "lists the",
-  plural unlikelyChg, S "to be made to the", phrase game, phrase Doc.physics,
-  phrase library]
-
-unlikelyChangesStmt1, unlikelyChangesStmt2,
-  unlikelyChangesStmt3, unlikelyChangesStmt4 :: Sentence
-
-unlikelyChangesStmt1 = foldlSent [S "The goal of the system is to simulate",
-  S "the interactions of rigid bodies"]
-unlikelyChangesStmt2 = foldlSent [S "There will always be a source of input",
-  S "data external to the software"]
-unlikelyChangesStmt3 = foldlSent [S "A Cartesian Coordinate system is used"]
-unlikelyChangesStmt4 = foldlSent [S "All objects are rigid bodies"]
+unlikelyChangesStmt1 = S "The goal of the system is to simulate the interactions of rigid bodies."
+unlikelyChangesStmt2 = S "There will always be a source of input data external to the software."
+unlikelyChangesStmt3 = S "A Cartesian Coordinate system is used."
+unlikelyChangesStmt4 = S "All objects are rigid bodies."
 
 ucSRB, ucEI, ucCCS, ucORB :: ConceptInstance
 
@@ -80,8 +62,5 @@ ucEI = cic "ucEI" unlikelyChangesStmt2 "External-Input" unlikeChgDom
 ucCCS = cic "ucCCS" unlikelyChangesStmt3 "Cartesian-Coordinate-System" unlikeChgDom
 ucORB = cic "ucORB" unlikelyChangesStmt4 "Objects-Rigid-Bodies" unlikeChgDom
   
-unlikelyChangesList' :: [ConceptInstance]
-unlikelyChangesList' = [ucSRB, ucEI, ucCCS, ucORB]
-
-unlikelyChangesList :: [Contents]
-unlikelyChangesList = mkEnumSimpleD unlikelyChangesList'
+unlikelyChgs :: [ConceptInstance]
+unlikelyChgs = [ucSRB, ucEI, ucCCS, ucORB]

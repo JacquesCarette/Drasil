@@ -15,7 +15,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   SSDSub(..), SolChSpec(SCSProg), TConvention(..), TSIntro(..),
   Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
-  LCsSec(..), UCsSec'(..), AuxConstntSec(..), ProblemDescription(PDProg),
+  LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
   generateTraceMap', dataConstraintUncertainty, goalStmtF, inDataConstTbl,
   intro, mkDoc, outDataConstTbl, mkEnumSimpleD, outDataConstTbl, termDefnF,
   tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
@@ -47,8 +47,7 @@ import qualified Data.Drasil.Concepts.Math as CM (equation, law, mathcon, mathco
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
-import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
- likelyChgs)
+import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GamePhysics.Concepts (chipmunk, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
@@ -103,7 +102,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       NonFReqsSub nonfuncReqs
     ],
     LCsSec $ LCsProg likelyChgs,
-    UCsSec' $ UCsProg' unlikelyChangeswithIntro,
+    UCsSec $ UCsProg unlikelyChgs,
     ExistingSolnSec $ ExistSolnProg offShelfSols,
     TraceabilitySec $ TraceabilityProg (map fst traceabilityMatrices)
       (map (foldlList Comma List . snd) traceabilityMatrices) (map (LlC . fst) traceabilityMatrices) [],
@@ -130,8 +129,7 @@ theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ likelyChgs ++ unlikelyChangesList' ++
-  funcReqs
+concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 section :: [Section]
 section = sec

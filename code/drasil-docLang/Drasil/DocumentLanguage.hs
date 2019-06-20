@@ -41,7 +41,7 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, likelyChg, refmat,
-  section_, software)
+  section_, software, unlikelyChg)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
@@ -62,6 +62,7 @@ data DocSection = RefSec RefSec
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
+                | UCsSec' UCsSec'
                 | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
@@ -200,7 +201,8 @@ newtype LCsSec = LCsProg [ConceptInstance]
 
 {--}
 
-newtype UCsSec = UCsProg [Contents]
+newtype UCsSec' = UCsProg' [Contents]
+newtype UCsSec = UCsProg [ConceptInstance]
 
 {--}
 
@@ -241,6 +243,7 @@ mkSections si = map doit
     doit (GSDSec gs')        = mkGSDSec gs'
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc)         = mkLCsSec lc
+    doit (UCsSec' ulcs)      = mkUCsSec' ulcs
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
@@ -493,8 +496,13 @@ mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
 {--}
 
 -- | Helper for making the 'UnikelyChanges' section
+mkUCsSec' :: UCsSec' -> Section
+mkUCsSec' (UCsProg' c) = SRS.unlikeChg c []
+
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg c []
+mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
+  where intro = foldlSP [S "This", phrase section_, S "lists the",
+                plural unlikelyChg, S "to be made to the", phrase software]
 
 {--}
 

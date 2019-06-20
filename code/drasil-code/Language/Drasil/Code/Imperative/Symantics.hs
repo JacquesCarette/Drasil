@@ -292,13 +292,6 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   listAdd            :: repr (Value repr) -> repr (Value repr) -> 
     repr (Function repr)
   listAppend         :: repr (Value repr) -> repr (Function repr)
-  listExtendInt      :: repr (Function repr)
-  listExtendFloat    :: repr (Function repr)
-  listExtendChar     :: repr (Function repr)
-  listExtendBool     :: repr (Function repr)
-  listExtendString   :: repr (Function repr)
-  -- Integer is the depth of nesting, type is the full type of the list.
-  listExtendList     :: Integer -> repr (StateType repr) -> repr (Function repr)
 
   iterBegin :: repr (Function repr)
   iterEnd   :: repr (Function repr)

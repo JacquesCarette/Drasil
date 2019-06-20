@@ -299,12 +299,6 @@ instance FunctionSym PythonCode where
   listSize = return $ text "len"
   listAdd i v = fmap funcDocD (funcApp "insert" [i, v])
   listAppend v = fmap funcDocD (funcApp "append" [v])
-  listExtendInt = fmap pyListExtend defaultInt 
-  listExtendFloat = fmap pyListExtend defaultFloat 
-  listExtendChar = fmap pyListExtend defaultChar 
-  listExtendBool = fmap pyListExtend defaultBool
-  listExtendString = fmap pyListExtend defaultString
-  listExtendList n _ = return $ pyListExtendList n
 
   iterBegin = fmap funcDocD (funcApp "begin" [])
   iterEnd = fmap funcDocD (funcApp "end" [])
@@ -550,14 +544,6 @@ pyListSizeAccess (v, _) f = f <> parens v
 
 pyStringType :: (Doc, CodeType)
 pyStringType = (text "str", String)
-
-pyListExtend :: (Doc, Maybe String) -> Doc
-pyListExtend (dftVal, _) = dot <> text "append" <> parens dftVal
-
-pyListExtendList :: Integer -> Doc
-pyListExtendList ns = dot <> text "append" <> parens (nestedList ns)
-  where nestedList 0 = empty
-        nestedList n = brackets $ nestedList (n-1)
 
 pyVarDecDef :: Label ->  (Doc, Maybe String) -> Doc
 pyVarDecDef l (v, _) = text l <+> equals <+> v

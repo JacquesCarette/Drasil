@@ -2,7 +2,7 @@ module Drasil.DocLang (
     -- DocumentLanguage
     AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), DocDesc, 
     DocSection(..), Emphasis(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), 
-    IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), 
+    IntroSec(..), IntroSub(..), LFunc(..), 
     Literature(Doc', Lit, Manual), ProblemDescription(..), RefSec(..), RefTab(..), 
     ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
     SSDSub(..), SolChSpec(..), ExistingSolnSec(..), StkhldrSec(StkhldrProg2),
@@ -48,7 +48,7 @@ module Drasil.DocLang (
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
     DerivationDisplay(..), DocDesc, DocSection(..), Emphasis(..), ExistingSolnSec(..), 
     GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), 
-    LCsSec(..), LFunc(..), Literature(Doc', Lit, Manual), ProblemDescription(..), 
+    LFunc(..), Literature(Doc', Lit, Manual), ProblemDescription(..), 
     RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), 
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), LCsSec'(..),

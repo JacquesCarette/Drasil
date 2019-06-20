@@ -15,8 +15,7 @@ egetDocSec IntroSec{}           = []
 egetDocSec (StkhldrSec s)       = egetStk s
 egetDocSec (GSDSec g)           = egetGSD g
 egetDocSec (SSDSec s)           = egetSSD s
-egetDocSec (ReqrmntSec r)       = egetReq r
-egetDocSec (LCsSec l)           = egetLcs l
+egetDocSec ReqrmntSec{}         = [] -- requirements can't lead to Expr?
 egetDocSec LCsSec'{}            = [] -- likely changes can't lead to Expr?
 egetDocSec (UCsSec u)           = egetUcs u
 egetDocSec (TraceabilitySec t)  = egetTrace t
@@ -54,12 +53,6 @@ egetGSD (GSDProg2 gsdsub) = concatMap egetGSDSub gsdsub
 
 egetSSD :: SSDSec -> [Expr]
 egetSSD (SSDProg ssd) = concatMap egetSSDSub ssd
-
-egetReq :: ReqrmntSec -> [Expr]
-egetReq (ReqsProg rs) = concatMap egetReqSub rs
-
-egetLcs :: LCsSec -> [Expr]
-egetLcs (LCsProg c) = concatMap egetCon' c
 
 egetUcs :: UCsSec -> [Expr]
 egetUcs (UCsProg c) = concatMap egetCon' c
@@ -102,10 +95,6 @@ egetGSDSub (SystCons c s) = concatMap egetCon' c ++ concatMap egetSec s
 egetSSDSub :: SSDSub -> [Expr]
 egetSSDSub (SSDProblem p)   = egetProblem p
 egetSSDSub (SSDSolChSpec s) = egetSol s
-
-egetReqSub :: ReqsSub -> [Expr]
-egetReqSub FReqsSub{}    = []
-egetReqSub NonFReqsSub{} = []
 
 egetFunc :: LFunc -> [Expr]
 egetFunc Term         = []
@@ -153,7 +142,6 @@ getDocSec (StkhldrSec s)       = getStk s
 getDocSec (GSDSec g)           = getGSD g
 getDocSec (SSDSec s)           = getSSD s
 getDocSec (ReqrmntSec r)       = getReq r
-getDocSec (LCsSec l)           = getLcs l
 getDocSec (LCsSec' l)          = getLcs' l
 getDocSec (UCsSec u)           = getUcs u
 getDocSec (TraceabilitySec t)  = getTrace t
@@ -336,9 +324,6 @@ getReqSub :: ReqsSub -> [Sentence]
 getReqSub (FReqsSub  c _) = map (^. defn) c
 getReqSub (NonFReqsSub c) = map (^. defn) c
 
-getLcs :: LCsSec -> [Sentence]
-getLcs (LCsProg c) = concatMap getCon' c
-
 getLcs' :: LCsSec' -> [Sentence]
 getLcs' (LCsProg' c) = map (^. defn) c
 
@@ -368,7 +353,6 @@ ciGetDocSec (StkhldrSec stk)    = ciGetStk stk
 ciGetDocSec GSDSec{}            = []
 ciGetDocSec (SSDSec ssd)        = ciGetSSD ssd
 ciGetDocSec ReqrmntSec{}        = []
-ciGetDocSec LCsSec{}            = []
 ciGetDocSec LCsSec'{}           = []
 ciGetDocSec UCsSec{}            = []
 ciGetDocSec TraceabilitySec{}   = []

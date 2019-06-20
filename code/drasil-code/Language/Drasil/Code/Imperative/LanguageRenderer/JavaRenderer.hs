@@ -455,6 +455,16 @@ instance StatementSym JavaCode where
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 
+  inOutCall n ins [] = valState $ funcApp n ins
+  inOutCall n ins [out] = assign out $ funcApp n ins
+  inOutCall n ins outs = multi $ ("outputs" &.= funcApp n ins) 
+    : assignArray 0 outs
+    where assignArray :: (StatementSym repr) => Int -> [repr (Value repr)] ->[repr (Statement repr)]
+          assignArray _ [] = []
+          -- Need to cast to correct type
+          assignArray c (v:vs) = (v &=. ("outputs[" ++ show n ++ "]"))
+            : assignArray (c+1) vs
+
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
   multi = lift1List multiStateDocD endStatement

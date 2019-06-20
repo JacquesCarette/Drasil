@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Changes (likelyChgs, likelyChgsList, unlikelyChgs,
+module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
   unlikelyChgsList) where
 
 --A list of likely and unlikely changes for GlassBR
@@ -18,9 +18,6 @@ import Drasil.GlassBR.Concepts (blastRisk, glaSlab, glass)
 import Drasil.GlassBR.Unitals (explosion, lite)
 
 {--LIKELY CHANGES--}
-
-likelyChgsList :: [Contents]
-likelyChgsList = mkEnumSimpleD likelyChgs
 
 likelyChgs :: [ConceptInstance]
 likelyChgs = [calcInternalBlastRisk, varValsOfmkE, accMoreThanSingleLite,

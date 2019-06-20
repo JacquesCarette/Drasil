@@ -41,18 +41,19 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   doubleSlash, addCommentsDocD, valList, appendToBody, getterName, setterName, 
   setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
-  fd, ModData(..), md, TypeData(..), td, ValData(..), vd, liftA4, liftA5, 
-  liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, liftPairFst, 
-  getInnerType, convType)
+  fd, ModData(..), md, TypeData(..), td, ValData(..), vd, mapPairFst, liftA4, 
+  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
+  liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import Data.List (nub)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   equals, semi, vcat, lbrace, rbrace, colon, render, isEmpty)
 
-newtype CSharpCode a = CSC {unCSC :: a}
+newtype CSharpCode a = CSC {unCSC :: a} deriving Eq
 
 instance Functor CSharpCode where
   fmap f (CSC x) = CSC (f x)
@@ -443,6 +444,11 @@ instance StatementSym CSharpCode where
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 
+  inOutCall n ins [out] = assign out $ funcApp n ins
+  inOutCall n ins outs = valState $ funcApp n (nub $ map (\v -> 
+    if v `elem` outs then fmap (mapPairFst csRef) v else v) ins ++
+    map (fmap (mapPairFst csRef)) outs)
+
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
   multi = lift1List multiStateDocD endStatement
@@ -517,7 +523,7 @@ instance MethodSym CSharpCode where
 
   inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (uncurry 
     stateParam) ins) (liftA2 appendToBody b $ state $ returnVar l)
-  inOutFunc n s p ins outs b = function n s p void (map (fmap csRefParam . 
+  inOutFunc n s p ins outs b = function n s p void (map (fmap csRef . 
     uncurry stateParam) outs ++ map (uncurry stateParam) (filter (\(l,_) -> l 
     `notElem` map fst outs) ins)) b
 
@@ -595,5 +601,5 @@ csOpenFileWorA :: ValData -> ValData -> TypeData
 csOpenFileWorA f n w a = valDoc f <+> equals <+> new <+> typeDoc w <> 
   parens (valDoc n <> comma <+> valDoc a)
 
-csRefParam :: Doc -> Doc
-csRefParam p = text "ref" <+> p
+csRef :: Doc -> Doc
+csRef p = text "ref" <+> p

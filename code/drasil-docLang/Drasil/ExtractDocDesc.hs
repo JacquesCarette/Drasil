@@ -17,7 +17,6 @@ egetDocSec (GSDSec g)           = egetGSD g
 egetDocSec (SSDSec s)           = egetSSD s
 egetDocSec ReqrmntSec{}         = [] -- requirements can't lead to Expr?
 egetDocSec LCsSec{}             = [] -- likely changes can't lead to Expr?
-egetDocSec (UCsSec' u)          = egetUcs' u
 egetDocSec UCsSec{}             = [] -- unlikely changes can't lead to Expr?
 egetDocSec (TraceabilitySec t)  = egetTrace t
 egetDocSec (AuxConstntSec a)    = egetAux a
@@ -54,9 +53,6 @@ egetGSD (GSDProg2 gsdsub) = concatMap egetGSDSub gsdsub
 
 egetSSD :: SSDSec -> [Expr]
 egetSSD (SSDProg ssd) = concatMap egetSSDSub ssd
-
-egetUcs' :: UCsSec' -> [Expr]
-egetUcs' (UCsProg' c) = concatMap egetCon' c
 
 egetTrace :: TraceabilitySec -> [Expr]
 egetTrace (TraceabilityProg lc _ c s) = concatMap egetLblCon lc ++ concatMap egetCon' c
@@ -144,7 +140,6 @@ getDocSec (GSDSec g)           = getGSD g
 getDocSec (SSDSec s)           = getSSD s
 getDocSec (ReqrmntSec r)       = getReq r
 getDocSec (LCsSec l)           = getLcs l
-getDocSec (UCsSec' u)          = getUcs' u
 getDocSec (UCsSec u)           = getUcs u
 getDocSec (TraceabilitySec t)  = getTrace t
 getDocSec (AuxConstntSec a)    = getAux a
@@ -329,9 +324,6 @@ getReqSub (NonFReqsSub c) = map (^. defn) c
 getLcs :: LCsSec -> [Sentence]
 getLcs (LCsProg c) = map (^. defn) c
 
-getUcs' :: UCsSec' -> [Sentence]
-getUcs' (UCsProg' c) = concatMap getCon' c
-
 getUcs :: UCsSec -> [Sentence]
 getUcs (UCsProg c) = map (^. defn) c
 
@@ -359,7 +351,6 @@ ciGetDocSec GSDSec{}            = []
 ciGetDocSec (SSDSec ssd)        = ciGetSSD ssd
 ciGetDocSec ReqrmntSec{}        = []
 ciGetDocSec LCsSec{}            = []
-ciGetDocSec UCsSec'{}           = []
 ciGetDocSec UCsSec{}            = []
 ciGetDocSec TraceabilitySec{}   = []
 ciGetDocSec (AuxConstntSec aux) = ciGetAux aux

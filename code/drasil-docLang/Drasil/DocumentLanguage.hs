@@ -62,7 +62,6 @@ data DocSection = RefSec RefSec
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
-                | UCsSec' UCsSec'
                 | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
@@ -201,7 +200,6 @@ newtype LCsSec = LCsProg [ConceptInstance]
 
 {--}
 
-newtype UCsSec' = UCsProg' [Contents]
 newtype UCsSec = UCsProg [ConceptInstance]
 
 {--}
@@ -243,7 +241,6 @@ mkSections si = map doit
     doit (GSDSec gs')        = mkGSDSec gs'
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc)         = mkLCsSec lc
-    doit (UCsSec' ulcs)      = mkUCsSec' ulcs
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
@@ -496,9 +493,6 @@ mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
 {--}
 
 -- | Helper for making the 'UnikelyChanges' section
-mkUCsSec' :: UCsSec' -> Section
-mkUCsSec' (UCsProg' c) = SRS.unlikeChg c []
-
 mkUCsSec :: UCsSec -> Section
 mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
   where intro = foldlSP [S "This", phrase section_, S "lists the",

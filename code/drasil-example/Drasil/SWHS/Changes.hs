@@ -20,8 +20,8 @@ import Data.Drasil.Quantities.Physics (energy)
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
-likelyChgs :: [ConceptInstance]
-likelyChgs = [likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW,
+likelyChanges :: [ConceptInstance]
+likelyChanges = [likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW,
   likeChgTLH]
 
 likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW,
@@ -50,8 +50,8 @@ likeChgDT = cic "likeChgDT" (
 --
 likeChgDITPW = cic "likeChgDITPW" (
   foldlSent [chgsStart assumpSITWP (S "To add more flexibility to the"),
-  phrase simulation `sC` (phrase tempInit `ofThe` phrase water) `sAnd`
-  S "the", short phsChgMtrl, S "could be allowed to have different",
+  phrase simulation `sC` (phrase tempInit `ofThe` phrase water) `andThe`
+  short phsChgMtrl, S "could be allowed to have different",
   plural value] ) "Different-Initial-Temps-PCM-Water" likeChgDom
 --
 likeChgTLH = cic "likeChgTLH" (

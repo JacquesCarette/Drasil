@@ -19,14 +19,14 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose),
   ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
-  TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
+  TraceabilitySec(TraceabilityProg), LCsSec'(..), UCsSec(..),
   GSDSec(..), GSDSub(..), ProblemDescription(PDProg),
   dataConstraintUncertainty, intro, mkDoc, mkEnumSimpleD, outDataConstTbl,
   physSystDesc, goalStmtF, termDefnF, tsymb'', getDocDesc, egetDocDesc,
   ciGetDocDesc, generateTraceMap, generateTraceMap', getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   physSystDescriptionLabel, traceMatStandard)
-import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg, inModel)
+import qualified Drasil.DocLang.SRS as SRS (unlikeChg, inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
@@ -56,7 +56,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
   thermalAnalysis, enerSrc)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
-import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
+import Drasil.SWHS.Changes (likelyChanges, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
   coil, tank, transient, swhsPCM, phaseChangeMaterial, tankPCM, con)
 import Drasil.SWHS.DataDefs (dataDefs, qDefs)
@@ -188,7 +188,7 @@ mkSRS = [RefSec $ RefProg intro [
     FReqsSub funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
-  LCsSec $ LCsProg likelyChgsList,
+  LCsSec' $ LCsProg' likelyChanges,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
     TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
@@ -223,7 +223,7 @@ theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
-concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
+concIns = goals ++ assumptions ++ likelyChanges ++ unlikelyChgs ++ funcReqs
 
 section :: [Section]
 section = sec
@@ -471,12 +471,6 @@ outputConstraints = [tempW, tempPCM, watE, pcmE]
 --------------------------------
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
-
-likelyChgsSect :: Section
-likelyChgsSect = SRS.likeChg likelyChgsList []
-
-likelyChgsList :: [Contents]
-likelyChgsList = mkEnumSimpleD likelyChgs
 
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --

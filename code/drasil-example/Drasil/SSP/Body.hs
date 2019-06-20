@@ -15,7 +15,7 @@ import qualified Data.Map as Map
 import Utils.Drasil
 
 import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
-  LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
+  LCsSec'(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
@@ -54,8 +54,7 @@ import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 
 import Drasil.SSP.Assumptions (assumptions)
-import Drasil.SSP.Changes (likelyChgs, likelyChgsCon, unlikelyChgs,
-  unlikelyChgsCon)
+import Drasil.SSP.Changes (likelyChgs, unlikelyChgs, unlikelyChgsCon)
 import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
@@ -146,7 +145,7 @@ mkSRS = [RefSec $ RefProg intro
     FReqsSub funcReqs funcReqTables,
     NonFReqsSub nonFuncReqs
   ],
-  LCsSec $ LCsProg likelyChgsCon,
+  LCsSec' $ LCsProg' likelyChgs,
   UCsSec $ UCsProg unlikelyChgsCon,
   TraceabilitySec $ TraceabilityProg (map fst traceyMatrix) (map (foldlList Comma List . snd) traceyMatrix)
     (map (LlC . fst) traceyMatrix) [],

@@ -1,4 +1,4 @@
-module Drasil.SSP.Changes (likelyChgsCon, likelyChgs, unlikelyChgsCon,
+module Drasil.SSP.Changes (likelyChgs, unlikelyChgsCon,
   unlikelyChgs) where
 
 -- A list of likely and unlikely changes for the SSP example
@@ -15,9 +15,6 @@ import Drasil.SSP.Assumptions (assumpSLH, assumpINSFL, assumpENSL,
   assumpSF, assumpSL)
 import Drasil.SSP.Defs (slope, soil, soilPrpty)
 import Drasil.SSP.Unitals (intNormForce, intShrForce, surfLoad, zcoord)
-
-likelyChgsCon :: [Contents]
-likelyChgsCon = mkEnumSimpleD likelyChgs
 
 likelyChgs :: [ConceptInstance]
 likelyChgs = [likelyChgCISL, likelyChgCSF, likelyChgCEF]

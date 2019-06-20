@@ -529,10 +529,10 @@ pyLnOp :: Doc
 pyLnOp = text "math.log"
 
 pyStateObj :: TypeData -> Doc -> Doc
-pyStateObj (TD _ t) vs = t <> parens vs
+pyStateObj t vs = typeDoc t <> parens vs
 
 pyExtStateObj :: Label -> TypeData -> Doc -> Doc
-pyExtStateObj l (TD _ t) vs = text l <> dot <> t <> parens vs
+pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs
 
 pyInlineIf :: (Doc, Maybe String) -> (Doc, Maybe String) -> 
   (Doc, Maybe String) -> Doc
@@ -549,7 +549,7 @@ pyVarDecDef :: Label ->  (Doc, Maybe String) -> Doc
 pyVarDecDef l (v, _) = text l <+> equals <+> v
 
 pyListDec :: Label -> TypeData -> Doc
-pyListDec l (TD _ t) = text l <+> equals <+> t
+pyListDec l t = text l <+> equals <+> typeDoc t
 
 pyListDecDef :: Label -> Doc -> Doc
 pyListDecDef l vs = text l <+> equals <+> brackets vs

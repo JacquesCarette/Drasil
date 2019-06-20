@@ -172,7 +172,7 @@ typeDocD :: Label -> TypeData
 typeDocD t = td (Object t) (text t)
 
 listTypeDocD :: TypeData -> Doc -> TypeData
-listTypeDocD (TD t tdoc) list = td (List t) (list <> angles tdoc)
+listTypeDocD t list = td (List (cType t)) (list <> angles (typeDoc t))
 
 -- Method Types --
 
@@ -185,7 +185,7 @@ constructDocD _ = empty
 -- Parameters --
 
 stateParamDocD :: Label -> TypeData -> Doc
-stateParamDocD n (TD _ t) = t <+> text n
+stateParamDocD n t = typeDoc t <+> text n
 
 paramListDocD :: [Doc] -> Doc
 paramListDocD = hicat (text ", ")
@@ -205,7 +205,7 @@ methodListDocD ms = vibcat methods
 -- StateVar --
 
 stateVarDocD :: Label -> Doc -> Doc -> TypeData -> Doc -> Doc
-stateVarDocD l s p (TD _ t) end = s <+> p <+> t <+> text l <> end
+stateVarDocD l s p t end = s <+> p <+> typeDoc t <+> text l <> end
 
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat
@@ -267,8 +267,8 @@ forDocD blockStart blockEnd sInit (vGuard, _) sUpdate b = vcat [
 
 forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> TypeData -> 
   (Doc, Maybe String) -> Doc -> Doc
-forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel (TD _ t) (v, _) b =
-  vcat [iterForEachLabel <+> parens (t <+> text l <+> iterInLabel <+> v) <+>
+forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel t (v, _) b =
+  vcat [iterForEachLabel <+> parens (typeDoc t <+> text l <+> iterInLabel <+> v) <+>
     blockStart,
   indent b,
   blockEnd]
@@ -311,23 +311,25 @@ plusPlusDocD' :: (Doc, Maybe String) -> Doc -> Doc
 plusPlusDocD' (v, _) plusOp = v <+> equals <+> v <+> plusOp <+> int 1
 
 varDecDocD :: Label -> TypeData -> Doc
-varDecDocD l (TD _ st) = st <+> text l
+varDecDocD l st = typeDoc st <+> text l
 
 varDecDefDocD :: Label -> TypeData -> (Doc, Maybe String) -> Doc
-varDecDefDocD l (TD _ st) (v, _) = st <+> text l <+> equals <+> v
+varDecDefDocD l st (v, _) = typeDoc st <+> text l <+> equals <+> v
 
 listDecDocD :: Label -> (Doc, Maybe String) -> TypeData -> Doc
-listDecDocD l (n, _) (TD _ st) = st <+> text l <+> equals <+> new <+> st <> parens n
+listDecDocD l (n, _) st = typeDoc st <+> text l <+> equals <+> new <+> 
+  typeDoc st <> parens n
 
 listDecDefDocD :: Label -> TypeData -> [(Doc, Maybe String)] -> Doc
-listDecDefDocD l (TD _ st) vs = st <+> text l <+> equals <+> new <+> st <+> 
-  braces (callFuncParamList vs)
+listDecDefDocD l st vs = typeDoc st <+> text l <+> equals <+> new <+> 
+  typeDoc st <+> braces (callFuncParamList vs)
 
 objDecDefDocD :: Label -> TypeData -> (Doc, Maybe String) -> Doc
 objDecDefDocD = varDecDefDocD
 
 constDecDefDocD :: Label -> TypeData -> (Doc, Maybe String) -> Doc -- can this be done without StateType (infer from value)?
-constDecDefDocD l (TD _ st) (v, _) = text "const" <+> st <+> text l <+> equals <+> v
+constDecDefDocD l st (v, _) = text "const" <+> typeDoc st <+> text l <+> 
+  equals <+> v
 
 returnDocD :: (Doc, Maybe String) -> Doc
 returnDocD (v, _) = text "return" <+> v
@@ -561,10 +563,10 @@ extFuncAppDocD :: Library -> Label -> [(Doc, Maybe String)] -> Doc
 extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
 
 stateObjDocD :: TypeData -> Doc -> Doc
-stateObjDocD (TD _ st) vs = new <+> st <> parens vs
+stateObjDocD st vs = new <+> typeDoc st <> parens vs
 
 listStateObjDocD :: Doc -> TypeData -> Doc -> Doc
-listStateObjDocD lstObj (TD _ st) vs = lstObj <+> st <> parens vs
+listStateObjDocD lstObj st vs = lstObj <+> typeDoc st <> parens vs
 
 notNullDocD :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 notNullDocD = binOpDocD
@@ -579,7 +581,7 @@ funcDocD :: (Doc, Maybe String) -> Doc
 funcDocD (fnApp, _) = dot <> fnApp
 
 castDocD :: TypeData -> Doc
-castDocD (TD _ t) = parens t
+castDocD t = parens $ typeDoc t
 
 sizeDocD :: Doc
 sizeDocD = dot <> text "Count"

@@ -1581,20 +1581,20 @@ cppOutfileTypeDoc :: TypeData
 cppOutfileTypeDoc = td File (text "ofstream")
 
 cppIterTypeDoc :: TypeData -> TypeData
-cppIterTypeDoc (TD t tdoc) = td (Iterator t) (text "std::" <> tdoc <>
+cppIterTypeDoc t = td (Iterator (cType t)) (text "std::" <> typeDoc t <>
   text "::iterator")
 
 cppStateObjDoc :: TypeData -> Doc -> Doc
-cppStateObjDoc (TD _ t) ps = t <> parens ps
+cppStateObjDoc t ps = typeDoc t <> parens ps
 
 cppListSetDoc :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 cppListSetDoc (i, _) (v, _) = dot <> text "at" <> parens i <+> equals <+> v
 
 cppListDecDoc :: Label -> (Doc, Maybe String) -> TypeData -> Doc
-cppListDecDoc l (n, _) (TD _ t) = t <+> text l <> parens n
+cppListDecDoc l (n, _) t = typeDoc t <+> text l <> parens n
 
 cppListDecDefDoc :: Label -> TypeData -> Doc -> Doc
-cppListDecDefDoc l (TD _ t) vs = t <+> text l <> braces vs
+cppListDecDefDoc l t vs = typeDoc t <+> text l <> braces vs
 
 cppPrintDocD :: Bool -> Doc -> (Doc, Maybe String) -> Doc
 cppPrintDocD newLn printFn (v, _) = printFn <+> text "<<" <+> v <+> end
@@ -1627,7 +1627,7 @@ cppOpenFile mode (f, _) (n, _) = f <> dot <> text "open" <>
   parens (n <> comma <+> text mode)
 
 cppPointerParamDoc :: Label -> TypeData  -> Doc
-cppPointerParamDoc n (TD _ t) = t <+> text "&" <> text n
+cppPointerParamDoc n t = typeDoc t <+> text "&" <> text n
 
 cppsMethod :: Label -> Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 
@@ -1647,8 +1647,8 @@ cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
                       | otherwise = t <+> text n <> parens ps <> end
 
 cppMainMethod :: TypeData  -> Doc -> Doc -> Doc -> Doc
-cppMainMethod (TD _ t) b bStart bEnd = vcat [
-  t <+> text "main" <> parens (text "int argc, const char *argv[]") <+> bStart,
+cppMainMethod t b bStart bEnd = vcat [
+  typeDoc t <+> text "main" <> parens (text "int argc, const char *argv[]") <+> bStart,
   indent b,
   blank,
   indent $ text "return 0;",

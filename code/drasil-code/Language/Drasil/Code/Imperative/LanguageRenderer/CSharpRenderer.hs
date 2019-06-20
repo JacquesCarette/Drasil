@@ -582,9 +582,9 @@ csFileInput :: (Doc, Maybe String) -> (Doc, Maybe String)
 csFileInput (f, s) = (f <> dot <> text "ReadLine()", s)
 
 csOpenFileR :: (Doc, Maybe String) -> (Doc, Maybe String) -> TypeData -> Doc
-csOpenFileR (f, _) (n, _) (TD _ r) = f <+> equals <+> new <+> r <> parens n
+csOpenFileR (f, _) (n, _) r = f <+> equals <+> new <+> typeDoc r <> parens n
 
 csOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) -> TypeData 
   -> (Doc, Maybe String) -> Doc
-csOpenFileWorA (f, _) (n, _) (TD _ w) (a, _) = f <+> equals <+> new <+> w <> parens 
-  (n <> comma <+> a)
+csOpenFileWorA (f, _) (n, _) w (a, _) = f <+> equals <+> new <+> typeDoc w <> 
+  parens (n <> comma <+> a)

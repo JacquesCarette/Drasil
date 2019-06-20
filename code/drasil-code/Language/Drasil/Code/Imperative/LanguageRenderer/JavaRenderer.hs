@@ -587,13 +587,13 @@ jListType (TD Float _) lst = td (List Float) (lst <> angles (text "Double"))
 jListType t lst = listTypeDocD t lst
 
 jListDecDef :: Label -> TypeData -> Doc -> Doc
-jListDecDef l (TD _ st) vs = st <+> text l <+> equals <+> new <+> st <+> parens
-  listElements
+jListDecDef l st vs = typeDoc st <+> text l <+> equals <+> new <+> 
+  typeDoc st <+> parens listElements
   where listElements = if isEmpty vs then empty else text "Arrays.asList" <> 
                          parens vs
 
 jConstDecDef :: Label -> TypeData -> (Doc, Maybe String) -> Doc
-jConstDecDef l (TD _ st) (v, _) = text "final" <+> st <+> text l <+> equals <+>
+jConstDecDef l st (v, _) = text "final" <+> typeDoc st <+> text l <+> equals <+>
   v
 
 jThrowDoc :: (Doc, Maybe String) -> Doc
@@ -629,7 +629,7 @@ jOpenFileWorA (f, _) (n, _) (wa, _) = f <+> equals <+> new <+>
   text "File" <> parens n <> comma <+> wa))
 
 jStringSplit :: (Doc, Maybe String) -> TypeData -> (Doc, Maybe String) -> Doc
-jStringSplit (vnew, _) (TD _ t) (s, _) = vnew <+> equals <+> new <+> t
+jStringSplit (vnew, _) t (s, _) = vnew <+> equals <+> new <+> typeDoc t
   <> parens s
 
 jMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc

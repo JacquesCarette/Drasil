@@ -1,10 +1,8 @@
-module Drasil.SSP.Changes (likelyChgs, unlikelyChgsCon,
-  unlikelyChgs) where
+module Drasil.SSP.Changes (likelyChgs, unlikelyChgs) where
 
 -- A list of likely and unlikely changes for the SSP example
 
 import Language.Drasil
-import Drasil.DocLang (mkEnumSimpleD)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (analysis, likeChgDom, model, system, unlikeChgDom)
@@ -45,16 +43,13 @@ lcCEFDesc = foldlSent [chgsStart assumpSL (S "The"), phrase system,
   plural calculation, S "can be added for an imposed surface load on the", 
   phrase slope]
 
-unlikelyChgsCon :: [Contents]
-unlikelyChgsCon = ucIntro : mkEnumSimpleD unlikelyChgs
-
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [unlikelyChgNISLO, unlikelyChg2AO]
 
 unlikelyChgNISLO, unlikelyChg2AO :: ConceptInstance
 
 unlikelyChgNISLO = cic "UC_normshearlinear" ucNASLODesc "Normal-And-Shear-Linear-Only" unlikeChgDom
-unlikelyChg2AO =   cic "UC_2donly"          uc2AODesc   "2D-Analysis-Only"             unlikeChgDom
+unlikelyChg2AO   = cic "UC_2donly"          uc2AODesc   "2D-Analysis-Only"             unlikeChgDom
 
 ucNASLODesc, uc2AODesc :: Sentence
 
@@ -69,7 +64,3 @@ uc2AODesc = foldlSent [makeRef2S assumpENSL, S "allows for", short twoD,
   S "These", plural model, S "do not take into account", phrase stress, 
   S "in the", ch zcoord :+: S "-direction, and therefore cannot be used",
   S "without manipulation to attempt", phrase threeD, phrase analysis]
-
-ucIntro :: Contents
-ucIntro = foldlSP [S "If changes were to be made with regard to the following" `sC`
-  S "a different algorithm would be needed"]

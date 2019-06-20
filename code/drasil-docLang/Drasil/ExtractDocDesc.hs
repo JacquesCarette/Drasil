@@ -100,7 +100,6 @@ egetGSDSub (UsrChars c)   = concatMap egetCon' c
 egetGSDSub (SystCons c s) = concatMap egetCon' c ++ concatMap egetSec s
 
 egetSSDSub :: SSDSub -> [Expr]
-egetSSDSub (SSDSubVerb s)   = egetSec s
 egetSSDSub (SSDProblem p)   = egetProblem p
 egetSSDSub (SSDSolChSpec s) = egetSol s
 
@@ -297,7 +296,6 @@ getSSD :: SSDSec -> [Sentence]
 getSSD (SSDProg ssd) = concatMap getSSDSub ssd
 
 getSSDSub :: SSDSub -> [Sentence]
-getSSDSub (SSDSubVerb s)     = getSec s
 getSSDSub (SSDProblem pd)    = getProblem pd
 getSSDSub (SSDSolChSpec sss) = getSol sss
 
@@ -400,9 +398,8 @@ ciGetSSD :: SSDSec -> [CI]
 ciGetSSD (SSDProg ssdsub) = concatMap ciGetSSDSub ssdsub
 
 ciGetSSDSub :: SSDSub -> [CI]
-ciGetSSDSub SSDSubVerb{}   = []
 ciGetSSDSub (SSDProblem pd) = ciGetProbDesc pd
-ciGetSSDSub SSDSolChSpec{} = []
+ciGetSSDSub SSDSolChSpec{}  = []
 
 ciGetProbDesc :: ProblemDescription -> [CI]
 ciGetProbDesc PDProg{} = []

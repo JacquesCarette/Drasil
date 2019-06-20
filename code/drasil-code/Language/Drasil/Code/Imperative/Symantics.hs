@@ -266,8 +266,6 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   selfAccess :: repr (Function repr) -> repr (Value repr)
 
-  listPopulateAccess :: repr (Value repr) -> repr (Function repr) -> 
-    repr (Value repr)
   listSizeAccess     :: repr (Value repr) -> repr (Value repr)
 
   listIndexExists :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
@@ -293,19 +291,7 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   listSize           :: repr (Function repr)
   listAdd            :: repr (Value repr) -> repr (Value repr) -> 
     repr (Function repr)
-  listPopulateInt    :: repr (Value repr) -> repr (Function repr)
-  listPopulateFloat  :: repr (Value repr) -> repr (Function repr)
-  listPopulateChar   :: repr (Value repr) -> repr (Function repr)
-  listPopulateBool   :: repr (Value repr) -> repr (Function repr)
-  listPopulateString :: repr (Value repr) -> repr (Function repr)
   listAppend         :: repr (Value repr) -> repr (Function repr)
-  listExtendInt      :: repr (Function repr)
-  listExtendFloat    :: repr (Function repr)
-  listExtendChar     :: repr (Function repr)
-  listExtendBool     :: repr (Function repr)
-  listExtendString   :: repr (Function repr)
-  -- Integer is the depth of nesting, type is the full type of the list.
-  listExtendList     :: Integer -> repr (StateType repr) -> repr (Function repr)
 
   iterBegin :: repr (Function repr)
   iterEnd   :: repr (Function repr)

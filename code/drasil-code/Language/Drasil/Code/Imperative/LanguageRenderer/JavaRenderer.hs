@@ -299,7 +299,6 @@ instance Selector JavaCode where
 
   selfAccess = objAccess self
 
-  listPopulateAccess _ _ = return (mkVal empty)
   listSizeAccess v = objAccess v listSize
 
   listIndexExists l i = mkVal <$> liftA3 jListIndexExists greaterOp l i
@@ -323,18 +322,7 @@ instance FunctionSym JavaCode where
 
   listSize = fmap funcDocD (funcApp "size" [])
   listAdd i v = fmap funcDocD (funcApp "add" [i, v])
-  listPopulateInt _ = return empty
-  listPopulateFloat _ = return empty
-  listPopulateChar _ = return empty
-  listPopulateBool _ = return empty
-  listPopulateString _ = return empty
   listAppend v = fmap funcDocD (funcApp "add" [v])
-  listExtendInt = fmap jListExtend defaultInt 
-  listExtendFloat = fmap jListExtend defaultFloat 
-  listExtendChar = fmap jListExtend defaultChar 
-  listExtendBool = fmap jListExtend defaultBool
-  listExtendString = fmap jListExtend defaultString
-  listExtendList _ = fmap jListExtendList
 
   iterBegin = fmap funcDocD (funcApp "begin" [])
   iterEnd = fmap funcDocD (funcApp "end" [])
@@ -638,12 +626,6 @@ jOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) ->
 jOpenFileWorA (f, _) (n, _) (wa, _) = f <+> equals <+> new <+> 
   text "PrintWriter" <> parens (new <+> text "FileWriter" <> parens (new <+> 
   text "File" <> parens n <> comma <+> wa))
-
-jListExtend :: (Doc, Maybe String) -> Doc
-jListExtend (v, _) = dot <> text "add" <> parens v
-
-jListExtendList :: (Doc, CodeType) -> Doc
-jListExtendList (t, _) = dot <> text "add" <> parens (new <+> t <> parens empty)
 
 jStringSplit :: (Doc, Maybe String) -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc
 jStringSplit (vnew, _) (t, _) (s, _) = vnew <+> equals <+> new <+> t

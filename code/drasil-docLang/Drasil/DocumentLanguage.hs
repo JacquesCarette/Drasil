@@ -61,7 +61,7 @@ data DocSection = RefSec RefSec
                 | GSDSec GSDSec
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
-                | LCsSec' LCsSec'
+                | LCsSec LCsSec
                 | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
@@ -196,7 +196,7 @@ data ReqsSub where
 
 {--}
 
-newtype LCsSec' = LCsProg' [ConceptInstance]
+newtype LCsSec = LCsProg [ConceptInstance]
 
 {--}
 
@@ -240,7 +240,7 @@ mkSections si = map doit
     doit Bibliography        = mkBib (citeDB si)
     doit (GSDSec gs')        = mkGSDSec gs'
     doit (ReqrmntSec r)      = mkReqrmntSec r
-    doit (LCsSec' lc)        = mkLCsSec' lc
+    doit (LCsSec lc)         = mkLCsSec lc
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
@@ -485,8 +485,8 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 {--}
 
 -- | Helper for making the 'LikelyChanges' section
-mkLCsSec' :: LCsSec' -> Section
-mkLCsSec' (LCsProg' c) = SRS.likeChg (intro : mkEnumSimpleD c) []
+mkLCsSec :: LCsSec -> Section
+mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
   where intro = foldlSP [S "This", phrase section_, S "lists the",
                 plural likelyChg, S "to be made to the", phrase software]
 

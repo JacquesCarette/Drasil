@@ -16,7 +16,7 @@ import Utils.Drasil
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
-  LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
+  LCsSec(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
   ReqrmntSec(..), ReqsSub(..), SCSSub(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
@@ -173,7 +173,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     FReqsSub funcReqs funcReqsTables,
     NonFReqsSub nonfuncReqs
   ],
-  LCsSec' $ LCsProg' likelyChgs,
+  LCsSec $ LCsProg likelyChgs,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
     TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)

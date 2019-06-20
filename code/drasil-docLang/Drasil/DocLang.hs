@@ -6,7 +6,7 @@ module Drasil.DocLang (
     Literature(Doc', Lit, Manual), ProblemDescription(..), RefSec(..), RefTab(..), 
     ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
     SSDSub(..), SolChSpec(..), ExistingSolnSec(..), StkhldrSec(StkhldrProg2),
-    LCsSec'(..), StkhldrSub(Client, Cstmr), TConvention(..),
+    LCsSec(..), StkhldrSub(Client, Cstmr), TConvention(..),
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc,
     tsymb, tsymb'', mkEnumSimple, mkEnumSimpleD,
     -- DocumentLanguage.Definitions
@@ -51,7 +51,7 @@ import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..),
     LFunc(..), Literature(Doc', Lit, Manual), ProblemDescription(..), 
     RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), 
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2),
-    StkhldrSub(Client, Cstmr), TConvention(..), LCsSec'(..),
+    StkhldrSub(Client, Cstmr), TConvention(..), LCsSec(..),
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, tsymb,
     tsymb'', mkEnumSimple, mkEnumSimpleD)
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, 

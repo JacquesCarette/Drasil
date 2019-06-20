@@ -15,7 +15,7 @@ import qualified Data.Map as Map
 import Utils.Drasil
 
 import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
-  LCsSec'(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
+  LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
@@ -145,7 +145,7 @@ mkSRS = [RefSec $ RefProg intro
     FReqsSub funcReqs funcReqTables,
     NonFReqsSub nonFuncReqs
   ],
-  LCsSec' $ LCsProg' likelyChgs,
+  LCsSec $ LCsProg likelyChgs,
   UCsSec $ UCsProg unlikelyChgsCon,
   TraceabilitySec $ TraceabilityProg (map fst traceyMatrix) (map (foldlList Comma List . snd) traceyMatrix)
     (map (LlC . fst) traceyMatrix) [],

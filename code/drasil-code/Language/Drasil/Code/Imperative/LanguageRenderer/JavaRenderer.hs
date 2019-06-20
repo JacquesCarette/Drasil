@@ -218,8 +218,8 @@ instance ValueSym JavaCode where
   arg n = mkVal <$> liftA2 argDocD (litInt n) argsList
   enumElement en e = return (enumElemDocD en e, Just $ en ++ "." ++ e)
   enumVar = var
-  objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ 
-    valName v)
+  objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valueName o ++ "." ++ 
+    valueName v)
   objVarSelf = var
   listVar n _ = var n
   n `listOf` t = listVar n t
@@ -228,7 +228,7 @@ instance ValueSym JavaCode where
   inputFunc = return (mkVal $ parens (text "new Scanner(System.in)"))
   argsList = return (mkVal $ text "args")
 
-  valName (JC (v, s)) = fromMaybe 
+  valueName (JC (v, s)) = fromMaybe 
     (error $ "Attempt to print unprintable Value (" ++ render v ++ ")") s
 
 instance NumericExpression JavaCode where
@@ -288,7 +288,7 @@ instance Selector JavaCode where
   ($.) = objAccess
 
   objMethodCall o f ps = objAccess o (func f ps)
-  objMethodCallVoid o f = objMethodCall o f []
+  objMethodCallNoParams o f = objMethodCall o f []
 
   selfAccess = objAccess self
 

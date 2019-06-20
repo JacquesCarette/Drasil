@@ -527,8 +527,8 @@ loggedAssign a b =
     return $ multi [
       assign a b,
       openFileA v_outfile (litString $ logName g),
-      printFileStr v_outfile ("var '" ++ valName a ++ "' assigned to "),
-      printFile v_outfile (convType $ varType (valName a) (vMap $ codeSpec g))
+      printFileStr v_outfile ("var '" ++ valueName a ++ "' assigned to "),
+      printFile v_outfile (convType $ varType (valueName a) (vMap $ codeSpec g))
         a,
       printFileStrLn v_outfile (" in module " ++ currentModule g),
       closeFile v_outfile ]

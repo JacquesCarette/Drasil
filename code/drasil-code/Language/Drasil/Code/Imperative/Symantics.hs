@@ -143,25 +143,26 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
   infixl 9 $:
 
 
-  const        :: Label -> repr (Value repr)
-  var          :: Label -> repr (Value repr)
-  extVar       :: Library -> Label -> repr (Value repr)
+  const        :: Label -> repr (StateType repr) -> repr (Value repr)
+  var          :: Label -> repr (StateType repr) -> repr (Value repr)
+  extVar       :: Library -> Label -> repr (StateType repr) -> repr (Value repr)
 --  global       :: Label -> repr (Value repr)         -- not sure how this one works, but in GOOL it was hardcoded to give an error so I'm leaving it out for now
-  self         :: repr (Value repr)
+  self         :: Label -> repr (Value repr)
   arg          :: Integer -> repr (Value repr)
   enumElement  :: Label -> Label -> repr (Value repr)
-  enumVar      :: Label -> repr (Value repr)
+  enumVar      :: Label -> Label -> repr (Value repr)
   objVar       :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-  objVarSelf   :: Label -> repr (Value repr)
-  listVar      :: Label -> repr (StateType repr) -> repr (Value repr)
+  objVarSelf   :: Label -> repr (StateType repr) -> repr (Value repr)
+  listVar      :: Label -> repr (Permanence repr) -> repr (StateType repr) -> 
+    repr (Value repr)
   listOf       :: Label -> repr (StateType repr) -> repr (Value repr)
   -- Use for iterator variables, i.e. in a forEach loop.
-  iterVar      :: Label -> repr (Value repr)
+  iterVar      :: Label -> repr (StateType repr) -> repr (Value repr)
 
   inputFunc :: repr (Value repr)
   argsList  :: repr (Value repr)
 
-  valName :: repr (Value repr) -> String -- Function for converting a value to a string of the value's name
+  valueName :: repr (Value repr) -> String -- Function for converting a value to a string of the value's name
 
 class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => 
   NumericExpression repr where
@@ -229,9 +230,12 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
   ValueExpression repr where -- for values that can include expressions
   inlineIf     :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) ->
     repr (Value repr)
-  funcApp      :: Label -> [repr (Value repr)] -> repr (Value repr)
-  selfFuncApp  :: Label -> [repr (Value repr)] -> repr (Value repr)
-  extFuncApp   :: Library -> Label -> [repr (Value repr)] -> repr (Value repr)
+  funcApp      :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
+    repr (Value repr)
+  selfFuncApp  :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
+    repr (Value repr)
+  extFuncApp   :: Library -> Label -> repr (StateType repr) -> 
+    [repr (Value repr)] -> repr (Value repr)
   stateObj     :: repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Value repr)
   extStateObj  :: Library -> repr (StateType repr) -> [repr (Value repr)] -> 
@@ -250,15 +254,19 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
 -- I'm leaving it as is for now, even though I suspect this will change in the future.
 class (FunctionSym repr, ValueSym repr, ValueExpression repr) => 
   Selector repr where
-  objAccess :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
-  ($.)      :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
+  objAccess :: repr (StateType repr) -> repr (Value repr) -> 
+    repr (Function repr) -> repr (Value repr)
+  ($.)      :: repr (StateType repr) -> repr (Value repr) -> 
+    repr (Function repr) -> repr (Value repr)
   infixl 9 $.
 
-  objMethodCall     :: repr (Value repr) -> Label -> [repr (Value repr)] -> 
-    repr (Value repr)
-  objMethodCallVoid :: repr (Value repr) -> Label -> repr (Value repr)
+  objMethodCall     :: repr (StateType repr) -> repr (Value repr) -> Label -> 
+    [repr (Value repr)] -> repr (Value repr)
+  objMethodCallNoParams :: repr (StateType repr) -> repr (Value repr) -> Label
+    -> repr (Value repr)
 
-  selfAccess :: repr (Function repr) -> repr (Value repr)
+  selfAccess :: Label -> repr (StateType repr) -> repr (Function repr) -> 
+    repr (Value repr)
 
   listSizeAccess     :: repr (Value repr) -> repr (Value repr)
 
@@ -269,8 +277,8 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   stringEqual :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
-  castObj        :: repr (Function repr) -> repr (Value repr) -> 
-    repr (Value repr)
+  castObj        :: repr (StateType repr) -> repr (Function repr) -> 
+    repr (Value repr) -> repr (Value repr)
   castStrToFloat :: repr (Value repr) -> repr (Value repr)
 
 class (ValueSym repr, ValueExpression repr) => FunctionSym repr where

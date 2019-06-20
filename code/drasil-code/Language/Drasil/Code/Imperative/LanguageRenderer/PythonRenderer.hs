@@ -33,8 +33,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   forLabel, observerListName, addCommentsDocD, callFuncParamList, getterName, 
   setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  TypeData(..), td, blank, vibcat, liftA4, liftA5, liftList, lift1List, 
-  lift4Pair, liftPairFst)
+  TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4, liftA5, liftList, 
+  lift1List, lift4Pair, liftPairFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -177,37 +177,41 @@ instance BinaryOpSym PythonCode where
   orOp = return $ text "or"
 
 instance ValueSym PythonCode where
-  type Value PythonCode = (Doc, Maybe String)
-  litTrue = return (text "True", Just "True")
-  litFalse = return (text "False", Just "False")
-  litChar c = return (litCharD c, Just $ "\'" ++ [c] ++ "\'")
-  litFloat v = return (litFloatD v, Just $ show v)
-  litInt v = return (litIntD v, Just $ show v)
-  litString s = return (litStringD s, Just $ "\"" ++ s ++ "\"")
+  type Value PythonCode = ValData
+  litTrue = liftA2 (vd (Just "True")) bool (return $ text "True")
+  litFalse = liftA2 (vd (Just "False")) bool (return $ text "False")
+  litChar c = liftA2 (vd (Just $ "\'" ++ [c] ++ "\'")) char 
+    (return $ litCharD c)
+  litFloat v = liftA2 (vd (Just $ show v)) float (return $ litFloatD v)
+  litInt v = liftA2 (vd (Just $ show v)) int (return $ litIntD v)
+  litString s = liftA2 (vd (Just $ "\"" ++ s ++ "\"")) string 
+    (return $ litStringD s)
 
   ($->) = objVar
   ($:) = enumElement
 
   const = var
-  var n = return (varDocD n, Just n)
-  extVar l n = return (extVarDocD l n, Just $ l ++ "." ++ n)
-  self = return (text "self", Just "self")
-  arg n = mkVal <$> liftA2 argDocD (litInt (n + 1)) argsList
-  enumElement en e = return (enumElemDocD en e, Just $ en ++ "." ++ e)
-  enumVar = var
-  objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ 
-    valName v)
-  objVarSelf n = liftPairFst (liftA2 objVarDocD self (var n), Just $ "self." ++
-    n)
-  listVar n _ = var n
-  n `listOf` t = listVar n t
-  iterVar = var
+  var n t = liftA2 (vd (Just n)) t (return $ varDocD n) 
+  extVar l n t = liftA2 (vd (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
+  self l = liftA2 (vd (Just "self")) (obj l) (return $ text "self")
+  arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n + 1)) argsList)
+  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (obj en) 
+    (enumElemDocD en e)
+  enumVar e en = var e (obj en)
+  objVar o v =  liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
+    (valType v) (liftA2 objVarDocD o v)
+  objVarSelf n t = liftA2 (vd (Just $ "self." ++ n)) t (liftA2 objVarDocD self 
+    (var n t))
+  listVar n p t = var n (listType p t)
+  n `listOf` t = listVar n static_ t
+  iterVar n t = var n (iterator t)
 
-  inputFunc = return (mkVal $ text "input()")  -- raw_input() for < Python 3.0
-  argsList = return (mkVal $ text "sys.argv")
+  inputFunc = liftA2 mkVal string (text "input()")  -- raw_input() for < Python 3.0
+  argsList = liftA2 mkVal (listType string) text "sys.argv"
 
-  valName (PC (v, s)) = fromMaybe 
-    (error $ "Attempt to print unprintable Value (" ++ render v ++ ")") s
+  valueName v = fromMaybe 
+    (error $ "Attempt to print unprintable Value (" ++ render (valDoc v) ++ ")")
+    (valName v)
 
 instance NumericExpression PythonCode where
   (#~) = liftA2 unExpr negateOp
@@ -248,39 +252,39 @@ instance BooleanExpression PythonCode where
   (?!=) = liftA3 binExpr notEqualOp
 
 instance ValueExpression PythonCode where
-  inlineIf b v1 v2 = mkVal <$> liftA3 pyInlineIf b v1 v2
-  funcApp n vs = mkVal <$> liftList (funcAppDocD n) vs
+  inlineIf b v1 v2 = liftA2 mkVal (fmap valType v1) (liftA3 pyInlineIf b v1 v2)
+  funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
-  extFuncApp l n vs = mkVal <$> liftList (extFuncAppDocD l n) vs
-  stateObj t vs = mkVal <$> liftA2 pyStateObj t (liftList callFuncParamList 
-    vs)
-  extStateObj l t vs = mkVal <$> liftA2 (pyExtStateObj l) t (liftList 
-    callFuncParamList vs)
-  listStateObj t _ = mkVal <$> fmap typeDoc t
+  extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
+  stateObj t vs = liftA2 mkVal t (liftA2 pyStateObj t (liftList 
+    callFuncParamList vs))
+  extStateObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
+    callFuncParamList vs))
+  listStateObj t _ = liftA2 mkVal t (fmap typeDoc t)
 
-  exists v = v ?!= var "None"
+  exists v = v ?!= var "None" Void
   notNull = exists
 
 instance Selector PythonCode where
-  objAccess v f = mkVal <$> liftA2 objAccessDocD v f
+  objAccess t v f = liftA2 mkVal t (liftA2 objAccessDocD v f)
   ($.) = objAccess 
 
-  objMethodCall o f ps = objAccess o (func f ps)
-  objMethodCallVoid o f = objMethodCall o f []
+  objMethodCall t o f ps = objAccess t o (func f ps)
+  objMethodCallNoParams t o f = objMethodCall t o f []
 
-  selfAccess = objAccess self
+  selfAccess l = objAccess (self l)
 
-  listSizeAccess v = mkVal <$> liftA2 pyListSizeAccess v listSize
+  listSizeAccess v = liftA2 mkVal int liftA2 pyListSizeAccess v listSize
 
   listIndexExists lst index = listSizeAccess lst ?> index
-  argExists i = objAccess argsList (listAccess (litInt $ fromIntegral i))
+  argExists i = objAccess string argsList (listAccess (litInt $ fromIntegral i))
   
-  indexOf l v = objAccess l (fmap funcDocD (funcApp "index" [v]))
+  indexOf l v = objAccess int l (fmap funcDocD (funcApp "index" [v]))
 
   stringEqual v1 v2 = v1 ?== v2
 
-  castObj f v = mkVal <$> liftA2 castObjDocD f v
-  castStrToFloat = castObj (cast float string)
+  castObj t f v = liftA2 mkVal t (liftA2 castObjDocD f v)
+  castStrToFloat = castObj float (cast float string)
 
 instance FunctionSym PythonCode where
   type Function PythonCode = Doc
@@ -388,7 +392,7 @@ instance StatementSym PythonCode where
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
-  free v = v &= var "None"
+  free v = v &= var "None" Void
 
   throw errMsg = mkStNoEnd <$> fmap pyThrow (litString errMsg)
 

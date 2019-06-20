@@ -205,7 +205,7 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   inputFunc = pair inputFunc inputFunc
   argsList = pair argsList argsList
 
-  valName v = valName $ pfst v
+  valueName v = valueName $ pfst v
 
 instance (Pair p) => NumericExpression (p CppSrcCode CppHdrCode) where
   (#~) v = pair ((#~) $ pfst v) ((#~) $ psnd v)
@@ -270,8 +270,8 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
 
   objMethodCall o f ps = pair (objMethodCall (pfst o) f (map pfst ps)) 
     (objMethodCall (psnd o) f (map psnd ps))
-  objMethodCallVoid o f = pair (objMethodCallVoid (pfst o) f) 
-    (objMethodCallVoid (psnd o) f)
+  objMethodCallNoParams o f = pair (objMethodCallNoParams (pfst o) f) 
+    (objMethodCallNoParams (psnd o) f)
 
   selfAccess f = pair (selfAccess $ pfst f) (selfAccess $ psnd f)
 
@@ -703,8 +703,8 @@ instance ValueSym CppSrcCode where
   arg n = mkVal <$> liftA2 argDocD (litInt (n+1)) argsList
   enumElement _ e = return (text e, Just e)
   enumVar = var
-  objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valName o ++ "." ++ 
-    valName v)
+  objVar o v = liftPairFst (liftA2 objVarDocD o v, Just $ valueName o ++ "." ++ 
+    valueName v)
   objVarSelf = var
   listVar n _ = var n
   n `listOf` t = listVar n t
@@ -713,7 +713,7 @@ instance ValueSym CppSrcCode where
   inputFunc = return (mkVal $ text "std::cin")
   argsList = return (mkVal $ text "argv")
 
-  valName (CPPSC (v, s)) = fromMaybe 
+  valueName (CPPSC (v, s)) = fromMaybe 
     (error $ "Attempt to print unprintable Value (" ++ render v ++ ")") s
 
 instance NumericExpression CppSrcCode where
@@ -772,7 +772,7 @@ instance Selector CppSrcCode where
   ($.) = objAccess
 
   objMethodCall o f ps = objAccess o (func f ps)
-  objMethodCallVoid o f = objMethodCall o f []
+  objMethodCallNoParams o f = objMethodCall o f []
 
   selfAccess = objAccess self
 
@@ -1221,7 +1221,7 @@ instance ValueSym CppHdrCode where
   inputFunc = return (mkVal empty)
   argsList = return (mkVal empty)
 
-  valName _ = error "Attempted to extract string from Value for C++ header file"
+  valueName _ = error "Attempted to extract string from Value for C++ header file"
 
 instance NumericExpression CppHdrCode where
   (#~) _ = return (mkVal empty)
@@ -1278,7 +1278,7 @@ instance Selector CppHdrCode where
   ($.) _ _ = return (mkVal empty)
 
   objMethodCall _ _ _ = return (mkVal empty)
-  objMethodCallVoid _ _ = return (mkVal empty)
+  objMethodCallNoParams _ _ = return (mkVal empty)
 
   selfAccess _ = return (mkVal empty)
 

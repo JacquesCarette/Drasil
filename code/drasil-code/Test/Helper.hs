@@ -14,6 +14,6 @@ doubleAndAdd = function "doubleAndAdd" public static_ (mState float)
   [stateParam "num1" float, stateParam "num2" float]
   (bodyStatements [
     varDec "doubledSum" float, 
-    "doubledSum" &.= ((litFloat 2.0 #* var "num1") #+ 
-      (litFloat 2.0 #* var "num2")),
+    "doubledSum" &.= ((litFloat 2.0 #* var "num1" float) #+ 
+      (litFloat 2.0 #* var "num2" float)),
     returnVar "doubledSum"])

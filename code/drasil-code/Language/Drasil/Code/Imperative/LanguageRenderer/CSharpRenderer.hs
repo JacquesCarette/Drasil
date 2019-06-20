@@ -213,7 +213,7 @@ instance ValueSym CSharpCode where
   enumElement en e = return (enumElemDocD en e, Just $ en ++ "." ++ e)
   enumVar = var
   objVar o v = liftPairFst (liftA2 objVarDocD o v, 
-    Just $ valName o ++ "." ++ valName v)
+    Just $ valueName o ++ "." ++ valueName v)
   objVarSelf n = liftPairFst (liftA2 objVarDocD self (var n), 
     Just $ "self." ++ n)
   listVar n _ = var n
@@ -223,7 +223,7 @@ instance ValueSym CSharpCode where
   inputFunc = return (mkVal $ text "Console.ReadLine()")
   argsList = return (mkVal $ text "args")
 
-  valName (CSC (v, s)) = fromMaybe (error $ 
+  valueName (CSC (v, s)) = fromMaybe (error $ 
     "Attempt to print unprintable Value (" ++ render v ++ ")") s
 
 instance NumericExpression CSharpCode where
@@ -283,7 +283,7 @@ instance Selector CSharpCode where
   ($.) = objAccess
 
   objMethodCall o f ps = objAccess o (func f ps)
-  objMethodCallVoid o f = objMethodCall o f []
+  objMethodCallNoParams o f = objMethodCall o f []
 
   selfAccess = objAccess self
 

@@ -2,10 +2,10 @@
 
 module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   ScopeTag(..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
-  TypeData(..), td, blank,verticalComma, angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,
-  vimap,vibmap, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, 
-  liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst,
-  liftPairSnd
+  TypeData(..), td, ValData(..), vd, blank,verticalComma, angles,
+  doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, 
+  mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, lift2Lists,
+  lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, liftPairSnd
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -47,6 +47,11 @@ data TypeData = TD {cType :: CodeType, typeDoc :: Doc}
 
 td :: CodeType -> Doc -> TypeData
 td = TD
+
+data ValData = VD {valName :: Maybe String, valType :: TypeData, valDoc :: Doc}
+
+vd :: Maybe String -> TypeData -> Doc -> ValData
+vd = VD
 
 blank :: Doc
 blank = text ""

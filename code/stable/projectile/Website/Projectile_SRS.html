@@ -110,13 +110,13 @@
                   <td>m</td>
                 </tr>
                 <tr>
-                  <td><em>p'</em></td>
-                  <td>Landing position</td>
+                  <td><em>p<sup>i</sup></em></td>
+                  <td>Initial position</td>
                   <td>m</td>
                 </tr>
                 <tr>
-                  <td><em>p<sup>i</sup></em></td>
-                  <td>Initial position</td>
+                  <td><em>p<sub>land</sub></em></td>
+                  <td>Landing position</td>
                   <td>m</td>
                 </tr>
                 <tr>
@@ -160,7 +160,7 @@
                   <td>s</td>
                 </tr>
                 <tr>
-                  <td><em>t'</em></td>
+                  <td><em>t<sub>flight</sub></em></td>
                   <td>Flight duration</td>
                   <td>s</td>
                 </tr>
@@ -171,12 +171,12 @@
                 </tr>
                 <tr>
                   <td><em>v<sup>i</sup></em></td>
-                  <td>Launch speed</td>
+                  <td>Initial speed</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
-                  <td><em>v<sup>i</sup></em></td>
-                  <td>Initial speed</td>
+                  <td><em>v<sub>launch</sub></em></td>
+                  <td>Launch speed</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
@@ -1064,18 +1064,18 @@
                     <tr>
                       <th>Input</th>
                       <td>
-                        <p class="paragraph"><em>v<sup>i</sup></em>, <em>θ</em></p>
+                        <p class="paragraph"><em>v<sub>launch</sub></em>, <em>θ</em></p>
                       </td>
                     </tr>
                     <tr>
                       <th>Output</th>
-                      <td><p class="paragraph"><em>t'</em></p></td>
+                      <td><p class="paragraph"><em>t<sub>flight</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
                       <td>
                         <div class="equation">
-                          <em>v<sup>i</sup>&thinsp;&gt;&thinsp;0</em>
+                          <em>v<sub>launch</sub>&thinsp;&gt;&thinsp;0</em>
                         </div>
                         <div class="equation">
                           <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
@@ -1088,17 +1088,21 @@
                     <tr>
                       <th>Output Constraints</th>
                       <td>
-                        <div class="equation"><em>t'&thinsp;&gt;&thinsp;0</em></div>
+                        <div class="equation">
+                          <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em>
+                        </div>
                       </td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>t' = <div class="fraction">
-                                     <span class="fup">2&#8239;v<sup>i</sup>&#8239;sin(θ)</span>
-                                     <span class="fdn">g</span>
-                                   </div></em>
+                          <em>t<sub>flight</sub> = <div class="fraction">
+                                                     <span class="fup">
+                                                       2&#8239;v<sup>i</sup>&#8239;sin(θ)
+                                                     </span>
+                                                     <span class="fdn">g</span>
+                                                   </div></em>
                         </div>
                       </td>
                     </tr>
@@ -1106,7 +1110,7 @@
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em>t'</em> is the flight duration (s)</li>
+                          <li><em>t<sub>flight</sub></em> is the flight duration (s)</li>
                           <li><em>v<sup>i</sup></em> is the initial speed (m/s)</li>
                           <li><em>θ</em> is the launch angle (rad)</li>
                           <li>
@@ -1132,7 +1136,7 @@
                           <em>g</em> is defined in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a>.
                         </p>
                         <p class="paragraph">
-                          The constraint <em>t'&thinsp;&gt;&thinsp;0</em> is from <a href=#timeStartZero>A: timeStartZero</a>.
+                          The constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#timeStartZero>A: timeStartZero</a>.
                         </p>
                       </td>
                     </tr>
@@ -1165,40 +1169,50 @@
                                                                               </div></em>
                 </div>
                 <p class="paragraph">
-                  To find the time that the projectile lands, we want to find the <em>t</em> value (<em>t'</em>) where <em>p<sub>y</sub> = 0</em> (since the target is on the <em>x</em>-axis from <a href=#targetXAxis>A: targetXAxis</a>). From the equation above we get:
+                  To find the time that the projectile lands, we want to find the <em>t</em> value (<em>t<sub>flight</sub></em>) where <em>p<sub>y</sub> = 0</em> (since the target is on the <em>x</em>-axis from <a href=#targetXAxis>A: targetXAxis</a>). From the equation above we get:
                 </p>
                 <div class="equation">
-                  <em>v<sub>y</sub><sup>i</sup>&#8239;t'&minus;<div class="fraction">
-                                                                 <span class="fup">
-                                                                   g&#8239;t'<sup>2</sup>
-                                                                 </span>
-                                                                 <span class="fdn">2</span>
-                                                               </div> = 0</em>
+                  <em>v<sub>y</sub><sup>i</sup>&#8239;t<sub>flight</sub>&minus;<div class="fraction">
+                                                                                 <span class="fup">
+                                                                                   g&#8239;t<sub>flight</sub><sup>2</sup>
+                                                                                 </span>
+                                                                                 <span class="fdn">
+                                                                                   2
+                                                                                 </span>
+                                                                               </div> = 0</em>
                 </div>
                 <p class="paragraph">
-                  Dividing by <em>t'</em> (with the constraint <em>t'&thinsp;&gt;&thinsp;0</em>) gives us:
+                  Dividing by <em>t<sub>flight</sub></em> (with the constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em>) gives us:
                 </p>
                 <div class="equation">
                   <em>v<sub>y</sub><sup>i</sup>&minus;<div class="fraction">
-                                                        <span class="fup">g&#8239;t'</span>
+                                                        <span class="fup">
+                                                          g&#8239;t<sub>flight</sub>
+                                                        </span>
                                                         <span class="fdn">2</span>
                                                       </div> = 0</em>
                 </div>
-                <p class="paragraph">Solving for <em>t'</em> gives us:</p>
+                <p class="paragraph">
+                  Solving for <em>t<sub>flight</sub></em> gives us:
+                </p>
                 <div class="equation">
-                  <em>t' = <div class="fraction">
-                             <span class="fup">2&#8239;v<sub>y</sub><sup>i</sup></span>
-                             <span class="fdn">g</span>
-                           </div></em>
+                  <em>t<sub>flight</sub> = <div class="fraction">
+                                             <span class="fup">
+                                               2&#8239;v<sub>y</sub><sup>i</sup>
+                                             </span>
+                                             <span class="fdn">g</span>
+                                           </div></em>
                 </div>
                 <p class="paragraph">
                   From <a href=#DD:speedIY>DD: speedIY</a> we can replace <em>v<sub>y</sub><sup>i</sup></em>:
                 </p>
                 <div class="equation">
-                  <em>t' = <div class="fraction">
-                             <span class="fup">2&#8239;v<sup>i</sup>&#8239;sin(θ)</span>
-                             <span class="fdn">g</span>
-                           </div></em>
+                  <em>t<sub>flight</sub> = <div class="fraction">
+                                             <span class="fup">
+                                               2&#8239;v<sup>i</sup>&#8239;sin(θ)
+                                             </span>
+                                             <span class="fdn">g</span>
+                                           </div></em>
                 </div>
                 <div id="IM:calOfLandingDist">
                   <table class="idefn">
@@ -1209,18 +1223,18 @@
                     <tr>
                       <th>Input</th>
                       <td>
-                        <p class="paragraph"><em>v<sup>i</sup></em>, <em>θ</em></p>
+                        <p class="paragraph"><em>v<sub>launch</sub></em>, <em>θ</em></p>
                       </td>
                     </tr>
                     <tr>
                       <th>Output</th>
-                      <td><p class="paragraph"><em>p'</em></p></td>
+                      <td><p class="paragraph"><em>p<sub>land</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
                       <td>
                         <div class="equation">
-                          <em>v<sup>i</sup>&thinsp;&gt;&thinsp;0</em>
+                          <em>v<sub>launch</sub>&thinsp;&gt;&thinsp;0</em>
                         </div>
                         <div class="equation">
                           <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
@@ -1233,19 +1247,21 @@
                     <tr>
                       <th>Output Constraints</th>
                       <td>
-                        <div class="equation"><em>p'&thinsp;&gt;&thinsp;0</em></div>
+                        <div class="equation">
+                          <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em>
+                        </div>
                       </td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>p' = <div class="fraction">
-                                     <span class="fup">
-                                       2&#8239;v<sup>i</sup><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
-                                     </span>
-                                     <span class="fdn">g</span>
-                                   </div></em>
+                          <em>p<sub>land</sub> = <div class="fraction">
+                                                   <span class="fup">
+                                                     2&#8239;v<sup>i</sup><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
+                                                   </span>
+                                                   <span class="fdn">g</span>
+                                                 </div></em>
                         </div>
                       </td>
                     </tr>
@@ -1253,7 +1269,7 @@
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em>p'</em> is the landing position (m)</li>
+                          <li><em>p<sub>land</sub></em> is the landing position (m)</li>
                           <li><em>v<sup>i</sup></em> is the initial speed (m/s)</li>
                           <li><em>θ</em> is the launch angle (rad)</li>
                           <li>
@@ -1279,7 +1295,7 @@
                           <em>g</em> is defined in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a>.
                         </p>
                         <p class="paragraph">
-                          The constraint <em>p'&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A: posXDirection</a>.
+                          The constraint <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A: posXDirection</a>.
                         </p>
                       </td>
                     </tr>
@@ -1305,35 +1321,35 @@
                   <em>p<sub>x</sub> = v<sub>x</sub><sup>i</sup>&#8239;t</em>
                 </div>
                 <p class="paragraph">
-                  To find the horizontal distance travelled, we want to find the <em>p<sub>x</sub></em> value (<em>p'</em>) at flight duration (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>):
+                  To find the horizontal distance travelled, we want to find the <em>p<sub>x</sub></em> value (<em>p<sub>land</sub></em>) at flight duration (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>):
                 </p>
                 <div class="equation">
-                  <em>p' = <div class="fraction">
-                             <span class="fup">
-                               v<sub>x</sub><sup>i</sup>&sdot;2&#8239;v<sup>i</sup>&#8239;sin(θ)
-                             </span>
-                             <span class="fdn">g</span>
-                           </div></em>
+                  <em>p<sub>land</sub> = <div class="fraction">
+                                           <span class="fup">
+                                             v<sub>x</sub><sup>i</sup>&sdot;2&#8239;v<sup>i</sup>&#8239;sin(θ)
+                                           </span>
+                                           <span class="fdn">g</span>
+                                         </div></em>
                 </div>
                 <p class="paragraph">
                   From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i</sup></em>:
                 </p>
                 <div class="equation">
-                  <em>p' = <div class="fraction">
-                             <span class="fup">
-                               v<sup>i</sup>&#8239;cos(θ)&sdot;2&#8239;v<sup>i</sup>&#8239;sin(θ)
-                             </span>
-                             <span class="fdn">g</span>
-                           </div></em>
+                  <em>p<sub>land</sub> = <div class="fraction">
+                                           <span class="fup">
+                                             v<sup>i</sup>&#8239;cos(θ)&sdot;2&#8239;v<sup>i</sup>&#8239;sin(θ)
+                                           </span>
+                                           <span class="fdn">g</span>
+                                         </div></em>
                 </div>
                 <p class="paragraph">Rearranging this equation gives us:</p>
                 <div class="equation">
-                  <em>p' = <div class="fraction">
-                             <span class="fup">
-                               2&#8239;v<sup>i</sup><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
-                             </span>
-                             <span class="fdn">g</span>
-                           </div></em>
+                  <em>p<sub>land</sub> = <div class="fraction">
+                                           <span class="fup">
+                                             2&#8239;v<sup>i</sup><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
+                                           </span>
+                                           <span class="fdn">g</span>
+                                         </div></em>
                 </div>
                 <div id="IM:offsetIM">
                   <table class="idefn">
@@ -1344,7 +1360,9 @@
                     <tr>
                       <th>Input</th>
                       <td>
-                        <p class="paragraph"><em>p'</em>, <em>p<sub>target</sub></em></p>
+                        <p class="paragraph">
+                          <em>p<sub>land</sub></em>, <em>p<sub>target</sub></em>
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1354,7 +1372,9 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation"><em>p'&thinsp;&gt;&thinsp;0</em></div>
+                        <div class="equation">
+                          <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em>
+                        </div>
                         <div class="equation">
                           <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
                         </div>
@@ -1368,7 +1388,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>d<sub>offset</sub> = p'&minus;p<sub>target</sub></em>
+                          <em>d<sub>offset</sub> = p<sub>land</sub>&minus;p<sub>target</sub></em>
                         </div>
                       </td>
                     </tr>
@@ -1379,7 +1399,7 @@
                           <li>
                             <em>d<sub>offset</sub></em> is the offset between the target position and the landing position (m)
                           </li>
-                          <li><em>p'</em> is the landing position (m)</li>
+                          <li><em>p<sub>land</sub></em> is the landing position (m)</li>
                           <li><em>p<sub>target</sub></em> is the target position (m)</li>
                         </ul>
                       </td>
@@ -1388,10 +1408,10 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>p'</em> is from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
+                          <em>p<sub>land</sub></em> is from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.
                         </p>
                         <p class="paragraph">
-                          The constraints <em>p'&thinsp;&gt;&thinsp;0</em> and <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em> are from <a href=#posXDirection>A: posXDirection</a>.
+                          The constraints <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em> and <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em> are from <a href=#posXDirection>A: posXDirection</a>.
                         </p>
                       </td>
                     </tr>
@@ -1535,8 +1555,8 @@
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
-                      <td><em>v<sup>i</sup></em></td>
-                      <td><em>v<sup>i</sup>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>v<sub>launch</sub></em></td>
+                      <td><em>v<sub>launch</sub>&thinsp;&gt;&thinsp;0</em></td>
                       <td><em>100</em> m/s</td>
                       <td>10<em>%</em></td>
                     </tr>
@@ -1566,8 +1586,8 @@
                       <th>Physical Constraints</th>
                     </tr>
                     <tr>
-                      <td><em>p'</em></td>
-                      <td><em>p'&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>p<sub>land</sub></em></td>
+                      <td><em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em></td>
                     </tr>
                     <tr>
                       <td><em>d<sub>offset</sub></em></td>
@@ -1613,7 +1633,7 @@
               </p>
               <p>
                 <div id="calcValues">
-                  Calculate-Values: Calculate the following quantities: <em>t'</em> (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>), <em>p'</em> (from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>), and <em>s</em> (from <a href=#IM:messageIM>IM: messageIM</a>).
+                  Calculate-Values: Calculate the following quantities: <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>), <em>p<sub>land</sub></em> (from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>), and <em>s</em> (from <a href=#IM:messageIM>IM: messageIM</a>).
                 </div>
               </p>
               <p>
@@ -1635,7 +1655,7 @@
                   <td>m</td>
                 </tr>
                 <tr>
-                  <td><em>v<sup>i</sup></em></td>
+                  <td><em>v<sub>launch</sub></em></td>
                   <td>Launch speed</td>
                   <td>m/s</td>
                 </tr>

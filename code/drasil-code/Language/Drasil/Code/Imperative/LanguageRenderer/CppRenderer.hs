@@ -45,6 +45,7 @@ import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),
   getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
+import Data.List (nub)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -435,6 +436,9 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   addObserver t o = pair (addObserver (pfst t) (pfst o)) (addObserver (psnd t) 
     (psnd o))
 
+  inOutCall n ins outs = pair (inOutCall n (map pfst ins) (map pfst outs)) 
+    (inOutCall n (map psnd ins) (map psnd outs))
+
   state s = pair (state $ pfst s) (state $ psnd s)
   loopState s = pair (loopState $ pfst s) (loopState $ psnd s)
   multi ss = pair (multi $ map pfst ss) (multi $ map psnd ss)
@@ -546,7 +550,7 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
 -- Source File --
 -----------------
 
-newtype CppSrcCode a = CPPSC {unCPPSC :: a}
+newtype CppSrcCode a = CPPSC {unCPPSC :: a} deriving Eq
 
 instance Functor CppSrcCode where
   fmap f (CPPSC x) = CPPSC (f x)
@@ -946,6 +950,8 @@ instance StatementSym CppSrcCode where
   addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
+
+  inOutCall n ins outs = valState $ funcApp n (nub $ ins ++ outs)
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
@@ -1417,6 +1423,8 @@ instance StatementSym CppHdrCode where
 
   initObserverList _ _ = return (mkStNoEnd empty)
   addObserver _ _ = return (mkStNoEnd empty)
+
+  inOutCall _ _ _ = return (mkStNoEnd empty)
 
   state _ = return (mkStNoEnd empty)
   loopState _ = return (mkStNoEnd empty)

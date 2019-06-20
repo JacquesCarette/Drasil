@@ -1,4 +1,4 @@
-module Drasil.SWHS.Changes where
+module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL, likeChgTLH, unlikelyChgs) where
 
 import Language.Drasil
 import Utils.Drasil

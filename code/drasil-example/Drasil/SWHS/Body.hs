@@ -19,14 +19,14 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose),
   ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
-  TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec'(..),
+  TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   GSDSec(..), GSDSub(..), ProblemDescription(PDProg),
   dataConstraintUncertainty, intro, mkDoc, mkEnumSimpleD, outDataConstTbl,
   physSystDesc, goalStmtF, termDefnF, tsymb'', getDocDesc, egetDocDesc,
   ciGetDocDesc, generateTraceMap, generateTraceMap', getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   physSystDescriptionLabel, traceMatStandard)
-import qualified Drasil.DocLang.SRS as SRS (unlikeChg, inModel)
+import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
@@ -189,7 +189,7 @@ mkSRS = [RefSec $ RefProg intro [
     NonFReqsSub nfRequirements
   ],
   LCsSec $ LCsProg likelyChgs,
-  UCsSec' $ UCsProg' unlikelyChgsList,
+  UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $
     TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
       (map (LlC . fst) traceabilityMatrices) [],
@@ -475,12 +475,6 @@ outputConstraints = [tempW, tempPCM, watE, pcmE]
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
 --------------------------------
-
-unlikelyChgsSect :: Section
-unlikelyChgsSect = SRS.unlikeChg unlikelyChgsList []
-
-unlikelyChgsList :: [Contents]
-unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --

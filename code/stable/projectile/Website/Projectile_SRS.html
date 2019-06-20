@@ -927,6 +927,47 @@
                 <p class="paragraph">
                   This section collects and defines all the data needed to build the instance models.
                 </p>
+                <div id="DD:vecMag">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Speed</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>v</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">m/s</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td><div class="equation"><em>v = |<b>v</b>|</em></div></td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>v</em> is the speed (m/s)</li>
+                          <li><em><b>v</b></em> is the velocity (m/s)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#DD:speedIY>DD: speedIY</a> and <a href=#DD:speedIX>DD: speedIX</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
                 <div id="DD:speedIX">
                   <table class="ddefn">
                     <tr>
@@ -947,7 +988,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>v<sub>x</sub><sup>i</sup> = |<b>v</b><sup>i</sup>|&#8239;cos(θ)</em>
+                          <em>v<sub>x</sub><sup>i</sup> = v<sup>i</sup>&#8239;cos(θ)</em>
                         </div>
                       </td>
                     </tr>
@@ -958,9 +999,7 @@
                           <li>
                             <em>v<sub>x</sub><sup>i</sup></em> is the x-component of initial velocity (m/s)
                           </li>
-                          <li>
-                            <em><b>v</b><sup>i</sup></em> is the initial velocity (m/s)
-                          </li>
+                          <li><em>v<sup>i</sup></em> is the initial speed (m/s)</li>
                           <li><em>θ</em> is the launch angle (rad)</li>
                         </ul>
                       </td>
@@ -969,7 +1008,10 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em><b>v</b><sup>i</sup></em> and <em>θ</em> are shown in <a href=#Figure:Launch>Fig:Launch</a>.
+                          <em>v<sup>i</sup></em> is from <a href=#DD:vecMag>DD: vecMag</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>θ</em> is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                       </td>
                     </tr>
@@ -1007,7 +1049,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>v<sub>y</sub><sup>i</sup> = |<b>v</b><sup>i</sup>|&#8239;sin(θ)</em>
+                          <em>v<sub>y</sub><sup>i</sup> = v<sup>i</sup>&#8239;sin(θ)</em>
                         </div>
                       </td>
                     </tr>
@@ -1018,9 +1060,7 @@
                           <li>
                             <em>v<sub>y</sub><sup>i</sup></em> is the y-component of initial velocity (m/s)
                           </li>
-                          <li>
-                            <em><b>v</b><sup>i</sup></em> is the initial velocity (m/s)
-                          </li>
+                          <li><em>v<sup>i</sup></em> is the initial speed (m/s)</li>
                           <li><em>θ</em> is the launch angle (rad)</li>
                         </ul>
                       </td>
@@ -1029,7 +1069,10 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em><b>v</b><sup>i</sup></em> and <em>θ</em> are shown in <a href=#Figure:Launch>Fig:Launch</a>.
+                          <em>v<sup>i</sup></em> is from <a href=#DD:vecMag>DD: vecMag</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>θ</em> is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                       </td>
                     </tr>
@@ -1735,6 +1778,23 @@
               <th><a href=#timeStartZero>A: timeStartZero</a></th>
             </tr>
             <tr>
+              <td><a href=#DD:vecMag>DD: vecMag</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#DD:speedIX>DD: speedIX</a></td>
               <td></td>
               <td></td>
@@ -2117,6 +2177,7 @@
           <table class="table">
             <tr>
               <th></th>
+              <th><a href=#DD:vecMag>DD: vecMag</a></th>
               <th><a href=#DD:speedIX>DD: speedIX</a></th>
               <th><a href=#DD:speedIY>DD: speedIY</a></th>
               <th><a href=#TM:acceleration>TM: acceleration</a></th>
@@ -2131,7 +2192,24 @@
               <th><a href=#IM:messageIM>IM: messageIM</a></th>
             </tr>
             <tr>
+              <td><a href=#DD:vecMag>DD: vecMag</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#DD:speedIX>DD: speedIX</a></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2147,6 +2225,7 @@
             </tr>
             <tr>
               <td><a href=#DD:speedIY>DD: speedIY</a></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2174,6 +2253,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:velocity>TM: velocity</a></td>
@@ -2189,9 +2269,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:rectVel>GD: rectVel</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -2210,6 +2292,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
               <td></td>
@@ -2222,6 +2305,7 @@
             </tr>
             <tr>
               <td><a href=#GD:velVec>GD: velVec</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2242,6 +2326,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -2252,6 +2337,7 @@
             </tr>
             <tr>
               <td><a href=#IM:calOfLandingTime>IM: calOfLandingTime</a></td>
+              <td></td>
               <td></td>
               <td>X</td>
               <td></td>
@@ -2267,6 +2353,7 @@
             </tr>
             <tr>
               <td><a href=#IM:calOfLandingDist>IM: calOfLandingDist</a></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -2282,6 +2369,7 @@
             </tr>
             <tr>
               <td><a href=#IM:offsetIM>IM: offsetIM</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2307,6 +2395,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
             </tr>
@@ -2319,6 +2408,7 @@
           <table class="table">
             <tr>
               <th></th>
+              <th><a href=#DD:vecMag>DD: vecMag</a></th>
               <th><a href=#DD:speedIX>DD: speedIX</a></th>
               <th><a href=#DD:speedIY>DD: speedIY</a></th>
               <th><a href=#TM:acceleration>TM: acceleration</a></th>
@@ -2366,9 +2456,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#inputParams>FR: Input-Parameters</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2416,9 +2508,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#calcValues>FR: Calculate-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2444,6 +2538,7 @@
             </tr>
             <tr>
               <td><a href=#outputValues>FR: Output-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2491,9 +2586,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifiable>NFR: Verifiable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2541,9 +2638,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#reusable>NFR: Reusable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2591,9 +2690,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#portable>NFR: Portable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

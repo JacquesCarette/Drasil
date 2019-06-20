@@ -6,34 +6,47 @@ import Utils.Drasil
 
 import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
 
-import Data.Drasil.Quantities.Physics (iVel, ixVel, iyVel)
+import Data.Drasil.Quantities.Physics (speed, iSpeed, ixVel, iyVel, velocity)
 
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.Unitals (launAngle)
 
 dataDefns :: [DataDefinition]
-dataDefns = [speedIX, speedIY]
+dataDefns = [vecMag, speedIX, speedIY]
+
+----------
+vecMag :: DataDefinition
+vecMag = ddNoRefs vecMagQD [{-Derivation-}] "vecMag" [{-Notes-}]
+
+vecMagQD :: QDefinition
+vecMagQD = mkQuantDef speed vecMagEqn
+
+vecMagEqn :: Expr
+vecMagEqn = UnaryOp Abs (sy velocity)
 
 ----------
 speedIX :: DataDefinition
-speedIX = ddNoRefs speedIXQD [{-Derivation-}] "speedIX" [figRef]
+speedIX = ddNoRefs speedIXQD [{-Derivation-}] "speedIX" [speedRef, figRef]
 
 speedIXQD :: QDefinition
 speedIXQD = mkQuantDef ixVel speedIXEqn
 
 speedIXEqn :: Expr
-speedIXEqn = UnaryOp Abs (sy iVel) * cos (sy launAngle)
+speedIXEqn = sy iSpeed * cos (sy launAngle)
 
 ----------
 speedIY :: DataDefinition
-speedIY = ddNoRefs speedIYQD [{-Derivation-}] "speedIY" [figRef]
+speedIY = ddNoRefs speedIYQD [{-Derivation-}] "speedIY" [speedRef, figRef]
 
 speedIYQD :: QDefinition
 speedIYQD = mkQuantDef iyVel speedIYEqn
 
 speedIYEqn :: Expr
-speedIYEqn = UnaryOp Abs (sy iVel) * sin (sy launAngle)
+speedIYEqn = sy iSpeed * sin (sy launAngle)
 
 ----------
+speedRef :: Sentence
+speedRef = ch iSpeed `sIs` S "from" +:+. makeRef2S vecMag
+
 figRef :: Sentence
-figRef = ch iVel `sAnd` ch launAngle `sAre` S "shown in" +:+. makeRef2S figLaunch
+figRef = ch launAngle `sIs` S "shown in" +:+. makeRef2S figLaunch

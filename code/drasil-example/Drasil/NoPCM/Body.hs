@@ -45,7 +45,7 @@ import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..), GSDSec(..), GSDSub(..),
-  AuxConstntSec(AuxConsProg), IntroSec(IntroProg), LCsSec(..), UCsSec'(..),
+  AuxConstntSec(AuxConsProg), IntroSec(IntroProg), LCsSec(..), UCsSec(..),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
@@ -159,7 +159,7 @@ mkSRS = [RefSec $ RefProg intro
     NonFReqsSub nfRequirements
   ],
   LCsSec $ LCsProg $ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH],
-  UCsSec' $ UCsProg' unlikelyChgsList,
+  UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $
     TraceabilityProg (map fst traceabilityMatrices)
       (map (foldlList Comma List . snd) traceabilityMatrices) (map (LlC . fst) traceabilityMatrices) [],
@@ -430,8 +430,6 @@ dataConstListOut = [tempW, watE]
 -------------------------------
 --Section 6b : UNLIKELY CHANGES
 -------------------------------
-unlikelyChgsList :: [Contents]
-unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS

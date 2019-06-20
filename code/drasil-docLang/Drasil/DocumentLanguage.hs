@@ -40,7 +40,8 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
-import Data.Drasil.Concepts.Documentation (assumpDom, refmat)
+import Data.Drasil.Concepts.Documentation (assumpDom, likelyChg, refmat,
+  section_, software)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
@@ -491,7 +492,9 @@ mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsProg c) = SRS.likeChg c []
 
 mkLCsSec' :: LCsSec' -> Section
-mkLCsSec' (LCsProg' c) = SRS.likeChg (mkEnumSimpleD c) []
+mkLCsSec' (LCsProg' c) = SRS.likeChg (intro : mkEnumSimpleD c) []
+  where intro = foldlSP [S "This", phrase section_, S "lists the",
+                plural likelyChg, S "to be made to the", phrase software]
 
 {--}
 

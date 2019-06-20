@@ -4,10 +4,10 @@ module Drasil.GamePhysics.Changes where
 
 import Language.Drasil
 import Drasil.DocLang (mkEnumSimpleD)
-import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg)
+import qualified Drasil.DocLang.SRS as SRS (unlikeChg)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation as Doc (section_, likelyChg, unlikelyChg,
+import Data.Drasil.Concepts.Documentation as Doc (section_, unlikelyChg,
   physics, game, library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -18,19 +18,6 @@ import Drasil.GamePhysics.Assumptions (assumpCT, assumpDI, assumpCAJI)
 ---------------------
 --  LIKELY CHANGES --
 ---------------------
-
-likelyChanges :: Section
-likelyChangesIntro :: Contents
-likelyChangesList :: [Contents]
-
-likelyChangesListwithIntro :: [Contents]
-likelyChangesListwithIntro = likelyChangesIntro : likelyChangesList
-
-likelyChanges = SRS.likeChg likelyChangesListwithIntro []
-
-likelyChangesIntro = foldlSP [S "This", phrase section_, 
-  S "lists the", plural likelyChg, S "to be made to the",
-  phrase game, phrase Doc.physics, phrase library]
 
 likelyChangesStmt1, likelyChangesStmt2, likelyChangesStmt3,
   likelyChangesStmt4 :: Sentence
@@ -57,10 +44,8 @@ lcEC = cic "lcEC" likelyChangesStmt2 "Expanded-Collisions" likeChgDom
 lcID = cic "lcID" likelyChangesStmt3 "Include-Dampening" likeChgDom
 lcIJC = cic "lcIJC" likelyChangesStmt4 "Include-Joints-Constraints" likeChgDom
 
-likelyChangesList' :: [ConceptInstance]
-likelyChangesList' = [lcVODES, lcEC, lcID, lcIJC]
-
-likelyChangesList = mkEnumSimpleD likelyChangesList'
+likelyChanges :: [ConceptInstance]
+likelyChanges = [lcVODES, lcEC, lcID, lcIJC]
 
 --------------------------------
 --UNLIKELY CHANGES --

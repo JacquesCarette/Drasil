@@ -19,32 +19,21 @@ public class ReadTable {
         line = infile.nextLine();
         linetokens = new ArrayList<String>(Arrays.asList(line.split(",")));
         for (int j = 0; (j < (int)((linetokens.size() / 2))); j += 1) {
-            while ((z_vector.size() <= j)) {
-                z_vector.add(0.0);
-            }
-            z_vector.set(j, Double.parseDouble(linetokens.get(((j * 2) + 1))));
+            z_vector.add(Double.parseDouble(linetokens.get(((j * 2) + 1))));
         }
         while (infile.hasNextLine()) {
             lines.add(infile.nextLine());
         }
         for (int i = 0; (i < lines.size()); i += 1) {
             linetokens = new ArrayList<String>(Arrays.asList(lines.get(i).split(",")));
+            ArrayList<Double> x_matrix_temp = new ArrayList<Double> ();
+            ArrayList<Double> y_matrix_temp = new ArrayList<Double> ();
             for (int j = 0; (j < (int)((linetokens.size() / 2))); j += 1) {
-                while ((x_matrix.size() <= i)) {
-                    x_matrix.add(new ArrayList<Double>());
-                }
-                while ((x_matrix.get(i).size() <= j)) {
-                    x_matrix.get(i).add(0.0);
-                }
-                x_matrix.get(i).set(j, Double.parseDouble(linetokens.get(((j * 2) + 0))));
-                while ((y_matrix.size() <= i)) {
-                    y_matrix.add(new ArrayList<Double>());
-                }
-                while ((y_matrix.get(i).size() <= j)) {
-                    y_matrix.get(i).add(0.0);
-                }
-                y_matrix.get(i).set(j, Double.parseDouble(linetokens.get(((j * 2) + 1))));
+                x_matrix_temp.add(Double.parseDouble(linetokens.get(((j * 2) + 0))));
+                y_matrix_temp.add(Double.parseDouble(linetokens.get(((j * 2) + 1))));
             }
+            x_matrix.add(x_matrix_temp);
+            y_matrix.add(y_matrix_temp);
         }
         infile.close();
     }

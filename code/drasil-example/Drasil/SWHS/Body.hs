@@ -14,19 +14,19 @@ import Control.Lens ((^.))
 import qualified Data.Map as Map
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
-  Field(..), Fields, LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg),
+  Field(..), Fields, LFunc(TermExcept), Literature(Doc', Lit), IntroSec(IntroProg),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
-  RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
+  RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose),
   ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  GSDSec(..), GSDSub(..),
+  GSDSec(..), GSDSub(..), ProblemDescription(PDProg),
   dataConstraintUncertainty, intro, mkDoc, mkEnumSimpleD, outDataConstTbl,
   physSystDesc, goalStmtF, termDefnF, tsymb'', getDocDesc, egetDocDesc,
   ciGetDocDesc, generateTraceMap, generateTraceMap', getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   physSystDescriptionLabel, traceMatStandard)
-import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, unlikeChg, inModel)
+import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg, inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
@@ -42,7 +42,7 @@ import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
   understandability, reusability, maintainability, verifiability)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
+import Data.Drasil.Software.Products (sciCompS, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time, physicscon)
@@ -170,7 +170,8 @@ mkSRS = [RefSec $ RefProg intro [
     , SystCons [] []
     ],
   SSDSec $
-    SSDProg [SSDSubVerb probDescription
+    SSDProg 
+      [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, physSystDescription, goalStates]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
@@ -314,22 +315,18 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 -- 4.1 : Problem Description --
 -------------------------------
 
-probDescription :: Section
-probDescription = SRS.probDesc [probDescIntro progName phsChgMtrl sWHT]
-  [termAndDefn, physSystDescription, goalStates]
-
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-termAndDefn :: Section
-termAndDefn = termDefnF Nothing [termAndDefnBullets]
+termsAndDefns :: Section
+termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note:
 -- GlassBR has an additional sentence with a reference at the end.)
 
-termAndDefnBullets :: Contents
-termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
+termsAndDefnsBullets :: Contents
+termsAndDefnsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
   [CT.htFlux, phaseChangeMaterial, CT.heatCapSpec,
   CT.thermalConduction, transient]
 
@@ -738,12 +735,9 @@ userChars pro = foldlSP [S "The end", phrase user `sOf`
 -- 4.1 : Problem Description --
 -------------------------------
 
-probDescIntro :: CI -> CI -> ConceptChunk -> Contents
-probDescIntro pro pcmat sw = foldlSP [short pro, S "is a", phrase compPro,
-  S "developed to investigate the effect of",
-  S "employing", short pcmat, S "within a", phrase sw]
-
--- section is very different between all examples
+probDescIntro :: Sentence
+probDescIntro = foldlSent_ [S "investigate the effect" `sOf` S "employing",
+  short phsChgMtrl, S "within a", phrase sWHT]
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --

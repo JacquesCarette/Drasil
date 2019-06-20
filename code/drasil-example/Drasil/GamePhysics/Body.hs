@@ -48,7 +48,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
- likelyChanges)
+ likelyChgs)
 import Drasil.GamePhysics.Concepts (chipmunk, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
@@ -102,7 +102,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       FReqsSub funcReqs [],
       NonFReqsSub nonfuncReqs
     ],
-    LCsSec' $ LCsProg' likelyChanges,
+    LCsSec' $ LCsProg' likelyChgs,
     UCsSec $ UCsProg unlikelyChangeswithIntro,
     ExistingSolnSec $ ExistSolnProg offShelfSols,
     TraceabilitySec $ TraceabilityProg (map fst traceabilityMatrices)
@@ -130,7 +130,7 @@ theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ likelyChanges ++ unlikelyChangesList' ++
+concIns = assumptions ++ likelyChgs ++ unlikelyChangesList' ++
   funcReqs
 
 section :: [Section]

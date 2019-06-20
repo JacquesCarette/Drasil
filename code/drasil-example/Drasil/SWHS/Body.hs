@@ -56,7 +56,7 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
   thermalAnalysis, enerSrc)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
-import Drasil.SWHS.Changes (likelyChanges, unlikelyChgs)
+import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
   coil, tank, transient, swhsPCM, phaseChangeMaterial, tankPCM, con)
 import Drasil.SWHS.DataDefs (dataDefs, qDefs)
@@ -188,7 +188,7 @@ mkSRS = [RefSec $ RefProg intro [
     FReqsSub funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
-  LCsSec' $ LCsProg' likelyChanges,
+  LCsSec' $ LCsProg' likelyChgs,
   UCsSec $ UCsProg unlikelyChgsList,
   TraceabilitySec $
     TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
@@ -223,7 +223,7 @@ theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
-concIns = goals ++ assumptions ++ likelyChanges ++ unlikelyChgs ++ funcReqs
+concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 section :: [Section]
 section = sec

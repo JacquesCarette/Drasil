@@ -44,8 +44,8 @@ lcEC = cic "lcEC" likelyChangesStmt2 "Expanded-Collisions" likeChgDom
 lcID = cic "lcID" likelyChangesStmt3 "Include-Dampening" likeChgDom
 lcIJC = cic "lcIJC" likelyChangesStmt4 "Include-Joints-Constraints" likeChgDom
 
-likelyChanges :: [ConceptInstance]
-likelyChanges = [lcVODES, lcEC, lcID, lcIJC]
+likelyChgs :: [ConceptInstance]
+likelyChgs = [lcVODES, lcEC, lcID, lcIJC]
 
 --------------------------------
 --UNLIKELY CHANGES --

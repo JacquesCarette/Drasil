@@ -20,8 +20,8 @@ import Data.Drasil.Quantities.Physics (energy)
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
-likelyChanges :: [ConceptInstance]
-likelyChanges = [likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW,
+likelyChgs :: [ConceptInstance]
+likelyChgs = [likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW,
   likeChgTLH]
 
 likeChgUTP, likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgDITPW,

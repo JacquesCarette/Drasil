@@ -951,6 +951,7 @@ instance StatementSym CppSrcCode where
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 
+  inOutCall n ins [v] = assign v $ funcApp n ins
   inOutCall n ins outs = valState $ funcApp n (nub $ ins ++ outs)
 
   state = fmap statementDocD
@@ -1036,8 +1037,6 @@ instance MethodSym CppSrcCode where
   function n s _ t ps b = liftA2 (mthd False) (fmap snd s) (liftA5 
     (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
 
-  inOutFunc n s p ins [] b = function n s p void (map (fmap (uncurry getParam) 
-    . liftPairSnd) ins) b
   inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (fmap (uncurry 
     getParam) . liftPairSnd) ins) (liftA2 appendToBody b $ state $ returnVar l)
   inOutFunc n s p ins outs b = function n s p void (map (uncurry pointerParam) 
@@ -1483,8 +1482,6 @@ instance MethodSym CppHdrCode where
 
   function n = method n ""
 
-  inOutFunc n s p ins [] b = function n s p void (map (fmap (uncurry getParam) 
-    . liftPairSnd) ins) b
   inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (fmap (uncurry 
     getParam) . liftPairSnd) ins) (liftA2 appendToBody b $ state $ returnVar l)
   inOutFunc n s p ins outs b = function n s p void (map (uncurry pointerParam) 

@@ -515,8 +515,6 @@ instance MethodSym CSharpCode where
 
   function n = method n ""
 
-  inOutFunc n s p ins [] b = function n s p void (map (uncurry stateParam) ins)
-    b
   inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (uncurry 
     stateParam) ins) (liftA2 appendToBody b $ state $ returnVar l)
   inOutFunc n s p ins outs b = function n s p void (map (fmap csRefParam . 

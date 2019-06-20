@@ -328,6 +328,8 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   assign v1 v2 = pair (assign (pfst v1) (pfst v2)) (assign (psnd v1) (psnd v2))
   assignToListIndex lst index v = pair (assignToListIndex (pfst lst) (pfst 
     index) (pfst v)) (assignToListIndex (psnd lst) (psnd index) (psnd v))
+  multiAssign vs1 vs2 = pair (multiAssign (map pfst vs1) (map pfst vs2)) 
+    (multiAssign (map psnd vs1) (map psnd vs2))
   (&=) v1 v2 = pair ((&=) (pfst v1) (pfst v2)) ((&=) (psnd v1) (psnd v2))
   (&-=) v1 v2 = pair ((&-=) (pfst v1) (pfst v2)) ((&-=) (psnd v1) (psnd v2))
   (&+=) v1 v2 = pair ((&+=) (pfst v1) (pfst v2)) ((&+=) (psnd v1) (psnd v2))
@@ -827,6 +829,7 @@ instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
   assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
   assignToListIndex lst index v = valState $ lst $. listSet index v
+  multiAssign _ _ = error "No multiple assignment statements in C++"
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
   (&+=) v1 v2 = mkSt <$> liftA2 plusEqualsDocD v1 v2
@@ -1338,6 +1341,7 @@ instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
   assign _ _ = return (mkStNoEnd empty)
   assignToListIndex _ _ _ = return (mkStNoEnd empty)
+  multiAssign _ _ = return (mkStNoEnd empty)
   (&=) _ _ = return (mkStNoEnd empty)
   (&-=) _ _ = return (mkStNoEnd empty)
   (&+=) _ _ = return (mkStNoEnd empty)

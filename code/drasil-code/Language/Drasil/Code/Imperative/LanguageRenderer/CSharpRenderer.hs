@@ -338,6 +338,7 @@ instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
   assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
   assignToListIndex lst index v = valState $ lst $. listSet index v
+  multiAssign _ _ = error "No multiple assignment statements in C#"
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
   (&+=) v1 v2 = mkSt <$> liftA2 plusEqualsDocD v1 v2

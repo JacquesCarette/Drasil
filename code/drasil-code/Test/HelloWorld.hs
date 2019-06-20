@@ -40,7 +40,6 @@ helloInitVariables = block [comment "Initializing variables",
   stringSplit ' ' (var "myName") (litString "Brooks Mac"),
   printLnList string (var "myName"),
   listDecDef "boringList" (listType dynamic_ bool) [litFalse, litFalse, litFalse, litFalse, litFalse],
-  valState $ listPopulateAccess (var "boringList") (listPopulateBool (litInt 5)),
   printLnList bool (var "boringList"),
   listDec "mySlicedList" 2 $ listType static_ float]
 

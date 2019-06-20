@@ -282,8 +282,6 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
 
   selfAccess f = pair (selfAccess $ pfst f) (selfAccess $ psnd f)
 
-  listPopulateAccess v f = pair (listPopulateAccess (pfst v) (pfst f)) 
-    (listPopulateAccess (psnd v) (psnd f))
   listSizeAccess v = pair (listSizeAccess $ pfst v) (listSizeAccess $ psnd v)
 
   listIndexExists v i = pair (listIndexExists (pfst v) (pfst i)) 
@@ -309,15 +307,6 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
 
   listSize = pair listSize listSize
   listAdd i v = pair (listAdd (pfst i) (pfst v)) (listAdd (psnd i) (psnd v))
-  listPopulateInt v = pair (listPopulateInt $ pfst v) (listPopulateInt $ psnd v)
-  listPopulateFloat v = pair (listPopulateFloat $ pfst v) 
-    (listPopulateFloat $ psnd v)
-  listPopulateChar v = pair (listPopulateChar $ pfst v) 
-    (listPopulateChar $ psnd v)
-  listPopulateBool v = pair (listPopulateBool $ pfst v) 
-    (listPopulateBool $ psnd v)
-  listPopulateString v = pair (listPopulateString $ pfst v) 
-    (listPopulateString $ psnd v)
   listAppend v = pair (listAppend $ pfst v) (listAppend $ psnd v)
 
   iterBegin = pair iterBegin iterBegin
@@ -800,7 +789,6 @@ instance Selector CppSrcCode where
 
   selfAccess = objAccess self
 
-  listPopulateAccess _ _ = return (mkVal empty)
   listSizeAccess v = objAccess v listSize
 
   listIndexExists v i = listSizeAccess v ?> i
@@ -824,11 +812,6 @@ instance FunctionSym CppSrcCode where
 
   listSize = func "size" []
   listAdd _ v = fmap funcDocD (funcApp "push_back" [v])
-  listPopulateInt _ = return empty
-  listPopulateFloat _ = return empty
-  listPopulateChar _ = return empty
-  listPopulateBool _ = return empty
-  listPopulateString _ = return empty
   listAppend v = fmap funcDocD (funcApp "push_back" [v])
 
   iterBegin = fmap funcDocD (funcApp "begin" [])
@@ -1318,7 +1301,6 @@ instance Selector CppHdrCode where
 
   selfAccess _ = return (mkVal empty)
 
-  listPopulateAccess _ _ = return (mkVal empty)
   listSizeAccess _ = return (mkVal empty)
 
   listIndexExists _ _ = return (mkVal empty)
@@ -1341,11 +1323,6 @@ instance FunctionSym CppHdrCode where
 
   listSize = return empty
   listAdd _ _ = return empty
-  listPopulateInt _ = return empty
-  listPopulateFloat _ = return empty
-  listPopulateChar _ = return empty
-  listPopulateBool _ = return empty
-  listPopulateString _ = return empty
   listAppend _ = return empty
 
   iterBegin = return empty

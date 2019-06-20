@@ -276,7 +276,6 @@ instance Selector PythonCode where
 
   selfAccess = objAccess self
 
-  listPopulateAccess v f = mkVal <$> liftA2 pyListPopAccess v f
   listSizeAccess v = mkVal <$> liftA2 pyListSizeAccess v listSize
 
   listIndexExists lst index = listSizeAccess lst ?> index
@@ -299,11 +298,6 @@ instance FunctionSym PythonCode where
 
   listSize = return $ text "len"
   listAdd i v = fmap funcDocD (funcApp "insert" [i, v])
-  listPopulateInt = liftA2 pyListPop defaultInt
-  listPopulateFloat = liftA2 pyListPop defaultFloat
-  listPopulateChar = liftA2 pyListPop defaultChar
-  listPopulateBool = liftA2 pyListPop defaultBool
-  listPopulateString = liftA2 pyListPop defaultString
   listAppend v = fmap funcDocD (funcApp "append" [v])
 
   iterBegin = fmap funcDocD (funcApp "begin" [])
@@ -545,17 +539,11 @@ pyInlineIf :: (Doc, Maybe String) -> (Doc, Maybe String) ->
 pyInlineIf (c, _) (v1, _) (v2, _) = parens $ v1 <+> text "if" <+> c <+> 
   text "else" <+> v2
 
-pyListPopAccess :: (Doc, Maybe String) -> Doc -> Doc
-pyListPopAccess (v, _) f = v <+> equals <+> f
-
 pyListSizeAccess :: (Doc, Maybe String) -> Doc -> Doc
 pyListSizeAccess (v, _) f = f <> parens v
 
 pyStringType :: (Doc, CodeType)
 pyStringType = (text "str", String)
-
-pyListPop :: (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
-pyListPop (dftVal, _) (size, _) = brackets dftVal <+> text "*" <+> size
 
 pyVarDecDef :: Label ->  (Doc, Maybe String) -> Doc
 pyVarDecDef l (v, _) = text l <+> equals <+> v

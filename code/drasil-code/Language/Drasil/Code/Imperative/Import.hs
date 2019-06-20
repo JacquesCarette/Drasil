@@ -26,9 +26,9 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
   programName)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
-import Language.Drasil.Code.DataDesc (Ind(WithPattern, WithLine, Explicit), 
-  Entry(JunkEntry, ListEntry, Entry), LinePattern(Repeat, Straight), 
-  Data(Line, Lines, JunkData, Singleton), DataDesc, getInputs)
+import Language.Drasil.Code.DataDesc (Entry(JunkEntry, ListEntry, Entry),
+  LinePattern(Repeat, Straight), Data(Line, Lines, JunkData, Singleton), 
+  DataDesc, getInputs)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (nub, intersperse, (\\), stripPrefix)
@@ -808,18 +808,18 @@ genDataFunc nameTitle ddef = do
             return [getFileInput (codeType v) v_infile vv]
         inData JunkData = return [discardFileLine v_infile]
         inData (Line lp d) = do
-          lnI <- lineData lp (litInt 0)
+          lnI <- lineData Nothing lp
           return $ [getFileInputLine v_infile v_line, 
             stringSplit d v_linetokens v_line] ++ lnI
         inData (Lines lp Nothing d) = do
-          lnV <- lineData lp v_i
+          lnV <- lineData (Just "_temp") lp
           return [ getFileInputAll v_infile v_lines,
             forRange l_i (litInt 0) (listSizeAccess v_lines) (litInt 1)
               (bodyStatements $ stringSplit d v_linetokens (v_lines $.
                 listAccess v_i) : lnV)
             ]
         inData (Lines lp (Just numLines) d) = do
-          lnV <- lineData lp v_i
+          lnV <- lineData (Just "_temp") lp
           return [ forRange l_i (litInt 0) (litInt numLines) (litInt 1)
             ( bodyStatements $
               [getFileInputLine v_infile v_line,
@@ -827,81 +827,72 @@ genDataFunc nameTitle ddef = do
               ] ++ lnV)
             ]
         ---------------
-        lineData :: (RenderSym repr) => LinePattern -> repr (Value repr)
-          -> Reader (State repr) [repr (Statement repr)]
-        lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
-        lineData (Repeat p Nothing) lineNo = do
-          pat <- patternData p lineNo v_j
-          return [forRange l_j (litInt 0) (castObj (cast int float)
-            (listSizeAccess v_linetokens #/ litInt (toInteger $ length p))) 
-            (litInt 1) ( bodyStatements pat )]
-        lineData (Repeat p (Just numPat)) lineNo = do
-          pat <- patternData p lineNo v_j
-          return [forRange l_j (litInt 0) (litInt numPat) (litInt 1) 
-            ( bodyStatements pat )]
+        lineData :: (RenderSym repr) => Maybe String -> LinePattern -> 
+          Reader (State repr) [repr (Statement repr)]
+        lineData s (Straight p) = patternData s p (litInt 0)
+        lineData s (Repeat p Nothing) = do
+          pat <- patternData s p v_j
+          return $ clearTemps s p ++ 
+            [forRange l_j (litInt 0) (castObj (cast int float)
+              (listSizeAccess v_linetokens #/ litInt (toInteger $ length p))) 
+              (litInt 1) ( bodyStatements pat )] ++ 
+            appendTemps s p
+        lineData s (Repeat p (Just numPat)) = do
+          pat <- patternData s p v_j
+          return $ clearTemps s p ++ 
+            [forRange l_j (litInt 0) (litInt numPat) (litInt 1) 
+              (bodyStatements pat)] ++ 
+            appendTemps s p
         ---------------
-        patternData :: (RenderSym repr) => [Entry] -> repr (Value repr)
-          -> repr (Value repr) -> Reader (State repr) [repr (Statement repr)]
-        patternData d lineNo patNo = do
+        clearTemps :: (RenderSym repr) => Maybe String -> [Entry] -> 
+          [repr (Statement repr)]
+        clearTemps Nothing _ = []
+        clearTemps (Just sfx) es = mapMaybe (clearTemp sfx) es
+        ---------------
+        clearTemp :: (RenderSym repr) => String -> Entry -> 
+          Maybe (repr (Statement repr))
+        clearTemp sfx (Entry v) = Just $ listDecDef (codeName v ++ sfx) 
+          (convType $ getListType (codeType v) 1) []
+        clearTemp sfx (ListEntry _ v) = Just $ listDecDef (codeName v ++ sfx)
+          (convType $ getListType (codeType v) 1) []
+        clearTemp _ JunkEntry = Nothing
+        ---------------
+        appendTemps :: (RenderSym repr) => Maybe String -> [Entry] -> 
+          [repr (Statement repr)]
+        appendTemps Nothing _ = []
+        appendTemps (Just sfx) es = mapMaybe (appendTemp sfx) es
+        ---------------
+        appendTemp :: (RenderSym repr) => String -> Entry -> 
+          Maybe (repr (Statement repr))
+        appendTemp sfx (Entry v) = Just $ valState $ var (codeName v) $. 
+          listAppend (var $ codeName v ++ sfx)
+        appendTemp sfx (ListEntry _ v) = Just $ valState $ var (codeName v) $.
+          listAppend (var $ codeName v ++ sfx)
+        appendTemp _ JunkEntry = Nothing
+        ---------------
+        patternData :: (RenderSym repr) => Maybe String -> [Entry] -> 
+          repr (Value repr) -> Reader (State repr) [repr (Statement repr)]
+        patternData s d patNo = do
           let l = toInteger $ length d
-          ent <- mapM (\(x,y) -> entryData x lineNo patNo y) $ 
-            zip (map (\z -> (patNo #* litInt l) #+ litInt z) [0..l-1]) d
+          ent <- zipWithM (entryData s) 
+            (map (\z -> (patNo #* litInt l) #+ litInt z) [0..l-1]) d
           return $ concat ent
         ---------------
-        entryData :: (RenderSym repr) => repr (Value repr) -> repr 
-          (Value repr) -> repr (Value repr) -> Entry -> Reader (State repr)
-          [repr (Statement repr)]
-        entryData tokIndex _ _ (Entry v) = do
-          vv <- variable $ codeName v
+        entryData :: (RenderSym repr) => Maybe String -> repr (Value repr) -> 
+          Entry -> Reader (State repr) [repr (Statement repr)]
+        entryData s tokIndex (Entry v) = do
+          vv <- variable $ codeName v ++ fromMaybe "" s
           a <- assign' vv $ getCastFunc (codeType v)
             (v_linetokens $. listAccess tokIndex)
           return [a]
-        entryData tokIndex lineNo patNo (ListEntry indx v) = do
-          vv <- variable $ codeName v
-          return $ checkIndex indx 1 lineNo patNo vv (codeType v) ++ [
-            valState $ indexData indx lineNo patNo vv $. 
-            listSet (getIndex indx lineNo patNo)
+        entryData s tokIndex (ListEntry indx v) = do
+          vv <- variable $ codeName v ++ fromMaybe "" s
+          return [
+            valState $ vv $. listAppend 
             (getCastFunc (getListType (codeType v) (toInteger $ length indx))
             (v_linetokens $. listAccess tokIndex))]
-        entryData _ _ _ JunkEntry = return []
+        entryData _ _ JunkEntry = return []
         ---------------
-        indexData :: (RenderSym repr) => [Ind] -> repr (Value repr) ->
-          repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-        indexData [_] _ _ v = v
-        indexData (Explicit i : is) l p v = indexData is l p (objAccess v 
-          (listAccess $ litInt i))
-        indexData (WithLine : is) l p v = indexData is l p (objAccess v 
-          (listAccess l))
-        indexData (WithPattern : is) l p v = indexData is l p (objAccess v
-          (listAccess p))
-        indexData [] _ _ _ = error "indexData called with empty index list"
-        ------------------------------
-        getIndex :: (RenderSym repr) => [Ind] -> repr (Value repr) ->
-          repr (Value repr) -> repr (Value repr)
-        getIndex [Explicit i] _ _ = litInt i
-        getIndex [WithLine] l _ = l
-        getIndex [WithPattern] _ p = p
-        getIndex (_:xs) l p = getIndex xs l p
-        getIndex [] _ _ = error "getIndex called with empty index list"
-        ---------------
-        checkIndex :: (RenderSym repr) => [Ind] -> Integer-> 
-          repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
-          C.CodeType -> [repr (Statement repr)]
-        checkIndex [] _ _ _ _ _ = []
-        checkIndex (Explicit i : is) n l p v s =
-          while (listSizeAccess v ?<= litInt i) (bodyStatements [ 
-            valState $
-            v $. getListExtend (getListType s n) ] )
-            : checkIndex is (n+1) l p (v $. listAccess (litInt i)) s
-        checkIndex (WithLine : is) n l p v s =
-          while (listSizeAccess  v ?<= l) (bodyStatements [ valState $
-          v $. getListExtend (getListType s n) ])
-          : checkIndex is (n+1) l p (v $. listAccess l) s
-        checkIndex (WithPattern : is) n l p v s =
-          while (listSizeAccess v ?<= p) (bodyStatements [ valState $ 
-          v $. getListExtend (getListType s n) ] )
-          : checkIndex is (n+1) l p (v $. listAccess p) s
-        ---------------------------
         l_line, l_lines, l_linetokens, l_infile, l_filename, l_i, l_j :: Label
         v_line, v_lines, v_linetokens, v_infile, v_filename, v_i, v_j ::
           (RenderSym repr) => (repr (Value repr))
@@ -930,19 +921,6 @@ getFileInput C.Float = getFloatFileInput
 getFileInput C.Char = getCharFileInput
 getFileInput C.String = getStringFileInput
 getFileInput _ = error "No getFileInput function for the given type"
-
-getListExtend :: (RenderSym repr) => C.CodeType -> repr (Function repr)
-getListExtend C.Boolean = listExtendBool
-getListExtend C.Integer = listExtendInt
-getListExtend C.Float = listExtendFloat
-getListExtend C.Char = listExtendChar
-getListExtend C.String = listExtendString
-getListExtend t@(C.List _) = listExtendList (getNestDegree t) (convType t)
-getListExtend _ = error "No listExtend function for the given type"
-
-getNestDegree :: C.CodeType -> Integer
-getNestDegree (C.List t) = 1 + getNestDegree t
-getNestDegree _ = 0
 
 getCastFunc :: (RenderSym repr) => C.CodeType -> repr (Value repr) ->
    repr (Value repr)

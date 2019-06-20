@@ -49,8 +49,7 @@ import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
-  empty, equals, integer, semi, vcat, lbrace, rbrace, quotes, render, colon,
-  isEmpty)
+  empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
 
 data CppCode x y a = CPPC {src :: x a, hdr :: y a}
 
@@ -320,13 +319,6 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   listPopulateString v = pair (listPopulateString $ pfst v) 
     (listPopulateString $ psnd v)
   listAppend v = pair (listAppend $ pfst v) (listAppend $ psnd v)
-  listExtendInt = pair listExtendInt listExtendInt
-  listExtendFloat = pair listExtendFloat listExtendFloat
-  listExtendChar = pair listExtendChar listExtendChar
-  listExtendBool = pair listExtendBool listExtendBool
-  listExtendString = pair listExtendString listExtendString
-  listExtendList i t = pair (listExtendList i $ pfst t) 
-    (listExtendList i $ psnd t)
 
   iterBegin = pair iterBegin iterBegin
   iterEnd = pair iterEnd iterEnd
@@ -838,12 +830,6 @@ instance FunctionSym CppSrcCode where
   listPopulateBool _ = return empty
   listPopulateString _ = return empty
   listAppend v = fmap funcDocD (funcApp "push_back" [v])
-  listExtendInt = listAppend defaultInt 
-  listExtendFloat = listAppend defaultFloat 
-  listExtendChar = listAppend defaultChar 
-  listExtendBool = listAppend defaultBool
-  listExtendString = listAppend defaultString
-  listExtendList _ = fmap cppListExtendList
 
   iterBegin = fmap funcDocD (funcApp "begin" [])
   iterEnd = fmap funcDocD (funcApp "end" [])
@@ -1361,12 +1347,6 @@ instance FunctionSym CppHdrCode where
   listPopulateBool _ = return empty
   listPopulateString _ = return empty
   listAppend _ = return empty
-  listExtendInt = return empty
-  listExtendFloat = return empty
-  listExtendChar = return empty
-  listExtendBool = return empty
-  listExtendString = return empty
-  listExtendList _ _ = return empty
 
   iterBegin = return empty
   iterEnd = return empty
@@ -1667,10 +1647,6 @@ cppInput (v, _) (inFn, _) end = vcat [
 cppOpenFile :: Label -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 cppOpenFile mode (f, _) (n, _) = f <> dot <> text "open" <> 
   parens (n <> comma <+> text mode)
-
-cppListExtendList :: (Doc, CodeType) -> Doc
-cppListExtendList (t, _) = dot <> text "push_back" <> 
-  parens (t <> parens (integer 0))
 
 cppPointerParamDoc :: Label -> (Doc, CodeType)  -> Doc
 cppPointerParamDoc n (t, _) = t <+> text "&" <> text n

@@ -1,10 +1,8 @@
-module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
-  unlikelyChgsList) where
+module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs) where
 
 --A list of likely and unlikely changes for GlassBR
 
 import Language.Drasil
-import Drasil.DocLang (mkEnumSimpleD)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (condition, goal, input_, likeChgDom,
@@ -58,9 +56,6 @@ considerMoreThanFlexGlassDesc = foldlSent [chgsStart assumpRT (S "The"), phrase 
   S "of the glass"]
 
 {--UNLIKELY CHANGES--}
-
-unlikelyChgsList :: [Contents]
-unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [predictWithstandOfCertDeg, accAlteredGlass]

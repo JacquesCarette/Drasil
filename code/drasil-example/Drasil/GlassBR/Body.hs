@@ -17,12 +17,11 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
   LCsSec(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
-  ReqrmntSec(..), ReqsSub(..), SCSSub(..),
-  SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
-  StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
-  TSIntro(SymbOrder, TSPurpose), UCsSec'(..), Verbosity(Verbose),
-  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
-  outDataConstTbl, physSystDesc, termDefnF, tsymb, generateTraceMap,
+  ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..), SSDSub(..),
+  SolChSpec(..), StkhldrSec(StkhldrProg2),  StkhldrSub(Client, Cstmr),
+  TraceabilitySec(TraceabilityProg),  TSIntro(SymbOrder, TSPurpose), UCsSec(..),
+  Verbosity(Verbose), dataConstraintUncertainty, goalStmtF, inDataConstTbl,
+  intro, mkDoc, outDataConstTbl, physSystDesc, termDefnF, tsymb, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
   getSCSSub, traceMatStandard, characteristicsLabel, physSystDescriptionLabel,
   generateTraceMap', mkEnumSimpleD)
@@ -56,8 +55,7 @@ import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamenta
   derived)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
-import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
-  unlikelyChgsList)
+import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, con, con')
 import Drasil.GlassBR.DataDefs (dataDefns, qDefns)
@@ -174,7 +172,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     NonFReqsSub nonfuncReqs
   ],
   LCsSec $ LCsProg likelyChgs,
-  UCsSec' $ UCsProg' unlikelyChgsList,
+  UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $
     TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
       (map (LlC . fst) traceabilityMatrices) [],

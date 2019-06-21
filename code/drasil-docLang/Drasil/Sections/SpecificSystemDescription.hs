@@ -30,7 +30,6 @@ import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.IdeaDicts (inModel, thModel)
 
 import qualified Drasil.DocLang.SRS as SRS
-import Drasil.DocumentLanguage.Labels (physSystDescriptionLabel)
 
 import Control.Lens ((^.))
 
@@ -67,7 +66,7 @@ physSystDesc :: (Idea a) => a -> [Sentence] -> LabelledContent -> [Contents] -> 
 physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
   where intro = mkParagraph $ foldlSentCol [S "The", phrase physicalSystem `sOf` short progName `sC`
                 S "as shown in", makeRef2S fg `sC` S "includes the following", plural element]
-        bullets = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) parts
+        bullets = enumSimpleU 1 (short physSyst) parts
 
 --List all the given inputs. Might be possible to use ofThe combinator from utils.hs
 goalStmtF :: [Sentence] -> [Contents] -> Section

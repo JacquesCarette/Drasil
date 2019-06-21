@@ -35,7 +35,7 @@ timeIM = imNoRefs timeRC [qw launSpeed, qw launAngle]
 
 timeRC :: RelationConcept
 timeRC = makeRC "timeRC" (nounPhraseSP "calculation of landing time")
-  EmptyS $ sy flightDur $= 2 * sy iSpeed * sin (sy launAngle) / sy grav
+  EmptyS $ sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy grav
 
 timeDeriv :: Derivation
 timeDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase flightDur)) :
@@ -43,9 +43,9 @@ timeDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase flightDur)) :
 
 timeDerivSents :: [Sentence]
 timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3,
-                  timeDerivSent4, fromReplace speedIY iyVel]
+                  timeDerivSent4, timeDerivSent5]
 
-timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4 :: Sentence
+timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4, timeDerivSent5 :: Sentence
 timeDerivSent1 = foldlSentCol [S "We know that" +:+.
   foldlList Comma List [eqnWSource (sy iyPos $= 0) launchOrigin,
   eqnWSource (sy yConstAccel $= - sy grav) accelYGravity],
@@ -60,6 +60,8 @@ timeDerivSent3 = foldlSentCol [S "Dividing by", ch flightDur,
   sParen (S "with the" +:+ phrase constraint +:+ E (sy flightDur $> 0)),
   S "gives us"]
 timeDerivSent4 = S "Solving for" +:+ ch flightDur +: S "gives us"
+timeDerivSent5 = foldlSentCol [S "From", makeRef2S speedIY,
+  sParen (S "with" +:+ (E $ sy iSpeed $= sy launSpeed)), S "we can replace", ch iyVel]
 
 timeDerivEqns :: [Expr]
 timeDerivEqns = [timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4, timeDerivEqn5]
@@ -69,7 +71,7 @@ timeDerivEqn1 = sy yPos $= sy iyVel * sy time - sy grav * square (sy time) / 2
 timeDerivEqn2 = sy iyVel * sy flightDur - sy grav * square (sy flightDur) / 2 $= 0
 timeDerivEqn3 = sy iyVel - sy grav * sy flightDur / 2 $= 0
 timeDerivEqn4 = sy flightDur $= 2 * sy iyVel / sy grav
-timeDerivEqn5 = sy flightDur $= 2 * sy iSpeed * sin (sy launAngle) / sy grav
+timeDerivEqn5 = sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy grav
 
 ---
 distanceIM :: InstanceModel
@@ -78,7 +80,7 @@ distanceIM = imNoRefs distanceRC [qw launSpeed, qw launAngle]
   [sy landPos $> 0] distanceDeriv "calOfLandingDist" [angleConstraintNote, gravNote, landPosConsNote]
 
 distanceExpr :: Expr
-distanceExpr = sy landPos $= 2 * square (sy iSpeed) * sin (sy launAngle) *
+distanceExpr = sy landPos $= 2 * square (sy launSpeed) * sin (sy launAngle) *
                                 cos (sy launAngle) / sy grav
 
 distanceRC :: RelationConcept
@@ -91,9 +93,9 @@ distanceDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase landPos)) :
 
 distanceDerivSents :: [Sentence]
 distanceDerivSents = [distanceDerivSent1, distanceDerivSent2,
-                      fromReplace speedIX ixVel, distanceDerivSent3]
+                      distanceDerivSent3, distanceDerivSent4]
 
-distanceDerivSent1, distanceDerivSent2, distanceDerivSent3 :: Sentence
+distanceDerivSent1, distanceDerivSent2, distanceDerivSent3, distanceDerivSent4 :: Sentence
 distanceDerivSent1 = foldlSentCol [S "We know that" +:+.
   foldlList Comma List [eqnWSource (sy ixPos $= 0) launchOrigin,
   eqnWSource (sy xConstAccel $= 0) accelXZero],
@@ -103,15 +105,18 @@ distanceDerivSent2 = foldlSentCol [S "To find the horizontal", phrase distance,
   S "travelled" `sC` S "we want to find the", ch xPos, phrase value,
   sParen (ch landPos), S "at", phrase flightDur,
   sParen (S "from" +:+ makeRef2S timeIM)]
-distanceDerivSent3 = S "Rearranging this" +:+ phrase equation +: S "gives us"
+distanceDerivSent3 = foldlSentCol [S "From", makeRef2S speedIX,
+  sParen (S "with" +:+ (E $ sy iSpeed $= sy launSpeed)), S "we can replace", ch ixVel]
+distanceDerivSent4 = S "Rearranging this" +:+ phrase equation +: S "gives us"
+
 
 distanceDerivEqns :: [Expr]
 distanceDerivEqns = [distanceDerivEqn1, distanceDerivEqn2, distanceDerivEqn3, distanceExpr]
 
 distanceDerivEqn1, distanceDerivEqn2, distanceDerivEqn3 :: Expr
 distanceDerivEqn1 = sy xPos $= sy ixVel * sy time
-distanceDerivEqn2 = sy landPos $= sy ixVel * 2 * sy iSpeed * sin (sy launAngle) / sy grav
-distanceDerivEqn3 = sy landPos $= sy iSpeed * cos (sy launAngle) * 2 * sy iSpeed * sin (sy launAngle) / sy grav
+distanceDerivEqn2 = sy landPos $= sy ixVel * 2 * sy launSpeed * sin (sy launAngle) / sy grav
+distanceDerivEqn3 = sy landPos $= sy launSpeed * cos (sy launAngle) * 2 * sy launSpeed * sin (sy launAngle) / sy grav
 
 ---
 offsetIM :: InstanceModel

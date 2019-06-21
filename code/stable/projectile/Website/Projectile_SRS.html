@@ -338,9 +338,6 @@
                   <li>
                     Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a pair of numerical coordinates.
                   </li>
-                  <li>
-                    Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.
-                  </li>
                   <li>Rectilinear: Occuring in one dimension.</li>
                 </ul>
               </div>
@@ -1142,7 +1139,7 @@
                         <div class="equation">
                           <em>t<sub>flight</sub> = <div class="fraction">
                                                      <span class="fup">
-                                                       2&#8239;v<sup>i</sup>&#8239;sin(θ)
+                                                       2&#8239;v<sub>launch</sub>&#8239;sin(θ)
                                                      </span>
                                                      <span class="fdn">g</span>
                                                    </div></em>
@@ -1154,7 +1151,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li><em>t<sub>flight</sub></em> is the flight duration (s)</li>
-                          <li><em>v<sup>i</sup></em> is the initial speed (m/s)</li>
+                          <li><em>v<sub>launch</sub></em> is the launch speed (m/s)</li>
                           <li><em>θ</em> is the launch angle (rad)</li>
                           <li>
                             <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
@@ -1247,12 +1244,12 @@
                                            </div></em>
                 </div>
                 <p class="paragraph">
-                  From <a href=#DD:speedIY>DD: speedIY</a> we can replace <em>v<sub>y</sub><sup>i</sup></em>:
+                  From <a href=#DD:speedIY>DD: speedIY</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>y</sub><sup>i</sup></em>:
                 </p>
                 <div class="equation">
                   <em>t<sub>flight</sub> = <div class="fraction">
                                              <span class="fup">
-                                               2&#8239;v<sup>i</sup>&#8239;sin(θ)
+                                               2&#8239;v<sub>launch</sub>&#8239;sin(θ)
                                              </span>
                                              <span class="fdn">g</span>
                                            </div></em>
@@ -1301,7 +1298,7 @@
                         <div class="equation">
                           <em>p<sub>land</sub> = <div class="fraction">
                                                    <span class="fup">
-                                                     2&#8239;v<sup>i</sup><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
+                                                     2&#8239;v<sub>launch</sub><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
                                                    </span>
                                                    <span class="fdn">g</span>
                                                  </div></em>
@@ -1313,7 +1310,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li><em>p<sub>land</sub></em> is the landing position (m)</li>
-                          <li><em>v<sup>i</sup></em> is the initial speed (m/s)</li>
+                          <li><em>v<sub>launch</sub></em> is the launch speed (m/s)</li>
                           <li><em>θ</em> is the launch angle (rad)</li>
                           <li>
                             <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
@@ -1369,18 +1366,18 @@
                 <div class="equation">
                   <em>p<sub>land</sub> = <div class="fraction">
                                            <span class="fup">
-                                             v<sub>x</sub><sup>i</sup>&sdot;2&#8239;v<sup>i</sup>&#8239;sin(θ)
+                                             v<sub>x</sub><sup>i</sup>&sdot;2&#8239;v<sub>launch</sub>&#8239;sin(θ)
                                            </span>
                                            <span class="fdn">g</span>
                                          </div></em>
                 </div>
                 <p class="paragraph">
-                  From <a href=#DD:speedIX>DD: speedIX</a> we can replace <em>v<sub>x</sub><sup>i</sup></em>:
+                  From <a href=#DD:speedIX>DD: speedIX</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>x</sub><sup>i</sup></em>:
                 </p>
                 <div class="equation">
                   <em>p<sub>land</sub> = <div class="fraction">
                                            <span class="fup">
-                                             v<sup>i</sup>&#8239;cos(θ)&sdot;2&#8239;v<sup>i</sup>&#8239;sin(θ)
+                                             v<sub>launch</sub>&#8239;cos(θ)&sdot;2&#8239;v<sub>launch</sub>&#8239;sin(θ)
                                            </span>
                                            <span class="fdn">g</span>
                                          </div></em>
@@ -1389,7 +1386,7 @@
                 <div class="equation">
                   <em>p<sub>land</sub> = <div class="fraction">
                                            <span class="fup">
-                                             2&#8239;v<sup>i</sup><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
+                                             2&#8239;v<sub>launch</sub><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
                                            </span>
                                            <span class="fdn">g</span>
                                          </div></em>

@@ -180,7 +180,6 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Target: Where the projectile should be launched to.}
 \item{Gravity: The force that attracts one physical body with mass to another.}
 \item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a pair of numerical coordinates.}
-\item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.}
 \item{Rectilinear: Occuring in one dimension.}
 \end{itemize}
 \subsubsection{Physical System Description}
@@ -604,12 +603,12 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {t_{flight}}=\frac{2 {v^{i}} \sin\left(θ\right)}{g}
+           {t_{flight}}=\frac{2 {v_{launch}} \sin\left(θ\right)}{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${t_{flight}}$ is the flight duration (s)}
-              \item{${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v_{launch}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (rad)}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
@@ -640,9 +639,9 @@ Solving for ${t_{flight}}$ gives us:
 \begin{displaymath}
 {t_{flight}}=\frac{2 {{v_{y}}^{i}}}{g}
 \end{displaymath}
-From \hyperref[DD:speedIY]{DD: speedIY} we can replace ${{v_{y}}^{i}}$:
+From \hyperref[DD:speedIY]{DD: speedIY} (with ${v^{i}}={v_{launch}}$) we can replace ${{v_{y}}^{i}}$:
 \begin{displaymath}
-{t_{flight}}=\frac{2 {v^{i}} \sin\left(θ\right)}{g}
+{t_{flight}}=\frac{2 {v_{launch}} \sin\left(θ\right)}{g}
 \end{displaymath}
 \par~
 
@@ -670,12 +669,12 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {p_{land}}=\frac{2 {v^{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+           {p_{land}}=\frac{2 {v_{launch}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${p_{land}}$ is the landing position (m)}
-              \item{${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v_{launch}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (rad)}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
@@ -696,15 +695,15 @@ We know that ${{p_{x}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${
 \end{displaymath}
 To find the horizontal distance travelled, we want to find the ${p_{x}}$ value (${p_{land}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
 \begin{displaymath}
-{p_{land}}=\frac{{{v_{x}}^{i}}\cdot{}2 {v^{i}} \sin\left(θ\right)}{g}
+{p_{land}}=\frac{{{v_{x}}^{i}}\cdot{}2 {v_{launch}} \sin\left(θ\right)}{g}
 \end{displaymath}
-From \hyperref[DD:speedIX]{DD: speedIX} we can replace ${{v_{x}}^{i}}$:
+From \hyperref[DD:speedIX]{DD: speedIX} (with ${v^{i}}={v_{launch}}$) we can replace ${{v_{x}}^{i}}$:
 \begin{displaymath}
-{p_{land}}=\frac{{v^{i}} \cos\left(θ\right)\cdot{}2 {v^{i}} \sin\left(θ\right)}{g}
+{p_{land}}=\frac{{v_{launch}} \cos\left(θ\right)\cdot{}2 {v_{launch}} \sin\left(θ\right)}{g}
 \end{displaymath}
 Rearranging this equation gives us:
 \begin{displaymath}
-{p_{land}}=\frac{2 {v^{i}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+{p_{land}}=\frac{2 {v_{launch}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
 \end{displaymath}
 \par~
 

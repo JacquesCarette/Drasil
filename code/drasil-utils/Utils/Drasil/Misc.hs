@@ -199,7 +199,7 @@ chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
 chgsStart = sDash . makeRef2S
 
 --Throws an error if a char in a list appears in a string
-checkValidStr :: String -> [Char] -> String
+checkValidStr :: String -> String -> String
 checkValidStr s [] = s
 checkValidStr s (x:xs)
   | x `elem` s = error $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']

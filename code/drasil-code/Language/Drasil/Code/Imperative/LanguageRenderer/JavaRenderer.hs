@@ -289,7 +289,8 @@ instance ValueExpression JavaCode where
     (liftList callFuncParamList vs))
 
   exists = notNull
-  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (var "null" (fmap valType v)))
+  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (var "null"
+    (fmap valType v)))
 
 instance Selector JavaCode where
   objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
@@ -426,7 +427,7 @@ instance StatementSym JavaCode where
   getFileInputLine f v = v &= f $. func "nextLine" string []
   discardFileLine f = valState $ f $. func "nextLine" string []
   stringSplit d vnew s = mkSt <$> liftA2 jStringSplit vnew 
-    (funcApp "Arrays.asList" (listType dynamic_ string) 
+    (funcApp "Arrays.asList" (listType static_ string) 
     [s $. func "split" (listType static_ string) [litString [d]]])
 
   break = return (mkSt breakDocD)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
@@ -476,7 +477,7 @@ instance ControlStatementSym JavaCode where
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 jTryCatch tb cb
   
-  checkState l t = switch (var l t)
+  checkState l = switch (var l string)
   notifyObservers ft fn t ps = for initv (var index int ?< 
     (obsList $. listSize)) (var index int &++) notify
     where obsList = observerListName `listOf` t

@@ -192,9 +192,9 @@ paramListDocD = hicat (text ", ")
 
 -- Method --
 
-methodDocD :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc
+methodDocD :: Label -> Doc -> Doc -> TypeData -> Doc -> Doc -> Doc
 methodDocD n s p t ps b = vcat [
-  s <+> p <+> t <+> text n <> parens ps <+> lbrace,
+  s <+> p <+> typeDoc t <+> text n <> parens ps <+> lbrace,
   indent b,
   rbrace]
 

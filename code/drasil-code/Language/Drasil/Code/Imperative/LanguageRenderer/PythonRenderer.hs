@@ -429,7 +429,7 @@ instance ControlStatementSym PythonCode where
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 pyTryCatch tb cb
 
-  checkState l t = switch (var l t)
+  checkState l = switch (var l string)
   notifyObservers ft fn t ps = forRange index initv (listSizeAccess obsList) 
     (litInt 1) notify
     where obsList = observerListName `listOf` t

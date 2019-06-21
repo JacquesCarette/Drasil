@@ -20,7 +20,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  GSDSec(..), GSDSub(..), ProblemDescription(PDProg),
+  GSDSec(..), GSDSub(..), ProblemDescription(PDProg'),
   dataConstraintUncertainty, intro, mkDoc, mkEnumSimpleD, outDataConstTbl,
   physSystDesc, goalStmtF, termDefnF, tsymb'', getDocDesc, egetDocDesc,
   ciGetDocDesc, generateTraceMap, generateTraceMap', getTraceMapFromTM,
@@ -171,7 +171,7 @@ mkSRS = [RefSec $ RefProg intro [
     ],
   SSDSec $
     SSDProg 
-      [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, physSystDescription, goalStates]
+      [ SSDProblem   $ PDProg'  probDescIntro [termsAndDefns, physSystDescription, goalStates]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]

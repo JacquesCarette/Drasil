@@ -15,7 +15,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   SSDSub(..), SolChSpec(SCSProg), TConvention(..), TSIntro(..),
   Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
-  LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
+  LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg'),
   generateTraceMap', dataConstraintUncertainty, goalStmtF, inDataConstTbl,
   intro, mkDoc, outDataConstTbl, mkEnumSimpleD, outDataConstTbl, termDefnF,
   tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
@@ -85,7 +85,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
    SSDSec $ SSDProg
-      [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, goalStates]
+      [ SSDProblem   $ PDProg'  probDescIntro [termsAndDefns, goalStates]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tModsNew

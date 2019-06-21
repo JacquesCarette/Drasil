@@ -49,7 +49,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
-  ProblemDescription(PDProg), dataConstraintUncertainty, inDataConstTbl,
+  ProblemDescription(PDProg'), dataConstraintUncertainty, inDataConstTbl,
   intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc, termDefnF,
   tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
@@ -141,7 +141,7 @@ mkSRS = [RefSec $ RefProg intro
     ],
   SSDSec $
     SSDProg
-    [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, physSystDescription, goalStates]
+    [ SSDProblem   $ PDProg'  probDescIntro [termsAndDefns, physSystDescription, goalStates]
     , SSDSolChSpec $ SCSProg
       [ Assumptions
       , TMs [] (Label : stdFields) theoreticalModels

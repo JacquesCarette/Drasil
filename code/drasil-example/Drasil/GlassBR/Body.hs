@@ -154,7 +154,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
-      [SSDProblem $ PDProg prob [termsAndDesc, physSystDescription, goalStmts],
+      [SSDProblem $ PDProg' prob [termsAndDesc, physSystDescription, goalStmts],
        SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tMods

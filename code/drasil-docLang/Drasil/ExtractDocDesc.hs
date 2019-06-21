@@ -115,7 +115,8 @@ egetFunc DefnExcept{} = []
 egetFunc TAD          = []
 
 egetProblem :: ProblemDescription -> [Expr]
-egetProblem (PDProg _ s) = concatMap egetSec s
+egetProblem (PDProg' _ s) = concatMap egetSec s
+egetProblem (PDProg _ s _) = concatMap egetSec s
 
 egetSol :: SolChSpec -> [Expr]
 egetSol (SCSProg s) = concatMap egetSCSSub s
@@ -300,7 +301,8 @@ getSSDSub (SSDProblem pd)    = getProblem pd
 getSSDSub (SSDSolChSpec sss) = getSol sss
 
 getProblem :: ProblemDescription -> [Sentence]
-getProblem (PDProg s x) = s : concatMap getSec x
+getProblem (PDProg' s x) = s : concatMap getSec x
+getProblem (PDProg s x _) = s : concatMap getSec x
 
 getSol :: SolChSpec -> [Sentence]
 getSol (SCSProg x) = concatMap getSCSSub x
@@ -402,6 +404,7 @@ ciGetSSDSub (SSDProblem pd) = ciGetProbDesc pd
 ciGetSSDSub SSDSolChSpec{}  = []
 
 ciGetProbDesc :: ProblemDescription -> [CI]
+ciGetProbDesc PDProg'{} = []
 ciGetProbDesc PDProg{} = []
 
 ciGetAux :: AuxConstntSec -> [CI]

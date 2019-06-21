@@ -1,10 +1,10 @@
-module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, chgsStart,
-  displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple, enumSimpleU,
-  eqN, eqUnR, eqUnR', fmtU, follows, getTandS, itemRefToSent, makeListRef,
-  makeTMatrix, maybeChanged, maybeExpanded, maybeWOVerb, mkEnumAbbrevList,
-  mkTableFromColumns, noRefs, noRefsLT, refineChain, showingCxnBw,
-  sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym,
-  typUncr, underConsidertn, unwrap, weave, zipSentList) where
+module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
+  chgsStart, displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple,
+  enumSimpleU, eqN, eqUnR, eqUnR', fmtU, follows, getTandS, itemRefToSent,
+  makeListRef, makeTMatrix, maybeChanged, maybeExpanded, maybeWOVerb,
+  mkEnumAbbrevList, mkTableFromColumns, noRefs, noRefsLT, refineChain,
+  showingCxnBw, sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc,
+  tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
@@ -197,3 +197,10 @@ displayConstrntsAsSet sym listOfVals = E $ sy sym `isin` DiscreteS listOfVals
 --Produces a common beginning of a likely change of the form "reference - sentence"
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
 chgsStart = sDash . makeRef2S
+
+--Throws an error if a char in a list appears in a string
+checkValidStr :: String -> [Char] -> String
+checkValidStr s [] = s
+checkValidStr s (x:xs)
+  | x `elem` s = error $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']
+  | otherwise  = checkValidStr s xs

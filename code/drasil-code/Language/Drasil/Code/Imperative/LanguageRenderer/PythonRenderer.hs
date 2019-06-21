@@ -198,7 +198,7 @@ instance ValueSym PythonCode where
   enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (obj en) 
     (return $ enumElemDocD en e)
   enumVar e en = var e (obj en)
-  objVar o v =  liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
+  objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
     (fmap valType v) (liftA2 objVarDocD o v)
   objVarSelf l n t = liftA2 (vd (Just $ "self." ++ n)) t (liftA2 objVarDocD
     (self l) (var n t))
@@ -307,10 +307,10 @@ instance SelectorFunction PythonCode where
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 listSetDocD i v)
 
-  listAccessEnum = listAccess
+  listAccessEnum _ = listAccess
   listSetEnum t i = listSet (castObj (cast int t) i)
 
-  at = listAccess
+  at t l = listAccess t (var l int)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end to end in a separator
@@ -434,7 +434,7 @@ instance ControlStatementSym PythonCode where
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = litInt 0
-          notify = oneLiner $ valState $ (obsList $. at t (var index int)) $.
+          notify = oneLiner $ valState $ (obsList $. at t index) $.
             func fn ft ps
 
   getFileInputAll f v = v &= objMethodCall (listType static_ string) f 
@@ -462,10 +462,10 @@ instance MethodSym PythonCode where
   method n l _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) (self l) (liftList 
     paramListDocD ps) b, False)
   getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
-    where getBody = oneLiner $ returnState (self n $-> var n t)
+    where getBody = oneLiner $ returnState (self c $-> var n t)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_
     (mState void) [stateParam paramLbl t] setBody
-    where setBody = oneLiner $ (self setLbl $-> var setLbl t) &= var paramLbl t
+    where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
   mainMethod _ b = liftPairFst (b, True)
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_

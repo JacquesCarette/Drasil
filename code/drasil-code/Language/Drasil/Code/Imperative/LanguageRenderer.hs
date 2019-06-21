@@ -176,8 +176,8 @@ listTypeDocD t list = td (List (cType t)) (list <> angles (typeDoc t))
 
 -- Method Types --
 
-voidDocD :: Doc
-voidDocD = text "void"
+voidDocD :: TypeData
+voidDocD = td Void (text "void")
 
 constructDocD :: Label -> Doc
 constructDocD _ = empty

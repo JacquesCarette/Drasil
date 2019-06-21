@@ -54,6 +54,7 @@ data TypeData = TD {cType :: CodeType, typeDoc :: Doc}
 td :: CodeType -> Doc -> TypeData
 td = TD
 
+-- Maybe String is the String representation of the value
 data ValData = VD {valName :: Maybe String, valType :: TypeData, valDoc :: Doc}
 
 vd :: Maybe String -> TypeData -> Doc -> ValData

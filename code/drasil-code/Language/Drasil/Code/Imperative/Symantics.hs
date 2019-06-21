@@ -303,12 +303,12 @@ class (ValueSym repr, FunctionSym repr, Selector repr) =>
     repr (Function repr)
   listSet    :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
 
-  listAccessEnum   :: repr(StateType repr) -> repr (Value repr) -> 
-    repr (Function repr)
+  listAccessEnum   :: repr (StateType repr) -> repr (StateType repr) ->
+    repr (Value repr) -> repr (Function repr)
   listSetEnum      :: repr (StateType repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Function repr)
 
-  at :: repr (StateType repr) -> repr (Value repr) -> repr (Function repr)
+  at :: repr (StateType repr) -> Label -> repr (Function repr)
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) 
   => StatementSym repr where

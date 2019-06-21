@@ -20,9 +20,9 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  GSDSec(..), GSDSub(..), ProblemDescription(PDProg'),
+  GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(Goals),
   dataConstraintUncertainty, intro, mkDoc, mkEnumSimpleD, outDataConstTbl,
-  physSystDesc, goalStmtF, termDefnF, tsymb'', getDocDesc, egetDocDesc,
+  physSystDesc, termDefnF, tsymb'', getDocDesc, egetDocDesc,
   ciGetDocDesc, generateTraceMap, generateTraceMap', getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   physSystDescriptionLabel, traceMatStandard)
@@ -171,7 +171,7 @@ mkSRS = [RefSec $ RefProg intro [
     ],
   SSDSec $
     SSDProg 
-      [ SSDProblem   $ PDProg'  probDescIntro [termsAndDefns, physSystDescription, goalStates]
+      [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, physSystDescription] [Goals goalInputs goals]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
@@ -360,25 +360,13 @@ systDescList = [physSyst1 tank water, physSyst2 coil tank htFluxC,
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
-goalStates :: Section
-goalStates = goalStmtF (goalStateIntro tempC tempW tempPCM) goalStateList
-
-goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
-goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
-  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw `andThe` phrase tempcm,
+goalInputs :: [Sentence]
+goalInputs  = [S "the" +:+ phrase tempC,
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase tempW `andThe` phrase tempPCM,
   S "the material" +:+ plural property]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
 -- abstracted out if this paragraph were to be abstracted out.
-
-goalStateList :: [Contents]
-goalStateList = mkEnumSimpleD goals
-
--- List structure is repeated between examples. (For all of these lists I am
--- imagining the potential for something like what was done with the lists in
--- MG, where you define goals, assumptions, physical system components, etc. in
--- separate files, import them and pass them as arguments to some "makeSRS"
--- function and the rest is automated.)
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --

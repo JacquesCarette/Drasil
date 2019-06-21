@@ -41,7 +41,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName,
   setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  angles, liftA4, liftA5, liftA6, liftA7, liftList, lift1List, 
+  TypeData(..), td, angles, liftA4, liftA5, liftA6, liftA7, liftList, lift1List,
   lift3Pair, lift4Pair, liftPairFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -128,7 +128,7 @@ instance BlockSym JavaCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst .state) sts)
 
 instance StateTypeSym JavaCode where
-  type StateType JavaCode = (Doc, CodeType)
+  type StateType JavaCode = TypeData
   bool = return boolTypeDocD
   int = return intTypeDocD
   float = return jFloatTypeDocD
@@ -501,7 +501,7 @@ instance ScopeSym JavaCode where
 
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = Doc
-  mState = fmap fst
+  mState = fmap typeDoc
   void = return voidDocD
   construct n = return $ constructDocD n
 
@@ -569,31 +569,32 @@ jtop end inc lst = vcat [
   inc <+> text "java.io.File" <> end,
   inc <+> text ("java.util." ++ render lst) <> end]
 
-jFloatTypeDocD :: (Doc, CodeType)
-jFloatTypeDocD = (text "double", Float)
+jFloatTypeDocD :: TypeData
+jFloatTypeDocD = td Float (text "double")
 
-jStringTypeDoc :: (Doc, CodeType)
-jStringTypeDoc = (text "String", String)
+jStringTypeDoc :: TypeData
+jStringTypeDoc = td String (text "String")
 
-jInfileTypeDoc :: (Doc, CodeType)
-jInfileTypeDoc = (text "Scanner", File)
+jInfileTypeDoc :: TypeData
+jInfileTypeDoc = td File (text "Scanner")
 
-jOutfileTypeDoc :: (Doc, CodeType)
-jOutfileTypeDoc = (text "PrintWriter", File)
+jOutfileTypeDoc :: TypeData
+jOutfileTypeDoc = td File (text "PrintWriter")
 
-jListType :: (Doc, CodeType) -> Doc -> (Doc, CodeType)
-jListType (_, Integer) lst = (lst <> angles (text "Integer"), List Integer)
-jListType (_, Float) lst = (lst <> angles (text "Double"), List Float)
+jListType :: TypeData -> Doc -> TypeData
+jListType (TD Integer _) lst = td (List Integer) (lst <> angles (text "Integer"))
+jListType (TD Float _) lst = td (List Float) (lst <> angles (text "Double"))
 jListType t lst = listTypeDocD t lst
 
-jListDecDef :: Label -> (Doc, CodeType) -> Doc -> Doc
-jListDecDef l (st, _) vs = st <+> text l <+> equals <+> new <+> st <+> parens
-  listElements
+jListDecDef :: Label -> TypeData -> Doc -> Doc
+jListDecDef l st vs = typeDoc st <+> text l <+> equals <+> new <+> 
+  typeDoc st <+> parens listElements
   where listElements = if isEmpty vs then empty else text "Arrays.asList" <> 
                          parens vs
 
-jConstDecDef :: Label -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc
-jConstDecDef l (st, _) (v, _) = text "final" <+> st <+> text l <+> equals <+> v
+jConstDecDef :: Label -> TypeData -> (Doc, Maybe String) -> Doc
+jConstDecDef l st (v, _) = text "final" <+> typeDoc st <+> text l <+> equals <+>
+  v
 
 jThrowDoc :: (Doc, Maybe String) -> Doc
 jThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg
@@ -627,8 +628,8 @@ jOpenFileWorA (f, _) (n, _) (wa, _) = f <+> equals <+> new <+>
   text "PrintWriter" <> parens (new <+> text "FileWriter" <> parens (new <+> 
   text "File" <> parens n <> comma <+> wa))
 
-jStringSplit :: (Doc, Maybe String) -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc
-jStringSplit (vnew, _) (t, _) (s, _) = vnew <+> equals <+> new <+> t
+jStringSplit :: (Doc, Maybe String) -> TypeData -> (Doc, Maybe String) -> Doc
+jStringSplit (vnew, _) t (s, _) = vnew <+> equals <+> new <+> typeDoc t
   <> parens s
 
 jMethod :: Label -> Doc -> Doc -> Doc -> Doc -> Doc -> Doc

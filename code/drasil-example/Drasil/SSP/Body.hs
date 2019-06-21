@@ -20,7 +20,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  dataConstraintUncertainty, goalStmtF, intro, mkDoc, mkEnumSimpleD,
+  PDSub(Goals), dataConstraintUncertainty, intro, mkDoc,
   termDefnF, tsymb'', getDocDesc, egetDocDesc, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
   getSCSSub, physSystDescriptionLabel, generateTraceMap', traceMatStandard)
@@ -75,10 +75,9 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index,
 
 tableOfSymbIntro :: [TSIntro]
 
-termsDefs, physSysDesc, goalStmt :: Section
+termsDefs, physSysDesc :: Section
 termsDefsList, physSysIntro, physSysConv, 
   physSysDescBullets, physSysFbd :: Contents
-goalsList :: [Contents]
 
 --Document Setup--
 thisSi :: [UnitDefn]
@@ -128,7 +127,7 @@ mkSRS = [RefSec $ RefProg intro
       UsrChars [userCharIntro], SystCons [sysConstraints] []],
     SSDSec $
       SSDProg
-        [ SSDProblem   $ PDProg prob [termsDefs, physSysDesc, goalStmt]
+        [ SSDProblem   $ PDProg prob [termsDefs, physSysDesc] [Goals goalsInputs goals]
         , SSDSolChSpec $ SCSProg
           [Assumptions
           , TMs [] (Label : stdFields) tMods
@@ -464,17 +463,13 @@ figIndexConv = llcc (makeFigRef "IndexConvention") $
 
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $
-  fig (atStart fbd +:+  S "of" +:+ plural force +:+ S "acting on a" +:+
+  fig (atStart fbd `sOf` plural force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
-goalStmt = goalStmtF (map (uncurry ofThe) [
-  (phrase shape, phrase soil +:+ S "mass"),
-  (S "location", phrase waterTable),
-  (plural mtrlPrpty, phrase soil)
-  ]) goalsList
-
-goalsList = mkEnumSimpleD goals
+goalsInputs :: [Sentence]
+goalsInputs = [phrase shape `ofThe` phrase soil +:+ S "mass",
+  S "location" `ofThe` phrase waterTable, plural mtrlPrpty `ofThe` phrase soil]
 
 -- SECTION 4.2 --
 

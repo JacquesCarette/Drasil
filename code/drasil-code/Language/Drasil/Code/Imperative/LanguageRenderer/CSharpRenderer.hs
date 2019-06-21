@@ -42,8 +42,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   addCommentsDocD, callFuncParamList, getterName, setterName, setMain, setEmpty,
   statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
-  liftPairFst)
+  TypeData(..), td, liftA4, liftA5, liftA6, liftA7, liftList, lift1List, 
+  lift3Pair, lift4Pair, liftPairFst)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -123,7 +123,7 @@ instance BlockSym CSharpCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
 instance StateTypeSym CSharpCode where
-  type StateType CSharpCode = (Doc, CodeType)
+  type StateType CSharpCode = TypeData
   bool = return boolTypeDocD
   int = return intTypeDocD
   float = return csFloatTypeDoc
@@ -489,7 +489,7 @@ instance ScopeSym CSharpCode where
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = Doc
-  mState = fmap fst
+  mState = fmap typeDoc
   void = return voidDocD
   construct n = return $ constructDocD n
 
@@ -551,14 +551,14 @@ cstop end inc = vcat [
   inc <+> text "System.Collections" <> end,
   inc <+> text "System.Collections.Generic" <> end]
 
-csFloatTypeDoc :: (Doc, CodeType)
-csFloatTypeDoc = (text "double", Float) -- Same as Java, maybe make a common function
+csFloatTypeDoc :: TypeData
+csFloatTypeDoc = td Float (text "double") -- Same as Java, maybe make a common function
 
-csInfileTypeDoc :: (Doc, CodeType)
-csInfileTypeDoc = (text "StreamReader", File)
+csInfileTypeDoc :: TypeData
+csInfileTypeDoc = td File (text "StreamReader")
 
-csOutfileTypeDoc :: (Doc, CodeType)
-csOutfileTypeDoc = (text "StreamWriter", File)
+csOutfileTypeDoc :: TypeData
+csOutfileTypeDoc = td File (text "StreamWriter")
 
 csThrowDoc :: (Doc, Maybe String) -> Doc
 csThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg
@@ -581,10 +581,10 @@ csInput it (v, _) (inFn, _) = v <+> equals <+> text it <> parens inFn
 csFileInput :: (Doc, Maybe String) -> (Doc, Maybe String)
 csFileInput (f, s) = (f <> dot <> text "ReadLine()", s)
 
-csOpenFileR :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, CodeType) -> Doc
-csOpenFileR (f, _) (n, _) (r, _) = f <+> equals <+> new <+> r <> parens n
+csOpenFileR :: (Doc, Maybe String) -> (Doc, Maybe String) -> TypeData -> Doc
+csOpenFileR (f, _) (n, _) r = f <+> equals <+> new <+> typeDoc r <> parens n
 
-csOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, CodeType) 
+csOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) -> TypeData 
   -> (Doc, Maybe String) -> Doc
-csOpenFileWorA (f, _) (n, _) (w, _) (a, _) = f <+> equals <+> new <+> w <> parens 
-  (n <> comma <+> a)
+csOpenFileWorA (f, _) (n, _) w (a, _) = f <+> equals <+> new <+> typeDoc w <> 
+  parens (n <> comma <+> a)

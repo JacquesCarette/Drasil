@@ -49,11 +49,11 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
-  ProblemDescription(PDProg), dataConstraintUncertainty, inDataConstTbl,
-  intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc, termDefnF,
+  ProblemDescription(PDProg), PDSub(Goals), dataConstraintUncertainty,
+  inDataConstTbl, intro, mkDoc, outDataConstTbl, physSystDesc, termDefnF,
   tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  goalStmtF, physSystDescriptionLabel, generateTraceMap', traceMatStandard)
+  physSystDescriptionLabel, generateTraceMap', traceMatStandard)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -112,7 +112,7 @@ units = map ucw [density, tau, inSA, outSA,
   deltaT, tempEnv, thFluxVect, time, htFluxC,
   vol, wMass, wVol, tauW, QT.sensHeat]
 
-termsAndDefns, physSystDescription, goalStates :: Section
+termsAndDefns, physSystDescription :: Section
 
 -------------------
 --INPUT INFORMATION
@@ -141,7 +141,7 @@ mkSRS = [RefSec $ RefProg intro
     ],
   SSDSec $
     SSDProg
-    [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, physSystDescription, goalStates]
+    [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, physSystDescription] [Goals goalInputs goals]
     , SSDSolChSpec $ SCSProg
       [ Assumptions
       , TMs [] (Label : stdFields) theoreticalModels
@@ -366,16 +366,9 @@ physSystDescList :: Contents
 physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_
   [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
-goalStates = goalStmtF (goalStatesIntro temp coil tempW) goalStatesList
-
-goalStatesIntro :: NamedIdea c => ConceptChunk -> ConceptChunk -> c -> [Sentence]
-goalStatesIntro te co temw = [phrase te `ofThe` phrase co,
-  S "the initial" +:+ phrase temw,
-  S "the material" +:+ plural property]
-
-goalStatesList :: [Contents]
-goalStatesList = mkEnumSimpleD goals
-
+goalInputs :: [Sentence]
+goalInputs = [phrase temp `ofThe` phrase coil,
+  S "the initial" +:+ phrase tempW, S "the material" +:+ plural property]
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION

@@ -15,7 +15,8 @@ import System.FilePath (takeBaseName, takeExtension)
 type Name = String
 type SourceLocation = Maybe String
 type SRSVariants = [(Name, String)]
-data Example = E Name SourceLocation SRSVariants
+type Description = Maybe String
+data Example = E Name SourceLocation SRSVariants Description
 
 -- Returns FilePath of the SRS
 srsPath :: FilePath -> FilePath -> FilePath -> FilePath
@@ -32,14 +33,22 @@ getExtensionName _ = error "Expected some extension."
 getSRS :: [Name] -> SRSVariants
 getSRS = map (\x -> (x, getExtensionName $ takeExtension x)) . filter (\x -> any (`endswith` x) [".pdf", ".html"])
 
+zip4 :: [a] -> [b] -> [c] -> [d] -> [(a,b,c,d)]
+zip4 (a:as) (b:bs) (c:cs) (d:ds) = (a,b,c,d) : zip4 as bs cs ds
+zip4 _ _ _ _ = []
+
 mkExamples :: String -> FilePath -> FilePath -> IO [Example]
 mkExamples repoRoot path srsDir = do
   -- names will be a list of example names (Chipmunk, GlassBR, etc. of type FilePath)
   names <- sort <$> (listDirectory path >>= filterM (\x -> doesDirectoryExist $ path ++ x))
 
-  -- returns a list of Just sources or Nothing based on existence and contents of src file.
+  -- a list of Just sources or Nothing based on existence and contents of src file.
   sources <- mapM (\x -> doesFileExist (path ++ x ++ "/src") >>=
       \y -> if y then Just . (++) repoRoot . rstrip <$> readFile (path ++ x ++ "/src") else return Nothing) names
+
+  -- a list of Just descriptions or Nothing based on existence and contents of desc file.
+  descriptions <- mapM (\x -> doesFileExist ("descriptions/" ++ x ++ ".txt") >>=
+      \y -> if y then Just . rstrip <$> readFile ("descriptions/" ++ x ++ ".txt") else return Nothing) names
 
   -- creates a list of SRSVariants, so a list of list of tuples.
   -- the outer list has an element for each example.
@@ -47,7 +56,7 @@ mkExamples repoRoot path srsDir = do
 
   -- returns the IO list of examples with constructor E containing
   -- the name of the example, sources (if applicable), and the list of Variants.
-  return $ map (\(name, source, srs) -> E name source srs) $ zip3 names sources srss
+  return $ map (\(name, source, srs, desc) -> E name source srs desc) $ zip4 names sources srss descriptions
 
 maybeField :: String -> (Item a -> Compiler (Maybe String)) -> Context a
 maybeField s f = Context $ \k _ i -> do
@@ -66,11 +75,13 @@ mkExampleCtx exampleDir srsDir =
     field "url" (\x -> return $ srsPath exampleDir (name $ example x) srsDir ++ fst (srsVar x))
   ) (\x -> mapM (\y -> makeItem (y, itemBody x)) $ srs $ itemBody x)  <>
   field "name" (return . name . itemBody) <>
+  maybeField "desc" (return . desc . itemBody) <>
   maybeField "src" (return . src . itemBody)
   where
-    name (E nm _ _) = nm
-    src (E _ s _) = s
-    srs (E _ _ s) = s
+    name (E nm _ _ _) = nm
+    src (E _ s _ _) = s
+    srs (E _ _ s _) = s
+    desc (E _ _ _ d) = d
     srsVar = fst . itemBody
     example = snd . itemBody
 

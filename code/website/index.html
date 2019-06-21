@@ -19,7 +19,10 @@
 and in some cases, their own generated code.</p>
 <ul>
 $-for(examples)$
-  <li><b>$name$</b>
+  <li><b>$name$</b> - 
+    $desc$
+    <br />
+    <br />
     <ul>
     $-for(srs)$
       <li><a href="$url$">$name$ SRS [$type$]</a></li>$sep-$
@@ -28,6 +31,7 @@ $-for(examples)$
       <li><a href="$src-$">Generated Code</a></li>
     $-endif$
     </ul>
+    <br />
   </li>$sep-$
 $endfor$
 </ul>

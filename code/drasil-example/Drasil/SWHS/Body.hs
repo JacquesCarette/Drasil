@@ -343,17 +343,17 @@ tAndDMap c = Flat $ foldlSent [atStart c +: EmptyS, c ^. defn]
 -----------------------------------------
 
 physSystDescription :: Section
-physSystDescription = physSystDesc (short progName) figTank [physSystDescList, LlC figTank]
+physSystDescription = physSystDesc progName systDescList figTank []
 
 -- Above paragraph is general except for progName and figure. However, not
 -- every example has a physical system. Also, the SSP example is different, so
 -- this paragraph can not be abstracted out as is.
 
 physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_ systDescList
+physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ systDescList
 
-systDescList :: [[Sentence]]
-systDescList = [physSyst1 tank water, physSyst2 coil tank htFluxC,
+systDescList :: [Sentence]
+systDescList = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC,
   physSyst3 phsChgMtrl tank htFluxP]
 
 -----------------------------

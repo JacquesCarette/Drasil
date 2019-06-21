@@ -34,7 +34,7 @@ import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
 import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
-  datConF, dataDefnF, genDefnF, goalStmtF, inModelF, probDescF,
+  datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
   solutionCharSpecIntro, specSysDescr, thModF)
 import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
@@ -170,7 +170,9 @@ data SSDSub where
 data ProblemDescription where
   PDProg :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
 
+-- | Problem Description subsections
 data PDSub where
+  PhySysDesc :: (Idea a) => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
   Goals :: [Sentence] -> [ConceptInstance] -> PDSub
 
 -- | Solution Characteristics Specification section
@@ -420,7 +422,8 @@ mkSSDSec si (SSDProg l) =
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
-  where mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
+  where mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
+        mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =

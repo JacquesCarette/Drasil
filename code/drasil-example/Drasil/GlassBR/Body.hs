@@ -390,8 +390,7 @@ termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
 
 {--Physical System Description--}
 
-physSystDescription = physSystDesc (short glassBR) physSystFig 
-  [physSystDescriptionList, LlC physSystFig]
+physSystDescription = physSystDesc glassBR physSystDescriptionListPhysys physSystFig []
 
 physSystDescriptionList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) physSystDescriptionListPhysys
 

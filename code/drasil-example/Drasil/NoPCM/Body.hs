@@ -17,7 +17,7 @@ import Data.Drasil.People (thulasi)
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, content,
   definition, doccon, doccon', document, goal, information, material_, model,
-  physSyst, problem, property, purpose, reference, srsDomains)
+  problem, property, purpose, reference, srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (educon)
@@ -53,7 +53,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
   termDefnF, tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  physSystDescriptionLabel, generateTraceMap', traceMatStandard)
+  generateTraceMap', traceMatStandard)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -354,17 +354,15 @@ termsAndDefnsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $
   atStart x :+: S ":" +:+ (x ^. defn))
   [htFlux, heatCapSpec, thermalConduction, transient]
   
-physSystDescription = physSystDesc (getAcc progName) figTank
-  [physSystDescList, LlC figTank]
+physSystDescription = physSystDesc progName physSystDescList figTank []
 
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
   S "from" +:+ phrase coil `sOf` ch htFluxC)
   $ resourcePath ++ "TankWaterOnly.png"
 
-physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_
-  [physSyst1 tank water, physSyst2 coil tank htFluxC]
+physSystDescList :: [Sentence]
+physSystDescList = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalInputs :: [Sentence]
 goalInputs = [phrase temp `ofThe` phrase coil,

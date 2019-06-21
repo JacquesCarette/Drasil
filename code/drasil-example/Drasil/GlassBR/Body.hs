@@ -16,16 +16,16 @@ import Utils.Drasil
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
-  LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
-  ReqrmntSec(..), ReqsSub(..), SCSSub(..),
+  LCsSec'(..), ProblemDescription(..), PDSub(Goals), RefSec(RefProg),
+  RefTab(TAandA, TUnits), ReqrmntSec(..), ReqsSub(..), SCSSub(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
-  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
+  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, 
   outDataConstTbl, physSystDesc, termDefnF, tsymb, generateTraceMap,
   getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
   getSCSSub, traceMatStandard, characteristicsLabel, physSystDescriptionLabel,
-  generateTraceMap', mkEnumSimpleD)
+  generateTraceMap')
 
 import qualified Drasil.DocLang.SRS as SRS (reference, valsOfAuxCons,
   assumpt, inModel)
@@ -154,7 +154,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
-      [SSDProblem $ PDProg prob [termsAndDesc, physSystDescription, goalStmts],
+      [SSDProblem $ PDProg prob [termsAndDesc, physSystDescription] [Goals goalInputs goals],
        SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tMods
@@ -207,7 +207,7 @@ systInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
 
-termsAndDesc, physSystDescription, goalStmts :: Section
+termsAndDesc, physSystDescription :: Section
 
 physSystDescriptionList, appdxIntro :: Contents
 
@@ -237,11 +237,6 @@ termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` (load ^. defn)) $
   Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes)]
-
---Used in "Goal Statements" Section--
-
-goalStmtsList :: [Contents]
-goalStmtsList = mkEnumSimpleD goals
 
 solChSpecSubsections :: [CI]
 solChSpecSubsections = [thModel, inModel, Doc.dataDefn, dataConst]
@@ -417,9 +412,9 @@ physSystDescriptionListPhysys2 imprtntElem = foldlSent [S "The"
 
 {--Goal Statements--}
 
-goalStmts = goalStmtF [foldlList Comma List [plural dimension `ofThe` phrase glaPlane,
-  phrase glassTy, plural characteristic `ofThe` phrase explosion,
-  S "the" +:+ phrase pbTol]] goalStmtsList
+goalInputs :: [Sentence]
+goalInputs = [plural dimension `ofThe` phrase glaPlane, S "the" +:+ phrase glassTy,
+  plural characteristic `ofThe` phrase explosion, S "the" +:+ phrase pbTol]
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 

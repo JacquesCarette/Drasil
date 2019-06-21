@@ -83,6 +83,7 @@ class (PermanenceSym repr) => StateTypeSym repr where
   obj           :: Label -> repr (StateType repr)
   enumType      :: Label -> repr (StateType repr)
   iterator      :: repr (StateType repr) -> repr (StateType repr)
+  void          :: repr (StateType repr)
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 
@@ -152,7 +153,7 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
   enumElement  :: Label -> Label -> repr (Value repr)
   enumVar      :: Label -> Label -> repr (Value repr)
   objVar       :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-  objVarSelf   :: Label -> repr (StateType repr) -> repr (Value repr)
+  objVarSelf   :: Label -> Label -> repr (StateType repr) -> repr (Value repr)
   listVar      :: Label -> repr (Permanence repr) -> repr (StateType repr) -> 
     repr (Value repr)
   listOf       :: Label -> repr (StateType repr) -> repr (Value repr)
@@ -254,10 +255,8 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
 -- I'm leaving it as is for now, even though I suspect this will change in the future.
 class (FunctionSym repr, ValueSym repr, ValueExpression repr) => 
   Selector repr where
-  objAccess :: repr (StateType repr) -> repr (Value repr) -> 
-    repr (Function repr) -> repr (Value repr)
-  ($.)      :: repr (StateType repr) -> repr (Value repr) -> 
-    repr (Function repr) -> repr (Value repr)
+  objAccess :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
+  ($.)      :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
   infixl 9 $.
 
   objMethodCall     :: repr (StateType repr) -> repr (Value repr) -> Label -> 
@@ -265,8 +264,7 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
   objMethodCallNoParams :: repr (StateType repr) -> repr (Value repr) -> Label
     -> repr (Value repr)
 
-  selfAccess :: Label -> repr (StateType repr) -> repr (Function repr) -> 
-    repr (Value repr)
+  selfAccess :: Label -> repr (Function repr) -> repr (Value repr)
 
   listSizeAccess     :: repr (Value repr) -> repr (Value repr)
 
@@ -277,17 +275,18 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   stringEqual :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
-  castObj        :: repr (StateType repr) -> repr (Function repr) -> 
-    repr (Value repr) -> repr (Value repr)
+  castObj        :: repr (Function repr) -> repr (Value repr) -> 
+    repr (Value repr)
   castStrToFloat :: repr (Value repr) -> repr (Value repr)
 
 class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   type Function repr
-  func           :: Label -> [repr (Value repr)] -> repr (Function repr)
+  func           :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
+    repr (Function repr)
   cast           :: repr (StateType repr) -> repr (StateType repr) -> 
     repr (Function repr)
   castListToInt  :: repr (Function repr)
-  get            :: Label -> repr (Function repr)
+  get            :: Label -> repr (StateType repr) -> repr (Function repr)
   set            :: Label -> repr (Value repr) -> repr (Function repr)
 
   listSize           :: repr (Function repr)
@@ -300,7 +299,8 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
 
 class (ValueSym repr, FunctionSym repr, Selector repr) => 
   SelectorFunction repr where
-  listAccess :: repr (Value repr) -> repr (Function repr)
+  listAccess :: repr (StateType repr) -> repr (Value repr) -> 
+    repr (Function repr)
   listSet    :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
 
   listAccessEnum   :: repr(StateType repr) -> repr (Value repr) -> 
@@ -308,33 +308,21 @@ class (ValueSym repr, FunctionSym repr, Selector repr) =>
   listSetEnum      :: repr (StateType repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Function repr)
 
-  at :: Label -> repr (Function repr)
+  at :: repr (StateType repr) -> repr (Value repr) -> repr (Function repr)
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) 
   => StatementSym repr where
   type Statement repr
   (&=)   :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
   infixr 1 &=
-  (&.=)  :: Label -> repr (Value repr) -> repr (Statement repr)
-  infixr 1 &.=
-  (&=.)  :: repr (Value repr) -> Label -> repr (Statement repr)
-  infixr 1 &=.
   (&-=)  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
   infixl 1 &-=
-  (&.-=) :: Label -> repr (Value repr) -> repr (Statement repr)
-  infixl 1 &.-=
   (&+=)  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
   infixl 1 &+=
-  (&.+=) :: Label -> repr (Value repr) -> repr (Statement repr)
-  infixl 1 &.+=
   (&++)  :: repr (Value repr) -> repr (Statement repr)
   infixl 8 &++
-  (&.++) :: Label -> repr (Statement repr)
-  infixl 8 &.++
   (&~-)  :: repr (Value repr) -> repr (Statement repr)
   infixl 8 &~-
-  (&.~-) :: Label -> repr (Statement repr)
-  infixl 8 &.~-
 
   assign            :: repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)
@@ -416,7 +404,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   continue :: repr (Statement repr)
 
   returnState :: repr (Value repr) -> repr (Statement repr)
-  returnVar :: Label -> repr (Statement repr)
+  returnVar :: Label -> repr (StateType repr) -> repr (Statement repr)
 
   valState :: repr (Value repr) -> repr (Statement repr)
 
@@ -461,9 +449,10 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
 
   tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Statement repr)
 
-  checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> 
-    repr (Body repr) -> repr (Statement repr)
-  notifyObservers :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
+  checkState      :: Label -> repr (StateType repr) -> 
+    [(repr (Value repr), repr (Body repr))] -> repr (Body repr) -> 
+    repr (Statement repr)
+  notifyObservers :: repr (StateType repr) -> Label -> repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Statement repr)
 
   getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> 
@@ -479,7 +468,6 @@ class ScopeSym repr where
 class MethodTypeSym repr where
   type MethodType repr
   mState    :: repr (StateType repr) -> repr (MethodType repr)
-  void      :: repr (MethodType repr)
   construct :: Label -> repr (MethodType repr)
 
 class ParameterSym repr where

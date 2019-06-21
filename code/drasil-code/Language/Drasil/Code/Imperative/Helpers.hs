@@ -1,11 +1,12 @@
 {-# LANGUAGE TupleSections #-}
 
 module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
-  ScopeTag(..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
-  TypeData(..), td, ValData(..), vd, blank,verticalComma, angles,
-  doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, 
-  mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, lift2Lists,
-  lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, liftPairSnd
+  ScopeTag(..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
+  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, blank,verticalComma,
+  angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
+  mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, 
+  lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
+  liftPairSnd
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -25,6 +26,11 @@ class Pair p where
 data Terminator = Semi | Empty
 
 data ScopeTag = Pub | Priv deriving Eq
+
+data FuncData = FD {funcType :: TypeData, funcDoc :: Doc}
+
+fd :: TypeData -> Doc -> FuncData
+fd = FD
 
 data ModData = MD {name :: Label, isMainMod :: Bool, modDoc :: Doc}
 

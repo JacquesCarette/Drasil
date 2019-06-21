@@ -36,9 +36,9 @@ import Utils.Drasil (capitalize, indent, indentList)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library)
-import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  TypeData(..), td, ValData(..), vd, angles,blank, doubleQuotedText,hicat,
-  vibcat,vmap)
+import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
+  ModData(..), md, TypeData(..), td, ValData(..), vd, angles,blank, 
+  doubleQuotedText,hicat,vibcat,vmap)
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
@@ -581,11 +581,11 @@ listAccessDocD v = brackets $ valDoc v
 listSetDocD :: ValData -> ValData -> Doc
 listSetDocD i v = brackets (valDoc i) <+> equals <+> valDoc v
 
-objAccessDocD :: ValData -> Doc -> Doc
-objAccessDocD v f = valDoc v <> f
+objAccessDocD :: ValData -> FuncData -> Doc
+objAccessDocD v f = valDoc v <> funcDoc f
 
-castObjDocD :: Doc -> ValData -> Doc
-castObjDocD f v = f <> parens (valDoc v)
+castObjDocD :: FuncData -> ValData -> Doc
+castObjDocD f v = funcDoc f <> parens (valDoc v)
 
 -- Keywords --
 

@@ -2,12 +2,13 @@
 
 module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   ScopeTag(..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
-  blank,verticalComma, angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,
+  TypeData(..), td, blank,verticalComma, angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,
   vimap,vibmap, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, 
   liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst,
   liftPairSnd
 ) where
 
+import Language.Drasil.Code.Code (CodeType)
 import Language.Drasil.Code.Imperative.Symantics (Label)
 
 import Prelude hiding ((<>))
@@ -41,6 +42,11 @@ data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc,
 
 svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
+
+data TypeData = TD {cType :: CodeType, typeDoc :: Doc}
+
+td :: CodeType -> Doc -> TypeData
+td = TD
 
 blank :: Doc
 blank = text ""

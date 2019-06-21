@@ -12,12 +12,12 @@ import Utils.Drasil
 import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
   Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
   IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
-  SSDSub(SSDSubVerb, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..), 
-  TSIntro(..), Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
+  SSDSub(..), SolChSpec(SCSProg), TConvention(..), TSIntro(..),
+  Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
-  LCsSec(..), UCsSec(..), AuxConstntSec(..), generateTraceMap',
-  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc,
-  outDataConstTbl, mkEnumSimpleD, outDataConstTbl, termDefnF, tsymb,
+  LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
+  PDSub(Goals), generateTraceMap', dataConstraintUncertainty, inDataConstTbl,
+  intro, mkDoc, outDataConstTbl, outDataConstTbl, termDefnF, tsymb,
   getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   traceMatStandard, solutionLabel)
@@ -84,7 +84,8 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
    GSDSec $ GSDProg2 [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
-   SSDSec $ SSDProg [SSDSubVerb probDescription
+   SSDSec $ SSDProg
+      [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns] [Goals [S "the" +:+ plural input_] goals]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tModsNew
@@ -357,52 +358,40 @@ userCharacteristicsIntro = foldlSP
 -- 4.1 : Problem Description --
 -------------------------------
 
-probDescription :: Section
-probDescription = SRS.probDesc [probDescIntro]
-  [termAndDefn, goalStates]
-
-probDescIntro :: Contents
-probDescIntro = foldlSP 
-  [S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task,
-  titleize' game, S "need",  plural physLib, S "that simulate", plural object,
-  S "acting under various", phrase physical, plural condition `sC` S "while", 
-  S "simultaneously being fast and efficient enough to work in soft",
+probDescIntro :: Sentence
+probDescIntro = foldlSent_
+  [S "create a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
+  getAcc twoD, phrase CP.rigidBody, phrase physLib `sC` S "which will allow for more accessible",
+  phrase game, S "development" `sAnd` S "the production of higher quality" +:+. plural product_,
+  S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
+  S "need",  plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
+  plural condition `sC` S "while simultaneously being fast and efficient enough to work in soft",
   phrase realtime, S "during the" +:+. phrase game, S "Developing a", 
-  phrase physLib, S "from scratch takes a long period of", phrase QP.time `sAnd`
+  phrase physLib, S "from scratch takes a long period" `sOf` phrase QP.time `sAnd`
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
   phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
   plural product_, S "There are a few free" `sC` phrase openSource `sAnd` S "high quality",
-  plural physLib, S "available to be used for", phrase consumer, plural product_ +:+. 
-  sParen (makeRef2S $ SRS.offShelfSol ([] :: [Contents]) ([] :: [Section])),
-  S "By creating a simple, lightweight, fast and portable",
-  getAcc twoD, phrase CP.rigidBody, phrase physLib `sC` phrase game,
-  S "development will be more accessible to the masses" `sAnd` S "higher quality",
-  plural product_, S "will be produced"]
+  plural physLib, S "available to be used for", phrase consumer, plural product_,
+  sParen (makeRef2S $ SRS.offShelfSol ([] :: [Contents]) ([] :: [Section]))]
   
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-termAndDefn :: Section
-termAndDefn = termDefnF Nothing [termAndDefnBullets]
+termsAndDefns :: Section
+termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
 
 terminologyLabel :: Reference
 terminologyLabel = makeLstRef "terminologyGM" "terminologyGM"
 
-termAndDefnBullets :: Contents
-termAndDefnBullets = LlC $ enumBullet terminologyLabel
+termsAndDefnsBullets :: Contents
+termsAndDefnsBullets = LlC $ enumBullet terminologyLabel
   (map (\x -> atStart x +: EmptyS +:+ (x ^. defn))
     [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand])
 
 -----------------------------
 -- 4.1.2 : Goal Statements --
 -----------------------------
-
-goalStates :: Section
-goalStates = goalStmtF [S "the" +:+ plural input_] goalStateList
-
-goalStateList :: [Contents]
-goalStateList = mkEnumSimpleD goals
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -492,7 +481,7 @@ offShelfSolsIntro, offShelfSols2DList,
   offShelfSolsMid, offShelfSols3DList :: Contents
 
 offShelfSolsIntro = mkParagraph $ foldlSentCol 
-  [S "As mentioned in", makeRef2S probDescription `sC`
+  [S "As mentioned in", makeRef2S (SRS.probDesc [] []) `sC`
   S "there already exist free", phrase openSource, phrase game +:+.
   plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]
 

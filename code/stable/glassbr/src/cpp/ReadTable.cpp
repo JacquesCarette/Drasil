@@ -30,10 +30,7 @@ void func_read_table(string filename, vector<double> &z_vector, vector<vector<do
         linetokens.push_back(word);
     }
     for (int j = 0; (j < (int)((linetokens.size() / 2))); j += 1) {
-        while ((z_vector.size() <= j)) {
-            z_vector.push_back(0.0);
-        }
-        z_vector.at(j) = std::stod(linetokens.at(((j * 2) + 1)));
+        z_vector.push_back(std::stod(linetokens.at(((j * 2) + 1))));
     }
     string nextLine;
     while (std::getline(infile, nextLine)) {
@@ -47,22 +44,14 @@ void func_read_table(string filename, vector<double> &z_vector, vector<vector<do
         while (std::getline(ss, word, ',')) {
             linetokens.push_back(word);
         }
+        vector<double> x_matrix_temp{};
+        vector<double> y_matrix_temp{};
         for (int j = 0; (j < (int)((linetokens.size() / 2))); j += 1) {
-            while ((x_matrix.size() <= i)) {
-                x_matrix.push_back(vector<double>(0));
-            }
-            while ((x_matrix.at(i).size() <= j)) {
-                x_matrix.at(i).push_back(0.0);
-            }
-            x_matrix.at(i).at(j) = std::stod(linetokens.at(((j * 2) + 0)));
-            while ((y_matrix.size() <= i)) {
-                y_matrix.push_back(vector<double>(0));
-            }
-            while ((y_matrix.at(i).size() <= j)) {
-                y_matrix.at(i).push_back(0.0);
-            }
-            y_matrix.at(i).at(j) = std::stod(linetokens.at(((j * 2) + 1)));
+            x_matrix_temp.push_back(std::stod(linetokens.at(((j * 2) + 0))));
+            y_matrix_temp.push_back(std::stod(linetokens.at(((j * 2) + 1))));
         }
+        x_matrix.push_back(x_matrix_temp);
+        y_matrix.push_back(y_matrix_temp);
     }
     infile.close();
 }

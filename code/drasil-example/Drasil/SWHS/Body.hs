@@ -14,19 +14,19 @@ import Control.Lens ((^.))
 import qualified Data.Map as Map
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
-  Field(..), Fields, LFunc (TermExcept), Literature (Doc', Lit), IntroSec (IntroProg),
+  Field(..), Fields, LFunc(TermExcept), Literature(Doc', Lit), IntroSec(IntroProg),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
-  RefTab (TAandA, TUnits), TSIntro (SymbConvention, SymbOrder, TSPurpose),
+  RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose),
   ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  GSDSec(..), GSDSub(..),
+  GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(Goals),
   dataConstraintUncertainty, intro, mkDoc, mkEnumSimpleD, outDataConstTbl,
-  physSystDesc, goalStmtF, termDefnF, tsymb'', getDocDesc, egetDocDesc,
+  physSystDesc, termDefnF, tsymb'', getDocDesc, egetDocDesc,
   ciGetDocDesc, generateTraceMap, generateTraceMap', getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   physSystDescriptionLabel, traceMatStandard)
-import qualified Drasil.DocLang.SRS as SRS (likeChg, probDesc, unlikeChg, inModel)
+import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg, inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
@@ -42,7 +42,7 @@ import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
   understandability, reusability, maintainability, verifiability)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import Data.Drasil.Software.Products (sciCompS, compPro, prodtcon)
+import Data.Drasil.Software.Products (sciCompS, prodtcon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time, physicscon)
@@ -170,7 +170,8 @@ mkSRS = [RefSec $ RefProg intro [
     , SystCons [] []
     ],
   SSDSec $
-    SSDProg [SSDSubVerb probDescription
+    SSDProg 
+      [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, physSystDescription] [Goals goalInputs goals]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
@@ -314,22 +315,18 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 -- 4.1 : Problem Description --
 -------------------------------
 
-probDescription :: Section
-probDescription = SRS.probDesc [probDescIntro progName phsChgMtrl sWHT]
-  [termAndDefn, physSystDescription, goalStates]
-
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-termAndDefn :: Section
-termAndDefn = termDefnF Nothing [termAndDefnBullets]
+termsAndDefns :: Section
+termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note:
 -- GlassBR has an additional sentence with a reference at the end.)
 
-termAndDefnBullets :: Contents
-termAndDefnBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
+termsAndDefnsBullets :: Contents
+termsAndDefnsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
   [CT.htFlux, phaseChangeMaterial, CT.heatCapSpec,
   CT.thermalConduction, transient]
 
@@ -363,25 +360,13 @@ systDescList = [physSyst1 tank water, physSyst2 coil tank htFluxC,
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
-goalStates :: Section
-goalStates = goalStmtF (goalStateIntro tempC tempW tempPCM) goalStateList
-
-goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
-goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
-  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw `andThe` phrase tempcm,
+goalInputs :: [Sentence]
+goalInputs  = [S "the" +:+ phrase tempC,
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase tempW `andThe` phrase tempPCM,
   S "the material" +:+ plural property]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
 -- abstracted out if this paragraph were to be abstracted out.
-
-goalStateList :: [Contents]
-goalStateList = mkEnumSimpleD goals
-
--- List structure is repeated between examples. (For all of these lists I am
--- imagining the potential for something like what was done with the lists in
--- MG, where you define goals, assumptions, physical system components, etc. in
--- separate files, import them and pass them as arguments to some "makeSRS"
--- function and the rest is automated.)
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -738,12 +723,9 @@ userChars pro = foldlSP [S "The end", phrase user `sOf`
 -- 4.1 : Problem Description --
 -------------------------------
 
-probDescIntro :: CI -> CI -> ConceptChunk -> Contents
-probDescIntro pro pcmat sw = foldlSP [short pro, S "is a", phrase compPro,
-  S "developed to investigate the effect of",
-  S "employing", short pcmat, S "within a", phrase sw]
-
--- section is very different between all examples
+probDescIntro :: Sentence
+probDescIntro = foldlSent_ [S "investigate the effect" `sOf` S "employing",
+  short phsChgMtrl, S "within a", phrase sWHT]
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --

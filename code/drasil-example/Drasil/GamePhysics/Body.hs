@@ -15,10 +15,10 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   SSDSub(..), SolChSpec(SCSProg), TConvention(..), TSIntro(..),
   Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
-  LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg'),
-  generateTraceMap', dataConstraintUncertainty, goalStmtF, inDataConstTbl,
-  intro, mkDoc, outDataConstTbl, mkEnumSimpleD, outDataConstTbl, termDefnF,
-  tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
+  LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
+  PDSub(Goals), generateTraceMap', dataConstraintUncertainty, inDataConstTbl,
+  intro, mkDoc, outDataConstTbl, outDataConstTbl, termDefnF, tsymb,
+  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   traceMatStandard, solutionLabel)
 
@@ -85,7 +85,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
    SSDSec $ SSDProg
-      [ SSDProblem   $ PDProg'  probDescIntro [termsAndDefns, goalStates]
+      [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns] [Goals [S "the" +:+ plural input_] goals]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tModsNew
@@ -392,12 +392,6 @@ termsAndDefnsBullets = LlC $ enumBullet terminologyLabel
 -----------------------------
 -- 4.1.2 : Goal Statements --
 -----------------------------
-
-goalStates :: Section
-goalStates = goalStmtF [S "the" +:+ plural input_] goalStateList
-
-goalStateList :: [Contents]
-goalStateList = mkEnumSimpleD goals
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --

@@ -168,7 +168,6 @@ data SSDSub where
 
 -- | Problem Description section
 data ProblemDescription where
-  PDProg' :: Sentence -> [Section] -> ProblemDescription
   PDProg :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
 
 data PDSub where
@@ -420,7 +419,6 @@ mkSSDSec si (SSDProg l) =
     mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
-mkSSDProb _ (PDProg' prob subSec) = SSD.probDescF prob subSec
 mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
   where mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
 

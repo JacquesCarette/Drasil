@@ -49,9 +49,9 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
-  ProblemDescription(PDProg), PDSub(Goals), dataConstraintUncertainty,
-  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  termDefnF, tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
+  ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty,
+  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, termDefnF,
+  tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceMap', traceMatStandard)
 
@@ -112,8 +112,6 @@ units = map ucw [density, tau, inSA, outSA,
   deltaT, tempEnv, thFluxVect, time, htFluxC,
   vol, wMass, wVol, tauW, QT.sensHeat]
 
-termsAndDefns, physSystDescription :: Section
-
 -------------------
 --INPUT INFORMATION
 -------------------
@@ -141,7 +139,9 @@ mkSRS = [RefSec $ RefProg intro
     ],
   SSDSec $
     SSDProg
-    [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, physSystDescription] [Goals goalInputs goals]
+    [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns]
+      [ PhySysDesc progName physSystParts figTank []
+      , Goals goalInputs goals]
     , SSDSolChSpec $ SCSProg
       [ Assumptions
       , TMs [] (Label : stdFields) theoreticalModels
@@ -346,6 +346,7 @@ orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
 probDescIntro :: Sentence
 probDescIntro = foldlSent_ [S "investigate the heating" `sOf` phrase water, S "in a", phrase sWHT]
 
+termsAndDefns :: Section
 termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
 
 termsAndDefnsBullets :: Contents
@@ -354,15 +355,13 @@ termsAndDefnsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $
   atStart x :+: S ":" +:+ (x ^. defn))
   [htFlux, heatCapSpec, thermalConduction, transient]
   
-physSystDescription = physSystDesc progName physSystDescList figTank []
-
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
   S "from" +:+ phrase coil `sOf` ch htFluxC)
   $ resourcePath ++ "TankWaterOnly.png"
 
-physSystDescList :: [Sentence]
-physSystDescList = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]
+physSystParts :: [Sentence]
+physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalInputs :: [Sentence]
 goalInputs = [phrase temp `ofThe` phrase coil,

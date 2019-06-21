@@ -18,17 +18,17 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD,
   sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, 
   asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, 
-  unExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
-  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
-  divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, 
-  binOpDocD', binExpr, binExpr', mkVal, litTrueD, litFalseD, litCharD, 
-  litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, 
-  enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, 
-  stateObjDocD, listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
-  listIndexExistsDocD, funcDocD, castDocD, sizeDocD, listAccessDocD, 
-  listSetDocD, objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, addCommentsDocD, 
-  callFuncParamList, getterName, setterName, setMain, setEmpty, 
+  unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, 
+  binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, litTrueD, 
+  litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
+  selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
+  extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
+  constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
+  sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
+  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
+  addCommentsDocD, callFuncParamList, getterName, setterName, setMain, setEmpty,
   statementsToStateVars
 ) where
 
@@ -441,6 +441,9 @@ unOpDocD op v = op <> parens v
 unExpr :: Doc -> ValData -> ValData
 unExpr u v = mkVal (valType v) (unOpDocD u (valDoc v))
 
+typeUnExpr :: Doc -> TypeData -> ValData -> ValData
+typeUnExpr u t v = mkVal t (unOpDocD u (valDoc v))
+
 -- Binary Operators --
 
 equalOpDocD :: Doc
@@ -496,6 +499,9 @@ binExpr b v1 v2 = mkVal (valType v1) (binOpDocD b (valDoc v1) (valDoc v2))
 
 binExpr' :: Doc -> ValData -> ValData -> ValData
 binExpr' b v1 v2 = mkVal (valType v1) (binOpDocD' b (valDoc v1) (valDoc v2))
+
+typeBinExpr :: Doc -> TypeData -> ValData -> ValData -> ValData
+typeBinExpr b t v1 v2 = mkVal t (binOpDocD b (valDoc v1) (valDoc v2))
 
 mkVal :: TypeData -> Doc -> ValData
 mkVal = vd Nothing

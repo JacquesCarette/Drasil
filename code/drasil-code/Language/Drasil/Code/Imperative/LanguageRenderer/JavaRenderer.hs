@@ -28,17 +28,17 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
   stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD,
   varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
-  commentDocD, mkSt, mkStNoEnd, notOpDocD, negateOpDocD, unExpr, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  commentDocD, mkSt, mkStNoEnd, notOpDocD, negateOpDocD, unExpr, typeUnExpr, 
+  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', mkVal, litTrueD, 
-  litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
-  selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
-  extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, funcDocD, 
-  castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, 
-  dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, observerListName,
-  doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName,
-  setMain, setEmpty, statementsToStateVars)
+  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
+  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
+  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
+  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
+  funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
+  observerListName, doubleSlash, addCommentsDocD, callFuncParamList, getterName,
+  setterName, setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -265,16 +265,16 @@ instance NumericExpression JavaCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression JavaCode where
-  (?!) = liftA2 unExpr notOp
-  (?&&) = liftA3 binExpr andOp
-  (?||) = liftA3 binExpr orOp
+  (?!) = liftA3 typeUnExpr notOp bool
+  (?&&) = liftA4 typeBinExpr andOp bool
+  (?||) = liftA4 typeBinExpr orOp bool
 
-  (?<) = liftA3 binExpr lessOp
-  (?<=) = liftA3 binExpr lessEqualOp
-  (?>) = liftA3 binExpr greaterOp
-  (?>=) = liftA3 binExpr greaterEqualOp
-  (?==) = liftA3 binExpr equalOp
-  (?!=) = liftA3 binExpr notEqualOp
+  (?<) = liftA4 typeBinExpr lessOp bool
+  (?<=) = liftA4 typeBinExpr lessEqualOp bool
+  (?>) = liftA4 typeBinExpr greaterOp bool
+  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
+  (?==) = liftA4 typeBinExpr equalOp bool
+  (?!=) = liftA4 typeBinExpr notEqualOp bool
   
 instance ValueExpression JavaCode where
   inlineIf b v1 v2 = liftA2 mkVal (fmap valType v1) (liftA3 inlineIfDocD b v1 

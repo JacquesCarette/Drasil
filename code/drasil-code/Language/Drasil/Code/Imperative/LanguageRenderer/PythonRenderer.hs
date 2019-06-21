@@ -23,14 +23,15 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   methodListDocD, ifCondDocD, stratDocD, assignDocD, plusEqualsDocD', 
   plusPlusDocD', statementDocD, returnDocD, commentDocD, mkStNoEnd, notOpDocD', 
   negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
-  tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, typeUnExpr, 
+  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, binExpr, mkVal, litCharD, litFloatD, litIntD, litStringD, 
-  varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, funcAppDocD, 
-  extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD, castObjDocD, breakDocD, 
-  continueDocD, staticDocD, dynamicDocD, classDec, dot, forLabel, 
-  observerListName, addCommentsDocD, callFuncParamList, getterName, setterName)
+  moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD, litFloatD, litIntD, 
+  litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
+  funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD, 
+  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, classDec, dot, 
+  forLabel, observerListName, addCommentsDocD, callFuncParamList, getterName, 
+  setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
   liftA5, liftList, lift1List, lift4Pair, liftPairFst)
@@ -240,16 +241,16 @@ instance NumericExpression PythonCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression PythonCode where
-  (?!) = liftA2 unExpr notOp
-  (?&&) = liftA3 binExpr andOp
-  (?||) = liftA3 binExpr orOp
+  (?!) = liftA3 typeUnExpr notOp bool
+  (?&&) = liftA4 typeBinExpr andOp bool
+  (?||) = liftA4 typeBinExpr orOp bool
 
-  (?<) = liftA3 binExpr lessOp
-  (?<=) = liftA3 binExpr lessEqualOp
-  (?>) = liftA3 binExpr greaterOp
-  (?>=) = liftA3 binExpr greaterEqualOp
-  (?==) = liftA3 binExpr equalOp
-  (?!=) = liftA3 binExpr notEqualOp
+  (?<) = liftA4 typeBinExpr lessOp bool
+  (?<=) = liftA4 typeBinExpr lessEqualOp bool
+  (?>) = liftA4 typeBinExpr greaterOp bool
+  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
+  (?==) = liftA4 typeBinExpr equalOp bool
+  (?!=) = liftA4 typeBinExpr notEqualOp bool
 
 instance ValueExpression PythonCode where
   inlineIf b v1 v2 = liftA2 mkVal (fmap valType v1) (liftA3 pyInlineIf b v1 v2)

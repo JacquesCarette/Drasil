@@ -66,6 +66,13 @@ compsy a (Concat (Atomic "Δ" : y)) =
 compsy (Concat x) (Concat y) = complsy x y
 compsy (Concat a) b = complsy a [b]
 compsy b (Concat a) = complsy [b] a
+-- The next two cases are very specific (but common) patterns where a superscript is added
+-- to some "conceptual" base symbol to add further context. For example: `v_f^{AB}` (expressed in LaTeX
+-- notation for clarity), where `v_f` is a final velocity, and the `^{AB}` adds context that it is the
+-- final velocity between points `A` and `B`. In these cases, the sorting of `v_f^{AB}` should be
+-- following `v_f` as it is logical to place it with its parent concept.
+compsy (Corners [] [] ur [] (Corners [] [] [] lr b)) a = compsy (Corners [] [] ur lr b) a
+compsy a (Corners [] [] ur [] (Corners [] [] [] lr b)) = compsy a (Corners [] [] ur lr b)
 compsy (Corners _ _ u l b) (Corners _ _ u' l' b')  =
   case compsy b b' of
     EQ -> case complsy l l' of

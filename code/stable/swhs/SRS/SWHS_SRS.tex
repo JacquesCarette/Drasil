@@ -80,13 +80,13 @@ ${C^{S}}$ & Specific heat capacity of a solid & $\frac{\text{J}}{(\text{kg}{}^{\
 \\
 ${C^{V}}$ & Specific heat capacity of a vapour & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${C_{tol}}$ & Relative tolerance for conservation of energy & --
-\\
-${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
-\\
 ${{C_{P}}^{L}}$ & Specific heat capacity of PCM as a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${{C_{P}}^{S}}$ & Specific heat capacity of PCM as a solid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+\\
+${C_{tol}}$ & Relative tolerance for conservation of energy & --
+\\
+${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 $D$ & Diameter of tank & m
 \\
@@ -152,21 +152,21 @@ ${T_{init}}$ & Initial temperature & ${}^{\circ}$C
 \\
 ${T_{melt}}$ & Melting point temperature & ${}^{\circ}$C
 \\
+${{T_{melt}}^{P}}$ & Melting point temperature for PCM & ${}^{\circ}$C
+\\
 ${T_{P}}$ & Temperature of the phase change material & ${}^{\circ}$C
 \\
 ${T_{W}}$ & Temperature of the water & ${}^{\circ}$C
-\\
-${{T_{melt}}^{P}}$ & Melting point temperature for PCM & ${}^{\circ}$C
 \\
 $t$ & Time & s
 \\
 ${t_{final}}$ & Final time & s
 \\
-${t_{step}}$ & Time step for simulation & s
-\\
 ${{t_{melt}}^{final}}$ & Time at which melting of PCM ends & s
 \\
 ${{t_{melt}}^{init}}$ & Time at which melting of PCM begins & s
+\\
+${t_{step}}$ & Time step for simulation & s
 \\
 $V$ & Volume & $\text{m}^{3}$
 \\
@@ -188,11 +188,11 @@ ${ρ_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 $τ$ & Dummy variable for integration over time & s
 \\
-${τ_{W}}$ & ODE parameter for water & s
-\\
 ${{τ_{P}}^{L}}$ & ODE parameter for liquid PCM & s
 \\
 ${{τ_{P}}^{S}}$ & ODE parameter for solid PCM & s
+\\
+${τ_{W}}$ & ODE parameter for water & s
 \\
 $ϕ$ & Melt fraction & --
 \\
@@ -994,11 +994,11 @@ ${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $0.12$ $\text{m}^{2}$
 \\
 ${A_{P}}$ & ${A_{P}}>0$ & ${V_{P}}\leq{}{A_{P}}\leq{}\frac{2}{{h_{min}}} {V_{tank}}$ & $1.2$ $\text{m}^{2}$ & 10$\%$
 \\
-${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
-\\
 ${{C_{P}}^{L}}$ & ${{C_{P}}^{L}}>0$ & ${{{C_{P}}^{L}}_{min}}<{{C_{P}}^{L}}<{{{C_{P}}^{L}}_{max}}$ & $2.27\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
 \\
 ${{C_{P}}^{S}}$ & ${{C_{P}}^{S}}>0$ & ${{{C_{P}}^{S}}_{min}}<{{C_{P}}^{S}}<{{{C_{P}}^{S}}_{max}}$ & $1.76\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
+\\
+${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
 \\
 $D$ & $D>0$ & -- & $0.412$ m & 10$\%$
 \\
@@ -1090,11 +1090,11 @@ ${A_{P}}$ & Phase change material surface area & $\text{m}^{2}$
 \\
 ${A_{tol}}$ & Absolute tolerance & --
 \\
-${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
-\\
 ${{C_{P}}^{L}}$ & Specific heat capacity of PCM as a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 ${{C_{P}}^{S}}$ & Specific heat capacity of PCM as a solid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+\\
+${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 $D$ & Diameter of tank & m
 \\

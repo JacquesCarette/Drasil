@@ -119,16 +119,6 @@
                   <td>J/(kg&sdot;&deg;C)</td>
                 </tr>
                 <tr>
-                  <td><em>C<sub>tol</sub></em></td>
-                  <td>Relative tolerance for conservation of energy</td>
-                  <td>--</td>
-                </tr>
-                <tr>
-                  <td><em>C<sub>W</sub></em></td>
-                  <td>Specific heat capacity of water</td>
-                  <td>J/(kg&sdot;&deg;C)</td>
-                </tr>
-                <tr>
                   <td><em>C<sub>P</sub><sup>L</sup></em></td>
                   <td>Specific heat capacity of PCM as a liquid</td>
                   <td>J/(kg&sdot;&deg;C)</td>
@@ -136,6 +126,16 @@
                 <tr>
                   <td><em>C<sub>P</sub><sup>S</sup></em></td>
                   <td>Specific heat capacity of PCM as a solid</td>
+                  <td>J/(kg&sdot;&deg;C)</td>
+                </tr>
+                <tr>
+                  <td><em>C<sub>tol</sub></em></td>
+                  <td>Relative tolerance for conservation of energy</td>
+                  <td>--</td>
+                </tr>
+                <tr>
+                  <td><em>C<sub>W</sub></em></td>
+                  <td>Specific heat capacity of water</td>
                   <td>J/(kg&sdot;&deg;C)</td>
                 </tr>
                 <tr>
@@ -303,6 +303,11 @@
                   <td>&deg;C</td>
                 </tr>
                 <tr>
+                  <td><em>T<sub>melt</sub><sup>P</sup></em></td>
+                  <td>Melting point temperature for PCM</td>
+                  <td>&deg;C</td>
+                </tr>
+                <tr>
                   <td><em>T<sub>P</sub></em></td>
                   <td>Temperature of the phase change material</td>
                   <td>&deg;C</td>
@@ -310,11 +315,6 @@
                 <tr>
                   <td><em>T<sub>W</sub></em></td>
                   <td>Temperature of the water</td>
-                  <td>&deg;C</td>
-                </tr>
-                <tr>
-                  <td><em>T<sub>melt</sub><sup>P</sup></em></td>
-                  <td>Melting point temperature for PCM</td>
                   <td>&deg;C</td>
                 </tr>
                 <tr>
@@ -328,11 +328,6 @@
                   <td>s</td>
                 </tr>
                 <tr>
-                  <td><em>t<sub>step</sub></em></td>
-                  <td>Time step for simulation</td>
-                  <td>s</td>
-                </tr>
-                <tr>
                   <td><em>t<sub>melt</sub><sup>final</sup></em></td>
                   <td>Time at which melting of PCM ends</td>
                   <td>s</td>
@@ -340,6 +335,11 @@
                 <tr>
                   <td><em>t<sub>melt</sub><sup>init</sup></em></td>
                   <td>Time at which melting of PCM begins</td>
+                  <td>s</td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>step</sub></em></td>
+                  <td>Time step for simulation</td>
                   <td>s</td>
                 </tr>
                 <tr>
@@ -393,11 +393,6 @@
                   <td>s</td>
                 </tr>
                 <tr>
-                  <td><em>τ<sub>W</sub></em></td>
-                  <td>ODE parameter for water</td>
-                  <td>s</td>
-                </tr>
-                <tr>
                   <td><em>τ<sub>P</sub><sup>L</sup></em></td>
                   <td>ODE parameter for liquid PCM</td>
                   <td>s</td>
@@ -405,6 +400,11 @@
                 <tr>
                   <td><em>τ<sub>P</sub><sup>S</sup></em></td>
                   <td>ODE parameter for solid PCM</td>
+                  <td>s</td>
+                </tr>
+                <tr>
+                  <td><em>τ<sub>W</sub></em></td>
+                  <td>ODE parameter for water</td>
                   <td>s</td>
                 </tr>
                 <tr>
@@ -2360,15 +2360,6 @@
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
-                      <td><em>C<sub>W</sub></em></td>
-                      <td><em>C<sub>W</sub>&thinsp;&gt;&thinsp;0</em></td>
-                      <td>
-                        <em>C<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;C<sub>W</sub>&thinsp;&lt;&thinsp;C<sub>W</sub><sup>max</sup></em>
-                      </td>
-                      <td><em>4.186&sdot;10<sup>3</sup></em> J/(kg&sdot;&deg;C)</td>
-                      <td>10<em>%</em></td>
-                    </tr>
-                    <tr>
                       <td><em>C<sub>P</sub><sup>L</sup></em></td>
                       <td><em>C<sub>P</sub><sup>L</sup>&thinsp;&gt;&thinsp;0</em></td>
                       <td>
@@ -2384,6 +2375,15 @@
                         <em>C<sub>P</sub><sup>S</sup><sub>min</sub>&thinsp;&lt;&thinsp;C<sub>P</sub><sup>S</sup>&thinsp;&lt;&thinsp;C<sub>P</sub><sup>S</sup><sub>max</sub></em>
                       </td>
                       <td><em>1.76&sdot;10<sup>3</sup></em> J/(kg&sdot;&deg;C)</td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>C<sub>W</sub></em></td>
+                      <td><em>C<sub>W</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td>
+                        <em>C<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;C<sub>W</sub>&thinsp;&lt;&thinsp;C<sub>W</sub><sup>max</sup></em>
+                      </td>
+                      <td><em>4.186&sdot;10<sup>3</sup></em> J/(kg&sdot;&deg;C)</td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -2664,11 +2664,6 @@
                   <td>--</td>
                 </tr>
                 <tr>
-                  <td><em>C<sub>W</sub></em></td>
-                  <td>Specific heat capacity of water</td>
-                  <td>J/(kg&sdot;&deg;C)</td>
-                </tr>
-                <tr>
                   <td><em>C<sub>P</sub><sup>L</sup></em></td>
                   <td>Specific heat capacity of PCM as a liquid</td>
                   <td>J/(kg&sdot;&deg;C)</td>
@@ -2676,6 +2671,11 @@
                 <tr>
                   <td><em>C<sub>P</sub><sup>S</sup></em></td>
                   <td>Specific heat capacity of PCM as a solid</td>
+                  <td>J/(kg&sdot;&deg;C)</td>
+                </tr>
+                <tr>
+                  <td><em>C<sub>W</sub></em></td>
+                  <td>Specific heat capacity of water</td>
                   <td>J/(kg&sdot;&deg;C)</td>
                 </tr>
                 <tr>

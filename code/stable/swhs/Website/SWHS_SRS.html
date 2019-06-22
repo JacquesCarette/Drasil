@@ -171,6 +171,11 @@
                   <td>W/m<sup>3</sup></td>
                 </tr>
                 <tr>
+                  <td><em>H<sub>f</sub></em></td>
+                  <td>Specific latent heat of fusion</td>
+                  <td>J/kg</td>
+                </tr>
+                <tr>
                   <td><em>h</em></td>
                   <td>Convective heat transfer coefficient</td>
                   <td>W/(m<sup>2</sup>&sdot;&deg;C)</td>
@@ -181,11 +186,6 @@
                     Convective heat transfer coefficient between coil and water
                   </td>
                   <td>W/(m<sup>2</sup>&sdot;&deg;C)</td>
-                </tr>
-                <tr>
-                  <td><em>H<sub>f</sub></em></td>
-                  <td>Specific latent heat of fusion</td>
-                  <td>J/kg</td>
                 </tr>
                 <tr>
                   <td><em>h<sub>min</sub></em></td>
@@ -228,6 +228,11 @@
                   <td>J</td>
                 </tr>
                 <tr>
+                  <td><em>Q<sub>P</sub></em></td>
+                  <td>Latent heat energy added to PCM</td>
+                  <td>J</td>
+                </tr>
+                <tr>
                   <td><em>q</em></td>
                   <td>Heat flux</td>
                   <td>W/m<sup>2</sup></td>
@@ -253,11 +258,6 @@
                   <td>W/m<sup>2</sup></td>
                 </tr>
                 <tr>
-                  <td><em>Q<sub>P</sub></em></td>
-                  <td>Latent heat energy added to PCM</td>
-                  <td>J</td>
-                </tr>
-                <tr>
                   <td><em><b>q</b></em></td>
                   <td>Thermal flux vector</td>
                   <td>W/m<sup>2</sup></td>
@@ -271,11 +271,6 @@
                   <td><em>T</em></td>
                   <td>Temperature</td>
                   <td>&deg;C</td>
-                </tr>
-                <tr>
-                  <td><em>t</em></td>
-                  <td>Time</td>
-                  <td>s</td>
                 </tr>
                 <tr>
                   <td><em>ΔT</em></td>
@@ -298,11 +293,6 @@
                   <td>&deg;C</td>
                 </tr>
                 <tr>
-                  <td><em>t<sub>final</sub></em></td>
-                  <td>Final time</td>
-                  <td>s</td>
-                </tr>
-                <tr>
                   <td><em>T<sub>init</sub></em></td>
                   <td>Initial temperature</td>
                   <td>&deg;C</td>
@@ -318,14 +308,29 @@
                   <td>&deg;C</td>
                 </tr>
                 <tr>
-                  <td><em>t<sub>step</sub></em></td>
-                  <td>Time step for simulation</td>
-                  <td>s</td>
-                </tr>
-                <tr>
                   <td><em>T<sub>W</sub></em></td>
                   <td>Temperature of the water</td>
                   <td>&deg;C</td>
+                </tr>
+                <tr>
+                  <td><em>T<sub>melt</sub><sup>P</sup></em></td>
+                  <td>Melting point temperature for PCM</td>
+                  <td>&deg;C</td>
+                </tr>
+                <tr>
+                  <td><em>t</em></td>
+                  <td>Time</td>
+                  <td>s</td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>final</sub></em></td>
+                  <td>Final time</td>
+                  <td>s</td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>step</sub></em></td>
+                  <td>Time step for simulation</td>
+                  <td>s</td>
                 </tr>
                 <tr>
                   <td><em>t<sub>melt</sub><sup>final</sup></em></td>
@@ -336,11 +341,6 @@
                   <td><em>t<sub>melt</sub><sup>init</sup></em></td>
                   <td>Time at which melting of PCM begins</td>
                   <td>s</td>
-                </tr>
-                <tr>
-                  <td><em>T<sub>melt</sub><sup>P</sup></em></td>
-                  <td>Melting point temperature for PCM</td>
-                  <td>&deg;C</td>
                 </tr>
                 <tr>
                   <td><em>V</em></td>
@@ -2394,6 +2394,15 @@
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
+                      <td><em>H<sub>f</sub></em></td>
+                      <td><em>H<sub>f</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td>
+                        <em>H<sub>f</sub><sub>min</sub>&thinsp;&lt;&thinsp;H<sub>f</sub>&thinsp;&lt;&thinsp;H<sub>f</sub><sub>max</sub></em>
+                      </td>
+                      <td><em>211.6&sdot;10<sup>3</sup></em> J/kg</td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
                       <td><em>h<sub>C</sub></em></td>
                       <td><em>h<sub>C</sub>&thinsp;&gt;&thinsp;0</em></td>
                       <td>
@@ -2402,15 +2411,6 @@
                       <td>
                         <em>1.0&sdot;10<sup>3</sup></em> W/(m<sup>2</sup>&sdot;&deg;C)
                       </td>
-                      <td>10<em>%</em></td>
-                    </tr>
-                    <tr>
-                      <td><em>H<sub>f</sub></em></td>
-                      <td><em>H<sub>f</sub>&thinsp;&gt;&thinsp;0</em></td>
-                      <td>
-                        <em>H<sub>f</sub><sub>min</sub>&thinsp;&lt;&thinsp;H<sub>f</sub>&thinsp;&lt;&thinsp;H<sub>f</sub><sub>max</sub></em>
-                      </td>
-                      <td><em>211.6&sdot;10<sup>3</sup></em> J/kg</td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -2443,15 +2443,6 @@
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
-                      <td><em>t<sub>final</sub></em></td>
-                      <td><em>t<sub>final</sub>&thinsp;&gt;&thinsp;0</em></td>
-                      <td>
-                        <em>t<sub>final</sub>&thinsp;&lt;&thinsp;t<sub>final</sub><sup>max</sup></em>
-                      </td>
-                      <td><em>50.0&sdot;10<sup>3</sup></em> s</td>
-                      <td>10<em>%</em></td>
-                    </tr>
-                    <tr>
                       <td><em>T<sub>init</sub></em></td>
                       <td>
                         <em>0&thinsp;&lt;&thinsp;T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub></em>
@@ -2461,21 +2452,30 @@
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
-                      <td><em>t<sub>step</sub></em></td>
-                      <td>
-                        <em>0&thinsp;&lt;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-                      </td>
-                      <td>--</td>
-                      <td><em>0.01</em> s</td>
-                      <td>10<em>%</em></td>
-                    </tr>
-                    <tr>
                       <td><em>T<sub>melt</sub><sup>P</sup></em></td>
                       <td>
                         <em>0&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
                       </td>
                       <td>--</td>
                       <td><em>44.2</em> &deg;C</td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>t<sub>final</sub></em></td>
+                      <td><em>t<sub>final</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td>
+                        <em>t<sub>final</sub>&thinsp;&lt;&thinsp;t<sub>final</sub><sup>max</sup></em>
+                      </td>
+                      <td><em>50.0&sdot;10<sup>3</sup></em> s</td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>t<sub>step</sub></em></td>
+                      <td>
+                        <em>0&thinsp;&lt;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+                      </td>
+                      <td>--</td>
+                      <td><em>0.01</em> s</td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -2684,16 +2684,16 @@
                   <td>m</td>
                 </tr>
                 <tr>
+                  <td><em>H<sub>f</sub></em></td>
+                  <td>Specific latent heat of fusion</td>
+                  <td>J/kg</td>
+                </tr>
+                <tr>
                   <td><em>h<sub>C</sub></em></td>
                   <td>
                     Convective heat transfer coefficient between coil and water
                   </td>
                   <td>W/(m<sup>2</sup>&sdot;&deg;C)</td>
-                </tr>
-                <tr>
-                  <td><em>H<sub>f</sub></em></td>
-                  <td>Specific latent heat of fusion</td>
-                  <td>J/kg</td>
                 </tr>
                 <tr>
                   <td><em>h<sub>P</sub></em></td>
@@ -2716,24 +2716,24 @@
                   <td>&deg;C</td>
                 </tr>
                 <tr>
-                  <td><em>t<sub>final</sub></em></td>
-                  <td>Final time</td>
-                  <td>s</td>
-                </tr>
-                <tr>
                   <td><em>T<sub>init</sub></em></td>
                   <td>Initial temperature</td>
                   <td>&deg;C</td>
                 </tr>
                 <tr>
-                  <td><em>t<sub>step</sub></em></td>
-                  <td>Time step for simulation</td>
-                  <td>s</td>
-                </tr>
-                <tr>
                   <td><em>T<sub>melt</sub><sup>P</sup></em></td>
                   <td>Melting point temperature for PCM</td>
                   <td>&deg;C</td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>final</sub></em></td>
+                  <td>Final time</td>
+                  <td>s</td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>step</sub></em></td>
+                  <td>Time step for simulation</td>
+                  <td>s</td>
                 </tr>
                 <tr>
                   <td><em>V<sub>P</sub></em></td>
@@ -4603,6 +4603,18 @@
               <td>J/(kg&sdot;&deg;C)</td>
             </tr>
             <tr>
+              <td><em>H<sub>f</sub><sub>max</sub></em></td>
+              <td>maximum specific latent heat of fusion</td>
+              <td><em>1000000</em></td>
+              <td>J/(kg&sdot;&deg;C)</td>
+            </tr>
+            <tr>
+              <td><em>H<sub>f</sub><sub>min</sub></em></td>
+              <td>minimum specific latent heat of fusion</td>
+              <td><em>0</em></td>
+              <td>J/(kg&sdot;&deg;C)</td>
+            </tr>
+            <tr>
               <td><em>h<sub>C</sub><sup>max</sup></em></td>
               <td>
                 maximum convective heat transfer coefficient between coil and water
@@ -4617,18 +4629,6 @@
               </td>
               <td><em>10</em></td>
               <td>W/(m<sup>2</sup>&sdot;&deg;C)</td>
-            </tr>
-            <tr>
-              <td><em>H<sub>f</sub><sub>max</sub></em></td>
-              <td>maximum specific latent heat of fusion</td>
-              <td><em>1000000</em></td>
-              <td>J/(kg&sdot;&deg;C)</td>
-            </tr>
-            <tr>
-              <td><em>H<sub>f</sub><sub>min</sub></em></td>
-              <td>minimum specific latent heat of fusion</td>
-              <td><em>0</em></td>
-              <td>J/(kg&sdot;&deg;C)</td>
             </tr>
             <tr>
               <td><em>h<sub>P</sub><sup>max</sup></em></td>

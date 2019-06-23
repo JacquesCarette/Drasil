@@ -136,12 +136,6 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
   litInt    :: Integer -> repr (Value repr)
   litString :: String -> repr (Value repr)
 
-  defaultChar   :: repr (Value repr)
-  defaultFloat  :: repr (Value repr)
-  defaultInt    :: repr (Value repr)
-  defaultString :: repr (Value repr)
-  defaultBool   :: repr (Value repr)
-
   --other operators ($)
   ($->) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   infixl 9 $->

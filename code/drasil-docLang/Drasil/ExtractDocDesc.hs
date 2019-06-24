@@ -4,7 +4,7 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc) where
 import Control.Lens((^.))
 import Drasil.DocumentLanguage
 import Language.Drasil hiding (Manual, Vector, Verb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..), TheoryModel)
+import Theory.Drasil (Theory(..))
 import Data.List(transpose)
 
 import Data.Functor.Constant (Constant(Constant))
@@ -100,21 +100,57 @@ instance Multiplate DLPlate where
 egetDocDesc :: DocDesc -> [Expr]
 egetDocDesc = concatMap egetDocSec
 
+exprOnlyPlate :: DLPlate (Constant [Expr])
+exprOnlyPlate = preorderFold $ purePlate {
+  refSec = Constant <$> \(RefProg c _) -> con [c],
+  introSub = Constant <$> \case
+    (IOrgSec _ _ s _) -> mSec [s]
+    _ -> [],
+  gsdSec = Constant <$> \case
+    (GSDProg s1 c1 c2 s2) -> mSec s1 ++ con [c1] ++ con c2 ++ mSec s2
+    (GSDProg2 _) -> [],
+  gsdSub = Constant <$> \case
+    (SysCntxt c) -> con c
+    (UsrChars c) -> con c
+    (SystCons c s) -> con c ++ mSec s,
+  pdSec = Constant <$> \(PDProg _ s _) -> mSec s,
+  pdSub = Constant <$> \case
+    (PhySysDesc _ _ lc c) -> con [lc] ++ con c
+    (Goals _ _) -> [],
+  scsSub = Constant <$> \case
+    Assumptions -> []
+    (TMs _ _ t) -> let r = concatMap (\x -> x ^. invariants ++
+                           defExp (x ^. defined_quant ++ x ^. defined_fun) ++
+                           r (x ^. valid_context)) in r t
+    (DDs _ _ d _) -> map sy d ++ defExp d
+    (GDs _ _ g _) -> map (^. relat) g
+    (IMs _ _ i _) -> map (^. relat) i
+    (Constraints _ _ _ lc) -> con lc
+    (CorrSolnPpties c) -> con c,
+  reqSub = Constant <$> \case
+    (FReqsSub _ c) -> con c
+    (NonFReqsSub _) -> [],
+  lcsSec = Constant <$> \(LCsProg c) -> con c,
+  ucsSec = Constant <$> \(UCsProg c) -> con c,
+  traceSec = Constant <$> \(TraceabilityProg lc _ c s) -> con lc ++ con c ++ mSec s,
+  auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> defExp qdef,
+  existSolnSec = Constant <$> \(ExistSolnProg c) -> con c,
+  appendSec = Constant <$> \(AppndxProg c) -> con c
+  } where
+    defExp :: DefiningExpr a => [a] -> [Expr]
+    defExp = map (^. defnExpr)
+    mSec :: [Section] -> [Expr]
+    mSec = concatMap egetSec
+    con :: HasContents a => [a] -> [Expr]
+    con = concatMap egetCon'
+
 egetDocSec :: DocSection -> [Expr]
-egetDocSec (RefSec r)           = egetRefSec r
-egetDocSec IntroSec{}           = []
-egetDocSec (StkhldrSec s)       = egetStk s
-egetDocSec (GSDSec g)           = egetGSD g
-egetDocSec (SSDSec s)           = egetSSD s
-egetDocSec (ReqrmntSec r)       = egetReq r
-egetDocSec (LCsSec l)           = egetLcs l
-egetDocSec LCsSec'{}            = [] -- likely changes can't lead to Expr?
-egetDocSec (UCsSec u)           = egetUcs u
-egetDocSec (TraceabilitySec t)  = egetTrace t
-egetDocSec (AuxConstntSec a)    = egetAux a
-egetDocSec  Bibliography        = []
-egetDocSec (AppndxSec a)        = egetApp a
-egetDocSec (ExistingSolnSec e)  = egetExist e
+egetDocSec x = foldFor docSec exprOnlyPlate x ++ concatMap sentToExp (getDocSec x)
+
+sentToExp :: Sentence -> [Expr]
+sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
+sentToExp (E e) = [e]
+sentToExp _ = []
 
 egetSec :: Section -> [Expr]
 egetSec (Section _ sc _ ) = concatMap egetSecCon sc
@@ -123,7 +159,7 @@ egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
 egetSecCon (Con c) = egetCon' c
 
-egetCon' :: Contents -> [Expr]
+egetCon' :: HasContents a => a -> [Expr]
 egetCon' c = egetCon (c ^. accessContents)
 
 egetCon :: RawContent -> [Expr]
@@ -131,108 +167,6 @@ egetCon (EqnBlock e) = [e]
 egetCon (Defini _ []) = []
 egetCon (Defini dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Defini dt tl)
 egetCon _ = []
-
-egetLblCon :: LabelledContent -> [Expr]
-egetLblCon a = egetCon (a ^. accessContents)
-
-egetRefSec :: RefSec -> [Expr]
-egetRefSec (RefProg c r) = egetCon' c ++ concatMap egetRefProg r
-
-egetGSD :: GSDSec -> [Expr]
-egetGSD (GSDProg s1 c1 c2 s2) = concatMap egetSec s1 ++ egetCon' c1
-  ++ concatMap egetCon' c2 ++ concatMap egetSec s2
-egetGSD (GSDProg2 gsdsub) = concatMap egetGSDSub gsdsub
-
-egetSSD :: SSDSec -> [Expr]
-egetSSD (SSDProg ssd) = concatMap egetSSDSub ssd
-
-egetReq :: ReqrmntSec -> [Expr]
-egetReq (ReqsProg rs) = concatMap egetReqSub rs
-
-egetLcs :: LCsSec -> [Expr]
-egetLcs (LCsProg c) = concatMap egetCon' c
-
-egetUcs :: UCsSec -> [Expr]
-egetUcs (UCsProg c) = concatMap egetCon' c
-
-egetTrace :: TraceabilitySec -> [Expr]
-egetTrace (TraceabilityProg lc _ c s) = concatMap egetLblCon lc ++ concatMap egetCon' c
-  ++ concatMap egetSec s
-
-egetAux :: AuxConstntSec -> [Expr]
-egetAux (AuxConsProg _ qd) = concatMap egetQDef qd
-
-egetQDef :: QDefinition -> [Expr]
-egetQDef q = [q ^. defnExpr]
-
-egetApp :: AppndxSec -> [Expr]
-egetApp (AppndxProg c) = concatMap egetCon' c
-
-egetExist :: ExistingSolnSec -> [Expr]
-egetExist (ExistSolnProg c) = concatMap egetCon' c
-
-egetRefProg :: RefTab -> [Expr]
-egetRefProg TUnits       = []
-egetRefProg TUnits'{}    = []
-egetRefProg TSymb{}      = []
-egetRefProg (TSymb' l _) = egetFunc l
-egetRefProg TAandA       = []
-
-egetStk :: StkhldrSec -> [Expr]
-egetStk StkhldrProg{}     = []
-egetStk (StkhldrProg2 s)  = concatMap egetStkSub s
-
-egetStkSub :: StkhldrSub -> [Expr]
-egetStkSub _ = []
-
-egetGSDSub :: GSDSub -> [Expr]
-egetGSDSub (SysCntxt c)   = concatMap egetCon' c
-egetGSDSub (UsrChars c)   = concatMap egetCon' c
-egetGSDSub (SystCons c s) = concatMap egetCon' c ++ concatMap egetSec s
-
-egetSSDSub :: SSDSub -> [Expr]
-egetSSDSub (SSDProblem p)   = egetProblem p
-egetSSDSub (SSDSolChSpec s) = egetSol s
-
-egetReqSub :: ReqsSub -> [Expr]
-egetReqSub FReqsSub{}    = []
-egetReqSub NonFReqsSub{} = []
-
-egetFunc :: LFunc -> [Expr]
-egetFunc Term         = []
-egetFunc Defn         = []
-egetFunc TermExcept{} = []
-egetFunc DefnExcept{} = []
-egetFunc TAD          = []
-
-egetProblem :: ProblemDescription -> [Expr]
-egetProblem (PDProg _ s _) = concatMap egetSec s
-
-egetSol :: SolChSpec -> [Expr]
-egetSol (SCSProg s) = concatMap egetSCSSub s
-
-egetSCSSub :: SCSSub -> [Expr]
-egetSCSSub Assumptions  = []
-egetSCSSub (TMs _ _ x)    = concatMap egetTM x
-egetSCSSub (GDs _ _ x _)  = concatMap egetGD x
-egetSCSSub (DDs _ _ x _)  = concatMap egetDD x
-egetSCSSub (IMs _ _ x _)  = concatMap egetIM x
-egetSCSSub (Constraints _ _ _ lc) = concatMap egetLblCon lc
-egetSCSSub (CorrSolnPpties c) = concatMap egetCon' c
-
-egetTM :: TheoryModel -> [Expr]
-egetTM x = concatMap egetTM (x ^. valid_context) ++ 
-  concatMap egetQDef (x ^. defined_quant ++ x ^. defined_fun)
-  ++ (x ^. invariants)
-
-egetIM :: InstanceModel ->[Expr]
-egetIM x = [x ^. relat]
-
-egetGD :: GenDefn ->[Expr]
-egetGD gd = [gd ^. relat]
-
-egetDD :: DataDefinition -> [Expr]
-egetDD d = [d ^. defnExpr, sy d]
 
 getDocDesc :: DocDesc -> [Sentence]
 getDocDesc = concatMap getDocSec

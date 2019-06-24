@@ -43,7 +43,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, liftA4, liftA5, 
   liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, liftPairFst, 
-  convType)
+  getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -133,9 +133,6 @@ instance StateTypeSym CSharpCode where
   outfile = return csOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
-    where getInnerType :: CodeType -> CodeType
-          getInnerType (List innerT) = innerT
-          getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in C#"

@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
   mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, 
   lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
-  liftPairSnd, convType
+  liftPairSnd, getInnerType, convType
 ) where
 
 import Language.Drasil.Code.Code (CodeType(..))
@@ -145,6 +145,10 @@ liftPairFst (c, n) = fmap (, n) c
 
 liftPairSnd :: Functor f => (a, f b) -> f (a, b)
 liftPairSnd (c, n) = fmap (c ,) n
+
+getInnerType :: CodeType -> CodeType
+getInnerType (List innerT) = innerT
+getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
 
 convType :: (S.RenderSym repr) => CodeType -> repr (S.StateType repr)
 convType Boolean = S.bool

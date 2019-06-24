@@ -42,7 +42,7 @@ import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
   doubleQuotedText, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, 
   liftA8, liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPairFst,
-  convType)
+  getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import qualified Data.Map as Map (fromList,lookup)
@@ -623,9 +623,6 @@ instance StateTypeSym CppSrcCode where
   outfile = return cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
-    where getInnerType :: CodeType -> CodeType
-          getInnerType (List innerT) = innerT
-          getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
@@ -1156,9 +1153,6 @@ instance StateTypeSym CppHdrCode where
   outfile = return cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
-    where getInnerType :: CodeType -> CodeType
-          getInnerType (List innerT) = innerT
-          getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)

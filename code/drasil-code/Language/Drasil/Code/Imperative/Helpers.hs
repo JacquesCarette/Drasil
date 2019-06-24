@@ -6,11 +6,12 @@ module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
   mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, 
   lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
-  liftPairSnd
+  liftPairSnd, convType
 ) where
 
-import Language.Drasil.Code.Code (CodeType)
-import Language.Drasil.Code.Imperative.Symantics (Label)
+import Language.Drasil.Code.Code (CodeType(..))
+import qualified Language.Drasil.Code.Imperative.Symantics as S (Label, 
+  RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
@@ -32,9 +33,9 @@ data FuncData = FD {funcType :: TypeData, funcDoc :: Doc}
 fd :: TypeData -> Doc -> FuncData
 fd = FD
 
-data ModData = MD {name :: Label, isMainMod :: Bool, modDoc :: Doc}
+data ModData = MD {name :: S.Label, isMainMod :: Bool, modDoc :: Doc}
 
-md :: Label -> Bool -> Doc -> ModData
+md :: S.Label -> Bool -> Doc -> ModData
 md = MD
 
 data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag, 
@@ -144,3 +145,15 @@ liftPairFst (c, n) = fmap (, n) c
 
 liftPairSnd :: Functor f => (a, f b) -> f (a, b)
 liftPairSnd (c, n) = fmap (c ,) n
+
+convType :: (S.RenderSym repr) => CodeType -> repr (S.StateType repr)
+convType Boolean = S.bool
+convType Integer = S.int
+convType Float = S.float
+convType Char = S.char
+convType String = S.string
+convType (List t) = S.listType S.dynamic_ (convType t)
+convType (Iterator t) = S.iterator $ convType t
+convType (Object n) = S.obj n
+convType Void = S.void
+convType File = error "convType: File ?"

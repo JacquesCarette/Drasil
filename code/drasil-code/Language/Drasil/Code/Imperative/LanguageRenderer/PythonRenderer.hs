@@ -34,7 +34,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
-  liftA5, liftList, lift1List, lift4Pair, liftPairFst)
+  liftA5, liftList, lift1List, lift4Pair, liftPairFst, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -123,6 +123,10 @@ instance StateTypeSym PythonCode where
   infile = return $ td File empty
   outfile = return $ td File empty
   listType _ t = liftA2 td (fmap (List . cType) t) (return $ brackets empty)
+  listInnerType t = fmap (getInnerType . cType) t >>= convType
+    where getInnerType :: CodeType -> CodeType
+          getInnerType (List innerT) = innerT
+          getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in Python"
@@ -213,6 +217,7 @@ instance ValueSym PythonCode where
   valueName v = fromMaybe 
     (error $ "Attempt to print unprintable Value (" ++ render (valDoc $ unPC v) 
     ++ ")") (valName $ unPC v)
+  valueType = fmap valType
 
 instance NumericExpression PythonCode where
   (#~) = liftA2 unExpr negateOp

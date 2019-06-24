@@ -41,7 +41,8 @@ import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
   doubleQuotedText, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, 
-  liftA8, liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPairFst)
+  liftA8, liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPairFst,
+  convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import qualified Data.Map as Map (fromList,lookup)
@@ -129,6 +130,7 @@ instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
   outfile = pair outfile outfile
   listType p st = pair (listType (pfst p) (pfst st)) (listType (psnd p) 
     (psnd st))
+  listInnerType st = pair (listInnerType $ pfst st) (listInnerType $ psnd st)
   obj t = pair (obj t) (obj t)
   enumType t = pair (enumType t) (enumType t)
   iterator t = pair (iterator $ pfst t) (iterator $ psnd t)
@@ -207,6 +209,7 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   argsList = pair argsList argsList
 
   valueName v = valueName $ pfst v
+  valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
 
 instance (Pair p) => NumericExpression (p CppSrcCode CppHdrCode) where
   (#~) v = pair ((#~) $ pfst v) ((#~) $ psnd v)
@@ -619,6 +622,10 @@ instance StateTypeSym CppSrcCode where
   infile = return cppInfileTypeDoc
   outfile = return cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
+  listInnerType t = fmap (getInnerType . cType) t >>= convType
+    where getInnerType :: CodeType -> CodeType
+          getInnerType (List innerT) = innerT
+          getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
@@ -716,6 +723,7 @@ instance ValueSym CppSrcCode where
   valueName v = fromMaybe 
     (error $ "Attempt to print unprintable Value (" ++ render (valDoc $ unCPPSC 
     v) ++ ")") (valName $ unCPPSC v)
+  valueType = fmap valType
 
 instance NumericExpression CppSrcCode where
   (#~) = liftA2 unExpr negateOp
@@ -1147,6 +1155,10 @@ instance StateTypeSym CppHdrCode where
   infile = return cppInfileTypeDoc
   outfile = return cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
+  listInnerType t = fmap (getInnerType . cType) t >>= convType
+    where getInnerType :: CodeType -> CodeType
+          getInnerType (List innerT) = innerT
+          getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
@@ -1221,6 +1233,7 @@ instance ValueSym CppHdrCode where
   argsList = liftA2 mkVal void (return empty)
 
   valueName _ = error "Attempted to extract string from Value for C++ header file"
+  valueType = error "Attempted to extract type from Value for C++ header file"
 
 instance NumericExpression CppHdrCode where
   (#~) _ = liftA2 mkVal void (return empty)

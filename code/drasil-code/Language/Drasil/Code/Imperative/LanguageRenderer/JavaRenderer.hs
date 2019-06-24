@@ -42,7 +42,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
-  liftPairFst)
+  liftPairFst, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -137,6 +137,10 @@ instance StateTypeSym JavaCode where
   infile = return jInfileTypeDoc
   outfile = return jOutfileTypeDoc
   listType p st = liftA2 jListType st (list p)
+  listInnerType t = fmap (getInnerType . cType) t >>= convType
+    where getInnerType :: CodeType -> CodeType
+          getInnerType (List innerT) = innerT
+          getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in Java"
@@ -236,6 +240,7 @@ instance ValueSym JavaCode where
   valueName v = fromMaybe 
     (error $ "Attempt to print unprintable Value (" ++ render (valDoc $ unJC v) 
     ++ ")") (valName $ unJC v)
+  valueType = fmap valType
 
 instance NumericExpression JavaCode where
   (#~) = liftA2 unExpr negateOp

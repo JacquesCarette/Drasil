@@ -80,6 +80,7 @@ class (PermanenceSym repr) => StateTypeSym repr where
   infile        :: repr (StateType repr)
   outfile       :: repr (StateType repr)
   listType      :: repr (Permanence repr) -> repr (StateType repr) -> repr (StateType repr)
+  listInnerType :: repr (StateType repr) -> repr (StateType repr)
   obj           :: Label -> repr (StateType repr)
   enumType      :: Label -> repr (StateType repr)
   iterator      :: repr (StateType repr) -> repr (StateType repr)
@@ -164,6 +165,7 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
   argsList  :: repr (Value repr)
 
   valueName :: repr (Value repr) -> String -- Function for converting a value to a string of the value's name
+  valueType :: repr (Value repr) -> repr (StateType repr)
 
 class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => 
   NumericExpression repr where

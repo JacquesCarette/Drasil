@@ -332,8 +332,8 @@ constDecDefDocD :: Label -> TypeData -> ValData -> Doc -- can this be done witho
 constDecDefDocD l st v = text "const" <+> typeDoc st <+> text l <+> equals <+>
   valDoc v
 
-returnDocD :: ValData -> Doc
-returnDocD v = text "return" <+> valDoc v
+returnDocD :: [ValData] -> Doc
+returnDocD vs = text "return" <+> valList vs
 
 commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt

@@ -930,8 +930,8 @@ instance StatementSym CppSrcCode where
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)
 
-  returnState v = mkSt <$> fmap returnDocD v
-  returnVar l t = mkSt <$> fmap returnDocD (var l t)
+  returnState v = mkSt <$> fmap returnDocD [v]
+  returnVar l t = mkSt <$> fmap returnDocD [var l t]
   multiReturn _ = error "Cannot return multiple values in C++"
 
   valState v = mkSt <$> fmap valDoc v

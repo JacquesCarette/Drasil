@@ -387,10 +387,10 @@ instance StatementSym PythonCode where
   break = return (mkStNoEnd breakDocD)
   continue = return (mkStNoEnd continueDocD)
 
-  returnState v = mkStNoEnd <$> fmap returnDocD v
-  returnVar l t = mkStNoEnd <$> fmap returnDocD (var l t)
+  returnState v = mkStNoEnd <$> fmap returnDocD [v]
+  returnVar l t = mkStNoEnd <$> fmap returnDocD [var l t]
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs = mkStNoEnd <$> fmap returnDocD (mkVal <$> liftList valList vs)
+  multiReturn vs = mkStNoEnd <$> fmap returnDocD vs
 
   valState v = mkStNoEnd <$> fmap valDoc v
 

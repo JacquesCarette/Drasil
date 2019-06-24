@@ -434,8 +434,8 @@ instance StatementSym JavaCode where
   break = return (mkSt breakDocD)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
   continue = return (mkSt continueDocD)
 
-  returnState v = mkSt <$> fmap returnDocD v
-  returnVar l = mkSt <$> fmap returnDocD (var l t)
+  returnState v = mkSt <$> fmap returnDocD [v]
+  returnVar l = mkSt <$> fmap returnDocD [var l t]
   multiReturn _ = error "Cannot return multiple values in Java"
 
   valState v = mkSt <$> fmap valDoc v

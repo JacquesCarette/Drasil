@@ -93,6 +93,7 @@ build_website() {
 
 	# src stubs were consumed by site generator; safe to delete those.
 	rm "$EXAMPLE_DEST"*/src
+    rm -r descriptions/
 }
 
 

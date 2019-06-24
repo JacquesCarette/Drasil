@@ -50,8 +50,8 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
   ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty,
-  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, termDefnF',
-  tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
+  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, tsymb,
+  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceMap', traceMatStandard)
 
@@ -139,8 +139,9 @@ mkSRS = [RefSec $ RefProg intro
     ],
   SSDSec $
     SSDProg
-    [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns]
-      [ PhySysDesc progName physSystParts figTank []
+    [ SSDProblem $ PDProg probDescIntro []
+      [ TermsAndDefs Nothing terms
+      , PhySysDesc progName physSystParts figTank []
       , Goals goalInputs goals]
     , SSDSolChSpec $ SCSProg
       [ Assumptions
@@ -346,14 +347,8 @@ orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
 probDescIntro :: Sentence
 probDescIntro = foldlSent_ [S "investigate the heating" `sOf` phrase water, S "in a", phrase sWHT]
 
-termsAndDefns :: Section
-termsAndDefns = termDefnF' Nothing [termsAndDefnsBullets]
-
-termsAndDefnsBullets :: Contents
-termsAndDefnsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
-  map (\x -> Flat $
-  atStart x :+: S ":" +:+ (x ^. defn))
-  [htFlux, heatCapSpec, thermalConduction, transient]
+terms :: [ConceptChunk]
+terms = [htFlux, heatCapSpec, thermalConduction, transient]
   
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+

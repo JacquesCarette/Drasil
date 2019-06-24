@@ -53,7 +53,7 @@ probDescF prob = SRS.probDesc [mkParagraph $ foldlSent [S "A", phrase system `sI
 --can take a (Just sentence) if needed or Nothing if not
 termDefnF :: Concept c => Maybe Sentence -> [c] -> Section
 termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ map termDef lst] []
-  where intro = foldlSP [
+  where intro = foldlSP_ [
                   S "This subsection provides a list of terms that are used in the subsequent",
                   plural section_ `sAnd` S "their meaning, with the", phrase purpose `sOf`
                   S "reducing ambiguity and making it easier to correctly understand the" +:+.

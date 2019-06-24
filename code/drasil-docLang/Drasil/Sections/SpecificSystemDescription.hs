@@ -51,15 +51,16 @@ probDescF :: Sentence -> [Section] -> Section
 probDescF prob = SRS.probDesc [mkParagraph $ foldlSent [S "A", phrase system `sIs` S "needed to", prob]]
                   
 --can take a (Just sentence) if needed or Nothing if not
-termDefnF :: Maybe Sentence -> [Contents] -> Section
-termDefnF end otherContents = SRS.termAndDefn (intro : otherContents) []
-      where lastF Nothing  = EmptyS
-            lastF (Just s) = S "." +:+ s
-            intro = foldlSP [S "This subsection provides a list of terms", 
-                    S "that are used in the subsequent", plural section_, 
-                    S "and their meaning, with the", phrase purpose, 
-                    S "of reducing ambiguity and making it easier to correctly", 
-                    S "understand the", plural requirement :+: lastF end]
+termDefnF :: Concept c => Maybe Sentence -> [c] -> Section
+termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ map termDef lst] []
+  where intro = foldlSP [
+                  S "This subsection provides a list of terms that are used in the subsequent",
+                  plural section_ `sAnd` S "their meaning, with the", phrase purpose `sOf`
+                  S "reducing ambiguity and making it easier to correctly understand the" +:+.
+                  plural requirement, extra end]
+        extra Nothing  = EmptyS
+        extra (Just x) = x
+        termDef x = atStart x +: EmptyS +:+ (x ^. defn)
 
 termDefnF' :: Maybe Sentence -> [Contents] -> Section
 termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []
@@ -72,7 +73,7 @@ termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []
                     S "understand the", plural requirement :+: lastF end]
 
 --general introduction for Physical System Description
-physSystDesc :: (Idea a) => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
+physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
 physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
   where intro = mkParagraph $ foldlSentCol [S "The", phrase physicalSystem `sOf` short progName `sC`
                 S "as shown in", makeRef2S fg `sC` S "includes the following", plural element]

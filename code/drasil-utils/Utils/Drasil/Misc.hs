@@ -111,7 +111,7 @@ bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
 enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
 enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
 
-enumBulletU ::[Sentence] -> Contents --FIXME: should Enumeration be labelled?
+enumBulletU :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
 enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it

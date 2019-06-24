@@ -269,7 +269,7 @@ forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> TypeData ->
   ValData -> Doc -> Doc
 forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel t v b =
   vcat [iterForEachLabel <+> parens (typeDoc t <+> text l <+> iterInLabel <+> 
-    (valDoc v)) <+> blockStart,
+    valDoc v) <+> blockStart,
   indent b,
   blockEnd]
 

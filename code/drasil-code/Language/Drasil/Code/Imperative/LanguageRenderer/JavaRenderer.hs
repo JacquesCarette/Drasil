@@ -32,9 +32,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', mkVal, litTrueD, 
-  litFalseD, litCharD, litFloatD, litIntD, litStringD, defaultCharD, 
-  defaultFloatD, defaultIntD, defaultStringD, varDocD, extVarDocD, selfDocD, 
-  argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
+  litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
+  selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
   extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, funcDocD, 
   castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, 
   dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, observerListName,
@@ -208,12 +207,6 @@ instance ValueSym JavaCode where
   litFloat v = return (litFloatD v, Just $ show v)
   litInt v = return (litIntD v, Just $ show v)
   litString s = return (litStringD s, Just $ "\"" ++ s ++ "\"")
-
-  defaultChar = return (defaultCharD, Just "space character")
-  defaultFloat = return (defaultFloatD, Just "0.0")
-  defaultInt = return (defaultIntD, Just "0")
-  defaultString = return (defaultStringD, Just "empty string")
-  defaultBool = litFalse
 
   ($->) = objVar
   ($:) = enumElement

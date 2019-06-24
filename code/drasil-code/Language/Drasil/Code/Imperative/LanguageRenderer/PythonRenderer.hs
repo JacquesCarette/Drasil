@@ -27,11 +27,11 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   unExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
   lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
   divideOpDocD, moduloOpDocD, binExpr, mkVal, litCharD, litFloatD, litIntD, 
-  litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, varDocD,
-  extVarDocD, argDocD, enumElemDocD, objVarDocD, funcAppDocD, extFuncAppDocD,
-  funcDocD, listSetDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD,
-  staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName,
-  addCommentsDocD, callFuncParamList, getterName, setterName)
+  litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
+  funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD, 
+  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, classDec, dot, 
+  forLabel, observerListName, addCommentsDocD, callFuncParamList, getterName, 
+  setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
   TypeData(..), td, blank, vibcat, liftA4, liftA5, liftList, lift1List, 
   lift4Pair, liftPairFst)
@@ -184,12 +184,6 @@ instance ValueSym PythonCode where
   litFloat v = return (litFloatD v, Just $ show v)
   litInt v = return (litIntD v, Just $ show v)
   litString s = return (litStringD s, Just $ "\"" ++ s ++ "\"")
-
-  defaultChar = return (defaultCharD, Just "space character")
-  defaultFloat = return (defaultFloatD, Just "0.0")
-  defaultInt = return (defaultIntD, Just "0")
-  defaultString = return (defaultStringD, Just "empty string")
-  defaultBool = litFalse
 
   ($->) = objVar
   ($:) = enumElement
@@ -611,7 +605,9 @@ pyFunction n ps b = vcat [
 pyClass :: Label -> Doc -> Doc -> Doc
 pyClass n pn fs = vcat [
   classDec <+> text n <> pn <> colon,
-  indent fs]
+  indent funcSec]
+  where funcSec | isEmpty fs = text "None"
+                | otherwise = fs    
 
 pyModuleImportList :: [Doc] -> Doc
 pyModuleImportList = vcat

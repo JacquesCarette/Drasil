@@ -33,14 +33,13 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr',
   mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
-  defaultCharD, defaultFloatD, defaultIntD, defaultStringD, varDocD, extVarDocD,
-  selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
-  extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
-  listIndexExistsDocD, funcDocD, castDocD, listSetDocD, listAccessDocD,
-  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
-  privateDocD, publicDocD, dot, new, observerListName, doubleSlash, 
-  addCommentsDocD, callFuncParamList, getterName, setterName, setMain, setEmpty,
-  statementsToStateVars)
+  varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
+  inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
+  notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
+  listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, observerListName,
+  doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName, 
+  setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
   TypeData(..), td, liftA4, liftA5, liftA6, liftA7, liftList, lift1List, 
   lift3Pair, lift4Pair, liftPairFst)
@@ -202,12 +201,6 @@ instance ValueSym CSharpCode where
   litFloat v = return (litFloatD v, Just $ show v)
   litInt v = return (litIntD v, Just $ show v)
   litString s = return (litStringD s, Just $ "\"" ++ s ++ "\"")
-
-  defaultChar = return (defaultCharD, Just "space character")
-  defaultFloat = return (defaultFloatD, Just "0.0")
-  defaultInt = return (defaultIntD, Just "0")
-  defaultString = return (defaultStringD, Just "empty string")
-  defaultBool = litFalse
 
   ($->) = objVar
   ($:) = enumElement

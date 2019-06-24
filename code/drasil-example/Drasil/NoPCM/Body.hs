@@ -17,7 +17,7 @@ import Data.Drasil.People (thulasi)
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, content,
   definition, doccon, doccon', document, goal, information, material_, model,
-  physSyst, problem, property, purpose, reference, srsDomains)
+  problem, property, purpose, reference, srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (educon)
@@ -49,11 +49,11 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
-  ProblemDescription(PDProg), dataConstraintUncertainty, inDataConstTbl,
-  intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc, termDefnF,
+  ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty,
+  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, termDefnF,
   tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  goalStmtF, physSystDescriptionLabel, generateTraceMap', traceMatStandard)
+  generateTraceMap', traceMatStandard)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -112,8 +112,6 @@ units = map ucw [density, tau, inSA, outSA,
   deltaT, tempEnv, thFluxVect, time, htFluxC,
   vol, wMass, wVol, tauW, QT.sensHeat]
 
-termsAndDefns, physSystDescription, goalStates :: Section
-
 -------------------
 --INPUT INFORMATION
 -------------------
@@ -141,7 +139,9 @@ mkSRS = [RefSec $ RefProg intro
     ],
   SSDSec $
     SSDProg
-    [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, physSystDescription, goalStates]
+    [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns]
+      [ PhySysDesc progName physSystParts figTank []
+      , Goals goalInputs goals]
     , SSDSolChSpec $ SCSProg
       [ Assumptions
       , TMs [] (Label : stdFields) theoreticalModels
@@ -346,6 +346,7 @@ orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
 probDescIntro :: Sentence
 probDescIntro = foldlSent_ [S "investigate the heating" `sOf` phrase water, S "in a", phrase sWHT]
 
+termsAndDefns :: Section
 termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
 
 termsAndDefnsBullets :: Contents
@@ -354,28 +355,17 @@ termsAndDefnsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $
   atStart x :+: S ":" +:+ (x ^. defn))
   [htFlux, heatCapSpec, thermalConduction, transient]
   
-physSystDescription = physSystDesc (getAcc progName) figTank
-  [physSystDescList, LlC figTank]
-
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
   S "from" +:+ phrase coil `sOf` ch htFluxC)
   $ resourcePath ++ "TankWaterOnly.png"
 
-physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_
-  [physSyst1 tank water, physSyst2 coil tank htFluxC]
+physSystParts :: [Sentence]
+physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
-goalStates = goalStmtF (goalStatesIntro temp coil tempW) goalStatesList
-
-goalStatesIntro :: NamedIdea c => ConceptChunk -> ConceptChunk -> c -> [Sentence]
-goalStatesIntro te co temw = [phrase te `ofThe` phrase co,
-  S "the initial" +:+ phrase temw,
-  S "the material" +:+ plural property]
-
-goalStatesList :: [Contents]
-goalStatesList = mkEnumSimpleD goals
-
+goalInputs :: [Sentence]
+goalInputs = [phrase temp `ofThe` phrase coil,
+  S "the initial" +:+ phrase tempW, S "the material" +:+ plural property]
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION

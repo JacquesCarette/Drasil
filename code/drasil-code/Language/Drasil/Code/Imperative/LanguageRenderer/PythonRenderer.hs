@@ -27,14 +27,14 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   unExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
   lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
   divideOpDocD, moduloOpDocD, binExpr, mkVal, litCharD, litFloatD, litIntD, 
-  litStringD, defaultCharD, defaultFloatD, defaultIntD, defaultStringD, varDocD,
-  extVarDocD, argDocD, enumElemDocD, objVarDocD, funcAppDocD, extFuncAppDocD,
-  funcDocD, listSetDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD,
-  staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName,
-  addCommentsDocD, callFuncParamList, getterName, setterName)
+  litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
+  funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD, 
+  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, classDec, dot, 
+  forLabel, observerListName, addCommentsDocD, callFuncParamList, getterName, 
+  setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  blank, vibcat, liftA4, liftA5, liftList, lift1List, lift4Pair, 
-  liftPairFst, liftPairSnd)
+  TypeData(..), td, blank, vibcat, liftA4, liftA5, liftList, lift1List, 
+  lift4Pair, liftPairFst)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -114,15 +114,15 @@ instance BlockSym PythonCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
 instance StateTypeSym PythonCode where
-  type StateType PythonCode = (Doc, CodeType)
-  bool = return (empty, Boolean)
+  type StateType PythonCode = TypeData
+  bool = return $ td Boolean empty
   int = return intTypeDocD
   float = return floatTypeDocD
-  char = return (empty, Char)
+  char = return $ td Char empty
   string = return pyStringType
-  infile = return (empty, File)
-  outfile = return (empty, File)
-  listType _ t = liftPairSnd (brackets empty, fmap (List . snd) t)
+  infile = return $ td File empty
+  outfile = return $ td File empty
+  listType _ t = liftA2 td (fmap (List . cType) t) (return $ brackets empty)
   obj t = return $ typeDocD t
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in Python"
@@ -184,12 +184,6 @@ instance ValueSym PythonCode where
   litFloat v = return (litFloatD v, Just $ show v)
   litInt v = return (litIntD v, Just $ show v)
   litString s = return (litStringD s, Just $ "\"" ++ s ++ "\"")
-
-  defaultChar = return (defaultCharD, Just "space character")
-  defaultFloat = return (defaultFloatD, Just "0.0")
-  defaultInt = return (defaultIntD, Just "0")
-  defaultString = return (defaultStringD, Just "empty string")
-  defaultBool = litFalse
 
   ($->) = objVar
   ($:) = enumElement
@@ -262,7 +256,7 @@ instance ValueExpression PythonCode where
     vs)
   extStateObj l t vs = mkVal <$> liftA2 (pyExtStateObj l) t (liftList 
     callFuncParamList vs)
-  listStateObj t _ = mkVal <$> fmap fst t
+  listStateObj t _ = mkVal <$> fmap typeDoc t
 
   exists v = v ?!= var "None"
   notNull = exists
@@ -291,7 +285,7 @@ instance Selector PythonCode where
 instance FunctionSym PythonCode where
   type Function PythonCode = Doc
   func l vs = fmap funcDocD (funcApp l vs)
-  cast targT _ = fmap fst targT
+  cast targT _ = fmap typeDoc targT
   castListToInt = cast int (listType static_ int)
   get n = fmap funcDocD (var n)
   set n v = fmap funcDocD (mkVal . fst <$> assign (var n) v)
@@ -450,7 +444,7 @@ instance ScopeSym PythonCode where
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = Doc
-  mState = fmap fst
+  mState = fmap typeDoc
   void = return voidDocD
   construct n = return $ constructDocD n
 
@@ -528,11 +522,11 @@ pyLogOp = text "math.log10"
 pyLnOp :: Doc
 pyLnOp = text "math.log"
 
-pyStateObj :: (Doc, CodeType) -> Doc -> Doc
-pyStateObj (t, _) vs = t <> parens vs
+pyStateObj :: TypeData -> Doc -> Doc
+pyStateObj t vs = typeDoc t <> parens vs
 
-pyExtStateObj :: Label -> (Doc, CodeType) -> Doc -> Doc
-pyExtStateObj l (t, _) vs = text l <> dot <> t <> parens vs
+pyExtStateObj :: Label -> TypeData -> Doc -> Doc
+pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs
 
 pyInlineIf :: (Doc, Maybe String) -> (Doc, Maybe String) -> 
   (Doc, Maybe String) -> Doc
@@ -542,14 +536,14 @@ pyInlineIf (c, _) (v1, _) (v2, _) = parens $ v1 <+> text "if" <+> c <+>
 pyListSizeAccess :: (Doc, Maybe String) -> Doc -> Doc
 pyListSizeAccess (v, _) f = f <> parens v
 
-pyStringType :: (Doc, CodeType)
-pyStringType = (text "str", String)
+pyStringType :: TypeData
+pyStringType = td String (text "str")
 
 pyVarDecDef :: Label ->  (Doc, Maybe String) -> Doc
 pyVarDecDef l (v, _) = text l <+> equals <+> v
 
-pyListDec :: Label -> (Doc, CodeType) -> Doc
-pyListDec l (t, _) = text l <+> equals <+> t
+pyListDec :: Label -> TypeData -> Doc
+pyListDec l t = text l <+> equals <+> typeDoc t
 
 pyListDecDef :: Label -> Doc -> Doc
 pyListDecDef l vs = text l <+> equals <+> brackets vs
@@ -611,7 +605,9 @@ pyFunction n ps b = vcat [
 pyClass :: Label -> Doc -> Doc -> Doc
 pyClass n pn fs = vcat [
   classDec <+> text n <> pn <> colon,
-  indent fs]
+  indent funcSec]
+  where funcSec | isEmpty fs = text "None"
+                | otherwise = fs    
 
 pyModuleImportList :: [Doc] -> Doc
 pyModuleImportList = vcat

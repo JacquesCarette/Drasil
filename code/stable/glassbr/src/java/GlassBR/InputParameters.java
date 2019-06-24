@@ -26,23 +26,5 @@ public class InputParameters {
     public double AR;
     public double w_TNT;
     
-    public InputParameters() throws Exception {
-        a = 0.0;
-        b = 0.0;
-        w = 0.0;
-        P_btol = 0.0;
-        TNT = 0.0;
-        g = "";
-        t = 0.0;
-        SD_x = 0.0;
-        SD_y = 0.0;
-        SD_z = 0.0;
-        h = 0.0;
-        LDF = 0.0;
-        GTF = 0.0;
-        SD = 0.0;
-        AR = 0.0;
-        w_TNT = 0.0;
-    }
 }
 

@@ -34,8 +34,8 @@ import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
 import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
-  datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
-  specSysDescr, thModF)
+  datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
+  solutionCharSpecIntro, specSysDescr, thModF)
 import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
@@ -168,7 +168,12 @@ data SSDSub where
 
 -- | Problem Description section
 data ProblemDescription where
-  PDProg :: Sentence -> [Section] -> ProblemDescription
+  PDProg :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
+
+-- | Problem Description subsections
+data PDSub where
+  PhySysDesc :: (Idea a) => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+  Goals :: [Sentence] -> [ConceptInstance] -> PDSub
 
 -- | Solution Characteristics Specification section
 data SolChSpec where
@@ -416,7 +421,9 @@ mkSSDSec si (SSDProg l) =
     mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
-mkSSDProb _ (PDProg prob subSec) = SSD.probDescF prob subSec
+mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
+  where mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
+        mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =

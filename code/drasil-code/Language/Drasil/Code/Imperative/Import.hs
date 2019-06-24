@@ -209,12 +209,7 @@ genInputClass = do
       genClass _ = do
         let inputVars = map (\x -> pubMVar 0 (codeName x) (convType $ 
               codeType x)) ins
-            varsList  = map (objVarSelf . codeName) ins
-            vals      = map (getDefaultValue . codeType) ins
-        asgs <- zipWithM assign' varsList vals
-        return $ Just $ pubClass "InputParameters" Nothing inputVars
-          [ constructor "InputParameters" [] (body [block (initLogFileVar 
-          (logKind g) ++ asgs)]) ]
+        return $ Just $ pubClass "InputParameters" Nothing inputVars []
   genClass $ mapMaybe (\x -> Map.lookup (codeName x) (eMap $ codeSpec g)) ins
 
 genInputConstraints :: (RenderSym repr) => Reader (State repr) 
@@ -423,6 +418,7 @@ genMainFunc =
     wo <- getOutputCall
     return $ mainMethod "" $ bodyStatements $
       varDecDef l_filename string (arg 0) :
+      initLogFileVar (logKind g) ++
       catMaybes ([ip, gi, dv, ic] ++ varDef ++ [wo])
 
 getInputDecl :: (RenderSym repr) => Reader (State repr) (Maybe (repr (
@@ -433,8 +429,8 @@ getInputDecl = do
       getDecl :: (RenderSym repr) => Structure -> [CodeChunk] -> Maybe (repr 
         (Statement repr))
       getDecl _ [] = Nothing
-      getDecl Loose ins = Just $ multi $ map (\x -> varDecDef (codeName x) 
-        (convType $ codeType x) (getDefaultValue $ codeType x)) ins
+      getDecl Loose ins = Just $ multi $ map (\x -> varDec (codeName x) 
+        (convType $ codeType x)) ins
       getDecl AsClass _ = Just $ extObjDecNewVoid l_params "InputParameters" 
         (obj "InputParameters") 
   return $ getDecl (inStruct g) (inputs $ codeSpec g)
@@ -604,14 +600,6 @@ getConstParams _ = []
 
 getArgs :: (RenderSym repr) => [ParamData repr] -> [repr (Value repr)]
 getArgs = map (var . paramName)
-
-getDefaultValue :: (RenderSym repr) => C.CodeType -> repr (Value repr)
-getDefaultValue C.Boolean = defaultBool
-getDefaultValue C.Integer = defaultInt
-getDefaultValue C.Float = defaultFloat
-getDefaultValue C.Char = defaultChar
-getDefaultValue C.String = defaultString
-getDefaultValue _ = error "No default value for the given type"
 
 convType :: (RenderSym repr) => C.CodeType -> repr (StateType repr)
 convType C.Boolean = bool

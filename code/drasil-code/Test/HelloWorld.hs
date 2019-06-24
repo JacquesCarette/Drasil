@@ -84,7 +84,6 @@ helloIfBody = addComments "If body" (body [
     printLn string (litString " too"),
     printStr "boo",
     print bool litTrue,
-    printLn float defaultFloat,
     print int (litInt 0),
     print char (litChar 'c'),
     printLn bool (litTrue ?!),

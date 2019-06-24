@@ -16,28 +16,25 @@ import Utils.Drasil
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
-  LCsSec'(..), ProblemDescription(..), RefSec(RefProg), RefTab(TAandA, TUnits), 
-  ReqrmntSec(..), ReqsSub(..), SCSSub(..),
+  LCsSec'(..), ProblemDescription(..), PDSub(..), RefSec(RefProg),
+  RefTab(TAandA, TUnits), ReqrmntSec(..), ReqsSub(..), SCSSub(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
-  dataConstraintUncertainty, goalStmtF, inDataConstTbl, intro, mkDoc, 
-  outDataConstTbl, physSystDesc, termDefnF, tsymb, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
-  getSCSSub, traceMatStandard, characteristicsLabel, physSystDescriptionLabel,
-  generateTraceMap', mkEnumSimpleD)
+  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
+  termDefnF, tsymb, generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
+  getTraceMapFromDD, getTraceMapFromIM, getSCSSub, traceMatStandard,
+  characteristicsLabel, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (reference, valsOfAuxCons,
-  assumpt, inModel)
+import qualified Drasil.DocLang.SRS as SRS (reference, valsOfAuxCons, assumpt, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   assumption, characteristic, company, condition, content, dataConst, datum,
   definition, doccon, doccon', document, emphasis, environment, goal,
-  information, input_, interface, model, organization, physical, physSyst,
-  problem, product_, purpose, reference, software, softwareConstraint,
-  softwareSys, srsDomains, standard, sysCont, system, template, term_, user,
-  value, variable)
+  information, input_, interface, model, organization, physical, problem,
+  product_, purpose, reference, software, softwareConstraint, softwareSys,
+  srsDomains, standard, sysCont, system, template, term_, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, code)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
@@ -154,7 +151,9 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
-      [SSDProblem $ PDProg prob [termsAndDesc, physSystDescription, goalStmts],
+      [SSDProblem $ PDProg prob [termsAndDesc]
+        [ PhySysDesc glassBR physSystParts physSystFig []
+        , Goals goalInputs goals],
        SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tMods
@@ -207,10 +206,6 @@ systInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
 
-termsAndDesc, physSystDescription, goalStmts :: Section
-
-physSystDescriptionList, appdxIntro :: Contents
-
 inputDataConstraints, outputDataConstraints :: LabelledContent
 
 --------------------------------------------------------------------------------
@@ -237,11 +232,6 @@ termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` (load ^. defn)) $
   Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes)]
-
---Used in "Goal Statements" Section--
-
-goalStmtsList :: [Contents]
-goalStmtsList = mkEnumSimpleD goals
 
 solChSpecSubsections :: [CI]
 solChSpecSubsections = [thModel, inModel, Doc.dataDefn, dataConst]
@@ -389,37 +379,24 @@ prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict whether a",
 
 {--Terminology and Definitions--}
 
+termsAndDesc :: Section
 termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ makeCiteS astm2009 `sIn`
   makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
 
 {--Physical System Description--}
 
-physSystDescription = physSystDesc (short glassBR) physSystFig 
-  [physSystDescriptionList, LlC physSystFig]
-
-physSystDescriptionList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) physSystDescriptionListPhysys
-
---"Dead" knowledge?
-physSystDescriptionListPhysys :: [Sentence]
-physSystDescriptionListPhysys1 :: Sentence
-physSystDescriptionListPhysys2 :: NamedIdea n => n -> Sentence
-
-physSystDescriptionListPhysys = [physSystDescriptionListPhysys1, physSystDescriptionListPhysys2 ptOfExplsn]
-
-physSystDescriptionListPhysys1 = S "The" +:+. phrase glaSlab
-
-physSystDescriptionListPhysys2 imprtntElem = foldlSent [S "The"
-  +:+. phrase imprtntElem, S "Where the", phrase bomb `sC`
-  S "or", (blast ^. defn) `sC` S "is located. The", phrase sD
-  `isThe` phrase distance, S "between the", phrase imprtntElem `sAnd`
-  S "the glass"]
+physSystParts :: [Sentence]
+physSystParts = [S "The" +:+. phrase glaSlab,
+  foldlSent [S "The" +:+. phrase ptOfExplsn, S "Where the", phrase bomb `sC`
+  S "or", (blast ^. defn) `sC` S "is located. The", phrase sD `isThe`
+  phrase distance, S "between the", phrase ptOfExplsn `sAnd` S "the glass"]]
 
 {--Goal Statements--}
 
-goalStmts = goalStmtF [foldlList Comma List [plural dimension `ofThe` phrase glaPlane,
-  phrase glassTy, plural characteristic `ofThe` phrase explosion,
-  S "the" +:+ phrase pbTol]] goalStmtsList
+goalInputs :: [Sentence]
+goalInputs = [plural dimension `ofThe` phrase glaPlane, S "the" +:+ phrase glassTy,
+  plural characteristic `ofThe` phrase explosion, S "the" +:+ phrase pbTol]
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 
@@ -459,6 +436,7 @@ traceabilityMatrices = traceMatStandard systInfo
 
 {--APPENDIX--}
 
+appdxIntro :: Contents
 appdxIntro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
   sParen (makeRef2S demandVsSDFig `sAnd` makeRef2S dimlessloadVsARFig),

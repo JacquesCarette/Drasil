@@ -33,17 +33,16 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr',
   mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
-  defaultCharD, defaultFloatD, defaultIntD, defaultStringD, varDocD, extVarDocD,
-  selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
-  extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
-  listIndexExistsDocD, funcDocD, castDocD, listSetDocD, listAccessDocD,
-  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
-  privateDocD, publicDocD, dot, new, observerListName, doubleSlash, 
-  addCommentsDocD, callFuncParamList, getterName, setterName, setMain, setEmpty,
-  statementsToStateVars)
+  varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
+  inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
+  notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
+  listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, observerListName,
+  doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName, 
+  setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
-  liftPairFst)
+  TypeData(..), td, liftA4, liftA5, liftA6, liftA7, liftList, lift1List, 
+  lift3Pair, lift4Pair, liftPairFst)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -123,7 +122,7 @@ instance BlockSym CSharpCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
 instance StateTypeSym CSharpCode where
-  type StateType CSharpCode = (Doc, CodeType)
+  type StateType CSharpCode = TypeData
   bool = return boolTypeDocD
   int = return intTypeDocD
   float = return csFloatTypeDoc
@@ -202,12 +201,6 @@ instance ValueSym CSharpCode where
   litFloat v = return (litFloatD v, Just $ show v)
   litInt v = return (litIntD v, Just $ show v)
   litString s = return (litStringD s, Just $ "\"" ++ s ++ "\"")
-
-  defaultChar = return (defaultCharD, Just "space character")
-  defaultFloat = return (defaultFloatD, Just "0.0")
-  defaultInt = return (defaultIntD, Just "0")
-  defaultString = return (defaultStringD, Just "empty string")
-  defaultBool = litFalse
 
   ($->) = objVar
   ($:) = enumElement
@@ -489,7 +482,7 @@ instance ScopeSym CSharpCode where
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = Doc
-  mState = fmap fst
+  mState = fmap typeDoc
   void = return voidDocD
   construct n = return $ constructDocD n
 
@@ -551,14 +544,14 @@ cstop end inc = vcat [
   inc <+> text "System.Collections" <> end,
   inc <+> text "System.Collections.Generic" <> end]
 
-csFloatTypeDoc :: (Doc, CodeType)
-csFloatTypeDoc = (text "double", Float) -- Same as Java, maybe make a common function
+csFloatTypeDoc :: TypeData
+csFloatTypeDoc = td Float (text "double") -- Same as Java, maybe make a common function
 
-csInfileTypeDoc :: (Doc, CodeType)
-csInfileTypeDoc = (text "StreamReader", File)
+csInfileTypeDoc :: TypeData
+csInfileTypeDoc = td File (text "StreamReader")
 
-csOutfileTypeDoc :: (Doc, CodeType)
-csOutfileTypeDoc = (text "StreamWriter", File)
+csOutfileTypeDoc :: TypeData
+csOutfileTypeDoc = td File (text "StreamWriter")
 
 csThrowDoc :: (Doc, Maybe String) -> Doc
 csThrowDoc (errMsg, _) = text "throw new" <+> text "Exception" <> parens errMsg
@@ -581,10 +574,10 @@ csInput it (v, _) (inFn, _) = v <+> equals <+> text it <> parens inFn
 csFileInput :: (Doc, Maybe String) -> (Doc, Maybe String)
 csFileInput (f, s) = (f <> dot <> text "ReadLine()", s)
 
-csOpenFileR :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, CodeType) -> Doc
-csOpenFileR (f, _) (n, _) (r, _) = f <+> equals <+> new <+> r <> parens n
+csOpenFileR :: (Doc, Maybe String) -> (Doc, Maybe String) -> TypeData -> Doc
+csOpenFileR (f, _) (n, _) r = f <+> equals <+> new <+> typeDoc r <> parens n
 
-csOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) -> (Doc, CodeType) 
+csOpenFileWorA :: (Doc, Maybe String) -> (Doc, Maybe String) -> TypeData 
   -> (Doc, Maybe String) -> Doc
-csOpenFileWorA (f, _) (n, _) (w, _) (a, _) = f <+> equals <+> new <+> w <> parens 
-  (n <> comma <+> a)
+csOpenFileWorA (f, _) (n, _) w (a, _) = f <+> equals <+> new <+> typeDoc w <> 
+  parens (n <> comma <+> a)

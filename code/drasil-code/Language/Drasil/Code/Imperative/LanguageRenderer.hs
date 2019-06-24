@@ -22,10 +22,9 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
   divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, 
   binOpDocD', binExpr, binExpr', mkVal, litTrueD, litFalseD, litCharD, 
-  litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
-  defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
-  objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
-  listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
+  litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, 
+  enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, 
+  stateObjDocD, listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
   listIndexExistsDocD, funcDocD, castDocD, sizeDocD, listAccessDocD, 
   listSetDocD, objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, addCommentsDocD, 
@@ -38,7 +37,7 @@ import Utils.Drasil (capitalize, indent, indentList)
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), ModData(..), md,
-  angles,blank, doubleQuotedText,hicat,vibcat,vmap)
+  TypeData(..), td, angles,blank, doubleQuotedText,hicat,vibcat,vmap)
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
@@ -150,29 +149,29 @@ printFileDocD fn (f, _) = f <> dot <> text fn
 
 -- Type Printers --
 
-boolTypeDocD :: (Doc, CodeType)
-boolTypeDocD = (text "Boolean", Boolean) -- capital B?
+boolTypeDocD :: TypeData
+boolTypeDocD = td Boolean (text "Boolean") -- capital B?
 
-intTypeDocD :: (Doc, CodeType)
-intTypeDocD = (text "int", Integer)
+intTypeDocD :: TypeData
+intTypeDocD = td Integer (text "int")
 
-floatTypeDocD :: (Doc, CodeType)
-floatTypeDocD = (text "float", Float)
+floatTypeDocD :: TypeData
+floatTypeDocD = td Float (text "float")
 
-charTypeDocD :: (Doc, CodeType)
-charTypeDocD = (text "char", Char)
+charTypeDocD :: TypeData
+charTypeDocD = td Char (text "char")
 
-stringTypeDocD :: (Doc, CodeType)
-stringTypeDocD = (text "string", String)
+stringTypeDocD :: TypeData
+stringTypeDocD = td String (text "string")
 
-fileTypeDocD :: (Doc, CodeType)
-fileTypeDocD = (text "File", File)
+fileTypeDocD :: TypeData
+fileTypeDocD = td File (text "File")
 
-typeDocD :: Label -> (Doc, CodeType)
-typeDocD t = (text t, Object t)
+typeDocD :: Label -> TypeData
+typeDocD t = td (Object t) (text t)
 
-listTypeDocD :: (Doc, CodeType) -> Doc -> (Doc, CodeType)
-listTypeDocD (td, t) list = (list <> angles td, List t)
+listTypeDocD :: TypeData -> Doc -> TypeData
+listTypeDocD t list = td (List (cType t)) (list <> angles (typeDoc t))
 
 -- Method Types --
 
@@ -184,8 +183,8 @@ constructDocD _ = empty
 
 -- Parameters --
 
-stateParamDocD :: Label -> (Doc, CodeType) -> Doc
-stateParamDocD n (t, _) = t <+> text n
+stateParamDocD :: Label -> TypeData -> Doc
+stateParamDocD n t = typeDoc t <+> text n
 
 paramListDocD :: [Doc] -> Doc
 paramListDocD = hicat (text ", ")
@@ -204,8 +203,8 @@ methodListDocD ms = vibcat methods
 
 -- StateVar --
 
-stateVarDocD :: Label -> Doc -> Doc -> (Doc, CodeType) -> Doc -> Doc
-stateVarDocD l s p (t, _) end = s <+> p <+> t <+> text l <> end
+stateVarDocD :: Label -> Doc -> Doc -> TypeData -> Doc -> Doc
+stateVarDocD l s p t end = s <+> p <+> typeDoc t <+> text l <> end
 
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat
@@ -265,10 +264,10 @@ forDocD blockStart blockEnd sInit (vGuard, _) sUpdate b = vcat [
   indent b,
   blockEnd]
 
-forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> (Doc, CodeType) -> 
+forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> TypeData -> 
   (Doc, Maybe String) -> Doc -> Doc
-forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel (t, _) (v, _) b =
-  vcat [iterForEachLabel <+> parens (t <+> text l <+> iterInLabel <+> v) <+>
+forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel t (v, _) b =
+  vcat [iterForEachLabel <+> parens (typeDoc t <+> text l <+> iterInLabel <+> v) <+>
     blockStart,
   indent b,
   blockEnd]
@@ -310,24 +309,26 @@ plusPlusDocD (v, _) = v <> text "++"
 plusPlusDocD' :: (Doc, Maybe String) -> Doc -> Doc
 plusPlusDocD' (v, _) plusOp = v <+> equals <+> v <+> plusOp <+> int 1
 
-varDecDocD :: Label -> (Doc, CodeType) -> Doc
-varDecDocD l (st, _) = st <+> text l
+varDecDocD :: Label -> TypeData -> Doc
+varDecDocD l st = typeDoc st <+> text l
 
-varDecDefDocD :: Label -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc
-varDecDefDocD l (st, _) (v, _) = st <+> text l <+> equals <+> v
+varDecDefDocD :: Label -> TypeData -> (Doc, Maybe String) -> Doc
+varDecDefDocD l st (v, _) = typeDoc st <+> text l <+> equals <+> v
 
-listDecDocD :: Label -> (Doc, Maybe String) -> (Doc, CodeType) -> Doc
-listDecDocD l (n, _) (st, _) = st <+> text l <+> equals <+> new <+> st <> parens n
+listDecDocD :: Label -> (Doc, Maybe String) -> TypeData -> Doc
+listDecDocD l (n, _) st = typeDoc st <+> text l <+> equals <+> new <+> 
+  typeDoc st <> parens n
 
-listDecDefDocD :: Label -> (Doc, CodeType) -> [(Doc, Maybe String)] -> Doc
-listDecDefDocD l (st, _) vs = st <+> text l <+> equals <+> new <+> st <+> 
-  braces (callFuncParamList vs)
+listDecDefDocD :: Label -> TypeData -> [(Doc, Maybe String)] -> Doc
+listDecDefDocD l st vs = typeDoc st <+> text l <+> equals <+> new <+> 
+  typeDoc st <+> braces (callFuncParamList vs)
 
-objDecDefDocD :: Label -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc
+objDecDefDocD :: Label -> TypeData -> (Doc, Maybe String) -> Doc
 objDecDefDocD = varDecDefDocD
 
-constDecDefDocD :: Label -> (Doc, CodeType) -> (Doc, Maybe String) -> Doc -- can this be done without StateType (infer from value)?
-constDecDefDocD l (st, _) (v, _) = text "const" <+> st <+> text l <+> equals <+> v
+constDecDefDocD :: Label -> TypeData -> (Doc, Maybe String) -> Doc -- can this be done without StateType (infer from value)?
+constDecDefDocD l st (v, _) = text "const" <+> typeDoc st <+> text l <+> 
+  equals <+> v
 
 returnDocD :: (Doc, Maybe String) -> Doc
 returnDocD (v, _) = text "return" <+> v
@@ -517,18 +518,6 @@ litIntD = integer
 litStringD :: String -> Doc
 litStringD = doubleQuotedText
 
-defaultCharD :: Doc
-defaultCharD = char ' '
-
-defaultFloatD :: Doc
-defaultFloatD = double 0.0
-
-defaultIntD :: Doc
-defaultIntD = integer 0
-
-defaultStringD :: Doc
-defaultStringD = doubleQuotedText ""
-
 -- Value Printers --
 
 varDocD :: Label -> Doc
@@ -560,11 +549,11 @@ funcAppDocD n vs = text n <> parens (callFuncParamList vs)
 extFuncAppDocD :: Library -> Label -> [(Doc, Maybe String)] -> Doc
 extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
 
-stateObjDocD :: (Doc, CodeType) -> Doc -> Doc
-stateObjDocD (st, _) vs = new <+> st <> parens vs
+stateObjDocD :: TypeData -> Doc -> Doc
+stateObjDocD st vs = new <+> typeDoc st <> parens vs
 
-listStateObjDocD :: Doc -> (Doc, CodeType) -> Doc -> Doc
-listStateObjDocD lstObj (st, _) vs = lstObj <+> st <> parens vs
+listStateObjDocD :: Doc -> TypeData -> Doc -> Doc
+listStateObjDocD lstObj st vs = lstObj <+> typeDoc st <> parens vs
 
 notNullDocD :: Doc -> (Doc, Maybe String) -> (Doc, Maybe String) -> Doc
 notNullDocD = binOpDocD
@@ -578,8 +567,8 @@ listIndexExistsDocD greater (lst, _) (index, _) = parens (lst <>
 funcDocD :: (Doc, Maybe String) -> Doc
 funcDocD (fnApp, _) = dot <> fnApp
 
-castDocD :: (Doc, CodeType) -> Doc
-castDocD (t, _) = parens t
+castDocD :: TypeData -> Doc
+castDocD t = parens $ typeDoc t
 
 sizeDocD :: Doc
 sizeDocD = dot <> text "Count"

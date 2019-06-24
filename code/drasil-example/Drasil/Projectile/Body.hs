@@ -13,17 +13,16 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation), DocDesc,
   DocSection(AuxConstntSec, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
-  IntroSec(IntroProg), IntroSub(IScope), ProblemDescription(PDProg),
+  IntroSec(IntroProg), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
   TSIntro(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
-  dataConstraintUncertainty, generateTraceMap, generateTraceMap', goalStmtF,
-  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, physSystDesc,
-  physSystDescriptionLabel, termDefnF, traceMatStandard, tsymb)
+  dataConstraintUncertainty, generateTraceMap, generateTraceMap', inDataConstTbl,
+  intro, mkDoc, outDataConstTbl, termDefnF, traceMatStandard, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
-  physSyst, problem, srsDomains, srs)
+  problem, srsDomains, srs)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (constAccel, gravity, physicCon, physicCon',
@@ -69,8 +68,9 @@ mkSRS = [
       ],
   SSDSec $
     SSDProg
-      [ SSDProblem   $ PDProg prob
-        [termsAndDefs, physSystDescription, goalStmts]
+      [ SSDProblem $ PDProg prob [termsAndDefs]
+        [ PhySysDesc projectileTitle physSystParts figLaunch []
+        , Goals [(phrase iVel +:+ S "vector") `ofThe` phrase projectile] goals]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tMods
@@ -184,25 +184,11 @@ termsAndDefsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $
 -- Physical System Description --
 ---------------------------------
 
-physSystDescription :: Section
-physSystDescription = physSystDesc (short projectileTitle) figLaunch [physSystDescList, LlC figLaunch]
-
-physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) systDescList
-
-systDescList :: [Sentence]
-systDescList = map foldlSent [
+physSystParts :: [Sentence]
+physSystParts = map foldlSent [
   [S "The", phrase launcher],
   [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `sAnd` getTandS launAngle)],
   [S "The", phrase target]]
-
----------------------
--- Goal Statements --
----------------------
-
-goalStmts :: Section
-goalStmts = goalStmtF [(phrase iVel +:+ S "vector") `ofThe` phrase projectile]
-  (mkEnumSimpleD goals)
 
 ----------------------
 -- Data Constraints --

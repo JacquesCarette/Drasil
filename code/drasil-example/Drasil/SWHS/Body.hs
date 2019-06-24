@@ -20,20 +20,19 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  GSDSec(..), GSDSub(..), ProblemDescription(PDProg),
+  GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(..),
   dataConstraintUncertainty, intro, mkDoc, mkEnumSimpleD, outDataConstTbl,
-  physSystDesc, goalStmtF, termDefnF, tsymb'', getDocDesc, egetDocDesc,
-  ciGetDocDesc, generateTraceMap, generateTraceMap', getTraceMapFromTM,
-  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  physSystDescriptionLabel, traceMatStandard)
+  termDefnF, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
+  generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD,
+  getTraceMapFromIM, getSCSSub, traceMatStandard)
 import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg, inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   constraint, content, datum, definition, document, environment, goalStmt,
-  information, input_, model, organization, output_, physical, physics, physSyst,
-  problem, property, purpose, quantity, reference, software, softwareSys, srs,
-  srsDomains, sysCont, system, user, value, variable, doccon, doccon')
+  information, input_, model, organization, output_, physical, physics, problem,
+  property, purpose, quantity, reference, software, softwareSys, srs, srsDomains,
+  sysCont, system, user, value, variable, doccon, doccon')
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
@@ -165,7 +164,9 @@ mkSRS = [RefSec $ RefProg intro [
     ],
   SSDSec $
     SSDProg 
-      [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns, physSystDescription, goalStates]
+      [ SSDProblem $ PDProg probDescIntro [termsAndDefns]
+        [ PhySysDesc progName physSystParts figTank []
+        , Goals goalInputs goals]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
@@ -336,43 +337,38 @@ tAndDMap c = Flat $ foldlSent [atStart c +: EmptyS, c ^. defn]
 -- 4.1.2 : Physical System Description --
 -----------------------------------------
 
-physSystDescription :: Section
-physSystDescription = physSystDesc (short progName) figTank [physSystDescList, LlC figTank]
+physSystParts :: [Sentence]
+physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC,
+  [short phsChgMtrl, S "suspended in" +:+. phrase tank,
+  sParen (ch htFluxP +:+ S "represents the" +:+. phrase htFluxP)]]
 
--- Above paragraph is general except for progName and figure. However, not
--- every example has a physical system. Also, the SSP example is different, so
--- this paragraph can not be abstracted out as is.
+physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]
+physSyst1 ta wa = [atStart ta, S "containing" +:+. phrase wa]
 
-physSystDescList :: Contents
-physSystDescList = LlC $ enumSimple physSystDescriptionLabel 1 (short physSyst) $ map foldlSent_ systDescList
+physSyst2 :: ConceptChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
+physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
+  sParen (ch hfc +:+ S "represents the" +:+. phrase hfc)]
 
-systDescList :: [[Sentence]]
-systDescList = [physSyst1 tank water, physSyst2 coil tank htFluxC,
-  physSyst3 phsChgMtrl tank htFluxP]
+-- Structure of list would be same between examples but content is completely
+-- different
+
+figTank :: LabelledContent
+figTank = llcc (makeFigRef "Tank") $ fig (
+  foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC `sOf`
+  ch htFluxC `sAnd` phrase htFluxP `sOf` ch htFluxP])
+  $ resourcePath ++ "Tank.png"
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
-goalStates :: Section
-goalStates = goalStmtF (goalStateIntro tempC tempW tempPCM) goalStateList
-
-goalStateIntro :: (NamedIdea a, NamedIdea b, NamedIdea c) => a -> b -> c -> [Sentence]
-goalStateIntro temc temw tempcm = [S "the" +:+ phrase temc,
-  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase temw `andThe` phrase tempcm,
+goalInputs :: [Sentence]
+goalInputs  = [S "the" +:+ phrase tempC,
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase tempW `andThe` phrase tempPCM,
   S "the material" +:+ plural property]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
 -- abstracted out if this paragraph were to be abstracted out.
-
-goalStateList :: [Contents]
-goalStateList = mkEnumSimpleD goals
-
--- List structure is repeated between examples. (For all of these lists I am
--- imagining the potential for something like what was done with the lists in
--- MG, where you define goals, assumptions, physical system components, etc. in
--- separate files, import them and pass them as arguments to some "makeSRS"
--- function and the rest is automated.)
 
 --------------------------------------------------
 -- 4.2 : Solution Characteristics Specification --
@@ -740,26 +736,6 @@ probDescIntro = foldlSent_ [S "investigate the effect" `sOf` S "employing",
 -----------------------------------------
 -- 4.1.2 : Physical System Description --
 -----------------------------------------
-
-physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]
-physSyst1 ta wa = [atStart ta, S "containing" +:+. phrase wa]
---
-physSyst2 :: ConceptChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
-physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
-  sParen (ch hfc +:+ S "represents the" +:+. phrase hfc)]
---
-physSyst3 :: CI -> ConceptChunk -> UnitalChunk -> [Sentence]
-physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
-  sParen (ch hfp +:+ S "represents the" +:+. phrase hfp)]
-
--- Structure of list would be same between examples but content is completely
--- different
-
-figTank :: LabelledContent
-figTank = llcc (makeFigRef "Tank") $ fig (
-  foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC, S "of",
-  ch htFluxC `sAnd` phrase htFluxP, S "of", ch htFluxP])
-  $ resourcePath ++ "Tank.png"
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

@@ -22,9 +22,9 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   datum, datumConstraint, definition, element, general, goalStmt, information,
   input_, limitation, model, output_, physical, physicalConstraint, physicalSystem,
-  problem, problemDescription, purpose, quantity, requirement, scope, section_,
-  softwareConstraint, solutionCharacteristic, specification, symbol_, system,
-  theory, typUnc, uncertainty, user, value, variable)
+  physSyst, problem, problemDescription, purpose, quantity, requirement, scope,
+  section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
+  system, theory, typUnc, uncertainty, user, value, variable)
 import Data.Drasil.Concepts.Math (equation)
 
 import Data.Drasil.IdeaDicts (inModel, thModel)
@@ -62,12 +62,11 @@ termDefnF end otherContents = SRS.termAndDefn (intro : otherContents) []
                     S "understand the", plural requirement :+: lastF end]
 
 --general introduction for Physical System Description
-physSystDesc :: Sentence -> LabelledContent -> [Contents] -> Section
-physSystDesc progName fg otherContents = SRS.physSyst (intro:otherContents) []
-  where intro = mkParagraph $ foldlSentCol
-                [S "The", phrase physicalSystem `sOf` progName `sC`
-                S "as shown in", makeRef2S fg `sC` S "includes the following", 
-                plural element]
+physSystDesc :: (Idea a) => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
+physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
+  where intro = mkParagraph $ foldlSentCol [S "The", phrase physicalSystem `sOf` short progName `sC`
+                S "as shown in", makeRef2S fg `sC` S "includes the following", plural element]
+        bullets = enumSimpleU 1 (short physSyst) parts
 
 --List all the given inputs. Might be possible to use ofThe combinator from utils.hs
 goalStmtF :: [Sentence] -> [Contents] -> Section

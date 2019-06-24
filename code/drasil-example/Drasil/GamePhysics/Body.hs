@@ -16,8 +16,8 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
   LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(Goals), generateTraceMap', dataConstraintUncertainty, inDataConstTbl,
-  intro, mkDoc, outDataConstTbl, outDataConstTbl, termDefnF', tsymb,
+  PDSub(..), generateTraceMap', dataConstraintUncertainty, inDataConstTbl,
+  intro, mkDoc, outDataConstTbl, outDataConstTbl, tsymb,
   getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   traceMatStandard, solutionLabel)
@@ -85,7 +85,9 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
    SSDSec $ SSDProg
-      [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns] [Goals [S "the" +:+ plural input_] goals]
+      [ SSDProblem $ PDProg probDescIntro []
+        [ TermsAndDefs Nothing terms
+        , Goals [S "the" +:+ plural input_] goals]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tModsNew
@@ -378,16 +380,8 @@ probDescIntro = foldlSent_
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-termsAndDefns :: Section
-termsAndDefns = termDefnF' Nothing [termsAndDefnsBullets]
-
-terminologyLabel :: Reference
-terminologyLabel = makeLstRef "terminologyGM" "terminologyGM"
-
-termsAndDefnsBullets :: Contents
-termsAndDefnsBullets = LlC $ enumBullet terminologyLabel
-  (map (\x -> atStart x +: EmptyS +:+ (x ^. defn))
-    [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand])
+terms :: [ConceptChunk]
+terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand]
 
 -----------------------------
 -- 4.1.2 : Goal Statements --

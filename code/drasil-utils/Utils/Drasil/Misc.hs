@@ -198,9 +198,9 @@ displayConstrntsAsSet sym listOfVals = E $ sy sym `isin` DiscreteS listOfVals
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
 chgsStart = sDash . makeRef2S
 
---Throws an error if a char in a list appears in a string
-checkValidStr :: String -> String -> String
-checkValidStr s [] = s
+--An either type - Left with error message if invalid char in string, else Right with string
+checkValidStr :: String -> String -> Either String String
+checkValidStr s [] = Right s
 checkValidStr s (x:xs)
-  | x `elem` s = error $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']
+  | x `elem` s = Left $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']
   | otherwise  = checkValidStr s xs

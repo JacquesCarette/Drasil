@@ -276,7 +276,7 @@ spec :: PrintingInformation -> Sentence -> P.Spec
 spec sm (EmptyS :+: b) = spec sm b
 spec sm (a :+: EmptyS) = spec sm a
 spec sm (a :+: b)      = spec sm a P.:+: spec sm b
-spec _ (S s)           = P.S $ checkValidStr s invalidChars
+spec _ (S s)           = either error P.S $ checkValidStr s invalidChars
   where invalidChars   = ['<', '>', '\"', '&', '#', '$', '%', '&', '~', '^', '\\', '{', '}'] 
 spec _ (Sy s)          = P.Sy s
 spec _ Percent         = P.E $ P.MO P.Perc

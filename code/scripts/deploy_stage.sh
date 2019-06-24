@@ -38,8 +38,9 @@ copy_docs() {
     DOC_DIR=$(cd "$CUR_DIR" && stack path --local-install-root)/doc/
   fi
   rm -r "$DOC_DEST" >/dev/null 2>&1  # Printing an error message that a directory doesn't exist isn't the most useful.
-  mkdir -p "$DOC_DEST"
-  cp -r "$DOC_DIR". "$DOC_DEST"
+  # As of Stack 2.1.1 Stack's Haddock integration uses absolute paths. See #1578.
+  # mkdir -p "$DOC_DEST"
+  # cp -r "$DOC_DIR". "$DOC_DEST"
 }
 
 copy_datafiles() {

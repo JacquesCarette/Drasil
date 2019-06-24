@@ -30,7 +30,7 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..), Con
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
   )
 
-import Language.Drasil.Code.Imperative.New (PackageSym(..), RenderSym(..), 
+import Language.Drasil.Code.Imperative.Symantics (PackageSym(..), RenderSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
   StateTypeSym(..), StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
@@ -39,11 +39,11 @@ import Language.Drasil.Code.Imperative.New (PackageSym(..), RenderSym(..),
 
 import Language.Drasil.Code.Imperative.Helpers (ModData(..))
 
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewJavaRenderer 
+import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer 
   (JavaCode (..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewPythonRenderer 
+import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer 
   (PythonCode(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewCSharpRenderer 
+import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer 
   (CSharpCode(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.NewCppRenderer 
+import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
   (CppSrcCode(..), CppHdrCode(..), unSrc, unHdr)

@@ -14,32 +14,21 @@ public class ReadTable {
         line = (infile.ReadLine());
         linetokens = new List<string>(line.Split(','));
         for (int j = 0; (j < (int)((linetokens.Count / 2))); j += 1) {
-            while ((z_vector.Count <= j)) {
-                z_vector.Add(0.0);
-            }
-            z_vector[j] = Double.Parse(linetokens[((j * 2) + 1)]);
+            z_vector.Add(Double.Parse(linetokens[((j * 2) + 1)]));
         }
         while (!(infile.EndOfStream)) {
             lines.Add(infile.ReadLine());
         }
         for (int i = 0; (i < lines.Count); i += 1) {
             linetokens = new List<string>(lines[i].Split(','));
+            List<double> x_matrix_temp = new List<double> {};
+            List<double> y_matrix_temp = new List<double> {};
             for (int j = 0; (j < (int)((linetokens.Count / 2))); j += 1) {
-                while ((x_matrix.Count <= i)) {
-                    x_matrix.Add(new List<double>());
-                }
-                while ((x_matrix[i].Count <= j)) {
-                    x_matrix[i].Add(0.0);
-                }
-                x_matrix[i][j] = Double.Parse(linetokens[((j * 2) + 0)]);
-                while ((y_matrix.Count <= i)) {
-                    y_matrix.Add(new List<double>());
-                }
-                while ((y_matrix[i].Count <= j)) {
-                    y_matrix[i].Add(0.0);
-                }
-                y_matrix[i][j] = Double.Parse(linetokens[((j * 2) + 1)]);
+                x_matrix_temp.Add(Double.Parse(linetokens[((j * 2) + 0)]));
+                y_matrix_temp.Add(Double.Parse(linetokens[((j * 2) + 1)]));
             }
+            x_matrix.Add(x_matrix_temp);
+            y_matrix.Add(y_matrix_temp);
         }
         infile.Close();
     }

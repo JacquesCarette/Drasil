@@ -1,4 +1,8 @@
 module Utils.Drasil (
+  -- Document
+  indent, indentList,
+  -- English
+  capitalize,
   -- Fold
   EnumType(..), WrapType(..), SepType(..), FoldType(..), foldConstraints,
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
@@ -20,6 +24,8 @@ module Utils.Drasil (
   sVersus, sAnd, sAre, sIn, sIs, toThe
 ) where
 
+import Utils.Drasil.Document
+import Utils.Drasil.English
 import Utils.Drasil.Fold
 import Utils.Drasil.Misc
 import Utils.Drasil.Phrase

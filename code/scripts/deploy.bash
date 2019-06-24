@@ -38,6 +38,8 @@ fi
 source "$ALL_FUNCTIONS_FILE"
 
 try_deploy() {
+  # Cleanup the deploy folder if it already exists.
+  rm -rf "$DEPLOY_FOLDER" >/dev/null 2>&1
   git clone --quiet --branch="$DEPLOY_BRANCH" --depth=5 "https://github.com/$TRAVIS_REPO_SLUG.git" "$DEPLOY_FOLDER"
   if [ $? = 1 ]; then
     echo "Clone failed. Bailing."

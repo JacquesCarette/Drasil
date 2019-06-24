@@ -3,7 +3,7 @@ module Drasil.DocLang (
     AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), DocDesc, 
     DocSection(..), Emphasis(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), 
     IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), 
-    Literature(Doc', Lit, Manual), ProblemDescription(..), RefSec(..), RefTab(..), 
+    Literature(Doc', Lit, Manual), ProblemDescription(..), PDSub(..), RefSec(..), RefTab(..), 
     ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
     SSDSub(..), SolChSpec(..), ExistingSolnSec(..), StkhldrSec(StkhldrProg2),
     LCsSec'(..), StkhldrSub(Client, Cstmr), TConvention(..),
@@ -25,7 +25,7 @@ module Drasil.DocLang (
     reqF, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, 
     -- Sections.SpecificSystemDescription
     assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, 
-    inModelF, outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr,
+    inModelF, outDataConstTbl, probDescF, termDefnF, specSysDescr,
     -- Sections.Stakeholders
     -- Sections.TableOfAbbAndAcronyms
     -- Sections.TableOfSymbols
@@ -41,15 +41,14 @@ module Drasil.DocLang (
     getTraceMapFromTM, getTraceMapFromGD,
     getTraceMapFromDD, getTraceMapFromIM, getSCSSub, generateTraceMap',
    -- Labels
-    goalStmtLabel, solutionLabel, characteristicsLabel,
-    physSystDescriptionLabel
+    goalStmtLabel, solutionLabel, characteristicsLabel
     ) where 
 
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
     DerivationDisplay(..), DocDesc, DocSection(..), Emphasis(..), ExistingSolnSec(..), 
     GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), 
     LCsSec(..), LFunc(..), Literature(Doc', Lit, Manual), ProblemDescription(..), 
-    RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), 
+    PDSub(..), RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), 
     SCSSub(..), SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2),
     StkhldrSub(Client, Cstmr), TConvention(..), LCsSec'(..),
     TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..), mkDoc, tsymb,
@@ -66,7 +65,7 @@ import Drasil.Sections.Requirements (reqF, mkInputPropsTable, mkQRTuple, mkQRTup
     mkValsSourceTable)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 
     dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
-    outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr)
+    outDataConstTbl, probDescF, termDefnF, specSysDescr)
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms
 --import Drasil.Sections.TableOfSymbols
@@ -79,5 +78,4 @@ import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc)
 import Drasil.TraceTable (generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
     getTraceMapFromDD, getTraceMapFromIM, getSCSSub, generateTraceMap')
 -- Commented out modules aren't used - uncomment if this changes
-import Drasil.DocumentLanguage.Labels (goalStmtLabel, solutionLabel, characteristicsLabel,
-    physSystDescriptionLabel)
+import Drasil.DocumentLanguage.Labels (goalStmtLabel, solutionLabel, characteristicsLabel)

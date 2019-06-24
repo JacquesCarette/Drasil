@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Language.Drasil.Code.Imperative.New (
+module Language.Drasil.Code.Imperative.Symantics (
   -- Types
   Label, Library,
   -- Typeclasses
@@ -80,11 +80,6 @@ class (PermanenceSym repr) => StateTypeSym repr where
   infile        :: repr (StateType repr)
   outfile       :: repr (StateType repr)
   listType      :: repr (Permanence repr) -> repr (StateType repr) -> repr (StateType repr)
-  intListType   :: repr (Permanence repr) -> repr (StateType repr)
-  intListType p = listType p int
-  floatListType :: repr (Permanence repr) -> repr (StateType repr)
-  floatListType p = listType p float
-  boolListType  :: repr (StateType repr)
   obj           :: Label -> repr (StateType repr)
   enumType      :: Label -> repr (StateType repr)
   iterator      :: repr (StateType repr) -> repr (StateType repr)
@@ -140,12 +135,6 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
   litFloat  :: Double -> repr (Value repr)
   litInt    :: Integer -> repr (Value repr)
   litString :: String -> repr (Value repr)
-
-  defaultChar   :: repr (Value repr)
-  defaultFloat  :: repr (Value repr)
-  defaultInt    :: repr (Value repr)
-  defaultString :: repr (Value repr)
-  defaultBool   :: repr (Value repr)
 
   --other operators ($)
   ($->) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
@@ -271,8 +260,6 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   selfAccess :: repr (Function repr) -> repr (Value repr)
 
-  listPopulateAccess :: repr (Value repr) -> repr (Function repr) -> 
-    repr (Value repr)
   listSizeAccess     :: repr (Value repr) -> repr (Value repr)
 
   listIndexExists :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
@@ -298,19 +285,7 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   listSize           :: repr (Function repr)
   listAdd            :: repr (Value repr) -> repr (Value repr) -> 
     repr (Function repr)
-  listPopulateInt    :: repr (Value repr) -> repr (Function repr)
-  listPopulateFloat  :: repr (Value repr) -> repr (Function repr)
-  listPopulateChar   :: repr (Value repr) -> repr (Function repr)
-  listPopulateBool   :: repr (Value repr) -> repr (Function repr)
-  listPopulateString :: repr (Value repr) -> repr (Function repr)
   listAppend         :: repr (Value repr) -> repr (Function repr)
-  listExtendInt      :: repr (Function repr)
-  listExtendFloat    :: repr (Function repr)
-  listExtendChar     :: repr (Function repr)
-  listExtendBool     :: repr (Function repr)
-  listExtendString   :: repr (Function repr)
-  -- Integer is the depth of nesting, type is the full type of the list.
-  listExtendList     :: Integer -> repr (StateType repr) -> repr (Function repr)
 
   iterBegin :: repr (Function repr)
   iterEnd   :: repr (Function repr)

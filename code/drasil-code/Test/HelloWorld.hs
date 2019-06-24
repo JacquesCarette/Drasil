@@ -27,26 +27,24 @@ helloInitVariables :: (RenderSym repr) => repr (Block repr)
 helloInitVariables = block [comment "Initializing variables",
   varDec "a" int, 
   varDecDef "b" int (litInt 5),
-  listDecDef "myOtherList" (floatListType static_) [litFloat 1.0, litFloat 1.5],
+  listDecDef "myOtherList" (listType static_ float) [litFloat 1.0, litFloat 1.5],
   varDecDef "oneIndex" int (indexOf (var "myOtherList") (litFloat 1.0)),
   printLn int (var "oneIndex"),
   "a" &.= listSizeAccess (var "myOtherList"),
   valState (objAccess (var "myOtherList") (listAdd (litInt 2) (litFloat 2.0))),
   valState (objAccess (var "myOtherList") (listAppend (litFloat 2.5))),
-  valState (objAccess (var "myOtherList") listExtendFloat),
   varDec "e" float,
   "e" &.= objAccess (var "myOtherList") (listAccess (litInt 1)),
   valState (objAccess (var "myOtherList") (listSet (litInt 1) (litFloat 17.4))),
   listDec "myName" 7 (listType static_ string),
   stringSplit ' ' (var "myName") (litString "Brooks Mac"),
   printLnList string (var "myName"),
-  listDecDef "boringList" boolListType [litFalse, litFalse, litFalse, litFalse, litFalse],
-  valState $ listPopulateAccess (var "boringList") (listPopulateBool (litInt 5)),
+  listDecDef "boringList" (listType dynamic_ bool) [litFalse, litFalse, litFalse, litFalse, litFalse],
   printLnList bool (var "boringList"),
-  listDec "mySlicedList" 2 $ floatListType static_]
+  listDec "mySlicedList" 2 $ listType static_ float]
 
 helloListSlice :: (RenderSym repr) => repr (Block repr)
-helloListSlice = listSlice (floatListType static_) (var "mySlicedList") (var "myOtherList") (Just (litInt 1)) (Just (litInt 3)) Nothing
+helloListSlice = listSlice (listType static_ float) (var "mySlicedList") (var "myOtherList") (Just (litInt 1)) (Just (litInt 3)) Nothing
 
 helloIfBody :: (RenderSym repr) => repr (Body repr)
 helloIfBody = addComments "If body" (body [
@@ -66,7 +64,7 @@ helloIfBody = addComments "If body" (body [
     (&~-) (var "c"),
     (&.~-) "b",
 
-    listDec "myList" 5 (intListType static_),
+    listDec "myList" 5 (listType static_ int),
     objDecDef "myObj" char (litChar 'o'),
     constDecDef "myConst" string (litString "Imconstant"),
 
@@ -86,7 +84,6 @@ helloIfBody = addComments "If body" (body [
     printLn string (litString " too"),
     printStr "boo",
     print bool litTrue,
-    printLn float defaultFloat,
     print int (litInt 0),
     print char (litChar 'c'),
     printLn bool (litTrue ?!),

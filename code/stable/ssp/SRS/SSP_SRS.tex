@@ -84,11 +84,11 @@ ${F_{rot}}$ & Force Causing Rotation: a force in the direction of rotation & N
 \\
 ${F_{S}}$ & Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force. & --
 \\
+${{F_{S}}^{min}}$ & Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface & --
+\\
 ${F_{x}}$ & X-Component of the Force:  & N
 \\
 ${F_{y}}$ & Y-Component of the Force:  & N
-\\
-${{F_{S}}^{min}}$ & Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface & --
 \\
 $\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
@@ -98,13 +98,13 @@ ${{\mathbf{F}_{x}}^{H}}$ & Sums of the Interslice Normal Water Forces: for each 
 \\
 $\mathbf{f}$ & Interslice Normal to Shear Force Ratio Variation Function: function of distance in the x-direction & --
 \\
-$g$ & Gravitational Acceleration: An expression used in physics to indicate the intensity of a gravitational field & $\frac{\text{m}}{\text{s}^{2}}$
-\\
 $\mathbf{G}$ & Interslice Normal Forces: per meter in the z-direction exerted between each pair of adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
-$h$ & Height: The distance above a reference point for a point of interest. & m
+$g$ & Gravitational Acceleration: An expression used in physics to indicate the intensity of a gravitational field & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\mathbf{H}$ & Interslice Normal Water Forces: per meter in the z-direction exerted in the x-coordinate direction between each pair of adjacent slices & $\frac{\text{N}}{\text{m}}$
+\\
+$h$ & Height: The distance above a reference point for a point of interest. & m
 \\
 $\mathbf{h}$ & Y-Direction Heights of Slices: heights in the y-direction from the base of each slice to the slope surface, at the x-direction midpoint of the slice & m
 \\
@@ -126,23 +126,23 @@ $M$ & Moment: a measure of the tendency of a body to rotate about a specific poi
 \\
 $m$ & Mass: the quantity of matter in a body & kg
 \\
-$n$ & Number of Slices: the slip mass has been divided into & --
-\\
 $\mathbf{N}$ & Normal Forces: total reactive forces per meter in the z-direction for each slice of a soil surface subject to a body resting on it & $\frac{\text{N}}{\text{m}}$
 \\
 $\mathbf{N'}$ & Effective Normal Forces: per meter in the z-direction for each slice of a soil surface, subtracting pore water reactive force from total reactive force & $\frac{\text{N}}{\text{m}}$
 \\
-$P$ & Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force that can be withstood before failure & N
+$n$ & Number of Slices: the slip mass has been divided into & --
 \\
-$p$ & Pressure: A force exerted over an area & Pa
+$P$ & Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force that can be withstood before failure & N
 \\
 $\mathbf{P}$ & Resistive Shear Forces: Mohr Coulomb frictional forces per meter in the z-direction for each slice that describes the limit of mobilized shear force the slice can withstand before failure & $\frac{\text{N}}{\text{m}}$
 \\
+$p$ & Pressure: A force exerted over an area & Pa
+\\
 $\mathbf{Q}$ & External Forces: forces per meter in the z-direction acting into the surface from the midpoint of each slice & $\frac{\text{N}}{\text{m}}$
 \\
-$r$ & Length of the Moment Arm: distance between a force causing rotation and the axis of rotation & m
-\\
 $\mathbf{R}$ & Resistive Shear Forces Without the Influence of Interslice Forces: per meter in the z-direction for each slice & $\frac{\text{N}}{\text{m}}$
+\\
+$r$ & Length of the Moment Arm: distance between a force causing rotation and the axis of rotation & m
 \\
 $\mathbf{r}$ & Displacement: The change in An object's location relative to a reference point & m
 \\
@@ -152,23 +152,25 @@ $\mathbf{S}$ & Mobilized Shear Forces: per meter in the z-direction for each sli
 \\
 $\mathbf{T}$ & Mobilized Shear Forces Without the Influence of Interslice Forces: per meter in the z-direction for each slice & $\frac{\text{N}}{\text{m}}$
 \\
-$u$ & Pore Pressure: from water within the soil & Pa
-\\
 ${\mathbf{U}_{b}}$ & Base Hydrostatic Forces: per meter in the z-direction from water pressure within each slice & $\frac{\text{N}}{\text{m}}$
 \\
 ${\mathbf{U}_{t}}$ & Surface Hydrostatic Forces: per meter in the z-direction from water pressure acting into each slice from standing water on the slope surface & $\frac{\text{N}}{\text{m}}$
 \\
-$V$ & Volume: the amount of space that a substance or object occupies. & $\text{m}^{3}$
+$u$ & Pore Pressure: from water within the soil & Pa
 \\
-$v$ & Local Index: used as a bound variable index in calculations & --
+$V$ & Volume: the amount of space that a substance or object occupies. & $\text{m}^{3}$
 \\
 ${\mathbf{V}_{dry}}$ & Volumes of Dry Soil: amount of space occupied by dry soil for each slice & $\text{m}^{3}$
 \\
 ${\mathbf{V}_{sat}}$ & Volumes of Saturated Soil: amount of space occupied by saturated soil for each slice & $\text{m}^{3}$
 \\
+$v$ & Local Index: used as a bound variable index in calculations & --
+\\
 $W$ & Weight: The gravitational force acting on an object & N
 \\
 $\mathbf{W}$ & Weights: downward force per meter in the z-direction on each slice caused by gravity & $\frac{\text{N}}{\text{m}}$
+\\
+$\mathbf{X}$ & Interslice Shear Forces: per meter in the z-direction exerted between adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
 $x$ & X-Coordinate: in the Cartesian coordinate system & m
 \\
@@ -179,8 +181,6 @@ ${{x_{slip}}^{maxExt}}$ & Maximum Exit X-Coordinate: maximum potential x-coordin
 ${{x_{slip}}^{minEtr}}$ & Minimum Exit X-Coordinate: minimum potential x-coordinate for the entry point of a slip surface & m
 \\
 ${{x_{slip}}^{minExt}}$ & Minimum Exit X-Coordinate: minimum potential x-coordinate for the exit point of a slip surface & m
-\\
-$\mathbf{X}$ & Interslice Shear Forces: per meter in the z-direction exerted between adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
 ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
 \\
@@ -351,7 +351,7 @@ The Morgenstern-Price method \cite{morgenstern1965}, which involves dividing the
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-SSP is a computer program developed to evaluate the factor of safety of a slope's slip surface and identify the critical slip surface of the slope, as well as the interslice normal force and shear force along the critical slip surface. It is intended to be used as an educational tool for introducing slope stability issues, and to facilitate the analysis and design of a safe slope.
+A system is needed to evaluate the factor of safety of a slope's slip surface and identify the critical slip surface of the slope, as well as the interslice normal force and shear force along the critical slip surface.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
@@ -373,7 +373,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
-The Physical System Description (PS) of SSP, as shown in \hyperref[Figure:PhysicalSystem]{Fig:PhysicalSystem}, includes the following elements:
+The physical system of SSP, as shown in \hyperref[Figure:PhysicalSystem]{Fig:PhysicalSystem}, includes the following elements:
 \begin{itemize}
 \item[PS1:]A slope comprised of one soil layer.
 \item[PS2:]A water table, which may or may not exist.
@@ -414,24 +414,24 @@ Given the shape of the soil mass, the location of the water table, and the mater
 The instance models that govern SSP are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 \begin{itemize}
-\item[Slip-Surface-Concave:\phantomsection\label{assumpSSC}]The slip surface is concave with respect to the slope surface. The (${\mathbf{x}_{slip}}$, ${\mathbf{y}_{slip}}$) coordinates of a slip surface follow a concave up function. \hyperref[IM:crtSlpId]{IM: crtSlpId}.
-\item[Factor-of-Safety:\phantomsection\label{assumpFOS}]The factor of safety is assumed to be constant across the entire slip surface. \hyperref[GD:mobShr]{GD: mobShr}.
-\item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]The soil mass is homogeneous, with consistent soil properties throughout. \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:resShr]{GD: resShr} \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.
-\item[Soil-Properties:\phantomsection\label{assumpSP}]The soil properties are independent of dry or saturated conditions, with the exception of unit weight. \hyperref[GD:resShr]{GD: resShr}.
-\item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. \hyperref[GD:resShr]{GD: resShr}.
-\item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($\mathbf{f}$) describing variation depending on $x$ position. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.
-\item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:effNormF]{GD: effNormF} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
-\item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. \hyperref[TM:equilibrium]{TM: equilibrium} \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.
-\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} \hyperref[DD:slcHeight]{DD: slcHeight} \hyperref[DD:angleB]{DD: angleB} \hyperref[GD:baseWtrF]{GD: baseWtrF} \hyperref[DD:angleA]{DD: angleA}.
-\item[Edge-Slices:\phantomsection\label{assumpES}]The interslice forces at the 0th and $n$th interslice interfaces are zero. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty}.
-\item[Seismic-Force:\phantomsection\label{assumpSF}]There is no seismic force acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[LC_seismic]{LC: Calculate-Seismic-Force}.
-\item[Surface-Load:\phantomsection\label{assumpSL}]There is no imposed surface load, and therefore no external forces, acting on the slope. \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[LC_external]{LC: Calculate-External-Force}.
-\item[Water-Intersects-Base-Edge:\phantomsection\label{assumpWIBE}]The water table only intersects the base of a slice at an edge of the slice. \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
-\item[Water-Intersects-Surface-Edge:\phantomsection\label{assumpWISE}]The water table only intersects the slope surface at the edge of a slice. \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:sliceWght]{GD: sliceWght}.
-\item[Negligible-Effect-Surface-Slope-Seismic:\phantomsection\label{assumpNESSS}]The effect of the slope of the surface of the soil on the seismic force is assumed to be negligible. \hyperref[GD:momentEql]{GD: momentEql}.
-\item[Hydrostatic-Force-Slice-Midpoint:\phantomsection\label{assumpHFSM}]The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
+\item[Slip-Surface-Concave:\phantomsection\label{assumpSSC}]The slip surface is concave with respect to the slope surface. The (${\mathbf{x}_{slip}}$, ${\mathbf{y}_{slip}}$) coordinates of a slip surface follow a concave up function. (RefBy: \hyperref[IM:crtSlpId]{IM: crtSlpId}.)
+\item[Factor-of-Safety:\phantomsection\label{assumpFOS}]The factor of safety is assumed to be constant across the entire slip surface. (RefBy: \hyperref[GD:mobShr]{GD: mobShr}.)
+\item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]The soil mass is homogeneous, with consistent soil properties throughout. (RefBy: \hyperref[GD:sliceWght]{GD: sliceWght}, \hyperref[GD:resShr]{GD: resShr}, and \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.)
+\item[Soil-Properties:\phantomsection\label{assumpSP}]The soil properties are independent of dry or saturated conditions, with the exception of unit weight. (RefBy: \hyperref[GD:resShr]{GD: resShr}.)
+\item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. (RefBy: \hyperref[GD:resShr]{GD: resShr}.)
+\item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($\mathbf{f}$) describing variation depending on $x$ position. (RefBy: \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[GD:normShrR]{GD: normShrR}, \hyperref[IM:fctSfty]{IM: fctSfty}, and \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.)
+\item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. (RefBy: \hyperref[GD:srfWtrF]{GD: srfWtrF}, \hyperref[GD:sliceWght]{GD: sliceWght}, \hyperref[GD:resShr]{GD: resShr}, \hyperref[GD:effNormF]{GD: effNormF}, and \hyperref[GD:baseWtrF]{GD: baseWtrF}.)
+\item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. (RefBy: \hyperref[TM:equilibrium]{TM: equilibrium} and \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.)
+\item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]The surface and base of a slice are approximated as straight lines. (RefBy: \hyperref[GD:srfWtrF]{GD: srfWtrF}, \hyperref[GD:sliceWght]{GD: sliceWght}, \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}, \hyperref[DD:slcHeight]{DD: slcHeight}, \hyperref[DD:angleB]{DD: angleB}, \hyperref[GD:baseWtrF]{GD: baseWtrF}, and \hyperref[DD:angleA]{DD: angleA}.)
+\item[Edge-Slices:\phantomsection\label{assumpES}]The interslice forces at the 0th and $n$th interslice interfaces are zero. (RefBy: \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:intsliceFs]{IM: intsliceFs}, and \hyperref[IM:fctSfty]{IM: fctSfty}.)
+\item[Seismic-Force:\phantomsection\label{assumpSF}]There is no seismic force acting on the slope. (RefBy: \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:fctSfty]{IM: fctSfty}, and \hyperref[LC_seismic]{LC: Calculate-Seismic-Force}.)
+\item[Surface-Load:\phantomsection\label{assumpSL}]There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:fctSfty]{IM: fctSfty}, and \hyperref[LC_external]{LC: Calculate-External-Force}.)
+\item[Water-Intersects-Base-Edge:\phantomsection\label{assumpWIBE}]The water table only intersects the base of a slice at an edge of the slice. (RefBy: \hyperref[GD:sliceWght]{GD: sliceWght} and \hyperref[GD:baseWtrF]{GD: baseWtrF}.)
+\item[Water-Intersects-Surface-Edge:\phantomsection\label{assumpWISE}]The water table only intersects the slope surface at the edge of a slice. (RefBy: \hyperref[GD:srfWtrF]{GD: srfWtrF} and \hyperref[GD:sliceWght]{GD: sliceWght}.)
+\item[Negligible-Effect-Surface-Slope-Seismic:\phantomsection\label{assumpNESSS}]The effect of the slope of the surface of the soil on the seismic force is assumed to be negligible. (RefBy: \hyperref[GD:momentEql]{GD: momentEql}.)
+\item[Hydrostatic-Force-Slice-Midpoint:\phantomsection\label{assumpHFSM}]The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. (RefBy: \hyperref[GD:srfWtrF]{GD: srfWtrF}, \hyperref[GD:momentEql]{GD: momentEql}, and \hyperref[GD:baseWtrF]{GD: baseWtrF}.)
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -458,7 +458,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
+RefBy & \hyperref[GD:mobShr]{GD: mobShr}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -485,7 +485,7 @@ Notes & For a body in static equilibrium, the net forces and moments acting on t
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
+RefBy & \hyperref[GD:normForcEq]{GD: normForcEq}, \hyperref[GD:momentEql]{GD: momentEql}, and \hyperref[GD:bsShrFEq]{GD: bsShrFEq}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -513,7 +513,7 @@ Notes & In this model the shear strength $τ$ is proportional to the product of 
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:resShr]{GD: resShr}.
+RefBy & \hyperref[GD:resShr]{GD: resShr}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -540,7 +540,7 @@ Notes & $σ$ is defined in \hyperref[DD:stress]{DD: stress}.
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:effNormF]{GD: effNormF}.
+RefBy & \hyperref[GD:effNormF]{GD: effNormF}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -567,7 +567,7 @@ Notes & The net force $\mathbf{F}$ (N) on a body is proportional to the accelera
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[GD:weight]{GD: weight}.
+RefBy & \hyperref[GD:weight]{GD: weight}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
@@ -608,7 +608,7 @@ Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in th
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}.
+RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Normal force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
@@ -647,7 +647,7 @@ Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in th
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}.
+RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Base shear force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
@@ -680,7 +680,7 @@ Notes & ${\mathbf{ℓ}_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[GD:mobShr]{GD: mobShr}.
+RefBy & \hyperref[GD:mobShr]{GD: mobShr}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Derived by substituting \hyperref[DD:stress]{DD: stress} into the Mohr-Coulomb shear strength, \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}, and multiplying both sides of the equation by the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction. The effective angle of friction $φ'$ and the effective cohesion $c'$ are not indexed by $i$ becaused they are assumed to be isotropic (\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}) and the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}, \hyperref[assumpSP]{A: Soil-Properties}).
@@ -715,7 +715,7 @@ Notes & ${\mathbf{ℓ}_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}.
+RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Mobilized shear forces is derived by dividing the definition of the $\mathbf{P}$ from \hyperref[GD:resShr]{GD: resShr}. by the definition of the factor of safety from \hyperref[TM:factOfSafety]{TM: factOfSafety}. The factor of safety ${F_{S}}$ is not indexed by $i$ because it is assumed to be constant for the entire slip surface (\hyperref[assumpFOS]{A: Factor-of-Safety}).
@@ -784,7 +784,7 @@ Notes & $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\ma
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} and \hyperref[IM:fctSfty]{IM: fctSfty}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -817,7 +817,7 @@ Notes & $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\ma
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} and \hyperref[IM:fctSfty]{IM: fctSfty}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -847,7 +847,7 @@ Notes & Mathematical representation of the primary assumption for the Morgenster
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:fctSfty]{IM: fctSfty}.
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} and \hyperref[IM:fctSfty]{IM: fctSfty}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -888,7 +888,7 @@ Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} for t
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Moment is equal to torque, so the equation from \hyperref[DD:torque]{DD: torque} will be used to calculate moments:
@@ -971,7 +971,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \hyperref{https://en.wikipedia.org/wiki/Weight}{}{}{Definition of Weight}
 \\ \midrule \\
-RefBy & \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:momentEql]{GD: momentEql}.
+RefBy & \hyperref[GD:sliceWght]{GD: sliceWght} and \hyperref[GD:momentEql]{GD: momentEql}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 Under the influence of gravity, and assuming a 2D Cartesian coordinate system with down as positive, an object has an acceleration vector of:
@@ -1028,7 +1028,7 @@ Notes & This equation is based on the assumption that the surface and the base o
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
+RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[GD:normForcEq]{GD: normForcEq}, \hyperref[GD:momentEql]{GD: momentEql}, \hyperref[GD:mobShearWO]{GD: mobShearWO}, and \hyperref[GD:bsShrFEq]{GD: bsShrFEq}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 For the case where the water table is above the slope surface, the weights come from the weight of the saturated soil. Substituting values for saturated soil into the equation for weight from \hyperref[GD:weight]{GD: weight} yields:
@@ -1081,7 +1081,7 @@ Notes & This equation is derived from Bernoulli's equation for a slow moving flu
 \\ \midrule \\
 Source & \hyperref{https://en.wikipedia.org/wiki/Pressure}{}{}{Definition of Pressure}
 \\ \midrule \\
-RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
+RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF} and \hyperref[GD:baseWtrF]{GD: baseWtrF}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1116,7 +1116,7 @@ Notes & This equation is based on the assumption that the base of a slice is a s
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:effNormF]{GD: effNormF} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
+RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[GD:effNormF]{GD: effNormF}, and \hyperref[GD:baseWtrF]{GD: baseWtrF}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 The base hydrostatic forces come from the hydrostatic pressure exerted by the water above the base of each slice. The equation for hydrostatic pressure from \hyperref[GD:hsPressure]{GD: hsPressure} is:
@@ -1164,7 +1164,7 @@ Notes & This equation is based on the assumption that the surface of a slice is 
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF} \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
+RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF}, \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, \hyperref[GD:normForcEq]{GD: normForcEq}, \hyperref[GD:momentEql]{GD: momentEql}, \hyperref[GD:mobShearWO]{GD: mobShearWO}, and \hyperref[GD:bsShrFEq]{GD: bsShrFEq}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 The surface hydrostatic forces come from the hydrostatic pressure exerted by the water above the surface of each slice. The equation for hydrostatic pressure from \hyperref[GD:hsPressure]{GD: hsPressure} is:
@@ -1216,7 +1216,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[GD:mobShearWO]{GD: mobShearWO}.
+RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, and \hyperref[GD:mobShearWO]{GD: mobShearWO}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1248,7 +1248,7 @@ Notes & This equation is based on the assumption that the base of a slice is a s
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[DD:lengthLb]{DD: lengthLb} \hyperref[GD:bsShrFEq]{GD: bsShrFEq} \hyperref[DD:convertFunc2]{DD: convertFunc2} \hyperref[DD:convertFunc1]{DD: convertFunc1}.
+RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, \hyperref[GD:normForcEq]{GD: normForcEq}, \hyperref[GD:momentEql]{GD: momentEql}, \hyperref[GD:mobShearWO]{GD: mobShearWO}, \hyperref[DD:lengthLb]{DD: lengthLb}, \hyperref[GD:bsShrFEq]{GD: bsShrFEq}, \hyperref[DD:convertFunc2]{DD: convertFunc2}, and \hyperref[DD:convertFunc1]{DD: convertFunc1}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1280,7 +1280,7 @@ Notes & This equation is based on the assumption that the surface of a slice is 
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[GD:normForcEq]{GD: normForcEq} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[GD:mobShearWO]{GD: mobShearWO} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[GD:bsShrFEq]{GD: bsShrFEq}.
+RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, \hyperref[GD:normForcEq]{GD: normForcEq}, \hyperref[GD:momentEql]{GD: momentEql}, \hyperref[GD:mobShearWO]{GD: mobShearWO}, \hyperref[DD:lengthLs]{DD: lengthLs}, and \hyperref[GD:bsShrFEq]{GD: bsShrFEq}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1309,7 +1309,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:sliceWght]{GD: sliceWght} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} \hyperref[GD:momentEql]{GD: momentEql} \hyperref[DD:lengthLs]{DD: lengthLs} \hyperref[DD:lengthLb]{DD: lengthLb}.
+RefBy & \hyperref[GD:sliceWght]{GD: sliceWght}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}, \hyperref[GD:momentEql]{GD: momentEql}, \hyperref[DD:lengthLs]{DD: lengthLs}, and \hyperref[DD:lengthLb]{DD: lengthLb}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1341,7 +1341,7 @@ Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB} and $\math
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:resShr]{GD: resShr} \hyperref[GD:resShearWO]{GD: resShearWO} \hyperref[GD:mobShr]{GD: mobShr} \hyperref[GD:baseWtrF]{GD: baseWtrF}.
+RefBy & \hyperref[GD:resShr]{GD: resShr}, \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[GD:mobShr]{GD: mobShr}, and \hyperref[GD:baseWtrF]{GD: baseWtrF}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1373,7 +1373,7 @@ Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB} and $\math
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF}.
+RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1405,7 +1405,7 @@ Notes & This equation is based on the assumption that the surface and base of a 
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[GD:momentEql]{GD: momentEql}.
+RefBy & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} and \hyperref[GD:momentEql]{GD: momentEql}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1434,7 +1434,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{huston2008}
 \\ \midrule \\
-RefBy & \hyperref[GD:resShr]{GD: resShr} \hyperref[TM:effStress]{TM: effStress} \hyperref[GD:effNormF]{GD: effNormF}.
+RefBy & \hyperref[GD:resShr]{GD: resShr}, \hyperref[TM:effStress]{TM: effStress}, and \hyperref[GD:effNormF]{GD: effNormF}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1465,7 +1465,7 @@ Notes & The torque on a body measures the the tendency of a force to rotate the 
 \\ \midrule \\
 Source & --
 \\ \midrule \\
-RefBy & \hyperref[GD:momentEql]{GD: momentEql}.
+RefBy & \hyperref[GD:momentEql]{GD: momentEql}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1500,7 +1500,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} \hyperref[GD:normShrR]{GD: normShrR} \hyperref[DD:convertFunc2]{DD: convertFunc2} \hyperref[DD:convertFunc1]{DD: convertFunc1}.
+RefBy & \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}, \hyperref[GD:normShrR]{GD: normShrR}, \hyperref[DD:convertFunc2]{DD: convertFunc2}, and \hyperref[DD:convertFunc1]{DD: convertFunc1}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1535,7 +1535,7 @@ Notes & $\mathbf{f}$ is defined in \hyperref[DD:ratioVariation]{DD: ratioVariati
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[DD:convertFunc2]{DD: convertFunc2}.
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs}, \hyperref[IM:fctSfty]{IM: fctSfty}, and \hyperref[DD:convertFunc2]{DD: convertFunc2}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1571,7 +1571,7 @@ Notes & $\mathbf{f}$ is defined in \hyperref[DD:ratioVariation]{DD: ratioVariati
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
-RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[IM:fctSfty]{IM: fctSfty}.
+RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} and \hyperref[IM:fctSfty]{IM: fctSfty}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1659,7 +1659,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}.
+RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -1689,7 +1689,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
-RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}.
+RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
@@ -1733,7 +1733,7 @@ Notes & $\mathbf{R}$ is defined in \hyperref[GD:resShearWO]{GD: resShearWO}, $\m
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} \hyperref[displayFS]{FR: Display-Factor-of-Safety} \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}.
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:intsliceFs]{IM: intsliceFs}, \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR: Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 The mobilized shear force defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding Equation (1) below:
@@ -1862,7 +1862,7 @@ Notes & ${\mathbf{C}_{num}}$ is defined in \hyperref[IM:nrmShrForNum]{IM: nrmShr
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} \hyperref[displayFS]{FR: Display-Factor-of-Safety} \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}.
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}, \hyperref[IM:intsliceFs]{IM: intsliceFs}, \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR: Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR}, Equation (14) can be derived:
@@ -1927,7 +1927,7 @@ Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $\mathbf{
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${\mathbf{C}_{num}}$.
@@ -1970,7 +1970,7 @@ Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB} and $\math
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:nrmShrFor]{IM: nrmShrFor}.
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${\mathbf{C}_{den}}$.
@@ -2015,7 +2015,7 @@ Notes & $\mathbf{T}$ is defined in \hyperref[GD:mobShearWO]{GD: mobShearWO}, $\m
 \\ \midrule \\
 Source & \cite{chen2005}
 \\ \midrule \\
-RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:intsliceFs]{IM: intsliceFs} \hyperref[IM:fctSfty]{IM: fctSfty} \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} \hyperref[displayFS]{FR: Display-Factor-of-Safety} \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}.
+RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:intsliceFs]{IM: intsliceFs}, \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR: Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 This derivation is identical to the derivation for \hyperref[IM:fctSfty]{IM: fctSfty} up until Equation (3) shown again below:
@@ -2068,7 +2068,7 @@ Notes & The minimization function must enforce the constraints on the critical s
 \\ \midrule \\
 Source & \cite{li2010}
 \\ \midrule \\
-RefBy & \hyperref[displayGraph]{FR: Display-Graph} \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}.
+RefBy & \hyperref[displayGraph]{FR: Display-Graph} and \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \subsubsection{Data Constraints}

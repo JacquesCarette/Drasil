@@ -19,23 +19,21 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
-  ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..),
-  dataConstraintUncertainty, goalStmtF, intro, mkDoc,
-  mkEnumSimpleD, probDescF, termDefnF,
-  tsymb'', getDocDesc, egetDocDesc, generateTraceMap,
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM,
-  getSCSSub, physSystDescriptionLabel, generateTraceMap', traceMatStandard)
+  ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
+  PDSub(..), dataConstraintUncertainty, intro, mkDoc, termDefnF, tsymb'',
+  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
+  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
+  generateTraceMap', traceMatStandard)
 
-import qualified Drasil.DocLang.SRS as SRS (inModel, physSyst, assumpt, sysCon,
+import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt, sysCon,
   genDefn, dataDefn, datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
-  constant, constraint, definition, design, document, effect, endUser,
-  environment, goal, information, input_, interest, issue, loss, method_,
-  model, organization, physical, physics, problem, purpose, requirement,
-  software, softwareSys, srsDomains, symbol_, sysCont, system,
-  systemConstraint, template, type_, user, value, variable, physSyst,
-  doccon, doccon')
+  constant, constraint, definition, document, effect, endUser, environment,
+  goal, information, input_, interest, loss, method_, model, organization,
+  physical, physics, problem, purpose, requirement, software,
+  softwareSys, srsDomains, symbol_, sysCont, system, systemConstraint,
+  template, type_, user, value, variable, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
@@ -73,16 +71,6 @@ import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, propsDeriv
 import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
   constrained, inputs, outputs, symbols)
-
---type declarations for sections--
-
-tableOfSymbIntro :: [TSIntro]
-
-problemDesc, termsDefs, physSysDesc, goalStmt :: Section
-termsDefsList, physSysIntro, physSysConv, 
-  physSysDescBullets, physSysFbd :: Contents
-goalsList :: [Contents]
-
 
 --Document Setup--
 thisSi :: [UnitDefn]
@@ -131,7 +119,10 @@ mkSRS = [RefSec $ RefProg intro
     GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
       UsrChars [userCharIntro], SystCons [sysConstraints] []],
     SSDSec $
-      SSDProg [SSDSubVerb problemDesc
+      SSDProg
+        [ SSDProblem $ PDProg prob [termsDefs]
+          [ PhySysDesc ssp physSystParts figPhysSyst physSystContents 
+          , Goals goalsInputs goals]
         , SSDSolChSpec $ SCSProg
           [Assumptions
           , TMs [] (Label : stdFields) tMods
@@ -229,7 +220,7 @@ symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap
 
 -- SECTION 1.2 --
 --automatically generated in mkSRS using the intro below
-
+tableOfSymbIntro :: [TSIntro]
 tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
   [plural value, S "with a subscript", ch index, S "implies that the",
   phrase value, S "will be taken at and analyzed at a", phrase slice
@@ -383,19 +374,23 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 -- SECTION 4 --
 
 -- SECTION 4.1 --
-problemDesc = probDescF EmptyS ssp ending [termsDefs, physSysDesc, goalStmt]
-  where ending = foldlSent_ [S "evaluate the", phrase fs `sOf` S "a",
-          phrasePoss slope, phrase slpSrf, S "and identify",
-          phrase crtSlpSrf `ofThe` phrase slope `sC` S "as well as the",
-          phrase intrslce, phrase normForce `sAnd` phrase shearForce,
-          S "along the" +:+. phrase crtSlpSrf, S "It is intended to be",
-          S "used as an educational tool for introducing", phrase slope,
-          S "stability", plural issue `sC` S "and to facilitate the",
-          phrase analysis `sAnd` phrase design `sOf` S "a safe", phrase slope]
+prob :: Sentence
+prob = foldlSent_ [S "evaluate the", phrase fs `sOf` S "a", phrasePoss slope,
+  phrase slpSrf `sAnd` S "identify", phrase crtSlpSrf `ofThe` phrase slope `sC`
+  S "as well as the", phrase intrslce, phrase normForce `sAnd` phrase shearForce,
+  S "along the", phrase crtSlpSrf]
+
+{-
+From when solution was used in Problem Description:
+  It is intended to be used as an educational tool for introducing slope stability
+  issues and to facilitate the analysis and design of a safe slope.
+-}
 
 -- SECTION 4.1.1 --
+termsDefs :: Section
 termsDefs = termDefnF Nothing [termsDefsList]
 
+termsDefsList :: Contents
 termsDefsList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   map (\x -> (titleize x, Flat $ x ^. defn))
   [fsConcept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
@@ -405,52 +400,10 @@ termsDefsList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
   -- except for fsConcept, crtSlpSrf & plnStrn which are in defs.hs
 
 -- SECTION 4.1.2 --
-physSysDesc = SRS.physSyst
-  [physSysIntro, physSysDescBullets, LlC figPhysSyst, physSysConv,
-   LlC figIndexConv, physSysFbd, LlC figForceActing] []
-
-physSysIntro = physSystIntro ssp figPhysSyst
-
-physSystIntro :: (Idea a, HasShortName d, Referable d) => a -> d -> Contents
-physSystIntro what indexref = foldlSPCol [S "The", introduceAbb physSyst, S "of",
-  short what `sC` S "as shown in", makeRef2S indexref `sC` 
-  S "includes the following elements"]
-
-physSysConv = physSystConvention morPrice morgenstern1965 slope how 
-  index slice intrslce figIndexConv
-  where how = S "as a series of vertical" +:+ plural slice
-
-physSystConvention :: (NamedIdea a, HasShortName b, Referable b, NamedIdea c,
-  NamedIdea d, HasSymbol d, NamedIdea e, NamedIdea f, HasShortName g, 
-  Referable g) => a -> b -> c -> Sentence -> d -> e -> f -> g -> Contents
-physSystConvention anlsys refr what how ix ixd intrfce indexref = foldlSP [
-  atStart anlsys, phrase analysis, makeRef2S refr, S "of the", phrase what, 
-  S "involves representing the", phrase what +:+. how, S "As shown in",
-  makeRef2S indexref `sC` S "the", phrase ix, ch ix, S "is used to denote a",
-  phrase value, S "for a single", phrase ixd `sC` S "and an", phrase intrfce, 
-  phrase value, S "at a given", phrase ix, ch ix, S "refers to the",
-  phrase value, S "between", phrase ixd, ch ix `sAnd` S "adjacent", phrase ixd,
-  E $ sy ix + 1]
-
-physSysDescBullets = LlC $ enumSimple physSystDescriptionLabel 1 (short Doc.physSyst) physSystDescriptionListPhysys
-
-physSystDescriptionListPhysys :: [Sentence]
-physSystDescriptionListPhysys1 :: Sentence
-physSystDescriptionListPhysys2 :: Sentence
-
-physSystDescriptionListPhysys = [physSystDescriptionListPhysys1, physSystDescriptionListPhysys2]
-
-physSystDescriptionListPhysys1 = foldlSent [S "A", phrase slope, 
-  S "comprised of one", phrase soilLyr]
-
-physSystDescriptionListPhysys2 = foldlSent [S "A", phrase waterTable `sC` 
-  S "which may or may not exist"]
-
-physSysFbd = foldlSP [S "A", phrase fbd, S "of the", 
-  plural force, S "acting on a", phrase slice, 
-  S "is displayed in" +:+. makeRef2S figForceActing, S "The specific",
-  plural force `sAnd` plural symbol_, S "will be discussed in detail in",
-  makeRef2S (SRS.genDefn [] []) `sAnd` makeRef2S (SRS.dataDefn [] [])]
+physSystParts :: [Sentence]
+physSystParts = map foldlSent [
+  [S "A", phrase slope, S "comprised of one", phrase soilLyr],
+  [S "A", phrase waterTable `sC` S "which may or may not exist"]]
 
 figPhysSyst :: LabelledContent
 figPhysSyst = llcc (makeFigRef "PhysicalSystem") $
@@ -458,24 +411,39 @@ figPhysSyst = llcc (makeFigRef "PhysicalSystem") $
   S "by", short ssp `sC` S "where the dashed line represents the",
   phrase waterTable]) (resourcePath ++ "PhysSyst.png")
 
+physSystContents :: [Contents]
+physSystContents = [physSysConv, LlC figIndexConv, physSysFbd, LlC figForceActing]
+
+physSysConv :: Contents
+physSysConv = foldlSP [atStart morPrice, phrase analysis, makeRef2S morgenstern1965,
+  S "of the", phrase slope,  S "involves representing the", phrase slope,
+  S "as a series of vertical" +:+. plural slice, S "As shown in",
+  makeRef2S figIndexConv `sC` S "the", phrase index, ch index, S "is used to denote a",
+  phrase value, S "for a single", phrase slice `sC` S "and an", phrase intrslce, 
+  phrase value, S "at a given", phrase index, ch index, S "refers to the",
+  phrase value, S "between", phrase slice, ch index `sAnd` S "adjacent", phrase slice,
+  E $ sy index + 1]
+
 figIndexConv :: LabelledContent
 figIndexConv = llcc (makeFigRef "IndexConvention") $ 
   fig (foldlSent_ [S "Index convention for", phrase slice `sAnd` 
   phrase intrslce, plural value]) (resourcePath ++ "IndexConvention.png")
 
+physSysFbd :: Contents
+physSysFbd = foldlSP [S "A", phrase fbd, S "of the", plural force, S "acting on a",
+  phrase slice `sIs` S "displayed in" +:+. makeRef2S figForceActing, S "The specific",
+  plural force `sAnd` plural symbol_, S "will be discussed in detail in",
+  makeRef2S (SRS.genDefn [] []) `sAnd` makeRef2S (SRS.dataDefn [] [])]
+
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $
-  fig (atStart fbd +:+  S "of" +:+ plural force +:+ S "acting on a" +:+
+  fig (atStart fbd `sOf` plural force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
-goalStmt = goalStmtF (map (uncurry ofThe) [
-  (phrase shape, phrase soil +:+ S "mass"),
-  (S "location", phrase waterTable),
-  (plural mtrlPrpty, phrase soil)
-  ]) goalsList
-
-goalsList = mkEnumSimpleD goals
+goalsInputs :: [Sentence]
+goalsInputs = [phrase shape `ofThe` phrase soil +:+ S "mass",
+  S "location" `ofThe` phrase waterTable, plural mtrlPrpty `ofThe` phrase soil]
 
 -- SECTION 4.2 --
 

@@ -22,8 +22,7 @@ import Drasil.SSP.DataDefs (convertFunc1, convertFunc2,
   intersliceWtrF, lengthB, angleA, angleB, slcHeight, ratioVariation)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, 
   resShearWOGD, bsShrFEqGD, mobShrGD, srfWtrFGD)
-import Drasil.SSP.Goals (identifyCritAndFSGS, determineNormalFGS, 
-  determineShearFGS)
+import Drasil.SSP.Goals (goals, identifyCritAndFSGS)
 import Drasil.SSP.Defs (crtSlpSrf, factorOfSafety, morPrice, slice, 
   slpSrf, ssa)
 import Drasil.SSP.References (chen2005, li2010, karchewski2012)
@@ -631,14 +630,11 @@ instModIntro = [instModIntro1, instModIntro2]
 
 instModIntro1, instModIntro2 :: Sentence
 
-instModIntro1 = foldlSent [S "The", plural goal, 
-  makeRef2S identifyCritAndFSGS `sC` makeRef2S determineNormalFGS `sC` S "and",
-  makeRef2S determineShearFGS,
-  S "are met by the simultaneous", phrase solution, S "of", 
-  makeRef2S fctSfty `sC` makeRef2S nrmShrFor `sC`
-  S "and" +:+. makeRef2S intsliceFs, S "The", phrase goal, 
-  makeRef2S identifyCritAndFSGS, S "is also", 
-  S "contributed to by" +:+ makeRef2S crtSlpId]
+instModIntro1 = foldlSent [S "The", plural goal, foldlList Comma List
+  (map makeRef2S goals) `sAre` S "met by the simultaneous" +:+. (phrase solution `sOf`
+  foldlList Comma List (map makeRef2S [fctSfty, nrmShrFor, intsliceFs])), S "The",
+  phrase goal, makeRef2S identifyCritAndFSGS `sIs` S "also contributed to by",
+  makeRef2S crtSlpId]
 
 instModIntro2 = foldlSent [S "The", titleize morPrice,
   phrase method_, S "is a vertical", phrase slice `sC` S "limit equilibrium",

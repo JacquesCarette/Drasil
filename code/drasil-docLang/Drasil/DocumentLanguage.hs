@@ -34,8 +34,8 @@ import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
 import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
-  datConF, dataDefnF, genDefnF, inModelF, probDescF, solutionCharSpecIntro, 
-  specSysDescr, thModF)
+  datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
+  solutionCharSpecIntro, specSysDescr, thModF)
 import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
@@ -68,8 +68,6 @@ data DocSection = RefSec RefSec
                 | Bibliography
                 | AppndxSec AppndxSec
                 | ExistingSolnSec ExistingSolnSec
-
---FIXME: anything with 'Verb' in it should eventually go
 
 {--}
 
@@ -165,13 +163,17 @@ newtype SSDSec = SSDProg [SSDSub]
 
 -- | Specific system description subsections
 data SSDSub where
-  SSDSubVerb :: Section -> SSDSub
   SSDProblem :: ProblemDescription -> SSDSub
   SSDSolChSpec :: SolChSpec -> SSDSub
 
 -- | Problem Description section
 data ProblemDescription where
-  PDProg :: Sentence -> CI -> Sentence -> [Section] -> ProblemDescription
+  PDProg :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
+
+-- | Problem Description subsections
+data PDSub where
+  PhySysDesc :: (Idea a) => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+  Goals :: [Sentence] -> [ConceptInstance] -> PDSub
 
 -- | Solution Characteristics Specification section
 data SolChSpec where
@@ -415,17 +417,17 @@ mkSSDSec si (SSDProg l) =
   SSD.specSysDescr $ map (mkSubSSD si) l
   where
     mkSubSSD :: SystemInformation -> SSDSub -> Section
-    mkSubSSD _ (SSDSubVerb s)        = s
     mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
     mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
-mkSSDProb _ (PDProg start progName end subSec) =
-  SSD.probDescF start progName end subSec
+mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
+  where mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
+        mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
-  SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) inModSec] $
+  SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) imStub] $
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
@@ -450,8 +452,7 @@ mkSolChSpec si (SCSProg l) =
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims
     mkSubSCS si' Assumptions =
-      SSD.assumpF tmStub gdStub ddStub imStub lcStub ucStub $ mkEnumSimpleD .
-      map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
+      SSD.assumpF $ mkEnumSimpleD . map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
       asOrderedList $ _sysinfodb si' ^. conceptinsTable
       {-where
         -- Duplicated here to avoid "leaking" the definition from drasil-lang
@@ -462,24 +463,24 @@ mkSolChSpec si (SCSProg l) =
           show (length u) ++ " instead."-}
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
-    inModSec = SRS.inModel [mkParagraph EmptyS] []
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and
     -- then error out if necessary.
 
 helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
-helperCI a c = over defn (\x -> foldlSent_ [x, helperRefs a c]) a
+helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
+  where
+    refby EmptyS = EmptyS
+    refby sent   = sParen $ S "RefBy:" +:+. sent
+
 {--}
 
 -- | Section stubs for implicit referencing
-tmStub, gdStub, ddStub, imStub, lcStub, ucStub, pdStub:: Section
+tmStub, ddStub, imStub, pdStub :: Section
 tmStub = SRS.thModel   [] []
-gdStub = SRS.genDefn   [] []
 ddStub = SRS.dataDefn  [] []
 imStub = SRS.inModel   [] []
-lcStub = SRS.likeChg   [] []
-ucStub = SRS.unlikeChg [] []
 pdStub = SRS.probDesc  [] []
 
 -- | Helper for making the 'Requirements' section
@@ -487,7 +488,7 @@ mkReqrmntSec :: ReqrmntSec -> Section
 mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
-    mkSubs (FReqsSub frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
+    mkSubs (FReqsSub frs tbs) = R.fReqF  (mkEnumSimpleD frs ++ map LlC tbs)
     mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 {--}

@@ -24,11 +24,13 @@ $-for(examples)$
     <br />
     <br />
     <ul>
-    $-for(srs)$
-      <li><a href="$url$">$name$ SRS [$type$]</a></li>$sep-$
-    $endfor$
+      <li>$name$ SRS
+        $-for(srs)$
+          <a href="$url$">[$type$]</a>
+        $endfor$
+      </li>
     $-if(src)$
-      <li><a href="$src-$">Generated Code</a></li>
+      <li><a href="$src$">Generated Code</a></li>
     $-endif$
     </ul>
     <br />

@@ -28,7 +28,6 @@ data DLPlate f = DLPlate {
   reqSec :: ReqrmntSec -> f ReqrmntSec,
   reqSub :: ReqsSub -> f ReqsSub,
   lcsSec :: LCsSec -> f LCsSec,
-  lcsSec' :: LCsSec' -> f LCsSec',
   ucsSec :: UCsSec -> f UCsSec,
   traceSec :: TraceabilitySec -> f TraceabilitySec,
   existSolnSec :: ExistingSolnSec -> f ExistingSolnSec,
@@ -38,7 +37,7 @@ data DLPlate f = DLPlate {
 
 instance Multiplate DLPlate where
   multiplate p = DLPlate ds res intro intro' stk stk' gs gs' ss ss' pd pd' sc
-    rs rs' lcp lcp' ucp ts es acs aps where
+    rs rs' lcp ucp ts es acs aps where
     ds (RefSec x) = RefSec <$> refSec p x
     ds (IntroSec x) = IntroSec <$> introSec p x
     ds (StkhldrSec x) = StkhldrSec <$> stkSec p x
@@ -46,7 +45,6 @@ instance Multiplate DLPlate where
     ds (SSDSec x) = SSDSec <$> ssdSec p x
     ds (ReqrmntSec x) = ReqrmntSec <$> reqSec p x
     ds (LCsSec x) = LCsSec <$> lcsSec p x
-    ds (LCsSec' x) = LCsSec' <$> lcsSec' p x
     ds (UCsSec x) = UCsSec <$> ucsSec p x
     ds (TraceabilitySec x) = TraceabilitySec <$> traceSec p x
     ds (ExistingSolnSec x) = ExistingSolnSec <$> existSolnSec p x
@@ -87,7 +85,6 @@ instance Multiplate DLPlate where
     rs' (FReqsSub ci con) = FReqsSub <$> pure ci <*> pure con
     rs' (NonFReqsSub c) = NonFReqsSub <$> pure c
     lcp (LCsProg c) = LCsProg <$> pure c
-    lcp' (LCsProg' c) = LCsProg' <$> pure c
     ucp (UCsProg c) = UCsProg <$> pure c
     ts (TraceabilityProg llc sen con sect) = TraceabilityProg <$> pure llc <*>
       pure sen <*> pure con <*> pure sect
@@ -96,7 +93,7 @@ instance Multiplate DLPlate where
     aps (AppndxProg con) = AppndxProg <$> pure con
   mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b introSub) (b stkSec)
     (b stkSub) (b gsdSec) (b gsdSub) (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)
-    (b scsSub) (b reqSec) (b reqSub) (b lcsSec) (b lcsSec') (b ucsSec)
+    (b scsSub) (b reqSec) (b reqSub) (b lcsSec) (b ucsSec)
     (b traceSec) (b existSolnSec) (b auxConsSec) (b appendSec)
 
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
@@ -124,8 +121,8 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   reqSub = Constant <$> \case
     (FReqsSub _ c) -> mCon c
     (NonFReqsSub _) -> mempty,
-  lcsSec = Constant <$> \(LCsProg c) -> mCon c,
-  ucsSec = Constant <$> \(UCsProg c) -> mCon c,
+  lcsSec = Constant <$> \(LCsProg _) -> mempty,
+  ucsSec = Constant <$> \(UCsProg _) -> mempty,
   traceSec = Constant <$> \(TraceabilityProg lc _ c s) ->
     mconcat [mCon lc, mCon c, mSec s],
   existSolnSec = Constant <$> \(ExistSolnProg c) -> mCon c,
@@ -210,7 +207,8 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
     reqSub = Constant . f <$> \case
       (FReqsSub c _) -> def c
       (NonFReqsSub c) -> def c,
-    lcsSec' = Constant . f <$> \(LCsProg' c) -> def c,
+    lcsSec = Constant . f <$> \(LCsProg c) -> def c,
+    ucsSec = Constant . f <$> \(UCsProg c) -> def c,
     traceSec = Constant . f <$>
       \(TraceabilityProg _ s _ _) -> s,
     auxConsSec = Constant . f <$> \(AuxConsProg _ qdef) -> def qdef

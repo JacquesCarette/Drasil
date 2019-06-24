@@ -1,4 +1,4 @@
-module Drasil.SWHS.Changes where
+module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL, likeChgTLH, unlikelyChgs) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -50,8 +50,8 @@ likeChgDT = cic "likeChgDT" (
 --
 likeChgDITPW = cic "likeChgDITPW" (
   foldlSent [chgsStart assumpSITWP (S "To add more flexibility to the"),
-  phrase simulation `sC` (phrase tempInit `ofThe` phrase water) `sAnd`
-  S "the", short phsChgMtrl, S "could be allowed to have different",
+  phrase simulation `sC` (phrase tempInit `ofThe` phrase water) `andThe`
+  short phsChgMtrl, S "could be allowed to have different",
   plural value] ) "Different-Initial-Temps-PCM-Water" likeChgDom
 --
 likeChgTLH = cic "likeChgTLH" (

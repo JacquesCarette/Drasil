@@ -266,7 +266,7 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   selfAccess :: Label -> repr (Function repr) -> repr (Value repr)
 
-  listSizeAccess     :: repr (Value repr) -> repr (Value repr)
+  listSizeAccess :: repr (Value repr) -> repr (Value repr)
 
   listIndexExists :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   argExists       :: Integer -> repr (Value repr)
@@ -291,11 +291,11 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
 
   listSize           :: repr (Function repr)
   listAdd            :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Function repr)
+    repr (Value repr) -> repr (Function repr)
   listAppend         :: repr (Value repr) -> repr (Function repr)
 
-  iterBegin :: repr (Function repr)
-  iterEnd   :: repr (Function repr)
+  iterBegin :: repr (StateType repr) -> repr (Function repr)
+  iterEnd   :: repr (StateType repr) -> repr (Function repr)
 
 class (ValueSym repr, FunctionSym repr, Selector repr) => 
   SelectorFunction repr where
@@ -451,8 +451,8 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
 
   checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> 
     repr (Body repr) -> repr (Statement repr)
-  notifyObservers :: repr (StateType repr) -> Label -> repr (StateType repr) -> [repr (Value repr)] -> 
-    repr (Statement repr)
+  notifyObservers :: repr (StateType repr) -> Label -> repr (StateType repr) -> 
+    [repr (Value repr)] -> repr (Statement repr)
 
   getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)

@@ -297,11 +297,11 @@ instance FunctionSym PythonCode where
     valType v) (fmap fst (assign (var n (fmap valType v)) v))))
 
   listSize = liftA2 fd int (return $ text "len")
-  listAdd i v = func "insert" (listType static_ $ fmap valType v) [i, v]
+  listAdd _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
   listAppend v = func "append" (listType static_ $ fmap valType v) [v]
 
-  iterBegin = error "Attempt to use iterBegin in Python, but Python has no iterators"
-  iterEnd = error "Attempt to use iterEnd in Python, but Python has no iterators"
+  iterBegin _ = error "Attempt to use iterBegin in Python, but Python has no iterators"
+  iterEnd _ = error "Attempt to use iterEnd in Python, but Python has no iterators"
 
 instance SelectorFunction PythonCode where
   listAccess t v = liftA2 fd t (fmap pyListAccess v)
@@ -401,7 +401,7 @@ instance StatementSym PythonCode where
   changeState fsmName toState = var fsmName string &= litString toState
 
   initObserverList = listDecDef observerListName
-  addObserver t o = valState $ obsList $. listAdd lastelem o
+  addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = listSizeAccess obsList
 

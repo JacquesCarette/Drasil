@@ -153,10 +153,10 @@ instance ControlBlockSym CSharpCode where
         v_i = var l_i int
     in
       block [
-        listDec l_temp 0 t,
+        listDec l_temp 0 (fmap valType vnew),
         for (varDecDef l_i int (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
-          (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess (fmap valType vold) v_i)),
+          (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess t v_i)),
         vnew &= v_temp]
 
 instance UnaryOpSym CSharpCode where
@@ -316,11 +316,11 @@ instance FunctionSym CSharpCode where
   set n v = func (setterName n) (fmap valType v) [v]
 
   listSize = liftA2 fd int (fmap funcDocD (var "Count" int))
-  listAdd i v = func "Insert" (fmap valType v) [i, v]
+  listAdd _ i v = func "Insert" (fmap valType v) [i, v]
   listAppend v = func "Add" (fmap valType v) [v]
 
-  iterBegin = error "Attempt to use iterBegin in C#, but C# has no iterators"
-  iterEnd = error "Attempt to use iterEnd in C#, but C# has no iterators"
+  iterBegin _ = error "Attempt to use iterBegin in C#, but C# has no iterators"
+  iterEnd _ = error "Attempt to use iterEnd in C#, but C# has no iterators"
 
 instance SelectorFunction CSharpCode where
   listAccess t v = liftA2 fd t (fmap listAccessDocD v)
@@ -435,7 +435,7 @@ instance StatementSym CSharpCode where
   changeState fsmName toState = var fsmName string &= litString toState
 
   initObserverList = listDecDef observerListName
-  addObserver t o = valState $ obsList $. listAdd lastelem o
+  addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 

@@ -159,11 +159,10 @@ instance ControlBlockSym JavaCode where
         v_i = var l_i int
     in
       block [
-        listDec l_temp 0 t,
+        listDec l_temp 0 (fmap valType vnew),
         for (varDecDef l_i int (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
-          (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess (fmap 
-          valType vold) v_i)),
+          (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess t v_i)),
         vnew &= v_temp]
 
 instance UnaryOpSym JavaCode where
@@ -323,11 +322,11 @@ instance FunctionSym JavaCode where
   set n v = func (setterName n) (fmap valType v) [v]
 
   listSize = func "size" int []
-  listAdd i v = func "add" (listType static_ $ fmap valType v) [i, v]
+  listAdd _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
   listAppend v = func "add" (listType static_ $ fmap valType v) [v]
 
-  iterBegin = error "Attempt to use iterBegin in Java, but Java has no iterators"
-  iterEnd = error "Attempt to use iterEnd in Java, but Java has no iterators"
+  iterBegin _ = error "Attempt to use iterBegin in Java, but Java has no iterators"
+  iterEnd _ = error "Attempt to use iterEnd in Java, but Java has no iterators"
 
 instance SelectorFunction JavaCode where
   listAccess t i = func "get" t [i]
@@ -449,7 +448,7 @@ instance StatementSym JavaCode where
   changeState fsmName toState = var fsmName string &= litString toState
 
   initObserverList = listDecDef observerListName
-  addObserver t o = valState $ obsList $. listAdd lastelem o
+  addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 

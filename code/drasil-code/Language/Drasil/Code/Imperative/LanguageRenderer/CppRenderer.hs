@@ -32,8 +32,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
   minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD,
   orOpDocD, binExpr, binExpr', mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
-  litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
-  defaultStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfDocD, 
+  litIntD, litStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfDocD, 
   funcAppDocD, funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, 
   continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, 
   dot, observerListName, doubleSlash, addCommentsDocD, callFuncParamList, 
@@ -186,12 +185,6 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   litFloat v = pair (litFloat v) (litFloat v)
   litInt v = pair (litInt v) (litInt v)
   litString s = pair (litString s) (litString s)
-
-  defaultChar = pair defaultChar defaultChar
-  defaultFloat = pair defaultFloat defaultFloat
-  defaultInt = pair defaultInt defaultInt
-  defaultString = pair defaultString defaultString
-  defaultBool = pair defaultBool defaultBool
 
   ($->) v1 v2 = pair (($->) (pfst v1) (pfst v2)) (($->) (psnd v1) (psnd v2))
   ($:) l1 l2 = pair (($:) l1 l2) (($:) l1 l2)
@@ -699,12 +692,6 @@ instance ValueSym CppSrcCode where
   litFloat v = return (litFloatD v, Just $ show v)
   litInt v = return (litIntD v, Just $ show v)
   litString s = return (litStringD s, Just $ "\"" ++ s ++ "\"")
-
-  defaultChar = return (defaultCharD, Just "space character")
-  defaultFloat = return (defaultFloatD, Just "0.0")
-  defaultInt = return (defaultIntD, Just "0")
-  defaultString = return (defaultStringD, Just "empty string")
-  defaultBool = litFalse
 
   ($->) = objVar
   ($:) = enumElement
@@ -1214,12 +1201,6 @@ instance ValueSym CppHdrCode where
   litFloat _ = return (mkVal empty)
   litInt _ = return (mkVal empty)
   litString _ = return (mkVal empty)
-
-  defaultChar = return (mkVal empty)
-  defaultFloat = return (mkVal empty)
-  defaultInt = return (mkVal empty)
-  defaultString = return (mkVal empty)
-  defaultBool = return (mkVal empty)
 
   ($->) _ _ = return (mkVal empty)
   ($:) _ _ = return (mkVal empty)

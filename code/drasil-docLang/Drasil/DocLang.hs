@@ -25,7 +25,7 @@ module Drasil.DocLang (
     reqF, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, 
     -- Sections.SpecificSystemDescription
     assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, 
-    inModelF, outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr,
+    inModelF, outDataConstTbl, probDescF, termDefnF, specSysDescr,
     -- Sections.Stakeholders
     -- Sections.TableOfAbbAndAcronyms
     -- Sections.TableOfSymbols
@@ -41,8 +41,7 @@ module Drasil.DocLang (
     getTraceMapFromTM, getTraceMapFromGD,
     getTraceMapFromDD, getTraceMapFromIM, getSCSSub, generateTraceMap',
    -- Labels
-    goalStmtLabel, solutionLabel, characteristicsLabel,
-    physSystDescriptionLabel
+    goalStmtLabel, solutionLabel, characteristicsLabel
     ) where 
 
 import Drasil.DocumentLanguage (AppndxSec(..), AuxConstntSec(..), 
@@ -66,7 +65,7 @@ import Drasil.Sections.Requirements (reqF, mkInputPropsTable, mkQRTuple, mkQRTup
     mkValsSourceTable)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 
     dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
-    outDataConstTbl, physSystDesc, probDescF, termDefnF, specSysDescr)
+    outDataConstTbl, probDescF, termDefnF, specSysDescr)
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms
 --import Drasil.Sections.TableOfSymbols
@@ -79,5 +78,4 @@ import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc)
 import Drasil.TraceTable (generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
     getTraceMapFromDD, getTraceMapFromIM, getSCSSub, generateTraceMap')
 -- Commented out modules aren't used - uncomment if this changes
-import Drasil.DocumentLanguage.Labels (goalStmtLabel, solutionLabel, characteristicsLabel,
-    physSystDescriptionLabel)
+import Drasil.DocumentLanguage.Labels (goalStmtLabel, solutionLabel, characteristicsLabel)

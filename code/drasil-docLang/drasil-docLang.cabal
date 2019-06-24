@@ -40,6 +40,8 @@ library
     split >= 0.2.3.1,
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
+    transformers >= 0.4.2.0,
+    multiplate >= 0.0.2,
     data-fix (>= 0.0.4 && <= 1.0),
     drasil-lang >= 0.1.59,
     drasil-data >= 0.1.12,

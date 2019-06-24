@@ -22,10 +22,9 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
   divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, 
   binOpDocD', binExpr, binExpr', mkVal, litTrueD, litFalseD, litCharD, 
-  litFloatD, litIntD, litStringD, defaultCharD, defaultFloatD, defaultIntD, 
-  defaultStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
-  objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
-  listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
+  litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, 
+  enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, 
+  stateObjDocD, listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
   listIndexExistsDocD, funcDocD, castDocD, sizeDocD, listAccessDocD, 
   listSetDocD, objAccessDocD, castObjDocD, includeD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, addCommentsDocD, 
@@ -518,18 +517,6 @@ litIntD = integer
 
 litStringD :: String -> Doc
 litStringD = doubleQuotedText
-
-defaultCharD :: Doc
-defaultCharD = char ' '
-
-defaultFloatD :: Doc
-defaultFloatD = double 0.0
-
-defaultIntD :: Doc
-defaultIntD = integer 0
-
-defaultStringD :: Doc
-defaultStringD = doubleQuotedText ""
 
 -- Value Printers --
 

@@ -54,8 +54,7 @@ import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 
 import Drasil.SSP.Assumptions (assumptions)
-import Drasil.SSP.Changes (likelyChgs, likelyChgsCon, unlikelyChgs,
-  unlikelyChgsCon)
+import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
@@ -139,8 +138,8 @@ mkSRS = [RefSec $ RefProg intro
     FReqsSub funcReqs funcReqTables,
     NonFReqsSub nonFuncReqs
   ],
-  LCsSec $ LCsProg likelyChgsCon,
-  UCsSec $ UCsProg unlikelyChgsCon,
+  LCsSec $ LCsProg likelyChgs,
+  UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $ TraceabilityProg (map fst traceyMatrix) (map (foldlList Comma List . snd) traceyMatrix)
     (map (LlC . fst) traceyMatrix) [],
   AuxConstntSec $ AuxConsProg ssp [],

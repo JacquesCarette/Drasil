@@ -12,7 +12,7 @@ import System.Environment (getEnv, lookupEnv)
 import System.FilePath (takeBaseName, takeExtension)
 
 type Name = String
-type SourceLocation = Maybe String
+type SourceLocation = Maybe [String]
 type SRSVariants = [(Name, String)]
 data Example = E Name SourceLocation SRSVariants
 
@@ -32,7 +32,14 @@ mkExamples :: String -> FilePath -> FilePath -> IO [Example]
 mkExamples repoRoot path srsDir = do
   names <- sort <$> (listDirectory path >>= filterM (\x -> doesDirectoryExist $ path ++ x))
   sources <- mapM (\x -> doesFileExist (path ++ x ++ "/src") >>=
-      \y -> if y then Just . (++) repoRoot . rstrip <$> readFile (path ++ x ++ "/src") else return Nothing) names
+      \y -> if y then Just . map ((++) repoRoot) . lines . rstrip <$> readFile (path ++ x ++ "/src") else return Nothing) names
+
+  -- a list of Just descriptions or Nothing based on existence and contents of desc file.
+  descriptions <- mapM (\x -> doesFileExist ("descriptions/" ++ x ++ ".txt") >>=
+      \y -> if y then Just . rstrip <$> readFile ("descriptions/" ++ x ++ ".txt") else return Nothing) names
+
+  -- creates a list of SRSVariants, so a list of list of tuples.
+  -- the outer list has an element for each example.
   srss <- mapM (\x -> sort . getSRS <$> listDirectory (srsPath path x srsDir)) names
   return $ map (\(name, source, srs) -> E name source srs) $ zip3 names sources srss
 
@@ -44,6 +51,29 @@ maybeField s f = Context $ \k _ i -> do
   else
     fail $ "maybeField " ++ s ++ " used when really Nothing. Wrap in `$if(" ++ s ++ ")$` block."
 
+----------- New additions ---------
+-- Could be better optimized
+
+maybeListField :: String -> (Item a -> Compiler (Maybe [String])) -> Context a
+maybeListField s f n = Context $ \k _ i -> do
+  val <- f i
+  if k == s && isJust val then
+    return $ StringField $ (fromJust val)!!n
+  else
+    fail $ "maybeField " ++ s ++ " used when really Nothing. Wrap in `$if(" ++ s ++ ")$` block."
+
+takeFromSlash :: String -> String
+takeFromSlash s = takeFromSlashHelper s ""
+  where
+    takeFromSlashHelper (xs ++ [x]) end
+      | x == "/" = end
+      | otherwise = takeFromSlashHelper (x:end)
+    takeFromSlashHelper _ _ = error "src files have incorrect format"
+
+
+maybeListField "src" (return . src . itemBody) 0 <>
+maybeListField takeFromSlash (return . src . itemBody)
+
 mkExampleCtx :: FilePath -> FilePath -> Context Example
 mkExampleCtx exampleDir srsDir =
   listFieldWith "srs" (
@@ -53,7 +83,10 @@ mkExampleCtx exampleDir srsDir =
     field "url" (\x -> return $ srsPath exampleDir (name $ example x) srsDir ++ fst (srsVar x))
   ) (\x -> mapM (\y -> makeItem (y, itemBody x)) $ srs $ itemBody x)  <>
   field "name" (return . name . itemBody) <>
-  maybeField "src" (return . src . itemBody)
+  maybeField "desc" (return . desc . itemBody) <>
+  maybeListField "src" (return . src . itemBody) 0 <>
+  maybeListField "src" (return . src . itemBody) 0
+
   where
     name (E nm _ _) = nm
     src (E _ s _) = s

@@ -69,7 +69,11 @@ copy_examples() {
 		if [ -d "$example/"src ]; then
 			# We don't expose code in deploy. It's more conveneient to link to GitHub's directory
 			# We place a stub file which Hakyll will replace.
-			echo $(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-) > "$EXAMPLE_DEST$example_name/src"
+            cd ../..
+            ls -d code/stable/"$example_name"/src/* > code/"$DEPLOY_FOLDER$EXAMPLE_DEST$example_name/src"
+            cd code/"$DEPLOY_FOLDER"
+			# ls -d "$CUR_DIR"$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)* > "$EXAMPLE_DEST$example_name/src"
+            #echo $(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-) > "$EXAMPLE_DEST$example_name/src"
 		fi
 	done
 }
@@ -87,7 +91,8 @@ build_website() {
 	cp -r "$CUR_DIR"website/_site/. .
 
 	# src stubs were consumed by site generator; safe to delete those.
-	rm "$EXAMPLE_DEST"*/src
+	# rm "$EXAMPLE_DEST"*/src
+    rm -r descriptions/
 }
 
 

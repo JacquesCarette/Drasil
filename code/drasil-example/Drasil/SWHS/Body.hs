@@ -22,7 +22,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(..),
   dataConstraintUncertainty, intro, mkDoc, mkEnumSimpleD, outDataConstTbl,
-  termDefnF, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
+  termDefnF', tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD,
   getTraceMapFromIM, getSCSSub, traceMatStandard)
 import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg, inModel)
@@ -321,7 +321,7 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 -----------------------------------------
 
 termsAndDefns :: Section
-termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
+termsAndDefns = termDefnF' Nothing [termsAndDefnsBullets]
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note:
 -- GlassBR has an additional sentence with a reference at the end.)

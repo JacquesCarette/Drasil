@@ -25,7 +25,7 @@ module Drasil.DocLang (
     reqF, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, 
     -- Sections.SpecificSystemDescription
     assumpF, dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, 
-    inModelF, outDataConstTbl, probDescF, termDefnF, specSysDescr,
+    inModelF, outDataConstTbl, probDescF, termDefnF, termDefnF', specSysDescr,
     -- Sections.Stakeholders
     -- Sections.TableOfAbbAndAcronyms
     -- Sections.TableOfSymbols
@@ -65,7 +65,7 @@ import Drasil.Sections.Requirements (reqF, mkInputPropsTable, mkQRTuple, mkQRTup
     mkValsSourceTable)
 import Drasil.Sections.SpecificSystemDescription (assumpF, 
     dataConstraintUncertainty, dataDefnF, goalStmtF, inDataConstTbl, inModelF, 
-    outDataConstTbl, probDescF, termDefnF, specSysDescr)
+    outDataConstTbl, probDescF, termDefnF, termDefnF', specSysDescr)
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms
 --import Drasil.Sections.TableOfSymbols

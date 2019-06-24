@@ -1,7 +1,7 @@
 module Drasil.Sections.SpecificSystemDescription 
   ( specSysDescr
   , probDescF
-  , termDefnF
+  , termDefnF, termDefnF'
   , physSystDesc
   , goalStmtF
   , solutionCharSpecIntro 
@@ -53,6 +53,16 @@ probDescF prob = SRS.probDesc [mkParagraph $ foldlSent [S "A", phrase system `sI
 --can take a (Just sentence) if needed or Nothing if not
 termDefnF :: Maybe Sentence -> [Contents] -> Section
 termDefnF end otherContents = SRS.termAndDefn (intro : otherContents) []
+      where lastF Nothing  = EmptyS
+            lastF (Just s) = S "." +:+ s
+            intro = foldlSP [S "This subsection provides a list of terms", 
+                    S "that are used in the subsequent", plural section_, 
+                    S "and their meaning, with the", phrase purpose, 
+                    S "of reducing ambiguity and making it easier to correctly", 
+                    S "understand the", plural requirement :+: lastF end]
+
+termDefnF' :: Maybe Sentence -> [Contents] -> Section
+termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []
       where lastF Nothing  = EmptyS
             lastF (Just s) = S "." +:+ s
             intro = foldlSP [S "This subsection provides a list of terms", 

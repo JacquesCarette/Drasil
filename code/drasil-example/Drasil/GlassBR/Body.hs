@@ -22,7 +22,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
   dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  termDefnF, tsymb, generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
+  termDefnF', tsymb, generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
   getTraceMapFromDD, getTraceMapFromIM, getSCSSub, traceMatStandard,
   characteristicsLabel, generateTraceMap')
 
@@ -380,7 +380,7 @@ prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict whether a",
 {--Terminology and Definitions--}
 
 termsAndDesc :: Section
-termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
+termsAndDesc = termDefnF' (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ makeCiteS astm2009 `sIn`
   makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
 

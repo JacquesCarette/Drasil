@@ -17,7 +17,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
   LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(Goals), generateTraceMap', dataConstraintUncertainty, inDataConstTbl,
-  intro, mkDoc, outDataConstTbl, outDataConstTbl, termDefnF, tsymb,
+  intro, mkDoc, outDataConstTbl, outDataConstTbl, termDefnF', tsymb,
   getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   traceMatStandard, solutionLabel)
@@ -379,7 +379,7 @@ probDescIntro = foldlSent_
 -----------------------------------------
 
 termsAndDefns :: Section
-termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
+termsAndDefns = termDefnF' Nothing [termsAndDefnsBullets]
 
 terminologyLabel :: Reference
 terminologyLabel = makeLstRef "terminologyGM" "terminologyGM"

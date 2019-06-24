@@ -50,7 +50,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
   ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty,
-  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, termDefnF,
+  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, termDefnF',
   tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceMap', traceMatStandard)
@@ -347,7 +347,7 @@ probDescIntro :: Sentence
 probDescIntro = foldlSent_ [S "investigate the heating" `sOf` phrase water, S "in a", phrase sWHT]
 
 termsAndDefns :: Section
-termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
+termsAndDefns = termDefnF' Nothing [termsAndDefnsBullets]
 
 termsAndDefnsBullets :: Contents
 termsAndDefnsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 

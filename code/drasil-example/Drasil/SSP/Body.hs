@@ -20,7 +20,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), dataConstraintUncertainty, intro, mkDoc, termDefnF, tsymb'',
+  PDSub(..), dataConstraintUncertainty, intro, mkDoc, termDefnF', tsymb'',
   getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceMap', traceMatStandard)
@@ -388,7 +388,7 @@ From when solution was used in Problem Description:
 
 -- SECTION 4.1.1 --
 termsDefs :: Section
-termsDefs = termDefnF Nothing [termsDefsList]
+termsDefs = termDefnF' Nothing [termsDefsList]
 
 termsDefsList :: Contents
 termsDefsList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $

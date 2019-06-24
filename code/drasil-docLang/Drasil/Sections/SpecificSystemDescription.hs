@@ -57,7 +57,7 @@ termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ map termDef lst] []
                   S "This subsection provides a list of terms that are used in the subsequent",
                   plural section_ `sAnd` S "their meaning, with the", phrase purpose `sOf`
                   S "reducing ambiguity and making it easier to correctly understand the" +:+.
-                  plural requirement, maybe EmptyS (\x -> x) end]
+                  plural requirement, maybe EmptyS id end]
         termDef x = atStart x +: EmptyS +:+ (x ^. defn)
 
 termDefnF' :: Maybe Sentence -> [Contents] -> Section

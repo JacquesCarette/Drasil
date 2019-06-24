@@ -1,15 +1,17 @@
 {-# LANGUAGE TupleSections #-}
 
 module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
-  ScopeTag(..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
-  TypeData(..), td, blank,verticalComma, angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,
-  vimap,vibmap, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, 
-  liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst,
-  liftPairSnd
+  ScopeTag(..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
+  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, blank,verticalComma,
+  angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
+  mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, 
+  lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
+  liftPairSnd, getInnerType, convType
 ) where
 
-import Language.Drasil.Code.Code (CodeType)
-import Language.Drasil.Code.Imperative.Symantics (Label)
+import Language.Drasil.Code.Code (CodeType(..))
+import qualified Language.Drasil.Code.Imperative.Symantics as S (Label, 
+  RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
@@ -26,9 +28,14 @@ data Terminator = Semi | Empty
 
 data ScopeTag = Pub | Priv deriving Eq
 
-data ModData = MD {name :: Label, isMainMod :: Bool, modDoc :: Doc}
+data FuncData = FD {funcType :: TypeData, funcDoc :: Doc}
 
-md :: Label -> Bool -> Doc -> ModData
+fd :: TypeData -> Doc -> FuncData
+fd = FD
+
+data ModData = MD {name :: S.Label, isMainMod :: Bool, modDoc :: Doc}
+
+md :: S.Label -> Bool -> Doc -> ModData
 md = MD
 
 data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag, 
@@ -47,6 +54,12 @@ data TypeData = TD {cType :: CodeType, typeDoc :: Doc}
 
 td :: CodeType -> Doc -> TypeData
 td = TD
+
+-- Maybe String is the String representation of the value
+data ValData = VD {valName :: Maybe String, valType :: TypeData, valDoc :: Doc}
+
+vd :: Maybe String -> TypeData -> Doc -> ValData
+vd = VD
 
 blank :: Doc
 blank = text ""
@@ -132,3 +145,19 @@ liftPairFst (c, n) = fmap (, n) c
 
 liftPairSnd :: Functor f => (a, f b) -> f (a, b)
 liftPairSnd (c, n) = fmap (c ,) n
+
+getInnerType :: CodeType -> CodeType
+getInnerType (List innerT) = innerT
+getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
+
+convType :: (S.RenderSym repr) => CodeType -> repr (S.StateType repr)
+convType Boolean = S.bool
+convType Integer = S.int
+convType Float = S.float
+convType Char = S.char
+convType String = S.string
+convType (List t) = S.listType S.dynamic_ (convType t)
+convType (Iterator t) = S.iterator $ convType t
+convType (Object n) = S.obj n
+convType Void = S.void
+convType File = error "convType: File ?"

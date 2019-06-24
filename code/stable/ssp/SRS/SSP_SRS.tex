@@ -2228,6 +2228,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}
+This section lists the likely changes to be made to the software.
 \begin{itemize}
 \item[Calculate-Inhomogeneous-Soil-Layers:\phantomsection\label{LC_inhomogeneous}]\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} - The system currently assumes the soil mass is homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
 \item[Calculate-Seismic-Force:\phantomsection\label{LC_seismic}]\hyperref[assumpSF]{A: Seismic-Force} - The system currently assumes no seismic force. In the future, calculations can be added for the presence of seismic force.
@@ -2235,7 +2236,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
-If changes were to be made with regard to the following, a different algorithm would be needed.
+This section lists the unlikely changes to be made to the software.
 \begin{itemize}
 \item[Normal-And-Shear-Linear-Only:\phantomsection\label{UC_normshearlinear}]Changes related to \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} are not possible due to the dependency of the calculations on the linear relationship between interslice normal forces and interslice shear forces.
 \item[2D-Analysis-Only:\phantomsection\label{UC_2donly}]\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} allows for 2D analysis with these models only because stress along the $z$-direction is zero. These models do not take into account stress in the $z$-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.

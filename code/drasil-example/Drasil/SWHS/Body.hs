@@ -21,11 +21,11 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(..),
-  dataConstraintUncertainty, intro, mkDoc, mkEnumSimpleD, outDataConstTbl,
-  tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
+  dataConstraintUncertainty, intro, mkDoc, outDataConstTbl, tsymb'',
+  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD,
   getTraceMapFromIM, getSCSSub, traceMatStandard)
-import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg, inModel)
+import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
@@ -190,8 +190,8 @@ mkSRS = [RefSec $ RefProg intro [
     FReqsSub funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
-  LCsSec $ LCsProg likelyChgsList,
-  UCsSec $ UCsProg unlikelyChgsList,
+  LCsSec $ LCsProg likelyChgs,
+  UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $
     TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
       (map (LlC . fst) traceabilityMatrices) [],
@@ -456,21 +456,9 @@ outputConstraints = [tempW, tempPCM, watE, pcmE]
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
-likelyChgsSect :: Section
-likelyChgsSect = SRS.likeChg likelyChgsList []
-
-likelyChgsList :: [Contents]
-likelyChgsList = mkEnumSimpleD likelyChgs
-
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
 --------------------------------
-
-unlikelyChgsSect :: Section
-unlikelyChgsSect = SRS.unlikeChg unlikelyChgsList []
-
-unlikelyChgsList :: [Contents]
-unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --

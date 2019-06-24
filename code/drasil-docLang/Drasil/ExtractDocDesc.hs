@@ -309,47 +309,18 @@ ciGetDocDesc :: DocDesc -> [CI]
 ciGetDocDesc = concatMap ciGetDocSec
 
 ciGetDocSec :: DocSection -> [CI]
-ciGetDocSec RefSec{}            = []
-ciGetDocSec (IntroSec intro)    = ciGetIntro intro
-ciGetDocSec (StkhldrSec stk)    = ciGetStk stk
-ciGetDocSec GSDSec{}            = []
-ciGetDocSec (SSDSec ssd)        = ciGetSSD ssd
-ciGetDocSec ReqrmntSec{}        = []
-ciGetDocSec LCsSec{}            = []
-ciGetDocSec LCsSec'{}           = []
-ciGetDocSec UCsSec{}            = []
-ciGetDocSec TraceabilitySec{}   = []
-ciGetDocSec (AuxConstntSec aux) = ciGetAux aux
-ciGetDocSec Bibliography        = []
-ciGetDocSec AppndxSec{}         = []
-ciGetDocSec ExistingSolnSec{}   = []
+ciGetDocSec = foldFor docSec ciPlate
 
-ciGetIntro :: IntroSec -> [CI]
-ciGetIntro (IntroProg _ _ insub) = concatMap ciGetIntroSub insub
-
-ciGetIntroSub :: IntroSub -> [CI]
-ciGetIntroSub IPurpose{}          = []
-ciGetIntroSub IScope{}            = []
-ciGetIntroSub IChar{}             = []
-ciGetIntroSub (IOrgSec  _ ci _ _) = [ci]
-
-ciGetStk :: StkhldrSec -> [CI]
-ciGetStk (StkhldrProg  ci _)   = [ci]
-ciGetStk (StkhldrProg2 stksub) = concatMap ciGetStkSub stksub
-
-ciGetStkSub :: StkhldrSub -> [CI]
-ciGetStkSub (Client ci1 _) = [ci1]
-ciGetStkSub (Cstmr ci2)    = [ci2]
-
-ciGetSSD :: SSDSec -> [CI]
-ciGetSSD (SSDProg ssdsub) = concatMap ciGetSSDSub ssdsub
-
-ciGetSSDSub :: SSDSub -> [CI]
-ciGetSSDSub (SSDProblem pd) = ciGetProbDesc pd
-ciGetSSDSub SSDSolChSpec{}  = []
-
-ciGetProbDesc :: ProblemDescription -> [CI]
-ciGetProbDesc PDProg{} = []
-
-ciGetAux :: AuxConstntSec -> [CI]
-ciGetAux (AuxConsProg ci _) = [ci]
+ciPlate :: DLPlate (Constant [CI])
+ciPlate = preorderFold $ purePlate {
+  introSub = Constant <$> \case
+    (IOrgSec _ ci _ _) -> [ci]
+    _ -> [],
+  stkSec = Constant <$> \case
+    (StkhldrProg ci _) -> [ci]
+    (StkhldrProg2 _) -> [],
+  stkSub = Constant <$> \case
+   (Client ci _) -> [ci]
+   (Cstmr ci) -> [ci],
+   auxConsSec = Constant <$> \(AuxConsProg ci _) -> [ci]
+}

@@ -32,6 +32,7 @@ import Data.Drasil.IdeaDicts (inModel, thModel)
 import qualified Drasil.DocLang.SRS as SRS
 
 import Control.Lens ((^.))
+import Data.Maybe
 
 -- | Specific System description section builder. Takes the system and subsections.
 specSysDescr :: [Section] -> Section
@@ -57,7 +58,7 @@ termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ map termDef lst] []
                   S "This subsection provides a list of terms that are used in the subsequent",
                   plural section_ `sAnd` S "their meaning, with the", phrase purpose `sOf`
                   S "reducing ambiguity and making it easier to correctly understand the" +:+.
-                  plural requirement, maybe EmptyS id end]
+                  plural requirement, fromMaybe EmptyS end]
         termDef x = atStart x +: EmptyS +:+ (x ^. defn)
 
 termDefnF' :: Maybe Sentence -> [Contents] -> Section

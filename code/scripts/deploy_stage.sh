@@ -57,7 +57,7 @@ copy_graphs() {
 copy_descs() {
   rm -r descriptions >/dev/null 2>&1  # Printing an error message that a directory doesn't exist isn't the most useful.
   mkdir -p descriptions
-  cp -r "$CUR_DIR"descriptions/. descriptions/
+  cp -r "$CUR_DIR"website/descriptions/. descriptions/
 }
 
 copy_examples() {

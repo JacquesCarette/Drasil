@@ -2,9 +2,9 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, chgsStart,
   displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple, enumSimpleU,
   eqN, eqUnR, eqUnR', fmtU, follows, getTandS, itemRefToSent, makeListRef,
   makeTMatrix, maybeChanged, maybeExpanded, maybeWOVerb, mkEnumAbbrevList,
-  mkTableFromColumns, noRefs, noRefsLT, refineChain, showingCxnBw,
-  sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym,
-  typUncr, underConsidertn, unwrap, weave, zipSentList) where
+  mkTableFromColumns, noRefs, refineChain, showingCxnBw, sortBySymbol,
+  sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym, typUncr,
+  underConsidertn, unwrap, weave, zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)

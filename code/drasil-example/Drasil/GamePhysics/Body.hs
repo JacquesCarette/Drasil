@@ -59,7 +59,6 @@ import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 
-import Control.Lens ((^.))
 import qualified Data.Map as Map
 
 authors :: People

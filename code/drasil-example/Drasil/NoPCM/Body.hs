@@ -10,7 +10,6 @@ import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 
-import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Data.Drasil.People (thulasi)
 

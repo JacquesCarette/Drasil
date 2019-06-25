@@ -6,7 +6,7 @@ import Theory.Drasil (GenDefn, TheoryModel, gdNoRefs)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
-import Data.Drasil.Concepts.Math (cartesian, vector)
+import Data.Drasil.Concepts.Math (cartesian, equation, vector)
 import Data.Drasil.Concepts.Physics (oneD, rectilinear, twoD)
 
 import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
@@ -147,7 +147,7 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
 
 rearrAndIntSent, performIntSent :: Sentence
 rearrAndIntSent   = S "Rearranging" `sAnd` S "integrating" `sC` S "we" +: S "have"
-performIntSent    = S "Performing the integration" `sC` S "we" +: S "have"
+performIntSent    = S "Performing the integration" `sC` S "we have the required" +: phrase equation
 
 -- Helper for making vector derivations
 vecDeriv :: [(UnitalChunk, Expr)] -> GenDefn -> Sentence
@@ -160,7 +160,7 @@ vecDeriv vecs gdef = foldlSentCol [
   phrase iVel, sParen (S "at" +:+ E (sy time $= 0) `sC` S "from" +:+ makeRef2S timeStartZero) `sIs`
   S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), S "Since we have a",
   phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phrase coordinate `sOf`
-  S "the", phrase ((fst . head) vecs), phrase vector, S "to yield"]
+  S "the", phrase ((fst . head) vecs), phrase vector, S "to yield the required", phrase equation]
 
 -- Helper expressions that represent the vectors of quantities as components
 positionXY, velocityXY, accelerationXY, constAccelXY :: Expr

@@ -1,4 +1,4 @@
-module Drasil.Projectile.IMods (distanceIM, iMods, messageIM, offsetIM, timeIM) where
+module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) where
 
 import Prelude hiding (cos, sin)
 
@@ -12,8 +12,8 @@ import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Math (constraint, equation, xAxis)
 
 import Data.Drasil.Quantities.Math (pi_)
-import Data.Drasil.Quantities.Physics (distance, iSpeed, ixPos, ixVel, iyPos,
-  iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
+import Data.Drasil.Quantities.Physics (iSpeed, ixPos, ixVel, iyPos, iyVel,
+  time, xConstAccel, xPos, yConstAccel, yPos)
 
 import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, launchOrigin,
   posXDirection, targetXAxis, timeStartZero, yAxisGravity)
@@ -25,7 +25,7 @@ import Drasil.Projectile.Unitals (flightDur, grav, landPos, launAngle,
   launSpeed, message, offset, targPos, tol)
 
 iMods :: [InstanceModel]
-iMods = [timeIM, distanceIM, offsetIM, messageIM]
+iMods = [timeIM, landPosIM, offsetIM, messageIM]
 
 ---
 timeIM :: InstanceModel
@@ -74,49 +74,48 @@ timeDerivEqn4 = sy flightDur $= 2 * sy iyVel / sy grav
 timeDerivEqn5 = sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy grav
 
 ---
-distanceIM :: InstanceModel
-distanceIM = imNoRefs distanceRC [qw launSpeed, qw launAngle]
+landPosIM :: InstanceModel
+landPosIM = imNoRefs landPosRC [qw launSpeed, qw launAngle]
   [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw landPos)
-  [sy landPos $> 0] distanceDeriv "calOfLandingDist" [angleConstraintNote, gravNote, landPosConsNote]
+  [sy landPos $> 0] landPosDeriv "calOfLandingDist" [angleConstraintNote, gravNote, landPosConsNote]
 
-distanceExpr :: Expr
-distanceExpr = sy landPos $= 2 * square (sy launSpeed) * sin (sy launAngle) *
+landPosExpr :: Expr
+landPosExpr = sy landPos $= 2 * square (sy launSpeed) * sin (sy launAngle) *
                                 cos (sy launAngle) / sy grav
 
-distanceRC :: RelationConcept
-distanceRC = makeRC "distanceRC" (nounPhraseSP "calculation of landing distance")
-  landPosConsNote distanceExpr
+landPosRC :: RelationConcept
+landPosRC = makeRC "landPosRC" (nounPhraseSP "calculation of landing position")
+  landPosConsNote landPosExpr
 
-distanceDeriv :: Derivation
-distanceDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase landPos)) :
-               weave [distanceDerivSents, map E distanceDerivEqns]
+landPosDeriv :: Derivation
+landPosDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase landPos)) :
+               weave [landPosDerivSents, map E landPosDerivEqns]
 
-distanceDerivSents :: [Sentence]
-distanceDerivSents = [distanceDerivSent1, distanceDerivSent2,
-                      distanceDerivSent3, distanceDerivSent4]
+landPosDerivSents :: [Sentence]
+landPosDerivSents = [landPosDerivSent1, landPosDerivSent2,
+                      landPosDerivSent3, landPosDerivSent4]
 
-distanceDerivSent1, distanceDerivSent2, distanceDerivSent3, distanceDerivSent4 :: Sentence
-distanceDerivSent1 = foldlSentCol [S "We know that" +:+.
+landPosDerivSent1, landPosDerivSent2, landPosDerivSent3, landPosDerivSent4 :: Sentence
+landPosDerivSent1 = foldlSentCol [S "We know that" +:+.
   foldlList Comma List [eqnWSource (sy ixPos $= 0) launchOrigin,
   eqnWSource (sy xConstAccel $= 0) accelXZero],
   S "Substituting these", plural value, S "into the x-direction" `sOf`
   makeRef2S posVecGD, S "gives us"]
-distanceDerivSent2 = foldlSentCol [S "To find the horizontal", phrase distance,
-  S "travelled" `sC` S "we want to find the", ch xPos, phrase value,
-  sParen (ch landPos), S "at", phrase flightDur,
-  sParen (S "from" +:+ makeRef2S timeIM)]
-distanceDerivSent3 = foldlSentCol [S "From", makeRef2S speedIX,
+landPosDerivSent2 = foldlSentCol [S "To find the", phrase landPos `sC`
+  S "we want to find the", ch xPos, phrase value, sParen (ch landPos),
+  S "at", phrase flightDur, sParen (S "from" +:+ makeRef2S timeIM)]
+landPosDerivSent3 = foldlSentCol [S "From", makeRef2S speedIX,
   sParen (S "with" +:+ (E $ sy iSpeed $= sy launSpeed)), S "we can replace", ch ixVel]
-distanceDerivSent4 = S "Rearranging this" +:+ phrase equation +: S "gives us"
+landPosDerivSent4 = S "Rearranging this gives us the required" +: phrase equation
 
 
-distanceDerivEqns :: [Expr]
-distanceDerivEqns = [distanceDerivEqn1, distanceDerivEqn2, distanceDerivEqn3, distanceExpr]
+landPosDerivEqns :: [Expr]
+landPosDerivEqns = [landPosDerivEqn1, landPosDerivEqn2, landPosDerivEqn3, landPosExpr]
 
-distanceDerivEqn1, distanceDerivEqn2, distanceDerivEqn3 :: Expr
-distanceDerivEqn1 = sy xPos $= sy ixVel * sy time
-distanceDerivEqn2 = sy landPos $= sy ixVel * 2 * sy launSpeed * sin (sy launAngle) / sy grav
-distanceDerivEqn3 = sy landPos $= sy launSpeed * cos (sy launAngle) * 2 * sy launSpeed * sin (sy launAngle) / sy grav
+landPosDerivEqn1, landPosDerivEqn2, landPosDerivEqn3 :: Expr
+landPosDerivEqn1 = sy xPos $= sy ixVel * sy time
+landPosDerivEqn2 = sy landPos $= sy ixVel * 2 * sy launSpeed * sin (sy launAngle) / sy grav
+landPosDerivEqn3 = sy landPos $= sy launSpeed * cos (sy launAngle) * 2 * sy launSpeed * sin (sy launAngle) / sy grav
 
 ---
 offsetIM :: InstanceModel
@@ -154,7 +153,7 @@ gravNote = ch grav `sIs` S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[
 landAndTargPosConsNote = S "The" +:+ plural constraint +:+
   E (sy landPos $> 0) `sAnd` E (sy targPos $> 0) `sAre` S "from" +:+. makeRef2S posXDirection
 
-landPosNote = ch landPos `sIs` S "from" +:+. makeRef2S distanceIM
+landPosNote = ch landPos `sIs` S "from" +:+. makeRef2S landPosIM
 
 landPosConsNote = S "The" +:+ phrase constraint +:+
   E (sy landPos $> 0) `sIs` S "from" +:+. makeRef2S posXDirection

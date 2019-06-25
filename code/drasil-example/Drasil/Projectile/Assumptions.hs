@@ -6,7 +6,7 @@ import Language.Drasil
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumpDom)
-import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis)
+import Data.Drasil.Concepts.Math (cartesian, xAxis, xDir, yAxis, yDir)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (acceleration, collision, distance, gravity, time, twoD)
 
@@ -51,17 +51,17 @@ targetXAxisDesc :: Sentence
 targetXAxisDesc = S "The" +:+ phrase target +:+ S "lies on the" +:+ phrase xAxis +:+. sParen (S "from" +:+ makeRef2S neglectCurv)
 
 posXDirectionDesc :: Sentence
-posXDirectionDesc = S "The positive x-direction" `sIs` S "from the" +:+. (phrase launcher `toThe` phrase target)
+posXDirectionDesc = S "The positive" +:+ phrase xDir `sIs` S "from the" +:+. (phrase launcher `toThe` phrase target)
 
 constAccelDesc :: Sentence
 constAccelDesc = S "The" +:+ (phrase acceleration `sIs` S "constant") +:+.
                  sParen (S "from" +:+ foldlList Comma List (map makeRef2S [accelXZero, accelYGravity, neglectDrag, freeFlight]))
 
 accelXZeroDesc :: Sentence
-accelXZeroDesc = S "The" +:+ phrase acceleration +:+. (S "in the x-direction" `sIs` S "zero")
+accelXZeroDesc = S "The" +:+ phrase acceleration +:+. (S "in the" +:+ phrase xDir `sIs` S "zero")
 
 accelYGravityDesc :: Sentence
-accelYGravityDesc = S "The" +:+ phrase acceleration +:+ S "in the y-direction" `isThe` phrase acceleration +:+
+accelYGravityDesc = S "The" +:+ phrase acceleration +:+ S "in the" +:+ phrase yDir `isThe` phrase acceleration +:+
                     S "due to" +:+ phrase gravity +:+. sParen (S "from" +:+ makeRef2S yAxisGravity)
 
 neglectDragDesc :: Sentence

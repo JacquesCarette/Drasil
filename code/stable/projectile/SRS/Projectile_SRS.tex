@@ -66,7 +66,7 @@ ${{a_{y}}^{c}}$ & $y$-component of constant acceleration & $\frac{\text{m}}{\tex
 \\
 $\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${d_{offset}}$ & Offset between the target position and the landing position & m
+${d_{offset}}$ & Distance between the target position and the landing position & m
 \\
 $g$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
@@ -160,11 +160,11 @@ Uncert. & Typical Uncertainty
 \end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
-Projectile motion is an incredibly common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems.
+Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. The program documented here is called Projectile.
 The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes the analysis of a two-dimensional projectile motion problem with constant acceleration. Given the appropriate inputs, Projectile determines if the projectile hits the target.
+The scope of the requirements includes the analysis of a two-dimensional (2D) projectile motion problem with constant acceleration. Given the appropriate inputs, Projectile determines if the projectile hits the target.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
@@ -175,7 +175,7 @@ A system is needed to efficiently and correctly predict the landing position of 
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 \begin{itemize}
-\item{Launcher: Where the projectile is launched from.}
+\item{Launcher: Where the projectile is launched from and the device that does the launching.}
 \item{Projectile: The object to be launched at the target.}
 \item{Target: Where the projectile should be launched to.}
 \item{Gravity: The force that attracts one physical body with mass to another.}
@@ -215,10 +215,10 @@ This section simplifies the original problem and helps in developing the theoret
 \item[yAxisGravity:\phantomsection\label{yAxisGravity}]The direction of the $y$-axis is directed opposite to gravity. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}, and \hyperref[accelYGravity]{A: accelYGravity}.)
 \item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)
 \item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the $x$-axis (from \hyperref[neglectCurv]{A: neglectCurv}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.)
-\item[posXDirection:\phantomsection\label{posXDirection}]The positive x-direction is from the launcher to the target. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[IM:offsetIM]{IM: offsetIM}, \hyperref[IM:messageIM]{IM: messageIM}, and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)
+\item[posXDirection:\phantomsection\label{posXDirection}]The positive $x$-direction is from the launcher to the target. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[IM:offsetIM]{IM: offsetIM}, \hyperref[IM:messageIM]{IM: messageIM}, and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)
 \item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant (from \hyperref[accelXZero]{A: accelXZero}, \hyperref[accelYGravity]{A: accelYGravity}, \hyperref[neglectDrag]{A: neglectDrag}, and \hyperref[freeFlight]{A: freeFlight}). (RefBy: \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:posVec]{GD: posVec}.)
-\item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the x-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[constAccel]{A: constAccel}.)
-\item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the y-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A: yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[constAccel]{A: constAccel}.)
+\item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[constAccel]{A: constAccel}.)
+\item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A: yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[constAccel]{A: constAccel}.)
 \item[neglectDrag:\phantomsection\label{neglectDrag}]Air drag is neglected. (RefBy: \hyperref[constAccel]{A: constAccel}.)
 \item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD: rectVel} and \hyperref[GD:rectPos]{GD: rectPos}.)
 \item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A: constAccel}.)
@@ -318,7 +318,7 @@ Rearranging and integrating, we have:
 \begin{displaymath}
 \int_{{v^{i}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt
 \end{displaymath}
-Performing the integration, we have:
+Performing the integration, we have the required equation:
 \begin{displaymath}
 v={v^{i}}+{a^{c}} t
 \end{displaymath}
@@ -364,7 +364,7 @@ From \hyperref[GD:rectVel]{GD: rectVel} we can replace $v$:
 \begin{displaymath}
 \int_{{p^{i}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{i}}+{a^{c}} t}\,dt
 \end{displaymath}
-Performing the integration, we have:
+Performing the integration, we have the required equation:
 \begin{displaymath}
 p={p^{i}}+{v^{i}} t+\frac{{a^{c}} t^{2}}{2}
 \end{displaymath}
@@ -414,7 +414,7 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
 \end{bmatrix}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
 {{v_{x}}^{i}}\\
 {{v_{y}}^{i}}
-\end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectVel]{GD: rectVel} can be applied to each coordinate of the velocity vector to yield:
+\end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectVel]{GD: rectVel} can be applied to each coordinate of the velocity vector to yield the required equation:
 \begin{displaymath}
 \mathbf{v}=\begin{bmatrix}
 {{v_{x}}^{i}}+{{a_{x}}^{c}} t\\
@@ -472,7 +472,7 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
 \end{bmatrix}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
 {{v_{x}}^{i}}\\
 {{v_{y}}^{i}}
-\end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectPos]{GD: rectPos} can be applied to each coordinate of the position vector to yield:
+\end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectPos]{GD: rectPos} can be applied to each coordinate of the position vector to yield the required equation:
 \begin{displaymath}
 \mathbf{p}=\begin{bmatrix}
 {{p_{x}}^{i}}+{{v_{x}}^{i}} t+\frac{{{a_{x}}^{c}} t^{2}}{2}\\
@@ -651,7 +651,7 @@ From \hyperref[DD:speedIY]{DD: speedIY} (with ${v^{i}}={v_{launch}}$) we can rep
 \phantomsection 
 \label{IM:calOfLandingDist}
 \\ \midrule \\
-Label & Calculation of landing distance
+Label & Calculation of landing position
 \\ \midrule \\
 Input & ${v_{launch}}$, $θ$
 \\ \midrule \\
@@ -693,7 +693,7 @@ We know that ${{p_{x}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${
 \begin{displaymath}
 {p_{x}}={{v_{x}}^{i}} t
 \end{displaymath}
-To find the horizontal distance travelled, we want to find the ${p_{x}}$ value (${p_{land}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
+To find the landing position, we want to find the ${p_{x}}$ value (${p_{land}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
 \begin{displaymath}
 {p_{land}}=\frac{{{v_{x}}^{i}}\cdot{}2 {v_{launch}} \sin\left(θ\right)}{g}
 \end{displaymath}
@@ -701,7 +701,7 @@ From \hyperref[DD:speedIX]{DD: speedIX} (with ${v^{i}}={v_{launch}}$) we can rep
 \begin{displaymath}
 {p_{land}}=\frac{{v_{launch}} \cos\left(θ\right)\cdot{}2 {v_{launch}} \sin\left(θ\right)}{g}
 \end{displaymath}
-Rearranging this equation gives us:
+Rearranging this gives us the required equation:
 \begin{displaymath}
 {p_{land}}=\frac{2 {v_{launch}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
 \end{displaymath}
@@ -733,7 +733,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${d_{offset}}$ is the offset between the target position and the landing position (m)}
+              \item{${d_{offset}}$ is the distance between the target position and the landing position (m)}
               \item{${p_{land}}$ is the landing position (m)}
               \item{${p_{target}}$ is the target position (m)}
               \end{symbDescription}
@@ -776,7 +776,7 @@ The projectile went long., & {d_{offset}}>0
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$s$ is the output message as a string (Unitless)}
-              \item{${d_{offset}}$ is the offset between the target position and the landing position (m)}
+              \item{${d_{offset}}$ is the distance between the target position and the landing position (m)}
               \item{${p_{target}}$ is the target position (m)}
               \item{$ε$ is the hit tolerance (Unitless)}
               \end{symbDescription}

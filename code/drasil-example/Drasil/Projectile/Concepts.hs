@@ -24,7 +24,7 @@ projectileTitle = commonIdeaWithDict "projectileTitle" (pn "Projectile") "Projec
 duration, flightDur, landingPos, launch, launchAngle, launchSpeed, offset, targetPos :: NamedChunk
 duration   = nc "duration" (nounPhraseSP "duration")
 launch     = nc "launch"   (nounPhraseSP "launch") -- FIXME: Used as adjective
-offset     = nc "offset"   (nounPhraseSent $ S "offset between the" +:+ phrase targetPos `andThe` phrase landingPos)
+offset     = nc "offset"   (nounPhraseSent $ S "distance between the" +:+ phrase targetPos `andThe` phrase landingPos)
 
 flightDur   = compoundNC (nc "flight"  (nounPhraseSP "flight" )) duration
 landingPos  = compoundNC (nc "landing" (nounPhraseSP "landing")) position
@@ -34,7 +34,8 @@ targetPos   = compoundNC target position
 
 ---
 hitMessage, launcher, longMessage, projectile, shortMessage, target :: ConceptChunk
-launcher   = dcc "launcher"   (nounPhraseSP "launcher")   "Where the projectile is launched from."
+launcher   = dcc "launcher"   (nounPhraseSP "launcher")  ("Where the projectile is launched from " ++
+                                                          "and the device that does the launching.")
 projectile = dcc "projectile" (nounPhraseSP "projectile") "The object to be launched at the target."
 target     = dcc "target"     (nounPhraseSP "target")     "Where the projectile should be launched to."
 

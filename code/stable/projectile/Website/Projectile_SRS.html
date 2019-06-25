@@ -95,7 +95,7 @@
                 <tr>
                   <td><em>d<sub>offset</sub></em></td>
                   <td>
-                    Offset between the target position and the landing position
+                    Distance between the target position and the landing position
                   </td>
                   <td>m</td>
                 </tr>
@@ -295,7 +295,7 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          Projectile motion is an incredibly common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems.
+          Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. The program documented here is called Projectile.
         </p>
         <p class="paragraph">
           The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
@@ -304,7 +304,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes the analysis of a two-dimensional projectile motion problem with constant acceleration. Given the appropriate inputs, Projectile determines if the projectile hits the target.
+              The scope of the requirements includes the analysis of a two-dimensional (2D) projectile motion problem with constant acceleration. Given the appropriate inputs, Projectile determines if the projectile hits the target.
             </p>
           </div>
         </div>
@@ -329,7 +329,9 @@
                   This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
                 </p>
                 <ul class="list">
-                  <li>Launcher: Where the projectile is launched from.</li>
+                  <li>
+                    Launcher: Where the projectile is launched from and the device that does the launching.
+                  </li>
                   <li>Projectile: The object to be launched at the target.</li>
                   <li>Target: Where the projectile should be launched to.</li>
                   <li>
@@ -420,7 +422,7 @@
                   </p>
                   <p>
                     <div id="posXDirection">
-                      posXDirection: The positive x-direction is from the launcher to the target. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#IM:offsetIM>IM: offsetIM</a>, <a href=#IM:messageIM>IM: messageIM</a>, and <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.)
+                      posXDirection: The positive <em>x</em>-direction is from the launcher to the target. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#IM:offsetIM>IM: offsetIM</a>, <a href=#IM:messageIM>IM: messageIM</a>, and <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.)
                     </div>
                   </p>
                   <p>
@@ -430,12 +432,12 @@
                   </p>
                   <p>
                     <div id="accelXZero">
-                      accelXZero: The acceleration in the x-direction is zero. (RefBy: <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> and <a href=#constAccel>A: constAccel</a>.)
+                      accelXZero: The acceleration in the <em>x</em>-direction is zero. (RefBy: <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> and <a href=#constAccel>A: constAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="accelYGravity">
-                      accelYGravity: The acceleration in the y-direction is the acceleration due to gravity (from <a href=#yAxisGravity>A: yAxisGravity</a>). (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> and <a href=#constAccel>A: constAccel</a>.)
+                      accelYGravity: The acceleration in the <em>y</em>-direction is the acceleration due to gravity (from <a href=#yAxisGravity>A: yAxisGravity</a>). (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> and <a href=#constAccel>A: constAccel</a>.)
                     </div>
                   </p>
                   <p>
@@ -631,7 +633,9 @@
                 <div class="equation">
                   <em>&int;<sub>v<sup>i</sup></sub><sup>v</sup>1&#8239;dv = &int;<sub>0</sub><sup>t</sup>a<sup>c</sup>&#8239;dt</em>
                 </div>
-                <p class="paragraph">Performing the integration, we have:</p>
+                <p class="paragraph">
+                  Performing the integration, we have the required equation:
+                </p>
                 <div class="equation">
                   <em>v = v<sup>i</sup>&plus;a<sup>c</sup>&#8239;t</em>
                 </div>
@@ -710,7 +714,9 @@
                 <div class="equation">
                   <em>&int;<sub>p<sup>i</sup></sub><sup>p</sup>1&#8239;dp = &int;<sub>0</sub><sup>t</sup>v<sup>i</sup>&plus;a<sup>c</sup>&#8239;t&#8239;dt</em>
                 </div>
-                <p class="paragraph">Performing the integration, we have:</p>
+                <p class="paragraph">
+                  Performing the integration, we have the required equation:
+                </p>
                 <div class="equation">
                   <em>p = p<sup>i</sup>&plus;v<sup>i</sup>&#8239;t&plus;<div class="fraction">
                                                                           <span class="fup">
@@ -789,7 +795,7 @@
 </table></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = <table class="matrix">
 <tr><td>v<sub>x</sub><sup>i</sup></td></tr>
 <tr><td>v<sub>y</sub><sup>i</sup></td></tr>
-</table></em>. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD: rectVel</a> can be applied to each coordinate of the velocity vector to yield:
+</table></em>. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD: rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
                 </p>
                 <div class="equation">
                   <em><b>v</b> = <table class="matrix">
@@ -894,7 +900,7 @@
 </table></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = <table class="matrix">
 <tr><td>v<sub>x</sub><sup>i</sup></td></tr>
 <tr><td>v<sub>y</sub><sup>i</sup></td></tr>
-</table></em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD: rectPos</a> can be applied to each coordinate of the position vector to yield:
+</table></em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD: rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
                 </p>
                 <div class="equation">
                   <em><b>p</b> = <table class="matrix">
@@ -1262,7 +1268,7 @@
                   <table class="idefn">
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Calculation of landing distance</p></td>
+                      <td><p class="paragraph">Calculation of landing position</p></td>
                     </tr>
                     <tr>
                       <th>Input</th>
@@ -1365,7 +1371,7 @@
                   <em>p<sub>x</sub> = v<sub>x</sub><sup>i</sup>&#8239;t</em>
                 </div>
                 <p class="paragraph">
-                  To find the horizontal distance travelled, we want to find the <em>p<sub>x</sub></em> value (<em>p<sub>land</sub></em>) at flight duration (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>):
+                  To find the landing position, we want to find the <em>p<sub>x</sub></em> value (<em>p<sub>land</sub></em>) at flight duration (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>):
                 </p>
                 <div class="equation">
                   <em>p<sub>land</sub> = <div class="fraction">
@@ -1386,7 +1392,9 @@
                                            <span class="fdn">g</span>
                                          </div></em>
                 </div>
-                <p class="paragraph">Rearranging this equation gives us:</p>
+                <p class="paragraph">
+                  Rearranging this gives us the required equation:
+                </p>
                 <div class="equation">
                   <em>p<sub>land</sub> = <div class="fraction">
                                            <span class="fup">
@@ -1441,7 +1449,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>d<sub>offset</sub></em> is the offset between the target position and the landing position (m)
+                            <em>d<sub>offset</sub></em> is the distance between the target position and the landing position (m)
                           </li>
                           <li><em>p<sub>land</sub></em> is the landing position (m)</li>
                           <li><em>p<sub>target</sub></em> is the target position (m)</li>
@@ -1541,7 +1549,7 @@
                         <ul class="hide-list-style-no-indent">
                           <li><em>s</em> is the output message as a string (Unitless)</li>
                           <li>
-                            <em>d<sub>offset</sub></em> is the offset between the target position and the landing position (m)
+                            <em>d<sub>offset</sub></em> is the distance between the target position and the landing position (m)
                           </li>
                           <li><em>p<sub>target</sub></em> is the target position (m)</li>
                           <li><em>ε</em> is the hit tolerance (Unitless)</li>

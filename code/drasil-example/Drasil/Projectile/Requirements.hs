@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
-import Drasil.Projectile.IMods (distanceIM, messageIM, offsetIM, timeIM)
+import Drasil.Projectile.IMods (landPosIM, messageIM, offsetIM, timeIM)
 import Drasil.Projectile.Unitals (flightDur, inputs, landPos, launAngle,
   launSpeed, message, offset, targPos)
 
@@ -47,7 +47,7 @@ verifyParamsDesc = foldlSent [S "Check the entered", plural inParam,
 calcValuesDesc = foldlSent [S "Calculate the following" +: plural quantity,
   foldlList Comma List [
     ch flightDur +:+ sParen (S "from" +:+ makeRef2S timeIM),
-    ch landPos   +:+ sParen (S "from" +:+ makeRef2S distanceIM),
+    ch landPos   +:+ sParen (S "from" +:+ makeRef2S landPosIM),
     ch offset    +:+ sParen (S "from" +:+ makeRef2S offsetIM),
     ch message   +:+ sParen (S "from" +:+ makeRef2S messageIM)
   ]]

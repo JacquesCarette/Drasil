@@ -516,7 +516,7 @@ instance MethodTypeSym JavaCode where
 
 instance ParameterSym JavaCode where
   type Parameter JavaCode = Doc
-  stateParam n = fmap (stateParamDocD n)
+  stateParam = fmap stateParamDocD
   pointerParam = stateParam
 
 instance MethodSym JavaCode where
@@ -527,7 +527,7 @@ instance MethodSym JavaCode where
   getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self c $-> var n t)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
-    void [stateParam paramLbl t] setBody
+    void [stateParam $ var paramLbl t] setBody
     where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
   mainMethod c b = setMain <$> method "main" c public static_ void 
     [return $ text "String[] args"] b

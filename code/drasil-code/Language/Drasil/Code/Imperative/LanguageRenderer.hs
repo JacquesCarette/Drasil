@@ -184,8 +184,8 @@ constructDocD _ = empty
 
 -- Parameters --
 
-stateParamDocD :: Label -> TypeData -> Doc
-stateParamDocD n t = typeDoc t <+> text n
+stateParamDocD :: ValData -> Doc
+stateParamDocD v = typeDoc (valType v) <+> valDoc v
 
 paramListDocD :: [Doc] -> Doc
 paramListDocD = hicat (text ", ")

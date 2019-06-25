@@ -499,7 +499,7 @@ instance MethodTypeSym CSharpCode where
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = Doc
-  stateParam n = fmap (stateParamDocD n)
+  stateParam = fmap stateParamDocD
   pointerParam = stateParam
 
 instance MethodSym CSharpCode where
@@ -510,7 +510,7 @@ instance MethodSym CSharpCode where
   getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self c $-> var n t)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
-    void [stateParam paramLbl t] setBody
+    void [stateParam $ var paramLbl t] setBody
     where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
   mainMethod c b = setMain <$> method "Main" c public static_ void 
     [return $ text "string[] args"] b

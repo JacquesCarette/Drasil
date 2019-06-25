@@ -494,8 +494,8 @@ instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   type Parameter (p CppSrcCode CppHdrCode) = Doc
-  stateParam n t = pair (stateParam n $ pfst t) (stateParam n $ psnd t)
-  pointerParam n t = pair (pointerParam n $ pfst t) (pointerParam n $ psnd t)
+  stateParam v = pair (stateParam $ pfst v) (stateParam $ psnd v)
+  pointerParam v = pair (pointerParam $ pfst v) (pointerParam $ psnd v)
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   type Method (p CppSrcCode CppHdrCode) = MethodData
@@ -1009,8 +1009,8 @@ instance MethodTypeSym CppSrcCode where
 
 instance ParameterSym CppSrcCode where
   type Parameter CppSrcCode = Doc
-  stateParam n = fmap (stateParamDocD n)
-  pointerParam n = fmap (cppPointerParamDoc n)
+  stateParam = fmap stateParamDocD
+  pointerParam = fmap cppPointerParamDoc
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
@@ -1019,7 +1019,7 @@ instance MethodSym CppSrcCode where
   getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self c $-> var n t)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
-    void [stateParam paramLbl t] setBody
+    void [stateParam $ var paramLbl t] setBody
     where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
   mainMethod _ b = fmap (mthd True Pub) (liftA4 cppMainMethod int b blockStart 
     blockEnd)
@@ -1464,8 +1464,8 @@ instance MethodTypeSym CppHdrCode where
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = Doc
-  stateParam n = fmap (stateParamDocD n)
-  pointerParam n = fmap (cppPointerParamDoc n)
+  stateParam = fmap stateParamDocD
+  pointerParam = fmap cppPointerParamDoc
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
@@ -1473,7 +1473,7 @@ instance MethodSym CppHdrCode where
     (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement)
   getMethod n c t = method (getterName n) c public dynamic_ t [] (return empty)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
-    void [stateParam paramLbl t] (return empty)
+    void [stateParam $ var paramLbl t] (return empty)
   mainMethod _ _ = return (mthd True Pub empty)
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -1530,10 +1530,11 @@ isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
-getParam :: Label -> TypeData -> Doc
-getParam l st@(TD (List _) _) = cppPointerParamDoc l st
-getParam l st@(TD (Object _) _) = cppPointerParamDoc l st
-getParam l st = stateParamDocD l st
+getParam :: ValData -> Doc
+getParam v = getParamFunc ((cType . valType) v) v
+  where getParamFunc (List _) = cppPointerParamDoc
+        getParamFunc (Object _) = cppPointerParamDoc
+        getParamFunc _ = stateParamDocD
  
 -- convenience
 enumsEqualInts :: Bool
@@ -1639,8 +1640,8 @@ cppOpenFile :: Label -> ValData -> ValData -> Doc
 cppOpenFile mode f n = valDoc f <> dot <> text "open" <> 
   parens (valDoc n <> comma <+> text mode)
 
-cppPointerParamDoc :: Label -> TypeData  -> Doc
-cppPointerParamDoc n t = typeDoc t <+> text "&" <> text n
+cppPointerParamDoc :: ValData -> Doc
+cppPointerParamDoc v = typeDoc (valType v) <+> text "&" <> valDoc v
 
 cppsMethod :: Label -> Label -> TypeData -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 

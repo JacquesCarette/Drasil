@@ -463,7 +463,7 @@ instance MethodTypeSym PythonCode where
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = Doc
-  stateParam n _ = return $ text n
+  stateParam = fmap valDoc
   pointerParam = stateParam
 
 instance MethodSym PythonCode where
@@ -473,7 +473,7 @@ instance MethodSym PythonCode where
   getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self c $-> var n t)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_
-    (mState void) [stateParam paramLbl t] setBody
+    (mState void) [stateParam $ var paramLbl t] setBody
     where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
   mainMethod _ b = liftPairFst (b, True)
   privMethod n c = method n c private dynamic_

@@ -6,6 +6,7 @@ import Utils.Drasil
 
 import Data.Drasil.IdeaDicts (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
+import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir)
 import Control.Lens((^.)) --need for parametrization hack
 
 physicCon :: [ConceptChunk]
@@ -102,33 +103,33 @@ height       = dccWDS "height" (cn' "height") (S "The" +:+ phrase distance +:+
 -- FIXME: Complete all variants?
 -- FIXME: Pull out commonalities?
 
-xDist = dccWDS "xDist" (cn "distance in the x-direction") (atStart distance +:+ S "in the x-direction")
-yDist = dccWDS "yDist" (cn "distance in the y-direction") (atStart distance +:+ S "in the y-direction")
+xDist = dccWDS "xDist" (nounPhraseSent $ phrase distance +:+ S "in the" +:+ phrase xDir) (atStart distance +:+ S "in the" +:+ phrase xDir)
+yDist = dccWDS "yDist" (nounPhraseSent $ phrase distance +:+ S "in the" +:+ phrase yDir) (atStart distance +:+ S "in the" +:+ phrase yDir)
 
 iPos = dccWDS "iPos" (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
-xPos = dccWDS "xPos" (cn "x-component of position") (S "The x-component" `sOf` phrase position)
-yPos = dccWDS "yPos" (cn "y-component of position") (S "The y-component" `sOf` phrase position)
+xPos = dccWDS "xPos" (nounPhraseSent $ phrase xComp `sOf` phrase position) (S "The" +:+ phrase xComp `sOf` phrase position)
+yPos = dccWDS "yPos" (nounPhraseSent $ phrase yComp `sOf` phrase position) (S "The" +:+ phrase yComp `sOf` phrase position)
 
-ixPos = dccWDS "ixPos" (cn "x-component of initial position") (S "The x-component" `sOf` phrase iPos)
-iyPos = dccWDS "iyPos" (cn "y-component of initial position") (S "The y-component" `sOf` phrase iPos)
+ixPos = dccWDS "ixPos" (nounPhraseSent $ phrase xComp `sOf` phrase iPos) (S "The" +:+ phrase xComp `sOf` phrase iPos)
+iyPos = dccWDS "iyPos" (nounPhraseSent $ phrase yComp `sOf` phrase iPos) (S "The" +:+ phrase yComp `sOf` phrase iPos)
 
 fSpeed = dccWDS "fSpeed" (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
 iSpeed = dccWDS "iSpeed" (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
 
 fVel = dccWDS "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
 iVel = dccWDS "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
-xVel = dccWDS "xVel" (cn "x-component of velocity") (S "The x-component" `sOf` phrase velocity)
-yVel = dccWDS "yVel" (cn "y-component of velocity") (S "The y-component" `sOf` phrase velocity)
+xVel = dccWDS "xVel" (nounPhraseSent $ phrase xComp `sOf` phrase velocity) (S "The" +:+ phrase xComp `sOf` phrase velocity)
+yVel = dccWDS "yVel" (nounPhraseSent $ phrase yComp `sOf` phrase velocity) (S "The" +:+ phrase yComp `sOf` phrase velocity)
 
-ixVel = dccWDS "ixVel" (cn "x-component of initial velocity") (S "The x-component" `sOf` phrase iVel)
-iyVel = dccWDS "iyVel" (cn "y-component of initial velocity") (S "The y-component" `sOf` phrase iVel)
+ixVel = dccWDS "ixVel" (nounPhraseSent $ phrase xComp `sOf` phrase iVel) (S "The" +:+ phrase xComp `sOf` phrase iVel)
+iyVel = dccWDS "iyVel" (nounPhraseSent $ phrase yComp `sOf` phrase iVel) (S "The" +:+ phrase yComp `sOf` phrase iVel)
 
-xAccel = dccWDS "xScalAcc" (cn "x-component of acceleration") (S "The x-component" `sOf` phrase acceleration)
-yAccel = dccWDS "yScalAcc" (cn "y-component of acceleration") (S "The y-component" `sOf` phrase acceleration)
+xAccel = dccWDS "xScalAcc" (nounPhraseSent $ phrase xComp `sOf` phrase acceleration) (S "The" +:+ phrase xComp `sOf` phrase acceleration)
+yAccel = dccWDS "yScalAcc" (nounPhraseSent $ phrase yComp `sOf` phrase acceleration) (S "The" +:+ phrase yComp `sOf` phrase acceleration)
 
 constAccelV = dccWDS "constAccelV" (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
-xConstAccel = dccWDS "xConstAccel" (cn "x-component of constant acceleration") (S "The x-component" `sOf` phrase constAccel)
-yConstAccel = dccWDS "yConstAccel" (cn "y-component of constant acceleration") (S "The y-component" `sOf` phrase constAccel)
+xConstAccel = dccWDS "xConstAccel" (nounPhraseSent $ phrase xComp `sOf` phrase constAccel) (S "The" +:+ phrase xComp `sOf` phrase constAccel)
+yConstAccel = dccWDS "yConstAccel" (nounPhraseSent $ phrase yComp `sOf` phrase constAccel) (S "The" +:+ phrase yComp `sOf` phrase constAccel)
 
 potEnergy  = dccWDS "potEnergy" (cn "potential energy")
   (S "The measure of the" +:+ phrase energy +:+ 

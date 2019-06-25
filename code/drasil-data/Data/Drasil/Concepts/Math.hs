@@ -11,8 +11,8 @@ mathcon :: [ConceptChunk]
 mathcon = [angle, area, calculation, cartesian, change, constraint, diameter,
   equation, euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal,
   normalV, number, orient, parameter, perp, perpV, pi_, probability, rOfChng,
-  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xDir,
-  yAxis, yDir, zAxis, zDir]
+  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp,
+  xDir, yAxis, yComp, yDir, zAxis, zComp, zDir]
 
 mathcon' :: [CI]
 mathcon' = [pde, ode, de]
@@ -20,8 +20,8 @@ mathcon' = [pde, ode, de]
 angle, area, calculation, cartesian, change, constraint, diameter, equation,
   euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal, normalV,
   number, orient, parameter, perp, perpV, pi_, probability, rOfChng, rate,
-  rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xDir,
-  yAxis, yDir, zAxis, zDir :: ConceptChunk
+  rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp, xDir,
+  yAxis, yComp, yDir, zAxis, zComp, zDir :: ConceptChunk
 
 pde, ode, de :: CI
 
@@ -62,6 +62,10 @@ orient       = dcc "orientation"  (cn' "orientation")             "The relative 
 xAxis = dcc "xAxis" (nounPhraseSent $ P lX :+: S "-axis") "the primary axis of a system of coordinates"
 yAxis = dcc "yAxis" (nounPhraseSent $ P lY :+: S "-axis") "the secondary axis of a system of coordinates"
 zAxis = dcc "zAxis" (nounPhraseSent $ P lZ :+: S "-axis") "the tertiary axis of a system of coordinates"
+
+xComp = dcc "xComp" (nounPhraseSent $ P lX :+: S "-component") "the component of a vector in the x-direction"
+yComp = dcc "yComp" (nounPhraseSent $ P lY :+: S "-component") "the component of a vector in the y-direction"
+zComp = dcc "zComp" (nounPhraseSent $ P lZ :+: S "-component") "the component of a vector in the z-direction"
 
 xDir = dcc "xDir" (nounPhraseSent $ P lX :+: S "-direction") "the direction aligned with the x-axis"
 yDir = dcc "yDir" (nounPhraseSent $ P lY :+: S "-direction") "the direction aligned with the y-axis"

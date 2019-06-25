@@ -2,7 +2,7 @@
 
 import Control.Monad (filterM)
 import Data.Char (toUpper)
-import Data.List (sort)
+import Data.List (sort, zip4)
 import Data.Maybe (fromMaybe, fromJust, isJust)
 import Data.Monoid ((<>))
 import Data.String.Utils (rstrip, endswith)
@@ -32,10 +32,6 @@ getExtensionName _ = error "Expected some extension."
 -- returns a list of tuples, where each tuple is (Name, string) where string is "HTML" or "PDF"
 getSRS :: [Name] -> SRSVariants
 getSRS = map (\x -> (x, getExtensionName $ takeExtension x)) . filter (\x -> any (`endswith` x) [".pdf", ".html"])
-
-zip4 :: [a] -> [b] -> [c] -> [d] -> [(a,b,c,d)]
-zip4 (a:as) (b:bs) (c:cs) (d:ds) = (a,b,c,d) : zip4 as bs cs ds
-zip4 _ _ _ _ = []
 
 mkExamples :: String -> FilePath -> FilePath -> IO [Example]
 mkExamples repoRoot path srsDir = do

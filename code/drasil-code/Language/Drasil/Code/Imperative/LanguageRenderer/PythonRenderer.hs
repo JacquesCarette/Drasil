@@ -410,8 +410,8 @@ instance StatementSym PythonCode where
     where obsList = observerListName `listOf` t
           lastelem = listSizeAccess obsList
 
-  inOutCall n ins [] = valState $ funcApp n void ins
-  inOutCall n ins outs = multiAssign outs [funcApp n void ins]
+  inOutCall = pyInOutCall funcApp
+  extInOutCall m = pyInOutCall (extFuncApp m)
 
   state = fmap statementDocD
   loopState = fmap statementDocD 
@@ -646,3 +646,10 @@ pyModule ls vs fs cs =
              | otherwise  = vs $+$ blank
         funcs | isEmpty fs = empty
               | otherwise  = fs $+$ blank
+
+pyInOutCall :: (Label -> PythonCode (StateType PythonCode) -> 
+  [PythonCode (Value PythonCode)] -> PythonCode (Value PythonCode)) -> Label -> 
+  [PythonCode (Value PythonCode)] -> [PythonCode (Value PythonCode)] -> 
+  PythonCode (Statement PythonCode)
+pyInOutCall f n ins [] = valState $ f n void ins
+pyInOutCall f n ins outs = multiAssign outs [f n void ins]

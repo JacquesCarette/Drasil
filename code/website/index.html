@@ -20,7 +20,9 @@ and in some cases, their own generated code.</p>
 <ul>
 $-for(examples)$
   <li><b>$name$</b> - 
-    $desc$
+    $-if(desc)$
+      $desc$
+    $-endif$
     <br />
     <br />
     <ul>

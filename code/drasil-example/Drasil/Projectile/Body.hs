@@ -58,7 +58,7 @@ mkSRS = [
   RefSec $
     RefProg intro
       [ TUnits
-      , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder]
+      , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits]
       , TAandA
       ],
   IntroSec $

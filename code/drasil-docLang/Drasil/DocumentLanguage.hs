@@ -88,6 +88,7 @@ data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used
              | SymbOrder -- ^ Symbol ordering (defaults to alphabetical)
              | SymbConvention [Literature] -- ^ Symbol conventions match specified literature
              | TSPurpose -- ^ Purpose of the Table of Symbols
+             | VectorUnits -- ^ Definition of vector components
 
 -- | Possible typographic conventions
 data TConvention = Vector Emphasis -- ^ How vectors are emphasized
@@ -315,6 +316,7 @@ tsI SymbOrder = S "The symbols are listed in alphabetical order."
 tsI (SymbConvention ls) = symbConvention ls
 tsI TSPurpose = S "The table that follows summarizes the symbols used in" +:+
   S "this document along with their units."
+tsI VectorUnits = S "For vector quantities, the units shown are for each component of the vector."
 
 -- | typographic convention writer. Translates a list of typographic conventions
 -- to a sentence

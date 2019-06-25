@@ -55,12 +55,6 @@ copy_graphs() {
   cp -r "$CUR_DIR$GRAPH_FOLDER". "$GRAPH_FOLDER"
 }
 
-copy_descs() {
-  rm -r descriptions >/dev/null 2>&1  # Printing an error message that a directory doesn't exist isn't the most useful.
-  mkdir -p descriptions
-  cp -r "$CUR_DIR"website/descriptions/. descriptions/
-}
-
 copy_examples() {
 	rm -r "$EXAMPLE_DEST"
 	for example in "$CUR_DIR$BUILD_FOLDER"*; do
@@ -94,14 +88,12 @@ build_website() {
 
 	# src stubs were consumed by site generator; safe to delete those.
 	rm "$EXAMPLE_DEST"*/src
-    rm -r descriptions/
 }
 
 
 cd "$DEPLOY_FOLDER"
 copy_docs
 copy_graphs
-copy_descs
 copy_datafiles
 copy_examples
 build_website

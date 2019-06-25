@@ -20,21 +20,22 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, 
   intTypeDocD, floatTypeDocD, typeDocD, constructDocD, paramListDocD, 
-  methodListDocD, ifCondDocD, stratDocD, assignDocD, plusEqualsDocD', 
-  plusPlusDocD', statementDocD, returnDocD, commentDocD, mkStNoEnd, notOpDocD', 
-  negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
-  tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, typeUnExpr, 
-  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD, litFloatD, litIntD, 
-  litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
-  funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD, 
+  methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
+  plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
+  mkStNoEnd, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', 
+  sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', 
+  unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD,
+  litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
+  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, classDec, dot, 
   forLabel, observerListName, addCommentsDocD, valList, appendToBody,
   getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
-  liftA5, liftList, lift1List, lift4Pair, liftPairFst, getInnerType, convType)
+  liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPairFst, getInnerType,
+  convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -319,8 +320,7 @@ instance StatementSym PythonCode where
   type Statement PythonCode = (Doc, Terminator)
   assign v1 v2 = mkStNoEnd <$> liftA2 assignDocD v1 v2
   assignToListIndex lst index v = valState $ lst $. listSet index v
-  multiAssign outs vs = assign (mkVal <$> liftList valList outs) 
-    (mkVal <$> liftList valList vs)
+  multiAssign outs vs = mkStNoEnd <$> lift2Lists multiAssignDoc outs vs
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
   (&+=) v1 v2 = mkStNoEnd <$> liftA3 plusEqualsDocD' v1 plusOp v2
@@ -410,8 +410,8 @@ instance StatementSym PythonCode where
     where obsList = observerListName `listOf` t
           lastelem = listSizeAccess obsList
 
-  inOutCall n ins [] = valState $ funcApp n ins
-  inOutCall n ins outs = multiAssign outs [funcApp n ins]
+  inOutCall n ins [] = valState $ funcApp n void ins
+  inOutCall n ins outs = multiAssign outs [funcApp n void ins]
 
   state = fmap statementDocD
   loopState = fmap statementDocD 

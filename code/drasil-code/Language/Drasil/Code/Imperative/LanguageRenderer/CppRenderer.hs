@@ -951,8 +951,8 @@ instance StatementSym CppSrcCode where
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 
-  inOutCall n ins [out] = assign out $ funcApp n ins
-  inOutCall n ins outs = valState $ funcApp n (nub $ ins ++ outs)
+  inOutCall n ins [out] = assign out $ funcApp n (fmap valType out) ins
+  inOutCall n ins outs = valState $ funcApp n void (nub $ ins ++ outs)
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)

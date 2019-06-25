@@ -455,15 +455,17 @@ instance StatementSym JavaCode where
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 
-  inOutCall n ins [] = valState $ funcApp n ins
-  inOutCall n ins [out] = assign out $ funcApp n ins
-  inOutCall n ins outs = multi $ ("outputs" &.= funcApp n ins) 
-    : assignArray 0 outs
-    where assignArray :: (StatementSym repr) => Int -> [repr (Value repr)] ->[repr (Statement repr)]
+  inOutCall n ins [] = valState $ funcApp n void ins
+  inOutCall n ins [out] = assign out $ funcApp n (fmap valType out) ins
+  inOutCall n ins outs = multi $ varDecDef "outputs" arrayType (funcApp n 
+    arrayType ins) : assignArray 0 outs
+    where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
+            [JavaCode (Statement JavaCode)]
           assignArray _ [] = []
-          -- Need to cast to correct type
-          assignArray c (v:vs) = (v &=. ("outputs[" ++ show n ++ "]"))
+          assignArray c (v:vs) = (v &= castObj (cast (fmap valType v) arrayType)
+            (var ("outputs[" ++ show c ++ "]") (fmap valType v))) 
             : assignArray (c+1) vs
+          arrayType = return $ td (List $ Object "Object") (text "Object[]")
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
@@ -546,7 +548,8 @@ instance MethodSym JavaCode where
         (var ("new Object[" ++ show (length outs) ++ "]") arrayType)
       : assignArray 0 outs
       ++ [returnVar "outputs" arrayType])))
-      where assignArray :: (StatementSym repr) => Int -> [(Label, repr (StateType repr))] -> [repr (Statement repr)]
+      where assignArray :: Int -> [(Label, JavaCode (StateType JavaCode))] -> 
+              [JavaCode (Statement JavaCode)]
             assignArray _ [] = []
             assignArray c ((l,t):ls) = (var ("outputs[" ++ show c ++ "]") t &= 
               var l t) : assignArray (c+1) ls

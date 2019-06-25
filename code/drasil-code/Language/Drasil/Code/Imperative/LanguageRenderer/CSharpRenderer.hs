@@ -41,7 +41,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   doubleSlash, addCommentsDocD, valList, appendToBody, getterName, setterName, 
   setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
-  fd, ModData(..), md, TypeData(..), td, ValData(..), vd, mapPairFst, liftA4, 
+  fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
   liftPairFst, getInnerType, convType)
 
@@ -444,10 +444,10 @@ instance StatementSym CSharpCode where
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 
-  inOutCall n ins [out] = assign out $ funcApp n ins
-  inOutCall n ins outs = valState $ funcApp n (nub $ map (\v -> 
-    if v `elem` outs then fmap (mapPairFst csRef) v else v) ins ++
-    map (fmap (mapPairFst csRef)) outs)
+  inOutCall n ins [out] = assign out $ funcApp n (fmap valType out) ins
+  inOutCall n ins outs = valState $ funcApp n void (nub $ map (\v -> 
+    if v `elem` outs then fmap (updateValDoc csRef) v else v) ins ++
+    map (fmap (updateValDoc csRef)) outs)
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)

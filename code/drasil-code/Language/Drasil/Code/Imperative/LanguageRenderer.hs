@@ -11,14 +11,14 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
   methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, 
   switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, assignDocD, 
-  plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', varDecDocD, 
-  varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, returnDocD, 
-  commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd, stratDocD, notOpDocD, 
-  notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', 
-  logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD,
-  sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, 
-  asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, 
-  unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', 
+  varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, 
+  returnDocD, commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd, stratDocD, 
+  notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
+  absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
+  sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
+  asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', 
+  unOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, 
   binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, litTrueD, 
@@ -297,6 +297,9 @@ stratDocD b resultState = vcat [
 
 assignDocD :: ValData -> ValData -> Doc
 assignDocD v1 v2 = valDoc v1 <+> equals <+> valDoc v2
+
+multiAssignDoc :: [ValData] -> [ValData] -> Doc
+multiAssignDoc vs1 vs2 = valList vs1 <+> equals <+> valList vs2
 
 plusEqualsDocD :: ValData -> ValData -> Doc
 plusEqualsDocD v1 v2 = valDoc v1 <+> text "+=" <+> valDoc v2

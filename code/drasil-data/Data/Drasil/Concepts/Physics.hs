@@ -1,19 +1,11 @@
-module Data.Drasil.Concepts.Physics 
-  ( rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space
-  , cartesian, rightHand, restitutionCoef, acceleration, pressure, height
-  , momentOfInertia, force, impulseS, impulseV, displacement
-  , gravitationalAccel, gravitationalConst, position, distance
-  , time, torque, weight, fbd, angular, linear, tension, compression, stress
-  , strain , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint
-  , damping , cohesion, isotropy, twoD, threeD, physicCon, physicCon', kEnergy, chgInVelocity
-  , potEnergy
-  ) where
+module Data.Drasil.Concepts.Physics where
+
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.IdeaDicts (physics)
+import Data.Drasil.IdeaDicts (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
 import Control.Lens((^.)) --need for parametrization hack
 
@@ -27,7 +19,7 @@ physicCon = [rigidBody, velocity, friction, elasticity, energy, mechEnergy, coll
   joint, damping, pressure, cohesion, isotropy, kEnergy, chgInVelocity, potEnergy]
 
 physicCon' :: [CI]
-physicCon' = [twoD, threeD]
+physicCon' = [oneD, twoD, threeD]
 
 rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
   cartesian, rightHand, restitutionCoef, acceleration, height, 
@@ -37,7 +29,10 @@ rigidBody, velocity, friction, elasticity, energy, mechEnergy, collision, space,
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
   joint, damping, pressure,cohesion, isotropy, kEnergy, chgInVelocity, potEnergy:: ConceptChunk
 
-twoD, threeD :: CI
+oneD, twoD, threeD :: CI
+oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
+twoD   = commonIdeaWithDict "twoD"   (cn "two-dimensional")   "2D" [mathematics, physics]
+threeD = commonIdeaWithDict "threeD" (cn "three-dimensional") "3D" [mathematics, physics]
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."
@@ -166,7 +161,3 @@ isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
 
 chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity") (S "The" +:+ phrase chgInVelocity +:+
  S "of a" +:+ phrase rigidBody)
-
-twoD = commonIdeaWithDict "twoD" (pn "two-dimensional") "2D" [physics]
-
-threeD = commonIdeaWithDict "threeD" (pn "three-dimensional") "3D" [physics]

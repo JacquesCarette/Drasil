@@ -275,12 +275,13 @@ purposeDoc pname =
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
 scpIncl :: Sentence
-scpIncl = S "stability analysis of a" +:+ introduceAbb twoD +:+ 
-  phrase soil +:+ S "mass" `sC` S "composed of a single homogeneous" +:+ phrase layer +:+ S "with" +:+ phrase constant +:+. plural mtrlPrpty +:+ S "The" +:+
-  phrase soil +:+ S "mass is assumed to extend infinitely in the third" +:+. phrase dimension +:+ S "The" +:+ phrase analysis +:+ S "will be at an" +:+
-  S "instant in" +:+ phrase time :+: S ";" +:+ plural factor +:+ S "that" +:+
-  S "may change the" +:+ plural soilPrpty +:+ S "over" +:+ phrase time +:+
-  S "will not be considered"
+scpIncl = foldlSent_ [S "stability analysis of a", phrase twoD, sParen(getAcc twoD),
+  phrase soil, S "mass" `sC` S "composed of a single homogeneous", phrase layer,
+  S "with", phrase constant +:+. plural mtrlPrpty, S "The", phrase soil,
+  S "mass is assumed to extend infinitely in the third" +:+. phrase dimension,
+  S "The", phrase analysis, S "will be at an instant in", phrase time :+: S ";",
+  plural factor, S "that", S "may change the", plural soilPrpty, S "over", phrase time,
+  S "will not be considered"]
 
 -- SECTION 2.3 --
 -- Characteristics of the Intended Reader generated in IChar

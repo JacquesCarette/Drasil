@@ -434,8 +434,8 @@ instance StatementSym JavaCode where
   break = return (mkSt breakDocD)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
   continue = return (mkSt continueDocD)
 
-  returnState v = mkSt <$> fmap returnDocD [v]
-  returnVar l = mkSt <$> fmap returnDocD [var l t]
+  returnState v = mkSt <$> liftList returnDocD [v]
+  returnVar l t = mkSt <$> liftList returnDocD [var l t]
   multiReturn _ = error "Cannot return multiple values in Java"
 
   valState v = mkSt <$> fmap valDoc v
@@ -536,20 +536,22 @@ instance MethodSym JavaCode where
 
   function n = method n ""
 
-  inOutFunc n s p ins [] b = function n s p void (map (uncurry stateParam) ins)
-    b
+  inOutFunc n s p ins [] b = function n s p (mState void) 
+    (map (uncurry stateParam) ins) b
   inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (uncurry 
-    stateParam) ins) (liftA2 appendToBody b (state $ returnVar l))
-  inOutFunc n s p ins outs b = function n s p (return $ text "Object[]") (map 
-    (uncurry stateParam) ins) (liftA2 appendToBody b (multi (
-      varDecDef "outputs" (return (text "Object[]", List $ Object "Object")) 
-        (var $ "new Object[" ++ show (length outs) ++ "]")
+    stateParam) ins) (liftA2 appendToBody b (returnVar l t))
+  inOutFunc n s p ins outs b = function n s p arrayType
+    (map (uncurry stateParam) ins) (liftA2 appendToBody b (multi (
+      varDecDef "outputs" arrayType
+        (var ("new Object[" ++ show (length outs) ++ "]") arrayType)
       : assignArray 0 outs
-      ++ [returnVar "outputs"])))
+      ++ [returnVar "outputs" arrayType])))
       where assignArray :: (StatementSym repr) => Int -> [(Label, repr (StateType repr))] -> [repr (Statement repr)]
             assignArray _ [] = []
-            assignArray c ((l,_):ls) = (("outputs[" ++ show n ++ "]") &.= var l)
-              : assignArray (c+1) ls
+            assignArray c ((l,t):ls) = (var ("outputs[" ++ show c ++ "]") t &= 
+              var l t) : assignArray (c+1) ls
+            arrayType = return $ td (List $ Object "Object") (text "Object[]")
+            
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc

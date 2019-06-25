@@ -424,8 +424,8 @@ instance StatementSym CSharpCode where
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)
 
-  returnState v = mkSt <$> fmap returnDocD [v]
-  returnVar l = mkSt <$> fmap returnDocD [var l t]
+  returnState v = mkSt <$> liftList returnDocD [v]
+  returnVar l t = mkSt <$> liftList returnDocD [var l t]
   multiReturn _ = error "Cannot return multiple values in C#"
 
   valState v = mkSt <$> fmap valDoc v
@@ -522,8 +522,8 @@ instance MethodSym CSharpCode where
   function n = method n ""
 
   inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (uncurry 
-    stateParam) ins) (liftA2 appendToBody b $ state $ returnVar l)
-  inOutFunc n s p ins outs b = function n s p void (map (fmap csRef . 
+    stateParam) ins) (liftA2 appendToBody b $ returnVar l t)
+  inOutFunc n s p ins outs b = function n s p (mState void) (map (fmap csRef . 
     uncurry stateParam) outs ++ map (uncurry stateParam) (filter (\(l,_) -> l 
     `notElem` map fst outs) ins)) b
 

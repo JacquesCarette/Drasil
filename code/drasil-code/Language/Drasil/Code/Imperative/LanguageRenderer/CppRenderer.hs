@@ -42,7 +42,7 @@ import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
   doubleQuotedText, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, 
   liftA8, liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPairFst,
-  getInnerType, convType)
+  liftPairSnd, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.List (nub)
@@ -930,8 +930,8 @@ instance StatementSym CppSrcCode where
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)
 
-  returnState v = mkSt <$> fmap returnDocD [v]
-  returnVar l t = mkSt <$> fmap returnDocD [var l t]
+  returnState v = mkSt <$> liftList returnDocD [v]
+  returnVar l t = mkSt <$> liftList returnDocD [var l t]
   multiReturn _ = error "Cannot return multiple values in C++"
 
   valState v = mkSt <$> fmap valDoc v
@@ -1038,10 +1038,10 @@ instance MethodSym CppSrcCode where
     (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
 
   inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (fmap (uncurry 
-    getParam) . liftPairSnd) ins) (liftA2 appendToBody b $ state $ returnVar l)
-  inOutFunc n s p ins outs b = function n s p void (map (uncurry pointerParam) 
-    outs ++ map (fmap (uncurry getParam) . liftPairSnd) (filter (\(l,_) -> l 
-    `notElem` map fst outs) ins)) b
+    getParam) . liftPairSnd) ins) (liftA2 appendToBody b $ returnVar l t)
+  inOutFunc n s p ins outs b = function n s p (mState void) (map (uncurry 
+    pointerParam) outs ++ map (fmap (uncurry getParam) . liftPairSnd) (filter 
+    (\(l,_) -> l `notElem` map fst outs) ins)) b
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1483,10 +1483,10 @@ instance MethodSym CppHdrCode where
   function n = method n ""
 
   inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (fmap (uncurry 
-    getParam) . liftPairSnd) ins) (liftA2 appendToBody b $ state $ returnVar l)
-  inOutFunc n s p ins outs b = function n s p void (map (uncurry pointerParam) 
-    outs ++ map (fmap (uncurry getParam) . liftPairSnd) (filter (\(l,_) -> l 
-    `notElem` map fst outs) ins)) b
+    getParam) . liftPairSnd) ins) (liftA2 appendToBody b $ returnVar l t)
+  inOutFunc n s p ins outs b = function n s p (mState void) (map (uncurry 
+    pointerParam) outs ++ map (fmap (uncurry getParam) . liftPairSnd) (filter 
+    (\(l,_) -> l `notElem` map fst outs) ins)) b
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
@@ -1530,9 +1530,9 @@ isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
-getParam :: Label -> (Doc, CodeType) -> Doc
-getParam l st@(_, List _) = cppPointerParamDoc l st
-getParam l st@(_, Object _) = cppPointerParamDoc l st
+getParam :: Label -> TypeData -> Doc
+getParam l st@(TD (List _) _) = cppPointerParamDoc l st
+getParam l st@(TD (Object _) _) = cppPointerParamDoc l st
 getParam l st = stateParamDocD l st
  
 -- convenience

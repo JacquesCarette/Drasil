@@ -30,7 +30,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
   funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD, 
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, classDec, dot, 
-  forLabel, observerListName, addCommentsDocD, valList, getterName, setterName)
+  forLabel, observerListName, addCommentsDocD, valList, appendToBody,
+  getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
   liftA5, liftList, lift1List, lift4Pair, liftPairFst, getInnerType, convType)
@@ -387,10 +388,10 @@ instance StatementSym PythonCode where
   break = return (mkStNoEnd breakDocD)
   continue = return (mkStNoEnd continueDocD)
 
-  returnState v = mkStNoEnd <$> fmap returnDocD [v]
-  returnVar l t = mkStNoEnd <$> fmap returnDocD [var l t]
+  returnState v = mkStNoEnd <$> liftList returnDocD [v]
+  returnVar l t = mkStNoEnd <$> liftList returnDocD [var l t]
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs = mkStNoEnd <$> fmap returnDocD vs
+  multiReturn vs = mkStNoEnd <$> liftList returnDocD vs
 
   valState v = mkStNoEnd <$> fmap valDoc v
 
@@ -483,8 +484,11 @@ instance MethodSym PythonCode where
   function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList 
     paramListDocD ps) b, False)
 
-  inOutFunc n s p ins [] b = function n s p void (map (uncurry stateParam) ins) b
-  inOutFunc n s p ins outs b = function n s p void (map (uncurry stateParam) ins) (liftA2 appendToBody b (state $ multiReturn (map fst outs)))
+  inOutFunc n s p ins [] b = function n s p (mState void) 
+    (map (uncurry stateParam) ins) b
+  inOutFunc n s p ins outs b = function n s p (mState void) 
+    (map (uncurry stateParam) ins) (liftA2 appendToBody b (multiReturn (map 
+    (uncurry var) outs)))
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc

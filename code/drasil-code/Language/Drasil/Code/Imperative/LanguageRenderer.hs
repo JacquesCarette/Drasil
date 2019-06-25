@@ -653,7 +653,7 @@ valList :: [ValData] -> Doc
 valList vs = hcat (intersperse (text ", ") (map valDoc vs))
 
 appendToBody :: Doc -> (Doc, Terminator) -> Doc
-appendToBody b (s, _) = vcat [b, maybeBlank, s]
+appendToBody b s = vcat [b, maybeBlank, fst $ statementDocD s]
   where maybeBlank = if isEmpty b then empty else blank
 
 getterName :: String -> String

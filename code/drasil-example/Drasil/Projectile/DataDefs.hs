@@ -16,7 +16,7 @@ dataDefns = [vecMag, speedIX, speedIY]
 
 ----------
 vecMag :: DataDefinition
-vecMag = ddNoRefs vecMagQD [{-Derivation-}] "vecMag" [{-Notes-}]
+vecMag = ddNoRefs vecMagQD [{-Derivation-}] "vecMag" [magNote]
 
 vecMagQD :: QDefinition
 vecMagQD = mkQuantDef speed vecMagEqn
@@ -45,6 +45,11 @@ speedIYEqn :: Expr
 speedIYEqn = sy iSpeed * sin (sy launAngle)
 
 ----------
+magNote :: Sentence
+magNote = foldlSent [S "For a given", phrase velocity, S "vector", ch velocity `sC`
+  S "the magnitude of the vector", sParen (E $ UnaryOp Abs (sy velocity)) `isThe`
+  S "scalar called", phrase speed]
+
 speedRef :: Sentence
 speedRef = ch iSpeed `sIs` S "from" +:+. makeRef2S vecMag
 

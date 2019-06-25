@@ -28,7 +28,6 @@ class InputParameters {
         double AR;
         double w_TNT;
         
-        InputParameters();
         ~InputParameters();
     
     private:

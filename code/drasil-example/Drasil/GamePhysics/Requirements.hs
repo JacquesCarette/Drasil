@@ -1,10 +1,9 @@
-module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, propsDeriv, requirements) where
+module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, propsDeriv) where
 
 import Language.Drasil hiding (Vector, organization)
-import Drasil.DocLang (mkEnumSimpleD, reqF)
 import Utils.Drasil
 
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS (propCorSol, solCharSpec)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, body, code,
   environment, funcReqDom, input_, likelyChg, mg, mis, module_, nonFuncReqDom,
   output_, physicalConstraint, physicalSim, property, requirement, srs,
@@ -28,15 +27,9 @@ import Drasil.GamePhysics.Concepts (twoD)
 propsDeriv :: [Contents]
 propsDeriv = [foldlSP [S "FIXME"]]
 
-requirements :: Section
-requirements = reqF [funcReqsSection, nonfuncReqsSection]
-
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
-
-funcReqsSection :: Section
-funcReqsSection = SRS.funcReq (mkEnumSimpleD funcReqs) []
 
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
@@ -109,9 +102,6 @@ deterCollRespOverTime = cic "deterCollRespOverTime" deterCollRespOverTimeDesc "D
 --------------------------------------
 -- 5.2 : Nonfunctional Requirements --
 --------------------------------------
-
-nonfuncReqsSection :: Section
-nonfuncReqsSection = SRS.nonfuncReq (mkEnumSimpleD nonfuncReqs) []
 
 nonfuncReqs :: [ConceptInstance] 
 nonfuncReqs = [highPerformance, correct, understandable, portable, reliable, reusable, maintainable]

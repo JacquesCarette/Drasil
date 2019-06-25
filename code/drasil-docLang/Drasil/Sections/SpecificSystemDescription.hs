@@ -1,7 +1,7 @@
 module Drasil.Sections.SpecificSystemDescription 
   ( specSysDescr
   , probDescF
-  , termDefnF
+  , termDefnF, termDefnF'
   , physSystDesc
   , goalStmtF
   , solutionCharSpecIntro 
@@ -32,6 +32,7 @@ import Data.Drasil.IdeaDicts (inModel, thModel)
 import qualified Drasil.DocLang.SRS as SRS
 
 import Control.Lens ((^.))
+import Data.Maybe
 
 -- | Specific System description section builder. Takes the system and subsections.
 specSysDescr :: [Section] -> Section
@@ -51,18 +52,25 @@ probDescF :: Sentence -> [Section] -> Section
 probDescF prob = SRS.probDesc [mkParagraph $ foldlSent [S "A", phrase system `sIs` S "needed to", prob]]
                   
 --can take a (Just sentence) if needed or Nothing if not
-termDefnF :: Maybe Sentence -> [Contents] -> Section
-termDefnF end otherContents = SRS.termAndDefn (intro : otherContents) []
-      where lastF Nothing  = EmptyS
-            lastF (Just s) = S "." +:+ s
-            intro = foldlSP [S "This subsection provides a list of terms", 
+termDefnF :: Concept c => Maybe Sentence -> [c] -> Section
+termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ map termDef lst] []
+  where intro = foldlSP_ [
+                  S "This subsection provides a list of terms that are used in the subsequent",
+                  plural section_ `sAnd` S "their meaning, with the", phrase purpose `sOf`
+                  S "reducing ambiguity and making it easier to correctly understand the" +:+.
+                  plural requirement, fromMaybe EmptyS end]
+        termDef x = atStart x +: EmptyS +:+ (x ^. defn)
+
+termDefnF' :: Maybe Sentence -> [Contents] -> Section
+termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []
+      where intro = foldlSP [S "This subsection provides a list of terms", 
                     S "that are used in the subsequent", plural section_, 
                     S "and their meaning, with the", phrase purpose, 
                     S "of reducing ambiguity and making it easier to correctly", 
-                    S "understand the", plural requirement :+: lastF end]
+                    S "understand the", plural requirement :+: maybe EmptyS (S "." +:+) end]
 
 --general introduction for Physical System Description
-physSystDesc :: (Idea a) => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
+physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
 physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
   where intro = mkParagraph $ foldlSentCol [S "The", phrase physicalSystem `sOf` short progName `sC`
                 S "as shown in", makeRef2S fg `sC` S "includes the following", plural element]

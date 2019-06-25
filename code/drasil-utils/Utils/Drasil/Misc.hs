@@ -3,9 +3,9 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, chgsStart,
   displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple, enumSimpleU,
   eqN, eqUnR, eqUnR', eqnWSource, fromReplace, fmtU, follows, getTandS,
   itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
-  maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, noRefsLT,
-  refineChain, showingCxnBw, sortBySymbol, sortBySymbolTuple, tAndDOnly,
-  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
+  maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
+  showingCxnBw, sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc,
+  tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
@@ -120,7 +120,7 @@ bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
 enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
 enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
 
-enumBulletU ::[Sentence] -> Contents --FIXME: should Enumeration be labelled?
+enumBulletU :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
 enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it

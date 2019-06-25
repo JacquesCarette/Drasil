@@ -7,7 +7,6 @@ import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation
   _constants, _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind,
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
-import Control.Lens ((^.))
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation), DocDesc,
@@ -18,7 +17,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
   TSIntro(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
   dataConstraintUncertainty, generateTraceMap, generateTraceMap', inDataConstTbl,
-  intro, mkDoc, outDataConstTbl, termDefnF, traceMatStandard, tsymb)
+  intro, mkDoc, outDataConstTbl, traceMatStandard, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -68,8 +67,9 @@ mkSRS = [
       ],
   SSDSec $
     SSDProg
-      [ SSDProblem $ PDProg prob [termsAndDefs]
-        [ PhySysDesc projectileTitle physSystParts figLaunch []
+      [ SSDProblem $ PDProg prob []
+        [ TermsAndDefs Nothing terms
+        , PhySysDesc projectileTitle physSystParts figLaunch []
         , Goals [(phrase iVel +:+ S "vector") `ofThe` phrase projectile] goals]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -171,14 +171,8 @@ prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict the",
 -- Terminology and Definitions --
 ---------------------------------
 
-termsAndDefs :: Section
-termsAndDefs = termDefnF Nothing [termsAndDefsBullets]
-
-termsAndDefsBullets :: Contents
-termsAndDefsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $
-  map tAndDMap [launcher, projectile, target, gravity, cartesian, rectilinear]
-  where
-    tAndDMap c = Flat $ foldlSent_ [atStart c +: EmptyS, c ^. defn]
+terms :: [ConceptChunk]
+terms = [launcher, projectile, target, gravity, cartesian, rectilinear]
 
 ---------------------------------
 -- Physical System Description --

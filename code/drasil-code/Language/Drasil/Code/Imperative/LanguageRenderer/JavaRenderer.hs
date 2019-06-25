@@ -455,17 +455,9 @@ instance StatementSym JavaCode where
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 
-  inOutCall n ins [] = valState $ funcApp n void ins
-  inOutCall n ins [out] = assign out $ funcApp n (fmap valType out) ins
-  inOutCall n ins outs = multi $ varDecDef "outputs" arrayType (funcApp n 
-    arrayType ins) : assignArray 0 outs
-    where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
-            [JavaCode (Statement JavaCode)]
-          assignArray _ [] = []
-          assignArray c (v:vs) = (v &= castObj (cast (fmap valType v) arrayType)
-            (var ("outputs[" ++ show c ++ "]") (fmap valType v))) 
-            : assignArray (c+1) vs
-          arrayType = return $ td (List $ Object "Object") (text "Object[]")
+  inOutCall = jInOutCall funcApp
+
+  extInOutCall m = jInOutCall (extFuncApp m)
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
@@ -541,18 +533,17 @@ instance MethodSym JavaCode where
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map stateParam ins) (liftA2 appendToBody b (returnState v))
-  inOutFunc n s p ins outs b = function n s p arrayType
+  inOutFunc n s p ins outs b = function n s p jArrayType
     (map stateParam ins) (liftA2 appendToBody b (multi (
-      varDecDef "outputs" arrayType
-        (var ("new Object[" ++ show (length outs) ++ "]") arrayType)
+      varDecDef "outputs" jArrayType
+        (var ("new Object[" ++ show (length outs) ++ "]") jArrayType)
       : assignArray 0 outs
-      ++ [returnVar "outputs" arrayType])))
+      ++ [returnVar "outputs" jArrayType])))
       where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
               [JavaCode (Statement JavaCode)]
             assignArray _ [] = []
             assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
               (fmap valType v) &= v) : assignArray (c+1) vs
-            arrayType = return $ td (List $ Object "Object") (text "Object[]")
             
 
 instance StateVarSym JavaCode where
@@ -612,6 +603,9 @@ jListType (TD Integer _) lst = td (List Integer) (lst <> angles (text "Integer")
 jListType (TD Float _) lst = td (List Float) (lst <> angles (text "Double"))
 jListType t lst = listTypeDocD t lst
 
+jArrayType :: JavaCode (StateType JavaCode)
+jArrayType = return $ td (List $ Object "Object") (text "Object[]")
+
 jListDecDef :: Label -> TypeData -> Doc -> Doc
 jListDecDef l st vs = typeDoc st <+> text l <+> equals <+> new <+> 
   typeDoc st <+> parens listElements
@@ -669,3 +663,18 @@ jMethod n s p t ps b = vcat [
 jListIndexExists :: Doc -> ValData -> ValData -> Doc
 jListIndexExists greater lst index = parens (valDoc lst <> text ".length" <+> 
   greater <+> valDoc index)
+
+jAssignFromArray :: Int -> [JavaCode (Value JavaCode)] -> 
+  [JavaCode (Statement JavaCode)]
+jAssignFromArray _ [] = []
+jAssignFromArray c (v:vs) = (v &= castObj (cast (fmap valType v) jArrayType)
+  (var ("outputs[" ++ show c ++ "]") (fmap valType v))) : jAssignFromArray (c+1) vs
+
+jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 
+  [JavaCode (Value JavaCode)] -> JavaCode (Value JavaCode)) -> Label -> 
+  [JavaCode (Value JavaCode)] -> [JavaCode (Value JavaCode)] -> 
+  JavaCode (Statement JavaCode)
+jInOutCall f n ins [] = valState $ f n void ins
+jInOutCall f n ins [out] = assign out $ f n (fmap valType out) ins
+jInOutCall f n ins outs = multi $ varDecDef "outputs" jArrayType (f n 
+  jArrayType ins) : jAssignFromArray 0 outs

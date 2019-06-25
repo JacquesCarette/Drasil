@@ -430,6 +430,8 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   -- The two lists are inputs and outputs, respectively
   inOutCall :: Label -> [repr (Value repr)] -> [repr (Value repr)] -> 
     repr (Statement repr)
+  extInOutCall :: Library -> Label -> [repr (Value repr)] ->
+    [repr (Value repr)] -> repr (Statement repr)
 
   state     :: repr (Statement repr) -> repr (Statement repr)
   loopState :: repr (Statement repr) -> repr (Statement repr)

@@ -84,11 +84,11 @@ ${F_{rot}}$ & Force Causing Rotation: a force in the direction of rotation & N
 \\
 ${F_{S}}$ & Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force. & --
 \\
+${{F_{S}}^{min}}$ & Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface & --
+\\
 ${F_{x}}$ & X-Component of the Force:  & N
 \\
 ${F_{y}}$ & Y-Component of the Force:  & N
-\\
-${{F_{S}}^{min}}$ & Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface & --
 \\
 $\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
@@ -98,13 +98,13 @@ ${{\mathbf{F}_{x}}^{H}}$ & Sums of the Interslice Normal Water Forces: for each 
 \\
 $\mathbf{f}$ & Interslice Normal to Shear Force Ratio Variation Function: function of distance in the x-direction & --
 \\
-$g$ & Gravitational Acceleration: An expression used in physics to indicate the intensity of a gravitational field & $\frac{\text{m}}{\text{s}^{2}}$
-\\
 $\mathbf{G}$ & Interslice Normal Forces: per meter in the z-direction exerted between each pair of adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
-$h$ & Height: The distance above a reference point for a point of interest. & m
+$g$ & Gravitational Acceleration: An expression used in physics to indicate the intensity of a gravitational field & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\mathbf{H}$ & Interslice Normal Water Forces: per meter in the z-direction exerted in the x-coordinate direction between each pair of adjacent slices & $\frac{\text{N}}{\text{m}}$
+\\
+$h$ & Height: The distance above a reference point for a point of interest. & m
 \\
 $\mathbf{h}$ & Y-Direction Heights of Slices: heights in the y-direction from the base of each slice to the slope surface, at the x-direction midpoint of the slice & m
 \\
@@ -126,23 +126,23 @@ $M$ & Moment: a measure of the tendency of a body to rotate about a specific poi
 \\
 $m$ & Mass: the quantity of matter in a body & kg
 \\
-$n$ & Number of Slices: the slip mass has been divided into & --
-\\
 $\mathbf{N}$ & Normal Forces: total reactive forces per meter in the z-direction for each slice of a soil surface subject to a body resting on it & $\frac{\text{N}}{\text{m}}$
 \\
 $\mathbf{N'}$ & Effective Normal Forces: per meter in the z-direction for each slice of a soil surface, subtracting pore water reactive force from total reactive force & $\frac{\text{N}}{\text{m}}$
 \\
-$P$ & Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force that can be withstood before failure & N
+$n$ & Number of Slices: the slip mass has been divided into & --
 \\
-$p$ & Pressure: A force exerted over an area & Pa
+$P$ & Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force that can be withstood before failure & N
 \\
 $\mathbf{P}$ & Resistive Shear Forces: Mohr Coulomb frictional forces per meter in the z-direction for each slice that describes the limit of mobilized shear force the slice can withstand before failure & $\frac{\text{N}}{\text{m}}$
 \\
+$p$ & Pressure: A force exerted over an area & Pa
+\\
 $\mathbf{Q}$ & External Forces: forces per meter in the z-direction acting into the surface from the midpoint of each slice & $\frac{\text{N}}{\text{m}}$
 \\
-$r$ & Length of the Moment Arm: distance between a force causing rotation and the axis of rotation & m
-\\
 $\mathbf{R}$ & Resistive Shear Forces Without the Influence of Interslice Forces: per meter in the z-direction for each slice & $\frac{\text{N}}{\text{m}}$
+\\
+$r$ & Length of the Moment Arm: distance between a force causing rotation and the axis of rotation & m
 \\
 $\mathbf{r}$ & Displacement: The change in An object's location relative to a reference point & m
 \\
@@ -152,23 +152,25 @@ $\mathbf{S}$ & Mobilized Shear Forces: per meter in the z-direction for each sli
 \\
 $\mathbf{T}$ & Mobilized Shear Forces Without the Influence of Interslice Forces: per meter in the z-direction for each slice & $\frac{\text{N}}{\text{m}}$
 \\
-$u$ & Pore Pressure: from water within the soil & Pa
-\\
 ${\mathbf{U}_{b}}$ & Base Hydrostatic Forces: per meter in the z-direction from water pressure within each slice & $\frac{\text{N}}{\text{m}}$
 \\
 ${\mathbf{U}_{t}}$ & Surface Hydrostatic Forces: per meter in the z-direction from water pressure acting into each slice from standing water on the slope surface & $\frac{\text{N}}{\text{m}}$
 \\
-$V$ & Volume: the amount of space that a substance or object occupies. & $\text{m}^{3}$
+$u$ & Pore Pressure: from water within the soil & Pa
 \\
-$v$ & Local Index: used as a bound variable index in calculations & --
+$V$ & Volume: the amount of space that a substance or object occupies. & $\text{m}^{3}$
 \\
 ${\mathbf{V}_{dry}}$ & Volumes of Dry Soil: amount of space occupied by dry soil for each slice & $\text{m}^{3}$
 \\
 ${\mathbf{V}_{sat}}$ & Volumes of Saturated Soil: amount of space occupied by saturated soil for each slice & $\text{m}^{3}$
 \\
+$v$ & Local Index: used as a bound variable index in calculations & --
+\\
 $W$ & Weight: The gravitational force acting on an object & N
 \\
 $\mathbf{W}$ & Weights: downward force per meter in the z-direction on each slice caused by gravity & $\frac{\text{N}}{\text{m}}$
+\\
+$\mathbf{X}$ & Interslice Shear Forces: per meter in the z-direction exerted between adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
 $x$ & X-Coordinate: in the Cartesian coordinate system & m
 \\
@@ -179,8 +181,6 @@ ${{x_{slip}}^{maxExt}}$ & Maximum Exit X-Coordinate: maximum potential x-coordin
 ${{x_{slip}}^{minEtr}}$ & Minimum Exit X-Coordinate: minimum potential x-coordinate for the entry point of a slip surface & m
 \\
 ${{x_{slip}}^{minExt}}$ & Minimum Exit X-Coordinate: minimum potential x-coordinate for the exit point of a slip surface & m
-\\
-$\mathbf{X}$ & Interslice Shear Forces: per meter in the z-direction exerted between adjacent slices & $\frac{\text{N}}{\text{m}}$
 \\
 ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
 \\
@@ -373,7 +373,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
-The Physical System Description (PS) of SSP, as shown in \hyperref[Figure:PhysicalSystem]{Fig:PhysicalSystem}, includes the following elements:
+The physical system of SSP, as shown in \hyperref[Figure:PhysicalSystem]{Fig:PhysicalSystem}, includes the following elements:
 \begin{itemize}
 \item[PS1:]A slope comprised of one soil layer.
 \item[PS2:]A water table, which may or may not exist.
@@ -2228,6 +2228,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}
+This section lists the likely changes to be made to the software.
 \begin{itemize}
 \item[Calculate-Inhomogeneous-Soil-Layers:\phantomsection\label{LC_inhomogeneous}]\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} - The system currently assumes the soil mass is homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
 \item[Calculate-Seismic-Force:\phantomsection\label{LC_seismic}]\hyperref[assumpSF]{A: Seismic-Force} - The system currently assumes no seismic force. In the future, calculations can be added for the presence of seismic force.
@@ -2235,7 +2236,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
-If changes were to be made with regard to the following, a different algorithm would be needed.
+This section lists the unlikely changes to be made to the software.
 \begin{itemize}
 \item[Normal-And-Shear-Linear-Only:\phantomsection\label{UC_normshearlinear}]Changes related to \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} are not possible due to the dependency of the calculations on the linear relationship between interslice normal forces and interslice shear forces.
 \item[2D-Analysis-Only:\phantomsection\label{UC_2donly}]\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} allows for 2D analysis with these models only because stress along the $z$-direction is zero. These models do not take into account stress in the $z$-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.

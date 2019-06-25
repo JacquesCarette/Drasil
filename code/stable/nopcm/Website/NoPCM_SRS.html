@@ -192,11 +192,6 @@
                   <td>&deg;C</td>
                 </tr>
                 <tr>
-                  <td><em>t</em></td>
-                  <td>Time</td>
-                  <td>s</td>
-                </tr>
-                <tr>
                   <td><em>ΔT</em></td>
                   <td>Change in temperature</td>
                   <td>&deg;C</td>
@@ -212,24 +207,29 @@
                   <td>&deg;C</td>
                 </tr>
                 <tr>
-                  <td><em>t<sub>final</sub></em></td>
-                  <td>Final time</td>
-                  <td>s</td>
-                </tr>
-                <tr>
                   <td><em>T<sub>init</sub></em></td>
                   <td>Initial temperature</td>
                   <td>&deg;C</td>
                 </tr>
                 <tr>
-                  <td><em>t<sub>step</sub></em></td>
-                  <td>Time step for simulation</td>
-                  <td>s</td>
-                </tr>
-                <tr>
                   <td><em>T<sub>W</sub></em></td>
                   <td>Temperature of the water</td>
                   <td>&deg;C</td>
+                </tr>
+                <tr>
+                  <td><em>t</em></td>
+                  <td>Time</td>
+                  <td>s</td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>final</sub></em></td>
+                  <td>Final time</td>
+                  <td>s</td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>step</sub></em></td>
+                  <td>Time step for simulation</td>
+                  <td>s</td>
                 </tr>
                 <tr>
                   <td><em>V</em></td>
@@ -1320,21 +1320,21 @@
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
-                      <td><em>t<sub>final</sub></em></td>
-                      <td><em>t<sub>final</sub>&thinsp;&gt;&thinsp;0</em></td>
-                      <td>
-                        <em>t<sub>final</sub>&thinsp;&lt;&thinsp;t<sub>final</sub><sup>max</sup></em>
-                      </td>
-                      <td><em>50.0&sdot;10<sup>3</sup></em> s</td>
-                      <td>10<em>%</em></td>
-                    </tr>
-                    <tr>
                       <td><em>T<sub>init</sub></em></td>
                       <td>
                         <em>0&thinsp;&lt;&thinsp;T<sub>init</sub>&thinsp;&lt;&thinsp;100</em>
                       </td>
                       <td>--</td>
                       <td><em>40.0</em> &deg;C</td>
+                      <td>10<em>%</em></td>
+                    </tr>
+                    <tr>
+                      <td><em>t<sub>final</sub></em></td>
+                      <td><em>t<sub>final</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td>
+                        <em>t<sub>final</sub>&thinsp;&lt;&thinsp;t<sub>final</sub><sup>max</sup></em>
+                      </td>
+                      <td><em>50.0&sdot;10<sup>3</sup></em> s</td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -1490,14 +1490,14 @@
                   <td>&deg;C</td>
                 </tr>
                 <tr>
-                  <td><em>t<sub>final</sub></em></td>
-                  <td>Final time</td>
-                  <td>s</td>
-                </tr>
-                <tr>
                   <td><em>T<sub>init</sub></em></td>
                   <td>Initial temperature</td>
                   <td>&deg;C</td>
+                </tr>
+                <tr>
+                  <td><em>t<sub>final</sub></em></td>
+                  <td>Final time</td>
+                  <td>s</td>
                 </tr>
                 <tr>
                   <td><em>t<sub>step</sub></em></td>
@@ -1552,6 +1552,9 @@
     <div id="Sec:LCs">
       <div class="section">
         <h1>Likely Changes</h1>
+        <p class="paragraph">
+          This section lists the likely changes to be made to the software.
+        </p>
         <div class="list">
           <p>
             <div id="likeChgTCVOD">
@@ -1579,6 +1582,9 @@
     <div id="Sec:UCs">
       <div class="section">
         <h1>Unlikely Changes</h1>
+        <p class="paragraph">
+          This section lists the unlikely changes to be made to the software.
+        </p>
         <div class="list">
           <p>
             <div id="unlikeChgWFS">

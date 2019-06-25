@@ -334,7 +334,7 @@ The physical system of GlassBR, as shown in \hyperref[Figure:physSystImage]{Fig:
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the dimensions of the glass plane, glass type, the characteristics of the explosion, and the tolerable probability of breakage, the goal statements are:
+Given the dimensions of the glass plane, the glass type, the characteristics of the explosion, and the tolerable probability of breakage, the goal statements are:
 \begin{itemize}
 \item[Predict-Glass-Withstands-Explosion:\phantomsection\label{willBreakGS}]Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
 \end{itemize}
@@ -1185,6 +1185,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}
+This section lists the likely changes to be made to the software.
 \begin{itemize}
 \item[Calculate-Internal-Blask-Risk:\phantomsection\label{calcInternalBlastRisk}]\hyperref[assumpES]{A: explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
 \item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]\hyperref[assumpSV]{A: standardValues}, \hyperref[assumpLDFC]{A: ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
@@ -1194,6 +1195,7 @@ This section provides the non-functional requirements, the qualities that the so
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
+This section lists the unlikely changes to be made to the software.
 \begin{itemize}
 \item[Predict-Withstanding-of-Certain-Degree:\phantomsection\label{predictWithstandOfCertDeg}]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
 \item[Accommodate-Altered-Glass:\phantomsection\label{accAlteredGlass}]\hyperref[assumpGC]{A: glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.

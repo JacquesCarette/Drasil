@@ -72,6 +72,7 @@ instance Multiplate DLPlate where
     ss' (SSDProblem prog) = SSDProblem <$> pdSec p prog
     ss' (SSDSolChSpec (SCSProg spec)) = SSDSolChSpec . SCSProg <$> traverse (scsSub p) spec
     pd (PDProg s sect progs) = PDProg <$> pure s <*> pure sect <*> traverse (pdSub p) progs
+    pd' (TermsAndDefs s cs) = TermsAndDefs <$> pure s <*> pure cs
     pd' (Goals s ci) = Goals <$> pure s <*> pure ci
     pd' (PhySysDesc nm s lc c) = PhySysDesc <$> pure nm <*> pure s <*> pure lc <*> pure c
     sc Assumptions = pure Assumptions
@@ -112,6 +113,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (SystCons c s) -> mCon c `mappend` mSec s,
   pdSec = Constant <$> \(PDProg _ s _) -> mSec s,
   pdSub = Constant <$> \case
+    (TermsAndDefs _ _) -> mempty
     (PhySysDesc _ _ lc c) -> mCon [lc] `mappend` mCon c
     (Goals _ _) -> mempty,
   scsSub = Constant <$> \case
@@ -192,6 +194,8 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (Cstmr _) -> [],
     pdSec = Constant . f <$> \(PDProg s _ _) -> [s],
     pdSub = Constant . f <$> \case
+      (TermsAndDefs Nothing cs) -> def cs
+      (TermsAndDefs (Just s) cs) -> s : def cs
       (PhySysDesc _ s _ _) -> s
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case

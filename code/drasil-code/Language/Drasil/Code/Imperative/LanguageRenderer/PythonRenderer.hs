@@ -484,11 +484,9 @@ instance MethodSym PythonCode where
   function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList 
     paramListDocD ps) b, False)
 
-  inOutFunc n s p ins [] b = function n s p (mState void) 
-    (map (uncurry stateParam) ins) b
-  inOutFunc n s p ins outs b = function n s p (mState void) 
-    (map (uncurry stateParam) ins) (liftA2 appendToBody b (multiReturn (map 
-    (uncurry var) outs)))
+  inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
+  inOutFunc n s p ins outs b = function n s p (mState void) (map stateParam ins)
+    (liftA2 appendToBody b (multiReturn outs))
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc

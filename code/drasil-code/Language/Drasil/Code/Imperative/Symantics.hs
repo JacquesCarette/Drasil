@@ -509,7 +509,7 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
 
   -- The two lists are inputs and outputs, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    [(Label, repr (StateType repr))] -> [(Label, repr (StateType repr))] -> 
+    [repr (Value repr)] -> [repr (Value repr)] -> 
     repr (Body repr) -> repr (Method repr)
 
 class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => 

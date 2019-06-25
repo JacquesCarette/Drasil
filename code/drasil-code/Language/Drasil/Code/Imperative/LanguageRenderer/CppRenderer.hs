@@ -42,7 +42,7 @@ import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
   doubleQuotedText, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, 
   liftA8, liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPairFst,
-  liftPairSnd, getInnerType, convType)
+  getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.List (nub)
@@ -516,7 +516,9 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
 
   function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
-  inOutFunc n s p ins outs b = pair (inOutFunc n (pfst s) (pfst p) (map (mapPairSnd pfst) ins) (map (mapPairSnd pfst) outs) (pfst b)) (inOutFunc n (psnd s) (psnd p) (map (mapPairSnd psnd) ins) (map (mapPairSnd psnd) outs) (psnd b))
+  inOutFunc n s p ins outs b = pair (inOutFunc n (pfst s) (pfst p) (map pfst 
+    ins) (map pfst outs) (pfst b)) (inOutFunc n (psnd s) (psnd p) (map psnd ins)
+    (map psnd outs) (psnd b))
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -1037,11 +1039,11 @@ instance MethodSym CppSrcCode where
   function n s _ t ps b = liftA2 (mthd False) (fmap snd s) (liftA5 
     (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
 
-  inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (fmap (uncurry 
-    getParam) . liftPairSnd) ins) (liftA2 appendToBody b $ returnVar l t)
-  inOutFunc n s p ins outs b = function n s p (mState void) (map (uncurry 
-    pointerParam) outs ++ map (fmap (uncurry getParam) . liftPairSnd) (filter 
-    (\(l,_) -> l `notElem` map fst outs) ins)) b
+  inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
+    (map (fmap getParam) ins) (liftA2 appendToBody b $ returnState v)
+  inOutFunc n s p ins outs b = function n s p (mState void) 
+    (map pointerParam outs ++ map (fmap getParam) 
+    (filter (`notElem` outs) ins)) b
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1090,7 +1092,7 @@ instance ModuleSym CppSrcCode where
 -- Header File --
 -----------------
 
-newtype CppHdrCode a = CPPHC {unCPPHC :: a}
+newtype CppHdrCode a = CPPHC {unCPPHC :: a} deriving Eq
 
 instance Functor CppHdrCode where
   fmap f (CPPHC x) = CPPHC (f x)
@@ -1229,7 +1231,7 @@ instance ValueSym CppHdrCode where
   ($:) _ _ = liftA2 mkVal void (return empty)
 
   const _ _ = liftA2 mkVal void (return empty)
-  var _ _ = liftA2 mkVal void (return empty)
+  var n t = liftA2 (vd (Just n)) t (return $ varDocD n) 
   extVar _ _ _ = liftA2 mkVal void (return empty)
   self _ = liftA2 mkVal void (return empty)
   arg _ = liftA2 mkVal void (return empty)
@@ -1482,11 +1484,11 @@ instance MethodSym CppHdrCode where
 
   function n = method n ""
 
-  inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (fmap (uncurry 
-    getParam) . liftPairSnd) ins) (liftA2 appendToBody b $ returnVar l t)
-  inOutFunc n s p ins outs b = function n s p (mState void) (map (uncurry 
-    pointerParam) outs ++ map (fmap (uncurry getParam) . liftPairSnd) (filter 
-    (\(l,_) -> l `notElem` map fst outs) ins)) b
+  inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
+    (map (fmap getParam) ins) (liftA2 appendToBody b $ returnState v)
+  inOutFunc n s p ins outs b = function n s p (mState void) 
+    (map pointerParam outs ++ map (fmap getParam) 
+    (filter (`notElem` outs) ins)) b
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData

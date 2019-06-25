@@ -538,21 +538,20 @@ instance MethodSym JavaCode where
 
   function n = method n ""
 
-  inOutFunc n s p ins [] b = function n s p (mState void) 
-    (map (uncurry stateParam) ins) b
-  inOutFunc n s p ins [(l,t)] b = function n s p (mState t) (map (uncurry 
-    stateParam) ins) (liftA2 appendToBody b (returnVar l t))
+  inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
+  inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
+    (map stateParam ins) (liftA2 appendToBody b (returnState v))
   inOutFunc n s p ins outs b = function n s p arrayType
-    (map (uncurry stateParam) ins) (liftA2 appendToBody b (multi (
+    (map stateParam ins) (liftA2 appendToBody b (multi (
       varDecDef "outputs" arrayType
         (var ("new Object[" ++ show (length outs) ++ "]") arrayType)
       : assignArray 0 outs
       ++ [returnVar "outputs" arrayType])))
-      where assignArray :: Int -> [(Label, JavaCode (StateType JavaCode))] -> 
+      where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
               [JavaCode (Statement JavaCode)]
             assignArray _ [] = []
-            assignArray c ((l,t):ls) = (var ("outputs[" ++ show c ++ "]") t &= 
-              var l t) : assignArray (c+1) ls
+            assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
+              (fmap valType v) &= v) : assignArray (c+1) vs
             arrayType = return $ td (List $ Object "Object") (text "Object[]")
             
 

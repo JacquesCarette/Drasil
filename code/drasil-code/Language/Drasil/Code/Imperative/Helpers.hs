@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   verticalComma,angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,
   vibmap, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, 
   liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
-  liftPairSnd, getInnerType, convType
+  getInnerType, convType
 ) where
 
 import Language.Drasil.Code.Code (CodeType(..))
@@ -146,9 +146,6 @@ liftPair (a, b) = liftA2 (,) a b
 
 liftPairFst :: Functor f => (f a, b) -> f (a, b)
 liftPairFst (c, n) = fmap (, n) c
-
-liftPairSnd :: Functor f => (a, f b) -> f (a, b)
-liftPairSnd (c, n) = fmap (c ,) n
 
 getInnerType :: CodeType -> CodeType
 getInnerType (List innerT) = innerT

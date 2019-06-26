@@ -5,40 +5,40 @@ using System.Collections.Generic;
 
 public class InputFormat {
     
-    public static void get_input(string filename, ref double A_C, ref double C_W, ref double h_C, ref double T_init, ref double t_final, ref double L, ref double T_C, ref double t_step, ref double rho_W, ref double D, ref double A_tol, ref double R_tol, ref double T_W, ref double E_W) {
+    public static void get_input(string filename, out double A_C, out double C_W, out double h_C, out double T_init, out double t_final, out double L, out double T_C, out double t_step, out double rho_W, out double D, out double A_tol, out double R_tol, out double T_W, out double E_W) {
         StreamReader infile;
         string line;
         List<string> lines = new List<string>(0);
         List<string> linetokens = new List<string>(0);
         infile = new StreamReader(filename);
         infile.ReadLine();
-        inParams.A_C = Double.Parse(infile.ReadLine());
+        A_C = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.C_W = Double.Parse(infile.ReadLine());
+        C_W = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.h_C = Double.Parse(infile.ReadLine());
+        h_C = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.T_init = Double.Parse(infile.ReadLine());
+        T_init = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.t_final = Double.Parse(infile.ReadLine());
+        t_final = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.L = Double.Parse(infile.ReadLine());
+        L = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.T_C = Double.Parse(infile.ReadLine());
+        T_C = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.t_step = Double.Parse(infile.ReadLine());
+        t_step = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.rho_W = Double.Parse(infile.ReadLine());
+        rho_W = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.D = Double.Parse(infile.ReadLine());
+        D = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.A_tol = Double.Parse(infile.ReadLine());
+        A_tol = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.R_tol = Double.Parse(infile.ReadLine());
+        R_tol = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.T_W = Double.Parse(infile.ReadLine());
+        T_W = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.E_W = Double.Parse(infile.ReadLine());
+        E_W = Double.Parse(infile.ReadLine());
         infile.Close();
     }
 }

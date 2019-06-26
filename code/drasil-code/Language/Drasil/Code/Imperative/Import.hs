@@ -455,7 +455,7 @@ genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 
 genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genMainFunc =
-  let l_filename = "inputfile"
+  let l_filename = "filename"
   in do
     g <- ask
     ip <- getInputDecl
@@ -545,7 +545,7 @@ getInputFormatIns = do
   let getIns :: (RenderSym repr) => Structure -> [repr (Value repr)]
       getIns Loose = []
       getIns AsClass = [var "inParams" (obj "InputParameters")]
-  return $ var "inputfile" infile : getIns (inStruct g)
+  return $ var "filename" string : getIns (inStruct g)
 
 getInputFormatOuts :: (RenderSym repr) => Reader (State repr) 
   [repr (Value repr)]

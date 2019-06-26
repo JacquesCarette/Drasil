@@ -18,4 +18,4 @@ data CodeType = Boolean
               | List CodeType
               | Iterator CodeType
               | Object String
-              | Void
+              | Void deriving Eq

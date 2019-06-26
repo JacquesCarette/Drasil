@@ -12,9 +12,9 @@ module Utils.Drasil (
   enumBullet, enumBulletU, enumSimple, enumSimpleU, eqN, eqUnR, eqUnR',
   fmtU, follows, getTandS, itemRefToSent, makeListRef, makeTMatrix,
   maybeChanged, maybeExpanded, maybeWOVerb, mkEnumAbbrevList,
-  mkTableFromColumns, noRefs, noRefsLT, refineChain, showingCxnBw,
-  sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym,
-  typUncr, underConsidertn, unwrap, weave, zipSentList,
+  mkTableFromColumns, noRefs, refineChain, showingCxnBw, sortBySymbol,
+  sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym, typUncr,
+  underConsidertn, unwrap, weave, zipSentList,
   -- Phrase
   and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',
   compoundNCP1, compoundNCPlPh, compoundNCPlPl, for, for', for'', of_, of_',

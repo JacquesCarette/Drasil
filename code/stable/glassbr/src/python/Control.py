@@ -9,9 +9,9 @@ import InputConstraints
 import OutputFormat
 import Calculations
 
-inputfile = sys.argv[1]
+filename = sys.argv[1]
 inParams = InputParameters.InputParameters()
-InputFormat.func_get_input(inputfile, inParams)
+InputFormat.get_input(filename, inParams)
 DerivedValues.derived_values(inParams)
 InputConstraints.input_constraints(inParams)
 J_tol = Calculations.func_J_tol(inParams)

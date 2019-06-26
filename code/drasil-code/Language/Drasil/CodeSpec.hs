@@ -263,7 +263,8 @@ modDepMap :: CodeSystInfo -> ModExportMap -> Choices -> ModDepMap
 modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _) -> (n, getModDep m)) 
   (mods cs) ++ ("Control", getDepsControl cs mem)
   : catMaybes [getDepsDerived cs mem chs,
-               getDepsConstraints cs mem chs]
+               getDepsConstraints cs mem chs,
+               getDepsInFormat chs]
   where getModDep (Mod name' funcs) =
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)

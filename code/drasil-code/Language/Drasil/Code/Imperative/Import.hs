@@ -623,10 +623,15 @@ variable s' t' = do
         Reader (State repr) (repr (Value repr))
       doit s t | member s mm =
         maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
-               | s `elem` map codeName (inputs cs) = return $ var "inParams" 
-               (obj "InputParameters") $-> var s t
+               | s `elem` map codeName (inputs cs) = return $ inputVariable 
+                 (inStruct g) s t
                | otherwise                         = return $ var s t
   doit s' t'
+
+inputVariable :: (RenderSym repr) => Structure -> String -> 
+  repr (StateType repr) -> repr (Value repr)
+inputVariable Unbundled s t = var s t
+inputVariable Bundled s t = var "inParams" (obj "InputParameters") $-> var s t
   
 fApp :: (RenderSym repr) => String -> String -> repr (StateType repr) -> 
   [repr (Value repr)] -> Reader (State repr) (repr (Value repr))

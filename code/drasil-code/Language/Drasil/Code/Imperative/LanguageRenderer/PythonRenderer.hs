@@ -20,21 +20,22 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, 
   intTypeDocD, floatTypeDocD, typeDocD, constructDocD, paramListDocD, 
-  methodListDocD, ifCondDocD, stratDocD, assignDocD, plusEqualsDocD', 
-  plusPlusDocD', statementDocD, returnDocD, commentDocD, mkStNoEnd, notOpDocD', 
-  negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
-  tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, typeUnExpr, 
-  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD, litFloatD, litIntD, 
-  litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
-  funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD, 
+  methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
+  plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
+  mkStNoEnd, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', 
+  sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', 
+  unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD,
+  litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
+  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, classDec, dot, 
-  forLabel, observerListName, addCommentsDocD, callFuncParamList, getterName, 
-  setterName)
+  forLabel, observerListName, addCommentsDocD, valList, appendToBody,
+  getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
-  liftA5, liftList, lift1List, lift4Pair, liftPairFst, getInnerType, convType)
+  liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPairFst, getInnerType,
+  convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -259,10 +260,9 @@ instance ValueExpression PythonCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 pyStateObj t (liftList 
-    callFuncParamList vs))
+  stateObj t vs = liftA2 mkVal t (liftA2 pyStateObj t (liftList valList vs))
   extStateObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
-    callFuncParamList vs))
+    valList vs))
   listStateObj t _ = liftA2 mkVal t (fmap typeDoc t)
 
   exists v = v ?!= var "None" void
@@ -316,10 +316,11 @@ instance SelectorFunction PythonCode where
   at t l = listAccess t (var l int)
 
 instance StatementSym PythonCode where
-  -- Terminator determines how statements end to end in a separator
+  -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   assign v1 v2 = mkStNoEnd <$> liftA2 assignDocD v1 v2
   assignToListIndex lst index v = valState $ lst $. listSet index v
+  multiAssign outs vs = mkStNoEnd <$> lift2Lists multiAssignDoc outs vs
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
   (&+=) v1 v2 = mkStNoEnd <$> liftA3 plusEqualsDocD' v1 plusOp v2
@@ -330,7 +331,7 @@ instance StatementSym PythonCode where
   varDecDef l _ v = mkStNoEnd <$> fmap (pyVarDecDef l) v
   listDec l _ t = mkStNoEnd <$> fmap (pyListDec l) (listType static_ t)
   listDecDef l _ vs = mkStNoEnd <$> fmap (pyListDecDef l) (liftList 
-    callFuncParamList vs)
+    valList vs)
   objDecDef = varDecDef
   objDecNew l t vs = varDecDef l t (stateObj t vs)
   extObjDecNew l lib t vs = varDecDef l t (extStateObj lib t vs)
@@ -387,8 +388,10 @@ instance StatementSym PythonCode where
   break = return (mkStNoEnd breakDocD)
   continue = return (mkStNoEnd continueDocD)
 
-  returnState v = mkStNoEnd <$> fmap returnDocD v
-  returnVar l t = mkStNoEnd <$> fmap returnDocD (var l t)
+  returnState v = mkStNoEnd <$> liftList returnDocD [v]
+  returnVar l t = mkStNoEnd <$> liftList returnDocD [var l t]
+  multiReturn [] = error "Attempt to write return statement with no return variables"
+  multiReturn vs = mkStNoEnd <$> liftList returnDocD vs
 
   valState v = mkStNoEnd <$> fmap valDoc v
 
@@ -406,6 +409,9 @@ instance StatementSym PythonCode where
   addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = listSizeAccess obsList
+
+  inOutCall n ins [] = valState $ funcApp n void ins
+  inOutCall n ins outs = multiAssign outs [funcApp n void ins]
 
   state = fmap statementDocD
   loopState = fmap statementDocD 
@@ -457,7 +463,7 @@ instance MethodTypeSym PythonCode where
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = Doc
-  stateParam n _ = return $ text n
+  stateParam = fmap valDoc
   pointerParam = stateParam
 
 instance MethodSym PythonCode where
@@ -467,7 +473,7 @@ instance MethodSym PythonCode where
   getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self c $-> var n t)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_
-    (mState void) [stateParam paramLbl t] setBody
+    (mState void) [stateParam $ var paramLbl t] setBody
     where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
   mainMethod _ b = liftPairFst (b, True)
   privMethod n c = method n c private dynamic_
@@ -475,9 +481,12 @@ instance MethodSym PythonCode where
   constructor n = method initName n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Python"
 
-
   function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList 
     paramListDocD ps) b, False)
+
+  inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
+  inOutFunc n s p ins outs b = function n s p (mState void) (map stateParam ins)
+    (liftA2 appendToBody b (multiReturn outs))
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc

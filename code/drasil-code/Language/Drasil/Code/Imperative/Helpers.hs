@@ -2,11 +2,11 @@
 
 module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   ScopeTag(..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, blank,verticalComma,
-  angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
-  mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, 
-  lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
-  liftPairSnd, getInnerType, convType
+  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, blank,
+  verticalComma,angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,
+  vibmap, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, 
+  liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
+  getInnerType, convType
 ) where
 
 import Language.Drasil.Code.Code (CodeType(..))
@@ -50,16 +50,20 @@ data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc,
 svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
 
-data TypeData = TD {cType :: CodeType, typeDoc :: Doc}
+data TypeData = TD {cType :: CodeType, typeDoc :: Doc} deriving Eq
 
 td :: CodeType -> Doc -> TypeData
 td = TD
 
 -- Maybe String is the String representation of the value
 data ValData = VD {valName :: Maybe String, valType :: TypeData, valDoc :: Doc}
+  deriving Eq
 
 vd :: Maybe String -> TypeData -> Doc -> ValData
 vd = VD
+
+updateValDoc :: (Doc -> Doc) -> ValData -> ValData
+updateValDoc f v = vd (valName v) (valType v) ((f . valDoc) v)
 
 blank :: Doc
 blank = text ""
@@ -142,9 +146,6 @@ liftPair (a, b) = liftA2 (,) a b
 
 liftPairFst :: Functor f => (f a, b) -> f (a, b)
 liftPairFst (c, n) = fmap (, n) c
-
-liftPairSnd :: Functor f => (a, f b) -> f (a, b)
-liftPairSnd (c, n) = fmap (c ,) n
 
 getInnerType :: CodeType -> CodeType
 getInnerType (List innerT) = innerT

@@ -37,8 +37,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  observerListName, doubleSlash, addCommentsDocD, callFuncParamList, getterName,
-  setterName, setMain, setEmpty, statementsToStateVars)
+  observerListName, doubleSlash, addCommentsDocD, valList, appendToBody, 
+  getterName, setterName, setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -283,11 +283,10 @@ instance ValueExpression JavaCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t 
-    (liftList callFuncParamList vs))
+  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t (liftList valList vs))
   extStateObj _ = stateObj
   listStateObj t vs = liftA2 mkVal t (liftA3 listStateObjDocD listObj t 
-    (liftList callFuncParamList vs))
+    (liftList valList vs))
 
   exists = notNull
   notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (var "null"
@@ -344,6 +343,7 @@ instance StatementSym JavaCode where
   type Statement JavaCode = (Doc, Terminator)
   assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
   assignToListIndex lst index v = valState $ lst $. listSet index v
+  multiAssign _ _ = error "No multiple assignment statements in Java"
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
   (&+=) v1 v2 = mkSt <$> liftA2 plusEqualsDocD v1 v2
@@ -354,7 +354,7 @@ instance StatementSym JavaCode where
   varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
   listDec l n t = mkSt <$> liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> liftA2 (jListDecDef l) t (liftList 
-    callFuncParamList vs)
+    valList vs)
   objDecDef l t v = mkSt <$> liftA2 (objDecDefDocD l) t v
   objDecNew l t vs = mkSt <$> liftA2 (objDecDefDocD l) t (stateObj t vs)
   extObjDecNew l _ = objDecNew l
@@ -434,8 +434,9 @@ instance StatementSym JavaCode where
   break = return (mkSt breakDocD)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
   continue = return (mkSt continueDocD)
 
-  returnState v = mkSt <$> fmap returnDocD v
-  returnVar l t = mkSt <$> fmap returnDocD (var l t)
+  returnState v = mkSt <$> liftList returnDocD [v]
+  returnVar l t = mkSt <$> liftList returnDocD [var l t]
+  multiReturn _ = error "Cannot return multiple values in Java"
 
   valState v = mkSt <$> fmap valDoc v
 
@@ -453,6 +454,18 @@ instance StatementSym JavaCode where
   addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
+
+  inOutCall n ins [] = valState $ funcApp n void ins
+  inOutCall n ins [out] = assign out $ funcApp n (fmap valType out) ins
+  inOutCall n ins outs = multi $ varDecDef "outputs" arrayType (funcApp n 
+    arrayType ins) : assignArray 0 outs
+    where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
+            [JavaCode (Statement JavaCode)]
+          assignArray _ [] = []
+          assignArray c (v:vs) = (v &= castObj (cast (fmap valType v) arrayType)
+            (var ("outputs[" ++ show c ++ "]") (fmap valType v))) 
+            : assignArray (c+1) vs
+          arrayType = return $ td (List $ Object "Object") (text "Object[]")
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
@@ -503,7 +516,7 @@ instance MethodTypeSym JavaCode where
 
 instance ParameterSym JavaCode where
   type Parameter JavaCode = Doc
-  stateParam n = fmap (stateParamDocD n)
+  stateParam = fmap stateParamDocD
   pointerParam = stateParam
 
 instance MethodSym JavaCode where
@@ -514,7 +527,7 @@ instance MethodSym JavaCode where
   getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self c $-> var n t)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
-    void [stateParam paramLbl t] setBody
+    void [stateParam $ var paramLbl t] setBody
     where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
   mainMethod c b = setMain <$> method "main" c public static_ void 
     [return $ text "String[] args"] b
@@ -524,6 +537,23 @@ instance MethodSym JavaCode where
   destructor _ _ = error "Destructors not allowed in Java"
 
   function n = method n ""
+
+  inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
+  inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
+    (map stateParam ins) (liftA2 appendToBody b (returnState v))
+  inOutFunc n s p ins outs b = function n s p arrayType
+    (map stateParam ins) (liftA2 appendToBody b (multi (
+      varDecDef "outputs" arrayType
+        (var ("new Object[" ++ show (length outs) ++ "]") arrayType)
+      : assignArray 0 outs
+      ++ [returnVar "outputs" arrayType])))
+      where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
+              [JavaCode (Statement JavaCode)]
+            assignArray _ [] = []
+            assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
+              (fmap valType v) &= v) : assignArray (c+1) vs
+            arrayType = return $ td (List $ Object "Object") (text "Object[]")
+            
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc

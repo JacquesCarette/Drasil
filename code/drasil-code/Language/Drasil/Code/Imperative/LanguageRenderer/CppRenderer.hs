@@ -36,7 +36,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   objVarDocD, inlineIfDocD, funcAppDocD, funcDocD, castDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD,
   publicDocD, classDec, dot, observerListName, doubleSlash, addCommentsDocD, 
-  callFuncParamList, getterName, setterName, setEmpty)
+  valList, appendToBody, getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
@@ -45,6 +45,7 @@ import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),
   getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
+import Data.List (nub)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -328,6 +329,8 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   assign v1 v2 = pair (assign (pfst v1) (pfst v2)) (assign (psnd v1) (psnd v2))
   assignToListIndex lst index v = pair (assignToListIndex (pfst lst) (pfst 
     index) (pfst v)) (assignToListIndex (psnd lst) (psnd index) (psnd v))
+  multiAssign vs1 vs2 = pair (multiAssign (map pfst vs1) (map pfst vs2)) 
+    (multiAssign (map psnd vs1) (map psnd vs2))
   (&=) v1 v2 = pair ((&=) (pfst v1) (pfst v2)) ((&=) (psnd v1) (psnd v2))
   (&-=) v1 v2 = pair ((&-=) (pfst v1) (pfst v2)) ((&-=) (psnd v1) (psnd v2))
   (&+=) v1 v2 = pair ((&+=) (pfst v1) (pfst v2)) ((&+=) (psnd v1) (psnd v2))
@@ -413,6 +416,7 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
 
   returnState v = pair (returnState $ pfst v) (returnState $ psnd v)
   returnVar l t = pair (returnVar l $ pfst t) (returnVar l $ psnd t)
+  multiReturn vs = pair (multiReturn $ map pfst vs) (multiReturn $ map psnd vs)
 
   valState v = pair (valState $ pfst v) (valState $ psnd v)
 
@@ -431,6 +435,9 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (initObserverList (psnd t) (map psnd vs))
   addObserver t o = pair (addObserver (pfst t) (pfst o)) (addObserver (psnd t) 
     (psnd o))
+
+  inOutCall n ins outs = pair (inOutCall n (map pfst ins) (map pfst outs)) 
+    (inOutCall n (map psnd ins) (map psnd outs))
 
   state s = pair (state $ pfst s) (state $ psnd s)
   loopState s = pair (loopState $ pfst s) (loopState $ psnd s)
@@ -487,8 +494,8 @@ instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   type Parameter (p CppSrcCode CppHdrCode) = Doc
-  stateParam n t = pair (stateParam n $ pfst t) (stateParam n $ psnd t)
-  pointerParam n t = pair (pointerParam n $ pfst t) (pointerParam n $ psnd t)
+  stateParam v = pair (stateParam $ pfst v) (stateParam $ psnd v)
+  pointerParam v = pair (pointerParam $ pfst v) (pointerParam $ psnd v)
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   type Method (p CppSrcCode CppHdrCode) = MethodData
@@ -509,6 +516,9 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
 
   function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
+  inOutFunc n s p ins outs b = pair (inOutFunc n (pfst s) (pfst p) (map pfst 
+    ins) (map pfst outs) (pfst b)) (inOutFunc n (psnd s) (psnd p) (map psnd ins)
+    (map psnd outs) (psnd b))
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -542,7 +552,7 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
 -- Source File --
 -----------------
 
-newtype CppSrcCode a = CPPSC {unCPPSC :: a}
+newtype CppSrcCode a = CPPSC {unCPPSC :: a} deriving Eq
 
 instance Functor CppSrcCode where
   fmap f (CPPSC x) = CPPSC (f x)
@@ -766,8 +776,7 @@ instance ValueExpression CppSrcCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp _ = funcApp
-  stateObj t vs = liftA2 mkVal t (liftA2 cppStateObjDoc t (liftList 
-    callFuncParamList vs))
+  stateObj t vs = liftA2 mkVal t (liftA2 cppStateObjDoc t (liftList valList vs))
   extStateObj _ = stateObj
   listStateObj = stateObj
 
@@ -826,6 +835,7 @@ instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
   assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
   assignToListIndex lst index v = valState $ lst $. listSet index v
+  multiAssign _ _ = error "No multiple assignment statements in C++"
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
   (&+=) v1 v2 = mkSt <$> liftA2 plusEqualsDocD v1 v2
@@ -836,7 +846,7 @@ instance StatementSym CppSrcCode where
   varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
   listDec l n t = mkSt <$> liftA2 (cppListDecDoc l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> liftA2 (cppListDecDefDoc l) t (liftList 
-    callFuncParamList vs)
+    valList vs)
   objDecDef l t v = mkSt <$> liftA2 (objDecDefDocD l) t v
   objDecNew l t vs = mkSt <$> liftA2 (objDecDefDocD l) t (stateObj t vs)
   extObjDecNew l _ = objDecNew l
@@ -922,8 +932,9 @@ instance StatementSym CppSrcCode where
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)
 
-  returnState v = mkSt <$> fmap returnDocD v
-  returnVar l t = mkSt <$> fmap returnDocD (var l t)
+  returnState v = mkSt <$> liftList returnDocD [v]
+  returnVar l t = mkSt <$> liftList returnDocD [var l t]
+  multiReturn _ = error "Cannot return multiple values in C++"
 
   valState v = mkSt <$> fmap valDoc v
 
@@ -941,6 +952,9 @@ instance StatementSym CppSrcCode where
   addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
+
+  inOutCall n ins [out] = assign out $ funcApp n (fmap valType out) ins
+  inOutCall n ins outs = valState $ funcApp n void (nub $ ins ++ outs)
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
@@ -997,8 +1011,8 @@ instance MethodTypeSym CppSrcCode where
 
 instance ParameterSym CppSrcCode where
   type Parameter CppSrcCode = Doc
-  stateParam n = fmap (stateParamDocD n)
-  pointerParam n = fmap (cppPointerParamDoc n)
+  stateParam = fmap stateParamDocD
+  pointerParam = fmap cppPointerParamDoc
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
@@ -1007,7 +1021,7 @@ instance MethodSym CppSrcCode where
   getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self c $-> var n t)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
-    void [stateParam paramLbl t] setBody
+    void [stateParam $ var paramLbl t] setBody
     where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
   mainMethod _ b = fmap (mthd True Pub) (liftA4 cppMainMethod int b blockStart 
     blockEnd)
@@ -1024,6 +1038,12 @@ instance MethodSym CppSrcCode where
 
   function n s _ t ps b = liftA2 (mthd False) (fmap snd s) (liftA5 
     (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
+
+  inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
+    (map (fmap getParam) ins) (liftA2 appendToBody b $ returnState v)
+  inOutFunc n s p ins outs b = function n s p (mState void) 
+    (map pointerParam outs ++ map (fmap getParam) 
+    (filter (`notElem` outs) ins)) b
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1072,7 +1092,7 @@ instance ModuleSym CppSrcCode where
 -- Header File --
 -----------------
 
-newtype CppHdrCode a = CPPHC {unCPPHC :: a}
+newtype CppHdrCode a = CPPHC {unCPPHC :: a} deriving Eq
 
 instance Functor CppHdrCode where
   fmap f (CPPHC x) = CPPHC (f x)
@@ -1211,7 +1231,7 @@ instance ValueSym CppHdrCode where
   ($:) _ _ = liftA2 mkVal void (return empty)
 
   const _ _ = liftA2 mkVal void (return empty)
-  var _ _ = liftA2 mkVal void (return empty)
+  var n t = liftA2 (vd (Just n)) t (return $ varDocD n) 
   extVar _ _ _ = liftA2 mkVal void (return empty)
   self _ = liftA2 mkVal void (return empty)
   arg _ = liftA2 mkVal void (return empty)
@@ -1328,6 +1348,7 @@ instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
   assign _ _ = return (mkStNoEnd empty)
   assignToListIndex _ _ _ = return (mkStNoEnd empty)
+  multiAssign _ _ = return (mkStNoEnd empty)
   (&=) _ _ = return (mkStNoEnd empty)
   (&-=) _ _ = return (mkStNoEnd empty)
   (&+=) _ _ = return (mkStNoEnd empty)
@@ -1388,6 +1409,7 @@ instance StatementSym CppHdrCode where
 
   returnState _ = return (mkStNoEnd empty)
   returnVar _ _ = return (mkStNoEnd empty)
+  multiReturn _ = return (mkStNoEnd empty)
 
   valState _ = return (mkStNoEnd empty)
 
@@ -1402,6 +1424,8 @@ instance StatementSym CppHdrCode where
 
   initObserverList _ _ = return (mkStNoEnd empty)
   addObserver _ _ = return (mkStNoEnd empty)
+
+  inOutCall _ _ _ = return (mkStNoEnd empty)
 
   state _ = return (mkStNoEnd empty)
   loopState _ = return (mkStNoEnd empty)
@@ -1442,8 +1466,8 @@ instance MethodTypeSym CppHdrCode where
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = Doc
-  stateParam n = fmap (stateParamDocD n)
-  pointerParam n = fmap (cppPointerParamDoc n)
+  stateParam = fmap stateParamDocD
+  pointerParam = fmap cppPointerParamDoc
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
@@ -1451,7 +1475,7 @@ instance MethodSym CppHdrCode where
     (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement)
   getMethod n c t = method (getterName n) c public dynamic_ t [] (return empty)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
-    void [stateParam paramLbl t] (return empty)
+    void [stateParam $ var paramLbl t] (return empty)
   mainMethod _ _ = return (mthd True Pub empty)
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -1459,6 +1483,12 @@ instance MethodSym CppHdrCode where
   destructor n _ = pubMethod ('~':n) n void [] (return empty)
 
   function n = method n ""
+
+  inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
+    (map (fmap getParam) ins) (liftA2 appendToBody b $ returnState v)
+  inOutFunc n s p ins outs b = function n s p (mState void) 
+    (map pointerParam outs ++ map (fmap getParam) 
+    (filter (`notElem` outs) ins)) b
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
@@ -1502,6 +1532,12 @@ isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
+getParam :: ValData -> Doc
+getParam v = getParamFunc ((cType . valType) v) v
+  where getParamFunc (List _) = cppPointerParamDoc
+        getParamFunc (Object _) = cppPointerParamDoc
+        getParamFunc _ = stateParamDocD
+ 
 -- convenience
 enumsEqualInts :: Bool
 enumsEqualInts = False
@@ -1606,8 +1642,8 @@ cppOpenFile :: Label -> ValData -> ValData -> Doc
 cppOpenFile mode f n = valDoc f <> dot <> text "open" <> 
   parens (valDoc n <> comma <+> text mode)
 
-cppPointerParamDoc :: Label -> TypeData  -> Doc
-cppPointerParamDoc n t = typeDoc t <+> text "&" <> text n
+cppPointerParamDoc :: ValData -> Doc
+cppPointerParamDoc v = typeDoc (valType v) <+> text "&" <> valDoc v
 
 cppsMethod :: Label -> Label -> TypeData -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 

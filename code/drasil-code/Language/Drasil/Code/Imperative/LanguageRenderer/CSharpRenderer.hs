@@ -38,21 +38,22 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
   listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, observerListName,
-  doubleSlash, addCommentsDocD, callFuncParamList, getterName, setterName, 
+  doubleSlash, addCommentsDocD, valList, appendToBody, getterName, setterName, 
   setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
-  fd, ModData(..), md, TypeData(..), td, ValData(..), vd, liftA4, liftA5, 
-  liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, liftPairFst, 
-  getInnerType, convType)
+  fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
+  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
+  liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import Data.List (nub)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   equals, semi, vcat, lbrace, rbrace, colon, render, isEmpty)
 
-newtype CSharpCode a = CSC {unCSC :: a}
+newtype CSharpCode a = CSC {unCSC :: a} deriving Eq
 
 instance Functor CSharpCode where
   fmap f (CSC x) = CSC (f x)
@@ -278,11 +279,10 @@ instance ValueExpression CSharpCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t 
-    (liftList callFuncParamList vs))
+  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t (liftList valList vs))
   extStateObj _ = stateObj
   listStateObj t vs = liftA2 mkVal t (liftA3 listStateObjDocD listObj t 
-    (liftList callFuncParamList vs))
+    (liftList valList vs))
 
   exists = notNull
   notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (var "null" 
@@ -339,6 +339,7 @@ instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
   assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
   assignToListIndex lst index v = valState $ lst $. listSet index v
+  multiAssign _ _ = error "No multiple assignment statements in C#"
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
   (&+=) v1 v2 = mkSt <$> liftA2 plusEqualsDocD v1 v2
@@ -423,8 +424,9 @@ instance StatementSym CSharpCode where
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)
 
-  returnState v = mkSt <$> fmap returnDocD v
-  returnVar l t = mkSt <$> fmap returnDocD (var l t)
+  returnState v = mkSt <$> liftList returnDocD [v]
+  returnVar l t = mkSt <$> liftList returnDocD [var l t]
+  multiReturn _ = error "Cannot return multiple values in C#"
 
   valState v = mkSt <$> fmap valDoc v
 
@@ -441,6 +443,11 @@ instance StatementSym CSharpCode where
   addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
+
+  inOutCall n ins [out] = assign out $ funcApp n (fmap valType out) ins
+  inOutCall n ins outs = valState $ funcApp n void (nub $ map (\v -> 
+    if v `elem` outs then fmap (updateValDoc csRef) v else v) ins ++
+    map (fmap (updateValDoc csRef)) outs)
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
@@ -492,7 +499,7 @@ instance MethodTypeSym CSharpCode where
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = Doc
-  stateParam n = fmap (stateParamDocD n)
+  stateParam = fmap stateParamDocD
   pointerParam = stateParam
 
 instance MethodSym CSharpCode where
@@ -503,7 +510,7 @@ instance MethodSym CSharpCode where
   getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
     where getBody = oneLiner $ returnState (self c $-> var n t)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
-    void [stateParam paramLbl t] setBody
+    void [stateParam $ var paramLbl t] setBody
     where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
   mainMethod c b = setMain <$> method "Main" c public static_ void 
     [return $ text "string[] args"] b
@@ -513,6 +520,11 @@ instance MethodSym CSharpCode where
   destructor _ _ = error "Destructors not allowed in C#"
 
   function n = method n ""
+
+  inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
+    (map stateParam ins) (liftA2 appendToBody b $ returnState v)
+  inOutFunc n s p ins outs b = function n s p (mState void) (map (fmap csRef . 
+    stateParam) outs ++ map stateParam (filter (`notElem` outs) ins)) b
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -587,3 +599,6 @@ csOpenFileWorA :: ValData -> ValData -> TypeData
   -> ValData -> Doc
 csOpenFileWorA f n w a = valDoc f <+> equals <+> new <+> typeDoc w <> 
   parens (valDoc n <> comma <+> valDoc a)
+
+csRef :: Doc -> Doc
+csRef p = text "ref" <+> p

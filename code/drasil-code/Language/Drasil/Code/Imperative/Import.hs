@@ -28,7 +28,7 @@ import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (Entry(JunkEntry, ListEntry, Entry),
   LinePattern(Repeat, Straight), Data(Line, Lines, JunkData, Singleton), 
-  DataDesc, getInputs)
+  DataDesc, getInputs, junkLine, singleton)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (nub, intersperse, (\\), stripPrefix)
@@ -110,6 +110,13 @@ publicMethod mt l pl u = do
   g <- ask
   genMethodCall public static_ (commented g) (logKind g) mt l pl u
 
+publicInOutFunc :: (RenderSym repr) => Label -> [repr (Value repr)] -> 
+  [repr (Value repr)] -> Reader (State repr) [repr (Block repr)] -> 
+  Reader (State repr) (repr (Method repr))
+publicInOutFunc l ins outs u = do
+  g <- ask
+  genInOutFunc public static_ (commented g) (logKind g) l ins outs u
+
 generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
   ([ModData], Label)] -> State repr -> IO ()
 generateCode l unRepr g =
@@ -137,9 +144,10 @@ genModules = do
   let s = csi $ codeSpec g
   mn     <- genMain
   inp    <- chooseInStructure $ inStruct g
+  inpf   <- genInputFormatMod
   out    <- genOutputMod
   moddef <- traverse genModDef (mods s) -- hack ?
-  return $ mn : inp ++ out ++ moddef
+  return $ mn : inp ++ inpf ++ out ++ moddef
 
 -- private utilities used in generateCode
 getDir :: Lang -> String
@@ -258,6 +266,29 @@ constrWarn _ = oneLiner $ printStrLn "Warning: constraint violated"
 constrExc :: (RenderSym repr) => Expr -> repr (Body repr)
 constrExc _ = oneLiner $ throw "InputError"
 
+genInputFormatMod :: (RenderSym repr) => Reader (State repr) 
+  [repr (Module repr)]
+genInputFormatMod = do
+  inFunc <- genInputFormat
+  let inFmt = maybeToList inFunc
+  liftS $ genModule "InputFormat" (Just $ return inFmt) Nothing
+
+genInputFormat :: (RenderSym repr) => Reader (State repr) 
+  (Maybe (repr (Method repr)))
+genInputFormat = do
+  g <- ask
+  let dd = junkLine : intersperse junkLine (map singleton (extInputs $ csi $
+        codeSpec g))
+      genInFormat :: (RenderSym repr) => Maybe String -> Reader (State repr) 
+        (Maybe (repr (Method repr)))
+      genInFormat Nothing = return Nothing
+      genInFormat (Just _) = do
+        ins <- getInputFormatIns
+        outs <- getInputFormatOuts
+        mthd <- publicInOutFunc "get_input" ins outs (readData dd)
+        return $ Just mthd
+  genInFormat $ Map.lookup "get_input" (eMap $ codeSpec g)
+
 ---- CONST ----
 
 {-
@@ -345,15 +376,30 @@ genMethodCall :: (RenderSym repr) => repr (Scope repr) -> repr
   Label -> [ParamData repr] -> Reader (State repr) [repr (Block repr)] -> 
   Reader (State repr) (repr (Method repr))
 genMethodCall s pr doComments doLog t n p b = do
-  let loggedBody LogFunc = loggedMethod n pTypes pNames b
-      loggedBody LogAll  = loggedMethod n pTypes pNames b
+  let loggedBody LogFunc = loggedMethod n vals b
+      loggedBody LogAll  = loggedMethod n vals b
       loggedBody _       = b
       commBody CommentFunc = commMethod n pNames
       commBody _           = id
       pTypes = map paramType p
       pNames = map paramName p
+      vals = zipWith var pNames pTypes
   bod <- commBody doComments (loggedBody doLog)
   return $ function n s pr t (map param p) (body bod)
+
+genInOutFunc :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) 
+  -> Comments -> Logging -> Label -> [repr (Value repr)] -> [repr (Value repr)] 
+  -> Reader (State repr) [repr (Block repr)] 
+  -> Reader (State repr) (repr (Method repr))
+genInOutFunc s pr doComments doLog n ins outs b = do
+  let loggedBody LogFunc = loggedMethod n ins b
+      loggedBody LogAll  = loggedMethod n ins b
+      loggedBody _       = b
+      commBody CommentFunc = commMethod n pNames
+      commBody _           = id
+      pNames = map valueName ins
+  bod <- commBody doComments (loggedBody doLog)
+  return $ inOutFunc n s pr ins outs (body bod)
 
 commMethod :: (RenderSym repr) => Label -> [Label] -> Reader (State repr) 
   [repr (Block repr)] -> Reader (State repr) [repr (Block repr)]
@@ -367,10 +413,10 @@ commMethod n l b = do
           codeSpec g)) l
     ] : rest 
 
-loggedMethod :: (RenderSym repr) => Label -> [repr (StateType repr)] ->
-  [Label] -> Reader (State repr) [repr (Block repr)] -> Reader (State repr)
-  [repr (Block repr)]
-loggedMethod n st l b =
+loggedMethod :: (RenderSym repr) => Label -> [repr (Value repr)] -> 
+  Reader (State repr) [repr (Block repr)] -> 
+  Reader (State repr) [repr (Block repr)]
+loggedMethod n vals b =
   let l_outfile = "outfile"
       v_outfile = var l_outfile outfile
   in do
@@ -380,14 +426,14 @@ loggedMethod n st l b =
       varDec l_outfile outfile,
       openFileA v_outfile (litString $ logName g),
       printFileStr v_outfile ("function " ++ n ++ "("),
-      printParams st l v_outfile,
+      printParams vals v_outfile,
       printFileStrLn v_outfile ") called",
       closeFile v_outfile ]
       : rest
   where
-    printParams sts ls v_outfile = multi $
+    printParams vs v_outfile = multi $
       intersperse (printFileStr v_outfile ", ") $
-      map (\(x,y) -> printFile v_outfile x (var y x)) (zip sts ls)
+      map (\v -> printFile v_outfile (valueType v) v) vs
 
 ---- MAIN ---
 
@@ -409,7 +455,7 @@ genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 
 genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genMainFunc =
-  let l_filename = "inputfile"
+  let l_filename = "filename"
   in do
     g <- ask
     ip <- getInputDecl
@@ -450,11 +496,23 @@ getFuncCall n t funcPs = do
         return $ Just val
   getCall $ Map.lookup n (eMap $ codeSpec g)
 
+getInOutCall :: (RenderSym repr) => String -> 
+  Reader (State repr) [repr (Value repr)] ->
+  Reader (State repr) [repr (Value repr)] -> 
+  Reader (State repr) (Maybe (repr (Statement repr)))
+getInOutCall n inFunc outFunc = do
+  g <- ask
+  let getCall Nothing = return Nothing
+      getCall (Just m) = do
+        ins <- inFunc
+        outs <- outFunc
+        stmt <- fAppInOut m n ins outs 
+        return $ Just stmt
+  getCall $ Map.lookup n (eMap $ codeSpec g)
+
 getInputCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
-getInputCall = do
-  val <- getFuncCall (funcPrefix ++ "get_input") void getInputFormatParams
-  return $ fmap valState val
+getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
 
 getDerivedCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -480,13 +538,26 @@ getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
   return $ fmap valState val
 
-getInputFormatParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
-getInputFormatParams = do 
+getInputFormatIns :: (RenderSym repr) => Reader (State repr) 
+  [repr (Value repr)]
+getInputFormatIns = do
   g <- ask
-  let ins = extInputs $ csi $ codeSpec g
-      l_filename = "inputfile"
-  ps <- getParams ins
-  return $ PD (stateParam $ var l_filename infile) infile l_filename : ps
+  let getIns :: (RenderSym repr) => Structure -> [repr (Value repr)]
+      getIns Loose = []
+      getIns AsClass = [var "inParams" (obj "InputParameters")]
+  return $ var "filename" string : getIns (inStruct g)
+
+getInputFormatOuts :: (RenderSym repr) => Reader (State repr) 
+  [repr (Value repr)]
+getInputFormatOuts = do
+  g <- ask
+  let getOuts :: (RenderSym repr) => Structure -> [repr (Value repr)]
+      getOuts Loose = toValues $ extInputs $ csi $ codeSpec g
+      getOuts AsClass = []
+  return $ getOuts (inStruct g)
+  
+toValues :: (RenderSym repr) => [CodeChunk] -> [repr (Value repr)]
+toValues = map (\c -> var (codeName c) ((convType . codeType) c))
 
 getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do
@@ -561,6 +632,13 @@ fApp :: (RenderSym repr) => String -> String -> repr (StateType repr) ->
 fApp m s t vl = do
   g <- ask
   return $ if m /= currentModule g then extFuncApp m s t vl else funcApp s t vl
+
+fAppInOut :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
+  [repr (Value repr)] -> Reader (State repr) (repr (Statement repr))
+fAppInOut m n ins outs = do
+  g <- ask
+  return $ if m /= currentModule g then extInOutCall m n ins outs 
+    else inOutCall n ins outs
 
 data ParamData repr = PD {
   param :: (ParameterSym repr) => repr (Parameter repr),
@@ -770,21 +848,28 @@ convStmt (FAppend a b) = do
   b' <- convExpr b
   return $ valState $ a' $. listAppend b'
 
--- this is really ugly!!
 genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)
   (repr (Method repr))
 genDataFunc nameTitle ddef = do
-    parms <- getParams $ getInputs ddef
-    inD <- mapM inData ddef
-    publicMethod (mState void) nameTitle (PD p_filename string l_filename : parms) $
-      return [block $ [
-      varDec l_infile infile,
-      varDec l_line string,
-      listDec l_lines 0 (listType dynamic_ string),
-      listDec l_linetokens 0 (listType dynamic_ string),
-      openFileR v_infile v_filename ] ++
-      concat inD ++ [
-      closeFile v_infile ]]
+  parms <- getParams $ getInputs ddef
+  publicMethod (mState void) nameTitle (PD p_filename string l_filename : parms)  (readData ddef)
+  where l_filename = "filename"
+        v_filename = var l_filename string
+        p_filename = stateParam v_filename
+
+-- this is really ugly!!
+readData :: (RenderSym repr) => DataDesc -> Reader (State repr)
+  [repr (Block repr)]
+readData ddef = do
+  inD <- mapM inData ddef
+  return [block $ [
+    varDec l_infile infile,
+    varDec l_line string,
+    listDec l_lines 0 (listType dynamic_ string),
+    listDec l_linetokens 0 (listType dynamic_ string),
+    openFileR v_infile v_filename ] ++
+    concat inD ++ [
+    closeFile v_infile ]]
   where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Statement repr)]
         inData (Singleton v) = do
             vv <- variable (codeName v) (convType $ codeType v)
@@ -883,7 +968,6 @@ genDataFunc nameTitle ddef = do
         l_line, l_lines, l_linetokens, l_infile, l_filename, l_i, l_j :: Label
         v_line, v_lines, v_linetokens, v_infile, v_filename, v_i, v_j ::
           (RenderSym repr) => (repr (Value repr))
-        p_filename :: (RenderSym repr) => (repr (Parameter repr))
         l_line = "line"
         v_line = var l_line string
         l_lines = "lines"
@@ -894,7 +978,6 @@ genDataFunc nameTitle ddef = do
         v_infile = var l_infile infile
         l_filename = "filename"
         v_filename = var l_filename string
-        p_filename = stateParam v_filename
         l_i = "i"
         v_i = var l_i int
         l_j = "j"

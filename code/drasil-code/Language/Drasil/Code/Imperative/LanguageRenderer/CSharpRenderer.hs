@@ -521,8 +521,9 @@ instance MethodSym CSharpCode where
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map stateParam ins) (liftA2 appendToBody b $ returnState v)
-  inOutFunc n s p ins outs b = function n s p (mState void) (map (fmap csRef . 
-    stateParam) outs ++ map stateParam (filter (`notElem` outs) ins)) b
+  inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
+    if v `elem` outs then fmap csRef (stateParam v) else stateParam v) ins ++
+    map (fmap csRef . stateParam) outs) b
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc

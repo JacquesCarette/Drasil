@@ -859,7 +859,7 @@ genDataFunc nameTitle ddef = do
 
 -- this is really ugly!!
 readData :: (RenderSym repr) => DataDesc -> Reader (State repr)
-  [(repr (Block repr))]
+  [repr (Block repr)]
 readData ddef = do
   inD <- mapM inData ddef
   return [block $ [

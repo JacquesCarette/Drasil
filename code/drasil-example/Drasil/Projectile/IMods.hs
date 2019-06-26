@@ -129,19 +129,21 @@ offsetRC = makeRC "offsetRC" (nounPhraseSP "offset")
 ---
 messageIM :: InstanceModel
 messageIM = imNoDerivNoRefs messageRC [qw offset, qw targPos]
-  [sy targPos $> 0] (qw message) [] "messageIM" [offsetNote, targPosConsNote, tolNote]
+  [sy targPos $> 0, sy offset $> negate (sy landPos)] (qw message) [] "messageIM"
+  [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 
 messageRC :: RelationConcept
 messageRC = makeRC "messageRC" (nounPhraseSP "output message") 
   EmptyS $ sy message $= case_ [case1, case2, case3]
-  where case1 = (Str "The target was hit.",        UnaryOp Abs (sy offset / sy targPos) $< sy tol)
+  where case1 = (Str "The target was hit.",        abs (sy offset / sy targPos) $< sy tol)
         case2 = (Str "The projectile fell short.", sy offset $< 0)
         case3 = (Str "The projectile went long.",  sy offset $> 0)
 
 --- Notes
 
 angleConstraintNote, gravNote, landAndTargPosConsNote, landPosNote,
-  landPosConsNote, offsetNote, targPosConsNote, timeConsNote, tolNote :: Sentence
+  landPosConsNote, offsetNote, offsetConsNote, targPosConsNote,
+  timeConsNote, tolNote :: Sentence
 
 angleConstraintNote = foldlSent [S "The", phrase constraint,
   E (0 $< sy launAngle $< (sy pi_ / 2)) `sIs` S "from",
@@ -159,6 +161,9 @@ landPosConsNote = S "The" +:+ phrase constraint +:+
   E (sy landPos $> 0) `sIs` S "from" +:+. makeRef2S posXDirection
 
 offsetNote = ch offset `sIs` S "from" +:+. makeRef2S offsetIM
+
+offsetConsNote = foldlSent [S "The", phrase constraint, E (sy offset $> negate (sy landPos)) `sIs`
+  S "from the fact that", E (sy landPos $> 0) `sC` S "from", makeRef2S posXDirection]
 
 targPosConsNote = S "The" +:+ phrase constraint +:+
   E (sy targPos $> 0) `sIs` S "from" +:+. makeRef2S posXDirection

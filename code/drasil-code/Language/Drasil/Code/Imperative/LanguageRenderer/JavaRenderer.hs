@@ -456,7 +456,6 @@ instance StatementSym JavaCode where
           lastelem = obsList $. listSize
 
   inOutCall = jInOutCall funcApp
-
   extInOutCall m = jInOutCall (extFuncApp m)
 
   state = fmap statementDocD

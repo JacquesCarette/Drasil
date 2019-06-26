@@ -1043,9 +1043,9 @@ instance MethodSym CppSrcCode where
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map (fmap getParam) ins) (liftA2 appendToBody b $ returnState v)
-  inOutFunc n s p ins outs b = function n s p (mState void) 
-    (map pointerParam outs ++ map (fmap getParam) 
-    (filter (`notElem` outs) ins)) b
+  inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
+    if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
+    map pointerParam outs) b
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1489,9 +1489,9 @@ instance MethodSym CppHdrCode where
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map (fmap getParam) ins) (liftA2 appendToBody b $ returnState v)
-  inOutFunc n s p ins outs b = function n s p (mState void) 
-    (map pointerParam outs ++ map (fmap getParam) 
-    (filter (`notElem` outs) ins)) b
+  inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
+    if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
+    map pointerParam outs) b
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData

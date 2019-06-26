@@ -147,7 +147,7 @@ genModules = do
   inpf   <- genInputFormatMod
   out    <- genOutputMod
   moddef <- traverse genModDef (mods s) -- hack ?
-  return $ mn : inp ++ out ++ moddef
+  return $ mn : inp ++ inpf ++ out ++ moddef
 
 -- private utilities used in generateCode
 getDir :: Lang -> String
@@ -496,11 +496,23 @@ getFuncCall n t funcPs = do
         return $ Just val
   getCall $ Map.lookup n (eMap $ codeSpec g)
 
+getInOutCall :: (RenderSym repr) => String -> 
+  Reader (State repr) [repr (Value repr)] ->
+  Reader (State repr) [repr (Value repr)] -> 
+  Reader (State repr) (Maybe (repr (Statement repr)))
+getInOutCall n inFunc outFunc = do
+  g <- ask
+  let getCall Nothing = return Nothing
+      getCall (Just m) = do
+        ins <- inFunc
+        outs <- outFunc
+        stmt <- fAppInOut m n ins outs 
+        return $ Just stmt
+  getCall $ Map.lookup n (eMap $ codeSpec g)
+
 getInputCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
-getInputCall = do
-  val <- getFuncCall (funcPrefix ++ "get_input") void getInputFormatParams
-  return $ fmap valState val
+getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
 
 getDerivedCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -620,6 +632,13 @@ fApp :: (RenderSym repr) => String -> String -> repr (StateType repr) ->
 fApp m s t vl = do
   g <- ask
   return $ if m /= currentModule g then extFuncApp m s t vl else funcApp s t vl
+
+fAppInOut :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
+  [repr (Value repr)] -> Reader (State repr) (repr (Statement repr))
+fAppInOut m n ins outs = do
+  g <- ask
+  return $ if m /= currentModule g then extInOutCall m n ins outs 
+    else inOutCall n ins outs
 
 data ParamData repr = PD {
   param :: (ParameterSym repr) => repr (Parameter repr),
@@ -834,7 +853,7 @@ genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)
 genDataFunc nameTitle ddef = do
   parms <- getParams $ getInputs ddef
   publicMethod (mState void) nameTitle (PD p_filename string l_filename : parms)  (readData ddef)
-  where l_filename = "inputfile"
+  where l_filename = "filename"
         v_filename = var l_filename string
         p_filename = stateParam v_filename
 

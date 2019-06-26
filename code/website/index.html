@@ -27,12 +27,12 @@ $-for(examples)$
           <a href="$url$">[$type$]</a>
         $endfor$
       </li>
-      $-if(src)$
+      $-for(src)$
         <li>
           Generated Code
-          <a href="$src-$">LINKKKK</a>
+          <a href="$path-$">LINKKKK</a>
         </li>
-      $-endif$
+      $-endfor$
     </ul>
     <br>
   </li>$sep-$

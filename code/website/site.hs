@@ -13,7 +13,7 @@ import System.FilePath (takeBaseName, takeExtension)
 
 -- type FilePath = String -- from System.FilePath
 type Name = String
-type SourceLocation = Maybe [String]
+type SourceLocation = [String]
 type SRSVariants = [(Name, String)]
 type Description = Maybe String
 data Example = E Name SourceLocation SRSVariants Description
@@ -40,7 +40,7 @@ mkExamples repoRoot path srsDir = do
 
   -- a list of Just sources or Nothing based on existence and contents of src file.
   sources <- mapM (\x -> doesFileExist (path ++ x ++ "/src") >>=
-    \y -> if y then Just . map ((++) repoRoot) . lines . rstrip <$> readFile (path ++ x ++ "/src") else return Nothing) names
+    \y -> if y then map ((++) repoRoot) . lines . rstrip <$> readFile (path ++ x ++ "/src") else return []) names
 
   -- a list of Just descriptions or Nothing based on existence and contents of desc file.
   descriptions <- mapM (\x -> doesFileExist ("descriptions/" ++ x ++ ".txt") >>=
@@ -94,11 +94,12 @@ mkExampleCtx exampleDir srsDir =
   ) (\x -> mapM (\y -> makeItem (y, itemBody x)) $ srs $ itemBody x)  <>
   field "name" (return . name . itemBody) <>
   maybeField "desc" (return . desc . itemBody) <>
-  -- listFieldWith "src" (
-  --   field "path" (function1)
-  --   field "lang" (function2)
-  -- ) (function3) 
-  maybeListField "src" (return . src . itemBody) 0
+  listFieldWith "src" (
+    -- need to be indexed
+    field "path" (return . fst . itemBody)
+    -- field "lang" (function2)
+  ) (\x -> mapM (\y -> makeItem (y, itemBody x)) $ src $ itemBody x)
+  -- maybeListField "src" (return . src . itemBody) 0
   where
     name (E nm _ _ _) = nm
     src (E _ s _ _) = s

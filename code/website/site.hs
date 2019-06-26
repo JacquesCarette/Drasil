@@ -13,10 +13,10 @@ import System.FilePath (takeBaseName, takeExtension)
 
 -- type FilePath = String -- from System.FilePath
 type Name = String
-type SourceLocation = [String]
+type CodeSource = (FilePath, String)
 type SRSVariants = [(Name, String)]
 type Description = Maybe String
-data Example = E Name SourceLocation SRSVariants Description
+data Example = E Name [CodeSource] SRSVariants Description
 
 -- Returns FilePath of the SRS
 srsPath :: FilePath -> FilePath -> FilePath -> FilePath
@@ -33,6 +33,16 @@ getExtensionName _ = error "Expected some extension."
 getSRS :: [Name] -> SRSVariants
 getSRS = map (\x -> (x, getExtensionName $ takeExtension x)) . filter (\x -> any (`endswith` x) [".pdf", ".html"])
 
+getSrc :: String -> FilePath -> CodeSource
+getSrc repoRoot source = (repoRoot ++ source, lang $ takeBaseName source)
+  where
+    -- Some languages might be named differently than the folders they are stored in.
+    lang "cpp"    = "C++"
+    lang "csharp" = "C#"
+    lang "python" = "Python"
+    lang "java"   = "Java"
+    lang x        = error ("No given display name for language: " ++ x)
+
 mkExamples :: String -> FilePath -> FilePath -> IO [Example]
 mkExamples repoRoot path srsDir = do
   -- names will be a list of example names (Chipmunk, GlassBR, etc. of type FilePath)
@@ -40,7 +50,8 @@ mkExamples repoRoot path srsDir = do
 
   -- a list of Just sources or Nothing based on existence and contents of src file.
   sources <- mapM (\x -> doesFileExist (path ++ x ++ "/src") >>=
-    \y -> if y then map ((++) repoRoot) . lines . rstrip <$> readFile (path ++ x ++ "/src") else return []) names
+    \y -> if y then map (getSrc repoRoot) . lines . rstrip <$> readFile (path ++ x ++ "/src") else return []) names
+    
 
   -- a list of Just descriptions or Nothing based on existence and contents of desc file.
   descriptions <- mapM (\x -> doesFileExist ("descriptions/" ++ x ++ ".txt") >>=
@@ -62,28 +73,6 @@ maybeField s f = Context $ \k _ i -> do
   else
     fail $ "maybeField " ++ s ++ " used when really Nothing. Wrap in `$if(" ++ s ++ ")$` block."
 
------------ New additions ---------
--- Could be better optimized
-
-maybeListField :: String -> (Item a -> Compiler (Maybe [String])) -> Int -> Context a
-maybeListField s f n = Context $ \k _ i -> do
-  val <- f i
-  if k == s && isJust val then
-    return $ StringField $ (fromJust val)!!n
-  else
-    fail $ "maybeField " ++ s ++ " used when really Nothing. Wrap in `$if(" ++ s ++ ")$` block."
-
-takeFromSlash :: String -> String
-takeFromSlash s = takeFromSlashHelper s ""
-  where
-    takeFromSlashHelper begin end
-      | last begin == '/' = end
-      | otherwise = takeFromSlashHelper (init begin) (last begin :end)
-
-
--- maybeListField "src" (return . src . itemBody) 0 <>
--- maybeListField takeFromSlash (return . src . itemBody)
-
 mkExampleCtx :: FilePath -> FilePath -> Context Example
 mkExampleCtx exampleDir srsDir =
   listFieldWith "srs" (
@@ -95,11 +84,9 @@ mkExampleCtx exampleDir srsDir =
   field "name" (return . name . itemBody) <>
   maybeField "desc" (return . desc . itemBody) <>
   listFieldWith "src" (
-    -- need to be indexed
-    field "path" (return . fst . itemBody)
-    -- field "lang" (function2)
+    field "path" (return . fst . fst . itemBody) <>
+    field "lang" (return . snd . fst . itemBody)
   ) (\x -> mapM (\y -> makeItem (y, itemBody x)) $ src $ itemBody x)
-  -- maybeListField "src" (return . src . itemBody) 0
   where
     name (E nm _ _ _) = nm
     src (E _ s _ _) = s

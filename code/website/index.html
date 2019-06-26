@@ -25,14 +25,16 @@ $-for(examples)$
       <li>$name$ SRS
         $-for(srs)$
           <a href="$url$">[$type$]</a>
-        $endfor$
+        $-endfor$
       </li>
-      $-for(src)$
+      $-if(src)$
         <li>
-          Generated Code
-          <a href="$path-$">LINKKKK</a>
+          Generated Code:
+          $-for(src)$
+            <a href="$path$">[$lang$]</a>
+          $-endfor$
         </li>
-      $-endfor$
+      $-endif$
     </ul>
     <br>
   </li>$sep-$

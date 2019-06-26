@@ -21,9 +21,9 @@ using std::ofstream;
 #include "Calculations.hpp"
 
 int main(int argc, const char *argv[]) {
-    string inputfile = argv[1];
+    string filename = argv[1];
     InputParameters inParams = InputParameters();
-    func_get_input(inputfile, inParams);
+    get_input(filename, inParams);
     derived_values(inParams);
     input_constraints(inParams);
     double J_tol = func_J_tol(inParams);

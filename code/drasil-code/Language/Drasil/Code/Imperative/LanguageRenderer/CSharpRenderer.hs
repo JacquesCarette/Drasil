@@ -444,10 +444,8 @@ instance StatementSym CSharpCode where
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 
-  inOutCall n ins [out] = assign out $ funcApp n (fmap valType out) ins
-  inOutCall n ins outs = valState $ funcApp n void (nub $ map (\v -> 
-    if v `elem` outs then fmap (updateValDoc csRef) v else v) ins ++
-    map (fmap (updateValDoc csRef)) outs)
+  inOutCall = csInOutCall funcApp
+  extInOutCall m = csInOutCall (extFuncApp m)
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
@@ -602,3 +600,12 @@ csOpenFileWorA f n w a = valDoc f <+> equals <+> new <+> typeDoc w <>
 
 csRef :: Doc -> Doc
 csRef p = text "ref" <+> p
+
+csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) -> 
+  [CSharpCode (Value CSharpCode)] -> CSharpCode (Value CSharpCode)) -> Label -> 
+  [CSharpCode (Value CSharpCode)] -> [CSharpCode (Value CSharpCode)] -> 
+  CSharpCode (Statement CSharpCode)
+csInOutCall f n ins [out] = assign out $ f n (fmap valType out) ins
+csInOutCall f n ins outs = valState $ f n void (nub $ map (\v -> 
+  if v `elem` outs then fmap (updateValDoc csRef) v else v) ins ++
+  map (fmap (updateValDoc csRef)) outs)

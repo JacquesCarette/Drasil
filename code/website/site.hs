@@ -54,7 +54,7 @@ maybeField s f = Context $ \k _ i -> do
 ----------- New additions ---------
 -- Could be better optimized
 
-maybeListField :: String -> (Item a -> Compiler (Maybe [String])) -> Context a
+maybeListField :: String -> (Item a -> Compiler (Maybe [String])) -> Int -> Context a
 maybeListField s f n = Context $ \k _ i -> do
   val <- f i
   if k == s && isJust val then
@@ -65,14 +65,13 @@ maybeListField s f n = Context $ \k _ i -> do
 takeFromSlash :: String -> String
 takeFromSlash s = takeFromSlashHelper s ""
   where
-    takeFromSlashHelper (xs ++ [x]) end
-      | x == "/" = end
-      | otherwise = takeFromSlashHelper (x:end)
-    takeFromSlashHelper _ _ = error "src files have incorrect format"
+    takeFromSlashHelper begin end
+      | last begin == '/' = end
+      | otherwise = takeFromSlashHelper (init begin) (last begin :end)
 
 
-maybeListField "src" (return . src . itemBody) 0 <>
-maybeListField takeFromSlash (return . src . itemBody)
+-- maybeListField "src" (return . src . itemBody) 0 <>
+-- maybeListField takeFromSlash (return . src . itemBody)
 
 mkExampleCtx :: FilePath -> FilePath -> Context Example
 mkExampleCtx exampleDir srsDir =
@@ -83,10 +82,11 @@ mkExampleCtx exampleDir srsDir =
     field "url" (\x -> return $ srsPath exampleDir (name $ example x) srsDir ++ fst (srsVar x))
   ) (\x -> mapM (\y -> makeItem (y, itemBody x)) $ srs $ itemBody x)  <>
   field "name" (return . name . itemBody) <>
-  maybeField "desc" (return . desc . itemBody) <>
-  maybeListField "src" (return . src . itemBody) 0 <>
+  -- listFieldWith "src" (
+  --   field "path" (function1)
+  --   field "lang" (function2)
+  -- ) (function3) 
   maybeListField "src" (return . src . itemBody) 0
-
   where
     name (E nm _ _) = nm
     src (E _ s _) = s

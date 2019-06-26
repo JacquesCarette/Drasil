@@ -486,7 +486,7 @@ getInputFormatParams = do
   let ins = extInputs $ csi $ codeSpec g
       l_filename = "inputfile"
   ps <- getParams ins
-  return $ PD (stateParam l_filename infile) infile l_filename : ps
+  return $ PD (stateParam $ var l_filename infile) infile l_filename : ps
 
 getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
 getDerivedParams = do
@@ -583,7 +583,7 @@ getParams cs = do
   return $ inPs ++ conPs ++ ps
 
 mkParam :: (RenderSym repr) => CodeChunk -> ParamData repr
-mkParam p = PD ((paramFunc $ codeType p) pName pType) pType pName
+mkParam p = PD (paramFunc (codeType p) $ var pName pType) pType pName
   where paramFunc (C.List _) = pointerParam
         paramFunc _ = stateParam
         pName = codeName p
@@ -593,7 +593,7 @@ getInputParams :: (RenderSym repr) => Structure -> [CodeChunk] ->
   [ParamData repr]
 getInputParams _ [] = []
 getInputParams Loose cs = map mkParam cs
-getInputParams AsClass _ = [PD (pointerParam pName pType) pType pName]
+getInputParams AsClass _ = [PD (pointerParam $ var pName pType) pType pName]
   where pName = "inParams"
         pType = obj "InputParameters"
 
@@ -893,8 +893,8 @@ genDataFunc nameTitle ddef = do
         l_infile = "infile"
         v_infile = var l_infile infile
         l_filename = "filename"
-        p_filename = stateParam l_filename string
         v_filename = var l_filename string
+        p_filename = stateParam v_filename
         l_i = "i"
         v_i = var l_i int
         l_j = "j"

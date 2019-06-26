@@ -11,14 +11,14 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
   methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, 
   switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, assignDocD, 
-  plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', varDecDocD, 
-  varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, returnDocD, 
-  commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd, stratDocD, notOpDocD, 
-  notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', 
-  logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD,
-  sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, 
-  asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, 
-  unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', 
+  varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, 
+  returnDocD, commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd, stratDocD, 
+  notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
+  absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
+  sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
+  asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', 
+  unOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, 
   binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, litTrueD, 
@@ -28,8 +28,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  addCommentsDocD, callFuncParamList, getterName, setterName, setMain, setEmpty,
-  statementsToStateVars
+  addCommentsDocD, valList, appendToBody, getterName, setterName, 
+  setMain, setEmpty, statementsToStateVars
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -184,8 +184,8 @@ constructDocD _ = empty
 
 -- Parameters --
 
-stateParamDocD :: Label -> TypeData -> Doc
-stateParamDocD n t = typeDoc t <+> text n
+stateParamDocD :: ValData -> Doc
+stateParamDocD v = typeDoc (valType v) <+> valDoc v
 
 paramListDocD :: [Doc] -> Doc
 paramListDocD = hicat (text ", ")
@@ -298,6 +298,9 @@ stratDocD b resultState = vcat [
 assignDocD :: ValData -> ValData -> Doc
 assignDocD v1 v2 = valDoc v1 <+> equals <+> valDoc v2
 
+multiAssignDoc :: [ValData] -> [ValData] -> Doc
+multiAssignDoc vs1 vs2 = valList vs1 <+> equals <+> valList vs2
+
 plusEqualsDocD :: ValData -> ValData -> Doc
 plusEqualsDocD v1 v2 = valDoc v1 <+> text "+=" <+> valDoc v2
 
@@ -323,7 +326,7 @@ listDecDocD l n st = typeDoc st <+> text l <+> equals <+> new <+>
 
 listDecDefDocD :: Label -> TypeData -> [ValData] -> Doc
 listDecDefDocD l st vs = typeDoc st <+> text l <+> equals <+> new <+> 
-  typeDoc st <+> braces (callFuncParamList vs)
+  typeDoc st <+> braces (valList vs)
 
 objDecDefDocD :: Label -> TypeData -> ValData -> Doc
 objDecDefDocD = varDecDefDocD
@@ -332,8 +335,8 @@ constDecDefDocD :: Label -> TypeData -> ValData -> Doc -- can this be done witho
 constDecDefDocD l st v = text "const" <+> typeDoc st <+> text l <+> equals <+>
   valDoc v
 
-returnDocD :: ValData -> Doc
-returnDocD v = text "return" <+> valDoc v
+returnDocD :: [ValData] -> Doc
+returnDocD vs = text "return" <+> valList vs
 
 commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt
@@ -552,7 +555,7 @@ inlineIfDocD c v1 v2 = parens
   (parens (valDoc c) <+> text "?" <+> valDoc v1 <+> text ":" <+> valDoc v2)
 
 funcAppDocD :: Label -> [ValData] -> Doc
-funcAppDocD n vs = text n <> parens (callFuncParamList vs)
+funcAppDocD n vs = text n <> parens (valList vs)
 
 extFuncAppDocD :: Library -> Label -> [ValData] -> Doc
 extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
@@ -649,8 +652,12 @@ dashes s l = replicate (l - length s) '-'
 
 -- Helper Functions --
 
-callFuncParamList :: [ValData] -> Doc
-callFuncParamList vs = hcat (intersperse (text ", ") (map valDoc vs))
+valList :: [ValData] -> Doc
+valList vs = hcat (intersperse (text ", ") (map valDoc vs))
+
+appendToBody :: Doc -> (Doc, Terminator) -> Doc
+appendToBody b s = vcat [b, maybeBlank, fst $ statementDocD s]
+  where maybeBlank = if isEmpty b then empty else blank
 
 getterName :: String -> String
 getterName s = "Get" ++ capitalize s

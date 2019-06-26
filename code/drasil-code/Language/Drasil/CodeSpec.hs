@@ -252,6 +252,7 @@ modExportMap cs@CSI {
                         ++ getExportDerived chs ds
                         ++ getExportConstraints chs (getConstraints (cMap cs) 
                           (ins ++ map codevar ds))
+                        ++ getExportInputFormat ins
                         ++ getExportOutput (outputs cs)
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
@@ -262,7 +263,8 @@ modDepMap :: CodeSystInfo -> ModExportMap -> Choices -> ModDepMap
 modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _) -> (n, getModDep m)) 
   (mods cs) ++ ("Control", getDepsControl cs mem)
   : catMaybes [getDepsDerived cs mem chs,
-               getDepsConstraints cs mem chs]
+               getDepsConstraints cs mem chs,
+               getDepsInFormat chs]
   where getModDep (Mod name' funcs) =
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)
@@ -368,6 +370,10 @@ getExportConstraints _ [] = []
 getExportConstraints chs _ = [("input_constraints", cMod $ inputStructure chs)]
   where cMod Loose = "InputParameters"
         cMod AsClass = "InputConstraints"
+        
+getExportInputFormat :: [Input] -> [Export]
+getExportInputFormat [] = []
+getExportInputFormat _ = [("get_input", "InputFormat")]
 
 getExportOutput :: [Output] -> [Export]
 getExportOutput [] = []
@@ -377,7 +383,7 @@ getDepsControl :: CodeSystInfo -> ModExportMap -> [String]
 getDepsControl cs mem = 
   let ins = extInputs cs ++ map codevar (derivedInputs cs)
       ip = map (\x -> Map.lookup (codeName x) mem) ins
-      inf = Map.lookup (funcPrefix ++ "get_input") mem
+      inf = Map.lookup "get_input" mem
       dv = Map.lookup "derived_values" mem
       ic = Map.lookup "input_constraints" mem
       wo = Map.lookup "write_output" mem
@@ -403,6 +409,11 @@ getDepsConstraints cs mem chs = constraintDeps $ inputStructure chs
         varsList = filter (\i -> Map.member (i ^. uid) cm) ins
         reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v
           (sysinfodb cs) mem) (getConstraints cm varsList)
+
+getDepsInFormat :: Choices -> Maybe (String, [String])
+getDepsInFormat chs = inFormatDeps $ inputStructure chs
+  where inFormatDeps Loose = Nothing
+        inFormatDeps AsClass = Just ("InputFormat", ["InputParameters"])
 
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs

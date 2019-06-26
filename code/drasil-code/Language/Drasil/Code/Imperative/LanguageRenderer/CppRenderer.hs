@@ -438,6 +438,8 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
 
   inOutCall n ins outs = pair (inOutCall n (map pfst ins) (map pfst outs)) 
     (inOutCall n (map psnd ins) (map psnd outs))
+  extInOutCall m n ins outs = pair (extInOutCall m n (map pfst ins) (map pfst 
+    outs)) (extInOutCall m n (map psnd ins) (map psnd outs)) 
 
   state s = pair (state $ pfst s) (state $ psnd s)
   loopState s = pair (loopState $ pfst s) (loopState $ psnd s)
@@ -953,8 +955,8 @@ instance StatementSym CppSrcCode where
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 
-  inOutCall n ins [out] = assign out $ funcApp n (fmap valType out) ins
-  inOutCall n ins outs = valState $ funcApp n void (nub $ ins ++ outs)
+  inOutCall = cppInOutCall funcApp
+  extInOutCall m = cppInOutCall (extFuncApp m)
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
@@ -1041,9 +1043,9 @@ instance MethodSym CppSrcCode where
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map (fmap getParam) ins) (liftA2 appendToBody b $ returnState v)
-  inOutFunc n s p ins outs b = function n s p (mState void) 
-    (map pointerParam outs ++ map (fmap getParam) 
-    (filter (`notElem` outs) ins)) b
+  inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
+    if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
+    map pointerParam outs) b
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1426,6 +1428,7 @@ instance StatementSym CppHdrCode where
   addObserver _ _ = return (mkStNoEnd empty)
 
   inOutCall _ _ _ = return (mkStNoEnd empty)
+  extInOutCall _ _ _ _ = return (mkStNoEnd empty)
 
   state _ = return (mkStNoEnd empty)
   loopState _ = return (mkStNoEnd empty)
@@ -1486,9 +1489,9 @@ instance MethodSym CppHdrCode where
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map (fmap getParam) ins) (liftA2 appendToBody b $ returnState v)
-  inOutFunc n s p ins outs b = function n s p (mState void) 
-    (map pointerParam outs ++ map (fmap getParam) 
-    (filter (`notElem` outs) ins)) b
+  inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
+    if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
+    map pointerParam outs) b
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
@@ -1711,3 +1714,10 @@ cppModuleDoc ls blnk1 fs blnk2 cs = vcat [
   cs,
   blnk2,
   fs]
+
+cppInOutCall :: (Label -> CppSrcCode (StateType CppSrcCode) -> 
+  [CppSrcCode (Value CppSrcCode)] -> CppSrcCode (Value CppSrcCode)) -> Label -> 
+  [CppSrcCode (Value CppSrcCode)] -> [CppSrcCode (Value CppSrcCode)] -> 
+  CppSrcCode (Statement CppSrcCode)
+cppInOutCall f n ins [out] = assign out $ f n (fmap valType out) ins
+cppInOutCall f n ins outs = valState $ f n void (nub $ ins ++ outs)

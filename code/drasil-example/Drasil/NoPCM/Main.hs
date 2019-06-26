@@ -7,10 +7,9 @@ import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
 import Drasil.NoPCM.Body (si, srs, printSetting)
-import Drasil.NoPCM.DataDesc (inputMod)
 
 code :: CodeSpec
-code = codeSpec si choices [inputMod]
+code = codeSpec si choices []
 -- Sub interpolation mod into list when possible
 
 choices :: Choices

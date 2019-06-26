@@ -330,6 +330,8 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
     repr (Statement repr)
   assignToListIndex :: repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Statement repr)
+  multiAssign       :: [repr (Value repr)] -> [repr (Value repr)] ->
+    repr (Statement repr) 
 
   varDec           :: Label -> repr (StateType repr) -> repr (Statement repr)
   varDecDef        :: Label -> repr (StateType repr) -> repr (Value repr) -> 
@@ -407,6 +409,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
 
   returnState :: repr (Value repr) -> repr (Statement repr)
   returnVar :: Label -> repr (StateType repr) -> repr (Statement repr)
+  multiReturn :: [repr (Value repr)] -> repr (Statement repr)
 
   valState :: repr (Value repr) -> repr (Statement repr)
 
@@ -423,6 +426,12 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
     repr (Statement repr)
   addObserver      :: repr (StateType repr) -> repr (Value repr) -> 
     repr (Statement repr)
+
+  -- The two lists are inputs and outputs, respectively
+  inOutCall :: Label -> [repr (Value repr)] -> [repr (Value repr)] -> 
+    repr (Statement repr)
+  extInOutCall :: Library -> Label -> [repr (Value repr)] ->
+    [repr (Value repr)] -> repr (Statement repr)
 
   state     :: repr (Statement repr) -> repr (Statement repr)
   loopState :: repr (Statement repr) -> repr (Statement repr)
@@ -473,9 +482,9 @@ class MethodTypeSym repr where
 
 class ParameterSym repr where
   type Parameter repr
-  stateParam :: Label -> repr (StateType repr) -> repr (Parameter repr)
+  stateParam :: repr (Value repr) -> repr (Parameter repr)
   -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
-  pointerParam :: Label -> repr (StateType repr) -> repr (Parameter repr)
+  pointerParam :: repr (Value repr) -> repr (Parameter repr)
 
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   BodySym repr) => MethodSym repr where
@@ -499,6 +508,11 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr) 
+
+  -- The two lists are inputs and outputs, respectively
+  inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
+    [repr (Value repr)] -> [repr (Value repr)] -> 
+    repr (Body repr) -> repr (Method repr)
 
 class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => 
   StateVarSym repr where

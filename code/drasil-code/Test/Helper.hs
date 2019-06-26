@@ -11,9 +11,9 @@ helper = fileDoc (buildModule "Helper" [] [] [doubleAndAdd] [])
 
 doubleAndAdd :: (RenderSym repr) => repr (Method repr)
 doubleAndAdd = function "doubleAndAdd" public static_ (mState float) 
-  [stateParam "num1" float, stateParam "num2" float]
+  [stateParam $ var "num1" float, stateParam $ var "num2" float]
   (bodyStatements [
     varDec "doubledSum" float, 
-    "doubledSum" &.= ((litFloat 2.0 #* var "num1") #+ 
-      (litFloat 2.0 #* var "num2")),
-    returnVar "doubledSum"])
+    var "doubledSum" float &= ((litFloat 2.0 #* var "num1" float) #+ 
+      (litFloat 2.0 #* var "num2" float)),
+    returnVar "doubledSum" float])

@@ -35,12 +35,13 @@ import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
 import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
-  solutionCharSpecIntro, specSysDescr, thModF)
+  solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
 import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
-import Data.Drasil.Concepts.Documentation (assumpDom, refmat)
+import Data.Drasil.Concepts.Documentation (assumpDom, likelyChg, refmat,
+  section_, software, unlikelyChg)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
@@ -61,7 +62,6 @@ data DocSection = RefSec RefSec
                 | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
-                | LCsSec' LCsSec'
                 | UCsSec UCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
@@ -172,7 +172,8 @@ data ProblemDescription where
 
 -- | Problem Description subsections
 data PDSub where
-  PhySysDesc :: (Idea a) => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+  TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
+  PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
   Goals :: [Sentence] -> [ConceptInstance] -> PDSub
 
 -- | Solution Characteristics Specification section
@@ -201,12 +202,11 @@ data ReqsSub where
 
 {--}
 
-newtype LCsSec = LCsProg [Contents] --FIXME:Should become [LikelyChanges]
-newtype LCsSec' = LCsProg' [ConceptInstance]
+newtype LCsSec = LCsProg [ConceptInstance]
 
 {--}
 
-newtype UCsSec = UCsProg [Contents]
+newtype UCsSec = UCsProg [ConceptInstance]
 
 {--}
 
@@ -246,8 +246,7 @@ mkSections si = map doit
     doit Bibliography        = mkBib (citeDB si)
     doit (GSDSec gs')        = mkGSDSec gs'
     doit (ReqrmntSec r)      = mkReqrmntSec r
-    doit (LCsSec lc')        = mkLCsSec lc'
-    doit (LCsSec' lc)        = mkLCsSec' lc
+    doit (LCsSec lc)         = mkLCsSec lc
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
@@ -422,7 +421,8 @@ mkSSDSec si (SSDProg l) =
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
-  where mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
+  where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
+        mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
@@ -495,16 +495,17 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 -- | Helper for making the 'LikelyChanges' section
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg c []
-
-mkLCsSec' :: LCsSec' -> Section
-mkLCsSec' (LCsProg' c) = SRS.likeChg (mkEnumSimpleD c) []
+mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
+  where intro = foldlSP [S "This", phrase section_, S "lists the",
+                plural likelyChg, S "to be made to the", phrase software]
 
 {--}
 
 -- | Helper for making the 'UnikelyChanges' section
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg c []
+mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
+  where intro = foldlSP [S "This", phrase section_, S "lists the",
+                plural unlikelyChg, S "to be made to the", phrase software]
 
 {--}
 

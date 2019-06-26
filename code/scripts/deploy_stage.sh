@@ -56,7 +56,9 @@ copy_graphs() {
 }
 
 copy_examples() {
-	rm -r "$EXAMPLE_DEST"
+  if [ -d "$EXAMPLE_DEST" ]; then
+	  rm -r "$EXAMPLE_DEST"
+  fi
 	for example in "$CUR_DIR$BUILD_FOLDER"*; do
 		example_name=$(basename "$example")
 		mkdir -p "$EXAMPLE_DEST$example_name/$SRS_DEST"
@@ -69,11 +71,8 @@ copy_examples() {
 		if [ -d "$example/"src ]; then
 			# We don't expose code in deploy. It's more conveneient to link to GitHub's directory
 			# We place a stub file which Hakyll will replace.
-            cd ../..
-            ls -d code/stable/"$example_name"/src/* > code/"$DEPLOY_FOLDER$EXAMPLE_DEST$example_name/src"
-            cd code/"$DEPLOY_FOLDER"
-			# ls -d "$CUR_DIR"$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)* > "$EXAMPLE_DEST$example_name/src"
-            #echo $(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-) > "$EXAMPLE_DEST$example_name/src"
+      REL_PATH=$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)
+      ls -d "$(git rev-parse --show-toplevel)/$REL_PATH"*/ | rev | cut -d/ -f2 | rev | tr '\n' '\0' | xargs -0 printf "$REL_PATH%s\n" > "$EXAMPLE_DEST$example_name/src"       #echo $(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-) > "$EXAMPLE_DEST$example_name/src"
 		fi
 	done
 }
@@ -92,7 +91,7 @@ build_website() {
 
 	# src stubs were consumed by site generator; safe to delete those.
 	# rm "$EXAMPLE_DEST"*/src
-    rm -r descriptions/
+  echo "FIXME: Uncomment the remove src file lines"
 }
 
 

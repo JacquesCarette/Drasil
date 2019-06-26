@@ -2,7 +2,7 @@
 
 import Control.Monad (filterM)
 import Data.Char (toUpper)
-import Data.List (sort)
+import Data.List (sort, zip4)
 import Data.Maybe (fromMaybe, fromJust, isJust)
 import Data.Monoid ((<>))
 import Data.String.Utils (rstrip, endswith)
@@ -11,37 +11,48 @@ import System.Directory (doesDirectoryExist, doesFileExist, listDirectory)
 import System.Environment (getEnv, lookupEnv)
 import System.FilePath (takeBaseName, takeExtension)
 
+-- type FilePath = String -- from System.FilePath
 type Name = String
 type SourceLocation = Maybe [String]
 type SRSVariants = [(Name, String)]
-data Example = E Name SourceLocation SRSVariants
+type Description = Maybe String
+data Example = E Name SourceLocation SRSVariants Description
 
+-- Returns FilePath of the SRS
 srsPath :: FilePath -> FilePath -> FilePath -> FilePath
 srsPath baseDir ex srs = baseDir ++ ex ++ "/" ++ srs
 
+-- Returns the Uppercase String of the given extension
 getExtensionName :: String -> String
 getExtensionName [] = error "Expected some file extension. Got none."
 getExtensionName [_] = error "Expected file extension. Got a single character."
 getExtensionName ('.':xs) = map toUpper xs
 getExtensionName _ = error "Expected some extension."
 
+-- returns a list of tuples, where each tuple is (Name, string) where string is "HTML" or "PDF"
 getSRS :: [Name] -> SRSVariants
 getSRS = map (\x -> (x, getExtensionName $ takeExtension x)) . filter (\x -> any (`endswith` x) [".pdf", ".html"])
 
 mkExamples :: String -> FilePath -> FilePath -> IO [Example]
 mkExamples repoRoot path srsDir = do
+  -- names will be a list of example names (Chipmunk, GlassBR, etc. of type FilePath)
   names <- sort <$> (listDirectory path >>= filterM (\x -> doesDirectoryExist $ path ++ x))
+
+  -- a list of Just sources or Nothing based on existence and contents of src file.
   sources <- mapM (\x -> doesFileExist (path ++ x ++ "/src") >>=
-      \y -> if y then Just . map ((++) repoRoot) . lines . rstrip <$> readFile (path ++ x ++ "/src") else return Nothing) names
+    \y -> if y then Just . map ((++) repoRoot) . lines . rstrip <$> readFile (path ++ x ++ "/src") else return Nothing) names
 
   -- a list of Just descriptions or Nothing based on existence and contents of desc file.
   descriptions <- mapM (\x -> doesFileExist ("descriptions/" ++ x ++ ".txt") >>=
-      \y -> if y then Just . rstrip <$> readFile ("descriptions/" ++ x ++ ".txt") else return Nothing) names
+    \y -> if y then Just . rstrip <$> readFile ("descriptions/" ++ x ++ ".txt") else return Nothing) names
 
   -- creates a list of SRSVariants, so a list of list of tuples.
   -- the outer list has an element for each example.
   srss <- mapM (\x -> sort . getSRS <$> listDirectory (srsPath path x srsDir)) names
-  return $ map (\(name, source, srs) -> E name source srs) $ zip3 names sources srss
+
+  -- returns the IO list of examples with constructor E containing
+  -- the name of the example, sources (if applicable), and the list of Variants.
+  return $ map (\(name, source, srs, desc) -> E name source srs desc) $ zip4 names sources srss descriptions
 
 maybeField :: String -> (Item a -> Compiler (Maybe String)) -> Context a
 maybeField s f = Context $ \k _ i -> do
@@ -82,15 +93,17 @@ mkExampleCtx exampleDir srsDir =
     field "url" (\x -> return $ srsPath exampleDir (name $ example x) srsDir ++ fst (srsVar x))
   ) (\x -> mapM (\y -> makeItem (y, itemBody x)) $ srs $ itemBody x)  <>
   field "name" (return . name . itemBody) <>
+  maybeField "desc" (return . desc . itemBody) <>
   -- listFieldWith "src" (
   --   field "path" (function1)
   --   field "lang" (function2)
   -- ) (function3) 
   maybeListField "src" (return . src . itemBody) 0
   where
-    name (E nm _ _) = nm
-    src (E _ s _) = s
-    srs (E _ _ s) = s
+    name (E nm _ _ _) = nm
+    src (E _ s _ _) = s
+    srs (E _ _ s _) = s
+    desc (E _ _ _ d) = d
     srsVar = fst . itemBody
     example = snd . itemBody
 

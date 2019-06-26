@@ -10,7 +10,6 @@ import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 
-import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Data.Drasil.People (thulasi)
 
@@ -50,8 +49,8 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
   ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty,
-  inDataConstTbl, intro, mkDoc, mkEnumSimpleD, outDataConstTbl, termDefnF,
-  tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
+  inDataConstTbl, intro, mkDoc, outDataConstTbl, tsymb,
+  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceMap', traceMatStandard)
 
@@ -139,8 +138,9 @@ mkSRS = [RefSec $ RefProg intro
     ],
   SSDSec $
     SSDProg
-    [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns]
-      [ PhySysDesc progName physSystParts figTank []
+    [ SSDProblem $ PDProg probDescIntro []
+      [ TermsAndDefs Nothing terms
+      , PhySysDesc progName physSystParts figTank []
       , Goals goalInputs goals]
     , SSDSolChSpec $ SCSProg
       [ Assumptions
@@ -158,8 +158,8 @@ mkSRS = [RefSec $ RefProg intro
     FReqsSub funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
-  LCsSec $ LCsProg likelyChgsList,
-  UCsSec $ UCsProg unlikelyChgsList,
+  LCsSec $ LCsProg $ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH],
+  UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $
     TraceabilityProg (map fst traceabilityMatrices)
       (map (foldlList Comma List . snd) traceabilityMatrices) (map (LlC . fst) traceabilityMatrices) [],
@@ -346,14 +346,8 @@ orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
 probDescIntro :: Sentence
 probDescIntro = foldlSent_ [S "investigate the heating" `sOf` phrase water, S "in a", phrase sWHT]
 
-termsAndDefns :: Section
-termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
-
-termsAndDefnsBullets :: Contents
-termsAndDefnsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ 
-  map (\x -> Flat $
-  atStart x :+: S ":" +:+ (x ^. defn))
-  [htFlux, heatCapSpec, thermalConduction, transient]
+terms :: [ConceptChunk]
+terms = [htFlux, heatCapSpec, thermalConduction, transient]
   
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
@@ -416,14 +410,10 @@ dataConstListOut = [tempW, watE]
 ----------------------------
 --Section 6 : LIKELY CHANGES
 ----------------------------
-likelyChgsList :: [Contents]
-likelyChgsList = mkEnumSimpleD $ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH]
 
 -------------------------------
 --Section 6b : UNLIKELY CHANGES
 -------------------------------
-unlikelyChgsList :: [Contents]
-unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS

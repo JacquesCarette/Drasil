@@ -242,6 +242,7 @@ executable projectile
     , Drasil.Projectile.GenDefs
     , Drasil.Projectile.Goals
     , Drasil.Projectile.IMods
+    , Drasil.Projectile.References
     , Drasil.Projectile.Requirements
     , Drasil.Projectile.TMods
     , Drasil.Projectile.Unitals

@@ -10,7 +10,7 @@ import Utils.Drasil
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation), DocDesc,
-  DocSection(AuxConstntSec, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
+  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
   IntroSec(IntroProg), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
@@ -44,6 +44,7 @@ import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
+import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
   nonfuncReqs, propsDeriv)
 import Drasil.Projectile.TMods (tMods)
@@ -94,7 +95,8 @@ mkSRS = [
     TraceabilityProg
       (map fst traceMats) (map (foldlList Comma List . snd) traceMats) (map (LlC . fst) traceMats) [],
   AuxConstntSec $
-    AuxConsProg projectileTitle constants
+    AuxConsProg projectileTitle constants,
+  Bibliography
   ]
 
 justification, scope1, scope2 :: Sentence
@@ -147,7 +149,7 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 refDB :: ReferenceDB
-refDB = rdb [] concIns
+refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs

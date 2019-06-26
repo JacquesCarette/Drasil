@@ -13,10 +13,14 @@
 \usepackage{caption}
 \usepackage{enumitem}
 \usepackage{graphics}
+\usepackage{filecontents}
+\usepackage[backend=bibtex]{biblatex}
+\usepackage{url}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\bibliography{bibfile}
 \title{Software Requirements Specification for Projectile}
 \author{Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith}
 \begin{document}
@@ -248,7 +252,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & \hyperref{https://en.wikipedia.org/wiki/Acceleration}{}{}{Definition of Acceleration}
+Source & \cite{accelerationWiki}
 \\ \midrule \\
 RefBy & \hyperref[GD:rectVel]{GD: rectVel}
 \\ \bottomrule \end{tabular}
@@ -273,7 +277,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{p}$ is the position (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & \hyperref{https://en.wikipedia.org/wiki/Velocity}{}{}{Definition of Velocity}
+Source & \cite{velocityWiki}
 \\ \midrule \\
 RefBy & \hyperref[GD:rectPos]{GD: rectPos}
 \\ \bottomrule \end{tabular}
@@ -1011,4 +1015,24 @@ $ε$ & hit tolerance & $2.0\%$ & --
 \caption{Auxiliary Constants}
 \label{Table:TAuxConsts}
 \end{longtable}
+\section{References}
+\label{Sec:References}
+\begin{filecontents*}{bibfile.bib}
+@misc{accelerationWiki,
+author={Wikipedia Contributors},
+title={Acceleration},
+howpublished={\url{https://en.wikipedia.org/wiki/Acceleration}},
+month=jun,
+year={2019}}
+
+@misc{velocityWiki,
+author={Wikipedia Contributors},
+title={Velocity},
+howpublished={\url{https://en.wikipedia.org/wiki/Velocity}},
+month=jun,
+year={2019}}
+\end{filecontents*}
+\nocite{*}
+\bibstyle{ieeetr}
+\printbibliography[heading=none]
 \end{document}

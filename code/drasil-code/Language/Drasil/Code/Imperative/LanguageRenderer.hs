@@ -28,8 +28,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  addCommentsDocD, valList, appendToBody, getterName, setterName, 
-  setMain, setEmpty, statementsToStateVars
+  addCommentsDocD, valList, prependToBody, appendToBody, surroundBody, 
+  getterName, setterName, setMain, setEmpty, statementsToStateVars
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -314,8 +314,8 @@ plusPlusDocD v = valDoc v <> text "++"
 plusPlusDocD' :: ValData -> Doc -> Doc
 plusPlusDocD' v plusOp = valDoc v <+> equals <+> valDoc v <+> plusOp <+> int 1
 
-varDecDocD :: Label -> TypeData -> Doc
-varDecDocD l st = typeDoc st <+> text l
+varDecDocD :: ValData -> Doc
+varDecDocD v = typeDoc (valType v) <+> valDoc v
 
 varDecDefDocD :: Label -> TypeData -> ValData -> Doc
 varDecDefDocD l st v = typeDoc st <+> text l <+> equals <+> valDoc v
@@ -655,9 +655,16 @@ dashes s l = replicate (l - length s) '-'
 valList :: [ValData] -> Doc
 valList vs = hcat (intersperse (text ", ") (map valDoc vs))
 
+prependToBody :: (Doc, Terminator) -> Doc -> Doc
+prependToBody s b = vcat [fst $ statementDocD s, maybeBlank, b]
+  where maybeBlank = if isEmpty b then empty else blank
+
 appendToBody :: Doc -> (Doc, Terminator) -> Doc
 appendToBody b s = vcat [b, maybeBlank, fst $ statementDocD s]
   where maybeBlank = if isEmpty b then empty else blank
+
+surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
+surroundBody p b a = prependToBody p (appendToBody b a)
 
 getterName :: String -> String
 getterName s = "Get" ++ capitalize s

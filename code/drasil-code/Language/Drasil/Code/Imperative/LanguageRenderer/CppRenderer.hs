@@ -36,7 +36,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   objVarDocD, inlineIfDocD, funcAppDocD, funcDocD, castDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD,
   publicDocD, classDec, dot, observerListName, doubleSlash, addCommentsDocD, 
-  valList, appendToBody, getterName, setterName, setEmpty)
+  valList, surroundBody, getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
@@ -337,7 +337,7 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   (&++) v = pair ((&++) $ pfst v) ((&++) $ psnd v)
   (&~-) v = pair ((&~-) $ pfst v) ((&~-) $ psnd v)
 
-  varDec l t = pair (varDec l $ pfst t) (varDec l $ psnd t)
+  varDec v = pair (varDec $ pfst v) (varDec $ psnd v)
   varDecDef l t v = pair (varDecDef l (pfst t) (pfst v)) (varDecDef l (psnd t) 
     (psnd v))
   listDec l n t = pair (listDec l n $ pfst t) (listDec l n $ psnd t)
@@ -844,7 +844,7 @@ instance StatementSym CppSrcCode where
   (&++) v = mkSt <$> fmap plusPlusDocD v
   (&~-) v = v &= (v #- litInt 1)
 
-  varDec l t = mkSt <$> fmap (varDecDocD l) t
+  varDec v = mkSt <$> fmap varDecDocD v
   varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
   listDec l n t = mkSt <$> liftA2 (cppListDecDoc l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> liftA2 (cppListDecDefDoc l) t (liftList 
@@ -924,9 +924,9 @@ instance StatementSym CppSrcCode where
                          in
     multi [
       valState $ vnew $. func "clear" void [],
-      varDec l_ss (obj "std::stringstream"),
+      varDec v_ss,
       valState $ objMethodCall string v_ss "str" [s],
-      varDec l_word string,
+      varDec v_word,
       while (funcApp "std::getline" string [v_ss, v_word, litChar d]) 
         (oneLiner $ valState $ vnew $. listAppend v_word)
     ]
@@ -995,7 +995,7 @@ instance ControlStatementSym CppSrcCode where
   getFileInputAll f v = let l_line = "nextLine"
                             v_line = var l_line string
                         in
-    multi [varDec l_line string,
+    multi [varDec v_line,
       while (funcApp "std::getline" string [f, v_line])
       (oneLiner $ valState $ v $. listAppend v_line)]
 
@@ -1031,9 +1031,9 @@ instance MethodSym CppSrcCode where
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
   destructor n vs = 
-    let i = "i"
+    let i = var "i" int
         deleteStatements = map (fmap destructSts) vs
-        loopIndexDec = varDec i int
+        loopIndexDec = varDec i
         dbody = if all (isEmpty . fst . unCPPSC) deleteStatements then 
           return empty else bodyStatements $ loopIndexDec : deleteStatements
     in pubMethod ('~':n) n void [] dbody
@@ -1042,7 +1042,7 @@ instance MethodSym CppSrcCode where
     (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
-    (map (fmap getParam) ins) (liftA2 appendToBody b $ returnState v)
+    (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState v))
   inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
     map pointerParam outs) b
@@ -1357,7 +1357,7 @@ instance StatementSym CppHdrCode where
   (&++) _ = return (mkStNoEnd empty)
   (&~-) _ = return (mkStNoEnd empty)
 
-  varDec _ _ = return (mkStNoEnd empty)
+  varDec _ = return (mkStNoEnd empty)
   varDecDef _ _ _ = return (mkStNoEnd empty)
   listDec _ _ _ = return (mkStNoEnd empty)
   listDecDef _ _ _ = return (mkStNoEnd empty)
@@ -1488,7 +1488,7 @@ instance MethodSym CppHdrCode where
   function n = method n ""
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
-    (map (fmap getParam) ins) (liftA2 appendToBody b $ returnState v)
+    (map (fmap getParam) ins) b
   inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
     map pointerParam outs) b

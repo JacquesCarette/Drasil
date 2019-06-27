@@ -521,9 +521,9 @@ instance MethodSym CSharpCode where
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
-  inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
+  inOutFunc n s p ins outs b = function n s p (mState void) (map (\v -> 
     if v `elem` outs then fmap csRef (stateParam v) else stateParam v) ins ++
-    map (fmap csRef . stateParam) outs) b
+    map (fmap csOut . stateParam) (filter (`notElem` ins) outs)) b
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -602,6 +602,9 @@ csOpenFileWorA f n w a = valDoc f <+> equals <+> new <+> typeDoc w <>
 csRef :: Doc -> Doc
 csRef p = text "ref" <+> p
 
+csOut :: Doc -> Doc
+csOut p = text "out" <+> p
+
 csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) -> 
   [CSharpCode (Value CSharpCode)] -> CSharpCode (Value CSharpCode)) -> Label -> 
   [CSharpCode (Value CSharpCode)] -> [CSharpCode (Value CSharpCode)] -> 
@@ -609,4 +612,4 @@ csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) ->
 csInOutCall f n ins [out] = assign out $ f n (fmap valType out) ins
 csInOutCall f n ins outs = valState $ f n void (nub $ map (\v -> 
   if v `elem` outs then fmap (updateValDoc csRef) v else v) ins ++
-  map (fmap (updateValDoc csRef)) outs)
+  map (fmap (updateValDoc csOut)) (filter (`notElem` ins) outs))

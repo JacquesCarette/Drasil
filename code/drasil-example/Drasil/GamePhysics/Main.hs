@@ -20,7 +20,7 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 --   comments         = CommentNone,
 --   onSfwrConstraint = Warning,
 --   onPhysConstraint = Warning,
---   inputStructure   = Loose
+--   inputStructure   = Unbundled
 -- }       
        
 main :: IO ()

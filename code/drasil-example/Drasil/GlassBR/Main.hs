@@ -21,7 +21,7 @@ choices = Choices {
   comments = CommentNone,
   onSfwrConstraint = Exception,
   onPhysConstraint = Exception,
-  inputStructure = AsClass
+  inputStructure = Bundled
 }
   
 main :: IO()

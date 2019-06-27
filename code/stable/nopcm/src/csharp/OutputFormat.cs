@@ -9,9 +9,9 @@ public class OutputFormat {
         StreamWriter outputfile;
         outputfile = new StreamWriter("output.txt", false);
         outputfile.Write("T_W = ");
-        outputfile.WriteLine(inParams.T_W);
+        outputfile.WriteLine(T_W);
         outputfile.Write("E_W = ");
-        outputfile.WriteLine(inParams.E_W);
+        outputfile.WriteLine(E_W);
         outputfile.Close();
     }
 }

@@ -13,11 +13,11 @@ import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
   NameOpts(NameOpts), packSep)
 import Language.Drasil.Code.Imperative.LanguageRenderer ( 
@@ -37,8 +37,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  observerListName, doubleSlash, addCommentsDocD, valList, surroundBody, 
-  getterName, setterName, setMain, setEmpty)
+  blockCmtStart, blockCmtEnd, observerListName, doubleSlash, blockCmtDoc, 
+  addCommentsDocD, valList, surroundBody, getterName, setterName, setMain, 
+  setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -104,6 +105,8 @@ instance KeywordSym JavaCode where
   iterInLabel = return colon
 
   commentStart = return doubleSlash
+  blockCommentStart = return blockCmtStart
+  blockCommentEnd = return blockCmtEnd
   
   printFunc = return $ text "System.out.print"
   printLnFunc = return $ text "System.out.println"
@@ -570,6 +573,10 @@ instance ModuleSym JavaCode where
   buildModule n _ ms cs = fmap (md n (any (snd . unJC) ms || 
     any (snd . unJC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
+
+instance BlockCommentSym JavaCode where
+  type BlockComment JavaCode = Doc
+  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
 
 enumsEqualInts :: Bool
 enumsEqualInts = False

@@ -16,7 +16,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, 
   intTypeDocD, floatTypeDocD, typeDocD, constructDocD, paramListDocD, 
@@ -91,6 +91,8 @@ instance KeywordSym PythonCode where
   iterInLabel = return $ text "in"
 
   commentStart = return $ text "#"
+  blockCommentStart = return empty
+  blockCommentEnd = return empty
   
   printFunc = return $ text "print"
   printLnFunc = return empty
@@ -516,6 +518,10 @@ instance ModuleSym PythonCode where
     liftA3 pyModule (liftList pyModuleImportList (map include ls)) 
     (liftList methodListDocD fs) (liftList pyModuleClassList cs))
 
+instance BlockCommentSym PythonCode where
+  type BlockComment PythonCode = Doc
+  blockComment lns = fmap (pyBlockComment lns) commentStart
+
 -- convenience
 imp, incl, initName :: Label
 imp = "import"
@@ -646,3 +652,6 @@ pyInOutCall :: (Label -> PythonCode (StateType PythonCode) ->
   PythonCode (Statement PythonCode)
 pyInOutCall f n ins [] = valState $ f n void ins
 pyInOutCall f n ins outs = multiAssign outs [f n void ins]
+
+pyBlockComment :: [String] -> Doc -> Doc
+pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns

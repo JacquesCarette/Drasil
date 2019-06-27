@@ -10,7 +10,7 @@ module Language.Drasil.Code.Imperative.Symantics (
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..)
+  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..)
 ) where
 
 type Label = String
@@ -47,6 +47,8 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   iterInLabel      :: repr (Keyword repr)
 
   commentStart :: repr (Keyword repr)
+  blockCommentStart :: repr (Keyword repr)
+  blockCommentEnd :: repr (Keyword repr)
 
   printFunc       :: repr (Keyword repr)
   printLnFunc     :: repr (Keyword repr)
@@ -541,3 +543,7 @@ class (ClassSym repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Library] -> [repr (Method repr)] -> 
     [repr (Class repr)] -> repr (Module repr)
+    
+class BlockCommentSym repr where
+  type BlockComment repr
+  blockComment :: [String] -> repr (BlockComment repr)

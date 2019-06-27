@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..))
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD,
@@ -37,9 +37,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
   listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, observerListName,
-  doubleSlash, addCommentsDocD, valList, surroundBody, getterName, setterName, 
-  setMain, setEmpty)
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
+  blockCmtEnd, observerListName, doubleSlash, blockCmtDoc, addCommentsDocD, 
+  valList, surroundBody, getterName, setterName, setMain, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -100,6 +100,8 @@ instance KeywordSym CSharpCode where
   iterInLabel = return $ text "in"
 
   commentStart = return doubleSlash
+  blockCommentStart = return blockCmtStart
+  blockCommentEnd = return blockCmtEnd
   
   printFunc = return $ text "Console.Write"
   printLnFunc = return $ text "Console.WriteLine"
@@ -550,6 +552,10 @@ instance ModuleSym CSharpCode where
   buildModule n _ ms cs = fmap (md n (any (snd . unCSC) ms || 
     any (snd . unCSC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
+
+instance BlockCommentSym CSharpCode where
+  type BlockComment CSharpCode = Doc
+  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [

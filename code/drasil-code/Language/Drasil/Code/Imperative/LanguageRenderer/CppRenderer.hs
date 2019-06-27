@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..))
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, listTypeDocD, voidDocD,
@@ -35,8 +35,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   litCharD, litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, 
   objVarDocD, inlineIfDocD, funcAppDocD, funcDocD, castDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD,
-  publicDocD, classDec, dot, observerListName, doubleSlash, addCommentsDocD, 
-  valList, surroundBody, getterName, setterName, setEmpty)
+  publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, observerListName, 
+  doubleSlash, blockCmtDoc, addCommentsDocD, valList, surroundBody, getterName, 
+  setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
@@ -96,6 +97,8 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   iterInLabel = pair iterInLabel iterInLabel
 
   commentStart = pair commentStart commentStart
+  blockCommentStart = pair blockCommentStart blockCommentStart
+  blockCommentEnd = pair blockCommentEnd blockCommentEnd
   
   printFunc = pair printFunc printFunc
   printLnFunc = pair printLnFunc printLnFunc
@@ -550,6 +553,10 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   buildModule n l ms cs = pair (buildModule n l (map pfst ms) (map pfst cs)) 
     (buildModule n l (map psnd ms) (map psnd cs))
 
+instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
+  type BlockComment (p CppSrcCode CppHdrCode) = Doc
+  blockComment lns = pair (blockComment lns) (blockComment lns)
+
 -----------------
 -- Source File --
 -----------------
@@ -601,6 +608,8 @@ instance KeywordSym CppSrcCode where
   iterInLabel = return empty
 
   commentStart = return doubleSlash
+  blockCommentStart = return blockCmtStart
+  blockCommentEnd = return blockCmtEnd
   
   printFunc = return $ text "std::cout"
   printLnFunc = return $ text "std::cout"
@@ -1090,6 +1099,10 @@ instance ModuleSym CppSrcCode where
     any (not . isEmpty . mthdDoc . unCPPSC) ms then return blank else 
     return empty) (liftList vibcat (map (fmap fst) cs)))
 
+instance BlockCommentSym CppSrcCode where
+  type BlockComment CppSrcCode = Doc
+  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+
 -----------------
 -- Header File --
 -----------------
@@ -1141,7 +1154,9 @@ instance KeywordSym CppHdrCode where
   iterInLabel = return empty
 
   commentStart = return empty
-  
+  blockCommentStart = return blockCmtStart
+  blockCommentEnd = return blockCmtEnd
+
   printFunc = return empty
   printLnFunc = return empty
   printFileFunc _ = return empty
@@ -1529,6 +1544,10 @@ instance ModuleSym CppHdrCode where
     (not . isEmpty . mthdDoc . unCPPHC) ms then return blank else return empty)
     (liftList vibcat (map (fmap fst) cs)))
     where methods = map (fmap (\(MthD m _ d) -> (d, m))) ms
+
+instance BlockCommentSym CppHdrCode where
+  type BlockComment CppHdrCode = Doc
+  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
 
 -- helpers
 isDtor :: Label -> Bool

@@ -1,7 +1,8 @@
 -- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.LanguageRenderer (
   -- * Common Syntax
-  classDec, dot, doubleSlash, forLabel, new, observerListName,
+  classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd, 
+  observerListName,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
@@ -28,8 +29,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  addCommentsDocD, valList, prependToBody, appendToBody, surroundBody, 
-  getterName, setterName, setMain, setEmpty
+  blockCmtDoc, addCommentsDocD, valList, prependToBody, appendToBody, 
+  surroundBody, getterName, setterName, setMain, setEmpty
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -50,12 +51,14 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>),
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec,dot,doubleSlash,forLabel,new :: Doc
+classDec,dot,doubleSlash,forLabel,new,blockCmtStart,blockCmtEnd :: Doc
 classDec = text "class"
 dot = text "."
 doubleSlash = text "//"
 forLabel = text "for"
 new = text "new"
+blockCmtStart = text "/*"
+blockCmtEnd = text "*/"
 
 observerListName :: Label
 observerListName = "observerList"
@@ -626,6 +629,9 @@ publicDocD :: Doc
 publicDocD = text "public"
 
 -- Comment Functions -- 
+
+blockCmtDoc :: [String] -> Doc -> Doc -> Doc
+blockCmtDoc lns start end = start <+> vcat (map text lns) <+> end
 
 commentLength :: Int
 commentLength = 75

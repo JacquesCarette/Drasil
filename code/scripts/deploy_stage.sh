@@ -77,6 +77,11 @@ copy_examples() {
 	done
 }
 
+copy_images() {
+  mkdir -p "$CUR_DIR"deploy/Images
+  cp -r "$CUR_DIR"website/Images/ "$CUR_DIR"deploy/Images
+}
+
 build_website() {
 	cd "$CUR_DIR"website
 	make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER" DOCS_FOLDER="$DOC_DEST" EXAMPLES_FOLDER="$EXAMPLE_DEST" \
@@ -88,7 +93,7 @@ build_website() {
 	fi
 	cd "$CUR_DIR$DEPLOY_FOLDER"
 	cp -r "$CUR_DIR"website/_site/. .
-
+  
 	# src stubs were consumed by site generator; safe to delete those.
 	# rm "$EXAMPLE_DEST"*/src
   echo "FIXME: Uncomment the remove src file lines"
@@ -100,5 +105,6 @@ copy_docs
 copy_graphs
 copy_datafiles
 copy_examples
+copy_images
 build_website
 cd "$CUR_DIR"

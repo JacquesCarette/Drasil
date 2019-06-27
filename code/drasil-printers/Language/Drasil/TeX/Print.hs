@@ -197,7 +197,7 @@ makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t =
   pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . anyBig) lls))
   %% pure (text "\\toprule")
-  %% makeRows [head lls]
+  %% makeRows [map (\x -> S "\\textbf{" :+: x :+: S "}") (head lls)]
   %% pure (text "\\midrule")
   %% pure (text "\\endhead")
   %% makeRows (tail lls)

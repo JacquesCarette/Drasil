@@ -7,7 +7,7 @@ import Language.Drasil.Code.Imperative.Symantics (
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observer :: (RenderSym repr) => repr (RenderFile repr)
-observer = fileDoc (buildModule "Observer" [] [] [] [helperClass])
+observer = fileDoc (buildModule "Observer" [] [] [helperClass])
 
 helperClass :: (RenderSym repr) => repr (Class repr)
 helperClass = pubClass "Observer" Nothing [stateVar 0 "x" public dynamic_ int] [observerConstructor, printNumMethod]

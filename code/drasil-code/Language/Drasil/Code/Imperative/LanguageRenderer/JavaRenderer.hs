@@ -38,7 +38,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
   observerListName, doubleSlash, addCommentsDocD, valList, surroundBody, 
-  getterName, setterName, setMain, setEmpty, statementsToStateVars)
+  getterName, setterName, setMain, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -567,10 +567,9 @@ instance ClassSym JavaCode where
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
-  buildModule n _ vs ms cs = fmap (md n (any (snd . unJC) ms || 
-    any (snd . unJC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
-    else pubClass n Nothing (map (liftA4 statementsToStateVars public static_
-    endStatement) vs) ms : cs))
+  buildModule n _ ms cs = fmap (md n (any (snd . unJC) ms || 
+    any (snd . unJC) cs)) (liftList moduleDocD (if null ms then cs 
+    else pubClass n Nothing [] ms : cs))
 
 enumsEqualInts :: Bool
 enumsEqualInts = False

@@ -29,7 +29,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
   addCommentsDocD, valList, prependToBody, appendToBody, surroundBody, 
-  getterName, setterName, setMain, setEmpty, statementsToStateVars
+  getterName, setterName, setMain, setEmpty
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -677,7 +677,3 @@ setMain (d, _) = (d, True)
 
 setEmpty :: (Doc, Terminator) -> (Doc, Terminator)
 setEmpty (d, _) = (d, Empty)
-
--- Hack because modules accept Statement representations of their state variables. Modules should be redesigned/rethought
-statementsToStateVars :: Doc -> Doc -> Doc -> (Doc, Terminator) -> Doc
-statementsToStateVars s p end (v, _) = s <+> p <+> v <> end

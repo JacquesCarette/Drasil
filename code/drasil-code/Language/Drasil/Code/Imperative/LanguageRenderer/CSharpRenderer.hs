@@ -38,7 +38,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
   listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, observerListName,
-  doubleSlash, addCommentsDocD, valList, appendToBody, getterName, setterName, 
+  doubleSlash, addCommentsDocD, valList, surroundBody, getterName, setterName, 
   setMain, setEmpty, statementsToStateVars)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
@@ -346,7 +346,7 @@ instance StatementSym CSharpCode where
   (&++) v = mkSt <$> fmap plusPlusDocD v
   (&~-) v = v &= (v #- litInt 1)
 
-  varDec l t = mkSt <$> fmap (varDecDocD l) t
+  varDec v = mkSt <$> fmap varDecDocD v
   varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
   listDec l n t = mkSt <$> liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> lift1List (listDecDefDocD l) t vs
@@ -520,7 +520,7 @@ instance MethodSym CSharpCode where
   function n = method n ""
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
-    (map stateParam ins) (liftA2 appendToBody b $ returnState v)
+    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
   inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
     if v `elem` outs then fmap csRef (stateParam v) else stateParam v) ins ++
     map (fmap csRef . stateParam) outs) b

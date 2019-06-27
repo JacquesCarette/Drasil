@@ -13,7 +13,7 @@ patternTest = packMods "PatternTest" [fileDoc (buildModule "PatternTest" ["Obser
 
 patternTestMainMethod :: (RenderSym repr) => repr (Method repr)
 patternTestMainMethod = mainMethod "PatternTest" (body [block [
-  varDec "n" int,
+  varDec $ var "n" int,
   initState "myFSM" "Off", 
   changeState "myFSM" "On",
   checkState "myFSM" 

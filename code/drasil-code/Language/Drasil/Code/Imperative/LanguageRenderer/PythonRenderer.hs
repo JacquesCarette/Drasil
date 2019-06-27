@@ -327,7 +327,7 @@ instance StatementSym PythonCode where
   (&++) v = mkStNoEnd <$> liftA2 plusPlusDocD' v plusOp
   (&~-) v = v &= (v #- litInt 1)
 
-  varDec _ _ = return (mkStNoEnd empty)
+  varDec _ = return (mkStNoEnd empty)
   varDecDef l _ v = mkStNoEnd <$> fmap (pyVarDecDef l) v
   listDec l _ t = mkStNoEnd <$> fmap (pyListDec l) (listType static_ t)
   listDecDef l _ vs = mkStNoEnd <$> fmap (pyListDecDef l) (liftList 

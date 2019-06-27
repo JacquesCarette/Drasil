@@ -11,6 +11,21 @@ import java.util.ArrayList;
 public class InputFormat {
     
     public static Object[] get_input(String filename) throws Exception {
+        double A_C;
+        double C_W;
+        double h_C;
+        double T_init;
+        double t_final;
+        double L;
+        double T_C;
+        double t_step;
+        double rho_W;
+        double D;
+        double A_tol;
+        double R_tol;
+        double T_W;
+        double E_W;
+        
         Scanner infile;
         String line;
         ArrayList<String> lines = new ArrayList<String>(0);

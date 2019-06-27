@@ -20,7 +20,7 @@ import qualified Language.Drasil.Printing.Helpers as H
 -- note that this is just the Reader Monad for now, but we might need
 -- to extend, so start there.
 
--- there are two proper contexts, test and math; curr is the 'current' context.
+-- there are two proper contexts, text and math; curr is the 'current' context.
 -- There are multiple ways of getting there: for Text, either being at the top-level 
 -- or inside \text. For Math, either surrounded by $ or 
 -- in \begin{equation} .. \end{equation}.
@@ -34,7 +34,7 @@ instance Functor PrintLaTeX where
 
 instance Applicative PrintLaTeX where
   pure = PL . const
-  PL f <*> PL v = PL $ \ctx -> (f ctx) (v ctx)
+  PL f <*> PL v = PL $ \ctx -> f ctx (v ctx)
 
 instance Monad PrintLaTeX where
   return = pure
@@ -59,7 +59,7 @@ switch f (PL g) = PL $ \c -> adjust c (f c) g
     -- we are producing Math, but want some Text embedded
     adjust Math Text gen = bstext TP.<> br (gen Text)
     -- we are producing Text, but want some Math embedded
-    adjust Text Math gen = dollar TP.<> (gen Math) TP.<> dollar
+    adjust Text Math gen = dollar TP.<> gen Math TP.<> dollar
     adjust Curr Curr gen = gen Text -- default
     adjust Curr x gen = gen x
     adjust x Curr gen = gen x 
@@ -69,16 +69,16 @@ toMath = switch (const Math)
 toText = switch (const Text)
 
 -- MonadReader calls this 'ask'
-get_ctx :: PrintLaTeX MathContext
-get_ctx = PL id
+getCtx :: PrintLaTeX MathContext
+getCtx = PL id
 
 instance Semigroup (PrintLaTeX TP.Doc) where
-  (PL s1) <> (PL s2) = PL $ \ctx -> (s1 ctx) TP.<> (s2 ctx)
+  (PL s1) <> (PL s2) = PL $ \ctx -> s1 ctx TP.<> s2 ctx
 
 -- very convenient lifting of $$
 instance Monoid (PrintLaTeX TP.Doc) where
   mempty = pure TP.empty
-  (PL s1) `mappend` (PL s2) = PL $ \ctx -> (s1 ctx) $$ (s2 ctx)
+  (PL s1) `mappend` (PL s2) = PL $ \ctx -> s1 ctx $$ s2 ctx
 
 -- since Text.PrettyPrint steals <>, use %% instead
 -- may revisit later

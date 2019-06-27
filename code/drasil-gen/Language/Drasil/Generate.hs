@@ -11,7 +11,8 @@ import Language.Drasil
 import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec), 
   DocType(SRS, MG, MIS, Website), Filename, makeCSS, genHTML,
   genTeX, PrintingInformation)
-import Language.Drasil.Code (generator, generateCode, Choices, CodeSpec)
+import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec,
+  Lang(..), unJC, unPC, unCSC, unSrc, unHdr)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -30,7 +31,7 @@ prnt sm dt@(DocSpec _ _) body =
 
 -- | Helper for writing the documents (TeX / HTML) to file
 prntDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
-prntDoc (DocSpec dt fn) body sm = prntDoc' dt fn (fmt dt) body sm
+prntDoc (DocSpec dt fn) = prntDoc' dt fn (fmt dt)
   where fmt SRS = TeX
         fmt MG  = TeX
         fmt MIS = TeX
@@ -65,5 +66,10 @@ genCode chs spec = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
-  generateCode chs $ generator chs spec
+  mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
+  where genLangCode Java = genCall Java [unJC]
+        genLangCode Python = genCall Python [unPC]
+        genLangCode CSharp = genCall CSharp [unCSC]
+        genLangCode Cpp = genCall Cpp [unHdr, unSrc]
+        genCall lng unRepr = generateCode lng unRepr $ generator chs spec

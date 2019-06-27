@@ -83,7 +83,6 @@ POTENTIAL TASKS (Proto-issues)
     - AssumpChunk: Hack. re-implement.
     - Change: Hack. re-implement.
     - Citation: should investigate 3rd party implementations
-  - Remove multiple occurrences of definition of DD as Data Definition
 
 - Structural:
   - make sure the generated code compiles and runs correctly and html is clean, tex 

@@ -14,16 +14,17 @@ module Drasil.DocLang.SRS
 --May want to combine SRS-specific functions into this file as well (ie. OrganizationOfSRS) to make it more Recipe-like.
 
 import Language.Drasil
-import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, 
-    assumption, charOfIR, client, customer, consVals, dataDefn, datumConstraint, 
-    functionalRequirement, genDefn, generalSystemDescription, goalStmt, 
-    indPRCase, inModel, introduction, likelyChg, unlikelyChg, nonfunctionalRequirement,
-    offShelfSolution, orgOfDoc, physSyst, prodUCTable, problemDescription, 
-    propOfCorSol, prpsOfDoc, reference, requirement, scpOfReq, scpOfTheProj,
-    solutionCharSpec, specificsystemdescription, srs, stakeholder, sysCont, 
-    systemConstraint, termAndDef, terminology, thModel, traceyMandG, tOfSymb, 
-    userCharacteristic)
-import Data.Drasil.Phrase (for'', the')
+import Utils.Drasil
+
+import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
+  charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,
+  generalSystemDescription, goalStmt, indPRCase, introduction, likelyChg,
+  unlikelyChg, nonfunctionalRequirement, offShelfSolution, orgOfDoc, physSyst,
+  prodUCTable, problemDescription, propOfCorSol, prpsOfDoc, reference, requirement,
+  scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription, srs,
+  stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
+  tOfSymb, userCharacteristic)
+import qualified Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
@@ -35,9 +36,9 @@ forTT' = for'' titleize' titleize'
 -- | SRS document constructor. 
 -- Create the SRS from given system name, authors, and sections
 doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
-doc sys authors secs = Document (Doc.srs `forTT` sys) authors secs
+doc  sys = Document (Doc.srs `forTT` sys)
 -- | Uses plural of system for title.
-doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
+doc' sys = Document (Doc.srs `forTT'` sys)
 
 -- | Standard SRS section builders
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
@@ -61,7 +62,7 @@ sysCont     cs ss = section' (titleize Doc.sysCont)              cs ss  "SysCont
 userChar    cs ss = section' (titleize' Doc.userCharacteristic)  cs ss  "UserChars"
 sysCon      cs ss = section' (titleize' Doc.systemConstraint)    cs ss  "SysConstraints"
 
-scpOfTheProj cs ss = section' (at_start (Doc.scpOfTheProj titleize)) cs ss "ProjScope"
+scpOfTheProj cs ss = section' (atStart (Doc.scpOfTheProj titleize)) cs ss "ProjScope"
 prodUCTable cs ss  = section' (titleize Doc.prodUCTable)      cs ss      "UseCaseTable"
 indPRCase   cs ss  = section (titleize' Doc.indPRCase)       cs ss      indPRCaseLabel
 
@@ -82,7 +83,7 @@ datCon      cs ss = section (titleize' Doc.datumConstraint)   cs ss datConLabel
 propCorSol  cs ss = section' (titleize' Doc.propOfCorSol)      cs ss "CorSolProps"
 
 require     cs ss = section' (titleize' Doc.requirement)      cs ss "Requirements"
-nonfuncReq  cs ss = section' (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
+nonfuncReq  cs ss = section (titleize' Doc.nonfunctionalRequirement) cs ss nonfuncReqLabel
 funcReq     cs ss = section (titleize' Doc.functionalRequirement) cs ss funcReqLabel
 
 likeChg     cs ss = section (titleize' Doc.likelyChg)        cs ss likeChgLabel
@@ -110,7 +111,8 @@ section' a b c d = section a b c (makeSecRef d (toString a))
 --FIXME: create using section information somehow?
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
-  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel, solCharSpecLabel :: Reference
+  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel, nonfuncReqLabel,
+  solCharSpecLabel :: Reference
 physSystLabel      = makeSecRef "PhysSyst" "Physical System Description"
 datConLabel        = makeSecRef "DataConstraints" "Data Constraints"
 genDefnLabel       = makeSecRef "GDs" "General Definitions"
@@ -125,4 +127,5 @@ referenceLabel     = makeSecRef "References" "References"
 indPRCaseLabel     = makeSecRef "IndividualProdUC" "Individual Product Use Cases"
 assumptLabel       = makeSecRef "Assumps" "Assumptions"
 funcReqLabel       = makeSecRef "FRs" "Functional Requirements"
+nonfuncReqLabel    = makeSecRef "NFRs" "Nonfunctional Requirements"
 solCharSpecLabel   = makeSecRef "SolCharSpec" "Solution Characteristics Specification"

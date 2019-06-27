@@ -1,18 +1,19 @@
 module Data.Drasil.Concepts.Computation where
 
 import Language.Drasil
+import Utils.Drasil
+
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
     quantity, type_, value, variable)
 import Data.Drasil.Concepts.Math (parameter)
-import Data.Drasil.Phrase (compoundNC, compoundNCPlPh, compoundNCPlPl)
 import Data.Drasil.IdeaDicts
 
 algorithm :: ConceptChunk
 algorithm    = dcc "algorithm" (cn' "algorithm")
   "A series of steps to be followed in calculations and problem-solving operations"
 
-mod_calc_desc :: Sentence -> ConceptChunk
-mod_calc_desc defnFromEx = dccWDS "mod_calc_desc" (cn' "calculation") defnFromEx
+modCalcDesc :: Sentence -> ConceptChunk
+modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")
 
 compcon :: [NamedChunk]
 compcon = [application, computer, structure, dataStruct, dataStruct', dataType, dataType', 

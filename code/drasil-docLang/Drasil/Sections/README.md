@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: May 29, 2019
 --------------------------------------------------
 
 AuxiliaryConstants.hs
@@ -23,9 +23,6 @@ Requirements.hs
 
 ScopeOfTheProject.hs
   - Contains the functions to generate the Scope of the Project section
-
-SolutionCharacterSpec.hs
-  - Contains the functions to generate the Solution Character Specification section
 
 SpecificSystemDescription.hs
   - Contains the functions to generate the Specific System Description section

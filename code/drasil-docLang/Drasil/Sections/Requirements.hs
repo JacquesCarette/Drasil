@@ -1,79 +1,69 @@
-module Drasil.Sections.Requirements
-  (fReqF, reqF, nonFuncReqF, nonFuncReqF') where
+module Drasil.Sections.Requirements (fReqF, mkInputPropsTable, mkQRTuple,
+  mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
 
 import Language.Drasil
+import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (priority, software, nonfunctionalRequirement,
-  functionalRequirement, section_)
-import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.SentenceStructures (foldlList, foldlSent, SepType(Comma), FoldType(List))
+import Data.Drasil.Concepts.Documentation (description, functionalRequirement,
+  input_, nonfunctionalRequirement, section_, software, symbol_)
+import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
+import Drasil.DocumentLanguage.Units (toSentence)
 
 -- wrapper for reqIntro
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
 fReqF :: [Contents] -> Section
-fReqF listOfReqs = SRS.funcReq (fReqIntro : listOfReqs) []
+fReqF listOfFReqs = SRS.funcReq (fReqIntro : listOfFReqs) []
+
+nfReqF :: [Contents] -> Section
+nfReqF nfrs = SRS.nonfuncReq (nfReqIntro : nfrs) []
+
+--helpers for requirements intros
+reqIntroStart :: Sentence
+reqIntroStart = foldlSent_ [S "This", phrase section_, S "provides"]
+
+frReqIntroBody :: Sentence
+frReqIntroBody = foldlSent_
+        [S "the", plural functionalRequirement `sC` S "the tasks and behaviours that the",
+        phrase software, S "is expected to complete"]
+
+nfrReqIntroBody :: Sentence
+nfrReqIntroBody = foldlSent_
+        [S "the", plural nonfunctionalRequirement `sC` S "the qualities that the",
+        phrase software, S "is expected to exhibit"]
 
 --generalized requirements introduction
-reqIntroS :: Sentence
-reqIntroS = foldlSent
-        [S "This", (phrase section_), S "provides the",
-        (plural functionalRequirement) `sC` S "the business tasks that the",
-        (phrase software), S "is expected to complete" `sC` S "and the", 
-        (plural nonfunctionalRequirement) `sC` S "the qualities that the",
-        (phrase software), S "is expected to exhibit"]
-
 reqIntro :: Contents
-reqIntro = mkParagraph reqIntroS
+reqIntro = mkParagraph $ reqIntroStart +:+. (frReqIntroBody `sC` EmptyS `sAnd` nfrReqIntroBody)
 
 --generalized functional requirements introduction
-fReqIntroS :: Sentence
-fReqIntroS = foldlSent
-        [S "The following", (phrase section_), S "provides the",
-        (plural functionalRequirement) `sC` S "the business tasks that the",
-        (phrase software), S "is expected to complete"]
-
 fReqIntro :: Contents
-fReqIntro = mkParagraph fReqIntroS
+fReqIntro = mkParagraph $ reqIntroStart +:+. frReqIntroBody
 
--- wrapper for nonfuncReq
-nonFuncReqF :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> Section
-nonFuncReqF noPriority priority_ reason_ explanation_ = SRS.nonfuncReq
-  [nonFuncReq (map phrase noPriority) (map phrase priority_) reason_ explanation_] []
+--generalized nonfunctional requirements introduction
+nfReqIntro :: Contents
+nfReqIntro = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 
-nonFuncReqF' :: (Concept c) => [c] -> [Contents] -> Sentence -> Sentence -> Section
-nonFuncReqF' noPriority nfrs reason_ explanation_ = SRS.nonfuncReq
-  ((nonFuncReq' (map phrase noPriority) nfrs reason_ explanation_) : nfrs) []
-        
--- generalized non-functional requirements paragraph: list of non-priority requirements, list of priority requirements,
--- reason for initial priority choice, explanation for how priority choice can be achieved.
-nonFuncReq :: [Sentence] -> [Sentence] -> Sentence -> Sentence -> Contents
-nonFuncReq noPriority priority_ reason_ explanation_ = mkParagraph $ reason_ `sC` (listO explanation_ noPriority priority_)
+-- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
+mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 
+                          [i] -> r -> LabelledContent
+mkInputPropsTable reqInputs req = llcc (makeTabRef "ReqInputs") $ 
+  Table [atStart symbol_, atStart description, atStart' unit_]
+  (mkTable [ch, atStart, toSentence] $ sortBySymbol reqInputs)
+  (S "Required" +:+ titleize' input_ `follows` req) True
 
-nonFuncReq' :: [Sentence] -> [Contents] -> Sentence -> Sentence -> Contents
-nonFuncReq' noPriority priority_ reason_ explanation_ = mkParagraph $ reason_ `sC` (listO' explanation_ noPriority priority_)
+-- | takes a list of tuples of variables and sources and creates an table for uses in Functional Requirments
+mkValsSourceTable :: (Quantity i, MayHaveUnit i) => 
+                          [(i, Sentence)] -> String -> Sentence -> LabelledContent
+mkValsSourceTable vals label cap = llcc (makeTabRef label) $ 
+  Table [atStart symbol_, atStart description, S "Source", atStart' unit_]
+  (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 
-listO :: Sentence -> [Sentence] -> [Sentence] -> Sentence
-listO explanation_ [] [] = S "so there are no" +:+ (plural priority) +:+ explanation_
-listO explanation_ [] priority_ = S "so" +:+ head priority_ +:+ S "is a high" +:+. (phrase priority) +:+ explanation_ +:+ S "The other" +:+. listT (tail priority_)
-listO explanation_ [s] priority_ = S "so" +:+ s +:+ S "is not a" +:+. phrase priority +:+ explanation_ +:+ S "Rather than" +:+ s `sC` S "the" +:+. listT priority_
-listO explanation_ s priority_ = S "so" +:+ foldlList Comma List s +:+ S "are not" +:+. (plural priority) +:+ explanation_ +:+ S "Rather, the" +:+. listT priority_
+mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
+mkQRTuple = map (\c -> (qw c, makeRef2S c))
 
-listO' :: Sentence -> [Sentence] -> [Contents] -> Sentence
-listO' explanation_ [] [] = S "so there are no" +:+ (plural priority) +:+ explanation_
-listO' explanation_ []  priority_ = S "so all" +:+ (plural nonfunctionalRequirement) +:+ S "are given equal" +:+ phrase priority +:+ explanation_ +:+ S "The" +:+. listT' priority_
-listO' explanation_ [s] priority_ = S "so" +:+ s +:+ S "is not a" +:+. phrase priority +:+ explanation_ +:+ S "Rather than" +:+ s `sC` S "the" +:+. listT' priority_
-listO' explanation_ s priority_ = S "so" +:+ foldlList Comma List s +:+ S "are not" +:+. (plural priority) +:+ explanation_ +:+ S "Rather, the" +:+. listT' priority_
-
-listT :: [Sentence] -> Sentence
-listT [] = (phrase program) +:+ S "does not possess a" +:+ (phrase priority) +:+ (phrase nonfunctionalRequirement)
-listT [s] = (phrase nonfunctionalRequirement) +:+ (phrase priority) +:+ S "is" +:+ s
-listT s = (phrase nonfunctionalRequirement) +:+ (plural priority) +:+ S "are" +:+ foldlList Comma List s
-
-listT' :: [Contents] -> Sentence
-listT' [] = (phrase program) +:+ S "does not possess a" +:+ (phrase priority) +:+ (phrase nonfunctionalRequirement)
-listT' [_] = (phrase nonfunctionalRequirement) +:+ (phrase priority) +:+ S "is:"
-listT' _ = (phrase nonfunctionalRequirement) +:+ (plural priority) +:+ S "are:"
+mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
+mkQRTupleRef qs rs = map (\(c, r) -> (qw c, makeRef2S r)) $ zip qs rs

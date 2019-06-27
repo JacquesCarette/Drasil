@@ -1,0 +1,1 @@
+bash $(cat "$SHELL_OPTS_FILE") scripts/deploy.bash

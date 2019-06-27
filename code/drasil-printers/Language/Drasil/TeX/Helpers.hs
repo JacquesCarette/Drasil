@@ -40,15 +40,15 @@ command :: String -> (String -> D)
 command s c = pure $ (H.bslash TP.<> text s) TP.<> H.br c
 
 commandD :: String -> (D -> D)
-commandD s c = (pure $ (H.bslash TP.<> text s)) <> br c
+commandD s c = pure (H.bslash TP.<> text s) <> br c
 
 -- 1-argument command, with optional argument
 command1o :: String -> Maybe String -> String -> D
-command1o s o c = pure $ (H.bslash TP.<> text s) TP.<> (maybe TP.empty H.sq o) TP.<> H.br c
+command1o s o c = pure $ (H.bslash TP.<> text s) TP.<> maybe TP.empty H.sq o TP.<> H.br c
 
 -- no braces!
 command1oD :: String -> Maybe D -> D -> D
-command1oD s o c = (pure $ (H.bslash TP.<> text s)) <> (maybe empty sq o) <> c
+command1oD s o c = pure (H.bslash TP.<> text s) <> maybe empty sq o <> c
 
 -- 0-argument command
 command0 :: String -> D
@@ -65,13 +65,13 @@ command3 s a0 a1 a2 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1
 -- Encapsulate environments
 mkEnv :: String -> D -> D
 mkEnv nm d =
-  (pure $ text ("\\begin" ++ H.brace nm)) $+$ 
+  pure (text ("\\begin" ++ H.brace nm)) $+$ 
   d $+$
-  (pure $ text ("\\end" ++ H.brace nm))
+  pure (text ("\\end" ++ H.brace nm))
 
 -- for defining (LaTeX) macros
 comm :: String -> String -> Maybe String -> D
-comm b1 b2 s1 = command0 "newcommand" <> (pure $ H.br ("\\" ++ b1) TP.<> 
+comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<> 
   maybe TP.empty H.sq s1 TP.<> H.br b2)
 
 -- this one is special enough, let this sub-optimal implementation stand
@@ -90,25 +90,31 @@ genSec d
   | d == 3 = pure $ H.bslash TP.<> text "paragraph"
   | otherwise = pure $ 
      H.bslash TP.<> text (concat $ replicate d "sub") TP.<> text "section" 
-      TP.<> (if (not numberedSections) then text "*" else TP.empty) 
+      TP.<> (if not numberedSections then text "*" else TP.empty) 
 
 -- For references
 ref, sref, hyperref, externalref, snref :: String -> D -> D
 sref         = if numberedSections then ref else hyperref
-ref      t x = custRef (t ++ "~\\ref") x
-hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
+ref      t   = custRef (t ++ "~\\ref")
+hyperref t x = command0 "hyperref" <> sq x <> br (pure (text (t ++ "~")) <> x)
 externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
   br empty <> br x
 snref    r t = command0 "hyperref" <> sq (pure $ text r) <> br t
 
 href :: String -> String -> D
-href a0 a1 = command2 "href" a0 a1
+href = command2 "href"
 
 custRef :: String -> D -> D
-custRef t x = (pure $ text t) <> br x
+custRef t x = pure (text t) <> br x
+
+custRef' :: String -> D -> D -> D
+custRef' t x i = pure (text t) <> sq i <> br x
 
 cite :: D -> D
-cite  x = custRef "\\cite"  x
+cite = custRef "\\cite"
+
+citeInfo :: D -> D -> D
+citeInfo = custRef' "\\cite"
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
@@ -120,7 +126,7 @@ count           = command "newcounter"
 
 includegraphics :: MaxWidthPercent -> String -> D
 includegraphics 100 = command1o "includegraphics" 
-  (Just $ "width=\\textwidth")
+  (Just "width=\\textwidth")
 includegraphics wp = command1o "includegraphics" 
   (Just $ "width=" ++ show (wp / 100) ++ "\\textwidth")
 
@@ -132,7 +138,7 @@ label           = commandD "label"
 title           = commandD "title"
 
 item' :: D -> D -> D
-item' bull s = command1oD "item" (Just bull) s
+item' bull = command1oD "item" (Just bull)
 
 maketitle, maketoc, newline, newpage, centering :: D
 maketitle = command0 "maketitle"
@@ -161,8 +167,8 @@ sec :: Int -> D -> D
 sec d b1 = genSec d <> br b1
 
 subscript, superscript :: D -> D -> D
-subscript a b = a <> (pure $ H.unders) <> br b
-superscript a b = a <> (pure $ H.hat) <> br b
+subscript a b = a <> pure H.unders <> br b
+superscript a b = a <> pure H.hat <> br b
 
 -- grave, acute :: Char -> D
 -- grave c = (pure $ text "\\`{") <> pure (TP.char c) <> (pure $ text "}")
@@ -195,7 +201,7 @@ hyperConfig :: D
 hyperConfig = command "hypersetup" hyperSettings
 
 useTikz :: D
-useTikz = usepackage "luatex85" $+$ (pure $ text "\\def") <>
+useTikz = usepackage "luatex85" $+$ pure (text "\\def") <>
   command "pgfsysdriver" "pgfsys-pdftex.def" $+$
   -- the above is a workaround..  temporary until TeX packages have been fixed
   usepackage "tikz" $+$ command "usetikzlibrary" "arrows.meta" $+$

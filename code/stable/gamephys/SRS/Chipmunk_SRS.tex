@@ -16,10 +16,10 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
-\newlist{symbDescription}{description}{1}
-\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \setmathfont{Latin Modern Math}
 \global\tabulinesep=1mm
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Chipmunk2D}
 \author{Alex Halliwushka and Luthfi Mawarid}
@@ -66,9 +66,9 @@ Symbol & Description & Units
 \endhead
 $\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${\mathbf{a}_{i}}$ & The I-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
-\\
 $\mathbf{a}(t)$ & Linear Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+${\mathbf{a}_{i}}$ & The I-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 ${C_{R}}$ & Coefficient of restitution & --
 \\
@@ -84,11 +84,15 @@ $G$ & Gravitational constant & $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$
 \\
 $g$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
+$h$ & Height & m
+\\
 $\mathbf{I}$ & Moment of inertia & kg$\text{m}^{2}$
 \\
 ${\mathbf{I}_{A}}$ & Moment of Inertia Of Rigid Body A & kg$\text{m}^{2}$
 \\
 ${\mathbf{I}_{B}}$ & Moment of Inertia Of Rigid Body B & kg$\text{m}^{2}$
+\\
+$\mathbf{J}$ & Impulse (vector) & Ns
 \\
 $j$ & Impulse (scalar) & Ns
 \\
@@ -112,17 +116,21 @@ ${m_{j}}$ & Mass Of the J-Th Particle & kg
 \\
 $\mathbf{n}$ & Collision Normal Vector & m
 \\
+$PE$ & Potential energy & J
+\\
 $\mathbf{p}$ & Position & m
 \\
 ${\mathbf{p}_{CM}}$ & Center of Mass & m
 \\
 ${\mathbf{p}_{j}}$ & Position Vector of the J-Th Particle & m
 \\
+${r_{j}}$ & Distance Between the J-Th Particle and the Axis of Rotation & m
+\\
 $\mathbf{r}$ & Displacement & m
 \\
-${\mathbf{r}_{OB}}$ & Displacement vector between the origin and point B & m
-\\
 $\mathbf{r}(t)$ & Linear Displacement & m
+\\
+${\mathbf{r}_{OB}}$ & Displacement vector between the origin and point B & m
 \\
 $\mathbf{\hat{r}}$ & Displacement unit vector & m
 \\
@@ -130,33 +138,39 @@ $t$ & Time & s
 \\
 ${t_{c}}$ & Denotes the time at collision & s
 \\
-${{\mathbf{v}_{f}}^{AB}}$ & Final Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+$\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
-${{\mathbf{v}_{i}}^{AB}}$ & Initial Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+$Δ\mathbf{v}$ & Change in velocity & $\frac{\text{m}}{\text{s}}$
+\\
+$\mathbf{v}(t)$ & Linear Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${\mathbf{v}^{AP}}$ & Velocity Of the Point of Collision P in Body A & $\frac{\text{m}}{\text{s}}$
 \\
 ${\mathbf{v}^{BP}}$ & Velocity Of the Point of Collision P in Body B & $\frac{\text{m}}{\text{s}}$
 \\
+${\mathbf{v}_{1}}$ & Velocity Of the First Body & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{2}}$ & Velocity Of the Second Body & $\frac{\text{m}}{\text{s}}$
+\\
 ${\mathbf{v}_{A}}$ & Velocity At Point A & $\frac{\text{m}}{\text{s}}$
 \\
 ${\mathbf{v}_{B}}$ & Velocity At Point B & $\frac{\text{m}}{\text{s}}$
 \\
+${{\mathbf{v}_{f}}^{AB}}$ & Final Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+\\
 ${\mathbf{v}_{i}}$ & Velocity Of the I-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
+\\
+${{\mathbf{v}_{i}}^{AB}}$ & Initial Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
 \\
 ${\mathbf{v}_{O}}$ & Velocity At Point Origin & $\frac{\text{m}}{\text{s}}$
 \\
-$\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
-\\
-$\mathbf{v}(t)$ & Linear Velocity & $\frac{\text{m}}{\text{s}}$
-\\
 $||\mathbf{n}||$ & Length of the Normal Vector & m
+\\
+$||\mathbf{r}||$ & Euclidean norm of the displacement & m
 \\
 $||{\mathbf{r}_{AP}}*\mathbf{n}||$ & Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body A & m
 \\
 $||{\mathbf{r}_{BP}}*\mathbf{n}||$ & Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body B & m
-\\
-$||\mathbf{r}||$ & Euclidean norm of the displacement & m
 \\
 ${||\mathbf{r}||^{2}}$ & Squared distance & $\text{m}^{2}$
 \\
@@ -186,6 +200,8 @@ Abbreviation & Full Form
 \endhead
 2D & two-dimensional
 \\
+3D & three-dimensional
+\\
 A & Assumption
 \\
 CM & Centre of Mass
@@ -208,7 +224,7 @@ R & Requirement
 \\
 SRS & Software Requirements Specification
 \\
-T & Theoretical Model
+TM & Theoretical Model
 \\
 UC & Unlikely Change
 \\
@@ -224,18 +240,18 @@ Due to the rising cost of developing video games, developers are looking for way
 The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-This document descibes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
+This document describes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given the appropriate inputs, Chipmunk2D simulates how these rigid bodies interact with one another.
+The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
 Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{dParnas1972} and \cite{parnasClements1984}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
-The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models, and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}).
+The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}).
 \section{General System Description}
 \label{Sec:GenSysDesc}
 This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
@@ -275,10 +291,10 @@ There are no system constraints.
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (\hyperref[Sec:ExistingSolns]{Section: Off-The-Shelf Solutions}). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
+A system is needed to create a simple, lightweight, fast, and portable 2D rigid body physics library, which will allow for more accessible game development and the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (\hyperref[Sec:ExistingSolns]{Section: Off-The-Shelf Solutions}).
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 \begin{itemize}
 \item{Rigid body: A solid body in which deformation is neglected.}
 \item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
@@ -290,23 +306,23 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:GoalStmt}
 Given the inputs, the goal statements are:
 \begin{itemize}
-\item[GS1:]Determine their new positions and velocities over a period of time.
-\item[GS2:]Determine their new orientations and angular velocities over a period of time.
+\item[Determine-Linear-Properties:\phantomsection\label{linearGS}]Determine their new positions and velocities over a period of time.
+\item[Determine-Angular-Properties:\phantomsection\label{angularGS}]Determine their new orientations and angular velocities over a period of time.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern Chipmunk2D are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 \begin{itemize}
-\item[objectTy:\phantomsection\label{assumpOT}]All objects are rigid bodies. \hyperref[DD:chalses]{DD: chalses} \hyperref[DD:chalses]{DD: chalses} \hyperref[DD:reVeInColl]{DD: reVeInColl} \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[DD:kEnergy]{DD: kEnergy} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D} \hyperref[TM:ChaslesThm]{TM: ChaslesThm} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
-\item[objectDimension:\phantomsection\label{assumpOD}]All objects are 2D. \hyperref[DD:chalses]{DD: chalses} \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[DD:kEnergy]{DD: kEnergy} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
+\item[objectTy:\phantomsection\label{assumpOT}]All objects are rigid bodies. (RefBy: \hyperref[DD:chalses]{DD: chalses}, \hyperref[DD:reVeInColl]{DD: reVeInColl}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[DD:momentOfInertia]{DD: momentOfInertia}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulseV]{DD: impulseV}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[TM:ChaslesThm]{TM: ChaslesThm}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)
+\item[objectDimension:\phantomsection\label{assumpOD}]All objects are 2D. (RefBy: \hyperref[DD:chalses]{DD: chalses}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]The library uses a Cartesian coordinate system.
-\item[axesDefined:\phantomsection\label{assumpAD}]The axes are defined using right-handed coordinate system. \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D}.
-\item[collisionType:\phantomsection\label{assumpCT}]All rigid bodies collisions are vertex-to-edge collisions. \hyperref[lcEC]{LC: Expanded-Collisions} \hyperref[DD:impulse]{DD: impulse} \hyperref[IM:col2D]{IM: col2D}.
-\item[dampingInvolvement:\phantomsection\label{assumpDI}]There is no damping involved throughout the simulation and this implies that there are no friction forces. \hyperref[DD:chalses]{DD: chalses} \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linAcc]{DD: linAcc} \hyperref[lcID]{LC: Include-Dampening} \hyperref[DD:kEnergy]{DD: kEnergy} \hyperref[IM:col2D]{IM: col2D} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angAccel]{DD: angAccel}.
-\item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]There are no constraints and joints involved throughout the simulation. \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:rotMot]{IM: rotMot} \hyperref[lcIJC]{LC: Include-Joints-Constraints} \hyperref[IM:col2D]{IM: col2D}.
+\item[axesDefined:\phantomsection\label{assumpAD}]The axes are defined using right-handed coordinate system. (RefBy: \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:impulse]{DD: impulse}, and \hyperref[IM:col2D]{IM: col2D}.)
+\item[collisionType:\phantomsection\label{assumpCT}]All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[lcEC]{LC: Expanded-Collisions}, \hyperref[DD:impulse]{DD: impulse}, and \hyperref[IM:col2D]{IM: col2D}.)
+\item[dampingInvolvement:\phantomsection\label{assumpDI}]There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[DD:chalses]{DD: chalses}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[lcID]{LC: Include-Dampening}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)
+\item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]There are no constraints and joints involved throughout the simulation. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[lcIJC]{LC: Include-Joints-Constraints}, and \hyperref[IM:col2D]{IM: col2D}.)
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -331,9 +347,9 @@ Description & \begin{symbDescription}
               \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The net force $\mathbf{F}$ (N) on a rigid body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the rigid body, where $m$ (kg) denotes the mass of the rigid body as the constant of proportionality.
+Notes & The net force $\mathbf{F}$ (N) on a body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the body, where $m$ (kg) denotes the mass of the body as the constant of proportionality.
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -359,7 +375,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & Every action has an equal and opposite reaction. In other words, the force ${\mathbf{F}_{1}}$ (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force ${\mathbf{F}_{2}}$ (N) exerted on the first rigid body by the second.
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -390,7 +406,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -418,7 +434,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -445,7 +461,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The net torque $τ$ (Nm) on a rigid body is proportional to its angular acceleration $α$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional \hyperref[assumpOD]{A: objectDimension}.
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -484,9 +500,9 @@ Description & \begin{symbDescription}
 Notes & \hyperref[assumpOT]{A: objectTy}
         \hyperref[assumpOD]{A: objectDimension}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:transMot]{IM: transMot} \hyperref[IM:col2D]{IM: col2D}.
+RefBy & \hyperref[IM:transMot]{IM: transMot} and \hyperref[IM:col2D]{IM: col2D}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -517,9 +533,9 @@ Notes & \hyperref[assumpOT]{A: objectTy}
         \hyperref[assumpOD]{A: objectDimension}
         \hyperref[assumpDI]{A: dampingInvolvement}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:transMot]{IM: transMot}.
+RefBy & \hyperref[IM:transMot]{IM: transMot}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -550,9 +566,9 @@ Notes & \hyperref[assumpOT]{A: objectTy}
         \hyperref[assumpOD]{A: objectDimension}
         \hyperref[assumpDI]{A: dampingInvolvement}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:transMot]{IM: transMot}.
+RefBy & \hyperref[IM:transMot]{IM: transMot}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -583,9 +599,9 @@ Notes & \hyperref[assumpOT]{A: objectTy}
         \hyperref[assumpOD]{A: objectDimension}
         \hyperref[assumpDI]{A: dampingInvolvement}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:transMot]{IM: transMot}.
+RefBy & \hyperref[IM:transMot]{IM: transMot}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -616,9 +632,9 @@ Notes & \hyperref[assumpOT]{A: objectTy}
         \hyperref[assumpOD]{A: objectDimension}
         \hyperref[assumpDI]{A: dampingInvolvement}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
+RefBy & \hyperref[IM:rotMot]{IM: rotMot}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -649,9 +665,9 @@ Notes & \hyperref[assumpOT]{A: objectTy}
         \hyperref[assumpOD]{A: objectDimension}
         \hyperref[assumpDI]{A: dampingInvolvement}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
+RefBy & \hyperref[IM:rotMot]{IM: rotMot}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -682,9 +698,9 @@ Notes & \hyperref[assumpOT]{A: objectTy}
         \hyperref[assumpOD]{A: objectDimension}
         \hyperref[assumpDI]{A: dampingInvolvement}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:rotMot]{IM: rotMot}.
+RefBy & \hyperref[IM:rotMot]{IM: rotMot}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -724,9 +740,9 @@ Notes & \hyperref[assumpOT]{A: objectTy}
         \hyperref[assumpAD]{A: axesDefined}
         \hyperref[assumpCT]{A: collisionType}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
-RefBy & \hyperref[IM:col2D]{IM: col2D}.
+RefBy & \hyperref[IM:col2D]{IM: col2D}
 \\ \bottomrule \end{tabular}
 \end{minipage}
 \par~
@@ -759,7 +775,7 @@ Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of 
         \hyperref[assumpOD]{A: objectDimension}
         \hyperref[assumpDI]{A: dampingInvolvement}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -790,7 +806,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -824,7 +840,7 @@ Notes & The kinetic energy of an object is the energy it possess due to its moti
         \hyperref[assumpOD]{A: objectDimension}
         \hyperref[assumpDI]{A: dampingInvolvement}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -856,7 +872,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The coefficient of restitution ${C_{R}}$ is a unitless, dimensionless quantity that determines the elasticity of a collision between two rigid bodies. ${C_{R}}=1$ results in an elastic collision, while ${C_{R}}<1$ results in an inelastic collision, and ${C_{R}}=0$ results in a totally inelastic collision.
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -887,7 +903,118 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & In a collision, the velocity of a rigid body \hyperref[assumpOT]{A: objectTy} A colliding with another rigid body B relative to that body ${{\mathbf{v}_{i}}^{AB}}$ is the difference between the velocities of A and B at point P.
 \\ \midrule \\
-Source & 
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:impulseV}
+\phantomsection 
+\label{DD:impulseV}
+\\ \midrule \\
+Label & Impulse (vector)
+\\ \midrule \\
+Symbol & $\mathbf{J}$
+\\ \midrule \\
+Units & Ns
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{J}=m Δ\mathbf{v}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{J}$ is the impulse (vector) (Ns)}
+              \item{$m$ is the mass (kg)}
+              \item{$Δ\mathbf{v}$ is the change in velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & An impulse (vector) $\mathbf{J}$ occurs when a force $\mathbf{F}$ acts over a body over an interval of time Derivation of impulse (vector).
+        \hyperref[assumpOT]{A: objectTy}
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+Derivation of impulse (vector) - Newton's second law of motion states:
+\begin{displaymath}
+\mathbf{F}=m \mathbf{a}=m \frac{d\,\mathbf{v}}{d\,t}
+\end{displaymath}
+Rearranging :
+\begin{displaymath}
+\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)
+\end{displaymath}
+Integrating the right hand side :
+\begin{displaymath}
+\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}
+\end{displaymath}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:potEnergy}
+\phantomsection 
+\label{DD:potEnergy}
+\\ \midrule \\
+Label & Potential energy
+\\ \midrule \\
+Symbol & $PE$
+\\ \midrule \\
+Units & J
+\\ \midrule \\
+Equation & \begin{displaymath}
+           PE=m g h
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$PE$ is the potential energy (J)}
+              \item{$m$ is the mass (kg)}
+              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$h$ is the height (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The potential energy of an object is the energy held by an object because of its position to other objects.
+        \hyperref[assumpOT]{A: objectTy}
+        \hyperref[assumpOD]{A: objectDimension}
+        \hyperref[assumpDI]{A: dampingInvolvement}
+\\ \midrule \\
+Source & --
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule \end{tabular}
+\end{minipage}
+\par~
+
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:momentOfInertia}
+\phantomsection 
+\label{DD:momentOfInertia}
+\\ \midrule \\
+Label & Moment of inertia
+\\ \midrule \\
+Symbol & $\mathbf{I}$
+\\ \midrule \\
+Units & kg$\text{m}^{2}$
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \mathbf{I}=\displaystyle\sum{{m_{j}} {r_{j}}^{2}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
+              \item{${m_{j}}$ is the mass of the j-th particle (kg)}
+              \item{${r_{j}}$ is the distance between the j-th particle and the axis of rotation (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The moment of inertia $\mathbf{I}$ of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.
+        \hyperref[assumpOT]{A: objectTy}
+\\ \midrule \\
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -895,6 +1022,7 @@ RefBy &
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+The goal \hyperref[linearGS]{GS: Determine-Linear-Properties} is met by \hyperref[IM:transMot]{IM: transMot} and \hyperref[IM:col2D]{IM: col2D}. The goal \hyperref[angularGS]{GS: Determine-Angular-Properties} is met by \hyperref[IM:rotMot]{IM: rotMot} and \hyperref[IM:col2D]{IM: col2D}.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -942,7 +1070,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The above equation expresses the total acceleration of the rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linAcc]{DD: linAcc}.  It is currently assumed that there is no damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} involved. \hyperref[DD:ctrOfMass]{DD: ctrOfMass}.
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -992,7 +1120,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The above equation for the total angular acceleration of the rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} i is derived from T5, and the resultant outputs are then obtained from this equation using \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angAccel]{DD: angAccel}. It is currently assumed that there is no damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} involved. \hyperref[assumpAD]{A: axesDefined}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -1046,7 +1174,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & This instance model is based on our assumptions regarding rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} collisions \hyperref[assumpCT]{A: collisionType} Again, this does not take damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} into account. \hyperref[assumpAD]{A: axesDefined}. \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[DD:impulse]{DD: impulse}
 \\ \midrule \\
-Source & 
+Source & --
 \\ \midrule \\
 RefBy & 
 \\ \bottomrule \end{tabular}
@@ -1060,27 +1188,27 @@ Var & Physical Constraints & Typical Value & Uncert.
 \\
 \midrule
 \endhead
-${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $800.0\cdot{}10^{-3}$ & 10.0$\%$
+${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $0.8$ & 10$\%$
 \\
-$\mathbf{F}$ & -- & $98.1$ N & 10.0$\%$
+$\mathbf{F}$ & -- & $98.1$ N & 10$\%$
 \\
-$G$ & -- & $9.8$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10.0$\%$
+$G$ & -- & $9.8$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10$\%$
 \\
-$\mathbf{I}$ & $\mathbf{I}\geq{}0$ & $74.5$ kg$\text{m}^{2}$ & 10.0$\%$
+$\mathbf{I}$ & $\mathbf{I}\geq{}0$ & $74.5$ kg$\text{m}^{2}$ & 10$\%$
 \\
-$L$ & $L\geq{}0$ & $44.2$ m & 10.0$\%$
+$L$ & $L\geq{}0$ & $44.2$ m & 10$\%$
 \\
-$m$ & $m\geq{}0$ & $56.2$ kg & 10.0$\%$
+$m$ & $m\geq{}0$ & $56.2$ kg & 10$\%$
 \\
-$\mathbf{p}$ & -- & $412.0\cdot{}10^{-3}$ m & 10.0$\%$
+$\mathbf{p}$ & -- & $0.412$ m & 10$\%$
 \\
-$\mathbf{v}$ & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10.0$\%$
+$\mathbf{v}$ & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
-$τ$ & -- & $200.0$ Nm & 10.0$\%$
+$τ$ & -- & $200.0$ Nm & 10$\%$
 \\
-$ω$ & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10.0$\%$
+$ω$ & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10$\%$
 \\
-$ϕ$ & -- & $\frac{π}{2}$ rad & 10.0$\%$
+$ϕ$ & -- & $\frac{π}{2}$ rad & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -1104,37 +1232,49 @@ $ω$
 \caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
 \end{longtable}
+\subsubsection{Properties of a Correct Solution}
+\label{Sec:CorSolProps}
+FIXME.
 \section{Requirements}
 \label{Sec:Requirements}
-This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FRs}
-The following section provides the functional requirements, the business tasks that the software is expected to complete.
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
-\item[Simulation-Space:\phantomsection\label{reqSS}]Create a space for all of the rigid bodies in the physical simulation to interact in.
-\item[Input-Initial-Conditions:\phantomsection\label{reqIIC}]Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
-\item[Input-Surface-Properties:\phantomsection\label{reqISP}]Input the surface properties of the bodies such as friction or elasticity.
-\item[Verify-Physical\_Constraints:\phantomsection\label{reqVPC}]Verify that the inputs satisfy the required physical constraints from \hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}.
-\item[Calculate-Translation-Over-Time:\phantomsection\label{reqCTOT}]Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
-\item[Calculate-Rotation-Over-Time:\phantomsection\label{reqCROT}]Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.
-\item[Determine-Collisions:\phantomsection\label{reqDC}]Determine if any of the rigid bodies in the space have collided.
-\item[Determine-Collision-Response-Over-Time:\phantomsection\label{reqDCROT}]Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
+\item[Simulation-Space:\phantomsection\label{simSpace}]Create a space for all of the rigid bodies in the physical simulation to interact in.
+\item[Input-Initial-Conditions:\phantomsection\label{inputInitialConds}]Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
+\item[Input-Surface-Properties:\phantomsection\label{inputSurfaceProps}]Input the surface properties of the bodies such as friction or elasticity.
+\item[Verify-Physical\_Constraints:\phantomsection\label{verifyPhysCons}]Verify that the inputs satisfy the required physical constraints from \hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}.
+\item[Calculate-Translation-Over-Time:\phantomsection\label{calcTransOverTime}]Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
+\item[Calculate-Rotation-Over-Time:\phantomsection\label{calcRotOverTime}]Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.
+\item[Determine-Collisions:\phantomsection\label{deterColls}]Determine if any of the rigid bodies in the space have collided.
+\item[Determine-Collision-Response-Over-Time:\phantomsection\label{deterCollRespOverTime}]Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
 \end{itemize}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
-Games are resource intensive, so performance is not a priority.  Rather than performance, the non-functional requirement priorities are correctness, understandability, portability, reliability, and maintainability.
+This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
+\begin{itemize}
+\item[High-Performance:\phantomsection\label{highPerformance}]The code has a short reponse time when performing computation.
+\item[Correct:\phantomsection\label{correct}]The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
+\item[Understandable:\phantomsection\label{understandable}]The code is modularized with complete module guide and module interface specification.
+\item[Portable:\phantomsection\label{portable}]The code is able to be run in different environments.
+\item[Reliable:\phantomsection\label{reliable}]The code gives consistent outputs.
+\item[Reusable:\phantomsection\label{reusable}]The code is modularized.
+\item[Maintainable:\phantomsection\label{maintainable}]The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+\end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}
-This section lists the likely changes to be made to the game physics library.
+This section lists the likely changes to be made to the software.
 \begin{itemize}
 \item[Variable-ODE-Solver:\phantomsection\label{lcVODES}]The internal ODE-solving algorithm used by the library may be changed in the future.
-\item[Expanded-Collisions:\phantomsection\label{lcEC}]The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions. \hyperref[assumpCT]{A: collisionType}
-\item[Include-Dampening:\phantomsection\label{lcID}]The library may be expanded to include motion with damping. \hyperref[assumpDI]{A: dampingInvolvement}
-\item[Include-Joints-Constraints:\phantomsection\label{lcIJC}]The library may be expanded to include joints and constraints. \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement}
+\item[Expanded-Collisions:\phantomsection\label{lcEC}]\hyperref[assumpCT]{A: collisionType} - The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions.
+\item[Include-Dampening:\phantomsection\label{lcID}]\hyperref[assumpDI]{A: dampingInvolvement} - The library may be expanded to include motion with damping.
+\item[Include-Joints-Constraints:\phantomsection\label{lcIJC}]\hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} - The library may be expanded to include joints and constraints.
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
-This section lists the unlikely changes to be made to the game physics library.
+This section lists the unlikely changes to be made to the software.
 \begin{itemize}
 \item[Simulate-Rigid-Bodies:\phantomsection\label{ucSRB}]The goal of the system is to simulate the interactions of rigid bodies.
 \item[External-Input:\phantomsection\label{ucEI}]There will always be a source of input data external to the software.
@@ -1156,200 +1296,180 @@ Free open source 3D game physics libraries include:
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. \hyperref[Table:TraceyReqGoalsOther]{Table:TraceyReqGoalsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. \hyperref[Table:TraceyAssumpsOther]{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
-\toprule
- & \hyperref[reqVPC]{FR: Verify-Physical\_Constraints} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[lcIJC]{LC: Include-Joints-Constraints} & \hyperref[lcEC]{LC: Expanded-Collisions} & \hyperref[DD:chalses]{DD: chalses} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[lcID]{LC: Include-Dampening} & \hyperref[DD:kEnergy]{DD: kEnergy} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[DD:reVeInColl]{DD: reVeInColl} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm}
-\\
-\midrule
-\endhead
-\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:angAccel]{DD: angAccel} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:angDisp]{DD: angDisp} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:angVel]{DD: angVel} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[assumpAD]{A: axesDefined} &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} &  & X &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[assumpCT]{A: collisionType} &  &  & X & X &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[assumpDI]{A: dampingInvolvement} &  & X &  & X & X &  &  & X & X & X & X & X & X & X & X & X &  &  &  & 
-\\
-\hyperref[assumpOD]{A: objectDimension} &  & X & X & X & X &  &  & X & X & X & X &  & X & X & X & X & X & X &  & 
-\\
-\hyperref[assumpOT]{A: objectTy} &  & X & X & X & X &  &  & X & X & X & X &  & X & X & X & X & X &  & X & X
-\\
-\hyperref[DD:impulse]{DD: impulse} &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:linVel]{DD: linVel} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
-\label{Table:Tracey}
-\end{longtable}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements on the data definitions, theoretical models, general definitions, and instance models.
 \begin{longtable}{l l l l l l l l}
 \toprule
- & IM1 (\hyperref[IM:transMot]{IM: transMot}) & IM2 (\hyperref[IM:rotMot]{IM: rotMot}) & IM3 (\hyperref[IM:col2D]{IM: col2D}) & R1 (\hyperref[reqSS]{FR: Simulation-Space}) & R4 (\hyperref[reqIIC]{FR: Input-Initial-Conditions}) & R7 (\hyperref[reqISP]{FR: Input-Surface-Properties}) & Data Constraints (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification})
+ & \hyperref[assumpOT]{A: objectTy} & \hyperref[assumpOD]{A: objectDimension} & \hyperref[assumpCST]{A: coordinateSystemTy} & \hyperref[assumpAD]{A: axesDefined} & \hyperref[assumpCT]{A: collisionType} & \hyperref[assumpDI]{A: dampingInvolvement} & \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement}
 \\
 \midrule
 \endhead
-GS1 (\hyperref[Sec:ProbDesc]{Section: Problem Description}) & X &  &  &  &  &  & 
+\hyperref[DD:ctrOfMass]{DD: ctrOfMass} & X & X &  &  &  &  & 
 \\
-GS2 (\hyperref[Sec:ProbDesc]{Section: Problem Description}) &  & X &  &  &  &  & 
+\hyperref[DD:linDisp]{DD: linDisp} & X & X &  &  &  & X & 
 \\
-GS3 (\hyperref[reqSS]{FR: Simulation-Space}) &  &  & X &  &  &  & 
+\hyperref[DD:linVel]{DD: linVel} & X & X &  &  &  & X & 
 \\
-GS4 (\hyperref[reqIIC]{FR: Input-Initial-Conditions}) &  &  & X &  &  & X & 
+\hyperref[DD:linAcc]{DD: linAcc} & X & X &  &  &  & X & 
 \\
-R1 (\hyperref[reqISP]{FR: Input-Surface-Properties}) &  &  &  &  &  &  & 
+\hyperref[DD:angDisp]{DD: angDisp} & X & X &  &  &  & X & 
 \\
-R2 (\hyperref[reqVPC]{FR: Verify-Physical\_Constraints}) & X & X &  &  & X &  & 
+\hyperref[DD:angVel]{DD: angVel} & X & X &  &  &  & X & 
 \\
-R3 (\hyperref[reqCTOT]{FR: Calculate-Translation-Over-Time}) &  &  & X &  & X &  & 
+\hyperref[DD:angAccel]{DD: angAccel} & X & X &  &  &  & X & 
 \\
-R4 (\hyperref[reqCROT]{FR: Calculate-Rotation-Over-Time}) &  &  &  &  &  &  & X
+\hyperref[DD:impulse]{DD: impulse} & X & X &  & X & X &  & 
 \\
-R5 (\hyperref[reqDC]{FR: Determine-Collisions}) & X &  &  &  &  &  & 
+\hyperref[DD:chalses]{DD: chalses} & X & X &  &  &  & X & 
 \\
-R6 (\hyperref[reqDCROT]{FR: Determine-Collision-Response-Over-Time}) &  & X &  &  &  &  & 
+\hyperref[DD:torque]{DD: torque} &  &  &  &  &  &  & 
 \\
- &  &  &  & X &  &  & 
+\hyperref[DD:kEnergy]{DD: kEnergy} & X & X &  &  &  & X & 
 \\
- &  &  & X &  &  & X & 
+\hyperref[DD:coeffRestitution]{DD: coeffRestitution} &  &  &  &  &  &  & 
+\\
+\hyperref[DD:reVeInColl]{DD: reVeInColl} & X &  &  &  &  &  & 
+\\
+\hyperref[DD:impulseV]{DD: impulseV} & X &  &  &  &  &  & 
+\\
+\hyperref[DD:potEnergy]{DD: potEnergy} & X & X &  &  &  & X & 
+\\
+\hyperref[DD:momentOfInertia]{DD: momentOfInertia} & X &  &  &  &  &  & 
+\\
+\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  &  &  & 
+\\
+\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot} &  &  &  &  &  &  & 
+\\
+\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw} &  &  &  &  &  &  & 
+\\
+\hyperref[TM:ChaslesThm]{TM: ChaslesThm} & X &  &  &  &  &  & 
+\\
+\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  & X &  &  &  &  & 
+\\
+\hyperref[IM:transMot]{IM: transMot} & X & X &  &  &  & X & X
+\\
+\hyperref[IM:rotMot]{IM: rotMot} & X & X &  & X &  & X & X
+\\
+\hyperref[IM:col2D]{IM: col2D} & X & X &  & X & X & X & X
+\\
+\hyperref[simSpace]{FR: Simulation-Space} &  &  &  &  &  &  & 
+\\
+\hyperref[inputInitialConds]{FR: Input-Initial-Conditions} &  &  &  &  &  &  & 
+\\
+\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} &  &  &  &  &  &  & 
+\\
+\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} &  &  &  &  &  &  & 
+\\
+\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} &  &  &  &  &  &  & 
+\\
+\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} &  &  &  &  &  &  & 
+\\
+\hyperref[deterColls]{FR: Determine-Collisions} &  &  &  &  &  &  & 
+\\
+\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  & 
+\\
+\hyperref[lcVODES]{LC: Variable-ODE-Solver} &  &  &  &  &  &  & 
+\\
+\hyperref[lcEC]{LC: Expanded-Collisions} &  &  &  &  & X &  & 
+\\
+\hyperref[lcID]{LC: Include-Dampening} &  &  &  &  &  & X & 
+\\
+\hyperref[lcIJC]{LC: Include-Joints-Constraints} &  &  &  &  &  &  & X
+\\
+\hyperref[ucSRB]{UC: Simulate-Rigid-Bodies} &  &  &  &  &  &  & 
+\\
+\hyperref[ucEI]{UC: External-Input} &  &  &  &  &  &  & 
+\\
+\hyperref[ucCCS]{UC: Cartesian-Coordinate-System} &  &  &  &  &  &  & 
+\\
+\hyperref[ucORB]{UC: Objects-Rigid-Bodies} &  &  &  &  &  &  & 
 \\
 \bottomrule
-\caption{Traceability Matrix Showing the Connections Between Requirements (\hyperref[Sec:Requirements]{Section: Requirements}), Goal Statements (\hyperref[Sec:ProbDesc]{Section: Problem Description}) and Other Items}
-\label{Table:TraceyReqGoalsOther}
+\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
+\label{Table:TraceMatAvsAll}
 \end{longtable}
-\begin{longtable}{l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & A1 (\hyperref[assumpOT]{A: objectTy}) & A2 (\hyperref[assumpOD]{A: objectDimension}) & A3 (\hyperref[assumpCST]{A: coordinateSystemTy}) & A4 (\hyperref[assumpAD]{A: axesDefined}) & A5 (\hyperref[assumpCT]{A: collisionType}) & A6 (\hyperref[assumpDI]{A: dampingInvolvement}) & A7 (\hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement})
+ & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[DD:chalses]{DD: chalses} & \hyperref[DD:torque]{DD: torque} & \hyperref[DD:kEnergy]{DD: kEnergy} & \hyperref[DD:coeffRestitution]{DD: coeffRestitution} & \hyperref[DD:reVeInColl]{DD: reVeInColl} & \hyperref[DD:impulseV]{DD: impulseV} & \hyperref[DD:potEnergy]{DD: potEnergy} & \hyperref[DD:momentOfInertia]{DD: momentOfInertia} & \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} & \hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot} & \hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[IM:col2D]{IM: col2D}
 \\
 \midrule
 \endhead
-T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) &  &  &  &  &  &  & 
+\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) &  &  &  &  &  &  & 
+\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T3 (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) &  &  &  &  &  &  & 
+\hyperref[DD:linVel]{DD: linVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T4 (\hyperref[TM:ChaslesThm]{TM: ChaslesThm}) & X &  &  &  &  &  & 
+\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-T5 (\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}) &  &  &  &  &  &  & 
+\hyperref[DD:angDisp]{DD: angDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD1 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  &  &  &  &  &  & 
+\hyperref[DD:angVel]{DD: angVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD2 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  &  &  &  &  &  & 
+\hyperref[DD:angAccel]{DD: angAccel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD3 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  & X & X &  &  &  & 
+\hyperref[DD:impulse]{DD: impulse} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD4 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  &  &  &  &  &  & 
+\hyperref[DD:chalses]{DD: chalses} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD5 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  &  &  &  &  &  & 
+\hyperref[DD:torque]{DD: torque} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD6 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  &  &  &  &  &  & 
+\hyperref[DD:kEnergy]{DD: kEnergy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD7 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  &  &  &  &  &  & 
+\hyperref[DD:coeffRestitution]{DD: coeffRestitution} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD1 (\hyperref[DD:ctrOfMass]{DD: ctrOfMass}) & X & X &  &  &  &  & 
+\hyperref[DD:reVeInColl]{DD: reVeInColl} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD2 (\hyperref[DD:linDisp]{DD: linDisp}) & X & X &  &  &  & X & 
+\hyperref[DD:impulseV]{DD: impulseV} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD3 (\hyperref[DD:linVel]{DD: linVel}) & X & X &  &  &  & X & 
+\hyperref[DD:potEnergy]{DD: potEnergy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD4 (\hyperref[DD:linAcc]{DD: linAcc}) & X & X &  &  &  & X & 
+\hyperref[DD:momentOfInertia]{DD: momentOfInertia} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD5 (\hyperref[DD:angDisp]{DD: angDisp}) & X & X &  &  &  & X & 
+\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD6 (\hyperref[DD:angVel]{DD: angVel}) & X & X &  &  &  & X & 
+\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & X & X &  &  &  & X & 
+\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-DD8 (\hyperref[DD:impulse]{DD: impulse}) & X & X &  & X & X &  & 
+\hyperref[TM:ChaslesThm]{TM: ChaslesThm} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-IM1 (\hyperref[DD:chalses]{DD: chalses}) & X & X &  &  &  & X & X
+\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-IM2 (\hyperref[DD:torque]{DD: torque}) & X & X &  & X &  & X & X
+\hyperref[IM:transMot]{IM: transMot} & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-IM3 (\hyperref[DD:kEnergy]{DD: kEnergy}) & X & X &  &  & X & X & X
+\hyperref[IM:rotMot]{IM: rotMot} &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-LC1 (\hyperref[DD:coeffRestitution]{DD: coeffRestitution}) &  &  &  &  &  &  & 
-\\
-LC2 (\hyperref[DD:reVeInColl]{DD: reVeInColl}) &  &  &  &  & X &  & 
-\\
-LC3 (\hyperref[IM:transMot]{IM: transMot}) &  &  &  &  &  & X & 
-\\
-LC4 (\hyperref[IM:rotMot]{IM: rotMot}) &  &  &  &  &  &  & X
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Assumptions (\hyperref[Sec:ProbDesc]{Section: Problem Description}) and Other Items}
-\label{Table:TraceyAssumpsOther}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
-\toprule
- & T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) & T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) & T3 (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) & T4 (\hyperref[TM:ChaslesThm]{TM: ChaslesThm}) & T5 (\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}) & GD1 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD2 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD3 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD4 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD5 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD6 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & GD7 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & DD1 (\hyperref[DD:ctrOfMass]{DD: ctrOfMass}) & DD2 (\hyperref[DD:linDisp]{DD: linDisp}) & DD3 (\hyperref[DD:linVel]{DD: linVel}) & DD4 (\hyperref[DD:linAcc]{DD: linAcc}) & DD5 (\hyperref[DD:angDisp]{DD: angDisp}) & DD6 (\hyperref[DD:angVel]{DD: angVel}) & DD7 (\hyperref[DD:angAccel]{DD: angAccel}) & DD8 (\hyperref[DD:impulse]{DD: impulse}) & IM1 (\hyperref[DD:chalses]{DD: chalses}) & IM2 (\hyperref[DD:torque]{DD: torque}) & IM3 (\hyperref[DD:kEnergy]{DD: kEnergy})
-\\
-\midrule
-\endhead
-T1 (\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-T2 (\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-T3 (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-T4 (\hyperref[TM:ChaslesThm]{TM: ChaslesThm}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-T5 (\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}) &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & 
-\\
-GD1 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-GD2 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  & X &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-GD3 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) & X &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-GD4 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-GD5 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-GD6 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-GD7 (\hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD1 (\hyperref[DD:ctrOfMass]{DD: ctrOfMass}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD2 (\hyperref[DD:linDisp]{DD: linDisp}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD3 (\hyperref[DD:linVel]{DD: linVel}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD4 (\hyperref[DD:linAcc]{DD: linAcc}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD5 (\hyperref[DD:angDisp]{DD: angDisp}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD6 (\hyperref[DD:angVel]{DD: angVel}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD7 (\hyperref[DD:angAccel]{DD: angAccel}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-DD8 (\hyperref[DD:impulse]{DD: impulse}) &  &  &  & X &  & X &  &  & X & X &  & X &  &  &  &  &  &  &  &  &  &  & X
-\\
-IM1 (\hyperref[DD:chalses]{DD: chalses}) & X &  &  &  &  &  &  & X &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
-\\
-IM2 (\hyperref[DD:torque]{DD: torque}) &  &  &  &  & X &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  & 
-\\
-IM3 (\hyperref[DD:kEnergy]{DD: kEnergy}) &  &  &  &  &  & X & X &  &  &  & X & X & X &  &  &  &  &  &  & X &  &  & 
+\hyperref[IM:col2D]{IM: col2D} & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
-\label{Table:TraceyItemsSecs}
+\label{Table:TraceMatRefvsRef}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
+\toprule
+ & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[DD:chalses]{DD: chalses} & \hyperref[DD:torque]{DD: torque} & \hyperref[DD:kEnergy]{DD: kEnergy} & \hyperref[DD:coeffRestitution]{DD: coeffRestitution} & \hyperref[DD:reVeInColl]{DD: reVeInColl} & \hyperref[DD:impulseV]{DD: impulseV} & \hyperref[DD:potEnergy]{DD: potEnergy} & \hyperref[DD:momentOfInertia]{DD: momentOfInertia} & \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} & \hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot} & \hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[simSpace]{FR: Simulation-Space} & \hyperref[inputInitialConds]{FR: Input-Initial-Conditions} & \hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} & \hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} & \hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} & \hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} & \hyperref[deterColls]{FR: Determine-Collisions} & \hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}
+\\
+\midrule
+\endhead
+\hyperref[simSpace]{FR: Simulation-Space} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[inputInitialConds]{FR: Input-Initial-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[deterColls]{FR: Determine-Collisions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}
+\label{Table:TraceMatAllvsR}
 \end{longtable}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}

@@ -1,11 +1,11 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Unital 
-  ( UnitalChunk(..) , makeUCWDS , uc , uc' , ucs , ucs' , ucsWS) where
+  ( UnitalChunk(..) , makeUCWDS , uc , uc' , ucs , ucs' , ucs'' , ucsWS) where
 
 import Control.Lens (makeLenses, view, (^.))
 
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
@@ -15,6 +15,7 @@ import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence)
+import Language.Drasil.Stages (Stage)
 
 -- | UnitalChunks are Unitary DefinedQuantityDict
 data UnitalChunk = UC { _defq' :: DefinedQuantityDict
@@ -28,7 +29,7 @@ instance Idea          UnitalChunk where getA (UC qc _) = getA qc
 instance Definition    UnitalChunk where defn = defq' . defn
 instance ConceptDomain UnitalChunk where cdom = cdom . view defq'
 instance HasSpace      UnitalChunk where typ = defq' . typ
-instance HasSymbol     UnitalChunk where symbol c st = symbol (c^.defq') st
+instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 instance Quantity      UnitalChunk where 
 instance Unitary       UnitalChunk where unit = view uni
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
@@ -38,7 +39,7 @@ instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 -- | Used to create a UnitalChunk from a 'Concept', 'Symbol', and 'Unit'.
 -- Assumes the 'Space' is Real
 uc :: (Concept c, IsUnit u) => c -> Symbol -> u -> UnitalChunk
-uc a b c = ucs' a b Real c
+uc a b = ucs' a b Real
 
 ucs' :: (Concept c, IsUnit u) => c -> Symbol -> Space -> u -> UnitalChunk
 ucs' a sym space c = UC (dqd (cw a) sym space un) un
@@ -56,6 +57,11 @@ ucs :: (IsUnit u) => String -> NP ->
   String -> Symbol -> Space -> u -> UnitalChunk
 ucs nam trm desc sym space un = UC (dqd (dcc nam trm desc) sym space uu) uu
   where uu = unitWrapper un
+
+-- | For when the symbol changes depending on the stage
+ucs'' :: String -> NP -> String -> (Stage -> Symbol) -> Space -> UnitDefn ->
+  UnitalChunk
+ucs'' nam trm desc sym space un = UC (dqd' (dcc nam trm desc) sym space (Just un)) un
 
 -- ucs With a Sentence for desc
 ucsWS :: (IsUnit u) => String -> NP ->

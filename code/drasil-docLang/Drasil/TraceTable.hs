@@ -13,6 +13,8 @@ import Data.Maybe (mapMaybe)
 
 import Language.Drasil
 import Language.Drasil.Development (lnames')
+import Database.Drasil (TraceMap, traceMap)
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Drasil.DocumentLanguage
 
@@ -21,30 +23,30 @@ traceMap' :: HasUID l => (l -> [Sentence]) -> [l] -> TraceMap
 traceMap' f = traceMap $ lnames' . f
 
 getTraceMapFromDocSec :: [DocSection] -> SSDSec
-getTraceMapFromDocSec ((SSDSec ssd):_)  = ssd
-getTraceMapFromDocSec  (_:tl)          = getTraceMapFromDocSec tl
-getTraceMapFromDocSec []                = error "No SSDSec found."
+getTraceMapFromDocSec (SSDSec ssd:_) = ssd
+getTraceMapFromDocSec (_:tl)         = getTraceMapFromDocSec tl
+getTraceMapFromDocSec []             = error "No SSDSec found."
 
 getTraceMapFromSSDSec :: SSDSec -> [SSDSub]
-getTraceMapFromSSDSec (SSDProg s)       = s
+getTraceMapFromSSDSec (SSDProg s) = s
 
 getTraceMapFromSSDSub :: [SSDSub] -> SolChSpec
-getTraceMapFromSSDSub ((SSDSolChSpec s):_) = s
-getTraceMapFromSSDSub (_:tl)              = getTraceMapFromSSDSub tl
-getTraceMapFromSSDSub []                    = error "No SolChSpec found."
+getTraceMapFromSSDSub (SSDSolChSpec s:_) = s
+getTraceMapFromSSDSub (_:tl)             = getTraceMapFromSSDSub tl
+getTraceMapFromSSDSub []                 = error "No SolChSpec found."
 
 getTraceMapFromSolCh :: SolChSpec -> [SCSSub]
 getTraceMapFromSolCh (SCSProg s) = s
 
 getTraceMapFromTM :: [SCSSub] -> [TheoryModel]
-getTraceMapFromTM ((TMs _ _ t):_)     = t
-getTraceMapFromTM  (_:tl)           = getTraceMapFromTM tl
-getTraceMapFromTM []                = error "No TM found."
+getTraceMapFromTM (TMs _ _ t:_) = t
+getTraceMapFromTM (_:tl)        = getTraceMapFromTM tl
+getTraceMapFromTM []            = error "No TM found."
 
 getTraceMapFromGD :: [SCSSub] -> [GenDefn]
-getTraceMapFromGD ((GDs _ _ gd _):_)  = gd
-getTraceMapFromGD  (_:tl)           = getTraceMapFromGD tl
-getTraceMapFromGD []                = []
+getTraceMapFromGD (GDs _ _ gd _:_) = gd
+getTraceMapFromGD (_:tl)           = getTraceMapFromGD tl
+getTraceMapFromGD []               = []
 
 getTraceMapFromDD :: [SCSSub] -> [DataDefinition]
 getTraceMapFromDD l = concat $ mapMaybe getDD l
@@ -52,9 +54,9 @@ getTraceMapFromDD l = concat $ mapMaybe getDD l
         getDD _           = Nothing
 
 getTraceMapFromIM :: [SCSSub] -> [InstanceModel]
-getTraceMapFromIM ((IMs _ _ im _):_)  = im
-getTraceMapFromIM  (_:tl)           = getTraceMapFromIM tl
-getTraceMapFromIM []                = []
+getTraceMapFromIM (IMs _ _ imod _:_) = imod
+getTraceMapFromIM (_:tl)             = getTraceMapFromIM tl
+getTraceMapFromIM []                 = []
 
 extractSFromNotes :: HasAdditionalNotes l => l -> [Sentence]
 extractSFromNotes c = c ^. getNotes
@@ -68,16 +70,16 @@ getSCSSub a = getTraceMapFromSolCh $ getTraceMapFromSSDSub $ getTraceMapFromSSDS
 
 generateTraceMap :: [DocSection] -> TraceMap
 generateTraceMap a = Map.unionsWith (\(w,x) (y,z) -> (w ++ y, ordering x z)) [
-  (traceMap' extractSFromNotes tt), (traceMap' extractSFromNotes gd),
-  (traceMap' extractSFromNotes dd), (traceMap' extractSFromNotes im),
+  traceMap' extractSFromNotes tt, traceMap' extractSFromNotes gd,
+  traceMap' extractSFromNotes ddef, traceMap' extractSFromNotes imod,
   -- Theory models do not have derivations.
-  (traceMap' extractSFromDeriv gd),
-  (traceMap' extractSFromDeriv dd), (traceMap' extractSFromDeriv im)]
+  traceMap' extractSFromDeriv gd,
+  traceMap' extractSFromDeriv ddef, traceMap' extractSFromDeriv imod]
   where
-    tt = getTraceMapFromTM $ getSCSSub a
-    gd = getTraceMapFromGD $ getSCSSub a
-    im = getTraceMapFromIM $ getSCSSub a
-    dd = getTraceMapFromDD $ getSCSSub a
+    tt   = getTraceMapFromTM $ getSCSSub a
+    gd   = getTraceMapFromGD $ getSCSSub a
+    imod = getTraceMapFromIM $ getSCSSub a
+    ddef = getTraceMapFromDD $ getSCSSub a
     ordering x y = if x == y then x else error "Expected ordering between smaller TraceMaps to be the same"
 
 -- This is a hack as ConceptInstance cannot be collected yet.

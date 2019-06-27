@@ -1,30 +1,165 @@
+{-# LANGUAGE LambdaCase, Rank2Types #-}
 module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc) where
 
 import Control.Lens((^.))
 import Drasil.DocumentLanguage
 import Language.Drasil hiding (Manual, Vector, Verb)
+import Theory.Drasil (Theory(..))
 import Data.List(transpose)
 
-egetDocDesc :: DocDesc -> [Expr]
-egetDocDesc d = concatMap egetDocSec d
+import Data.Functor.Constant (Constant(Constant))
+import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate), appendPlate,
+  foldFor, purePlate, preorderFold)
 
-egetDocSec :: DocSection -> [Expr]
-egetDocSec (Verbatim a)         = egetSec a
-egetDocSec (RefSec r)           = egetRefSec r
-egetDocSec IntroSec{}           = []
-egetDocSec (StkhldrSec s)       = egetStk s
-egetDocSec (GSDSec g)           = egetGSD g
-egetDocSec (ScpOfProjSec s)     = egetScp s
-egetDocSec (SSDSec s)           = egetSSD s
-egetDocSec (ReqrmntSec r)       = egetReq r
-egetDocSec (LCsSec l)           = egetLcs l
-egetDocSec LCsSec'{}            = [] -- likely changes can't lead to Expr?
-egetDocSec (UCsSec u)           = egetUcs u
-egetDocSec (TraceabilitySec t)  = egetTrace t
-egetDocSec (AuxConstntSec a)    = egetAux a
-egetDocSec (Bibliography)       = []
-egetDocSec (AppndxSec a)        = egetApp a
-egetDocSec (ExistingSolnSec e)  = egetExist e
+data DLPlate f = DLPlate {
+  docSec :: DocSection -> f DocSection,
+  refSec :: RefSec -> f RefSec,
+  introSec :: IntroSec -> f IntroSec,
+  introSub :: IntroSub -> f IntroSub,
+  stkSec :: StkhldrSec -> f StkhldrSec,
+  stkSub :: StkhldrSub -> f StkhldrSub,
+  gsdSec :: GSDSec -> f GSDSec,
+  gsdSub :: GSDSub -> f GSDSub,
+  ssdSec :: SSDSec -> f SSDSec,
+  ssdSub :: SSDSub -> f SSDSub,
+  pdSec :: ProblemDescription -> f ProblemDescription,
+  pdSub :: PDSub -> f PDSub,
+  scsSub :: SCSSub -> f SCSSub,
+  reqSec :: ReqrmntSec -> f ReqrmntSec,
+  reqSub :: ReqsSub -> f ReqsSub,
+  lcsSec :: LCsSec -> f LCsSec,
+  ucsSec :: UCsSec -> f UCsSec,
+  traceSec :: TraceabilitySec -> f TraceabilitySec,
+  existSolnSec :: ExistingSolnSec -> f ExistingSolnSec,
+  auxConsSec :: AuxConstntSec -> f AuxConstntSec,
+  appendSec :: AppndxSec -> f AppndxSec
+}
+
+instance Multiplate DLPlate where
+  multiplate p = DLPlate ds res intro intro' stk stk' gs gs' ss ss' pd pd' sc
+    rs rs' lcp ucp ts es acs aps where
+    ds (RefSec x) = RefSec <$> refSec p x
+    ds (IntroSec x) = IntroSec <$> introSec p x
+    ds (StkhldrSec x) = StkhldrSec <$> stkSec p x
+    ds (GSDSec x) = GSDSec <$> gsdSec p x
+    ds (SSDSec x) = SSDSec <$> ssdSec p x
+    ds (ReqrmntSec x) = ReqrmntSec <$> reqSec p x
+    ds (LCsSec x) = LCsSec <$> lcsSec p x
+    ds (UCsSec x) = UCsSec <$> ucsSec p x
+    ds (TraceabilitySec x) = TraceabilitySec <$> traceSec p x
+    ds (ExistingSolnSec x) = ExistingSolnSec <$> existSolnSec p x
+    ds (AuxConstntSec x) = AuxConstntSec <$> auxConsSec p x
+    ds (AppndxSec x) = AppndxSec <$> appendSec p x
+    ds Bibliography = pure Bibliography
+
+    res (RefProg c x) = RefProg <$> pure c <*> pure x
+    intro (IntroProg s1 s2 progs) = IntroProg <$> pure s1 <*> pure s2 <*>
+      traverse (introSub p) progs
+    intro' (IPurpose s) = IPurpose <$> pure s
+    intro' (IScope s1 s2) = IScope <$> pure s1 <*> pure s2
+    intro' (IChar s1 s2 s3) = IChar <$> pure s1 <*> pure s2 <*> pure s3
+    intro' (IOrgSec s1 c sect s2) = IOrgSec <$> pure s1 <*> pure c <*> pure sect <*> pure s2
+    stk (StkhldrProg c s) = StkhldrProg <$> pure c <*> pure s
+    stk (StkhldrProg2 progs) = StkhldrProg2 <$> traverse (stkSub p) progs
+    stk' (Client c s) = Client <$> pure c <*> pure s
+    stk' (Cstmr c) = Cstmr <$> pure c
+    gs (GSDProg s1 c labcon s2) = GSDProg <$> pure s1 <*> pure c <*> pure labcon <*> pure s2
+    gs (GSDProg2 x) = GSDProg2 <$> traverse (gsdSub p) x
+    gs' (SysCntxt c) = SysCntxt <$> pure c
+    gs' (UsrChars c) = UsrChars <$> pure c
+    gs' (SystCons c s) = SystCons <$> pure c <*> pure s
+    ss (SSDProg progs) = SSDProg <$> traverse (ssdSub p) progs
+    ss' (SSDProblem prog) = SSDProblem <$> pdSec p prog
+    ss' (SSDSolChSpec (SCSProg spec)) = SSDSolChSpec . SCSProg <$> traverse (scsSub p) spec
+    pd (PDProg s sect progs) = PDProg <$> pure s <*> pure sect <*> traverse (pdSub p) progs
+    pd' (TermsAndDefs s cs) = TermsAndDefs <$> pure s <*> pure cs
+    pd' (Goals s ci) = Goals <$> pure s <*> pure ci
+    pd' (PhySysDesc nm s lc c) = PhySysDesc <$> pure nm <*> pure s <*> pure lc <*> pure c
+    sc Assumptions = pure Assumptions
+    sc (TMs s f t) = TMs <$> pure s <*> pure f <*> pure t
+    sc (GDs s f g d) = GDs <$> pure s <*> pure f <*> pure g <*> pure d
+    sc (DDs s f dd d) = DDs <$> pure s <*> pure f <*> pure dd <*> pure d
+    sc (IMs s f i d) = IMs <$> pure s <*> pure f <*> pure i <*> pure d
+    sc (Constraints s1 s2 s3 l) = Constraints <$> pure s1 <*> pure s2 <*> pure s3 <*> pure l
+    sc (CorrSolnPpties c) = CorrSolnPpties <$> pure c
+    rs (ReqsProg reqs) = ReqsProg <$> traverse (reqSub p) reqs
+    rs' (FReqsSub ci con) = FReqsSub <$> pure ci <*> pure con
+    rs' (NonFReqsSub c) = NonFReqsSub <$> pure c
+    lcp (LCsProg c) = LCsProg <$> pure c
+    ucp (UCsProg c) = UCsProg <$> pure c
+    ts (TraceabilityProg llc sen con sect) = TraceabilityProg <$> pure llc <*>
+      pure sen <*> pure con <*> pure sect
+    es (ExistSolnProg contents) = ExistSolnProg <$> pure contents
+    acs (AuxConsProg ci qdef) = AuxConsProg <$> pure ci <*> pure qdef
+    aps (AppndxProg con) = AppndxProg <$> pure con
+  mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b introSub) (b stkSec)
+    (b stkSub) (b gsdSec) (b gsdSub) (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)
+    (b scsSub) (b reqSec) (b reqSub) (b lcsSec) (b ucsSec)
+    (b traceSec) (b existSolnSec) (b auxConsSec) (b appendSec)
+
+secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
+  ([Section] -> b) -> DLPlate (Constant b)
+secConPlate mCon mSec = preorderFold $ purePlate {
+  refSec = Constant <$> \(RefProg c _) -> mCon [c],
+  introSub = Constant <$> \case
+    (IOrgSec _ _ s _) -> mSec [s]
+    _ -> mempty,
+  gsdSec = Constant <$> \case
+    (GSDProg s1 c1 c2 s2) -> mconcat [mSec s1, mCon [c1], mCon c2, mSec s2]
+    (GSDProg2 _) -> mempty,
+  gsdSub = Constant <$> \case
+    (SysCntxt c) -> mCon c
+    (UsrChars c) -> mCon c
+    (SystCons c s) -> mCon c `mappend` mSec s,
+  pdSec = Constant <$> \(PDProg _ s _) -> mSec s,
+  pdSub = Constant <$> \case
+    (TermsAndDefs _ _) -> mempty
+    (PhySysDesc _ _ lc c) -> mCon [lc] `mappend` mCon c
+    (Goals _ _) -> mempty,
+  scsSub = Constant <$> \case
+    (Constraints _ _ _ lc) -> mCon lc
+    (CorrSolnPpties c) -> mCon c
+    _ -> mempty,
+  reqSub = Constant <$> \case
+    (FReqsSub _ c) -> mCon c
+    (NonFReqsSub _) -> mempty,
+  lcsSec = Constant <$> \(LCsProg _) -> mempty,
+  ucsSec = Constant <$> \(UCsProg _) -> mempty,
+  traceSec = Constant <$> \(TraceabilityProg lc _ c s) ->
+    mconcat [mCon lc, mCon c, mSec s],
+  existSolnSec = Constant <$> \(ExistSolnProg c) -> mCon c,
+  appendSec = Constant <$> \(AppndxProg c) -> mCon c
+}
+
+exprPlate :: DLPlate (Constant [Expr])
+exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap egetCon')
+  (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
+  scsSub = Constant <$> \case
+    Assumptions -> []
+    (TMs _ _ t) -> let r = concatMap (\x -> x ^. invariants ++
+                           defExp (x ^. defined_quant ++ x ^. defined_fun) ++
+                           r (x ^. valid_context)) in r t
+    (DDs _ _ d _) -> map sy d ++ defExp d
+    (GDs _ _ g _) -> expRel g
+    (IMs _ _ i _) -> expRel i
+    _ -> [],
+  auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> defExp qdef
+  })where
+    defExp :: DefiningExpr a => [a] -> [Expr]
+    defExp = map (^. defnExpr)
+    expRel :: ExprRelat a => [a] -> [Expr]
+    expRel = map (^. relat)
+
+sentToExp :: Sentence -> [Expr]
+sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
+sentToExp (E e) = [e]
+sentToExp _ = []
+
+fmGetDocDesc :: DLPlate (Constant [a]) -> DocDesc -> [a]
+fmGetDocDesc p = concatMap (foldFor docSec p)
+
+egetDocDesc :: DocDesc -> [Expr]
+egetDocDesc = fmGetDocDesc exprPlate
 
 egetSec :: Section -> [Expr]
 egetSec (Section _ sc _ ) = concatMap egetSecCon sc
@@ -33,8 +168,8 @@ egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
 egetSecCon (Con c) = egetCon' c
 
-egetCon' :: Contents -> [Expr]
-egetCon' c = egetCon (c ^. accessContents)
+egetCon' :: HasContents a => a -> [Expr]
+egetCon' = egetCon . (^. accessContents)
 
 egetCon :: RawContent -> [Expr]
 egetCon (EqnBlock e) = [e]
@@ -42,134 +177,55 @@ egetCon (Defini _ []) = []
 egetCon (Defini dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Defini dt tl)
 egetCon _ = []
 
-egetLblCon :: LabelledContent -> [Expr]
-egetLblCon a = egetCon (a ^. accessContents)
-
-egetRefSec :: RefSec -> [Expr]
-egetRefSec (RefProg c r) = egetCon' c ++ concatMap egetRefProg r
-
-egetGSD :: GSDSec -> [Expr]
-egetGSD (GSDProg s1 c1 c2 s2) = concatMap egetSec s1 ++ egetCon' c1
-  ++ concatMap egetCon' c2 ++ concatMap egetSec s2
-egetGSD (GSDProg2 gsdsub) = concatMap egetGSDSub gsdsub
-
-egetScp :: ScpOfProjSec -> [Expr]
-egetScp (ScpOfProjProg _ c1 c2) = egetCon' c1 ++ egetCon' c2
-
-egetSSD :: SSDSec -> [Expr]
-egetSSD (SSDProg ssd) = concatMap egetSSDSub ssd
-
-egetReq :: ReqrmntSec -> [Expr]
-egetReq (ReqsProg rs) = concatMap egetReqSub rs
-
-egetLcs :: LCsSec -> [Expr]
-egetLcs (LCsProg c) = concatMap egetCon' c
-
-egetUcs :: UCsSec -> [Expr]
-egetUcs (UCsProg c) = concatMap egetCon' c
-
-egetTrace :: TraceabilitySec -> [Expr]
-egetTrace (TraceabilityProg lc _ c s) = concatMap egetLblCon lc ++ concatMap egetCon' c
-  ++ concatMap egetSec s
-
-egetAux :: AuxConstntSec -> [Expr]
-egetAux (AuxConsProg _ qd) = concatMap egetQDef qd
-
-egetQDef :: QDefinition -> [Expr]
-egetQDef q = [q ^. defnExpr]
-
-egetApp :: AppndxSec -> [Expr]
-egetApp (AppndxProg c) = concatMap egetCon' c
-
-egetExist :: ExistingSolnSec -> [Expr]
-egetExist (ExistSolnVerb s) = egetSec s
-egetExist (ExistSolnProg c) = concatMap egetCon' c
-
-egetRefProg :: RefTab -> [Expr]
-egetRefProg TUnits       = []
-egetRefProg TUnits'{}    = []
-egetRefProg TSymb{}      = []
-egetRefProg (TSymb' l _) = egetFunc l
-egetRefProg TAandA       = []
-
-egetStk :: StkhldrSec -> [Expr]
-egetStk StkhldrProg{}     = []
-egetStk (StkhldrProg2 s)  = concatMap egetStkSub s
-
-egetStkSub :: StkhldrSub -> [Expr]
-egetStkSub _ = []
-
-egetGSDSub :: GSDSub -> [Expr]
-egetGSDSub (SysCntxt c)   = concatMap egetCon' c
-egetGSDSub (UsrChars c)   = concatMap egetCon' c
-egetGSDSub (SystCons c s) = concatMap egetCon' c ++ concatMap egetSec s
-
-egetSSDSub :: SSDSub -> [Expr]
-egetSSDSub (SSDSubVerb s)   = egetSec s
-egetSSDSub (SSDProblem p)   = egetProblem p
-egetSSDSub (SSDSolChSpec s) = egetSol s
-
-egetReqSub :: ReqsSub -> [Expr]
-egetReqSub (FReqsSub c) = concatMap egetCon' c
-egetReqSub NonFReqsSub{} = []
-egetReqSub NonFReqsSub'{} = []
-
-egetFunc :: LFunc -> [Expr]
-egetFunc Term         = []
-egetFunc Defn         = []
-egetFunc TermExcept{} = []
-egetFunc DefnExcept{} = []
-egetFunc TAD          = []
-
-egetProblem :: ProblemDescription -> [Expr]
-egetProblem (PDProg _ _ _ s) = concatMap egetSec s
-
-egetSol :: SolChSpec -> [Expr]
-egetSol (SCSProg s) = concatMap egetSCSSub s
-
-egetSCSSub :: SCSSub -> [Expr]
-egetSCSSub Assumptions  = []
-egetSCSSub (TMs _ _ x)    = concatMap egetTM x
-egetSCSSub (GDs _ _ x _)  = concatMap egetGD x
-egetSCSSub (DDs _ _ x _)  = concatMap egetDD x
-egetSCSSub (IMs _ _ x _)  = concatMap egetIM x
-egetSCSSub (Constraints _ _ _ lc) = concatMap egetLblCon lc
-egetSCSSub (CorrSolnPpties c) = concatMap egetCon' c
-
-egetTM :: TheoryModel -> [Expr]
-egetTM x = concatMap egetTM (x ^. valid_context) ++ 
-  concatMap egetQDef (x ^. defined_quant ++ x ^. defined_fun)
-  ++ (x ^. invariants)
-
-egetIM :: InstanceModel ->[Expr]
-egetIM x = [x ^. relat]
-
-egetGD :: GenDefn ->[Expr]
-egetGD gd = [gd ^. relat]
-
-egetDD :: DataDefinition -> [Expr]
-egetDD dd = [dd ^. defnExpr, sy dd]
+sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
+sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatMap getSec) $
+  preorderFold $ purePlate {
+    introSec = Constant . f <$> \(IntroProg s1 s2 _) -> [s1, s2],
+    introSub = Constant . f <$> \case
+      (IPurpose s) -> [s]
+      (IScope s1 s2) -> [s1, s2]
+      (IChar s1 s2 s3) -> concat [s1, s2, s3]
+      (IOrgSec s1 _ _ s2) -> [s1, s2],
+    stkSec = Constant . f <$> \case
+      (StkhldrProg _ s) -> [s]
+      _ -> [],
+    stkSub = Constant . f <$> \case
+      (Client _ s) -> [s]
+      (Cstmr _) -> [],
+    pdSec = Constant . f <$> \(PDProg s _ _) -> [s],
+    pdSub = Constant . f <$> \case
+      (TermsAndDefs Nothing cs) -> def cs
+      (TermsAndDefs (Just s) cs) -> s : def cs
+      (PhySysDesc _ s _ _) -> s
+      (Goals s c) -> s ++ def c,
+    scsSub = Constant . f <$> \case
+      Assumptions -> []
+      (TMs s _ t) -> let r = mappend s . concatMap (\x -> def (x ^. operations) ++
+                             def (x ^. defined_quant) ++ notes [x] ++
+                             r (x ^. valid_context)) in r t
+      (DDs s _ d _) -> s ++ der d ++ notes d
+      (GDs s _ d _) -> def d ++ s ++ der d ++ notes d
+      (IMs s _ d _) -> s ++ der d ++ notes d
+      (Constraints s1 s2 s3 _) -> [s1, s2, s3]
+      (CorrSolnPpties _) -> [],
+    reqSub = Constant . f <$> \case
+      (FReqsSub c _) -> def c
+      (NonFReqsSub c) -> def c,
+    lcsSec = Constant . f <$> \(LCsProg c) -> def c,
+    ucsSec = Constant . f <$> \(UCsProg c) -> def c,
+    traceSec = Constant . f <$>
+      \(TraceabilityProg _ s _ _) -> s,
+    auxConsSec = Constant . f <$> \(AuxConsProg _ qdef) -> def qdef
+  } where
+    def :: Definition a => [a] -> [Sentence]
+    def = map (^. defn)
+    der :: HasDerivation a => [a] -> [Sentence]
+    der = concatMap (^. derivations)
+    notes :: HasAdditionalNotes a => [a] -> [Sentence]
+    notes = concatMap (^. getNotes)
 
 getDocDesc :: DocDesc -> [Sentence]
-getDocDesc d = concatMap getDocSec d
-
-getDocSec :: DocSection -> [Sentence]
-getDocSec (Verbatim a)         = getSec a
-getDocSec (RefSec r)           = getRefSec r
-getDocSec (IntroSec i)         = getIntrosec i
-getDocSec (StkhldrSec s)       = getStk s
-getDocSec (GSDSec g)           = getGSD g
-getDocSec (ScpOfProjSec s)     = getScp s
-getDocSec (SSDSec s)           = getSSD s
-getDocSec (ReqrmntSec r)       = getReq r
-getDocSec (LCsSec l)           = getLcs l
-getDocSec (LCsSec' l)          = getLcs' l
-getDocSec (UCsSec u)           = getUcs u
-getDocSec (TraceabilitySec t)  = getTrace t
-getDocSec (AuxConstntSec a)    = getAux a
-getDocSec Bibliography         = []
-getDocSec (AppndxSec a)        = getApp a
-getDocSec (ExistingSolnSec e)  = getExist e
+getDocDesc = fmGetDocDesc (sentencePlate id)
 
 getSec :: Section -> [Sentence]
 getSec (Section t sc _ ) = t : concatMap getSecCon sc
@@ -178,8 +234,8 @@ getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
 getSecCon (Con c) = getCon' c
 
-getCon' :: Contents -> [Sentence]
-getCon' c = getCon (c ^. accessContents)
+getCon' :: HasContents a => a -> [Sentence]
+getCon' = getCon . (^. accessContents)
 
 getCon :: RawContent -> [Sentence]
 getCon (Table s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
@@ -188,7 +244,7 @@ getCon EqnBlock{}          = []
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _)    = [l]
 getCon (Bib bref)          = getBib bref
-getCon (Graph [(s1, s2)] _ _ l) = s1 : s2 : [l]
+getCon (Graph [(s1, s2)] _ _ l) = [s1, s2, l]
 getCon Graph{}             = []
 getCon (Defini _ [])       = []
 getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
@@ -242,187 +298,19 @@ getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
 
-getRefSec :: RefSec -> [Sentence]
-getRefSec (RefProg c r) = getCon' c ++ concatMap getReftab r
-
-getReftab :: RefTab -> [Sentence]
-getReftab TUnits = []
-getReftab (TUnits' tu) = concatMap getTuIntro tu
-getReftab (TSymb ts) = concatMap getTsIntro ts
-getReftab (TSymb' lf ts) = getLFunc lf ++ concatMap getTsIntro ts
-getReftab TAandA = []
-
-getTuIntro :: TUIntro -> [Sentence]
-getTuIntro System    = []
-getTuIntro Derived   = []
-getTuIntro TUPurpose = []
-
-getTsIntro :: TSIntro -> [Sentence]
-getTsIntro (TypogConvention tc) = concatMap getTConv tc
-getTsIntro SymbOrder            = []
-getTsIntro SymbConvention{}     = []
-getTsIntro TSPurpose            = []
-
-getLFunc :: LFunc -> [Sentence]
-getLFunc Term = []
-getLFunc Defn = []
-getLFunc (TermExcept x) = map (^. defn) x
-getLFunc (DefnExcept x) = map (^. defn) x
-getLFunc TAD  = []
-
-getTConv :: TConvention -> [Sentence]
-getTConv Vector{} = []
-getTConv (Verb s) = [s]
-
-getIntrosec :: IntroSec -> [Sentence]
-getIntrosec (IntroProg s1 s2 is) = [s1] ++ [s2] ++ concatMap getIntroSub is
-
-getIntroSub :: IntroSub -> [Sentence]
-getIntroSub (IPurpose s) = [s]
-getIntroSub (IScope s1 s2) = [s1, s2]
-getIntroSub (IChar s1 s2 s3) = s1 ++ s2 ++ s3
-getIntroSub (IOrgSec s1 _ _ s2) = [s1, s2]
-
-getStk :: StkhldrSec -> [Sentence]
-getStk (StkhldrProg _ s) = [s]
-getStk (StkhldrProg2 t) = concatMap getStkSub t
-
-getStkSub :: StkhldrSub -> [Sentence]
-getStkSub (Client _ s) = [s]
-getStkSub Cstmr{}      = []
-
-getGSD :: GSDSec -> [Sentence]
-getGSD (GSDProg sc c cl sc1) = concatMap getSec sc ++ getCon' c
-  ++ concatMap getCon' cl ++ concatMap getSec sc1
-getGSD (GSDProg2 gs) = concatMap getGSDSub gs
-
-getGSDSub :: GSDSub -> [Sentence]
-getGSDSub (SysCntxt c) = concatMap getCon' c
-getGSDSub (UsrChars c) = concatMap getCon' c
-getGSDSub (SystCons c s) = concatMap getCon' c ++ concatMap getSec s
-
-getScp :: ScpOfProjSec -> [Sentence]
-getScp (ScpOfProjProg s c1 c2) = [s] ++ (getCon' c1) ++ (getCon' c2)
-
-getSSD :: SSDSec -> [Sentence]
-getSSD (SSDProg ssd) = concatMap getSSDSub ssd
-
-getSSDSub :: SSDSub -> [Sentence]
-getSSDSub (SSDSubVerb s)     = getSec s
-getSSDSub (SSDProblem pd)    = getProblem pd
-getSSDSub (SSDSolChSpec sss) = getSol sss
-
-getProblem :: ProblemDescription -> [Sentence]
-getProblem (PDProg s1 _ s2 x) = [s1]++[s2]++(concatMap getSec x)
-
-getSol :: SolChSpec -> [Sentence]
-getSol (SCSProg x) = concatMap getSCSSub x
-
-getSCSSub :: SCSSub -> [Sentence]
-getSCSSub Assumptions  = []
-getSCSSub (TMs s _ x)    = s ++ concatMap getTM x
-getSCSSub (GDs s _ x _)  = s ++ concatMap getGD x
-getSCSSub (DDs s _ x _)  = s ++ concatMap getDD x
-getSCSSub (IMs s _ x _)  = s ++ concatMap getIM x
-getSCSSub (Constraints s1 s2 s3 lb) = [s1, s2, s3] ++ concatMap (getCon . (^. accessContents)) lb
-getSCSSub (CorrSolnPpties c) = concatMap getCon' c
-
--- The definition of IM should not be collected because even the definition is at type
--- sentence, but the definition is not shown in Document.
-getIM :: InstanceModel -> [Sentence]
-getIM x = (x ^. derivations) ++ (x ^. getNotes)
-
-getGD :: GenDefn -> [Sentence]
-getGD gd = [gd ^. defn] ++ (gd ^. derivations) ++ (gd ^. getNotes)
-
-getDD :: DataDefinition -> [Sentence]
-getDD dd = (dd ^. derivations) ++ (dd ^. getNotes)
-
-getTM :: TheoryModel -> [Sentence]
-getTM x = map (^. defn) (x ^. operations) ++ map (^. defn) (x ^. defined_quant)
-  ++ concatMap getTM (x ^. valid_context) ++ (x ^. getNotes)
-
-getReq :: ReqrmntSec -> [Sentence]
-getReq (ReqsProg rs) = concatMap getReqSub rs
-
-getReqSub :: ReqsSub -> [Sentence]
-getReqSub (FReqsSub c) = concatMap getCon' c
-getReqSub (NonFReqsSub cc1 cc2 s1 s2) = (map (^. defn) cc1) ++ (map (^. defn) cc2)
-  ++ [s1, s2]
-getReqSub (NonFReqsSub' cc1 cc2 s1 s2) = (map (^. defn) cc1) ++ (map (^. defn) cc2)
-  ++ [s1, s2]
-
-getLcs :: LCsSec -> [Sentence]
-getLcs (LCsProg c) = concatMap getCon' c
-
-getLcs' :: LCsSec' -> [Sentence]
-getLcs' (LCsProg' c) = map (^. defn) c
-
-getUcs :: UCsSec -> [Sentence]
-getUcs (UCsProg c) = concatMap getCon' c
-
-getTrace :: TraceabilitySec -> [Sentence]
-getTrace (TraceabilityProg lc s c x) = (concatMap (getCon . (^. accessContents)) lc)
-  ++ s ++ concatMap getCon' c ++ concatMap getSec x
-
-getAux :: AuxConstntSec -> [Sentence]
-getAux AuxConsProg{} = []
-
-getApp :: AppndxSec -> [Sentence]
-getApp (AppndxProg c) = concatMap getCon' c
-
-getExist :: ExistingSolnSec -> [Sentence]
-getExist (ExistSolnVerb s) = getSec s
-getExist (ExistSolnProg c) = concatMap getCon' c
+ciPlate :: DLPlate (Constant [CI])
+ciPlate = preorderFold $ purePlate {
+  introSub = Constant <$> \case
+    (IOrgSec _ ci _ _) -> [ci]
+    _ -> [],
+  stkSec = Constant <$> \case
+    (StkhldrProg ci _) -> [ci]
+    (StkhldrProg2 _) -> [],
+  stkSub = Constant <$> \case
+   (Client ci _) -> [ci]
+   (Cstmr ci) -> [ci],
+   auxConsSec = Constant <$> \(AuxConsProg ci _) -> [ci]
+}
 
 ciGetDocDesc :: DocDesc -> [CI]
-ciGetDocDesc docdesc = concatMap ciGetDocSec docdesc
-
-ciGetDocSec :: DocSection -> [CI]
-ciGetDocSec Verbatim{}              = []
-ciGetDocSec RefSec{}                = []
-ciGetDocSec (IntroSec        intro) = ciGetIntro intro
-ciGetDocSec (StkhldrSec      stk)   = ciGetStk stk
-ciGetDocSec GSDSec{}                = []
-ciGetDocSec ScpOfProjSec{}          = []
-ciGetDocSec (SSDSec          ssd)   = ciGetSSD ssd
-ciGetDocSec ReqrmntSec{}            = []
-ciGetDocSec LCsSec{}                = []
-ciGetDocSec LCsSec'{}               = []
-ciGetDocSec UCsSec{}                = []
-ciGetDocSec TraceabilitySec{}       = []
-ciGetDocSec (AuxConstntSec   aux)   = ciGetAux aux
-ciGetDocSec Bibliography            = []
-ciGetDocSec AppndxSec{}             = []
-ciGetDocSec ExistingSolnSec{}       = []
-
-ciGetIntro :: IntroSec -> [CI]
-ciGetIntro (IntroProg _ _ insub) = concatMap ciGetIntroSub insub
-
-ciGetIntroSub :: IntroSub -> [CI]
-ciGetIntroSub IPurpose{}          = []
-ciGetIntroSub IScope{}            = []
-ciGetIntroSub IChar{}             = []
-ciGetIntroSub (IOrgSec  _ ci _ _) = [ci]
-
-ciGetStk :: StkhldrSec -> [CI]
-ciGetStk (StkhldrProg  ci _)   = [ci]
-ciGetStk (StkhldrProg2 stksub) = concatMap ciGetStkSub stksub
-
-ciGetStkSub :: StkhldrSub -> [CI]
-ciGetStkSub (Client ci1 _) = [ci1]
-ciGetStkSub (Cstmr ci2)    = [ci2]
-
-ciGetSSD :: SSDSec -> [CI]
-ciGetSSD (SSDProg ssdsub) = concatMap ciGetSSDSub ssdsub
-
-ciGetSSDSub :: SSDSub -> [CI]
-ciGetSSDSub SSDSubVerb{}   = []
-ciGetSSDSub (SSDProblem pd) = ciGetProbDesc pd
-ciGetSSDSub SSDSolChSpec{} = []
-
-ciGetProbDesc :: ProblemDescription -> [CI]
-ciGetProbDesc (PDProg _ ci _ _) = [ci]
-
-ciGetAux :: AuxConstntSec -> [CI]
-ciGetAux (AuxConsProg ci _) = [ci]
+ciGetDocDesc = fmGetDocDesc ciPlate

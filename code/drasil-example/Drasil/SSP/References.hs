@@ -7,8 +7,8 @@ import Data.Drasil.People (bKarchewski, cfLee, dgFredlund, dStolle, dyZhu,
   grChen, jKrahn, pGuo, pjCleall, qhQian, ssLing, tltZhan, yCLi, ymChen,
   rHuston, hJosephs, nrMorgenstern, vePrice)
 
-sspCitations :: BibRef
-sspCitations = [chen2005, parnasClements1986, koothoor2013,
+citations :: BibRef
+citations = [chen2005, parnasClements1986, koothoor2013,
   fredlund1977, smithLai2005, li2010, karchewski2012, huston2008, 
   morgenstern1965]
 
@@ -32,7 +32,7 @@ li2010 = cArticle [yCLi, ymChen, tltZhan, ssLing, pjCleall]
   "li2010"
 
 karchewski2012 = cInProceedings [bKarchewski, pGuo, dStolle]
-  ("Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis") 
+  "Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis"
   "Proceedings of the 65th annual Canadian GeoTechnical Conference" 2012 
   [address "Winnipeg, MB, Canada", organization "Canadian Geotechnical Society"] 
   "karchewski2012"

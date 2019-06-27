@@ -1,5 +1,5 @@
 Name:		drasil-docLang
-Version:	0.1.23
+Version:	0.1.25
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -23,8 +23,6 @@ library
     , Drasil.Sections.Introduction
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.Requirements
-    , Drasil.Sections.ScopeOfTheProject
-    , Drasil.Sections.SolutionCharacterSpec
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Stakeholders
     , Drasil.Sections.TableOfAbbAndAcronyms
@@ -42,12 +40,16 @@ library
     split >= 0.2.3.1,
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
+    transformers >= 0.4.2.0,
+    multiplate >= 0.0.2,
     data-fix (>= 0.0.4 && <= 1.0),
     drasil-lang >= 0.1.59,
-    drasil-data >= 0.1.11
+    drasil-data >= 0.1.12,
+    drasil-database >= 0.1.1,
+    drasil-theory >= 0.1.0,
+    drasil-utils >= 0.1.0
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
-
 
 source-repository head
   type:     git

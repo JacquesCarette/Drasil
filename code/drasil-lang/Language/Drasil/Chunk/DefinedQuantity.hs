@@ -41,7 +41,7 @@ dqd c s sp = DQD c (const s) sp . Just . unitWrapper
 
 -- For when the symbol changes depending on the stage
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
-dqd' c s sp un = DQD c s sp un
+dqd' = DQD
 
 -- When the input already has all the necessary information. A 'projection' operator
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict

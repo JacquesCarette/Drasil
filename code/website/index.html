@@ -1,0 +1,46 @@
+<h2>Drasil - Generate All the Things!</h2>
+<p id="center"><a href="https://github.com/JacquesCarette/Drasil">Link to GitHub repository</a></p>
+<hr>
+<br>
+<p>
+  This webpage is designed to contain the most up to date
+  <a href="#caseStudies">case study artifacts</a>
+  and <a href="#packages">package dependency graphs</a> from the Drasil repository.
+  The case study artifacts include the Software Requirements Specification (SRS) for the case study,
+  which specifies what the program sets out to achieve.
+  The package dependency graphs shows the hierarchy of modules within each package.
+  The footer of this page contains the continuous integration build of the project,
+  as well as the commit number that the build and artifacts are based off of.
+</p>
+<br>
+<h3 id="caseStudies">Case Studies</h3>
+<p>Each of the case studies contain their own generated PDF and HTML reports,
+and in some cases, their own generated code.</p>
+<ul>
+$-for(examples)$
+  <li><b>$name$</b> - $if(desc)-$ $desc$ $endif$
+    <br>
+    <br>
+    <ul>
+      <li>$name$ SRS
+        $-for(srs)$
+          <a href="$url$">[$type$]</a>
+        $-endfor$
+      </li>
+    $-if(src)$
+      <li><a href="$src-$">Generated Code</a></li>
+    $-endif$
+    </ul>
+    <br>
+  </li>$sep-$
+$endfor$
+</ul>
+$if(docsUrl)-$
+<h4><a href="$docsUrl$">Haskell Documentation</a></h4>
+$-endif$
+<h3 id="packages">Package Dependency Graphs</h3>
+<ul>
+  $-for(graphs)$
+    <li><a href="$url$">$name$</a></li>$sep-$
+  $endfor$
+</ul>

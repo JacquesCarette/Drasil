@@ -1,15 +1,13 @@
 {-# Language TemplateHaskell #-}
 -- | Document Description Language
 module Language.Drasil.Document where
-import Data.Drasil.IdeaDicts (documentc)
-import Language.Drasil.Chunk.CommonIdea (CI, commonIdeaWithDict)
+
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname), getRefAdd)
 import Language.Drasil.Classes (Referable(refAdd, renderRef))
 import Language.Drasil.Document.Core
 import Language.Drasil.Label.Type (prepend, LblType(RP, URI),raw, (+::+), name)
 import Language.Drasil.Misc (repUnd)
-import Language.Drasil.NounPhrase (cn')
-import Language.Drasil.RefProg (Reference(Reference))
+import Language.Drasil.RefProg (Reference(Reference), RefInfo(None))
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.UID (UID)
@@ -45,9 +43,6 @@ instance Referable Section where
   refAdd    (Section _ _ lb ) = getRefAdd lb
   renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getRefAdd lb)
 
-sectionci :: CI
-sectionci    = commonIdeaWithDict "sectionci"    (cn' "section")                   "DD"        [documentc]
-
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
@@ -80,10 +75,7 @@ mkRawLC x lb = llcc lb x
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
-section title intro secs lbe = Section title (map Con intro ++ map Sub secs) lbe
-
-section'' :: Sentence -> [Contents] -> [Section] -> Reference -> Section
-section'' title intro secs lbe = section title intro secs lbe
+section title intro secs = Section title (map Con intro ++ map Sub secs)
 
 extractSection :: Document -> [Section]
 extractSection (Document _ _ sec) = concatMap getSec sec
@@ -107,19 +99,19 @@ figWithWidth = Figure
 -- FIXME: horrible hacks.
 -- These should eventually either disappear, or at least move out to docLang
 makeTabRef :: String -> Reference
-makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' rs)
+makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' rs) None
 
 makeFigRef :: String -> Reference
-makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' rs)
+makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' rs) None
 
 makeSecRef :: String -> String -> Reference
 makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Section") ("Sec:" ++ repUnd r))
-  (shortname' s)
+  (shortname' s) None
 
 makeLstRef :: String -> String -> Reference
 makeLstRef r s = Reference (r ++ "Label") (RP (prepend "Lst") ("Lst:" ++ repUnd r))
-  (shortname' s)
+  (shortname' s) None
 
 -- | Create a reference for a URI
 makeURI :: UID -> String -> ShortName -> Reference
-makeURI u r s = Reference u (URI r) s
+makeURI u r s = Reference u (URI r) s None

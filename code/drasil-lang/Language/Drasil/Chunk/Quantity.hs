@@ -42,7 +42,7 @@ mkQuant' i t symbs sp u ab = QD (mkIdea i t ab) sp symbs u
 
 -- | implVar makes an variable that is implementation-only
 implVar :: String -> NP -> Symbol -> Space -> QuantityDict
-implVar i des sym ty = vcSt i des f ty
+implVar i des sym = vcSt i des f
   where
     f :: Stage -> Symbol
     f Implementation = sym
@@ -65,4 +65,4 @@ codeVC n s t = QD (nw n) t f Nothing
 
 -- | Creates a QuantityDict from an 'Idea', symbol and space
 vc'' :: Idea c => c -> Symbol -> Space -> QuantityDict
-vc'' n sy space = vc (n ^. uid) (n ^. term) sy space
+vc'' n = vc (n ^. uid) (n ^. term)

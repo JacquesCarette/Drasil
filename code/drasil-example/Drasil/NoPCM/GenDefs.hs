@@ -1,6 +1,8 @@
-module Drasil.NoPCM.GenDefs (rocTempSimp, swhsGDs) where
+module Drasil.NoPCM.GenDefs (rocTempSimp, genDefs) where
 
 import Language.Drasil
+import Theory.Drasil (GenDefn, gdNoRefs)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (temp)
@@ -9,39 +11,35 @@ import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heat_cap_spec)
-
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), foldlList, 
-  foldlSentCol, ofThe, sAnd)
-import Data.Drasil.Utils (weave)
+  heatCapSpec)
 
 import Drasil.NoPCM.Assumptions (assumpDWCoW, assumpSHECoW)
 import Drasil.SWHS.Assumptions (assumpCWTAT)
-import Drasil.SWHS.Concepts (gauss_div)
-import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimpRC, rocTempSimp_desc)
+import Drasil.SWHS.Concepts (gaussDiv)
+import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimpRC, rocTempSimpDesc)
 import Drasil.SWHS.TMods (consThermE)
-import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
-  ht_flux_out)
+import Drasil.SWHS.Unitals (inSA, outSA, volHtGen, thFluxVect, htFluxIn, 
+  htFluxOut)
 
-swhsGDs :: [GenDefn]
-swhsGDs = [nwtnCooling, rocTempSimp] 
+genDefs :: [GenDefn]
+genDefs = [nwtnCooling, rocTempSimp] 
 
 rocTempSimp :: GenDefn
-rocTempSimp = gd' rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv 
-  [{-S "FIXME: no sources"-}] "rocTempSimp" [rocTempSimp_desc]
+rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) rocTempSimpDeriv 
+  "rocTempSimp" [rocTempSimpDesc]
 
-roc_temp_simp_deriv :: Derivation
-roc_temp_simp_deriv =
+rocTempSimpDeriv :: Derivation
+rocTempSimpDeriv =
   S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+.
     phrase temp :
-  (weave [roc_temp_simp_deriv_sentences, map E roc_temp_simp_deriv_eqns])
+  weave [rocTempSimpDerivSent, map E rocTempSimpDerivEqns]
 
-roc_temp_simp_deriv_sentences :: [Sentence]
-roc_temp_simp_deriv_sentences = map foldlSentCol [
+rocTempSimpDerivSent :: [Sentence]
+rocTempSimpDerivSent = map foldlSentCol [
   genDefDesc1 consThermE vol,
-  genDefDesc2 gauss_div surface vol thFluxVect uNormalVect unit_,
-  genDefDesc3 vol vol_ht_gen,
-  genDefDesc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
+  genDefDesc2 gaussDiv surface vol thFluxVect uNormalVect unit_,
+  genDefDesc3 vol volHtGen,
+  genDefDesc4 htFluxIn htFluxOut inSA outSA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpDWCoW, makeRef2S assumpSHECoW],
   genDefDesc5 density mass vol]
 
@@ -69,7 +67,7 @@ genDefDesc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
   makeRef2S rocTempSimp, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  (foldlList Comma List assumps) `sC` S "we have"]
+  foldlList Comma List assumps `sC` S "we have"]
 
 genDefDesc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
 genDefDesc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
@@ -77,28 +75,28 @@ genDefDesc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
 
 genDefEq1, genDefEq2, genDefEq3, genDefEq4, genDefEq5 :: Expr
 
-genDefEq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+genDefEq1 = negate (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) + 
+  intAll (eqSymb vol) (sy volHtGen) $=
+  intAll (eqSymb vol) (sy density
+  * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
 
-genDefEq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
-  (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+genDefEq2 = negate (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) +
+  intAll (eqSymb vol) (sy volHtGen) $= 
+  intAll (eqSymb vol)
+  (sy density * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
 
-genDefEq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
+genDefEq3 = sy htFluxIn * sy inSA - sy htFluxOut *
+  sy outSA + sy volHtGen * sy vol $= 
+  intAll (eqSymb vol) (sy density * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
 
-genDefEq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
-  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol)
+genDefEq4 = sy density * sy QT.heatCapSpec * sy vol * deriv
+  (sy QT.temp) time $= sy htFluxIn * sy inSA - sy htFluxOut *
+  sy outSA + sy volHtGen * sy vol
 
-genDefEq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
-  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
-  * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
+genDefEq5 = sy mass * sy QT.heatCapSpec * deriv (sy QT.temp)
+  time $= sy htFluxIn * sy inSA - sy htFluxOut
+  * sy outSA + sy volHtGen * sy vol
 
-roc_temp_simp_deriv_eqns :: [Expr]
-roc_temp_simp_deriv_eqns = [genDefEq1, genDefEq2, genDefEq3, genDefEq4,
+rocTempSimpDerivEqns :: [Expr]
+rocTempSimpDerivEqns = [genDefEq1, genDefEq2, genDefEq3, genDefEq4,
   genDefEq5]

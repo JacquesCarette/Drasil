@@ -1,14 +1,19 @@
 module Main (main) where
 
-import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
-  ImplementationType(..), Lang(..), Logging(..), Structure(..))
+import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
+  ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
+  Structure(..))
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.NoPCM.Body (nopcm_srs, nopcm_code, printSetting)
+import Drasil.NoPCM.Body (si, srs, printSetting)
 
-nopcm_Choices :: Choices
-nopcm_Choices = Choices {
+code :: CodeSpec
+code = codeSpec si choices []
+-- Sub interpolation mod into list when possible
+
+choices :: Choices
+choices = Choices {
   lang = [Python, Cpp, CSharp, Java],
   impType = Program,
   logFile = "log.txt",
@@ -21,6 +26,6 @@ nopcm_Choices = Choices {
        
 main :: IO ()            
 main = do
-  gen (DocSpec SRS "NoPCM_SRS") nopcm_srs printSetting
-  gen (DocSpec Website "NoPCM_SRS") nopcm_srs printSetting
-  genCode nopcm_Choices nopcm_code
+  gen (DocSpec SRS "NoPCM_SRS") srs printSetting
+  gen (DocSpec Website "NoPCM_SRS") srs printSetting
+  genCode choices code

@@ -1,11 +1,10 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil hiding (organization, year)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Math (graph)
-import Data.Drasil.Phrase (andRT, and_, and_', ofA, of_, of_', of__, theCustom,
-  ofN_, compoundNC, compoundNC', compoundNCP1)
-import Data.Drasil.IdeaDicts (softEng, documentc)
+import Data.Drasil.IdeaDicts (dataDefn, documentc, genDefn, inModel, softEng, thModel)
 
 import Control.Lens ((^.))
 
@@ -40,26 +39,23 @@ doccon = [abbreviation, analysis, appendix, aspect, body, characteristic, class_
 
 doccon' :: [CI]
 doccon' = [assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
-  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc]
+  unlikelyChg, physSyst, requirement, thModel, mg, mis, notApp, srs, typUnc]
 
-assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
-  unlikelyChg, physSyst, requirement, thModel, mg, notApp, srs, typUnc, sec :: CI
+assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requirement,
+  mg, mis, notApp, srs, typUnc, sec :: CI
 
 -----------------------------------------------------------------------------------------------------------------
 -- | CI       |           |    uid      |         term                        | abbreviation |     ConceptDomain
 -----------------------------------------------------------------------------------------------------------------
 assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                  "A"         [softEng]
-dataDefn    = commonIdeaWithDict "dataDefn"    (cn' "data definition")                             "DD"        [softEng]
 desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)        "DS"        [softEng]
-genDefn     = commonIdeaWithDict "genDefn"     (cn' "general definition")                          "GD"        [softEng]
 goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)              "GS"        [softEng]
 dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                             "DC"        [softEng]
-inModel     = commonIdeaWithDict "inModel"     (fterms compoundPhrase instance_ model)             "IM"        [softEng]
 likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                               "LC"        [softEng]
 unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                             "UC"        [softEng]
 physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"        [softEng]
 requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                 "R"         [softEng]
-thModel     = commonIdeaWithDict "thModel"     (cn' "theoretical model")                           "T"         [softEng]
+mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"        [softEng]
 mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)               "MG"        [softEng]
 notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")                     "N/A"       []
 typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                         "Uncert."   [softEng]
@@ -239,7 +235,7 @@ scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` theCustom oper project) -- r
 
 -- compounds
 
-designDoc, fullForm, generalSystemDescription, indPRCase,
+designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, datumConstraint, functionalRequirement,
@@ -253,6 +249,7 @@ designDoc                    = compoundNC design document
 fullForm                     = compoundNC full form
 functionalRequirement        = compoundNC functional requirement_
 generalSystemDescription     = compoundNC general systemdescription
+moduleInterface              = compoundNC module_ interface
 indPRCase                    = compoundNC individual productUC
 nonfunctionalRequirement     = compoundNC nonfunctional requirement_
 offShelfSolution             = compoundNC offShelf solution
@@ -315,8 +312,8 @@ unlikeChgDom :: ConceptChunk
 unlikeChgDom = ccs (mkIdea "unlikeChgDom" (unlikelyChg ^. term) $ Just "UC") EmptyS [chgProbDom]
 -- | List of domains for SRS
 srsDomains :: [ConceptChunk]
-srsDomains = [goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom,
-  likeChgDom, unlikeChgDom]
+srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom,
+  chgProbDom, likeChgDom, unlikeChgDom]
 
 -- FIXME: fterms is here instead of Utils because of cyclic import
 -- | Apply a binary function to the terms of two named ideas, instead of to the named

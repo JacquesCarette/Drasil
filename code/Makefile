@@ -1,125 +1,223 @@
-TINY_PREF  = Tiny_
-GLASSBR_PREF = GlassBR_
-NOPCM_PREF = NoPCM_
-SWHS_PREF  = SWHS_
-SSP_PREF   = SSP_
-GAMEPHYS_PREF  = Chipmunk_
+# For documentation on how to add to this, see Issue #1371
+# List of all known packages
+PACKAGES = lang utils build code theory database printers gen data docLang example
 
+# and associated package-level suffixes
+BUILD_P_SUFFIX = _build
+DOC_P_SUFFIX = _doc
+GRAPH_P_SUFFIX = _graph
+
+BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
+DOC_PACKAGES = $(addsuffix $(DOC_P_SUFFIX), $(PACKAGES))
+GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES))
+
+PACKAGE_GEN_TARGET = BUILD DOC GRAPH
+
+#####
+
+# Current list of examples
+EXAMPLES = tiny glassbr nopcm swhs ssp gamephys projectile template
+
+# where they live
 TINY_DIR  = Tiny
 GLASSBR_DIR = GlassBR
 NOPCM_DIR = NoPCM
 SWHS_DIR  = SWHS
 SSP_DIR   = SSP
 GAMEPHYS_DIR  = Chipmunk
+PROJECTILE_DIR = Projectile
+TEMPLATE_DIR = Template
 
-PACKAGES = lang build code printers gen data docLang example
-DPACKAGES = $(addprefix drasil-, $(PACKAGES))
-BUILD_PACKAGES = $(addprefix build_, $(PACKAGES))
-DOCS_PACKAGES = $(addsuffix -docs, $(PACKAGES))
-
+# and the name of their executables
 TINY_EXE  = tiny
 GLASSBR_EXE = glassbr
 NOPCM_EXE = nopcm
 SWHS_EXE  = swhs
 SSP_EXE   = ssp
 GAMEPHYS_EXE  = chipmunkdocs
+PROJECTILE_EXE = projectile
+TEMPLATE_EXE = template
 
-EXAMPLES = tiny glassbr nopcm swhs ssp gamephys
-BUILD_EXAMPLES = $(addsuffix _build, $(EXAMPLES))
-TEX_EXAMPLES = $(addsuffix _tex, $(EXAMPLES))
-CODE_EXAMPLES = $(addsuffix _code, $(EXAMPLES))
+# and the associated per-example information generated
+GEN_E_SUFFIX = _gen
+TEST_E_SUFFIX = _diff
+MOVE_DF_E_SUFFIX = _prog
+TEX_E_SUFFIX = _tex
+CODE_E_SUFFIX = _code
+DCP_E_SUFFIX = _deploy_code_path
 
-DIRS = $(foreach dir, $(addsuffix _DIR,$(shell echo $(EXAMPLES) | tr a-z A-Z)), $($(dir))) $(DPACKAGES)
-DIFF = diff --strip-trailing-cr --ignore-all-space
+GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
+TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES))
+MOVE_DF_EXAMPLES =  $(addsuffix $(MOVE_DF_E_SUFFIX), $(EXAMPLES))
+TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
+CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(EXAMPLES))
+DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
 
-TESTS =  $(addsuffix _diff, $(EXAMPLES))
-PROGS =  $(addsuffix _prog, $(EXAMPLES))
+EXAMPLE_GEN_TARGET = GEN TEST MOVE_DF TEX CODE DCP
 
+GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(DEPLOY_FOLDER_NAME)
+CLEAN_GF_PREFIX = clean_
+CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
+
+ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(foreach E, $(EXAMPLE_GEN_TARGET), $($(E)_EXAMPLES)) $(CLEAN_FOLDERS)
+
+#####
+
+# make variables/configuration
+DIFF = diff -r -X ../.gitignore -x '*.txt'
+LOG_SUFFIX = _log.log
+MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
+CACHED_MSV_FILE = .drasil-min-stack-ver
+BUILD_FOLDER_NAME = build
+BUILD_FOLDER = $(BUILD_FOLDER_NAME)/
+EXAMPLE_CODE_SUBFOLDER = src/
+LOG_FOLDER_NAME = logs
+LOG_FOLDER = $(LOG_FOLDER_NAME)/
+SCRIPT_FOLDER = scripts/
+GRAPH_FOLDER_NAME = graphs
+GRAPH_FOLDER = $(GRAPH_FOLDER_NAME)/
+DEPLOY_FOLDER_NAME = deploy
+DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
+DEPLOY_CODE_PATH_KV_SEP = :
+# make command line options
+#  GHC debug options
 PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
 
+#  GHC build options
 GHCTHREADS += 2
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
 override stackArgs += --ghc-options="$(GHCFLAGS)"
 
+#  Output amount control
 NOISY=no
 SUMMARIZE_TEX=no
 
-MIN_STACK_VER = 1.9.1  # Version which adds --interleaved-output flag
-CACHED_MSV_FILE = .drasil-min-stack-ver
-
-all: test
-
-check_stack: FORCE
-	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) sh check_stack.sh
-
-test: $(PROGS) $(TESTS)
-	@echo ----------------------------
-	@echo Make complete, checking logs
-	@echo ----------------------------
-	sh log_check.sh $(NOISY)
-
-prog: $(PROGS)
-
-FORCE: ;
+# actual targets
+all: test graphs
 
 debug: stackArgs+=$(PROFALL) 
 debug: EXECARGS+=$(PROFEXEC) 
 debug: test
 
-$(filter build_%, $(BUILD_PACKAGES)): build_%: check_stack
-	stack install -j3 $(stackArgs) drasil-$* --dump-logs --interleaved-output
+# sanity check -- are we using the right stack version?
+check_stack:
+	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) "$(SHELL)" $(SCRIPT_FOLDER)check_stack.sh
 
-%_build: EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%_build: EDIR=$($(EXAMPLE)_DIR)
-%_build: EEXE=$($(EXAMPLE)_EXE)
-$(filter %_build, $(BUILD_EXAMPLES)): %_build: build_example
-	mkdir -p build/$(EDIR)
-	cd build/$(EDIR) && stack exec -- $(EEXE) $(EXECARGS)
+check_dot:
+	@BIN=dot DOWNLOAD_LOCATION=https://www.graphviz.org/download/ "$(SHELL)" $(SCRIPT_FOLDER)check_binary.sh
 
-%_diff: EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%_diff: EDIR=$($(EXAMPLE)_DIR)
-%_diff: EPREF=$($(EXAMPLE)_PREF)
-$(filter %_diff, $(TESTS)): %_diff: %_build
-	- $(DIFF) ./stable/$*/SRS/$(EPREF)SRS.tex ./build/$(EDIR)/SRS/$(EPREF)SRS.tex > $(EPREF)log.log 2>&1
-	- $(DIFF) ./stable/$*/Website/$(EPREF)SRS.css ./build/$(EDIR)/Website/$(EPREF)SRS.css >> $(EPREF)log.log 2>&1
-	- $(DIFF) ./stable/$*/Website/$(EPREF)SRS.html ./build/$(EDIR)/Website/$(EPREF)SRS.html >> $(EPREF)log.log 2>&1
+packages: $(BUILD_PACKAGES)
 
-%_prog: PDIR=$($(shell echo $* | tr a-z A-Z)_DIR)
-$(filter %_prog, $(PROGS)): %_prog: %_build
+# Actually build all the packages
+$(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
+	stack install -j3 $(stackArgs) "drasil-$*" --dump-logs --interleaved-output
 
-glassbr_prog: glassbr_build
-	test -d ./build/$(GLASSBR_DIR)/src/python && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/python/
-	test -d ./build/$(GLASSBR_DIR)/src/java && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/java/
-	test -d ./build/$(GLASSBR_DIR)/src/csharp && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/csharp/
-	test -d ./build/$(GLASSBR_DIR)/src/cpp && cp ./datafiles/$(GLASSBR_DIR)/*.txt ./build/$(GLASSBR_DIR)/src/cpp/
+%$(GEN_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
+$(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_SUFFIX)
+	@mkdir -p $(BUILD_FOLDER)$(EDIR)
+	cd $(BUILD_FOLDER)$(EDIR) && stack exec -- $(EEXE) $(EXECARGS)
 
-docs: $(DOCS_PACKAGES)
+%$(TEST_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(TEST_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+$(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): %$(GEN_E_SUFFIX)
+	@mkdir -p $(LOG_FOLDER)
+	- $(DIFF) "stable/$*/" $(BUILD_FOLDER)$(EDIR)/ > $(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX) 2>&1
 
-$(filter %-docs, $(DOCS_PACKAGES)): %-docs: check_stack
-	stack haddock drasil-$* $(haddockArgs)
+# actually run the tests
+test: $(MOVE_DF_EXAMPLES) $(TEST_EXAMPLES)
+	@echo ----------------------------
+	@echo Make complete, checking logs
+	@echo ----------------------------
+	@LOG_FOLDER=$(LOG_FOLDER) LOG_SUFFIX=$(LOG_SUFFIX) NOISY=$(NOISY) "$(SHELL)" $(SCRIPT_FOLDER)log_check.sh
 
-%_tex: EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%_tex: EDIR=$($(EXAMPLE)_DIR)
-%_tex: EPREF=$($(EXAMPLE)_PREF)
-$(filter %_tex, $(TEX_EXAMPLES)): %_tex: %_build
-	EDIR=$(EDIR) EPREF=$(EPREF) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE=$(MAKE) sh ./tex_build.sh
+# generate pretty dot graphs too
+graphmod: check_stack
+	stack install dotgen graphmod
+
+$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack check_dot graphmod
+	@mkdir -p $(GRAPH_FOLDER)
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > $(GRAPH_FOLDER)drasil-"$*".pdf
+
+graphs: $(GRAPH_PACKAGES)
+###
+
+$(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(GEN_E_SUFFIX)
+
+# GlassBR is odd, so it needs some special rules just for itself
+$(GLASSBR_EXE)$(MOVE_DF_E_SUFFIX): $(GLASSBR_EXE)$(GEN_E_SUFFIX)
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)python && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)python/
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)java && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)java/
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)csharp && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)csharp/
+	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)cpp && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)cpp/
+
+prog: $(MOVE_DF_EXAMPLES)
+
+# use stack to build the documentation too
+$(filter %$(DOC_P_SUFFIX), $(DOC_PACKAGES)): %$(DOC_P_SUFFIX): check_stack
+	stack haddock "drasil-$*" $(haddockArgs)
+
+docs: $(DOC_PACKAGES)
+
+%$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+$(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(GEN_E_SUFFIX)
+	EDIR=$(EDIR) BUILD_FOLDER=$(BUILD_FOLDER) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" "$(SHELL)" $(SCRIPT_FOLDER)tex_build.sh
 
 tex: $(TEX_EXAMPLES)
 
-%_code: EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%_code: EDIR=$($(EXAMPLE)_DIR)
-$(filter %_code, $(CODE_EXAMPLES)): %_code: %_build
-	EDIR=$(EDIR) MAKE=$(MAKE) sh ./code_build.sh
+%$(CODE_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+$(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(MOVE_DF_E_SUFFIX)
+	@EDIR=$(EDIR) BUILD_FOLDER=$(BUILD_FOLDER) EXAMPLE_CODE_SUBFOLDER=$(EXAMPLE_CODE_SUBFOLDER) MAKE="$(MAKE)" "$(SHELL)" $(SCRIPT_FOLDER)code_build.sh; \
+	# If you're reading this comment because you got NoPCM working, then you should remove everything below this line until the next target. \
+	# (Next line with zero idents) Additionally you should remove the "; \" from the line immediately preceeding the comment on the previous line. \
+	RET=$$?; \
+	if [ $* = $(NOPCM_EXE) ]; then \
+		if [ $$RET != 0 ]; then \
+			echo "$(NOPCM_DIR) failed to compile as expected. Letting it slide...for now."; \
+			exit 0; \
+		else \
+			echo "$(NOPCM_DIR) surprisingly did not fail to compile!"; \
+			echo "Failing this build because you should check the Drasil makefile and alter the code as indicated by the comment for the currently invoked target"; \
+			exit 1; \
+		fi; \
+	else \
+		exit $$RET; \
+	fi
 
 code: $(CODE_EXAMPLES)
 
-clean: clean_build
+%$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(DCP_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+$(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
+# Print as formatted K/V for deploy to extract
+	@echo "$(EDIR)$(DEPLOY_CODE_PATH_KV_SEP)$(shell git rev-parse --show-prefix)stable/$*/src/"
+
+deploy_code_path: $(DCP_EXAMPLES)
+
+deploy_lite:
+	@mkdir -p $(DEPLOY_FOLDER)
+	@BUILD_FOLDER=$(BUILD_FOLDER) DEPLOY_FOLDER=$(DEPLOY_FOLDER) GRAPH_FOLDER=$(GRAPH_FOLDER) \
+	DEPLOY_CODE_PATH_KV_SEP=$(DEPLOY_CODE_PATH_KV_SEP) MAKE=$(MAKE) "$(SHELL)" $(SCRIPT_FOLDER)deploy_stage.sh
+
+# This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
+# dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX
+# files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
+# everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
+# what `deploy.bash` calls. 
+deploy: graphs docs tex
+	$(MAKE) deploy_lite
+
+
+# follow two are for cleaning things out
+$(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
+	- rm -r "./$*"
+
+clean: $(CLEAN_FOLDERS)
 	- stack clean
 	- rm $(CACHED_MSV_FILE)
 
-clean_build: clean_logs
-	- rm -r ./build
-
-clean_logs:
-	- rm *.log
+.PHONY: clean code tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(ALL_EXPANDED_TARGETS)

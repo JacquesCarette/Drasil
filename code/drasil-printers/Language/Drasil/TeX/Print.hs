@@ -36,7 +36,7 @@ import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
   newline, superscript, parens, fraction, quote, externalref,
-  snref, cite, sec, newpage, maketoc, maketitle, document, author, title)
+  snref, cite, citeInfo, sec, newpage, maketoc, maketitle, document, author, title)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -79,13 +79,13 @@ symbol (L.Special s) = unPL $ L.special s
 symbol (L.Concat sl) = concatMap symbol sl
 --
 -- handle the special cases first, then general case
-symbol (L.Corners [] [] [x] [] s) = brace $ (symbol s) ++"^"++ brace (symbol x)
-symbol (L.Corners [] [] [] [x] s) = brace $ (symbol s) ++"_"++ brace (symbol x)
+symbol (L.Corners [] [] [x] [] s) = brace $ symbol s ++ "^" ++ brace (symbol x)
+symbol (L.Corners [] [] [] [x] s) = brace $ symbol s ++ "_" ++ brace (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol L.Corners{}                = error "rendering of Corners (general)"
-symbol (L.Atop f s) = sFormat f s
-symbol (L.Empty)    = ""
+symbol (L.Atop f s)               = sFormat f s
+symbol L.Empty                    = ""
 
 sFormat :: L.Decoration -> L.Symbol -> String
 sFormat L.Hat    s = "\\hat{" ++ symbol s ++ "}"
@@ -98,72 +98,72 @@ data OpenClose = Open | Close
 ------------------ EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
-p_expr :: Expr -> String
-p_expr (Dbl d)    = showEFloat Nothing d ""
-p_expr (Int i)    = show i
-p_expr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
-p_expr (Div n d) = "\\frac{" ++ p_expr n ++ "}{" ++ p_expr d ++"}"
-p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
-p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
-p_expr (Row [x]) = brace $ p_expr x -- a bit of a hack...
-p_expr (Row l) = concatMap p_expr l
-p_expr (Ident s) = s
-p_expr (Spec s) = unPL $ L.special s
---p_expr (Gr g) = unPL $ greek g
-p_expr (Sub e) = "_" ++ brace (p_expr e)
-p_expr (Sup e) = "^" ++ brace (p_expr e)
-p_expr (Over Hat s)     = "\\hat{" ++ p_expr s ++ "}"
-p_expr (MO o) = p_ops o
-p_expr (Fenced l r m)    = fence Open l ++ p_expr m ++ fence Close r
-p_expr (Font Bold e) = "\\mathbf{" ++ p_expr e ++ "}"
-p_expr (Font Emph e) = p_expr e -- Emph is ignored here because we're in Math mode
-p_expr (Spc Thin) = "\\,"
-p_expr (Sqrt e)  = "\\sqrt{" ++ p_expr e ++ "}"
+pExpr :: Expr -> String
+pExpr (Dbl d)    = showEFloat Nothing d ""
+pExpr (Int i)    = show i
+pExpr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
+pExpr (Div n d) = "\\frac{" ++ pExpr n ++ "}{" ++ pExpr d ++"}"
+pExpr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
+pExpr (Mtx a)    = "\\begin{bmatrix}\n" ++ pMatrix a ++ "\n\\end{bmatrix}"
+pExpr (Row [x]) = brace $ pExpr x -- a bit of a hack...
+pExpr (Row l) = concatMap pExpr l
+pExpr (Ident s) = s
+pExpr (Spec s) = unPL $ L.special s
+--pExpr (Gr g) = unPL $ greek g
+pExpr (Sub e) = "_" ++ brace (pExpr e)
+pExpr (Sup e) = "^" ++ brace (pExpr e)
+pExpr (Over Hat s)     = "\\hat{" ++ pExpr s ++ "}"
+pExpr (MO o) = pOps o
+pExpr (Fenced l r m)    = fence Open l ++ pExpr m ++ fence Close r
+pExpr (Font Bold e) = "\\mathbf{" ++ pExpr e ++ "}"
+pExpr (Font Emph e) = pExpr e -- Emph is ignored here because we're in Math mode
+pExpr (Spc Thin) = "\\,"
+pExpr (Sqrt e)  = "\\sqrt{" ++ pExpr e ++ "}"
 
-p_ops :: Ops -> String
-p_ops IsIn     = "\\in{}"
-p_ops Integer  = "\\mathbb{Z}"
-p_ops Rational = "\\mathbb{Q}"
-p_ops Real     = "\\mathbb{R}"
-p_ops Natural  = "\\mathbb{N}"
-p_ops Boolean  = "\\mathbb{B}"
-p_ops Comma    = ","
-p_ops Prime    = "'"
-p_ops Log      = "\\log"
-p_ops Ln       = "\\ln"
-p_ops Sin      = "\\sin"
-p_ops Cos      = "\\cos"
-p_ops Tan      = "\\tan"
-p_ops Sec      = "\\sec"
-p_ops Csc      = "\\csc"
-p_ops Cot      = "\\cot"
-p_ops Arcsin   = "\\arcsin"
-p_ops Arccos   = "\\arccos"
-p_ops Arctan   = "\\arctan"
-p_ops Not      = "\\neg{}"
-p_ops Dim      = "\\mathsf{dim}"
-p_ops Exp      = "e"
-p_ops Neg      = "-"
-p_ops Cross    = "\\times"
-p_ops Dot      = "\\cdot{}"
-p_ops Eq       = "="
-p_ops NEq      = "\\neq{}"
-p_ops Lt       = "<"
-p_ops Gt       = ">"
-p_ops GEq      = "\\geq{}"
-p_ops LEq      = "\\leq{}"
-p_ops Impl     = "\\implies{}"
-p_ops Iff      = "\\iff{}"
-p_ops Subt     = "-"
-p_ops And      = "\\land{}"
-p_ops Or       = "\\lor{}"
-p_ops Add      = "+"
-p_ops Mul      = " "
-p_ops Summ     = "\\displaystyle\\sum"
-p_ops Prod     = "\\displaystyle\\prod"
-p_ops Inte     = "\\int"
-p_ops Point    = "."
-p_ops Perc     = "\\%"
+pOps :: Ops -> String
+pOps IsIn     = "\\in{}"
+pOps Integer  = "\\mathbb{Z}"
+pOps Rational = "\\mathbb{Q}"
+pOps Real     = "\\mathbb{R}"
+pOps Natural  = "\\mathbb{N}"
+pOps Boolean  = "\\mathbb{B}"
+pOps Comma    = ","
+pOps Prime    = "'"
+pOps Log      = "\\log"
+pOps Ln       = "\\ln"
+pOps Sin      = "\\sin"
+pOps Cos      = "\\cos"
+pOps Tan      = "\\tan"
+pOps Sec      = "\\sec"
+pOps Csc      = "\\csc"
+pOps Cot      = "\\cot"
+pOps Arcsin   = "\\arcsin"
+pOps Arccos   = "\\arccos"
+pOps Arctan   = "\\arctan"
+pOps Not      = "\\neg{}"
+pOps Dim      = "\\mathsf{dim}"
+pOps Exp      = "e"
+pOps Neg      = "-"
+pOps Cross    = "\\times"
+pOps Dot      = "\\cdot{}"
+pOps Eq       = "="
+pOps NEq      = "\\neq{}"
+pOps Lt       = "<"
+pOps Gt       = ">"
+pOps GEq      = "\\geq{}"
+pOps LEq      = "\\leq{}"
+pOps Impl     = "\\implies{}"
+pOps Iff      = "\\iff{}"
+pOps Subt     = "-"
+pOps And      = "\\land{}"
+pOps Or       = "\\lor{}"
+pOps Add      = "+"
+pOps Mul      = " "
+pOps Summ     = "\\displaystyle\\sum"
+pOps Prod     = "\\displaystyle\\prod"
+pOps Inte     = "\\int"
+pOps Point    = "."
+pOps Perc     = "\\%"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -174,19 +174,19 @@ fence _ Abs = "|"
 fence _ Norm = "||"
 
 -- | For printing Matrix
-p_matrix :: [[Expr]] -> String
-p_matrix [] = ""
-p_matrix [x] = p_in x
-p_matrix (x:xs) = p_matrix [x] ++ "\\\\\n" ++ p_matrix xs
+pMatrix :: [[Expr]] -> String
+pMatrix [] = ""
+pMatrix [x] = pIn x
+pMatrix (x:xs) = pMatrix [x] ++ "\\\\\n" ++ pMatrix xs
 
-p_in :: [Expr] -> String
-p_in [] = ""
-p_in [x] = p_expr x
-p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
+pIn :: [Expr] -> String
+pIn [] = ""
+pIn [x] = pExpr x
+pIn (x:xs) = pIn [x] ++ " & " ++ pIn xs
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
-cases [p]    = (p_expr $ fst p) ++ ", & " ++ p_expr (snd p)
+cases [p]    = pExpr (fst p) ++ ", & " ++ pExpr (snd p)
 cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 
 -----------------------------------------------------------------
@@ -196,15 +196,15 @@ cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t =
   pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . anyBig) lls))
-  %% (pure (text "\\toprule"))
+  %% pure (text "\\toprule")
   %% makeRows [head lls]
-  %% (pure (text "\\midrule"))
+  %% pure (text "\\midrule")
   %% pure (text "\\endhead")
   %% makeRows (tail lls)
-  %% (pure (text "\\bottomrule"))
+  %% pure (text "\\bottomrule")
   %% (if bool then caption t else caption empty)
   %% label r
-  %% (pure $ text ("\\end{" ++ ltab ++ "}"))
+  %% pure (text ("\\end{" ++ ltab ++ "}"))
   where ltab = tabType $ anyLong lls
         tabType True  = ltabu
         tabType False = ltable
@@ -220,17 +220,17 @@ makeTable lls r bool t =
 -- | determines the length of a Spec
 specLength :: Spec -> Int
 specLength (S x)     = length x
-specLength (E x)     = length $ filter (`notElem` dontCount) $ p_expr x
+specLength (E x)     = length $ filter (`notElem` dontCount) $ pExpr x
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
-specLength (EmptyS)  = 0
+specLength EmptyS    = 0
 specLength _         = 0
 
 dontCount :: String
 dontCount = "\\/[]{}()_^$:"
 
 makeRows :: [[Spec]] -> D
-makeRows cs = foldr (\c -> (%%) (makeColumns c %% pure dbs)) empty cs
+makeRows = foldr (\c -> (%%) (makeColumns c %% pure dbs)) empty
 
 makeColumns :: [Spec] -> D
 makeColumns ls = hpunctuate (text " & ") $ map spec ls
@@ -245,7 +245,7 @@ needs (Sy _)           = Text
 needs (Sp _)           = Math
 needs HARDNL           = Text
 needs Ref{}            = Text
-needs (EmptyS)         = Text
+needs EmptyS           = Text
 needs (Quote _)        = Text
 
 -- print all Spec through here
@@ -255,32 +255,33 @@ spec a@(s :+: t) = s' <> t'
     ctx = const $ needs a
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
-spec (E ex) = toMath $ pure $ text $ p_expr ex
+spec (E ex) = toMath $ pure $ text $ pExpr ex
 spec (S s)  = pure $ text (concatMap escapeChars s)
-spec (Sy s) = p_unit s
+spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
-spec (Ref Internal r sn)  = snref r $ spec sn
-spec (Ref Cite2 r _)      = cite $ pure $ text r
-spec (Ref External r sn)  = externalref r $ spec sn
-spec EmptyS                 = empty
-spec (Quote q)              = quote $ spec q
+spec (Ref Internal r sn) = snref r $ spec sn
+spec (Ref Cite2    r EmptyS) = cite (pure $ text r)
+spec (Ref Cite2    r i)      = citeInfo (pure $ text r) (spec i)
+spec (Ref External r sn) = externalref r $ spec sn
+spec EmptyS              = empty
+spec (Quote q)           = quote $ spec q
 
 escapeChars :: Char -> String
 escapeChars '_' = "\\_"
 escapeChars c = [c]
 
-symbol_needs :: L.Symbol -> MathContext
-symbol_needs (L.Atomic _)          = Text
-symbol_needs (L.Special _)         = Math
-symbol_needs (L.Concat [])         = Math
-symbol_needs (L.Concat (s:_))      = symbol_needs s
-symbol_needs L.Corners{}           = Math
-symbol_needs (L.Atop _ _)          = Math
-symbol_needs L.Empty               = Curr
+symbolNeeds :: L.Symbol -> MathContext
+symbolNeeds (L.Atomic _)          = Text
+symbolNeeds (L.Special _)         = Math
+symbolNeeds (L.Concat [])         = Math
+symbolNeeds (L.Concat (s:_))      = symbolNeeds s
+symbolNeeds L.Corners{}           = Math
+symbolNeeds (L.Atop _ _)          = Math
+symbolNeeds L.Empty               = Curr
 
-p_unit :: L.USymb -> D
-p_unit (L.US ls) = formatu t b
+pUnit :: L.USymb -> D
+pUnit (L.US ls) = formatu t b
   where
     (t,b) = partition ((> 0) . snd) ls
     formatu :: [(L.Symbol,Integer)] -> [(L.Symbol,Integer)] -> D
@@ -296,21 +297,21 @@ p_unit (L.US ls) = formatu t b
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
     p_symb (L.Concat s) = foldl (<>) empty $ map p_symb s
-    p_symb n = let cn = symbol_needs n in switch (const cn) $ pure $ text $ symbol n
+    p_symb n = let cn = symbolNeeds n in switch (const cn) $ pure $ text $ symbol n
 
 {-
-p_unit :: L.USymb -> D
-p_unit (UName (Concat s)) = foldl (<>) empty $ map (p_unit . UName) s
-p_unit (UName n) =
-  let cn = symbol_needs n in
+pUnit :: L.USymb -> D
+pUnit (UName (Concat s)) = foldl (<>) empty $ map (pUnit . UName) s
+pUnit (UName n) =
+  let cn = symbolNeeds n in
   switch (const cn) (pure $ text $ symbol n)
-p_unit (UProd l) = foldr (<>) empty (map p_unit l)
-p_unit (UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
-p_unit (UDiv n d) = toMath $
+pUnit (UProd l) = foldr (<>) empty (map pUnit l)
+pUnit (UPow n p) = toMath $ superscript (pUnit n) (pure $ text $ show p)
+pUnit (UDiv n d) = toMath $
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
-    UProd _  -> fraction (p_unit n) (parens $ p_unit d)
-    UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
-    _        -> fraction (p_unit n) (p_unit d)
+    UProd _  -> fraction (pUnit n) (parens $ pUnit d)
+    UDiv _ _ -> fraction (pUnit n) (parens $ pUnit d)
+    _        -> fraction (pUnit n) (pUnit d)
 -}
 
 -----------------------------------------------------------------
@@ -333,18 +334,18 @@ makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = vcat [
   pure $ text 
   $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
-  (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"), --shortname instead of refname?
-  (pure $ text "\\phantomsection "), label l,
+  pure (text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> pure (text "}"), --shortname instead of refname?
+  pure (text "\\phantomsection "), label l,
   makeDRows sm ps,
-  pure $ dbs <+> text ("\\bottomrule \\end{tabular}")
+  pure $ dbs <+> text "\\bottomrule \\end{tabular}"
   ]
 
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
-makeDRows sm [(f,d)]    = dBoilerplate %% (pure $ text (f ++ " & ")) <>
-  (vcat $ map (`lo` sm) d)
-makeDRows sm ((f,d):ps) = dBoilerplate %% ((pure $ text (f ++ " & ")) <>
-  (vcat $ map (`lo` sm) d))
+makeDRows sm [(f,d)]    = dBoilerplate %% pure (text (f ++ " & ")) <>
+  vcat (map (`lo` sm) d)
+makeDRows sm ((f,d):ps) = dBoilerplate %% (pure (text (f ++ " & ")) <>
+  vcat (map (`lo` sm) d))
                        %% makeDRows sm ps
 dBoilerplate :: D
 dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
@@ -364,33 +365,33 @@ makeEquation contents = toEqn (spec contents)
 -----------------------------------------------------------------
 
 makeList :: ListType -> D
-makeList (Simple items)      = itemize     $ vcat $ sim_item items
-makeList (Desc items)        = description $ vcat $ sim_item items
-makeList (Unordered items)   = itemize     $ vcat $ map pl_item items
-makeList (Ordered items)     = enumerate   $ vcat $ map pl_item items
-makeList (Definitions items) = symbDescription $ vcat $ def_item items
+makeList (Simple items)      = itemize     $ vcat $ simItem items
+makeList (Desc items)        = description $ vcat $ simItem items
+makeList (Unordered items)   = itemize     $ vcat $ map plItem items
+makeList (Ordered items)     = enumerate   $ vcat $ map plItem items
+makeList (Definitions items) = symbDescription $ vcat $ defItem items
 
-pl_item :: (ItemType,Maybe Label) -> D
-pl_item (i, l) = mlref l <> p_item i
+plItem :: (ItemType,Maybe Label) -> D
+plItem (i, l) = mlref l <> pItem i
 
 lspec :: Spec -> D  -- FIXME: Should be option rolled in to spec
 lspec (S s) = pure $ text s
 lspec r = spec r
 
 mlref :: Maybe Label -> D
-mlref = maybe empty $ ((<>) $ pure $ text "\\phantomsection") . label . lspec
+mlref = maybe empty $ (<>) (pure $ text "\\phantomsection") . label . lspec
 
-p_item :: ItemType -> D
-p_item (Flat s) = item $ spec s
-p_item (Nested t s) = vcat [item $ spec t, makeList s]
+pItem :: ItemType -> D
+pItem (Flat s) = item $ spec s
+pItem (Nested t s) = vcat [item $ spec t, makeList s]
 
-sim_item :: [(Spec,ItemType,Maybe Label)] -> [D]
-sim_item = map (\(x,y,l) -> item' (spec (x :+: S ":") <> mlref l) $ sp_item y)
+simItem :: [(Spec,ItemType,Maybe Label)] -> [D]
+simItem = map (\(x,y,l) -> item' (spec (x :+: S ":") <> mlref l) $ sp_item y)
   where sp_item (Flat s) = spec s
         sp_item (Nested t s) = vcat [spec t, makeList s]
 
-def_item :: [(Spec, ItemType,Maybe Label)] -> [D]
-def_item = map (\(x,y,l) -> item $ mlref l <> (spec $ x :+: S " is the " :+: d_item y))
+defItem :: [(Spec, ItemType,Maybe Label)] -> [D]
+defItem = map (\(x,y,l) -> item $ mlref l <> spec (x :+: S " is the " :+: d_item y))
   where d_item (Flat s) = s
         d_item (Nested _ _) = error "Cannot use sublists in definitions"
 -----------------------------------------------------------------
@@ -410,21 +411,21 @@ makeFigure r c f wp =
 ------------------ EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 -- p_op :: Functional -> Expr -> String
--- p_op f@(Summation bs) x = oper f ++ makeBound bs ++ brace (sqbrac (p_expr x))
--- p_op f@(Product bs) x = oper f ++ makeBound bs ++ brace (p_expr x)
+-- p_op f@(Summation bs) x = oper f ++ makeBound bs ++ brace (sqbrac (pExpr x))
+-- p_op f@(Product bs) x = oper f ++ makeBound bs ++ brace (pExpr x)
 -- p_op f@(Integral bs wrtc) x = oper f ++ makeIBound bs ++ 
---   brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
+--   brace (pExpr x ++ "d" ++ symbol wrtc) -- HACK alert.
 -- 
 -- makeBound :: Maybe ((Symbol, Expr),Expr) -> String
--- makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++
---                               "^" ++ brace (p_expr hi)
+-- makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ pExpr v)) ++
+--                               "^" ++ brace (pExpr hi)
 -- makeBound Nothing = ""
 -- 
 -- makeIBound :: (Maybe Expr, Maybe Expr) -> String
--- makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++
---                                    "^" ++ brace (p_expr high)
--- makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
--- makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
+-- makeIBound (Just low, Just high) = "_" ++ brace (pExpr low) ++
+--                                    "^" ++ brace (pExpr high)
+-- makeIBound (Just low, Nothing)   = "_" ++ brace (pExpr low)
+-- makeIBound (Nothing, Just high)  = "^" ++ brace (pExpr high)
 -- makeIBound (Nothing, Nothing)    = ""
 
 -----------------------------------------------------------------
@@ -437,15 +438,14 @@ makeGraph ps w h c l =
   vcat $ [ centering,
            pure $ text "\\begin{adjustbox}{max width=\\textwidth}",
            pure $ text "\\begin{tikzpicture}[>=latex,line join=bevel]",
-           (pure $ text "\\tikzstyle{n} = [draw, shape=rectangle, ") <>
-             w <> h <> (pure $ text "font=\\Large, align=center]"),
+           pure (text "\\tikzstyle{n} = [draw, shape=rectangle, ") <>
+             w <> h <> pure (text "font=\\Large, align=center]"),
            pure $ text "\\begin{dot2tex}[dot, codeonly, options=-t raw]",
            pure $ text "digraph G {",
            pure $ text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];",
            pure $ text "node [style = \"n\"];"
          ]
-     ++  map (\(a,b) -> (q a) <> (pure $ text " -> ") <> (q b) <>
-                (pure $ text ";")) ps
+     ++  map (\(a,b) -> q a <> pure (text " -> ") <> q b <> pure (text ";")) ps
      ++  [ pure $ text "}",
            pure $ text "\\end{dot2tex}",
            pure $ text "\\end{tikzpicture}",
@@ -453,7 +453,7 @@ makeGraph ps w h c l =
            caption c,
            label l
          ]
-  where q x = (pure $ text "\"") <> x <> (pure $ text "\"")
+  where q x = pure (text "\"") <> x <> pure (text "\"")
 
 ---------------------------
 -- Bibliography Printing --

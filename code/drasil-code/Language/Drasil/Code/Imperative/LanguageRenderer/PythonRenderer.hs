@@ -93,6 +93,8 @@ instance KeywordSym PythonCode where
   commentStart = return $ text "#"
   blockCommentStart = return empty
   blockCommentEnd = return empty
+  docCommentStart = return $ text "##"
+  docCommentEnd = return empty
   
   printFunc = return $ text "print"
   printLnFunc = return empty
@@ -521,6 +523,7 @@ instance ModuleSym PythonCode where
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
   blockComment lns = fmap (pyBlockComment lns) commentStart
+  docComment lns = liftA2 (pyDocComment lns) docCommentStart commentStart
 
 -- convenience
 imp, incl, initName :: Label
@@ -655,3 +658,7 @@ pyInOutCall f n ins outs = multiAssign outs [f n void ins]
 
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
+
+pyDocComment :: [String] -> Doc -> Doc -> Doc
+pyDocComment [] _ _ = empty
+pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . text) lns

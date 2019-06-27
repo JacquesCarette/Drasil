@@ -35,9 +35,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   litCharD, litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, 
   objVarDocD, inlineIfDocD, funcAppDocD, funcDocD, castDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD,
-  publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, observerListName, 
-  doubleSlash, blockCmtDoc, addCommentsDocD, valList, surroundBody, getterName, 
-  setterName, setEmpty)
+  publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, docCmtStart, 
+  observerListName, doubleSlash, blockCmtDoc, docCmtDoc, addCommentsDocD, 
+  valList, surroundBody, getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
@@ -99,6 +99,8 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   commentStart = pair commentStart commentStart
   blockCommentStart = pair blockCommentStart blockCommentStart
   blockCommentEnd = pair blockCommentEnd blockCommentEnd
+  docCommentStart = pair docCommentStart docCommentStart
+  docCommentEnd = pair docCommentEnd docCommentEnd
   
   printFunc = pair printFunc printFunc
   printLnFunc = pair printLnFunc printLnFunc
@@ -556,6 +558,7 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   type BlockComment (p CppSrcCode CppHdrCode) = Doc
   blockComment lns = pair (blockComment lns) (blockComment lns)
+  docComment lns = pair (docComment lns) (docComment lns)
 
 -----------------
 -- Source File --
@@ -610,6 +613,9 @@ instance KeywordSym CppSrcCode where
   commentStart = return doubleSlash
   blockCommentStart = return blockCmtStart
   blockCommentEnd = return blockCmtEnd
+  docCommentStart = return docCmtStart
+  docCommentEnd = blockCommentEnd
+
   
   printFunc = return $ text "std::cout"
   printLnFunc = return $ text "std::cout"
@@ -1102,6 +1108,7 @@ instance ModuleSym CppSrcCode where
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
 
 -----------------
 -- Header File --
@@ -1156,6 +1163,8 @@ instance KeywordSym CppHdrCode where
   commentStart = return empty
   blockCommentStart = return blockCmtStart
   blockCommentEnd = return blockCmtEnd
+  docCommentStart = return docCmtStart
+  docCommentEnd = blockCommentEnd
 
   printFunc = return empty
   printLnFunc = return empty
@@ -1548,6 +1557,7 @@ instance ModuleSym CppHdrCode where
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
 
 -- helpers
 isDtor :: Label -> Bool

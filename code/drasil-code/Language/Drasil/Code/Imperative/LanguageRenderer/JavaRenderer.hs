@@ -37,9 +37,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  blockCmtStart, blockCmtEnd, observerListName, doubleSlash, blockCmtDoc, 
-  addCommentsDocD, valList, surroundBody, getterName, setterName, setMain, 
-  setEmpty)
+  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
+  blockCmtDoc, docCmtDoc, addCommentsDocD, valList, surroundBody, getterName, 
+  setterName, setMain, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -107,6 +107,8 @@ instance KeywordSym JavaCode where
   commentStart = return doubleSlash
   blockCommentStart = return blockCmtStart
   blockCommentEnd = return blockCmtEnd
+  docCommentStart = return docCmtStart
+  docCommentEnd = blockCommentEnd
   
   printFunc = return $ text "System.out.print"
   printLnFunc = return $ text "System.out.println"
@@ -577,6 +579,7 @@ instance ModuleSym JavaCode where
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd 
 
 enumsEqualInts :: Bool
 enumsEqualInts = False

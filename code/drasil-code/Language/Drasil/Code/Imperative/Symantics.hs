@@ -46,9 +46,11 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   iterForEachLabel :: repr (Keyword repr)
   iterInLabel      :: repr (Keyword repr)
 
-  commentStart :: repr (Keyword repr)
+  commentStart      :: repr (Keyword repr)
   blockCommentStart :: repr (Keyword repr)
-  blockCommentEnd :: repr (Keyword repr)
+  blockCommentEnd   :: repr (Keyword repr)
+  docCommentStart   :: repr (Keyword repr)
+  docCommentEnd     :: repr (Keyword repr)
 
   printFunc       :: repr (Keyword repr)
   printLnFunc     :: repr (Keyword repr)
@@ -547,3 +549,4 @@ class (ClassSym repr) => ModuleSym repr where
 class BlockCommentSym repr where
   type BlockComment repr
   blockComment :: [String] -> repr (BlockComment repr)
+  docComment :: [String] -> repr (BlockComment repr)

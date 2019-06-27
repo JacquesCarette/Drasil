@@ -38,8 +38,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
   listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
-  blockCmtEnd, observerListName, doubleSlash, blockCmtDoc, addCommentsDocD, 
-  valList, surroundBody, getterName, setterName, setMain, setEmpty)
+  blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
+  docCmtDoc, addCommentsDocD, valList, surroundBody, getterName, setterName, 
+  setMain, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -102,6 +103,8 @@ instance KeywordSym CSharpCode where
   commentStart = return doubleSlash
   blockCommentStart = return blockCmtStart
   blockCommentEnd = return blockCmtEnd
+  docCommentStart = return docCmtStart
+  docCommentEnd = blockCommentEnd
   
   printFunc = return $ text "Console.Write"
   printLnFunc = return $ text "Console.WriteLine"
@@ -556,6 +559,7 @@ instance ModuleSym CSharpCode where
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [

@@ -39,8 +39,8 @@ import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
   number)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, mass, physicalcon)
-import Data.Drasil.Concepts.Physics (cohesion, fbd, force, isotropy, strain, 
-  stress, time, twoD, physicCon)
+import Data.Drasil.Concepts.Physics (cohesion, fbd, force, gravity, isotropy,
+  strain, stress, time, twoD, physicCon)
 import Data.Drasil.Concepts.Software (program, softwarecon)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, shearForce, 
   shearRes, solidcon)
@@ -232,15 +232,15 @@ tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
 startIntro, kSent :: Sentence
 startIntro = foldlSent [S "A", phrase slope, S "of geological",
   phrase mass `sC` S "composed of", phrase soil, S "and rock and sometimes",
-  S "water, is subject to the influence of gravity on the" +:+. phrase mass,
-  S "This can cause instability in the form of", phrase soil, S "or rock" +:+.
-  S "movement", S "The", plural effect, S "of", phrase soil,
+  S "water, is subject to the influence" `sOf` phrase gravity +:+ S "on the" +:+.
+  phrase mass, S "This can cause instability in the form" `sOf` phrase soil +:+.
+  S "or rock movement", S "The", plural effect `sOf` phrase soil +:+
   S "or rock movement can range from inconvenient to",
-  S "seriously hazardous, resulting in signifcant life and economic" +:+.
+  S "seriously hazardous, resulting in significant life and economic" +:+.
   plural loss, atStart slope, S "stability is of", phrase interest,
   S "both when analysing natural", plural slope `sC`
-  S "and when designing an excavated" +:+.  phrase slope, atStart ssa,
-  S "is", (S "assessment" `ofThe` S "safety of a" +:+ phrase slope) `sC`
+  S "and when designing an excavated" +:+.  phrase slope, atStart ssa `sIs`
+  (S "assessment" `ofThe` S "safety of a" +:+ phrase slope) `sC`
   S "identifying the", phrase surface,
   S "most likely to experience", phrase slip `sAnd`
   S "an index of its relative stability known as the", phrase fs]

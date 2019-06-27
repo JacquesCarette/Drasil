@@ -2,7 +2,7 @@ module Drasil.Projectile.GenDefs (genDefns, posVecGD) where
 
 import Prelude hiding (cos, sin)
 import Language.Drasil
-import Theory.Drasil (GenDefn, TheoryModel, gdNoRefs)
+import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
@@ -15,6 +15,7 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
 
 import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
+import Drasil.Projectile.References (hibbeler2004)
 import Drasil.Projectile.TMods (accelerationTM, velocityTM)
 
 genDefns :: [GenDefn]
@@ -22,7 +23,8 @@ genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
 ----------
 rectVelGD :: GenDefn
-rectVelGD = gdNoRefs rectVelRC (getUnit speed) rectVelDeriv "rectVel" [{-Notes-}]
+rectVelGD = gd rectVelRC (getUnit speed) rectVelDeriv 
+  [makeCiteInfo hibbeler2004 $ Page [8]] "rectVel" [{-Notes-}]
 
 rectVelRC :: RelationConcept
 rectVelRC = makeRC "rectVelRC" (nounPhraseSent $ foldlSent_ 
@@ -53,7 +55,8 @@ rectVelDerivEqn2 = defint (eqSymb speed) (sy iSpeed) (sy speed) 1 $=
 
 ----------
 rectPosGD :: GenDefn
-rectPosGD = gdNoRefs rectPosRC (getUnit scalarPos) rectPosDeriv "rectPos" [{-Notes-}]
+rectPosGD = gd rectPosRC (getUnit scalarPos) rectPosDeriv
+  [makeCiteInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
 
 rectPosRC :: RelationConcept
 rectPosRC = makeRC "rectPosRC" (nounPhraseSent $ foldlSent_ 

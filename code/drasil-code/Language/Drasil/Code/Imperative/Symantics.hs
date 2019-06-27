@@ -539,5 +539,5 @@ class (StateVarSym repr, MethodSym repr) => ClassSym repr where
 
 class (ClassSym repr) => ModuleSym repr where
   type Module repr
-  buildModule :: Label -> [Library] -> [repr (Statement repr)] -> 
-    [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)
+  buildModule :: Label -> [Library] -> [repr (Method repr)] -> 
+    [repr (Class repr)] -> repr (Module repr)

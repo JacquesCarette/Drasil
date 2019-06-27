@@ -39,7 +39,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, observerListName,
   doubleSlash, addCommentsDocD, valList, surroundBody, getterName, setterName, 
-  setMain, setEmpty, statementsToStateVars)
+  setMain, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -547,10 +547,9 @@ instance ClassSym CSharpCode where
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ vs ms cs = fmap (md n (any (snd . unCSC) ms || 
-    any (snd . unCSC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
-    else pubClass n Nothing (map (liftA4 statementsToStateVars public static_ 
-    endStatement) vs) ms : cs))
+  buildModule n _ ms cs = fmap (md n (any (snd . unCSC) ms || 
+    any (snd . unCSC) cs)) (liftList moduleDocD (if null ms then cs 
+    else pubClass n Nothing [] ms : cs))
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [

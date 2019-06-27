@@ -333,7 +333,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   multiAssign       :: [repr (Value repr)] -> [repr (Value repr)] ->
     repr (Statement repr) 
 
-  varDec           :: Label -> repr (StateType repr) -> repr (Statement repr)
+  varDec           :: repr (Value repr) -> repr (Statement repr)
   varDecDef        :: Label -> repr (StateType repr) -> repr (Value repr) -> 
     repr (Statement repr)
   listDec          :: Label -> Integer -> repr (StateType repr) -> 
@@ -539,5 +539,5 @@ class (StateVarSym repr, MethodSym repr) => ClassSym repr where
 
 class (ClassSym repr) => ModuleSym repr where
   type Module repr
-  buildModule :: Label -> [Library] -> [repr (Statement repr)] -> 
-    [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)
+  buildModule :: Label -> [Library] -> [repr (Method repr)] -> 
+    [repr (Class repr)] -> repr (Module repr)

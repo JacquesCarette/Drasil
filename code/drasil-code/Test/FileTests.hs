@@ -7,7 +7,7 @@ import Language.Drasil.Code (PackageSym(..), RenderSym(..), PermanenceSym(..),
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 fileTests :: (PackageSym repr) => repr (Package repr)
-fileTests = packMods "FileTests" [fileDoc (buildModule "FileTests" [] [] [fileTestMethod] [])]
+fileTests = packMods "FileTests" [fileDoc (buildModule "FileTests" [] [fileTestMethod] [])]
 
 fileTestMethod :: (RenderSym repr) => repr (Method repr)
 fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory], 
@@ -16,9 +16,9 @@ fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory],
 writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [
   varDecDef "e" int (litInt 5),
-  varDec "f" float,
+  varDec $ var "f" float,
   var "f" float &= castObj (cast float int) (var "e" int),
-  varDec "fileToWrite" outfile,
+  varDec $ var "fileToWrite" outfile,
 
   openFileW (var "fileToWrite" outfile) (litString "testText.txt"),
   printFile (var "fileToWrite" outfile) int (litInt 0),
@@ -28,9 +28,9 @@ writeStory = block [
   printFileStrLn (var "fileToWrite" outfile) "!!",
   closeFile (var "fileToWrite" outfile),
 
-  varDec "fileToRead" infile,
+  varDec $ var "fileToRead" infile,
   openFileR (var "fileToRead" infile) (litString "testText.txt"),
-  varDec "fileLine" string,
+  varDec $ var "fileLine" string,
   getFileInputLine (var "fileToRead" infile) (var "fileLine" string),
   discardFileLine (var "fileToRead" infile),
   listDec "fileContents" 0 (listType dynamic_ string)]

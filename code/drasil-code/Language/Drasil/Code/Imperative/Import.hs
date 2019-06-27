@@ -66,8 +66,8 @@ chooseConstr Exception = constrExc
 
 chooseInStructure :: (RenderSym repr) => Structure -> Reader (State repr) 
   [repr (Module repr)]
-chooseInStructure Loose   = genInputModNoClass
-chooseInStructure AsClass = genInputModClass
+chooseInStructure Unbundled   = genInputModNoClass
+chooseInStructure Bundled = genInputModClass
 
 chooseLogging :: (RenderSym repr) => Logging -> (repr (Value repr) -> 
   repr (Value repr) -> Reader (State repr) (repr (Statement repr)))
@@ -76,8 +76,8 @@ chooseLogging LogAll = loggedAssign
 chooseLogging _      = \x y -> return $ assign x y
 
 initLogFileVar :: (RenderSym repr) => Logging -> [repr (Statement repr)]
-initLogFileVar LogVar = [varDec "outfile" outfile]
-initLogFileVar LogAll = [varDec "outfile" outfile]
+initLogFileVar LogVar = [varDec $ var "outfile" outfile]
+initLogFileVar LogAll = [varDec $ var "outfile" outfile]
 initLogFileVar _ = []
 
 
@@ -201,7 +201,7 @@ genInputModNoClass :: (RenderSym repr) => Reader (State repr)
 genInputModNoClass = do
   inpDer    <- genInputDerived
   inpConstr <- genInputConstraints
-  return [ buildModule "InputParameters" [] []
+  return [ buildModule "InputParameters" []
            (catMaybes [inpDer, inpConstr])
            []
          ]
@@ -363,7 +363,7 @@ genOutputFormat = do
                  ] ) (outputs $ csi $ codeSpec g)
         mthd <- publicMethod (mState void) "write_output" parms (return [block $
           [
-          varDec l_outfile outfile,
+          varDec v_outfile,
           openFileW v_outfile (litString "output.txt") ] ++
           concat outp ++ [ closeFile v_outfile ]])
         return $ Just mthd
@@ -423,7 +423,7 @@ loggedMethod n vals b =
     g <- ask
     rest <- b
     return $ block [
-      varDec l_outfile outfile,
+      varDec v_outfile,
       openFileA v_outfile (litString $ logName g),
       printFileStr v_outfile ("function " ++ n ++ "("),
       printParams vals v_outfile,
@@ -447,7 +447,7 @@ genModule n maybeMs maybeCs = do
       updateState = withReader (\s -> s { currentModule = n })
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
-  return $ buildModule n ls [] ms cs
+  return $ buildModule n ls ms cs
 
 
 genMain :: (RenderSym repr) => Reader (State repr) (repr (Module repr))
@@ -474,14 +474,15 @@ getInputDecl :: (RenderSym repr) => Reader (State repr) (Maybe (repr (
 getInputDecl = do
   g <- ask
   let l_params = "inParams"
-      getDecl :: (RenderSym repr) => Structure -> [CodeChunk] -> Maybe (repr 
-        (Statement repr))
-      getDecl _ [] = Nothing
-      getDecl Loose ins = Just $ multi $ map (\x -> varDec (codeName x) 
-        (convType $ codeType x)) ins
-      getDecl AsClass _ = Just $ extObjDecNewVoid l_params "InputParameters" 
-        (obj "InputParameters") 
-  return $ getDecl (inStruct g) (inputs $ codeSpec g)
+      getDecl :: (RenderSym repr) => Structure -> [CodeChunk] -> 
+        Reader (State repr) (Maybe (repr (Statement repr)))
+      getDecl _ [] = return Nothing
+      getDecl Unbundled ins = do
+        vals <- mapM (\x -> variable (codeName x) (convType $ codeType x)) ins
+        return $ Just $ multi $ map varDec vals
+      getDecl Bundled _ = return $ Just $ extObjDecNewVoid l_params 
+        "InputParameters" (obj "InputParameters") 
+  getDecl (inStruct g) (inputs $ codeSpec g)
 
 getFuncCall :: (RenderSym repr) => String -> repr (StateType repr) -> 
   Reader (State repr) [ParamData repr] -> 
@@ -543,8 +544,8 @@ getInputFormatIns :: (RenderSym repr) => Reader (State repr)
 getInputFormatIns = do
   g <- ask
   let getIns :: (RenderSym repr) => Structure -> [repr (Value repr)]
-      getIns Loose = []
-      getIns AsClass = [var "inParams" (obj "InputParameters")]
+      getIns Unbundled = []
+      getIns Bundled = [var "inParams" (obj "InputParameters")]
   return $ var "filename" string : getIns (inStruct g)
 
 getInputFormatOuts :: (RenderSym repr) => Reader (State repr) 
@@ -552,8 +553,8 @@ getInputFormatOuts :: (RenderSym repr) => Reader (State repr)
 getInputFormatOuts = do
   g <- ask
   let getOuts :: (RenderSym repr) => Structure -> [repr (Value repr)]
-      getOuts Loose = toValues $ extInputs $ csi $ codeSpec g
-      getOuts AsClass = []
+      getOuts Unbundled = toValues $ extInputs $ csi $ codeSpec g
+      getOuts Bundled = []
   return $ getOuts (inStruct g)
   
 toValues :: (RenderSym repr) => [CodeChunk] -> [repr (Value repr)]
@@ -622,10 +623,15 @@ variable s' t' = do
         Reader (State repr) (repr (Value repr))
       doit s t | member s mm =
         maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
-               | s `elem` map codeName (inputs cs) = return $ var "inParams" 
-               (obj "InputParameters") $-> var s t
+               | s `elem` map codeName (inputs cs) = return $ inputVariable 
+                 (inStruct g) s t
                | otherwise                         = return $ var s t
   doit s' t'
+
+inputVariable :: (RenderSym repr) => Structure -> String -> 
+  repr (StateType repr) -> repr (Value repr)
+inputVariable Unbundled s t = var s t
+inputVariable Bundled s t = var "inParams" (obj "InputParameters") $-> var s t
   
 fApp :: (RenderSym repr) => String -> String -> repr (StateType repr) -> 
   [repr (Value repr)] -> Reader (State repr) (repr (Value repr))
@@ -670,8 +676,8 @@ mkParam p = PD (paramFunc (codeType p) $ var pName pType) pType pName
 getInputParams :: (RenderSym repr) => Structure -> [CodeChunk] ->
   [ParamData repr]
 getInputParams _ [] = []
-getInputParams Loose cs = map mkParam cs
-getInputParams AsClass _ = [PD (pointerParam $ var pName pType) pType pName]
+getInputParams Unbundled cs = map mkParam cs
+getInputParams Bundled _ = [PD (pointerParam $ var pName pType) pType pName]
   where pName = "inParams"
         pType = obj "InputParameters"
 
@@ -798,12 +804,10 @@ genFunc (FDef (FuncDef n i o s)) = do
   g <- ask
   parms <- getParams i
   stmts <- mapM convStmt s
+  vals <- mapM (\x -> variable (codeName x) (convType $ codeType x)) 
+    (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ i)
   publicMethod (mState $ convType o) n parms
-    (return [block $
-        map (\x -> varDec (codeName x) (convType $ codeType x))
-          (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ i)
-        ++ stmts
-    ])
+    (return [block $ map varDec vals ++ stmts])
 genFunc (FData (FuncData n ddef)) = genDataFunc n ddef
 genFunc (FCD cd) = genCalcFunc cd
 
@@ -839,7 +843,9 @@ convStmt (FTry t c) = do
 convStmt FContinue = return continue
 convStmt (FDec v (C.List t)) = return $ listDec (codeName v) 0 
   (listType dynamic_ (convType t))
-convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
+convStmt (FDec v t) = do 
+  val <- variable (codeName v) (convType t)
+  return $ varDec val
 convStmt (FProcCall n l) = do
   e' <- convExpr (FCall (asExpr n) l)
   return $ valState e'
@@ -863,8 +869,8 @@ readData :: (RenderSym repr) => DataDesc -> Reader (State repr)
 readData ddef = do
   inD <- mapM inData ddef
   return [block $ [
-    varDec l_infile infile,
-    varDec l_line string,
+    varDec v_infile,
+    varDec v_line,
     listDec l_lines 0 (listType dynamic_ string),
     listDec l_linetokens 0 (listType dynamic_ string),
     openFileR v_infile v_filename ] ++

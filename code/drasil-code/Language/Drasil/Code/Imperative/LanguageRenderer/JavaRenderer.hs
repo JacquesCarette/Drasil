@@ -37,8 +37,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  observerListName, doubleSlash, addCommentsDocD, valList, appendToBody, 
-  getterName, setterName, setMain, setEmpty, statementsToStateVars)
+  observerListName, doubleSlash, addCommentsDocD, valList, surroundBody, 
+  getterName, setterName, setMain, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -350,7 +350,7 @@ instance StatementSym JavaCode where
   (&++) v = mkSt <$> fmap plusPlusDocD v
   (&~-) v = v &= (v #- litInt 1)
 
-  varDec l t = mkSt <$> fmap (varDecDocD l) t
+  varDec v = mkSt <$> fmap varDecDocD v
   varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
   listDec l n t = mkSt <$> liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> liftA2 (jListDecDef l) t (liftList 
@@ -531,10 +531,9 @@ instance MethodSym JavaCode where
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
-    (map stateParam ins) (liftA2 appendToBody b (returnState v))
+    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
   inOutFunc n s p ins outs b = function n s p jArrayType
-    (map stateParam ins) (liftA2 appendToBody b (multi (
-      varDecDef "outputs" jArrayType
+    (map stateParam ins) (liftA3 surroundBody decls b (multi (varDecDef "outputs" jArrayType
         (var ("new Object[" ++ show (length outs) ++ "]") jArrayType)
       : assignArray 0 outs
       ++ [returnVar "outputs" jArrayType])))
@@ -543,6 +542,7 @@ instance MethodSym JavaCode where
             assignArray _ [] = []
             assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
               (fmap valType v) &= v) : assignArray (c+1) vs
+            decls = multi $ map varDec outs
             
 
 instance StateVarSym JavaCode where
@@ -567,10 +567,9 @@ instance ClassSym JavaCode where
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
-  buildModule n _ vs ms cs = fmap (md n (any (snd . unJC) ms || 
-    any (snd . unJC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
-    else pubClass n Nothing (map (liftA4 statementsToStateVars public static_
-    endStatement) vs) ms : cs))
+  buildModule n _ ms cs = fmap (md n (any (snd . unJC) ms || 
+    any (snd . unJC) cs)) (liftList moduleDocD (if null ms then cs 
+    else pubClass n Nothing [] ms : cs))
 
 enumsEqualInts :: Bool
 enumsEqualInts = False

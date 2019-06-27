@@ -36,9 +36,9 @@ acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
   yPos, yVel :: ConceptChunk
 
 oneD, twoD, threeD :: CI
-oneD   = commonIdeaWithDict "oneD"   (pn "one-dimensional")   "1D" [mathematics, physics]
-twoD   = commonIdeaWithDict "twoD"   (pn "two-dimensional")   "2D" [mathematics, physics]
-threeD = commonIdeaWithDict "threeD" (pn "three-dimensional") "3D" [mathematics, physics]
+oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
+twoD   = commonIdeaWithDict "twoD"   (cn "two-dimensional")   "2D" [mathematics, physics]
+threeD = commonIdeaWithDict "threeD" (cn "three-dimensional") "3D" [mathematics, physics]
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."

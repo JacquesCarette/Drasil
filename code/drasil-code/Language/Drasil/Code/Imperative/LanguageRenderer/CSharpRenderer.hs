@@ -38,8 +38,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
   listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, observerListName,
-  doubleSlash, addCommentsDocD, valList, appendToBody, getterName, setterName, 
-  setMain, setEmpty, statementsToStateVars)
+  doubleSlash, addCommentsDocD, valList, surroundBody, getterName, setterName, 
+  setMain, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
@@ -346,7 +346,7 @@ instance StatementSym CSharpCode where
   (&++) v = mkSt <$> fmap plusPlusDocD v
   (&~-) v = v &= (v #- litInt 1)
 
-  varDec l t = mkSt <$> fmap (varDecDocD l) t
+  varDec v = mkSt <$> fmap varDecDocD v
   varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
   listDec l n t = mkSt <$> liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> lift1List (listDecDefDocD l) t vs
@@ -520,10 +520,10 @@ instance MethodSym CSharpCode where
   function n = method n ""
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
-    (map stateParam ins) (liftA2 appendToBody b $ returnState v)
-  inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
+    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
+  inOutFunc n s p ins outs b = function n s p (mState void) (map (\v -> 
     if v `elem` outs then fmap csRef (stateParam v) else stateParam v) ins ++
-    map (fmap csRef . stateParam) outs) b
+    map (fmap csOut . stateParam) (filter (`notElem` ins) outs)) b
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -547,10 +547,9 @@ instance ClassSym CSharpCode where
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ vs ms cs = fmap (md n (any (snd . unCSC) ms || 
-    any (snd . unCSC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
-    else pubClass n Nothing (map (liftA4 statementsToStateVars public static_ 
-    endStatement) vs) ms : cs))
+  buildModule n _ ms cs = fmap (md n (any (snd . unCSC) ms || 
+    any (snd . unCSC) cs)) (liftList moduleDocD (if null ms then cs 
+    else pubClass n Nothing [] ms : cs))
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [
@@ -602,6 +601,9 @@ csOpenFileWorA f n w a = valDoc f <+> equals <+> new <+> typeDoc w <>
 csRef :: Doc -> Doc
 csRef p = text "ref" <+> p
 
+csOut :: Doc -> Doc
+csOut p = text "out" <+> p
+
 csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) -> 
   [CSharpCode (Value CSharpCode)] -> CSharpCode (Value CSharpCode)) -> Label -> 
   [CSharpCode (Value CSharpCode)] -> [CSharpCode (Value CSharpCode)] -> 
@@ -609,4 +611,4 @@ csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) ->
 csInOutCall f n ins [out] = assign out $ f n (fmap valType out) ins
 csInOutCall f n ins outs = valState $ f n void (nub $ map (\v -> 
   if v `elem` outs then fmap (updateValDoc csRef) v else v) ins ++
-  map (fmap (updateValDoc csRef)) outs)
+  map (fmap (updateValDoc csOut)) (filter (`notElem` ins) outs))

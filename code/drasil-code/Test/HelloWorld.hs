@@ -14,7 +14,7 @@ import Test.Helper (helper)
 
 helloWorld :: (PackageSym repr) => repr (Package repr)
 helloWorld = packMods "HelloWorld" [fileDoc (buildModule "HelloWorld" 
-  ["Helper"] [] [helloWorldMain] []), helper]
+  ["Helper"] [helloWorldMain] []), helper]
 
 helloWorldMain :: (RenderSym repr) => repr (Method repr)
 helloWorldMain = mainMethod "HelloWorld" (body [ helloInitVariables, 
@@ -25,7 +25,7 @@ helloWorldMain = mainMethod "HelloWorld" (body [ helloInitVariables,
 
 helloInitVariables :: (RenderSym repr) => repr (Block repr)
 helloInitVariables = block [comment "Initializing variables",
-  varDec "a" int, 
+  varDec $ var "a" int, 
   varDecDef "b" int (litInt 5),
   listDecDef "myOtherList" (listType static_ float) [litFloat 1.0, litFloat 1.5],
   varDecDef "oneIndex" int (indexOf (var "myOtherList" (listType static_ float)) (litFloat 1.0)),
@@ -34,7 +34,7 @@ helloInitVariables = block [comment "Initializing variables",
   valState (objAccess (var "myOtherList" (listType static_ float)) (listAdd 
     (var "myOtherList" (listType static_ float)) (litInt 2) (litFloat 2.0))),
   valState (objAccess (var "myOtherList" (listType static_ float)) (listAppend (litFloat 2.5))),
-  varDec "e" float,
+  varDec $ var "e" float,
   var "e" int &= objAccess (var "myOtherList" (listType static_ float)) (listAccess float (litInt 1)),
   valState (objAccess (var "myOtherList" (listType static_ float)) (listSet (litInt 1) (litFloat 17.4))),
   listDec "myName" 7 (listType static_ string),
@@ -50,8 +50,8 @@ helloListSlice = listSlice (listType static_ float) (var "mySlicedList" (listTyp
 helloIfBody :: (RenderSym repr) => repr (Body repr)
 helloIfBody = addComments "If body" (body [
   block [
-    varDec "c" int,
-    varDec "d" int,
+    varDec $ var "c" int,
+    varDec $ var "d" int,
     assign (var "a" int) (litInt 5),
     var "b" int &= (var "a" int #+ litInt 2),
     var "c" int &= (var "b" int #+ litInt 3),

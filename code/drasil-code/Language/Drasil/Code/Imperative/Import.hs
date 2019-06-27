@@ -201,7 +201,7 @@ genInputModNoClass :: (RenderSym repr) => Reader (State repr)
 genInputModNoClass = do
   inpDer    <- genInputDerived
   inpConstr <- genInputConstraints
-  return [ buildModule "InputParameters" [] []
+  return [ buildModule "InputParameters" []
            (catMaybes [inpDer, inpConstr])
            []
          ]
@@ -447,7 +447,7 @@ genModule n maybeMs maybeCs = do
       updateState = withReader (\s -> s { currentModule = n })
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
-  return $ buildModule n ls [] ms cs
+  return $ buildModule n ls ms cs
 
 
 genMain :: (RenderSym repr) => Reader (State repr) (repr (Module repr))

@@ -7,7 +7,7 @@ import Language.Drasil.Code.Imperative.Symantics (
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 helper :: (RenderSym repr) => repr (RenderFile repr)
-helper = fileDoc (buildModule "Helper" [] [] [doubleAndAdd] [])
+helper = fileDoc (buildModule "Helper" [] [doubleAndAdd] [])
 
 doubleAndAdd :: (RenderSym repr) => repr (Method repr)
 doubleAndAdd = function "doubleAndAdd" public static_ (mState float) 

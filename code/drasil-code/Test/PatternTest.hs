@@ -13,7 +13,7 @@ patternTest = packMods "PatternTest" [fileDoc (buildModule "PatternTest" ["Obser
 
 patternTestMainMethod :: (RenderSym repr) => repr (Method repr)
 patternTestMainMethod = mainMethod "PatternTest" (body [block [
-  varDec "n" int,
+  varDec $ var "n" int,
   initState "myFSM" "Off", 
   changeState "myFSM" "On",
   checkState "myFSM" 
@@ -25,12 +25,12 @@ patternTestMainMethod = mainMethod "PatternTest" (body [block [
   runStrategy "myStrat" 
     [("myStrat", oneLiner (printStrLn "myStrat")), 
       ("yourStrat", oneLiner (printStrLn "yourStrat"))]
-    (Just (litInt 3)) (Just (var "n")),
+    (Just (litInt 3)) (Just (var "n" int)),
 
   block [
     varDecDef "obs1" (obj "Observer") (extStateObj "Observer" (obj "Observer") []), 
     varDecDef "obs2" (obj "Observer") (extStateObj "Observer" (obj "Observer") [])],
   block [
-    initObserverList (listType static_ (obj "Observer")) [var "obs1"], 
-    addObserver (obj "Observer") (var "obs2"),
-    notifyObservers "printNum" (listType static_ (obj "Observer")) []]])
+    initObserverList (listType static_ (obj "Observer")) [var "obs1" (obj "Observer")], 
+    addObserver (obj "Observer") (var "obs2" (obj "Observer")),
+    notifyObservers void "printNum" (listType static_ (obj "Observer")) []]])

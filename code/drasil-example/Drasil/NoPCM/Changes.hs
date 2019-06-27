@@ -1,4 +1,4 @@
-module Drasil.NoPCM.Changes where
+module Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -6,7 +6,7 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (model, likeChgDom, unlikeChgDom)
 import Data.Drasil.Concepts.Thermodynamics (temp)
 
-import Drasil.NoPCM.Assumptions(assumpCTNTD, assumpNIHGBW, assumpWAL)
+import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.SWHS.Concepts (water)
 --------------------------------
@@ -21,7 +21,7 @@ likeChgDT = cic "likeChgDT" (
   foldlSent [chgsStart assumpCTNTD (S "The"), phrase model,
   S "currently only accounts for charging of the tank. That is, increasing the",
   phrase temp, S "of the water to match the", phrase temp +:+. S "of the coil",
-  S "A more complete", phrase model,S "would also account for discharging of the tank"]) 
+  S "A more complete", phrase model, S "would also account for discharging of the tank"]) 
   "Discharging-Tank" likeChgDom
 
 

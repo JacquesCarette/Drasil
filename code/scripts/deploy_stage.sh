@@ -56,7 +56,9 @@ copy_graphs() {
 }
 
 copy_examples() {
-	rm -r "$EXAMPLE_DEST"
+  if [ -d "$EXAMPLE_DEST" ]; then
+	  rm -r "$EXAMPLE_DEST"
+  fi
 	for example in "$CUR_DIR$BUILD_FOLDER"*; do
 		example_name=$(basename "$example")
 		mkdir -p "$EXAMPLE_DEST$example_name/$SRS_DEST"

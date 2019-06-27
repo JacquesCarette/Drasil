@@ -16,13 +16,13 @@ import Utils.Drasil
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
-  LCsSec'(..), ProblemDescription(..), PDSub(..), RefSec(RefProg),
+  LCsSec(..), ProblemDescription(..), PDSub(..), RefSec(RefProg),
   RefTab(TAandA, TUnits), ReqrmntSec(..), ReqsSub(..), SCSSub(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
   dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  termDefnF, tsymb, generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
+  termDefnF', tsymb, generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
   getTraceMapFromDD, getTraceMapFromIM, getSCSSub, traceMatStandard,
   characteristicsLabel, generateTraceMap')
 
@@ -53,8 +53,7 @@ import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamenta
   derived)
 
 import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
-import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs,
-  unlikelyChgsList)
+import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, con, con')
 import Drasil.GlassBR.DataDefs (dataDefns, qDefns)
@@ -172,8 +171,8 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     FReqsSub funcReqs funcReqsTables,
     NonFReqsSub nonfuncReqs
   ],
-  LCsSec' $ LCsProg' likelyChgs,
-  UCsSec $ UCsProg unlikelyChgsList,
+  LCsSec $ LCsProg likelyChgs,
+  UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $
     TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
       (map (LlC . fst) traceabilityMatrices) [],
@@ -380,7 +379,7 @@ prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict whether a",
 {--Terminology and Definitions--}
 
 termsAndDesc :: Section
-termsAndDesc = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
+termsAndDesc = termDefnF' (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
   S "are extracted from" +:+ makeCiteS astm2009 `sIn`
   makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
 

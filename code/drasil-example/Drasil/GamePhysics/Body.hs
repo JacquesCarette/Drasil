@@ -16,8 +16,8 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
   LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(Goals), generateTraceMap', dataConstraintUncertainty, inDataConstTbl,
-  intro, mkDoc, outDataConstTbl, outDataConstTbl, termDefnF, tsymb,
+  PDSub(..), generateTraceMap', dataConstraintUncertainty, inDataConstTbl,
+  intro, mkDoc, outDataConstTbl, outDataConstTbl, tsymb,
   getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   traceMatStandard, solutionLabel)
@@ -47,8 +47,7 @@ import qualified Data.Drasil.Concepts.Math as CM (equation, law, mathcon, mathco
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
-import Drasil.GamePhysics.Changes (unlikelyChangesList', unlikelyChangeswithIntro,
- likelyChangesListwithIntro, likelyChangesList')
+import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GamePhysics.Concepts (chipmunk, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
@@ -59,7 +58,6 @@ import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 
-import Control.Lens ((^.))
 import qualified Data.Map as Map
 
 authors :: People
@@ -85,7 +83,9 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
    SSDSec $ SSDProg
-      [ SSDProblem   $ PDProg  probDescIntro [termsAndDefns] [Goals [S "the" +:+ plural input_] goals]
+      [ SSDProblem $ PDProg probDescIntro []
+        [ TermsAndDefs Nothing terms
+        , Goals [S "the" +:+ plural input_] goals]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields) tModsNew
@@ -102,8 +102,8 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       FReqsSub funcReqs [],
       NonFReqsSub nonfuncReqs
     ],
-    LCsSec $ LCsProg likelyChangesListwithIntro,
-    UCsSec $ UCsProg unlikelyChangeswithIntro,
+    LCsSec $ LCsProg likelyChgs,
+    UCsSec $ UCsProg unlikelyChgs,
     ExistingSolnSec $ ExistSolnProg offShelfSols,
     TraceabilitySec $ TraceabilityProg (map fst traceabilityMatrices)
       (map (foldlList Comma List . snd) traceabilityMatrices) (map (LlC . fst) traceabilityMatrices) [],
@@ -130,8 +130,7 @@ theory :: [TheoryModel]
 theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ likelyChangesList' ++ unlikelyChangesList' ++
-  funcReqs
+concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 section :: [Section]
 section = sec
@@ -378,16 +377,8 @@ probDescIntro = foldlSent_
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-termsAndDefns :: Section
-termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
-
-terminologyLabel :: Reference
-terminologyLabel = makeLstRef "terminologyGM" "terminologyGM"
-
-termsAndDefnsBullets :: Contents
-termsAndDefnsBullets = LlC $ enumBullet terminologyLabel
-  (map (\x -> atStart x +: EmptyS +:+ (x ^. defn))
-    [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand])
+terms :: [ConceptChunk]
+terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand]
 
 -----------------------------
 -- 4.1.2 : Goal Statements --

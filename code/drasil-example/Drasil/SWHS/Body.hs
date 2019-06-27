@@ -21,11 +21,11 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(..),
-  dataConstraintUncertainty, intro, mkDoc, mkEnumSimpleD, outDataConstTbl,
-  termDefnF, tsymb'', getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
+  dataConstraintUncertainty, intro, mkDoc, outDataConstTbl, tsymb'',
+  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD,
   getTraceMapFromIM, getSCSSub, traceMatStandard)
-import qualified Drasil.DocLang.SRS as SRS (likeChg, unlikeChg, inModel)
+import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
@@ -170,8 +170,9 @@ mkSRS = [RefSec $ RefProg intro [
     ],
   SSDSec $
     SSDProg 
-      [ SSDProblem $ PDProg probDescIntro [termsAndDefns]
-        [ PhySysDesc progName physSystParts figTank []
+      [ SSDProblem $ PDProg probDescIntro []
+        [ TermsAndDefs Nothing terms
+        , PhySysDesc progName physSystParts figTank []
         , Goals goalInputs goals]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -189,8 +190,8 @@ mkSRS = [RefSec $ RefProg intro [
     FReqsSub funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
-  LCsSec $ LCsProg likelyChgsList,
-  UCsSec $ UCsProg unlikelyChgsList,
+  LCsSec $ LCsProg likelyChgs,
+  UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $
     TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
       (map (LlC . fst) traceabilityMatrices) [],
@@ -320,21 +321,8 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-termsAndDefns :: Section
-termsAndDefns = termDefnF Nothing [termsAndDefnsBullets]
-
--- Above paragraph is repeated in all examples, can be abstracted out. (Note:
--- GlassBR has an additional sentence with a reference at the end.)
-
-termsAndDefnsBullets :: Contents
-termsAndDefnsBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs $ map tAndDMap
-  [CT.htFlux, phaseChangeMaterial, CT.heatCapSpec,
-  CT.thermalConduction, transient]
-
-tAndDMap :: Concept c => c -> ItemType
-tAndDMap c = Flat $ foldlSent [atStart c +: EmptyS, c ^. defn]
-
--- Structure of this list is same in all examples, probably can be automated.
+terms :: [ConceptChunk]
+terms = map cw [CT.htFlux, phaseChangeMaterial, CT.heatCapSpec, CT.thermalConduction, transient]
 
 -- Included heat flux and specific heat in NamedChunks even though they are
 -- already in SWHSUnits
@@ -468,21 +456,9 @@ outputConstraints = [tempW, tempPCM, watE, pcmE]
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
-likelyChgsSect :: Section
-likelyChgsSect = SRS.likeChg likelyChgsList []
-
-likelyChgsList :: [Contents]
-likelyChgsList = mkEnumSimpleD likelyChgs
-
 --------------------------------
 -- Section 6b : UNLIKELY CHANGES --
 --------------------------------
-
-unlikelyChgsSect :: Section
-unlikelyChgsSect = SRS.unlikeChg unlikelyChgsList []
-
-unlikelyChgsList :: [Contents]
-unlikelyChgsList = mkEnumSimpleD unlikelyChgs
 
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --

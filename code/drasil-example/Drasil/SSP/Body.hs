@@ -9,7 +9,6 @@ import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
   _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, qdFromDD)
 
-import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 import qualified Data.Map as Map
 import Utils.Drasil
@@ -20,7 +19,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), dataConstraintUncertainty, intro, mkDoc, termDefnF, tsymb'',
+  PDSub(..), dataConstraintUncertainty, intro, mkDoc, tsymb'',
   getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceMap', traceMatStandard)
@@ -54,8 +53,7 @@ import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 
 import Drasil.SSP.Assumptions (assumptions)
-import Drasil.SSP.Changes (likelyChgs, likelyChgsCon, unlikelyChgs,
-  unlikelyChgsCon)
+import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
@@ -120,8 +118,9 @@ mkSRS = [RefSec $ RefProg intro
       UsrChars [userCharIntro], SystCons [sysConstraints] []],
     SSDSec $
       SSDProg
-        [ SSDProblem $ PDProg prob [termsDefs]
-          [ PhySysDesc ssp physSystParts figPhysSyst physSystContents 
+        [ SSDProblem $ PDProg prob []
+          [ TermsAndDefs Nothing terms
+          , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
           , Goals goalsInputs goals]
         , SSDSolChSpec $ SCSProg
           [Assumptions
@@ -139,8 +138,8 @@ mkSRS = [RefSec $ RefProg intro
     FReqsSub funcReqs funcReqTables,
     NonFReqsSub nonFuncReqs
   ],
-  LCsSec $ LCsProg likelyChgsCon,
-  UCsSec $ UCsProg unlikelyChgsCon,
+  LCsSec $ LCsProg likelyChgs,
+  UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $ TraceabilityProg (map fst traceyMatrix) (map (foldlList Comma List . snd) traceyMatrix)
     (map (LlC . fst) traceyMatrix) [],
   AuxConstntSec $ AuxConsProg ssp [],
@@ -387,15 +386,10 @@ From when solution was used in Problem Description:
 -}
 
 -- SECTION 4.1.1 --
-termsDefs :: Section
-termsDefs = termDefnF Nothing [termsDefsList]
+terms :: [ConceptChunk]
+terms = [fsConcept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
+  shearForce, mobShear, shearRes, effFandS, cohesion, isotropy, plnStrn]
 
-termsDefsList :: Contents
-termsDefsList = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $
-  map (\x -> (titleize x, Flat $ x ^. defn))
-  [fsConcept, slpSrf, crtSlpSrf, waterTable, stress, strain, normForce,
-  shearForce, mobShear, shearRes, effFandS, cohesion, isotropy,
-  plnStrn]
   -- most of these are in concepts (physics or solidMechanics)
   -- except for fsConcept, crtSlpSrf & plnStrn which are in defs.hs
 

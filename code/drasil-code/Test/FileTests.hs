@@ -16,27 +16,29 @@ fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory],
 writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [
   varDecDef "e" int (litInt 5),
-  varDec "f" float,
-  "f" &.= castObj (cast float int) (var "e"),
-  varDec "fileToWrite" outfile,
+  varDec $ var "f" float,
+  var "f" float &= castObj (cast float int) (var "e" int),
+  varDec $ var "fileToWrite" outfile,
 
-  openFileW (var "fileToWrite") (litString "testText.txt"),
-  printFile (var "fileToWrite") int (litInt 0),
-  printFileLn (var "fileToWrite") int (litFloat 0.89),
-  printFileStr (var "fileToWrite") "ello",
-  printFileStrLn (var "fileToWrite") "bye",
-  printFileStrLn (var "fileToWrite") "!!",
-  closeFile (var "fileToWrite"),
+  openFileW (var "fileToWrite" outfile) (litString "testText.txt"),
+  printFile (var "fileToWrite" outfile) int (litInt 0),
+  printFileLn (var "fileToWrite" outfile) int (litFloat 0.89),
+  printFileStr (var "fileToWrite" outfile) "ello",
+  printFileStrLn (var "fileToWrite" outfile) "bye",
+  printFileStrLn (var "fileToWrite" outfile) "!!",
+  closeFile (var "fileToWrite" outfile),
 
-  varDec "fileToRead" infile,
-  openFileR (var "fileToRead") (litString "testText.txt"),
-  varDec "fileLine" string,
-  getFileInputLine (var "fileToRead") (var "fileLine"),
-  discardFileLine (var "fileToRead"),
+  varDec $ var "fileToRead" infile,
+  openFileR (var "fileToRead" infile) (litString "testText.txt"),
+  varDec $ var "fileLine" string,
+  getFileInputLine (var "fileToRead" infile) (var "fileLine" string),
+  discardFileLine (var "fileToRead" infile),
   listDec "fileContents" 0 (listType dynamic_ string)]
 
 readStory :: (RenderSym repr) => repr (Statement repr)
-readStory = getFileInputAll (var "fileToRead") (var "fileContents")
+readStory = getFileInputAll (var "fileToRead" infile) 
+  (var "fileContents" (listType dynamic_ string))
 
 goodBye :: (RenderSym repr) => repr (Block repr)
-goodBye = block [printLnList string (var "fileContents"), closeFile (var "fileToRead")]
+goodBye = block [printLnList string (var "fileContents" 
+  (listType dynamic_ string)), closeFile (var "fileToRead" infile)]

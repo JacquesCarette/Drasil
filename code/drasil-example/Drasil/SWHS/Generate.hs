@@ -7,10 +7,9 @@ import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
 import Drasil.SWHS.Body (srs', printSetting) -- si
--- import Drasil.SWHS.DataDesc (inputMod)
 
 -- code :: CodeSpec
--- code = codeSpec si choices [inputMod]
+-- code = codeSpec si choices []
 
 -- choices :: Choices
 -- choices = Choices {

@@ -640,7 +640,7 @@ docCmtDoc :: [String] -> Doc -> Doc -> Doc
 docCmtDoc lns start end = vcat $ start : map (indent . text) lns ++ [end]
 
 commentedItem :: Doc -> Doc -> Doc
-commentedItem cmt itm = cmt $+$ itm
+commentedItem cmt itm = if isEmpty itm then itm else cmt $+$ itm
 
 commentLength :: Int
 commentLength = 75

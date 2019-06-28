@@ -126,7 +126,7 @@ mkSRS = [RefSec $ RefProg intro
   IntroSec $ IntroProg (introStart enerSrc energy progName)
     (introEnd progName program)
   [IPurpose $ purpDoc progName,
-  IScope (scopeReqs thermalAnalysis sWHT) EmptyS,
+  IScope scopeReqs EmptyS,
   IChar [] (charReader1 htTransTheo ++ charReader2 M.de) [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
   GSDSec $ GSDProg2 
@@ -284,8 +284,8 @@ purpDoc pro = foldlSent [S "The main", phrase purpose, S "of this",
 --Section 2.2 : SCOPE OF REQUIREMENTS
 -------------------------------------
 
-scopeReqs :: ConceptChunk -> ConceptChunk -> Sentence
-scopeReqs ta sw = foldlSent_ [phrase ta `sOf` S "a single", phrase sw]
+scopeReqs :: Sentence
+scopeReqs = phrase thermalAnalysis `sOf` S "a single" +:+ phrase sWHT
 
 --------------------------------------------------
 --Section 2.3 : CHARACTERISTICS Of INTENDED READER

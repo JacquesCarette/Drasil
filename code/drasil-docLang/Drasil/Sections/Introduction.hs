@@ -105,19 +105,16 @@ charIntRdrF progName assumed topic asset r =
 -- sectionRef - reference to user characteristic section
 intReaderIntro :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] ->
   Section -> [Contents]
-intReaderIntro progName assumed topic [] sectionRef = 
-  [foldlSP [S "Reviewers of this", phrase documentation,
-  S "should have an understanding of" +:+. 
-  foldlList Comma List (assumed ++ topic), S "The", plural user,
-  S "of", short progName, S "can have a lower level of expertise, as", 
-  S "explained in", makeRef2S sectionRef]]
 intReaderIntro progName assumed topic asset sectionRef = 
   [foldlSP [S "Reviewers of this", phrase documentation,
-  S "should have an understanding of" +:+. 
-  foldlList Comma List (assumed ++ topic), S "It would be an asset to",
-  S "understand" +:+. foldlList Comma List asset, S "The", plural user,
-  S "of", short progName, S "can have a lower level of expertise, as", 
-  S "explained in", makeRef2S sectionRef]]
+  S "should have an understanding of" +:+.
+  foldlList Comma List (assumed ++ topic), assetSent, S "The",
+  plural user `sOf` short progName, S "can have a lower level" `sOf`
+  S "expertise, as explained" `sIn` makeRef2S sectionRef]]
+  where
+    assetSent = case asset of
+      [] -> EmptyS
+      _  -> S "It would be an asset to understand" +:+. foldlList Comma List asset
 
 -- | Doc.organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
 orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section

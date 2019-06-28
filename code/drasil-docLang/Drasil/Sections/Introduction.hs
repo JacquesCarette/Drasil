@@ -8,9 +8,9 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   decision, definition, desSpec, design, designDoc, document, documentation,
-  environment, goal, goalStmt, implementation, intReader, model, organization,
-  purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs, system,
-  theory, user, vavPlan)
+  environment, goal, goalStmt, implementation, input_, intReader, model,
+  organization, purpose, requirement, scope, section_, softwareDoc, softwareVAV,
+  srs, system, theory, user, vavPlan)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986)
 
@@ -79,13 +79,14 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
 scopeOfRequirements :: Idea a => Sentence -> a -> Sentence -> Section
-scopeOfRequirements mainRequirement _ EmptyS = SRS.scpOfReq [scpBody] []
-  where scpBody = foldlSP [phrase scope `ofThe'` plural requirement,
-                  S "includes", mainRequirement]
-scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [scpBody] []
-  where scpBody = foldlSP [phrase scope `ofThe'` plural requirement,
-                  S "includes" +:+. mainRequirement, S "Given the appropriate",
-                  S "inputs" `sC` short programName +:+ intendedPurpose]
+scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq
+  [mkParagraph $ foldlSent [phrase scope `ofThe'` plural requirement,
+                            S "includes", mainRequirement] +:+ ins] []
+  where
+    ins = case intendedPurpose of
+      EmptyS -> EmptyS
+      _      -> S "Given the appropriate" +:+ plural input_ `sC`
+                short programName +:+. intendedPurpose
 
 -- | constructor for characteristics of the intended reader subsection
 -- progName

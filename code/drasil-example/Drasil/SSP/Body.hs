@@ -104,7 +104,7 @@ srs = mkDoc mkSRS for si
   
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro
-  [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
+  [TUnits, tsymb'' tableOfSymbIntro Term, TAandA],
   IntroSec $ IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
     , IScope scpIncl EmptyS

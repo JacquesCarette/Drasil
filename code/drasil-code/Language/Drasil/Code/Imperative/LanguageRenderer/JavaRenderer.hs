@@ -38,11 +38,11 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, addCommentsDocD, valList, surroundBody, getterName, 
-  setterName, setMain, setEmpty)
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody,
+  getterName, setterName, setMain, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
-  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
+  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
   liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -549,6 +549,8 @@ instance MethodSym JavaCode where
               (fmap valType v) &= v) : assignArray (c+1) vs
             decls = multi $ map varDec outs
             
+  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
+    fmap snd fn)
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc

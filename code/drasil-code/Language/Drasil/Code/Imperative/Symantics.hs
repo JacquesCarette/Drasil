@@ -518,6 +518,9 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
     [repr (Value repr)] -> [repr (Value repr)] -> 
     repr (Body repr) -> repr (Method repr)
 
+  commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
+    repr (Method repr)
+
 class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => 
   StateVarSym repr where
   type StateVar repr

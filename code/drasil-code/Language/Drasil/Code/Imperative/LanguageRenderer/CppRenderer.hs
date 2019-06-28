@@ -36,8 +36,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   objVarDocD, inlineIfDocD, funcAppDocD, funcDocD, castDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD,
   publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, docCmtStart, 
-  observerListName, doubleSlash, blockCmtDoc, docCmtDoc, addCommentsDocD, 
-  valList, surroundBody, getterName, setterName, setEmpty)
+  observerListName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, valList, surroundBody, getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
@@ -526,6 +526,9 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   inOutFunc n s p ins outs b = pair (inOutFunc n (pfst s) (pfst p) (map pfst 
     ins) (map pfst outs) (pfst b)) (inOutFunc n (psnd s) (psnd p) (map psnd ins)
     (map psnd outs) (psnd b))
+
+  commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
+    (commentedFunc (psnd cmt) (psnd fn)) 
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -1062,6 +1065,10 @@ instance MethodSym CppSrcCode where
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
     map pointerParam outs) b
 
+  commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
+    liftA3 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) 
+    (liftA2 commentedItem cmt (fmap mthdDoc fn)) else fn
+
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
   stateVar del l s p t = liftA3 svd (fmap snd s) (liftA4 (stateVarDocD l) 
@@ -1516,6 +1523,10 @@ instance MethodSym CppHdrCode where
   inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
     map pointerParam outs) b
+
+  commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
+    liftA3 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) 
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData

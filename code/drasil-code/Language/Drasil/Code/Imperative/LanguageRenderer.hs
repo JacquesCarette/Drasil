@@ -29,8 +29,9 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  blockCmtDoc, docCmtDoc, addCommentsDocD, valList, prependToBody, appendToBody,
-  surroundBody, getterName, setterName, setMain, setEmpty
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, 
+  prependToBody, appendToBody, surroundBody, getterName, setterName, setMain, 
+  setEmpty
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -43,7 +44,7 @@ import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
-import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), 
+import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
   integer, semi, equals, braces, int, comma, colon, hcat)
 
@@ -637,6 +638,9 @@ blockCmtDoc lns start end = start <+> vcat (map text lns) <+> end
 
 docCmtDoc :: [String] -> Doc -> Doc -> Doc
 docCmtDoc lns start end = vcat $ start : map (indent . text) lns ++ [end]
+
+commentedItem :: Doc -> Doc -> Doc
+commentedItem cmt itm = cmt $+$ itm
 
 commentLength :: Int
 commentLength = 75

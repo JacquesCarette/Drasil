@@ -39,11 +39,11 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
-  docCmtDoc, addCommentsDocD, valList, surroundBody, getterName, setterName, 
-  setMain, setEmpty)
+  docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody, getterName, 
+  setterName, setMain, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
-  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
+  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
   liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -529,6 +529,9 @@ instance MethodSym CSharpCode where
   inOutFunc n s p ins outs b = function n s p (mState void) (map (\v -> 
     if v `elem` outs then fmap csRef (stateParam v) else stateParam v) ins ++
     map (fmap csOut . stateParam) (filter (`notElem` ins) outs)) b
+
+  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
+    fmap snd fn)
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc

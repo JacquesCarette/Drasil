@@ -30,12 +30,12 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
   objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, classDec, dot, 
-  forLabel, observerListName, addCommentsDocD, valList, appendToBody,
-  getterName, setterName)
+  forLabel, observerListName, commentedItem, addCommentsDocD, valList, 
+  appendToBody, getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
-  liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPairFst, getInnerType,
-  convType)
+  liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, liftPairFst, 
+  getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -491,6 +491,9 @@ instance MethodSym PythonCode where
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins outs b = function n s p (mState void) (map stateParam ins)
     (liftA2 appendToBody b (multiReturn outs))
+
+  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
+    fmap snd fn)
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc

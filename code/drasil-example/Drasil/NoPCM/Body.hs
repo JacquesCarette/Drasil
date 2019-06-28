@@ -47,10 +47,10 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   AuxConstntSec(AuxConsProg), IntroSec(IntroProg), LCsSec(..), UCsSec(..),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
-  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
-  ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty,
-  inDataConstTbl, intro, mkDoc, outDataConstTbl, tsymb,
-  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
+  TraceabilitySec(TraceabilityProg), ProblemDescription(PDProg), PDSub(..), 
+  TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits),
+  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
+  tsymb, getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceMap', traceMatStandard)
 
@@ -122,7 +122,7 @@ units = map ucw [density, tau, inSA, outSA,
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro
   [TUnits,
-  tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder],
+  tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
   TAandA],
   IntroSec $ IntroProg (introStart enerSrc energy progName)
     (introEnd progName program)

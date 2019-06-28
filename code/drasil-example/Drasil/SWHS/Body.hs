@@ -16,7 +16,7 @@ import qualified Data.Map as Map
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   Field(..), Fields, LFunc(TermExcept), Literature(Doc', Lit), IntroSec(IntroProg),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
-  RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose),
+  RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose, VectorUnits),
   ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
@@ -145,7 +145,7 @@ symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [
     TUnits,
-    tsymb'' tSymbIntro (TermExcept [uNormalVect]),
+    tsymb'' tSymbIntro $ TermExcept [uNormalVect],
     TAandA],
   IntroSec $
     IntroProg (introP1 CT.enerSrc energy swhsPCM phsChgMtrl
@@ -194,7 +194,7 @@ mkSRS = [RefSec $ RefProg intro [
 
 tSymbIntro :: [TSIntro]
 tSymbIntro = [TSPurpose, SymbConvention
-  [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder]
+  [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder, VectorUnits]
 
 --- The document starts here
 srs' :: Document

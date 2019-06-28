@@ -103,7 +103,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       (map (foldlList Comma List . snd) traceabilityMatrices) (map (LlC . fst) traceabilityMatrices) [],
     AuxConstntSec $ AuxConsProg chipmunk [],
     Bibliography]
-      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
+      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns

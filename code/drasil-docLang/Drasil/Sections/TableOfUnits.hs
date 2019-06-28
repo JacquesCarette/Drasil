@@ -3,7 +3,6 @@
 module Drasil.Sections.TableOfUnits (tableOfUnits) where
 
 import Control.Lens ((^.))
-import Prelude hiding (id)
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (symbol_, description)
 

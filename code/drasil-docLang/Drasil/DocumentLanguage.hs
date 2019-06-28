@@ -88,6 +88,7 @@ data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used
              | SymbOrder -- ^ Symbol ordering (defaults to alphabetical)
              | SymbConvention [Literature] -- ^ Symbol conventions match specified literature
              | TSPurpose -- ^ Purpose of the Table of Symbols
+             | VectorUnits -- ^ Definition of vector components
 
 -- | Possible typographic conventions
 data TConvention = Vector Emphasis -- ^ How vectors are emphasized
@@ -231,7 +232,7 @@ newtype AppndxSec = AppndxProg [Contents]
 -- | Creates a document from a document description and system information
 mkDoc :: DocDesc -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc l comb si@SI {_sys = sys, _kind = kind, _authors = authors} = Document
-  (nw kind `comb` nw sys) (S $ manyNames authors) (mkSections si l)
+  (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) (mkSections si l)
 
 -- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]
@@ -315,6 +316,7 @@ tsI SymbOrder = S "The symbols are listed in alphabetical order."
 tsI (SymbConvention ls) = symbConvention ls
 tsI TSPurpose = S "The table that follows summarizes the symbols used in" +:+
   S "this document along with their units."
+tsI VectorUnits = S "For vector quantities, the units shown are for each component of the vector."
 
 -- | typographic convention writer. Translates a list of typographic conventions
 -- to a sentence

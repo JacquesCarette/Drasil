@@ -152,8 +152,7 @@ mkSRS = [RefSec $ RefProg intro [
     progName CT.thermalEnergy latentHeat unit_) (introP2 swhsPCM program
     progName)
     [IPurpose $ purpDoc swhsPCM progName,
-     IScope (scopeReqs1 CT.thermalAnalysis tankPCM) $
-       scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
+     IScope (scopeReqs CT.thermalAnalysis tankPCM water phsChgMtrl sWHT) EmptyS,
      IChar [] (charReader1 CT.htTransTheo ++ charReader2 de) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        $ orgDocEnd swhsPCM progName],
@@ -543,18 +542,10 @@ purpDoc sp pro = foldlSent [S "The main", phrase purpose, S "of this",
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 
-scopeReqs1 :: ConceptChunk -> ConceptChunk -> Sentence
-scopeReqs1 ta tp = foldlSent_ [phrase ta,
-  S "of a single", phrase tp]
-
-scopeReqs2 :: UnitalChunk -> ConceptChunk -> ConceptChunk -> CI ->
-  ConceptChunk -> Sentence
-scopeReqs2 t te wa pcmat sw = foldlSent_ [S "predicts the",
-  phrase t `sAnd` phrase te,
-  S "histories for the", phrase wa `sAnd` S "the" +:+.
-  short pcmat, S "This entire", phrase document,
-  S "is written assuming that the substances inside the",
-  phrase sw, S "are", phrase wa `sAnd` short pcmat]
+scopeReqs :: ConceptChunk -> ConceptChunk -> ConceptChunk -> CI -> ConceptChunk -> Sentence
+scopeReqs ta tp sw wa pcmat = foldlSent_ [phrase ta `sOf` S "a single" +:+. phrase tp,
+  S "This entire", phrase document, S "is written assuming that the substances inside the",
+  phrase sw `sAre` phrase wa `sAnd` short pcmat]
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar

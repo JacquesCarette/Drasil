@@ -24,9 +24,8 @@ import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (program, softwarecon)
-import Data.Drasil.Concepts.Thermodynamics (enerSrc, thermalAnalysis, temp,
-  thermalEnergy, htTransTheo, htFlux, heatCapSpec, thermalConduction, thermocon,
-  phaseChange)
+import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatCapSpec, htTransTheo,
+  htFlux, phaseChange, thermalAnalysis, thermalConduction, thermocon, temp)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
@@ -127,8 +126,7 @@ mkSRS = [RefSec $ RefProg intro
   IntroSec $ IntroProg (introStart enerSrc energy progName)
     (introEnd progName program)
   [IPurpose $ purpDoc progName,
-  IScope (scopeReqStart thermalAnalysis sWHT) (scopeReqEnd temp thermalEnergy
-    water),
+  IScope (scopeReqs thermalAnalysis sWHT) EmptyS,
   IChar [] (charReader1 htTransTheo ++ charReader2 M.de) [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
   GSDSec $ GSDProg2 
@@ -286,13 +284,8 @@ purpDoc pro = foldlSent [S "The main", phrase purpose, S "of this",
 --Section 2.2 : SCOPE OF REQUIREMENTS
 -------------------------------------
 
-scopeReqStart :: ConceptChunk -> ConceptChunk -> Sentence
-scopeReqStart ta sw = foldlSent_ [phrase ta, S "of a single", phrase sw]
-
-scopeReqEnd :: ConceptChunk -> ConceptChunk -> ConceptChunk -> Sentence
-scopeReqEnd tem te wa = foldlSent_ [S "predicts the",
-  phrase tem `sAnd` phrase te,
-  S "histories for the", phrase wa]
+scopeReqs :: ConceptChunk -> ConceptChunk -> Sentence
+scopeReqs ta sw = foldlSent_ [phrase ta `sOf` S "a single", phrase sw]
 
 --------------------------------------------------
 --Section 2.3 : CHARACTERISTICS Of INTENDED READER

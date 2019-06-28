@@ -5,9 +5,9 @@ import math
 def write_output(T_W, E_W):
     outputfile = open("output.txt", "w")
     print("T_W = ", end='', file=outputfile)
-    print(inParams.T_W, file=outputfile)
+    print(T_W, file=outputfile)
     print("E_W = ", end='', file=outputfile)
-    print(inParams.E_W, file=outputfile)
+    print(E_W, file=outputfile)
     outputfile.close()
 
 

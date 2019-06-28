@@ -33,17 +33,17 @@ type Capitalization = Sentence  --Using type synonyms for clarity.
 type PluralString   = String
 
 instance NounPhrase NP where
-  phraseNP (ProperNoun n _)             = S n
-  phraseNP (CommonNoun n _ _)           = S n
-  phraseNP (Phrase n _ _ _)             = n
-  pluralNP n@(ProperNoun _ p)           = sPlur (phraseNP n) p
-  pluralNP n@(CommonNoun _ p _)         = sPlur (phraseNP n) p
-  pluralNP (Phrase _ p _ _)             = p
-  sentenceCase n@ProperNoun {}   _ = phraseNP n
+  phraseNP (ProperNoun n _)           = S n
+  phraseNP (CommonNoun n _ _)         = S n
+  phraseNP (Phrase n _ _ _)           = n
+  pluralNP n@(ProperNoun _ p)         = sPlur (phraseNP n) p
+  pluralNP n@(CommonNoun _ p _)       = sPlur (phraseNP n) p
+  pluralNP (Phrase _ p _ _)           = p
+  sentenceCase n@ProperNoun {}      _ = phraseNP n
   sentenceCase n@(CommonNoun _ _ r) f = cap (f n) r
   sentenceCase n@(Phrase _ _ r _)   f = cap (f n) r
-  titleCase n@ProperNoun {}      _ = phraseNP n
-  titleCase n@CommonNoun {}    f = cap (f n) CapWords
+  titleCase n@ProperNoun {}         _ = phraseNP n
+  titleCase n@CommonNoun {}         f = cap (f n) CapWords
   titleCase n@(Phrase _ _ _ r)      f = cap (f n) r
   
 -- ===Constructors=== --
@@ -214,23 +214,23 @@ findHyph :: String -> String
 findHyph "" = ""
 findHyph [x] = [x]
 findHyph (x:y:xs) 
-      | x == '-'    = '-' : (toUpper y : xs)
-      | otherwise   = x : findHyph (y:xs)
+  | x == '-'  = '-' : (toUpper y : xs)
+  | otherwise = x : findHyph (y:xs)
 
 capFirstWord :: String -> String
-capFirstWord (c:cs)
-    | not (isLetter c)          = c : cs
-    | not (isLatin1 c)          = c : cs
-    | otherwise                 = toUpper c : cs
 capFirstWord "" = ""
+capFirstWord (c:cs)
+  | not (isLetter c) = c : cs
+  | not (isLatin1 c) = c : cs
+  | otherwise        = toUpper c : cs
 
 capWords :: String -> String
-capWords (c:cs)
-    | not (isLetter c)          = c : cs
-    | not (isLatin1 c)          = c : cs
-    | (c : cs) `elem` doNotCaps = toLower c : cs
-    | otherwise                 = toUpper c : cs
 capWords "" = ""
+capWords (c:cs)
+  | not (isLetter c)          = c : cs
+  | not (isLatin1 c)          = c : cs
+  | (c : cs) `elem` doNotCaps = toLower c : cs
+  | otherwise                 = toUpper c : cs
 
 doNotCaps :: [String]
 doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",

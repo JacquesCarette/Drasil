@@ -20,7 +20,7 @@ import Drasil.SWHS.Body (srs', printSetting) -- si
 --   comments = CommentNone,    -- CommentNone, CommentFunc
 --   onSfwrConstraint = Warning,  -- Warning, Exception
 --   onPhysConstraint = Warning,  -- Warning, Exception
---   inputStructure = Loose    -- Loose, AsClass
+--   inputStructure = Unbundled    -- Unbundled, Bundled
 -- }
 
 generate :: IO ()

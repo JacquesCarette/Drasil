@@ -21,7 +21,7 @@ choices = Choices {
   comments = CommentNone,
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
-  inputStructure = Loose
+  inputStructure = Unbundled
 }       
        
 main :: IO ()            

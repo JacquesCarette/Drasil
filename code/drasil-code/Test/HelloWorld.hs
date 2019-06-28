@@ -14,7 +14,7 @@ import Test.Helper (helper)
 
 helloWorld :: (PackageSym repr) => repr (Package repr)
 helloWorld = packMods "HelloWorld" [fileDoc (buildModule "HelloWorld" 
-  ["Helper"] [] [helloWorldMain] []), helper]
+  ["Helper"] [helloWorldMain] []), helper]
 
 helloWorldMain :: (RenderSym repr) => repr (Method repr)
 helloWorldMain = mainMethod "HelloWorld" (body [ helloInitVariables, 

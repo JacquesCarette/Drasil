@@ -10,10 +10,11 @@ module Utils.Drasil (
   -- Misc
   addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart,
   displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple, enumSimpleU,
-  eqN, eqUnR, eqUnR', fmtU, follows, getTandS, itemRefToSent, makeListRef,
-  makeTMatrix, maybeChanged, maybeExpanded, maybeWOVerb, mkEnumAbbrevList,
-  mkTableFromColumns, noRefs, refineChain, showingCxnBw, sortBySymbol,
-  sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym, typUncr,
+  eqN, eqUnR, eqUnR', eqnWSource, fromReplace, fmtU, follows, getTandS,
+  itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
+  maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
+  showingCxnBw, sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc,
+  tAndDWSym, typUncr,
   underConsidertn, unwrap, weave, zipSentList,
   -- Phrase
   and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',

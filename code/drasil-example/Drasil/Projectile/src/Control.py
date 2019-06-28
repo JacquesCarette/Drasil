@@ -12,10 +12,9 @@ inputfile = sys.argv[1]
 inParams = InputParameters.InputParameters()
 InputFormat.func_get_input(inputfile, inParams)
 InputConstraints.input_constraints(inParams)
-d = Calculations.func_d(inParams)
-short = Calculations.func_short(inParams, d)
-offset = Calculations.func_offset(inParams, d)
-hit = Calculations.func_hit(inParams, offset)
-OutputFormat.write_output(hit, short, offset)
+p_land = Calculations.func_p_land(inParams)
+offset = Calculations.func_offset(inParams, p_land)
+message = Calculations.func_message(inParams, offset)
+OutputFormat.write_output(message, offset)
 
 

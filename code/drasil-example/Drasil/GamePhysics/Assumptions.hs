@@ -4,9 +4,9 @@ import Language.Drasil hiding (organization)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation as Doc (simulation, assumpDom)
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody,  
-  cartesian, rightHand, collision, joint, damping, force, friction)
-import qualified Data.Drasil.Concepts.Math as CM (constraint)
+import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, force,
+  friction, joint, rigidBody)
+import qualified Data.Drasil.Concepts.Math as CM (cartesian, constraint, rightHand)
 
 import Drasil.GamePhysics.Concepts (twoD)
 
@@ -44,12 +44,10 @@ implies f = [S "and this implies that there are no", f]
 
 assumptions_assum1 = allObject (plural CP.rigidBody)
 assumptions_assum2 = allObject (getAcc twoD)
-assumptions_assum3 = [S "The library uses a", phrase CP.cartesian]
-assumptions_assum4 = [S "The axes are defined using", 
-  phrase CP.rightHand]
-assumptions_assum5 = [S "All", plural CP.rigidBody, 
-  plural CP.collision, S "are vertex-to-edge", 
-  plural CP.collision]
+assumptions_assum3 = [S "The library uses a", phrase CM.cartesian]
+assumptions_assum4 = [S "The axes are defined using", phrase CM.rightHand]
+assumptions_assum5 = [S "All", plural CP.rigidBody, plural CP.collision,
+  S "are vertex-to-edge", plural CP.collision]
 
 assumptions_assum6 = thereNo [phrase CP.damping] ++ implies (phrase CP.friction +:+ plural CP.force)
 assumptions_assum7 = thereNo [plural CM.constraint, plural CP.joint]

@@ -1,10 +1,11 @@
+{-# Language TypeFamilies #-}
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
   chgsStart, displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple,
-  enumSimpleU, eqN, eqUnR, eqUnR', fmtU, follows, getTandS, itemRefToSent,
-  makeListRef, makeTMatrix, maybeChanged, maybeExpanded, maybeWOVerb,
-  mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain, showingCxnBw,
-  sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym, typUncr,
-  underConsidertn, unwrap, weave, zipSentList) where
+  enumSimpleU, eqN, eqUnR, eqUnR', eqnWSource, fromReplace, fmtU, follows,
+  getTandS, itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
+  maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
+  showingCxnBw, sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc,
+  tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
@@ -36,6 +37,14 @@ eqUnR' e = UlC $ ulcc $ EqnBlock e
 --Doesn't use equation concept so utils doesn't depend on data
 eqN :: Int -> Sentence
 eqN n = S "Equation" +:+ sParen (S $ show n)
+
+-- | takes an expression and a referable and outputs as a Sentence "expression (source)"
+eqnWSource :: (Referable r, HasShortName r) => Expr -> r -> Sentence
+eqnWSource a b = E a +:+ sParen (makeRef2S b)
+
+-- | takes a referable and a HasSymbol and outputs as a Sentence "From source we can replace symbol"
+fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
+fromReplace src c = S "From" +:+ makeRef2S src +:+ S "we can replace" +: E (sy c)
 
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
 -- s - the number from which the enumeration should start from

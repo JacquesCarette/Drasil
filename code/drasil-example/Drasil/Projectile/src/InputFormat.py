@@ -11,7 +11,7 @@ def func_get_input(filename, inParams):
     infile.readline()
     inParams.theta = float(infile.readline())
     infile.readline()
-    inParams.d_aim = float(infile.readline())
+    inParams.p_target = float(infile.readline())
     infile.close()
 
 

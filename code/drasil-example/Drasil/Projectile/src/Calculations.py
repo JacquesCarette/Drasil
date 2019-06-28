@@ -4,16 +4,17 @@ import math
 import InputParameters
 
 
-def func_d(inParams):
-    return (2 * (inParams.v ** 2) * math.sin(math.radians(inParams.theta)) * math.cos(math.radians(inParams.theta))) / 9.8
+def func_p_land(inParams):
+    return (2 * (inParams.v ** 2) * math.sin(inParams.theta) * math.cos(inParams.theta)) / 9.8
 
-def func_short(inParams, d):
-    return (inParams.d_aim > d)
+def func_offset(inParams, p_land):
+    return p_land - inParams.p_target
 
-def func_offset(inParams, d):
-    return abs(inParams.d_aim - d)
-
-def func_hit(inParams, offset):
-    return (offset < 0.02 * inParams.d_aim)
-
+def func_message(inParams, offset):
+    if abs(offset / inParams.p_target) < 0.02:
+        return "The target was hit."
+    elif offset < 0:
+        return "The projectile fell short."
+    else:
+        return "The projectile went long."
 

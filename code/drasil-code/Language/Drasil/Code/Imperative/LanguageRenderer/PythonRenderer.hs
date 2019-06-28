@@ -510,12 +510,11 @@ instance ClassSym PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n ls vs fs cs = fmap (md n (any (snd . unPC) fs || 
+  buildModule n ls fs cs = fmap (md n (any (snd . unPC) fs || 
     any (snd . unPC) cs)) (if all (isEmpty . fst . unPC) cs && all 
     (isEmpty . fst . unPC) fs then return empty else
-    liftA4 pyModule (liftList pyModuleImportList (map 
-    include ls)) (liftList pyModuleVarList (map state vs)) (liftList 
-    methodListDocD fs) (liftList pyModuleClassList cs))
+    liftA3 pyModule (liftList pyModuleImportList (map include ls)) 
+    (liftList methodListDocD fs) (liftList pyModuleClassList cs))
 
 -- convenience
 imp, incl, initName :: Label
@@ -628,22 +627,16 @@ pyClass n pn fs = vcat [
 pyModuleImportList :: [Doc] -> Doc
 pyModuleImportList = vcat
 
-pyModuleVarList :: [(Doc, Terminator)] -> Doc
-pyModuleVarList vs = vcat (map fst vs)
-
 pyModuleClassList :: [(Doc, Bool)] -> Doc
 pyModuleClassList cs = vibcat $ map fst cs 
 
-pyModule :: Doc -> Doc -> Doc -> Doc -> Doc
-pyModule ls vs fs cs =
+pyModule :: Doc -> Doc -> Doc -> Doc
+pyModule ls fs cs =
   libs $+$
-  vars $+$
   funcs $+$
   cs
   where libs | isEmpty ls = empty
              | otherwise  = ls $+$ blank
-        vars | isEmpty vs = empty
-             | otherwise  = vs $+$ blank
         funcs | isEmpty fs = empty
               | otherwise  = fs $+$ blank
 

@@ -547,8 +547,8 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
-  buildModule n l vs ms cs = pair (buildModule n l (map pfst vs) (map pfst ms) 
-    (map pfst cs)) (buildModule n l (map psnd vs) (map psnd ms) (map psnd cs))
+  buildModule n l ms cs = pair (buildModule n l (map pfst ms) (map pfst cs)) 
+    (buildModule n l (map psnd ms) (map psnd cs))
 
 -----------------
 -- Source File --
@@ -1079,7 +1079,7 @@ instance ClassSym CppSrcCode where
 
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
-  buildModule n l _ ms cs = fmap (md n (any (snd . unCPPSC) cs || 
+  buildModule n l ms cs = fmap (md n (any (snd . unCPPSC) cs || 
     any (isMainMthd . unCPPSC) ms)) (if all (isEmpty . fst . unCPPSC) cs && all 
     (isEmpty . mthdDoc . unCPPSC) ms then return empty else
     liftA5 cppModuleDoc (liftList vcat (map include l)) 
@@ -1519,7 +1519,7 @@ instance ClassSym CppHdrCode where
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
-  buildModule n l _ ms cs = fmap (md n (any (snd . unCPPHC) cs || 
+  buildModule n l ms cs = fmap (md n (any (snd . unCPPHC) cs || 
     any (snd . unCPPHC) methods)) (if all (isEmpty . fst . unCPPHC) cs && all 
     (isEmpty . mthdDoc . unCPPHC) ms then return empty else liftA5 cppModuleDoc
     (liftList vcat (map include l)) (if not (null l) && any 

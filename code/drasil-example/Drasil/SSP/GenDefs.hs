@@ -14,7 +14,7 @@ import Data.Drasil.SI_Units (metre, newton)
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption, component,
   constant, definition, method_, value)
-import Data.Drasil.Concepts.Math (area, equation)
+import Data.Drasil.Concepts.Math (area, equation, zDir)
 import Data.Drasil.Concepts.PhysicalProperties (len)
 import Data.Drasil.Concepts.Physics (twoD, weight)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
@@ -143,12 +143,11 @@ resShrDeriv :: Sentence
 resShrDeriv = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
   S "into the Mohr-Coulomb", phrase shrStress `sC` makeRef2S mcShrStrgth `sC`
   S "and multiplying both sides of the", phrase equation, S "by", 
-  phrase genericA `ofThe` phrase slice, S "in the shear-" :+: ch zcoord  +:+. 
+  phrase genericA `ofThe` phrase slice, S "in the shear-" :+: ch zcoord +:+. 
   S "plane", S "Since the", phrase slope, S "is assumed to extend infinitely",
-  S "in the", ch zcoord :+: S "-direction", sParen (makeRef2S assumpPSC) `sC` 
-  S "the resulting", plural force, S "are expressed per", phrase metre,
-  S "in the", ch zcoord :+: S "-direction.", S "The", 
-  getTandS fricAngle `andThe` getTandS effCohesion, S "are not indexed by",
+  S "in the", phrase zDir, sParen (makeRef2S assumpPSC) `sC` S "the resulting",
+  plural force, S "are expressed per", phrase metre, S "in the" +:+. phrase zDir,
+  S "The", getTandS fricAngle `andThe` getTandS effCohesion, S "are not indexed by",
   ch index, S "becaused they are assumed to be isotropic", 
   sParen (makeRef2S assumpSLI) `andThe` phrase soil, S "is assumed to be",
   S "homogeneous, with", phrase constant, plural soilPrpty, S "throughout" +:+.
@@ -191,8 +190,9 @@ effNormFDeriv = foldlSent [
   makeRef2S effStress `sAnd` S "multiplying both sides of the", phrase equation,
   S "by the", phrase genericA `ofThe` phrase slice, S "in the shear-" :+: 
   ch zcoord +:+. S "plane", S "Since the", phrase slope, 
-  S "is assumed to extend infinitely in the", ch zcoord :+: S "-direction", 
-  sParen (makeRef2S assumpPSC) `sC` S "the resulting", plural force, S "are expressed per", phrase metre, S "in the", ch zcoord :+: S "-direction" ]
+  S "is assumed to extend infinitely in the", phrase zDir,
+  sParen (makeRef2S assumpPSC) `sC` S "the resulting", plural force,
+  S "are expressed per", phrase metre, S "in the", phrase zDir]
 
 --
 normShrR :: RelationConcept

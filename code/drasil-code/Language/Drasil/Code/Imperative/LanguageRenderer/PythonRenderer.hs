@@ -70,6 +70,9 @@ instance RenderSym PythonCode where
   top _ = return pytop
   bottom = return empty
 
+  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
+    (liftA2 commentedItem cmt (fmap modDoc m))
+
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
   endStatement = return empty

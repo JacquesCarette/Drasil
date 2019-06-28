@@ -80,6 +80,9 @@ instance RenderSym CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 
+  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
+    (liftA2 commentedItem cmt (fmap modDoc m))
+
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
   endStatement = return semi

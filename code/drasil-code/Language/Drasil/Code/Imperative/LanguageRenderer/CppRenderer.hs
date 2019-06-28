@@ -76,6 +76,9 @@ instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
 
+  commentedMod cmt m = pair (commentedMod (pfst cmt) (pfst m)) 
+    (commentedMod (psnd cmt) (psnd m))
+
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
   endStatement = pair endStatement endStatement
@@ -596,6 +599,9 @@ instance RenderSym CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
 
+  commentedMod cmt m = if isMainMod (unCPPSC m) then liftA3 md (fmap name m) 
+    (fmap isMainMod m) (liftA2 commentedItem cmt (fmap modDoc m)) else m 
+  
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
   endStatement = return semi
@@ -1150,6 +1156,10 @@ instance RenderSym CppHdrCode where
     liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
+
+  commentedMod cmt m = if isMainMod (unCPPHC m) then m else 
+    liftA3 md (fmap name m) (fmap isMainMod m) 
+    (liftA2 commentedItem cmt (fmap modDoc m))
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc

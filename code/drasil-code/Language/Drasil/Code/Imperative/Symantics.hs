@@ -26,6 +26,9 @@ class (ModuleSym repr, ControlBlockSym repr) => RenderSym repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
 
+  commentedMod :: repr (BlockComment repr) -> repr (RenderFile repr) ->
+    repr (RenderFile repr)
+
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   type Keyword repr
   endStatement     :: repr (Keyword repr)
@@ -532,7 +535,7 @@ class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) =>
   listStateVar :: Int -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> repr (StateType repr) -> repr (StateVar repr)
 
-class (StateVarSym repr, MethodSym repr, BlockCommentSym repr) => ClassSym repr 
+class (StateVarSym repr, MethodSym repr) => ClassSym repr 
   where
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 

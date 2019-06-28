@@ -84,6 +84,9 @@ instance RenderSym JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
 
+  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
+    (liftA2 commentedItem cmt (fmap modDoc m))
+
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
   endStatement = return semi

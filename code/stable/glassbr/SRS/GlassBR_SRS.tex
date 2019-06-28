@@ -547,7 +547,7 @@ Symbol & $J$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
-           J=interpZ\left(SDF.txt,AR,\hat{q}\right)
+           J=interpZ\left(\text{``SDF.txt"},AR,\hat{q}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -619,9 +619,9 @@ Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
            GTF=\begin{cases}
-1, & g=AN\\
-4, & g=FT\\
-2, & g=HS
+1, & g=\text{``AN"}\\
+4, & g=\text{``FT"}\\
+2, & g=\text{``HS"}
 \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -694,7 +694,7 @@ Symbol & ${\hat{q}_{tol}}$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\hat{q}_{tol}}=interpY\left(SDF.txt,AR,{J_{tol}}\right)
+           {\hat{q}_{tol}}=interpY\left(\text{``SDF.txt"},AR,{J_{tol}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -923,7 +923,7 @@ Symbol & $q$
 Units & Pa
 \\ \midrule \\
 Equation & \begin{displaymath}
-           q=interpY\left(TSD.txt,SD,{w_{TNT}}\right)
+           q=interpY\left(\text{``TSD.txt"},SD,{w_{TNT}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}

@@ -99,26 +99,26 @@ data OpenClose = Open | Close
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
 pExpr :: Expr -> String
-pExpr (Dbl d)    = showEFloat Nothing d ""
-pExpr (Int i)    = show i
-pExpr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
-pExpr (Div n d) = "\\frac{" ++ pExpr n ++ "}{" ++ pExpr d ++"}"
-pExpr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
-pExpr (Mtx a)    = "\\begin{bmatrix}\n" ++ pMatrix a ++ "\n\\end{bmatrix}"
-pExpr (Row [x]) = brace $ pExpr x -- a bit of a hack...
-pExpr (Row l) = concatMap pExpr l
-pExpr (Ident s) = s
-pExpr (Spec s) = unPL $ L.special s
---pExpr (Gr g) = unPL $ greek g
-pExpr (Sub e) = "_" ++ brace (pExpr e)
-pExpr (Sup e) = "^" ++ brace (pExpr e)
-pExpr (Over Hat s)     = "\\hat{" ++ pExpr s ++ "}"
-pExpr (MO o) = pOps o
-pExpr (Fenced l r m)    = fence Open l ++ pExpr m ++ fence Close r
-pExpr (Font Bold e) = "\\mathbf{" ++ pExpr e ++ "}"
-pExpr (Font Emph e) = pExpr e -- Emph is ignored here because we're in Math mode
-pExpr (Spc Thin) = "\\,"
-pExpr (Sqrt e)  = "\\sqrt{" ++ pExpr e ++ "}"
+pExpr (Dbl d)        = showEFloat Nothing d ""
+pExpr (Int i)        = show i
+pExpr (Str s)        = "\\text{``" ++ s ++ "\"}"
+pExpr (Div n d)      = "\\frac{" ++ pExpr n ++ "}{" ++ pExpr d ++"}"
+pExpr (Case ps)      = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
+pExpr (Mtx a)        = "\\begin{bmatrix}\n" ++ pMatrix a ++ "\n\\end{bmatrix}"
+pExpr (Row [x])      = brace $ pExpr x -- a bit of a hack...
+pExpr (Row l)        = concatMap pExpr l
+pExpr (Ident s)      = s
+pExpr (Spec s)       = unPL $ L.special s
+--pExpr (Gr g)         = unPL $ greek g
+pExpr (Sub e)        = "_" ++ brace (pExpr e)
+pExpr (Sup e)        = "^" ++ brace (pExpr e)
+pExpr (Over Hat s)   = "\\hat{" ++ pExpr s ++ "}"
+pExpr (MO o)         = pOps o
+pExpr (Fenced l r m) = fence Open l ++ pExpr m ++ fence Close r
+pExpr (Font Bold e)  = "\\mathbf{" ++ pExpr e ++ "}"
+pExpr (Font Emph e)  = pExpr e -- Emph is ignored here because we're in Math mode
+pExpr (Spc Thin)     = "\\,"
+pExpr (Sqrt e)       = "\\sqrt{" ++ pExpr e ++ "}"
 
 pOps :: Ops -> String
 pOps IsIn     = "\\in{}"

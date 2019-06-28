@@ -150,7 +150,7 @@ uSymb (L.US ls) = formatu t b
 pExpr :: Expr -> Doc
 pExpr (Dbl d)        = text $ showEFloat Nothing d ""
 pExpr (Int i)        = text $ show i
-pExpr (Str s)        = text s
+pExpr (Str s)        = text $ "&quot;" ++ s ++ "&quot;"
 pExpr (Div a b)      = fraction (pExpr a) (pExpr b)
 pExpr (Case ps)      = cases ps pExpr
 pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "</table>"

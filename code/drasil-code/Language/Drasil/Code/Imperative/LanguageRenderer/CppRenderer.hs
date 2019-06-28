@@ -42,8 +42,8 @@ import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
   doubleQuotedText, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, 
-  liftA8, liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPairFst,
-  getInnerType, convType)
+  liftA8, liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair,
+  liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.List (nub)
@@ -553,6 +553,9 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   pubClass n p vs fs = pair (pubClass n p (map pfst vs) (map pfst fs)) 
     (pubClass n p (map psnd vs) (map psnd fs))
 
+  commentedClass cmt cs = pair (commentedClass (pfst cmt) (pfst cs)) 
+    (commentedClass (psnd cmt) (psnd cs))
+
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
   buildModule n l ms cs = pair (buildModule n l (map pfst ms) (map pfst cs)) 
@@ -619,7 +622,6 @@ instance KeywordSym CppSrcCode where
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
 
-  
   printFunc = return $ text "std::cout"
   printLnFunc = return $ text "std::cout"
   printFileFunc = fmap valDoc -- is this right?
@@ -1099,6 +1101,8 @@ instance ClassSym CppSrcCode where
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
+  commentedClass _ cs = cs
+
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
   buildModule n l ms cs = fmap (md n (any (snd . unCPPSC) cs || 
@@ -1551,6 +1555,9 @@ instance ClassSym CppHdrCode where
   mainClass _ _ _ = return (empty, True)
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
+
+  commentedClass cmt cs = if snd (unCPPHC cs) then cs else 
+    liftPair (liftA2 commentedItem cmt (fmap fst cs), fmap snd cs)
 
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData

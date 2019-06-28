@@ -553,6 +553,9 @@ instance ClassSym CSharpCode where
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
+  commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
+    fmap snd cs)
+
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
   buildModule n _ ms cs = fmap (md n (any (snd . unCSC) ms || 

@@ -515,6 +515,9 @@ instance ClassSym PythonCode where
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
+  commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
+    fmap snd cs)
+
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
   buildModule n ls fs cs = fmap (md n (any (snd . unPC) fs || 

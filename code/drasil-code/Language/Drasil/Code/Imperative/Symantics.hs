@@ -491,7 +491,7 @@ class ParameterSym repr where
   pointerParam :: repr (Value repr) -> repr (Parameter repr)
 
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
-  BodySym repr) => MethodSym repr where
+  BodySym repr, BlockCommentSym repr) => MethodSym repr where
   type Method repr
   -- Second label is class name
   method      :: Label -> Label -> repr (Scope repr) -> 
@@ -532,7 +532,8 @@ class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) =>
   listStateVar :: Int -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> repr (StateType repr) -> repr (StateVar repr)
 
-class (StateVarSym repr, MethodSym repr) => ClassSym repr where
+class (StateVarSym repr, MethodSym repr, BlockCommentSym repr) => ClassSym repr 
+  where
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
     [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
@@ -543,6 +544,9 @@ class (StateVarSym repr, MethodSym repr) => ClassSym repr where
     [repr (Method repr)] -> repr (Class repr)
   pubClass :: Label -> Maybe Label -> [repr (StateVar repr)] -> 
     [repr (Method repr)] -> repr (Class repr)
+
+  commentedClass :: repr (BlockComment repr) -> repr (Class repr) -> 
+    repr (Class repr)
 
 class (ClassSym repr) => ModuleSym repr where
   type Module repr

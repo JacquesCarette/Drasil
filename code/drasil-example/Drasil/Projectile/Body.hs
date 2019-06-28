@@ -64,7 +64,7 @@ mkSRS = [
       ],
   IntroSec $
     IntroProg justification (phrase projectileTitle)
-      [ IScope scope1 scope2
+      [ IScope scope EmptyS
       ],
   SSDSec $
     SSDProg
@@ -99,15 +99,14 @@ mkSRS = [
   Bibliography
   ]
 
-justification, scope1, scope2 :: Sentence
+justification, scope :: Sentence
 justification = foldlSent [atStart projectile, S "motion is a common" +:+.
   (phrase problem `sIn` phrase physics), S "Therefore, it is useful to have a",
   phrase program, S "to solve and model these types of" +:+. plural problem,
   S "The", phrase program, S "documented here is called", phrase projectileTitle]
-scope1 = foldlSent_ [S "the", phrase analysis `sOf` S "a", phrase twoD,
+scope = foldlSent_ [S "the", phrase analysis `sOf` S "a", phrase twoD,
   sParen (getAcc twoD), phrase projectile, S "motion", phrase problem, S "with",
   phrase constAccel]
-scope2 = foldlSent_ [S "determines if the", phrase projectile, S "hits the", phrase target]
 
 systInfo :: SystemInformation
 systInfo = SI {

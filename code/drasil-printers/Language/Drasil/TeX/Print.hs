@@ -333,7 +333,7 @@ makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = vcat [
   pure $ text 
-  $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
+  $ "\\begin{tabular}{>{\\raggedright}p{"++show colAwidth++"\\textwidth}>{\\raggedright\\arraybackslash}p{"++show colBwidth++"\\textwidth}}",
   pure (text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> pure (text "}"), --shortname instead of refname?
   pure (text "\\phantomsection "), label l,
   makeDRows sm ps,

@@ -230,7 +230,19 @@ executable projectile
   hs-source-dirs: .
   main-is: Drasil/Projectile/Main.hs
   other-modules:
-      Drasil.Projectile.Body
+      Drasil.Projectile.Assumptions
+    , Drasil.Projectile.Body
+    , Drasil.Projectile.Concepts
+    , Drasil.Projectile.DataDefs
+    , Drasil.Projectile.Figures
+    , Drasil.Projectile.GenDefs
+    , Drasil.Projectile.Goals
+    , Drasil.Projectile.IMods
+    , Drasil.Projectile.References
+    , Drasil.Projectile.Requirements
+    , Drasil.Projectile.TMods
+    , Drasil.Projectile.Unitals
+    
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

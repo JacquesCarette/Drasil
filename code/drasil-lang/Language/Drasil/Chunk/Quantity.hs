@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Quantity 
-  (QuantityDict, qw, mkQuant, mkQuant', implVar,codeVC,vc,vcSt,vc'') where
+  (QuantityDict, codeVC, implVar, mkQuant, mkQuant', vc, vc'', vcSt, vcUnit, qw) where
 
 import Control.Lens ((^.),makeLenses,view)
 
@@ -51,6 +51,10 @@ implVar i des sym = vcSt i des f
 -- | Creates a Quantity from an uid, term, symbol, and space
 vc :: String -> NP -> Symbol -> Space -> QuantityDict
 vc i des sym space = QD (nw $ nc i des) space (const sym) Nothing
+
+-- | Creates a Quantity from an uid, term, symbol, space, and unit
+vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
+vcUnit i des sym space u = QD (nw $ nc i des) space (const sym) (Just u)
 
 -- | Like cv, but creates a QuantityDict from something that knows about stages
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict

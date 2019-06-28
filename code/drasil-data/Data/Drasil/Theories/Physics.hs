@@ -7,8 +7,8 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (body, component, constant, material_,
   value)
-import Data.Drasil.Concepts.Math (equation, vector)
-import Data.Drasil.Concepts.Physics (cartesian, twoD)
+import Data.Drasil.Concepts.Math (cartesian, equation, vector)
+import Data.Drasil.Concepts.Physics (gravity, twoD)
 import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
@@ -67,10 +67,9 @@ weightDerivEqns = map E [weightDerivAccelEqn, weightDerivNewtonEqn,
   weightDerivReplaceMassEqn, weightDerivSpecWeightEqn]
 
 weightDerivAccelSentence :: [Sentence]
-weightDerivAccelSentence = [S "Under the influence" `sOf` S "gravity" `sC` 
-  S "and assuming a", short twoD, phrase cartesian, 
-  S "with down as positive" `sC` S "an object has an", phrase QP.acceleration, 
-  phrase vector, S "of"]
+weightDerivAccelSentence = [S "Under the influence" `sOf` phrase gravity `sC` 
+  S "and assuming a", short twoD, phrase cartesian, S "with down as positive" `sC`
+  S "an object has an", phrase QP.acceleration, phrase vector, S "of"]
 
 weightDerivNewtonSentence :: [Sentence]
 weightDerivNewtonSentence = [S "Since there is only one non-zero", 

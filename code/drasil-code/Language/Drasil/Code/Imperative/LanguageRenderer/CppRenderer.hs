@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..))
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, listTypeDocD, voidDocD,
@@ -35,14 +35,15 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   litCharD, litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, 
   objVarDocD, inlineIfDocD, funcAppDocD, funcDocD, castDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD,
-  publicDocD, classDec, dot, observerListName, doubleSlash, addCommentsDocD, 
-  valList, surroundBody, getterName, setterName, setEmpty)
+  publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, docCmtStart, 
+  observerListName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, valList, surroundBody, getterName, setterName, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
   doubleQuotedText, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, 
-  liftA8, liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPairFst,
-  getInnerType, convType)
+  liftA8, liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair,
+  liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.List (nub)
@@ -75,6 +76,9 @@ instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
 
+  commentedMod cmt m = pair (commentedMod (pfst cmt) (pfst m)) 
+    (commentedMod (psnd cmt) (psnd m))
+
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
   endStatement = pair endStatement endStatement
@@ -96,6 +100,10 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   iterInLabel = pair iterInLabel iterInLabel
 
   commentStart = pair commentStart commentStart
+  blockCommentStart = pair blockCommentStart blockCommentStart
+  blockCommentEnd = pair blockCommentEnd blockCommentEnd
+  docCommentStart = pair docCommentStart docCommentStart
+  docCommentEnd = pair docCommentEnd docCommentEnd
   
   printFunc = pair printFunc printFunc
   printLnFunc = pair printLnFunc printLnFunc
@@ -522,6 +530,9 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     ins) (map pfst outs) (pfst b)) (inOutFunc n (psnd s) (psnd p) (map psnd ins)
     (map psnd outs) (psnd b))
 
+  commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
+    (commentedFunc (psnd cmt) (psnd fn)) 
+
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
   stateVar del l s p t = pair (stateVar del l (pfst s) (pfst p) (pfst t))
@@ -545,10 +556,18 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   pubClass n p vs fs = pair (pubClass n p (map pfst vs) (map pfst fs)) 
     (pubClass n p (map psnd vs) (map psnd fs))
 
+  commentedClass cmt cs = pair (commentedClass (pfst cmt) (pfst cs)) 
+    (commentedClass (psnd cmt) (psnd cs))
+
 instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   type Module (p CppSrcCode CppHdrCode) = ModData
   buildModule n l ms cs = pair (buildModule n l (map pfst ms) (map pfst cs)) 
     (buildModule n l (map psnd ms) (map psnd cs))
+
+instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
+  type BlockComment (p CppSrcCode CppHdrCode) = Doc
+  blockComment lns = pair (blockComment lns) (blockComment lns)
+  docComment lns = pair (docComment lns) (docComment lns)
 
 -----------------
 -- Source File --
@@ -580,6 +599,9 @@ instance RenderSym CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
 
+  commentedMod cmt m = if isMainMod (unCPPSC m) then liftA3 md (fmap name m) 
+    (fmap isMainMod m) (liftA2 commentedItem cmt (fmap modDoc m)) else m 
+  
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
   endStatement = return semi
@@ -601,7 +623,11 @@ instance KeywordSym CppSrcCode where
   iterInLabel = return empty
 
   commentStart = return doubleSlash
-  
+  blockCommentStart = return blockCmtStart
+  blockCommentEnd = return blockCmtEnd
+  docCommentStart = return docCmtStart
+  docCommentEnd = blockCommentEnd
+
   printFunc = return $ text "std::cout"
   printLnFunc = return $ text "std::cout"
   printFileFunc = fmap valDoc -- is this right?
@@ -1047,6 +1073,10 @@ instance MethodSym CppSrcCode where
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
     map pointerParam outs) b
 
+  commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
+    liftA3 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) 
+    (liftA2 commentedItem cmt (fmap mthdDoc fn)) else fn
+
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
   stateVar del l s p t = liftA3 svd (fmap snd s) (liftA4 (stateVarDocD l) 
@@ -1077,6 +1107,8 @@ instance ClassSym CppSrcCode where
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
+  commentedClass _ cs = cs
+
 instance ModuleSym CppSrcCode where
   type Module CppSrcCode = ModData
   buildModule n l ms cs = fmap (md n (any (snd . unCPPSC) cs || 
@@ -1089,6 +1121,11 @@ instance ModuleSym CppSrcCode where
     || (all (isEmpty . fst . unCPPSC) cs && not (null l))) && 
     any (not . isEmpty . mthdDoc . unCPPSC) ms then return blank else 
     return empty) (liftList vibcat (map (fmap fst) cs)))
+
+instance BlockCommentSym CppSrcCode where
+  type BlockComment CppSrcCode = Doc
+  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
 
 -----------------
 -- Header File --
@@ -1120,6 +1157,10 @@ instance RenderSym CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
 
+  commentedMod cmt m = if isMainMod (unCPPHC m) then m else 
+    liftA3 md (fmap name m) (fmap isMainMod m) 
+    (liftA2 commentedItem cmt (fmap modDoc m))
+
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
   endStatement = return semi
@@ -1141,7 +1182,11 @@ instance KeywordSym CppHdrCode where
   iterInLabel = return empty
 
   commentStart = return empty
-  
+  blockCommentStart = return blockCmtStart
+  blockCommentEnd = return blockCmtEnd
+  docCommentStart = return docCmtStart
+  docCommentEnd = blockCommentEnd
+
   printFunc = return empty
   printLnFunc = return empty
   printFileFunc _ = return empty
@@ -1493,6 +1538,10 @@ instance MethodSym CppHdrCode where
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
     map pointerParam outs) b
 
+  commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
+    liftA3 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) 
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar _ l s p t = liftA3 svd (fmap snd s) (liftA4 (stateVarDocD l) 
@@ -1517,6 +1566,9 @@ instance ClassSym CppHdrCode where
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
+  commentedClass cmt cs = if snd (unCPPHC cs) then cs else 
+    liftPair (liftA2 commentedItem cmt (fmap fst cs), fmap snd cs)
+
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
   buildModule n l ms cs = fmap (md n (any (snd . unCPPHC) cs || 
@@ -1529,6 +1581,11 @@ instance ModuleSym CppHdrCode where
     (not . isEmpty . mthdDoc . unCPPHC) ms then return blank else return empty)
     (liftList vibcat (map (fmap fst) cs)))
     where methods = map (fmap (\(MthD m _ d) -> (d, m))) ms
+
+instance BlockCommentSym CppHdrCode where
+  type BlockComment CppHdrCode = Doc
+  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
 
 -- helpers
 isDtor :: Label -> Bool

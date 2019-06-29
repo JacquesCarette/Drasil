@@ -1,7 +1,8 @@
 -- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.LanguageRenderer (
   -- * Common Syntax
-  classDec, dot, doubleSlash, forLabel, new, observerListName,
+  classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
+  docCmtStart, observerListName,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
@@ -28,8 +29,9 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  addCommentsDocD, valList, prependToBody, appendToBody, surroundBody, 
-  getterName, setterName, setMain, setEmpty
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, 
+  prependToBody, appendToBody, surroundBody, getterName, setterName, setMain, 
+  setEmpty
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -42,7 +44,7 @@ import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
-import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), 
+import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
   integer, semi, equals, braces, int, comma, colon, hcat)
 
@@ -50,12 +52,16 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>),
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec,dot,doubleSlash,forLabel,new :: Doc
+classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
+  docCmtStart :: Doc
 classDec = text "class"
 dot = text "."
 doubleSlash = text "//"
 forLabel = text "for"
 new = text "new"
+blockCmtStart = text "/*"
+blockCmtEnd = text "*/"
+docCmtStart = text "/**"
 
 observerListName :: Label
 observerListName = "observerList"
@@ -626,6 +632,15 @@ publicDocD :: Doc
 publicDocD = text "public"
 
 -- Comment Functions -- 
+
+blockCmtDoc :: [String] -> Doc -> Doc -> Doc
+blockCmtDoc lns start end = start <+> vcat (map text lns) <+> end
+
+docCmtDoc :: [String] -> Doc -> Doc -> Doc
+docCmtDoc lns start end = vcat $ start : map (indent . text) lns ++ [end]
+
+commentedItem :: Doc -> Doc -> Doc
+commentedItem cmt itm = if isEmpty itm then itm else cmt $+$ itm
 
 commentLength :: Int
 commentLength = 75

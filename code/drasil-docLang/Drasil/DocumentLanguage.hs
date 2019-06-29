@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
 -- representation of information, to something more informative.
@@ -7,8 +6,15 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation, instanceModel, gdefn, tmodel,
-  helperRefs)
+import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
+  DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
+  GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), Literature(..),
+  PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
+  ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
+  SSDSec(..), SSDSub(..), TConvention(..), TraceabilitySec(..), TSIntro(..),
+  TUIntro(..), UCsSec(..))
+import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
+  gdefn, tmodel, helperRefs)
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                      -- Vector - Name conflict (defined in file)
@@ -16,7 +22,6 @@ import Utils.Drasil
 
 import Database.Drasil(SystemInformation(SI), asOrderedList, citeDB, conceptinsTable,
   termTable, unitTable, _authors, _concepts, _kind, _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
@@ -45,189 +50,6 @@ import Data.Drasil.Concepts.Documentation (assumpDom, likelyChg, refmat,
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
-
-type System = Sentence
-type DocKind = Sentence
-
-{--}
-
-type DocDesc = [DocSection]
-
--- | Document sections are either Reference, Introduction, or Specific
--- System Description sections (for now!)
-data DocSection = RefSec RefSec
-                | IntroSec IntroSec
-                | StkhldrSec StkhldrSec
-                | GSDSec GSDSec
-                | SSDSec SSDSec
-                | ReqrmntSec ReqrmntSec
-                | LCsSec LCsSec
-                | UCsSec UCsSec
-                | TraceabilitySec TraceabilitySec
-                | AuxConstntSec AuxConstntSec
-                | Bibliography
-                | AppndxSec AppndxSec
-                | OffShelfSolnsSec OffShelfSolnsSec
-
-{--}
-
--- | Reference section. Contents are top level followed by a list of subsections.
-data RefSec = RefProg Contents [RefTab]
-
--- | Reference subsections
-data RefTab where
-  TUnits :: RefTab
-  TUnits' :: [TUIntro] -> RefTab -- Customized intro
-  TSymb :: [TSIntro] -> RefTab
-  TSymb' :: LFunc -> [TSIntro] -> RefTab
-  TAandA :: RefTab
-  -- add more here
-
--- | For creating the table of symbols intro
-data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used
-             | SymbOrder -- ^ Symbol ordering (defaults to alphabetical)
-             | SymbConvention [Literature] -- ^ Symbol conventions match specified literature
-             | TSPurpose -- ^ Purpose of the Table of Symbols
-             | VectorUnits -- ^ Definition of vector components
-
--- | Possible typographic conventions
-data TConvention = Vector Emphasis -- ^ How vectors are emphasized
-                 | Verb Sentence -- ^ Verbatim for specialized conventions
-
--- | How to handle Emphasis
-data Emphasis = Bold
-              | Italics
-
-instance Show Emphasis where
-  show Bold = "bold"
-  show Italics = "italics"
-
--- | Types of literature
-data Literature = Lit Topic -- ^ literature
-                | Doc Topic -- ^ existing documentation for (singular topic)
-                | Doc' Topic -- ^ existing documentation for (plural of topic)
-                | Manual Topic -- ^ manual
-
-type Topic = IdeaDict
-
--- | For creating the table of units intro
-data TUIntro = System -- ^ System of units (defaults to SI)
-             | Derived -- ^ Sentence about derived units being used alongside SI
-             | TUPurpose -- ^ Purpose of the table of units
-
--- | Lens (lookup) functions (currently for TSymb)
-data LFunc where
-  Term :: LFunc
-  Defn :: LFunc
-  TermExcept :: [DefinedQuantityDict] -> LFunc
-  DefnExcept :: [DefinedQuantityDict] -> LFunc
-  TAD :: LFunc --Term and Definition
-
-{--}
-
--- | Introduction section. Contents are top level followed by a list of
--- subsections.
-data IntroSec = IntroProg Sentence Sentence [IntroSub]
-  -- ^ Temporary, will be modified once we've figured out more about the section.
-
--- | Introduction subsections
-data IntroSub where
-  IPurpose :: Sentence -> IntroSub
-  IScope   :: Sentence -> Sentence -> IntroSub
-  IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
-  IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
-
-{--}
-
--- | Stakeholders section
-data StkhldrSec = StkhldrProg CI Sentence | StkhldrProg2 [StkhldrSub]
-
--- | Stakeholders subsections
-data StkhldrSub where
-  Client :: CI -> Sentence -> StkhldrSub
-  Cstmr  :: CI -> StkhldrSub
-
-{--}
-
-data GSDSec = GSDProg [Section] Contents [Contents] [Section]
-            | GSDProg2 [GSDSub]
-
-data GSDSub where
-  SysCntxt   :: [Contents] -> GSDSub --FIXME: partially automate
-  UsrChars   :: [Contents] -> GSDSub
-  SystCons   :: [Contents] -> [Section] -> GSDSub
-
-{--}
-
--- | Specific System Description section . Contains a list of subsections.
-newtype SSDSec = SSDProg [SSDSub]
-
--- | Specific system description subsections
-data SSDSub where
-  SSDProblem :: ProblemDescription -> SSDSub
-  SSDSolChSpec :: SolChSpec -> SSDSub
-
--- | Problem Description section
-data ProblemDescription where
-  PDProg :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
-
--- | Problem Description subsections
-data PDSub where
-  TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
-  PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
-  Goals :: [Sentence] -> [ConceptInstance] -> PDSub
-
--- | Solution Characteristics Specification section
-data SolChSpec where
-  SCSProg :: [SCSSub] -> SolChSpec
-
--- | Solution Characteristics Specification subsections
-data SCSSub where
-  Assumptions    :: SCSSub
-  TMs            :: [Sentence] -> Fields  -> [TheoryModel] -> SCSSub
-  GDs            :: [Sentence] -> Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
-  DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
-  IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
-  Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
---FIXME: Work in Progress ^
-  CorrSolnPpties :: [Contents] -> SCSSub
-data DerivationDisplay = ShowDerivation
-                       | HideDerivation
-{--}
-
-newtype ReqrmntSec = ReqsProg [ReqsSub]
-
-data ReqsSub where
-  FReqsSub    :: [ConceptInstance] -> [LabelledContent] -> ReqsSub -- LabelledContent for tables
-  NonFReqsSub :: [ConceptInstance] -> ReqsSub
-
-{--}
-
-newtype LCsSec = LCsProg [ConceptInstance]
-
-{--}
-
-newtype UCsSec = UCsProg [ConceptInstance]
-
-{--}
-
-data TraceabilitySec = TraceabilityProg [LabelledContent] [Sentence] [Contents] [Section]
-
-{--}
-
--- | Off-The-Shelf Solutions section 
-newtype OffShelfSolnsSec = OffShelfSolnsProg [Contents]
-
-{--}
-
--- | Values of Auxiliary Constants section
-data AuxConstntSec = AuxConsProg CI [QDefinition]
-
-{--}
-
-newtype AppndxSec = AppndxProg [Contents]
-
-{--}
 
 -- | Creates a document from a document description and system information
 mkDoc :: DocDesc -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
@@ -448,19 +270,8 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' Assumptions =
       SSD.assumpF $ mkEnumSimpleD . map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
       asOrderedList $ _sysinfodb si' ^. conceptinsTable
-      {-where
-        -- Duplicated here to avoid "leaking" the definition from drasil-lang
-        -- Commented out since its imported from drasil-database now
-        sDom :: [UID] -> UID
-        sDom [u] = u
-        sDom u = error $ "Expected ConceptDomain to have a single domain, found " ++
-          show (length u) ++ " instead."-}
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
-    --FIXME: inModSec should be replaced with a walk
-    -- over the SCSProg and generate a relevant intro.
-    -- Could start with just a quick check of whether or not IM is included and
-    -- then error out if necessary.
 
 helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a

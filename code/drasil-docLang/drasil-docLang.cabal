@@ -14,6 +14,7 @@ library
       Drasil.DocumentLanguage
     , Drasil.ExtractDocDesc
     , Drasil.TraceTable
+    , Drasil.DocumentLanguage.Core
     , Drasil.DocumentLanguage.Definitions
     , Drasil.DocumentLanguage.RefHelpers
     , Drasil.DocumentLanguage.TraceabilityMatrix

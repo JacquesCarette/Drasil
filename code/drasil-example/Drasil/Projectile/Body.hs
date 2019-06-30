@@ -73,7 +73,7 @@ mkSRS = [
         , PhySysDesc projectileTitle physSystParts figLaunch []
         , Goals [(phrase iVel +:+ S "vector") `ofThe` phrase projectile] goals]
       , SSDSolChSpec $ SCSProg
-        [ Assumptions
+        [ Assumptions assumptions
         , TMs [] (Label : stdFields) tMods
         , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation

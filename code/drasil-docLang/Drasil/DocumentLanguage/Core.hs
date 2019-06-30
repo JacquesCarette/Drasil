@@ -146,7 +146,7 @@ data SolChSpec where
 
 -- | Solution Characteristics Specification subsections
 data SCSSub where
-  Assumptions    :: SCSSub
+  Assumptions    :: [ConceptInstance] -> SCSSub
   TMs            :: [Sentence] -> Fields  -> [TheoryModel] -> SCSSub
   GDs            :: [Sentence] -> Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
@@ -256,7 +256,7 @@ instance Multiplate DLPlate where
     pd' (TermsAndDefs s cs) = TermsAndDefs <$> pure s <*> pure cs
     pd' (Goals s ci) = Goals <$> pure s <*> pure ci
     pd' (PhySysDesc nm s lc c) = PhySysDesc <$> pure nm <*> pure s <*> pure lc <*> pure c
-    sc Assumptions = pure Assumptions
+    sc (Assumptions c) = Assumptions <$> pure c
     sc (TMs s f t) = TMs <$> pure s <*> pure f <*> pure t
     sc (GDs s f g d) = GDs <$> pure s <*> pure f <*> pure g <*> pure d
     sc (DDs s f dd d) = DDs <$> pure s <*> pure f <*> pure dd <*> pure d

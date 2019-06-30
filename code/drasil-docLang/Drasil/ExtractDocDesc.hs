@@ -49,7 +49,6 @@ exprPlate :: DLPlate (Constant [Expr])
 exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap egetCon')
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
   scsSub = Constant <$> \case
-    Assumptions -> []
     (TMs _ _ t) -> let r = concatMap (\x -> x ^. invariants ++
                            defExp (x ^. defined_quant ++ x ^. defined_fun) ++
                            r (x ^. valid_context)) in r t
@@ -113,7 +112,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (PhySysDesc _ s _ _) -> s
       (Goals s c) -> s ++ def c,
     scsSub = Constant . f <$> \case
-      Assumptions -> []
+      (Assumptions c) -> def c
       (TMs s _ t) -> let r = mappend s . concatMap (\x -> def (x ^. operations) ++
                              def (x ^. defined_quant) ++ notes [x] ++
                              r (x ^. valid_context)) in r t

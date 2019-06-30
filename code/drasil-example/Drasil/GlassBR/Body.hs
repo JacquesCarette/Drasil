@@ -154,7 +154,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         [ PhySysDesc glassBR physSystParts physSystFig []
         , Goals goalInputs goals],
        SSDSolChSpec $ SCSProg
-        [ Assumptions
+        [ Assumptions assumptions
         , TMs [] (Label : stdFields) tMods
         , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation

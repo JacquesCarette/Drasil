@@ -81,7 +81,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         [ TermsAndDefs Nothing terms
         , Goals [S "the" +:+ plural input_] goals]
       , SSDSolChSpec $ SCSProg
-        [ Assumptions
+        [ Assumptions assumptions
         , TMs [] (Label : stdFields) tModsNew
         , GDs [] [] [] HideDerivation -- No Gen Defs for Gamephysics
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation

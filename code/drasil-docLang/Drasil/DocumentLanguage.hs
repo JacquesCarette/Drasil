@@ -20,8 +20,8 @@ import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name c
                                                      -- Vector - Name conflict (defined in file)
 import Utils.Drasil
 
-import Database.Drasil(SystemInformation(SI), asOrderedList, citeDB, conceptinsTable,
-  termTable, unitTable, _authors, _concepts, _kind, _quants, _sys, _sysinfodb, _usedinfodb)
+import Database.Drasil(SystemInformation(SI), citeDB, termTable, unitTable,
+  _authors, _concepts, _kind, _quants, _sys, _usedinfodb)
 
 import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
@@ -45,8 +45,8 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
 
-import Data.Drasil.Concepts.Documentation (assumpDom, likelyChg, refmat,
-  section_, software, unlikelyChg)
+import Data.Drasil.Concepts.Documentation (likelyChg, refmat, section_,
+  software, unlikelyChg)
 
 import Data.Function (on)
 import Data.List (nub, sortBy)
@@ -267,9 +267,8 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (IMs intro fields ims _) =
       SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims
-    mkSubSCS si' Assumptions =
-      SSD.assumpF $ mkEnumSimpleD . map (`helperCI` si') . filter (\x -> sDom (cdom x) == assumpDom ^. uid) .
-      asOrderedList $ _sysinfodb si' ^. conceptinsTable
+    mkSubSCS si' (Assumptions ci) =
+      SSD.assumpF $ mkEnumSimpleD $ map (`helperCI` si') ci
     mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
 

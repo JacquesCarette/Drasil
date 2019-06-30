@@ -169,7 +169,7 @@ mkSRS = [RefSec $ RefProg intro [
         , PhySysDesc progName physSystParts figTank []
         , Goals goalInputs goals]
       , SSDSolChSpec $ SCSProg
-        [ Assumptions
+        [ Assumptions assumptions
         , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
         , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefs ShowDerivation

@@ -39,8 +39,6 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (NonFReqsSub _) -> mempty,
   lcsSec = Constant <$> \(LCsProg _) -> mempty,
   ucsSec = Constant <$> \(UCsProg _) -> mempty,
-  traceSec = Constant <$> \(TraceabilityProg lc _ c s) ->
-    mconcat [mCon lc, mCon c, mSec s],
   offShelfSec = Constant <$> \(OffShelfSolnsProg c) -> mCon c,
   appendSec = Constant <$> \(AppndxProg c) -> mCon c
 }
@@ -126,8 +124,8 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (NonFReqsSub c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,
     ucsSec = Constant . f <$> \(UCsProg c) -> def c,
-    traceSec = Constant . f <$>
-      \(TraceabilityProg _ s _ _) -> s,
+    traceSec = Constant . f <$> \(TraceabilityProg progs) ->
+      concatMap (\(TraceConfig _ ls s _ _) -> s : ls) progs,
     auxConsSec = Constant . f <$> \(AuxConsProg _ qdef) -> def qdef
   } where
     def :: Definition a => [a] -> [Sentence]

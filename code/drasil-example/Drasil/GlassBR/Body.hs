@@ -173,9 +173,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   ],
   LCsSec $ LCsProg likelyChgs,
   UCsSec $ UCsProg unlikelyChgs,
-  TraceabilitySec $
-    TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
-      (map (LlC . fst) traceabilityMatrices) [],
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard systInfo,
   AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
@@ -425,9 +423,6 @@ outputDataConstraints = outDataConstTbl [probBr]
 {--UNLIKELY CHANGES--}
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
-
-traceabilityMatrices :: [(LabelledContent, [Sentence])]
-traceabilityMatrices = traceMatStandard systInfo
 
 {--VALUES OF AUXILIARY CONSTANTS--}
 

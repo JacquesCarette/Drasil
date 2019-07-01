@@ -2,6 +2,7 @@
 module Drasil.DocumentLanguage.Core where
 
 import Drasil.DocumentLanguage.Definitions (Fields)
+import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                      -- Vector - Name conflict (defined in file)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
@@ -174,7 +175,9 @@ newtype UCsSec = UCsProg [ConceptInstance]
 
 {--}
 
-data TraceabilitySec = TraceabilityProg [LabelledContent] [Sentence] [Contents] [Section]
+newtype TraceabilitySec = TraceabilityProg [TraceConfig]
+
+data TraceConfig = TraceConfig UID [Sentence] Sentence [TraceViewCat] [TraceViewCat]
 
 {--}
 
@@ -268,8 +271,7 @@ instance Multiplate DLPlate where
     rs' (NonFReqsSub c) = NonFReqsSub <$> pure c
     lcp (LCsProg c) = LCsProg <$> pure c
     ucp (UCsProg c) = UCsProg <$> pure c
-    ts (TraceabilityProg llc sen con sect) = TraceabilityProg <$> pure llc <*>
-      pure sen <*> pure con <*> pure sect
+    ts (TraceabilityProg progs) = TraceabilityProg <$> pure progs
     es (OffShelfSolnsProg contents) = OffShelfSolnsProg <$> pure contents
     acs (AuxConsProg ci qdef) = AuxConsProg <$> pure ci <*> pure qdef
     aps (AppndxProg con) = AppndxProg <$> pure con

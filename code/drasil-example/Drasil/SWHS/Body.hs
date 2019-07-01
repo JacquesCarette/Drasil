@@ -186,9 +186,7 @@ mkSRS = [RefSec $ RefProg intro [
   ],
   LCsSec $ LCsProg likelyChgs,
   UCsSec $ UCsProg unlikelyChgs,
-  TraceabilitySec $
-    TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
-      (map (LlC . fst) traceabilityMatrices) [],
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]
 
@@ -457,9 +455,6 @@ outputConstraints = [tempW, tempPCM, watE, pcmE]
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
-
-traceabilityMatrices :: [(LabelledContent, [Sentence])]
-traceabilityMatrices = traceMatStandard si
 
 ------------------------
 -- Traceabilty Graphs --

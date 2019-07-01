@@ -99,8 +99,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     LCsSec $ LCsProg likelyChgs,
     UCsSec $ UCsProg unlikelyChgs,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
-    TraceabilitySec $ TraceabilityProg (map fst traceabilityMatrices)
-      (map (foldlList Comma List . snd) traceabilityMatrices) (map (LlC . fst) traceabilityMatrices) [],
+    TraceabilitySec $ TraceabilityProg $ traceMatStandard sysInfo,
     AuxConstntSec $ AuxConsProg chipmunk [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
@@ -484,9 +483,6 @@ offShelfSols3DList = LlC $ enumBullet solutionLabel [
 -----------------------------------------------------
 -- SECTION 8 : Traceability Matrices and Graph    --
 -----------------------------------------------------
-
-traceabilityMatrices :: [(LabelledContent, [Sentence])]
-traceabilityMatrices = traceMatStandard sysInfo
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

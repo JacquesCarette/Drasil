@@ -11,8 +11,8 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), Literature(..),
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
   ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
-  SSDSec(..), SSDSub(..), TConvention(..), TraceabilitySec(..), TSIntro(..),
-  TUIntro(..), UCsSec(..))
+  SSDSec(..), SSDSub(..), TConvention(..), TraceabilitySec(..), TraceConfig(..),
+  TSIntro(..), TUIntro(..), UCsSec(..))
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel, helperRefs)
 
@@ -43,7 +43,8 @@ import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
 import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
-import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF)
+import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF,
+  generateTraceTableView)
 
 import Data.Drasil.Concepts.Documentation (likelyChg, refmat, section_,
   software, unlikelyChg)
@@ -71,7 +72,7 @@ mkSections si = map doit
     doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc)         = mkLCsSec lc
     doit (UCsSec ulcs)       = mkUCsSec ulcs
-    doit (TraceabilitySec t) = mkTraceabilitySec t
+    doit (TraceabilitySec t) = mkTraceabilitySec t si
     doit (AppndxSec a)       = mkAppndxSec a
     doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
@@ -314,9 +315,12 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
 {--}
 
 -- | Helper for making the 'Traceability Matrices and Graphs' section
-mkTraceabilitySec :: TraceabilitySec -> Section
-mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
-  TM.traceMGF refs trailing otherContents subSec
+mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
+mkTraceabilitySec (TraceabilityProg progs) si = TM.traceMGF trace
+  (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
+  (map LlC trace) [] where
+  trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
+    u desc rows cols si) progs
 
 {--}
 

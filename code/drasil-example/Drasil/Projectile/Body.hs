@@ -91,9 +91,7 @@ mkSRS = [
       [ FReqsSub funcReqs [inputParamsTable]
       , NonFReqsSub nonfuncReqs
       ],
-  TraceabilitySec $
-    TraceabilityProg
-      (map fst traceMats) (map (foldlList Comma List . snd) traceMats) (map (LlC . fst) traceMats) [],
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard systInfo,
   AuxConstntSec $
     AuxConsProg projectileTitle constants,
   Bibliography
@@ -195,10 +193,3 @@ physSystParts = map foldlSent [
 inDataCons, outDataCons :: LabelledContent
 inDataCons  = inDataConstTbl  inConstraints
 outDataCons = outDataConstTbl outConstraints
-
---------------------------
--- Traceabilty Matrices --
---------------------------
-
-traceMats :: [(LabelledContent, [Sentence])]
-traceMats = traceMatStandard systInfo

@@ -140,8 +140,7 @@ mkSRS = [RefSec $ RefProg intro
   ],
   LCsSec $ LCsProg likelyChgs,
   UCsSec $ UCsProg unlikelyChgs,
-  TraceabilitySec $ TraceabilityProg (map fst traceyMatrix) (map (foldlList Comma List . snd) traceyMatrix)
-    (map (LlC . fst) traceyMatrix) [],
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg ssp [],
   Bibliography]
 
@@ -178,10 +177,6 @@ labCon = [figPhysSyst, figIndexConv, figForceActing,
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
-traceyMatrix :: [(LabelledContent, [Sentence])]
-traceyMatrix = traceMatStandard si
-
 
 -- SYMBOL MAP HELPERS --
 symMap :: ChunkDB

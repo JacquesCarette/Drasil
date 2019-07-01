@@ -43,7 +43,7 @@ import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
 import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
-import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
+import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF)
 
 import Data.Drasil.Concepts.Documentation (likelyChg, refmat, section_,
   software, unlikelyChg)
@@ -316,7 +316,7 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
 -- | Helper for making the 'Traceability Matrices and Graphs' section
 mkTraceabilitySec :: TraceabilitySec -> Section
 mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
-  TMG.traceMGF refs trailing otherContents subSec
+  TM.traceMGF refs trailing otherContents subSec
 
 {--}
 

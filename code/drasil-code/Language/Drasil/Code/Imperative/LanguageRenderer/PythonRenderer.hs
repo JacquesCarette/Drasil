@@ -336,9 +336,8 @@ instance StatementSym PythonCode where
 
   varDec _ = return (mkStNoEnd empty)
   varDecDef = assign
-  listDec l _ t = mkStNoEnd <$> fmap (pyListDec l) (listType static_ t)
-  listDecDef l _ vs = mkStNoEnd <$> fmap (pyListDecDef l) (liftList 
-    valList vs)
+  listDec _ v = mkStNoEnd <$> liftA2 pyListDec v (listType static_ (valueType v))
+  listDecDef v vs = mkStNoEnd <$> liftA2 pyListDecDef v (liftList valList vs)
   objDecDef = varDecDef
   objDecNew v vs = varDecDef v (stateObj (valueType v) vs)
   extObjDecNew lib v vs = varDecDef v (extStateObj lib (valueType v) vs)
@@ -406,7 +405,7 @@ instance StatementSym PythonCode where
     (litString initialState)
   changeState fsmName toState = var fsmName string &= litString toState
 
-  initObserverList = listDecDef observerListName
+  initObserverList t = listDecDef (var observerListName t)
   addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = listSizeAccess obsList
@@ -566,11 +565,11 @@ pyListSizeAccess v f = funcDoc f <> parens (valDoc v)
 pyStringType :: TypeData
 pyStringType = td String (text "str")
 
-pyListDec :: Label -> TypeData -> Doc
-pyListDec l t = text l <+> equals <+> typeDoc t
+pyListDec :: ValData -> TypeData -> Doc
+pyListDec v t = valDoc v <+> equals <+> typeDoc t
 
-pyListDecDef :: Label -> Doc -> Doc
-pyListDecDef l vs = text l <+> equals <+> brackets vs
+pyListDecDef :: ValData -> Doc -> Doc
+pyListDecDef v vs = valDoc v <+> equals <+> brackets vs
 
 pyPrint :: Bool ->  ValData -> ValData ->  ValData -> Doc
 pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)

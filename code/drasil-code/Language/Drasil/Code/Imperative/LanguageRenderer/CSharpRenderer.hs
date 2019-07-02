@@ -161,7 +161,7 @@ instance ControlBlockSym CSharpCode where
         v_i = var l_i int
     in
       block [
-        listDec l_temp 0 (fmap valType vnew),
+        listDec 0 v_temp,
         for (varDecDef v_i (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
           (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
@@ -358,8 +358,8 @@ instance StatementSym CSharpCode where
 
   varDec v = mkSt <$> fmap varDecDocD v
   varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
-  listDec l n t = mkSt <$> liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-  listDecDef l t vs = mkSt <$> lift1List (listDecDefDocD l) t vs
+  listDec n v = mkSt <$> liftA2 listDecDocD v (litInt n)
+  listDecDef v vs = mkSt <$> lift1List listDecDefDocD v vs
   objDecDef v def = mkSt <$> liftA2 objDecDefDocD v def
   objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) vs)
   extObjDecNew _ = objDecNew
@@ -424,7 +424,7 @@ instance StatementSym CSharpCode where
   initState fsmName initialState = varDecDef (var fsmName string) (litString initialState)
   changeState fsmName toState = var fsmName string &= litString toState
 
-  initObserverList = listDecDef observerListName
+  initObserverList t = listDecDef (var observerListName t)
   addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize

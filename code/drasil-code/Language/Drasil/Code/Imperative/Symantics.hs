@@ -346,9 +346,8 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   varDec           :: repr (Value repr) -> repr (Statement repr)
   varDecDef        :: repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)
-  listDec          :: Label -> Integer -> repr (StateType repr) -> 
-    repr (Statement repr)
-  listDecDef       :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
+  listDec          :: Integer -> repr (Value repr) -> repr (Statement repr)
+  listDecDef       :: repr (Value repr) -> [repr (Value repr)] -> 
     repr (Statement repr)
   objDecDef        :: repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)

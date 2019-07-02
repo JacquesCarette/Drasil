@@ -348,9 +348,9 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   varDec v = pair (varDec $ pfst v) (varDec $ psnd v)
   varDecDef v def = pair (varDecDef (pfst v) (pfst def)) (varDecDef (psnd v) 
     (psnd def))
-  listDec l n t = pair (listDec l n $ pfst t) (listDec l n $ psnd t)
-  listDecDef l t vs = pair (listDecDef l (pfst t) (map pfst vs)) (listDecDef l 
-    (psnd t) (map psnd vs))
+  listDec n v = pair (listDec n $ pfst v) (listDec n $ psnd v)
+  listDecDef v vs = pair (listDecDef (pfst v) (map pfst vs)) (listDecDef 
+    (psnd v) (map psnd vs))
   objDecDef v def = pair (objDecDef (pfst v) (pfst def)) (objDecDef (psnd v)
     (psnd def))
   objDecNew v vs = pair (objDecNew (pfst v) (map pfst vs)) (objDecNew 
@@ -674,7 +674,7 @@ instance ControlBlockSym CppSrcCode where
         v_i = var l_i int
     in
       block [
-        listDec l_temp 0 (fmap valType vnew),
+        listDec 0 v_temp,
         for (varDecDef v_i (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
           (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
@@ -868,9 +868,8 @@ instance StatementSym CppSrcCode where
 
   varDec v = mkSt <$> fmap varDecDocD v
   varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
-  listDec l n t = mkSt <$> liftA2 (cppListDecDoc l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-  listDecDef l t vs = mkSt <$> liftA2 (cppListDecDefDoc l) t (liftList 
-    valList vs)
+  listDec n v = mkSt <$> liftA2 cppListDecDoc v (litInt n)
+  listDecDef v vs = mkSt <$> liftA2 cppListDecDefDoc v (liftList valList vs)
   objDecDef v def = mkSt <$> liftA2 objDecDefDocD v def
   objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) vs)
   extObjDecNew _ = objDecNew
@@ -944,7 +943,7 @@ instance StatementSym CppSrcCode where
     (litString initialState)
   changeState fsmName toState = var fsmName string &= litString toState
 
-  initObserverList = listDecDef observerListName
+  initObserverList t = listDecDef (var observerListName t)
   addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
@@ -1374,8 +1373,8 @@ instance StatementSym CppHdrCode where
 
   varDec _ = return (mkStNoEnd empty)
   varDecDef _ _ = return (mkStNoEnd empty)
-  listDec _ _ _ = return (mkStNoEnd empty)
-  listDecDef _ _ _ = return (mkStNoEnd empty)
+  listDec _ _ = return (mkStNoEnd empty)
+  listDecDef _ _ = return (mkStNoEnd empty)
   objDecDef _ _ = return (mkStNoEnd empty)
   objDecNew _ _ = return (mkStNoEnd empty)
   extObjDecNew _ _ _ = return (mkStNoEnd empty)
@@ -1633,11 +1632,11 @@ cppStateObjDoc t ps = typeDoc t <> parens ps
 cppListSetDoc :: ValData -> ValData -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens (valDoc i) <+> equals <+> valDoc v
 
-cppListDecDoc :: Label -> ValData -> TypeData -> Doc
-cppListDecDoc l n t = typeDoc t <+> text l <> parens (valDoc n)
+cppListDecDoc :: ValData -> ValData -> Doc
+cppListDecDoc v n = typeDoc (valType v) <+> valDoc v <> parens (valDoc n)
 
-cppListDecDefDoc :: Label -> TypeData -> Doc -> Doc
-cppListDecDefDoc l t vs = typeDoc t <+> text l <> braces vs
+cppListDecDefDoc :: ValData -> Doc -> Doc
+cppListDecDefDoc v vs = typeDoc (valType v) <+> valDoc v <> braces vs
 
 cppPrint :: Bool -> ValData -> ValData -> Doc
 cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> valDoc v <+> end

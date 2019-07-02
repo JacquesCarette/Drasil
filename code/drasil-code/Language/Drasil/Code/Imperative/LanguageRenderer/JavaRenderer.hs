@@ -165,7 +165,7 @@ instance ControlBlockSym JavaCode where
         v_i = var l_i int
     in
       block [
-        listDec l_temp 0 (fmap valType vnew),
+        listDec 0 v_temp,
         for (varDecDef v_i (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
           (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
@@ -362,9 +362,8 @@ instance StatementSym JavaCode where
 
   varDec v = mkSt <$> fmap varDecDocD v
   varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
-  listDec l n t = mkSt <$> liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
-  listDecDef l t vs = mkSt <$> liftA2 (jListDecDef l) t (liftList 
-    valList vs)
+  listDec n v = mkSt <$> liftA2 listDecDocD v (litInt n)
+  listDecDef v vs = mkSt <$> liftA2 jListDecDef v (liftList valList vs)
   objDecDef v def = mkSt <$> liftA2 objDecDefDocD v def
   objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) vs)
   extObjDecNew _ = objDecNew
@@ -435,7 +434,7 @@ instance StatementSym JavaCode where
     (litString initialState)
   changeState fsmName toState = var fsmName string &= litString toState
 
-  initObserverList = listDecDef observerListName
+  initObserverList t = listDecDef (var observerListName t)
   addObserver t o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
@@ -601,9 +600,9 @@ jListType t lst = listTypeDocD t lst
 jArrayType :: JavaCode (StateType JavaCode)
 jArrayType = return $ td (List $ Object "Object") (text "Object[]")
 
-jListDecDef :: Label -> TypeData -> Doc -> Doc
-jListDecDef l st vs = typeDoc st <+> text l <+> equals <+> new <+> 
-  typeDoc st <+> parens listElements
+jListDecDef :: ValData -> Doc -> Doc
+jListDecDef v vs = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
+  typeDoc (valType v) <+> parens listElements
   where listElements = if isEmpty vs then empty else text "Arrays.asList" <> 
                          parens vs
 

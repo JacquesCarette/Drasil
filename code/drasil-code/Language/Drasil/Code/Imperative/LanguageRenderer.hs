@@ -359,13 +359,13 @@ varDecDocD v = typeDoc (valType v) <+> valDoc v
 varDecDefDocD :: ValData -> ValData -> Doc
 varDecDefDocD v def = typeDoc (valType v) <+> valDoc v <+> equals <+> valDoc def
 
-listDecDocD :: Label -> ValData -> TypeData -> Doc
-listDecDocD l n st = typeDoc st <+> text l <+> equals <+> new <+> 
-  typeDoc st <> parens (valDoc n)
+listDecDocD :: ValData -> ValData -> Doc
+listDecDocD v n = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
+  typeDoc (valType v) <> parens (valDoc n)
 
-listDecDefDocD :: Label -> TypeData -> [ValData] -> Doc
-listDecDefDocD l st vs = typeDoc st <+> text l <+> equals <+> new <+> 
-  typeDoc st <+> braces (valList vs)
+listDecDefDocD :: ValData -> [ValData] -> Doc
+listDecDefDocD v vs = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
+  typeDoc (valType v) <+> braces (valList vs)
 
 objDecDefDocD :: ValData -> ValData -> Doc
 objDecDefDocD = varDecDefDocD

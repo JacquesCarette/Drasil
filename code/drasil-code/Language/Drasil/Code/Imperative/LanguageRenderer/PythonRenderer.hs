@@ -16,7 +16,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, 
   intTypeDocD, floatTypeDocD, typeDocD, constructDocD, paramListDocD, 
@@ -30,12 +30,12 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
   objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD,
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, classDec, dot, 
-  forLabel, observerListName, addCommentsDocD, valList, appendToBody,
-  getterName, setterName)
+  forLabel, observerListName, commentedItem, addCommentsDocD, valList, 
+  appendToBody, getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
-  liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPairFst, getInnerType,
-  convType)
+  liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, liftPairFst, 
+  getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -70,6 +70,9 @@ instance RenderSym PythonCode where
   top _ = return pytop
   bottom = return empty
 
+  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
+    (liftA2 commentedItem cmt (fmap modDoc m))
+
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
   endStatement = return empty
@@ -91,6 +94,10 @@ instance KeywordSym PythonCode where
   iterInLabel = return $ text "in"
 
   commentStart = return $ text "#"
+  blockCommentStart = return empty
+  blockCommentEnd = return empty
+  docCommentStart = return $ text "##"
+  docCommentEnd = return empty
   
   printFunc = return $ text "print"
   printLnFunc = return empty
@@ -488,6 +495,9 @@ instance MethodSym PythonCode where
   inOutFunc n s p ins outs b = function n s p (mState void) (map stateParam ins)
     (liftA2 appendToBody b (multiReturn outs))
 
+  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
+    fmap snd fn)
+
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ _ _ = return empty
@@ -508,6 +518,9 @@ instance ClassSym PythonCode where
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
+  commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
+    fmap snd cs)
+
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
   buildModule n ls fs cs = fmap (md n (any (snd . unPC) fs || 
@@ -515,6 +528,11 @@ instance ModuleSym PythonCode where
     (isEmpty . fst . unPC) fs then return empty else
     liftA3 pyModule (liftList pyModuleImportList (map include ls)) 
     (liftList methodListDocD fs) (liftList pyModuleClassList cs))
+
+instance BlockCommentSym PythonCode where
+  type BlockComment PythonCode = Doc
+  blockComment lns = fmap (pyBlockComment lns) commentStart
+  docComment lns = liftA2 (pyDocComment lns) docCommentStart commentStart
 
 -- convenience
 imp, incl, initName :: Label
@@ -646,3 +664,10 @@ pyInOutCall :: (Label -> PythonCode (StateType PythonCode) ->
   PythonCode (Statement PythonCode)
 pyInOutCall f n ins [] = valState $ f n void ins
 pyInOutCall f n ins outs = multiAssign outs [f n void ins]
+
+pyBlockComment :: [String] -> Doc -> Doc
+pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
+
+pyDocComment :: [String] -> Doc -> Doc -> Doc
+pyDocComment [] _ _ = empty
+pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . text) lns

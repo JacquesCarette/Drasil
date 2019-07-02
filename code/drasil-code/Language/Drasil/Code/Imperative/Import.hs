@@ -425,15 +425,21 @@ loggedMethod n vals b =
     return $ block [
       varDec v_outfile,
       openFileA v_outfile (litString $ logName g),
-      printFileStr v_outfile ("function " ++ n ++ "("),
-      printParams vals v_outfile,
-      printFileStrLn v_outfile ") called",
+      printFileStrLn v_outfile ("function " ++ n ++ " called with inputs: {"),
+      multi $ printInputs vals v_outfile,
+      printFileStrLn v_outfile "  }",
       closeFile v_outfile ]
       : rest
   where
-    printParams vs v_outfile = multi $
-      intersperse (printFileStr v_outfile ", ") $
-      map (\v -> printFile v_outfile (valueType v) v) vs
+    printInputs [] _ = []
+    printInputs [v] v_outfile = [
+      printFileStr v_outfile ("  " ++ valueName v ++ " = "), 
+      printFileLn v_outfile (valueType v) v]
+    printInputs (v:vs) v_outfile = [
+      printFileStr v_outfile ("  " ++ valueName v ++ " = "), 
+      printFile v_outfile (valueType v) v, 
+      printFileStrLn v_outfile ", "] ++ printInputs vs v_outfile
+    
 
 ---- MAIN ---
 

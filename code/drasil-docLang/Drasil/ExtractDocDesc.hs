@@ -220,7 +220,10 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
     def :: Definition a => [a] -> [Sentence]
     def = map (^. defn)
     der :: HasDerivation a => [a] -> [Sentence]
-    der = concatMap (^. derivations)
+    der = concatMap (getDerivSent . (^. derivations))
+    getDerivSent :: Maybe Derivation -> [Sentence]
+    getDerivSent Nothing = []
+    getDerivSent (Just (Derivation h s)) = h : s
     notes :: HasAdditionalNotes a => [a] -> [Sentence]
     notes = concatMap (^. getNotes)
 

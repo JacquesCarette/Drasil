@@ -62,7 +62,10 @@ extractSFromNotes :: HasAdditionalNotes l => l -> [Sentence]
 extractSFromNotes c = c ^. getNotes
 
 extractSFromDeriv :: HasDerivation l => l -> [Sentence]
-extractSFromDeriv c = c ^. derivations
+extractSFromDeriv c = getDerivSent (c ^. derivations)
+  where
+    getDerivSent Nothing = []
+    getDerivSent (Just (Derivation h s)) = h : s
 
 getSCSSub :: [DocSection] -> [SCSSub]
 getSCSSub a = getTraceMapFromSolCh $ getTraceMapFromSSDSub $ getTraceMapFromSSDSec

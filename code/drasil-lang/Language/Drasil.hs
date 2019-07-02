@@ -82,7 +82,7 @@ module Language.Drasil (
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
   -- Derivation
-  , Derivation
+  , Derivation(Derivation), mkDeriv, mkDerivName
   -- ShortName
   , ShortName, shortname', getStringSN
   --Citations
@@ -209,7 +209,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
-import Language.Drasil.Derivation (Derivation)
+import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName)
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
   -- Types

@@ -370,9 +370,9 @@ listDecDefDocD l st vs = typeDoc st <+> text l <+> equals <+> new <+>
 objDecDefDocD :: ValData -> ValData -> Doc
 objDecDefDocD = varDecDefDocD
 
-constDecDefDocD :: Label -> TypeData -> ValData -> Doc -- can this be done without StateType (infer from value)?
-constDecDefDocD l st v = text "const" <+> typeDoc st <+> text l <+> equals <+>
-  valDoc v
+constDecDefDocD :: ValData -> ValData -> Doc
+constDecDefDocD v def = text "const" <+> typeDoc (valType v) <+> valDoc v <+> 
+  equals <+> valDoc def
 
 returnDocD :: [ValData] -> Doc
 returnDocD vs = text "return" <+> valList vs

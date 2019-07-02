@@ -370,7 +370,7 @@ instance StatementSym JavaCode where
   extObjDecNew _ = objDecNew
   objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) [])
   extObjDecNewVoid _ = objDecNewVoid
-  constDecDef l t v = mkSt <$> liftA2 (jConstDecDef l) t v
+  constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
 
   printSt _ p v _ = mkSt <$> liftA2 printDoc p v
 
@@ -607,9 +607,9 @@ jListDecDef l st vs = typeDoc st <+> text l <+> equals <+> new <+>
   where listElements = if isEmpty vs then empty else text "Arrays.asList" <> 
                          parens vs
 
-jConstDecDef :: Label -> TypeData -> ValData -> Doc
-jConstDecDef l st v = text "final" <+> typeDoc st <+> text l <+> equals <+>
-  valDoc v
+jConstDecDef :: ValData -> ValData -> Doc
+jConstDecDef v def = text "final" <+> typeDoc (valType v) <+> valDoc v <+> 
+  equals <+> valDoc def
 
 jThrowDoc :: ValData -> Doc
 jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valDoc 

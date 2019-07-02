@@ -365,7 +365,7 @@ instance StatementSym CSharpCode where
   extObjDecNew _ = objDecNew
   objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) [])
   extObjDecNewVoid _ = objDecNewVoid
-  constDecDef l t v = mkSt <$> liftA2 (constDecDefDocD l) t v
+  constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
   printSt _ p v _ = mkSt <$> liftA2 printDoc p v
 

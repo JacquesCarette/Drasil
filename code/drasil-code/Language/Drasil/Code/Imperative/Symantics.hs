@@ -358,7 +358,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
     [repr (Value repr)] -> repr (Statement repr)
   objDecNewVoid    :: repr (Value repr) -> repr (Statement repr)
   extObjDecNewVoid :: Library -> repr (Value repr) -> repr (Statement repr)
-  constDecDef      :: Label -> repr (StateType repr) -> repr (Value repr) -> 
+  constDecDef      :: repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)
 
   -- newLn, printFunc, value to print, maybe a file to print to 

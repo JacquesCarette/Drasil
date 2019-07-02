@@ -360,8 +360,8 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   objDecNewVoid v = pair (objDecNewVoid $ pfst v) (objDecNewVoid $ psnd v)
   extObjDecNewVoid lib v = pair (extObjDecNewVoid lib $ pfst v) 
     (extObjDecNewVoid lib $ psnd v)
-  constDecDef l t v = pair (constDecDef l (pfst t) (pfst v)) (constDecDef l 
-    (psnd t) (psnd v))
+  constDecDef v def = pair (constDecDef (pfst v) (pfst def)) (constDecDef 
+    (psnd v) (psnd def))
 
   printSt nl p v f = pair (printSt nl (pfst p) (pfst v) (fmap pfst f)) 
     (printSt nl (psnd p) (psnd v) (fmap psnd f))
@@ -876,7 +876,7 @@ instance StatementSym CppSrcCode where
   extObjDecNew _ = objDecNew
   objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) [])
   extObjDecNewVoid _ = objDecNewVoid
-  constDecDef l t v = mkSt <$> liftA2 (constDecDefDocD l) t v
+  constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
   printSt nl p v _ = mkSt <$> liftA2 (cppPrint nl) p v
 
@@ -1381,7 +1381,7 @@ instance StatementSym CppHdrCode where
   extObjDecNew _ _ _ = return (mkStNoEnd empty)
   objDecNewVoid _ = return (mkStNoEnd empty)
   extObjDecNewVoid _ _ = return (mkStNoEnd empty)
-  constDecDef _ _ _ = return (mkStNoEnd empty)
+  constDecDef _ _ = return (mkStNoEnd empty)
 
   printSt _ _ _ _ = return (mkStNoEnd empty)
 

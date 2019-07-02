@@ -33,11 +33,10 @@ import Language.Drasil.Printing.LayoutObj (LayoutObj(Graph, Bib, Figure, Definit
   List, Table, EqnBlock, Paragraph, Header, HDiv), Document(Document))
 import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
-import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
+import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, mkEnvArgs, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
   newline, superscript, parens, fraction, quote, externalref, commandD,
   snref, cite, citeInfo, sec, newpage, maketoc, maketitle, document, author, title)
-import qualified Language.Drasil.TeX.Helpers as TH (br)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -195,9 +194,8 @@ cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 -----------------------------------------------------------------
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
-makeTable lls r bool t =
-  pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . anyBig) lls))
-  %% pure (text "\\toprule")
+makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
+  pure (text "\\toprule")
   %% makeRows [map (\x -> S "\\textbf{" :+: x :+: S "}") (head lls)]
   %% pure (text "\\midrule")
   %% pure (text "\\endhead")
@@ -205,7 +203,6 @@ makeTable lls r bool t =
   %% pure (text "\\bottomrule")
   %% (if bool then caption t else caption empty)
   %% label r
-  %% pure (text ("\\end{" ++ ltab ++ "}"))
   where ltab = tabType $ anyLong lls
         tabType True  = ltabu
         tabType False = ltable
@@ -332,8 +329,7 @@ endDefn = pure (text "\\end{minipage}")
 
 makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
-makeDefTable sm ps l = mkEnv "tabular" $ vcat [
-  TH.br $ pure $ text $ col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth,
+makeDefTable sm ps l = mkEnvArgs "tabular" (col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth) $ vcat [
   pure (text "\\toprule ") <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l, --shortname instead of refname?
   pure (text "\\phantomsection "), label l,
   makeDRows sm ps,

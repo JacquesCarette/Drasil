@@ -816,7 +816,7 @@ instance Selector CppSrcCode where
 
   selfAccess l = objAccess (self l)
 
-  listSizeAccess v = objAccess v listSize
+  listSizeAccess v = castObj (cast int int) (objAccess v listSize)
 
   listIndexExists v i = listSizeAccess v ?> i
   argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))

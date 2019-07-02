@@ -359,7 +359,7 @@ genOutputFormat = do
         outp <- mapM (\x -> do
           v <- variable (codeName x) (convType $ codeType x)
           return [ printFileStr v_outfile (codeName x ++ " = "),
-                   printFileLn v_outfile (convType $ codeType x) v
+                   printFileLn v_outfile v
                  ] ) (outputs $ csi $ codeSpec g)
         mthd <- publicMethod (mState void) "write_output" parms (return [block $
           [
@@ -434,10 +434,10 @@ loggedMethod n vals b =
     printInputs [] _ = []
     printInputs [v] v_outfile = [
       printFileStr v_outfile ("  " ++ valueName v ++ " = "), 
-      printFileLn v_outfile (valueType v) v]
+      printFileLn v_outfile v]
     printInputs (v:vs) v_outfile = [
       printFileStr v_outfile ("  " ++ valueName v ++ " = "), 
-      printFile v_outfile (valueType v) v, 
+      printFile v_outfile v, 
       printFileStrLn v_outfile ", "] ++ printInputs vs v_outfile
     
 
@@ -609,8 +609,7 @@ loggedAssign a b =
       assign a b,
       openFileA v_outfile (litString $ logName g),
       printFileStr v_outfile ("var '" ++ valueName a ++ "' assigned to "),
-      printFile v_outfile (convType $ varType (valueName a) (vMap $ codeSpec g))
-        a,
+      printFile v_outfile a,
       printFileStrLn v_outfile (" in module " ++ currentModule g),
       closeFile v_outfile ]
 

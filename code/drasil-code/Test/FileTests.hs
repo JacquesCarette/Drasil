@@ -21,8 +21,8 @@ writeStory = block [
   varDec $ var "fileToWrite" outfile,
 
   openFileW (var "fileToWrite" outfile) (litString "testText.txt"),
-  printFile (var "fileToWrite" outfile) int (litInt 0),
-  printFileLn (var "fileToWrite" outfile) int (litFloat 0.89),
+  printFile (var "fileToWrite" outfile) (litInt 0),
+  printFileLn (var "fileToWrite" outfile) (litFloat 0.89),
   printFileStr (var "fileToWrite" outfile) "ello",
   printFileStrLn (var "fileToWrite" outfile) "bye",
   printFileStrLn (var "fileToWrite" outfile) "!!",
@@ -40,5 +40,5 @@ readStory = getFileInputAll (var "fileToRead" infile)
   (var "fileContents" (listType dynamic_ string))
 
 goodBye :: (RenderSym repr) => repr (Block repr)
-goodBye = block [printLnList string (var "fileContents" 
-  (listType dynamic_ string)), closeFile (var "fileToRead" infile)]
+goodBye = block [printLn (var "fileContents" (listType dynamic_ string)), 
+  closeFile (var "fileToRead" infile)]

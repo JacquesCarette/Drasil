@@ -42,12 +42,11 @@ import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   RenderSym(..), BodySym(..), StateTypeSym(listInnerType, getType), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..))
+  SelectorFunction(..), StatementSym(..), ControlStatementSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   ModData(..), md, TypeData(..), td, ValData(..), vd, angles,blank, 
-  doubleQuotedText,hicat,vibcat,vmap)
+  doubleQuotedText,hicat,vibcat,vmap, getNestDegree)
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
@@ -155,18 +154,20 @@ bodyDocD bs = vibcat blocks
 printDoc :: ValData -> ValData -> Doc
 printDoc printFn v = valDoc printFn <> parens (valDoc v)
 
-printListDoc :: (RenderSym repr) => repr (Value repr) -> 
+printListDoc :: (RenderSym repr) => Integer -> repr (Value repr) -> 
   (repr (Value repr) -> repr (Statement repr)) -> 
   (String -> repr (Statement repr)) -> 
   (String -> repr (Statement repr)) -> 
   repr (Statement repr)
-printListDoc v prFn prStrFn prLnFn = multi [state (prStrFn "["), 
-  for (varDecDef "i" S.int (litInt 0)) (i ?< ((v $. listSize) #- litInt 1)) 
-    (i &++) (bodyStatements [prFn (v $. listAccess t i), prStrFn ","]), 
-  state (prFn (v $. listAccess t ((v $. listSize) #- litInt 1))), 
+printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
+  for (varDecDef l_i S.int (litInt 0)) (i ?< (listSizeAccess v #- litInt 1))
+    (i &++) (bodyStatements [prFn (v $. listAccess t i), prStrFn ", /f "]), 
+  ifNoElse [(listSizeAccess v ?> litInt 0, oneLiner $
+    prFn (v $. listAccess t (listSizeAccess v #- litInt 1)))], 
   prLnFn "]"]
   where t = listInnerType $ valueType v
-        i = var "i" S.int
+        l_i = "list_i" ++ show n
+        i = var l_i S.int
 
 printObjDoc :: String -> (String -> repr (Statement repr)) 
   -> repr (Statement repr)
@@ -175,7 +176,8 @@ printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 outDoc :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
   -> Maybe (repr (Value repr)) -> repr (Statement repr)
 outDoc newLn printFn v f = outDoc' (getType $ valueType v)
-  where outDoc' (List _) = printListDoc v prFn prStrFn prLnFn
+  where outDoc' (List t) = printListDoc (getNestDegree 1 t) v prFn prStrFn 
+          prLnFn
         outDoc' (Object n) = printObjDoc n prLnFn
         outDoc' _ = printSt newLn printFn v f
         prFn = maybe print printFile f

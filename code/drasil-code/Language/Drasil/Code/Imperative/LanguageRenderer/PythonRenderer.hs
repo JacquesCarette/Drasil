@@ -578,7 +578,7 @@ pyListDecDef l vs = text l <+> equals <+> brackets vs
 
 pyPrint :: Bool ->  ValData -> ValData ->  ValData -> Doc
 pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
-  where nl = if newLn then empty else text ", end =''"
+  where nl = if newLn then empty else text ", end=''"
         fl = if isEmpty (valDoc f) then empty else text ", file=" <> valDoc f
 
 pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 

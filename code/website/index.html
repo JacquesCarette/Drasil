@@ -4,10 +4,11 @@
 <br>
 <p>
   This webpage is designed to contain the most up to date
-  <a href="#caseStudies">case study artifacts</a>
+  <a href="#caseStudies">case study artifacts</a>, <a href="#haskDoc">documentation</a>,
   and <a href="#packages">package dependency graphs</a> from the Drasil repository.
   The case study artifacts include the Software Requirements Specification (SRS) for the case study,
   which specifies what the program sets out to achieve.
+  The Haskell Documentation section contains the current documentation for the Drasil framework.
   The package dependency graphs shows the hierarchy of modules within each package.
   The footer of this page contains the continuous integration build of the project,
   as well as the commit number that the build and artifacts are based off of.
@@ -40,9 +41,15 @@ $-for(examples)$
   </li>$sep-$
 $endfor$
 </ul>
+
 $if(docsUrl)-$
-<h4><a href="$docsUrl$">Haskell Documentation</a></h4>
+  <h3 id="haskDoc">Haskell Documentation</h3>
+  <p>
+    The current documentation for the Drasil framework can be found at
+    <a href="$docsUrl$">this link</a>.
+  </p>
 $-endif$
+
 <h3 id="packages">Package Dependency Graphs</h3>
 <ul>
   $-for(graphs)$

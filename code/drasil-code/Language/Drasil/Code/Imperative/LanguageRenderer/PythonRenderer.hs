@@ -340,10 +340,10 @@ instance StatementSym PythonCode where
   listDecDef l _ vs = mkStNoEnd <$> fmap (pyListDecDef l) (liftList 
     valList vs)
   objDecDef = varDecDef
-  objDecNew l t vs = varDecDef l t (stateObj t vs)
-  extObjDecNew l lib t vs = varDecDef l t (extStateObj lib t vs)
-  objDecNewVoid l t = varDecDef l t (stateObj t [])
-  extObjDecNewVoid l lib t = varDecDef l t (extStateObj lib t [])
+  objDecNew v vs = varDecDef v (stateObj (valueType v) vs)
+  extObjDecNew lib v vs = varDecDef v (extStateObj lib (valueType v) vs)
+  objDecNewVoid v = varDecDef v (stateObj (valueType v) [])
+  extObjDecNewVoid lib v = varDecDef v (extStateObj lib (valueType v) [])
   constDecDef = varDecDef
 
   printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 

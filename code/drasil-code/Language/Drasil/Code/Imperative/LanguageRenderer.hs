@@ -367,7 +367,7 @@ listDecDefDocD :: Label -> TypeData -> [ValData] -> Doc
 listDecDefDocD l st vs = typeDoc st <+> text l <+> equals <+> new <+> 
   typeDoc st <+> braces (valList vs)
 
-objDecDefDocD :: Label -> TypeData -> ValData -> Doc
+objDecDefDocD :: ValData -> ValData -> Doc
 objDecDefDocD = varDecDefDocD
 
 constDecDefDocD :: Label -> TypeData -> ValData -> Doc -- can this be done without StateType (infer from value)?

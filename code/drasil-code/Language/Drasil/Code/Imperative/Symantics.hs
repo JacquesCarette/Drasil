@@ -350,15 +350,14 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
     repr (Statement repr)
   listDecDef       :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Statement repr)
-  objDecDef        :: Label -> repr (StateType repr) -> repr (Value repr) -> 
+  objDecDef        :: repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)
-  objDecNew        :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
+  objDecNew        :: repr (Value repr) -> [repr (Value repr)] -> 
     repr (Statement repr)
-  extObjDecNew     :: Label -> Library -> repr (StateType repr) -> 
+  extObjDecNew     :: Library -> repr (Value repr) -> 
     [repr (Value repr)] -> repr (Statement repr)
-  objDecNewVoid    :: Label -> repr (StateType repr) -> repr (Statement repr)
-  extObjDecNewVoid :: Label -> Library -> repr (StateType repr) -> 
-    repr (Statement repr)
+  objDecNewVoid    :: repr (Value repr) -> repr (Statement repr)
+  extObjDecNewVoid :: Library -> repr (Value repr) -> repr (Statement repr)
   constDecDef      :: Label -> repr (StateType repr) -> repr (Value repr) -> 
     repr (Statement repr)
 

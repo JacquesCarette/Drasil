@@ -351,15 +351,15 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   listDec l n t = pair (listDec l n $ pfst t) (listDec l n $ psnd t)
   listDecDef l t vs = pair (listDecDef l (pfst t) (map pfst vs)) (listDecDef l 
     (psnd t) (map psnd vs))
-  objDecDef l t v = pair (objDecDef l (pfst t) (pfst v)) (objDecDef l (psnd t)
-    (psnd v))
-  objDecNew l t vs = pair (objDecNew l (pfst t) (map pfst vs)) (objDecNew l 
-    (psnd t) (map psnd vs))
-  extObjDecNew l lib t vs = pair (extObjDecNew l lib (pfst t) (map pfst vs)) 
-    (extObjDecNew l lib (psnd t) (map psnd vs))
-  objDecNewVoid l t = pair (objDecNewVoid l $ pfst t) (objDecNewVoid l $ psnd t)
-  extObjDecNewVoid l lib t = pair (extObjDecNewVoid l lib $ pfst t) 
-    (extObjDecNewVoid l lib $ psnd t)
+  objDecDef v def = pair (objDecDef (pfst v) (pfst def)) (objDecDef (psnd v)
+    (psnd def))
+  objDecNew v vs = pair (objDecNew (pfst v) (map pfst vs)) (objDecNew 
+    (psnd v) (map psnd vs))
+  extObjDecNew lib v vs = pair (extObjDecNew lib (pfst v) (map pfst vs)) 
+    (extObjDecNew lib (psnd v) (map psnd vs))
+  objDecNewVoid v = pair (objDecNewVoid $ pfst v) (objDecNewVoid $ psnd v)
+  extObjDecNewVoid lib v = pair (extObjDecNewVoid lib $ pfst v) 
+    (extObjDecNewVoid lib $ psnd v)
   constDecDef l t v = pair (constDecDef l (pfst t) (pfst v)) (constDecDef l 
     (psnd t) (psnd v))
 
@@ -871,11 +871,11 @@ instance StatementSym CppSrcCode where
   listDec l n t = mkSt <$> liftA2 (cppListDecDoc l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> liftA2 (cppListDecDefDoc l) t (liftList 
     valList vs)
-  objDecDef l t v = mkSt <$> liftA2 (objDecDefDocD l) t v
-  objDecNew l t vs = mkSt <$> liftA2 (objDecDefDocD l) t (stateObj t vs)
-  extObjDecNew l _ = objDecNew l
-  objDecNewVoid l t = mkSt <$> liftA2 (objDecDefDocD l) t (stateObj t [])
-  extObjDecNewVoid l _ = objDecNewVoid l
+  objDecDef v def = mkSt <$> liftA2 objDecDefDocD v def
+  objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) vs)
+  extObjDecNew _ = objDecNew
+  objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) [])
+  extObjDecNewVoid _ = objDecNewVoid
   constDecDef l t v = mkSt <$> liftA2 (constDecDefDocD l) t v
 
   printSt nl p v _ = mkSt <$> liftA2 (cppPrint nl) p v
@@ -1376,11 +1376,11 @@ instance StatementSym CppHdrCode where
   varDecDef _ _ = return (mkStNoEnd empty)
   listDec _ _ _ = return (mkStNoEnd empty)
   listDecDef _ _ _ = return (mkStNoEnd empty)
-  objDecDef _ _ _ = return (mkStNoEnd empty)
-  objDecNew _ _ _ = return (mkStNoEnd empty)
-  extObjDecNew _ _ _ _ = return (mkStNoEnd empty)
-  objDecNewVoid _ _ = return (mkStNoEnd empty)
-  extObjDecNewVoid _ _ _ = return (mkStNoEnd empty)
+  objDecDef _ _ = return (mkStNoEnd empty)
+  objDecNew _ _ = return (mkStNoEnd empty)
+  extObjDecNew _ _ _ = return (mkStNoEnd empty)
+  objDecNewVoid _ = return (mkStNoEnd empty)
+  extObjDecNewVoid _ _ = return (mkStNoEnd empty)
   constDecDef _ _ _ = return (mkStNoEnd empty)
 
   printSt _ _ _ _ = return (mkStNoEnd empty)

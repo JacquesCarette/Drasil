@@ -196,7 +196,7 @@ cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
   pure (text "\\toprule")
-  %% makeRows [map (\x -> S "\\textbf{" :+: x :+: S "}") (head lls)]
+  %% makeHeaders (head lls)
   %% pure (text "\\midrule")
   %% pure (text "\\endhead")
   %% makeRows (tail lls)
@@ -226,6 +226,9 @@ specLength _         = 0
 
 dontCount :: String
 dontCount = "\\/[]{}()_^$:"
+
+makeHeaders :: [Spec] -> D
+makeHeaders ls = hpunctuate (text " & ") (map (commandD "textbf" . spec) ls) %% pure dbs
 
 makeRows :: [[Spec]] -> D
 makeRows = foldr (\c -> (%%) (makeColumns c %% pure dbs)) empty

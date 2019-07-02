@@ -135,8 +135,7 @@ resShrRel :: Relation
 resShrRel = inxi shrResI $= shrResEqn
 
 resShrDesc :: Sentence
-resShrDesc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
-  makeRef2S lengthLb]
+resShrDesc = foldlSent [ch baseLngth, S "is defined in", makeRef2S lengthLb]
 
 resShrDeriv :: Derivation
 resShrDeriv = mkDerivNoHeader [foldlSent [S "Derived by substituting",
@@ -162,8 +161,7 @@ mobShrRel :: Relation
 mobShrRel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 
 mobShrDesc :: Sentence
-mobShrDesc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
-  makeRef2S lengthLb]
+mobShrDesc = foldlSent [ch baseLngth, S "is defined in", makeRef2S lengthLb]
 
 mobShrDeriv :: Derivation
 mobShrDeriv = mkDerivNoHeader [foldlSent_ [atStart mobShrI `sIs` S "derived by dividing",
@@ -318,9 +316,9 @@ momEqlDerivMomentSentence = [S "Considering one dimension, with",
   S "and replacing the", phrase torque, S "symbol with the", phrase momntOfBdy, 
   S "symbol, the", phrase equation, S "simplifies to"]
 
-momEqlDerivNormaliSentence = [S "where", ch rotForce, S "is the", 
-  phrase rotForce `sAnd` ch momntArm, S "is the", phrase momntArm `sC`
-  S "or the distance between the", phrase force, S "and the axis about" +:+.
+momEqlDerivNormaliSentence = [S "where", ch rotForce `isThe`
+  phrase rotForce `sAnd` ch momntArm `isThe` phrase momntArm `sC`
+  S "or the distance between the", phrase force `andThe` S "axis about" +:+.
   S "which the rotation acts",
   S "To represent the", phrase momentEqlGD `sC` S "the", plural momntOfBdy,
   S "from each", phrase force, S "acting on a", phrase slice +:+. 
@@ -333,15 +331,15 @@ momEqlDerivNormaliSentence = [S "where", ch rotForce, S "is the",
   S "acting on", phrase slice, S "interface", ch index `sC` S "the", 
   phrase momntOfBdy, S "is negative because the", phrase force, 
   S "tends to rotate the", phrase slice, S "in a counterclockwise",
-  S "direction" `sC` S "and the", phrase momntArm, S "is", S "height" `ofThe`
-  phrase force, S "plus the difference in height between the base at", 
+  S "direction" `sC` S "and the", phrase momntArm `sIs` (S "height" `ofThe`
+  phrase force), S "plus the difference in height between the base at", 
   phrase slice, S "interface", ch index `andThe` S "base at the midpoint of",
   phrase slice +:+. ch index, 
   S "Thus, the", phrase momntOfBdy, S "is expressed as"]
 
 momEqlDerivNormaliM1Sentence = [S "For the", E (sy index - 1) :+: S "th",
-  phrase slice, S "interface, the", phrase momntOfBdy, S "is similar but in",
-  S "the opposite direction"]
+  phrase slice, S "interface" `sC` S "the", phrase momntOfBdy `sIs`
+  S "similar but in the opposite direction"]
 
 momEqlDerivWateriSentence = [S "Next, the", phrase intrslce, S "normal water",
   phrase force +:+. S "is considered", S "This", phrase force, S "is zero at",
@@ -350,7 +348,7 @@ momEqlDerivWateriSentence = [S "Next, the", phrase intrslce, S "normal water",
   phrase pressure, S "For such a triangular distribution, the resultant", 
   phrase force +:+. S "acts at one-third of the height", S "Thus, for the",
   phrase intrslce, S "normal water", phrase force, S "acting on", phrase slice, 
-  S "interface", ch index `sC` S "the", phrase momntOfBdy, S "is" ]
+  S "interface", ch index `sC` S "the", phrase momntOfBdy, S "is"]
 
 momEqlDerivWateriM1Sentence = [S "The", phrase momntOfBdy, S "for the",
   phrase intrslce, S "normal water", phrase force, S "acting on", phrase slice,
@@ -361,7 +359,7 @@ momEqlDerivSheariSentence = [S "The", phrase intrslce, phrase shearForce,
   S "clockwise direction, and the", phrase momntArm, S "is the", phrase len, 
   S "from the", phrase slice, S "edge to the", phrase slice, S "midpoint" `sC`
   S "equivalent to half of", S "width" `ofThe` phrase slice `sC` S "so the",
-  phrase momntOfBdy +:+. S "is"]
+  phrase momntOfBdy, S "is"]
 
 momEqlDerivSheariM1Sentence = [S "The", phrase intrslce, phrase shearForce,
   S "at", phrase slice, S "interface", E (sy index - 1), S "also tends to",
@@ -375,8 +373,8 @@ momEqlDerivSeismicIntSentence = [S "Seismic", plural force, S "act over the",
   E (sy earthqkLoadFctr * inxi slcWght), S "where", E (inxi slcWght),
   S "can be expressed as", E (sy genericSpWght * inxi baseWthX * sy yi),
   S "using", makeRef2S weightGD, S "where", E (sy yi), S "is the height of" +:+.
-  S "the segment under consideration", S "The corresponding", phrase momntArm, 
-  S "is", ch yi `sC` S "the height from the base of the", phrase slice +:+.
+  S "the segment under consideration", S "The corresponding", phrase momntArm `sIs`
+  ch yi `sC` S "the height from the base of the", phrase slice +:+.
   S "to the segment under consideration", S "In reality, the", plural force, 
   S "near the surface of the", phrase soil, S "mass are slightly different",
   S "due to the slope of the surface, but this difference is assumed to be",
@@ -411,10 +409,10 @@ momEqlDerivExtSentence = [S "The external", phrase force, S "again acts into",
 
 momEqlDerivFinalSentence = [S "The base hydrostatic", phrase force `sAnd`
   phrase slice, phrase weight, S "both act in the direction of the point of",
-  S "rotation", sParen (makeRef2S assumpHFSM) `sC` S "therefore both have", plural momntOfBdy +:+. S "of zero",
-  S "Thus, all of the", plural momntOfBdy +:+. S "have been determined",
-  S "The", phrase momentEqlGD, S "is then represented by the sum of all",
-  plural momntOfBdy]
+  S "rotation", sParen (makeRef2S assumpHFSM) `sC` S "therefore both have",
+  plural momntOfBdy +:+. S "of zero", S "Thus, all of the", plural momntOfBdy +:+.
+  S "have been determined", S "The", phrase momentEqlGD `sIs`
+  S "then represented by the sum of all", plural momntOfBdy]
 
 momEqlDerivTorqueEqn = sy torque $= cross (sy displacement) (sy force)
 

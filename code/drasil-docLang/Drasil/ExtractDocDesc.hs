@@ -1,5 +1,5 @@
 {-# LANGUAGE LambdaCase, Rank2Types #-}
-module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc) where
+module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc, sentencePlate) where
 
 import Control.Lens((^.))
 import Drasil.DocumentLanguage.Core

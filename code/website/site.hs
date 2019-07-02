@@ -73,16 +73,6 @@ maybeField s f = Context $ \k _ i -> do
   else
     fail $ "maybeField " ++ s ++ " used when really Nothing. Wrap in `$if(" ++ s ++ ")$` block."
 
-
--- maybelListFieldWith :: String -> Context a -> (Item b -> Compiler [Item a]) -> Context b
--- maybelListFieldWith s c f = Context $ \k _ i -> do
---   val <- f i
---   if val == [] then
---     fail "No code files for example"
---   else
---     field "path" (return . fst . fst . itemBody) <>
---     field "lang" (return . snd . fst . itemBody)
-
 mkExampleCtx :: FilePath -> FilePath -> Context Example
 mkExampleCtx exampleDir srsDir =
   listFieldWith "srs" (
@@ -96,13 +86,9 @@ mkExampleCtx exampleDir srsDir =
   listFieldWith "src" (
     field "path" (return . fst . fst . itemBody) <>
     field "lang" (return . snd . fst . itemBody)
-  ) (\x -> mapM (\y -> makeItem (y, itemBody x)) $ src $ itemBody x) <>
-  (Context $ \_ _ _ -> fail "No code files for example")
-  -- <>
-  -- maybelListFieldWith "src" (
-  --   field "path" (return . fst . fst . itemBody) <>
-  --   field "lang" (return . snd . fst . itemBody)
-  -- ) (\_ _ _ -> fail "No code files for example")
+  -- If there are no sources, fail is used so as not to create a "Generated Code" section
+  ) (\x -> if src (itemBody x) == [] then fail "No code files for example" else
+      mapM (\y -> makeItem (y, itemBody x)) $ src $ itemBody x)
   where
     name (E nm _ _ _) = nm
     src (E _ s _ _) = s

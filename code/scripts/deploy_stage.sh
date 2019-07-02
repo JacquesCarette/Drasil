@@ -93,10 +93,9 @@ build_website() {
 	fi
 	cd "$CUR_DIR$DEPLOY_FOLDER"
 	cp -r "$CUR_DIR"website/_site/. .
-  
+
 	# src stubs were consumed by site generator; safe to delete those.
-	# rm "$EXAMPLE_DEST"*/src
-  echo "FIXME: Uncomment the remove src file lines"
+	rm "$EXAMPLE_DEST"*/src
 }
 
 

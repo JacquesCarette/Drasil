@@ -297,8 +297,9 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
     repr (Function repr)
   cast           :: repr (StateType repr) -> repr (Function repr)
   castListToInt  :: repr (Function repr)
-  get            :: Label -> repr (StateType repr) -> repr (Function repr)
-  set            :: Label -> repr (Value repr) -> repr (Function repr)
+  get            :: repr (Value repr) -> repr (Function repr)
+  set            :: repr (Value repr) -> repr (Value repr) -> 
+    repr (Function repr)
 
   listSize           :: repr (Function repr)
   listAdd            :: repr (Value repr) -> repr (Value repr) -> 

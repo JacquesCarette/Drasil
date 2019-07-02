@@ -329,8 +329,8 @@ instance FunctionSym JavaCode where
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
   cast targT = liftA2 fd targT (fmap castDocD targT)
   castListToInt = func "ordinal" int []
-  get n t = func (getterName n) t []
-  set n v = func (setterName n) (fmap valType v) [v]
+  get v = func (getterName $ valueName v) (valueType v) []
+  set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
   listSize = func "size" int []
   listAdd _ i v = func "add" (listType static_ $ fmap valType v) [i, v]

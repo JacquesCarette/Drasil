@@ -309,8 +309,8 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   func l t vs = pair (func l (pfst t) (map pfst vs)) (func l (psnd t) (map psnd vs))
   cast targT = pair (cast $ pfst targT) (cast $ psnd targT)
   castListToInt = pair castListToInt castListToInt
-  get n t = pair (get n $ pfst t) (get n $ psnd t)
-  set n v = pair (set n $ pfst v) (set n $ psnd v)
+  get v = pair (get $ pfst v) (get $ psnd v)
+  set v toVal = pair (set (pfst v) (pfst toVal)) (set (psnd v) (psnd toVal))
 
   listSize = pair listSize listSize
   listAdd l i v = pair (listAdd (pfst l) (pfst i) (pfst v)) (listAdd (psnd l)
@@ -834,8 +834,8 @@ instance FunctionSym CppSrcCode where
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
   cast targT = liftA2 fd targT (fmap castDocD targT)
   castListToInt = cast int
-  get n t = func (getterName n) t []
-  set n v = func (setterName n) (fmap valType v) [v]
+  get v = func (getterName $ valueName v) (valueType v) []
+  set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
   listSize = func "size" int []
   listAdd l i v = func "insert" (listType static_ $ fmap valType v) [(l $.
@@ -1341,7 +1341,7 @@ instance FunctionSym CppHdrCode where
   func _ _ _ = liftA2 fd void (return empty)
   cast _ = liftA2 fd void (return empty)
   castListToInt = liftA2 fd void (return empty)
-  get _ _ = liftA2 fd void (return empty)
+  get _ = liftA2 fd void (return empty)
   set _ _ = liftA2 fd void (return empty)
 
   listSize = liftA2 fd void (return empty)

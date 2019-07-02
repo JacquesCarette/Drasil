@@ -325,8 +325,8 @@ instance FunctionSym CSharpCode where
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
   cast targT = liftA2 fd targT (fmap castDocD targT)
   castListToInt = cast int
-  get n t = func (getterName n) t []
-  set n v = func (setterName n) (fmap valType v) [v]
+  get v = func (getterName $ valueName v) (valueType v) []
+  set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
   listSize = liftA2 fd int (fmap funcDocD (var "Count" int))
   listAdd _ i v = func "Insert" (fmap valType v) [i, v]

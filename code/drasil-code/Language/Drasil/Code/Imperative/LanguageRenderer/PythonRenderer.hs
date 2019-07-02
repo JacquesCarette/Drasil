@@ -302,9 +302,8 @@ instance FunctionSym PythonCode where
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
   cast targT = liftA2 fd targT (fmap typeDoc targT)
   castListToInt = cast int
-  get n t = liftA2 fd t (fmap funcDocD (var n t))
-  set n v = liftA2 fd (fmap valType v) (fmap funcDocD (liftA2 mkVal (fmap 
-    valType v) (fmap fst (assign (var n (fmap valType v)) v))))
+  get v = func (getterName $ valueName v) (valueType v) []
+  set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
   listSize = liftA2 fd int (return $ text "len")
   listAdd _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]

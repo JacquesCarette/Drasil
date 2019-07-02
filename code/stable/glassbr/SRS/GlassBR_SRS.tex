@@ -360,7 +360,8 @@ This section focuses on the general equations and laws that GlassBR is based on.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:isSafeProb}
 \phantomsection 
 \label{TM:isSafeProb}
@@ -382,12 +383,14 @@ Notes & If $is-safeProb$, the glass is considered safe. $is-safeProb$ and $is-sa
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[TM:isSafeLoad]{TM: isSafeLoad} and \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:isSafeLoad}
 \phantomsection 
 \label{TM:isSafeLoad}
@@ -409,7 +412,8 @@ Notes & If $is-safeLoad$, the glass is considered safe. $is-safeProb$ (from \hyp
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[TM:isSafeProb]{TM: isSafeProb} and \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
@@ -420,7 +424,8 @@ This section collects and defines all the data needed to build the instance mode
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:riskFun}
 \phantomsection 
 \label{DD:riskFun}
@@ -455,12 +460,14 @@ Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
 Source & \cite{astm2009}, \cite[(Eqs. 4-5)]{beasonEtAl1998}, and \cite[(Eq. 14)]{campidelli}
 \\ \midrule \\
 RefBy & \hyperref[DD:probOfBreak]{DD: probOfBreak}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:minThick}
 \phantomsection 
 \label{DD:minThick}
@@ -498,12 +505,14 @@ Notes & $t$ is a function that maps from the nominal thickness ($h$) to the mini
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[DD:sdfTol]{DD: sdfTol}, \hyperref[DD:riskFun]{DD: riskFun}, \hyperref[DD:nFL]{DD: nFL}, and \hyperref[DD:dimlessLoad]{DD: dimlessLoad}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:loadDurFactor}
 \phantomsection 
 \label{DD:loadDurFactor}
@@ -530,12 +539,14 @@ Notes & \hyperref[assumpSV]{A: standardValues}
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[DD:sdfTol]{DD: sdfTol} and \hyperref[DD:riskFun]{DD: riskFun}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:stressDistFac}
 \phantomsection 
 \label{DD:stressDistFac}
@@ -564,12 +575,14 @@ Notes & $J$ is the stress distribution factor (Function), which is obtained by i
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[DD:riskFun]{DD: riskFun}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:nFL}
 \phantomsection 
 \label{DD:nFL}
@@ -601,12 +614,14 @@ Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[DD:calofCapacity]{DD: calofCapacity}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:gTF}
 \phantomsection 
 \label{DD:gTF}
@@ -637,12 +652,14 @@ Notes & AN is annealed glass.
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[DD:calofCapacity]{DD: calofCapacity} and \hyperref[DD:dimlessLoad]{DD: dimlessLoad}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:dimlessLoad}
 \phantomsection 
 \label{DD:dimlessLoad}
@@ -677,12 +694,14 @@ Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[DD:calofD
 Source & \cite{astm2009} and \cite[(Eq. 7)]{campidelli}
 \\ \midrule \\
 RefBy & \hyperref[DD:stressDistFac]{DD: stressDistFac}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:tolLoad}
 \phantomsection 
 \label{DD:tolLoad}
@@ -709,12 +728,14 @@ Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from \hyperref
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[DD:nFL]{DD: nFL}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:sdfTol}
 \phantomsection 
 \label{DD:sdfTol}
@@ -751,12 +772,14 @@ Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[DD:tolLoad]{DD: tolLoad}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:standOffDist}
 \phantomsection 
 \label{DD:standOffDist}
@@ -781,12 +804,14 @@ Description & \begin{symbDescription}
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[DD:calofDemand]{DD: calofDemand}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:aspectRatio}
 \phantomsection 
 \label{DD:aspectRatio}
@@ -812,12 +837,14 @@ Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[DD:tolLoad]{DD: tolLoad} and \hyperref[DD:stressDistFac]{DD: stressDistFac}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:eqTNTW}
 \phantomsection 
 \label{DD:eqTNTW}
@@ -841,12 +868,14 @@ Description & \begin{symbDescription}
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[DD:calofDemand]{DD: calofDemand}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:probOfBreak}
 \phantomsection 
 \label{DD:probOfBreak}
@@ -871,12 +900,14 @@ Notes & $B$ is the risk of failure, as defined in \hyperref[DD:riskFun]{DD: risk
 Source & \cite{astm2009} and \cite{beasonEtAl1998}
 \\ \midrule \\
 RefBy & \hyperref[IM:isSafePb]{IM: isSafePb}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:calofCapacity}
 \phantomsection 
 \label{DD:calofCapacity}
@@ -906,12 +937,14 @@ Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[IM:isSafeLR]{IM: isSafeLR}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:calofDemand}
 \phantomsection 
 \label{DD:calofDemand}
@@ -938,7 +971,8 @@ Notes & $q$, or demand, is the 3 second duration equivalent pressure obtained fr
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[IM:isSafeLR]{IM: isSafeLR} and \hyperref[DD:dimlessLoad]{DD: dimlessLoad}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
@@ -947,7 +981,8 @@ The goal \hyperref[willBreakGS]{GS: Predict-Glass-Withstands-Explosion} is met b
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:isSafePb}
 \phantomsection 
 \label{IM:isSafePb}
@@ -982,12 +1017,14 @@ Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safePb
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[IM:isSafeLR]{IM: isSafeLR}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:isSafeLR}
 \phantomsection 
 \label{IM:isSafeLR}
@@ -1022,7 +1059,8 @@ Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperre
 Source & \cite{astm2009}
 \\ \midrule \\
 RefBy & \hyperref[IM:isSafePb]{IM: isSafePb}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}

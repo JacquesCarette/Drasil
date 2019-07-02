@@ -298,7 +298,8 @@ This section focuses on the general equations and laws that SWHS is based on.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:consThermE}
 \phantomsection 
 \label{TM:consThermE}
@@ -324,12 +325,14 @@ Notes & The above equation gives the law of conservation of energy for transient
 Source & \hyperref{http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm}{}{}{Fourier Law of Heat Conduction and Heat Equation}
 \\ \midrule \\
 RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:sensHtE}
 \phantomsection 
 \label{TM:sensHtE}
@@ -352,7 +355,8 @@ Notes & $E$ occurs as long as the material does not reach a temperature where a 
 Source & \hyperref{http://en.wikipedia.org/wiki/Sensible_heat}{}{}{Definition of Sensible Heat}
 \\ \midrule \\
 RefBy & \hyperref[IM:heatEInWtr]{IM: heatEInWtr}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
@@ -360,7 +364,8 @@ This section collects the laws and equations that will be used to build the inst
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:nwtnCooling}
 \phantomsection 
 \label{GD:nwtnCooling}
@@ -385,12 +390,14 @@ Notes & Newton's law of cooling describes convective cooling from a surface. The
 Source & \cite[(pg. 8)]{incroperaEtAl2007}
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:rocTempSimp}
 \phantomsection 
 \label{GD:rocTempSimp}
@@ -419,7 +426,8 @@ Notes & The basic equation governing the rate of change of temperature, for a gi
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 Detailed derivation of simplified rate of change of temperature.
 Integrating \hyperref[TM:consThermE]{TM: consThermE} over a volume ($V$), we have:
@@ -448,7 +456,8 @@ This section collects and defines all the data needed to build the instance mode
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:htFluxC}
 \phantomsection 
 \label{DD:htFluxC}
@@ -477,7 +486,8 @@ Notes & \hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
@@ -486,7 +496,8 @@ The goal \hyperref[waterTempGS]{GS: Predict-Water-Temperature} is met by \hyperr
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:eBalanceOnWtr}
 \phantomsection 
 \label{IM:eBalanceOnWtr}
@@ -521,7 +532,8 @@ Notes & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}}$ is 
 Source & \cite[(with PCM removed)]{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}, \hyperref[findMass]{FR: Find-Mass}, and \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 Derivation of the energy balance on water:
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity, ${C_{W}}$. Heat transfer occurs in the water from the heating coil as ${q_{C}}$ (\hyperref[DD:htFluxC]{DD: htFluxC}), over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
@@ -543,7 +555,8 @@ Setting ${τ_{W}}$ = ${m_{W}}$ ${C_{W}}$ / ${h_{C}}$ ${A_{C}}$ , Equation (4) ca
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:heatEInWtr}
 \phantomsection 
 \label{IM:heatEInWtr}
@@ -578,7 +591,8 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}. 
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}

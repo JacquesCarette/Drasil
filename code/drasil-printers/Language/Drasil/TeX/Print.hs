@@ -35,8 +35,9 @@ import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
-  newline, superscript, parens, fraction, quote, externalref,
+  newline, superscript, parens, fraction, quote, externalref, commandD,
   snref, cite, citeInfo, sec, newpage, maketoc, maketitle, document, author, title)
+import qualified Language.Drasil.TeX.Helpers as TH (br)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -331,14 +332,18 @@ endDefn = pure (text "\\end{minipage}")
 
 makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
-makeDefTable sm ps l = vcat [
-  pure $ text 
-  $ "\\begin{tabular}{>{\\raggedright}p{"++show colAwidth++"\\textwidth}>{\\raggedright\\arraybackslash}p{"++show colBwidth++"\\textwidth}}",
-  pure (text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> pure (text "}"), --shortname instead of refname?
+makeDefTable sm ps l = mkEnv "tabular" $ vcat [
+  TH.br $ pure $ text $ col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth,
+  pure (text "\\toprule ") <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l, --shortname instead of refname?
   pure (text "\\phantomsection "), label l,
   makeDRows sm ps,
-  pure $ dbs <+> text "\\bottomrule \\end{tabular}"
+  pure $ dbs <+> text "\\bottomrule"
   ]
+  where
+    bold = commandD "textbf"
+    col s x = ">" ++ brace s ++ "p" ++ brace (show x ++ tw)
+    rr = "\\raggedright"
+    tw = "\\textwidth"
 
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"

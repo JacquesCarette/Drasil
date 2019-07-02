@@ -371,7 +371,8 @@ This section focuses on the general equations and laws that SWHS is based on.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:consThermE}
 \phantomsection 
 \label{TM:consThermE}
@@ -397,12 +398,14 @@ Notes & The above equation gives the law of conservation of energy for transient
 Source & \hyperref{http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm}{}{}{Fourier Law of Heat Conduction and Heat Equation}
 \\ \midrule \\
 RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:sensHtE}
 \phantomsection 
 \label{TM:sensHtE}
@@ -434,12 +437,14 @@ Notes & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}$, ${C
 Source & \hyperref{http://en.wikipedia.org/wiki/Sensible_heat}{}{}{Definition of Sensible Heat}
 \\ \midrule \\
 RefBy & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:latentHtE}
 \phantomsection 
 \label{TM:latentHtE}
@@ -461,7 +466,8 @@ Notes & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\r
 Source & \hyperref{http://en.wikipedia.org/wiki/Latent_heat}{}{}{Definition of Latent Heat}
 \\ \midrule \\
 RefBy & \hyperref[TM:sensHtE]{TM: sensHtE} and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
@@ -469,7 +475,8 @@ This section collects the laws and equations that will be used to build the inst
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:nwtnCooling}
 \phantomsection 
 \label{GD:nwtnCooling}
@@ -494,12 +501,14 @@ Notes & Newton's law of cooling describes convective cooling from a surface. The
 Source & \cite[(pg. 8)]{incroperaEtAl2007}
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:rocTempSimp}
 \phantomsection 
 \label{GD:rocTempSimp}
@@ -528,7 +537,8 @@ Notes & The basic equation governing the rate of change of temperature, for a gi
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 Detailed derivation of simplified rate of change of temperature :
 Integrating \hyperref[TM:consThermE]{TM: consThermE} over a volume ($V$), we have:
@@ -557,7 +567,8 @@ This section collects and defines all the data needed to build the instance mode
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:htFluxC}
 \phantomsection 
 \label{DD:htFluxC}
@@ -586,12 +597,14 @@ Notes & \hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:htFluxP}
 \phantomsection 
 \label{DD:htFluxP}
@@ -619,12 +632,14 @@ Notes & \hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:balanceSolidPCM}
 \phantomsection 
 \label{DD:balanceSolidPCM}
@@ -650,12 +665,14 @@ Description & \begin{symbDescription}
 Source & \cite{lightstone2012}
 \\ \midrule \\
 RefBy & \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:balanceLiquidPCM}
 \phantomsection 
 \label{DD:balanceLiquidPCM}
@@ -681,12 +698,14 @@ Description & \begin{symbDescription}
 Source & \cite{lightstone2012}
 \\ \midrule \\
 RefBy & \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:htFusion}
 \phantomsection 
 \label{DD:htFusion}
@@ -710,12 +729,14 @@ Description & \begin{symbDescription}
 Source & \cite[(pg. 282)]{bueche1986}
 \\ \midrule \\
 RefBy & \hyperref[DD:meltFrac]{DD: meltFrac}, \hyperref[TM:latentHtE]{TM: latentHtE}, \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:meltFrac}
 \phantomsection 
 \label{DD:meltFrac}
@@ -743,7 +764,8 @@ Notes & The value of $ϕ$ is constrained to $0\leq{}ϕ\leq{}1$.
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
@@ -752,7 +774,8 @@ The goals \hyperref[waterTempGS]{GS: Predict-Water-Temperature}, \hyperref[pcmTe
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:eBalanceOnWtr}
 \phantomsection 
 \label{IM:eBalanceOnWtr}
@@ -789,7 +812,8 @@ Notes & ${τ_{W}}$, ${t_{final}}$, ${T_{C}}$, ${T_{P}}$ from (\hyperref[IM:eBala
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}, \hyperref[findMass]{FR: Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, and \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 Derivation of the energy balance on water:
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity, ${C_{W}}$. Heat transfer occurs in the water from the heating coil as ${q_{C}}$ (\hyperref[DD:htFluxC]{DD: htFluxC})  and from the water into the PCM as ${q_{P}}$ (\hyperref[DD:htFluxP]{DD: htFluxP}), over areas ${A_{C}}$ and ${A_{P}}$, respectively. The thermal flux is constant over ${A_{C}}$, since the temperature of the heating coil is assumed to not vary along its length (\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length}), and the thermal flux is constant over ${A_{P}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
@@ -823,7 +847,8 @@ Finally, factoring out $\frac{1}{{τ_{W}}}$ , we are left with the governing ODE
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:eBalanceOnPCM}
 \phantomsection 
 \label{IM:eBalanceOnPCM}
@@ -866,7 +891,8 @@ Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, $
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}, \hyperref[findMass]{FR: Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time}, \hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time}, and \hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 Detailed derivation of the energy balance on the PCM during  sensible heating phase:
 To find the rate of change of ${T_{P}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, ${V_{P}}$. The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{P}}$ and the specific heat capacity of PCM as a solid is ${{C_{P}}^{S}}$. The heat flux into the PCM from water is ${q_{P}}$ over phase change material surface area ${A_{P}}$. There is no heat flux output. Assuming no volumetric heat generation per unit volume (\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
@@ -891,7 +917,8 @@ This derivation does not consider the boiling of the PCM, as the PCM is assumed 
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:heatEInWtr}
 \phantomsection 
 \label{IM:heatEInWtr}
@@ -926,12 +953,14 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}. 
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[findMass]{FR: Find-Mass} and \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\begin{tabular}
+{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:heatEInPCM}
 \phantomsection 
 \label{IM:heatEInPCM}
@@ -979,7 +1008,8 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE} a
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[findMass]{FR: Find-Mass}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, and \hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}

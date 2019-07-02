@@ -340,8 +340,8 @@ instance SelectorFunction CSharpCode where
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 listSetDocD i v)
 
-  listAccessEnum _ t v = listAccess t (castObj (cast int) v)
-  listSetEnum _ i = listSet (castObj (cast int) i)
+  listAccessEnum t v = listAccess t (castObj (cast int) v)
+  listSetEnum i = listSet (castObj (cast int) i)
 
   at t l = listAccess t (var l int)
 

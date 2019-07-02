@@ -325,10 +325,10 @@ instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
     (psnd v))
   listSet i v = pair (listSet (pfst i) (pfst v)) (listSet (psnd i) (psnd v))
 
-  listAccessEnum et t v = pair (listAccessEnum (pfst et) (pfst t) (pfst v)) 
-    (listAccessEnum (psnd et) (psnd t) (psnd v))
-  listSetEnum t i v = pair (listSetEnum (pfst t) (pfst i) (pfst v)) 
-    (listSetEnum (psnd t) (psnd i) (psnd v))
+  listAccessEnum t v = pair (listAccessEnum (pfst t) (pfst v)) 
+    (listAccessEnum (psnd t) (psnd v))
+  listSetEnum i v = pair (listSetEnum (pfst i) (pfst v)) 
+    (listSetEnum (psnd i) (psnd v))
 
   at t l = pair (at (pfst t) l) (at (psnd t) l)
 
@@ -850,8 +850,8 @@ instance SelectorFunction CppSrcCode where
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 cppListSetDoc i v)
 
-  listAccessEnum _ t v = listAccess t (castObj (cast int) v)
-  listSetEnum _ i = listSet (castObj (cast int) i)
+  listAccessEnum t v = listAccess t (castObj (cast int) v)
+  listSetEnum i = listSet (castObj (cast int) i)
 
   at t l = listAccess t (var l int) 
 
@@ -1355,8 +1355,8 @@ instance SelectorFunction CppHdrCode where
   listAccess _ _ = liftA2 fd void (return empty)
   listSet _ _ = liftA2 fd void (return empty)
 
-  listAccessEnum _ _ _ = liftA2 fd void (return empty)
-  listSetEnum _ _ _ = liftA2 fd void (return empty)
+  listAccessEnum _ _ = liftA2 fd void (return empty)
+  listSetEnum _ _ = liftA2 fd void (return empty)
 
   at _ _ = liftA2 fd void (return empty)
 

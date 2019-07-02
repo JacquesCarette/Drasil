@@ -343,8 +343,8 @@ instance SelectorFunction JavaCode where
   listAccess t i = func "get" t [i]
   listSet i v = func "set" (listType static_ $ fmap valType v) [i, v]
 
-  listAccessEnum _ t v = listAccess t (castObj (cast int) v)
-  listSetEnum _ i = listSet (castObj (cast int) i)
+  listAccessEnum t v = listAccess t (castObj (cast int) v)
+  listSetEnum i = listSet (castObj (cast int) i)
 
   at t l = listAccess t (var l int)
 

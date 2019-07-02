@@ -39,10 +39,10 @@ genDefs = [nwtnCooling, rocTempSimp]
 
 -- FIXME: page reference
 nwtnCooling, rocTempSimp :: GenDefn
-nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) ([] :: Derivation) 
+nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) Nothing
   [makeCiteInfo incroperaEtAl2007 $ Page [8]] "nwtnCooling" [nwtnCoolingDesc]
 
-rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) rocTempSimpDeriv
+rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) (Just rocTempSimpDeriv)
                  "rocTempSimp" [rocTempSimpDesc]
 
 --
@@ -102,10 +102,8 @@ rocTempSimpDesc = foldlSent [S "The basic", phrase equation,
 ---------------------------------------
 
 rocTempSimpDeriv :: Derivation
-rocTempSimpDeriv =
-  S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+
-    phrase temp +:+ S ":" :
-  weave [rocTempSimpDerivSent, map E rocTempSimpDerivEqns]
+rocTempSimpDeriv = mkDerivName (S "simplified" +:+ phrase rOfChng `sOf` phrase temp)
+  (weave [rocTempSimpDerivSent, map E rocTempSimpDerivEqns])
 
 rocTempSimpDerivSent :: [Sentence]
 rocTempSimpDerivSent = map foldlSentCol [

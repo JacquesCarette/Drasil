@@ -25,14 +25,12 @@ genDefs :: [GenDefn]
 genDefs = [nwtnCooling, rocTempSimp] 
 
 rocTempSimp :: GenDefn
-rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) rocTempSimpDeriv 
-  "rocTempSimp" [rocTempSimpDesc]
+rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn)
+  (Just rocTempSimpDeriv) "rocTempSimp" [rocTempSimpDesc]
 
 rocTempSimpDeriv :: Derivation
-rocTempSimpDeriv =
-  S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+.
-    phrase temp :
-  weave [rocTempSimpDerivSent, map E rocTempSimpDerivEqns]
+rocTempSimpDeriv = mkDerivName (S "simplified" +:+ phrase rOfChng `sOf` phrase temp)
+  (weave [rocTempSimpDerivSent, map E rocTempSimpDerivEqns])
 
 rocTempSimpDerivSent :: [Sentence]
 rocTempSimpDerivSent = map foldlSentCol [

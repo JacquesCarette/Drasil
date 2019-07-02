@@ -30,16 +30,15 @@ iMods = [timeIM, landPosIM, offsetIM, messageIM]
 ---
 timeIM :: InstanceModel
 timeIM = imNoRefs timeRC [qw launSpeed, qw launAngle]
-  [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw flightDur)
-  [sy flightDur $> 0] timeDeriv "calOfLandingTime" [angleConstraintNote, gravNote, timeConsNote]
+  [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw flightDur) [sy flightDur $> 0]
+  (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravNote, timeConsNote]
 
 timeRC :: RelationConcept
 timeRC = makeRC "timeRC" (nounPhraseSP "calculation of landing time")
   EmptyS $ sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy grav
 
 timeDeriv :: Derivation
-timeDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase flightDur)) :
-               weave [timeDerivSents, map E timeDerivEqns]
+timeDeriv = mkDerivName (phrase flightDur) (weave [timeDerivSents, map E timeDerivEqns])
 
 timeDerivSents :: [Sentence]
 timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3,
@@ -76,8 +75,8 @@ timeDerivEqn5 = sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy grav
 ---
 landPosIM :: InstanceModel
 landPosIM = imNoRefs landPosRC [qw launSpeed, qw launAngle]
-  [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw landPos)
-  [sy landPos $> 0] landPosDeriv "calOfLandingDist" [angleConstraintNote, gravNote, landPosConsNote]
+  [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw landPos) [sy landPos $> 0]
+  (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravNote, landPosConsNote]
 
 landPosExpr :: Expr
 landPosExpr = sy landPos $= 2 * square (sy launSpeed) * sin (sy launAngle) *
@@ -88,8 +87,7 @@ landPosRC = makeRC "landPosRC" (nounPhraseSP "calculation of landing position")
   landPosConsNote landPosExpr
 
 landPosDeriv :: Derivation
-landPosDeriv = (S "Detailed" +: (S "derivation" `sOf` phrase landPos)) :
-               weave [landPosDerivSents, map E landPosDerivEqns]
+landPosDeriv = mkDerivName (phrase landPos) (weave [landPosDerivSents, map E landPosDerivEqns])
 
 landPosDerivSents :: [Sentence]
 landPosDerivSents = [landPosDerivSent1, landPosDerivSent2,
@@ -120,7 +118,8 @@ landPosDerivEqn3 = sy landPos $= sy launSpeed * cos (sy launAngle) * 2 * sy laun
 ---
 offsetIM :: InstanceModel
 offsetIM = imNoDerivNoRefs offsetRC [qw landPos, qw targPos]
-  [sy landPos $> 0, sy targPos $> 0] (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
+  [sy landPos $> 0, sy targPos $> 0] (qw offset)
+  [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
 offsetRC :: RelationConcept
 offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") 
@@ -129,8 +128,8 @@ offsetRC = makeRC "offsetRC" (nounPhraseSP "offset")
 ---
 messageIM :: InstanceModel
 messageIM = imNoDerivNoRefs messageRC [qw offset, qw targPos]
-  [sy targPos $> 0, sy offset $> negate (sy landPos)] (qw message) [] "messageIM"
-  [offsetNote, targPosConsNote, offsetConsNote, tolNote]
+  [sy targPos $> 0, sy offset $> negate (sy landPos)] (qw message)
+  [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 
 messageRC :: RelationConcept
 messageRC = makeRC "messageRC" (nounPhraseSP "output message") 

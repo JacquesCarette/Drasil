@@ -54,29 +54,29 @@ generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, 
   mobShearWOGD, normShrRGD, momentEqlGD, sliceWghtGD, baseWtrFGD, 
   srfWtrFGD :: GenDefn
-normForcEqGD = gd normForcEq (getUnit totNrmForce)   [nmFEqDeriv]    
+normForcEqGD = gd normForcEq (getUnit totNrmForce)   (Just nmFEqDeriv)
   [makeCite chen2005]                      "normForcEq"  [nmFEqDesc]
-bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       [bShFEqDeriv]
+bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       (Just bShFEqDeriv)
   [makeCite chen2005]                      "bsShrFEq"    [bShFEqDesc]
-resShrGD     = gd resShr     (getUnit shrResI)       [resShrDeriv]   
+resShrGD     = gd resShr     (getUnit shrResI)       (Just resShrDeriv)
   [makeCite chen2005]                      "resShr"      [resShrDesc]
-mobShrGD     = gd mobShr     (getUnit mobShrI)       [mobShrDeriv]   
+mobShrGD     = gd mobShr     (getUnit mobShrI)       (Just mobShrDeriv)
   [makeCite chen2005]                      "mobShr"      [mobShrDesc]
-effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    [effNormFDeriv] 
+effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    (Just effNormFDeriv)
   [makeCite chen2005]                      "effNormF"    [effNormFDesc]
-resShearWOGD = gd resShearWO (getUnit shearRNoIntsl) []         
+resShearWOGD = gd resShearWO (getUnit shearRNoIntsl) Nothing     
   (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWODesc]
-mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) []
+mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) Nothing
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
-normShrRGD   = gd normShrR   (getUnit intShrForce)   [] 
+normShrRGD   = gd normShrR   (getUnit intShrForce)   Nothing
   [makeCite chen2005]                      "normShrR"    [nmShrRDesc]
-momentEqlGD  = gd momentEql  (Just newton)           momEqlDeriv
+momentEqlGD  = gd momentEql  (Just newton)           (Just momEqlDeriv)
   [makeCite chen2005]                      "momentEql"   [momEqlDesc]
-sliceWghtGD  = gd sliceWght  (getUnit slcWght)       sliceWghtDeriv
+sliceWghtGD  = gd sliceWght  (getUnit slcWght)       (Just sliceWghtDeriv)
   [makeCite fredlund1977]                  "sliceWght"   [sliceWghtNotes]
-baseWtrFGD   = gd baseWtrF   (getUnit baseHydroForce) bsWtrFDeriv
+baseWtrFGD   = gd baseWtrF   (getUnit baseHydroForce) (Just bsWtrFDeriv)
   [makeCite fredlund1977]                  "baseWtrF"    [bsWtrFNotes]
-srfWtrFGD    = gd srfWtrF    (getUnit surfHydroForce) srfWtrFDeriv   
+srfWtrFGD    = gd srfWtrF    (getUnit surfHydroForce) (Just srfWtrFDeriv)
   [makeCite fredlund1977]                  "srfWtrF"     [srfWtrFNotes]
 
 --
@@ -96,10 +96,10 @@ nmFEqDesc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   makeRef2S angleB `sC` S "and", ch baseAngle, S "is defined in", 
   makeRef2S angleA]
 
-nmFEqDeriv :: Sentence
-nmFEqDeriv = foldlSent [atStart normForcEq, S "is derived from the free",
-  S "body diagram of", makeRef2S figForceActing, S "in", 
-  makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
+nmFEqDeriv :: Derivation
+nmFEqDeriv = mkDerivNoHeader [foldlSent [atStart normForcEq `sIs`
+  S "derived from the free body diagram" `sOf`
+  (makeRef2S figForceActing `sIn` (makeRef2S $ SRS.physSyst [] []))]]
 
 --
 bsShrFEq :: RelationConcept
@@ -118,11 +118,10 @@ bShFEqDesc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   makeRef2S angleB `sC` S "and", ch baseAngle, S "is defined in", 
   makeRef2S angleA]
 
-bShFEqDeriv :: Sentence
-bShFEqDeriv = foldlSent [atStart bsShrFEq, S "is derived from the free",
-  S "body diagram of", makeRef2S figForceActing, S "in", 
-  makeRef2S $ SRS.physSyst ([]::[Contents]) ([]::[Section])]
-
+bShFEqDeriv :: Derivation
+bShFEqDeriv = mkDerivNoHeader [foldlSent [atStart bsShrFEq `sIs`
+  S "derived from the free body diagram" `sOf`
+  (makeRef2S figForceActing `sIn` (makeRef2S $ SRS.physSyst [] []))]]
 --
 shrResEqn :: Expr
 shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi effCohesion *
@@ -139,19 +138,20 @@ resShrDesc :: Sentence
 resShrDesc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
   makeRef2S lengthLb]
 
-resShrDeriv :: Sentence
-resShrDeriv = foldlSent_ [S "Derived by substituting", makeRef2S stressDD,
-  S "into the Mohr-Coulomb", phrase shrStress `sC` makeRef2S mcShrStrgth `sC`
-  S "and multiplying both sides of the", phrase equation, S "by", 
-  phrase genericA `ofThe` phrase slice, S "in the shear-" :+: ch zcoord +:+. 
-  S "plane", S "Since the", phrase slope, S "is assumed to extend infinitely",
-  S "in the", phrase zDir, sParen (makeRef2S assumpPSC) `sC` S "the resulting",
-  plural force, S "are expressed per", phrase metre, S "in the" +:+. phrase zDir,
-  S "The", getTandS fricAngle `andThe` getTandS effCohesion, S "are not indexed by",
+resShrDeriv :: Derivation
+resShrDeriv = mkDerivNoHeader [foldlSent [S "Derived by substituting",
+  makeRef2S stressDD, S "into the Mohr-Coulomb", phrase shrStress `sC`
+  makeRef2S mcShrStrgth `sC` S "and multiplying both sides of the",
+  phrase equation, S "by",  phrase genericA `ofThe` phrase slice `sIn`
+  S "the shear-" :+: ch zcoord +:+. S "plane", S "Since the", phrase slope,
+  S "is assumed to extend infinitely in the", phrase zDir,
+  sParen (makeRef2S assumpPSC) `sC` S "the resulting", plural force,
+  S "are expressed per", phrase metre, S "in the" +:+. phrase zDir, S "The",
+  getTandS fricAngle `andThe` getTandS effCohesion, S "are not indexed by",
   ch index, S "becaused they are assumed to be isotropic", 
   sParen (makeRef2S assumpSLI) `andThe` phrase soil, S "is assumed to be",
-  S "homogeneous, with", phrase constant, plural soilPrpty, S "throughout" +:+.
-  sParen (makeRef2S assumpSLH `sC` makeRef2S assumpSP)]
+  S "homogeneous, with", phrase constant, plural soilPrpty, S "throughout",
+  sParen (makeRef2S assumpSLH `sC` makeRef2S assumpSP)]]
 
 --
 mobShr :: RelationConcept
@@ -165,13 +165,13 @@ mobShrDesc :: Sentence
 mobShrDesc = foldlSent_ [ch baseLngth, S "is defined in" +:+. 
   makeRef2S lengthLb]
 
-mobShrDeriv :: Sentence
-mobShrDeriv = foldlSent_ [atStart mobShrI, S "is derived by dividing",
+mobShrDeriv :: Derivation
+mobShrDeriv = mkDerivNoHeader [foldlSent_ [atStart mobShrI `sIs` S "derived by dividing",
   phrase definition `ofThe` ch shrResI, S "from" +:+. makeRef2S resShrGD,
   S "by", phrase definition `ofThe` phrase fs, S "from" +:+.
   makeRef2S factOfSafety, S "The", getTandS fs, S "is not indexed by", ch index,
   S "because it is assumed to be", phrase constant, S "for the entire",
-  phrase slpSrf +:+. sParen (makeRef2S assumpFOSL)]
+  phrase slpSrf +:+. sParen (makeRef2S assumpFOSL)]]
 
 --
 effNormF :: RelationConcept
@@ -184,15 +184,15 @@ effNormFRel = inxi nrmFSubWat $= inxi totNrmForce - inxi baseHydroForce
 effNormFDesc :: Sentence
 effNormFDesc = ch baseHydroForce +:+ S "is defined in" +:+. makeRef2S baseWtrFGD
 
-effNormFDeriv :: Sentence
-effNormFDeriv = foldlSent [
+effNormFDeriv :: Derivation
+effNormFDeriv = mkDerivNoHeader [foldlSent [
   S "Derived by substituting", makeRef2S stressDD, S "into", 
   makeRef2S effStress `sAnd` S "multiplying both sides of the", phrase equation,
   S "by the", phrase genericA `ofThe` phrase slice, S "in the shear-" :+: 
   ch zcoord +:+. S "plane", S "Since the", phrase slope, 
   S "is assumed to extend infinitely in the", phrase zDir,
   sParen (makeRef2S assumpPSC) `sC` S "the resulting", plural force,
-  S "are expressed per", phrase metre, S "in the", phrase zDir]
+  S "are expressed per", phrase metre, S "in the", phrase zDir]]
 
 --
 normShrR :: RelationConcept
@@ -272,7 +272,7 @@ momEqlDesc = foldlSent [S "This", phrase equation, S "satisfies",
   makeRef2S angleB]
 
 momEqlDeriv :: Derivation
-momEqlDeriv = weave [momEqlDerivSentences, momEqlDerivEqns]
+momEqlDeriv = mkDerivNoHeader (weave [momEqlDerivSentences, momEqlDerivEqns])
 
 momEqlDerivSentences :: [Sentence]
 momEqlDerivSentences = map foldlSentCol [momEqlDerivTorqueSentence, 
@@ -487,7 +487,7 @@ sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the",
   makeRef2S lengthB]
 
 sliceWghtDeriv :: Derivation
-sliceWghtDeriv = weave [sliceWghtDerivSentences, sliceWghtDerivEqns]
+sliceWghtDeriv = mkDerivNoHeader (weave [sliceWghtDerivSentences, sliceWghtDerivEqns])
 
 sliceWghtDerivEqns :: [Sentence]
 sliceWghtDerivEqns = map E [sliceWghtDerivSatCaseWeightEqn, 
@@ -610,8 +610,8 @@ bsWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   S "is defined in", makeRef2S lengthLb]
 
 bsWtrFDeriv :: Derivation
-bsWtrFDeriv = weave [bsWtrFDerivSentences, bsWtrFDerivEqns] ++ 
-  bsWtrFDerivEndSentence
+bsWtrFDeriv = mkDerivNoHeader (weave [bsWtrFDerivSentences, bsWtrFDerivEqns] ++ 
+  bsWtrFDerivEndSentence)
 
 bsWtrFDerivEqns :: [Sentence]
 bsWtrFDerivEqns = map E [bsWtrFDerivWeightEqn, bsWtrFDerivHeightEqn,
@@ -693,8 +693,8 @@ srfWtrFNotes = foldlSent [S "This", phrase equation, S "is based on the",
   S "is defined in", makeRef2S lengthLs]
 
 srfWtrFDeriv :: Derivation
-srfWtrFDeriv = weave [srfWtrFDerivSentences, srfWtrFDerivEqns] ++ 
-  srfWtrFDerivEndSentence
+srfWtrFDeriv = mkDerivNoHeader (weave [srfWtrFDerivSentences, srfWtrFDerivEqns] ++ 
+  srfWtrFDerivEndSentence)
 
 srfWtrFDerivEqns :: [Sentence]
 srfWtrFDerivEqns = map E [srfWtrFDerivWeightEqn, srfWtrFDerivHeightEqn,

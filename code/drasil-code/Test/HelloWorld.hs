@@ -49,7 +49,7 @@ helloInitVariables = block [comment "Initializing variables",
   listDec "mySlicedList" 2 $ listType static_ float]
 
 helloListSlice :: (RenderSym repr) => repr (Block repr)
-helloListSlice = listSlice (listType static_ float) (var "mySlicedList" (listType static_ float)) (var "myOtherList" (listType static_ float)) (Just (litInt 1)) (Just (litInt 3)) Nothing
+helloListSlice = listSlice (var "mySlicedList" (listType static_ float)) (var "myOtherList" (listType static_ float)) (Just (litInt 1)) (Just (litInt 3)) Nothing
 
 helloIfBody :: (RenderSym repr) => repr (Body repr)
 helloIfBody = addComments "If body" (body [

@@ -154,7 +154,7 @@ instance ControlBlockSym CSharpCode where
             "Attempt to assign null return to a Value") (assign v) rv
           strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
-  listSlice t vnew vold b e s = 
+  listSlice vnew vold b e s = 
     let l_temp = "temp"
         v_temp = var l_temp (fmap valType vnew)
         l_i = "i_temp"
@@ -164,7 +164,8 @@ instance ControlBlockSym CSharpCode where
         listDec l_temp 0 (fmap valType vnew),
         for (varDecDef l_i int (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
-          (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess t v_i)),
+          (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
+          (listInnerType (fmap valType vold)) v_i)),
         vnew &= v_temp]
 
 instance UnaryOpSym CSharpCode where

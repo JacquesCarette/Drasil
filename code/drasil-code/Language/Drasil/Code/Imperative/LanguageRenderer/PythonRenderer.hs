@@ -144,7 +144,7 @@ instance ControlBlockSym PythonCode where
             "Attempt to assign null return to a Value") (assign v) rv
           strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
-  listSlice _ vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) 
+  listSlice vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
     where getVal = fromMaybe (liftA2 mkVal void (return empty))
 

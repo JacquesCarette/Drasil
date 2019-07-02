@@ -96,9 +96,9 @@ class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 
     Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
 
-  listSlice        :: repr (StateType repr) -> repr (Value repr) -> 
-    repr (Value repr) -> Maybe (repr (Value repr)) -> 
-    Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
+  listSlice        :: repr (Value repr) -> repr (Value repr) -> 
+    Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) ->
+    Maybe (repr (Value repr)) -> repr (Block repr)
 
 class UnaryOpSym repr where
   type UnaryOp repr

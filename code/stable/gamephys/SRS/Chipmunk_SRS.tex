@@ -33,23 +33,23 @@ This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
-\begin{longtable}{l l}
+\begin{longtable}{l l l}
 \toprule
-Symbol & Description
+Symbol & Description & SI Name
 \\
 \midrule
 \endhead
-J & energy (joule)
+J & energy & joule
 \\
-kg & mass (kilogram)
+kg & mass & kilogram
 \\
-m & length (metre)
+m & length & metre
 \\
-N & force (newton)
+N & force & newton
 \\
-rad & angle (radian)
+rad & angle & radian
 \\
-s & time (second)
+s & time & second
 \\
 \bottomrule
 \caption{}
@@ -198,9 +198,9 @@ Abbreviation & Full Form
 \\
 \midrule
 \endhead
-2D & two-dimensional
+2D & Two-Dimensional
 \\
-3D & three-dimensional
+3D & Three-Dimensional
 \\
 A & Assumption
 \\
@@ -299,7 +299,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Rigid body: A solid body in which deformation is neglected.}
 \item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
 \item{Centre of mass: The mean location of the distribution of mass of the object.}
-\item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a pair of numerical coordinates.}
+\item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length.}
 \item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.}
 \end{itemize}
 \subsubsection{Goal Statements}
@@ -520,7 +520,7 @@ Symbol & $\mathbf{r}(t)$
 Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{r}(t)=\frac{d\,\mathbf{p}\left(t\right)}{d\,t}
+           \mathbf{r}(t)=\frac{\,d\mathbf{p}\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -553,7 +553,7 @@ Symbol & $\mathbf{v}(t)$
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{v}(t)=\frac{d\,\mathbf{r}\left(t\right)}{d\,t}
+           \mathbf{v}(t)=\frac{\,d\mathbf{r}\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -586,7 +586,7 @@ Symbol & $\mathbf{a}(t)$
 Units & $\frac{\text{m}}{\text{s}^{2}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{a}(t)=\frac{d\,\mathbf{v}\left(t\right)}{d\,t}
+           \mathbf{a}(t)=\frac{\,d\mathbf{v}\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -619,7 +619,7 @@ Symbol & $θ$
 Units & rad
 \\ \midrule \\
 Equation & \begin{displaymath}
-           θ=\frac{d\,ϕ\left(t\right)}{d\,t}
+           θ=\frac{\,dϕ\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -652,7 +652,7 @@ Symbol & $ω$
 Units & $\frac{\text{rad}}{\text{s}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           ω=\frac{d\,θ\left(t\right)}{d\,t}
+           ω=\frac{\,dθ\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -685,7 +685,7 @@ Symbol & $α$
 Units & $\frac{\text{rad}}{\text{s}^{2}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           α=\frac{d\,ω\left(t\right)}{d\,t}
+           α=\frac{\,dω\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -942,7 +942,7 @@ RefBy &
 \end{minipage}
 Derivation of impulse (vector) - Newton's second law of motion states:
 \begin{displaymath}
-\mathbf{F}=m \mathbf{a}=m \frac{d\,\mathbf{v}}{d\,t}
+\mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}
 \end{displaymath}
 Rearranging :
 \begin{displaymath}
@@ -1056,7 +1056,7 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{a}_{i}}=\frac{d\,{\mathbf{v}_{i}}\left(t\right)}{d\,t}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
+           {\mathbf{a}_{i}}=\frac{\,d{\mathbf{v}_{i}}\left(t\right)}{\,dt}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1107,7 +1107,7 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           α=\frac{d\,ω\left(t\right)}{d\,t}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}
+           α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}

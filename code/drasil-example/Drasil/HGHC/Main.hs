@@ -21,7 +21,7 @@ thisChoices = Choices {
   comments         = CommentNone, 
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
-  inputStructure   = AsClass
+  inputStructure   = Bundled
 } -}
   
 main :: IO ()            

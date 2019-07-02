@@ -11,9 +11,9 @@ import java.util.ArrayList;
 public class Control {
     
     public static void main(String[] args) throws Exception {
-        String inputfile = args[0];
+        String filename = args[0];
         InputParameters inParams = new InputParameters();
-        InputFormat.func_get_input(inputfile, inParams);
+        InputFormat.get_input(filename, inParams);
         DerivedValues.derived_values(inParams);
         InputConstraints.input_constraints(inParams);
         double J_tol = Calculations.func_J_tol(inParams);

@@ -33,6 +33,7 @@ instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 instance Quantity      UnitalChunk where 
 instance Unitary       UnitalChunk where unit = view uni
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
+instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid) 
 
 --{BEGIN HELPER FUNCTIONS}--
 

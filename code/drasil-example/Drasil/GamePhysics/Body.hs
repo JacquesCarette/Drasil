@@ -41,9 +41,9 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, rightHand, physicCon)
-import qualified Data.Drasil.Concepts.Math as CM (equation, law, mathcon, mathcon')
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody)
+import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
+  mathcon, mathcon', rightHand)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
@@ -59,12 +59,6 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 
 import qualified Data.Map as Map
-
-authors :: People
-authors = [alex, luthfi]
-
-auths :: Sentence
-auths = S $ manyNames authors
 
 srs :: Document
 srs = mkDoc mkSRS for' sysInfo
@@ -147,7 +141,7 @@ sysInfo :: SystemInformation
 sysInfo = SI {
   _sys = chipmunk,
   _kind = Doc.srs,
-  _authors = authors,
+  _authors = [alex, luthfi],
   _quants = symbTT, 
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
@@ -378,7 +372,7 @@ probDescIntro = foldlSent_
 -----------------------------------------
 
 terms :: [ConceptChunk]
-terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand]
+terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand]
 
 -----------------------------
 -- 4.1.2 : Goal Statements --

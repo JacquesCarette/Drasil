@@ -33,23 +33,23 @@ This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
-\begin{longtable}{l l}
+\begin{longtable}{l l l}
 \toprule
-Symbol & Description
+Symbol & Description & SI Name
 \\
 \midrule
 \endhead
-${}^{\circ}$ & angle (degree)
+${}^{\circ}$ & angle & degree
 \\
-kg & mass (kilogram)
+kg & mass & kilogram
 \\
-m & length (metre)
+m & length & metre
 \\
-N & force (newton)
+N & force & newton
 \\
-Pa & pressure (pascal)
+Pa & pressure & pascal
 \\
-s & time (second)
+s & time & second
 \\
 \bottomrule
 \caption{}
@@ -86,9 +86,9 @@ ${F_{S}}$ & Factor of Safety: The global stability metric of a slip surface of a
 \\
 ${{F_{S}}^{min}}$ & Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface & --
 \\
-${F_{x}}$ & X-Component of the Force:  & N
+${F_{x}}$ & X-Coordinate of the Force:  & N
 \\
-${F_{y}}$ & Y-Component of the Force:  & N
+${F_{y}}$ & Y-Coordinate of the Force:  & N
 \\
 $\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
@@ -218,7 +218,7 @@ ${γ_{w}}$ & Unit Weight of Water: The weight of one cubic meter of water. & $\f
 \\
 $λ$ & Proportionality Constant: for the interslice normal to shear force ratio & --
 \\
-$π$ & Circumference to Diameter Ratio: The ratio of a circle's circumference to its diameter & --
+$π$ & Ratio of Circumference to Diameter for Any Circle: The ratio of a circle's circumference to its diameter & --
 \\
 $ρ$ & Density: mass per unit volume & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
@@ -258,9 +258,9 @@ Abbreviation & Full Form
 \\
 \midrule
 \endhead
-2D & two-dimensional
+2D & Two-Dimensional
 \\
-3D & three-dimensional
+3D & Three-Dimensional
 \\
 A & Assumption
 \\
@@ -294,7 +294,7 @@ Uncert. & Typical Uncertainty
 \end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
-A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
+A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in significant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
 The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (SSP). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -476,12 +476,12 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${F_{x}}$ is the x-component of the force (N)}
-              \item{${F_{y}}$ is the y-component of the force (N)}
+              \item{${F_{x}}$ is the x-coordinate of the force (N)}
+              \item{${F_{y}}$ is the y-coordinate of the force (N)}
               \item{$M$ is the moment (Nm)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & For a body in static equilibrium, the net forces and moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the x-component of the force ${F_{x}}$ and y-component of the force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
+Notes & For a body in static equilibrium, the net forces and moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the x-coordinate of the force ${F_{x}}$ and y-coordinate of the force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
@@ -1491,7 +1491,7 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{f}$ is the interslice normal to shear force ratio variation function (Unitless)}
-              \item{$π$ is the circumference to diameter ratio (Unitless)}
+              \item{$π$ is the ratio of circumference to diameter for any circle (Unitless)}
               \item{${\mathbf{x}_{slip}}$ is the x-coordinates of the slip surface (m)}
               \item{$i$ is the index (Unitless)}
               \item{$n$ is the number of slices (Unitless)}

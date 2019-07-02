@@ -83,14 +83,11 @@ thisSi = map unitWrapper [metre, kilogram, second] ++
 checkSi :: [UnitDefn]
 checkSi = collectUnits symMap symbTT
 
-authors :: Sentence
-authors = S $ manyNames people
-
 si :: SystemInformation
 si = SI {
   _sys = swhsPCM,
   _kind = srs, 
-  _authors = people,
+  _authors = [thulasi, brooks, spencerSmith],
   _quants = symbols,
   _concepts = symbTT,
   _definitions = qDefs,
@@ -144,9 +141,6 @@ shortTT = concatMap (`getIdeaDict` symMap) $ getDocDesc mkSRS
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap
-
-people :: [Person]
-people = [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [

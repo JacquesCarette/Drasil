@@ -10,7 +10,7 @@ spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
   mCampidelli,   dmWiess, sPalmer, scottSmith, bKarchewski, rHuston, 
-  hJosephs, nrMorgenstern, vePrice, samCrawford :: Person
+  hJosephs, nrMorgenstern, vePrice, samCrawford, rcHibbeler :: Person
   
 pjAgerfalk    = person    "PJ"                        "Agerfalk"
 daAruliah     = personWM  "D"         ["A"]           "Aruliah"
@@ -32,6 +32,7 @@ rGuy          = personWM  "Richard"   ["T"]           "Guy"
 pGuo          = person    "Peijun"                    "Guo"
 shdHaddock    = personWM  "Steven"    ["H", "D"]      "Haddock"
 alex          = person    "Alex"                      "Halliwushka"
+rcHibbeler    = personWM' "R"         ["C"]           "Hibbeler"
 rHuston       = person    "Ronald"                    "Huston"
 nChueHong     = personWM  "Neil"      ["P"]           "Chue Hong"
 kdHuff        = personWM  "Kathryn"   ["D"]           "Huff"

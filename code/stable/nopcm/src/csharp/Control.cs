@@ -6,7 +6,7 @@ using System.Collections.Generic;
 public class Control {
     
     public static void Main(string[] args) {
-        string inputfile = args[0];
+        string filename = args[0];
         double A_C;
         double C_W;
         double h_C;
@@ -21,7 +21,7 @@ public class Control {
         double R_tol;
         double T_W;
         double E_W;
-        InputFormat.func_get_input(inputfile, A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, A_tol, R_tol, T_W, E_W);
+        InputFormat.get_input(filename, out A_C, out C_W, out h_C, out T_init, out t_final, out L, out T_C, out t_step, out rho_W, out D, out A_tol, out R_tol, out T_W, out E_W);
         InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W);
         OutputFormat.write_output(T_W, E_W);
     }

@@ -7,10 +7,9 @@ import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
 import Drasil.SWHS.Body (srs', printSetting) -- si
--- import Drasil.SWHS.DataDesc (inputMod)
 
 -- code :: CodeSpec
--- code = codeSpec si choices [inputMod]
+-- code = codeSpec si choices []
 
 -- choices :: Choices
 -- choices = Choices {
@@ -21,7 +20,7 @@ import Drasil.SWHS.Body (srs', printSetting) -- si
 --   comments = CommentNone,    -- CommentNone, CommentFunc
 --   onSfwrConstraint = Warning,  -- Warning, Exception
 --   onPhysConstraint = Warning,  -- Warning, Exception
---   inputStructure = Loose    -- Loose, AsClass
+--   inputStructure = Unbundled    -- Unbundled, Bundled
 -- }
 
 generate :: IO ()

@@ -1,7 +1,8 @@
 -- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.LanguageRenderer (
   -- * Common Syntax
-  classDec, dot, doubleSlash, forLabel, new, observerListName,
+  classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
+  docCmtStart, observerListName,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
@@ -28,8 +29,9 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  addCommentsDocD, valList, appendToBody, getterName, setterName, 
-  setMain, setEmpty, statementsToStateVars
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, 
+  prependToBody, appendToBody, surroundBody, getterName, setterName, setMain, 
+  setEmpty
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -42,7 +44,7 @@ import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
-import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), 
+import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
   integer, semi, equals, braces, int, comma, colon, hcat)
 
@@ -50,12 +52,16 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>),
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec,dot,doubleSlash,forLabel,new :: Doc
+classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
+  docCmtStart :: Doc
 classDec = text "class"
 dot = text "."
 doubleSlash = text "//"
 forLabel = text "for"
 new = text "new"
+blockCmtStart = text "/*"
+blockCmtEnd = text "*/"
+docCmtStart = text "/**"
 
 observerListName :: Label
 observerListName = "observerList"
@@ -314,8 +320,8 @@ plusPlusDocD v = valDoc v <> text "++"
 plusPlusDocD' :: ValData -> Doc -> Doc
 plusPlusDocD' v plusOp = valDoc v <+> equals <+> valDoc v <+> plusOp <+> int 1
 
-varDecDocD :: Label -> TypeData -> Doc
-varDecDocD l st = typeDoc st <+> text l
+varDecDocD :: ValData -> Doc
+varDecDocD v = typeDoc (valType v) <+> valDoc v
 
 varDecDefDocD :: Label -> TypeData -> ValData -> Doc
 varDecDefDocD l st v = typeDoc st <+> text l <+> equals <+> valDoc v
@@ -627,6 +633,15 @@ publicDocD = text "public"
 
 -- Comment Functions -- 
 
+blockCmtDoc :: [String] -> Doc -> Doc -> Doc
+blockCmtDoc lns start end = start <+> vcat (map text lns) <+> end
+
+docCmtDoc :: [String] -> Doc -> Doc -> Doc
+docCmtDoc lns start end = vcat $ start : map (indent . text) lns ++ [end]
+
+commentedItem :: Doc -> Doc -> Doc
+commentedItem cmt itm = if isEmpty itm then itm else cmt $+$ itm
+
 commentLength :: Int
 commentLength = 75
 
@@ -655,9 +670,16 @@ dashes s l = replicate (l - length s) '-'
 valList :: [ValData] -> Doc
 valList vs = hcat (intersperse (text ", ") (map valDoc vs))
 
+prependToBody :: (Doc, Terminator) -> Doc -> Doc
+prependToBody s b = vcat [fst $ statementDocD s, maybeBlank, b]
+  where maybeBlank = if isEmpty b then empty else blank
+
 appendToBody :: Doc -> (Doc, Terminator) -> Doc
 appendToBody b s = vcat [b, maybeBlank, fst $ statementDocD s]
   where maybeBlank = if isEmpty b then empty else blank
+
+surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
+surroundBody p b a = prependToBody p (appendToBody b a)
 
 getterName :: String -> String
 getterName s = "Get" ++ capitalize s
@@ -670,7 +692,3 @@ setMain (d, _) = (d, True)
 
 setEmpty :: (Doc, Terminator) -> (Doc, Terminator)
 setEmpty (d, _) = (d, Empty)
-
--- Hack because modules accept Statement representations of their state variables. Modules should be redesigned/rethought
-statementsToStateVars :: Doc -> Doc -> Doc -> (Doc, Terminator) -> Doc
-statementsToStateVars s p end (v, _) = s <+> p <+> v <> end

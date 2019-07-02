@@ -33,23 +33,23 @@ This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
-\begin{longtable}{l l}
+\begin{longtable}{l l l}
 \toprule
-Symbol & Description
+Symbol & Description & SI Name
 \\
 \midrule
 \endhead
-${}^{\circ}$C & temperature (centigrade)
+${}^{\circ}$C & temperature & centigrade
 \\
-J & energy (joule)
+J & energy & joule
 \\
-kg & mass (kilogram)
+kg & mass & kilogram
 \\
-m & length (metre)
+m & length & metre
 \\
-s & time (second)
+s & time & second
 \\
-W & power (watt)
+W & power & watt
 \\
 \bottomrule
 \caption{}
@@ -130,7 +130,7 @@ $V$ & Volume & $\text{m}^{3}$
 \\
 ${V_{W}}$ & Volume of water & $\text{m}^{3}$
 \\
-$π$ & Circumference to diameter ratio & --
+$π$ & Ratio of circumference to diameter for any circle & --
 \\
 $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
@@ -306,7 +306,7 @@ This section focuses on the general equations and laws that SWHS is based on.
 Label & Conservation of thermal energy
 \\ \midrule \\
 Equation & \begin{displaymath}
-           -∇\cdot{}\mathbf{q}+g=ρ C \frac{\partial{}\,T}{\partial{}\,t}
+           -∇\cdot{}\mathbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -398,7 +398,7 @@ RefBy &
 Label & Simplified rate of change of temperature
 \\ \midrule \\
 Equation & \begin{displaymath}
-           m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+           m C \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -424,23 +424,23 @@ RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} and \hyperref[IM:eBalanceOnWt
 Detailed derivation of simplified rate of change of temperature.
 Integrating \hyperref[TM:consThermE]{TM: consThermE} over a volume ($V$), we have:
 \begin{displaymath}
--\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
+-\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
 \begin{displaymath}
--\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
+-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 \begin{displaymath}
-{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
+{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
 Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume}, and \hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
 \begin{displaymath}
-ρ C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+ρ C V \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{displaymath}
 Using the fact that $ρ$=$m$/$V$, (2) can be written as:
 \begin{displaymath}
-m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+m C \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -506,7 +506,7 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
+           \frac{\,d{T_{W}}}{\,dt}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -526,19 +526,19 @@ RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[out
 Derivation of the energy balance on water:
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity, ${C_{W}}$. Heat transfer occurs in the water from the heating coil as ${q_{C}}$ (\hyperref[DD:htFluxC]{DD: htFluxC}), over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 \begin{displaymath}
-{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={q_{C}} {A_{C}}
+{m_{W}} {C_{W}} \frac{\,d{T_{W}}}{\,dt}={q_{C}} {A_{C}}
 \end{displaymath}
 Using \hyperref[DD:htFluxC]{DD: htFluxC} , this can be written as:
 \begin{displaymath}
-{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)
+{m_{W}} {C_{W}} \frac{\,d{T_{W}}}{\,dt}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)
 \end{displaymath}
 Dividing (3) by ${m_{W}} {C_{W}}$, we obtain:
 \begin{displaymath}
-\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)
+\frac{\,d{T_{W}}}{\,dt}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)
 \end{displaymath}
 Setting ${τ_{W}}$ = ${m_{W}}$ ${C_{W}}$ / ${h_{C}}$ ${A_{C}}$ , Equation (4) can be written in its final form as:
 \begin{displaymath}
-\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)
+\frac{\,d{T_{W}}}{\,dt}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)
 \end{displaymath}
 \par~
 

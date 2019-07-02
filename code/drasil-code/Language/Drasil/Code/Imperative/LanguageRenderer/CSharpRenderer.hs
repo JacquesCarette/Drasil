@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..))
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD,
@@ -37,12 +37,13 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
   listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, observerListName,
-  doubleSlash, addCommentsDocD, valList, appendToBody, getterName, setterName, 
-  setMain, setEmpty, statementsToStateVars)
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
+  blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody, getterName, 
+  setterName, setMain, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
-  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
+  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
   liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -79,6 +80,9 @@ instance RenderSym CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 
+  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
+    (liftA2 commentedItem cmt (fmap modDoc m))
+
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
   endStatement = return semi
@@ -100,6 +104,10 @@ instance KeywordSym CSharpCode where
   iterInLabel = return $ text "in"
 
   commentStart = return doubleSlash
+  blockCommentStart = return blockCmtStart
+  blockCommentEnd = return blockCmtEnd
+  docCommentStart = return docCmtStart
+  docCommentEnd = blockCommentEnd
   
   printFunc = return $ text "Console.Write"
   printLnFunc = return $ text "Console.WriteLine"
@@ -346,7 +354,7 @@ instance StatementSym CSharpCode where
   (&++) v = mkSt <$> fmap plusPlusDocD v
   (&~-) v = v &= (v #- litInt 1)
 
-  varDec l t = mkSt <$> fmap (varDecDocD l) t
+  varDec v = mkSt <$> fmap varDecDocD v
   varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
   listDec l n t = mkSt <$> liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> lift1List (listDecDefDocD l) t vs
@@ -444,10 +452,8 @@ instance StatementSym CSharpCode where
     where obsList = observerListName `listOf` t
           lastelem = obsList $. listSize
 
-  inOutCall n ins [out] = assign out $ funcApp n (fmap valType out) ins
-  inOutCall n ins outs = valState $ funcApp n void (nub $ map (\v -> 
-    if v `elem` outs then fmap (updateValDoc csRef) v else v) ins ++
-    map (fmap (updateValDoc csRef)) outs)
+  inOutCall = csInOutCall funcApp
+  extInOutCall m = csInOutCall (extFuncApp m)
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
@@ -522,9 +528,13 @@ instance MethodSym CSharpCode where
   function n = method n ""
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
-    (map stateParam ins) (liftA2 appendToBody b $ returnState v)
-  inOutFunc n s p ins outs b = function n s p (mState void) (map (fmap csRef . 
-    stateParam) outs ++ map stateParam (filter (`notElem` outs) ins)) b
+    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
+  inOutFunc n s p ins outs b = function n s p (mState void) (map (\v -> 
+    if v `elem` outs then fmap csRef (stateParam v) else stateParam v) ins ++
+    map (fmap csOut . stateParam) (filter (`notElem` ins) outs)) b
+
+  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
+    fmap snd fn)
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -546,12 +556,19 @@ instance ClassSym CSharpCode where
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
+  commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
+    fmap snd cs)
+
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ vs ms cs = fmap (md n (any (snd . unCSC) ms || 
-    any (snd . unCSC) cs)) (liftList moduleDocD (if null vs && null ms then cs 
-    else pubClass n Nothing (map (liftA4 statementsToStateVars public static_ 
-    endStatement) vs) ms : cs))
+  buildModule n _ ms cs = fmap (md n (any (snd . unCSC) ms || 
+    any (snd . unCSC) cs)) (liftList moduleDocD (if null ms then cs 
+    else pubClass n Nothing [] ms : cs))
+
+instance BlockCommentSym CSharpCode where
+  type BlockComment CSharpCode = Doc
+  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [
@@ -602,3 +619,15 @@ csOpenFileWorA f n w a = valDoc f <+> equals <+> new <+> typeDoc w <>
 
 csRef :: Doc -> Doc
 csRef p = text "ref" <+> p
+
+csOut :: Doc -> Doc
+csOut p = text "out" <+> p
+
+csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) -> 
+  [CSharpCode (Value CSharpCode)] -> CSharpCode (Value CSharpCode)) -> Label -> 
+  [CSharpCode (Value CSharpCode)] -> [CSharpCode (Value CSharpCode)] -> 
+  CSharpCode (Statement CSharpCode)
+csInOutCall f n ins [out] = assign out $ f n (fmap valType out) ins
+csInOutCall f n ins outs = valState $ f n void (nub $ map (\v -> 
+  if v `elem` outs then fmap (updateValDoc csRef) v else v) ins ++
+  map (fmap (updateValDoc csOut)) (filter (`notElem` ins) outs))

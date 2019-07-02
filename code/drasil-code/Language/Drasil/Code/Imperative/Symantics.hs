@@ -10,7 +10,7 @@ module Language.Drasil.Code.Imperative.Symantics (
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..)
+  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..)
 ) where
 
 type Label = String
@@ -25,6 +25,9 @@ class (ModuleSym repr, ControlBlockSym repr) => RenderSym repr where
   fileDoc :: repr (Module repr) -> repr (RenderFile repr)
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
+
+  commentedMod :: repr (BlockComment repr) -> repr (RenderFile repr) ->
+    repr (RenderFile repr)
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   type Keyword repr
@@ -46,7 +49,11 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   iterForEachLabel :: repr (Keyword repr)
   iterInLabel      :: repr (Keyword repr)
 
-  commentStart :: repr (Keyword repr)
+  commentStart      :: repr (Keyword repr)
+  blockCommentStart :: repr (Keyword repr)
+  blockCommentEnd   :: repr (Keyword repr)
+  docCommentStart   :: repr (Keyword repr)
+  docCommentEnd     :: repr (Keyword repr)
 
   printFunc       :: repr (Keyword repr)
   printLnFunc     :: repr (Keyword repr)
@@ -333,7 +340,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   multiAssign       :: [repr (Value repr)] -> [repr (Value repr)] ->
     repr (Statement repr) 
 
-  varDec           :: Label -> repr (StateType repr) -> repr (Statement repr)
+  varDec           :: repr (Value repr) -> repr (Statement repr)
   varDecDef        :: Label -> repr (StateType repr) -> repr (Value repr) -> 
     repr (Statement repr)
   listDec          :: Label -> Integer -> repr (StateType repr) -> 
@@ -430,6 +437,8 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   -- The two lists are inputs and outputs, respectively
   inOutCall :: Label -> [repr (Value repr)] -> [repr (Value repr)] -> 
     repr (Statement repr)
+  extInOutCall :: Library -> Label -> [repr (Value repr)] ->
+    [repr (Value repr)] -> repr (Statement repr)
 
   state     :: repr (Statement repr) -> repr (Statement repr)
   loopState :: repr (Statement repr) -> repr (Statement repr)
@@ -485,7 +494,7 @@ class ParameterSym repr where
   pointerParam :: repr (Value repr) -> repr (Parameter repr)
 
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
-  BodySym repr) => MethodSym repr where
+  BodySym repr, BlockCommentSym repr) => MethodSym repr where
   type Method repr
   -- Second label is class name
   method      :: Label -> Label -> repr (Scope repr) -> 
@@ -512,6 +521,9 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
     [repr (Value repr)] -> [repr (Value repr)] -> 
     repr (Body repr) -> repr (Method repr)
 
+  commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
+    repr (Method repr)
+
 class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => 
   StateVarSym repr where
   type StateVar repr
@@ -523,7 +535,8 @@ class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) =>
   listStateVar :: Int -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> repr (StateType repr) -> repr (StateVar repr)
 
-class (StateVarSym repr, MethodSym repr) => ClassSym repr where
+class (StateVarSym repr, MethodSym repr) => ClassSym repr 
+  where
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
     [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
@@ -535,7 +548,15 @@ class (StateVarSym repr, MethodSym repr) => ClassSym repr where
   pubClass :: Label -> Maybe Label -> [repr (StateVar repr)] -> 
     [repr (Method repr)] -> repr (Class repr)
 
+  commentedClass :: repr (BlockComment repr) -> repr (Class repr) -> 
+    repr (Class repr)
+
 class (ClassSym repr) => ModuleSym repr where
   type Module repr
-  buildModule :: Label -> [Library] -> [repr (Statement repr)] -> 
-    [repr (Method repr)] -> [repr (Class repr)] -> repr (Module repr)
+  buildModule :: Label -> [Library] -> [repr (Method repr)] -> 
+    [repr (Class repr)] -> repr (Module repr)
+    
+class BlockCommentSym repr where
+  type BlockComment repr
+  blockComment :: [String] -> repr (BlockComment repr)
+  docComment :: [String] -> repr (BlockComment repr)

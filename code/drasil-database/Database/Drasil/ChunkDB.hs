@@ -43,7 +43,7 @@ type UnitMap = UMap UnitDefn
 -- likely be some 'manual' duplication of terms as this map will contain all
 -- quantities, concepts, etc.
 type TermMap = UMap IdeaDict
-type TraceMap = UMap [UID]
+type TraceMap = Map.Map UID [UID]
 type RefbyMap = Map.Map UID [UID]
 type DatadefnMap = UMap DataDefinition
 type InsModelMap = UMap InstanceModel
@@ -75,8 +75,8 @@ unitMap = cdbMap unitWrapper
 idMap :: HasUID a => [a] -> Map.Map UID (a, Int)
 idMap = cdbMap id
 
-traceMap :: HasUID l => (l -> [UID]) -> [l] -> TraceMap
-traceMap = cdbMap
+traceMap :: [(UID, [UID])] -> TraceMap
+traceMap = Map.fromList
 
 -- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
 symbLookup :: UID -> SymbolMap -> QuantityDict
@@ -168,14 +168,14 @@ collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
  . concatMap getUnits . mapMaybe (getUnitLup m)
 
 traceLookup :: UID -> TraceMap -> [UID]
-traceLookup c m = maybe [] fst $ Map.lookup c m
+traceLookup c = fromMaybe [] .  Map.lookup c
  
 invert :: (Ord v) => Map.Map k [v] -> Map.Map v [k]
 invert m = Map.fromListWith (++) pairs
     where pairs = [(v, [k]) | (k, vs) <- Map.toList m, v <- vs]
  
 generateRefbyMap :: TraceMap  -> RefbyMap
-generateRefbyMap = invert . Map.map fst
+generateRefbyMap = invert
 
 refbyLookup :: UID -> RefbyMap -> [UID]
 refbyLookup c = fromMaybe [] . Map.lookup c

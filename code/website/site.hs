@@ -87,7 +87,7 @@ mkExampleCtx exampleDir srsDir =
     field "path" (return . fst . fst . itemBody) <>
     field "lang" (return . snd . fst . itemBody)
   -- If there are no sources, fail is used so as not to create a "Generated Code" section
-  ) (\x -> if src (itemBody x) == [] then fail "No code files for example" else
+  ) (\x -> if null (src (itemBody x)) then fail "No code files for example" else
       mapM (\y -> makeItem (y, itemBody x)) $ src $ itemBody x)
   where
     name (E nm _ _ _) = nm

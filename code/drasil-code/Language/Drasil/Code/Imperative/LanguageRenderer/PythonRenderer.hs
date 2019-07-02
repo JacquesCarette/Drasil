@@ -335,7 +335,7 @@ instance StatementSym PythonCode where
   (&~-) v = v &= (v #- litInt 1)
 
   varDec _ = return (mkStNoEnd empty)
-  varDecDef l _ v = mkStNoEnd <$> fmap (pyVarDecDef l) v
+  varDecDef = assign
   listDec l _ t = mkStNoEnd <$> fmap (pyListDec l) (listType static_ t)
   listDecDef l _ vs = mkStNoEnd <$> fmap (pyListDecDef l) (liftList 
     valList vs)
@@ -402,7 +402,7 @@ instance StatementSym PythonCode where
 
   throw errMsg = mkStNoEnd <$> fmap pyThrow (litString errMsg)
 
-  initState fsmName initialState = varDecDef fsmName string 
+  initState fsmName initialState = varDecDef (var fsmName string) 
     (litString initialState)
   changeState fsmName toState = var fsmName string &= litString toState
 
@@ -565,9 +565,6 @@ pyListSizeAccess v f = funcDoc f <> parens (valDoc v)
 
 pyStringType :: TypeData
 pyStringType = td String (text "str")
-
-pyVarDecDef :: Label ->  ValData -> Doc
-pyVarDecDef l v = text l <+> equals <+> valDoc v
 
 pyListDec :: Label -> TypeData -> Doc
 pyListDec l t = text l <+> equals <+> typeDoc t

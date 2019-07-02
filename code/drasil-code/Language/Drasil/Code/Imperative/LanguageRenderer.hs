@@ -160,7 +160,7 @@ printListDoc :: (RenderSym repr) => Integer -> repr (Value repr) ->
   (String -> repr (Statement repr)) -> 
   repr (Statement repr)
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
-  for (varDecDef l_i S.int (litInt 0)) (i ?< (listSizeAccess v #- litInt 1))
+  for (varDecDef i (litInt 0)) (i ?< (listSizeAccess v #- litInt 1))
     (i &++) (bodyStatements [prFn (v $. listAccess t i), prStrFn ", /f "]), 
   ifNoElse [(listSizeAccess v ?> litInt 0, oneLiner $
     prFn (v $. listAccess t (listSizeAccess v #- litInt 1)))], 
@@ -356,8 +356,8 @@ plusPlusDocD' v plusOp = valDoc v <+> equals <+> valDoc v <+> plusOp <+> int 1
 varDecDocD :: ValData -> Doc
 varDecDocD v = typeDoc (valType v) <+> valDoc v
 
-varDecDefDocD :: Label -> TypeData -> ValData -> Doc
-varDecDefDocD l st v = typeDoc st <+> text l <+> equals <+> valDoc v
+varDecDefDocD :: ValData -> ValData -> Doc
+varDecDefDocD v def = typeDoc (valType v) <+> valDoc v <+> equals <+> valDoc def
 
 listDecDocD :: Label -> ValData -> TypeData -> Doc
 listDecDocD l n st = typeDoc st <+> text l <+> equals <+> new <+> 

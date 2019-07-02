@@ -346,8 +346,8 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   (&~-) v = pair ((&~-) $ pfst v) ((&~-) $ psnd v)
 
   varDec v = pair (varDec $ pfst v) (varDec $ psnd v)
-  varDecDef l t v = pair (varDecDef l (pfst t) (pfst v)) (varDecDef l (psnd t) 
-    (psnd v))
+  varDecDef v def = pair (varDecDef (pfst v) (pfst def)) (varDecDef (psnd v) 
+    (psnd def))
   listDec l n t = pair (listDec l n $ pfst t) (listDec l n $ psnd t)
   listDecDef l t vs = pair (listDecDef l (pfst t) (map pfst vs)) (listDecDef l 
     (psnd t) (map psnd vs))
@@ -675,7 +675,7 @@ instance ControlBlockSym CppSrcCode where
     in
       block [
         listDec l_temp 0 (fmap valType vnew),
-        for (varDecDef l_i int (fromMaybe (litInt 0) b)) 
+        for (varDecDef v_i (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
           (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
           (listInnerType (fmap valType vold)) v_i)),
@@ -867,7 +867,7 @@ instance StatementSym CppSrcCode where
   (&~-) v = v &= (v #- litInt 1)
 
   varDec v = mkSt <$> fmap varDecDocD v
-  varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
+  varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
   listDec l n t = mkSt <$> liftA2 (cppListDecDoc l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> liftA2 (cppListDecDefDoc l) t (liftList 
     valList vs)
@@ -940,7 +940,7 @@ instance StatementSym CppSrcCode where
 
   throw errMsg = mkSt <$> fmap cppThrowDoc (litString errMsg)
 
-  initState fsmName initialState = varDecDef fsmName string 
+  initState fsmName initialState = varDecDef (var fsmName string)
     (litString initialState)
   changeState fsmName toState = var fsmName string &= litString toState
 
@@ -968,9 +968,9 @@ instance ControlStatementSym CppSrcCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef i int initv) 
+  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
     (var i int ?< finalv) (var i int &+= stepv)
-  forEach l t v = for (varDecDef l (iterator t) (v $. iterBegin t)) 
+  forEach l t v = for (varDecDef (var l (iterator t)) (v $. iterBegin t)) 
     (var l (iterator t) ?!= v $. iterEnd t) (var l (iterator t) &++)
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
@@ -978,12 +978,13 @@ instance ControlStatementSym CppSrcCode where
 
   checkState l = switchAsIf (var l string) 
 
-  notifyObservers ft fn t ps = for initv (var index int ?< 
-    (obsList $. listSize)) (var index int &++) notify
+  notifyObservers ft fn t ps = for initv (v_index ?< (obsList $. listSize)) 
+    (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
-          initv = varDecDef index int $ litInt 0
-          notify = oneLiner $ valState $ (obsList $. at int index) $. 
+          v_index = var index int
+          initv = varDecDef v_index $ litInt 0
+          notify = oneLiner $ valState $ (obsList $. at t index) $. 
             func fn ft ps
 
   getFileInputAll f v = let l_line = "nextLine"
@@ -1372,7 +1373,7 @@ instance StatementSym CppHdrCode where
   (&~-) _ = return (mkStNoEnd empty)
 
   varDec _ = return (mkStNoEnd empty)
-  varDecDef _ _ _ = return (mkStNoEnd empty)
+  varDecDef _ _ = return (mkStNoEnd empty)
   listDec _ _ _ = return (mkStNoEnd empty)
   listDecDef _ _ _ = return (mkStNoEnd empty)
   objDecDef _ _ _ = return (mkStNoEnd empty)

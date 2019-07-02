@@ -162,7 +162,7 @@ instance ControlBlockSym CSharpCode where
     in
       block [
         listDec l_temp 0 (fmap valType vnew),
-        for (varDecDef l_i int (fromMaybe (litInt 0) b)) 
+        for (varDecDef v_i (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
           (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
           (listInnerType (fmap valType vold)) v_i)),
@@ -357,7 +357,7 @@ instance StatementSym CSharpCode where
   (&~-) v = v &= (v #- litInt 1)
 
   varDec v = mkSt <$> fmap varDecDocD v
-  varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
+  varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
   listDec l n t = mkSt <$> liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> lift1List (listDecDefDocD l) t vs
   objDecDef l t v = mkSt <$> liftA2 (objDecDefDocD l) t v
@@ -421,7 +421,7 @@ instance StatementSym CSharpCode where
 
   throw errMsg = mkSt <$> fmap csThrowDoc (litString errMsg)
 
-  initState fsmName initialState = varDecDef fsmName string (litString initialState)
+  initState fsmName initialState = varDecDef (var fsmName string) (litString initialState)
   changeState fsmName toState = var fsmName string &= litString toState
 
   initObserverList = listDecDef observerListName
@@ -448,8 +448,8 @@ instance ControlStatementSym CSharpCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef i int initv) (var i int ?< 
-    finalv) (var i int &+= stepv)
+  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
+    (var i int ?< finalv) (var i int &+= stepv)
   forEach l t v b = mkStNoEnd <$> liftA7 (forEachDocD l) blockStart blockEnd 
     iterForEachLabel iterInLabel t v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
@@ -457,12 +457,13 @@ instance ControlStatementSym CSharpCode where
   tryCatch tb cb = mkStNoEnd <$> liftA2 csTryCatch tb cb
 
   checkState l = switch (var l string)
-  notifyObservers ft fn t ps = for initv (var index int ?< 
-    (obsList $. listSize)) (var index int &++) notify
+  notifyObservers ft fn t ps = for initv (v_index ?< (obsList $. listSize)) 
+    (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
-          initv = varDecDef index int $ litInt 0
-          notify = oneLiner $ valState $ (obsList $. at int index) $. func fn 
+          v_index = var index int
+          initv = varDecDef v_index $ litInt 0
+          notify = oneLiner $ valState $ (obsList $. at t index) $. func fn 
             ft ps
 
   getFileInputAll f v = while (objVar f (var "EndOfStream" bool) ?!)

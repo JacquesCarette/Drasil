@@ -166,7 +166,7 @@ instance ControlBlockSym JavaCode where
     in
       block [
         listDec l_temp 0 (fmap valType vnew),
-        for (varDecDef l_i int (fromMaybe (litInt 0) b)) 
+        for (varDecDef v_i (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
           (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
           (listInnerType (fmap valType vold)) v_i)),
@@ -361,7 +361,7 @@ instance StatementSym JavaCode where
   (&~-) v = v &= (v #- litInt 1)
 
   varDec v = mkSt <$> fmap varDecDocD v
-  varDecDef l t v = mkSt <$> liftA2 (varDecDefDocD l) t v
+  varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
   listDec l n t = mkSt <$> liftA2 (listDecDocD l) (litInt n) t -- this means that the type you declare must already be a list. Not sure how I feel about this. On the bright side, it also means you don't need to pass permanence
   listDecDef l t vs = mkSt <$> liftA2 (jListDecDef l) t (liftList 
     valList vs)
@@ -431,7 +431,7 @@ instance StatementSym JavaCode where
 
   throw errMsg = mkSt <$> fmap jThrowDoc (litString errMsg)
 
-  initState fsmName initialState = varDecDef fsmName string 
+  initState fsmName initialState = varDecDef (var fsmName string) 
     (litString initialState)
   changeState fsmName toState = var fsmName string &= litString toState
 
@@ -459,8 +459,8 @@ instance ControlStatementSym JavaCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef i int initv) (var i int ?< 
-    finalv) (var i int &+= stepv)
+  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
+    (var i int ?< finalv) (var i int &+= stepv)
   forEach l t v b = mkStNoEnd <$> liftA7 (forEachDocD l) blockStart blockEnd
     iterForEachLabel iterInLabel t v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
@@ -468,12 +468,13 @@ instance ControlStatementSym JavaCode where
   tryCatch tb cb = mkStNoEnd <$> liftA2 jTryCatch tb cb
   
   checkState l = switch (var l string)
-  notifyObservers ft fn t ps = for initv (var index int ?< 
-    (obsList $. listSize)) (var index int &++) notify
+  notifyObservers ft fn t ps = for initv (v_index ?< (obsList $. listSize)) 
+    (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
-          initv = varDecDef index int $ litInt 0
-          notify = oneLiner $ valState $ (obsList $. at int index) $. func fn ft ps
+          v_index = var index int
+          initv = varDecDef v_index $ litInt 0
+          notify = oneLiner $ valState $ (obsList $. at t index) $. func fn ft ps
 
   getFileInputAll f v = while (f $. func "hasNextLine" bool [])
     (oneLiner $ valState $ v $. listAppend (f $. func "nextLine" string []))
@@ -518,7 +519,7 @@ instance MethodSym JavaCode where
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
   inOutFunc n s p ins outs b = function n s p jArrayType
-    (map stateParam ins) (liftA3 surroundBody decls b (multi (varDecDef "outputs" jArrayType
+    (map stateParam ins) (liftA3 surroundBody decls b (multi (varDecDef outputs
         (var ("new Object[" ++ show (length outs) ++ "]") jArrayType)
       : assignArray 0 outs
       ++ [returnVar "outputs" jArrayType])))
@@ -528,6 +529,7 @@ instance MethodSym JavaCode where
             assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
               (fmap valType v) &= v) : assignArray (c+1) vs
             decls = multi $ map varDec outs
+            outputs = var "outputs" jArrayType
             
   commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
     fmap snd fn)
@@ -669,5 +671,5 @@ jInOutCall :: (Label -> JavaCode (StateType JavaCode) ->
   JavaCode (Statement JavaCode)
 jInOutCall f n ins [] = valState $ f n void ins
 jInOutCall f n ins [out] = assign out $ f n (fmap valType out) ins
-jInOutCall f n ins outs = multi $ varDecDef "outputs" jArrayType (f n 
+jInOutCall f n ins outs = multi $ varDecDef (var "outputs" jArrayType) (f n 
   jArrayType ins) : jAssignFromArray 0 outs

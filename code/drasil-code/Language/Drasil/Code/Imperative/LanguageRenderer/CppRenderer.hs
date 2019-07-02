@@ -307,8 +307,7 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
   func l t vs = pair (func l (pfst t) (map pfst vs)) (func l (psnd t) (map psnd vs))
-  cast targT srcT = pair (cast (pfst targT) (pfst srcT)) 
-    (cast (psnd targT) (psnd srcT))
+  cast targT = pair (cast $ pfst targT) (cast $ psnd targT)
   castListToInt = pair castListToInt castListToInt
   get n t = pair (get n $ pfst t) (get n $ psnd t)
   set n v = pair (set n $ pfst v) (set n $ psnd v)
@@ -817,7 +816,7 @@ instance Selector CppSrcCode where
 
   selfAccess l = objAccess (self l)
 
-  listSizeAccess v = castObj (cast int int) (objAccess v listSize)
+  listSizeAccess v = castObj (cast int) (objAccess v listSize)
 
   listIndexExists v i = listSizeAccess v ?> i
   argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
@@ -833,8 +832,8 @@ instance Selector CppSrcCode where
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT _ = liftA2 fd targT (fmap castDocD targT)
-  castListToInt = cast int (listType static_ int)
+  cast targT = liftA2 fd targT (fmap castDocD targT)
+  castListToInt = cast int
   get n t = func (getterName n) t []
   set n v = func (setterName n) (fmap valType v) [v]
 
@@ -851,8 +850,8 @@ instance SelectorFunction CppSrcCode where
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 cppListSetDoc i v)
 
-  listAccessEnum et t v = listAccess t (castObj (cast int et) v)
-  listSetEnum t i = listSet (castObj (cast int t) i)
+  listAccessEnum _ t v = listAccess t (castObj (cast int) v)
+  listSetEnum _ i = listSet (castObj (cast int) i)
 
   at t l = listAccess t (var l int) 
 
@@ -1340,7 +1339,7 @@ instance Selector CppHdrCode where
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
   func _ _ _ = liftA2 fd void (return empty)
-  cast _ _ = liftA2 fd void (return empty)
+  cast _ = liftA2 fd void (return empty)
   castListToInt = liftA2 fd void (return empty)
   get _ _ = liftA2 fd void (return empty)
   set _ _ = liftA2 fd void (return empty)

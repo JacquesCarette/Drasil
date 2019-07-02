@@ -295,8 +295,7 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   type Function repr
   func           :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Function repr)
-  cast           :: repr (StateType repr) -> repr (StateType repr) -> 
-    repr (Function repr)
+  cast           :: repr (StateType repr) -> repr (Function repr)
   castListToInt  :: repr (Function repr)
   get            :: Label -> repr (StateType repr) -> repr (Function repr)
   set            :: Label -> repr (Value repr) -> repr (Function repr)

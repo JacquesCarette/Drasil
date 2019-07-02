@@ -912,7 +912,7 @@ readData ddef = do
         lineData s (Repeat p Nothing) = do
           pat <- patternData s p v_j
           return $ clearTemps s p ++ 
-            [forRange l_j (litInt 0) (castObj (cast int float)
+            [forRange l_j (litInt 0) (castObj (cast int)
               (listSizeAccess v_linetokens #/ litInt (toInteger $ length p))) 
               (litInt 1) ( bodyStatements pat )] ++ 
             appendTemps s p
@@ -1006,7 +1006,7 @@ getFileInput _ = error "No getFileInput function for the given type"
 getCastFunc :: (RenderSym repr) => C.CodeType -> repr (Value repr) ->
    repr (Value repr)
 getCastFunc C.Float = castStrToFloat
-getCastFunc t = castObj (cast (convType t) string)
+getCastFunc t = castObj (cast $ convType t)
 
 getListType :: C.CodeType -> Integer -> C.CodeType
 getListType _ 0 = error "No index given"

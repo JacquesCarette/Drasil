@@ -323,8 +323,8 @@ instance Selector CSharpCode where
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT _ = liftA2 fd targT (fmap castDocD targT)
-  castListToInt = cast int (listType static_ int)
+  cast targT = liftA2 fd targT (fmap castDocD targT)
+  castListToInt = cast int
   get n t = func (getterName n) t []
   set n v = func (setterName n) (fmap valType v) [v]
 
@@ -340,8 +340,8 @@ instance SelectorFunction CSharpCode where
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 listSetDocD i v)
 
-  listAccessEnum et t v = listAccess t (castObj (cast int et) v)
-  listSetEnum t i = listSet (castObj (cast int t) i)
+  listAccessEnum _ t v = listAccess t (castObj (cast int) v)
+  listSetEnum _ i = listSet (castObj (cast int) i)
 
   at t l = listAccess t (var l int)
 

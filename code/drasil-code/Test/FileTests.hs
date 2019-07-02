@@ -17,7 +17,7 @@ writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [
   varDecDef "e" int (litInt 5),
   varDec $ var "f" float,
-  var "f" float &= castObj (cast float int) (var "e" int),
+  var "f" float &= castObj (cast float) (var "e" int),
   varDec $ var "fileToWrite" outfile,
 
   openFileW (var "fileToWrite" outfile) (litString "testText.txt"),

@@ -327,7 +327,7 @@ instance Selector JavaCode where
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT _ = liftA2 fd targT (fmap castDocD targT)
+  cast targT = liftA2 fd targT (fmap castDocD targT)
   castListToInt = func "ordinal" int []
   get n t = func (getterName n) t []
   set n v = func (setterName n) (fmap valType v) [v]
@@ -343,8 +343,8 @@ instance SelectorFunction JavaCode where
   listAccess t i = func "get" t [i]
   listSet i v = func "set" (listType static_ $ fmap valType v) [i, v]
 
-  listAccessEnum et t v = listAccess t (castObj (cast int et) v)
-  listSetEnum t i = listSet (castObj (cast int t) i)
+  listAccessEnum _ t v = listAccess t (castObj (cast int) v)
+  listSetEnum _ i = listSet (castObj (cast int) i)
 
   at t l = listAccess t (var l int)
 
@@ -660,7 +660,7 @@ jListIndexExists greater lst index = parens (valDoc lst <> text ".length" <+>
 jAssignFromArray :: Int -> [JavaCode (Value JavaCode)] -> 
   [JavaCode (Statement JavaCode)]
 jAssignFromArray _ [] = []
-jAssignFromArray c (v:vs) = (v &= castObj (cast (fmap valType v) jArrayType)
+jAssignFromArray c (v:vs) = (v &= castObj (cast $ fmap valType v)
   (var ("outputs[" ++ show c ++ "]") (fmap valType v))) : jAssignFromArray (c+1) vs
 
 jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 

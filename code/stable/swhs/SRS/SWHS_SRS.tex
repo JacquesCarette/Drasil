@@ -379,7 +379,7 @@ This section focuses on the general equations and laws that SWHS is based on.
 Label & Conservation of thermal energy
 \\ \midrule \\
 Equation & \begin{displaymath}
-           -∇\cdot{}\mathbf{q}+g=ρ C \frac{\partial{}\,T}{\partial{}\,t}
+           -∇\cdot{}\mathbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -447,7 +447,7 @@ RefBy & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} and \hyperref[IM:heatEInPCM]{IM
 Label & Latent heat energy
 \\ \midrule \\
 Equation & \begin{displaymath}
-           Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(τ\right)}{d\,τ}}\,dτ
+           Q\left(t\right)=\int_{0}^{t}{\frac{\,dQ\left(τ\right)}{\,dτ}}\,dτ
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -456,7 +456,7 @@ Description & \begin{symbDescription}
               \item{$τ$ is the dummy variable for integration over time (s)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(τ\right)}{d\,τ}}\,dτ$ is the rate of change of $Q$ with respect to time $τ$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{DD: htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
+Notes & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{\,dQ\left(τ\right)}{\,dτ}}\,dτ$ is the rate of change of $Q$ with respect to time $τ$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{DD: htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
 \\ \midrule \\
 Source & \hyperref{http://en.wikipedia.org/wiki/Latent_heat}{}{}{Definition of Latent Heat}
 \\ \midrule \\
@@ -507,7 +507,7 @@ RefBy &
 Label & Simplified rate of change of temperature
 \\ \midrule \\
 Equation & \begin{displaymath}
-           m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+           m C \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -533,23 +533,23 @@ RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp}, \hyperref[IM:eBalanceOnWtr]{
 Detailed derivation of simplified rate of change of temperature :
 Integrating \hyperref[TM:consThermE]{TM: consThermE} over a volume ($V$), we have:
 \begin{displaymath}
--\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
+-\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
 \begin{displaymath}
--\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
+-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 \begin{displaymath}
-{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
+{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
 Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. The integral over the surface could be simplified because the thermal flux is assumed constant over ${A_{in}}$ and ${A_{out}}$ and $0$ on all other surfaces. Outward flux is considered positive. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}, \hyperref[assumpDWPCoV]{A: Density-Water-PCM-Constant-over-Volume}, and \hyperref[assumpSHECov]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
 \begin{displaymath}
-ρ C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+ρ C V \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{displaymath}
 Using the fact that $ρ$=$m$/$V$, (2) can be written as:
 \begin{displaymath}
-m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+m C \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -772,7 +772,7 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)+η \left({T_{P}}\left(t\right)-{T_{W}}\left(t\right)\right)\right)
+           \frac{\,d{T_{W}}}{\,dt}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)+η \left({T_{P}}\left(t\right)-{T_{W}}\left(t\right)\right)\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -794,31 +794,31 @@ RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[out
 Derivation of the energy balance on water:
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity, ${C_{W}}$. Heat transfer occurs in the water from the heating coil as ${q_{C}}$ (\hyperref[DD:htFluxC]{DD: htFluxC})  and from the water into the PCM as ${q_{P}}$ (\hyperref[DD:htFluxP]{DD: htFluxP}), over areas ${A_{C}}$ and ${A_{P}}$, respectively. The thermal flux is constant over ${A_{C}}$, since the temperature of the heating coil is assumed to not vary along its length (\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length}), and the thermal flux is constant over ${A_{P}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 \begin{displaymath}
-{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={q_{C}} {A_{C}}-{q_{P}} {A_{P}}
+{m_{W}} {C_{W}} \frac{\,d{T_{W}}}{\,dt}={q_{C}} {A_{C}}-{q_{P}} {A_{P}}
 \end{displaymath}
 Using \hyperref[DD:htFluxC]{DD: htFluxC} and \hyperref[DD:htFluxP]{DD: htFluxP} for ${q_{C}}$ and ${q_{P}}$ respectively, this can be written as:
 \begin{displaymath}
-{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)-{h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
+{m_{W}} {C_{W}} \frac{\,d{T_{W}}}{\,dt}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)-{h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
 \end{displaymath}
 Dividing (3) by ${m_{W}}$${C_{W}}$, we obtain:
 \begin{displaymath}
-\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)-\frac{{h_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{W}}-{T_{P}}\right)
+\frac{\,d{T_{W}}}{\,dt}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)-\frac{{h_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{W}}-{T_{P}}\right)
 \end{displaymath}
 Factoring the negative sign out of the second term of the RHS of Equation (4) and multiplying it by ${h_{C}}$ ${A_{C}}$ / ${h_{C}}$ ${A_{C}}$ yields:
 \begin{displaymath}
-\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{C}} {A_{C}}}{{h_{C}} {A_{C}}} \frac{{h_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
+\frac{\,d{T_{W}}}{\,dt}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{C}} {A_{C}}}{{h_{C}} {A_{C}}} \frac{{h_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{displaymath}
 Which simplifies to:
 \begin{displaymath}
-\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}} \frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
+\frac{\,d{T_{W}}}{\,dt}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}} \frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{displaymath}
 Setting ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:htFusion]{DD: htFusion}) and $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:meltFrac]{DD: meltFrac}), Equation (5) can be written as:
 \begin{displaymath}
-\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{η}{{τ_{W}}} \left({T_{P}}-{T_{W}}\right)
+\frac{\,d{T_{W}}}{\,dt}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{η}{{τ_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{displaymath}
 Finally, factoring out $\frac{1}{{τ_{W}}}$ , we are left with the governing ODE for (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}):
 \begin{displaymath}
-\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}+η \left({T_{P}}-{T_{W}}\right)\right)
+\frac{\,d{T_{W}}}{\,dt}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}+η \left({T_{P}}-{T_{W}}\right)\right)
 \end{displaymath}
 \par~
 
@@ -843,7 +843,7 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \frac{d\,{T_{P}}}{d\,t}=\begin{cases}
+           \frac{\,d{T_{P}}}{\,dt}=\begin{cases}
 \frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}<{{T_{melt}}^{P}}\\
 \frac{1}{{{τ_{P}}^{L}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}>{{T_{melt}}^{P}}\\
 0, & {T_{P}}={{T_{melt}}^{P}}\\
@@ -871,19 +871,19 @@ RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[unl
 Detailed derivation of the energy balance on the PCM during  sensible heating phase:
 To find the rate of change of ${T_{P}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, ${V_{P}}$. The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{P}}$ and the specific heat capacity of PCM as a solid is ${{C_{P}}^{S}}$. The heat flux into the PCM from water is ${q_{P}}$ over phase change material surface area ${A_{P}}$. There is no heat flux output. Assuming no volumetric heat generation per unit volume (\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 \begin{displaymath}
-{m_{P}} {{C_{P}}^{S}} \frac{d\,{T_{P}}}{d\,t}={q_{P}} {A_{P}}
+{m_{P}} {{C_{P}}^{S}} \frac{\,d{T_{P}}}{\,dt}={q_{P}} {A_{P}}
 \end{displaymath}
 Using \hyperref[DD:htFluxP]{DD: htFluxP} for ${q_{P}}$, this equation can be written as:
 \begin{displaymath}
-{m_{P}} {{C_{P}}^{S}} \frac{d\,{T_{P}}}{d\,t}={h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
+{m_{P}} {{C_{P}}^{S}} \frac{\,d{T_{P}}}{\,dt}={h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
 \end{displaymath}
 Dividing by ${m_{P}}$ ${{C_{P}}^{S}}$ we obtain:
 \begin{displaymath}
-\frac{d\,{T_{P}}}{d\,t}=\frac{{h_{P}} {A_{P}}}{{m_{P}} {{C_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
+\frac{\,d{T_{P}}}{\,dt}=\frac{{h_{P}} {A_{P}}}{{m_{P}} {{C_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{displaymath}
 Setting ${{τ_{P}}^{S}}$ = ${m_{P}}$ ${{C_{P}}^{S}}$ / ${h_{P}}$ ${A_{P}}$ , this can be written as:
 \begin{displaymath}
-\frac{d\,{T_{P}}}{d\,t}=\frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
+\frac{\,d{T_{P}}}{\,dt}=\frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{displaymath}
 Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${{C_{P}}^{S}}$ is replaced by ${{C_{P}}^{L}}$, and thus ${{τ_{P}}^{S}}$ is replaced by ${{τ_{P}}^{L}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (\hyperref[assumpVCMPN]{A: Volume-Change-Melting-PCM-Negligible}).
 In the case where ${T_{P}}={{T_{melt}}^{P}}$ and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d ${T_{P}}$ / d $t$ = 0.

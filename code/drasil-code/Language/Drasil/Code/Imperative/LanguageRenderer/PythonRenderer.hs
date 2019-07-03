@@ -17,9 +17,9 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (
-  fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc,
-  intTypeDocD, floatTypeDocD, typeDocD, constructDocD, paramListDocD, 
+import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc', 
+  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
+  floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, 
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
   mkStNoEnd, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', 
@@ -128,7 +128,7 @@ instance StateTypeSym PythonCode where
   listType _ t = liftA2 td (fmap (List . cType) t) (return $ brackets empty)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
-  enumType t = return $ typeDocD t
+  enumType t = return $ enumTypeDocD t
   iterator _ = error "Iterator-type variables do not exist in Python"
   void = return $ td Void (text "NoneType")
 

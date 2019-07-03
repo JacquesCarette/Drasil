@@ -23,10 +23,10 @@ import Language.Drasil.Code.Imperative.Build.AST (includeExt,
 import Language.Drasil.Code.Imperative.LanguageRenderer ( 
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
-  boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, voidDocD, 
-  constructDocD, stateParamDocD, paramListDocD, methodListDocD, stateVarDocD, 
-  stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
-  stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD,
+  boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
+  voidDocD, constructDocD, stateParamDocD, paramListDocD, methodListDocD, 
+  stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, 
+  whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD,
   varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
   commentDocD, mkSt, mkStNoEnd, notOpDocD, negateOpDocD, unExpr, typeUnExpr, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -142,7 +142,7 @@ instance StateTypeSym JavaCode where
   listType p st = liftA2 jListType st (list p)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
-  enumType t = return $ typeDocD t
+  enumType t = return $ enumTypeDocD t
   iterator _ = error "Iterator-type variables do not exist in Java"
   void = return voidDocD
 

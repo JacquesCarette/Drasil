@@ -10,24 +10,24 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
-  charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
-  voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
-  methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, 
-  switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, assignDocD, 
-  multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', 
-  varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, 
-  returnDocD, commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd, stratDocD, 
-  notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
-  absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
-  sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
-  asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', 
-  unOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, 
-  binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, litTrueD, 
-  litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
-  selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
-  extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
+  charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, 
+  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, 
+  methodDocD, methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, 
+  ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, 
+  assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, 
+  plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, 
+  statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd,
+  stratDocD, notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', 
+  absOpDocD, absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, 
+  expOpDocD', sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, 
+  tanOpDocD', asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, 
+  atanOpDocD', unOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, 
+  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
+  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, 
+  orOpDocD, binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, 
+  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
+  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
+  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
@@ -209,6 +209,9 @@ fileTypeDocD = td File (text "File")
 
 typeDocD :: Label -> TypeData
 typeDocD t = td (Object t) (text t)
+
+enumTypeDocD :: Label -> TypeData
+enumTypeDocD t = td (Enum t) (text t)
 
 listTypeDocD :: TypeData -> Doc -> TypeData
 listTypeDocD t lst = td (List (cType t)) (lst <> angles (typeDoc t))

@@ -30,10 +30,9 @@ module Drasil.DocLang (
   -- Sections.TraceabilityMandGs
   traceMatStandard,
   -- ExtractDocDesc
-  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
+  getDocDesc, egetDocDesc, ciGetDocDesc,
   -- Tracetable
-  getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD,
-  getTraceMapFromIM, getSCSSub, generateTraceMap',
+  generateTraceMap,
  -- Labels
   solutionLabel, characteristicsLabel
 ) where 
@@ -65,7 +64,6 @@ import Drasil.Sections.SpecificSystemDescription (dataConstraintUncertainty,
 --import Drasil.Sections.TableOfUnits
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc)
-import Drasil.TraceTable (generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
-    getTraceMapFromDD, getTraceMapFromIM, getSCSSub, generateTraceMap')
+import Drasil.TraceTable (generateTraceMap)
 -- Commented out modules aren't used - uncomment if this changes
 import Drasil.DocumentLanguage.Labels (solutionLabel, characteristicsLabel)

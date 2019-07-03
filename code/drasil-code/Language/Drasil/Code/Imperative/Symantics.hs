@@ -501,8 +501,6 @@ class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) =>
   privMVar :: Int -> repr (Value repr) -> repr (StateVar repr)
   pubMVar  :: Int -> repr (Value repr) -> repr (StateVar repr)
   pubGVar  :: Int -> repr (Value repr) -> repr (StateVar repr)
-  listStateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) -> 
-    repr (Value repr) -> repr (StateVar repr)
 
 class (StateVarSym repr, MethodSym repr) => ClassSym repr 
   where

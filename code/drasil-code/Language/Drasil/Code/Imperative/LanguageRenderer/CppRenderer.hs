@@ -511,8 +511,6 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   privMVar del v = pair (privMVar del $ pfst v) (privMVar del $ psnd v)
   pubMVar del v = pair (pubMVar del $ pfst v) (pubMVar del $ psnd v)
   pubGVar del v = pair (pubGVar del $ pfst v) (pubGVar del $ psnd v)
-  listStateVar del s p v = pair (listStateVar del (pfst s) (pfst p) 
-    (pfst v)) (listStateVar del (psnd s) (psnd p) (psnd v))
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   -- Bool is True if the class is a main class, False otherwise
@@ -1011,18 +1009,10 @@ instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
   stateVar del s p v = liftA3 svd (fmap snd s) (liftA4 stateVarDocD 
     (fst <$> includeScope s) p v endStatement) (if del < alwaysDel then
-    return (mkStNoEnd empty) else free v)
+    return (mkStNoEnd empty) else cppDestruct v)
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
-  listStateVar del s p v = 
-    let i = "i"
-        guard = var i int ?< (v $. listSize)
-        loopBody = oneLiner $ free (v $. at (valueType v) i)
-        initv = (var i int &= litInt 0)
-        deleteLoop = for initv guard (var i int &++) loopBody
-    in liftA3 svd (fmap snd s) (stVarDoc <$> stateVar del s p v) 
-      (if del < alwaysDel then return (mkStNoEnd empty) else deleteLoop)
 
 instance ClassSym CppSrcCode where
   -- Bool is True if the class is a main class, False otherwise
@@ -1462,7 +1452,6 @@ instance StateVarSym CppHdrCode where
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
-  listStateVar = stateVar
 
 instance ClassSym CppHdrCode where
   -- Bool is True if the class is a main class, False otherwise
@@ -1649,6 +1638,18 @@ cppMainMethod t b bStart bEnd = vcat [
   blank,
   indent $ text "return 0;",
   bEnd]
+
+cppDestruct :: CppSrcCode (Value CppSrcCode) -> 
+  CppSrcCode (Statement CppSrcCode)
+cppDestruct v = cppDestruct' (getType $ valueType v)
+  where cppDestruct' (List _) = deleteLoop
+        cppDestruct' _ = free v
+        i = "i"
+        v_i = var i int
+        guard = v_i ?< (v $. listSize)
+        loopBody = oneLiner $ free (v $. at (valueType v) i)
+        initv = v_i &= litInt 0
+        deleteLoop = for initv guard (v_i &++) loopBody
 
 cpphVarsFuncsList :: ScopeTag -> [StateVarData] -> [MethodData] -> Doc
 cpphVarsFuncsList st vs fs = 

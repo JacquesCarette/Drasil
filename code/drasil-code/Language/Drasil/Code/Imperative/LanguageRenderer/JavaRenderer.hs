@@ -517,7 +517,6 @@ instance StateVarSym JavaCode where
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
-  listStateVar = stateVar
 
 instance ClassSym JavaCode where
   -- Bool is True if the method is a main method, False otherwise

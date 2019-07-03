@@ -478,7 +478,6 @@ instance StateVarSym PythonCode where
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
-  listStateVar = stateVar
 
 instance ClassSym PythonCode where
   type Class PythonCode = (Doc, Bool)

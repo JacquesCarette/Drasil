@@ -501,7 +501,6 @@ instance StateVarSym CSharpCode where
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
-  listStateVar = stateVar
 
 instance ClassSym CSharpCode where
   -- Bool is True if the method is a main method, False otherwise

@@ -331,7 +331,7 @@ instance FunctionSym CSharpCode where
   iterEnd _ = error "Attempt to use iterEnd in C#, but C# has no iterators"
 
 instance SelectorFunction CSharpCode where
-  listAccess t v = liftA2 fd t (fmap listAccessDocD $ intValue v)
+  listAccess t v = liftA2 fd t (listAccessDocD <$> intValue v)
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 listSetDocD (intValue i) v)
 

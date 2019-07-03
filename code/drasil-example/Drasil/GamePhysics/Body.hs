@@ -54,8 +54,6 @@ import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 
-import qualified Data.Map as Map
-
 srs :: Document
 srs = mkDoc mkSRS for' sysInfo
 
@@ -146,14 +144,12 @@ everything = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units Map.empty
-  Map.empty dataDefns iModelsNew [] tModsNew
-  concIns sec []
+  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units dataDefns
+  iModelsNew [] tModsNew concIns sec []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
-  [] []
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration

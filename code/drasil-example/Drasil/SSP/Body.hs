@@ -9,7 +9,6 @@ import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
 import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
-import qualified Data.Map as Map
 import Utils.Drasil
 
 import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
@@ -160,14 +159,12 @@ symMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw thisSi)
-  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) thisSi Map.empty
-  Map.empty dataDefns SSP.iMods generalDefinitions tMods concIns
-  sec labCon
+  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) thisSi dataDefns SSP.iMods
+  generalDefinitions tMods concIns sec labCon
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) Map.empty Map.empty
- [] [] [] [] [] [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

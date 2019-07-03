@@ -10,7 +10,6 @@ import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel)
 import Utils.Drasil
 
 import Control.Lens ((^.))
-import qualified Data.Map as Map
 
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   Field(..), Fields, LFunc(TermExcept), Literature(Doc', Lit), IntroSec(IntroProg),
@@ -108,13 +107,11 @@ symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (thisSi ++ [m_2, m_3]) Map.empty Map.empty dataDefs insModel genDefs theory
-  concIns sec labCon
+  (thisSi ++ [m_2, m_3]) dataDefs insModel genDefs theory concIns sec labCon
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
- [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

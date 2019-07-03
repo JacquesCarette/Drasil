@@ -9,7 +9,6 @@ import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
 import Theory.Drasil (DataDefinition, TheoryModel)
 import Utils.Drasil
 
-import qualified Data.Map as Map
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
@@ -210,13 +209,12 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans]
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
-  (map cw symbols ++ srsDomains) thisSi Map.empty Map.empty dataDefn NoPCM.iMods
-  genDefs theoreticalModels concIns sec labCon
+  (map cw symbols ++ srsDomains) thisSi dataDefn NoPCM.iMods genDefs
+  theoreticalModels concIns sec labCon
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
- [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration

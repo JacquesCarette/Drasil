@@ -84,7 +84,7 @@ helloIfBody = addComments "If body" (body [
     printLn (var "mySlicedList" (listType static_ float)),
     
     printStrLn "Type an int",
-    getIntInput (var "d" int),
+    getInput (var "d" int),
     printStrLn "Type another",
     discardInput],
   

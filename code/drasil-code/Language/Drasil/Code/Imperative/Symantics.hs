@@ -367,23 +367,11 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   printFileStr   :: repr (Value repr) -> String -> repr (Statement repr)
   printFileStrLn :: repr (Value repr) -> String -> repr (Statement repr)
 
-  getIntInput        :: repr (Value repr) -> repr (Statement repr)
-  getFloatInput      :: repr (Value repr) -> repr (Statement repr)
-  getBoolInput       :: repr (Value repr) -> repr (Statement repr)
-  getStringInput     :: repr (Value repr) -> repr (Statement repr)
-  getCharInput       :: repr (Value repr) -> repr (Statement repr)
-  discardInput       :: repr (Statement repr)
-  getIntFileInput    :: repr (Value repr) -> repr (Value repr) -> 
+  getInput         :: repr (Value repr) -> repr (Statement repr)
+  discardInput     :: repr (Statement repr)
+  getFileInput     :: repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)
-  getFloatFileInput  :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Statement repr)
-  getBoolFileInput   :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Statement repr)
-  getStringFileInput :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Statement repr)
-  getCharFileInput   :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Statement repr)
-  discardFileInput   :: repr (Value repr) -> repr (Statement repr)
+  discardFileInput :: repr (Value repr) -> repr (Statement repr)
 
   openFileR :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
   openFileW :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)

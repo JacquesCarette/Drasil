@@ -372,23 +372,10 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   printFileStrLn f s = pair (printFileStrLn (pfst f) s) (printFileStrLn (psnd f)
     s)
 
-  getIntInput v = pair (getIntInput $ pfst v) (getIntInput $ psnd v)
-  getFloatInput v = pair (getFloatInput $ pfst v) (getFloatInput $ psnd v)
-  getBoolInput v = pair (getBoolInput $ pfst v) (getBoolInput $ psnd v)
-  getStringInput v = pair (getStringInput $ pfst v) (getStringInput $ psnd v)
-  getCharInput v = pair (getCharInput $ pfst v) (getCharInput $ psnd v)
+  getInput v = pair (getInput $ pfst v) (getInput $ psnd v)
   discardInput = pair discardInput discardInput
-
-  getIntFileInput f v = pair (getIntFileInput (pfst f) (pfst v)) 
-    (getIntFileInput (psnd f) (psnd v))
-  getFloatFileInput f v = pair (getFloatFileInput (pfst f) (pfst v)) 
-    (getFloatFileInput (psnd f) (psnd v))
-  getBoolFileInput f v = pair (getBoolFileInput (pfst f) (pfst v)) 
-    (getBoolFileInput (psnd f) (psnd v))
-  getStringFileInput f v = pair (getStringFileInput (pfst f) (pfst v)) 
-    (getStringFileInput (psnd f) (psnd v))
-  getCharFileInput f v = pair (getCharFileInput (pfst f) (pfst v)) 
-    (getCharFileInput (psnd f) (psnd v))
+  getFileInput f v = pair (getFileInput (pfst f) (pfst v)) 
+    (getFileInput (psnd f) (psnd v))
   discardFileInput f = pair (discardFileInput $ pfst f) (discardFileInput $
     psnd f)
 
@@ -873,18 +860,9 @@ instance StatementSym CppSrcCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getIntInput v = mkSt <$> liftA3 cppInput v inputFunc endStatement
-  getFloatInput v = mkSt <$> liftA3 cppInput v inputFunc endStatement
-  getBoolInput v = mkSt <$> liftA3 cppInput v inputFunc endStatement
-  getStringInput v = mkSt <$> liftA3 cppInput v inputFunc endStatement
-  getCharInput v = mkSt <$> liftA3 cppInput v inputFunc endStatement
+  getInput v = mkSt <$> liftA3 cppInput v inputFunc endStatement
   discardInput = mkSt <$> fmap (cppDiscardInput "\\n") inputFunc
-
-  getIntFileInput f v = mkSt <$> liftA3 cppInput v f endStatement
-  getFloatFileInput f v = mkSt <$> liftA3 cppInput v f endStatement
-  getBoolFileInput f v = mkSt <$> liftA3 cppInput v f endStatement
-  getStringFileInput f v = mkSt <$> liftA3 cppInput v f endStatement
-  getCharFileInput f v = mkSt <$> liftA3 cppInput v f endStatement
+  getFileInput f v = mkSt <$> liftA3 cppInput v f endStatement
   discardFileInput f = mkSt <$> fmap (cppDiscardInput " ") f
 
   openFileR f n = mkSt <$> liftA2 (cppOpenFile "std::fstream::in") f n
@@ -1372,18 +1350,9 @@ instance StatementSym CppHdrCode where
   printFileStr _ _ = return (mkStNoEnd empty)
   printFileStrLn _ _ = return (mkStNoEnd empty)
 
-  getIntInput _ = return (mkStNoEnd empty)
-  getFloatInput _ = return (mkStNoEnd empty)
-  getBoolInput _ = return (mkStNoEnd empty)
-  getStringInput _ = return (mkStNoEnd empty)
-  getCharInput _ = return (mkStNoEnd empty)
+  getInput _ = return (mkStNoEnd empty)
   discardInput = return (mkStNoEnd empty)
-
-  getIntFileInput _ _ = return (mkStNoEnd empty)
-  getFloatFileInput _ _ = return (mkStNoEnd empty)
-  getBoolFileInput _ _ = return (mkStNoEnd empty)
-  getStringFileInput _ _ = return (mkStNoEnd empty)
-  getCharFileInput _ _ = return (mkStNoEnd empty)
+  getFileInput _ _ = return (mkStNoEnd empty)
   discardFileInput _ = return (mkStNoEnd empty)
 
   openFileR _ _ = return (mkStNoEnd empty)

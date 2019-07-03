@@ -377,25 +377,9 @@ instance StatementSym JavaCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getIntInput v = mkSt <$> liftA3 jInput' (return $ text "Integer.parseInt")
-    v inputFunc
-  getFloatInput v = mkSt <$> liftA3 jInput' (return $ 
-    text "Double.parseDouble") v inputFunc
-  getBoolInput v = mkSt <$> liftA3 jInput (return $ text "nextBoolean()") v 
-    inputFunc
-  getStringInput v = mkSt <$> liftA3 jInput (return $ text "nextLine()") v 
-    inputFunc
-  getCharInput _ = return (mkStNoEnd empty)
+  getInput v = mkSt <$> liftA2 jInput v inputFunc
   discardInput = mkSt <$> fmap jDiscardInput inputFunc
-  getIntFileInput f v = mkSt <$> liftA3 jInput' (return $ 
-    text "Integer.parseInt") v f
-  getFloatFileInput f v = mkSt <$> liftA3 jInput' (return $ 
-    text "Double.parseDouble") v f
-  getBoolFileInput f v = mkSt <$> liftA3 jInput (return $
-    text "nextBoolean()") v f
-  getStringFileInput f v = mkSt <$> liftA3 jInput (return $ 
-    text "nextLine()") v f
-  getCharFileInput _ _ = return (mkStNoEnd empty)
+  getFileInput f v = mkSt <$> liftA2 jInput v f
   discardFileInput f = mkSt <$> fmap jDiscardInput f
 
   openFileR f n = mkSt <$> liftA2 jOpenFileR f n
@@ -627,12 +611,16 @@ jTryCatch tb cb = vcat [
 jDiscardInput :: ValData -> Doc
 jDiscardInput inFn = valDoc inFn <> dot <> text "next()"
 
-jInput :: Doc -> ValData -> ValData -> Doc
-jInput it v inFn = valDoc v <+> equals <+> parens (valDoc inFn <> dot <> it)
-
-jInput' :: Doc -> ValData -> ValData -> Doc
-jInput' it v inFn = valDoc v <+> equals <+> it <> parens (valDoc inFn <> dot <> 
-  text "nextLine()")
+jInput :: ValData -> ValData -> Doc
+jInput v inFn = valDoc v <+> equals <+> jInput' (cType $ valType v) 
+  where jInput' Integer = text "Integer.parseInt" <> parens (valDoc inFn <> 
+          dot <> text "nextLine()")
+        jInput' Float = text "Double.parseDouble" <> parens (valDoc inFn <> 
+          dot <> text "nextLine()")
+        jInput' Boolean = valDoc inFn <> dot <> text "nextBoolean()"
+        jInput' String = valDoc inFn <> dot <> text "nextLine()"
+        jInput' Char = valDoc inFn <> dot <> text "next().charAt(0)"
+        jInput' _ = error "Attempt to read value of unreadable type"
 
 jOpenFileR :: ValData -> ValData -> Doc
 jOpenFileR f n = valDoc f <+> equals <+> new <+> text "Scanner" <> parens 

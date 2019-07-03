@@ -373,21 +373,9 @@ instance StatementSym CSharpCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getIntInput v = mkSt <$> liftA2 (csInput "Int32.Parse") v inputFunc
-  getFloatInput v = mkSt <$> liftA2 (csInput "Double.Parse") v inputFunc
-  getBoolInput _ = error "Boolean input not yet implemented for C#"
-  getStringInput v = mkSt <$> liftA2 (csInput "") v inputFunc
-  getCharInput _ = error "Char input not yet implemented for C#"
+  getInput v = mkSt <$> liftA2 csInput v inputFunc
   discardInput = mkSt <$> fmap csDiscardInput inputFunc
-
-  getIntFileInput f v = mkSt <$> liftA2 (csInput "Int32.Parse") v 
-    (fmap csFileInput f)
-  getFloatFileInput f v = mkSt <$> liftA2 (csInput "Double.Parse") v 
-    (fmap csFileInput f)
-  getBoolFileInput _ _ = error "Boolean input not yet implemented for C#"
-  getStringFileInput f v = mkSt <$> liftA2 (csInput "") v
-    (fmap csFileInput f)
-  getCharFileInput _ _ = error "Char input not yet implemented for C#"
+  getFileInput f v = mkSt <$> liftA2 csInput v (fmap csFileInput f)
   discardFileInput f = valState $ fmap csFileInput f
 
   openFileR f n = mkSt <$> liftA3 csOpenFileR f n infile
@@ -395,7 +383,7 @@ instance StatementSym CSharpCode where
   openFileA f n = mkSt <$> liftA4 csOpenFileWorA f n outfile litTrue
   closeFile f = valState $ objMethodCall void f "Close" []
 
-  getFileInputLine = getStringFileInput
+  getFileInputLine = getFileInput
   discardFileLine f = valState $ fmap csFileInput f
   stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic_ string) 
     [s $. func "Split" (listType static_ string) [litChar d]]
@@ -579,8 +567,15 @@ csTryCatch tb cb= vcat [
 csDiscardInput :: ValData -> Doc
 csDiscardInput = valDoc
 
-csInput :: Label -> ValData -> ValData -> Doc
-csInput it v inFn = valDoc v <+> equals <+> text it <> parens (valDoc inFn)
+csInput :: ValData -> ValData -> Doc
+csInput v inFn = valDoc v <+> equals <+> text (csInput' (cType $ valType v)) <> 
+  parens (valDoc inFn)
+  where csInput' Integer = "Int32.Parse"
+        csInput' Float = "Double.Parse"
+        csInput' Boolean = "Boolean.Parse"
+        csInput' String = ""
+        csInput' Char = "Char.Parse"
+        csInput' _ = error "Attempt to read value of unreadable type"
 
 csFileInput :: ValData -> ValData
 csFileInput f = vd (valName f) (valType f) (valDoc f <> dot <> text "ReadLine()")

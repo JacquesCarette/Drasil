@@ -5,8 +5,7 @@ module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
-import Language.Drasil.Code.Code as C (Code(..), CodeType(List, Char, Float, 
-  String, Boolean, Integer))
+import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -882,7 +881,7 @@ readData ddef = do
   where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Statement repr)]
         inData (Singleton v) = do
             vv <- variable (codeName v) (convType $ codeType v)
-            return [getFileInput (codeType v) v_infile vv]
+            return [getFileInput v_infile vv]
         inData JunkData = return [discardFileLine v_infile]
         inData (Line lp d) = do
           lnI <- lineData Nothing lp
@@ -991,15 +990,6 @@ readData ddef = do
         v_i = var l_i int
         l_j = "j"
         v_j = var l_j int
-
-getFileInput :: (RenderSym repr) => C.CodeType -> (repr (Value repr) -> repr
-  (Value repr) -> repr (Statement repr))
-getFileInput C.Boolean = getBoolFileInput
-getFileInput C.Integer = getIntFileInput
-getFileInput C.Float = getFloatFileInput
-getFileInput C.Char = getCharFileInput
-getFileInput C.String = getStringFileInput
-getFileInput _ = error "No getFileInput function for the given type"
 
 getListType :: C.CodeType -> Integer -> C.CodeType
 getListType _ 0 = error "No index given"

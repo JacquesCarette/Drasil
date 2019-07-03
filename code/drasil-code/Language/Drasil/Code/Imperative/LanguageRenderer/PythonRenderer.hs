@@ -352,21 +352,9 @@ instance StatementSym PythonCode where
   printFileStr f s = printFile f (litString s)
   printFileStrLn f s = printFileLn f (litString s)
 
-  getIntInput v = v &= funcApp "int" int [inputFunc]
-  getFloatInput v = v &= funcApp "float" float [inputFunc]
-  getBoolInput v = v &= inputFunc ?!= litString "0"
-  getStringInput v = v &= objMethodCall string inputFunc "rstrip" []
-  getCharInput v = v &= inputFunc
+  getInput = pyInput inputFunc
   discardInput = valState inputFunc
-  getIntFileInput f v = v &= funcApp "int" int [objMethodCall string f 
-    "readline" []]
-  getFloatFileInput f v = v &= funcApp "float" float [objMethodCall string f
-    "readline" []]
-  getBoolFileInput f v =  v &= (objMethodCall string f "readline" [] ?!= 
-    litString "0")
-  getStringFileInput f v = v &= objMethodCall string (objMethodCall string f 
-    "readline" []) "rstrip" []
-  getCharFileInput f v = v &= objMethodCall string f "readline" []
+  getFileInput f = pyInput (objMethodCall string f "readline" [])
   discardFileInput f = valState (objMethodCall string f "readline" [])
 
   openFileR f n = f &= funcApp "open" infile [n, litString "r"]
@@ -374,7 +362,7 @@ instance StatementSym PythonCode where
   openFileA f n = f &= funcApp "open" outfile [n, litString "a"]
   closeFile f = valState $ objMethodCall void f "close" []
 
-  getFileInputLine f v = v &= objMethodCall string f "readline" []
+  getFileInputLine = getFileInput
   discardFileLine f = valState $ objMethodCall string f "readline" []
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
     (listType static_ string) [litString [d]]))  
@@ -574,6 +562,16 @@ pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr)
 pyOut newLn printFn v f = pyOut' (getType $ valueType v)
   where pyOut' (List _) = printSt newLn printFn v f
         pyOut' _ = outDoc newLn printFn v f
+
+pyInput :: PythonCode (Value PythonCode) -> PythonCode (Value PythonCode) -> 
+  PythonCode (Statement PythonCode)
+pyInput inSrc v = v &= pyInput' (getType $ valueType v)
+  where pyInput' Integer = funcApp "int" int [inSrc]
+        pyInput' Float = funcApp "float" float [inSrc]
+        pyInput' Boolean = inSrc ?!= litString "0"
+        pyInput' String = objMethodCall string inSrc "rstrip" []
+        pyInput' Char = inSrc
+        pyInput' _ = error "Attempt to read a value of unreadable type"
 
 pyThrow ::  ValData -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valDoc errMsg)

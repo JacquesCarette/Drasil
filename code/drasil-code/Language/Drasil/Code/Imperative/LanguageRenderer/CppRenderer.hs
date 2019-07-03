@@ -725,8 +725,8 @@ instance ValueSym CppSrcCode where
   extVar _ = var
   self l = liftA2 (vd (Just "this")) (obj l) (return selfDocD)
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n+1)) argsList)
-  enumElement en e = liftA2 (vd (Just e)) (obj en) (return $ text e)
-  enumVar e en = var e (obj en)
+  enumElement en e = liftA2 (vd (Just e)) (enumType en) (return $ text e)
+  enumVar e en = var e (enumType en)
   objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
     (fmap valType v) (liftA2 objVarDocD o v)
   objVarSelf _ = var

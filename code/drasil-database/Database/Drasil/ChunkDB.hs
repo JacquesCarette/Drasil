@@ -156,11 +156,11 @@ makeLenses ''ChunkDB
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
 cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
-    [q] -> [t] -> [c] -> [u] -> TraceMap -> RefbyMap ->
-    [DataDefinition] -> [InstanceModel] -> [GenDefn] ->  [TheoryModel] ->
-    [ConceptInstance] -> [Section] -> [LabelledContent] -> ChunkDB
-cdb s t c u tc rfm d ins gd tm ci sec lc = CDB (symbolMap s) (termMap t)
-  (conceptMap c) (unitMap u) tc rfm (idMap d) (idMap ins) (idMap gd) (idMap tm)
+    [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
+    [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] ->
+    [LabelledContent] -> ChunkDB
+cdb s t c u d ins gd tm ci sec lc = CDB (symbolMap s) (termMap t)
+  (conceptMap c) (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
   (idMap ci) (idMap sec) (idMap lc)
 
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]

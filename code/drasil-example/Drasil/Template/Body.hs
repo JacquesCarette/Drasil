@@ -13,8 +13,6 @@ import Drasil.DocLang (DocDesc, mkDoc)
 
 import Data.Drasil.Concepts.Documentation as Doc (srs)
 
-import qualified Data.Map as Map
-
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
 
@@ -42,15 +40,15 @@ systInfo = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb ([] :: [QuantityDict]) [nw example] ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) Map.empty Map.empty ([] :: [DataDefinition])
-  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
-  ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
+  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
+  ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) Map.empty Map.empty ([] :: [DataDefinition])
-  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
-  ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
+  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
+  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
+  ([] :: [Section]) ([] :: [LabelledContent])
 
 refDB :: ReferenceDB
 refDB = rdb [] []

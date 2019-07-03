@@ -1,6 +1,5 @@
 module Drasil.HGHC.HGHC (srsBody, thisSI, allSymbols, printSetting) where
 
-import qualified Data.Map as Map
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), DocDesc, 
@@ -45,12 +44,11 @@ allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon')
  ([] :: [ConceptChunk])-- FIXME: Fill in concepts
-  siUnits Map.empty Map.empty [] [] [] [] [] [] []
+  siUnits dataDefs [] [] [] [] [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) Map.empty Map.empty []
-           [] [] [] [] [] []
+           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 printSetting :: PrintingInformation
 printSetting = PI allSymbols defaultConfiguration

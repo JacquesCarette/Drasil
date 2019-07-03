@@ -1,7 +1,6 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-import qualified Data.Map as Map
 import Language.Drasil hiding (organization, section, sec)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -77,8 +76,8 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]) Map.empty Map.empty dataDefns iMods []
-  tMods concIns sec labelledCon
+  ++ map unitWrapper [pascal, newton]) dataDefns iMods [] tMods concIns sec
+  labelledCon
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
@@ -94,8 +93,7 @@ sec = extractSection srs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
- [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

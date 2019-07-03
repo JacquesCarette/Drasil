@@ -34,8 +34,6 @@ import Data.Drasil.Quantities.Physics (iVel, physicscon)
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
 
-import qualified Data.Map as Map
-
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, projectileTitle, landingPos,
   launcher, projectile, target)
@@ -132,13 +130,11 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
     map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : srsDomains)
-  (map unitWrapper [metre, radian, second]) Map.empty Map.empty dataDefns iMods genDefns tMods
-  concIns [] []
+  (map unitWrapper [metre, radian, second]) dataDefns iMods genDefns tMods concIns [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
-  (cw pi_ : srsDomains) ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] []
-  [] [] []
+  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

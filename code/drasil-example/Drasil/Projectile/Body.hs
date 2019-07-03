@@ -2,10 +2,10 @@ module Drasil.Projectile.Body where
 
 import Language.Drasil hiding (Vector)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
-  TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors, _concepts,
-  _constants, _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind,
-  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
+  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
+  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
+  _sysinfodb, _usedinfodb)
 import Utils.Drasil
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
@@ -16,8 +16,8 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
   TSIntro(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
-  dataConstraintUncertainty, generateTraceMap, generateTraceMap', inDataConstTbl,
-  intro, mkDoc, outDataConstTbl, traceMatStandard, tsymb)
+  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
+  traceMatStandard, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -132,16 +132,13 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
     map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : srsDomains)
-  (map unitWrapper [metre, radian, second]) label refBy dataDefns iMods genDefns tMods
-  concIns ([] :: [Section]) ([] :: [LabelledContent])
+  (map unitWrapper [metre, radian, second]) Map.empty Map.empty dataDefns iMods genDefns tMods
+  concIns [] []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols ++ map nw units)
-  (cw pi_ : srsDomains) units label refBy dataDefns iMods genDefns tMods
-  concIns ([] :: [Section]) ([] :: [LabelledContent])
-
-units :: [UnitDefn]
-units = collectUnits symbMap symbols 
+usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
+  (cw pi_ : srsDomains) ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] []
+  [] [] []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -151,12 +148,6 @@ refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
-
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
- 
-refBy :: RefbyMap
-refBy = generateRefbyMap label
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration

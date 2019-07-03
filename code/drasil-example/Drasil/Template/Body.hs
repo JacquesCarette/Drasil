@@ -2,14 +2,14 @@ module Drasil.Template.Body where
 
 import Language.Drasil
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
-  TraceMap, cdb, generateRefbyMap, rdb, refdb, _authors, _concepts, _constants,
-  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb)
+import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
+  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
+  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
+  _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 
-import Drasil.DocLang (DocDesc, generateTraceMap, generateTraceMap', mkDoc)
+import Drasil.DocLang (DocDesc, mkDoc)
 
 import Data.Drasil.Concepts.Documentation as Doc (srs)
 
@@ -41,23 +41,19 @@ systInfo = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) [nw example] ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
-  ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
+symbMap = cdb ([] :: [QuantityDict]) [nw example] ([] :: [ConceptChunk])
+  ([] :: [UnitDefn]) Map.empty Map.empty ([] :: [DataDefinition])
+  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
   ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk]) ([] :: [UnitDefn]) label refBy
-  ([] :: [DataDefinition]) ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
+usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
+  ([] :: [UnitDefn]) Map.empty Map.empty ([] :: [DataDefinition])
+  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
   ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
 
 refDB :: ReferenceDB
 refDB = rdb [] []
-
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' []
- 
-refBy :: RefbyMap
-refBy = generateRefbyMap label
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration

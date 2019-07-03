@@ -2,15 +2,15 @@ module Drasil.NoPCM.Body where
 
 import Language.Drasil hiding (section, sec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
-  SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
-  rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
-  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
+  SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
+  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
+  _quants, _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (DataDefinition, TheoryModel)
 import Utils.Drasil
 
 import qualified Data.Map as Map
+import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -49,10 +49,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
   ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty,
-  inDataConstTbl, intro, mkDoc, outDataConstTbl, tsymb,
-  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
-  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceMap', traceMatStandard)
+  inDataConstTbl, intro, mkDoc, outDataConstTbl, tsymb, traceMatStandard)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -84,9 +81,6 @@ import Drasil.NoPCM.Unitals (inputs, constrained, specParamValList)
 -- This defines the standard units used throughout the document
 thisSi :: [UnitDefn]
 thisSi = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
-
-checkSi :: [UnitDefn]
-checkSi = collectUnits symbMap symbTT 
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
@@ -146,7 +140,7 @@ mkSRS = [RefSec $ RefProg intro
       [ Assumptions assumptions
       , TMs [] (Label : stdFields) theoreticalModels
       , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
-      , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
+      , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefn ShowDerivation
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
         NoPCM.iMods ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
@@ -164,31 +158,13 @@ mkSRS = [RefSec $ RefProg intro
   AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]
 
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
- 
-refBy :: RefbyMap
-refBy = generateRefbyMap label
-
 dataDefn :: [DataDefinition]
-dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
-
-iMods :: [InstanceModel]
-iMods = getTraceMapFromIM $ getSCSSub mkSRS
-
-genDef :: [GenDefn]
-genDef = getTraceMapFromGD $ getSCSSub mkSRS
-
-theory :: [TheoryModel]
-theory = getTraceMapFromTM $ getSCSSub mkSRS
+dataDefn = [dd1HtFluxC]
 
 concIns :: [ConceptInstance]
 concIns =
  goals ++ funcReqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
  [likeChgTLH] ++ unlikelyChgs
-
-section :: [Section]
-section = sec
 
 labCon :: [LabelledContent]
 labCon = [inputInitQuantsTable, dataConstTable1]
@@ -204,7 +180,10 @@ si = SI {
   _sys = srsSWHS,
   _kind = Doc.srs,
   _authors = [thulasi],
-  _quants = symbTT,
+  -- FIXME: Everything after (and including) \\ should be removed when
+  -- #1658 is resolved. Basically, _quants is used here, but neither tankVol
+  -- or tau appear in the document and thus should not be displayed.
+  _quants = map qw symbols \\ map qw [tankVol, tau],
   _concepts = symbols,
   _definitions = [],
   _datadefs = [dd1HtFluxC],
@@ -229,23 +208,18 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
-  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans] ++ map nw checkSi
+  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans]
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
-  (map cw symbols ++ srsDomains)
-  thisSi label refBy dataDefn iMods genDef theory
-  concIns section labCon
+  (map cw symbols ++ srsDomains) thisSi Map.empty Map.empty dataDefn NoPCM.iMods
+  genDefs theoreticalModels concIns sec labCon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi label refBy
- dataDefn iMods genDef theory concIns
- section labCon
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
+ [] []
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
-
-symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symbMap
 
 --------------------------
 --Section 2 : INTRODUCTION

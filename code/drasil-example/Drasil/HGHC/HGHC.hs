@@ -10,7 +10,7 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     SSDSec(SSDProg))
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
-  collectUnits, rdb, refdb, _authors, _concepts, _constants, _constraints,
+  rdb, refdb, _authors, _concepts, _constants, _constraints,
   _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
@@ -41,9 +41,6 @@ thisSI = SI {
    refdb = rdb [] [] -- FIXME?
 }
 
-checkSi :: [UnitDefn] -- FIXME? Probably shouldn't be done here
-checkSi = collectUnits allSymbols symbols 
-
 allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon')
@@ -51,9 +48,9 @@ allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals
   siUnits Map.empty Map.empty [] [] [] [] [] [] []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw checkSi)
-           ([] :: [ConceptChunk]) checkSi Map.empty Map.empty [] [] [] []
-           [] [] []
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
+           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) Map.empty Map.empty []
+           [] [] [] [] [] []
 
 printSetting :: PrintingInformation
 printSetting = PI allSymbols defaultConfiguration

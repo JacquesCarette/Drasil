@@ -419,7 +419,6 @@ instance StatementSym JavaCode where
   continue = return (mkSt continueDocD)
 
   returnState v = mkSt <$> liftList returnDocD [v]
-  returnVar l t = mkSt <$> liftList returnDocD [var l t]
   multiReturn _ = error "Cannot return multiple values in Java"
 
   valState v = mkSt <$> fmap valDoc v
@@ -521,7 +520,7 @@ instance MethodSym JavaCode where
     (map stateParam ins) (liftA3 surroundBody decls b (multi (varDecDef outputs
         (var ("new Object[" ++ show (length outs) ++ "]") jArrayType)
       : assignArray 0 outs
-      ++ [returnVar "outputs" jArrayType])))
+      ++ [returnState outputs])))
       where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
               [JavaCode (Statement JavaCode)]
             assignArray _ [] = []

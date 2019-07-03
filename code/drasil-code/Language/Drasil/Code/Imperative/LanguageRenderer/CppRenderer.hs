@@ -417,7 +417,6 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   continue = pair continue continue
 
   returnState v = pair (returnState $ pfst v) (returnState $ psnd v)
-  returnVar l t = pair (returnVar l $ pfst t) (returnVar l $ psnd t)
   multiReturn vs = pair (multiReturn $ map pfst vs) (multiReturn $ map psnd vs)
 
   valState v = pair (valState $ pfst v) (valState $ psnd v)
@@ -928,7 +927,6 @@ instance StatementSym CppSrcCode where
   continue = return (mkSt continueDocD)
 
   returnState v = mkSt <$> liftList returnDocD [v]
-  returnVar l t = mkSt <$> liftList returnDocD [var l t]
   multiReturn _ = error "Cannot return multiple values in C++"
 
   valState v = mkSt <$> fmap valDoc v
@@ -1421,7 +1419,6 @@ instance StatementSym CppHdrCode where
   continue = return (mkStNoEnd empty)
 
   returnState _ = return (mkStNoEnd empty)
-  returnVar _ _ = return (mkStNoEnd empty)
   multiReturn _ = return (mkStNoEnd empty)
 
   valState _ = return (mkStNoEnd empty)

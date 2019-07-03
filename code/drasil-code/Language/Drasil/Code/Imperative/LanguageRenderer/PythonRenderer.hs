@@ -389,7 +389,6 @@ instance StatementSym PythonCode where
   continue = return (mkStNoEnd continueDocD)
 
   returnState v = mkStNoEnd <$> liftList returnDocD [v]
-  returnVar l t = mkStNoEnd <$> liftList returnDocD [var l t]
   multiReturn [] = error "Attempt to write return statement with no return variables"
   multiReturn vs = mkStNoEnd <$> liftList returnDocD vs
 

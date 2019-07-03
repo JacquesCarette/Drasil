@@ -408,7 +408,6 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   continue :: repr (Statement repr)
 
   returnState :: repr (Value repr) -> repr (Statement repr)
-  returnVar :: Label -> repr (StateType repr) -> repr (Statement repr)
   multiReturn :: [repr (Value repr)] -> repr (Statement repr)
 
   valState :: repr (Value repr) -> repr (Statement repr)

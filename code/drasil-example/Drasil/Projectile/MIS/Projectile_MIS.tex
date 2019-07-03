@@ -368,11 +368,11 @@ specification:
 \item Calculate the derived quantities ($p_{\text{land}}$, $\text{offset}$, and $
 \text{message}$) as follows:
 \begin{itemize}
-\item $p_{\text{land}} := \frac{2 v^2 sin(\theta) cos(\theta)}{9.8}$
+\item $p_{\text{land}} := \frac{2 v^2 sin(\theta) cos(\theta)}{g}$
 \item $\text{offset} := p_{\text{land}} - p_{\text{target}} $
 \item $\text{message} := $
 \begin{longtable*}[l]{l l} 
-$|\frac{\text{offset}}{p_{\text{target}}}| < 0.02$ & $\Rightarrow$ ``The target was hit."\\
+$|\frac{\text{offset}}{p_{\text{target}}}| < \epsilon$ & $\Rightarrow$ ``The target was hit."\\
 $\text{offset} < 0$ & $\Rightarrow$ ``The projectile fell short."\\
 $\text{True}$ & $\Rightarrow$ ``The projectile went long."\\
 \end{longtable*}
@@ -391,12 +391,12 @@ $\text{True}$ & $\Rightarrow$ ``The projectile went long."\\
 \end{itemize}
 \noindent \begin{longtable*}[l]{l l} 
 $\neg (0 < v)$ & $\Rightarrow$ InputError\\
-$\neg (0 < \text{offset})$ & $\Rightarrow$ InputError\\
+$\neg (0 < \theta < \frac{\pi}{2})$ & $\Rightarrow$ InputError\\
 $\neg (0 < p_{\text{target}})$ & $\Rightarrow$ InputError\\
 \end{longtable*}
 
-etc.  See Appendix (Section~\ref{Appendix}) for the complete list of exceptions 
-and associated error messages. \sam{I think the error messages should be more 
+See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and 
+associated error messages. \sam{I think the error messages should be more 
 descriptive, and be defined in the Appendix.}
 
 \subsection{Considerations}
@@ -962,32 +962,10 @@ N/A
 
 \renewcommand{\arraystretch}{1.2}
 \begin{longtable*}[l]{l} 
-\# From Table 2 in SRS\\
-  $L_\text{min}$ := 0.1\\
-  $L_\text{max}$ := 50\\
-  ${\frac{D}{L}}_\text{min}$ := 0.002 \\
-  ${\frac{D}{L}}_\text{max}$ := 200 \\
-  $\text{minfrac} $ := $10^{-6}$\\
-  $h_\text{min}$ := 0.001 \\
-  $\rho_P^{\text{min}}$ := 500\\
-  $\rho_P^{\text{max}}$ := 20000\\
-  $C_{P\text{min}}^S$ := 100 \\
-  $C_{P\text{max}}^S$ := 4000\\
-  $C_{P\text{min}}^L$ := 100 \\
-  $C_{P\text{max}}^L$ := 5000\\
-  $A_C^{\text{max}}$ := $\pi(\frac{D}{2})^2$\\
-  $\rho_W^{\text{min}}$ := 950\\
-  $\rho_W^{\text{max}}$ := 1000\\
-  $C_W^{\text{min}}$ := 4170\\
-  $C_W^{\text{max}}$ := 4210\\
-  $h_C^{\text{min}}$ := 10\\
-  $h_C^{\text{max}}$ := 10000\\
-  $h_P^{\text{min}}$ := 10\\
-  $h_P^{\text{max}}$ := 10000\\
-  $t_{\text{final}}^{\text{max}}$ := 86400\\
+\# From Table 10 in SRS\\
+  $g$ := 9.8\\
+  $\epsilon$ := 0.02\\
 \end{longtable*}
-
-\wss{$A_C^{\text{max}}$ shouldn't be in this table of constants}
 
 \subsection{Semantics}
 

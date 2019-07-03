@@ -218,7 +218,8 @@ class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) =>
 -- BooleanComparisons of BooleanExpressions and also BooleanExpressions of BooleanComparisons.
 -- This has the drawback of requiring a NumericExpression constraint for the first
 -- 3 functions here, even though they don't really need it.
-class (ValueSym repr, NumericExpression repr) => BooleanExpression repr where
+class (ValueSym repr, NumericExpression repr) => 
+  BooleanExpression repr where
   (?!)  :: repr (Value repr) -> repr (Value repr)
   infixr 6 ?!
   (?&&) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
@@ -287,16 +288,12 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   stringEqual :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
-  castObj        :: repr (Function repr) -> repr (Value repr) -> 
-    repr (Value repr)
-  castStrToFloat :: repr (Value repr) -> repr (Value repr)
+  cast :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr)
 
 class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   type Function repr
   func           :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Function repr)
-  cast           :: repr (StateType repr) -> repr (Function repr)
-  castListToInt  :: repr (Function repr)
   get            :: repr (Value repr) -> repr (Function repr)
   set            :: repr (Value repr) -> repr (Value repr) -> 
     repr (Function repr)

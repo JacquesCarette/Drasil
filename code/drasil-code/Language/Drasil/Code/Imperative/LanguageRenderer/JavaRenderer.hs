@@ -321,14 +321,11 @@ instance Selector JavaCode where
 
   stringEqual v1 str = objAccess v1 (func "equals" bool [str])
 
-  castObj f v = liftA2 mkVal (fmap funcType f) (liftA2 castObjDocD f v)
-  castStrToFloat v = funcApp "Double.parseDouble" float [v]
+  cast = jCast
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT = liftA2 fd targT (fmap castDocD targT)
-  castListToInt = func "ordinal" int []
   get v = func (getterName $ valueName v) (valueType v) []
   set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
@@ -343,8 +340,8 @@ instance SelectorFunction JavaCode where
   listAccess t i = func "get" t [i]
   listSet i v = func "set" (listType static_ $ fmap valType v) [i, v]
 
-  listAccessEnum t v = listAccess t (castObj (cast int) v)
-  listSetEnum i = listSet (castObj (cast int) i)
+  listAccessEnum t v = listAccess t (cast int v)
+  listSetEnum i = listSet (cast int i)
 
   at t l = listAccess t (var l int)
 
@@ -600,6 +597,13 @@ jListType t lst = listTypeDocD t lst
 jArrayType :: JavaCode (StateType JavaCode)
 jArrayType = return $ td (List $ Object "Object") (text "Object[]")
 
+jCast :: JavaCode (StateType JavaCode) -> JavaCode (Value JavaCode) -> 
+  JavaCode (Value JavaCode)
+jCast t v = jCast' (getType t) (getType $ valueType v)
+  where jCast' Float String = funcApp "Double.parseDouble" float [v]
+        jCast' Integer (Enum _) = v $. func "ordinal" int []
+        jCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
+
 jListDecDef :: ValData -> Doc -> Doc
 jListDecDef v vs = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
   typeDoc (valType v) <+> parens listElements
@@ -661,7 +665,7 @@ jListIndexExists greater lst index = parens (valDoc lst <> text ".length" <+>
 jAssignFromArray :: Int -> [JavaCode (Value JavaCode)] -> 
   [JavaCode (Statement JavaCode)]
 jAssignFromArray _ [] = []
-jAssignFromArray c (v:vs) = (v &= castObj (cast $ fmap valType v)
+jAssignFromArray c (v:vs) = (v &= cast (fmap valType v)
   (var ("outputs[" ++ show c ++ "]") (fmap valType v))) : jAssignFromArray (c+1) vs
 
 jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 

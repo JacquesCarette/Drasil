@@ -910,7 +910,7 @@ readData ddef = do
         lineData s (Repeat p Nothing) = do
           pat <- patternData s p v_j
           return $ clearTemps s p ++ 
-            [forRange l_j (litInt 0) (castObj (cast int)
+            [forRange l_j (litInt 0) (cast int
               (listSizeAccess v_linetokens #/ litInt (toInteger $ length p))) 
               (litInt 1) ( bodyStatements pat )] ++ 
             appendTemps s p
@@ -961,7 +961,7 @@ readData ddef = do
           Entry -> Reader (State repr) [repr (Statement repr)]
         entryData s tokIndex (Entry v) = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
-          a <- assign' vv $ getCastFunc (codeType v)
+          a <- assign' vv $ cast (convType $ codeType v)
             (v_linetokens $. listAccess (listInnerType $ 
               valueType v_linetokens) tokIndex)
           return [a]
@@ -969,7 +969,7 @@ readData ddef = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
           return [
             valState $ vv $. listAppend 
-            (getCastFunc (getListType (codeType v) (toInteger $ length indx))
+            (cast (convType $ getListType (codeType v) (toInteger $ length indx))
             (v_linetokens $. listAccess (listInnerType $ valueType v_linetokens)
             tokIndex))]
         entryData _ _ JunkEntry = return []
@@ -1000,11 +1000,6 @@ getFileInput C.Float = getFloatFileInput
 getFileInput C.Char = getCharFileInput
 getFileInput C.String = getStringFileInput
 getFileInput _ = error "No getFileInput function for the given type"
-
-getCastFunc :: (RenderSym repr) => C.CodeType -> repr (Value repr) ->
-   repr (Value repr)
-getCastFunc C.Float = castStrToFloat
-getCastFunc t = castObj (cast $ convType t)
 
 getListType :: C.CodeType -> Integer -> C.CodeType
 getListType _ 0 = error "No index given"

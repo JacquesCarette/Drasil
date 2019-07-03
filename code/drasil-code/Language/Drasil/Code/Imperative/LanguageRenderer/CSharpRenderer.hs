@@ -317,14 +317,11 @@ instance Selector CSharpCode where
 
   stringEqual v1 v2 = v1 ?== v2
 
-  castObj f v = liftA2 mkVal (fmap funcType f) (liftA2 castObjDocD f v)
-  castStrToFloat v = funcApp "Double.Parse" float [v]
+  cast = csCast
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT = liftA2 fd targT (fmap castDocD targT)
-  castListToInt = cast int
   get v = func (getterName $ valueName v) (valueType v) []
   set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
@@ -340,8 +337,8 @@ instance SelectorFunction CSharpCode where
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 listSetDocD i v)
 
-  listAccessEnum t v = listAccess t (castObj (cast int) v)
-  listSetEnum i = listSet (castObj (cast int) i)
+  listAccessEnum t v = listAccess t (cast int v)
+  listSetEnum i = listSet (cast int i)
 
   at t l = listAccess t (var l int)
 
@@ -562,6 +559,12 @@ csInfileTypeDoc = td File (text "StreamReader")
 
 csOutfileTypeDoc :: TypeData
 csOutfileTypeDoc = td File (text "StreamWriter")
+
+csCast :: CSharpCode (StateType CSharpCode) -> CSharpCode (Value CSharpCode) -> 
+  CSharpCode (Value CSharpCode)
+csCast t v = csCast' (getType t) (getType $ valueType v)
+  where csCast' Float String = funcApp "Double.Parse" float [v]
+        csCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
 csThrowDoc :: ValData -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 

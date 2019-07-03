@@ -294,14 +294,11 @@ instance Selector PythonCode where
 
   stringEqual v1 v2 = v1 ?== v2
 
-  castObj f v = liftA2 mkVal (fmap funcType f) (liftA2 castObjDocD f v)
-  castStrToFloat = castObj $ cast float
+  cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT = liftA2 fd targT (fmap typeDoc targT)
-  castListToInt = cast int
   get v = func (getterName $ valueName v) (valueType v) []
   set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
@@ -318,7 +315,7 @@ instance SelectorFunction PythonCode where
     (liftA2 listSetDocD i v)
 
   listAccessEnum = listAccess
-  listSetEnum i = listSet (castObj (cast int) i)
+  listSetEnum i = listSet (cast int i)
 
   at t l = listAccess t (var l int)
 

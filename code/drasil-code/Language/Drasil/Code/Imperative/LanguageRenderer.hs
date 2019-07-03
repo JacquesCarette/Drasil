@@ -631,8 +631,8 @@ listSetDocD i v = brackets (valDoc i) <+> equals <+> valDoc v
 objAccessDocD :: ValData -> FuncData -> Doc
 objAccessDocD v f = valDoc v <> funcDoc f
 
-castObjDocD :: FuncData -> ValData -> Doc
-castObjDocD f v = funcDoc f <> parens (valDoc v)
+castObjDocD :: Doc -> ValData -> Doc
+castObjDocD t v = t <> parens (valDoc v)
 
 -- Keywords --
 

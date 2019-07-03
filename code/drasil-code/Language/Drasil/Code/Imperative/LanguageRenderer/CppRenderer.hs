@@ -301,14 +301,11 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
   stringEqual v1 v2 = pair (stringEqual (pfst v1) (pfst v2)) (stringEqual 
     (psnd v1) (psnd v2))
 
-  castObj f v = pair (castObj (pfst f) (pfst v)) (castObj (psnd f) (psnd v))
-  castStrToFloat v = pair (castStrToFloat $ pfst v) (castStrToFloat $ psnd v)
+  cast t v = pair (cast (pfst t) (pfst v)) (cast (psnd t) (psnd v))
 
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
   func l t vs = pair (func l (pfst t) (map pfst vs)) (func l (psnd t) (map psnd vs))
-  cast targT = pair (cast $ pfst targT) (cast $ psnd targT)
-  castListToInt = pair castListToInt castListToInt
   get v = pair (get $ pfst v) (get $ psnd v)
   set v toVal = pair (set (pfst v) (pfst toVal)) (set (psnd v) (psnd toVal))
 
@@ -813,7 +810,7 @@ instance Selector CppSrcCode where
 
   selfAccess l = objAccess (self l)
 
-  listSizeAccess v = castObj (cast int) (objAccess v listSize)
+  listSizeAccess v = cast int (objAccess v listSize)
 
   listIndexExists v i = listSizeAccess v ?> i
   argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
@@ -823,14 +820,11 @@ instance Selector CppSrcCode where
 
   stringEqual v1 v2 = v1 ?== v2
 
-  castObj f v = liftA2 mkVal (fmap funcType f) (liftA2 castObjDocD f v)
-  castStrToFloat v = funcApp "std::stod" float [v]
+  cast = cppCast
 
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT = liftA2 fd targT (fmap castDocD targT)
-  castListToInt = cast int
   get v = func (getterName $ valueName v) (valueType v) []
   set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
@@ -847,8 +841,8 @@ instance SelectorFunction CppSrcCode where
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 cppListSetDoc i v)
 
-  listAccessEnum t v = listAccess t (castObj (cast int) v)
-  listSetEnum i = listSet (castObj (cast int) i)
+  listAccessEnum t v = listAccess t (cast int v)
+  listSetEnum i = listSet (cast int i)
 
   at t l = listAccess t (var l int) 
 
@@ -1330,14 +1324,11 @@ instance Selector CppHdrCode where
 
   stringEqual _ _ = liftA2 mkVal void (return empty)
 
-  castObj _ _ = liftA2 mkVal void (return empty)
-  castStrToFloat _ = liftA2 mkVal void (return empty)
+  cast _ _ = liftA2 mkVal void (return empty)
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
   func _ _ _ = liftA2 fd void (return empty)
-  cast _ = liftA2 fd void (return empty)
-  castListToInt = liftA2 fd void (return empty)
   get _ = liftA2 fd void (return empty)
   set _ _ = liftA2 fd void (return empty)
 
@@ -1625,6 +1616,12 @@ cppIterTypeDoc t = td (Iterator (cType t)) (text "std::" <> typeDoc t <>
 
 cppStateObjDoc :: TypeData -> Doc -> Doc
 cppStateObjDoc t ps = typeDoc t <> parens ps
+
+cppCast :: CppSrcCode (StateType CppSrcCode) -> 
+  CppSrcCode (Value CppSrcCode) -> CppSrcCode (Value CppSrcCode)
+cppCast t v = cppCast' (getType t) (getType $ valueType v)
+  where cppCast' Float String = funcApp "std::stod" float [v]
+        cppCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
 cppListSetDoc :: ValData -> ValData -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens (valDoc i) <+> equals <+> valDoc v

@@ -526,13 +526,13 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
-  stateVar del l s p t = pair (stateVar del l (pfst s) (pfst p) (pfst t))
-    (stateVar del l (psnd s) (psnd p) (psnd t))
-  privMVar del l t = pair (privMVar del l $ pfst t) (privMVar del l $ psnd t)
-  pubMVar del l t = pair (pubMVar del l $ pfst t) (pubMVar del l $ psnd t)
-  pubGVar del l t = pair (pubGVar del l $ pfst t) (pubGVar del l $ psnd t)
-  listStateVar del l s p t = pair (listStateVar del l (pfst s) (pfst p) 
-    (pfst t)) (listStateVar del l (psnd s) (psnd p) (psnd t))
+  stateVar del s p v = pair (stateVar del (pfst s) (pfst p) (pfst v))
+    (stateVar del (psnd s) (psnd p) (psnd v))
+  privMVar del v = pair (privMVar del $ pfst v) (privMVar del $ psnd v)
+  pubMVar del v = pair (pubMVar del $ pfst v) (pubMVar del $ psnd v)
+  pubGVar del v = pair (pubGVar del $ pfst v) (pubGVar del $ psnd v)
+  listStateVar del s p v = pair (listStateVar del (pfst s) (pfst p) 
+    (pfst v)) (listStateVar del (psnd s) (psnd p) (psnd v))
 
 instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
   -- Bool is True if the class is a main class, False otherwise
@@ -1044,19 +1044,19 @@ instance MethodSym CppSrcCode where
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
-  stateVar del l s p t = liftA3 svd (fmap snd s) (liftA4 (stateVarDocD l) 
-    (fst <$> includeScope s) p t endStatement) (if del < alwaysDel then
-    return (mkStNoEnd empty) else free $ var l t)
-  privMVar del l = stateVar del l private dynamic_
-  pubMVar del l = stateVar del l public dynamic_
-  pubGVar del l = stateVar del l public static_
-  listStateVar del l s p t = 
+  stateVar del s p v = liftA3 svd (fmap snd s) (liftA4 stateVarDocD 
+    (fst <$> includeScope s) p v endStatement) (if del < alwaysDel then
+    return (mkStNoEnd empty) else free v)
+  privMVar del = stateVar del private dynamic_
+  pubMVar del = stateVar del public dynamic_
+  pubGVar del = stateVar del public static_
+  listStateVar del s p v = 
     let i = "i"
-        guard = var i int ?< (var l t $. listSize)
-        loopBody = oneLiner $ free (var l t $. at int i)
+        guard = var i int ?< (v $. listSize)
+        loopBody = oneLiner $ free (v $. at (valueType v) i)
         initv = (var i int &= litInt 0)
         deleteLoop = for initv guard (var i int &++) loopBody
-    in liftA3 svd (fmap snd s) (stVarDoc <$> stateVar del l s p t) 
+    in liftA3 svd (fmap snd s) (stVarDoc <$> stateVar del s p v) 
       (if del < alwaysDel then return (mkStNoEnd empty) else deleteLoop)
 
 instance ClassSym CppSrcCode where
@@ -1507,11 +1507,11 @@ instance MethodSym CppHdrCode where
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
-  stateVar _ l s p t = liftA3 svd (fmap snd s) (liftA4 (stateVarDocD l) 
-    (fmap fst (includeScope s)) p t endStatement) (return (mkStNoEnd empty))
-  privMVar del l = stateVar del l private dynamic_
-  pubMVar del l = stateVar del l public dynamic_
-  pubGVar del l = stateVar del l public static_
+  stateVar _ s p v = liftA3 svd (fmap snd s) (liftA4 stateVarDocD 
+    (fmap fst (includeScope s)) p v endStatement) (return (mkStNoEnd empty))
+  privMVar del = stateVar del private dynamic_
+  pubMVar del = stateVar del public dynamic_
+  pubGVar del = stateVar del public static_
   listStateVar = stateVar
 
 instance ClassSym CppHdrCode where

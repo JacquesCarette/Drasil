@@ -215,8 +215,8 @@ genInputClass = do
         (repr (Class repr)))
       genClass [] = return Nothing 
       genClass _ = do
-        let inputVars = map (\x -> pubMVar 0 (codeName x) (convType $ 
-              codeType x)) ins
+        let inputVars = map (\x -> pubMVar 0 (var (codeName x) (convType $ 
+              codeType x))) ins
         return $ Just $ pubClass "InputParameters" Nothing inputVars []
   genClass $ mapMaybe (\x -> Map.lookup (codeName x) (eMap $ codeSpec g)) ins
 

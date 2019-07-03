@@ -535,10 +535,10 @@ instance MethodSym JavaCode where
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
-  stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
-  privMVar del l = stateVar del l private dynamic_
-  pubMVar del l = stateVar del l public dynamic_
-  pubGVar del l = stateVar del l public static_
+  stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
+  privMVar del = stateVar del private dynamic_
+  pubMVar del = stateVar del public dynamic_
+  pubGVar del = stateVar del public static_
   listStateVar = stateVar
 
 instance ClassSym JavaCode where

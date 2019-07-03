@@ -492,10 +492,10 @@ instance MethodSym PythonCode where
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
-  stateVar _ _ _ _ _ = return empty
-  privMVar del l = stateVar del l private dynamic_
-  pubMVar del l = stateVar del l public dynamic_
-  pubGVar del l = stateVar del l public static_
+  stateVar _ _ _ _ = return empty
+  privMVar del = stateVar del private dynamic_
+  pubMVar del = stateVar del public dynamic_
+  pubGVar del = stateVar del public static_
   listStateVar = stateVar
 
 instance ClassSym PythonCode where

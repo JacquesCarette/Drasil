@@ -912,10 +912,6 @@ Param (Section~\ref{Parameters})
 
 \subsection{Syntax}
 
-\subsubsection{Exported Constants}
-
-$max\_width$: integer
-
 \subsubsection{Exported Access Program}
 
 \begin{center}
@@ -923,10 +919,7 @@ $max\_width$: integer
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-output & fname: string, $T_W(t):\mathbb{R} \rightarrow \mathbb{R},
-                 T_P(t):\mathbb{R} \rightarrow \mathbb{R},
-                 E_W(t):\mathbb{R} \rightarrow \mathbb{R},
-       E_P(t):\mathbb{R} \rightarrow \mathbb{R}$, $t_\text{final}: \mathbb{R}$ & - & - \\
+output & fname: string, $\text{message} : \mathbb{R}$, $\text{offset} : \mathbb{R}$ & - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -943,14 +936,9 @@ file: A text file
 
 \subsubsection{Access Routine Semantics}
 
-\noindent output(fname, $T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$):
+\noindent output(fname, $\text{message}$, $\text{offset}$):
 \begin{itemize}
-\item transition:  Write to environment variable named fname the
-  following: the input
-    parameters from Param, and the calculated values $T_w$, $T_p$, $E_w$,
-    $E_p$ from times $0$ to $t_\text{final}$.  The functions will be output as
-    sequences in this file.  The spacing between points in the sequence should
-    be selected so that the heating behaviour is captured in the data.
+\item transition:  Write to environment variable named fname the calculated values $\text{message}$ and $\text{offset}$.
 \item exception: none
 \end{itemize}
 

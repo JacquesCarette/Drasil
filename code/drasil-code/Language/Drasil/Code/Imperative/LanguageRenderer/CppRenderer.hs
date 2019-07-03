@@ -503,7 +503,7 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   type Method (p CppSrcCode CppHdrCode) = MethodData
   method n c s p t ps b = pair (method n c (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (method n c (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
-  getMethod n c t = pair (getMethod n c $ pfst t) (getMethod n c $ psnd t) 
+  getMethod c v = pair (getMethod c $ pfst v) (getMethod c $ psnd v) 
   setMethod setLbl c paramLbl t = pair (setMethod setLbl c paramLbl $ pfst t) 
     (setMethod setLbl c paramLbl $ psnd t)
   mainMethod l b = pair (mainMethod l $ pfst b) (mainMethod l $ psnd b)
@@ -1011,8 +1011,9 @@ instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
   method n c s _ t ps b = liftA2 (mthd False) (fmap snd s) (liftA5 
     (cppsMethod n c) t (liftList paramListDocD ps) b blockStart blockEnd)
-  getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
-    where getBody = oneLiner $ returnState (self c $-> var n t)
+  getMethod c v = method (getterName $ valueName v) c public dynamic_ 
+    (mState $ valueType v) [] getBody
+    where getBody = oneLiner $ returnState (self c $-> v)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
     void [stateParam $ var paramLbl t] setBody
     where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
@@ -1483,7 +1484,8 @@ instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
   method n _ s _ t ps _ = liftA2 (mthd False) (fmap snd s) 
     (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement)
-  getMethod n c t = method (getterName n) c public dynamic_ t [] (return empty)
+  getMethod c v = method (getterName $ valueName v) c public dynamic_ 
+    (mState $ valueType v) [] (return empty)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
     void [stateParam $ var paramLbl t] (return empty)
   mainMethod _ _ = return (mthd True Pub empty)

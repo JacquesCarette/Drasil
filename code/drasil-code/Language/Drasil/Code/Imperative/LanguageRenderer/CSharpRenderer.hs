@@ -489,8 +489,9 @@ instance MethodSym CSharpCode where
   type Method CSharpCode = (Doc, Bool)
   method n _ s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t 
     (liftList paramListDocD ps) b, False)
-  getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
-    where getBody = oneLiner $ returnState (self c $-> var n t)
+  getMethod c v = method (getterName $ valueName v) c public dynamic_ 
+    (mState $ valueType v) [] getBody
+    where getBody = oneLiner $ returnState (self c $-> v)
   setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
     void [stateParam $ var paramLbl t] setBody
     where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t

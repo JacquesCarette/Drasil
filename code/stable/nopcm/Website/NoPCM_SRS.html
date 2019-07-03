@@ -874,66 +874,66 @@
                     </tr>
                   </table>
                 </div>
+                <b>Detailed derivation of simplified rate of change of temperature:</b>
                 <p class="paragraph">
-                  Detailed derivation of simplified rate of change of temperature:
+                  <p class="paragraph">
+                    Integrating <a href=#TM:consThermE>TM: consThermE</a> over a volume (<em>V</em>), we have:
+                  </p>
+                  <div class="equation">
+                    <em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
+                                                                                                                                               <span class="fup">
+                                                                                                                                                 &#8239;&part;T
+                                                                                                                                               </span>
+                                                                                                                                               <span class="fdn">
+                                                                                                                                                 &#8239;&part;t
+                                                                                                                                               </span>
+                                                                                                                                             </div>&#8239;dV</em>
+                  </div>
+                  <p class="paragraph">
+                    Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
+                  </p>
+                  <div class="equation">
+                    <em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
+                                                                                                                                                            <span class="fup">
+                                                                                                                                                              &#8239;&part;T
+                                                                                                                                                            </span>
+                                                                                                                                                            <span class="fdn">
+                                                                                                                                                              &#8239;&part;t
+                                                                                                                                                            </span>
+                                                                                                                                                          </div>&#8239;dV</em>
+                  </div>
+                  <p class="paragraph">
+                    We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
+                  </p>
+                  <div class="equation">
+                    <em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
+                                                                                                                                                            <span class="fup">
+                                                                                                                                                              &#8239;&part;T
+                                                                                                                                                            </span>
+                                                                                                                                                            <span class="fdn">
+                                                                                                                                                              &#8239;&part;t
+                                                                                                                                                            </span>
+                                                                                                                                                          </div>&#8239;dV</em>
+                  </div>
+                  <p class="paragraph">
+                    Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
+                  </p>
+                  <div class="equation">
+                    <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
+                                                  <span class="fup">&#8239;dT</span>
+                                                  <span class="fdn">&#8239;dt</span>
+                                                </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
+                  </div>
+                  <p class="paragraph">
+                    Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
+                  </p>
+                  <div class="equation">
+                    <em>m&#8239;C&#8239;<div class="fraction">
+                                          <span class="fup">&#8239;dT</span>
+                                          <span class="fdn">&#8239;dt</span>
+                                        </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
+                  </div>
                 </p>
-                <p class="paragraph">
-                  Integrating <a href=#TM:consThermE>TM: consThermE</a> over a volume (<em>V</em>), we have:
-                </p>
-                <div class="equation">
-                  <em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                             <span class="fup">
-                                                                                                                                               &#8239;&part;T
-                                                                                                                                             </span>
-                                                                                                                                             <span class="fdn">
-                                                                                                                                               &#8239;&part;t
-                                                                                                                                             </span>
-                                                                                                                                           </div>&#8239;dV</em>
-                </div>
-                <p class="paragraph">
-                  Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
-                </p>
-                <div class="equation">
-                  <em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                                          <span class="fup">
-                                                                                                                                                            &#8239;&part;T
-                                                                                                                                                          </span>
-                                                                                                                                                          <span class="fdn">
-                                                                                                                                                            &#8239;&part;t
-                                                                                                                                                          </span>
-                                                                                                                                                        </div>&#8239;dV</em>
-                </div>
-                <p class="paragraph">
-                  We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
-                </p>
-                <div class="equation">
-                  <em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                                          <span class="fup">
-                                                                                                                                                            &#8239;&part;T
-                                                                                                                                                          </span>
-                                                                                                                                                          <span class="fdn">
-                                                                                                                                                            &#8239;&part;t
-                                                                                                                                                          </span>
-                                                                                                                                                        </div>&#8239;dV</em>
-                </div>
-                <p class="paragraph">
-                  Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
-                </p>
-                <div class="equation">
-                  <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
-                                                <span class="fup">&#8239;dT</span>
-                                                <span class="fdn">&#8239;dt</span>
-                                              </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-                </div>
-                <p class="paragraph">
-                  Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
-                </p>
-                <div class="equation">
-                  <em>m&#8239;C&#8239;<div class="fraction">
-                                        <span class="fup">&#8239;dT</span>
-                                        <span class="fdn">&#8239;dt</span>
-                                      </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-                </div>
               </div>
             </div>
             <div id="Sec:DDs">
@@ -1125,55 +1125,55 @@
                     </tr>
                   </table>
                 </div>
+                <b>Detailed derivation of the energy balance on water:</b>
                 <p class="paragraph">
-                  Detailed derivation of the energy balance on water:
+                  <p class="paragraph">
+                    To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#DD:htFluxC>DD: htFluxC</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+                  </p>
+                  <div class="equation">
+                    <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
+                                                                  <span class="fup">
+                                                                    &#8239;dT<sub>W</sub>
+                                                                  </span>
+                                                                  <span class="fdn">&#8239;dt</span>
+                                                                </div> = q<sub>C</sub>&#8239;A<sub>C</sub></em>
+                  </div>
+                  <p class="paragraph">
+                    Using <a href=#DD:htFluxC>DD: htFluxC</a> , this can be written as:
+                  </p>
+                  <div class="equation">
+                    <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
+                                                                  <span class="fup">
+                                                                    &#8239;dT<sub>W</sub>
+                                                                  </span>
+                                                                  <span class="fdn">&#8239;dt</span>
+                                                                </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
+                  </div>
+                  <p class="paragraph">
+                    Dividing (3) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
+                  </p>
+                  <div class="equation">
+                    <em><div class="fraction">
+                          <span class="fup">&#8239;dT<sub>W</sub></span>
+                          <span class="fdn">&#8239;dt</span>
+                        </div> = <div class="fraction">
+                                   <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
+                                   <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
+                                 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
+                  </div>
+                  <p class="paragraph">
+                    Setting <em>τ<sub>W</sub></em> = <em>m<sub>W</sub></em> <em>C<sub>W</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> , Equation (4) can be written in its final form as:
+                  </p>
+                  <div class="equation">
+                    <em><div class="fraction">
+                          <span class="fup">&#8239;dT<sub>W</sub></span>
+                          <span class="fdn">&#8239;dt</span>
+                        </div> = <div class="fraction">
+                                   <span class="fup">1</span>
+                                   <span class="fdn">τ<sub>W</sub></span>
+                                 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
+                  </div>
                 </p>
-                <p class="paragraph">
-                  To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#DD:htFluxC>DD: htFluxC</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
-                </p>
-                <div class="equation">
-                  <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-                                                                <span class="fup">
-                                                                  &#8239;dT<sub>W</sub>
-                                                                </span>
-                                                                <span class="fdn">&#8239;dt</span>
-                                                              </div> = q<sub>C</sub>&#8239;A<sub>C</sub></em>
-                </div>
-                <p class="paragraph">
-                  Using <a href=#DD:htFluxC>DD: htFluxC</a> , this can be written as:
-                </p>
-                <div class="equation">
-                  <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-                                                                <span class="fup">
-                                                                  &#8239;dT<sub>W</sub>
-                                                                </span>
-                                                                <span class="fdn">&#8239;dt</span>
-                                                              </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
-                </div>
-                <p class="paragraph">
-                  Dividing (3) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
-                </p>
-                <div class="equation">
-                  <em><div class="fraction">
-                        <span class="fup">&#8239;dT<sub>W</sub></span>
-                        <span class="fdn">&#8239;dt</span>
-                      </div> = <div class="fraction">
-                                 <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
-                                 <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
-                               </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
-                </div>
-                <p class="paragraph">
-                  Setting <em>τ<sub>W</sub></em> = <em>m<sub>W</sub></em> <em>C<sub>W</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> , Equation (4) can be written in its final form as:
-                </p>
-                <div class="equation">
-                  <em><div class="fraction">
-                        <span class="fup">&#8239;dT<sub>W</sub></span>
-                        <span class="fdn">&#8239;dt</span>
-                      </div> = <div class="fraction">
-                                 <span class="fup">1</span>
-                                 <span class="fdn">τ<sub>W</sub></span>
-                               </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
-                </div>
                 <div id="IM:heatEInWtr">
                   <table class="idefn">
                     <tr>

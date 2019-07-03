@@ -22,6 +22,7 @@ data LayoutObj =
    | Header Depth Title Label
    | Paragraph Contents
    | EqnBlock Contents
+   | Derivation Contents [LayoutObj]
    | Definition DType [(String,[LayoutObj])] Label
    | List ListType
    | Figure Label Caption Filepath MaxWidthPercent

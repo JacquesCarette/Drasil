@@ -387,20 +387,22 @@ layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
   dtyp (layPairs pairs) 
   (P.S $ getRefAdd x)
   where layPairs = map (\(x',y) -> (x', map (lay sm) y))
-layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
-layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
-layLabelled  _ (LblC _ (Bib bib))               = T.Bib $ map layCite bib
+layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
+layLabelled sm (LblC _ (DerivBlock h d)) = T.Derivation (spec sm h) (map (layUnlabelled sm) d)
+layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
+layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
 layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
-layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
-layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
-layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
-layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
-layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
+layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
+layUnlabelled sm (DerivBlock h d) = T.Derivation (spec sm h) (map (layUnlabelled sm) d)
+layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
+layUnlabelled sm (Figure c f wp)  = T.Figure (P.S "nolabel2") (spec sm c) f wp
+layUnlabelled sm (Graph ps w h t) = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (\(x,y) -> (x, map temp y ))

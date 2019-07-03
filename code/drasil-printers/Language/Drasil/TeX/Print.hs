@@ -29,14 +29,13 @@ import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
   Author, Address), Citation(Cite), BibRef)
-import Language.Drasil.Printing.LayoutObj (LayoutObj(Graph, Bib, Figure, Definition,
-  List, Table, EqnBlock, Paragraph, Header, HDiv), Document(Document))
+import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
   newline, superscript, parens, fraction, quote, externalref,
-  snref, cite, citeInfo, sec, newpage, maketoc, maketitle, document, author, title)
+  snref, cite, citeInfo, sec, newpage, maketoc, maketitle, document, author, title, bold)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -53,11 +52,12 @@ buildStd sm (Document t a c) =
   document (maketitle %% maketoc %% newpage %% print sm c)
 
 -- clean until here; lo needs its sub-functions fixed first though
-lo ::  LayoutObj -> PrintingInformation -> D
+lo :: LayoutObj -> PrintingInformation -> D
 lo (Header d t l)       _  = sec d (spec t) %% label (spec l)
 lo (HDiv _ con _)       sm = print sm con -- FIXME ignoring 2 arguments?
 lo (Paragraph contents) _  = toText $ spec contents
 lo (EqnBlock contents)  _  = makeEquation contents
+lo (Derivation h d)      sm = foldr (%%) empty ((toText $ bold $ spec h) : (map (toText . (`lo` sm)) d))
 lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)
 lo (Definition _ ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
 lo (List l)               _  = toText $ makeList l

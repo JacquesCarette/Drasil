@@ -36,10 +36,10 @@ quote x = lq <> x <> rq
   rq = pure $ text "''"
 
 -- Make 1-argument command
-command :: String -> (String -> D)
+command :: String -> String -> D
 command s c = pure $ (H.bslash TP.<> text s) TP.<> H.br c
 
-commandD :: String -> (D -> D)
+commandD :: String -> D -> D
 commandD s c = pure (H.bslash TP.<> text s) <> br c
 
 -- 1-argument command, with optional argument
@@ -130,12 +130,13 @@ includegraphics 100 = command1o "includegraphics"
 includegraphics wp = command1o "includegraphics" 
   (Just $ "width=" ++ show (wp / 100) ++ "\\textwidth")
 
-author, caption, item, label, title :: D -> D
-author          = commandD "author"
-caption         = commandD "caption"
-item            = commandD "item"
-label           = commandD "label"
-title           = commandD "title"
+author, caption, item, label, title, bold :: D -> D
+author  = commandD "author"
+caption = commandD "caption"
+item    = commandD "item"
+label   = commandD "label"
+title   = commandD "title"
+bold    = commandD "textbf"
 
 item' :: D -> D -> D
 item' bull = command1oD "item" (Just bull)

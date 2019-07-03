@@ -114,13 +114,13 @@ mkExampleCtx exampleDir srsDir =
 
   -- returns the description of an example if Just, otherwise fails and does not add one
   maybeField "desc" (return . desc . itemBody) <>
-  
+
   listFieldWith "src" (
-    field "path" (return . fst . fst . itemBody) <>
-    field "lang" (return . snd . fst . itemBody)
+    field "path" (return . fst . itemBody) <>
+    field "lang" (return . snd . itemBody)
   -- If there are no sources, fail is used so as not to create a "Generated Code" section
   ) (\x -> if null (src $ itemBody x) then fail "No code files for example" else
-      mapM (\y -> makeItem (y, itemBody x)) $ src $ itemBody x)
+      mapM makeItem $ src $ itemBody x)
   where
     name (E nm _ _ _) = nm
     src (E _ s _ _) = s

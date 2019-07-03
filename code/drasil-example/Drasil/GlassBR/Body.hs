@@ -5,12 +5,11 @@ import qualified Data.Map as Map
 import Language.Drasil hiding (organization, section, sec)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
-  TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
-  _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
-  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
-  Theory(defined_fun, defined_quant), TheoryModel)
+import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
+  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
+  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
+  _sysinfodb, _usedinfodb)
+import Theory.Drasil (Theory(defined_fun, defined_quant))
 import Utils.Drasil
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
@@ -22,9 +21,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
   dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  termDefnF', tsymb, generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
-  getTraceMapFromDD, getTraceMapFromIM, getSCSSub, traceMatStandard,
-  characteristicsLabel, generateTraceMap')
+  termDefnF', tsymb, traceMatStandard, characteristicsLabel)
 
 import qualified Drasil.DocLang.SRS as SRS (reference, valsOfAuxCons, assumpt, inModel)
 
@@ -80,27 +77,8 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]) label refBy
-  dataDefn insModel genDef theory concIns
-  section labelledCon
-
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
- 
-refBy :: RefbyMap
-refBy = generateRefbyMap label 
-
-dataDefn :: [DataDefinition]
-dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
-
-insModel :: [InstanceModel]
-insModel = getTraceMapFromIM $ getSCSSub mkSRS
-
-genDef :: [GenDefn]
-genDef = getTraceMapFromGD $ getSCSSub mkSRS
-
-theory :: [TheoryModel]
-theory = getTraceMapFromTM $ getSCSSub mkSRS
+  ++ map unitWrapper [pascal, newton]) Map.empty Map.empty dataDefns iMods []
+  tMods concIns sec labelledCon
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
@@ -115,19 +93,15 @@ sec :: [Section]
 sec = extractSection srs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi label refBy
-  dataDefn insModel genDef theory concIns
-  section labelledCon
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
+ [] []
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
-
-checkSi :: [UnitDefn]
-checkSi = collectUnits symbMap thisSymbols 
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) systInfo

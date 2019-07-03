@@ -36,7 +36,7 @@ urlcolor=cyan          % color of external links
 
 \ifcomments
 \newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
-\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\todo}[1]{\textcolor{orange}{[TODO: #1]}}
 \else
 \newcommand{\authornote}[3]{}
 \newcommand{\todo}[1]{}
@@ -44,8 +44,9 @@ urlcolor=cyan          % color of external links
 
 \newcommand{\wss}[1]{\authornote{blue}{SS}{#1}}
 \newcommand{\bmac}[1]{\authornote{red}{BM}{#1}}
+\newcommand{\sam}[1]{\authornote{magenta}{SC}{#1}}
 
-\newcommand{\progname}{SWHS}
+\newcommand{\progname}{Projectile}
 
 \begin{document}
 
@@ -74,20 +75,19 @@ See SRS Documentation at \url{https://jacquescarette.github.io/Drasil/examples/P
 \section{Introduction}
 
 The following document details the Module Interface Specifications for the
-implemented modules in a program simulating a Solar Water Heating System with
-Phase Change Material.  It is intended to ease navigation through the program
-for design and maintenance purposes.
+implemented modules in a program simulating projectile motion. It is intended to 
+ease navigation through the program for design and maintenance purposes.
 
 Complementary documents include the System Requirement Specifications
 and Module Guide.  The full documentation and implementation can be
-found at \url{https://github.com/smiths/swhs}.
+found at \sam{No manual version of Projectile? Should this link be removed or  should there be a link?}.
 
-The specification is given in terms of functions, rather than sequences.  For
-instance, the predicted temperature of the water is given as a function of time
-($\mathbb{R} \rightarrow \mathbb{R})$, not as a sequence ($\mathbb{R}^n$).  This
-approach is more straightforward for the specification, but in the
-implementation stage, it will likely be necessary to introduce a
-sequence, assuming that a numerical solver is used for the system of ODEs.
+% The specification is given in terms of functions, rather than sequences.  For
+% instance, the predicted temperature of the water is given as a function of time
+% ($\mathbb{R} \rightarrow \mathbb{R})$, not as a sequence ($\mathbb{R}^n$). This
+% approach is more straightforward for the specification, but in the
+% implementation stage, it will likely be necessary to introduce a
+% sequence, assuming that a numerical solver is used for the system of ODEs.
 
 \section{Notation}
 
@@ -108,18 +108,14 @@ The following table summarizes the primitive data types used by \progname.
 \textbf{Data Type} & \textbf{Notation} & \textbf{Description}\\ 
 \midrule
 character & char & a single symbol or digit\\
-integer & $\mathbb{Z}$ & a number without a fractional component in (-$\infty$, $\infty$) \\
-natural number & $\mathbb{N}$ & a number without a fractional component in [1, $\infty$) \\
 real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
 \bottomrule
 \end{tabular} 
 \end{center}
 
 \noindent
-The specification of \progname \ uses some derived data types: sequences, strings, and
-tuples. Sequences are lists filled with elements of the same data type. Strings
-are sequences of characters. Tuples contain a list of values, potentially of
-different types. In addition, \progname \ uses functions, which
+The specification of \progname\ uses strings, a derived data type. Strings
+are lists of characters. In addition, \progname\ uses functions, which
 are defined by the data types of their inputs and outputs. Local functions are
 described by giving their type signature followed by their specification.
 

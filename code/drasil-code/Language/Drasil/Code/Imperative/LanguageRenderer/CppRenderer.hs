@@ -434,8 +434,7 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
 
   initObserverList t vs = pair (initObserverList (pfst t) (map pfst vs)) 
     (initObserverList (psnd t) (map psnd vs))
-  addObserver t o = pair (addObserver (pfst t) (pfst o)) (addObserver (psnd t) 
-    (psnd o))
+  addObserver o = pair (addObserver $ pfst o) (addObserver $ psnd o)
 
   inOutCall n ins outs = pair (inOutCall n (map pfst ins) (map pfst outs)) 
     (inOutCall n (map psnd ins) (map psnd outs))
@@ -942,8 +941,8 @@ instance StatementSym CppSrcCode where
   changeState fsmName toState = var fsmName string &= litString toState
 
   initObserverList t = listDecDef (var observerListName t)
-  addObserver t o = valState $ obsList $. listAdd obsList lastelem o
-    where obsList = observerListName `listOf` t
+  addObserver o = valState $ obsList $. listAdd obsList lastelem o
+    where obsList = observerListName `listOf` valueType o
           lastelem = obsList $. listSize
 
   inOutCall = cppInOutCall funcApp
@@ -1433,7 +1432,7 @@ instance StatementSym CppHdrCode where
   changeState _ _ = return (mkStNoEnd empty)
 
   initObserverList _ _ = return (mkStNoEnd empty)
-  addObserver _ _ = return (mkStNoEnd empty)
+  addObserver _ = return (mkStNoEnd empty)
 
   inOutCall _ _ _ = return (mkStNoEnd empty)
   extInOutCall _ _ _ _ = return (mkStNoEnd empty)

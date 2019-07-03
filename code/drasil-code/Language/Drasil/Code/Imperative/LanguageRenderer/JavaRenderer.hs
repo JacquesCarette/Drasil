@@ -434,8 +434,8 @@ instance StatementSym JavaCode where
   changeState fsmName toState = var fsmName string &= litString toState
 
   initObserverList t = listDecDef (var observerListName t)
-  addObserver t o = valState $ obsList $. listAdd obsList lastelem o
-    where obsList = observerListName `listOf` t
+  addObserver o = valState $ obsList $. listAdd obsList lastelem o
+    where obsList = observerListName `listOf` valueType o
           lastelem = obsList $. listSize
 
   inOutCall = jInOutCall funcApp

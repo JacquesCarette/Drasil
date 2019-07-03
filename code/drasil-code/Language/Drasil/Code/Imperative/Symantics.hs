@@ -423,8 +423,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
 
   initObserverList :: repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Statement repr)
-  addObserver      :: repr (StateType repr) -> repr (Value repr) -> 
-    repr (Statement repr)
+  addObserver      :: repr (Value repr) -> repr (Statement repr)
 
   -- The two lists are inputs and outputs, respectively
   inOutCall :: Label -> [repr (Value repr)] -> [repr (Value repr)] -> 

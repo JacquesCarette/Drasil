@@ -466,13 +466,13 @@ instance ControlStatementSym JavaCode where
   tryCatch tb cb = mkStNoEnd <$> liftA2 jTryCatch tb cb
   
   checkState l = switch (var l string)
-  notifyObservers ft fn t ps = for initv (v_index ?< (obsList $. listSize)) 
+  notifyObservers f t = for initv (v_index ?< (obsList $. listSize)) 
     (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           v_index = var index int
           initv = varDecDef v_index $ litInt 0
-          notify = oneLiner $ valState $ (obsList $. at t index) $. func fn ft ps
+          notify = oneLiner $ valState $ (obsList $. at t index) $. f
 
   getFileInputAll f v = while (f $. func "hasNextLine" bool [])
     (oneLiner $ valState $ v $. listAppend (f $. func "nextLine" string []))

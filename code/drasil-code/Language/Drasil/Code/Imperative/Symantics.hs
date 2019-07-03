@@ -459,8 +459,8 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
 
   checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> 
     repr (Body repr) -> repr (Statement repr)
-  notifyObservers :: repr (StateType repr) -> Label -> repr (StateType repr) -> 
-    [repr (Value repr)] -> repr (Statement repr)
+  notifyObservers :: repr (Function repr) -> repr (StateType repr) -> 
+    repr (Statement repr)
 
   getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)

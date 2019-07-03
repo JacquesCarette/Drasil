@@ -437,13 +437,12 @@ instance ControlStatementSym PythonCode where
   tryCatch tb cb = mkStNoEnd <$> liftA2 pyTryCatch tb cb
 
   checkState l = switch (var l string)
-  notifyObservers ft fn t ps = forRange index initv (listSizeAccess obsList) 
+  notifyObservers f t = forRange index initv (listSizeAccess obsList) 
     (litInt 1) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = litInt 0
-          notify = oneLiner $ valState $ (obsList $. at t index) $.
-            func fn ft ps
+          notify = oneLiner $ valState $ (obsList $. at t index) $. f
 
   getFileInputAll f v = v &= objMethodCall (listType static_ string) f 
     "readlines" []

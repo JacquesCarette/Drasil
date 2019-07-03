@@ -476,8 +476,8 @@ instance (Pair p) => ControlStatementSym (p CppSrcCode CppHdrCode) where
     (mapPairFst pfst . mapPairSnd pfst) vs) (pfst b)) 
     (checkState l (map (mapPairFst psnd . mapPairSnd psnd) vs) (psnd b))
 
-  notifyObservers ft fn t ps = pair (notifyObservers (pfst ft) fn (pfst t) 
-    (map pfst ps)) (notifyObservers (psnd ft) fn (psnd t) (map psnd ps))
+  notifyObservers f t = pair (notifyObservers (pfst f) (pfst t)) 
+    (notifyObservers (psnd f) (psnd t))
 
   getFileInputAll f v = pair (getFileInputAll (pfst f) (pfst v)) 
     (getFileInputAll (psnd f) (psnd v))
@@ -975,14 +975,13 @@ instance ControlStatementSym CppSrcCode where
 
   checkState l = switchAsIf (var l string) 
 
-  notifyObservers ft fn t ps = for initv (v_index ?< (obsList $. listSize)) 
+  notifyObservers f t = for initv (v_index ?< (obsList $. listSize)) 
     (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           v_index = var index int
           initv = varDecDef v_index $ litInt 0
-          notify = oneLiner $ valState $ (obsList $. at t index) $. 
-            func fn ft ps
+          notify = oneLiner $ valState $ (obsList $. at t index) $. f
 
   getFileInputAll f v = let l_line = "nextLine"
                             v_line = var l_line string
@@ -1459,7 +1458,7 @@ instance ControlStatementSym CppHdrCode where
 
   checkState _ _ _ = return (mkStNoEnd empty)
 
-  notifyObservers _ _ _ _ = return (mkStNoEnd empty)
+  notifyObservers _ _ = return (mkStNoEnd empty)
 
   getFileInputAll _ _ = return (mkStNoEnd empty)
 

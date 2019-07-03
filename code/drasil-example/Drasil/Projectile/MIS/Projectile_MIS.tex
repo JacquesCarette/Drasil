@@ -160,12 +160,15 @@ main
 
 \subsection{Uses}
 
-Param (Section~\ref{Parameters}), Temperature
-(Section~\ref{Temperature}), Solver
-(Section~\ref{ODE}), Energy (Section~\ref{Energy}), verify\_output (Section~\ref{VerifyOutput}), plot
-(Section~\ref{Plot}), output (Section~\ref{Output})
+Param (Section~\ref{Parameters}), verify\_output (Section~\ref{VerifyOutput}), 
+%plot(Section~\ref{Plot}),
+output (Section~\ref{Output})
 
 \subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+
 
 \subsubsection{Exported Access Programs}
 
@@ -183,71 +186,27 @@ main & - & - & - \\
 
 \subsubsection{State Variables}
 
-None
+filenameOut = ``output"
 
 \subsubsection{Access Routine Semantics}
 
 \noindent main():
 \begin{itemize}
 \item transition: Modify the state of Param module and the environment variables
-  for the Plot and Output modules by following these steps\\
+  for the Output module by following these steps\\
 \end{itemize}
 
-\noindent Get (filenameIn: string) and (filenameOut: string) from user\\
+\noindent Get (filenameIn: string) from user.\\
 
 \noindent load\_params(filenameIn)\\
 
-\noindent \#\textit{Find temperature function} ($T_W^\text{Solid},
-  T_W^\text{Melting}, T_W^\text{Liquid}$, $T_P^\text{Solid},
-  T_P^\text{Melting}, T_P^\text{Liquid}$), \textit{and energy} ($Q_P$) \textit{and times of transition between solid,
-  melting and liquid phases} ($t_\text{melt}^{\text{init}}, t_\text{melt}^{\text{final}}$)\\
+\noindent \#\textit{Output calculated values to a file.}\\
 
-\noindent $t_\text{melt}^\text{init}, [T_W^{\text{Solid}}, T_P^{\text{Solid}}]^T := \text{solve}(\text{ODE\_SolidPCM}, 0.0,
-[T_\text{init}, T_\text{init}]^T, \text{event\_StartMelt} , t_\text{final})$\\
+% \noindent verify\_output($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
 
-\noindent $t_\text{melt}^\text{final}$, $[T_W^{\text{Melting}},
-T_P^{\text{Melting}}, Q_p]^T$ := solve(ODE\_MeltingPCM,
-$t_\text{melt}^\text{init}$, $[T_W^{\text{Solid}}(t_\text{melt}^\text{init}),
-  T_P^{\text{Solid}}(t_\text{melt}^\text{init}), 0.0]^T$,
-  event\_EndMelt, $t_\text{final}$)\\
+% \noindent plot($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
 
-\noindent $[ T_W^{\text{Liquid}}, T_P^{\text{Liquid}}]^T$ := solveNoE(ODE\_LiquidPCM, $t_\text{melt}^\text{final}$,
-[$T_W^{\text{Melting}}(t_\text{melt}^\text{final})$,
-$T_P^{\text{Melting}}(t_\text{melt}^\text{final})$]$^T$, $t_\text{final}$)\\
-
-\noindent \#\textit{Combine temperatures for $0 \leq t \leq t_\text{final}$}\\
-
-\noindent $T_W(t) = (0 \leq t < t_\text{melt}^{\text{init}} \Rightarrow
-T_W^{\text{Solid}} | t_\text{melt}^{\text{init}} \leq t <
-t_\text{melt}^{\text{final}} \Rightarrow T_W^{\text{Melting}} |
-t_\text{melt}^{\text{final}} \leq t \leq
-t_\text{final} \Rightarrow T_W^{\text{Liquid}} )$\\
-
-\noindent $T_P(t) = (0 \leq t < t_\text{melt}^{\text{init}} \Rightarrow
-T_P^{\text{Solid}} | t_\text{melt}^{\text{init}} \leq t <
-t_\text{melt}^{\text{final}} \Rightarrow T_P^{\text{Melting}} | t_\text{melt}^{\text{final}} \leq t \leq
-t_\text{final} \Rightarrow T_P^{\text{Liquid}} )$\\
-
-\noindent \#\textit{Energy values} $(E_W(t), E_P(t))$ \textit{for} $0 \leq t \leq t_\text{final}$\\
-
-\noindent $E_W(t) = (0 \leq t < t_\text{melt}^{\text{init}} \Rightarrow
-\text{energyWater}(T_W^{\text{Solid}}) | t_\text{melt}^{\text{init}} \leq t <
-t_\text{melt}^{\text{final}} \Rightarrow \text{energyWater}(T_W^{\text{Melting}}) | t_\text{melt}^{\text{final}} \leq t \leq
-t_\text{final} \Rightarrow \text{energyWater}(T_W^{\text{Liquid}}) )$\\
-
-\noindent $E_P(t) = (0 \leq t < t_\text{melt}^{\text{init}} \Rightarrow
-\text{energySolidPCM}(T_P^{\text{Solid}}) | t_\text{melt}^{\text{init}} \leq t <
-t_\text{melt}^{\text{final}} \Rightarrow \text{energyMeltingPCM}(Q_P) | t_\text{melt}^{\text{final}} \leq t \leq
-t_\text{final} \Rightarrow \text{energyLiquidPCM}(T_P^{\text{Liquid}}) )$\\
-
-\noindent \#\textit{Output calculated values to a file and to a plot.  Verify
-  calculated values obey conservation of energy.}\\
-
-\noindent verify\_output($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
-
-\noindent plot($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
-
-\noindent output(filenameOut, $T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
+\noindent output(filenameOut, $t_\text{message}$, $t_\text{output}$)\\
 
 \newpage
 

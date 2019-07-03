@@ -66,7 +66,7 @@ printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
                                  divTag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ pSpec contents
 printLO (EqnBlock contents)    = pSpec contents
-printLO (Derivation hd d)      = bold (pSpec hd) $$ (paragraph $ vcat (map printLO d))
+printLO (Derivation hd d)      = text "<br />" $$ bold (pSpec hd) $$ (paragraph $ vcat (map printLO d))
 printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
 printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME

@@ -169,7 +169,7 @@ output (Section~\ref{Output})
 
 \subsubsection{Exported Constants}
 
-
+filenameOut = ``output"
 
 \subsubsection{Exported Access Programs}
 
@@ -187,7 +187,7 @@ main & - & - & - \\
 
 \subsubsection{State Variables}
 
-filenameOut = ``output"
+None
 
 \subsubsection{Access Routine Semantics}
 
@@ -347,14 +347,13 @@ $\text{True}$ & $\Rightarrow$ ``The projectile went long."\\
 \item exception: exc := 
 \end{itemize}
 \noindent \begin{longtable*}[l]{l l} 
-$\neg (0 < v)$ & $\Rightarrow$ InputError\\
-$\neg (0 < \theta < \frac{\pi}{2})$ & $\Rightarrow$ InputError\\
-$\neg (0 < p_{\text{target}})$ & $\Rightarrow$ InputError\\
+$\neg (0 < v)$ & $\Rightarrow$ badVelocity\\
+$\neg (0 < \theta < \frac{\pi}{2})$ & $\Rightarrow$ badAngle\\
+$\neg (0 < p_{\text{target}})$ & $\Rightarrow$ badTargetPosition\\
 \end{longtable*}
 
 See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and 
-associated error messages. \sam{I think the error messages should be more 
-descriptive, and be defined in the Appendix.}
+associated error messages.
 
 \subsection{Considerations}
 
@@ -679,49 +678,14 @@ N/A
 \renewcommand{\arraystretch}{1.2}
 
 \begin{longtable}{l p{12cm}}
-\caption{Possible Exceptions} \\
 \toprule
 \textbf{Message ID} & \textbf{Error Message} \\
 \midrule
-badLength & Error: Tank length must be $> 0$ \\
-badDiam & Error: Tank diameter must be $> 0$ \\
-badPCMVolume & Error: PCM volume must be $> 0$ \\
-badPCMAndTankVol & Error: PCM volume must be $<$ tank volume \\
-badPCMArea & Error: PCM area must be $> 0$ \\
-badPCMDensity & Error: rho\_p must be $> 0$ \\
-badMeltTemp & Error: Tmelt must be $> 0$ and $< Tc$ \\
-badCoilAndInitTemp & Error: Tc must be $>$ Tinit \\
-badCoilTemp & Error: Tc must be $> 0$ and $< 100$ \\
-badPCMHeatCapSolid & Error: C\_ps must be $> 0$ \\
-badPCMHeatCapLiquid & Error: C\_pl must be $> 0$ \\
-badHeatFusion & Error: Hf must be $> 0$ \\
-badCoilArea & Error: Ac must be $> 0$ \\
-badWaterDensity & Error: rho\_w must be $> 0$ \\
-badWaterHeatCap & Error: C\_w must be $> 0$ \\
-badCoilCoeff & Error: hc must be $> 0$ \\
-badPCMCoeff & Error: hp must be $> 0$ \\
-badInitTemp & Error: Tinit must be $> 0$ and $< 100$ \\
-badFinalTime & Error: tfinal must be $> 0$ \\
-badInitAndMeltTemp & Error: Tinit must be $<$ Tmelt \\
-ODE\_ACCURACY & $reltol$ and $abstol$ were not satisfied by the ODE solver for a given solution step. \\
-ODE\_BAD\_INPUT & Invalid input to ODE solver \\
-ODE\_MAXSTEP & ODE solver took $MaxStep$ steps and did not find solution \\
-warnLength & Warning: It is recommended that 0.1 $<$= L $<$= 50 \\
-warnDiam & Warning: It is recommended that 0.002 $<$= D/L $<$= 200 \\
-warnPCMVol & Warning: It is recommended that Vp be $>$= 0.0001\% of Vt \\
-warnVolArea & Warning: It is recommended that Vp $<$= Ap $<$= (2/0.001) * Vp \\
-warnPCMDensity & Warning: It is recommended that 500 $<$ rho\_p $<$ 20000 \\
-warnPCMHeatCapSolid & Warning: It is recommended that 100 $<$ C\_ps $<$ 4000 \\
-warnPCMHeatCapLiquid & Warning: It is recommended that 100 $<$ C\_pl $<$ 5000 \\
-warnCoilArea & Warning: It is recommended that Ac $<$= pi * (D/2) $\wedge$ 2 \\
-warnWaterDensity & Warning: It is recommended that 950 $<$ rho\_w $<$= 1000 \\
-warnWaterHeatCap & Warning: It is recommended that 4170 $<$ C\_w $<$ 4210 \\
-warnCoilCoeff & Warning: It is recommended that 10 $<$ hc $<$ 10000 \\
-warnPCMCoeff & Warning: It is recommended that 10 $<$ hp $<$ 10000 \\
-warnFinalTime & Warning: It is recommended that 0 $<$ tfinal $<$ 86400 \\
-warnWaterError & Warning: There is greater than $x$\% relative error between the energy in the water output and the expected output based on the law of conservation of energy. (Where $x$ is the value of $ConsTol$) \\
-warnPCMError & Warning: There is greater than $x$\% relative error between the energy in the PCM output and the expected output based on the law of conservation of energy. (Where $x$ is the value of $ConsTol$) \\
+badVelocity & InputError: Velocity must be positive.\\
+badAngle & InputError: Angle must be between zero and pi over two radians.\\
+badTargetPosition & InputError: Target position must be positive.\\
 \bottomrule
+\caption{Possible Exceptions} \\
 \end{longtable}
 
 

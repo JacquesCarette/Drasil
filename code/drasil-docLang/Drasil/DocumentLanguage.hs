@@ -21,9 +21,9 @@ import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name c
                                                      -- Vector - Name conflict (defined in file)
 import Utils.Drasil
 
-import Database.Drasil(SystemInformation(SI), citeDB, termTable, ccss',
-  _authors, _concepts, _kind, _quants, _sys, _usedinfodb, _sysinfodb,
-  collectUnits, ChunkDB)
+import Database.Drasil(SystemInformation(SI), citeDB, termTable, ccss, ccss',
+  _authors, _kind, _quants, _sys, _usedinfodb, _sysinfodb, collectUnits,
+  ChunkDB)
 
 import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
@@ -98,7 +98,8 @@ mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
                 $ filter (`hasStageSymbol` Equational) 
                 (nub v))
                 atStart] []
-    mkSubRef SI {_concepts = cccs} (TSymb' f con) = mkTSymb cccs f con
+    mkSubRef SI {_sysinfodb = cdb} (TSymb' f con) =
+      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
     mkSubRef SI {_usedinfodb = db} TAandA =
       tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
 

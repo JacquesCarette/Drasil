@@ -260,7 +260,7 @@ makeColumns = vcat . map (td . pSpec)
 makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
 makeDefn dt ps l = refwrap l $ table [dtag dt]
-  (tr (th (text "Refname") $$ td (bold (vcat [l]))) $$ makeDRows ps)
+  (tr (th (text "Refname") $$ td (bold l)) $$ makeDRows ps)
   where dtag L.General  = "gdefn"
         dtag L.Instance = "idefn"
         dtag L.Theory   = "tdefn"

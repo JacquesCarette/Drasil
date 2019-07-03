@@ -28,8 +28,8 @@ patternTestMainMethod = mainMethod "PatternTest" (body [block [
     (Just (litInt 3)) (Just (var "n" int)),
 
   block [
-    varDecDef "obs1" (obj "Observer") (extStateObj "Observer" (obj "Observer") []), 
-    varDecDef "obs2" (obj "Observer") (extStateObj "Observer" (obj "Observer") [])],
+    varDecDef (var "obs1" (obj "Observer")) (extStateObj "Observer" (obj "Observer") []), 
+    varDecDef (var "obs2" (obj "Observer")) (extStateObj "Observer" (obj "Observer") [])],
   block [
     initObserverList (listType static_ (obj "Observer")) [var "obs1" (obj "Observer")], 
     addObserver (obj "Observer") (var "obs2" (obj "Observer")),

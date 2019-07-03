@@ -461,7 +461,7 @@ genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 
 genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genMainFunc =
-  let l_filename = "filename"
+  let v_filename = var "filename" string
   in do
     g <- ask
     ip <- getInputDecl
@@ -471,7 +471,7 @@ genMainFunc =
     varDef <- mapM getCalcCall (execOrder $ csi $ codeSpec g)
     wo <- getOutputCall
     return $ mainMethod "" $ bodyStatements $
-      varDecDef l_filename string (arg 0) :
+      varDecDef v_filename (arg 0) :
       initLogFileVar (logKind g) ++
       catMaybes ([ip, gi, dv, ic] ++ varDef ++ [wo])
 
@@ -479,15 +479,13 @@ getInputDecl :: (RenderSym repr) => Reader (State repr) (Maybe (repr (
   Statement repr)))
 getInputDecl = do
   g <- ask
-  let l_params = "inParams"
-      getDecl :: (RenderSym repr) => Structure -> [CodeChunk] -> 
-        Reader (State repr) (Maybe (repr (Statement repr)))
+  let v_params = var "inParams" (obj "InputParameters")
       getDecl _ [] = return Nothing
       getDecl Unbundled ins = do
         vals <- mapM (\x -> variable (codeName x) (convType $ codeType x)) ins
         return $ Just $ multi $ map varDec vals
-      getDecl Bundled _ = return $ Just $ extObjDecNewVoid l_params 
-        "InputParameters" (obj "InputParameters") 
+      getDecl Bundled _ = return $ Just $ extObjDecNewVoid "InputParameters"
+        v_params 
   getDecl (inStruct g) (inputs $ codeSpec g)
 
 getFuncCall :: (RenderSym repr) => String -> repr (StateType repr) -> 
@@ -537,7 +535,7 @@ getCalcCall :: (RenderSym repr) => CodeDefinition -> Reader (State repr)
   (Maybe (repr (Statement repr)))
 getCalcCall c = do
   val <- getFuncCall (codeName c) (convType $ codeType c) (getCalcParams c)
-  return $ fmap (varDecDef (nopfx $ codeName c) (convType $ codeType c)) val
+  return $ fmap (varDecDef (var (nopfx $ codeName c) (convType $ codeType c))) val
 
 getOutputCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -846,8 +844,8 @@ convStmt (FTry t c) = do
   stmt2 <- mapM convStmt c
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmt FContinue = return continue
-convStmt (FDec v (C.List t)) = return $ listDec (codeName v) 0 
-  (listType dynamic_ (convType t))
+convStmt (FDec v (C.List t)) = return $ listDec 0 (var (codeName v)
+  (listType dynamic_ (convType t)))
 convStmt (FDec v t) = do 
   val <- variable (codeName v) (convType t)
   return $ varDec val
@@ -876,8 +874,8 @@ readData ddef = do
   return [block $ [
     varDec v_infile,
     varDec v_line,
-    listDec l_lines 0 (listType dynamic_ string),
-    listDec l_linetokens 0 (listType dynamic_ string),
+    listDec 0 v_lines,
+    listDec 0 v_linetokens,
     openFileR v_infile v_filename ] ++
     concat inD ++ [
     closeFile v_infile ]]
@@ -930,10 +928,10 @@ readData ddef = do
         ---------------
         clearTemp :: (RenderSym repr) => String -> Entry -> 
           Maybe (repr (Statement repr))
-        clearTemp sfx (Entry v) = Just $ listDecDef (codeName v ++ sfx) 
-          (convType $ getListType (codeType v) 1) []
-        clearTemp sfx (ListEntry _ v) = Just $ listDecDef (codeName v ++ sfx)
-          (convType $ getListType (codeType v) 1) []
+        clearTemp sfx (Entry v) = Just $ listDecDef (var (codeName v ++ 
+          sfx) (convType $ getListType (codeType v) 1)) []
+        clearTemp sfx (ListEntry _ v) = Just $ listDecDef (var 
+          (codeName v ++ sfx) (convType $ getListType (codeType v) 1)) []
         clearTemp _ JunkEntry = Nothing
         ---------------
         appendTemps :: (RenderSym repr) => Maybe String -> [Entry] -> 

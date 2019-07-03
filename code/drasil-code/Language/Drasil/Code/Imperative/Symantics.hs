@@ -491,8 +491,7 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
     repr (Permanence repr) -> repr (MethodType repr) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
   getMethod   :: Label -> repr (Value repr) -> repr (Method repr)
-  setMethod   :: Label -> Label -> Label -> repr (StateType repr) -> 
-    repr (Method repr) 
+  setMethod   :: Label -> repr (Value repr) -> repr (Method repr) 
   mainMethod  :: Label -> repr (Body repr) -> repr (Method repr)
   privMethod  :: Label -> Label -> repr (MethodType repr) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)

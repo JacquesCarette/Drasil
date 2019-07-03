@@ -504,8 +504,7 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   method n c s p t ps b = pair (method n c (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (method n c (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
   getMethod c v = pair (getMethod c $ pfst v) (getMethod c $ psnd v) 
-  setMethod setLbl c paramLbl t = pair (setMethod setLbl c paramLbl $ pfst t) 
-    (setMethod setLbl c paramLbl $ psnd t)
+  setMethod c v = pair (setMethod c $ pfst v) (setMethod c $ psnd v)
   mainMethod l b = pair (mainMethod l $ pfst b) (mainMethod l $ psnd b)
   privMethod n c t ps b = pair (privMethod n c (pfst t) (map pfst ps) (pfst b))
     (privMethod n c (psnd t) (map psnd ps) (psnd b))
@@ -1014,9 +1013,9 @@ instance MethodSym CppSrcCode where
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
     where getBody = oneLiner $ returnState (self c $-> v)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
-    void [stateParam $ var paramLbl t] setBody
-    where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
+  setMethod c v = method (setterName $ valueName v) c public dynamic_ 
+    (mState void) [stateParam v] setBody
+    where setBody = oneLiner $ (self c $-> v) &= v
   mainMethod _ b = fmap (mthd True Pub) (liftA4 cppMainMethod int b blockStart 
     blockEnd)
   privMethod n c = method n c private dynamic_
@@ -1486,8 +1485,8 @@ instance MethodSym CppHdrCode where
     (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] (return empty)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_ 
-    void [stateParam $ var paramLbl t] (return empty)
+  setMethod c v = method (setterName $ valueName v) c public dynamic_ 
+    (mState void) [stateParam v] (return empty)
   mainMethod _ _ = return (mthd True Pub empty)
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_

@@ -471,9 +471,9 @@ instance MethodSym PythonCode where
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
     where getBody = oneLiner $ returnState (self c $-> v)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_
-    (mState void) [stateParam $ var paramLbl t] setBody
-    where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
+  setMethod c v = method (setterName $ valueName v) c public dynamic_
+    (mState void) [stateParam v] setBody
+    where setBody = oneLiner $ (self c $-> v) &= v
   mainMethod _ b = liftPairFst (b, True)
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_

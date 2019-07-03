@@ -275,20 +275,13 @@ SpecParam (Section~\ref{SpecParam})
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \midrule
 load\_params & string & - &  FileError \\
-verify\_params & - & - & badLength, badDiam, badPCMVolume, badPCMAndTankVol,
-                        badPCMArea, badPCMDensity, badMeltTemp,
-                        badCoilAndInitTemp, badCoilTemp, badPCMHeatCapSolid,
-                        badPCMHeatCapLiquid, badHeatFusion, badCoilArea,
-                        badWaterDensity, badWaterHeatCap, badCoilCoeff,
-                        badPCMCoeff, badInitTemp, badFinalTime,
-                        badInitAndMeltTemp \\
-$L$ & - & $\mathbb{R}$\\
-$D$ & - & $\mathbb{R}$\\
-$V_P$ & - & $\mathbb{R}$\\
-$A_P$ & - & $\mathbb{R}$\\
-... & ... & ...\\
-$m_W^{\text{noPCM}}$ & - & $\mathbb{R}$ \\
-$\tau_W^{\text{noPCM}}$ & - & $\mathbb{R}$\\
+verify\_params & - & - & InputError \\
+$v$ & - & $\mathbb{R}$\\
+$\theta$ & - & $\mathbb{R}$\\
+$p_{\text{target}}$ & - & $\mathbb{R}$\\
+$p_{\text{land}}$ & - & $\mathbb{R}$\\
+$\text{offset}$ & - & $\mathbb{R}$\\
+$\text{message}$ & - & $\text{string}$\\
 \bottomrule
 \end{tabular}
 
@@ -296,117 +289,93 @@ $\tau_W^{\text{noPCM}}$ & - & $\mathbb{R}$\\
 
 \subsubsection{Environment Variables}
 
-inputFile: sequence of string \#\textit{f[i] is the ith string in the text file f}\\ 
+inputFile: sequence of string \#\textit{f[i] is the ith string in the text file f}
 
 \subsubsection{State Variables}
 
 \renewcommand{\arraystretch}{1.2}
 \begin{longtable*}[l]{l} 
-\# From R1\\
-$L$: $\mathbb{R}$ \\
-$D$: $\mathbb{R}$ \\
-$V_P$: $\mathbb{R}$ \\
-$A_P$: $\mathbb{R}$ \\
-$\rho_P$ : $\mathbb{R}$ \\
-$T_\text{melt}^{P}$: $\mathbb{R}$ \\
-$C^S_P$: $\mathbb{R}$ \\
-$C^L_P$: $\mathbb{R}$ \\
-$H_f$: $\mathbb{R}$ \\
-$A_C$: $\mathbb{R}$ \\
-$T_C$: $\mathbb{R}$ \\
-$\rho_W$: $\mathbb{R}$ \\
-$C_W$: $\mathbb{R}$ \\
-$h_C$: $\mathbb{R}$ \\
-$h_P$: $\mathbb{R}$ \\
-$T_\text{init}$: $\mathbb{R}$ \\
-$t_\text{step}$: $\mathbb{R}$ \\
-$t_\text{final}$: $\mathbb{R}$ \\
-$\mathit{AbsTol}$: $\mathbb{R}$ \\
-$\mathit{RelTol}$: $\mathbb{R}$ \\
-$\mathit{ConsTol}$: $\mathbb{R}$ \\
-~\\
-\# From R2\\
-$V_\text{tank}$: $\mathbb{R}$ \\
-$m_W$: $\mathbb{R}$ \\
-$m_P$: $\mathbb{R}$ \\
-~\\
-\noindent \# From R3\\
-$\tau_W$: $\mathbb{R}$ \\
-$\eta$: $\mathbb{R}$ \\
-$\tau_P^S$: $\mathbb{R}$ \\
-$\tau_P^L$: $\mathbb{R}$ \\
-~\\
-\# To Support IM4\\
-$E_{P\text{melt}}^{\text{init}}$: $\mathbb{R}$ \\
-$E_{P\text{melt}}^{\text{all}}$: $\mathbb{R}$ \\ 
-~\\
-\# To Support Testing\\
-$m_W^{\text{noPCM}}$: $\mathbb{R}$ \\
-$\tau_W^{\text{noPCM}}$: $\mathbb{R}$\\
+\# To Support IM1 and IM2 \\
+$v$: $\mathbb{R}$\\
+$\theta$: $\mathbb{R}$\\
+\# To Support IM3 and IM4 \\
+$p_{\text{target}}$: $\mathbb{R}$\\
+\# From FR4 \\
+$p_{\text{land}}$: $\mathbb{R}$\\
+$\text{offset}$: $\mathbb{R}$\\
+$\text{message}$: $\text{string}$\\
 \end{longtable*}
 
 \subsubsection{Assumptions}
 
 \begin{itemize}
 
-\item load\_params will be called before the values of any state variables will be accessed.
+\item load\_params will be called before the values of any state variables will 
+be accessed.
 
 \item The file contains the string equivalents of the numeric values for
-each input parameter in order, each on a new line. The order is the same as in
-the table in R1 of the SRS. Any comments in the input file should be denoted
-with a '\#' symbol.
+each input parameter in order, each on a new line. Any comments in the input file 
+should be denoted with a '\#' symbol.
 
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
 
-\noindent Param.$L$:
+\noindent Param.$v$:
 \begin{itemize}
-\item output: \textit{out} := $L$
+\item output: \textit{out} := $v$
 \item exception: none
 \end{itemize}
 
-\noindent Param.$D$:
+\noindent Param.$\theta$:
 \begin{itemize}
-\item output: \textit{out} := $D$
+\item output: \textit{out} := $\theta$
 \item exception: none
 \end{itemize}
 
-...
-~\newline
-
-\noindent Param.$m_W^{\text{noPCM}}$:
+\noindent Param.$p_{\text{target}}$:
 \begin{itemize}
-\item output: \textit{out} := $m_W^{\text{noPCM}}$
+\item output: \textit{out} := $p_{\text{target}}$
 \item exception: none
 \end{itemize}
 
-\noindent Param.$\tau_W^{\text{noPCM}}$:
+\noindent Param.$p_{\text{land}}$:
 \begin{itemize}
-\item output: \textit{out} := $\tau_W^{\text{noPCM}}$
+\item output: \textit{out} := $p_{\text{land}}$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$\text{offset}$:
+\begin{itemize}
+\item output: \textit{out} := $\text{offset}$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$\text{message}$:
+\begin{itemize}
+\item output: \textit{out} := $\text{message}$
 \item exception: none
 \end{itemize}
 
 \noindent load\_params($s$):
 \begin{itemize}
-\item transition: The filename $s$ is first associated with the file f.  {inputFile} is used to
-  modify the state variables using the following procedural specification:
+\item transition: The filename $s$ is first associated with the file f. 
+{inputFile} is used to modify the state variables using the following procedural 
+specification:
 \begin{enumerate}
 \item Read data sequentially from inputFile to populate the state variables from
-  R1 ($L$ to $\mathit{ConsTol}$).
-\item Calculate the derived quantities (all other state variables) as follows:
+  FR1 ($v$, $\theta$, and $p_{\text{target}}$).
+\item Calculate the derived quantities ($p_{\text{land}}$, $\text{offset}$, and $
+\text{message}$) as follows:
 \begin{itemize}
-\item $V_{\text{tank}} := \pi \times L \times (\frac{D}{2}) ^ 2$
-\item $m_W := \rho_w (V_t - V_p)$
-\item $m_P := \rho_p V_p$
-\item $\tau_W := \frac{m_w C_w}{A_c h_c}$
-\item $\eta := \frac{h_p A_p}{h_c A_c}$
-\item $\tau_P^S := \frac{m_p C_{ps}}{h_p A_p}$
-\item $\tau_P^L := \frac{m_p C_{pl}}{h_p A_p}$
-\item $E_{P\text{melt}}^{\text{init}} := C_{ps} m_p (T_{\text{melt}} - T_{\text{init}})$
-\item $E_{P\text{melt}}^{\text{all}} := H_f m_p$
-\item $m_W^{\text{noPCM}} := \rho_w  V_t$
-\item $\tau_W^{\text{noPCM}} := \frac{m_W^{\text{noPCM}} C_w}{h_c A_c}$
+\item $p_{\text{land}} := \frac{2 v^2 sin(\theta) cos(\theta)}{9.8}$
+\item $\text{offset} := p_{\text{land}} - p_{\text{target}} $
+\item $\text{message} := $
+\begin{longtable*}[l]{l l} 
+$|\frac{\text{offset}}{p_{\text{target}}}| < 0.02$ & $\Rightarrow$ ``The target was hit."\\
+$\text{offset} < 0$ & $\Rightarrow$ ``The projectile fell short."\\
+$\text{True}$ & $\Rightarrow$ ``The projectile went long."\\
+\end{longtable*}
 \end{itemize}
 \item verify\_params()
 \end{enumerate}
@@ -421,54 +390,14 @@ with a '\#' symbol.
 \item exception: exc := 
 \end{itemize}
 \noindent \begin{longtable*}[l]{l l} 
-$\neg (L > 0)$ & $\Rightarrow$ badLength\\
-$\neg (L_{\text{min}} \leq L \leq L_{\text{max}})$ & $\Rightarrow$ warnLength\\
-$\neg (D > 0)$ & $\Rightarrow$ badDiam\\
-$\neg ({\frac{D}{L}}_\text{min} \leq \frac{D}{L} \leq {\frac{D}{L}}_\text{max})$ & $\Rightarrow$ warnDiam\\
-$\neg (V_P > 0)$ & $\Rightarrow$ badPCMVolume\\
-$ \neg (V_P \geq \text{minfract} \cdot V_{\text{tank}}(D, L)) $ & $\Rightarrow$ warnPCMVol\\
-$\neg (V_P < V_{\text{tank}}(D, L))$ & $\Rightarrow$ badPCMAndTankVol\\
-$\neg (A_P > 0)$ & $\Rightarrow$ badPCMArea\\
-$\neg (V_P \leq A_P \leq \frac{2}{h_\text{min}} V_P)$ & $\Rightarrow$ warnVolArea\\
-$\neg (\rho_P > 0)$  & $\Rightarrow$ badPCMDensity\\
-$\neg (\rho_P^{\text{min}} < \rho_P < \rho_P^{\text{max}})$ & $\Rightarrow$ warnPCMDensity\\
-%   $T_\text{melt}^{P}$ 	& $0 < T_\text{melt}^{P} < T_C$ (+) & &  44.2 
-% 	\si[per-mode=symbol] {\celsius} & 10\%
-%   \\
-%   $C_P^S$ & $C_P^S > 0$ & $C_{P\text{min}}^S < C_P^S < C_{P\text{max}}^S$ & 1760 
-% 	\si[per-mode=symbol] {\joule\per\kilo\gram\per\celsius} & 10\%
-%   \\
-%   $C_P^L$ & $C_P^L > 0$ & $C_{P\text{min}}^L < C_P^S < C_{P\text{max}}^L$ & 2270 
-% 	\si[per-mode=symbol] {\joule\per\kilo\gram\per\celsius} & 10\%
-%   \\
-%   $H_f$ & $H_f > 0$ & $H_f^{\text{min}} < H_f < H_f^{\text{max}}$ & 211600 
-% 	\si[per-mode=symbol] {\joule\per\kilo\gram} & 10\%
-%   \\
-%   $A_C$ & $A_C > 0$ (*) & $A_C \leq A_C^{\text{max}}$ & 0.12 \si[per-mode=symbol] {\square\metre} & 10\%
-%   \\
-%   $T_C$ & $0 < T_C < 100$ (+)	& & 50 \si[per-mode=symbol] {\celsius} & 10\%
-%   \\
-%   $\rho_W$ & $\rho_W > 0$ & $\rho_W^{\text{min}} < \rho_W \leq \rho_W^{\text{max}}$ 
-% 	& 1000 \si[per-mode=symbol] {\kilo\gram\per\cubic\metre} & 10\%
-%   \\
-%   $C_W$ & $C_W > 0$ & $C_W^{\text{min}} < C_W < C_W^{\text{max}}$ & 4186 
-% 	\si[per-mode=symbol] {\joule\per\kilo\gram\per\celsius} & 10\%
-%   \\
-%   $h_C$ & $h_C > 0$ & $h_C^{\text{min}} \leq h_C \leq h_C^{\text{max}}$ 
-% 	& 1000 \si[per-mode=symbol] {\watt\per\square\metre\per\celsius} & 10\%
-%   \\
-%   $h_P$ & $h_P > 0$ & $h_P^{\text{min}} \leq h_P \leq h_P^{\text{max}}$ 
-% 	& 1000 \si[per-mode=symbol] {\watt\per\square\metre\per\celsius} & 10\%
-%   \\
-%   $T_\text{init}$ & $0 < T_\text{init} < T_\text{melt} $ (+) & & 40 \si[per-mode=symbol] {\celsius} & 10\%
-%   \\
-%   $t_\text{final}$ & $t_\text{final} > 0$ & $t_\text{final} < t_{\text{final}}^{\text{max}}$ (**) 
-% 		& 50000 \si[per-mode=symbol] {\second} & 10\%
-%   \\
+$\neg (0 < v)$ & $\Rightarrow$ InputError\\
+$\neg (0 < \text{offset})$ & $\Rightarrow$ InputError\\
+$\neg (0 < p_{\text{target}})$ & $\Rightarrow$ InputError\\
 \end{longtable*}
 
-etc.  See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and
-associated error messages.
+etc.  See Appendix (Section~\ref{Appendix}) for the complete list of exceptions 
+and associated error messages. \sam{I think the error messages should be more 
+descriptive, and be defined in the Appendix.}
 
 \subsection{Considerations}
 

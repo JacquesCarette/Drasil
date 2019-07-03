@@ -315,8 +315,6 @@ instance Selector CSharpCode where
 
   indexOf l v = objAccess l (func "IndexOf" int [v])
 
-  stringEqual v1 v2 = v1 ?== v2
-
   cast = csCast
 
 instance FunctionSym CSharpCode where

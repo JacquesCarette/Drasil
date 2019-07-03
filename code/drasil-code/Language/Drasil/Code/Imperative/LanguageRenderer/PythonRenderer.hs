@@ -292,8 +292,6 @@ instance Selector PythonCode where
   
   indexOf l v = objAccess l (func "index" int [v])
 
-  stringEqual v1 v2 = v1 ?== v2
-
   cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
 
 instance FunctionSym PythonCode where

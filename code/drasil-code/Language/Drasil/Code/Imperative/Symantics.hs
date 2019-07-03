@@ -286,8 +286,6 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   indexOf :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
-  stringEqual :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-
   cast :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr)
 
 class (ValueSym repr, ValueExpression repr) => FunctionSym repr where

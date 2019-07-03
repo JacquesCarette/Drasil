@@ -299,9 +299,6 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
   
   indexOf l v = pair (indexOf (pfst l) (pfst v)) (indexOf (psnd l) (psnd v))
 
-  stringEqual v1 v2 = pair (stringEqual (pfst v1) (pfst v2)) (stringEqual 
-    (psnd v1) (psnd v2))
-
   cast t v = pair (cast (pfst t) (pfst v)) (cast (psnd t) (psnd v))
 
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
@@ -799,8 +796,6 @@ instance Selector CppSrcCode where
   indexOf l v = funcApp "find" int [l $. iterBegin (fmap valType v), 
     l $. iterEnd (fmap valType v), v] #- l $. iterBegin (fmap valType v)
 
-  stringEqual v1 v2 = v1 ?== v2
-
   cast = cppCast
 
 instance FunctionSym CppSrcCode where
@@ -1282,8 +1277,6 @@ instance Selector CppHdrCode where
   argExists _ = liftA2 mkVal void (return empty)
   
   indexOf _ _ = liftA2 mkVal void (return empty)
-
-  stringEqual _ _ = liftA2 mkVal void (return empty)
 
   cast _ _ = liftA2 mkVal void (return empty)
 

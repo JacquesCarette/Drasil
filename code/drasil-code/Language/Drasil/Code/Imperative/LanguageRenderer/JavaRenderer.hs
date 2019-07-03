@@ -284,7 +284,7 @@ instance BooleanExpression JavaCode where
   (?<=) = liftA4 typeBinExpr lessEqualOp bool
   (?>) = liftA4 typeBinExpr greaterOp bool
   (?>=) = liftA4 typeBinExpr greaterEqualOp bool
-  (?==) = liftA4 typeBinExpr equalOp bool
+  (?==) = jEquality
   (?!=) = liftA4 typeBinExpr notEqualOp bool
   
 instance ValueExpression JavaCode where
@@ -318,8 +318,6 @@ instance Selector JavaCode where
   argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
 
   indexOf l v = objAccess l (func "indexOf" int [v])
-
-  stringEqual v1 str = objAccess v1 (func "equals" bool [str])
 
   cast = jCast
 
@@ -576,6 +574,12 @@ jListType t lst = listTypeDocD t lst
 
 jArrayType :: JavaCode (StateType JavaCode)
 jArrayType = return $ td (List $ Object "Object") (text "Object[]")
+
+jEquality :: JavaCode (Value JavaCode) -> JavaCode (Value JavaCode) -> 
+  JavaCode (Value JavaCode)
+jEquality v1 v2 = jEquality' (getType $ valueType v2)
+  where jEquality' String = objAccess v1 (func "equals" bool [v2])
+        jEquality' _ = liftA4 typeBinExpr equalOp bool v1 v2
 
 jCast :: JavaCode (StateType JavaCode) -> JavaCode (Value JavaCode) -> 
   JavaCode (Value JavaCode)

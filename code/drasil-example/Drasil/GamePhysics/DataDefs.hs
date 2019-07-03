@@ -244,7 +244,7 @@ chaslesThmDesc = foldlSent [S "The linear", phrase QP.velocity,
   S "of the", phrase CP.rigidBody, S "at the origin (axis of rotation)" `andThe`
   S "resultant vector from the cross product of the",
   phrase CP.rigidBody :+: S "'s", phrase QP.angularVelocity, 
-  ch QP.angularVelocity, (sParen $ Sy $ unit_symb QP.angularVelocity) `andThe`
+  ch QP.angularVelocity, sParen (Sy $ unit_symb QP.angularVelocity) `andThe`
   phrase rOB `sC` ch rOB, sParen $ Sy $ unit_symb rOB]
 
 ---------------DD10 Impulse(Vector)-----------------------------------------------------------------------

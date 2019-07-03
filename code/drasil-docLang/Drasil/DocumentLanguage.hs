@@ -16,6 +16,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel, helperRefs)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
+import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                      -- Vector - Name conflict (defined in file)
@@ -23,9 +24,9 @@ import Utils.Drasil
 
 import Database.Drasil(SystemInformation(SI), citeDB, termTable, ccss, ccss',
   _authors, _kind, _quants, _sys, _usedinfodb, _sysinfodb, collectUnits,
-  ChunkDB)
+  ChunkDB, traceTable, refbyTable, generateRefbyMap)
 
-import Control.Lens ((^.), over)
+import Control.Lens ((^.), over, set)
 import qualified Data.Map as Map (elems)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
@@ -57,10 +58,16 @@ import Data.List (nub, sortBy)
 -- | Creates a document from a document description and system information
 mkDoc :: DocDesc -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc l comb si@SI {_sys = sys, _kind = kind, _authors = authors} = Document
-  (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) (mkSections si l)
+  (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
+  mkSections (fillTraceMaps l si) l
 
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
+
+fillTraceMaps :: DocDesc -> SystemInformation -> SystemInformation
+fillTraceMaps dd si@SI{_sysinfodb = db} = si {_sysinfodb =
+  set refbyTable (generateRefbyMap tdb) $ set traceTable tdb db} where
+  tdb = generateTraceMap dd
 
 -- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]

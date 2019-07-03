@@ -15,13 +15,15 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   TSIntro(..), TUIntro(..), UCsSec(..))
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel, helperRefs)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                      -- Vector - Name conflict (defined in file)
 import Utils.Drasil
 
-import Database.Drasil(SystemInformation(SI), citeDB, termTable, unitTable,
-  _authors, _concepts, _kind, _quants, _sys, _usedinfodb)
+import Database.Drasil(SystemInformation(SI), citeDB, termTable, ccss',
+  _authors, _concepts, _kind, _quants, _sys, _usedinfodb, _sysinfodb,
+  collectUnits, ChunkDB)
 
 import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
@@ -57,12 +59,15 @@ mkDoc :: DocDesc -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> D
 mkDoc l comb si@SI {_sys = sys, _kind = kind, _authors = authors} = Document
   (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) (mkSections si l)
 
+extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
+extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
+
 -- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]
-mkSections si = map doit
+mkSections si dd = map doit dd
   where
     doit :: DocSection -> Section
-    doit (RefSec rs)         = mkRefSec si rs
+    doit (RefSec rs)         = mkRefSec si dd rs
     doit (IntroSec is)       = mkIntroSec si is
     doit (StkhldrSec sts)    = mkStkhldrSec sts
     doit (SSDSec ss)         = mkSSDSec si ss
@@ -78,15 +83,14 @@ mkSections si = map doit
 
 
 -- | Helper for creating the reference section and subsections
-mkRefSec :: SystemInformation -> RefSec -> Section
-mkRefSec si (RefProg c l) = section (titleize refmat) [c]
+mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
+mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
   (map (mkSubRef si) l) (makeSecRef "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
-    mkSubRef SI {_usedinfodb = db}  TUnits =
-        tableOfUnits (sortBy compUnitDefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
-    mkSubRef SI {_usedinfodb = db} (TUnits' con) =
-        tableOfUnits (sortBy compUnitDefn $ map fst $ Map.elems $ db ^. unitTable) (tuIntro con)
+    mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI
+    mkSubRef SI {_sysinfodb = db} (TUnits' con) =
+        tableOfUnits (nub $ sortBy compUnitDefn $ extractUnits dd db) (tuIntro con)
     mkSubRef SI {_quants = v} (TSymb con) =
       SRS.tOfSymb 
       [tsIntro con,

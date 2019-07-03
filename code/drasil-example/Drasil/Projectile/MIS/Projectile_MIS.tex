@@ -120,6 +120,7 @@ are lists of characters. In addition, \progname\ uses functions, which
 are defined by the data types of their inputs and outputs. Local functions are
 described by giving their type signature followed by their specification.
 
+\newpage
 \section{Module Decomposition}
 
 The following table is taken directly from the Module Guide document for this project.
@@ -470,78 +471,78 @@ not changed for the life of the program.
 
 % See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and
 % associated error messages.
-
-\newpage
-\section{MIS of Output Verification Module} \label{VerifyOutput}
-
-\subsection{Module}
-
-verify\_output
-
-\subsection{Uses}
-
-Param (Section~\ref{Parameters})
-
-\subsection{Syntax}
-
-\subsubsection{Exported Constant}
-
-ADMIS\_ER = $1 \times 10^{-6}$
-
-\subsubsection{Exported Access Programs}
-
-\begin{center}
-\begin{tabular}{p{3cm} p{7cm} p{1cm} p{2cm}}
-\hline
-\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\hline
-verify\_output & $T_W(t):\mathbb{R} \rightarrow \mathbb{R},
-                 T_P(t):\mathbb{R} \rightarrow \mathbb{R},
-                 E_W(t):\mathbb{R} \rightarrow \mathbb{R},
-                 E_P(t):\mathbb{R} \rightarrow \mathbb{R},
-                 t_\text{final}: \mathbb{R}$ & - & EWAT\_NOT\_CONSERVE, EPCM\_NOT\_CONSERVE \\
-\hline
-\end{tabular}
-\end{center}
-
-\subsection{Semantics}
-
-\subsubsection{State Variables}
-
-None
-
-\subsubsection{Assumptions}
-
-All of the fields of the input parameters structure have been assigned a
-value.  
-
-\subsubsection{Access Routine Semantics}
-
-\noindent verify\_output($T_W, T_P, E_W, E_P$, $t_\text{final}$):
-\begin{itemize}
-\item exception: exc := (
-\end{itemize}
-
-\noindent $
-(\forall t | 0 \leq t \leq t_\text{final} : \text{relErr}(E_W,
-\int_{0}^{t} h_C A_C (T_C - T_W(t)) dt - \int_{0}^{t} h_P A_P (T_W(t)
-- T_P(t)) dt) < \text{ADMIS\_ER}) \Rightarrow \text{EWAT\_NOT\_CONSERVE}
-$
-
-$|$
-
-\noindent $ 
-(\forall t | 0 \leq t \leq t_\text{final} : \text{relErr}(E_{P}, \int_{0}^{t}
-h_{P} A_{P} (T_{W}(t) - T_{P}(t)) dt) < \text{ADMIS\_ER}) \Rightarrow
-\text{EPCM\_NOT\_CONSERVE} 
-$
-)
-
-\subsubsection{Local Functions}
-
-relErr: $\mathbb{R}$ $\times$ $\mathbb{R}$ $\rightarrow$ $\mathbb{R}$ \\
-$\text{relErr}(t, e) \equiv \frac{|t - e|}{|t|}$ \\
-\newline
+%
+%\newpage
+%\section{MIS of Output Verification Module} \label{VerifyOutput}
+%
+%\subsection{Module}
+%
+%verify\_output
+%
+%\subsection{Uses}
+%
+%Param (Section~\ref{Parameters})
+%
+%\subsection{Syntax}
+%
+%\subsubsection{Exported Constant}
+%
+%ADMIS\_ER = $1 \times 10^{-6}$
+%
+%\subsubsection{Exported Access Programs}
+%
+%\begin{center}
+%\begin{tabular}{p{3cm} p{7cm} p{1cm} p{2cm}}
+%\hline
+%\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+%\hline
+%verify\_output & $T_W(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 T_P(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 E_W(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 E_P(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 t_\text{final}: \mathbb{R}$ & - & EWAT\_NOT\_CONSERVE, EPCM\_NOT\_CONSERVE \\
+%\hline
+%\end{tabular}
+%\end{center}
+%
+%\subsection{Semantics}
+%
+%\subsubsection{State Variables}
+%
+%None
+%
+%\subsubsection{Assumptions}
+%
+%All of the fields of the input parameters structure have been assigned a
+%value.  
+%
+%\subsubsection{Access Routine Semantics}
+%
+%\noindent verify\_output($T_W, T_P, E_W, E_P$, $t_\text{final}$):
+%\begin{itemize}
+%\item exception: exc := (
+%\end{itemize}
+%
+%\noindent $
+%(\forall t | 0 \leq t \leq t_\text{final} : \text{relErr}(E_W,
+%\int_{0}^{t} h_C A_C (T_C - T_W(t)) dt - \int_{0}^{t} h_P A_P (T_W(t)
+%- T_P(t)) dt) < \text{ADMIS\_ER}) \Rightarrow \text{EWAT\_NOT\_CONSERVE}
+%$
+%
+%$|$
+%
+%\noindent $ 
+%(\forall t | 0 \leq t \leq t_\text{final} : \text{relErr}(E_{P}, \int_{0}^{t}
+%h_{P} A_{P} (T_{W}(t) - T_{P}(t)) dt) < \text{ADMIS\_ER}) \Rightarrow
+%\text{EPCM\_NOT\_CONSERVE} 
+%$
+%)
+%
+%\subsubsection{Local Functions}
+%
+%relErr: $\mathbb{R}$ $\times$ $\mathbb{R}$ $\rightarrow$ $\mathbb{R}$ \\
+%$\text{relErr}(t, e) \equiv \frac{|t - e|}{|t|}$ \\
+%\newline
 
 %
 %\newpage

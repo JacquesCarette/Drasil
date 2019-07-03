@@ -451,9 +451,8 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
     repr (Statement repr) -> repr (Body repr) -> repr (Statement repr)
   forRange :: Label -> repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Body repr) -> repr (Statement repr)
-  -- Had to add StateType to forEach because I can't extract the StateType from the value.
-  forEach  :: Label -> repr (StateType repr) -> repr (Value repr) -> 
-    repr (Body repr) -> repr (Statement repr)
+  forEach  :: Label -> repr (Value repr) -> repr (Body repr) -> 
+    repr (Statement repr)
   while    :: repr (Value repr) -> repr (Body repr) -> repr (Statement repr) 
 
   tryCatch :: repr (Body repr) -> repr (Body repr) -> repr (Statement repr)

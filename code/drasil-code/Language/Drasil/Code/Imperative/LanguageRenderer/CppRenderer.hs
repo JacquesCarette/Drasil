@@ -465,8 +465,8 @@ instance (Pair p) => ControlStatementSym (p CppSrcCode CppHdrCode) where
   forRange i initv finalv stepv b = pair (forRange i (pfst initv) (pfst finalv) 
     (pfst stepv) (pfst b)) (forRange i (psnd initv) (psnd finalv) (psnd stepv) 
     (psnd b))
-  forEach l t v b = pair (forEach l (pfst t) (pfst v) (pfst b)) (forEach l 
-    (psnd t) (psnd v) (psnd b))
+  forEach l v b = pair (forEach l (pfst v) (pfst b)) (forEach l (psnd v) 
+    (psnd b))
   while v b = pair (while (pfst v) (pfst b)) (while (psnd v) (psnd b))
 
   tryCatch tb cb = pair (tryCatch (pfst tb) (pfst cb)) (tryCatch (psnd tb) 
@@ -966,8 +966,9 @@ instance ControlStatementSym CppSrcCode where
     (loopState sInit) vGuard (loopState sUpdate) b
   forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
     (var i int ?< finalv) (var i int &+= stepv)
-  forEach l t v = for (varDecDef (var l (iterator t)) (v $. iterBegin t)) 
+  forEach l v = for (varDecDef (var l (iterator t)) (v $. iterBegin t)) 
     (var l (iterator t) ?!= v $. iterEnd t) (var l (iterator t) &++)
+    where t = listInnerType $ valueType v
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 cppTryCatch tb cb
@@ -1451,7 +1452,7 @@ instance ControlStatementSym CppHdrCode where
 
   for _ _ _ _ = return (mkStNoEnd empty)
   forRange _ _ _ _ _ = return (mkStNoEnd empty)
-  forEach _ _ _ _ = return (mkStNoEnd empty)
+  forEach _ _ _ = return (mkStNoEnd empty)
   while _ _ = return (mkStNoEnd empty)
 
   tryCatch _ _ = return (mkStNoEnd empty)

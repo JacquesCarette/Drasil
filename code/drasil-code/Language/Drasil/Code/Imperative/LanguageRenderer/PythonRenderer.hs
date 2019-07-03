@@ -430,7 +430,7 @@ instance ControlStatementSym PythonCode where
     "use forRange, forEach, or while instead"
   forRange i initv finalv stepv b = mkStNoEnd <$> liftA5 (pyForRange i) 
     iterInLabel initv finalv stepv b
-  forEach l _ v b = mkStNoEnd <$> liftA4 (pyForEach l) iterForEachLabel 
+  forEach l v b = mkStNoEnd <$> liftA4 (pyForEach l) iterForEachLabel 
     iterInLabel v b
   while v b = mkStNoEnd <$> liftA2 pyWhile v b
 

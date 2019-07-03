@@ -304,10 +304,9 @@ forDocD bStart bEnd sInit vGuard sUpdate b = vcat [
   indent b,
   bEnd]
 
-forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> TypeData -> 
-  ValData -> Doc -> Doc
-forEachDocD l bStart bEnd forEachLabel inLabel t v b =
-  vcat [forEachLabel <+> parens (typeDoc t <+> text l <+> inLabel <+> 
+forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> ValData -> Doc -> Doc
+forEachDocD l bStart bEnd forEachLabel inLabel v b =
+  vcat [forEachLabel <+> parens (typeDoc (valType v) <+> text l <+> inLabel <+> 
     valDoc v) <+> bStart,
   indent b,
   bEnd]

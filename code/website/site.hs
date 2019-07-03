@@ -89,20 +89,16 @@ mkExampleCtx exampleDir srsDir =
   -- here, listFieldWith used with multiple versions of SRS per example
   listFieldWith "srs" (
     -- field will replace the string parameters in the html with the returned string
-    -- <> acts as a monad catenator
+    -- <> acts as a monad concatenator
 
     -- returns filename from ((filename, TYPE), E _ _ _ _)
     field "filename" (return . fst . srsVar) <>
-
     -- returns TYPE from ((_, _), E _ _ _ _)
     field "type" (return . snd . srsVar) <>
-
     -- returns name from ((_, _), E name [codeSource] srsVariants description)
     field "name" (return . name . example) <>
-
     -- gets the URL by taking the path to the srs ++ the filename of the srs
     field "url" (\x -> return $ srsPath exampleDir (name $ example x) srsDir ++ fst (srsVar x))
-
   -- creates a list of items where each item contains a tuple
   -- the tuple contains (specific srs variant, general Example)
   -- in this way, each srs variant is accounted for, and all information can be accessible 
@@ -111,12 +107,14 @@ mkExampleCtx exampleDir srsDir =
   -- Fills in the overall name of each example
   -- by returning name from E name [codeSource] srsVariants description
   field "name" (return . name . itemBody) <>
-
   -- returns the description of an example if Just, otherwise fails and does not add one
   maybeField "desc" (return . desc . itemBody) <>
 
+  -- Lists sources if they exist
   listFieldWith "src" (
+    -- return filepath from (filepath, language)
     field "path" (return . fst . itemBody) <>
+    -- return language from (filepath, language)
     field "lang" (return . snd . itemBody)
   -- If there are no sources, fail is used so as not to create a "Generated Code" section
   ) (\x -> if null (src $ itemBody x) then fail "No code files for example" else
@@ -130,11 +128,14 @@ mkExampleCtx exampleDir srsDir =
     example = snd . itemBody
 
 mkGraphs :: FilePath -> IO [FilePath]
+-- returns an IO list of the paths to all graphs based on an input path
 mkGraphs path = sort . filter (endswith ".pdf") <$> listDirectory path
 
 mkGraphCtx :: FilePath -> Context FilePath
 mkGraphCtx graphRoot =
+  -- fills name with the base name of the file (ie. no paths or extensions)
   field "name" (return . takeBaseName . itemBody) <>
+  -- fills url with the link to the file based on the link to the root directory concatenated with the filename
   field "url" (return . (++) graphRoot . itemBody)
 
 main :: IO ()

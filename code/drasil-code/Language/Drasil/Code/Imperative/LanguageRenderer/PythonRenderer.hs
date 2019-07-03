@@ -314,9 +314,6 @@ instance SelectorFunction PythonCode where
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 listSetDocD i v)
 
-  listAccessEnum = listAccess
-  listSetEnum i = listSet (cast int i)
-
   at t l = listAccess t (var l int)
 
 instance StatementSym PythonCode where

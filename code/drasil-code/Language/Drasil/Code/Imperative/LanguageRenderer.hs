@@ -33,7 +33,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, 
   prependToBody, appendToBody, surroundBody, getterName, setterName, setMain, 
-  setEmpty
+  setEmpty, intValue
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -727,3 +727,9 @@ setMain (d, _) = (d, True)
 
 setEmpty :: (Doc, Terminator) -> (Doc, Terminator)
 setEmpty (d, _) = (d, Empty)
+
+intValue :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
+intValue i = intValue' (getType $ valueType i)
+  where intValue' Integer = i
+        intValue' (Enum _) = cast S.int i
+        intValue' _ = error "Value passed must be Integer or Enum"

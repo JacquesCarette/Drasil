@@ -39,7 +39,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody,
-  getterName, setterName, setMain, setEmpty)
+  getterName, setterName, setMain, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
   liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
@@ -337,11 +337,8 @@ instance FunctionSym JavaCode where
   iterEnd _ = error "Attempt to use iterEnd in Java, but Java has no iterators"
 
 instance SelectorFunction JavaCode where
-  listAccess t i = func "get" t [i]
-  listSet i v = func "set" (listType static_ $ fmap valType v) [i, v]
-
-  listAccessEnum t v = listAccess t (cast int v)
-  listSetEnum i = listSet (cast int i)
+  listAccess t i = func "get" t [intValue i]
+  listSet i v = func "set" (listType static_ $ fmap valType v) [intValue i, v]
 
   at t l = listAccess t (var l int)
 

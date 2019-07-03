@@ -38,7 +38,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody,
-  getterName, setterName, setEmpty)
+  getterName, setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, angles, blank, 
@@ -322,11 +322,6 @@ instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
   listAccess t v = pair (listAccess (pfst t) (pfst v)) (listAccess (psnd t) 
     (psnd v))
   listSet i v = pair (listSet (pfst i) (pfst v)) (listSet (psnd i) (psnd v))
-
-  listAccessEnum t v = pair (listAccessEnum (pfst t) (pfst v)) 
-    (listAccessEnum (psnd t) (psnd v))
-  listSetEnum i v = pair (listSetEnum (pfst i) (pfst v)) 
-    (listSetEnum (psnd i) (psnd v))
 
   at t l = pair (at (pfst t) l) (at (psnd t) l)
 
@@ -838,12 +833,9 @@ instance FunctionSym CppSrcCode where
   iterEnd t = func "end" (iterator t) []
 
 instance SelectorFunction CppSrcCode where
-  listAccess t v = func "at" t [v]
+  listAccess t v = func "at" t [intValue v]
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
-    (liftA2 cppListSetDoc i v)
-
-  listAccessEnum t v = listAccess t (cast int v)
-  listSetEnum i = listSet (cast int i)
+    (liftA2 cppListSetDoc (intValue i) v)
 
   at t l = listAccess t (var l int) 
 
@@ -1343,9 +1335,6 @@ instance FunctionSym CppHdrCode where
 instance SelectorFunction CppHdrCode where
   listAccess _ _ = liftA2 fd void (return empty)
   listSet _ _ = liftA2 fd void (return empty)
-
-  listAccessEnum _ _ = liftA2 fd void (return empty)
-  listSetEnum _ _ = liftA2 fd void (return empty)
 
   at _ _ = liftA2 fd void (return empty)
 

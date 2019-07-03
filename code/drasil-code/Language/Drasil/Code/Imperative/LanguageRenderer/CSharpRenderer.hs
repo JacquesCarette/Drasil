@@ -40,7 +40,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
   docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody, getterName, 
-  setterName, setMain, setEmpty)
+  setterName, setMain, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
   liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
@@ -333,12 +333,9 @@ instance FunctionSym CSharpCode where
   iterEnd _ = error "Attempt to use iterEnd in C#, but C# has no iterators"
 
 instance SelectorFunction CSharpCode where
-  listAccess t v = liftA2 fd t (fmap listAccessDocD v)
+  listAccess t v = liftA2 fd t (fmap listAccessDocD $ intValue v)
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
-    (liftA2 listSetDocD i v)
-
-  listAccessEnum t v = listAccess t (cast int v)
-  listSetEnum i = listSet (cast int i)
+    (liftA2 listSetDocD (intValue i) v)
 
   at t l = listAccess t (var l int)
 

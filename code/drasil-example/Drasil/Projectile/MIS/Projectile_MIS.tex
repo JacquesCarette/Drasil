@@ -19,6 +19,7 @@
 \usepackage[section]{placeins}
 \usepackage{caption}
 \usepackage{fullpage}
+\usepackage[nottoc, numbib]{tocbibind}
 
 \hypersetup{
 bookmarks=true,     % show bookmarks bar?
@@ -133,18 +134,15 @@ The following table is taken directly from the Module Guide document for this pr
 {Hardware-Hiding} & ~ \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
 & Output Format\\
 & Output Verification\\
-& Temperature ODEs\\
-& Energy Equations\\ 
 & Control Module\\
 & Specification Parameters Module\\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision} & {Sequence Data Structure}\\
-& ODE Solver\\
-& Plotting\\
+\multirow{1}{0.3\textwidth}{Software Decision} & Sequence Data Structure\\
+% & Plotting\\
 \bottomrule
 
 \end{tabular}
@@ -153,7 +151,6 @@ The following table is taken directly from the Module Guide document for this pr
 \end{table}
 
 \newpage
-~\newpage
 
 \section{MIS of Control Module} \label{Main}
 
@@ -516,265 +513,6 @@ not changed for the life of the program.
 % associated error messages.
 
 \newpage
-\section{MIS of Temperature ODEs Module} \label{Temperature}
-
-\subsection{Module}
-
-Temperature
-
-\subsection{Uses}
-
-Param (Section~\ref{Parameters})
-
-\subsection{Syntax}
-
-\subsubsection{Exported Access Programs}
-
-\begin{center}
-\begin{tabular}{p{3.5cm} p{1cm} p{7cm} p{2cm}}
-\hline
-\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\hline
-ODE\_SolidPCM & -- & $(\mathbb{R}^{3} \rightarrow \mathbb{R})^2$ & - \\
-\hline
-ODE\_MeltingPCM & -- &  $(\mathbb{R}^{4} \rightarrow \mathbb{R})^3$ & - \\
-\hline
-ODE\_LiquidPCM & -- & $(\mathbb{R}^{3} \rightarrow \mathbb{R})^2$ & - \\
-\hline
-event\_StartMelt & -- & $\mathbb{R}^2 \rightarrow \mathbb{R}$ & - \\
-\hline
-event\_EndMelt & -- & $\mathbb{R}^3 \rightarrow \mathbb{R}$ & - \\
-\hline
-\end{tabular}
-\end{center}
-
-\subsection{Semantics}
-
-\subsubsection{State Variables}
-
-none
-
-\subsubsection{Assumptions}
-
-none
-
-\subsubsection{Access Routine Semantics}
-
-ODE\_SolidPCM(): 
-\renewcommand*{\arraystretch}{1.5}
-\begin{itemize}
-\item output: $out := 
-\dfrac{d}{dt} \left [ 
-\begin{array}{c}
-T_W\\
-T_P 
-\end{array} 
-\right] =
-\left [ 
-\begin{array}{c}
-\frac{1}{\tau_W}[(T_C - T_W(t)) + {\eta}(T_P(t) - T_W(t))]\\
-\frac{1}{\tau^S_P}(T_W(t) - T_P(t)) 
-\end{array} 
-\right]
-$
-\item exception: none
-\end{itemize}
-
-ODE\_MeltingPCM(): 
-\renewcommand*{\arraystretch}{1.5}
-\begin{itemize}
-\item output: $out := 
-\dfrac{d}{dt} \left [ 
-\begin{array}{c}
-T_W\\
-T_P\\
-Q_P 
-\end{array} 
-\right] =
-\left [ 
-\begin{array}{c}
-\frac{1}{\tau_W}[(T_C - T_W(t)) + {\eta}(T_P(t) - T_W(t))]\\
-0 \\
-h_P A_P (T_W(t) - T_\text{melt}^P)
-\end{array} 
-\right]
-$
-\item exception: none
-\end{itemize}
-
-ODE\_LiquidPCM(): 
-\renewcommand*{\arraystretch}{1.5}
-\begin{itemize}
-\item output: $out := 
-\dfrac{d}{dt} \left [ 
-\begin{array}{c}
-T_W\\
-T_P
-\end{array} 
-\right] =
-\left [ 
-\begin{array}{c}
-\frac{1}{\tau_W}[(T_C - T_W(t)) + {\eta}(T_P(t) - T_W(t))]\\
-\frac{1}{\tau^L_P}(T_W(t) - T_P(t))
-\end{array} 
-\right]
-$
-\item exception: none
-\end{itemize}
-
-event\_StartMelt(): 
-\begin{itemize}
-\item output: $out := g([T_W, T_P]^T) = T_\text{melt}^P - T_P$
-\item exception: none
-\end{itemize}
-
-event\_EndMelt(): 
-\begin{itemize}
-\item output: $out := g([T_W, T_P, Q_P]^T) = 1 - \phi$, where $\phi = \frac{Q_P}{E_{P\text{melt}}^{\text{all}}}$
-\item exception: none
-\end{itemize}
-
-\newpage
-\section{MIS of ODE Solver Module} \label{ODE}
-
-\#\textit{Bold font is used to indicate variables that are a sequence
-  type}
-
-\subsection{Module}
-
-Solver($n: \mathbb{N}$) \#\textit{$n$ is the length of the sequences}
-
-\subsection{Uses}
-
-None
-
-\subsection{Syntax}
-
-\subsubsection{Exported Access Programs}
-
-\begin{center}
-\begin{tabular}{p{1.5cm} >{\raggedright\arraybackslash}p{9.25cm} >{\raggedright\arraybackslash}p{2.4cm} p{1.5cm}}
-  \hline
-  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Except.} \\
-  \hline
-  solve & $\textbf{f}: (\mathbb{R}^{n+1} \rightarrow \mathbb{R})^n, t_0 : \mathbb{R},
-          \textbf{y}_0: \mathbb{R}^n, g: \mathbb{R}^n \rightarrow \mathbb{R},
-          t_\text{fin}: \mathbb{R}$ & $t_1: \mathbb{R}, 
-                                      \textbf{y}:
-                                      (\mathbb{R}
-                                      \rightarrow
-                                      \mathbb{R})^n$ & ODE\_ERR, NO\_EVENT\\
-  solveNoE & $\textbf{f}: (\mathbb{R}^{n+1} \rightarrow \mathbb{R})^n, t_0 : \mathbb{R},
-             \textbf{y}_0: \mathbb{R}^n, t_\text{fin}: \mathbb{R}$ & $\textbf{y}: (\mathbb{R}
-                                                            \rightarrow
-                                                            \mathbb{R})^n$ & ODE\_ERR\\
-
-  \hline 
-\end{tabular}
-\end{center}
-
-\subsection{Semantics}
-
-\subsubsection{State Variables}
-
-None
-
-\subsubsection{Access Routine Semantics}
-
-\#\textit{Solving} $\frac{d}{dt} \mathbf{y} = \mathbf{f}(t,
-\mathbf{y}(t))$\\
-
-\noindent solve($\textbf{f}, t_0, \textbf{y}_0, g, t_\text{fin}$): 
-\begin{itemize}
-\item output: $out := t_1, \textbf{y}(t)$ where 
-$$\textbf{y}(t) = \textbf{y}_0 + \int_{t_0}^{t} \textbf{f}(s, \textbf{y}(s)) ds$$ 
-with $t_1$ determined by the first time where $g(\textbf{y}(t_1)) = 0$.  $\textbf{y}(t)$ is
-calculated from $t = t_0$ to $t = t_1$.
-\item exception: $exc :=$ ( $\neg (\exists t: \mathbb{R}| t_0 \leq t
-  \leq t_\text{fin} : g(\textbf{y}(t)) = 0) \Rightarrow$ NO\_EVENT $|$ ODE Solver Fails $\Rightarrow$
-  ODE\_ERR)
-\end{itemize}
-
-solveNoE($\textbf{f}$, $t_0$, $\textbf{y}_0$, $t_\text{fin}$): 
-\begin{itemize}
-\item output: $out := \textbf{y}(t)$ where 
-$$\textbf{y}(t) = \textbf{y}_0 + \int_{t_0}^{t_\text{fin}} \textbf{f}(s, \textbf{y}(s)) ds$$ 
-$y(t)$ is calculated from $t = t_0$ to $t = t_\text{fin}$.
-\item exception: $exc :=$ ( ODE Solver Fails $\Rightarrow$ ODE\_ERR)
-\end{itemize}
-
-\newpage
-\section{MIS of Energy Module} \label{Energy}
-
-\subsection{Module}
-
-Energy
-
-\subsection{Uses}
-
-Param (Section~\ref{Parameters})
-
-\subsection{Syntax}
-
-\subsubsection{External Access Programs}
-
-\begin{center}
-\begin{tabular}{p{4cm} p{4cm} p{3cm} p{2cm}}
-\hline
-\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\hline
-energyWater & $\mathbb{R} \rightarrow \mathbb{R}$ & $\mathbb{R} \rightarrow \mathbb{R}$ & - \\
-\hline
-energySolidPCM & $\mathbb{R} \rightarrow \mathbb{R}$ & $\mathbb{R} \rightarrow \mathbb{R}$ & - \\
-\hline
-energyMeltingPCM & $\mathbb{R} \rightarrow \mathbb{R}$ & $\mathbb{R} \rightarrow \mathbb{R}$ & - \\
-\hline
-energyLiquidPCM & $\mathbb{R} \rightarrow \mathbb{R}$ & $\mathbb{R} \rightarrow \mathbb{R}$ & - \\
-\hline
-\end{tabular}
-\end{center}
-
-\subsection{Semantics}
-
-\subsubsection{State Variables}
-
-None
-
-\subsubsection{Assumptions}
-
-None
-
-\subsubsection{Access Routine Semantics}
-
-energyWater($T_W$): 
-\renewcommand*{\arraystretch}{1.5}
-\begin{itemize}
-\item output: $out := C_W m_W (T_W - T_\text{init})$
-\item exception: none
-\end{itemize}
-
-\noindent energySolidPCM($T_P$): 
-\renewcommand*{\arraystretch}{1.5}
-\begin{itemize}
-\item output: $out := C^S_P m_P (T_P - T_\text{init})$
-\item exception: none
-\end{itemize}
-
-\noindent energyMeltingPCM($Q_P$): 
-\renewcommand*{\arraystretch}{1.5}
-\begin{itemize}
-\item output: $out := E_{P\text{melt}}^{\text{init}} + Q_P$
-\item exception: none
-\end{itemize}
-
-\noindent energyLiquidPCM($T_P$): 
-\renewcommand*{\arraystretch}{1.5}
-\begin{itemize}
-\item output: $out := E_{P\text{melt}}^{\text{init}}+H_f m_p + C_P^L m_P(T_P(t) - T_\text{melt}^P)$
-\item exception: none
-\end{itemize}
-
-\newpage
 \section{MIS of Output Verification Module} \label{VerifyOutput}
 
 \subsection{Module}
@@ -846,60 +584,60 @@ relErr: $\mathbb{R}$ $\times$ $\mathbb{R}$ $\rightarrow$ $\mathbb{R}$ \\
 $\text{relErr}(t, e) \equiv \frac{|t - e|}{|t|}$ \\
 \newline
 
+%
+%\newpage
+%\section{MIS of Plotting Module} \label{Plot}
+%
+%\subsection{Module}
+%
+%plot
+%
+%\subsection{Uses}
+%
+%N/A
+%
+%\subsection{Syntax}
+%
+%\subsubsection{Exported Access Programs}
+%
+%\begin{center}
+%\begin{tabular}{p{2cm} p{8cm} p{2cm} p{2cm}}
+%\hline
+%\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+%\hline
+%plot & $T_W(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 T_P(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 E_W(t):\mathbb{R} \rightarrow \mathbb{R},
+%       E_P(t):\mathbb{R} \rightarrow \mathbb{R}$, $t_\text{final}: \mathbb{R}$ & - & - \\
+%\hline
+%\end{tabular}
+%\end{center}
+%
+%\subsection{Semantics}
+%
+%\subsubsection{State Variables}
+%
+%None
+%
+%\subsubsection{Environment Variables}
+%
+%win: 2D sequence of pixels displayed on the screen\\
+%
+%\subsubsection{Assumptions}
+%
+%None
+%
+%\subsubsection{Access Routine Semantics}
+%
+%\noindent plot($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$):
+%\begin{itemize}
+%\item transition: Modify win to display a plot where the vertical axis
+%  is time and one horizontal axis is temperature and the other
+%  horizontal axis is energy.  The time should run from $0$ to $t_\text{final}$
+%\item exception: none
+%\end{itemize}
+
 \newpage
-\section{MIS of Plotting Module} \label{Plot}
-
-\subsection{Module}
-
-plot
-
-\subsection{Uses}
-
-N/A
-
-\subsection{Syntax}
-
-\subsubsection{Exported Access Programs}
-
-\begin{center}
-\begin{tabular}{p{2cm} p{8cm} p{2cm} p{2cm}}
-\hline
-\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-\hline
-plot & $T_W(t):\mathbb{R} \rightarrow \mathbb{R},
-                 T_P(t):\mathbb{R} \rightarrow \mathbb{R},
-                 E_W(t):\mathbb{R} \rightarrow \mathbb{R},
-       E_P(t):\mathbb{R} \rightarrow \mathbb{R}$, $t_\text{final}: \mathbb{R}$ & - & - \\
-\hline
-\end{tabular}
-\end{center}
-
-\subsection{Semantics}
-
-\subsubsection{State Variables}
-
-None
-
-\subsubsection{Environment Variables}
-
-win: 2D sequence of pixels displayed on the screen\\
-
-\subsubsection{Assumptions}
-
-None
-
-\subsubsection{Access Routine Semantics}
-
-\noindent plot($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$):
-\begin{itemize}
-\item transition: Modify win to display a plot where the vertical axis
-  is time and one horizontal axis is temperature and the other
-  horizontal axis is energy.  The time should run from $0$ to $t_\text{final}$
-\item exception: none
-\end{itemize}
-
-\newpage
-
 \section{MIS of Output Module} \label{Output}
 
 \subsection{Module}
@@ -975,8 +713,6 @@ N/A
 
 \bibliographystyle {plainnat}
 \bibliography {MIS}
-
-\newpage
 
 \section{Appendix} \label{Appendix}
 

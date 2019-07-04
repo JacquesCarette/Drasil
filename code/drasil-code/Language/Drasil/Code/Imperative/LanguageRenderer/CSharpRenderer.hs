@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..))
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD,
@@ -37,12 +37,13 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
   listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, observerListName,
-  doubleSlash, addCommentsDocD, valList, surroundBody, getterName, setterName, 
-  setMain, setEmpty)
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
+  blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody, getterName, 
+  setterName, setMain, setEmpty)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
-  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
+  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
   liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -79,6 +80,9 @@ instance RenderSym CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 
+  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
+    (liftA2 commentedItem cmt (fmap modDoc m))
+
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
   endStatement = return semi
@@ -100,6 +104,10 @@ instance KeywordSym CSharpCode where
   iterInLabel = return $ text "in"
 
   commentStart = return doubleSlash
+  blockCommentStart = return blockCmtStart
+  blockCommentEnd = return blockCmtEnd
+  docCommentStart = return docCmtStart
+  docCommentEnd = blockCommentEnd
   
   printFunc = return $ text "Console.Write"
   printLnFunc = return $ text "Console.WriteLine"
@@ -525,6 +533,9 @@ instance MethodSym CSharpCode where
     if v `elem` outs then fmap csRef (stateParam v) else stateParam v) ins ++
     map (fmap csOut . stateParam) (filter (`notElem` ins) outs)) b
 
+  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
+    fmap snd fn)
+
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
   stateVar _ l s p t = liftA4 (stateVarDocD l) (includeScope s) p t endStatement
@@ -545,11 +556,19 @@ instance ClassSym CSharpCode where
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
+  commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
+    fmap snd cs)
+
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
   buildModule n _ ms cs = fmap (md n (any (snd . unCSC) ms || 
     any (snd . unCSC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
+
+instance BlockCommentSym CSharpCode where
+  type BlockComment CSharpCode = Doc
+  blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
+  docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [

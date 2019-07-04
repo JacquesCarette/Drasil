@@ -321,7 +321,7 @@ instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
   listSetFunc v i toVal = pair (listSetFunc (pfst v) (pfst i) (pfst toVal)) 
     (listSetFunc (psnd v) (psnd i) (psnd toVal))
 
-  at t l = pair (at (pfst t) l) (at (psnd t) l)
+  atFunc t l = pair (atFunc (pfst t) l) (atFunc (psnd t) l)
 
 instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
   get v vToGet = pair (get (pfst v) (pfst vToGet)) (get (psnd v) (psnd vToGet))
@@ -337,6 +337,7 @@ instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
     (listAccess (psnd v) (psnd i))
   listSet v i toVal = pair (listSet (pfst v) (pfst i) (pfst toVal)) 
     (listSet (psnd v) (psnd i) (psnd toVal))
+  at v l = pair (at (pfst v) l) (at (psnd v) l)
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -830,7 +831,7 @@ instance SelectorFunction CppSrcCode where
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 cppListSetDoc (intValue i) toVal)
 
-  at t l = listAccessFunc t (var l int) 
+  atFunc t l = listAccessFunc t (var l int) 
 
 instance FunctionApplication CppSrcCode where
   get v vToGet = v $. getFunc vToGet
@@ -841,6 +842,7 @@ instance FunctionApplication CppSrcCode where
   listAppend v vToApp = v $. listAppendFunc vToApp
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (var l int)
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -961,7 +963,7 @@ instance ControlStatementSym CppSrcCode where
           index = "observerIndex"
           v_index = var index int
           initv = varDecDef v_index $ litInt 0
-          notify = oneLiner $ valState $ (obsList $. at t index) $. f
+          notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = let l_line = "nextLine"
                             v_line = var l_line string
@@ -1318,7 +1320,7 @@ instance SelectorFunction CppHdrCode where
   listAccessFunc _ _ = liftA2 fd void (return empty)
   listSetFunc _ _ _ = liftA2 fd void (return empty)
 
-  at _ _ = liftA2 fd void (return empty)
+  atFunc _ _ = liftA2 fd void (return empty)
 
 instance FunctionApplication CppHdrCode where
   get _ _ = liftA2 mkVal void (return empty)
@@ -1329,6 +1331,7 @@ instance FunctionApplication CppHdrCode where
   listAppend _ _ = liftA2 mkVal void (return empty)
   listAccess _ _ = liftA2 mkVal void (return empty)
   listSet _ _ _ = liftA2 mkVal void (return empty)
+  at _ _ = liftA2 mkVal void (return empty)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
@@ -1671,7 +1674,7 @@ cppDestruct v = cppDestruct' (getType $ valueType v)
         i = "i"
         v_i = var i int
         guard = v_i ?< listSize v
-        loopBody = oneLiner $ free (v $. at (valueType v) i)
+        loopBody = oneLiner $ free (at v i)
         initv = v_i &= litInt 0
         deleteLoop = for initv guard (v_i &++) loopBody
 

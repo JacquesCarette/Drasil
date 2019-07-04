@@ -311,7 +311,7 @@ instance SelectorFunction PythonCode where
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD i toVal)
 
-  at t l = listAccessFunc t (var l int)
+  atFunc t l = listAccessFunc t (var l int)
 
 instance FunctionApplication PythonCode where
   get v vToGet = v $. getFunc vToGet
@@ -323,6 +323,7 @@ instance FunctionApplication PythonCode where
   listAppend v vToApp = v $. listAppendFunc vToApp
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (var l int)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
@@ -432,7 +433,7 @@ instance ControlStatementSym PythonCode where
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = litInt 0
-          notify = oneLiner $ valState $ (obsList $. at t index) $. f
+          notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = v &= objMethodCall (listType static_ string) f 
     "readlines" []

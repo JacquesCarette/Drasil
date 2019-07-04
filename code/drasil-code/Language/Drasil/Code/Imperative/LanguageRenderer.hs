@@ -29,9 +29,9 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
-  sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
-  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, 
+  sizeDocD, listAccessFuncDocD, listSetDocD, objAccessDocD, castObjDocD, 
+  includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
+  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, 
   prependToBody, appendToBody, surroundBody, getterName, setterName, setMain, 
   setEmpty, intValue
 ) where
@@ -40,10 +40,9 @@ import Utils.Drasil (capitalize, indent, indentList)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library,
-  RenderSym(..), BodySym(..), StateTypeSym(listInnerType, getType), 
+  RenderSym(..), BodySym(..), StateTypeSym(getType), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), Selector(..), 
-  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
-  ControlStatementSym(..))
+  FunctionApplication(..), StatementSym(..), ControlStatementSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   ModData(..), md, TypeData(..), td, ValData(..), vd, angles,blank, 
@@ -162,12 +161,11 @@ printListDoc :: (RenderSym repr) => Integer -> repr (Value repr) ->
   repr (Statement repr)
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
   for (varDecDef i (litInt 0)) (i ?< (listSize v #- litInt 1))
-    (i &++) (bodyStatements [prFn (v $. listAccess t i), prStrFn ", /f "]), 
+    (i &++) (bodyStatements [prFn (listAccess v i), prStrFn ", /f "]), 
   ifNoElse [(listSize v ?> litInt 0, oneLiner $
-    prFn (v $. listAccess t (listSize v #- litInt 1)))], 
+    prFn (listAccess v (listSize v #- litInt 1)))], 
   prLnFn "]"]
-  where t = listInnerType $ valueType v
-        l_i = "list_i" ++ show n
+  where l_i = "list_i" ++ show n
         i = var l_i S.int
 
 printObjDoc :: String -> (String -> repr (Statement repr)) 
@@ -626,8 +624,8 @@ castDocD t = parens $ typeDoc t
 sizeDocD :: Doc
 sizeDocD = dot <> text "Count"
 
-listAccessDocD :: ValData -> Doc
-listAccessDocD v = brackets $ valDoc v
+listAccessFuncDocD :: ValData -> Doc
+listAccessFuncDocD v = brackets $ valDoc v
 
 listSetDocD :: ValData -> ValData -> Doc
 listSetDocD i v = brackets (valDoc i) <+> equals <+> valDoc v

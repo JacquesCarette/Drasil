@@ -29,10 +29,10 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD,
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
-  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD,
-  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, classDec, dot, 
-  forLabel, observerListName, commentedItem, addCommentsDocD, valList, 
-  appendToBody, getterName, setterName)
+  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD,
+  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
+  commentedItem, addCommentsDocD, valList, appendToBody, getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
   liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, liftPairFst, 
@@ -287,7 +287,7 @@ instance Selector PythonCode where
   selfAccess l = objAccess (self l)
 
   listIndexExists lst index = listSize lst ?> index
-  argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
+  argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf l v = objAccess l (func "index" int [v])
 
@@ -307,11 +307,11 @@ instance FunctionSym PythonCode where
   iterEnd _ = error "Attempt to use iterEnd in Python, but Python has no iterators"
 
 instance SelectorFunction PythonCode where
-  listAccess t v = liftA2 fd t (fmap pyListAccess v)
+  listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 listSetDocD i v)
 
-  at t l = listAccess t (var l int)
+  at t l = listAccessFunc t (var l int)
 
 instance FunctionApplication PythonCode where
   get v vToGet = v $. getFunc vToGet
@@ -321,6 +321,7 @@ instance FunctionApplication PythonCode where
     (liftA2 pyListSize v listSizeFunc)
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
   listAppend v vToApp = v $. listAppendFunc vToApp
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
@@ -580,9 +581,6 @@ pyInput inSrc v = v &= pyInput' (getType $ valueType v)
 
 pyThrow ::  ValData -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valDoc errMsg)
-
-pyListAccess :: ValData -> Doc
-pyListAccess v = brackets (valDoc v)
 
 pyForRange :: Label -> Doc ->  ValData ->  ValData ->
   ValData -> Doc -> Doc

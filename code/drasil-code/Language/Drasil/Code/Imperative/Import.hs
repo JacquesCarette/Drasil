@@ -9,10 +9,9 @@ import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), SelectorFunction(..), 
-  FunctionApplication(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..))
+  ValueExpression(..), Selector(..), FunctionApplication(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,    
   BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
@@ -793,7 +792,7 @@ bfunc Impl  = error "convExpr :=>"
 bfunc Iff   = error "convExpr :<=>"
 bfunc Dot   = error "convExpr DotProduct"
 bfunc Frac  = (#/)
-bfunc Index = \x y -> x $. listAccess (listInnerType $ valueType x) y
+bfunc Index = listAccess
 
 -- medium hacks --
 genModDef :: (RenderSym repr) => CS.Mod -> Reader (State repr) 
@@ -890,8 +889,8 @@ readData ddef = do
           lnV <- lineData (Just "_temp") lp
           return [ getFileInputAll v_infile v_lines,
             forRange l_i (litInt 0) (listSize v_lines) (litInt 1)
-              (bodyStatements $ stringSplit d v_linetokens (v_lines $.
-                listAccess (listInnerType $ valueType v_lines) v_i) : lnV)
+              (bodyStatements $ stringSplit d v_linetokens (
+                listAccess v_lines v_i) : lnV)
             ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData (Just "_temp") lp
@@ -960,16 +959,14 @@ readData ddef = do
         entryData s tokIndex (Entry v) = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
           a <- assign' vv $ cast (convType $ codeType v)
-            (v_linetokens $. listAccess (listInnerType $ 
-              valueType v_linetokens) tokIndex)
+            (listAccess v_linetokens tokIndex)
           return [a]
         entryData s tokIndex (ListEntry indx v) = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
           return [
             valState $ listAppend vv
             (cast (convType $ getListType (codeType v) (toInteger $ length indx))
-            (v_linetokens $. listAccess (listInnerType $ valueType v_linetokens)
-            tokIndex))]
+            (listAccess v_linetokens tokIndex))]
         entryData _ _ JunkEntry = return []
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_filename, l_i, l_j :: Label

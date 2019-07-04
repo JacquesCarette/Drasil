@@ -37,7 +37,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
-  listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
   docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody, getterName, 
@@ -165,8 +165,7 @@ instance ControlBlockSym CSharpCode where
         listDec 0 v_temp,
         for (varDecDef v_i (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (listSize vold) e) (maybe (v_i &++) (v_i &+=) s)
-          (oneLiner $ valState $ listAppend v_temp (vold $. listAccess 
-          (listInnerType (fmap valType vold)) v_i)),
+          (oneLiner $ valState $ listAppend v_temp (listAccess vold v_i)),
         vnew &= v_temp]
 
 instance UnaryOpSym CSharpCode where
@@ -310,7 +309,7 @@ instance Selector CSharpCode where
 
   listIndexExists l i = liftA2 mkVal bool (liftA3 listIndexExistsDocD greaterOp
     l i)
-  argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
+  argExists i = listAccess argsList (litInt $ fromIntegral i)
 
   indexOf l v = objAccess l (func "IndexOf" int [v])
 
@@ -330,11 +329,11 @@ instance FunctionSym CSharpCode where
   iterEnd _ = error "Attempt to use iterEnd in C#, but C# has no iterators"
 
 instance SelectorFunction CSharpCode where
-  listAccess t v = liftA2 fd t (listAccessDocD <$> intValue v)
+  listAccessFunc t v = liftA2 fd t (listAccessFuncDocD <$> intValue v)
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 listSetDocD (intValue i) v)
 
-  at t l = listAccess t (var l int)
+  at t l = listAccessFunc t (var l int)
 
 instance FunctionApplication CSharpCode where
   get v vToGet = v $. getFunc vToGet
@@ -343,6 +342,7 @@ instance FunctionApplication CSharpCode where
   listSize v = v $. listSizeFunc
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
   listAppend v vToApp = v $. listAppendFunc vToApp
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)

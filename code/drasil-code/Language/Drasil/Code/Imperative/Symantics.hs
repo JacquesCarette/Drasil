@@ -305,7 +305,7 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
 
 class (ValueSym repr, FunctionSym repr, Selector repr) => 
   SelectorFunction repr where
-  listAccess :: repr (StateType repr) -> repr (Value repr) -> 
+  listAccessFunc :: repr (StateType repr) -> repr (Value repr) -> 
     repr (Function repr)
   listSet    :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
 
@@ -321,6 +321,7 @@ class (ValueSym repr, FunctionSym repr, Selector repr, SelectorFunction repr) =>
   listAdd    :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr)
   listAppend :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  listAccess :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr, 

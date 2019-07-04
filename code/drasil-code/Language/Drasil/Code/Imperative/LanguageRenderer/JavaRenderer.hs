@@ -169,8 +169,7 @@ instance ControlBlockSym JavaCode where
         listDec 0 v_temp,
         for (varDecDef v_i (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (listSize vold) e) (maybe (v_i &++) (v_i &+=) s)
-          (oneLiner $ valState $ listAppend v_temp (vold $. listAccess 
-          (listInnerType (fmap valType vold)) v_i)),
+          (oneLiner $ valState $ listAppend v_temp (listAccess vold v_i)),
         vnew &= v_temp]
 
 instance UnaryOpSym JavaCode where
@@ -314,7 +313,7 @@ instance Selector JavaCode where
 
   listIndexExists l i = liftA2 mkVal bool (liftA3 jListIndexExists greaterOp l 
     i)
-  argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
+  argExists i = listAccess argsList (litInt $ fromIntegral i)
 
   indexOf l v = objAccess l (func "indexOf" int [v])
 
@@ -334,10 +333,10 @@ instance FunctionSym JavaCode where
   iterEnd _ = error "Attempt to use iterEnd in Java, but Java has no iterators"
 
 instance SelectorFunction JavaCode where
-  listAccess t i = func "get" t [intValue i]
+  listAccessFunc t i = func "get" t [intValue i]
   listSet i v = func "set" (listType static_ $ fmap valType v) [intValue i, v]
 
-  at t l = listAccess t (var l int)
+  at t l = listAccessFunc t (var l int)
 
 instance FunctionApplication JavaCode where
   get v vToGet = v $. getFunc vToGet
@@ -346,6 +345,7 @@ instance FunctionApplication JavaCode where
   listSize v = v $. listSizeFunc
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
   listAppend v vToApp = v $. listAppendFunc vToApp
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end

@@ -329,7 +329,7 @@ instance FunctionSym JavaCode where
   listAddFunc _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
   listAppendFunc v = func "add" (listType static_ $ fmap valType v) [v]
 
-  iterBegin _ = error "Attempt to use iterBegin in Java, but Java has no iterators"
+  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Java, but Java has no iterators"
   iterEnd _ = error "Attempt to use iterEnd in Java, but Java has no iterators"
 
 instance SelectorFunction JavaCode where
@@ -348,6 +348,8 @@ instance FunctionApplication JavaCode where
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
   at v l = listAccess v (var l int)
+  
+  iterBegin v = v $. iterBeginFunc (valueType v)
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end

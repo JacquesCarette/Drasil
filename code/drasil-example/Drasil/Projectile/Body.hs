@@ -1,6 +1,7 @@
 module Drasil.Projectile.Body where
 
 import Language.Drasil hiding (Vector)
+import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
   TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors, _concepts,
@@ -48,8 +49,8 @@ import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
   nonfuncReqs, propsDeriv)
 import Drasil.Projectile.TMods (tMods)
-import Drasil.Projectile.Unitals (acronyms, constants, inConstraints,
-  launAngle, outConstraints, symbols, unitalIdeas, unitalQuants)
+import Drasil.Projectile.Unitals (acronyms, constants, constrained, inConstraints,
+  inputs, launAngle, outConstraints, outputs, symbols, unitalIdeas, unitalQuants)
 
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
@@ -116,13 +117,14 @@ systInfo = SI {
   _authors     = [samCrawford, brooks, spencerSmith],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = [] :: [QDefinition],
+  _definitions = map (relToQD symbMap) iMods ++
+                 map (relToQD symbMap) genDefns,
   _datadefs    = dataDefns,
-  _inputs      = [] :: [QuantityDict],
-  _outputs     = [] :: [QuantityDict],
+  _inputs      = inputs,
+  _outputs     = outputs,
   _defSequence = [] :: [Block QDefinition],
-  _constraints = [] :: [ConstrainedChunk],
-  _constants   = [] :: [QDefinition],
+  _constraints = map cnstrw constrained,
+  _constants   = constants,
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
    refdb       = refDB

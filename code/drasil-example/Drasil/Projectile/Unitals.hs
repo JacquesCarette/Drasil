@@ -15,7 +15,7 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccel,
   gravitationalAccel, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
   position, scalarPos, speed, time, velocity, xAccel, xConstAccel, xPos,
   xVel, yAccel, yConstAccel, yPos, yVel)
-import Data.Drasil.Quantities.Math (pi_)
+import Data.Drasil.Quantities.Math (pi_, piConst)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (radian, metre, second)
@@ -26,7 +26,7 @@ import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset)
 
 symbols :: [QuantityDict]
-symbols = qw pi_ : unitalQuants ++ map qw constants ++ map qw [
+symbols = unitalQuants ++ map qw constants ++ map qw [
   acceleration, constAccel, gravitationalAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, speed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
@@ -37,10 +37,13 @@ acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, srs, thModel, typUnc]
 
 constants :: [QDefinition]
-constants = [grav, tol]
+constants = [grav, piConst, tol]
 
 inputs :: [QuantityDict]
-inputs = map qw [launAngle, launSpeed, targPos]
+inputs = map qw [launSpeed, launAngle, targPos]
+
+outputs :: [QuantityDict]
+outputs = [message, qw offset]
 
 unitalQuants :: [QuantityDict]
 unitalQuants = message : map qw constrained
@@ -68,7 +71,7 @@ targPosUnc   = uq targPos   defaultUncrt
 flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
 flightDur = constrainedNRV' (dqd' flightDurConcept (unitHelper lT "flight") Real (Just second)) [gtZeroConstr]
 landPos   = constrainedNRV' (dqd' landPosConcept   (unitHelper lP "land"  ) Real (Just metre))  [gtZeroConstr]
-launAngle = constrained'    (dqd' launAngleConcept (const lTheta          ) Real (Just radian)) [physc $ Bounded (Exc, 0) (Exc, sy pi_ / 2)] (sy pi_ / 4)
+launAngle = constrained'    (dqd' launAngleConcept (staged lTheta (Atomic "angle")) Real (Just radian)) [physc $ Bounded (Exc, 0) (Exc, sy pi_ / 2)] (sy pi_ / 4)
 launSpeed = constrained'    (dqd' launSpeedConcept (unitHelper lV "launch") Real (Just velU))   [gtZeroConstr] (int 100)
 offset    = constrainedNRV' (dqd' offsetConcept    (unitHelper lD "offset") Real (Just metre))  [physc $ UpFrom (Exc, negate $ sy landPos) ]
 targPos   = constrained'    (dqd' targPosConcept   (unitHelper lP "target") Real (Just metre))  [gtZeroConstr] (int 1000)

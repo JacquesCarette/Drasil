@@ -1391,6 +1391,20 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  & 
 \\
+\hyperref[highPerformance]{NFR: High-Performance} &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  & 
+\\
+\hyperref[reliable]{NFR: Reliable} &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  & 
+\\
 \hyperref[lcVODES]{LC: Variable-ODE-Solver} &  &  &  &  &  &  & 
 \\
 \hyperref[lcEC]{LC: Expanded-Collisions} &  &  &  &  & X &  & 
@@ -1469,27 +1483,41 @@ The purpose of the traceability matrices is to provide easy references on what h
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chalses]{DD: chalses}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:ChaslesThm]{TM: ChaslesThm}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}} & \textbf{\hyperref[simSpace]{FR: Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR: Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR: Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}}
+\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chalses]{DD: chalses}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:ChaslesThm]{TM: ChaslesThm}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}} & \textbf{\hyperref[simSpace]{FR: Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR: Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR: Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[highPerformance]{NFR: High-Performance}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[portable]{NFR: Portable}} & \textbf{\hyperref[reliable]{NFR: Reliable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
 \\
 \midrule
 \endhead
-\hyperref[simSpace]{FR: Simulation-Space} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[simSpace]{FR: Simulation-Space} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputInitialConds]{FR: Input-Initial-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputInitialConds]{FR: Input-Initial-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[deterColls]{FR: Determine-Collisions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[deterColls]{FR: Determine-Collisions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[highPerformance]{NFR: High-Performance} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reliable]{NFR: Reliable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}

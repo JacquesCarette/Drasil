@@ -86,8 +86,8 @@ mkSRS = [
       ],
   ReqrmntSec $
     ReqsProg
-      [ FReqsSub funcReqs [inputParamsTable]
-      , NonFReqsSub nonfuncReqs
+      [ FReqsSub [inputParamsTable]
+      , NonFReqsSub
       ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard systInfo,
   AuxConstntSec $

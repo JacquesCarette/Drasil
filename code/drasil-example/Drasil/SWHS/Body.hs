@@ -157,8 +157,8 @@ mkSRS = [RefSec $ RefProg intro [
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqs [inputInitQuantsTable],
-    NonFReqsSub nfRequirements
+    FReqsSub [inputInitQuantsTable],
+    NonFReqsSub
   ],
   LCsSec,
   UCsSec,
@@ -182,6 +182,7 @@ theory = [consThermE, sensHtE, latentHtE]
 
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
+  ++ nfRequirements
 
 labCon :: [LabelledContent]
 labCon = [dataConTable1, inputInitQuantsTable]

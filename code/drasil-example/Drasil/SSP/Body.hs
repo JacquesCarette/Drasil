@@ -128,8 +128,8 @@ mkSRS = [RefSec $ RefProg intro
           ]
         ],
     ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqs funcReqTables,
-    NonFReqsSub nonFuncReqs
+    FReqsSub funcReqTables,
+    NonFReqsSub
   ],
   LCsSec,
   UCsSec,

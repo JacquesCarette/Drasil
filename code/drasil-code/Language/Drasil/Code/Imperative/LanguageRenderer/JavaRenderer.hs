@@ -334,7 +334,7 @@ instance FunctionSym JavaCode where
 
 instance SelectorFunction JavaCode where
   listAccessFunc t i = func "get" t [intValue i]
-  listSet i v = func "set" (listType static_ $ fmap valType v) [intValue i, v]
+  listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
 
   at t l = listAccessFunc t (var l int)
 
@@ -346,12 +346,13 @@ instance FunctionApplication JavaCode where
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
   listAppend v vToApp = v $. listAppendFunc vToApp
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
   assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
-  assignToListIndex lst index v = valState $ lst $. listSet index v
+  assignToListIndex lst index v = valState $ listSet lst index v
   multiAssign _ _ = error "No multiple assignment statements in Java"
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)

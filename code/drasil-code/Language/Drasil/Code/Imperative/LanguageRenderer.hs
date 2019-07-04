@@ -29,7 +29,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
-  sizeDocD, listAccessFuncDocD, listSetDocD, objAccessDocD, castObjDocD, 
+  sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
   includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, 
   prependToBody, appendToBody, surroundBody, getterName, setterName, setMain, 
@@ -627,8 +627,8 @@ sizeDocD = dot <> text "Count"
 listAccessFuncDocD :: ValData -> Doc
 listAccessFuncDocD v = brackets $ valDoc v
 
-listSetDocD :: ValData -> ValData -> Doc
-listSetDocD i v = brackets (valDoc i) <+> equals <+> valDoc v
+listSetFuncDocD :: ValData -> ValData -> Doc
+listSetFuncDocD i v = brackets (valDoc i) <+> equals <+> valDoc v
 
 objAccessDocD :: ValData -> FuncData -> Doc
 objAccessDocD v f = valDoc v <> funcDoc f

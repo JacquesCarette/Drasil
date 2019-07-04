@@ -13,7 +13,7 @@ import Utils.Drasil
 
 import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro,
-  TSIntro(..), UCsSec(..), Fields, Field(..), SRSDecl, SSDSec(..), SSDSub(..),
+  TSIntro(..), Fields, Field(..), SRSDecl, SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
@@ -132,7 +132,7 @@ mkSRS = [RefSec $ RefProg intro
     NonFReqsSub nonFuncReqs
   ],
   LCsSec,
-  UCsSec $ UCsProg unlikelyChgs,
+  UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg ssp [],
   Bibliography]

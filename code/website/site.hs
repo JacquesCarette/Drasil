@@ -81,6 +81,15 @@ maybeField s f = Context $ \k _ i -> do
     -- Otherwise, fail acts to not use the $if$ parameter in the html file
     fail $ "maybeField " ++ s ++ " used when really Nothing. Wrap in `$if(" ++ s ++ ")$` block."
 
+-- List if unempty
+maybeListFieldWith :: String -> Context a -> (Item b -> [c]) -> (Item b -> Compiler [Item a]) -> Context b
+-- takes as input: the string to be replaced, the context to be used as is,
+-- a function to be used on input to return a list to check for emptiness,
+-- and the function to be used regularly on input
+maybeListFieldWith s contxt checkNull f = listFieldWith s contxt
+  -- If the list is empty, fail is used so as not to create a specific section
+  (\x -> if null (checkNull x) then fail "No code files for example" else f x)
+
 mkExampleCtx :: FilePath -> FilePath -> Context Example
 mkExampleCtx exampleDir srsDir =
   -- each function is applied to the item containing an Example of form:
@@ -111,14 +120,14 @@ mkExampleCtx exampleDir srsDir =
   maybeField "desc" (return . desc . itemBody) <>
 
   -- Lists sources if they exist
-  listFieldWith "src" (
+  maybeListFieldWith "src" (
     -- return filepath from (filepath, language)
     field "path" (return . fst . itemBody) <>
     -- return language from (filepath, language)
     field "lang" (return . snd . itemBody)
-  -- If there are no sources, fail is used so as not to create a "Generated Code" section
-  ) (\x -> if null (src $ itemBody x) then fail "No code files for example" else
-      mapM makeItem $ src $ itemBody x)
+  -- (src . itemBody) gets the list of sources to be checked for emptiness
+  -- (mapM makeItem . src . itemBody) rewraps every item in src to be used internally
+  ) (src . itemBody) (mapM makeItem . src . itemBody)
   where
     name (E nm _ _ _) = nm
     src (E _ s _ _) = s

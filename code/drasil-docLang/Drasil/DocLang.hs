@@ -6,7 +6,7 @@ module Drasil.DocLang (
   -- DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), DocSection(..),
   Emphasis(..), OffShelfSolnsSec(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt),
-  IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), Literature(Doc', Lit, Manual),
+  IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit, Manual),
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..),
   SCSSub(..), SolChSpec(..), SSDSec(..), SSDSub(..), StkhldrSec(StkhldrProg2),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
@@ -39,12 +39,12 @@ module Drasil.DocLang (
   solutionLabel, characteristicsLabel
 ) where 
 
-import Drasil.DocDecl (SRSDecl)
+import Drasil.DocDecl (SRSDecl, DocSection(..))
 import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'')
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
-  DerivationDisplay(..), DocSection(..), Emphasis(..),
+  DerivationDisplay(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt),
-  IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), Literature(Doc', Lit,Manual),
+  IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
   ReqsSub(..), SCSSub(..), SolChSpec(..), SSDSec(..), SSDSub(..),
   StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..),

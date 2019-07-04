@@ -79,7 +79,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
   labelledCon
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
+concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
 
 section :: [Section]
 section = sec
@@ -139,8 +139,8 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqs funcReqsTables,
-    NonFReqsSub nonfuncReqs
+    FReqsSub funcReqsTables,
+    NonFReqsSub
   ],
   LCsSec,
   UCsSec,

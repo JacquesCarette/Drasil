@@ -148,8 +148,8 @@ mkSRS = [RefSec $ RefProg intro
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqs [inputInitQuantsTable],
-    NonFReqsSub nfRequirements
+    FReqsSub [inputInitQuantsTable],
+    NonFReqsSub
   ],
   LCsSec,
   UCsSec,
@@ -161,9 +161,8 @@ dataDefn :: [DataDefinition]
 dataDefn = [dd1HtFluxC]
 
 concIns :: [ConceptInstance]
-concIns =
- goals ++ funcReqs ++ assumptions ++ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++
- [likeChgTLH] ++ unlikelyChgs
+concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
+ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
 
 labCon :: [LabelledContent]
 labCon = [inputInitQuantsTable, dataConstTable1]

@@ -82,8 +82,8 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         ]
       ],
     ReqrmntSec $ ReqsProg [
-      FReqsSub funcReqs [],
-      NonFReqsSub nonfuncReqs
+      FReqsSub [],
+      NonFReqsSub
     ],
     LCsSec,
     UCsSec,
@@ -94,7 +94,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
+concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
 
 sec :: [Section]
 sec = extractSection srs

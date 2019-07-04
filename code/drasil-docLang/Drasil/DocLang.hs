@@ -39,16 +39,16 @@ module Drasil.DocLang (
   solutionLabel, characteristicsLabel
 ) where 
 
-import Drasil.DocDecl (SRSDecl, DocSection(..))
+import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..))
 import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'')
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt),
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
-  PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
-  ReqsSub(..), SCSSub(..), SolChSpec(..), SSDSec(..), SSDSub(..),
-  StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..),
-  TraceabilitySec(TraceabilityProg), TSIntro(..))
+  PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), SCSSub(..),
+  SolChSpec(..), SSDSec(..), SSDSub(..), StkhldrSec(StkhldrProg2),
+  StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
+  TSIntro(..))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(Verbose), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)

@@ -286,9 +286,7 @@ instance Selector PythonCode where
 
   selfAccess l = objAccess (self l)
 
-  listSizeAccess v = liftA2 mkVal int (liftA2 pyListSizeAccess v listSize)
-
-  listIndexExists lst index = listSizeAccess lst ?> index
+  listIndexExists lst index = listSize lst ?> index
   argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
   
   indexOf l v = objAccess l (func "index" int [v])
@@ -301,7 +299,7 @@ instance FunctionSym PythonCode where
   getFunc v = func (getterName $ valueName v) (valueType v) []
   setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
-  listSize = liftA2 fd int (return $ text "len")
+  listSizeFunc = liftA2 fd int (return $ text "len")
   listAdd _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
   listAppend v = func "append" (listType static_ $ fmap valType v) [v]
 
@@ -318,6 +316,8 @@ instance SelectorFunction PythonCode where
 instance FunctionApplication PythonCode where
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+  listSize v = liftA2 mkVal (fmap funcType listSizeFunc) 
+    (liftA2 pyListSize v listSizeFunc)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
@@ -392,7 +392,7 @@ instance StatementSym PythonCode where
   initObserverList t = listDecDef (var observerListName t)
   addObserver o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
-          lastelem = listSizeAccess obsList
+          lastelem = listSize obsList
 
   inOutCall = pyInOutCall funcApp
   extInOutCall m = pyInOutCall (extFuncApp m)
@@ -422,7 +422,7 @@ instance ControlStatementSym PythonCode where
   tryCatch tb cb = mkStNoEnd <$> liftA2 pyTryCatch tb cb
 
   checkState l = switch (var l string)
-  notifyObservers f t = forRange index initv (listSizeAccess obsList) 
+  notifyObservers f t = forRange index initv (listSize obsList) 
     (litInt 1) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
@@ -542,8 +542,8 @@ pyInlineIf :: ValData -> ValData ->
 pyInlineIf c v1 v2 = parens $ valDoc v1 <+> text "if" <+> valDoc c <+> 
   text "else" <+> valDoc v2
 
-pyListSizeAccess :: ValData -> FuncData -> Doc
-pyListSizeAccess v f = funcDoc f <> parens (valDoc v)
+pyListSize :: ValData -> FuncData -> Doc
+pyListSize v f = funcDoc f <> parens (valDoc v)
 
 pyStringType :: TypeData
 pyStringType = td String (text "str")

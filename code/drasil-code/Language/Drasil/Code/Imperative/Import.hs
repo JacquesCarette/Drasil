@@ -10,8 +10,9 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
-  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+  FunctionApplication(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,    
   BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
@@ -772,7 +773,7 @@ unop Cot  = cot
 unop Arcsin = arcsin
 unop Arccos = arccos
 unop Arctan = arctan
-unop Dim  = listSizeAccess
+unop Dim  = listSize
 unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
@@ -888,7 +889,7 @@ readData ddef = do
         inData (Lines lp Nothing d) = do
           lnV <- lineData (Just "_temp") lp
           return [ getFileInputAll v_infile v_lines,
-            forRange l_i (litInt 0) (listSizeAccess v_lines) (litInt 1)
+            forRange l_i (litInt 0) (listSize v_lines) (litInt 1)
               (bodyStatements $ stringSplit d v_linetokens (v_lines $.
                 listAccess (listInnerType $ valueType v_lines) v_i) : lnV)
             ]
@@ -908,7 +909,7 @@ readData ddef = do
           pat <- patternData s p v_j
           return $ clearTemps s p ++ 
             [forRange l_j (litInt 0) (cast int
-              (listSizeAccess v_linetokens #/ litInt (toInteger $ length p))) 
+              (listSize v_linetokens #/ litInt (toInteger $ length p))) 
               (litInt 1) ( bodyStatements pat )] ++ 
             appendTemps s p
         lineData s (Repeat p (Just numPat)) = do

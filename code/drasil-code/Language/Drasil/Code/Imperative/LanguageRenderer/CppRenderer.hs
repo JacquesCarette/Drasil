@@ -292,8 +292,6 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
 
   selfAccess l f = pair (selfAccess l $ pfst f) (selfAccess l $ psnd f)
 
-  listSizeAccess v = pair (listSizeAccess $ pfst v) (listSizeAccess $ psnd v)
-
   listIndexExists v i = pair (listIndexExists (pfst v) (pfst i)) 
     (listIndexExists (psnd v) (psnd i))
   argExists i = pair (argExists i) (argExists i)
@@ -309,7 +307,7 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   setFunc t v toVal = pair (setFunc (pfst t) (pfst v) (pfst toVal)) 
     (setFunc (psnd t) (psnd v) (psnd toVal))
 
-  listSize = pair listSize listSize
+  listSizeFunc = pair listSizeFunc listSizeFunc
   listAdd l i v = pair (listAdd (pfst l) (pfst i) (pfst v)) (listAdd (psnd l)
     (psnd i) (psnd v))
   listAppend v = pair (listAppend $ pfst v) (listAppend $ psnd v)
@@ -328,6 +326,7 @@ instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
   get v vToGet = pair (get (pfst v) (pfst vToGet)) (get (psnd v) (psnd vToGet))
   set v vToSet toVal = pair (set (pfst v) (pfst vToSet) (pfst toVal))
     (set (psnd v) (psnd vToSet) (psnd toVal))
+  listSize v = pair (listSize $ pfst v) (listSize $ psnd v)
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -655,7 +654,7 @@ instance ControlBlockSym CppSrcCode where
       block [
         listDec 0 v_temp,
         for (varDecDef v_i (fromMaybe (litInt 0) b)) 
-          (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
+          (v_i ?< fromMaybe (listSize vold) e) (maybe (v_i &++) (v_i &+=) s)
           (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
           (listInnerType (fmap valType vold)) v_i)),
         vnew &= v_temp]
@@ -795,9 +794,7 @@ instance Selector CppSrcCode where
 
   selfAccess l = objAccess (self l)
 
-  listSizeAccess v = cast int (objAccess v listSize)
-
-  listIndexExists v i = listSizeAccess v ?> i
+  listIndexExists v i = listSize v ?> i
   argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
   
   indexOf l v = funcApp "find" int [l $. iterBegin (fmap valType v), 
@@ -811,7 +808,7 @@ instance FunctionSym CppSrcCode where
   getFunc v = func (getterName $ valueName v) (valueType v) []
   setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
-  listSize = func "size" int []
+  listSizeFunc = func "size" int []
   listAdd l i v = func "insert" (listType static_ $ fmap valType v) [(l $.
     iterBegin (fmap valType v)) #+ i, v]
   listAppend v = func "push_back" (listType static_ $ fmap valType v) [v]
@@ -829,6 +826,7 @@ instance SelectorFunction CppSrcCode where
 instance FunctionApplication CppSrcCode where
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+  listSize v = cast int (v $. listSizeFunc)
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -911,7 +909,7 @@ instance StatementSym CppSrcCode where
   initObserverList t = listDecDef (var observerListName t)
   addObserver o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
-          lastelem = obsList $. listSize
+          lastelem = listSize obsList
 
   inOutCall = cppInOutCall funcApp
   extInOutCall m = cppInOutCall (extFuncApp m)
@@ -943,7 +941,7 @@ instance ControlStatementSym CppSrcCode where
 
   checkState l = switchAsIf (var l string) 
 
-  notifyObservers f t = for initv (v_index ?< (obsList $. listSize)) 
+  notifyObservers f t = for initv (v_index ?< (listSize obsList)) 
     (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
@@ -1282,8 +1280,6 @@ instance Selector CppHdrCode where
 
   selfAccess _ _ = liftA2 mkVal void (return empty)
 
-  listSizeAccess _ = liftA2 mkVal void (return empty)
-
   listIndexExists _ _ = liftA2 mkVal void (return empty)
   argExists _ = liftA2 mkVal void (return empty)
   
@@ -1297,7 +1293,7 @@ instance FunctionSym CppHdrCode where
   getFunc _ = liftA2 fd void (return empty)
   setFunc _ _ _ = liftA2 fd void (return empty)
 
-  listSize = liftA2 fd void (return empty)
+  listSizeFunc = liftA2 fd void (return empty)
   listAdd _ _ _ = liftA2 fd void (return empty)
   listAppend _ = liftA2 fd void (return empty)
 
@@ -1313,6 +1309,7 @@ instance SelectorFunction CppHdrCode where
 instance FunctionApplication CppHdrCode where
   get _ _ = liftA2 mkVal void (return empty)
   set _ _ _ = liftA2 mkVal void (return empty)
+  listSize _ = liftA2 mkVal void (return empty)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
@@ -1654,7 +1651,7 @@ cppDestruct v = cppDestruct' (getType $ valueType v)
         cppDestruct' _ = free v
         i = "i"
         v_i = var i int
-        guard = v_i ?< (v $. listSize)
+        guard = v_i ?< listSize v
         loopBody = oneLiner $ free (v $. at (valueType v) i)
         initv = v_i &= litInt 0
         deleteLoop = for initv guard (v_i &++) loopBody

@@ -280,8 +280,6 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   selfAccess :: Label -> repr (Function repr) -> repr (Value repr)
 
-  listSizeAccess :: repr (Value repr) -> repr (Value repr)
-
   listIndexExists :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   argExists       :: Integer -> repr (Value repr)
 
@@ -297,7 +295,7 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   setFunc        :: repr (StateType repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Function repr)
 
-  listSize           :: repr (Function repr)
+  listSizeFunc       :: repr (Function repr)
   listAdd            :: repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Function repr)
   listAppend         :: repr (Value repr) -> repr (Function repr)
@@ -318,10 +316,10 @@ class (ValueSym repr, FunctionSym repr, Selector repr, SelectorFunction repr) =>
   get :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   set :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr)
-  
+  listSize :: repr (Value repr) -> repr (Value repr)
 
-class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) 
-  => StatementSym repr where
+class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr, 
+  FunctionApplication repr) => StatementSym repr where
   type Statement repr
   (&=)   :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
   infixr 1 &=

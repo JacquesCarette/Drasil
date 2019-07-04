@@ -168,7 +168,7 @@ instance ControlBlockSym JavaCode where
       block [
         listDec 0 v_temp,
         for (varDecDef v_i (fromMaybe (litInt 0) b)) 
-          (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
+          (v_i ?< fromMaybe (listSize vold) e) (maybe (v_i &++) (v_i &+=) s)
           (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
           (listInnerType (fmap valType vold)) v_i)),
         vnew &= v_temp]
@@ -312,8 +312,6 @@ instance Selector JavaCode where
 
   selfAccess l = objAccess (self l)
 
-  listSizeAccess v = objAccess v listSize
-
   listIndexExists l i = liftA2 mkVal bool (liftA3 jListIndexExists greaterOp l 
     i)
   argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
@@ -328,7 +326,7 @@ instance FunctionSym JavaCode where
   getFunc v = func (getterName $ valueName v) (valueType v) []
   setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
-  listSize = func "size" int []
+  listSizeFunc = func "size" int []
   listAdd _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
   listAppend v = func "add" (listType static_ $ fmap valType v) [v]
 
@@ -344,6 +342,7 @@ instance SelectorFunction JavaCode where
 instance FunctionApplication JavaCode where
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+  listSize v = v $. listSizeFunc
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
@@ -417,7 +416,7 @@ instance StatementSym JavaCode where
   initObserverList t = listDecDef (var observerListName t)
   addObserver o = valState $ obsList $. listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
-          lastelem = obsList $. listSize
+          lastelem = listSize obsList
 
   inOutCall = jInOutCall funcApp
   extInOutCall m = jInOutCall (extFuncApp m)
@@ -447,7 +446,7 @@ instance ControlStatementSym JavaCode where
   tryCatch tb cb = mkStNoEnd <$> liftA2 jTryCatch tb cb
   
   checkState l = switch (var l string)
-  notifyObservers f t = for initv (v_index ?< (obsList $. listSize)) 
+  notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"

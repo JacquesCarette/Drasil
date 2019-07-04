@@ -42,7 +42,8 @@ import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   RenderSym(..), BodySym(..), StateTypeSym(listInnerType, getType), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), Selector(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..))
+  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
+  ControlStatementSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   ModData(..), md, TypeData(..), td, ValData(..), vd, angles,blank, 
@@ -160,10 +161,10 @@ printListDoc :: (RenderSym repr) => Integer -> repr (Value repr) ->
   (String -> repr (Statement repr)) -> 
   repr (Statement repr)
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
-  for (varDecDef i (litInt 0)) (i ?< (listSizeAccess v #- litInt 1))
+  for (varDecDef i (litInt 0)) (i ?< (listSize v #- litInt 1))
     (i &++) (bodyStatements [prFn (v $. listAccess t i), prStrFn ", /f "]), 
-  ifNoElse [(listSizeAccess v ?> litInt 0, oneLiner $
-    prFn (v $. listAccess t (listSizeAccess v #- litInt 1)))], 
+  ifNoElse [(listSize v ?> litInt 0, oneLiner $
+    prFn (v $. listAccess t (listSize v #- litInt 1)))], 
   prLnFn "]"]
   where t = listInnerType $ valueType v
         l_i = "list_i" ++ show n

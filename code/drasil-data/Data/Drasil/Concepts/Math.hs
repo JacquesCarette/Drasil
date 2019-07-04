@@ -13,7 +13,7 @@ mathcon = [angle, area, calculation, cartesian, centre, change, constraint,
   diameter, equation, euclidN, euclidSpace, gradient, graph, law, matrix, norm,
   normal, normalV, number, orient, parameter, perp, perpV, pi_, probability,
   rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis,
-  xComp, xDir, yAxis, yComp, yDir, zAxis, zComp, zDir]
+  xCoord, xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir]
 
 mathcon' :: [CI]
 mathcon' = [de, leftSide, ode, pde, rightSide]
@@ -21,8 +21,8 @@ mathcon' = [de, leftSide, ode, pde, rightSide]
 angle, area, calculation, cartesian, centre, change, constraint, diameter,
   equation, euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal,
   normalV, number, orient, parameter, perp, perpV, pi_, probability, rOfChng,
-  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp, 
-  xDir, yAxis, yComp, yDir, zAxis, zComp, zDir :: ConceptChunk
+  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord,
+  xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir :: ConceptChunk
 
 angle       = dcc "angle"        (cn' "angle")                   "the amount of rotation needed to bring one line or plane into coincidence with another"
 area        = dcc "area"         (cn' "area")                    "a part of an object or surface"
@@ -43,7 +43,7 @@ graph       = dcc "graph"        (cn' "graph")                   "a diagram show
 law         = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
 matrix      = dcc "matrix"       (cnICES "matrix")               ("a rectangular array of quantities or expressions in rows and columns that" ++
                                                                   "is treated as a single entity and manipulated according to particular rules")
-norm        = dcc "norm"         (cn' "norm")                    "the Spositive length or size of a vector"
+norm        = dcc "norm"         (cn' "norm")                    "the positive length or size of a vector"
 normal      = dcc "normal"       (cn' "normal" )                 "an object that is perpendicular to a given object"
 number      = dcc "number"       (cn' "number")                  "a mathematical object used to count, measure, and label"
 orient      = dcc "orientation"  (cn' "orientation")             "the relative physical position or direction of something"
@@ -62,6 +62,10 @@ vector      = dcc "vector"       (cn' "vector")                  "an object with
 xAxis = dcc "xAxis" (nounPhraseSent $ P lX :+: S "-axis") "the primary axis of a system of coordinates"
 yAxis = dcc "yAxis" (nounPhraseSent $ P lY :+: S "-axis") "the secondary axis of a system of coordinates"
 zAxis = dcc "zAxis" (nounPhraseSent $ P lZ :+: S "-axis") "the tertiary axis of a system of coordinates"
+
+xCoord = dcc "xCoord" (nounPhraseSent $ P lX :+: S "-coordinate") "the location of the point on the x-axis"
+yCoord = dcc "yCoord" (nounPhraseSent $ P lY :+: S "-coordinate") "the location of the point on the y-axis"
+zCoord = dcc "zCoord" (nounPhraseSent $ P lZ :+: S "-coordinate") "the location of the point on the z-axis"
 
 xComp = dcc "xComp" (nounPhraseSent $ P lX :+: S "-component") "the component of a vector in the x-direction"
 yComp = dcc "yComp" (nounPhraseSent $ P lY :+: S "-component") "the component of a vector in the y-direction"
@@ -86,4 +90,4 @@ normalV = dcc "normal vector" (compoundPhrase' (normal ^. term) (vector ^. term)
 perpV   = dcc "perp_vect"     (compoundPhrase' (perp ^. term) (vector ^. term)) "vector perpendicular or 90 degrees to another vector"
 rOfChng = dcc "rOfChng"       (rate `of_` change) "ratio between a change in one variable relative to a corresponding change in another"
 surArea = dcc "surArea"       (compoundPhrase' (surface ^. term) (area ^. term)) "a measure of the total area that the surface of the object occupies"
-unitV   = dcc "unit_vect"     (compoundPhrase' (unit_ ^. term) (vector ^. term)) "a vector that has a magnitude of one" 
+unitV   = dcc "unit_vect"     (compoundPhrase' (unit_ ^. term) (vector ^. term)) "a vector that has a magnitude of one"

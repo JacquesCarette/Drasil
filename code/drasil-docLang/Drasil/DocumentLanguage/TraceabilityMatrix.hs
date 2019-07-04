@@ -83,7 +83,7 @@ ensureItems u [] = error $ "Expected non-empty matrix dimension for traceability
 ensureItems _ l = l
 
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
-layoutUIDs a c e = concatMap (\x -> x e c) a
+layoutUIDs a c e = filter (`elem` (Map.keys $ c ^. traceTable)) $ concatMap (\x -> x e c) a
 
 traceViewFilt :: HasUID a => (a -> Bool) -> Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
 traceViewFilt f table _ = map (^. uid) . filter f . asOrderedList . (^. table)

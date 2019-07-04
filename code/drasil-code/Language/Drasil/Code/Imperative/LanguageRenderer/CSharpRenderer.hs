@@ -326,7 +326,7 @@ instance FunctionSym CSharpCode where
   listAppendFunc v = func "Add" (fmap valType v) [v]
 
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
-  iterEnd _ = error "Attempt to use iterEnd in C#, but C# has no iterators"
+  iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
 
 instance SelectorFunction CSharpCode where
   listAccessFunc t v = liftA2 fd t (listAccessFuncDocD <$> intValue v)
@@ -347,6 +347,7 @@ instance FunctionApplication CSharpCode where
   at v l = listAccess v (var l int)
   
   iterBegin v = v $. iterBeginFunc (valueType v)
+  iterEnd v = v $. iterEndFunc (valueType v)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)

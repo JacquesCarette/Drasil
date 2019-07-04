@@ -301,7 +301,7 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   listAppendFunc         :: repr (Value repr) -> repr (Function repr)
 
   iterBeginFunc :: repr (StateType repr) -> repr (Function repr)
-  iterEnd   :: repr (StateType repr) -> repr (Function repr)
+  iterEndFunc   :: repr (StateType repr) -> repr (Function repr)
 
 class (ValueSym repr, FunctionSym repr, Selector repr) => 
   SelectorFunction repr where
@@ -328,6 +328,7 @@ class (ValueSym repr, FunctionSym repr, Selector repr, SelectorFunction repr) =>
   at         :: repr (Value repr) -> Label -> repr (Value repr)
 
   iterBegin :: repr (Value repr) -> repr (Value repr)
+  iterEnd   :: repr (Value repr) -> repr (Value repr)
   
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr, 

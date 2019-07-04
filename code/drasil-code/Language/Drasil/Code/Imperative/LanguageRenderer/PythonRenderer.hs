@@ -304,7 +304,7 @@ instance FunctionSym PythonCode where
   listAppendFunc v = func "append" (listType static_ $ fmap valType v) [v]
 
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
-  iterEnd _ = error "Attempt to use iterEnd in Python, but Python has no iterators"
+  iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
 
 instance SelectorFunction PythonCode where
   listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
@@ -326,6 +326,7 @@ instance FunctionApplication PythonCode where
   at v l = listAccess v (var l int)
 
   iterBegin v = v $. iterBeginFunc (valueType v)
+  iterEnd v = v $. iterEndFunc (valueType v)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end

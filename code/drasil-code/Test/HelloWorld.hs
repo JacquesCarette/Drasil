@@ -8,7 +8,7 @@ import Language.Drasil.Code (
   StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  MethodSym(..), ModuleSym(..), BlockCommentSym(..))
+  FunctionApplication(..), MethodSym(..), ModuleSym(..), BlockCommentSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 

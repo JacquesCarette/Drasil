@@ -15,9 +15,10 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, printDoc, outDoc,
@@ -320,7 +321,7 @@ instance Selector CSharpCode where
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  get v = func (getterName $ valueName v) (valueType v) []
+  getFunc v = func (getterName $ valueName v) (valueType v) []
   set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
   listSize = liftA2 fd int (fmap funcDocD (var "Count" int))
@@ -336,6 +337,9 @@ instance SelectorFunction CSharpCode where
     (liftA2 listSetDocD (intValue i) v)
 
   at t l = listAccess t (var l int)
+
+instance FunctionApplication CSharpCode where
+  get v vToGet = v $. getFunc vToGet
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)

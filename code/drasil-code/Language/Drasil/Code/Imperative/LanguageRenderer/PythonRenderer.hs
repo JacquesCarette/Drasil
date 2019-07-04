@@ -14,9 +14,10 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, 
@@ -297,7 +298,7 @@ instance Selector PythonCode where
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  get v = func (getterName $ valueName v) (valueType v) []
+  getFunc v = func (getterName $ valueName v) (valueType v) []
   set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
   listSize = liftA2 fd int (return $ text "len")
@@ -313,6 +314,9 @@ instance SelectorFunction PythonCode where
     (liftA2 listSetDocD i v)
 
   at t l = listAccess t (var l int)
+
+instance FunctionApplication PythonCode where
+  get v vToGet = v $. getFunc vToGet
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end

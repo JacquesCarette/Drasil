@@ -16,9 +16,10 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDoc,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
@@ -304,7 +305,7 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
   func l t vs = pair (func l (pfst t) (map pfst vs)) (func l (psnd t) (map psnd vs))
-  get v = pair (get $ pfst v) (get $ psnd v)
+  getFunc v = pair (get $ pfst v) (get $ psnd v)
   set v toVal = pair (set (pfst v) (pfst toVal)) (set (psnd v) (psnd toVal))
 
   listSize = pair listSize listSize
@@ -321,6 +322,9 @@ instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
   listSet i v = pair (listSet (pfst i) (pfst v)) (listSet (psnd i) (psnd v))
 
   at t l = pair (at (pfst t) l) (at (psnd t) l)
+
+instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
+  get v vToGet = pair (get (pfst v) (pfst vToGet)) (get (psnd v) (psnd vToGet))
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -801,7 +805,7 @@ instance Selector CppSrcCode where
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  get v = func (getterName $ valueName v) (valueType v) []
+  getFunc v = func (getterName $ valueName v) (valueType v) []
   set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
   listSize = func "size" int []
@@ -818,6 +822,9 @@ instance SelectorFunction CppSrcCode where
     (liftA2 cppListSetDoc (intValue i) v)
 
   at t l = listAccess t (var l int) 
+
+instance FunctionApplication CppSrcCode where
+  get v vToGet = v $. getFunc vToGet
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -1283,7 +1290,7 @@ instance Selector CppHdrCode where
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
   func _ _ _ = liftA2 fd void (return empty)
-  get _ = liftA2 fd void (return empty)
+  getFunc _ = liftA2 fd void (return empty)
   set _ _ = liftA2 fd void (return empty)
 
   listSize = liftA2 fd void (return empty)
@@ -1298,6 +1305,9 @@ instance SelectorFunction CppHdrCode where
   listSet _ _ = liftA2 fd void (return empty)
 
   at _ _ = liftA2 fd void (return empty)
+
+instance FunctionApplication CppHdrCode where
+  get _ _ = liftA2 mkVal void (return empty)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)

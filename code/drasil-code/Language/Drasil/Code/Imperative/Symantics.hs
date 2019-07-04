@@ -8,9 +8,10 @@ module Language.Drasil.Code.Imperative.Symantics (
   BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..)
+  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..)
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -292,7 +293,7 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   type Function repr
   func           :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Function repr)
-  get            :: repr (Value repr) -> repr (Function repr)
+  getFunc        :: repr (Value repr) -> repr (Function repr)
   set            :: repr (Value repr) -> repr (Value repr) -> 
     repr (Function repr)
 
@@ -311,6 +312,11 @@ class (ValueSym repr, FunctionSym repr, Selector repr) =>
   listSet    :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
 
   at :: repr (StateType repr) -> Label -> repr (Function repr)
+
+class (ValueSym repr, FunctionSym repr, Selector repr, SelectorFunction repr) =>
+  FunctionApplication repr where
+  get :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) 
   => StatementSym repr where

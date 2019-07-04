@@ -43,7 +43,7 @@ import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Drasil.DocLang (SRSDecl, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..), GSDSec(..), GSDSub(..),
-  AuxConstntSec(AuxConsProg), IntroSec(IntroProg), LCsSec(..), UCsSec(..),
+  AuxConstntSec(AuxConsProg), IntroSec(IntroProg),UCsSec(..),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
@@ -151,7 +151,7 @@ mkSRS = [RefSec $ RefProg intro
     FReqsSub funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
-  LCsSec $ LCsProg $ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH],
+  LCsSec,
   UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg progName specParamValList,
@@ -162,7 +162,7 @@ dataDefn = [dd1HtFluxC]
 
 concIns :: [ConceptInstance]
 concIns =
- goals ++ funcReqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
+ goals ++ funcReqs ++ assumptions ++ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++
  [likeChgTLH] ++ unlikelyChgs
 
 labCon :: [LabelledContent]

@@ -12,7 +12,7 @@ import Prelude hiding (sin, cos, tan)
 import Utils.Drasil
 
 import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
-  LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
+  LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro,
   TSIntro(..), UCsSec(..), Fields, Field(..), SRSDecl, SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
@@ -131,7 +131,7 @@ mkSRS = [RefSec $ RefProg intro
     FReqsSub funcReqs funcReqTables,
     NonFReqsSub nonFuncReqs
   ],
-  LCsSec $ LCsProg likelyChgs,
+  LCsSec,
   UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg ssp [],

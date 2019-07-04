@@ -17,7 +17,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose),
   ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
   SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
-  TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
+  TraceabilitySec(TraceabilityProg), UCsSec(..),
   GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(..),
   dataConstraintUncertainty, intro, mkDoc, outDataConstTbl, tsymb'',
   traceMatStandard)
@@ -161,7 +161,7 @@ mkSRS = [RefSec $ RefProg intro [
     FReqsSub funcReqs [inputInitQuantsTable],
     NonFReqsSub nfRequirements
   ],
-  LCsSec $ LCsProg likelyChgs,
+  LCsSec,
   UCsSec $ UCsProg unlikelyChgs,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg progName specParamValList,

@@ -313,7 +313,7 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   listAppendFunc v = pair (listAppendFunc $ pfst v) (listAppendFunc $ psnd v)
 
   iterBeginFunc t = pair (iterBeginFunc $ pfst t) (iterBeginFunc $ psnd t)
-  iterEnd t = pair (iterEnd $ pfst t) (iterEnd $ psnd t)
+  iterEndFunc t = pair (iterEndFunc $ pfst t) (iterEndFunc $ psnd t)
 
 instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
   listAccessFunc t v = pair (listAccessFunc (pfst t) (pfst v)) (listAccessFunc (psnd t) 
@@ -340,6 +340,7 @@ instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
   at v l = pair (at (pfst v) l) (at (psnd v) l)
 
   iterBegin v = pair (iterBegin $ pfst v) (iterBegin $ psnd v)
+  iterEnd v = pair (iterEnd $ pfst v) (iterEnd $ psnd v)
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -809,8 +810,7 @@ instance Selector CppSrcCode where
   listIndexExists v i = listSize v ?> i
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
-  indexOf l v = funcApp "find" int [iterBegin l, 
-    l $. iterEnd (fmap valType v), v] #- iterBegin l
+  indexOf l v = funcApp "find" int [iterBegin l, iterEnd l, v] #- iterBegin l
 
   cast = cppCast
 
@@ -826,7 +826,7 @@ instance FunctionSym CppSrcCode where
   listAppendFunc v = func "push_back" (listType static_ $ fmap valType v) [v]
 
   iterBeginFunc t = func "begin" (iterator t) []
-  iterEnd t = func "end" (iterator t) []
+  iterEndFunc t = func "end" (iterator t) []
 
 instance SelectorFunction CppSrcCode where
   listAccessFunc t v = func "at" t [intValue v]
@@ -847,6 +847,7 @@ instance FunctionApplication CppSrcCode where
   at v l = listAccess v (var l int)
 
   iterBegin v = v $. iterBeginFunc (listInnerType $ valueType v)
+  iterEnd v = v $. iterEndFunc (listInnerType $ valueType v)
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -953,7 +954,7 @@ instance ControlStatementSym CppSrcCode where
   forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
     (var i int ?< finalv) (var i int &+= stepv)
   forEach l v = for (varDecDef (var l (iterator t)) (iterBegin v)) 
-    (var l (iterator t) ?!= v $. iterEnd t) (var l (iterator t) &++)
+    (var l (iterator t) ?!= iterEnd v) (var l (iterator t) &++)
     where t = listInnerType $ valueType v
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
@@ -1318,7 +1319,7 @@ instance FunctionSym CppHdrCode where
   listAppendFunc _ = liftA2 fd void (return empty)
 
   iterBeginFunc _ = liftA2 fd void (return empty)
-  iterEnd _ = liftA2 fd void (return empty)
+  iterEndFunc _ = liftA2 fd void (return empty)
 
 instance SelectorFunction CppHdrCode where
   listAccessFunc _ _ = liftA2 fd void (return empty)
@@ -1338,6 +1339,7 @@ instance FunctionApplication CppHdrCode where
   at _ _ = liftA2 mkVal void (return empty)
 
   iterBegin _ = liftA2 mkVal void (return empty)
+  iterEnd _ = liftA2 mkVal void (return empty)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)

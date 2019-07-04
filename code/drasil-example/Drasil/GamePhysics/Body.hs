@@ -12,10 +12,9 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   RefSec(..), RefTab(..), SCSSub(..), SRSDecl, SSDSec(SSDProg), SSDSub(..),
   SolChSpec(SCSProg), TConvention(..), TSIntro(..), Verbosity(Verbose),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
-  ReqrmntSec(..), ReqsSub(..), UCsSec(..), AuxConstntSec(..),
-  ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty, inDataConstTbl,
-  intro, mkDoc, outDataConstTbl, outDataConstTbl, tsymb,
-  traceMatStandard, solutionLabel)
+  ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
+  PDSub(..), dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
+  outDataConstTbl, outDataConstTbl, tsymb, traceMatStandard, solutionLabel)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -87,7 +86,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       NonFReqsSub nonfuncReqs
     ],
     LCsSec,
-    UCsSec $ UCsProg unlikelyChgs,
+    UCsSec,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
     TraceabilitySec $ TraceabilityProg $ traceMatStandard sysInfo,
     AuxConstntSec $ AuxConsProg chipmunk [],

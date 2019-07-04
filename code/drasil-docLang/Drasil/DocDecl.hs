@@ -8,7 +8,7 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
 import Database.Drasil (ChunkDB, UMap, asOrderedList, conceptinsTable)
 import Language.Drasil hiding (sec)
 
-import Data.Drasil.Concepts.Documentation (likeChgDom)
+import Data.Drasil.Concepts.Documentation (likeChgDom, unlikeChgDom)
 
 import Control.Lens((^.), Getting)
 
@@ -21,7 +21,7 @@ data DocSection = RefSec DL.RefSec
                 | SSDSec DL.SSDSec
                 | ReqrmntSec DL.ReqrmntSec
                 | LCsSec
-                | UCsSec DL.UCsSec
+                | UCsSec
                 | TraceabilitySec DL.TraceabilitySec
                 | AuxConstntSec DL.AuxConstntSec
                 | Bibliography
@@ -38,7 +38,7 @@ mkDocDesc cdb = map sec where
   sec (SSDSec s) = DL.SSDSec s
   sec (ReqrmntSec r) = DL.ReqrmntSec r
   sec LCsSec = DL.LCsSec $ DL.LCsProg $ fromConcInsDB likeChgDom
-  sec (UCsSec u) = DL.UCsSec u
+  sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromConcInsDB unlikeChgDom
   sec (TraceabilitySec t) = DL.TraceabilitySec t
   sec (AuxConstntSec a) = DL.AuxConstntSec a
   sec Bibliography = DL.Bibliography

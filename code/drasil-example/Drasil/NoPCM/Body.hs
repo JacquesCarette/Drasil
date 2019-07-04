@@ -43,7 +43,7 @@ import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Drasil.DocLang (SRSDecl, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..), GSDSec(..), GSDSub(..),
-  AuxConstntSec(AuxConsProg), IntroSec(IntroProg),UCsSec(..),
+  AuxConstntSec(AuxConsProg), IntroSec(IntroProg),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
@@ -152,7 +152,7 @@ mkSRS = [RefSec $ RefProg intro
     NonFReqsSub nfRequirements
   ],
   LCsSec,
-  UCsSec $ UCsProg unlikelyChgs,
+  UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]

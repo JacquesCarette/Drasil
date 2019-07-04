@@ -14,13 +14,12 @@ import Utils.Drasil
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
   DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..),
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
-  ProblemDescription(..), PDSub(..), RefSec(RefProg),
-  RefTab(TAandA, TUnits), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
-  SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
-  StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
-  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
-  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  termDefnF', tsymb, traceMatStandard, characteristicsLabel)
+  ProblemDescription(..), PDSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
+  ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl, SSDSec(..), SSDSub(..),
+  SolChSpec(..), StkhldrSec(StkhldrProg2),  StkhldrSub(Client, Cstmr),
+  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
+  Verbosity(Verbose), dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
+  outDataConstTbl, termDefnF', tsymb, traceMatStandard, characteristicsLabel)
 
 import qualified Drasil.DocLang.SRS as SRS (reference, valsOfAuxCons, assumpt, inModel)
 
@@ -144,7 +143,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     NonFReqsSub nonfuncReqs
   ],
   LCsSec,
-  UCsSec $ UCsProg unlikelyChgs,
+  UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard systInfo,
   AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
   Bibliography,

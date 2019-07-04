@@ -10,7 +10,7 @@ module Drasil.DocLang (
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..),
   SCSSub(..), SolChSpec(..), SSDSec(..), SSDSub(..), StkhldrSec(StkhldrProg2),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
-  TSIntro(..), UCsSec(..),
+  TSIntro(..),
   -- DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
   -- DocumentLanguage.RefHelpers 
@@ -48,7 +48,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
   ReqsSub(..), SCSSub(..), SolChSpec(..), SSDSec(..), SSDSub(..),
   StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..),
-  TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..))
+  TraceabilitySec(TraceabilityProg), TSIntro(..))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(Verbose), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)

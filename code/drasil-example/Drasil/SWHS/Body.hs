@@ -17,10 +17,9 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose),
   ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
   SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
-  TraceabilitySec(TraceabilityProg), UCsSec(..),
-  GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(..),
-  dataConstraintUncertainty, intro, mkDoc, outDataConstTbl, tsymb'',
-  traceMatStandard)
+  TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
+  ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty, intro,
+  mkDoc, outDataConstTbl, tsymb'', traceMatStandard)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
@@ -162,7 +161,7 @@ mkSRS = [RefSec $ RefProg intro [
     NonFReqsSub nfRequirements
   ],
   LCsSec,
-  UCsSec $ UCsProg unlikelyChgs,
+  UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]

@@ -962,7 +962,7 @@ instance ControlStatementSym CppSrcCode where
 
   checkState l = switchAsIf (var l string) 
 
-  notifyObservers f t = for initv (v_index ?< (listSize obsList)) 
+  notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"

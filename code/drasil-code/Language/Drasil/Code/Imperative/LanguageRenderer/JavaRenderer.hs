@@ -336,7 +336,7 @@ instance SelectorFunction JavaCode where
   listAccessFunc t i = func "get" t [intValue i]
   listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
 
-  at t l = listAccessFunc t (var l int)
+  atFunc t l = listAccessFunc t (var l int)
 
 instance FunctionApplication JavaCode where
   get v vToGet = v $. getFunc vToGet
@@ -347,6 +347,7 @@ instance FunctionApplication JavaCode where
   listAppend v vToApp = v $. listAppendFunc vToApp
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (var l int)
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
@@ -456,7 +457,7 @@ instance ControlStatementSym JavaCode where
           index = "observerIndex"
           v_index = var index int
           initv = varDecDef v_index $ litInt 0
-          notify = oneLiner $ valState $ (obsList $. at t index) $. f
+          notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = while (f $. func "hasNextLine" bool [])
     (oneLiner $ valState $ listAppend v (f $. func "nextLine" string []))

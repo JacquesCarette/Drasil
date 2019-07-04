@@ -310,7 +310,7 @@ class (ValueSym repr, FunctionSym repr, Selector repr) =>
   listSetFunc    :: repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Function repr)
 
-  at :: repr (StateType repr) -> Label -> repr (Function repr)
+  atFunc :: repr (StateType repr) -> Label -> repr (Function repr)
 
 class (ValueSym repr, FunctionSym repr, Selector repr, SelectorFunction repr) =>
   FunctionApplication repr where
@@ -325,6 +325,7 @@ class (ValueSym repr, FunctionSym repr, Selector repr, SelectorFunction repr) =>
   listAccess :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   listSet    :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) ->
     repr (Value repr)
+  at         :: repr (Value repr) -> Label -> repr (Value repr)
   
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr, 

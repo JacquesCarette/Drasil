@@ -333,7 +333,7 @@ instance SelectorFunction CSharpCode where
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD (intValue i) toVal)
 
-  at t l = listAccessFunc t (var l int)
+  atFunc t l = listAccessFunc t (var l int)
 
 instance FunctionApplication CSharpCode where
   get v vToGet = v $. getFunc vToGet
@@ -344,6 +344,7 @@ instance FunctionApplication CSharpCode where
   listAppend v vToApp = v $. listAppendFunc vToApp
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (var l int)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
@@ -450,7 +451,7 @@ instance ControlStatementSym CSharpCode where
           index = "observerIndex"
           v_index = var index int
           initv = varDecDef v_index $ litInt 0
-          notify = oneLiner $ valState $ (obsList $. at t index) $. f
+          notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = while (objVar f (var "EndOfStream" bool) ?!)
     (oneLiner $ valState $ listAppend v (fmap csFileInput f))

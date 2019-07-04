@@ -11,7 +11,8 @@ library
     , Drasil.DocLang.SRS
     , Drasil.DocumentLanguage.Units
   other-modules:
-      Drasil.DocumentLanguage
+      Drasil.DocDecl
+    , Drasil.DocumentLanguage
     , Drasil.ExtractDocDesc
     , Drasil.TraceTable
     , Drasil.DocumentLanguage.Core

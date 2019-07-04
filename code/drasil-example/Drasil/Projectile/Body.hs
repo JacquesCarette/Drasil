@@ -9,15 +9,15 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Utils.Drasil
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
-  DerivationDisplay(ShowDerivation), DocDesc,
+  DerivationDisplay(ShowDerivation),
   DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
   IntroSec(IntroProg), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
-  RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
-  SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
-  TSIntro(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
-  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  traceMatStandard, tsymb)
+  RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
+  SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
+  TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
+  Verbosity(Verbose), dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
+  outDataConstTbl, traceMatStandard, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -52,7 +52,7 @@ import Drasil.Projectile.Unitals (acronyms, constants, inConstraints,
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
 
-mkSRS :: DocDesc
+mkSRS :: SRSDecl
 mkSRS = [
   RefSec $
     RefProg intro

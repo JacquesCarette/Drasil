@@ -6,6 +6,7 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
+import Drasil.DocDecl (SRSDecl)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), Literature(..),
@@ -56,7 +57,7 @@ import Data.Function (on)
 import Data.List (nub, sortBy)
 
 -- | Creates a document from a document description and system information
-mkDoc :: DocDesc -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc l comb si@SI {_sys = sys, _kind = kind, _authors = authors} = Document
   (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
   mkSections (fillTraceMaps l si) l

@@ -11,12 +11,12 @@ import Utils.Drasil
 
 import Control.Lens ((^.))
 
-import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
+import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   Field(..), Fields, LFunc(TermExcept), Literature(Doc', Lit), IntroSec(IntroProg),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose),
-  ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
-  InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
+  ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
+  SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(..),
   dataConstraintUncertainty, intro, mkDoc, outDataConstTbl, tsymb'',
@@ -119,7 +119,7 @@ refDB = rdb citations concIns
 printSetting :: PrintingInformation
 printSetting = PI symMap defaultConfiguration
 
-mkSRS :: DocDesc
+mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [
     TUnits,
     tsymb'' tSymbIntro (TermExcept [uNormalVect]),

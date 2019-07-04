@@ -9,14 +9,14 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
 
-import Drasil.DocLang (DocDesc, mkDoc)
+import Drasil.DocLang (SRSDecl, mkDoc)
 
 import Data.Drasil.Concepts.Documentation as Doc (srs)
 
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
 
-mkSRS :: DocDesc
+mkSRS :: SRSDecl
 mkSRS = []
 
 systInfo :: SystemInformation

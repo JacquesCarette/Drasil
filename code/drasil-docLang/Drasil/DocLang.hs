@@ -1,8 +1,10 @@
 module Drasil.DocLang (
+  -- DocDecl
+  SRSDecl,
   -- DocumentLanguage
   mkDoc, tsymb, tsymb'',
   -- DocumentLanguage.Core
-  AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), DocDesc, DocSection(..),
+  AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), DocSection(..),
   Emphasis(..), OffShelfSolnsSec(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt),
   IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), Literature(Doc', Lit, Manual),
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..),
@@ -37,15 +39,16 @@ module Drasil.DocLang (
   solutionLabel, characteristicsLabel
 ) where 
 
+import Drasil.DocDecl (SRSDecl)
 import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'')
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
-  DerivationDisplay(..), DocDesc, DocSection(..), Emphasis(..), OffShelfSolnsSec(..),
-  GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..),
-  IntroSub(..), LCsSec(..), LFunc(..), Literature(Doc', Lit, Manual), PDSub(..),
-  ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..),
-  SCSSub(..), SolChSpec(..), SSDSec(..), SSDSub(..), StkhldrSec(StkhldrProg2),
-  StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
-  TSIntro(..), UCsSec(..))
+  DerivationDisplay(..), DocSection(..), Emphasis(..),
+  OffShelfSolnsSec(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt),
+  IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), Literature(Doc', Lit,Manual),
+  PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
+  ReqsSub(..), SCSSub(..), SolChSpec(..), SSDSec(..), SSDSub(..),
+  StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr), TConvention(..),
+  TraceabilitySec(TraceabilityProg), TSIntro(..), UCsSec(..))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(Verbose), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)

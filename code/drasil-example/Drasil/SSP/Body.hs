@@ -11,9 +11,9 @@ import Theory.Drasil (qdFromDD)
 import Prelude hiding (sin, cos, tan)
 import Utils.Drasil
 
-import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
+import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
-  TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
+  TSIntro(..), UCsSec(..), Fields, Field(..), SRSDecl, SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
@@ -95,7 +95,7 @@ resourcePath = "../../../datafiles/SSP/"
 srs :: Document
 srs = mkDoc mkSRS for si
   
-mkSRS :: DocDesc
+mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent

@@ -2,7 +2,7 @@ module Drasil.HGHC.HGHC (srsBody, thisSI, allSymbols, printSetting) where
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
-    RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), DocDesc, 
+    RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), SRSDecl, 
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
@@ -53,7 +53,7 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
 printSetting :: PrintingInformation
 printSetting = PI allSymbols defaultConfiguration
   
-thisSRS :: DocDesc
+thisSRS :: SRSDecl
 thisSRS = [RefSec $
     RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
     SSDSec $ SSDProg [

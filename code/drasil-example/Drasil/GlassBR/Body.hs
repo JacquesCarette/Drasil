@@ -12,10 +12,10 @@ import Theory.Drasil (Theory(defined_fun, defined_quant))
 import Utils.Drasil
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
-  DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
+  DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..),
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
   LCsSec(..), ProblemDescription(..), PDSub(..), RefSec(RefProg),
-  RefTab(TAandA, TUnits), ReqrmntSec(..), ReqsSub(..), SCSSub(..),
+  RefTab(TAandA, TUnits), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
@@ -104,7 +104,7 @@ printSetting = PI symbMap defaultConfiguration
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) systInfo
 
-mkSRS :: DocDesc
+mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab glassBR)

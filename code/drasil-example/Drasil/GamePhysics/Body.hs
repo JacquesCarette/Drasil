@@ -7,14 +7,13 @@ import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI), cdb, rdb,
   _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 
-import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
-  Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
-  IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
-  SSDSub(..), SolChSpec(SCSProg), TConvention(..), TSIntro(..),
-  Verbosity(Verbose), OffShelfSolnsSec(..), GSDSec(..), GSDSub(..),
-  TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
-  LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), dataConstraintUncertainty, inDataConstTbl,
+import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
+  Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), IntroSub(..),
+  RefSec(..), RefTab(..), SCSSub(..), SRSDecl, SSDSec(SSDProg), SSDSub(..),
+  SolChSpec(SCSProg), TConvention(..), TSIntro(..), Verbosity(Verbose),
+  OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
+  ReqrmntSec(..), ReqsSub(..), LCsSec(..), UCsSec(..), AuxConstntSec(..),
+  ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty, inDataConstTbl,
   intro, mkDoc, outDataConstTbl, outDataConstTbl, tsymb,
   traceMatStandard, solutionLabel)
 
@@ -57,7 +56,7 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
 srs :: Document
 srs = mkDoc mkSRS for' sysInfo
 
-mkSRS :: DocDesc 
+mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
   IntroSec $ IntroProg para1_introduction_intro (short chipmunk)
   [IPurpose para1_purpose_of_document_intro,

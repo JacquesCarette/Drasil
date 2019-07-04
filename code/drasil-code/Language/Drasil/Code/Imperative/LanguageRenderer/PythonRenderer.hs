@@ -299,7 +299,7 @@ instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
   getFunc v = func (getterName $ valueName v) (valueType v) []
-  set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
+  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
   listSize = liftA2 fd int (return $ text "len")
   listAdd _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
@@ -317,6 +317,7 @@ instance SelectorFunction PythonCode where
 
 instance FunctionApplication PythonCode where
   get v vToGet = v $. getFunc vToGet
+  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end

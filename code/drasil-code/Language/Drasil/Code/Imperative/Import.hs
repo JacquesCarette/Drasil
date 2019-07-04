@@ -9,7 +9,7 @@ import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  ValueExpression(..), Selector(..), SelectorFunction(..), 
   FunctionApplication(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..))
@@ -853,7 +853,7 @@ convStmt (FProcCall n l) = do
 convStmt (FAppend a b) = do
   a' <- convExpr a
   b' <- convExpr b
-  return $ valState $ a' $. listAppend b'
+  return $ valState $ listAppend a' b'
 
 genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)
   (repr (Method repr))
@@ -939,12 +939,12 @@ readData ddef = do
         ---------------
         appendTemp :: (RenderSym repr) => String -> Entry -> 
           Maybe (repr (Statement repr))
-        appendTemp sfx (Entry v) = Just $ valState $ var (codeName v) 
-          (convType $ codeType v) $. listAppend (var (codeName v ++ sfx) 
-          (convType $ codeType v))
-        appendTemp sfx (ListEntry _ v) = Just $ valState $ var (codeName v)
-          (convType $ codeType v) $. listAppend (var (codeName v ++ sfx) 
-          (convType $ codeType v))
+        appendTemp sfx (Entry v) = Just $ valState $ listAppend 
+          (var (codeName v) (convType $ codeType v)) 
+          (var (codeName v ++ sfx) (convType $ codeType v))
+        appendTemp sfx (ListEntry _ v) = Just $ valState $ listAppend 
+          (var (codeName v) (convType $ codeType v))
+          (var (codeName v ++ sfx) (convType $ codeType v))
         appendTemp _ JunkEntry = Nothing
         ---------------
         patternData :: (RenderSym repr) => Maybe String -> [Entry] -> 
@@ -966,7 +966,7 @@ readData ddef = do
         entryData s tokIndex (ListEntry indx v) = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
           return [
-            valState $ vv $. listAppend 
+            valState $ listAppend vv
             (cast (convType $ getListType (codeType v) (toInteger $ length indx))
             (v_linetokens $. listAccess (listInnerType $ valueType v_linetokens)
             tokIndex))]

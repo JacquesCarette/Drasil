@@ -45,9 +45,8 @@ urlcolor=cyan          % color of external links
 
 \begin{document}
 
-\title{Module Guide for Solar Water Heating Systems
-  Incorporating Phase Change Material} 
-\author{Thulasi Jegatheesan and Brooks MacLachlan}
+\title{Module Guide for Projectile} 
+\author{Samuel J. Crawford}
 \date{\today}
 	
 \maketitle
@@ -136,18 +135,12 @@ change. Anticipated changes are numbered by \textbf{AC} followed by a number.
 \item[\refstepcounter{acnum} \actheacnum \label{acOutput}:] The format of the
   final output data.
 \item[\refstepcounter{acnum} \actheacnum \label{acVerifyOut}:] The constraints on the output results.
-\item[\refstepcounter{acnum} \actheacnum \label{acODEs}:] How the governing ODEs
-  are defined using the input parameters.
-\item[\refstepcounter{acnum} \actheacnum \label{acEnergy}:] How the energy
-  equations are defined using the input parameters.
 \item[\refstepcounter{acnum} \actheacnum \label{acControl}:] How the overall
   control of the calculations is orchestrated.
 \item[\refstepcounter{acnum} \actheacnum \label{acSeqDS}:] The implementation
   for the sequence (array) data structure.
-\item[\refstepcounter{acnum} \actheacnum \label{acSolver}:] The algorithm used
-  for the ODE solver.
-\item[\refstepcounter{acnum} \actheacnum \label{acPlot}:] The implementation of
-  plotting data.
+% \item[\refstepcounter{acnum} \actheacnum \label{acPlot}:] The implementation of 
+%   plotting data.
 \end{description}
 
 \subsection{Unlikely Changes} \label{SecUchange}
@@ -173,11 +166,7 @@ followed by a number.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucOutput}:] Output data are
   displayed to the output device.
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucGoal}:] The goal of the system
-  is to calculate temperatures and energies.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucODEstructure}:] The ODEs for
-  temperature can be defined using parameters defined in the input parameters module.
-\item[\refstepcounter{ucnum} \uctheucnum \label{ucEnergyStructure}:] The energy
-  equations can be defined using the parameters defined in the input parameters module.
+  is to determine if the projectile hits the target.
 \end{description}
 
 \section{Module Hierarchy} \label{SecMH}
@@ -194,19 +183,15 @@ followed by a number.
 \item [\refstepcounter{mnum} \mthemnum \label{mParams}:] Input Parameters Module
 %\item [\refstepcounter{mnum} \mthemnum \label{mVerify}:] Input Verification Module
 \item [\refstepcounter{mnum} \mthemnum \label{mOutput}:] Output Format Module
-\item [\refstepcounter{mnum} \mthemnum \label{mVerifyOut}:] Output Verification Module
-\item [\refstepcounter{mnum} \mthemnum \label{mODEs}:] Temperature ODEs Module
-\item [\refstepcounter{mnum} \mthemnum \label{mEnergy}:] Energy Equations Module
+%\item [\refstepcounter{mnum} \mthemnum \label{mVerifyOut}:] Output Verification Module
 \item [\refstepcounter{mnum} \mthemnum \label{mControl}:] Control Module
 \item [\refstepcounter{mnum} \mthemnum \label{mSpecParams}:] Specification Parameters Module
 \item [\refstepcounter{mnum} \mthemnum \label{mSeqDS}:] Sequence Data Structure Module
-\item [\refstepcounter{mnum} \mthemnum \label{mSolver}:] ODE Solver Module
-\item [\refstepcounter{mnum} \mthemnum \label{mPlot}:] Plotting Module
+%\item [\refstepcounter{mnum} \mthemnum \label{mPlot}:] Plotting Module
 \end{description}
 
 Note that \mref{mHH} is a commonly used module and is already implemented by the operating
-system.  It will not be reimplemented.  Similarly, \mref{mSeqDS}, \mref{mSolver}
-and \mref{mPlot} are already available in Matlab and will not be reimplemented.
+system.  It will not be reimplemented.  Similarly, \mref{mSeqDS} and \mref{mPlot} are already available in Matlab and will not be reimplemented.
 
 \begin{table}[h!]
 \centering
@@ -215,21 +200,18 @@ and \mref{mPlot} are already available in Matlab and will not be reimplemented.
 \textbf{Level 1} & \textbf{Level 2}\\
 \midrule
 
-{Hardware-Hiding Module} & ~ \\
+{Hardware-Hiding} & ~ \\
 \midrule
 
-\multirow{7}{0.3\textwidth}{Behaviour-Hiding Module} & Input Parameters Module\\
-& Output Format Module\\
-& Output Verification Module\\
-& Temperature ODEs Module\\
-& Energy Equations Module\\ 
+\multirow{4}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
+& Output Format\\
+% & Output Verification\\
 & Control Module\\
 & Specification Parameters Module\\
 \midrule
 
-\multirow{3}{0.3\textwidth}{Software Decision Module} & {Sequence Data Structure Module}\\
-& ODE Solver Module\\
-& Plotting Module\\
+\multirow{1}{0.3\textwidth}{Software Decision} & Sequence Data Structure\\
+% & Plotting\\
 \bottomrule
 
 \end{tabular}
@@ -300,7 +282,7 @@ one module one secret rule can be relaxed here.
   parameter violates a software constraint.  Stored parameters can be read
   individually, but write access is only to redefine the entire set of inputs.
  % This module knows how many parameters it stores.
-\item[Implemented By:] SWHS
+\item[Implemented By:] Projectile
 \end{description}
 
 % \subsubsection{Input Verification Module (\mref{mVerify})}
@@ -310,7 +292,7 @@ one module one secret rule can be relaxed here.
 % \item[Services:] Verifies that the input parameters comply with physical and
 %   software constraints. Throws an error if a parameter violates a physical
 %   constraint. Throws a warning if a parameter violates a software constraint.
-% \item[Implemented By:] SWHS
+% \item[Implemented By:] Projectile
 % \end{description}
 
 \subsubsection{Output Format Module (\mref{mOutput})}
@@ -319,42 +301,25 @@ one module one secret rule can be relaxed here.
 \item[Secrets:] The format and structure of the output data.
 \item[Services:] Outputs the results of the calculations, including the input
   parameters, temperatures, energies, and times when melting starts and stops.
-\item[Implemented By:] SWHS
+\item[Implemented By:] Projectile
 \end{description} 
 
-\subsubsection{Output Verification Module (\mref{mVerifyOut})}
-
-\begin{description}
-\item[Secrets:] The algorithm used to approximate expected results.
-\item[Services:] Verifies that the output energy results follow the law of 
-  conservation of energy. Throws a warning if the relative error exceeds the
-  error threshold.
-\item[Implemented By:] SWHS
-\end{description}
-
-\subsubsection{Temperature ODEs Module (\mref{mODEs})}
-
-\begin{description}
-\item[Secrets:] The ODEs for solving the temperature, using the input parameters.
-\item[Services:] Defines the ODEs using the parameters in the input parameters module.
-\item[Implemented By:] SWHS
-\end{description} 
-
-\subsubsection{Energy Equations Module (\mref{mEnergy})}
-
-\begin{description}
-\item[Secrets:] The equations for solving for the energies using the input parameters.
-\item[Services:] Defines the energy equations using the parameters in the input
-  parameters module.
-\item[Implemented By:] SWHS
-\end{description} 
+%\subsubsection{Output Verification Module (\mref{mVerifyOut})}
+%
+%\begin{description}
+%\item[Secrets:] The algorithm used to approximate expected results.
+%\item[Services:] Verifies that the output energy results follow the law of 
+%  conservation of energy. Throws a warning if the relative error exceeds the
+%  error threshold.
+%\item[Implemented By:] Projectile
+%\end{description}
 
 \subsubsection{Control Module (\mref{mControl})}
 
 \begin{description}
 \item[Secrets:] The algorithm for coordinating the running of the program.
 \item[Services:] Provides the main program.
-\item[Implemented By:] SWHS
+\item[Implemented By:] Projectile
 \end{description}
  
 \subsubsection{Specification Parameters Module (\mref{mSpecParams})}
@@ -363,7 +328,7 @@ one module one secret rule can be relaxed here.
 \item[Secrets:] The values of the specification parameters (such as bounds for
   software constraints on input variables).
 \item[Services:] Read access for the specification parameters.
-\item[Implemented By:] SWHS
+\item[Implemented By:] Projectile
 \end{description}
 
 \subsection{Software Decision Module}
@@ -388,24 +353,13 @@ one module one secret rule can be relaxed here.
 \item[Implemented By:] Matlab
 \end{description}
 
-\subsubsection{ODE Solver Module (\mref{mSolver})}
-
-\begin{description}
-\item[Secrets:] The algorithm to solve a system of first order ODEs initial
-  value problem from a given starting time until the given event function shows
-  termination.
-\item[Services:] Solves an ODE using the governing equation, initial
-  conditions, event function and numerical parameters.
-\item[Implemented By:] Matlab
-\end{description}
-
-\subsubsection{Plotting Module (\mref{mPlot})}
-
-\begin{description}
-\item[Secrets:] The data structures and algorithms for plotting data graphically.
-\item[Services:] Provides a plot function.
-\item[Implemented By:] Matlab
-\end{description}
+%\subsubsection{Plotting Module (\mref{mPlot})}
+%
+%\begin{description}
+%\item[Secrets:] The data structures and algorithms for plotting data graphically.
+%\item[Services:] Provides a plot function.
+%\item[Implemented By:] Matlab
+%\end{description}
 
 \section{Traceability Matrix} \label{SecTM}
 
@@ -433,13 +387,13 @@ R1 & \mref{mHH}, \mref{mParams}, \mref{mControl}\\ %\mref{mInput},
 R2 & \mref{mParams}\\ %\mref{mInput}, 
 R3 & \mref{mParams}, \mref{mSpecParams}\\ %\mref{mVerify}\\
 R4 & \mref{mOutput}, \mref{mControl}\\
-R5 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R6 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}, \mref{mSeqDS}, \mref{mSolver}, \mref{mPlot}\\
-R7 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R8 & \mref{mOutput}, \mref{mEnergy}, \mref{mControl}, \mref{mSeqDS}, \mref{mPlot}\\
-R9 & \mref{mVerifyOut}\\
-R10 & \mref{mOutput}, \mref{mODEs}, \mref{mControl}\\
-R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
+R5 & \mref{mOutput}, \mref{mControl}, \mref{mSeqDS}\\ %, \mref{mPlot}\\
+R6 & \mref{mOutput}, \mref{mControl}, \mref{mSeqDS}\\ %, \mref{mPlot}\\
+R7 & \mref{mOutput}, \mref{mControl}, \mref{mSeqDS}\\ %, \mref{mPlot}\\
+R8 & \mref{mOutput}, \mref{mControl}, \mref{mSeqDS}\\ %, \mref{mPlot}\\
+%R9 & \mref{mVerifyOut}\\
+R9 & \mref{mOutput}, \mref{mControl}\\
+R10 & \mref{mOutput}, \mref{mControl}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Requirements and Modules}
@@ -457,12 +411,9 @@ R11 & \mref{mOutput}, \mref{mODEs}, \mref{mEnergy}, \mref{mControl}\\
 \acref{acParams} & \mref{mParams}\\
 \acref{acVerify} & \mref{mParams}\\ %\mref{mVerify}\\
 \acref{acOutput} & \mref{mOutput}\\
-\acref{acVerifyOut} & \mref{mVerifyOut}\\
-\acref{acODEs} & \mref{mODEs}\\
-\acref{acEnergy} & \mref{mEnergy}\\
+% \acref{acVerifyOut} & \mref{mVerifyOut}\\
 \acref{acControl} & \mref{mControl}\\
 \acref{acSeqDS} & \mref{mSeqDS}\\
-\acref{acSolver} & \mref{mSolver}\\
 \acref{acPlot} & \mref{mPlot}\\
 \bottomrule
 \end{tabular}
@@ -483,16 +434,16 @@ the modules. It can be seen that the graph is a directed acyclic graph
 system, and modules in the higher level of the hierarchy are essentially simpler
 because they use modules from the lower levels.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.7\textwidth]{RevisedHierarchy.pdf}
-\caption{Use hierarchy among modules}
-\label{FigUH}
-\end{figure}
+%\begin{figure}[H]
+%\centering
+%\includegraphics[width=0.7\textwidth]{RevisedHierarchy.pdf}
+%\caption{Use hierarchy among modules}
+%\label{FigUH}
+%\end{figure}
 
 %\section*{References}
 
 \bibliographystyle {plainnat}
-\bibliography {../SRS/PCM_SRS}
+\bibliography {MG}
 
 \end{document}

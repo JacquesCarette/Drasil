@@ -15,9 +15,10 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
   NameOpts(NameOpts), packSep)
 import Language.Drasil.Code.Imperative.LanguageRenderer ( 
@@ -324,7 +325,7 @@ instance Selector JavaCode where
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  get v = func (getterName $ valueName v) (valueType v) []
+  getFunc v = func (getterName $ valueName v) (valueType v) []
   set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
   listSize = func "size" int []
@@ -339,6 +340,9 @@ instance SelectorFunction JavaCode where
   listSet i v = func "set" (listType static_ $ fmap valType v) [intValue i, v]
 
   at t l = listAccess t (var l int)
+
+instance FunctionApplication JavaCode where
+  get v vToGet = v $. getFunc vToGet
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end

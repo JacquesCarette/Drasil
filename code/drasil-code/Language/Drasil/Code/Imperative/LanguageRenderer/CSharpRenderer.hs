@@ -322,7 +322,7 @@ instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
   getFunc v = func (getterName $ valueName v) (valueType v) []
-  set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
+  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
   listSize = liftA2 fd int (fmap funcDocD (var "Count" int))
   listAdd _ i v = func "Insert" (fmap valType v) [i, v]
@@ -340,6 +340,7 @@ instance SelectorFunction CSharpCode where
 
 instance FunctionApplication CSharpCode where
   get v vToGet = v $. getFunc vToGet
+  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)

@@ -294,8 +294,8 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   func           :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Function repr)
   getFunc        :: repr (Value repr) -> repr (Function repr)
-  set            :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Function repr)
+  setFunc        :: repr (StateType repr) -> repr (Value repr) -> 
+    repr (Value repr) -> repr (Function repr)
 
   listSize           :: repr (Function repr)
   listAdd            :: repr (Value repr) -> repr (Value repr) -> 
@@ -316,6 +316,8 @@ class (ValueSym repr, FunctionSym repr, Selector repr) =>
 class (ValueSym repr, FunctionSym repr, Selector repr, SelectorFunction repr) =>
   FunctionApplication repr where
   get :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  set :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
+    repr (Value repr)
   
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) 

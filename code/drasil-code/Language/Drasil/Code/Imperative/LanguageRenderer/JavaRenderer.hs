@@ -326,7 +326,7 @@ instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
   getFunc v = func (getterName $ valueName v) (valueType v) []
-  set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
+  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
   listSize = func "size" int []
   listAdd _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
@@ -343,6 +343,7 @@ instance SelectorFunction JavaCode where
 
 instance FunctionApplication JavaCode where
   get v vToGet = v $. getFunc vToGet
+  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end

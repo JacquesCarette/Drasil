@@ -305,8 +305,9 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
   func l t vs = pair (func l (pfst t) (map pfst vs)) (func l (psnd t) (map psnd vs))
-  getFunc v = pair (get $ pfst v) (get $ psnd v)
-  set v toVal = pair (set (pfst v) (pfst toVal)) (set (psnd v) (psnd toVal))
+  getFunc v = pair (getFunc $ pfst v) (getFunc $ psnd v)
+  setFunc t v toVal = pair (setFunc (pfst t) (pfst v) (pfst toVal)) 
+    (setFunc (psnd t) (psnd v) (psnd toVal))
 
   listSize = pair listSize listSize
   listAdd l i v = pair (listAdd (pfst l) (pfst i) (pfst v)) (listAdd (psnd l)
@@ -325,6 +326,8 @@ instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
   get v vToGet = pair (get (pfst v) (pfst vToGet)) (get (psnd v) (psnd vToGet))
+  set v vToSet toVal = pair (set (pfst v) (pfst vToSet) (pfst toVal))
+    (set (psnd v) (psnd vToSet) (psnd toVal))
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -806,7 +809,7 @@ instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
   getFunc v = func (getterName $ valueName v) (valueType v) []
-  set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
+  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
   listSize = func "size" int []
   listAdd l i v = func "insert" (listType static_ $ fmap valType v) [(l $.
@@ -825,6 +828,7 @@ instance SelectorFunction CppSrcCode where
 
 instance FunctionApplication CppSrcCode where
   get v vToGet = v $. getFunc vToGet
+  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -1291,7 +1295,7 @@ instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData
   func _ _ _ = liftA2 fd void (return empty)
   getFunc _ = liftA2 fd void (return empty)
-  set _ _ = liftA2 fd void (return empty)
+  setFunc _ _ _ = liftA2 fd void (return empty)
 
   listSize = liftA2 fd void (return empty)
   listAdd _ _ _ = liftA2 fd void (return empty)
@@ -1308,6 +1312,7 @@ instance SelectorFunction CppHdrCode where
 
 instance FunctionApplication CppHdrCode where
   get _ _ = liftA2 mkVal void (return empty)
+  set _ _ _ = liftA2 mkVal void (return empty)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)

@@ -23,7 +23,7 @@ import qualified Data.Map as Map (elems)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table)
-import Drasil.Sections.TableOfUnits (tableOfUnits)
+import Drasil.Sections.TableOfUnits (tableOfUnits, unitTableRef)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
   stakeholder, thModel, tOfSymb, userChar, propCorSol, offShelfSol)
@@ -364,7 +364,7 @@ tuI :: TUIntro -> Sentence
 tuI System  = 
   S "The unit system used throughout is SI (Système International d'Unités)."
 tuI TUPurpose = 
-  S "For each unit, the table lists the symbol, a description and the SI name."
+  S "For each unit" `sC` Ref unitTableRef +:+. S "lists the symbol, a description and the SI name"
 tuI Derived = 
   S "In addition to the basic units, several derived units are also used."
 

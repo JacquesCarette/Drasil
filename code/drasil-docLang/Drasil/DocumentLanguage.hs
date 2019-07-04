@@ -322,7 +322,7 @@ tsI VectorUnits = S "For vector quantities, the units shown are for each compone
 -- to a sentence
 typogConvention :: [TConvention] -> Sentence
 typogConvention [] = error "No arguments given for typographic conventions"
-typogConvention ts = S "Throughout the document," +:+. (foldlList Comma List $ map tcon ts)
+typogConvention ts = S "Throughout the document," +:+. foldlList Comma List (map tcon ts)
   where tcon (Vector emph) = S ("symbols in " ++ show emph ++
                                 " will represent vectors, and scalars otherwise")
         tcon (Verb s) = s
@@ -331,7 +331,7 @@ typogConvention ts = S "Throughout the document," +:+. (foldlList Comma List $ m
 symbConvention :: [Literature] -> Sentence
 symbConvention [] = error "Attempting to reference no literature for SymbConvention"
 symbConvention scs = S "The choice of symbols was made to be consistent with the" +:+.
-                      (makeSentence $ map scon scs)
+                      makeSentence (map scon scs)
   where makeSentence [x,y] = x +:+ S "and with" +:+ y
         makeSentence xs    = foldlList Comma List xs
         scon (Lit x)       = phrase x +:+ S "literature"

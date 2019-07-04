@@ -11,8 +11,8 @@ mathcon :: [ConceptChunk]
 mathcon = [angle, area, calculation, cartesian, change, constraint, diameter,
   equation, euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal,
   normalV, number, orient, parameter, perp, perpV, pi_, probability, rOfChng,
-  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp,
-  xDir, yAxis, yComp, yDir, zAxis, zComp, zDir]
+  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord,
+  xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir]
 
 mathcon' :: [CI]
 mathcon' = [pde, ode, de]
@@ -20,8 +20,8 @@ mathcon' = [pde, ode, de]
 angle, area, calculation, cartesian, change, constraint, diameter, equation,
   euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal, normalV,
   number, orient, parameter, perp, perpV, pi_, probability, rOfChng, rate,
-  rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp, xDir,
-  yAxis, yComp, yDir, zAxis, zComp, zDir :: ConceptChunk
+  rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord,
+  xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir :: ConceptChunk
 
 pde, ode, de :: CI
 
@@ -63,6 +63,10 @@ orient       = dcc "orientation"  (cn' "orientation")             "The relative 
 xAxis = dcc "xAxis" (nounPhraseSent $ P lX :+: S "-axis") "the primary axis of a system of coordinates"
 yAxis = dcc "yAxis" (nounPhraseSent $ P lY :+: S "-axis") "the secondary axis of a system of coordinates"
 zAxis = dcc "zAxis" (nounPhraseSent $ P lZ :+: S "-axis") "the tertiary axis of a system of coordinates"
+
+xCoord = dcc "xCoord" (nounPhraseSent $ P lX :+: S "-coordinate") "the location of the point on the x-axis"
+yCoord = dcc "yCoord" (nounPhraseSent $ P lY :+: S "-coordinate") "the location of the point on the y-axis"
+zCoord = dcc "zCoord" (nounPhraseSent $ P lZ :+: S "-coordinate") "the location of the point on the z-axis"
 
 xComp = dcc "xComp" (nounPhraseSent $ P lX :+: S "-component") "the component of a vector in the x-direction"
 yComp = dcc "yComp" (nounPhraseSent $ P lY :+: S "-component") "the component of a vector in the y-direction"

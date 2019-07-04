@@ -308,7 +308,7 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
     (setFunc (psnd t) (psnd v) (psnd toVal))
 
   listSizeFunc = pair listSizeFunc listSizeFunc
-  listAdd l i v = pair (listAdd (pfst l) (pfst i) (pfst v)) (listAdd (psnd l)
+  listAddFunc l i v = pair (listAddFunc (pfst l) (pfst i) (pfst v)) (listAddFunc (psnd l)
     (psnd i) (psnd v))
   listAppend v = pair (listAppend $ pfst v) (listAppend $ psnd v)
 
@@ -326,7 +326,10 @@ instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
   get v vToGet = pair (get (pfst v) (pfst vToGet)) (get (psnd v) (psnd vToGet))
   set v vToSet toVal = pair (set (pfst v) (pfst vToSet) (pfst toVal))
     (set (psnd v) (psnd vToSet) (psnd toVal))
+
   listSize v = pair (listSize $ pfst v) (listSize $ psnd v)
+  listAdd v i vToAdd = pair (listAdd (pfst v) (pfst i) (pfst vToAdd)) 
+    (listAdd (psnd v) (psnd i) (psnd vToAdd))
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -809,7 +812,7 @@ instance FunctionSym CppSrcCode where
   setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
   listSizeFunc = func "size" int []
-  listAdd l i v = func "insert" (listType static_ $ fmap valType v) [(l $.
+  listAddFunc l i v = func "insert" (listType static_ $ fmap valType v) [(l $.
     iterBegin (fmap valType v)) #+ i, v]
   listAppend v = func "push_back" (listType static_ $ fmap valType v) [v]
 
@@ -826,7 +829,9 @@ instance SelectorFunction CppSrcCode where
 instance FunctionApplication CppSrcCode where
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+
   listSize v = cast int (v $. listSizeFunc)
+  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -907,7 +912,7 @@ instance StatementSym CppSrcCode where
   changeState fsmName toState = var fsmName string &= litString toState
 
   initObserverList t = listDecDef (var observerListName t)
-  addObserver o = valState $ obsList $. listAdd obsList lastelem o
+  addObserver o = valState $ listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
           lastelem = listSize obsList
 
@@ -1294,7 +1299,7 @@ instance FunctionSym CppHdrCode where
   setFunc _ _ _ = liftA2 fd void (return empty)
 
   listSizeFunc = liftA2 fd void (return empty)
-  listAdd _ _ _ = liftA2 fd void (return empty)
+  listAddFunc _ _ _ = liftA2 fd void (return empty)
   listAppend _ = liftA2 fd void (return empty)
 
   iterBegin _ = liftA2 fd void (return empty)
@@ -1309,7 +1314,9 @@ instance SelectorFunction CppHdrCode where
 instance FunctionApplication CppHdrCode where
   get _ _ = liftA2 mkVal void (return empty)
   set _ _ _ = liftA2 mkVal void (return empty)
+
   listSize _ = liftA2 mkVal void (return empty)
+  listAdd _ _ _ = liftA2 mkVal void (return empty)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)

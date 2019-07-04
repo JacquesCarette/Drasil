@@ -323,7 +323,7 @@ instance FunctionSym CSharpCode where
   setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
   listSizeFunc = liftA2 fd int (fmap funcDocD (var "Count" int))
-  listAdd _ i v = func "Insert" (fmap valType v) [i, v]
+  listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
   listAppend v = func "Add" (fmap valType v) [v]
 
   iterBegin _ = error "Attempt to use iterBegin in C#, but C# has no iterators"
@@ -339,7 +339,9 @@ instance SelectorFunction CSharpCode where
 instance FunctionApplication CSharpCode where
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+  
   listSize v = v $. listSizeFunc
+  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
@@ -408,7 +410,7 @@ instance StatementSym CSharpCode where
   changeState fsmName toState = var fsmName string &= litString toState
 
   initObserverList t = listDecDef (var observerListName t)
-  addObserver o = valState $ obsList $. listAdd obsList lastelem o
+  addObserver o = valState $ listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
           lastelem = listSize obsList
 

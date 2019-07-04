@@ -327,7 +327,7 @@ instance FunctionSym JavaCode where
   setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
   listSizeFunc = func "size" int []
-  listAdd _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
+  listAddFunc _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
   listAppend v = func "add" (listType static_ $ fmap valType v) [v]
 
   iterBegin _ = error "Attempt to use iterBegin in Java, but Java has no iterators"
@@ -342,7 +342,9 @@ instance SelectorFunction JavaCode where
 instance FunctionApplication JavaCode where
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+
   listSize v = v $. listSizeFunc
+  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
@@ -414,7 +416,7 @@ instance StatementSym JavaCode where
   changeState fsmName toState = var fsmName string &= litString toState
 
   initObserverList t = listDecDef (var observerListName t)
-  addObserver o = valState $ obsList $. listAdd obsList lastelem o
+  addObserver o = valState $ listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
           lastelem = listSize obsList
 

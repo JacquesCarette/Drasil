@@ -300,7 +300,7 @@ instance FunctionSym PythonCode where
   setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
   listSizeFunc = liftA2 fd int (return $ text "len")
-  listAdd _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
+  listAddFunc _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
   listAppend v = func "append" (listType static_ $ fmap valType v) [v]
 
   iterBegin _ = error "Attempt to use iterBegin in Python, but Python has no iterators"
@@ -316,8 +316,10 @@ instance SelectorFunction PythonCode where
 instance FunctionApplication PythonCode where
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+
   listSize v = liftA2 mkVal (fmap funcType listSizeFunc) 
     (liftA2 pyListSize v listSizeFunc)
+  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
@@ -390,7 +392,7 @@ instance StatementSym PythonCode where
   changeState fsmName toState = var fsmName string &= litString toState
 
   initObserverList t = listDecDef (var observerListName t)
-  addObserver o = valState $ obsList $. listAdd obsList lastelem o
+  addObserver o = valState $ listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
           lastelem = listSize obsList
 

@@ -37,7 +37,7 @@ helloInitVariables = block [comment "Initializing variables",
     float)) (litFloat 1.0)),
   printLn (var "oneIndex" int),
   var "a" int &= listSize (var "myOtherList" (listType static_ float)),
-  valState (objAccess (var "myOtherList" (listType static_ float)) (listAdd 
+  valState (objAccess (var "myOtherList" (listType static_ float)) (listAddFunc 
     (var "myOtherList" (listType static_ float)) (litInt 2) (litFloat 2.0))),
   valState (objAccess (var "myOtherList" (listType static_ float)) (listAppend (litFloat 2.5))),
   varDec $ var "e" float,

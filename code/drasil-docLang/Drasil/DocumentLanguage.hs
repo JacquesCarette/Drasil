@@ -322,30 +322,22 @@ tsI VectorUnits = S "For vector quantities, the units shown are for each compone
 -- to a sentence
 typogConvention :: [TConvention] -> Sentence
 typogConvention [] = error "No arguments given for typographic conventions"
-typogConvention ts = S "Throughout the document" `sC` makeSentence ts
-  where makeSentence [x]     = tcon x :+: S "."
-        makeSentence [x,y]   = tcon x +:+ S "and" +:+. tcon y
-        makeSentence [x,y,z] = tcon x `sC` tcon y `sC` S "and" +:+. tcon z
-        makeSentence (x:xs)  = tcon x `sC` makeSentence xs
-        makeSentence  _      = error "How did you get here?"
-        tcon (Vector emph)   = S ("symbols in " ++ show emph ++
-                               " will represent vectors, and scalars otherwise")
+typogConvention ts = S "Throughout the document," +:+. (foldlList Comma List $ map tcon ts)
+  where tcon (Vector emph) = S ("symbols in " ++ show emph ++
+                                " will represent vectors, and scalars otherwise")
         tcon (Verb s) = s
 
 -- | symbolic convention writer.
 symbConvention :: [Literature] -> Sentence
 symbConvention [] = error "Attempting to reference no literature for SymbConvention"
-symbConvention scs = S "The choice of symbols was made to be consistent with the" +:+
-                      makeSentence scs
-  where makeSentence [x]     = scon x :+: S "."
-        makeSentence [x,y]   = scon x +:+ S "and with" +:+. scon y
-        makeSentence [x,y,z] = scon x `sC` scon y `sC` S "and" +:+. scon z
-        makeSentence (x:xs)  = scon x `sC` makeSentence xs
-        makeSentence  _      = error "How did you get here?"
-        scon (Lit x)         = phrase x +:+ S "literature"
-        scon (Doc x)         = S "existing documentation for" +:+ phrase x
-        scon (Doc' x)        = S "existing documentation for" +:+ plural x
-        scon (Manual x)      = S "that used in the" +:+ phrase x +:+ S "manual"
+symbConvention scs = S "The choice of symbols was made to be consistent with the" +:+.
+                      (makeSentence $ map scon scs)
+  where makeSentence [x,y] = x +:+ S "and with" +:+ y
+        makeSentence xs    = foldlList Comma List xs
+        scon (Lit x)       = phrase x +:+ S "literature"
+        scon (Doc x)       = S "existing documentation for" +:+ phrase x
+        scon (Doc' x)      = S "existing documentation for" +:+ plural x
+        scon (Manual x)    = S "that used in the" +:+ phrase x +:+ S "manual"
 
 -- | Table of units intro builder. Used by mkRefSec
 tuIntro :: [TUIntro] -> Contents

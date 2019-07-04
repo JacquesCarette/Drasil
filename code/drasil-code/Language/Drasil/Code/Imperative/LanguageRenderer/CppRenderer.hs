@@ -312,7 +312,7 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
     (psnd i) (psnd v))
   listAppendFunc v = pair (listAppendFunc $ pfst v) (listAppendFunc $ psnd v)
 
-  iterBegin t = pair (iterBegin $ pfst t) (iterBegin $ psnd t)
+  iterBeginFunc t = pair (iterBeginFunc $ pfst t) (iterBeginFunc $ psnd t)
   iterEnd t = pair (iterEnd $ pfst t) (iterEnd $ psnd t)
 
 instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
@@ -338,6 +338,8 @@ instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
   listSet v i toVal = pair (listSet (pfst v) (pfst i) (pfst toVal)) 
     (listSet (psnd v) (psnd i) (psnd toVal))
   at v l = pair (at (pfst v) l) (at (psnd v) l)
+
+  iterBegin v = pair (iterBegin $ pfst v) (iterBegin $ psnd v)
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -807,8 +809,8 @@ instance Selector CppSrcCode where
   listIndexExists v i = listSize v ?> i
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
-  indexOf l v = funcApp "find" int [l $. iterBegin (fmap valType v), 
-    l $. iterEnd (fmap valType v), v] #- l $. iterBegin (fmap valType v)
+  indexOf l v = funcApp "find" int [iterBegin l, 
+    l $. iterEnd (fmap valType v), v] #- iterBegin l
 
   cast = cppCast
 
@@ -819,11 +821,11 @@ instance FunctionSym CppSrcCode where
   setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
   listSizeFunc = func "size" int []
-  listAddFunc l i v = func "insert" (listType static_ $ fmap valType v) [(l $.
-    iterBegin (fmap valType v)) #+ i, v]
+  listAddFunc l i v = func "insert" (listType static_ $ fmap valType v) 
+    [iterBegin l #+ i, v]
   listAppendFunc v = func "push_back" (listType static_ $ fmap valType v) [v]
 
-  iterBegin t = func "begin" (iterator t) []
+  iterBeginFunc t = func "begin" (iterator t) []
   iterEnd t = func "end" (iterator t) []
 
 instance SelectorFunction CppSrcCode where
@@ -843,6 +845,8 @@ instance FunctionApplication CppSrcCode where
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
   at v l = listAccess v (var l int)
+
+  iterBegin v = v $. iterBeginFunc (listInnerType $ valueType v)
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -948,7 +952,7 @@ instance ControlStatementSym CppSrcCode where
     (loopState sInit) vGuard (loopState sUpdate) b
   forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
     (var i int ?< finalv) (var i int &+= stepv)
-  forEach l v = for (varDecDef (var l (iterator t)) (v $. iterBegin t)) 
+  forEach l v = for (varDecDef (var l (iterator t)) (iterBegin v)) 
     (var l (iterator t) ?!= v $. iterEnd t) (var l (iterator t) &++)
     where t = listInnerType $ valueType v
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
@@ -1313,7 +1317,7 @@ instance FunctionSym CppHdrCode where
   listAddFunc _ _ _ = liftA2 fd void (return empty)
   listAppendFunc _ = liftA2 fd void (return empty)
 
-  iterBegin _ = liftA2 fd void (return empty)
+  iterBeginFunc _ = liftA2 fd void (return empty)
   iterEnd _ = liftA2 fd void (return empty)
 
 instance SelectorFunction CppHdrCode where
@@ -1332,6 +1336,8 @@ instance FunctionApplication CppHdrCode where
   listAccess _ _ = liftA2 mkVal void (return empty)
   listSet _ _ _ = liftA2 mkVal void (return empty)
   at _ _ = liftA2 mkVal void (return empty)
+
+  iterBegin _ = liftA2 mkVal void (return empty)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)

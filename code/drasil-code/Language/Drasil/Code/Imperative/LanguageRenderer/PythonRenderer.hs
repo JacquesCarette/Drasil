@@ -29,7 +29,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD,
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
-  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD,
+  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD,
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
   commentedItem, addCommentsDocD, valList, appendToBody, getterName, setterName)
@@ -308,8 +308,8 @@ instance FunctionSym PythonCode where
 
 instance SelectorFunction PythonCode where
   listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
-  listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
-    (liftA2 listSetDocD i v)
+  listSetFunc v i toVal = liftA2 fd (valueType v) 
+    (liftA2 listSetFuncDocD i toVal)
 
   at t l = listAccessFunc t (var l int)
 
@@ -322,12 +322,13 @@ instance FunctionApplication PythonCode where
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
   listAppend v vToApp = v $. listAppendFunc vToApp
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   assign v1 v2 = mkStNoEnd <$> liftA2 assignDocD v1 v2
-  assignToListIndex lst index v = valState $ lst $. listSet index v
+  assignToListIndex lst index v = valState $ listSet lst index v
   multiAssign outs vs = mkStNoEnd <$> lift2Lists multiAssignDoc outs vs
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)

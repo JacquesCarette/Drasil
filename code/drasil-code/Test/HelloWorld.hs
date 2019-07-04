@@ -7,8 +7,8 @@ import Language.Drasil.Code (
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), SelectorFunction(..), 
-  FunctionApplication(..), MethodSym(..), ModuleSym(..), BlockCommentSym(..))
+  ValueExpression(..), Selector(..), FunctionApplication(..), MethodSym(..), 
+  ModuleSym(..), BlockCommentSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
@@ -42,7 +42,7 @@ helloInitVariables = block [comment "Initializing variables",
   valState (listAppend (var "myOtherList" (listType static_ float)) (litFloat 2.5)),
   varDec $ var "e" float,
   var "e" int &= listAccess (var "myOtherList" (listType static_ float)) (litInt 1),
-  valState (objAccess (var "myOtherList" (listType static_ float)) (listSet (litInt 1) (litFloat 17.4))),
+  valState (listSet (var "myOtherList" (listType static_ float)) (litInt 1) (litFloat 17.4)),
   listDec 7 (var "myName" (listType static_ string)),
   stringSplit ' ' (var "myName" (listType static_ string)) (litString "Brooks Mac"),
   printLn (var "myName" (listType static_ string)),

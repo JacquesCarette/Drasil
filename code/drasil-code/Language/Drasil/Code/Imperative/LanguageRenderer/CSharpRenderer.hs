@@ -36,7 +36,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
   varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
+  notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetFuncDocD, 
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
@@ -330,8 +330,8 @@ instance FunctionSym CSharpCode where
 
 instance SelectorFunction CSharpCode where
   listAccessFunc t v = liftA2 fd t (listAccessFuncDocD <$> intValue v)
-  listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
-    (liftA2 listSetDocD (intValue i) v)
+  listSetFunc v i toVal = liftA2 fd (valueType v) 
+    (liftA2 listSetFuncDocD (intValue i) toVal)
 
   at t l = listAccessFunc t (var l int)
 
@@ -343,11 +343,12 @@ instance FunctionApplication CSharpCode where
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
   listAppend v vToApp = v $. listAppendFunc vToApp
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
   assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
-  assignToListIndex lst index v = valState $ lst $. listSet index v
+  assignToListIndex lst index v = valState $ listSet lst index v
   multiAssign _ _ = error "No multiple assignment statements in C#"
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)

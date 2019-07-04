@@ -318,7 +318,8 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
   listAccessFunc t v = pair (listAccessFunc (pfst t) (pfst v)) (listAccessFunc (psnd t) 
     (psnd v))
-  listSet i v = pair (listSet (pfst i) (pfst v)) (listSet (psnd i) (psnd v))
+  listSetFunc v i toVal = pair (listSetFunc (pfst v) (pfst i) (pfst toVal)) 
+    (listSetFunc (psnd v) (psnd i) (psnd toVal))
 
   at t l = pair (at (pfst t) l) (at (psnd t) l)
 
@@ -334,6 +335,8 @@ instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
     (listAppend (psnd v) (psnd vToApp))
   listAccess v i = pair (listAccess (pfst v) (pfst i)) 
     (listAccess (psnd v) (psnd i))
+  listSet v i toVal = pair (listSet (pfst v) (pfst i) (pfst toVal)) 
+    (listSet (psnd v) (psnd i) (psnd toVal))
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -824,8 +827,8 @@ instance FunctionSym CppSrcCode where
 
 instance SelectorFunction CppSrcCode where
   listAccessFunc t v = func "at" t [intValue v]
-  listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
-    (liftA2 cppListSetDoc (intValue i) v)
+  listSetFunc v i toVal = liftA2 fd (valueType v) 
+    (liftA2 cppListSetDoc (intValue i) toVal)
 
   at t l = listAccessFunc t (var l int) 
 
@@ -837,11 +840,12 @@ instance FunctionApplication CppSrcCode where
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
   listAppend v vToApp = v $. listAppendFunc vToApp
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
   assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
-  assignToListIndex lst index v = valState $ lst $. listSet index v
+  assignToListIndex lst index v = valState $ listSet lst index v
   multiAssign _ _ = error "No multiple assignment statements in C++"
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
@@ -1312,7 +1316,7 @@ instance FunctionSym CppHdrCode where
 
 instance SelectorFunction CppHdrCode where
   listAccessFunc _ _ = liftA2 fd void (return empty)
-  listSet _ _ = liftA2 fd void (return empty)
+  listSetFunc _ _ _ = liftA2 fd void (return empty)
 
   at _ _ = liftA2 fd void (return empty)
 
@@ -1324,6 +1328,7 @@ instance FunctionApplication CppHdrCode where
   listAdd _ _ _ = liftA2 mkVal void (return empty)
   listAppend _ _ = liftA2 mkVal void (return empty)
   listAccess _ _ = liftA2 mkVal void (return empty)
+  listSet _ _ _ = liftA2 mkVal void (return empty)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)

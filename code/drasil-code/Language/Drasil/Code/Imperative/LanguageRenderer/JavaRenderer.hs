@@ -169,7 +169,7 @@ instance ControlBlockSym JavaCode where
         listDec 0 v_temp,
         for (varDecDef v_i (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (listSize vold) e) (maybe (v_i &++) (v_i &+=) s)
-          (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
+          (oneLiner $ valState $ listAppend v_temp (vold $. listAccess 
           (listInnerType (fmap valType vold)) v_i)),
         vnew &= v_temp]
 
@@ -328,7 +328,7 @@ instance FunctionSym JavaCode where
 
   listSizeFunc = func "size" int []
   listAddFunc _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
-  listAppend v = func "add" (listType static_ $ fmap valType v) [v]
+  listAppendFunc v = func "add" (listType static_ $ fmap valType v) [v]
 
   iterBegin _ = error "Attempt to use iterBegin in Java, but Java has no iterators"
   iterEnd _ = error "Attempt to use iterEnd in Java, but Java has no iterators"
@@ -345,6 +345,7 @@ instance FunctionApplication JavaCode where
 
   listSize v = v $. listSizeFunc
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
+  listAppend v vToApp = v $. listAppendFunc vToApp
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
@@ -457,7 +458,7 @@ instance ControlStatementSym JavaCode where
           notify = oneLiner $ valState $ (obsList $. at t index) $. f
 
   getFileInputAll f v = while (f $. func "hasNextLine" bool [])
-    (oneLiner $ valState $ v $. listAppend (f $. func "nextLine" string []))
+    (oneLiner $ valState $ listAppend v (f $. func "nextLine" string []))
 
 instance ScopeSym JavaCode where
   type Scope JavaCode = Doc

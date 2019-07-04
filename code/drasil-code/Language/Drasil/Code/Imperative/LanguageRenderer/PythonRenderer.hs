@@ -301,7 +301,7 @@ instance FunctionSym PythonCode where
 
   listSizeFunc = liftA2 fd int (return $ text "len")
   listAddFunc _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
-  listAppend v = func "append" (listType static_ $ fmap valType v) [v]
+  listAppendFunc v = func "append" (listType static_ $ fmap valType v) [v]
 
   iterBegin _ = error "Attempt to use iterBegin in Python, but Python has no iterators"
   iterEnd _ = error "Attempt to use iterEnd in Python, but Python has no iterators"
@@ -320,6 +320,7 @@ instance FunctionApplication PythonCode where
   listSize v = liftA2 mkVal (fmap funcType listSizeFunc) 
     (liftA2 pyListSize v listSizeFunc)
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
+  listAppend v vToApp = v $. listAppendFunc vToApp
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end

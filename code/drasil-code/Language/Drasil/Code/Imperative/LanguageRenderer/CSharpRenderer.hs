@@ -165,7 +165,7 @@ instance ControlBlockSym CSharpCode where
         listDec 0 v_temp,
         for (varDecDef v_i (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (listSize vold) e) (maybe (v_i &++) (v_i &+=) s)
-          (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
+          (oneLiner $ valState $ listAppend v_temp (vold $. listAccess 
           (listInnerType (fmap valType vold)) v_i)),
         vnew &= v_temp]
 
@@ -324,7 +324,7 @@ instance FunctionSym CSharpCode where
 
   listSizeFunc = liftA2 fd int (fmap funcDocD (var "Count" int))
   listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
-  listAppend v = func "Add" (fmap valType v) [v]
+  listAppendFunc v = func "Add" (fmap valType v) [v]
 
   iterBegin _ = error "Attempt to use iterBegin in C#, but C# has no iterators"
   iterEnd _ = error "Attempt to use iterEnd in C#, but C# has no iterators"
@@ -339,9 +339,10 @@ instance SelectorFunction CSharpCode where
 instance FunctionApplication CSharpCode where
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
-  
+
   listSize v = v $. listSizeFunc
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
+  listAppend v vToApp = v $. listAppendFunc vToApp
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
@@ -451,7 +452,7 @@ instance ControlStatementSym CSharpCode where
           notify = oneLiner $ valState $ (obsList $. at t index) $. f
 
   getFileInputAll f v = while (objVar f (var "EndOfStream" bool) ?!)
-    (oneLiner $ valState $ v $. listAppend (fmap csFileInput f))
+    (oneLiner $ valState $ listAppend v (fmap csFileInput f))
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc

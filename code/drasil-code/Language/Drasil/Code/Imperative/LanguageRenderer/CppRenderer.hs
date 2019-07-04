@@ -310,7 +310,7 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   listSizeFunc = pair listSizeFunc listSizeFunc
   listAddFunc l i v = pair (listAddFunc (pfst l) (pfst i) (pfst v)) (listAddFunc (psnd l)
     (psnd i) (psnd v))
-  listAppend v = pair (listAppend $ pfst v) (listAppend $ psnd v)
+  listAppendFunc v = pair (listAppendFunc $ pfst v) (listAppendFunc $ psnd v)
 
   iterBegin t = pair (iterBegin $ pfst t) (iterBegin $ psnd t)
   iterEnd t = pair (iterEnd $ pfst t) (iterEnd $ psnd t)
@@ -330,6 +330,8 @@ instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
   listSize v = pair (listSize $ pfst v) (listSize $ psnd v)
   listAdd v i vToAdd = pair (listAdd (pfst v) (pfst i) (pfst vToAdd)) 
     (listAdd (psnd v) (psnd i) (psnd vToAdd))
+  listAppend v vToApp = pair (listAppend (pfst v) (pfst vToApp)) 
+    (listAppend (psnd v) (psnd vToApp))
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -658,7 +660,7 @@ instance ControlBlockSym CppSrcCode where
         listDec 0 v_temp,
         for (varDecDef v_i (fromMaybe (litInt 0) b)) 
           (v_i ?< fromMaybe (listSize vold) e) (maybe (v_i &++) (v_i &+=) s)
-          (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
+          (oneLiner $ valState $ listAppend v_temp (vold $. listAccess 
           (listInnerType (fmap valType vold)) v_i)),
         vnew &= v_temp]
 
@@ -814,7 +816,7 @@ instance FunctionSym CppSrcCode where
   listSizeFunc = func "size" int []
   listAddFunc l i v = func "insert" (listType static_ $ fmap valType v) [(l $.
     iterBegin (fmap valType v)) #+ i, v]
-  listAppend v = func "push_back" (listType static_ $ fmap valType v) [v]
+  listAppendFunc v = func "push_back" (listType static_ $ fmap valType v) [v]
 
   iterBegin t = func "begin" (iterator t) []
   iterEnd t = func "end" (iterator t) []
@@ -832,6 +834,7 @@ instance FunctionApplication CppSrcCode where
 
   listSize v = cast int (v $. listSizeFunc)
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
+  listAppend v vToApp = v $. listAppendFunc vToApp
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -890,7 +893,7 @@ instance StatementSym CppSrcCode where
       valState $ objMethodCall string v_ss "str" [s],
       varDec v_word,
       while (funcApp "std::getline" string [v_ss, v_word, litChar d]) 
-        (oneLiner $ valState $ vnew $. listAppend v_word)
+        (oneLiner $ valState $ listAppend vnew v_word)
     ]
 
   break = return (mkSt breakDocD)
@@ -959,7 +962,7 @@ instance ControlStatementSym CppSrcCode where
                         in
     multi [varDec v_line,
       while (funcApp "std::getline" string [f, v_line])
-      (oneLiner $ valState $ v $. listAppend v_line)]
+      (oneLiner $ valState $ listAppend v v_line)]
 
 instance ScopeSym CppSrcCode where
   type Scope CppSrcCode = (Doc, ScopeTag)
@@ -1300,7 +1303,7 @@ instance FunctionSym CppHdrCode where
 
   listSizeFunc = liftA2 fd void (return empty)
   listAddFunc _ _ _ = liftA2 fd void (return empty)
-  listAppend _ = liftA2 fd void (return empty)
+  listAppendFunc _ = liftA2 fd void (return empty)
 
   iterBegin _ = liftA2 fd void (return empty)
   iterEnd _ = liftA2 fd void (return empty)
@@ -1317,6 +1320,7 @@ instance FunctionApplication CppHdrCode where
 
   listSize _ = liftA2 mkVal void (return empty)
   listAdd _ _ _ = liftA2 mkVal void (return empty)
+  listAppend _ _ = liftA2 mkVal void (return empty)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)

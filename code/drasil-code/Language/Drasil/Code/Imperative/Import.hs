@@ -27,7 +27,7 @@ import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (Entry(JunkEntry, ListEntry, Entry),
   LinePattern(Repeat, Straight), Data(Line, Lines, JunkData, Singleton), 
-  DataDesc, getInputs, getPatternInputs, junkLine, singleton)
+  DataDesc, isLine, isLines, getInputs, getPatternInputs, junkLine, singleton)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (nub, intersperse, (\\), stripPrefix)
@@ -862,12 +862,11 @@ readData :: (RenderSym repr) => DataDesc -> Reader (State repr)
   [repr (Block repr)]
 readData ddef = do
   inD <- mapM inData ddef
-  return [block $ [
-    varDec v_infile,
-    varDec v_line,
-    listDec 0 v_lines,
-    listDec 0 v_linetokens,
-    openFileR v_infile v_filename ] ++
+  return [block $ 
+    varDec v_infile :
+    (if any (\d -> isLine d || isLines d) ddef then [varDec v_line, listDec 0 v_linetokens] else []) ++
+    [listDec 0 v_lines | any isLines ddef] ++
+    openFileR v_infile v_filename :
     concat inD ++ [
     closeFile v_infile ]]
   where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Statement repr)]

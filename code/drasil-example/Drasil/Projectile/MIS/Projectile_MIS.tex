@@ -135,7 +135,8 @@ The following table is taken directly from the Module Guide document for this pr
 {Hardware-Hiding} & ~ \\
 \midrule
 
-\multirow{4}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
+& Input Constraints\\
 & Output Format\\
 % & Output Verification\\
 & Control Module\\
@@ -326,12 +327,10 @@ specification:
 \begin{itemize}
 \item $p_{\text{land}} := \frac{2 v^2 sin(\theta) cos(\theta)}{g}$
 \item $\text{offset} := p_{\text{land}} - p_{\text{target}} $
-\item $\text{message} := $
-\begin{longtable*}[l]{l l} 
-$|\frac{\text{offset}}{p_{\text{target}}}| < \epsilon$ & $\Rightarrow$ ``The target was hit."\\
-$\text{offset} < 0$ & $\Rightarrow$ ``The projectile fell short."\\
-$\text{True}$ & $\Rightarrow$ ``The projectile went long."\\
-\end{longtable*}
+\item $\text{message} :=$ ( \\
+$|\frac{\text{offset}}{p_{\text{target}}}| < \epsilon \Rightarrow$ ``The target was hit." $|$\\
+$\text{offset} < 0 \Rightarrow$ ``The projectile fell short."$|$\\
+$\text{True} \Rightarrow$ ``The projectile went long.")
 \end{itemize}
 \end{enumerate}
 

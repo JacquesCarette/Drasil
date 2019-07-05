@@ -111,7 +111,7 @@ rocTempSimpDerivSent :: [Sentence]
 rocTempSimpDerivSent = map foldlSentCol [
   rocTempDerivInteg consThermE vol,
   rocTempDerivGauss gaussDiv surface vol thFluxVect uNormalVect unit_,
-  s4_2_3_desc3 vol volHtGen,
+  rocTempDerivArbVol vol volHtGen,
   s4_2_3_desc4 htFluxIn htFluxOut inSA outSA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpTPCAV,
                  makeRef2S assumpDWPCoV, makeRef2S assumpSHECoV],
@@ -130,8 +130,8 @@ rocTempDerivGauss cchn su vo tfv unv un =
   phrase su `sAnd` ch unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
-s4_2_3_desc3 :: UnitalChunk -> UnitalChunk -> [Sentence]
-s4_2_3_desc3 vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
+rocTempDerivArbVol :: UnitalChunk -> UnitalChunk -> [Sentence]
+rocTempDerivArbVol vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
   phrase vhg, S "is assumed constant. Then (1) can be written as"]
 
 s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->

@@ -151,13 +151,14 @@ more complex. Sometimes this complexity is not necessary. Fixing some design
 decisions at the system architecture stage can simplify the software design. If
 these decision should later need to be changed, then many parts of the design
 will potentially need to be modified. Hence, it is not intended that these
-decisions will be changed.  As an example, the ODEs for the temperature and the
-energy equations are assumed to follow the structure given in the SRS; that is,
-even if they need to be modified, the modifications should be possible by
-changing how the input parameters are used in the definition.  If new parameters
-are needed, this will mean a change to both the input parameters module, the
-calculation module and the output module. Unlikely changes are numbered by \textbf{UC} 
-followed by a number.
+decisions will be changed.
+%As an example, the ODEs for the temperature and the
+%energy equations are assumed to follow the structure given in the SRS; that is,
+%even if they need to be modified, the modifications should be possible by
+%changing how the input parameters are used in the definition.  If new parameters
+%are needed, this will mean a change to both the input parameters module, the
+%calculation module and the output module.
+Unlikely changes are numbered by \textbf{UC} followed by a number.
 
 \begin{description}
 \item[\refstepcounter{ucnum} \uctheucnum \label{ucIO}:] Input/Output devices

@@ -135,8 +135,9 @@ The following table is taken directly from the Module Guide document for this pr
 {Hardware-Hiding} & ~ \\
 \midrule
 
-\multirow{5}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
+\multirow{6}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
 & Input Constraints\\
+& Calculations\\
 & Output Format\\
 % & Output Verification\\
 & Control Module\\
@@ -163,6 +164,7 @@ main
 \subsection{Uses}
 
 Param (Section~\ref{Parameters}), InputConstraints (Section~\ref{VerifyInput}),
+Calculations (Section~\ref{Calc}),
 % verify\_output (Section~\ref{VerifyOutput}), plot(Section~\ref{Plot}),
 output (Section~\ref{Output})
 
@@ -199,16 +201,14 @@ None
 \end{itemize}
 
 \noindent Get (filenameIn: string) from user.\\
-
 \noindent load\_params(filenameIn)\\
-
 \noindent input\_constraints(Param)\\
-
+\noindent p\_land := func\_p\_land(inParams)\\
+\noindent d\_offset := func\_d\_offset(inParams, p\_land)\\
+\noindent s := func\_s(inParams, d\_offset)\\
 \noindent \#\textit{Output calculated values to a file.}\\
 % \noindent verify\_output($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
-
 % \noindent plot($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
-
 \noindent output(filenameOut, $t_\text{message}$, $t_\text{output}$)\\
 
 \newpage
@@ -236,9 +236,6 @@ load\_params & string & - &  FileError \\
 $v$ & - & $\mathbb{R}$\\
 $\theta$ & - & $\mathbb{R}$\\
 $p_{\text{target}}$ & - & $\mathbb{R}$\\
-$p_{\text{land}}$ & - & $\mathbb{R}$\\
-$\text{offset}$ & - & $\mathbb{R}$\\
-$\text{message}$ & - & $\text{string}$\\
 \bottomrule
 \end{tabular}
 
@@ -257,10 +254,6 @@ $v$: $\mathbb{R}$\\
 $\theta$: $\mathbb{R}$\\
 \# To Support IM3 and IM4 \\
 $p_{\text{target}}$: $\mathbb{R}$\\
-\# From FR4 \\
-$p_{\text{land}}$: $\mathbb{R}$\\
-$\text{offset}$: $\mathbb{R}$\\
-$\text{message}$: $\text{string}$\\
 \end{longtable*}
 
 \subsubsection{Assumptions}
@@ -296,44 +289,11 @@ should be denoted with a '\#' symbol.
 \item exception: none
 \end{itemize}
 
-\noindent Param.$p_{\text{land}}$:
-\begin{itemize}
-\item output: \textit{out} := $p_{\text{land}}$
-\item exception: none
-\end{itemize}
-
-\noindent Param.$\text{offset}$:
-\begin{itemize}
-\item output: \textit{out} := $\text{offset}$
-\item exception: none
-\end{itemize}
-
-\noindent Param.$\text{message}$:
-\begin{itemize}
-\item output: \textit{out} := $\text{message}$
-\item exception: none
-\end{itemize}
-
 \noindent load\_params($s$):
 \begin{itemize}
 \item transition: The filename $s$ is first associated with the file f. 
-{inputFile} is used to modify the state variables using the following procedural 
-specification:
-\begin{enumerate}
-\item Read data sequentially from inputFile to populate the state variables from
+The data from inputFile is read sequentially to populate the state variables from
   FR1 ($v$, $\theta$, and $p_{\text{target}}$).
-\item Calculate the derived quantities ($p_{\text{land}}$, $\text{offset}$, and $
-\text{message}$) as follows:
-\begin{itemize}
-\item $p_{\text{land}} := \frac{2 v^2 sin(\theta) cos(\theta)}{g}$
-\item $\text{offset} := p_{\text{land}} - p_{\text{target}} $
-\item $\text{message} :=$ ( \\
-$|\frac{\text{offset}}{p_{\text{target}}}| < \epsilon \Rightarrow$ ``The target was hit." $|$\\
-$\text{offset} < 0 \Rightarrow$ ``The projectile fell short."$|$\\
-$\text{True} \Rightarrow$ ``The projectile went long.")
-\end{itemize}
-\end{enumerate}
-
 \item exception: exc := a file name $s$ cannot be found OR the format of
   inputFile is incorrect $\Rightarrow$  FileError
 \end{itemize}
@@ -392,6 +352,73 @@ input\_constraints(inParams):
  $\neg (0 < \text{inParams.}v) \Rightarrow$ badLength $|$\\
  $\neg (0 < \text{inParams.}\theta < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
  $\neg (0 < \text{inParams.}p_{text{target}}) \Rightarrow$ badTargetPosition)
+ \end{itemize}
+
+\subsection{Considerations}
+
+See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and
+ associated error messages.
+ 
+\newpage
+
+\section{MIS of Calculations Module} \label{Calc}
+
+The secret of this module is how the required values are calculated.
+
+\subsection{Module}
+
+Calculations
+
+\subsection{Uses}
+
+Param (Section~\ref{Parameters})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+ \begin{tabular}{p{3cm} p{3cm} p{1cm} p{8cm}}
+ \hline
+ \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+ \hline
+ func\_p\_land & Params & $\mathbb{R}$ & None \\
+ \hline
+ func\_d\_offset & Params, $\mathbb{R}$ & $\mathbb{R}$ & None \\
+ \hline
+ func\_s & Params, $\mathbb{R}$ & String & None \\
+ \hline
+ \end{tabular}
+ \end{center}
+
+\subsection{Semantics}
+
+\subsubsection{Assumptions}
+
+All of the fields Param have been assigned values before any of the access
+ routines for this module are called.
+
+\subsubsection{Access Routine Semantics}
+
+func\_p\_land(inParams):
+ \begin{itemize}
+ \item out: $\textit{out} := \frac{2 v^2 sin(inParams.\theta) cos(inParams.\theta)}{g}$
+ \item exception: exc := none
+ \end{itemize}
+ 
+func\_d\_offset(inParams):
+ \begin{itemize}
+ \item out: $\textit{out} := p_{\text{land}} - p_{\text{target}}$
+ \item exception: exc := none
+ \end{itemize}
+ 
+func\_s(inParams):
+ \begin{itemize}
+ \item out: $\textit{out} := $ ( \\
+$|\frac{\text{offset}}{p_{\text{target}}}| < \epsilon \Rightarrow$ ``The target was hit." $|$\\
+$\text{offset} < 0 \Rightarrow$ ``The projectile fell short."$|$\\
+$\text{True} \Rightarrow$ ``The projectile went long.")
+ \item exception: exc := none
  \end{itemize}
 
 \subsection{Considerations}

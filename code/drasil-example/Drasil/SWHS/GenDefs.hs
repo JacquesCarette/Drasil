@@ -112,7 +112,7 @@ rocTempSimpDerivSent = map foldlSentCol [
   rocTempDerivInteg consThermE vol,
   rocTempDerivGauss gaussDiv surface vol thFluxVect uNormalVect unit_,
   rocTempDerivArbVol vol volHtGen,
-  s4_2_3_desc4 htFluxIn htFluxOut inSA outSA density QT.heatCapSpec
+  rocTempDerivConsFlx htFluxIn htFluxOut inSA outSA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpTPCAV,
                  makeRef2S assumpDWPCoV, makeRef2S assumpSHECoV],
   s4_2_3_desc5 density mass vol]
@@ -134,10 +134,10 @@ rocTempDerivArbVol :: UnitalChunk -> UnitalChunk -> [Sentence]
 rocTempDerivArbVol vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
   phrase vhg, S "is assumed constant. Then (1) can be written as"]
 
-s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
+rocTempDerivConsFlx :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Sentence] -> [Sentence]
-s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
+rocTempDerivConsFlx hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
   ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
   makeRef2S rocTempSimp, S "The integral over the", phrase surface, 
   S "could be simplified because the thermal flux is assumed constant over",

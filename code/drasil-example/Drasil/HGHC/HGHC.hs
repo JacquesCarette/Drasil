@@ -59,7 +59,7 @@ thisSRS = [RefSec $
     SSDSec $ SSDProg [
       SSDSolChSpec $ SCSProg [
         DDs [] [Label, Symbol, Units, DefiningEquation,
-          Description Verbose IncludeUnits] dataDefs HideDerivation
+          Description Verbose IncludeUnits] HideDerivation
       ]]]
   
 srsBody :: Document

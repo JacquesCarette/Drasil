@@ -2,17 +2,19 @@
 module Drasil.DocDecl where
 
 import Drasil.DocumentLanguage.Core (DocDesc)
+import Drasil.DocumentLanguage.Definitions (Fields)
 import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   IntroSec(..), StkhldrSec(..), GSDSec(..), SSDSec(..), SSDSub(..),
-  ProblemDescription(..), PDSub(..), SolChSpec(..), ReqrmntSec(..),
+  ProblemDescription(..), PDSub(..), SolChSpec(..), SCSSub(..), ReqrmntSec(..),
   ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..),
-  AppndxSec(..), OffShelfSolnsSec(..))
+  AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
 
-import Database.Drasil (ChunkDB, UMap, asOrderedList, conceptinsTable)
+import Database.Drasil (ChunkDB, UMap, asOrderedList, conceptinsTable,
+  dataDefnTable, gendefTable, insmodelTable, theoryModelTable)
 import Language.Drasil hiding (sec)
 
-import Data.Drasil.Concepts.Documentation (funcReqDom, goalStmtDom, nonFuncReqDom,
-  likeChgDom, unlikeChgDom)
+import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
+  nonFuncReqDom, likeChgDom, unlikeChgDom)
 
 import Control.Lens((^.), Getting)
 
@@ -38,7 +40,7 @@ newtype SSDSec = SSDProg [SSDSub]
 -- | Specific system description subsections
 data SSDSub where
   SSDProblem :: ProblemDescription -> SSDSub
-  SSDSolChSpec :: DL.SolChSpec -> SSDSub
+  SSDSolChSpec :: SolChSpec -> SSDSub
 
 -- | Problem Description section
 data ProblemDescription where
@@ -49,6 +51,20 @@ data PDSub where
   TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
   PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
   Goals :: [Sentence] -> PDSub
+
+-- | Solution Characteristics Specification section
+data SolChSpec where
+  SCSProg :: [SCSSub] -> SolChSpec
+
+-- | Solution Characteristics Specification subsections
+data SCSSub where
+  Assumptions    :: SCSSub
+  TMs            :: [Sentence] -> Fields  -> SCSSub
+  GDs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
+  DDs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
+  IMs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
+  Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> SCSSub
+  CorrSolnPpties :: [Contents] -> SCSSub
 
 newtype ReqrmntSec = ReqsProg [ReqsSub]
 
@@ -77,12 +93,22 @@ mkDocDesc cdb = map sec where
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
   ssdSec :: SSDSub -> DL.SSDSub
   ssdSec (SSDProblem (PDProg s ls p)) = DL.SSDProblem $ DL.PDProg s ls $ map pdSub p
-  ssdSec (SSDSolChSpec scs) = DL.SSDSolChSpec scs
+  ssdSec (SSDSolChSpec (SCSProg scs)) = DL.SSDSolChSpec $ DL.SCSProg $ map scsSub scs
   pdSub :: PDSub -> DL.PDSub
   pdSub (TermsAndDefs s c) = DL.TermsAndDefs s c
   pdSub (PhySysDesc i s lc c) = DL.PhySysDesc i s lc c
   pdSub (Goals s) = DL.Goals s $ fromConcInsDB goalStmtDom
+  scsSub :: SCSSub -> DL.SCSSub
+  scsSub Assumptions = DL.Assumptions $ fromConcInsDB assumpDom
+  scsSub (TMs s f) = DL.TMs s f $ allInDB theoryModelTable
+  scsSub (GDs s f dd) = DL.GDs s f (allInDB gendefTable) dd
+  scsSub (DDs s f dd) = DL.DDs s f (allInDB dataDefnTable) dd
+  scsSub (IMs s f dd) = DL.IMs s f (allInDB insmodelTable) dd
+  scsSub (Constraints ls s1 s2 lc) = DL.Constraints ls s1 s2 lc
+  scsSub (CorrSolnPpties c) = DL.CorrSolnPpties c
   expandFromDB :: ([a] -> [a]) -> Getting (UMap a) ChunkDB (UMap a) -> [a]
   expandFromDB f = f . asOrderedList . (cdb ^.)
+  allInDB :: Getting (UMap a) ChunkDB (UMap a) -> [a]
+  allInDB = expandFromDB id
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
   fromConcInsDB c = expandFromDB (filter (\x -> sDom (cdom x) == c ^. uid)) conceptinsTable

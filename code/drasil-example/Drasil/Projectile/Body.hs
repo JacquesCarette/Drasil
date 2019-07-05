@@ -71,11 +71,11 @@ mkSRS = [
         , PhySysDesc projectileTitle physSystParts figLaunch []
         , Goals [(phrase iVel +:+ S "vector") `ofThe` phrase projectile]]
       , SSDSolChSpec $ SCSProg
-        [ Assumptions assumptions
-        , TMs [] (Label : stdFields) tMods
-        , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
+        [ Assumptions
+        , TMs [] (Label : stdFields)
+        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints EmptyS dataConstraintUncertainty EmptyS
                       {-(foldlSent [makeRef2S $ valsOfAuxCons [] [],
                       S "gives", plural value `ofThe` S "specification",

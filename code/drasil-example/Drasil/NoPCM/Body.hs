@@ -136,12 +136,12 @@ mkSRS = [RefSec $ RefProg intro
       , PhySysDesc progName physSystParts figTank []
       , Goals goalInputs]
     , SSDSolChSpec $ SCSProg
-      [ Assumptions assumptions
-      , TMs [] (Label : stdFields) theoreticalModels
-      , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
-      , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefn ShowDerivation
+      [ Assumptions
+      , TMs [] (Label : stdFields)
+      , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+      , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-        NoPCM.iMods ShowDerivation
+        ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
         [dataConstTable1, dataConstTable2]
       , CorrSolnPpties propsDerivNoPCM

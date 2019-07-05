@@ -183,7 +183,7 @@ followed by a number.
 \item [\refstepcounter{mnum} \mthemnum \label{mHH}:] Hardware-Hiding Module
 %\item [\refstepcounter{mnum} \mthemnum \label{mInput}:] Input Format Module
 \item [\refstepcounter{mnum} \mthemnum \label{mParams}:] Input Parameters Module
-%\item [\refstepcounter{mnum} \mthemnum \label{mVerify}:] Input Verification Module
+\item [\refstepcounter{mnum} \mthemnum \label{mInCons}:] Input Constraints Module
 \item [\refstepcounter{mnum} \mthemnum \label{mOutput}:] Output Format Module
 %\item [\refstepcounter{mnum} \mthemnum \label{mVerifyOut}:] Output Verification Module
 \item [\refstepcounter{mnum} \mthemnum \label{mControl}:] Control Module
@@ -192,8 +192,10 @@ followed by a number.
 %\item [\refstepcounter{mnum} \mthemnum \label{mPlot}:] Plotting Module
 \end{description}
 
-Note that \mref{mHH} is a commonly used module and is already implemented by the operating
-system.  It will not be reimplemented.  Similarly, \mref{mSeqDS} and \mref{mPlot} are already available in Matlab and will not be reimplemented.
+Note that \mref{mHH} is a commonly used module and is already implemented by the 
+operating system.  It will not be reimplemented.  Similarly, \mref{mSeqDS}
+% and \mref{mPlot} are
+is already available in Matlab and will not be reimplemented.
 
 \begin{table}[h!]
 \centering
@@ -205,7 +207,8 @@ system.  It will not be reimplemented.  Similarly, \mref{mSeqDS} and \mref{mPlot
 {Hardware-Hiding} & ~ \\
 \midrule
 
-\multirow{4}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
+& Input Constraints\\
 & Output Format\\
 % & Output Verification\\
 & Control Module\\
@@ -271,30 +274,24 @@ programming language selected.
 \subsubsection{Input Parameters Module (\mref{mParams})}
 
 \begin{description}
-\item[Secrets:] The data structure for input parameters, how the
-values are input and how the values are verified.  The load and verify secrets
-are isolated to their own access programs (like submodules).  This, combined
-with the fact that all of the services are invoked together, suggests that the
-one module one secret rule can be relaxed here.
-\item[Services:] Gets input from user (including material properties, processing
-  conditions, and numerical parameters), stores input and verifies that the
-  input parameters comply with physical and software constraints. Throws an
-  error if a parameter violates a physical constraint. Throws a warning if a
-  parameter violates a software constraint.  Stored parameters can be read
-  individually, but write access is only to redefine the entire set of inputs.
+\item[Secrets:] The data structure for input parameters and how the
+values are input.
+\item[Services:] Gets input from user and stores input. Stored parameters can 
+  be read individually, but write access is only to redefine the entire set of inputs.
  % This module knows how many parameters it stores.
 \item[Implemented By:] Projectile
 \end{description}
 
-% \subsubsection{Input Verification Module (\mref{mVerify})}
+\subsubsection{Input Constraints Module (\mref{mInCons})}
 
-% \begin{description}
-% \item[Secrets:] The format and structure of the physical and software constraints.
-% \item[Services:] Verifies that the input parameters comply with physical and
-%   software constraints. Throws an error if a parameter violates a physical
-%   constraint. Throws a warning if a parameter violates a software constraint.
-% \item[Implemented By:] Projectile
-% \end{description}
+\begin{description}
+\item[Secrets:] The format and structure of the physical constraints. % and software constraints.
+\item[Services:] Verifies that the input parameters comply with physical 
+  constraints. % and software constraints. 
+  Throws an error if a parameter violates a physical constraint.
+  % Throws a warning if a parameter violates a software constraint.
+\item[Implemented By:] Projectile
+\end{description}
 
 \subsubsection{Output Format Module (\mref{mOutput})}
 
@@ -364,13 +361,13 @@ one module one secret rule can be relaxed here.
 \section{Traceability Matrix} \label{SecTM}
 
 This section shows two traceability matrices: between the modules and the
-requirements and between the modules and the anticipated changes. Three of the 
-anticipated changes (\acref{acInput}, \acref{acParams}, \acref{acVerify})
-related to the input parameters map to the same module (\mref{mParams}).  The
-reason for this is that the services of this module will never need to be
-provided separately.  Input will be provided to the system, stored and verified
-at the beginning of any simulation.  From that point on, the only access needed
-to the input parameters is read access.
+requirements and between the modules and the anticipated changes. Two of the 
+anticipated changes (\acref{acInput} and \acref{acParams} related to the input 
+parameters map to the same module (\mref{mParams}). The reason for this is that 
+the services of this module will never need to be provided separately.  Input 
+will be provided to the system and stored at the beginning of any simulation.  
+From that point on, the only access needed to the input parameters is read 
+access.
 
 \wss{We should also document the mapping between these ``abstract'' modules and
   the Matlab files.}
@@ -384,8 +381,8 @@ to the input parameters is read access.
 \textbf{Req.} & \textbf{Modules}\\
 \midrule
 R1 & \mref{mHH}, \mref{mParams}, \mref{mControl}\\ %\mref{mInput}, 
-R2 & \mref{mParams}, \mref{mControl}\\
-R3 & \mref{mParams}, \mref{mSpecParams}\\ %\mref{mVerifyOut}\\
+R2 & \mref{mParams}, \mref{mControl}, \mref{mInCons}\\
+R3 & \mref{mParams}, \mref{mSpecParams}, \mref{mControl}\\ %\mref{mVerifyOut}\\
 R4 & \mref{mOutput}, \mref{mControl}\\
 \bottomrule
 \end{tabular}
@@ -402,7 +399,7 @@ R4 & \mref{mOutput}, \mref{mControl}\\
 \acref{acHardware} & \mref{mHH}\\
 \acref{acInput} & \mref{mParams}\\ %\mref{mInput}\\
 \acref{acParams} & \mref{mParams}\\
-\acref{acVerify} & \mref{mParams}\\ %\mref{mVerify}\\
+\acref{acVerify} & \mref{mInCons}\\
 \acref{acOutput} & \mref{mOutput}\\
 % \acref{acVerifyOut} & \mref{mVerifyOut}\\
 \acref{acControl} & \mref{mControl}\\

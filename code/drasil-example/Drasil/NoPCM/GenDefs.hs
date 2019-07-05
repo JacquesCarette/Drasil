@@ -41,7 +41,7 @@ rocTempSimpDerivSent = map foldlSentCol [
   rocTempDerivArbVol vol volHtGen,
   rocTempDerivConsFlx htFluxIn htFluxOut inSA outSA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpDWCoW, makeRef2S assumpSHECoW],
-  genDefDesc5 density mass vol]
+  rocTempDerivDens density mass vol]
 
 rocTempDerivInteg :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
 rocTempDerivInteg t1c vo =
@@ -69,8 +69,8 @@ rocTempDerivConsFlx hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   foldlList Comma List assumps `sC` S "we have"]
 
-genDefDesc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
-genDefDesc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
+rocTempDerivDens :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
+rocTempDerivDens den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
   ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
 
 genDefEq1, genDefEq2, genDefEq3, genDefEq4, genDefEq5 :: Expr

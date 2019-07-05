@@ -114,7 +114,7 @@ mkSRS = [RefSec $ RefProg intro
         [ SSDProblem $ PDProg prob []
           [ TermsAndDefs Nothing terms
           , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
-          , Goals goalsInputs goals]
+          , Goals goalsInputs]
         , SSDSolChSpec $ SCSProg
           [Assumptions assumptions
           , TMs [] (Label : stdFields) tMods

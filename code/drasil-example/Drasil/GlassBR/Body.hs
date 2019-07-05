@@ -79,7 +79,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
   labelledCon
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
+concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
 
 section :: [Section]
 section = sec
@@ -123,7 +123,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     SSDProg
       [SSDProblem $ PDProg prob [termsAndDesc]
         [ PhySysDesc glassBR physSystParts physSystFig []
-        , Goals goalInputs goals],
+        , Goals goalInputs],
        SSDSolChSpec $ SCSProg
         [ Assumptions assumptions
         , TMs [] (Label : stdFields) tMods

@@ -110,7 +110,7 @@ rocTempSimpDeriv =
 rocTempSimpDerivSent :: [Sentence]
 rocTempSimpDerivSent = map foldlSentCol [
   rocTempDerivInteg consThermE vol,
-  s4_2_3_desc2 gaussDiv surface vol thFluxVect uNormalVect unit_,
+  rocTempDerivGauss gaussDiv surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol volHtGen,
   s4_2_3_desc4 htFluxIn htFluxOut inSA outSA density QT.heatCapSpec
     QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpTPCAV,
@@ -121,9 +121,9 @@ rocTempDerivInteg :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sente
 rocTempDerivInteg t1c vo =
   [S "Integrating", makeRef2S t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
-s4_2_3_desc2 :: (NamedIdea b, HasSymbol b) => ConceptChunk -> b -> UnitalChunk -> UnitalChunk ->
+rocTempDerivGauss :: (NamedIdea b, HasSymbol b) => ConceptChunk -> b -> UnitalChunk -> UnitalChunk ->
   DefinedQuantityDict -> ConceptChunk -> [Sentence]
-s4_2_3_desc2 cchn su vo tfv unv un =
+rocTempDerivGauss cchn su vo tfv unv un =
   [S "Applying", titleize cchn, S "to the first term over",
   (phrase su +:+ ch su `ofThe` phrase vo) `sC` S "with",
   ch tfv, S "as the", phrase tfv, S "for the",

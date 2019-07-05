@@ -134,7 +134,8 @@ change. Anticipated changes are numbered by \textbf{AC} followed by a number.
   the input parameters.
 \item[\refstepcounter{acnum} \actheacnum \label{acOutput}:] The format of the
   final output data.
-\item[\refstepcounter{acnum} \actheacnum \label{acVerifyOut}:] The constraints on the output results.
+% \item[\refstepcounter{acnum} \actheacnum \label{acVerifyOut}:] The constraints 
+%   on the output results.
 \item[\refstepcounter{acnum} \actheacnum \label{acControl}:] How the overall
   control of the calculations is orchestrated.
 \item[\refstepcounter{acnum} \actheacnum \label{acSeqDS}:] The implementation
@@ -363,7 +364,7 @@ one module one secret rule can be relaxed here.
 \section{Traceability Matrix} \label{SecTM}
 
 This section shows two traceability matrices: between the modules and the
-requirements and between the modules and the anticipated changes.  Three of the
+requirements and between the modules and the anticipated changes. Three of the 
 anticipated changes (\acref{acInput}, \acref{acParams}, \acref{acVerify})
 related to the input parameters map to the same module (\mref{mParams}).  The
 reason for this is that the services of this module will never need to be
@@ -413,7 +414,7 @@ R10 & \mref{mOutput}, \mref{mControl}\\
 % \acref{acVerifyOut} & \mref{mVerifyOut}\\
 \acref{acControl} & \mref{mControl}\\
 \acref{acSeqDS} & \mref{mSeqDS}\\
-\acref{acPlot} & \mref{mPlot}\\
+% \acref{acPlot} & \mref{mPlot}\\
 \bottomrule
 \end{tabular}
 \caption{Trace Between Anticipated Changes and Modules}

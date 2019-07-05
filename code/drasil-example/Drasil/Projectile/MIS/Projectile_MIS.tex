@@ -161,7 +161,7 @@ main
 
 \subsection{Uses}
 
-Param (Section~\ref{Parameters}),
+Param (Section~\ref{Parameters}), InputConstraints (Section~\ref{VerifyInput}),
 % verify\_output (Section~\ref{VerifyOutput}), plot(Section~\ref{Plot}),
 output (Section~\ref{Output})
 
@@ -201,8 +201,9 @@ None
 
 \noindent load\_params(filenameIn)\\
 
-\noindent \#\textit{Output calculated values to a file.}\\
+\noindent input\_constraints(Param)\\
 
+\noindent \#\textit{Output calculated values to a file.}\\
 % \noindent verify\_output($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
 
 % \noindent plot($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
@@ -213,9 +214,8 @@ None
 
 \section{MIS of Input Parameters Module} \label{Parameters}
 
-The secrets of this module are the data structure for input parameters, how the
-values are input and how the values are verified.  The load and verify secrets
-are isolated to their own access programs.
+The secrets of this module are the data structure for input parameters and how 
+the values are inputted.
 
 \subsection{Module}
 
@@ -232,7 +232,6 @@ SpecParam (Section~\ref{SpecParam})
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \midrule
 load\_params & string & - &  FileError \\
-verify\_params & - & - & InputError \\
 $v$ & - & $\mathbb{R}$\\
 $\theta$ & - & $\mathbb{R}$\\
 $p_{\text{target}}$ & - & $\mathbb{R}$\\
@@ -334,23 +333,11 @@ $\text{offset} < 0$ & $\Rightarrow$ ``The projectile fell short."\\
 $\text{True}$ & $\Rightarrow$ ``The projectile went long."\\
 \end{longtable*}
 \end{itemize}
-\item verify\_params()
 \end{enumerate}
 
 \item exception: exc := a file name $s$ cannot be found OR the format of
   inputFile is incorrect $\Rightarrow$  FileError
 \end{itemize}
-
-\noindent verify\_params():
-\begin{itemize}
-\item out: \textit{out} := none
-\item exception: exc := 
-\end{itemize}
-\noindent \begin{longtable*}[l]{l l} 
-$\neg (0 < v)$ & $\Rightarrow$ badVelocity\\
-$\neg (0 < \theta < \frac{\pi}{2})$ & $\Rightarrow$ badAngle\\
-$\neg (0 < p_{\text{target}})$ & $\Rightarrow$ badTargetPosition\\
-\end{longtable*}
 
 See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and 
 associated error messages.
@@ -359,118 +346,60 @@ associated error messages.
 
 The value of each state variable can be accessed through its name (getter).  An
 access program is available for each state variable.  There are no setters for
-the state variables, since the values will be set and checked by load params and
+the state variables, since the values will be set by load\_params and
 not changed for the life of the program.
 
 \newpage
 
-% \section{MIS of Input Verification Module} \label{VerifyInput}
+\section{MIS of Input Constraints Module} \label{VerifyInput}
 
-% \subsection{Module}
+The secret of this module is how the values are verified.
 
-% verify\_params
+\subsection{Module}
 
-% \subsection{Uses}
+InputConstraints
 
-% Param (Section~\ref{Parameters})
+\subsection{Uses}
 
-% \subsection{Syntax}
+Param (Section~\ref{Parameters})
 
-% \subsubsection{Exported Access Programs}
+\subsection{Syntax}
 
-% \begin{center}
-% \begin{tabular}{p{3cm} p{1cm} p{1cm} p{9cm}}
-% \hline
-% \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
-% \hline
-% verify\_valid & - & - & badLength, badDiam, badPCMVolume, badPCMAndTankVol,
-%                         badPCMArea, badPCMDensity, badMeltTemp,
-%                         badCoilAndInitTemp, badCoilTemp, badPCMHeatCapSolid,
-%                         badPCMHeatCapLiquid, badHeatFusion, badCoilArea,
-%                         badWaterDensity, badWaterHeatCap, badCoilCoeff,
-%                         badPCMCoeff, badInitTemp, badFinalTime,
-%                         badInitAndMeltTemp \\
-% \hline
-% verify\_recommend & - & - & - \\
-% \hline
-% \end{tabular}
-% \end{center}
+\subsubsection{Exported Access Programs}
 
-% \subsection{Semantics}
+\begin{center}
+ \begin{tabular}{p{3cm} p{3cm} p{1cm} p{8cm}}
+ \hline
+ \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+ \hline
+ input\_constraints & InputParameters & - & badVelocity, badAngle, badTargetPosition \\
+ \hline
+ \end{tabular}
+ \end{center}
 
-% \subsubsection{Environment Variables}
+\subsection{Semantics}
 
-% $win$: 2D array of pixels displayed on the screen.
+\subsubsection{Assumptions}
 
-% \subsubsection{Assumptions}
+All of the fields Param have been assigned values before any of the access
+ routines for this module are called.
 
-% All of the fields Param have been assigned values before any of the access
-% routines for this module are called.
+\subsubsection{Access Routine Semantics}
 
-% \subsubsection{Access Routine Semantics}
+input\_constraints(inParams):
+ \begin{itemize}
+ \item out: \textit{out} := none
+ \item exception: exc := ( \\
+ $\neg (0 < \text{inParams.}v) \Rightarrow$ badLength $|$\\
+ $\neg (0 < \text{inParams.}\theta < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
+ $\neg (0 < \text{inParams.}p_{text{target}}) \Rightarrow$ badTargetPosition)
+ \end{itemize}
 
-% verify\_valid(): 
-% \begin{itemize}
-% \item transition: none
-% \item exceptions: exc := (\\
-% Param.getL() $\leq 0 \Rightarrow$ badLength $|$\\
-% Param.get\_diam() $\leq 0 \Rightarrow$ badDiam $|$\\
-% Params.get\_Vp() $\leq 0 \Rightarrow$ badPCMVolume $|$\\
-% Params.getVp() $\geq$ Params.Vt $\Rightarrow$ badPCMAndTankVol $|$\\
-% Params.getAp() $\leq 0 \Rightarrow$ badPCMArea $|$\\
-% Params.get\_rho\_p() $\leq 0 \Rightarrow$ badPCMDensity $|$\\
-% Params.getTmelt() $\leq 0 \Rightarrow$ badMeltTemp $|$\\
-% Params.getTmelt() $\geq$ Params.getTc() $\Rightarrow$ badMeltTemp $|$\\
-% Params.getTc() $\leq$ Params.getTinit() $\Rightarrow$ badCoilAndInitTemp $|$\\
-% Params.getTc() $\geq 100 \lor$ Params.getTc() $\leq 0 \Rightarrow$ badCoilTemp $|$\\
-% Params.getC\_ps() $\leq 0 \Rightarrow$ badPCMHeatCapSolid $|$\\
-% Params.getC\_pl() $\leq 0 \Rightarrow$ badPCMHeatCapLiquid $|$\\
-% Params.getHf() $\leq 0 \Rightarrow$ badHeatFusion $|$\\
-% Params.getAc() $\leq 0 \Rightarrow$ badCoilArea $|$\\
-% Params.get\_rho()\_w $\leq 0 \Rightarrow$ badWaterDensity $|$\\
-% Params.getC\_w() $\leq 0 \Rightarrow$ badWaterHeatCap $|$\\
-% Params.get\_hc() $\leq 0 \Rightarrow$ badCoilCoeff $|$\\
-% Params.get\_hp() $\leq 0 \Rightarrow$ badPCMCoeff $|$\\
-% Params.getTinit() $\leq 0 \lor$ Params.getTinit() $\geq 100 \Rightarrow$
-% badInitTemp $|$\\
-% Params.get\_tfinal() $\leq 0 \Rightarrow$ badFinalTime $|$\\
-% Params.getTinit() $\geq$ Params.getTmelt() $\Rightarrow$ badInitAndMeltTemp)  
-% \end{itemize}
+\subsection{Considerations}
 
-% verify\_recommend():
-% \begin{itemize}
-% \item transition: none
-% \item exceptions: exc := (\\
-% Params.getL() $< 0.1 \lor$ Params.getL() $> 50 \Rightarrow$ warnLength $|$\\
-% Params.getdiam() / Params.getL() $< 0.002 \lor$ Params.getdiam() / Params.getL() $> 200
-% \Rightarrow$ warnDiam $|$\\
-% Params.getVp() $<$ Params.getVt() $\times 10 ^ -6 \Rightarrow$ warnPCMVol $|$\\
-% Params.getVp() $>$ Params.getAp() $\lor$ Params.getAp $> (2/0.001) \times$ Params.getVp()
-% $\Rightarrow$ warnVolArea $|$\\
-% (Params.get\_rho\_p() $\leq 500) \lor ($ Params.get\_rho\_p() $\geq 20000) \Rightarrow$
-% warnPCMDensity $|$ ... )\\
-% \# \textit{Need to continue for the rest of the example - tabular form?}
-% \# \textit{Should add a module (Configuration Module) to store symbolic constants}
-%  % Params.getC\_ps \leq 100 \lor Params.getC\_ps \geq 4000 \Rightarrow$
-%  % warnPCMHeatCapSolid $|$\\
-%  % Params.getC\_pl \leq 100 \lor Params.getC\_pl \geq 5000 \Rightarrow$
-%  % warnPCMHeatCapLiquid $|$\\
-%  % Params.getAc > \pi \times (Params.getdiam / 2) ^ 2 \Rightarrow$ warnCoilArea
-%  % $|$\\
-%  % Params.getrho\_w \leq 950 \lor Params.getrho\_w > 1000 \Rightarrow$
-%  % warnWaterDensity $|$\\
-%  % Params.getC\_w \leq 4170 \lor Params.getC\_w \geq 4210 \Rightarrow$
-%  % warnWaterHeatCap $|$\\
-%  % Params.gethc \leq 10 \lor Params.gethc \geq 10000 \Rightarrow$ warnCoilCoeff $|$\\
-%  % Params.gethp \leq 10 \lor Params.gethp \geq 10000 \Rightarrow$ warnPCMCoeff $|$\\
-%  % Params.gettfinal \leq 0 \lor Params.gettfinal \geq 86400 \Rightarrow$ warnFinalTime)
-% \end{itemize}
+See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and
+ associated error messages.
 
-% \subsection{Considerations}
-
-% See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and
-% associated error messages.
-%
 %\newpage
 %\section{MIS of Output Verification Module} \label{VerifyOutput}
 %

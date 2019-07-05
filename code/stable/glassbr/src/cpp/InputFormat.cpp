@@ -30,9 +30,6 @@ void get_input(string filename, InputParameters &inParams) {
     outfile.close();
     
     ifstream infile;
-    string line;
-    vector<string> lines(0);
-    vector<string> linetokens(0);
     infile.open(filename, std::fstream::in);
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile >> inParams.a;

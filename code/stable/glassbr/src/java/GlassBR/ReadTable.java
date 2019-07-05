@@ -86,8 +86,8 @@ public class ReadTable {
         
         Scanner infile;
         String line;
-        ArrayList<String> lines = new ArrayList<String>(0);
         ArrayList<String> linetokens = new ArrayList<String>(0);
+        ArrayList<String> lines = new ArrayList<String>(0);
         infile = new Scanner(new File(filename));
         line = infile.nextLine();
         linetokens = new ArrayList<String>(Arrays.asList(line.split(",")));

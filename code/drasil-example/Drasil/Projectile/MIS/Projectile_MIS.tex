@@ -166,13 +166,9 @@ main
 Param (Section~\ref{Parameters}), InputConstraints (Section~\ref{VerifyInput}),
 Calculations (Section~\ref{Calc}),
 % verify\_output (Section~\ref{VerifyOutput}), plot(Section~\ref{Plot}),
-output (Section~\ref{Output})
+Output (Section~\ref{Output})
 
 \subsection{Syntax}
-
-\subsubsection{Exported Constants}
-
-filenameOut = ``output"
 
 \subsubsection{Exported Access Programs}
 
@@ -201,7 +197,7 @@ None
 \end{itemize}
 
 \noindent Get (filenameIn: string) from user.\\
-\noindent load\_params(filenameIn)\\
+\noindent get\_input(filenameIn)\\
 \noindent input\_constraints(Param)\\
 \noindent p\_land := func\_p\_land(inParams)\\
 \noindent d\_offset := func\_d\_offset(inParams, p\_land)\\
@@ -209,14 +205,14 @@ None
 \noindent \#\textit{Output calculated values to a file.}\\
 % \noindent verify\_output($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
 % \noindent plot($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
-\noindent output(filenameOut, $t_\text{message}$, $t_\text{output}$)\\
+\noindent write\_output($\text{s}$, $\text{d\_offset}$)\\
 
 \newpage
 
 \section{MIS of Input Parameters Module} \label{Parameters}
 
 The secrets of this module are the data structure for input parameters and how 
-the values are inputted.
+the values are input.
 
 \subsection{Module}
 
@@ -232,10 +228,10 @@ SpecParam (Section~\ref{SpecParam})
 \toprule
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \midrule
-load\_params & string & - &  FileError \\
-$v$ & - & $\mathbb{R}$\\
-$\theta$ & - & $\mathbb{R}$\\
-$p_{\text{target}}$ & - & $\mathbb{R}$\\
+get\_input & string & - &  FileError \\
+v\_launch & - & $\mathbb{R}$\\
+angle & - & $\mathbb{R}$\\
+p\_target & - & $\mathbb{R}$\\
 \bottomrule
 \end{tabular}
 
@@ -250,17 +246,17 @@ inputFile: sequence of string \#\textit{f[i] is the ith string in the text file 
 \renewcommand{\arraystretch}{1.2}
 \begin{longtable*}[l]{l} 
 \# To Support IM1 and IM2 \\
-$v$: $\mathbb{R}$\\
-$\theta$: $\mathbb{R}$\\
+v\_launch: $\mathbb{R}$\\
+angle: $\mathbb{R}$\\
 \# To Support IM3 and IM4 \\
-$p_{\text{target}}$: $\mathbb{R}$\\
+p\_target: $\mathbb{R}$\\
 \end{longtable*}
 
 \subsubsection{Assumptions}
 
 \begin{itemize}
 
-\item load\_params will be called before the values of any state variables will 
+\item get\_input will be called before the values of any state variables will 
 be accessed.
 
 \item The file contains the string equivalents of the numeric values for
@@ -271,30 +267,30 @@ should be denoted with a '\#' symbol.
 
 \subsubsection{Access Routine Semantics}
 
-\noindent Param.$v$:
+\noindent Param.v\_launch:
 \begin{itemize}
-\item output: \textit{out} := $v$
+\item output: \textit{out} := v\_launch
 \item exception: none
 \end{itemize}
 
-\noindent Param.$\theta$:
+\noindent Param.angle:
 \begin{itemize}
-\item output: \textit{out} := $\theta$
+\item output: \textit{out} := angle
 \item exception: none
 \end{itemize}
 
-\noindent Param.$p_{\text{target}}$:
+\noindent Param.p\_target:
 \begin{itemize}
-\item output: \textit{out} := $p_{\text{target}}$
+\item output: \textit{out} := p\_target
 \item exception: none
 \end{itemize}
 
-\noindent load\_params($s$):
+\noindent get\_input(filename):
 \begin{itemize}
-\item transition: The filename $s$ is first associated with the file f. 
+\item transition: The file name ``filename" is first associated with the file f. 
 The data from inputFile is read sequentially to populate the state variables from
-  FR1 ($v$, $\theta$, and $p_{\text{target}}$).
-\item exception: exc := a file name $s$ cannot be found OR the format of
+  FR1 (v\_launch, angle, and p\_target).
+\item exception: exc := a file name ``filename" cannot be found OR the format of
   inputFile is incorrect $\Rightarrow$  FileError
 \end{itemize}
 
@@ -305,7 +301,7 @@ associated error messages.
 
 The value of each state variable can be accessed through its name (getter).  An
 access program is available for each state variable.  There are no setters for
-the state variables, since the values will be set by load\_params and
+the state variables, since the values will be set by get\_input and
 not changed for the life of the program.
 
 \newpage
@@ -331,7 +327,7 @@ Param (Section~\ref{Parameters})
  \hline
  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
  \hline
- input\_constraints & InputParameters & - & badVelocity, badAngle, badTargetPosition \\
+ input\_constraints & Param & - & badVelocity, badAngle, badTargetPosition \\
  \hline
  \end{tabular}
  \end{center}
@@ -349,9 +345,9 @@ input\_constraints(inParams):
  \begin{itemize}
  \item out: \textit{out} := none
  \item exception: exc := ( \\
- $\neg (0 < \text{inParams.}v) \Rightarrow$ badLength $|$\\
- $\neg (0 < \text{inParams.}\theta < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
- $\neg (0 < \text{inParams.}p_{text{target}}) \Rightarrow$ badTargetPosition)
+ $\neg (0 < \text{inParams.v\_launch}) \Rightarrow$ badLength $|$\\
+ $\neg (0 < \text{inParams.angle} < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
+ $\neg (0 < \text{inParams.p\_target}) \Rightarrow$ badTargetPosition)
  \end{itemize}
 
 \subsection{Considerations}
@@ -382,11 +378,11 @@ Param (Section~\ref{Parameters})
  \hline
  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
  \hline
- func\_p\_land & Params & $\mathbb{R}$ & None \\
+ func\_p\_land & Param & $\mathbb{R}$ & None \\
  \hline
- func\_d\_offset & Params, $\mathbb{R}$ & $\mathbb{R}$ & None \\
+ func\_d\_offset & Param, $\mathbb{R}$ & $\mathbb{R}$ & None \\
  \hline
- func\_s & Params, $\mathbb{R}$ & String & None \\
+ func\_s & Param, $\mathbb{R}$ & String & None \\
  \hline
  \end{tabular}
  \end{center}
@@ -402,21 +398,21 @@ All of the fields Param have been assigned values before any of the access
 
 func\_p\_land(inParams):
  \begin{itemize}
- \item out: $\textit{out} := \frac{2 v^2 sin(inParams.\theta) cos(inParams.\theta)}{g}$
+ \item out: $\textit{out} := \frac{2 * \text{v\_launch}^2 * sin(\text{angle}) * cos(\text{angle})}{g}$
  \item exception: exc := none
  \end{itemize}
  
-func\_d\_offset(inParams):
+func\_d\_offset(inParams, p\_land):
  \begin{itemize}
- \item out: $\textit{out} := p_{\text{land}} - p_{\text{target}}$
+ \item out: $\textit{out} := $ p\_land - p\_target
  \item exception: exc := none
  \end{itemize}
  
-func\_s(inParams):
+func\_s(inParams, d\_offset):
  \begin{itemize}
  \item out: $\textit{out} := $ ( \\
-$|\frac{\text{offset}}{p_{\text{target}}}| < \epsilon \Rightarrow$ ``The target was hit." $|$\\
-$\text{offset} < 0 \Rightarrow$ ``The projectile fell short."$|$\\
+$|\frac{\text{d\_offset}}{\text{p\_target}}| < \epsilon \Rightarrow$ ``The target was hit." $|$\\
+$\text{d\_offset} < 0 \Rightarrow$ ``The projectile fell short."$|$\\
 $\text{True} \Rightarrow$ ``The projectile went long.")
  \item exception: exc := none
  \end{itemize}
@@ -556,7 +552,7 @@ See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and
 
 \subsection{Module}
 
-output
+Output
 
 \subsection{Uses}
 
@@ -571,7 +567,7 @@ Param (Section~\ref{Parameters})
 \hline
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \hline
-output & fname: string, $\text{message} : \mathbb{R}$, $\text{offset} : \mathbb{R}$ & - & - \\
+write\_output & String, String, $\mathbb{R}$ & - & - \\
 \hline
 \end{tabular}
 \end{center}
@@ -584,13 +580,13 @@ None
 
 \subsubsection{Environment Variables}
 
-file: A text file
+file: The file named ``output".
 
 \subsubsection{Access Routine Semantics}
 
-\noindent output(fname, $\text{message}$, $\text{offset}$):
+\noindent write\_output($\text{s}$, $\text{d\_offset}$):
 \begin{itemize}
-\item transition:  Write to environment variable named fname the calculated values $\text{message}$ and $\text{offset}$.
+\item transition:  Write to environment variable named ``file" the calculated values $\text{s}$ and $\text{d\_offset}$.
 \item exception: none
 \end{itemize}
 

@@ -33,7 +33,7 @@ import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (Entry(JunkEntry, ListEntry, Entry),
   LinePattern(Repeat, Straight), Data(Line, Lines, JunkData, Singleton), 
-  DataDesc, getInputs, junkLine, singleton)
+  DataDesc, getInputs, getPatternInputs, junkLine, singleton)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (nub, intersperse, (\\), stripPrefix)
@@ -991,12 +991,7 @@ readData ddef = do
 getEntryVars :: (RenderSym repr) => LinePattern -> 
   Reader (State repr) [repr (Value repr)]
 getEntryVars lp = mapM (\v -> variable (codeName v) (convType $ codeType v))
-  (mapMaybe getVars (getEntries lp))
-  where getEntries (Straight p) = p
-        getEntries (Repeat p _) = p
-        getVars (Entry v) = Just v
-        getVars (ListEntry _ v) = Just v
-        getVars JunkEntry = Nothing
+  (getPatternInputs lp)
 
 getEntryVarLogs :: (RenderSym repr) => LinePattern -> 
   Reader (State repr) [repr (Statement repr)]

@@ -62,11 +62,11 @@ repeated' :: [Entry] -> Integer -> LinePattern
 repeated' e i = Repeat e (Just i)
 
 isLine :: Data -> Bool
-isLine (Line _ _) = True
+isLine Line{} = True
 isLine _ = False
 
 isLines :: Data -> Bool
-isLines (Lines _ _ _) = True
+isLines Lines{} = True
 isLines _ = False
 
 getInputs :: DataDesc -> [CodeChunk]

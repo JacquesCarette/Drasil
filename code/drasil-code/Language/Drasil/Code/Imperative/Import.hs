@@ -184,27 +184,17 @@ liftS = fmap (: [])
 ------- INPUT ----------
 
 genInputModClass :: (RenderSym repr) => Reader (State repr) [repr (Module repr)]
-genInputModClass = do
-  inputClass <- genInputClass
-  derived <- genInputDerived
-  constrs <- genInputConstraints
-  let ic = maybeToList inputClass
-      dl = maybeToList derived
-      cl = maybeToList constrs
-  sequence [ genModule "InputParameters" Nothing (Just $ return ic),
-             genModule "DerivedValues" (Just $ return dl) Nothing,
-             genModule "InputConstraints" (Just $ return cl) Nothing
-           ]
+genInputModClass = sequence 
+  [genModule "InputParameters" Nothing (Just $ fmap maybeToList genInputClass),
+  genModule "DerivedValues" (Just $ fmap maybeToList genInputDerived) Nothing,
+  genModule "InputConstraints" (Just $ fmap maybeToList genInputConstraints) 
+    Nothing]
 
 genInputModNoClass :: (RenderSym repr) => Reader (State repr)
   [repr (Module repr)]
-genInputModNoClass = do
-  inpDer    <- genInputDerived
-  inpConstr <- genInputConstraints
-  return [ buildModule "InputParameters" []
-           (catMaybes [inpDer, inpConstr])
-           []
-         ]
+genInputModNoClass = liftS $
+  genModule "InputParameters" (Just $ concat <$> mapM (fmap maybeToList) 
+    [genInputDerived, genInputConstraints]) Nothing
 
 genInputClass :: (RenderSym repr) => Reader (State repr) (Maybe (repr (Class 
   repr)))
@@ -268,10 +258,8 @@ constrExc _ = oneLiner $ throw "InputError"
 
 genInputFormatMod :: (RenderSym repr) => Reader (State repr) 
   [repr (Module repr)]
-genInputFormatMod = do
-  inFunc <- genInputFormat
-  let inFmt = maybeToList inFunc
-  liftS $ genModule "InputFormat" (Just $ return inFmt) Nothing
+genInputFormatMod = liftS $ genModule "InputFormat" (Just $ 
+  fmap maybeToList genInputFormat) Nothing
 
 genInputFormat :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Method repr)))

@@ -73,14 +73,14 @@ rocTempDerivDens :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
 rocTempDerivDens den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
   ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
 
-rocTempDerivIntegEq, genDefEq2, genDefEq3, genDefEq4, genDefEq5 :: Expr
+rocTempDerivIntegEq, rocTempDerivGaussEq, genDefEq3, genDefEq4, genDefEq5 :: Expr
 
 rocTempDerivIntegEq = negate (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) + 
   intAll (eqSymb vol) (sy volHtGen) $=
   intAll (eqSymb vol) (sy density
   * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
 
-genDefEq2 = negate (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) +
+rocTempDerivGaussEq = negate (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) +
   intAll (eqSymb vol) (sy volHtGen) $= 
   intAll (eqSymb vol)
   (sy density * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
@@ -98,5 +98,5 @@ genDefEq5 = sy mass * sy QT.heatCapSpec * deriv (sy QT.temp)
   * sy outSA + sy volHtGen * sy vol
 
 rocTempSimpDerivEqns :: [Expr]
-rocTempSimpDerivEqns = [rocTempDerivIntegEq, genDefEq2, genDefEq3, genDefEq4,
+rocTempSimpDerivEqns = [rocTempDerivIntegEq, rocTempDerivGaussEq, genDefEq3, genDefEq4,
   genDefEq5]

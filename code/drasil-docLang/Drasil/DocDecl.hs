@@ -3,14 +3,16 @@ module Drasil.DocDecl where
 
 import Drasil.DocumentLanguage.Core (DocDesc)
 import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
-  IntroSec(..), StkhldrSec(..), GSDSec(..), SSDSec(..), ReqrmntSec(..), ReqsSub(..),
-  LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..), AppndxSec(..),
-  OffShelfSolnsSec(..))
+  IntroSec(..), StkhldrSec(..), GSDSec(..), SSDSec(..), SSDSub(..),
+  ProblemDescription(..), PDSub(..), SolChSpec(..), ReqrmntSec(..),
+  ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..),
+  AppndxSec(..), OffShelfSolnsSec(..))
 
 import Database.Drasil (ChunkDB, UMap, asOrderedList, conceptinsTable)
 import Language.Drasil hiding (sec)
 
-import Data.Drasil.Concepts.Documentation (funcReqDom, nonFuncReqDom, likeChgDom, unlikeChgDom)
+import Data.Drasil.Concepts.Documentation (funcReqDom, goalStmtDom, nonFuncReqDom,
+  likeChgDom, unlikeChgDom)
 
 import Control.Lens((^.), Getting)
 
@@ -20,7 +22,7 @@ data DocSection = RefSec DL.RefSec
                 | IntroSec DL.IntroSec
                 | StkhldrSec DL.StkhldrSec
                 | GSDSec DL.GSDSec
-                | SSDSec DL.SSDSec
+                | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec
                 | UCsSec
@@ -29,6 +31,24 @@ data DocSection = RefSec DL.RefSec
                 | Bibliography
                 | AppndxSec DL.AppndxSec
                 | OffShelfSolnsSec DL.OffShelfSolnsSec
+
+-- | Specific System Description section . Contains a list of subsections.
+newtype SSDSec = SSDProg [SSDSub]
+
+-- | Specific system description subsections
+data SSDSub where
+  SSDProblem :: ProblemDescription -> SSDSub
+  SSDSolChSpec :: DL.SolChSpec -> SSDSub
+
+-- | Problem Description section
+data ProblemDescription where
+  PDProg :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
+
+-- | Problem Description subsections
+data PDSub where
+  TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
+  PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+  Goals :: [Sentence] -> PDSub
 
 newtype ReqrmntSec = ReqsProg [ReqsSub]
 
@@ -43,7 +63,7 @@ mkDocDesc cdb = map sec where
   sec (IntroSec i) = DL.IntroSec i
   sec (StkhldrSec s) = DL.StkhldrSec s
   sec (GSDSec g) = DL.GSDSec g
-  sec (SSDSec s) = DL.SSDSec s
+  sec (SSDSec (SSDProg s)) = DL.SSDSec $ DL.SSDProg $ map ssdSec s
   sec (ReqrmntSec (ReqsProg r)) = DL.ReqrmntSec $ DL.ReqsProg $ map reqSec r
   sec LCsSec = DL.LCsSec $ DL.LCsProg $ fromConcInsDB likeChgDom
   sec UCsSec = DL.UCsSec $ DL.UCsProg $ fromConcInsDB unlikeChgDom
@@ -55,6 +75,13 @@ mkDocDesc cdb = map sec where
   reqSec :: ReqsSub -> DL.ReqsSub
   reqSec (FReqsSub t) = DL.FReqsSub (fromConcInsDB funcReqDom) t
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
+  ssdSec :: SSDSub -> DL.SSDSub
+  ssdSec (SSDProblem (PDProg s ls p)) = DL.SSDProblem $ DL.PDProg s ls $ map pdSub p
+  ssdSec (SSDSolChSpec scs) = DL.SSDSolChSpec scs
+  pdSub :: PDSub -> DL.PDSub
+  pdSub (TermsAndDefs s c) = DL.TermsAndDefs s c
+  pdSub (PhySysDesc i s lc c) = DL.PhySysDesc i s lc c
+  pdSub (Goals s) = DL.Goals s $ fromConcInsDB goalStmtDom
   expandFromDB :: ([a] -> [a]) -> Getting (UMap a) ChunkDB (UMap a) -> [a]
   expandFromDB f = f . asOrderedList . (cdb ^.)
   fromConcInsDB :: Concept c => c -> [ConceptInstance]

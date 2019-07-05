@@ -143,7 +143,7 @@ mkSRS = [RefSec $ RefProg intro [
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
         , PhySysDesc progName physSystParts figTank []
-        , Goals goalInputs goals]
+        , Goals goalInputs]
       , SSDSolChSpec $ SCSProg
         [ Assumptions assumptions
         , TMs [] (Label : stdFields) theory

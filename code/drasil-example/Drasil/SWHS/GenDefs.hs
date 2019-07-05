@@ -109,7 +109,7 @@ rocTempSimpDeriv =
 
 rocTempSimpDerivSent :: [Sentence]
 rocTempSimpDerivSent = map foldlSentCol [
-  s4_2_3_desc1 consThermE vol,
+  rocTempDerivInteg consThermE vol,
   s4_2_3_desc2 gaussDiv surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol volHtGen,
   s4_2_3_desc4 htFluxIn htFluxOut inSA outSA density QT.heatCapSpec
@@ -117,8 +117,8 @@ rocTempSimpDerivSent = map foldlSentCol [
                  makeRef2S assumpDWPCoV, makeRef2S assumpSHECoV],
   s4_2_3_desc5 density mass vol]
 
-s4_2_3_desc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
-s4_2_3_desc1 t1c vo =
+rocTempDerivInteg :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
+rocTempDerivInteg t1c vo =
   [S "Integrating", makeRef2S t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: (NamedIdea b, HasSymbol b) => ConceptChunk -> b -> UnitalChunk -> UnitalChunk ->

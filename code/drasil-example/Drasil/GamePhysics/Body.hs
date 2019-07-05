@@ -70,12 +70,12 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         [ TermsAndDefs Nothing terms
         , Goals [S "the" +:+ plural input_]]
       , SSDSolChSpec $ SCSProg
-        [ Assumptions assumptions
-        , TMs [] (Label : stdFields) tModsNew
-        , GDs [] [] [] HideDerivation -- No Gen Defs for Gamephysics
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+        [ Assumptions
+        , TMs [] (Label : stdFields)
+        , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-          iModelsNew ShowDerivation
+          ShowDerivation
         , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
             [inDataConstTbl inputConstraints, outDataConstTbl outputConstraints]
         , CorrSolnPpties propsDeriv

@@ -125,11 +125,11 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         [ PhySysDesc glassBR physSystParts physSystFig []
         , Goals goalInputs],
        SSDSolChSpec $ SCSProg
-        [ Assumptions assumptions
-        , TMs [] (Label : stdFields) tMods
-        , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
+        [ Assumptions
+        , TMs [] (Label : stdFields)
+        , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
         , Constraints EmptyS dataConstraintUncertainty
                       (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
                       S "gives", plural value `ofThe` S "specification",

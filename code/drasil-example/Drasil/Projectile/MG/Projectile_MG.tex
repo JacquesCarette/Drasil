@@ -184,6 +184,7 @@ followed by a number.
 %\item [\refstepcounter{mnum} \mthemnum \label{mInput}:] Input Format Module
 \item [\refstepcounter{mnum} \mthemnum \label{mParams}:] Input Parameters Module
 \item [\refstepcounter{mnum} \mthemnum \label{mInCons}:] Input Constraints Module
+\item [\refstepcounter{mnum} \mthemnum \label{mCalc}:] Calculations Module
 \item [\refstepcounter{mnum} \mthemnum \label{mOutput}:] Output Format Module
 %\item [\refstepcounter{mnum} \mthemnum \label{mVerifyOut}:] Output Verification Module
 \item [\refstepcounter{mnum} \mthemnum \label{mControl}:] Control Module
@@ -207,8 +208,9 @@ is already available in Matlab and will not be reimplemented.
 {Hardware-Hiding} & ~ \\
 \midrule
 
-\multirow{5}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
+\multirow{6}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
 & Input Constraints\\
+& Calculations \\
 & Output Format\\
 % & Output Verification\\
 & Control Module\\
@@ -290,6 +292,14 @@ values are input.
   constraints. % and software constraints. 
   Throws an error if a parameter violates a physical constraint.
   % Throws a warning if a parameter violates a software constraint.
+\item[Implemented By:] Projectile
+\end{description}
+
+\subsubsection{Calculations Module (\mref{mCalc})}
+
+\begin{description}
+\item[Secrets:] The calculations of values based on the inputs.
+\item[Services:] Calculates the required values based on the inputs.
 \item[Implemented By:] Projectile
 \end{description}
 
@@ -382,7 +392,8 @@ access.
 \midrule
 R1 & \mref{mHH}, \mref{mParams}, \mref{mControl}\\ %\mref{mInput}, 
 R2 & \mref{mParams}, \mref{mControl}, \mref{mInCons}\\
-R3 & \mref{mParams}, \mref{mSpecParams}, \mref{mControl}\\ %\mref{mVerifyOut}\\
+R3 & \mref{mParams}, \mref{mCalc}, \mref{mSpecParams}, \mref{mControl}\\
+	%\mref{mVerifyOut}\\
 R4 & \mref{mOutput}, \mref{mControl}\\
 \bottomrule
 \end{tabular}
@@ -402,7 +413,7 @@ R4 & \mref{mOutput}, \mref{mControl}\\
 \acref{acVerify} & \mref{mInCons}\\
 \acref{acOutput} & \mref{mOutput}\\
 % \acref{acVerifyOut} & \mref{mVerifyOut}\\
-\acref{acControl} & \mref{mControl}\\
+\acref{acControl} & \mref{mCalc}, \mref{mControl}\\
 \acref{acSeqDS} & \mref{mSeqDS}\\
 % \acref{acPlot} & \mref{mPlot}\\
 \bottomrule

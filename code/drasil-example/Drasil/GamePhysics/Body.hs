@@ -98,7 +98,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     ],
     LCsSec $ LCsProg likelyChgs,
     UCsSec $ UCsProg unlikelyChgs,
-    OffShelfSolnsSec $ ExistSolnProg offShelfSols,
+    OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
     TraceabilitySec $ TraceabilityProg (map fst traceabilityMatrices)
       (map (foldlList Comma List . snd) traceabilityMatrices) (map (LlC . fst) traceabilityMatrices) [],
     AuxConstntSec $ AuxConsProg chipmunk [],

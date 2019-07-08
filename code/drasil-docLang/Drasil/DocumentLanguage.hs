@@ -216,7 +216,7 @@ data TraceabilitySec = TraceabilityProg [LabelledContent] [Sentence] [Contents] 
 {--}
 
 -- | Off-The-Shelf Solutions section 
-newtype OffShelfSolnsSec = ExistSolnProg [Contents]
+newtype OffShelfSolnsSec = OffShelfSolnsProg [Contents]
 
 {--}
 
@@ -520,7 +520,7 @@ mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
 
 -- | Helper for making the 'Off-the-Shelf Solutions' section
 mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
-mkOffShelfSolnSec (ExistSolnProg cs) = SRS.offShelfSol cs [] 
+mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs [] 
 
 {--}
 

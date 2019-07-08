@@ -89,7 +89,7 @@ instance Multiplate DLPlate where
     ucp (UCsProg c) = UCsProg <$> pure c
     ts (TraceabilityProg llc sen con sect) = TraceabilityProg <$> pure llc <*>
       pure sen <*> pure con <*> pure sect
-    es (ExistSolnProg contents) = ExistSolnProg <$> pure contents
+    es (OffShelfSolnsProg contents) = OffShelfSolnsProg <$> pure contents
     acs (AuxConsProg ci qdef) = AuxConsProg <$> pure ci <*> pure qdef
     aps (AppndxProg con) = AppndxProg <$> pure con
   mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b introSub) (b stkSec)
@@ -127,7 +127,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   ucsSec = Constant <$> \(UCsProg _) -> mempty,
   traceSec = Constant <$> \(TraceabilityProg lc _ c s) ->
     mconcat [mCon lc, mCon c, mSec s],
-  existSolnSec = Constant <$> \(ExistSolnProg c) -> mCon c,
+  existSolnSec = Constant <$> \(OffShelfSolnsProg c) -> mCon c,
   appendSec = Constant <$> \(AppndxProg c) -> mCon c
 }
 

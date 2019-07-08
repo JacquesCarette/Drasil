@@ -142,7 +142,7 @@ data Logging = LogNone
              
 data Comments = CommentFunc
               | CommentClass
-              | CommentMod
+              | CommentMod deriving Eq
              
 data ConstraintBehaviour = Warning
                          | Exception
@@ -156,7 +156,7 @@ defaultChoices = Choices {
   impType = Program,
   logFile = "log.txt",
   logging = LogNone,
-  comments = CommentNone,
+  comments = [],
   onSfwrConstraint = Exception,
   onPhysConstraint = Warning,
   inputStructure = Bundled

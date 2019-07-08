@@ -29,8 +29,12 @@ class (ModuleSym repr, ControlBlockSym repr) => RenderSym repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
 
+  docMod :: String -> repr (RenderFile repr) -> repr (RenderFile repr)
+
   commentedMod :: repr (BlockComment repr) -> repr (RenderFile repr) ->
     repr (RenderFile repr)
+
+  moduleName :: repr (RenderFile repr) -> String
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   type Keyword repr

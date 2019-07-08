@@ -8,17 +8,16 @@ import Language.Drasil.Code (
   StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionApplication(..), MethodSym(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
 helloWorld :: (PackageSym repr) => repr (Package repr)
-helloWorld = packMods "HelloWorld" [commentedMod description $ 
+helloWorld = packMods "HelloWorld" [docMod description $ 
   fileDoc (buildModule "HelloWorld" ["Helper"] [helloWorldMain] []), helper]
 
-description :: (RenderSym repr) => repr (BlockComment repr)
-description = blockComment ["This module tests various GOOL functions",
-                            "It should run without errors."]
+description :: String
+description = "Tests various GOOL functions. It should run without errors."
 
 helloWorldMain :: (RenderSym repr) => repr (Method repr)
 helloWorldMain = mainMethod "HelloWorld" (body [ helloInitVariables, 

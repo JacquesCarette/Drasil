@@ -3,7 +3,7 @@
 -- | The logic to render Python code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
-  PythonCode(..)
+  PythonCode(..), pyExts
 ) where
 
 import Utils.Drasil (indent)
@@ -32,8 +32,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD,
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
-  commentedItem, addCommentsDocD, functionDoc, classDoc, valList, appendToBody, 
-  getterName, setterName)
+  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, valList, 
+  appendToBody, getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, ParamData(..), TypeData(..), td, ValData(..), vd, blank, 
   vibcat, mapPairFst, liftA4, liftA5, mapPairFst, liftList, lift1List, 
@@ -45,6 +45,12 @@ import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
   equals, vcat, colon, brackets, isEmpty, render)
+
+pyExts :: [String]
+pyExts = [pyExt]
+
+pyExt :: String
+pyExt = ".py"
 
 newtype PythonCode a = PC {unPC :: a}
 
@@ -72,8 +78,12 @@ instance RenderSym PythonCode where
   top _ = return pytop
   bottom = return empty
 
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) pyExt) m
+
   commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
     (liftA2 commentedItem cmt (fmap modDoc m))
+
+  moduleName m = name (unPC m)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc

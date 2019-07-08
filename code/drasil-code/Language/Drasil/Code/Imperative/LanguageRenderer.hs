@@ -32,8 +32,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
   includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, valList, prependToBody, appendToBody, surroundBody, 
-  getterName, setterName, setMain, setEmpty, intValue
+  functionDoc, classDoc, moduleDoc, valList, prependToBody, appendToBody, 
+  surroundBody, getterName, setterName, setMain, setEmpty, intValue
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -711,6 +711,10 @@ functionDoc desc params = ("\\brief " ++ desc)
 
 classDoc :: String -> [String]
 classDoc desc = ["\\brief " ++ desc]
+
+moduleDoc :: String -> String -> String -> [String]
+moduleDoc desc m ext = ["\\file " ++ m ++ ext,
+  "\\brief " ++ desc]
 
 -- Helper Functions --
 

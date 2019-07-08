@@ -5,7 +5,7 @@
 -- | The logic to render C++ code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
   -- * C++ Code Configuration -- defines syntax of all C++ code
-  CppSrcCode(..), CppHdrCode(..), CppCode(..), unSrc, unHdr
+  CppSrcCode(..), CppHdrCode(..), CppCode(..), cppExts, unSrc, unHdr
 ) where
 
 import Utils.Drasil (indent, indentList)
@@ -39,7 +39,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  valList, surroundBody, getterName, setterName, setEmpty, intValue)
+  moduleDoc, valList, surroundBody, getterName, setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   ParamData(..), StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
@@ -54,6 +54,13 @@ import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
+
+cppExts :: [String]
+cppExts = [cppHdrExt, cppSrcExt]
+
+cppHdrExt, cppSrcExt :: String
+cppHdrExt = ".hpp"
+cppSrcExt = ".cpp"
 
 data CppCode x y a = CPPC {src :: x a, hdr :: y a}
 
@@ -78,8 +85,12 @@ instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
 
+  docMod d m = pair (docMod d $ pfst m) (docMod d $ psnd m)
+
   commentedMod cmt m = pair (commentedMod (pfst cmt) (pfst m)) 
     (commentedMod (psnd cmt) (psnd m))
+
+  moduleName m = moduleName $ pfst m
 
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
@@ -599,8 +610,12 @@ instance RenderSym CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
 
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) cppSrcExt) m
+
   commentedMod cmt m = if isMainMod (unCPPSC m) then liftA3 md (fmap name m) 
     (fmap isMainMod m) (liftA2 commentedItem cmt (fmap modDoc m)) else m 
+    
+  moduleName m = name (unCPPSC m)
   
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -1128,10 +1143,14 @@ instance RenderSym CppHdrCode where
     liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
+  
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) cppHdrExt) m
 
   commentedMod cmt m = if isMainMod (unCPPHC m) then m else 
     liftA3 md (fmap name m) (fmap isMainMod m) 
     (liftA2 commentedItem cmt (fmap modDoc m))
+    
+  moduleName m = name (unCPPHC m)
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc

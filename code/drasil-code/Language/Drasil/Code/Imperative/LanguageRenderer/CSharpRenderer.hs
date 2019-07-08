@@ -4,7 +4,7 @@
 -- | The logic to render C# code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (
   -- * C# Code Configuration -- defines syntax of all C# code
-  CSharpCode(..)
+  CSharpCode(..), csExts
 ) where
 
 import Utils.Drasil (indent)
@@ -40,8 +40,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, valList, 
-  surroundBody, getterName, setterName, setMain, setEmpty, intValue)
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
+  valList, surroundBody, getterName, setterName, setMain, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, ParamData(..), pd, updateParamDoc, TypeData(..), td, 
   ValData(..), vd, updateValDoc, mapPairFst, liftA4, liftA5, liftA6, liftList,
@@ -55,6 +55,12 @@ import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   equals, semi, vcat, lbrace, rbrace, colon, render, isEmpty)
+
+csExts :: [String]
+csExts = [csExt]
+
+csExt :: String
+csExt = ".cs"
 
 newtype CSharpCode a = CSC {unCSC :: a} deriving Eq
 
@@ -82,8 +88,12 @@ instance RenderSym CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) csExt) m
+
   commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
     (liftA2 commentedItem cmt (fmap modDoc m))
+    
+  moduleName m = name (unCSC m)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc

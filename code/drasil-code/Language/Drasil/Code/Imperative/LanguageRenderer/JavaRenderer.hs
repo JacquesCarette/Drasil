@@ -4,7 +4,7 @@
 -- | The logic to render Java code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code
-  JavaCode(..), jNameOpts
+  JavaCode(..), jExts, jNameOpts
 ) where
 
 import Utils.Drasil (indent)
@@ -40,8 +40,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
   dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
   doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, valList, surroundBody, getterName, setterName, setMain,
-  setEmpty, intValue)
+  functionDoc, classDoc, moduleDoc, valList, surroundBody, getterName, 
+  setterName, setMain,setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, ParamData(..), pd, TypeData(..), td, ValData(..), vd,  
   angles, mapPairFst, liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, 
@@ -53,6 +53,12 @@ import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   semi, vcat, lbrace, rbrace, render, colon, comma, isEmpty, render)
+
+jExts :: [String]
+jExts = [jExt]
+
+jExt :: String
+jExt = ".java"
 
 jNameOpts :: NameOpts
 jNameOpts = NameOpts {
@@ -86,8 +92,12 @@ instance RenderSym JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
 
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) jExt) m
+
   commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
     (liftA2 commentedItem cmt (fmap modDoc m))
+
+  moduleName m = name (unJC m)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc

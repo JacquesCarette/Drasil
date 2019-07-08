@@ -130,7 +130,7 @@ checkSi :: [UnitDefn]
 checkSi = collectUnits symbMap thisSymbols 
 
 srs :: Document
-srs = mkDoc mkSRS (for'' titleize phrase) systInfo
+srs = mkDoc mkSRS (for'' titleize phrase) si
 
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
@@ -183,8 +183,8 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-systInfo :: SystemInformation
-systInfo = SI {
+si :: SystemInformation
+si = SI {
   _sys         = glassBR,
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
@@ -427,7 +427,7 @@ outputDataConstraints = outDataConstTbl [probBr]
 {--TRACEABLITY MATRICES AND GRAPHS--}
 
 traceabilityMatrices :: [(LabelledContent, [Sentence])]
-traceabilityMatrices = traceMatStandard systInfo
+traceabilityMatrices = traceMatStandard si
 
 {--VALUES OF AUXILIARY CONSTANTS--}
 

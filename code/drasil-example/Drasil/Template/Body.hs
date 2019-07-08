@@ -16,13 +16,13 @@ import Data.Drasil.Concepts.Documentation as Doc (srs)
 import qualified Data.Map as Map
 
 srsDoc :: Document
-srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
+srsDoc = mkDoc mkSRS (for'' titleize phrase) si
 
 mkSRS :: DocDesc
 mkSRS = []
 
-systInfo :: SystemInformation
-systInfo = SI {
+si :: SystemInformation
+si = SI {
   _sys         = example,
   _kind        = Doc.srs,
   _authors     = [authorName],

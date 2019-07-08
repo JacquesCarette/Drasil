@@ -61,7 +61,7 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
 import qualified Data.Map as Map
 
 srs :: Document
-srs = mkDoc mkSRS for' sysInfo
+srs = mkDoc mkSRS for' si
 
 checkSi :: [UnitDefn] -- FIXME
 checkSi = collectUnits everything symbTT 
@@ -137,8 +137,8 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
     --FIXME: Need to be able to print defn for gravitational constant.
 
-sysInfo :: SystemInformation
-sysInfo = SI {
+si :: SystemInformation
+si = SI {
   _sys = chipmunk,
   _kind = Doc.srs,
   _authors = [alex, luthfi],
@@ -486,7 +486,7 @@ offShelfSols3DList = LlC $ enumBullet solutionLabel [
 -----------------------------------------------------
 
 traceabilityMatrices :: [(LabelledContent, [Sentence])]
-traceabilityMatrices = traceMatStandard sysInfo
+traceabilityMatrices = traceMatStandard si
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

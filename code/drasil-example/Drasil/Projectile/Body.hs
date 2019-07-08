@@ -52,7 +52,7 @@ import Drasil.Projectile.Unitals (acronyms, constants, inConstraints,
   launAngle, outConstraints, symbols, unitalIdeas, unitalQuants)
 
 srsDoc :: Document
-srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
+srsDoc = mkDoc mkSRS (for'' titleize phrase) si
 
 mkSRS :: DocDesc
 mkSRS = [
@@ -109,8 +109,8 @@ scope1 = foldlSent_ [S "the", phrase analysis `sOf` S "a", phrase twoD,
   phrase constAccel]
 scope2 = foldlSent_ [S "determines if the", phrase projectile, S "hits the", phrase target]
 
-systInfo :: SystemInformation
-systInfo = SI {
+si :: SystemInformation
+si = SI {
   _sys         = projectileTitle,
   _kind        = srs,
   _authors     = [samCrawford, brooks, spencerSmith],
@@ -201,4 +201,4 @@ outDataCons = outDataConstTbl outConstraints
 --------------------------
 
 traceMats :: [(LabelledContent, [Sentence])]
-traceMats = traceMatStandard systInfo
+traceMats = traceMatStandard si

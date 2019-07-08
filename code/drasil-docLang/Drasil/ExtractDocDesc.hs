@@ -30,7 +30,7 @@ data DLPlate f = DLPlate {
   lcsSec :: LCsSec -> f LCsSec,
   ucsSec :: UCsSec -> f UCsSec,
   traceSec :: TraceabilitySec -> f TraceabilitySec,
-  existSolnSec :: ExistingSolnSec -> f ExistingSolnSec,
+  existSolnSec :: OffShelfSolnsSec -> f OffShelfSolnsSec,
   auxConsSec :: AuxConstntSec -> f AuxConstntSec,
   appendSec :: AppndxSec -> f AppndxSec
 }
@@ -47,7 +47,7 @@ instance Multiplate DLPlate where
     ds (LCsSec x) = LCsSec <$> lcsSec p x
     ds (UCsSec x) = UCsSec <$> ucsSec p x
     ds (TraceabilitySec x) = TraceabilitySec <$> traceSec p x
-    ds (ExistingSolnSec x) = ExistingSolnSec <$> existSolnSec p x
+    ds (OffShelfSolnsSec x) = OffShelfSolnsSec <$> existSolnSec p x
     ds (AuxConstntSec x) = AuxConstntSec <$> auxConsSec p x
     ds (AppndxSec x) = AppndxSec <$> appendSec p x
     ds Bibliography = pure Bibliography

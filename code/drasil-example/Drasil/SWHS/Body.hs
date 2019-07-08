@@ -150,8 +150,7 @@ mkSRS = [RefSec $ RefProg intro [
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural swhsPCM) progName)
     [IPurpose $ purpDoc (phrase swhsPCM) progName,
-     IScope (scopeReqs1 CT.thermalAnalysis tankPCM) $
-       scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
+     IScope (scopeReqStart tankPCM) (scopeReqEnd +:+ scopeReqEndSWHS),
      IChar [] (charReader1 CT.htTransTheo ++ charReader2 de) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        $ orgDocEnd swhsPCM progName],
@@ -304,9 +303,23 @@ purpDoc spSent pro = foldlSent [S "The main", phrase purpose, S "of this",
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 
+scopeReqStart :: ConceptChunk -> Sentence
+scopeReqStart tp = phrase CT.thermalAnalysis `sOf` S "a single" +:+ phrase tp
+
+scopeReqEnd :: Sentence
+scopeReqEnd  = foldlSent_ [S "predicts the", phrase temp `sAnd`
+  phrase CT.thermalEnergy, S "histories for the", phrase water]
+
+scopeReqEndSWHS :: Sentence
+scopeReqEndSWHS = foldlSent_ [S "and the" +:+. short phsChgMtrl,
+  S "This entire", phrase document `sIs` S "written assuming that the",
+  S "substances inside the", phrase sWHT `sAre` phrase water `sAnd`
+  short phsChgMtrl]
+
+
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar
--- water heating tank incorporating PCM, 2D slope composed of homogeneous soil
+-- water heating tank rating PCM, 2D slope composed of homogeneous soil
 -- layers, glass slab and blast, or 2D bodies acted on by forces) and also
 -- abstract out the overall goal of the program (i.e. predict the temperature
 -- and energy histories for the water and PCM, simulate how 2D rigid bodies
@@ -523,28 +536,6 @@ traceabilityMatrices = traceMatStandard si
 ---------------------------------
 -- 2.2 : Scope of Requirements --
 ---------------------------------
-
-scopeReqs1 :: ConceptChunk -> ConceptChunk -> Sentence
-scopeReqs1 ta tp = foldlSent_ [phrase ta,
-  S "of a single", phrase tp]
-
-scopeReqs2 :: UnitalChunk -> ConceptChunk -> ConceptChunk -> CI ->
-  ConceptChunk -> Sentence
-scopeReqs2 t te wa pcmat sw = foldlSent_ [S "predicts the",
-  phrase t `sAnd` phrase te,
-  S "histories for the", phrase wa `sAnd` S "the" +:+.
-  short pcmat, S "This entire", phrase document,
-  S "is written assuming that the substances inside the",
-  phrase sw, S "are", phrase wa `sAnd` short pcmat]
-
--- There is a similar paragraph in each example, but there's a lot of specific
--- info here. Would need to abstract out the object of analysis (i.e. solar
--- water heating tank rating PCM, 2D slope composed of homogeneous soil
--- layers, glass slab and blast, or 2D bodies acted on by forces) and also
--- abstract out the overall goal of the program (i.e. predict the temperature
--- and energy histories for the water and PCM, simulate how 2D rigid bodies
--- interact with each other, predict whether the glass slab is safe to use or
--- not, etc.). If that is done, then this paragraph can also be abstracted out.
 
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --

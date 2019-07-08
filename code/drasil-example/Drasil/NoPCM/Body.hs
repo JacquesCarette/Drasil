@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, htTransTheo,
-  phaseChange, temp, thermalAnalysis, thermalConduction, thermalEnergy, thermocon)
+  phaseChange, temp, thermalConduction, thermocon)
 
 import qualified Data.Drasil.Concepts.Math as M (ode, de)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
@@ -55,8 +55,9 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, introEnd,
-  introStart, orgDocIntro, physSyst1, physSyst2, purpDoc, sysCntxtDesc,
-  sysCntxtFig, systContRespBullets, sysCntxtRespIntro, userChars)
+  introStart, orgDocIntro, physSyst1, physSyst2, purpDoc, scopeReqEnd,
+  scopeReqStart, sysCntxtDesc, sysCntxtFig, systContRespBullets,
+  sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
@@ -123,8 +124,7 @@ mkSRS = [RefSec $ RefProg intro
   TAandA],
   IntroSec $ IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
   [IPurpose $ purpDoc (phrase progName) progName,
-  IScope (scopeReqStart thermalAnalysis sWHT) (scopeReqEnd temp thermalEnergy
-    water),
+  IScope (scopeReqStart sWHT) scopeReqEnd,
   IChar [] (charReader1 htTransTheo ++ charReader2 M.de) [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
   GSDSec $ GSDProg2 
@@ -259,14 +259,6 @@ introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. 
 -------------------------------------
 --Section 2.2 : SCOPE OF REQUIREMENTS
 -------------------------------------
-
-scopeReqStart :: ConceptChunk -> ConceptChunk -> Sentence
-scopeReqStart ta sw = foldlSent_ [phrase ta, S "of a single", phrase sw]
-
-scopeReqEnd :: ConceptChunk -> ConceptChunk -> ConceptChunk -> Sentence
-scopeReqEnd tem te wa = foldlSent_ [S "predicts the",
-  phrase tem `sAnd` phrase te,
-  S "histories for the", phrase wa]
 
 --------------------------------------------------
 --Section 2.3 : CHARACTERISTICS Of INTENDED READER

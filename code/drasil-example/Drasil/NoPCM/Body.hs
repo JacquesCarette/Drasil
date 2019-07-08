@@ -82,8 +82,8 @@ import Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable)
 import Drasil.NoPCM.Unitals (inputs, constrained, specParamValList)
 
 -- This defines the standard concepts used throughout the document
-thisSi :: [UnitDefn]
-thisSi = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
+units :: [UnitDefn]
+units = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
 checkSi :: [UnitDefn]
 checkSi = collectUnits symbMap symbTT 
@@ -234,7 +234,7 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans] ++ map nw checkSi
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains)
-  thisSi label refBy dataDefn iMods genDef theory
+  units label refBy dataDefn iMods genDef theory
   concIns section labCon
 
 usedDB :: ChunkDB

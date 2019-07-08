@@ -71,8 +71,8 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index,
   constrained, inputs, outputs, symbols)
 
 --Document Setup--
-thisSi :: [UnitDefn]
-thisSi = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
+units :: [UnitDefn]
+units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
 
 checkSi :: [UnitDefn]
 checkSi = collectUnits symMap symbTT
@@ -191,8 +191,8 @@ symMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
-  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw thisSi)
-  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) thisSi label
+  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
+  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units label
   refBy dataDefs iMods genDefs theory concIns
   section labCon
 

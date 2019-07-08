@@ -75,8 +75,8 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW,
 
 -------------------------------------------------------------------------------
 
-thisSi :: [UnitDefn]
-thisSi = map unitWrapper [metre, kilogram, second] ++ 
+units :: [UnitDefn]
+units = map unitWrapper [metre, kilogram, second] ++ 
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
@@ -108,13 +108,13 @@ resourcePath = "../../../datafiles/SWHS/"
 symMap :: ChunkDB
 symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
-  ++ map nw thermocon ++ map nw thisSi ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
+  ++ map nw thermocon ++ map nw units ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (thisSi ++ [m_2, m_3]) label refBy
+  (units ++ [m_2, m_3]) label refBy
   dataDefn insModel genDef theory concIns
   section labCon
 

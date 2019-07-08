@@ -381,9 +381,60 @@ orgDocEnd = foldlSent_ [S "The", plural inModel,
 -- 3.1 : System Context --
 --------------------------
 
+sysCntxtDesc :: CI -> Contents
+sysCntxtDesc pro = foldlSP [makeRef2S sysCntxtFig, S "shows the" +:+.
+  phrase sysCont, S "A circle represents an external entity outside the",
+  phrase software `sC` S "the", phrase user +:+. S "in this case",
+  S "A rectangle represents the", phrase softwareSys, S "itself" +:+.
+  sParen (short pro), S "Arrows are used to show the", plural datum,
+  S "flow between the", phrase system `sAnd` S "its", phrase environment]
+
+sysCntxtFig :: LabelledContent
+sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
+  [makeRef2S sysCntxtFig +: EmptyS, titleize sysCont])
+  $ resourcePath ++ "SystemContextFigure.png"
+
+sysCntxtRespIntro :: CI -> Contents
+sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
+  S "The only external interaction is through the", phrase user +:+.
+  S "interface", S "responsibilities" `ofThe'` phrase user `andThe`
+  phrase system `sAre` S "as follows"]
+
+systContRespBullets :: Contents
+systContRespBullets = UlC $ ulcc $ Enumeration $ bulletNested
+  [titleize user +: S "Responsibilities", short progName +: S "Responsibilities"]
+  $ map bulletFlat [userResp, swhsResp]
+
+-- User Responsibilities --
+userResp :: [Sentence]
+userResp = map foldlSent_ [
+  [S "Provide the", phrase input_, plural datum `toThe`
+    phrase system `sC` S "ensuring no errors in the", plural datum, S "entry"],
+  [S "Take care that consistent", plural unit_, S "are used for",
+    phrase input_, plural variable]
+  ]
+
+-- SWHS Responsibilities --
+swhsResp :: [Sentence]
+swhsResp = map foldlSent_ [
+  [S "Detect", plural datum, S "type mismatch, such as a string" `sOf`
+    S "characters instead of a floating point number"],
+  [S "Determine if the", plural input_, S "satisfy the required",
+    phrase physical `sAnd` phrase software, plural constraint],
+  [S "Calculate the required", plural output_]
+  ]
+
 --------------------------------
 -- 3.2 : User Characteristics --
 --------------------------------
+
+userChars :: CI -> Contents
+userChars pro = foldlSP [S "The end", phrase user `sOf` short pro,
+  S "should have an understanding of undergraduate Level 1 Calculus" `sAnd`
+  titleize Doc.physics]
+
+-- Some of these course names are repeated between examples, could potentially
+-- be abstracted out.
 
 ------------------------------
 -- 3.3 : System Constraints --
@@ -393,10 +444,13 @@ orgDocEnd = foldlSent_ [S "The", plural inModel,
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
-
 -------------------------------
 -- 4.1 : Problem Description --
 -------------------------------
+
+probDescIntro :: Sentence
+probDescIntro = foldlSent_ [S "investigate the effect" `sOf` S "employing",
+  short phsChgMtrl, S "within a", phrase sWHT]
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
@@ -594,60 +648,9 @@ traceabilityMatrices = traceMatStandard si
 -- 3.1 : System Context --
 --------------------------
 
-sysCntxtDesc :: CI -> Contents
-sysCntxtDesc pro = foldlSP [makeRef2S sysCntxtFig, S "shows the" +:+.
-  phrase sysCont, S "A circle represents an external entity outside the",
-  phrase software `sC` S "the", phrase user +:+. S "in this case",
-  S "A rectangle represents the", phrase softwareSys, S "itself" +:+.
-  sParen (short pro), S "Arrows are used to show the", plural datum,
-  S "flow between the", phrase system `sAnd` S "its", phrase environment]
-
-sysCntxtFig :: LabelledContent
-sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
-  [makeRef2S sysCntxtFig +: EmptyS, titleize sysCont])
-  $ resourcePath ++ "SystemContextFigure.png"
-
-sysCntxtRespIntro :: CI -> Contents
-sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
-  S "The only external interaction is through the", phrase user +:+.
-  S "interface", S "responsibilities" `ofThe'` phrase user `andThe`
-  phrase system `sAre` S "as follows"]
-
-systContRespBullets :: Contents
-systContRespBullets = UlC $ ulcc $ Enumeration $ bulletNested
-  [titleize user +: S "Responsibilities", short progName +: S "Responsibilities"]
-  $ map bulletFlat [userResp, swhsResp]
-
--- User Responsibilities --
-userResp :: [Sentence]
-userResp = map foldlSent_ [
-  [S "Provide the", phrase input_, plural datum `toThe`
-    phrase system `sC` S "ensuring no errors in the", plural datum, S "entry"],
-  [S "Take care that consistent", plural unit_, S "are used for",
-    phrase input_, plural variable]
-  ]
-
--- SWHS Responsibilities --
-swhsResp :: [Sentence]
-swhsResp = map foldlSent_ [
-  [S "Detect", plural datum, S "type mismatch, such as a string" `sOf`
-    S "characters instead of a floating point number"],
-  [S "Determine if the", plural input_, S "satisfy the required",
-    phrase physical `sAnd` phrase software, plural constraint],
-  [S "Calculate the required", plural output_]
-  ]
-
 --------------------------------
 -- 3.2 : User Characteristics --
 --------------------------------
-
-userChars :: CI -> Contents
-userChars pro = foldlSP [S "The end", phrase user `sOf`
-  short pro, S "should have an understanding of undergraduate",
-  S "Level 1 Calculus" `sAnd` titleize Doc.physics]
-
--- Some of these course names are repeated between examples, could potentially
--- be abstracted out.
 
 ------------------------------
 -- 3.3 : System Constraints --
@@ -666,10 +669,6 @@ userChars pro = foldlSP [S "The end", phrase user `sOf`
 -------------------------------
 -- 4.1 : Problem Description --
 -------------------------------
-
-probDescIntro :: Sentence
-probDescIntro = foldlSent_ [S "investigate the effect" `sOf` S "employing",
-  short phsChgMtrl, S "within a", phrase sWHT]
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --

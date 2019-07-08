@@ -135,8 +135,7 @@ The following table is taken directly from the Module Guide document for this pr
 {Hardware-Hiding} & ~ \\
 \midrule
 
-\multirow{6}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
-& Input Constraints\\
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
 & Calculations\\
 & Output Format\\
 % & Output Verification\\
@@ -163,8 +162,7 @@ main
 
 \subsection{Uses}
 
-Param (Section~\ref{Parameters}), InputConstraints (Section~\ref{VerifyInput}),
-Calculations (Section~\ref{Calc}),
+Param (Section~\ref{Parameters}), Calculations (Section~\ref{Calc}),
 % verify\_output (Section~\ref{VerifyOutput}), plot(Section~\ref{Plot}),
 Output (Section~\ref{Output})
 
@@ -212,7 +210,7 @@ None
 \section{MIS of Input Parameters Module} \label{Parameters}
 
 The secrets of this module are the data structure for input parameters and how 
-the values are input.
+the values are input and verified.
 
 \subsection{Module}
 
@@ -224,14 +222,15 @@ SpecParam (Section~\ref{SpecParam})
 
 \subsection{Syntax}
 
-\begin{tabular}{p{3cm} p{3cm} p{1cm} >{\raggedright\arraybackslash}p{7cm}}
+\begin{tabular}{p{3cm} p{2.5cm} p{1cm} >{\raggedright\arraybackslash}p{7.5cm}}
 \toprule
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \midrule
 get\_input & string, Param & - &  FileError \\
-$v_{\text{launch}}$ & - & $\mathbb{R}$\\
-$\theta$ & - & $\mathbb{R}$\\
-$p_{\text{target}}$ & - & $\mathbb{R}$\\
+input\_constraints & Param & - & badSpeed, badAngle, badTargetPosition\\
+$v_{\text{launch}}$ & - & $\mathbb{R}$ & -\\
+$\theta$ & - & $\mathbb{R}$ & -\\
+$p_{\text{target}}$ & - & $\mathbb{R}$ & -\\
 \bottomrule
 \end{tabular}
 
@@ -243,30 +242,45 @@ inputFile: sequence of string \#\textit{f[i] is the ith string in the text file 
 
 \subsubsection{State Variables}
 
-\renewcommand{\arraystretch}{1.2}
-\begin{longtable*}[l]{l} 
 \# To Support IM1 and IM2 \\
 $v_{\text{launch}}$: $\mathbb{R}$\\
 $\theta$: $\mathbb{R}$\\
 \# To Support IM3 and IM4 \\
 $p_{\text{target}}$: $\mathbb{R}$\\
-\end{longtable*}
 
 \subsubsection{Assumptions}
 
 \begin{itemize}
 
 \item get\_input will be called before the values of any state variables will 
-be accessed.
+be accessed or verified.
 
 \item The file contains the string equivalents of the numeric values for
 each input parameter in order, each on a new line. Any comments in the input file 
-should be denoted with a '\#' symbol.
+should be denoted with a `\#' symbol.
 
 \end{itemize}
 
 \subsubsection{Access Routine Semantics}
 
+\noindent get\_input(filename, Param):
+\begin{itemize}
+\item transition: The file name ``filename" is first associated with the file f. 
+The data from f is read sequentially to populate the state variables from
+FR1 ($v_{\text{launch}}$, $\theta$, and $p_{\text{target}}$) in Param.
+\item exception: exc := a file name ``filename" cannot be found OR the format of
+inputFile is incorrect $\Rightarrow$  FileError
+\end{itemize}
+
+\noindent input\_constraints(Param):
+\begin{itemize}
+\item out: \textit{out} := none
+\item exception: exc := ( \\
+$\neg (0 < \text{Param}.v_{\text{launch}}) \Rightarrow$ badSpeed $|$\\
+$\neg (0 < \text{Param}.\theta < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
+$\neg (0 < \text{Param}.p_{\text{target}}) \Rightarrow$ badTargetPosition)
+\end{itemize}
+ 
 \noindent Param.$v_{\text{launch}}$:
 \begin{itemize}
 \item output: \textit{out} := $v_{\text{launch}}$
@@ -285,18 +299,6 @@ should be denoted with a '\#' symbol.
 \item exception: none
 \end{itemize}
 
-\noindent get\_input(filename, Param):
-\begin{itemize}
-\item transition: The file name ``filename" is first associated with the file f. 
-The data from f is read sequentially to populate the state variables from
-FR1 ($v_{\text{launch}}$, $\theta$, and $p_{\text{target}}$) in Param.
-\item exception: exc := a file name ``filename" cannot be found OR the format of
-inputFile is incorrect $\Rightarrow$  FileError
-\end{itemize}
-
-See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and 
-associated error messages.
-
 \subsection{Considerations}
 
 The value of each state variable can be accessed through its name (getter).  An
@@ -304,57 +306,9 @@ access program is available for each state variable.  There are no setters for
 the state variables, since the values will be set by get\_input and
 not changed for the life of the program.
 
-\newpage
-
-\section{MIS of Input Constraints Module} \label{VerifyInput}
-
-The secret of this module is how the values are verified.
-
-\subsection{Module}
-
-InputConstraints
-
-\subsection{Uses}
-
-Param (Section~\ref{Parameters})
-
-\subsection{Syntax}
-
-\subsubsection{Exported Access Programs}
-
-\begin{center}
- \begin{tabular}{p{3cm} p{3cm} p{1cm} p{8cm}}
- \hline
- \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
- \hline
- input\_constraints & Param & - & badSpeed, badAngle, badTargetPosition \\
- \hline
- \end{tabular}
- \end{center}
-
-\subsection{Semantics}
-
-\subsubsection{Assumptions}
-
-All of the fields Param have been assigned values before any of the access
- routines for this module are called.
-
-\subsubsection{Access Routine Semantics}
-
-input\_constraints(Param):
- \begin{itemize}
- \item out: \textit{out} := none
- \item exception: exc := ( \\
- $\neg (0 < \text{Param}.v_{\text{launch}}) \Rightarrow$ badSpeed $|$\\
- $\neg (0 < \text{Param}.\theta < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
- $\neg (0 < \text{Param}.p_{\text{target}}) \Rightarrow$ badTargetPosition)
- \end{itemize}
-
-\subsection{Considerations}
-
 See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and
  associated error messages.
- 
+
 \newpage
 
 \section{MIS of Calculations Module} \label{Calc}
@@ -416,11 +370,6 @@ $d_{\text{offset}} < 0 \Rightarrow$ ``The projectile fell short."$|$\\
 $\text{True} \Rightarrow$ ``The projectile went long.")
  \item exception: exc := none
  \end{itemize}
-
-\subsection{Considerations}
-
-See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and
- associated error messages.
 
 %\newpage
 %\section{MIS of Output Verification Module} \label{VerifyOutput}

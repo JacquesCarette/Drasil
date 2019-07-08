@@ -149,7 +149,7 @@ mkSRS = [RefSec $ RefProg intro [
     TAandA],
   IntroSec $
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural swhsPCM) progName)
-    [IPurpose $ purpDoc swhsPCM progName,
+    [IPurpose $ purpDoc (phrase swhsPCM) progName,
      IScope (scopeReqs1 CT.thermalAnalysis tankPCM) $
        scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
      IChar [] (charReader1 CT.htTransTheo ++ charReader2 de) [],
@@ -279,6 +279,20 @@ introEnd progSent pro = foldlSent_ [EmptyS +:+. progSent, S "The developed",
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------
+
+purpDoc :: Sentence -> CI -> Sentence
+purpDoc spSent pro = foldlSent [S "The main", phrase purpose, S "of this",
+  phrase document, S "is to describe the modelling of" +:+.
+  spSent, S "The", plural goalStmt `sAnd` plural thModel,
+  S "used in the", short pro, S "code are provided, with an emphasis",
+  S "on explicitly identifying", plural assumption `sAnd` S "unambiguous" +:+.
+  plural definition, S "This", phrase document,
+  S "is intended to be used as a", phrase reference,
+  S "to provide ad hoc access to all", phrase information,
+  S "necessary to understand and verify the" +:+. phrase model, S "The",
+  short srs, S "is abstract because the", plural content, S "say what",
+  phrase problem, S "is being solved, but do not say how to solve it"]
+
 
 -- Besides program name, these two paragraphs are general, mostly repeated
 -- between examples, and can be abstracted out.
@@ -505,26 +519,6 @@ traceabilityMatrices = traceMatStandard si
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------
-
-purpDoc :: NamedIdea ni => ni -> CI -> Sentence
-purpDoc sp pro = foldlSent [S "The main", phrase purpose, S "of this",
-  phrase document, S "is to describe the modelling of" +:+.
-  phrase sp, S "The", plural goalStmt `sAnd` plural thModel,
-  S "used in the", short pro, S "code are provided, with an emphasis",
-  S "on explicitly identifying", plural assumption `sAnd` S "unambiguous" +:+.
-  plural definition, S "This", phrase document,
-  S "is intended to be used as a", phrase reference,
-  S "to provide ad hoc access to all", phrase information,
-  S "necessary to understand and verify the" +:+. phrase model, S "The",
-  short srs, S "is abstract because the", plural content, S "say what",
-  phrase problem, S "is being solved, but do not say how to solve it"]
-
-
--- Besides program name, these two paragraphs are general, mostly repeated
--- between examples, and can be abstracted out.
-
---How to italicize words in sentence?
---How to cite?
 
 ---------------------------------
 -- 2.2 : Scope of Requirements --

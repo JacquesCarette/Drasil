@@ -13,7 +13,8 @@ import Data.Drasil.Quantities.Physics (energy, time)
 
 import Drasil.SWHS.Concepts (water)
 import Drasil.SWHS.DataDefs (dd1HtFluxC)
-import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, heatEInWtr)
+import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc3,
+ heatEInWtr)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (tempW, tempC, tauW, wMass, htCapW, coilHTC, 
   coilSA, tempInit, timeFinal, htFluxC)
@@ -64,32 +65,22 @@ balWtrDesc = foldlSent [(E $ sy tempW) `isThe` phrase tempW +:+.
 ----------------------------------------------
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv =
-  S "Derivation of the" +:+ phrase energy +:+ S "balance on water:" :
+  S "Derivation of the" +:+ phrase energy +:+ S "balance on" +: phrase water :
   weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns]
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ (E $ sy coilSA)) EmptyS assumpNIHGBW,
   eBalanceOnWtrDerivDesc2 dd1HtFluxC,
-  eBalanceOnWtrDerivDesc3 eq1,
-  eBalanceOnWtrDerivDesc4 eq2]
+  eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4]
 
 eBalanceOnWtrDerivDesc2 :: DataDefinition -> [Sentence]
-eBalanceOnWtrDerivDesc2 dd =
-  [S "Using", makeRef2S dd, S ", this can be written as"]
+eBalanceOnWtrDerivDesc2 dd = [S "Using", makeRef2S dd, S "for", ch dd `sC`
+  S "this can be written as"]
 
-eBalanceOnWtrDerivDesc3 :: Expr-> [Sentence]
-eBalanceOnWtrDerivDesc3 eq = [S "Dividing (3) by", E eq `sC` S "we obtain"]
-
-eBalanceOnWtrDerivDesc4 :: [Sentence]-> [Sentence]
-eBalanceOnWtrDerivDesc4 eq = 
-  [S "Setting"] ++ eq ++ [S ", Equation (4) can be written in its final form as"]
-
-eq1:: Expr
-eq1 = sy wMass * sy htCapW
-
-eq2:: [Sentence]
-eq2 = [ch tauW, S "=", ch wMass, ch htCapW, S "/", ch coilHTC, ch coilSA]
+eBalanceOnWtrDerivDesc4 :: [Sentence]
+eBalanceOnWtrDerivDesc4 = [S "Setting", ch tauW, S "=", ch wMass, ch htCapW,
+  S "/", ch coilHTC, ch coilSA `sC` eqN 4, S "can be written in its final form as"]
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 

@@ -1772,7 +1772,7 @@
                 </div>
                 <p class="paragraph">Derivation of the energy balance on water:</p>
                 <p class="paragraph">
-                  To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#DD:htFluxC>DD: htFluxC</a>)  and from the water into the PCM as <em>q<sub>P</sub></em> (<a href=#DD:htFluxP>DD: htFluxP</a>), over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+                  To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#DD:htFluxC>DD: htFluxC</a>) and from the water into the PCM as <em>q<sub>P</sub></em> (<a href=#DD:htFluxP>DD: htFluxP</a>), over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
                 </p>
                 <div class="equation">
                   <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
@@ -1794,7 +1794,7 @@
                                                               </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&minus;h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
                 </div>
                 <p class="paragraph">
-                  Dividing (3) by <em>m<sub>W</sub></em><em>C<sub>W</sub></em>, we obtain:
+                  Dividing (3) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
                 </p>
                 <div class="equation">
                   <em><div class="fraction">
@@ -1899,7 +1899,7 @@
                   Finally, factoring out <em><div class="fraction">
                                                <span class="fup">1</span>
                                                <span class="fdn">τ<sub>W</sub></span>
-                                             </div></em> , we are left with the governing ODE for (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>):
+                                             </div></em>, we are left with the governing ODE for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>:
                 </p>
                 <div class="equation">
                   <em><div class="fraction">
@@ -2093,7 +2093,7 @@
                                </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
                 </div>
                 <p class="paragraph">
-                  Setting <em>τ<sub>P</sub><sup>S</sup></em> = <em>m<sub>P</sub></em> <em>C<sub>P</sub><sup>S</sup></em> / <em>h<sub>P</sub></em> <em>A<sub>P</sub></em> , this can be written as:
+                  Setting <em>τ<sub>P</sub><sup>S</sup></em> = <em>m<sub>P</sub></em> <em>C<sub>P</sub><sup>S</sup></em> / <em>h<sub>P</sub></em> <em>A<sub>P</sub></em>, this can be written as:
                 </p>
                 <div class="equation">
                   <em><div class="fraction">

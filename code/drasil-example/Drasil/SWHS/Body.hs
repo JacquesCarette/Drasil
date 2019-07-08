@@ -67,10 +67,9 @@ import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
 import Drasil.SWHS.Requirements (dataConTable1, funcReqs, inputInitQuantsTable,
   nfRequirements, propsDeriv)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE)
-import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW, htFluxC,
-  htFluxP, pcmE, pcmHTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
-  outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, tempC, tempPCM,
-  tempW, thickness, watE, wMass, absTol, relTol)
+import Drasil.SWHS.Unitals (htFluxC, htFluxP, pcmE, specParamValList,
+  constrained, inputs, outputs, symbols, symbolsAll, unitalChuncks, tempC,
+  tempPCM, tempW, thickness, watE, absTol, relTol)
 
 -------------------------------------------------------------------------------
 
@@ -531,12 +530,20 @@ goalInputs  = [S "the" +:+ phrase tempC,
 ------------------------------
 -- 4.2.4 : Data Definitions --
 ------------------------------
+
 -----------------------------
 -- 4.2.5 : Instance Models --
 -----------------------------
+-- Should "energy balance" be a concept?
+-- Add IM, GD, A, and EqnBlock references when available
+-- Replace derivs with regular derivative when available
+-- derivative notation in paragraph?
+-- Fractions in paragraph?
+
 ----------------------------
 -- 4.2.6 Data Constraints --
 ----------------------------
+
 ------------------------------
 -- Data Constraint: Table 1 --
 ------------------------------
@@ -568,6 +575,7 @@ outputConstraints = [tempW, tempPCM, watE, pcmE]
 ------------------------------
 -- Section 5 : REQUIREMENTS --
 ------------------------------
+
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
@@ -687,123 +695,6 @@ traceabilityMatrices = traceMatStandard si
 -----------------------------
 -- 4.2.5 : Instance Models --
 -----------------------------
-
-iModSubpar :: NamedChunk -> UncertQ -> UncertQ -> UncertQ -> ConceptChunk
-  -> [Contents]
-iModSubpar sol temw tempcm epcm pc = [foldlSP [S "The goals", foldlList Comma List $ map S
-  ["GS1", "GS2", "GS3", "GS4"], S "are solved by" +:+. foldlList Comma List -- hardcoded GSs because Goals are not implemented yet
-  [makeRef2S eBalanceOnWtr, makeRef2S eBalanceOnPCM, makeRef2S heatEInWtr, makeRef2S heatEInPCM], 
-  S "The", plural sol, S "for", makeRef2S eBalanceOnWtr `sAnd` makeRef2S eBalanceOnPCM, 
-  S "are coupled since the", phrase sol, S "for", ch temw `sAnd` ch tempcm +:+. S "depend on one another", 
-  makeRef2S heatEInWtr, S "can be solved once", makeRef2S eBalanceOnWtr, S "has been solved. The", 
-  phrase sol `sOf` makeRef2S eBalanceOnPCM `sAnd` makeRef2S heatEInPCM, S "are also coupled, since the", 
-  phrase tempcm `sAnd` phrase epcm, S "depend on the", phrase pc]]
-
-iMod1Para :: UnitalChunk -> ConceptChunk -> [Contents]
-iMod1Para en wa = [foldlSPCol [S "Derivation of the",
-  phrase en, S "balance on", phrase wa]]
-
-iMod1Sent2 :: DataDefinition -> DataDefinition -> UnitalChunk ->
-  UnitalChunk -> [Sentence]
-iMod1Sent2 d1hf d2hf hfc hfp = [S "Using", makeRef2S d1hf `sAnd`
-  makeRef2S d2hf, S "for", ch hfc `sAnd`
-  ch hfp, S "respectively, this can be written as"]
-
-iMod1Sent3 :: UnitalChunk -> UncertQ -> [Sentence]
-iMod1Sent3 wm hcw = [S "Dividing (3) by", ch wm :+: ch hcw `sC`
-  S "we obtain"]
-
-iMod1Sent4 :: CI -> UncertQ -> UncertQ -> [Sentence]
-iMod1Sent4 rs chtc csa = [S "Factoring the negative sign out of",
-  S "second term" `ofThe` short rs,
-  S "of", titleize equation,
-  S "(4) and multiplying it by",
-  ch chtc :+: ch csa :+: S "/" :+:
-  ch chtc :+: ch csa, S "yields"]
-
-iMod1Sent5 :: [Sentence]
-iMod1Sent5 = [S "Which simplifies to"]
-
-iMod1Sent6 :: [Sentence]
-iMod1Sent6 = [S "Setting",
-  (E $ sy tauW $= (sy wMass * sy htCapW) / (sy coilHTC * sy coilSA)) `sAnd`
-  (E $ sy eta $= (sy pcmHTC * sy pcmSA) / (sy coilHTC * sy coilSA)) `sC`
-  titleize equation, S "(5) can be written as"]
-
-iMod1Sent7 :: [Sentence]
-iMod1Sent7 = [S "Finally, factoring out", (E $ 1 / sy tauW) `sC` 
-  S "we are left with the governing", short ode, S "for", makeRef2S eBalanceOnWtr]
-
-iMod1Eqn1, iMod1Eqn2, iMod1Eqn3, iMod1Eqn4, iMod1Eqn5,
-  iMod1Eqn6, iMod1Eqn7 :: Expr
-
-iMod1Eqn1 = sy wMass * sy htCapW * deriv (sy tempW) time $=
-  sy htFluxC * sy coilSA - sy htFluxP * sy pcmSA
-
-iMod1Eqn2 = sy wMass * sy htCapW * deriv (sy tempW) time $=
-  sy coilHTC * sy coilSA * (sy tempC - sy tempW) -
-  sy pcmHTC * sy pcmSA * (sy tempW - sy tempPCM)
-
-iMod1Eqn3 = deriv (sy tempW) time $= (sy coilHTC *
-  sy coilSA) / (sy wMass * sy htCapW) * (sy tempC -
-  sy tempW) - (sy pcmMass * sy pcmSA) / (sy wMass *
-  sy htCapW) * (sy tempW - sy tempPCM)
-
-iMod1Eqn4 = deriv (sy tempW) time $= (sy coilHTC *
-  sy coilSA) / (sy wMass * sy htCapW) * (sy tempC - sy tempW) +
-  ((sy coilHTC * sy coilSA) / (sy coilHTC * sy coilSA)) *
-  ((sy pcmHTC * sy pcmSA) / (sy wMass * sy htCapW)) *
-  (sy tempPCM - sy tempW)
-
-iMod1Eqn5 = deriv (sy tempW) time $= (sy coilHTC *
-  sy coilSA) / (sy wMass * sy htCapW) * (sy tempC - sy tempW) +
-  ((sy pcmHTC * sy pcmSA) / (sy coilHTC * sy coilSA)) *
-  ((sy coilHTC * sy coilSA) / (sy wMass * sy htCapW)) *
-  (sy tempPCM - sy tempW)
-
-iMod1Eqn6 = deriv (sy tempW) time $= (1 / sy tauW) *
-  (sy tempC - sy tempW) + (sy eta / sy tauW) *
-  (sy tempPCM - sy tempW)
-
-iMod1Eqn7 = deriv (sy tempW) time $= (1 / sy tauW) *
-  ((sy tempC - sy tempW) + sy eta * (sy tempPCM -
-  sy tempW))
-
--- Should "energy balance" be a concept?
--- Add IM, GD, A, and EqnBlock references when available
--- Replace derivs with regular derivative when available
--- Fractions in paragraph?
-
-iMod2Sent1 :: DataDefinition -> UnitalChunk -> [Sentence]
-iMod2Sent1 d2hfp hfp = [S "Using", makeRef2S d2hfp, S "for", 
-  ch hfp `sC` S "this", phrase equation, S "can be written as"]
-
-iMod2Sent2 :: [Sentence]
-iMod2Sent2 = [S "Dividing by", ch pcmMass :+: ch htCapSP,
-  S "we obtain"]
-
-iMod2Sent3 :: [Sentence]
-iMod2Sent3 = [S "Setting", ch tauSP :+: S "=" :+: ch pcmMass :+: 
-  ch htCapSP :+: S "/" :+: ch pcmHTC :+: ch pcmSA `sC`
-  S "this can be written as"]
-
-iMod2Eqn1, iMod2Eqn2, iMod2Eqn3, iMod2Eqn4 :: Expr
-
-iMod2Eqn1 = sy pcmMass * sy htCapSP * deriv (sy tempPCM)
-  time $= sy htFluxP * sy pcmSA
-
-iMod2Eqn2 = sy pcmMass * sy htCapSP * deriv (sy tempPCM)
-  time $= sy pcmHTC * sy pcmSA * (sy tempW - sy tempPCM)
-
-iMod2Eqn3 = deriv (sy tempPCM) time $= (sy pcmHTC *
-  sy pcmSA) / (sy pcmMass * sy htCapSP) * (sy tempW - sy tempPCM)
-
-iMod2Eqn4 = deriv (sy tempPCM) time $= (1 / sy tauSP) *
-  (sy tempW - sy tempPCM)
-
--- Add GD, A, and EqnBlock references when available
--- FIXME: Replace derivs with regular derivative when available
--- derivative notation in paragraph?
 
 ----------------------------
 -- 4.2.6 Data Constraints --

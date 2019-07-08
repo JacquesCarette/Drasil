@@ -74,8 +74,8 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index,
 units :: [UnitDefn]
 units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
 
-checkSi :: [UnitDefn]
-checkSi = collectUnits symMap symbTT
+unitsColl :: [UnitDefn]
+unitsColl = collectUnits symMap symbTT
 
 si :: SystemInformation
 si = SI {
@@ -198,7 +198,7 @@ symMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++
- map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
+ map nw unitsColl) ([] :: [ConceptChunk]) unitsColl label refBy
  dataDefs iMods genDefs theory concIns section 
  labCon
 

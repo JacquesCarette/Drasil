@@ -85,8 +85,8 @@ import Drasil.NoPCM.Unitals (inputs, constrained, specParamValList)
 units :: [UnitDefn]
 units = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
-checkSi :: [UnitDefn]
-checkSi = collectUnits symbMap symbTT 
+unitsColl :: [UnitDefn]
+unitsColl = collectUnits symbMap symbTT 
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
@@ -231,15 +231,15 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
-  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans] ++ map nw checkSi
+  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans] ++ map nw unitsColl
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains)
   units label refBy dataDefn iMods genDef theory
   concIns section labCon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi label refBy
+usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw unitsColl)
+ ([] :: [ConceptChunk]) unitsColl label refBy
  dataDefn iMods genDef theory concIns
  section labCon
 

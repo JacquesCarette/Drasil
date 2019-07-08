@@ -41,8 +41,8 @@ si = SI {
    refdb = rdb [] [] -- FIXME?
 }
 
-checkSi :: [UnitDefn] -- FIXME? Probably shouldn't be done here
-checkSi = collectUnits allSymbols symbols 
+unitsColl :: [UnitDefn] -- FIXME? Probably shouldn't be done here
+unitsColl = collectUnits allSymbols symbols 
 
 allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
@@ -51,8 +51,8 @@ allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals
   siUnits Map.empty Map.empty [] [] [] [] [] [] []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw checkSi)
-           ([] :: [ConceptChunk]) checkSi Map.empty Map.empty [] [] [] []
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw unitsColl)
+           ([] :: [ConceptChunk]) unitsColl Map.empty Map.empty [] [] [] []
            [] [] []
 
 printSetting :: PrintingInformation

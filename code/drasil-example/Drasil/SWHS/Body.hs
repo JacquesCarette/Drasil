@@ -80,8 +80,8 @@ units = map unitWrapper [metre, kilogram, second] ++
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
-checkSi :: [UnitDefn]
-checkSi = collectUnits symMap symbTT
+unitsColl :: [UnitDefn]
+unitsColl = collectUnits symMap symbTT
 
 si :: SystemInformation
 si = SI {
@@ -119,8 +119,8 @@ symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   section labCon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronymsFull ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi label refBy dataDefn insModel genDef
+usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronymsFull ++ map nw unitsColl)
+ ([] :: [ConceptChunk]) unitsColl label refBy dataDefn insModel genDef
  theory concIns section labCon
 
 refDB :: ReferenceDB

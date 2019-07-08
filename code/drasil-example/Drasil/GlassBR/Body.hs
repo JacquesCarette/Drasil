@@ -115,8 +115,8 @@ sec :: [Section]
 sec = extractSection srs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi label refBy
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw unitsColl)
+ ([] :: [ConceptChunk]) unitsColl label refBy
   dataDefn insModel genDef theory concIns
   section labelledCon
 
@@ -126,8 +126,8 @@ refDB = rdb citations concIns
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
 
-checkSi :: [UnitDefn]
-checkSi = collectUnits symbMap thisSymbols 
+unitsColl :: [UnitDefn]
+unitsColl = collectUnits symbMap thisSymbols 
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si

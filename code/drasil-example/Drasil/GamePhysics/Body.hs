@@ -63,8 +63,8 @@ import qualified Data.Map as Map
 srs :: Document
 srs = mkDoc mkSRS for' si
 
-checkSi :: [UnitDefn] -- FIXME
-checkSi = collectUnits everything symbTT 
+unitsColl :: [UnitDefn] -- FIXME
+unitsColl = collectUnits everything symbTT 
 
 mkSRS :: DocDesc 
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
@@ -179,7 +179,7 @@ everything = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbolsAll ++ map nw acronyms
- ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
+ ++ map nw unitsColl) ([] :: [ConceptChunk]) unitsColl label refBy
  dataDefs iMods genDef theory concIns section
  []
 

@@ -54,7 +54,7 @@ data State repr = State {
   inStruct :: Structure,
   logName :: String,
   logKind :: Logging,
-  commented :: Comments,
+  commented :: [Comments],
   currentModule :: String,
 
   sfwrCBody :: (RenderSym repr) => Expr -> repr (Body repr),

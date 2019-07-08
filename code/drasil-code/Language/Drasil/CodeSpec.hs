@@ -126,7 +126,7 @@ data Choices = Choices {
   impType :: ImplementationType,
   logFile :: String,
   logging :: Logging,
-  comments :: Comments,
+  comments :: [Comments],
   onSfwrConstraint :: ConstraintBehaviour,
   onPhysConstraint :: ConstraintBehaviour,
   inputStructure :: Structure
@@ -140,8 +140,9 @@ data Logging = LogNone
              | LogVar
              | LogAll
              
-data Comments = CommentNone
-              | CommentFunc
+data Comments = CommentFunc
+              | CommentClass
+              | CommentMod
              
 data ConstraintBehaviour = Warning
                          | Exception

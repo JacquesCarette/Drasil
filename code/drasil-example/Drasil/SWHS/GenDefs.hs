@@ -112,11 +112,11 @@ genDefDeriv3 = [S "We consider an arbitrary" +:+. phrase vol, S "The",
 
 genDefDeriv4 :: Sentence -> [ConceptInstance] -> [Sentence]
 genDefDeriv4 s assumps = [S "Where", 
-  foldlList Comma List $ map ch [htFluxIn, htFluxOut, inSA, outSA],
+  foldlList Comma List (map ch [htFluxIn, htFluxOut, inSA, outSA]),
   S "are explained in" +:+. makeRef2S rocTempSimp, s, S "Assuming", 
-  foldlList Comma List $ map ch [density, QT.heatCapSpec, QT.temp],
+  foldlList Comma List (map ch [density, QT.heatCapSpec, QT.temp]),
   S "are constant over the", phrase vol `sC` S "which is true in our case by",
-  (foldlList Comma List $ map makeRef2S assumps) `sC` S "we have"]
+  foldlList Comma List (map makeRef2S assumps) `sC` S "we have"]
 
 genDefDeriv4SWHS :: Sentence
 genDefDeriv4SWHS = foldlSent [S "The integral over the", phrase surface,

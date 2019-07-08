@@ -544,6 +544,37 @@ goalInputs  = [S "the" +:+ phrase tempC,
 -- 4.2.6 Data Constraints --
 ----------------------------
 
+-- I do not think Table 2 will end up being necessary for the Drasil version
+---- The info from table 2 will likely end up in table 1.
+dataConTail :: Sentence
+dataConTail = dataContMid +:+ dataContFooter
+
+dataContMid :: Sentence
+dataContMid = foldlSent [S "The", phrase column, S "for", phrase software,
+  plural constraint, S "restricts the range" `sOf`  plural input_,
+  S "to reasonable", plural value]
+
+dataContFooter :: Sentence
+dataContFooter = foldlSent_ $ map foldlSent [
+
+  [sParen (S "*"), S "These", plural quantity, S "cannot be equal to zero" `sC`
+  S "or there will be a divide by zero in the", phrase model],
+
+  [sParen (S "+"), S "These", plural quantity, S "cannot be zero" `sC`
+  S "or there would be freezing", sParen (makeRef2S assumpPIS)],
+
+  [sParen (S "++"), S "The", plural constraint, S "on the", phrase surArea,
+  S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
+  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1" `sAnd`
+  S "the highest possible is", E (2 / sy thickness) `sC` S "where", ch thickness,
+  S "is the thickness of a" +:+. (Quote (S "sheet") `sOf` short phsChgMtrl),
+  S "A thin sheet has the greatest", phrase surArea, S "to", phrase vol, S "ratio"],
+
+  [sParen (S "**"), S "The", phrase constraint, S "on the maximum", phrase time,
+  S "at the end of the simulation is the total number of seconds in one day"]
+  
+  ]
+
 ------------------------------
 -- Data Constraint: Table 1 --
 ------------------------------
@@ -601,174 +632,6 @@ traceabilityMatrices = traceMatStandard si
 ------------------------
 -- Traceabilty Graphs --
 ------------------------
--------------------------------------------------
--- Section 8 :  Specification Parameter Values --
--------------------------------------------------
-----------------------------
--- Section 9 : References --
-----------------------------
-
-
--------------------------------------------------------------------------------
-
-
--- ============== --
--- Dead Knowledge --
--- ============== --
-
-
-------------------------------
--- Section 2 : INTRODUCTION --
-------------------------------
--------------------------------
--- 2.1 : Purpose of Document --
--------------------------------
-
----------------------------------
--- 2.2 : Scope of Requirements --
----------------------------------
-
-----------------------------------------------
--- 2.3 : Characteristics of Intended Reader --
-----------------------------------------------
-
-------------------------------------
--- 2.4 : Organization of Document --
-------------------------------------
-
---------------------------------------------
--- Section 3: GENERAL SYSTEM DESCRIPTION --
---------------------------------------------
-
---------------------------
--- 3.1 : System Context --
---------------------------
-
---------------------------------
--- 3.2 : User Characteristics --
---------------------------------
-
-------------------------------
--- 3.3 : System Constraints --
-------------------------------
-
----------------------------------------------
--- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
----------------------------------------------
-
--------------------------------
--- 4.1 : Problem Description --
--------------------------------
-
------------------------------------------
--- 4.1.1 : Terminology and Definitions --
------------------------------------------
-
------------------------------------------
--- 4.1.2 : Physical System Description --
------------------------------------------
-
------------------------------
--- 4.1.3 : Goal Statements --
------------------------------
-
---------------------------------------------------
--- 4.2 : Solution Characteristics Specification --
---------------------------------------------------
-
--------------------------
--- 4.2.1 : Assumptions --
--------------------------
-
---------------------------------
--- 4.2.2 : Theoretical Models --
---------------------------------
-
----------------------------------
--- 4.2.3 : General Definitions --
----------------------------------
-
-------------------------------
--- 4.2.4 : Data Definitions --
-------------------------------
-
------------------------------
--- 4.2.5 : Instance Models --
------------------------------
-
-----------------------------
--- 4.2.6 Data Constraints --
-----------------------------
-
--- I do not think Table 2 will end up being necessary for the Drasil version
----- The info from table 2 will likely end up in table 1.
-dataContMid :: Sentence
-dataContMid = foldlSent [S "The", phrase column, S "for", phrase software,
-  plural constraint, S "restricts the range of",
-  plural input_, S "to reasonable", plural value]
-
-dataConTail :: Sentence
-dataConTail = dataContMid :+:
-  dataContFooter quantity surArea vol thickness phsChgMtrl
-
-------------------------------
--- Data Constraint: Table 1 --
-------------------------------
-
-dataContFooter :: NamedChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
-  CI -> Sentence
-dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
-
-  [sParen (S "*"), S "These", plural qua, S "cannot be equal to zero" `sC`
-  S "or there will be a divide by zero in the", phrase model],
-
-  [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRef2S assumpPIS)],
-
-  [sParen (S "++"), S "The", plural constraint, S "on the", phrase sa,
-  S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
-  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is",
-  (S $ show (1 :: Integer)) `sAnd`
-  S "the highest possible is", E (2 / sy htcm) `sC` S "where",
-  E $ sy htcm, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
-  short pcmat, S "A thin sheet has the greatest", phrase sa, S "to",
-  phrase vo, S "ratio"],
-
-  [sParen (S "**"), S "The", phrase constraint, S "on the maximum", 
-  phrase time, S "at the end of the simulation is the total number of seconds",
-  S "in one day"]
-  
-  ]
-
-------------------------------
--- Data Constraint: Table 2 --
-------------------------------
-
-------------------------------
--- Data Constraint: Table 3 --
-------------------------------
-
-----------------------------------------------
--- 4.2.7 : Properties of A Correct Solution --
-----------------------------------------------
-
-------------------------------
--- Section 5 : REQUIREMENTS --
-------------------------------
-
------------------------------------
--- 5.1 : Functional Requirements --
------------------------------------
----------------------------------------
--- 5.2 : Non-functional Requirements --
----------------------------------------
---------------------------------
--- Section 6 : LIKELY CHANGES --
---------------------------------
---------------------------------------------------
--- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
---------------------------------------------------
-
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --
 -------------------------------------------------

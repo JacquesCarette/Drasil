@@ -148,9 +148,7 @@ mkSRS = [RefSec $ RefProg intro [
     tsymb'' tSymbIntro (TermExcept [uNormalVect]),
     TAandA],
   IntroSec $
-    IntroProg (introP1 CT.enerSrc energy swhsPCM phsChgMtrl
-    progName CT.thermalEnergy latentHeat unit_) (introP2 swhsPCM program
-    progName)
+    IntroProg (introStart +:+ introStartSWHS) (introEnd swhsPCM program progName)
     [IPurpose $ purpDoc swhsPCM progName,
      IScope (scopeReqs1 CT.thermalAnalysis tankPCM) $
        scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
@@ -245,6 +243,27 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 ------------------------------
 -- Section 2 : INTRODUCTION --
 ------------------------------
+
+introStart :: Sentence
+introStart = foldlSent [S "Due to the",
+  foldlList Comma List (map S ["increasing cost", "diminishing availability",
+    "negative environmental impact of fossil fuels"]) `sC`
+  S "there is a higher demand for renewable", plural CT.enerSrc `sAnd`
+  phrase energy, S "storage technology"]
+
+introStartSWHS :: Sentence
+introStartSWHS = foldlSent [swhsPCM ^. defn, sParen (short phsChgMtrl),
+  S "use a renewable", phrase CT.enerSrc `sAnd` S "provide a novel way of storing" +:+.
+  phrase energy, atStart swhsPCM, S "improve over the traditional", plural progName,
+  S "because of their smaller size. The smaller size is possible because of the ability" `sOf`
+  short phsChgMtrl, S "to store", phrase CT.thermalEnergy, S "as", phrase latentHeat `sC`
+  S "which allows higher", phrase CT.thermalEnergy, S "storage capacity per",
+  phrase unit_, S "weight"]
+
+introEnd :: NamedIdea ni => ni -> ConceptChunk -> CI -> Sentence
+introEnd sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
+  phrase pr, S "will be referred to as", titleize pro,
+  sParen (short pro)] -- SSP has same style sentence here
 
 -- In Concepts.hs "swhsPCM" gives "s for program name, and there is a
 -- similar paragraph in each of the other solar water heating systems
@@ -483,38 +502,6 @@ traceabilityMatrices = traceMatStandard si
 ------------------------------
 -- Section 2 : INTRODUCTION --
 ------------------------------
-
-introP1 :: (NamedIdea en, Definition en) => ConceptChunk -> UnitalChunk -> en -> CI -> CI ->
-  ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
-introP1 es en sp pcmat pro te lh un = foldlSent [
-  S "Due to the", foldlList Comma List (map S ["increasing cost", "diminishing availability",
-    "negative environmental impact of fossil fuels"]) `sC`
-  S "there is a higher demand for renewable", plural es `sAnd` phrase en +:+.
-  S "storage technology", sp ^. defn, sParen (short pcmat), S "use a renewable",
-  phrase es `sAnd` S "provide a novel way of storing" +:+. phrase en,
-  atStart sp, S "improve over the traditional",
-  plural pro, S "because of their smaller size. The",
-  S "smaller size is possible because of the ability of",
-  short pcmat, S "to store", phrase te, S "as", phrase lh `sC`
-  S "which allows higher", phrase te, S "storage capacity per",
-  phrase un, S "weight"]
-
-introP2 :: NamedIdea ni => ni -> ConceptChunk -> CI -> Sentence
-introP2 sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
-  phrase pr, S "will be referred to as", titleize pro,
-  sParen (short pro)] -- SSP has same style sentence here
-
--- In Concepts.hs "swhsPCM" gives "s for program name, and there is a
--- similar paragraph in each of the other solar water heating systems
--- incorporating PCM" which is not capitlaized whereas the stable version is
-
--- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural,
--- sometimes not, sometimes need to be used in different tenses. How to
--- accomodate all this?
-
--- The second paragraph is general between examples. It can probably be
--- abstracted out.
-
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------

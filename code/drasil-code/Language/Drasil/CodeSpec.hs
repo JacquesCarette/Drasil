@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, Constrai
 import Language.Drasil.Code.Code (CodeType)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), view)
 import Data.List (nub, delete, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (maybeToList, catMaybes, mapMaybe)
@@ -67,10 +67,10 @@ assocToMap :: CodeIdea a => [a] -> Map.Map String a
 assocToMap = Map.fromList . map (\x -> (codeName x, x))
 
 funcTerm :: String -> FunctionMap -> String
-funcTerm cname = maybe "" (getStr . phrase) . Map.lookup cname
+funcTerm cname = maybe "No description given" (getStr . phraseNP . view term) . Map.lookup cname
        
 varTerm :: String -> VarMap -> String
-varTerm cname = maybe "" (getStr . phrase) . Map.lookup cname
+varTerm cname = maybe "No description given" (getStr . phraseNP . view term) . Map.lookup cname
         
 varType :: String -> VarMap -> CodeType
 varType cname m = maybe (error "Variable not found") codeType (Map.lookup cname m)

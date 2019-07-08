@@ -443,6 +443,12 @@ userChars pro = foldlSP [S "The end", phrase user `sOf` short pro,
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
+-- Completely general except for solar water heating tank (object of analysis)
+-- and similar between all examples; can be abstracted out.
+
+-- The swhsPCM reference at the end would be better if singular, but concept
+-- is plural.
+
 -------------------------------
 -- 4.1 : Problem Description --
 -------------------------------
@@ -514,32 +520,13 @@ goalInputs  = [S "the" +:+ phrase tempC,
 --------------------------------
 
 -- Theory has to be RelationChunk....
--- No way to include "Source" or "Ref. By" sections?
 
 ---------------------------------
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
--- SECTION 4.2.3 --
-{--- General Definitions is automatically generated in solChSpecF
-s4_2_3_genDefs :: [Contents]
-s4_2_3_genDefs = map reldefn swhsRC
-
-s4_2_3_deriv :: [Contents]
-s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
-  s4_2_3_deriv_2 consThermE vol,
-  s4_2_3_deriv_3,
-  s4_2_3_deriv_4 gaussDiv surface vol thFluxVect uNormalVect unit_,
-  s4_2_3_deriv_5,
-  s4_2_3_deriv_6 vol volHtGen,
-  s4_2_3_deriv_7,
-  s4_2_3_deriv_8 htFluxIn htFluxOut inSA outSA density heatCapSpec
-    temp vol assumption assump3 assump4 assump5 assump6,
-  s4_2_3_deriv_9,
-  s4_2_3_deriv_10 density mass vol,
-  s4_2_3_deriv_11]-}
-
--- General Definitions is automatically generated 
+-- Created a unitalChunk for "S"... should I add it to table of symbols?
+-- Replace relevant derivs with the regular derivative when it is available
 
 ------------------------------
 -- 4.2.4 : Data Definitions --
@@ -557,6 +544,8 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
 ------------------------------
 -- Data Constraint: Table 2 --
 ------------------------------
+
+-- See Section 8 - Specification Parameter Values for table 3 from case study
 
 ------------------------------
 -- Data Constraint: Table 3 --
@@ -659,12 +648,6 @@ traceabilityMatrices = traceMatStandard si
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
--- Completely general except for solar water heating tank (object of analysis)
--- and similar between all examples; can be abstracted out.
-
--- The swhsPCM reference at the end would be better if singular, but concept
--- is plural.
-
 -------------------------------
 -- 4.1 : Problem Description --
 -------------------------------
@@ -693,23 +676,13 @@ traceabilityMatrices = traceMatStandard si
 -- 4.2.2 : Theoretical Models --
 --------------------------------
 
--- Theory has to be RelationChunk....
--- No way to include "Source" or "Ref. By" sections?
-
 ---------------------------------
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
--- Created a unitalChunk for "S"... should I add it to table of symbols?
--- Replace relevant derivs with the regular derivative when it is available
-
 ------------------------------
 -- 4.2.4 : Data Definitions --
 ------------------------------
-
-dataDefIntroEnd :: Sentence
-dataDefIntroEnd = foldlSent [S "The dimension of each",
-  phrase quantity, S "is also given"]
 
 -----------------------------
 -- 4.2.5 : Instance Models --
@@ -879,8 +852,6 @@ dataContFooter qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 ------------------------------
 -- Data Constraint: Table 2 --
 ------------------------------
-
--- See Section 8 - Specification Parameter Values for table 3 from case study
 
 ------------------------------
 -- Data Constraint: Table 3 --

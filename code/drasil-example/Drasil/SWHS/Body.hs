@@ -152,8 +152,8 @@ mkSRS = [RefSec $ RefProg intro [
     [IPurpose $ purpDoc (phrase swhsPCM) progName,
      IScope (scopeReqStart tankPCM) (scopeReqEnd +:+ scopeReqEndSWHS),
      IChar [] charsOfReader [],
-     IOrgSec orgDocIntro inModel (SRS.inModel [] [])
-       $ orgDocEnd swhsPCM progName],
+     IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
+    ],
   GSDSec $ GSDProg2 
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
     , UsrChars [userChars progName]
@@ -342,6 +342,37 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 ------------------------------------
 -- 2.4 : Organization of Document --
 ------------------------------------
+
+orgDocIntro :: Sentence
+orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
+  phrase document, S "follows the template for an", short srs,
+  S "for", phrase sciCompS, S "proposed by", makeCiteS parnas1972 `sAnd` 
+  makeCiteS parnasClements1984]
+
+orgDocEnd :: Sentence
+orgDocEnd = foldlSent_ [S "The", plural inModel, 
+  S "to be solved are referred to as" +:+. 
+  foldlList Comma List (map makeRef2S iMods), S "The", plural inModel,
+  S "provide the", phrase ode, sParen (short ode :+: S "s") `sAnd` 
+  S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
+  phrase swhsPCM, short progName, S "solves these", short ode :+: S "s"]
+
+-- This paragraph is mostly general (besides program name and number of IMs),
+-- but there are some differences between the examples that I'm not sure how to
+-- account for. Specifically, the glass example references a Volere paper that
+-- is not used for the other examples. Besides that, this paragraph could
+-- probably be abstracted out with some changes (i.e. the other examples don't
+-- include the last sentence, so we might not need to know the number of IMs
+-- after all if we just leave that sentence out)
+
+-- IM1 to IM4 : reference later
+
+-- how to cite/reference?
+
+-- If all SRS have the same basic layout, is it possible to automate
+-- the sectioning? This would also improve the tediousness of declaring
+-- LayoutObjs
+
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
@@ -554,36 +585,6 @@ traceabilityMatrices = traceMatStandard si
 ------------------------------------
 -- 2.4 : Organization of Document --
 ------------------------------------
-
-orgDocIntro :: Sentence
-orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
-  phrase document, S "follows the template for an", short srs,
-  S "for", phrase sciCompS, S "proposed by", makeCiteS parnas1972 `sAnd` 
-  makeCiteS parnasClements1984]
-
-orgDocEnd :: NamedIdea ni => ni -> CI -> Sentence
-orgDocEnd sp pro = foldlSent_ [S "The", plural inModel, 
-  S "to be solved are referred to as" +:+. 
-  foldlList Comma List (map makeRef2S iMods), S "The", plural inModel,
-  S "provide the", phrase ode, sParen (short ode :+: S "s") `sAnd` 
-  S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
-  phrase sp, short pro, S "solves these", short ode :+: S "s"]
-
--- This paragraph is mostly general (besides program name and number of IMs),
--- but there are some differences between the examples that I'm not sure how to
--- account for. Specifically, the glass example references a Volere paper that
--- is not used for the other examples. Besides that, this paragraph could
--- probably be abstracted out with some changes (i.e. the other examples don't
--- include the last sentence, so we might not need to know the number of IMs
--- after all if we just leave that sentence out)
-
--- IM1 to IM4 : reference later
-
--- how to cite/reference?
-
--- If all SRS have the same basic layout, is it possible to automate
--- the sectioning? This would also improve the tediousness of declaring
--- LayoutObjs
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --

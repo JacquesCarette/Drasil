@@ -18,14 +18,13 @@ import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, sr
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel)
 import Data.Drasil.Concepts.Education (educon)
-import Data.Drasil.Concepts.Math (mathcon, mathcon')
+import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
   temp, thermalConduction, thermocon)
 
-import qualified Data.Drasil.Concepts.Math as M (ode)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 
@@ -121,11 +120,13 @@ mkSRS = [RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder],
   TAandA],
-  IntroSec $ IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
-  [IPurpose $ purpDoc (phrase progName) progName,
-  IScope (scopeReqStart sWHT) scopeReqEnd,
-  IChar [] charsOfReader [],
-  IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
+  IntroSec $
+    IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
+    [ IPurpose $ purpDoc (phrase progName) progName
+    , IScope (scopeReqStart sWHT) scopeReqEnd
+    , IChar [] charsOfReader []
+    , IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
+    ],
   GSDSec $ GSDProg2 
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
     , UsrChars [userChars progName]
@@ -267,12 +268,12 @@ introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. 
 --Section 2.4: ORGANIZATION OF DOCUMENT
 ---------------------------------------
 
-orgDocEnd :: CI -> CI -> CI -> Sentence
-orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
+orgDocEnd :: Sentence
+orgDocEnd = foldlSent_ [S "The", phrase inModel,
   S "to be solved is referred to as" +:+. makeRef2S eBalanceOnWtr,
-  S "The", phrase im_, S "provides the",
-  titleize od, sParen (short od), S "that model the"
-  +:+. phrase pro, short pro, S "solves this", short od]
+  S "The", phrase inModel, S "provides the", titleize ode,
+  sParen (short ode), S "that models the" +:+. phrase progName,
+  short progName, S "solves this", short ode]
 
 ----------------------------------------
 --Section 3 : GENERAL SYSTEM DESCRIPTION

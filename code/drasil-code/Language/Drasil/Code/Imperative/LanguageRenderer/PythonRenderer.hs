@@ -32,7 +32,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD,
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
-  commentedItem, addCommentsDocD, functionDoc, valList, appendToBody, 
+  commentedItem, addCommentsDocD, functionDoc, classDoc, valList, appendToBody, 
   getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, ParamData(..), TypeData(..), td, ValData(..), vd, blank, 
@@ -513,6 +513,8 @@ instance ClassSym PythonCode where
   mainClass _ _ fs = liftPairFst (liftList methodListDocD fs, True)
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
+
+  docClass d = commentedClass (docComment $ classDoc d)
 
   commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
     fmap snd cs)

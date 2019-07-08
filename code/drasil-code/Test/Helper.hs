@@ -3,8 +3,7 @@ module Test.Helper (helper) where
 import Language.Drasil.Code.Imperative.Symantics (
   RenderSym(..), PermanenceSym(..), BodySym(..), StateTypeSym(..), 
   StatementSym(..),  ValueSym(..), NumericExpression(..), ScopeSym(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), ModuleSym(..),
-  BlockCommentSym(..))
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 helper :: (RenderSym repr) => repr (RenderFile repr)

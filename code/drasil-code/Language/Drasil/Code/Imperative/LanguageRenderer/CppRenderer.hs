@@ -38,8 +38,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, valList, 
-  surroundBody, getterName, setterName, setEmpty, intValue)
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
+  valList, surroundBody, getterName, setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   ParamData(..), StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
@@ -553,6 +553,8 @@ instance (Pair p) => ClassSym (p CppSrcCode CppHdrCode) where
     (privClass n p (map psnd vs) (map psnd fs))
   pubClass n p vs fs = pair (pubClass n p (map pfst vs) (map pfst fs)) 
     (pubClass n p (map psnd vs) (map psnd fs))
+
+  docClass d c = pair (docClass d $ pfst c) (docClass d $ psnd c)
 
   commentedClass cmt cs = pair (commentedClass (pfst cmt) (pfst cs)) 
     (commentedClass (psnd cmt) (psnd cs))
@@ -1074,6 +1076,8 @@ instance ClassSym CppSrcCode where
     (fmap (\(MthD b _ d) -> (d,b))) fs)), True)
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
+  
+  docClass d = commentedClass (docComment $ classDoc d)
 
   commentedClass _ cs = cs
 
@@ -1536,6 +1540,8 @@ instance ClassSym CppHdrCode where
   mainClass _ _ _ = return (empty, True)
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
+  
+  docClass d = commentedClass (docComment $ classDoc d)
 
   commentedClass cmt cs = if snd (unCPPHC cs) then cs else 
     liftPair (liftA2 commentedItem cmt (fmap fst cs), fmap snd cs)

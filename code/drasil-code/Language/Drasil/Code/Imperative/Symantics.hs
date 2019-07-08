@@ -542,6 +542,8 @@ class (StateVarSym repr, MethodSym repr) => ClassSym repr
   pubClass :: Label -> Maybe Label -> [repr (StateVar repr)] -> 
     [repr (Method repr)] -> repr (Class repr)
 
+  docClass :: String -> repr (Class repr) -> repr (Class repr)
+
   commentedClass :: repr (BlockComment repr) -> repr (Class repr) -> 
     repr (Class repr)
 

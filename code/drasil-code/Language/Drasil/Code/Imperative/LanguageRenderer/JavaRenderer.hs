@@ -40,8 +40,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
   dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
   doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, valList, surroundBody, getterName, setterName, setMain, setEmpty,
-  intValue)
+  functionDoc, classDoc, valList, surroundBody, getterName, setterName, setMain,
+  setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, ParamData(..), pd, TypeData(..), td, ValData(..), vd,  
   angles, mapPairFst, liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, 
@@ -551,6 +551,8 @@ instance ClassSym JavaCode where
   mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
+  
+  docClass d = commentedClass (docComment $ classDoc d)
 
   commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
     fmap snd cs)

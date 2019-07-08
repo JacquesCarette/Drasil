@@ -32,8 +32,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
   includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, valList, prependToBody, appendToBody, surroundBody, getterName, 
-  setterName, setMain, setEmpty, intValue
+  functionDoc, classDoc, valList, prependToBody, appendToBody, surroundBody, 
+  getterName, setterName, setMain, setEmpty, intValue
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -708,6 +708,9 @@ dashes s l = replicate (l - length s) '-'
 functionDoc :: String -> [(String, String)] -> [String]
 functionDoc desc params = ("\\brief " ++ desc) 
   : map (\(v, vDesc) -> "\\param " ++ v ++ " " ++ vDesc) params
+
+classDoc :: String -> [String]
+classDoc desc = ["\\brief " ++ desc]
 
 -- Helper Functions --
 

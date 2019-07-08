@@ -42,10 +42,10 @@ import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Software.Products (sciCompS, prodtcon)
-import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
-import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
+import Data.Drasil.Quantities.Math (surArea, uNormalVect)
+import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (energy, time, physicscon)
-import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat, temp)
+import Data.Drasil.Quantities.Thermodynamics (latentHeat, temp)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
@@ -67,11 +67,10 @@ import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
 import Drasil.SWHS.Requirements (dataConTable1, funcReqs, inputInitQuantsTable,
   nfRequirements, propsDeriv)
 import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE)
-import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW,
-  htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcmE,
-  pcmHTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
-  outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, tempC,
-  tempPCM, tempW, thFluxVect, thickness, volHtGen, watE, wMass, absTol, relTol)
+import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW, htFluxC,
+  htFluxP, pcmE, pcmHTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
+  outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, tempC, tempPCM,
+  tempW, thickness, watE, wMass, absTol, relTol)
 
 -------------------------------------------------------------------------------
 
@@ -701,55 +700,7 @@ traceabilityMatrices = traceMatStandard si
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
-genDefDeriv3, genDefDeriv5, genDefDeriv7, genDefDeriv11 :: Contents
-
-genDefDeriv1 :: ConceptChunk -> UnitalChunk -> Contents
-genDefDeriv1 roc tem = foldlSPCol [S "Detailed derivation of simplified",
-  phrase roc, S "of", phrase tem]
-
-genDefDeriv2 :: LabelledContent -> UnitalChunk -> Contents
-genDefDeriv2 t1ct vo = foldlSPCol [S "Integrating", makeRef2S t1ct,
-  S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
-
-genDefDeriv3 = eqUnR'
-  (negate (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) +
-  intAll (eqSymb vol) (sy volHtGen) $=
-  intAll (eqSymb vol) (sy density * sy heatCapSpec * pderiv (sy temp) time))
-
-genDefDeriv4 :: ConceptChunk -> DefinedQuantityDict -> UnitalChunk -> UnitalChunk ->
-  DefinedQuantityDict -> ConceptChunk -> Contents
-genDefDeriv4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaussdiv,
-  S "to the first term over", (phrase su +:+ ch su `ofThe` phrase vo) `sC`
-  S "with", ch tfv, S "as the", phrase tfv, S "for the",
-  phrase surface `sAnd` ch unv, S "as a", phrase un,
-  S "outward", phrase unv, S "for a", phrase su]
-
-genDefDeriv5 = eqUnR'
-  (negate (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) +
-  intAll (eqSymb vol) (sy volHtGen) $= 
-  intAll (eqSymb vol) (sy density * sy heatCapSpec * pderiv (sy temp) time))
-
-genDefDeriv6 :: UnitalChunk -> UnitalChunk -> Contents
-genDefDeriv6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
-  phrase vo, S "The", phrase vhg, S "is assumed constant. Then",
-  sParen $ S $ show (1 :: Integer), S "can be written as"]
-
-genDefDeriv7 = eqUnR'
-  (sy htFluxIn * sy inSA - sy htFluxOut *
-  sy outSA + sy volHtGen * sy vol $= 
-  intAll (eqSymb vol) (sy density * sy heatCapSpec * pderiv (sy temp) time))
-
-genDefDeriv10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
-genDefDeriv10 den ma vo = foldlSPCol [S "Using the fact that", ch den :+:
-  S "=" :+: ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
-
-genDefDeriv11 = eqUnR'
-  (sy mass * sy heatCapSpec * deriv (sy temp)
-  time $= sy htFluxIn * sy inSA - sy htFluxOut
-  * sy outSA + sy volHtGen * sy vol)
-
 -- Created a unitalChunk for "S"... should I add it to table of symbols?
--- Add references to above when available (assumptions, GDs)
 -- Replace relevant derivs with the regular derivative when it is available
 
 ------------------------------

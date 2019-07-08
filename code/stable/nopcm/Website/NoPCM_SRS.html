@@ -785,7 +785,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (<a href=#assumpHTCC>A: Heat-Transfer-Coeffs-Constant</a>) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>ΔT(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
+                          Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings.
+                        </p>
+                        <p class="paragraph">
+                          <em>h</em> is assumed to be independent of <em>T</em> (from <a href=#assumpHTCC>A: Heat-Transfer-Coeffs-Constant</a>).
+                        </p>
+                        <p class="paragraph">
+                          <em>ΔT(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object.
                         </p>
                       </td>
                     </tr>
@@ -855,7 +861,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The basic equation governing the rate of change of temperature, for a given volume <em>V</em>, with time. <em>m</em> is the mass (kg). <em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C)). <em>T</em> is the temperature (&deg;C) and <em>t</em> is the time (s). <em>q<sub>in</sub></em> and <em>q<sub>out</sub></em> are the in and out heat transfer rates, respectively (W/m<sup>2</sup>). <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> are the surface areas over which the heat is being transferred in and out, respectively (m<sup>2</sup>). <em>g</em> is the volumetric heat generated (W/m<sup>3</sup>). <em>V</em> is the volume (m<sup>3</sup>).
+                          The basic equation governing the rate of change of temperature, for a given volume <em>V</em>, with time.
                         </p>
                       </td>
                     </tr>
@@ -874,7 +880,7 @@
                   </table>
                 </div>
                 <p class="paragraph">
-                  Detailed derivation of simplified rate of change of temperature.
+                  Detailed derivation of simplified rate of change of temperature:
                 </p>
                 <p class="paragraph">
                   Integrating <a href=#TM:consThermE>TM: consThermE</a> over a volume (<em>V</em>), we have:
@@ -916,7 +922,7 @@
                                                                                                                                                         </div>&#8239;dV</em>
                 </div>
                 <p class="paragraph">
-                  Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
+                  Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
                 </p>
                 <div class="equation">
                   <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">

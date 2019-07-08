@@ -81,14 +81,14 @@ maybeField s f = Context $ \k _ i -> do
     -- Otherwise, fail acts to not use the $if$ parameter in the html file
     fail $ "maybeField " ++ s ++ " used when really Nothing. Wrap in `$if(" ++ s ++ ")$` block."
 
--- List if unempty
+-- List if non-empty
 maybeListFieldWith :: String -> Context a -> (Item b -> [c]) -> (Item b -> Compiler [Item a]) -> Context b
 -- takes as input: the string to be replaced, the context to be used as is,
 -- a function to be used on input to return a list to check for emptiness,
 -- and the function to be used regularly on input
 maybeListFieldWith s contxt checkNull f = listFieldWith s contxt
   -- If the list is empty, fail is used so as not to create a specific section
-  (\x -> if null (checkNull x) then fail "No code files for example" else f x)
+  (\x -> if null (checkNull x) then fail ("No instances of " ++ s) else f x)
 
 mkExampleCtx :: FilePath -> FilePath -> Context Example
 mkExampleCtx exampleDir srsDir =
@@ -98,13 +98,14 @@ mkExampleCtx exampleDir srsDir =
   -- here, listFieldWith used with multiple versions of SRS per example
   listFieldWith "srs" (
     -- field will replace the string parameters in the html with the returned string
-    -- <> acts as a monad concatenator
+    -- <> acts as a semigroup concatenator
 
     -- returns filename from ((filename, TYPE), E _ _ _ _)
     field "filename" (return . fst . srsVar) <>
     -- returns TYPE from ((_, _), E _ _ _ _)
     field "type" (return . snd . srsVar) <>
     -- returns name from ((_, _), E name [codeSource] srsVariants description)
+    -- which is the same name as the outer scope example name
     field "name" (return . name . example) <>
     -- gets the URL by taking the path to the srs ++ the filename of the srs
     field "url" (\x -> return $ srsPath exampleDir (name $ example x) srsDir ++ fst (srsVar x))

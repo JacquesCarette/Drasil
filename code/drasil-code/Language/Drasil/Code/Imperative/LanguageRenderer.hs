@@ -11,7 +11,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
   charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, 
+  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
   methodDocD, methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, 
   ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, 
   assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, 
@@ -31,9 +31,9 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
   includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, 
-  prependToBody, appendToBody, surroundBody, getterName, setterName, setMain, 
-  setEmpty, intValue
+  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, valList, prependToBody, appendToBody, surroundBody, getterName, 
+  setterName, setMain, setEmpty, intValue
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -45,10 +45,11 @@ import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   FunctionApplication(..), StatementSym(..), ControlStatementSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
-  ModData(..), md, TypeData(..), td, ValData(..), vd, angles,blank, 
-  doubleQuotedText,hicat,vibcat,vmap, getNestDegree)
+  ModData(..), md, ParamData(..), pd, TypeData(..), td, ValData(..), vd, angles,
+  blank, doubleQuotedText,hicat,vibcat,vmap, getNestDegree)
 
 import Data.List (intersperse, last)
+import Data.Maybe (fromMaybe)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
@@ -228,8 +229,13 @@ constructDocD _ = empty
 stateParamDocD :: ValData -> Doc
 stateParamDocD v = typeDoc (valType v) <+> valDoc v
 
-paramListDocD :: [Doc] -> Doc
-paramListDocD = hicat (text ", ")
+paramListDocD :: [ParamData] -> Doc
+paramListDocD = hicat (text ", ") . map paramDoc
+
+mkParam :: (ValData -> Doc) -> ValData -> ParamData
+mkParam f v = pd (fromMaybe 
+  (error "Attempt to create Parameter from Value with no string representation")
+  (valName v)) (valType v) (f v)
 
 -- Method --
 
@@ -698,6 +704,10 @@ endCommentDelimit c = commentDelimit (endCommentLabel ++ " " ++ c)
 
 dashes :: String -> Int -> String
 dashes s l = replicate (l - length s) '-'
+
+functionDoc :: String -> [(String, String)] -> [String]
+functionDoc desc params = ("\\brief " ++ desc) 
+  : map (\(v, vDesc) -> "\\param " ++ v ++ " " ++ vDesc) params
 
 -- Helper Functions --
 

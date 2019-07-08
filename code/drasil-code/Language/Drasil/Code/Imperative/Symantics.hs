@@ -480,6 +480,9 @@ class ParameterSym repr where
   -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
   pointerParam :: repr (Value repr) -> repr (Parameter repr)
 
+  parameterName :: repr (Parameter repr) -> String
+  parameterType :: repr (Parameter repr) -> repr (StateType repr)
+
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   BodySym repr, BlockCommentSym repr) => MethodSym repr where
   type Method repr
@@ -501,11 +504,18 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr) 
+  docFunc :: Label -> String -> repr (Scope repr) -> repr (Permanence repr) -> 
+    repr (MethodType repr) -> [(repr (Parameter repr), String)] -> 
+    repr (Body repr) -> repr (Method repr) 
 
   -- The two lists are inputs and outputs, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     [repr (Value repr)] -> [repr (Value repr)] -> 
     repr (Body repr) -> repr (Method repr)
+  -- Parameters are: Function name, brief description, scope, permanence, input values with descriptions, output values with descriptions, function body
+  docInOutFunc :: Label -> String -> repr (Scope repr) -> 
+    repr (Permanence repr) -> [(repr (Value repr), String)] -> 
+    [(repr (Value repr), String)] -> repr (Body repr) -> repr (Method repr)
 
   commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
     repr (Method repr)

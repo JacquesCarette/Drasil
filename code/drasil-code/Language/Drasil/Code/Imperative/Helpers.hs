@@ -2,11 +2,11 @@
 
 module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   ScopeTag(..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, blank,
-  verticalComma,angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,
-  vibmap, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, 
-  liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
-  getInnerType, getNestDegree, convType
+  ParamData(..), pd, updateParamDoc, StateVarData(..), svd, TypeData(..), td, 
+  ValData(..), vd, updateValDoc, blank,verticalComma,angles,doubleQuotedText,
+  himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, mapPairSnd, liftA4, 
+  liftA5, liftA6, liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, 
+  lift3Pair, lift4Pair, liftPairFst, getInnerType, getNestDegree, convType
 ) where
 
 import Language.Drasil.Code.Code (CodeType(..))
@@ -43,6 +43,15 @@ data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag,
 
 mthd :: Bool -> ScopeTag -> Doc -> MethodData
 mthd = MthD 
+
+data ParamData = PD {paramName :: String, paramType :: TypeData, 
+  paramDoc :: Doc} deriving Eq
+
+pd :: String -> TypeData -> Doc -> ParamData
+pd = PD 
+
+updateParamDoc :: (Doc -> Doc) -> ParamData -> ParamData
+updateParamDoc f v = pd (paramName v) (paramType v) ((f . paramDoc) v)
 
 data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc, 
   destructSts :: (Doc, Terminator)}

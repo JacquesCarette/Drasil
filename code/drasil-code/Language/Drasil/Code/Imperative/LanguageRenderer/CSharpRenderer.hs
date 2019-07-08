@@ -23,8 +23,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, printDoc, outDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD, 
-  typeDocD, enumTypeDocD, listTypeDocD, voidDocD,
-  constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD, 
+  typeDocD, enumTypeDocD, listTypeDocD, voidDocD, constructDocD, stateParamDocD,
+  paramListDocD, mkParam, methodDocD, methodListDocD, 
   stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
@@ -40,12 +40,13 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody, getterName, 
-  setterName, setMain, setEmpty, intValue)
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, valList, surroundBody,
+  getterName, setterName, setMain, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
-  fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
-  liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
-  liftPairFst, getInnerType, convType)
+  fd, ModData(..), md, ParamData(..), pd, updateParamDoc, TypeData(..), td, 
+  ValData(..), vd, updateValDoc, mapPairFst, liftA4, liftA5, liftA6, liftList,
+  lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, getInnerType, 
+  convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Data.List (nub)
@@ -472,9 +473,12 @@ instance MethodTypeSym CSharpCode where
   construct n = return $ td (Object n) (constructDocD n)
 
 instance ParameterSym CSharpCode where
-  type Parameter CSharpCode = Doc
-  stateParam = fmap stateParamDocD
+  type Parameter CSharpCode = ParamData
+  stateParam = fmap (mkParam stateParamDocD)
   pointerParam = stateParam
+
+  parameterName = paramName . unCSC
+  parameterType = fmap paramType
 
 instance MethodSym CSharpCode where
   -- Bool is True if the method is a main method, False otherwise
@@ -488,7 +492,8 @@ instance MethodSym CSharpCode where
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= v
   mainMethod c b = setMain <$> method "Main" c public static_ void 
-    [return $ text "string[] args"] b
+    [liftA2 (pd "args") (listType static_ string) 
+    (return $ text "string[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
@@ -496,11 +501,20 @@ instance MethodSym CSharpCode where
 
   function n = method n ""
 
+  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d $ map 
+    (mapPairFst parameterName) ps) (function n s p t (map fst ps) b)
+
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
   inOutFunc n s p ins outs b = function n s p (mState void) (map (\v -> 
-    if v `elem` outs then fmap csRef (stateParam v) else stateParam v) ins ++
-    map (fmap csOut . stateParam) (filter (`notElem` ins) outs)) b
+    if v `elem` outs then fmap (updateParamDoc csRef) (stateParam v) else 
+    stateParam v) ins ++ map (fmap (updateParamDoc csOut) . stateParam) 
+    (filter (`notElem` ins) outs)) b
+
+  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d $ 
+    map (mapPairFst valueName) ins ++ map (mapPairFst valueName) 
+    (filter (\pm -> fst pm `notElem` map fst ins) outs))
+    (inOutFunc n s p (map fst ins) (map fst outs) b)
 
   commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
     fmap snd fn)

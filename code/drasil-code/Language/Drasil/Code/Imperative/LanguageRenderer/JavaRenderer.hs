@@ -25,26 +25,27 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
   boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
-  voidDocD, constructDocD, stateParamDocD, paramListDocD, methodListDocD, 
-  stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, 
-  whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD,
-  varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
-  commentDocD, mkSt, mkStNoEnd, notOpDocD, negateOpDocD, unExpr, typeUnExpr, 
-  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
-  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
-  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
-  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
-  funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody,
-  getterName, setterName, setMain, setEmpty, intValue)
+  voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam, 
+  methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, 
+  forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
+  plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, 
+  statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, notOpDocD, 
+  negateOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
+  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
+  litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
+  objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
+  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
+  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, valList, surroundBody, getterName, setterName, setMain, setEmpty,
+  intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
-  fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
-  liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
-  liftPairFst, getInnerType, convType)
+  fd, ModData(..), md, ParamData(..), pd, TypeData(..), td, ValData(..), vd,  
+  angles, mapPairFst, liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, 
+  lift4Pair, liftPair, liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -478,9 +479,12 @@ instance MethodTypeSym JavaCode where
   construct n = return $ td (Object n) (constructDocD n)
 
 instance ParameterSym JavaCode where
-  type Parameter JavaCode = Doc
-  stateParam = fmap stateParamDocD
+  type Parameter JavaCode = ParamData
+  stateParam = fmap (mkParam stateParamDocD)
   pointerParam = stateParam
+
+  parameterName = paramName . unJC
+  parameterType = fmap paramType
 
 instance MethodSym JavaCode where
   -- Bool is True if the method is a main method, False otherwise
@@ -493,14 +497,18 @@ instance MethodSym JavaCode where
   setMethod c v = method (setterName $ valueName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= v
-  mainMethod c b = setMain <$> method "main" c public static_ void 
-    [return $ text "String[] args"] b
+  mainMethod c b = setMain <$> method "main" c public static_ (mState void) 
+    [liftA2 (pd "args") (listType static_ string) 
+    (return $ text "String[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Java"
 
   function n = method n ""
+
+  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d (map 
+    (mapPairFst parameterName) ps)) (function n s p t (map fst ps) b)
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
@@ -517,6 +525,10 @@ instance MethodSym JavaCode where
               (fmap valType v) &= v) : assignArray (c+1) vs
             decls = multi $ map varDec outs
             outputs = var "outputs" jArrayType
+    
+  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d 
+    (map (mapPairFst valueName) ins)) 
+    (inOutFunc n s p (map fst ins) (map fst outs) b)
             
   commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
     fmap snd fn)

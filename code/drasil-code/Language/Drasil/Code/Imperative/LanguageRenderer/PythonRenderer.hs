@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
-  floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, 
+  floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
   mkStNoEnd, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', 
@@ -32,11 +32,12 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD,
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
-  commentedItem, addCommentsDocD, valList, appendToBody, getterName, setterName)
+  commentedItem, addCommentsDocD, functionDoc, valList, appendToBody, 
+  getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
-  fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
-  liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, liftPairFst, 
-  getInnerType, convType)
+  fd, ModData(..), md, ParamData(..), TypeData(..), td, ValData(..), vd, blank, 
+  vibcat, mapPairFst, liftA4, liftA5, mapPairFst, liftList, lift1List, 
+  lift2Lists, lift4Pair, liftPair, liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -454,9 +455,12 @@ instance MethodTypeSym PythonCode where
   construct n = return $ td (Object n) (constructDocD n)
 
 instance ParameterSym PythonCode where
-  type Parameter PythonCode = Doc
-  stateParam = fmap valDoc
+  type Parameter PythonCode = ParamData
+  stateParam = fmap (mkParam valDoc)
   pointerParam = stateParam
+
+  parameterName = paramName . unPC
+  parameterType = fmap paramType
 
 instance MethodSym PythonCode where
   type Method PythonCode = (Doc, Bool)
@@ -477,9 +481,16 @@ instance MethodSym PythonCode where
   function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList 
     paramListDocD ps) b, False)
 
+  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d (map 
+    (mapPairFst parameterName) ps)) (function n s p t (map fst ps) b)
+
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins outs b = function n s p (mState void) (map stateParam ins)
     (liftA2 appendToBody b (multiReturn outs))
+
+  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d 
+    (map (mapPairFst valueName) ins)) 
+    (inOutFunc n s p (map fst ins) (map fst outs) b)
 
   commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
     fmap snd fn)

@@ -595,13 +595,12 @@ traceabilityMatrices = traceMatStandard si
 --------------------------
 
 sysCntxtDesc :: CI -> Contents
-sysCntxtDesc pro = foldlSP [makeRef2S sysCntxtFig, S "shows the" +:+. phrase sysCont, 
-  S "A circle represents an external entity outside the",
-  phrase software `sC` S "the", phrase user, S "in this case. A",
-  S "rectangle represents the", phrase softwareSys, S "itself" +:+.
-  sParen (short pro), S "Arrows are used to show the",
-  plural datum, S "flow between the", phrase system `sAnd`
-  S "its", phrase environment]
+sysCntxtDesc pro = foldlSP [makeRef2S sysCntxtFig, S "shows the" +:+.
+  phrase sysCont, S "A circle represents an external entity outside the",
+  phrase software `sC` S "the", phrase user +:+. S "in this case",
+  S "A rectangle represents the", phrase softwareSys, S "itself" +:+.
+  sParen (short pro), S "Arrows are used to show the", plural datum,
+  S "flow between the", phrase system `sAnd` S "its", phrase environment]
 
 sysCntxtFig :: LabelledContent
 sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
@@ -611,39 +610,31 @@ sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
 sysCntxtRespIntro :: CI -> Contents
 sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "The only external interaction is through the", phrase user +:+.
-  S "interface", S "responsibilities" `ofThe'` phrase user `sAnd`
-  S "the", phrase system, S "are as follows"]
+  S "interface", S "responsibilities" `ofThe'` phrase user `andThe`
+  phrase system `sAre` S "as follows"]
 
 systContRespBullets :: Contents
-systContRespBullets = UlC $ ulcc $ Enumeration $ Bullet $ noRefs [userResp input_ datum,
-  resp]
+systContRespBullets = UlC $ ulcc $ Enumeration $ bulletNested
+  [titleize user +: S "Responsibilities", short progName +: S "Responsibilities"]
+  $ map bulletFlat [userResp, swhsResp]
 
 -- User Responsibilities --
-userResp :: NamedChunk -> NamedChunk -> ItemType
-userResp inp dat = Nested (titleize user +: S "Responsibilities")
-  $ Bullet $ noRefs $ map Flat [
-
-  foldlSent_ [S "Provide the", phrase inp, plural dat, S "to the",
-  phrase system `sC` S "ensuring no errors in the", plural dat, S "entry"],
-
-  foldlSent_ [S "Take care that consistent", plural unit_,
-  S "are used for", phrase inp, plural variable]
-
+userResp :: [Sentence]
+userResp = map foldlSent_ [
+  [S "Provide the", phrase input_, plural datum `toThe`
+    phrase system `sC` S "ensuring no errors in the", plural datum, S "entry"],
+  [S "Take care that consistent", plural unit_, S "are used for",
+    phrase input_, plural variable]
   ]
 
 -- SWHS Responsibilities --
-resp :: ItemType
-resp = Nested (short progName +: S "Responsibilities")
-  $ Bullet $ noRefs $ map Flat [
-
-  foldlSent_ [S "Detect", plural datum, S "type mismatch, such as a string of",
-  S "characters instead of a floating point number"],
-
-  foldlSent_ [S "Determine if the", plural input_, S "satisfy the required",
-  phrase physical `sAnd` phrase software, plural constraint],
-
-  foldlSent_ [S "Calculate the required", plural output_]
-
+swhsResp :: [Sentence]
+swhsResp = map foldlSent_ [
+  [S "Detect", plural datum, S "type mismatch, such as a string" `sOf`
+    S "characters instead of a floating point number"],
+  [S "Determine if the", plural input_, S "satisfy the required",
+    phrase physical `sAnd` phrase software, plural constraint],
+  [S "Calculate the required", plural output_]
   ]
 
 --------------------------------

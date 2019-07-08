@@ -199,13 +199,13 @@ None
 \noindent Get (filenameIn: string) from user.\\
 \noindent get\_input(filenameIn, Param)\\
 \noindent input\_constraints(Param)\\
-\noindent p\_land := func\_p\_land(Param)\\
-\noindent d\_offset := func\_d\_offset(Param, p\_land)\\
-\noindent s := func\_s(Param, d\_offset)\\
+\noindent $p_{\text{land}}$ := func\_p\_land(Param)\\
+\noindent $d_{\text{offset}}$ := func\_d\_offset(Param, $p_{\text{land}}$)\\
+\noindent $s$ := func\_s(Param, $d_{\text{offset}}$)\\
 \noindent \#\textit{Output calculated values to a file.}\\
 % \noindent verify\_output($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
 % \noindent plot($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
-\noindent write\_output($\text{s}$, $\text{d\_offset}$)\\
+\noindent write\_output($s$, $d_{\text{offset}}$)\\
 
 \newpage
 
@@ -224,14 +224,14 @@ SpecParam (Section~\ref{SpecParam})
 
 \subsection{Syntax}
 
-\begin{tabular}{p{3cm} p{1cm} p{1cm} >{\raggedright\arraybackslash}p{9cm}}
+\begin{tabular}{p{3cm} p{3cm} p{1cm} >{\raggedright\arraybackslash}p{7cm}}
 \toprule
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \midrule
 get\_input & string, Param & - &  FileError \\
-v\_launch & - & $\mathbb{R}$\\
-angle & - & $\mathbb{R}$\\
-p\_target & - & $\mathbb{R}$\\
+$v_{\text{launch}}$ & - & $\mathbb{R}$\\
+$\theta$ & - & $\mathbb{R}$\\
+$p_{\text{target}}$ & - & $\mathbb{R}$\\
 \bottomrule
 \end{tabular}
 
@@ -246,10 +246,10 @@ inputFile: sequence of string \#\textit{f[i] is the ith string in the text file 
 \renewcommand{\arraystretch}{1.2}
 \begin{longtable*}[l]{l} 
 \# To Support IM1 and IM2 \\
-v\_launch: $\mathbb{R}$\\
-angle: $\mathbb{R}$\\
+$v_{\text{launch}}$: $\mathbb{R}$\\
+$\theta$: $\mathbb{R}$\\
 \# To Support IM3 and IM4 \\
-p\_target: $\mathbb{R}$\\
+$p_{\text{target}}$: $\mathbb{R}$\\
 \end{longtable*}
 
 \subsubsection{Assumptions}
@@ -267,21 +267,21 @@ should be denoted with a '\#' symbol.
 
 \subsubsection{Access Routine Semantics}
 
-\noindent Param.v\_launch:
+\noindent Param.$v_{\text{launch}}$:
 \begin{itemize}
-\item output: \textit{out} := v\_launch
+\item output: \textit{out} := $v_{\text{launch}}$
 \item exception: none
 \end{itemize}
 
-\noindent Param.angle:
+\noindent Param.$\theta$:
 \begin{itemize}
-\item output: \textit{out} := angle
+\item output: \textit{out} := $\theta$
 \item exception: none
 \end{itemize}
 
-\noindent Param.p\_target:
+\noindent Param.$p_{\text{target}}$:
 \begin{itemize}
-\item output: \textit{out} := p\_target
+\item output: \textit{out} := $p_{\text{target}}$
 \item exception: none
 \end{itemize}
 
@@ -289,7 +289,7 @@ should be denoted with a '\#' symbol.
 \begin{itemize}
 \item transition: The file name ``filename" is first associated with the file f. 
 The data from f is read sequentially to populate the state variables from
-FR1 (v\_launch, angle, and p\_target) in Param.
+FR1 ($v_{\text{launch}}$, $\theta$, and $p_{\text{target}}$) in Param.
 \item exception: exc := a file name ``filename" cannot be found OR the format of
 inputFile is incorrect $\Rightarrow$  FileError
 \end{itemize}
@@ -345,9 +345,9 @@ input\_constraints(Param):
  \begin{itemize}
  \item out: \textit{out} := none
  \item exception: exc := ( \\
- $\neg (0 < \text{Param.v\_launch}) \Rightarrow$ badSpeed $|$\\
- $\neg (0 < \text{Param.angle} < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
- $\neg (0 < \text{Param.p\_target}) \Rightarrow$ badTargetPosition)
+ $\neg (0 < \text{Param}.v_{\text{launch}}) \Rightarrow$ badSpeed $|$\\
+ $\neg (0 < \text{Param}.\theta < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
+ $\neg (0 < \text{Param}.p_{\text{target}}) \Rightarrow$ badTargetPosition)
  \end{itemize}
 
 \subsection{Considerations}
@@ -398,21 +398,21 @@ All of the fields Param have been assigned values before any of the access
 
 func\_p\_land(Param):
  \begin{itemize}
- \item out: $\textit{out} := \frac{2 * \text{v\_launch}^2 * sin(\text{angle}) * cos(\text{angle})}{g}$
+ \item out: $\textit{out} := \frac{2 * v_{\text{launch}}^2 * sin(\theta) * cos(\theta)}{g}$
  \item exception: exc := none
  \end{itemize}
  
-func\_d\_offset(Param, p\_land):
+func\_d\_offset(Param, $p_{\text{land}}$):
  \begin{itemize}
- \item out: $\textit{out} := $ p\_land - p\_target
+ \item out: $\textit{out} := p_{\text{land}} - p_{\text{target}}$
  \item exception: exc := none
  \end{itemize}
  
-func\_s(Param, d\_offset):
+func\_s(Param, $d_{\text{offset}}$):
  \begin{itemize}
  \item out: $\textit{out} := $ ( \\
-$|\frac{\text{d\_offset}}{\text{p\_target}}| < \epsilon \Rightarrow$ ``The target was hit." $|$\\
-$\text{d\_offset} < 0 \Rightarrow$ ``The projectile fell short."$|$\\
+$|\frac{d_{\text{offset}}}{p_{\text{target}}}| < \epsilon \Rightarrow$ ``The target was hit." $|$\\
+$d_{\text{offset}} < 0 \Rightarrow$ ``The projectile fell short."$|$\\
 $\text{True} \Rightarrow$ ``The projectile went long.")
  \item exception: exc := none
  \end{itemize}
@@ -584,9 +584,9 @@ file: The file named ``output".
 
 \subsubsection{Access Routine Semantics}
 
-\noindent write\_output($\text{s}$, $\text{d\_offset}$):
+\noindent write\_output($s$, $d_{\text{offset}}$):
 \begin{itemize}
-\item transition:  Write to environment variable named ``file" the calculated values $\text{s}$ and $\text{d\_offset}$.
+\item transition:  Write to environment variable named ``file" the calculated values $s$ and $d_{\text{offset}}$.
 \item exception: none
 \end{itemize}
 

@@ -197,11 +197,11 @@ None
 \end{itemize}
 
 \noindent Get (filenameIn: string) from user.\\
-\noindent get\_input(filenameIn)\\
+\noindent get\_input(filenameIn, Param)\\
 \noindent input\_constraints(Param)\\
-\noindent p\_land := func\_p\_land(inParams)\\
-\noindent d\_offset := func\_d\_offset(inParams, p\_land)\\
-\noindent s := func\_s(inParams, d\_offset)\\
+\noindent p\_land := func\_p\_land(Param)\\
+\noindent d\_offset := func\_d\_offset(Param, p\_land)\\
+\noindent s := func\_s(Param, d\_offset)\\
 \noindent \#\textit{Output calculated values to a file.}\\
 % \noindent verify\_output($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
 % \noindent plot($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
@@ -228,9 +228,9 @@ SpecParam (Section~\ref{SpecParam})
 \toprule
 \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
 \midrule
-get\_input & string & - &  FileError \\
+get\_input & string, Param & - &  FileError \\
 v\_launch & - & $\mathbb{R}$\\
-angle & - & $\mathbb{R}$\\
+v\_angle & - & $\mathbb{R}$\\
 p\_target & - & $\mathbb{R}$\\
 \bottomrule
 \end{tabular}
@@ -247,7 +247,7 @@ inputFile: sequence of string \#\textit{f[i] is the ith string in the text file 
 \begin{longtable*}[l]{l} 
 \# To Support IM1 and IM2 \\
 v\_launch: $\mathbb{R}$\\
-angle: $\mathbb{R}$\\
+v\_angle: $\mathbb{R}$\\
 \# To Support IM3 and IM4 \\
 p\_target: $\mathbb{R}$\\
 \end{longtable*}
@@ -273,9 +273,9 @@ should be denoted with a '\#' symbol.
 \item exception: none
 \end{itemize}
 
-\noindent Param.angle:
+\noindent Param.v\_angle:
 \begin{itemize}
-\item output: \textit{out} := angle
+\item output: \textit{out} := v\_angle
 \item exception: none
 \end{itemize}
 
@@ -285,13 +285,13 @@ should be denoted with a '\#' symbol.
 \item exception: none
 \end{itemize}
 
-\noindent get\_input(filename):
+\noindent get\_input(filename, Param):
 \begin{itemize}
 \item transition: The file name ``filename" is first associated with the file f. 
-The data from inputFile is read sequentially to populate the state variables from
-  FR1 (v\_launch, angle, and p\_target).
+The data from f is read sequentially to populate the state variables from
+FR1 (v\_launch, v\_angle, and p\_target) in Param.
 \item exception: exc := a file name ``filename" cannot be found OR the format of
-  inputFile is incorrect $\Rightarrow$  FileError
+inputFile is incorrect $\Rightarrow$  FileError
 \end{itemize}
 
 See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and 
@@ -327,7 +327,7 @@ Param (Section~\ref{Parameters})
  \hline
  \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
  \hline
- input\_constraints & Param & - & badVelocity, badAngle, badTargetPosition \\
+ input\_constraints & Param & - & badSpeed, badAngle, badTargetPosition \\
  \hline
  \end{tabular}
  \end{center}
@@ -341,13 +341,13 @@ All of the fields Param have been assigned values before any of the access
 
 \subsubsection{Access Routine Semantics}
 
-input\_constraints(inParams):
+input\_constraints(Param):
  \begin{itemize}
  \item out: \textit{out} := none
  \item exception: exc := ( \\
- $\neg (0 < \text{inParams.v\_launch}) \Rightarrow$ badLength $|$\\
- $\neg (0 < \text{inParams.angle} < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
- $\neg (0 < \text{inParams.p\_target}) \Rightarrow$ badTargetPosition)
+ $\neg (0 < \text{Param.v\_launch}) \Rightarrow$ badSpeed $|$\\
+ $\neg (0 < \text{Param.v\_angle} < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
+ $\neg (0 < \text{Param.p\_target}) \Rightarrow$ badTargetPosition)
  \end{itemize}
 
 \subsection{Considerations}
@@ -396,19 +396,19 @@ All of the fields Param have been assigned values before any of the access
 
 \subsubsection{Access Routine Semantics}
 
-func\_p\_land(inParams):
+func\_p\_land(Param):
  \begin{itemize}
- \item out: $\textit{out} := \frac{2 * \text{v\_launch}^2 * sin(\text{angle}) * cos(\text{angle})}{g}$
+ \item out: $\textit{out} := \frac{2 * \text{v\_launch}^2 * sin(\text{v\_angle}) * cos(\text{v\_angle})}{g}$
  \item exception: exc := none
  \end{itemize}
  
-func\_d\_offset(inParams, p\_land):
+func\_d\_offset(Param, p\_land):
  \begin{itemize}
  \item out: $\textit{out} := $ p\_land - p\_target
  \item exception: exc := none
  \end{itemize}
  
-func\_s(inParams, d\_offset):
+func\_s(Param, d\_offset):
  \begin{itemize}
  \item out: $\textit{out} := $ ( \\
 $|\frac{\text{d\_offset}}{\text{p\_target}}| < \epsilon \Rightarrow$ ``The target was hit." $|$\\
@@ -632,7 +632,7 @@ N/A
 \toprule
 \textbf{Message ID} & \textbf{Error Message} \\
 \midrule
-badVelocity & InputError: Velocity must be positive.\\
+badSpeed & InputError: Speed must be positive.\\
 badAngle & InputError: Angle must be between zero and pi over two radians.\\
 badTargetPosition & InputError: Target position must be positive.\\
 \bottomrule

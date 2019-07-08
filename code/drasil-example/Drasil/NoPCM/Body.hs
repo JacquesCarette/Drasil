@@ -81,7 +81,7 @@ import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
 import Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable)
 import Drasil.NoPCM.Unitals (inputs, constrained, specParamValList)
 
--- This defines the standard units used throughout the document
+-- This defines the standard concepts used throughout the document
 thisSi :: [UnitDefn]
 thisSi = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
@@ -90,7 +90,7 @@ checkSi = collectUnits symbMap symbTT
 
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
-symbols = pi_ : map dqdWr units ++ map dqdWr constrained
+symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
  ++ map dqdWr [tempW, watE]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
 
@@ -104,8 +104,8 @@ symbolsAll = map qw symbols ++ map qw specParamValList ++
   map qw [coilSAMax] ++ map qw [tauW] ++ map qw [eta] ++
   map qw [absTol, relTol]
 
-units :: [UnitaryConceptDict]
-units = map ucw [density, tau, inSA, outSA,
+concepts :: [UnitaryConceptDict]
+concepts = map ucw [density, tau, inSA, outSA,
   htCapL, QT.htFlux, htFluxIn, htFluxOut, volHtGen,
   htTransCoeff, mass, tankVol, QT.temp, QT.heatCapSpec,
   deltaT, tempEnv, thFluxVect, time, htFluxC,

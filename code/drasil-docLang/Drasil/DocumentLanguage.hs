@@ -251,7 +251,7 @@ mkSections si = map doit
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
-    doit (ExistingSolnSec o) = mkExistingSolnSec o
+    doit (ExistingSolnSec o) = mkOffShelfSolnSec o
 
 
 -- | Helper for creating the reference section and subsections
@@ -519,8 +519,8 @@ mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
 {--}
 
 -- | Helper for making the 'Off-the-Shelf Solutions' section
-mkExistingSolnSec :: ExistingSolnSec -> Section
-mkExistingSolnSec (ExistSolnProg cs) = SRS.offShelfSol cs [] 
+mkOffShelfSolnSec :: ExistingSolnSec -> Section
+mkOffShelfSolnSec (ExistSolnProg cs) = SRS.offShelfSol cs [] 
 
 {--}
 

@@ -67,7 +67,7 @@ data DocSection = RefSec RefSec
                 | AuxConstntSec AuxConstntSec
                 | Bibliography
                 | AppndxSec AppndxSec
-                | ExistingSolnSec ExistingSolnSec
+                | OffShelfSolnsSec OffShelfSolnsSec
 
 {--}
 
@@ -216,7 +216,7 @@ data TraceabilitySec = TraceabilityProg [LabelledContent] [Sentence] [Contents] 
 {--}
 
 -- | Off-The-Shelf Solutions section 
-newtype ExistingSolnSec = ExistSolnProg [Contents]
+newtype OffShelfSolnsSec = ExistSolnProg [Contents]
 
 {--}
 
@@ -251,7 +251,7 @@ mkSections si = map doit
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
-    doit (ExistingSolnSec o) = mkOffShelfSolnSec o
+    doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
 
 -- | Helper for creating the reference section and subsections
@@ -519,7 +519,7 @@ mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
 {--}
 
 -- | Helper for making the 'Off-the-Shelf Solutions' section
-mkOffShelfSolnSec :: ExistingSolnSec -> Section
+mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
 mkOffShelfSolnSec (ExistSolnProg cs) = SRS.offShelfSol cs [] 
 
 {--}

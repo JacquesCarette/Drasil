@@ -230,7 +230,7 @@ SpecParam (Section~\ref{SpecParam})
 \midrule
 get\_input & string, Param & - &  FileError \\
 v\_launch & - & $\mathbb{R}$\\
-v\_angle & - & $\mathbb{R}$\\
+angle & - & $\mathbb{R}$\\
 p\_target & - & $\mathbb{R}$\\
 \bottomrule
 \end{tabular}
@@ -247,7 +247,7 @@ inputFile: sequence of string \#\textit{f[i] is the ith string in the text file 
 \begin{longtable*}[l]{l} 
 \# To Support IM1 and IM2 \\
 v\_launch: $\mathbb{R}$\\
-v\_angle: $\mathbb{R}$\\
+angle: $\mathbb{R}$\\
 \# To Support IM3 and IM4 \\
 p\_target: $\mathbb{R}$\\
 \end{longtable*}
@@ -273,9 +273,9 @@ should be denoted with a '\#' symbol.
 \item exception: none
 \end{itemize}
 
-\noindent Param.v\_angle:
+\noindent Param.angle:
 \begin{itemize}
-\item output: \textit{out} := v\_angle
+\item output: \textit{out} := angle
 \item exception: none
 \end{itemize}
 
@@ -289,7 +289,7 @@ should be denoted with a '\#' symbol.
 \begin{itemize}
 \item transition: The file name ``filename" is first associated with the file f. 
 The data from f is read sequentially to populate the state variables from
-FR1 (v\_launch, v\_angle, and p\_target) in Param.
+FR1 (v\_launch, angle, and p\_target) in Param.
 \item exception: exc := a file name ``filename" cannot be found OR the format of
 inputFile is incorrect $\Rightarrow$  FileError
 \end{itemize}
@@ -346,7 +346,7 @@ input\_constraints(Param):
  \item out: \textit{out} := none
  \item exception: exc := ( \\
  $\neg (0 < \text{Param.v\_launch}) \Rightarrow$ badSpeed $|$\\
- $\neg (0 < \text{Param.v\_angle} < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
+ $\neg (0 < \text{Param.angle} < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
  $\neg (0 < \text{Param.p\_target}) \Rightarrow$ badTargetPosition)
  \end{itemize}
 
@@ -398,7 +398,7 @@ All of the fields Param have been assigned values before any of the access
 
 func\_p\_land(Param):
  \begin{itemize}
- \item out: $\textit{out} := \frac{2 * \text{v\_launch}^2 * sin(\text{v\_angle}) * cos(\text{v\_angle})}{g}$
+ \item out: $\textit{out} := \frac{2 * \text{v\_launch}^2 * sin(\text{angle}) * cos(\text{angle})}{g}$
  \item exception: exc := none
  \end{itemize}
  

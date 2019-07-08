@@ -22,10 +22,10 @@ import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (softwarecon)
-import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, htTransTheo,
-  phaseChange, temp, thermalConduction, thermocon)
+import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
+  temp, thermalConduction, thermocon)
 
-import qualified Data.Drasil.Concepts.Math as M (ode, de)
+import qualified Data.Drasil.Concepts.Math as M (ode)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 
@@ -54,10 +54,9 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, introEnd,
-  introStart, orgDocIntro, physSyst1, physSyst2, purpDoc, scopeReqEnd,
-  scopeReqStart, sysCntxtDesc, sysCntxtFig, systContRespBullets,
-  sysCntxtRespIntro, userChars)
+import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
+  orgDocIntro, physSyst1, physSyst2, purpDoc, scopeReqEnd, scopeReqStart,
+  sysCntxtDesc, sysCntxtFig, systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
@@ -125,7 +124,7 @@ mkSRS = [RefSec $ RefProg intro
   IntroSec $ IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
   [IPurpose $ purpDoc (phrase progName) progName,
   IScope (scopeReqStart sWHT) scopeReqEnd,
-  IChar [] (charReader1 htTransTheo ++ charReader2 M.de) [],
+  IChar [] charsOfReader [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
   GSDSec $ GSDProg2 
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]

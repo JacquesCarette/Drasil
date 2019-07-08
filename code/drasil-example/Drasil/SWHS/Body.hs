@@ -151,7 +151,7 @@ mkSRS = [RefSec $ RefProg intro [
     IntroProg (introStart +:+ introStartSWHS) (introEnd (plural swhsPCM) progName)
     [IPurpose $ purpDoc (phrase swhsPCM) progName,
      IScope (scopeReqStart tankPCM) (scopeReqEnd +:+ scopeReqEndSWHS),
-     IChar [] (charReader1 CT.htTransTheo ++ charReader2 de) [],
+     IChar [] charsOfReader [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        $ orgDocEnd swhsPCM progName],
   GSDSec $ GSDProg2 
@@ -316,7 +316,6 @@ scopeReqEndSWHS = foldlSent_ [S "and the" +:+. short phsChgMtrl,
   S "substances inside the", phrase sWHT `sAre` phrase water `sAnd`
   short phsChgMtrl]
 
-
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar
 -- water heating tank rating PCM, 2D slope composed of homogeneous soil
@@ -329,6 +328,17 @@ scopeReqEndSWHS = foldlSent_ [S "and the" +:+. short phsChgMtrl,
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
+
+charsOfReader :: [Sentence]
+charsOfReader = [charReaderHTT, charReaderDE]
+
+charReaderHTT :: Sentence
+charReaderHTT = foldlSent_ [phrase CT.htTransTheo, S "from level 3 or 4",
+  S "mechanical",  phrase engineering]
+
+charReaderDE :: Sentence
+charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
+
 ------------------------------------
 -- 2.4 : Organization of Document --
 ------------------------------------
@@ -540,14 +550,6 @@ traceabilityMatrices = traceMatStandard si
 ----------------------------------------------
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
-
-charReader1 :: ConceptChunk -> [Sentence]
-charReader1 htt = [phrase htt +:+ S "from level 3 or 4" +:+
-  S "mechanical" +:+ phrase engineering]
-
-charReader2 :: CI -> [Sentence]
-charReader2 diffeq = [plural diffeq +:+
-  S "from level 1 and 2" +:+ phrase calculus]
 
 ------------------------------------
 -- 2.4 : Organization of Document --

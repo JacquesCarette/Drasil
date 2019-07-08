@@ -148,7 +148,7 @@ mkSRS = [RefSec $ RefProg intro [
     tsymb'' tSymbIntro (TermExcept [uNormalVect]),
     TAandA],
   IntroSec $
-    IntroProg (introStart +:+ introStartSWHS) (introEnd swhsPCM program progName)
+    IntroProg (introStart +:+ introStartSWHS) (introEnd (plural swhsPCM) progName)
     [IPurpose $ purpDoc swhsPCM progName,
      IScope (scopeReqs1 CT.thermalAnalysis tankPCM) $
        scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
@@ -260,10 +260,10 @@ introStartSWHS = foldlSent [swhsPCM ^. defn, sParen (short phsChgMtrl),
   S "which allows higher", phrase CT.thermalEnergy, S "storage capacity per",
   phrase unit_, S "weight"]
 
-introEnd :: NamedIdea ni => ni -> ConceptChunk -> CI -> Sentence
-introEnd sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
-  phrase pr, S "will be referred to as", titleize pro,
-  sParen (short pro)] -- SSP has same style sentence here
+introEnd :: Sentence -> CI -> Sentence
+introEnd progSent pro = foldlSent_ [EmptyS +:+. progSent, S "The developed",
+  phrase program, S "will be referred to as", titleize pro, sParen (short pro)]
+  -- SSP has same style sentence here
 
 -- In Concepts.hs "swhsPCM" gives "s for program name, and there is a
 -- similar paragraph in each of the other solar water heating systems

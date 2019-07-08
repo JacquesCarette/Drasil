@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
-import Data.Drasil.Concepts.Software (program, softwarecon)
+import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, htTransTheo,
   phaseChange, temp, thermalAnalysis, thermalConduction, thermalEnergy, thermocon)
 
@@ -56,8 +56,8 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, introStart,
-  orgDocIntro, physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig,
+import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, introEnd,
+  introStart, orgDocIntro, physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig,
   systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
@@ -123,7 +123,7 @@ mkSRS = [RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder],
   TAandA],
-  IntroSec $ IntroProg (introStart +:+ introStartNoPCM) (introEnd progName program)
+  IntroSec $ IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
   [IPurpose $ purpDoc progName,
   IScope (scopeReqStart thermalAnalysis sWHT) (scopeReqEnd temp thermalEnergy
     water),
@@ -253,11 +253,6 @@ symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symbMap
 
 introStartNoPCM :: Sentence
 introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. phrase energy
-
-introEnd :: CI -> ConceptChunk -> Sentence
-introEnd pro pr = foldlSent_ [EmptyS +:+. plural pro, S "The developed",
-  phrase pr, S "will be referred to as", titleize pro,
-  sParen (short pro)]
 
 -----------------------------------
 --Section 2.1 : PURPOSE OF DOCUMENT

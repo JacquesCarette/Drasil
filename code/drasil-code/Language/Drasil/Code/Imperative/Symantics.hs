@@ -505,6 +505,8 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
     repr (Method repr)
   destructor :: Label -> [repr (StateVar repr)] -> repr (Method repr)
 
+  docMain :: Label -> repr (Body repr) -> repr (Method repr)
+
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr) 

@@ -515,6 +515,10 @@ instance MethodSym JavaCode where
   constructor n = method n n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Java"
 
+  docMain c b = commentedFunc (docComment $ functionDoc 
+    "Controls the flow of the program" 
+    [("args", "List of command-line arguments")]) (mainMethod c b)
+
   function n = method n ""
 
   docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d (map 

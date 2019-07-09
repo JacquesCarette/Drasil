@@ -526,6 +526,8 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   destructor n vs = pair (destructor n $ map pfst vs) 
     (destructor n $ map psnd vs)
 
+  docMain c b = pair (docMain c $ pfst b) (docMain c $ psnd b)
+
   function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
 
@@ -1049,6 +1051,11 @@ instance MethodSym CppSrcCode where
           return empty else bodyStatements $ loopIndexDec : deleteStatements
     in pubMethod ('~':n) n void [] dbody
 
+  docMain c b = commentedFunc (docComment $ functionDoc 
+    "Controls the flow of the program" 
+    [("argc", "Number of command-line arguments"),
+    ("argv", "List of command-line arguments")]) (mainMethod c b)
+
   function n s _ t ps b = liftA2 (mthd False) (fmap snd s) (liftA5 
     (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
 
@@ -1516,6 +1523,8 @@ instance MethodSym CppHdrCode where
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
   destructor n _ = pubMethod ('~':n) n void [] (return empty)
+
+  docMain = mainMethod
 
   function n = method n ""
 

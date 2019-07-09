@@ -488,6 +488,8 @@ instance MethodSym PythonCode where
   constructor n = method initName n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Python"
 
+  docMain = mainMethod
+
   function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList 
     paramListDocD ps) b, False)
 

@@ -7,7 +7,7 @@ import Language.Drasil
 import Theory.Drasil (GenDefn, gd, gdNoRefs)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
+import Data.Drasil.Concepts.Math (rate, rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)
 
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)

@@ -1,3 +1,5 @@
+{-# LANGUAGE PostfixOperators #-}
+
 -- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.LanguageRenderer (
   -- * Common Syntax
@@ -6,8 +8,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
-  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDocD, 
-  printListDocD, printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
+  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
+  printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
   charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
   voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
   methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, 
@@ -37,10 +39,14 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
 import Utils.Drasil (capitalize, indent, indentList)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label, Library)
+import Language.Drasil.Code.Imperative.Symantics (Label, Library,
+  RenderSym(..), BodySym(..), StateTypeSym(listInnerType, getType), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), Selector(..), 
+  SelectorFunction(..), StatementSym(..), ControlStatementSym(..))
+import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   ModData(..), md, TypeData(..), td, ValData(..), vd, angles,blank, 
-  doubleQuotedText,hicat,vibcat,vmap)
+  doubleQuotedText,hicat,vibcat,vmap, getNestDegree)
 
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
@@ -92,7 +98,7 @@ moduleDocD cs = vibcat (map fst cs)
 -- Class --
 
 classDocD :: Label -> Maybe Label -> Doc -> Doc -> Doc -> Doc -> Doc
-classDocD n p inherit s vs fs = vcat [
+classDocD n p inh s vs fs = vcat [
   s <+> classDec <+> text n <+> baseClass <+> lbrace, 
   indentList [
     vs,
@@ -100,7 +106,7 @@ classDocD n p inherit s vs fs = vcat [
     fs],
   rbrace]
   where baseClass = case p of Nothing -> empty
-                              Just pn -> inherit <+> text pn
+                              Just pn -> inh <+> text pn
 
 enumDocD :: Label -> Doc -> Doc -> Doc
 enumDocD n es s = vcat [
@@ -145,11 +151,38 @@ bodyDocD bs = vibcat blocks
 
 -- IO --
 
-outDocD :: Doc -> ValData -> Doc
-outDocD printFn v = printFn <> parens (valDoc v)
+printDoc :: ValData -> ValData -> Doc
+printDoc printFn v = valDoc printFn <> parens (valDoc v)
 
-printListDocD :: Doc -> Doc -> Doc -> Doc -> Doc
-printListDocD open b lastElem close = vcat [open, b, lastElem, close]
+printListDoc :: (RenderSym repr) => Integer -> repr (Value repr) -> 
+  (repr (Value repr) -> repr (Statement repr)) -> 
+  (String -> repr (Statement repr)) -> 
+  (String -> repr (Statement repr)) -> 
+  repr (Statement repr)
+printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
+  for (varDecDef l_i S.int (litInt 0)) (i ?< (listSizeAccess v #- litInt 1))
+    (i &++) (bodyStatements [prFn (v $. listAccess t i), prStrFn ", /f "]), 
+  ifNoElse [(listSizeAccess v ?> litInt 0, oneLiner $
+    prFn (v $. listAccess t (listSizeAccess v #- litInt 1)))], 
+  prLnFn "]"]
+  where t = listInnerType $ valueType v
+        l_i = "list_i" ++ show n
+        i = var l_i S.int
+
+printObjDoc :: String -> (String -> repr (Statement repr)) 
+  -> repr (Statement repr)
+printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
+
+outDoc :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
+  -> Maybe (repr (Value repr)) -> repr (Statement repr)
+outDoc newLn printFn v f = outDoc' (getType $ valueType v)
+  where outDoc' (List t) = printListDoc (getNestDegree 1 t) v prFn prStrFn 
+          prLnFn
+        outDoc' (Object n) = printObjDoc n prLnFn
+        outDoc' _ = printSt newLn printFn v f
+        prFn = maybe print printFile f
+        prStrFn = maybe printStr printFileStr f
+        prLnFn = if newLn then maybe printStrLn printFileStrLn f else maybe printStr printFileStr f 
 
 printFileDocD :: Label -> ValData -> Doc
 printFileDocD fn f = valDoc f <> dot <> text fn
@@ -178,7 +211,7 @@ typeDocD :: Label -> TypeData
 typeDocD t = td (Object t) (text t)
 
 listTypeDocD :: TypeData -> Doc -> TypeData
-listTypeDocD t list = td (List (cType t)) (list <> angles (typeDoc t))
+listTypeDocD t lst = td (List (cType t)) (lst <> angles (typeDoc t))
 
 -- Method Types --
 
@@ -223,19 +256,19 @@ alwaysDel = 4
 
 ifCondDocD :: Doc -> Doc -> Doc -> Doc -> [(ValData, Doc)] -> Doc
 ifCondDocD _ _ _ _ [] = error "if condition created with no cases"
-ifCondDocD ifStart elseIf blockEnd elseBody (c:cs) = 
+ifCondDocD ifStart elif bEnd elseBody (c:cs) = 
   let ifSect (v, b) = vcat [
         text "if" <+> parens (valDoc v) <+> ifStart,
         indent b,
-        blockEnd]
+        bEnd]
       elseIfSect (v, b) = vcat [
-        elseIf <+> parens (valDoc v) <+> ifStart,
+        elif <+> parens (valDoc v) <+> ifStart,
         indent b,
-        blockEnd]
+        bEnd]
       elseSect = if isEmpty elseBody then empty else vcat [
         text "else" <+> ifStart,
         indent elseBody,
-        blockEnd]
+        bEnd]
   in vcat [
     ifSect c,
     vmap elseIfSect cs,
@@ -265,25 +298,25 @@ switchDocD breakState v defBody cs =
 -- (blockStart, etc.) in as shared environment
 forDocD :: Doc -> Doc -> (Doc, Terminator) -> ValData -> 
   (Doc, Terminator) -> Doc -> Doc
-forDocD blockStart blockEnd sInit vGuard sUpdate b = vcat [
+forDocD bStart bEnd sInit vGuard sUpdate b = vcat [
   forLabel <+> parens (fst sInit <> semi <+> valDoc vGuard <> semi <+> 
-    fst sUpdate) <+> blockStart,
+    fst sUpdate) <+> bStart,
   indent b,
-  blockEnd]
+  bEnd]
 
 forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> TypeData -> 
   ValData -> Doc -> Doc
-forEachDocD l blockStart blockEnd iterForEachLabel iterInLabel t v b =
-  vcat [iterForEachLabel <+> parens (typeDoc t <+> text l <+> iterInLabel <+> 
-    valDoc v) <+> blockStart,
+forEachDocD l bStart bEnd forEachLabel inLabel t v b =
+  vcat [forEachLabel <+> parens (typeDoc t <+> text l <+> inLabel <+> 
+    valDoc v) <+> bStart,
   indent b,
-  blockEnd]
+  bEnd]
 
 whileDocD :: Doc -> Doc -> ValData -> Doc -> Doc
-whileDocD blockStart blockEnd v b = vcat [
-  text "while" <+> parens (valDoc v) <+> blockStart,
+whileDocD bStart bEnd v b = vcat [
+  text "while" <+> parens (valDoc v) <+> bStart,
   indent b,
-  blockEnd]
+  bEnd]
 
 tryCatchDocD :: Doc -> Doc -> Doc 
 tryCatchDocD tb cb = vcat [

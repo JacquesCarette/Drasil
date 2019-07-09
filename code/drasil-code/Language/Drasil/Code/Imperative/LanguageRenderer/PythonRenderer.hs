@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
-  fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, 
+  fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc,
   intTypeDocD, floatTypeDocD, typeDocD, constructDocD, paramListDocD, 
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
@@ -98,11 +98,6 @@ instance KeywordSym PythonCode where
   blockCommentEnd = return empty
   docCommentStart = return $ text "##"
   docCommentEnd = return empty
-  
-  printFunc = return $ text "print"
-  printLnFunc = return empty
-  printFileFunc _ = return empty
-  printFileLnFunc _ = return empty
 
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
@@ -136,6 +131,8 @@ instance StateTypeSym PythonCode where
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in Python"
   void = return $ td Void (text "NoneType")
+
+  getType = cType . unPC
 
 instance ControlBlockSym PythonCode where
   runStrategy l strats rv av = maybe
@@ -217,6 +214,10 @@ instance ValueSym PythonCode where
   iterVar n t = var n (iterator t)
 
   inputFunc = liftA2 mkVal string (return $ text "input()")  -- raw_input() for < Python 3.0
+  printFunc = liftA2 mkVal void (return $ text "print")
+  printLnFunc = liftA2 mkVal void (return empty)
+  printFileFunc _ = liftA2 mkVal void (return empty)
+  printFileLnFunc _ = liftA2 mkVal void (return empty)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "sys.argv")
 
   valueName v = fromMaybe 
@@ -346,24 +347,18 @@ instance StatementSym PythonCode where
   extObjDecNewVoid l lib t = varDecDef l t (extStateObj lib t [])
   constDecDef = varDecDef
 
-  print _ v = mkStNoEnd <$> liftA4 pyOut printFunc v (return $ text ", end=''") 
-    (liftA2 mkVal void (return empty))
-  printLn _ v = mkStNoEnd <$> liftA4 pyOut printFunc v (return empty)
-    (liftA2 mkVal void (return empty))
-  printStr s = print string (litString s)
-  printStrLn s = printLn string (litString s)
+  printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
+    (fromMaybe (liftA2 mkVal void (return empty)) f)
 
-  printFile f _ v = mkStNoEnd <$> liftA4 pyOut printFunc v (return $ 
-    text ", end='', file=") f
-  printFileLn f _ v = mkStNoEnd <$> liftA4 pyOut printFunc v (return $ 
-    text ", file=") f
-  printFileStr f s = printFile f string (litString s)
-  printFileStrLn f s = printFileLn f string (litString s)
+  print v = pyOut False printFunc v Nothing
+  printLn v = pyOut True printFunc v Nothing
+  printStr s = print (litString s)
+  printStrLn s = printLn (litString s)
 
-  printList = print
-  printLnList = printLn
-  printFileList = printFile
-  printFileLnList = printFileLn
+  printFile f v = pyOut False printFunc v (Just f)
+  printFileLn f v = pyOut True printFunc v (Just f)
+  printFileStr f s = printFile f (litString s)
+  printFileStrLn f s = printFileLn f (litString s)
 
   getIntInput v = v &= funcApp "int" int [inputFunc]
   getFloatInput v = v &= funcApp "float" float [inputFunc]
@@ -581,8 +576,16 @@ pyListDec l t = text l <+> equals <+> typeDoc t
 pyListDecDef :: Label -> Doc -> Doc
 pyListDecDef l vs = text l <+> equals <+> brackets vs
 
-pyOut :: Doc ->  ValData -> Doc ->  ValData -> Doc
-pyOut prf v txt f = prf <> parens (valDoc v <> txt <> valDoc f)
+pyPrint :: Bool ->  ValData -> ValData ->  ValData -> Doc
+pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
+  where nl = if newLn then empty else text ", end=''"
+        fl = if isEmpty (valDoc f) then empty else text ", file=" <> valDoc f
+
+pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
+  -> Maybe (repr (Value repr)) -> repr (Statement repr)
+pyOut newLn printFn v f = pyOut' (getType $ valueType v)
+  where pyOut' (List _) = printSt newLn printFn v f
+        pyOut' _ = outDoc newLn printFn v f
 
 pyThrow ::  ValData -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valDoc errMsg)

@@ -7,6 +7,7 @@ public class Control {
     
     public static void Main(string[] args) {
         string filename = args[0];
+        StreamWriter outfile;
         InputParameters inParams = new InputParameters();
         InputFormat.get_input(filename, inParams);
         DerivedValues.derived_values(inParams);

@@ -49,8 +49,7 @@ verifyInput = cic "verifyInput" ( foldlSent [
 determineCritSlip = cic "determineCritSlip" ( foldlSent [
   S "Determine the", phrase crtSlpSrf, S "for the", phrase input_, 
   phrase slope `sC` S "corresponding to the minimum", phrase fs `sC` 
-  S "by using", makeRef2S fctSfty `sC` makeRef2S nrmShrFor `sC` S "and", 
-  makeRef2S intsliceFs, S "to calculate the", phrase fs, S "for a", 
+  S "by using", usingIMs, S "to calculate the", phrase fs, S "for a", 
   phrase slpSrf `sAnd` S "using", makeRef2S crtSlpId, S "to find the", 
   phrase slpSrf, S "that minimizes it"]) 
   "Determine-Critical-Slip-Surface" funcReqDom
@@ -72,18 +71,15 @@ displayGraph = cic "displayGraph" ( foldlSent [
 
 displayFS = cic "displayFS" ( foldlSent [
   S "Display", phrase value `ofThe` phrase fs, S "for the", 
-  phrase crtSlpSrf `sC` S "as determined from", makeRef2S fctSfty `sC`
-  makeRef2S nrmShrFor `sC` S "and", makeRef2S intsliceFs]) 
+  phrase crtSlpSrf `sC` S "as determined from", usingIMs]) 
   "Display-Factor-of-Safety" funcReqDom
 
 displayNormal = cic "displayNormal" ( foldlSent [
-  S "Using", makeRef2S fctSfty `sC` makeRef2S nrmShrFor `sC` S "and",
-  makeRef2S intsliceFs `sC` S "calculate and graphically display the",
+  S "Using", usingIMs `sC` S "calculate and graphically display the",
   plural intNormForce]) "Display-Interslice-Normal-Forces" funcReqDom
 
 displayShear = cic "displayShear" ( foldlSent [
-  S "Using", makeRef2S fctSfty `sC` makeRef2S nrmShrFor `sC` S "and",
-  makeRef2S intsliceFs `sC` S "calculate and graphically display the",
+  S "Using", usingIMs `sC` S "calculate and graphically display the",
   plural intShrForce]) "Display-Interslice-Shear-Forces" funcReqDom
 
 writeToFile = cic "writeToFile" ( foldlSent [
@@ -91,6 +87,9 @@ writeToFile = cic "writeToFile" ( foldlSent [
   foldlList Comma List (map makeRef2S [displayInput, displayGraph, displayFS, 
   displayNormal, displayShear]) `sC` S "to a file"]) "Write-Results-To-File" 
   funcReqDom
+
+usingIMs :: Sentence
+usingIMs = foldlList Comma List $ map makeRef2S [fctSfty, nrmShrFor, intsliceFs]
 
 ------------------
 inputDataTable :: LabelledContent

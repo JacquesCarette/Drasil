@@ -11,6 +11,17 @@ import java.util.ArrayList;
 public class InputFormat {
     
     public static void get_input(String filename, InputParameters inParams) throws Exception {
+        PrintWriter outfile;
+        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
+        outfile.println("function get_input called with inputs: {");
+        outfile.print("  filename = ");
+        outfile.print(filename);
+        outfile.println(", ");
+        outfile.print("  inParams = ");
+        outfile.println("Instance of InputParameters object");
+        outfile.println("  }");
+        outfile.close();
+        
         Scanner infile;
         String line;
         ArrayList<String> lines = new ArrayList<String>(0);

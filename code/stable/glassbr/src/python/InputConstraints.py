@@ -5,6 +5,13 @@ import math
 import InputParameters
 
 def input_constraints(inParams):
+    outfile = open("log.txt", "a")
+    print("function input_constraints called with inputs: {", file=outfile)
+    print("  inParams = ", end='', file=outfile)
+    print("Instance of InputParameters object", file=outfile)
+    print("  }", file=outfile)
+    outfile.close()
+    
     if (not(((0.1 <= inParams.a) and (inParams.a <= 5.0)))) :
         raise Exception("InputError")
     if (not(((0.1 <= inParams.b) and (inParams.b <= 5.0)))) :

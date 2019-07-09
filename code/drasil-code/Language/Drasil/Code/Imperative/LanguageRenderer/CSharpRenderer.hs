@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', moduleDocD, classDocD, enumDocD,
-  enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDocD,
+  enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, printDoc, outDoc,
   printFileDocD, boolTypeDocD, 
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, listTypeDocD, voidDocD,
   constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD, 
@@ -108,11 +108,6 @@ instance KeywordSym CSharpCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
-  
-  printFunc = return $ text "Console.Write"
-  printLnFunc = return $ text "Console.WriteLine"
-  printFileFunc = fmap (printFileDocD "Write")
-  printFileLnFunc = fmap (printFileDocD "WriteLine")
 
 instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc
@@ -146,6 +141,8 @@ instance StateTypeSym CSharpCode where
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in C#"
   void = return voidDocD
+
+  getType = cType . unCSC
 
 instance ControlBlockSym CSharpCode where
   runStrategy l strats rv av = maybe
@@ -236,6 +233,10 @@ instance ValueSym CSharpCode where
   iterVar n t = var n (iterator t)
   
   inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")
+  printFunc = liftA2 mkVal void (return $ text "Console.Write")
+  printLnFunc = liftA2 mkVal void (return $ text "Console.WriteLine")
+  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "Write") f)
+  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "WriteLine") f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
   valueName v = fromMaybe 
@@ -365,42 +366,17 @@ instance StatementSym CSharpCode where
   extObjDecNewVoid l _ = objDecNewVoid l
   constDecDef l t v = mkSt <$> liftA2 (constDecDefDocD l) t v
 
-  print _ v = mkSt <$> liftA2 outDocD printFunc v
-  printLn _ v = mkSt <$> liftA2 outDocD printLnFunc v
-  printStr s = mkSt <$> liftA2 outDocD printFunc (litString s)
-  printStrLn s = mkSt <$> liftA2 outDocD printLnFunc (litString s)
+  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
 
-  printFile f _ v = mkSt <$> liftA2 outDocD (printFileFunc f) v
-  printFileLn f _ v = mkSt <$> liftA2 outDocD (printFileLnFunc f) v
-  printFileStr f s = mkSt <$> liftA2 outDocD (printFileFunc f) 
-    (litString s)
-  printFileStrLn f s = mkSt <$> liftA2 outDocD (printFileLnFunc f) 
-    (litString s)
+  print v = outDoc False printFunc v Nothing
+  printLn v = outDoc True printLnFunc v Nothing
+  printStr s = outDoc False printFunc (litString s) Nothing
+  printStrLn s = outDoc True printLnFunc (litString s) Nothing
 
-  printList t v = multi [state (printStr "["), 
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?< ((v $. listSize) #-
-      litInt 1)) (var "i" int &++)  (bodyStatements [
-        print t (v $. listAccess t (var "i" int)), printStr ","]), 
-    state (print t (v $. listAccess t ((v $. listSize) #- litInt 1))), 
-    printStr "]"]
-  printLnList t v = multi [state (printStr "["), 
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?<  ((v $. listSize) #- 
-      litInt 1)) (var "i" int &++) (bodyStatements [
-        print t (v $. listAccess t (var "i" int)), printStr ","]), 
-    state (print t (v $. listAccess t ((v $. listSize) #- litInt 1))), 
-    printStrLn "]"]
-  printFileList f t v = multi [state (printFileStr f "["),
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?< ((v $. listSize) #- 
-      litInt 1)) (var "i" int &++) (bodyStatements [
-        printFile f t (v $. listAccess t (var "i" int)), printFileStr f ","]), 
-    state (printFile f t (v $. listAccess t ((v $. listSize) #- litInt 1))), 
-    printFileStr f "]"]
-  printFileLnList f t v = multi [state (printFileStr f "["), 
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?< ((v $. listSize) #- 
-      litInt 1)) (var "i" int &++) (bodyStatements [
-        printFile f t (v $. listAccess t (var "i" int)), printFileStr f ","]), 
-    state (printFile f t (v $. listAccess t ((v $. listSize) #- litInt 1))), 
-    printFileStrLn f "]"]
+  printFile f v = outDoc False (printFileFunc f) v (Just f)
+  printFileLn f v = outDoc True (printFileLnFunc f) v (Just f)
+  printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
+  printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
   getIntInput v = mkSt <$> liftA2 (csInput "Int32.Parse") v inputFunc
   getFloatInput v = mkSt <$> liftA2 (csInput "Double.Parse") v inputFunc

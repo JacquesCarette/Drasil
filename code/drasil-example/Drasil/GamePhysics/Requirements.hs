@@ -61,19 +61,18 @@ simSpaceDesc = foldlSent [S "Create a", phrase CP.space, S "for all of the",
   plural CP.rigidBody, S "in the", phrase physicalSim, 
   S "to interact in"]
 
-inputInitialCondsDesc = foldlSent [S "Input the initial", 
-  plural QPP.mass `sC` plural QP.velocity `sC` 
-  plural QM.orientation `sC` plural QP.angularVelocity, 
-  S "of" `sC` S "and", plural QP.force, S "applied on", 
+inputInitialCondsDesc = foldlSent [S "Input the initial", foldlList Comma List
+  [plural QPP.mass, plural QP.velocity, plural QM.orientation,
+  plural QP.angularVelocity `sOf` EmptyS, plural QP.force +:+ S "applied on"],
   plural CP.rigidBody]
 
-inputSurfacePropsDesc = foldlSent [S "Input the", phrase CM.surface, 
-  plural property, S "of the", plural body, S "such as",
-  phrase CP.friction `sOr` phrase CP.elasticity]
+inputSurfacePropsDesc = foldlSent [S "Input", (phrase CM.surface +:+
+  plural property) `ofThe` plural body, S "such as", phrase CP.friction `sOr`
+  phrase CP.elasticity]
 
 verifyPhysConsDesc = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
-  makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section])]
+  makeRef2S (SRS.solCharSpec [] [])]
 
 calcTransOverTimeDesc = requirementS QP.position QP.velocity 
   (S "acted upon by a" +:+ phrase QP.force)
@@ -112,9 +111,8 @@ highPerformance = cic "highPerformance" (foldlSent [
   ]) "High-Performance" nonFuncReqDom
 
 correct :: ConceptInstance
-correct = cic "correct" (foldlSent [
-  plural output_ `ofThe'` phrase code, S "have the",
-  plural property, S "described in", makeRef2S (SRS.propCorSol propsDeriv [])
+correct = cic "correct" (foldlSent [plural output_ `ofThe'` phrase code,
+  S "have the", plural property, S "described" `sIn` makeRef2S (SRS.propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
 understandable :: ConceptInstance

@@ -5,6 +5,16 @@ import math
 import InputParameters
 
 def get_input(filename, inParams):
+    outfile = open("log.txt", "a")
+    print("function get_input called with inputs: {", file=outfile)
+    print("  filename = ", end='', file=outfile)
+    print(filename, end='', file=outfile)
+    print(", ", file=outfile)
+    print("  inParams = ", end='', file=outfile)
+    print("Instance of InputParameters object", file=outfile)
+    print("  }", file=outfile)
+    outfile.close()
+    
     lines = []
     linetokens = []
     infile = open(filename, "r")

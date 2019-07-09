@@ -3,6 +3,22 @@ import sys
 import math
 
 def func_read_table(filename, z_vector, x_matrix, y_matrix):
+    outfile = open("log.txt", "a")
+    print("function func_read_table called with inputs: {", file=outfile)
+    print("  filename = ", end='', file=outfile)
+    print(filename, end='', file=outfile)
+    print(", ", file=outfile)
+    print("  z_vector = ", end='', file=outfile)
+    print(z_vector, end='', file=outfile)
+    print(", ", file=outfile)
+    print("  x_matrix = ", end='', file=outfile)
+    print(x_matrix, end='', file=outfile)
+    print(", ", file=outfile)
+    print("  y_matrix = ", end='', file=outfile)
+    print(y_matrix, file=outfile)
+    print("  }", file=outfile)
+    outfile.close()
+    
     lines = []
     linetokens = []
     infile = open(filename, "r")

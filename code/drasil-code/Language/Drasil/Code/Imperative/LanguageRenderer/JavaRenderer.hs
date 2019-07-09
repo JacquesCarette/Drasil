@@ -22,9 +22,9 @@ import Language.Drasil.Code.Imperative.Build.AST (includeExt,
   NameOpts(NameOpts), packSep)
 import Language.Drasil.Code.Imperative.LanguageRenderer ( 
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
-  multiStateDocD, blockDocD, bodyDocD, outDocD, printFileDocD, boolTypeDocD,
-  intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, voidDocD, constructDocD, 
-  stateParamDocD, paramListDocD, methodListDocD, stateVarDocD, 
+  multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
+  boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, voidDocD, 
+  constructDocD, stateParamDocD, paramListDocD, methodListDocD, stateVarDocD, 
   stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
   stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD,
   varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
@@ -112,11 +112,6 @@ instance KeywordSym JavaCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
-  
-  printFunc = return $ text "System.out.print"
-  printLnFunc = return $ text "System.out.println"
-  printFileFunc = fmap (printFileDocD "print")
-  printFileLnFunc = fmap (printFileDocD "println")
 
 instance PermanenceSym JavaCode where
   type Permanence JavaCode = Doc
@@ -150,6 +145,8 @@ instance StateTypeSym JavaCode where
   enumType t = return $ typeDocD t
   iterator _ = error "Iterator-type variables do not exist in Java"
   void = return voidDocD
+
+  getType = cType . unJC
 
 instance ControlBlockSym JavaCode where
   runStrategy l strats rv av = maybe
@@ -240,6 +237,10 @@ instance ValueSym JavaCode where
   
   inputFunc = liftA2 mkVal (obj "Scanner") (return $ parens (
     text "new Scanner(System.in)"))
+  printFunc = liftA2 mkVal void (return $ text "System.out.print")
+  printLnFunc = liftA2 mkVal void (return $ text "System.out.println")
+  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "print") f)
+  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "println") f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
   valueName v = fromMaybe 
@@ -370,42 +371,17 @@ instance StatementSym JavaCode where
   extObjDecNewVoid l _ = objDecNewVoid l
   constDecDef l t v = mkSt <$> liftA2 (jConstDecDef l) t v
 
-  print _ v = mkSt <$> liftA2 outDocD printFunc v
-  printLn _ v = mkSt <$> liftA2 outDocD printLnFunc v
-  printStr s = mkSt <$> liftA2 outDocD printFunc (litString s)
-  printStrLn s = mkSt <$> liftA2 outDocD printLnFunc (litString s)
+  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
 
-  printFile f _ v = mkSt <$> liftA2 outDocD (printFileFunc f) v
-  printFileLn f _ v = mkSt <$> liftA2 outDocD (printFileLnFunc f) v
-  printFileStr f s = mkSt <$> liftA2 outDocD (printFileFunc f) 
-    (litString s)
-  printFileStrLn f s = mkSt <$> liftA2 outDocD (printFileLnFunc f) 
-    (litString s)
+  print v = outDoc False printFunc v Nothing
+  printLn v = outDoc True printLnFunc v Nothing
+  printStr s = outDoc False printFunc (litString s) Nothing
+  printStrLn s = outDoc True printLnFunc (litString s) Nothing
 
-  printList t v = multi [state (printStr "["), 
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?< ((v $. listSize) #- 
-      litInt 1)) (var "i" int &++) (bodyStatements [
-        print t (v $. listAccess t (var "i" int)), printStr ","]), 
-    state (print t (v $. listAccess t ((v $. listSize) #- litInt 1))), 
-    printStr "]"]
-  printLnList t v = multi [state (printStr "["), 
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?< ((v $. listSize) #- 
-      litInt 1)) (var "i" int &++) (bodyStatements [
-        print t (v $. listAccess t (var "i" int)), printStr ","]), 
-    state (print t (v $. listAccess t ((v $. listSize) #- litInt 1))), 
-    printStrLn "]"]
-  printFileList f t v = multi [state (printFileStr f "["), 
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?< ((v $. listSize) #- 
-      litInt 1)) (var "i" int &++) (bodyStatements [
-        printFile f t (v $. listAccess t (var "i" int)), printFileStr f ","]), 
-    state (printFile f t (v $. listAccess t ((v $. listSize) #- litInt 1))), 
-    printFileStr f "]"]
-  printFileLnList f t v = multi [state (printFileStr f "["), 
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?< ((v $. listSize) #- 
-      litInt 1)) (var "i" int &++) (bodyStatements [
-        printFile f t (v $. listAccess t (var "i" int)), printFileStr f ","]), 
-    state (printFile f t (v $. listAccess t ((v $. listSize) #- litInt 1))), 
-    printFileStrLn f "]"]
+  printFile f v = outDoc False (printFileFunc f) v (Just f)
+  printFileLn f v = outDoc True (printFileLnFunc f) v (Just f)
+  printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
+  printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
   getIntInput v = mkSt <$> liftA3 jInput' (return $ text "Integer.parseInt")
     v inputFunc

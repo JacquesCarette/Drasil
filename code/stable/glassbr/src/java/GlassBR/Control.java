@@ -12,6 +12,7 @@ public class Control {
     
     public static void main(String[] args) throws Exception {
         String filename = args[0];
+        PrintWriter outfile;
         InputParameters inParams = new InputParameters();
         InputFormat.get_input(filename, inParams);
         DerivedValues.derived_values(inParams);

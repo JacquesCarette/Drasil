@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
-  fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
+  fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDoc,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, listTypeDocD, voidDocD,
   constructDocD, stateParamDocD, paramListDocD, methodListDocD, stateVarDocD, 
   stateVarListDocD, alwaysDel, ifCondDocD, switchDocD, forDocD, whileDocD, 
@@ -104,11 +104,6 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   blockCommentEnd = pair blockCommentEnd blockCommentEnd
   docCommentStart = pair docCommentStart docCommentStart
   docCommentEnd = pair docCommentEnd docCommentEnd
-  
-  printFunc = pair printFunc printFunc
-  printLnFunc = pair printLnFunc printLnFunc
-  printFileFunc v = pair (printFileFunc $ pfst v) (printFileFunc $ psnd v)
-  printFileLnFunc v = pair (printFileLnFunc $ pfst v) (printFileLnFunc $ psnd v)
 
 instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   type Permanence (p CppSrcCode CppHdrCode) = Doc
@@ -144,6 +139,8 @@ instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
   enumType t = pair (enumType t) (enumType t)
   iterator t = pair (iterator $ pfst t) (iterator $ psnd t)
   void = pair void void
+
+  getType s = getType $ pfst s
 
 instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
   runStrategy l strats rv av = pair (runStrategy l (map (mapPairSnd pfst) 
@@ -215,6 +212,10 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   iterVar l t = pair (iterVar l $ pfst t) (iterVar l $ psnd t)
   
   inputFunc = pair inputFunc inputFunc
+  printFunc = pair printFunc printFunc
+  printLnFunc = pair printLnFunc printLnFunc
+  printFileFunc v = pair (printFileFunc $ pfst v) (printFileFunc $ psnd v)
+  printFileLnFunc v = pair (printFileLnFunc $ pfst v) (printFileLnFunc $ psnd v)
   argsList = pair argsList argsList
 
   valueName v = valueName $ pfst v
@@ -363,27 +364,21 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   constDecDef l t v = pair (constDecDef l (pfst t) (pfst v)) (constDecDef l 
     (psnd t) (psnd v))
 
-  print t v = pair (print (pfst t) (pfst v)) (print (psnd t) (psnd v))
-  printLn t v = pair (printLn (pfst t) (pfst v)) (printLn (psnd t) (psnd v))
+  printSt nl p v f = pair (printSt nl (pfst p) (pfst v) (fmap pfst f)) 
+    (printSt nl (psnd p) (psnd v) (fmap psnd f))
+
+  print v = pair (print $ pfst v) (print $ psnd v)
+  printLn v = pair (printLn $ pfst v) (printLn $ psnd v)
   printStr s = pair (printStr s) (printStr s)
   printStrLn s = pair (printStrLn s) (printStrLn s)
 
-  printFile f t v = pair (printFile (pfst f) (pfst t) (pfst v)) (printFile 
-    (psnd f) (psnd t) (psnd v))
-  printFileLn f t v = pair (printFileLn (pfst f) (pfst t) (pfst v)) 
-    (printFileLn (psnd f) (psnd t) (psnd v))
+  printFile f v = pair (printFile (pfst f) (pfst v)) (printFile (psnd f) 
+    (psnd v))
+  printFileLn f v = pair (printFileLn (pfst f) (pfst v)) (printFileLn (psnd f) 
+    (psnd v))
   printFileStr f s = pair (printFileStr (pfst f) s) (printFileStr (psnd f) s)
   printFileStrLn f s = pair (printFileStrLn (pfst f) s) (printFileStrLn (psnd f)
     s)
-
-  printList t v = pair (printList (pfst t) (pfst v)) (printList (psnd t) 
-    (psnd v))
-  printLnList t v = pair (printLnList (pfst t) (pfst v)) (printLnList (psnd t) 
-    (psnd v))
-  printFileList f t v = pair (printFileList (pfst f) (pfst t) (pfst v)) 
-    (printFileList (psnd f) (psnd t) (psnd v))
-  printFileLnList f t v = pair (printFileLnList (pfst f) (pfst t) (pfst v)) 
-    (printFileLnList (psnd f) (psnd t) (psnd v))
 
   getIntInput v = pair (getIntInput $ pfst v) (getIntInput $ psnd v)
   getFloatInput v = pair (getFloatInput $ pfst v) (getFloatInput $ psnd v)
@@ -628,11 +623,6 @@ instance KeywordSym CppSrcCode where
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
 
-  printFunc = return $ text "std::cout"
-  printLnFunc = return $ text "std::cout"
-  printFileFunc = fmap valDoc -- is this right?
-  printFileLnFunc = fmap valDoc
-
 instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = Doc
   static_ = return staticDocD
@@ -665,6 +655,8 @@ instance StateTypeSym CppSrcCode where
   enumType t = return $ typeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
   void = return voidDocD
+
+  getType = cType . unCPPSC
 
 instance ControlBlockSym CppSrcCode where
   runStrategy l strats rv av = maybe
@@ -753,6 +745,10 @@ instance ValueSym CppSrcCode where
   iterVar l t = liftA2 mkVal (iterator t) (return $ text $ "(*" ++ l ++ ")")
   
   inputFunc = liftA2 mkVal string (return $ text "std::cin")
+  printFunc = liftA2 mkVal void (return $ text "std::cout")
+  printLnFunc = liftA2 mkVal void (return $ text "std::cout")
+  printFileFunc f = liftA2 mkVal void (fmap valDoc f) -- is this right?
+  printFileLnFunc f = liftA2 mkVal void (fmap valDoc f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
   valueName v = fromMaybe 
@@ -820,7 +816,7 @@ instance Selector CppSrcCode where
 
   selfAccess l = objAccess (self l)
 
-  listSizeAccess v = objAccess v listSize
+  listSizeAccess v = castObj (cast int int) (objAccess v listSize)
 
   listIndexExists v i = listSizeAccess v ?> i
   argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
@@ -882,45 +878,17 @@ instance StatementSym CppSrcCode where
   extObjDecNewVoid l _ = objDecNewVoid l
   constDecDef l t v = mkSt <$> liftA2 (constDecDefDocD l) t v
 
-  print _ v = mkSt <$> liftA2 (cppPrintDocD False) printFunc v
-  printLn _ v = mkSt <$> liftA2 (cppPrintDocD True) printLnFunc v
-  printStr s = mkSt <$> liftA2 (cppPrintDocD False) printFunc (litString s)
-  printStrLn s = mkSt <$> liftA2 (cppPrintDocD True) printLnFunc 
-    (litString s)
+  printSt nl p v _ = mkSt <$> liftA2 (cppPrint nl) p v
 
-  printFile f _ v = mkSt <$> liftA2 (cppPrintDocD False) 
-    (printFileFunc f) v
-  printFileLn f _ v = mkSt <$> liftA2 (cppPrintDocD True) 
-    (printFileLnFunc f) v
-  printFileStr f s = mkSt <$> liftA2 (cppPrintDocD False) 
-    (printFileFunc f) (litString s)
-  printFileStrLn f s = mkSt <$> liftA2 (cppPrintDocD True) 
-    (printFileLnFunc f) (litString s)
+  print v = outDoc False printFunc v Nothing
+  printLn v = outDoc True printLnFunc v Nothing
+  printStr s = outDoc False printFunc (litString s) Nothing
+  printStrLn s = outDoc True printLnFunc (litString s) Nothing
 
-  printList t v = multi [state (printStr "["), 
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?< ((v $. listSize) #- 
-      litInt 1)) (var "i" int &++) (bodyStatements [
-        print t (v $. listAccess t (var "i" int)), printStr ","]),
-    state (print t (v $. listAccess t ((v $. listSize) #- litInt 1))),
-    printStr "]"]
-  printLnList t v = multi [state (printStr "["), 
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?< ((v $. listSize) #- 
-      litInt 1)) (var "i" int &++) (bodyStatements [
-        print t (v $. listAccess t (var "i" int)), printStr ","]),
-    state (print t (v $. listAccess t ((v $. listSize) #- litInt 1))), 
-    printStrLn "]"]
-  printFileList f t v = multi [state (printFileStr f "["), 
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?< ((v $. listSize) #- 
-      litInt 1)) (var "i" int &++) (bodyStatements [
-        printFile f t (v $. listAccess t (var "i" int)), printFileStr f ","]), 
-    state (printFile f t (v $. listAccess t ((v $. listSize) #- litInt 1))), 
-    printFileStr f "]"]
-  printFileLnList f t v = multi [state (printFileStr f "["), 
-    for (varDecDef "i" int (litInt 0)) (var "i" int ?< ((v $. listSize) #- 
-      litInt 1)) (var "i" int &++) (bodyStatements [
-        printFile f t (v $. listAccess t (var "i" int)), printFileStr f ","]), 
-    state (printFile f t (v $. listAccess t ((v $. listSize) #- litInt 1))),
-    printFileStrLn f "]"]
+  printFile f v = outDoc False (printFileFunc f) v (Just f)
+  printFileLn f v = outDoc True (printFileLnFunc f) v (Just f)
+  printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
+  printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
   getIntInput v = mkSt <$> liftA3 cppInput v inputFunc endStatement
   getFloatInput v = mkSt <$> liftA3 cppInput v inputFunc endStatement
@@ -1187,11 +1155,6 @@ instance KeywordSym CppHdrCode where
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
 
-  printFunc = return empty
-  printLnFunc = return empty
-  printFileFunc _ = return empty
-  printFileLnFunc _ = return empty
-
 instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = Doc
   static_ = return staticDocD
@@ -1224,6 +1187,8 @@ instance StateTypeSym CppHdrCode where
   enumType t = return $ typeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
   void = return voidDocD
+
+  getType = cType . unCPPHC
 
 instance ControlBlockSym CppHdrCode where
   runStrategy _ _ _ _ = return empty
@@ -1291,6 +1256,10 @@ instance ValueSym CppHdrCode where
   iterVar _ _ = liftA2 mkVal void (return empty)
   
   inputFunc = liftA2 mkVal void (return empty)
+  printFunc = liftA2 mkVal void (return empty)
+  printLnFunc = liftA2 mkVal void (return empty)
+  printFileFunc _ = liftA2 mkVal void (return empty)
+  printFileLnFunc _ = liftA2 mkVal void (return empty)
   argsList = liftA2 mkVal void (return empty)
 
   valueName _ = error "Attempted to extract string from Value for C++ header file"
@@ -1413,20 +1382,17 @@ instance StatementSym CppHdrCode where
   extObjDecNewVoid _ _ _ = return (mkStNoEnd empty)
   constDecDef _ _ _ = return (mkStNoEnd empty)
 
-  print _ _ = return (mkStNoEnd empty)
-  printLn _ _ = return (mkStNoEnd empty)
+  printSt _ _ _ _ = return (mkStNoEnd empty)
+
+  print _ = return (mkStNoEnd empty)
+  printLn _ = return (mkStNoEnd empty)
   printStr _ = return (mkStNoEnd empty)
   printStrLn _ = return (mkStNoEnd empty)
 
-  printFile _ _ _ = return (mkStNoEnd empty)
-  printFileLn _ _ _ = return (mkStNoEnd empty)
+  printFile _ _ = return (mkStNoEnd empty)
+  printFileLn _ _ = return (mkStNoEnd empty)
   printFileStr _ _ = return (mkStNoEnd empty)
   printFileStrLn _ _ = return (mkStNoEnd empty)
-
-  printList _ _ = return (mkStNoEnd empty)
-  printLnList _ _ = return (mkStNoEnd empty)
-  printFileList _ _ _ = return (mkStNoEnd empty)
-  printFileLnList _ _ _ = return (mkStNoEnd empty)
 
   getIntInput _ = return (mkStNoEnd empty)
   getFloatInput _ = return (mkStNoEnd empty)
@@ -1672,8 +1638,8 @@ cppListDecDoc l n t = typeDoc t <+> text l <> parens (valDoc n)
 cppListDecDefDoc :: Label -> TypeData -> Doc -> Doc
 cppListDecDefDoc l t vs = typeDoc t <+> text l <> braces vs
 
-cppPrintDocD :: Bool -> Doc -> ValData -> Doc
-cppPrintDocD newLn printFn v = printFn <+> text "<<" <+> valDoc v <+> end
+cppPrint :: Bool -> ValData -> ValData -> Doc
+cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> valDoc v <+> end
   where end = if newLn then text "<<" <+> text "std::endl" else empty
 
 cppThrowDoc :: ValData -> Doc

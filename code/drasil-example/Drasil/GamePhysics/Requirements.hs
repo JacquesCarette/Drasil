@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, propsDeriv) where
+module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs) where
 
 import Language.Drasil hiding (Vector, organization)
 import Utils.Drasil
@@ -23,9 +23,6 @@ import Drasil.GamePhysics.Concepts (twoD)
 ------------------------------
 -- SECTION 5 : REQUIREMENTS --
 ------------------------------
-
-propsDeriv :: [Contents]
-propsDeriv = [foldlSP [S "FIXME"]]
 
 -----------------------------------
 -- 5.1 : Functional Requirements --

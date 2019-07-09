@@ -12,8 +12,7 @@ module Drasil.Sections.SpecificSystemDescription
   , inModelF
   , datConF
   , dataConstraintUncertainty
-  , inDataConstTbl, outDataConstTbl 
-  , listofTablesToRefs
+  , inDataConstTbl, outDataConstTbl, propCorSolF
   ) where
 
 import Language.Drasil
@@ -144,39 +143,38 @@ inModelIntro :: Section -> Section -> Section -> Section -> Contents
 inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_, 
   S "transforms the", phrase problem, S "defined in", makeRef2S r1,
   S "into one which is expressed in mathematical terms. It uses concrete", 
-  plural symbol_, S "defined in", makeRef2S r2, 
-  S "to replace the abstract", plural symbol_, S "in the", 
-  plural model, S "identified in", makeRef2S r3 :+: end]
-    where end = S " and" +:+ makeRef2S r4
+  plural symbol_, S "defined in", makeRef2S r2, S "to replace the abstract",
+  plural symbol_, S "in the", plural model, S "identified in", makeRef2S r3 `sAnd`
+  makeRef2S r4]
 
 -- wrapper for datConPar
 datConF :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> Section
 datConF hasUncertainty mid trailing tables = SRS.datCon 
-  (dataConstraintParagraph hasUncertainty (listofTablesToRefs tables) mid trailing : map LlC tables) []
+  (dataConstraintParagraph hasUncertainty mid trailing tables : map LlC tables) []
   
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
-dataConstraintParagraph :: Sentence -> Sentence -> Sentence -> Sentence -> Contents
-dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = mkParagraph $
-  dataConstraintIntroSent tableRef +:+ middleSent +:+ 
+dataConstraintParagraph :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> Contents
+dataConstraintParagraph hasUncertainty middleSent trailingSent tables = mkParagraph $
+  dataConstraintIntroSent tables +:+ middleSent +:+ 
   dataConstraintClosingSent hasUncertainty trailingSent
 
--- makes a list of references to tables takes
--- l  list of layout objects that can be referenced
--- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
-listofTablesToRefs  []     = EmptyS
-listofTablesToRefs  [x]    = makeRef2S x +:+ S "shows"
-listofTablesToRefs  [x,y]  = makeRef2S x `sAnd` makeRef2S y +:+ S "show" -- for proper grammar with multiple tables
-                                                                                    -- no Oxford comma in case there is only two tables to be referenced
-listofTablesToRefs  (x:xs) = makeRef2S x `sC` listofTablesToRefs xs
- 
-dataConstraintIntroSent :: Sentence -> Sentence
-dataConstraintIntroSent tableRef = foldlSent [tableRef, S "the", plural datumConstraint, S "on the", phrase input_, 
-  S "and", phrase output_ +:+. (plural variable `sC` S "respectively"), S "The", 
-  phrase column, S "for", phrase physical, plural constraint, S "gives the", 
-  phrase physical, plural limitation, S "on the range of", plural value, 
-  S "that can be taken by the", phrase variable]
+dataConstraintIntroSent :: [LabelledContent] -> Sentence
+dataConstraintIntroSent tables = foldlSent [tableRef, S "the", plural datumConstraint,
+  S "on the" +:+. varsSent numTables, S "The", phrase column, S "for",
+  phrase physical, plural constraint, S "gives the",  phrase physical,
+  plural limitation, S "on the range of", plural value, S "that can be taken by the",
+  phrase variable]
+  where
+    numTables  = length tables
+    tableRef   = foldlList Comma List (map makeRef2S tables) +:+ tableEnd numTables
+    tableEnd 0 = EmptyS
+    tableEnd 1 = S "shows"
+    tableEnd _ = S "show"
+    -- FIXME: varsSent too hardcoded - we need a better way to enforce the data constraint tables
+    varsSent 1 = phrase input_ +:+ plural variable
+    varsSent 2 = phrase input_ `sAnd` phrase output_ +:+ plural variable `sC` S "respectively"
+    varsSent n = error $ "varsSent not implemented for " ++ show n ++ " tables"
 
 dataConstraintClosingSent :: Sentence -> Sentence -> Sentence
 dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
@@ -207,10 +205,7 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
             (short typUnc, map typUncr $ sortBySymbol qlst)]  "InDataConstraints" $
             S "Input Data Constraints"
   where
-    getRVal c = uns (c ^. reasVal)
-      where uns (Just e) = e
-            uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
-
+    getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ (c ^. uid)) (c ^. reasVal)
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
@@ -226,3 +221,11 @@ fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
 -- | formats software constraints
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
 fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
+
+propCorSolF :: [Contents] -> Section
+propCorSolF c@([LlC t@(LblC _ Table{})]) = SRS.propCorSol (propsIntro t : c) []
+propCorSolF x                            = SRS.propCorSol x []
+
+propsIntro :: LabelledContent -> Contents
+propsIntro tab = foldlSP [makeRef2S tab, S "shows the", plural datumConstraint,
+  S "on the", phrase output_, plural variable]

@@ -26,7 +26,7 @@ import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfUnits (tableOfUnits)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
-  stakeholder, thModel, tOfSymb, userChar, propCorSol, offShelfSol)
+  stakeholder, thModel, tOfSymb, userChar, offShelfSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -35,7 +35,7 @@ import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
 import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
-  solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
+  propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
 import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
 import qualified Drasil.Sections.TraceabilityMandGs as TMG (traceMGF)
@@ -463,7 +463,7 @@ mkSolChSpec si (SCSProg l) =
         sDom [u] = u
         sDom u = error $ "Expected ConceptDomain to have a single domain, found " ++
           show (length u) ++ " instead."-}
-    mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
+    mkSubSCS _ (CorrSolnPpties cs)   = SSD.propCorSolF cs
     mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.

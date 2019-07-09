@@ -16,11 +16,10 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
   LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), generateTraceMap', dataConstraintUncertainty, inDataConstTbl,
-  intro, mkDoc, outDataConstTbl, outDataConstTbl, tsymb,
-  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
-  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  traceMatStandard, solutionLabel)
+  PDSub(..), dataConstraintUncertainty, egetDocDesc, generateTraceMap,
+  generateTraceMap', getDocDesc, getSCSSub, getTraceMapFromDD,
+  getTraceMapFromGD, getTraceMapFromIM, getTraceMapFromTM, inDataConstTbl,
+  intro, mkDoc, outDataConstTbl, solutionLabel, traceMatStandard, tsymb)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -53,7 +52,7 @@ import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
-import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, propsDeriv)
+import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
@@ -87,8 +86,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
           iModelsNew ShowDerivation
-        , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
-            [inDataConstTbl inputConstraints, outDataConstTbl outputConstraints]
+        , Constraints EmptyS dataConstraintUncertainty (S "FIXME") [inDataConstTbl inputConstraints]
         , CorrSolnPpties propsDeriv
         ]
       ],
@@ -244,7 +242,6 @@ para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldl
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope_of_requirements_intro_p1 :: Sentence
-
 scope_of_requirements_intro_p1 = foldlSent_
   [S "the", phrase physicalSim `sOf` getAcc twoD, 
   plural CP.rigidBody, S "acted on by", plural QP.force]
@@ -263,7 +260,6 @@ scope_of_requirements_intro_p1 = foldlSent_
 -------------------------------------
 
 organizationOfDocumentsIntro :: Sentence
-
 organizationOfDocumentsIntro = foldlSent 
   [S "The", phrase organization, S "of this", phrase document, 
   S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
@@ -439,6 +435,9 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 ------------------------------
 -- SECTION 5 : REQUIREMENTS --
 ------------------------------
+
+propsDeriv :: [Contents]
+propsDeriv = [LlC $ outDataConstTbl outputConstraints]
 
 -- in Requirements.hs
 

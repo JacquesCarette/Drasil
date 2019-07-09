@@ -45,8 +45,7 @@ import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.References (citations)
-import Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
-  nonfuncReqs, propsDeriv)
+import Drasil.Projectile.Requirements (funcReqs, inputParamsTable, nonfuncReqs)
 import Drasil.Projectile.TMods (tMods)
 import Drasil.Projectile.Unitals (acronyms, constants, inConstraints,
   launAngle, outConstraints, symbols, unitalIdeas, unitalQuants)
@@ -78,11 +77,7 @@ mkSRS = [
         , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
-        , Constraints EmptyS dataConstraintUncertainty EmptyS
-                      {-(foldlSent [makeRef2S $ valsOfAuxCons [] [],
-                      S "gives", plural value `ofThe` S "specification",
-                      plural parameter, S "used in", makeRef2S inDataCons])-}
-                      [inDataCons, outDataCons]
+        , Constraints EmptyS dataConstraintUncertainty EmptyS [inDataCons]
         , CorrSolnPpties propsDeriv
         ]
       ],
@@ -195,6 +190,13 @@ physSystParts = map foldlSent [
 inDataCons, outDataCons :: LabelledContent
 inDataCons  = inDataConstTbl  inConstraints
 outDataCons = outDataConstTbl outConstraints
+
+------------------------------------
+-- Properties of Correct Solution --
+------------------------------------
+
+propsDeriv :: [Contents]
+propsDeriv = [LlC outDataCons]
 
 --------------------------
 -- Traceabilty Matrices --

@@ -184,18 +184,18 @@ liftS :: Reader a b -> Reader a [b]
 liftS = fmap (: [])
 
 funcTerm :: String -> Reader (State repr) String
-funcTerm cname = asks
-  ((maybe "No description given" (getStr . phraseNP . view term) 
-  . Map.lookup cname) 
-  . fMap
-  . codeSpec)
+funcTerm cname = do
+  g <- ask
+  let db = sysinfodb $ csi $ codeSpec g
+  return $ (maybe "No description given" (getStr db . phraseNP . view term) 
+    . Map.lookup cname) (fMap $ codeSpec g)
        
 varTerm :: String -> Reader (State repr) String
-varTerm cname = asks
-  ((maybe "No description given" (getStr . phraseNP . view term) 
-  . Map.lookup cname) 
-  . vMap
-  . codeSpec)
+varTerm cname = do
+  g <- ask
+  let db = sysinfodb $ csi $ codeSpec g
+  return $ (maybe "No description given" (getStr db . phraseNP . view term) 
+    . Map.lookup cname) (vMap $ codeSpec g)
 
 ------- INPUT ----------
 

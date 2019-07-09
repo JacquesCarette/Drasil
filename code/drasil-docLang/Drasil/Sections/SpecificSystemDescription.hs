@@ -161,10 +161,7 @@ dataConstraintParagraph hasUncertainty middleSent trailingSent tables = mkParagr
 
 dataConstraintIntroSent :: [LabelledContent] -> Sentence
 dataConstraintIntroSent tables = foldlSent [tableRef, S "the", plural datumConstraint,
-  S "on the" +:+. varsSent numTables, S "The", phrase column, S "for",
-  phrase physical, plural constraint, S "gives the",  phrase physical,
-  plural limitation, S "on the range of", plural value, S "that can be taken by the",
-  phrase variable]
+  S "on the" +:+. varsSent numTables, physConstColSent]
   where
     numTables  = length tables
     tableRef   = foldlList Comma List (map makeRef2S tables) +:+ tableEnd numTables
@@ -175,6 +172,11 @@ dataConstraintIntroSent tables = foldlSent [tableRef, S "the", plural datumConst
     varsSent 1 = phrase input_ +:+ plural variable
     varsSent 2 = phrase input_ `sAnd` phrase output_ +:+ plural variable `sC` S "respectively"
     varsSent n = error $ "varsSent not implemented for " ++ show n ++ " tables"
+
+physConstColSent :: Sentence
+physConstColSent = foldlSent_ [S "The", phrase column, S "for", phrase physical,
+  plural constraint, S "gives the",  phrase physical, plural limitation,
+  S "on the range" `sOf` plural value, S "that can be taken by the", phrase variable]
 
 dataConstraintClosingSent :: Sentence -> Sentence -> Sentence
 dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
@@ -228,4 +230,4 @@ propCorSolF x                            = SRS.propCorSol x []
 
 propsIntro :: LabelledContent -> Contents
 propsIntro tab = foldlSP [makeRef2S tab, S "shows the", plural datumConstraint,
-  S "on the", phrase output_, plural variable]
+  S "on the", phrase output_ +:+. plural variable, physConstColSent]

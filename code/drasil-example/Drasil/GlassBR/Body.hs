@@ -34,7 +34,8 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   definition, doccon, doccon', document, emphasis, environment, goal,
   information, input_, interface, model, organization, physical, problem,
   product_, purpose, reference, software, softwareConstraint, softwareSys,
-  srsDomains, standard, sysCont, system, template, term_, user, value, variable)
+  specification, srsDomains, standard, sysCont, system, template, term_, user,
+  value, variable)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, code)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
@@ -61,7 +62,7 @@ import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs, propsDeriv)
+import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
@@ -161,9 +162,9 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
         , Constraints EmptyS dataConstraintUncertainty
                       (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
-                      S "gives", plural value `ofThe` S "specification",
+                      S "gives", plural value `ofThe` phrase specification,
                       plural parameter, S "used in", makeRef2S inputDataConstraints])
-                      [inputDataConstraints, outputDataConstraints]
+                      [inputDataConstraints]
         , CorrSolnPpties propsDeriv
         ]
       ],
@@ -204,8 +205,6 @@ systInfo = SI {
    refdb       = refDB
 }
   --FIXME: All named ideas, not just acronyms.
-
-inputDataConstraints, outputDataConstraints :: LabelledContent
 
 --------------------------------------------------------------------------------
 termsAndDescBullets :: Contents
@@ -411,8 +410,12 @@ goalInputs = [plural dimension `ofThe` phrase glaPlane, S "the" +:+ phrase glass
 
 {-input and output tables-}
 
-inputDataConstraints = inDataConstTbl GB.inputDataConstraints
-outputDataConstraints = outDataConstTbl [probBr]
+inputDataConstraints :: LabelledContent
+inputDataConstraints  = inDataConstTbl GB.inputDataConstraints
+
+propsDeriv :: [Contents]
+propsDeriv = [LlC $ outDataConstTbl [probBr]]
+
 
 {--REQUIREMENTS--}
 

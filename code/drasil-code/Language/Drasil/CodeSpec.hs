@@ -10,13 +10,13 @@ import Database.Drasil(ChunkDB, SystemInformation(SI), symbLookup, symbolTable,
 import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
-import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, ConstraintMap,
-  codevar, codefunc, codeEquat, funcPrefix, codeName, spaceToCodeType, toCodeName, constraintMap,
-  qtov, qtoc, symbToCodeName, codeType)
+import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, 
+  ConstraintMap, codevar, codefunc, codeEquat, funcPrefix, codeName, 
+  spaceToCodeType, toCodeName, constraintMap, qtov, qtoc, codeType)
 import Language.Drasil.Code.Code (CodeType)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 
-import Control.Lens ((^.), view)
+import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
 import qualified Data.Map as Map
 import Data.Maybe (maybeToList, catMaybes, mapMaybe)
@@ -65,21 +65,9 @@ type VarMap      = Map.Map String CodeChunk
 
 assocToMap :: CodeIdea a => [a] -> Map.Map String a
 assocToMap = Map.fromList . map (\x -> (codeName x, x))
-
-funcTerm :: String -> FunctionMap -> String
-funcTerm cname = maybe "No description given" (getStr . phraseNP . view term) . Map.lookup cname
-       
-varTerm :: String -> VarMap -> String
-varTerm cname = maybe "No description given" (getStr . phraseNP . view term) . Map.lookup cname
         
 varType :: String -> VarMap -> CodeType
 varType cname m = maybe (error "Variable not found") codeType (Map.lookup cname m)
-        
-getStr :: Sentence -> String
-getStr (S s) = s
-getStr (P s) = symbToCodeName s
-getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
-getStr _ = error "Term is not a string" 
 
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys
@@ -186,17 +174,17 @@ data Func = FCD CodeDefinition
 funcQD :: QDefinition -> Func
 funcQD qd = FCD $ qtoc qd 
 
-funcData :: Name -> DataDesc -> Func
-funcData n d = FData $ FuncData (toCodeName n) d
+funcData :: Name -> String -> DataDesc -> Func
+funcData n desc d = FData $ FuncData (toCodeName n) desc d
 
-funcDef :: (Quantity c, MayHaveUnit c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
-funcDef s i t fs  = FDef $ FuncDef (toCodeName s) (map codevar i) (spaceToCodeType t) fs 
+funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> Space -> [FuncStmt] -> Func  
+funcDef s desc i t fs  = FDef $ FuncDef (toCodeName s) desc (map codevar i) (spaceToCodeType t) fs 
      
 data FuncData where
-  FuncData :: Name -> DataDesc -> FuncData
+  FuncData :: Name -> String -> DataDesc -> FuncData
   
 data FuncDef where
-  FuncDef :: Name -> [CodeChunk] -> CodeType -> [FuncStmt] -> FuncDef
+  FuncDef :: Name -> String -> [CodeChunk] -> CodeType -> [FuncStmt] -> FuncDef
  
 data FuncStmt where
   FAsg :: CodeChunk -> Expr -> FuncStmt
@@ -222,8 +210,8 @@ fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
 fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
 
 asVC :: Func -> QuantityDict
-asVC (FDef (FuncDef n _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
-asVC (FData (FuncData n _)) = implVar n (nounPhraseSP n) (Atomic n) Real
+asVC (FDef (FuncDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
+asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
 asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
 
 asExpr :: Func -> Expr
@@ -235,8 +223,8 @@ asExpr' f = sy $ asVC' f
 
 -- FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
-asVC' (FDef (FuncDef n _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
-asVC' (FData (FuncData n _)) = vc n (nounPhraseSP n) (Atomic n) Real
+asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
+asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
 asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 
 
@@ -270,8 +258,8 @@ modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _) -> (n, getModDep m))
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)
         fdep (FCD cd) = codeName cd:map codeName (codevarsandfuncs (codeEquat cd) sm mem)
-        fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
-        fdep (FData (FuncData _ d)) = map codeName $ getInputs d
+        fdep (FDef (FuncDef _ _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
+        fdep (FData (FuncData _ _ d)) = map codeName $ getInputs d
         sm = sysinfodb cs
 
 fstdep :: ChunkDB -> FuncStmt -> [CodeChunk]
@@ -318,14 +306,16 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
        
 fname :: Func -> Name       
 fname (FCD cd) = codeName cd
-fname (FDef (FuncDef n _ _ _)) = n
-fname (FData (FuncData n _)) = n 
+fname (FDef (FuncDef n _ _ _ _)) = n
+fname (FData (FuncData n _ _)) = n 
 
 prefixFunctions :: [Mod] -> [Mod]
 prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
   where pfunc f@(FCD _) = f
-        pfunc (FData (FuncData n d)) = FData (FuncData (funcPrefix ++ n) d)
-        pfunc (FDef (FuncDef n a t f)) = FDef (FuncDef (funcPrefix ++ n) a t f)
+        pfunc (FData (FuncData n desc d)) = FData (FuncData (funcPrefix ++ n) 
+          desc d)
+        pfunc (FDef (FuncDef n desc a t f)) = FDef (FuncDef (funcPrefix ++ n)
+          desc a t f)
 
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]

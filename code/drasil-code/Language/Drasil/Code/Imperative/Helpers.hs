@@ -4,9 +4,11 @@ module Language.Drasil.Code.Imperative.Helpers (blank,verticalComma,
   angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
   emptyIfEmpty, emptyIfNull, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, 
   liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 
-  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType
+  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType, getStr
 ) where
 
+import Language.Drasil (Sentence(..))
+import Language.Drasil.Chunk.Code (symbToCodeName)
 import Language.Drasil.Code.Code (CodeType(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S ( 
   RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
@@ -125,3 +127,10 @@ convType (Object n) = S.obj n
 convType (Enum n) = S.enumType n
 convType Void = S.void
 convType File = error "convType: File ?"
+
+getStr :: Sentence -> String
+getStr (S s) = s
+getStr (P s) = symbToCodeName s
+getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
+getStr (Ch _ _) = "Ch"
+getStr _ = error "Term is not a string" 

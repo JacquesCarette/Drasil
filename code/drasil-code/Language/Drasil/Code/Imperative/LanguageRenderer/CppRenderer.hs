@@ -1298,7 +1298,9 @@ instance ValueSym CppHdrCode where
   printFileLnFunc _ = liftA2 mkVal void (return empty)
   argsList = liftA2 mkVal void (return empty)
 
-  valueName _ = error "Attempted to extract string from Value for C++ header file"
+  valueName v = fromMaybe 
+    (error $ "Attempt to print unprintable Value (" ++ render (valDoc $ unCPPHC 
+    v) ++ ")") (valName $ unCPPHC v)
   valueType = error "Attempted to extract type from Value for C++ header file"
 
 instance NumericExpression CppHdrCode where

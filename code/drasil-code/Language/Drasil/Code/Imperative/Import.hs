@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Data (ModData(..))
-import Language.Drasil.Code.Imperative.Helpers (convType)
+import Language.Drasil.Code.Imperative.Helpers (convType, getStr)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
   (cppExts)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer 
@@ -44,8 +44,8 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes, mapMaybe)
 import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
-import Control.Monad.Reader (Reader, ask, runReader, withReader)
-import Control.Lens ((^.))
+import Control.Monad.Reader (Reader, ask, asks, runReader, withReader)
+import Control.Lens ((^.), view)
 import qualified Prelude as P ((<>))
 
 -- Private State, used to push these options around the generator
@@ -109,14 +109,14 @@ assign' x y = do
   g <- ask
   chooseLogging (logKind g) x y
 
-publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label -> 
-  [ParamData repr] -> [repr (Block repr)] -> 
-  Reader (State repr) (repr (Method repr))
+publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label -> String
+  -> [ParamData repr] -> [repr (Block repr)] 
+  -> Reader (State repr) (repr (Method repr))
 publicMethod = genMethodCall public static_
 
-publicInOutFunc :: (RenderSym repr) => Label -> [repr (Value repr)] -> 
-  [repr (Value repr)] -> [repr (Block repr)] -> 
-  Reader (State repr) (repr (Method repr))
+publicInOutFunc :: (RenderSym repr) => Label -> String -> [repr (Value repr)] 
+  -> [repr (Value repr)] -> [repr (Block repr)] 
+  -> Reader (State repr) (repr (Method repr))
 publicInOutFunc = genInOutFunc public static_
 
 generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
@@ -183,6 +183,20 @@ getBuildConfig Cpp = buildAll $ \i o -> cppCompiler : i ++ map asFragment
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (: [])
 
+funcTerm :: String -> Reader (State repr) String
+funcTerm cname = asks
+  ((maybe "No description given" (getStr . phraseNP . view term) 
+  . Map.lookup cname) 
+  . fMap
+  . codeSpec)
+       
+varTerm :: String -> Reader (State repr) String
+varTerm cname = asks
+  ((maybe "No description given" (getStr . phraseNP . view term) 
+  . Map.lookup cname) 
+  . vMap
+  . codeSpec)
+
 ------- INPUT ----------
 
 genInputModClass :: (RenderSym repr) => Reader (State repr) [repr (Module repr)]
@@ -226,7 +240,9 @@ genInputConstraints :: (RenderSym repr) => Reader (State repr)
   (Maybe (repr (Method repr)))
 genInputConstraints = do
   g <- ask
-  let cm       = cMap $ csi $ codeSpec g
+  let cm = cMap $ csi $ codeSpec g
+      desc = "Verifies that input values satisfy the physical constraints" ++
+             " and software constraints"
       genConstraints :: (RenderSym repr) => Maybe String -> Reader (State repr) 
         (Maybe (repr (Method repr)))
       genConstraints Nothing = return Nothing
@@ -240,8 +256,8 @@ genInputConstraints = do
           sfwrCBody h x)]}) sfwrCs
         hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
           physCBody h x)]}) physCs
-        mthd <- publicMethod (mState void) "input_constraints" parms [block sf,
-          block hw]
+        mthd <- publicMethod (mState void) "input_constraints" desc parms 
+          [block sf, block hw]
         return $ Just mthd
   genConstraints $ Map.lookup "input_constraints" (eMap $ codeSpec g)
 
@@ -250,6 +266,7 @@ genInputDerived :: (RenderSym repr) => Reader (State repr)
 genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ csi $ codeSpec g
+      desc = "Calculates values that can be immediately derived from the inputs"
       genDerived :: (RenderSym repr) => Maybe String -> Reader (State repr) 
         (Maybe (repr (Method repr)))
       genDerived Nothing = return Nothing
@@ -257,7 +274,7 @@ genInputDerived = do
         parms <- getDerivedParams
         inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (convType $ 
           codeType x) (codeEquat x)) dvals
-        mthd <- publicMethod (mState void) "derived_values" parms inps
+        mthd <- publicMethod (mState void) "derived_values" desc parms inps
         return $ Just mthd
   genDerived $ Map.lookup "derived_values" (eMap $ codeSpec g)
 
@@ -281,6 +298,7 @@ genInputFormat = do
   g <- ask
   let dd = junkLine : intersperse junkLine (map singleton (extInputs $ csi $
         codeSpec g))
+      desc = "Reads input from a file with the given file name"
       genInFormat :: (RenderSym repr) => Maybe String -> Reader (State repr) 
         (Maybe (repr (Method repr)))
       genInFormat Nothing = return Nothing
@@ -288,7 +306,7 @@ genInputFormat = do
         ins <- getInputFormatIns
         outs <- getInputFormatOuts
         bod <- readData dd
-        mthd <- publicInOutFunc "get_input" ins outs bod
+        mthd <- publicInOutFunc "get_input" desc ins outs bod
         return $ Just mthd
   genInFormat $ Map.lookup "get_input" (eMap $ codeSpec g)
 
@@ -316,9 +334,11 @@ genCalcFunc cdef = do
   parms <- getCalcParams cdef
   blck <- genCalcBlock CalcReturn (codeName cdef) (convType $ codeType cdef) 
     (codeEquat cdef)
+  desc <- funcTerm (codeName cdef)
   publicMethod
     (mState $ convType (codeType cdef))
     (codeName cdef)
+    ("Calculates " ++ desc)
     parms
     [blck]
 
@@ -352,7 +372,8 @@ genOutputFormat :: (RenderSym repr) => Reader (State repr) (Maybe (repr
   (Method repr)))
 genOutputFormat = do
   g <- ask
-  let genOutput :: (RenderSym repr) => Maybe String -> Reader (State repr) 
+  let desc = "Writes the output values to output.txt"
+      genOutput :: (RenderSym repr) => Maybe String -> Reader (State repr) 
         (Maybe (repr (Method repr)))
       genOutput Nothing = return Nothing
       genOutput (Just _) = do
@@ -364,7 +385,7 @@ genOutputFormat = do
           return [ printFileStr v_outfile (codeName x ++ " = "),
                    printFileLn v_outfile v
                  ] ) (outputs $ csi $ codeSpec g)
-        mthd <- publicMethod (mState void) "write_output" parms [block $ [
+        mthd <- publicMethod (mState void) "write_output" desc parms [block $ [
           varDec v_outfile,
           openFileW v_outfile (litString "output.txt") ] ++
           concat outp ++ [ closeFile v_outfile ]]
@@ -374,48 +395,45 @@ genOutputFormat = do
 -----
 
 genMethodCall :: (RenderSym repr) => repr (Scope repr) -> 
-  repr (Permanence repr) -> repr (MethodType repr) -> Label -> 
+  repr (Permanence repr) -> repr (MethodType repr) -> Label -> String -> 
   [ParamData repr] -> [repr (Block repr)] -> 
   Reader (State repr) (repr (Method repr))
-genMethodCall s pr t n p b = do
+genMethodCall s pr t n desc p b = do
   g <- ask
   let doLog = logKind g
       loggedBody LogFunc = loggedMethod (logName g) n vals b
       loggedBody LogAll  = loggedMethod (logName g) n vals b
       loggedBody _       = b
-      commBody | CommentFunc `elem` commented g = commMethod n pNames
-               | otherwise                      = return
+      bod = body $ loggedBody doLog
+      ps = map param p
       pTypes = map paramType p
       pNames = map paramName p
       vals = zipWith var pNames pTypes
-  bod <- commBody $ loggedBody doLog
-  return $ function n s pr t (map param p) (body bod)
+  pComms <- paramComments pNames
+  return $ if CommentFunc `elem` commented g
+    then docFunc n desc s pr t (zip ps pComms) bod
+    else function n s pr t ps bod
 
-genInOutFunc :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) 
-  -> Label -> [repr (Value repr)] -> [repr (Value repr)] 
+genInOutFunc :: (RenderSym repr) => repr (Scope repr) -> 
+  repr (Permanence repr) -> Label -> String -> [repr (Value repr)] -> [repr (Value repr)] 
   -> [repr (Block repr)] -> Reader (State repr) (repr (Method repr))
-genInOutFunc s pr n ins outs b = do
+genInOutFunc s pr n desc ins outs b = do
   g <- ask
   let doLog = logKind g
       loggedBody LogFunc = loggedMethod (logName g) n ins b
       loggedBody LogAll  = loggedMethod (logName g) n ins b
       loggedBody _       = b
-      commBody | CommentFunc `elem` commented g = commMethod n pNames
-               | otherwise                      = return
+      bod = body $ loggedBody doLog
       pNames = map valueName ins
-  bod <- commBody $ loggedBody doLog
-  return $ inOutFunc n s pr ins outs (body bod)
+      oNames = map valueName outs
+  pComms <- paramComments pNames
+  oComms <- paramComments oNames
+  return $ if CommentFunc `elem` commented g 
+    then docInOutFunc n desc s pr (zip ins pComms) (zip outs oComms) bod 
+    else inOutFunc n s pr ins outs bod
 
-commMethod :: (RenderSym repr) => Label -> [Label] -> [repr (Block repr)] -> 
-  Reader (State repr) [repr (Block repr)]
-commMethod n l b = do
-  g <- ask
-  return $ block [
-      comment $ "function '" ++ n ++ "': " ++ funcTerm n (fMap $ codeSpec g),
-      multi $ map
-        (\x -> comment $ "parameter '" ++ x ++ "': " ++ varTerm x (vMap $ 
-          codeSpec g)) l
-    ] : b
+paramComments :: [Label] -> Reader (State repr) [String]
+paramComments = mapM varTerm
 
 loggedMethod :: (RenderSym repr) => Label -> Label -> [repr (Value repr)] -> 
   [repr (Block repr)] -> [repr (Block repr)]
@@ -800,14 +818,15 @@ genModDef :: (RenderSym repr) => CS.Mod -> Reader (State repr)
 genModDef (CS.Mod n fs) = genModule n (Just $ mapM genFunc fs) Nothing
 
 genFunc :: (RenderSym repr) => Func -> Reader (State repr) (repr (Method repr))
-genFunc (FDef (FuncDef n i o s)) = do
+genFunc (FDef (FuncDef n desc i o s)) = do
   g <- ask
   parms <- getParams i
   stmts <- mapM convStmt s
   vals <- mapM (\x -> variable (codeName x) (convType $ codeType x)) 
     (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ i)
-  publicMethod (mState $ convType o) n parms [block $ map varDec vals ++ stmts]
-genFunc (FData (FuncData n ddef)) = genDataFunc n ddef
+  publicMethod (mState $ convType o) n desc parms [block $ map varDec vals ++ 
+    stmts]
+genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 genFunc (FCD cd) = genCalcFunc cd
 
 convStmt :: (RenderSym repr) => FuncStmt -> Reader (State repr) 
@@ -853,12 +872,13 @@ convStmt (FAppend a b) = do
   b' <- convExpr b
   return $ valState $ listAppend a' b'
 
-genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)
-  (repr (Method repr))
-genDataFunc nameTitle ddef = do
+genDataFunc :: (RenderSym repr) => Name -> String -> DataDesc -> 
+  Reader (State repr) (repr (Method repr))
+genDataFunc nameTitle desc ddef = do
   parms <- getParams $ getInputs ddef
   bod <- readData ddef
-  publicMethod (mState void) nameTitle (PD p_filename string l_filename : parms)  bod
+  publicMethod (mState void) nameTitle desc (PD p_filename string l_filename 
+    : parms)  bod
   where l_filename = "filename"
         v_filename = var l_filename string
         p_filename = stateParam v_filename

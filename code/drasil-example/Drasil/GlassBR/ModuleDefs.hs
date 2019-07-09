@@ -25,7 +25,8 @@ readTableMod :: Mod
 readTableMod = packmod "ReadTable" [readTable]
 
 readTable :: Func
-readTable = funcData "read_table"
+readTable = funcData "read_table" 
+  "Reads glass ASTM data from a file with the given file name"
   [ singleLine (repeated [junk, listEntry [WithPattern] zVector]) ',',
     multiLine (repeated [listEntry [WithLine, WithPattern] xMatrix,
                          listEntry [WithLine, WithPattern] yMatrix]) ','
@@ -118,11 +119,14 @@ interpOver ptx pty ind vv =
 -- Note how this one uses a semantic function in its body
 -- But it is also 'wrong' in the sense that it assumes x_1 <= x <= x_2
 linInterpCT :: Func
-linInterpCT = funcDef "lin_interp" [x_1, y_1, x_2, y_2, x] Real
+linInterpCT = funcDef "lin_interp" "Performs linear interpolation" 
+  [x_1, y_1, x_2, y_2, x] Real
   [ FRet $ onLine (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
 
 findCT :: Func
-findCT = funcDef "find" [arr, v] Natural
+findCT = funcDef "find" 
+  "Finds the array index for a value closest to the given value" 
+  [arr, v] Natural
   [
     ffor i (sy i $< (dim (sy arr) - 1))
       [ FCond ((vLook arr i 0 $<= sy v) $&& (sy v $<= vLook arr i 1))
@@ -131,7 +135,8 @@ findCT = funcDef "find" [arr, v] Natural
   ]
 
 extractColumnCT :: Func
-extractColumnCT = funcDef "extractColumn" [mat, j] (Vect Real)
+extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
+  [mat, j] (Vect Real)
   [
     fdec col,
     --
@@ -141,7 +146,9 @@ extractColumnCT = funcDef "extractColumn" [mat, j] (Vect Real)
   ]
 
 interpY :: Func
-interpY = funcDef "interpY" [filename, x, z] Real
+interpY = funcDef "interpY" 
+  "Linearly interpolates a y value at given x and z values" 
+  [filename, x, z] Real
   [
   -- hack
   fdec xMatrix,
@@ -165,7 +172,9 @@ interpY = funcDef "interpY" [filename, x, z] Real
   ]
 
 interpZ :: Func
-interpZ = funcDef "interpZ" [filename, x, y] Real
+interpZ = funcDef "interpZ" 
+  "Linearly interpolates a z value at given x and y values" 
+  [filename, x, y] Real
   [
     -- hack
   fdec xMatrix,

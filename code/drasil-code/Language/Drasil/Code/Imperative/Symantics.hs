@@ -13,6 +13,8 @@ module Language.Drasil.Code.Imperative.Symantics (
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..)
 ) where
 
+import Language.Drasil.Code.Code (CodeType)
+
 type Label = String
 type Library = String
 
@@ -55,11 +57,6 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   docCommentStart   :: repr (Keyword repr)
   docCommentEnd     :: repr (Keyword repr)
 
-  printFunc       :: repr (Keyword repr)
-  printLnFunc     :: repr (Keyword repr)
-  printFileFunc   :: repr (Value repr) -> repr (Keyword repr)
-  printFileLnFunc :: repr (Value repr) -> repr (Keyword repr)
-
 class PermanenceSym repr where
   type Permanence repr
   static_  :: repr (Permanence repr)
@@ -92,6 +89,8 @@ class (PermanenceSym repr) => StateTypeSym repr where
   enumType      :: Label -> repr (StateType repr)
   iterator      :: repr (StateType repr) -> repr (StateType repr)
   void          :: repr (StateType repr)
+
+  getType :: repr (StateType repr) -> CodeType
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 
@@ -169,6 +168,10 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
   iterVar      :: Label -> repr (StateType repr) -> repr (Value repr)
 
   inputFunc :: repr (Value repr)
+  printFunc       :: repr (Value repr)
+  printLnFunc     :: repr (Value repr)
+  printFileFunc   :: repr (Value repr) -> repr (Value repr)
+  printFileLnFunc :: repr (Value repr) -> repr (Value repr)
   argsList  :: repr (Value repr)
 
   valueName :: repr (Value repr) -> String -- Function for converting a value to a string of the value's name
@@ -359,28 +362,20 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   constDecDef      :: Label -> repr (StateType repr) -> repr (Value repr) -> 
     repr (Statement repr)
 
-  print      :: repr (StateType repr) -> repr (Value repr) -> 
-    repr (Statement repr)
-  printLn    :: repr (StateType repr) -> repr (Value repr) -> 
-    repr (Statement repr)
+  -- newLn, printFunc, value to print, maybe a file to print to 
+  printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> repr (Statement repr)
+
+  print      :: repr (Value repr) -> repr (Statement repr)
+  printLn    :: repr (Value repr) -> repr (Statement repr)
   printStr   :: String -> repr (Statement repr)
   printStrLn :: String -> repr (Statement repr)
 
-  printFile      :: repr (Value repr) -> repr (StateType repr) -> 
-    repr (Value repr) -> repr (Statement repr)
-  printFileLn    :: repr (Value repr) -> repr (StateType repr) -> 
-    repr (Value repr) -> repr (Statement repr)
+  printFile      :: repr (Value repr) -> repr (Value repr) -> 
+    repr (Statement repr)
+  printFileLn    :: repr (Value repr) -> repr (Value repr) -> 
+    repr (Statement repr)
   printFileStr   :: repr (Value repr) -> String -> repr (Statement repr)
   printFileStrLn :: repr (Value repr) -> String -> repr (Statement repr)
-
-  printList       :: repr (StateType repr) -> repr (Value repr) -> 
-    repr (Statement repr)
-  printLnList     :: repr (StateType repr) -> repr (Value repr) -> 
-    repr (Statement repr)
-  printFileList   :: repr (Value repr) -> repr (StateType repr) -> 
-    repr (Value repr) -> repr (Statement repr)
-  printFileLnList :: repr (Value repr) -> repr (StateType repr) -> 
-    repr (Value repr) -> repr (Statement repr)
 
   getIntInput        :: repr (Value repr) -> repr (Statement repr)
   getFloatInput      :: repr (Value repr) -> repr (Statement repr)

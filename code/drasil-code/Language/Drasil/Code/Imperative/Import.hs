@@ -487,7 +487,8 @@ genMainFunc =
     ic <- getConstraintCall
     varDef <- mapM getCalcCall (execOrder $ csi $ codeSpec g)
     wo <- getOutputCall
-    return $ mainMethod "" $ bodyStatements $
+    return $ (if CommentFunc `elem` commented g then docMain else mainMethod)
+      "" $ bodyStatements $
       varDecDef v_filename (arg 0) :
       initLogFileVar (logKind g) ++
       catMaybes ([ip, gi, dv, ic] ++ varDef ++ [wo])

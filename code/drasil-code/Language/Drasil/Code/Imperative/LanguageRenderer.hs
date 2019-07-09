@@ -707,15 +707,15 @@ dashes :: String -> Int -> String
 dashes s l = replicate (l - length s) '-'
 
 functionDoc :: String -> [(String, String)] -> [String]
-functionDoc desc params = (if null desc then [] else ["\\brief " ++ desc])
+functionDoc desc params = ["\\brief " ++ desc | not (null desc)]
   ++ map (\(v, vDesc) -> "\\param " ++ v ++ " " ++ vDesc) params
 
 classDoc :: String -> [String]
-classDoc desc = if null desc then [] else ["\\brief " ++ desc]
+classDoc desc = ["\\brief " ++ desc | not (null desc)]
 
 moduleDoc :: String -> String -> String -> [String]
-moduleDoc desc m ext = ["\\file " ++ m ++ ext] ++ if null desc then [] else
-  ["\\brief " ++ desc]
+moduleDoc desc m ext = ("\\file " ++ m ++ ext) : 
+  ["\\brief " ++ desc | not (null desc)]
 
 -- Helper Functions --
 

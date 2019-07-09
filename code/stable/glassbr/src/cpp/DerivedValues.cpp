@@ -31,6 +31,9 @@ void derived_values(InputParameters &inParams) {
     else if ((inParams.g == "HS")) {
         inParams.GTF = 2;
     }
+    else {
+        throw("Undefined case encountered in function GTF");
+    }
     
     inParams.SD = sqrt((pow(inParams.SD_x, 2) + (pow(inParams.SD_y, 2) + pow(inParams.SD_z, 2))));
     

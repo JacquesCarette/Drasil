@@ -15,6 +15,8 @@ def derived_values(inParams):
         inParams.GTF = 4
     elif ((inParams.g == "HS")) :
         inParams.GTF = 2
+    else :
+        raise Exception("Undefined case encountered in function GTF")
     
     inParams.SD = math.sqrt(((inParams.SD_x ** 2) + ((inParams.SD_y ** 2) + (inParams.SD_z ** 2))))
     

@@ -24,6 +24,9 @@ public class DerivedValues {
         else if (inParams.g.equals("HS")) {
             inParams.GTF = 2;
         }
+        else {
+            throw new Exception("Undefined case encountered in function GTF");
+        }
         
         inParams.SD = Math.sqrt((Math.pow(inParams.SD_x, 2) + (Math.pow(inParams.SD_y, 2) + Math.pow(inParams.SD_z, 2))));
         

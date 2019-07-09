@@ -19,6 +19,9 @@ public class DerivedValues {
         else if ((inParams.g == "HS")) {
             inParams.GTF = 2;
         }
+        else {
+            throw new Exception("Undefined case encountered in function GTF");
+        }
         
         inParams.SD = Math.Sqrt((Math.Pow(inParams.SD_x, 2) + (Math.Pow(inParams.SD_y, 2) + Math.Pow(inParams.SD_z, 2))));
         

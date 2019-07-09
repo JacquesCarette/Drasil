@@ -334,7 +334,8 @@ genCaseBlock :: (RenderSym repr) => CalcType -> String -> repr (StateType repr)
 genCaseBlock t v st cs = do
   ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (fmap body $ liftS $
     genCalcBlock t v st e)) cs
-  return $ block [ifNoElse ifs]
+  return $ block [ifCond ifs (oneLiner $ throw $ 
+    "Undefined case encountered in function " ++ v)]
 
 ----- OUTPUT -------
 

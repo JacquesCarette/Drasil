@@ -138,8 +138,8 @@ change. Anticipated changes are numbered by \textbf{AC} followed by a number.
 %   on the output results.
 \item[\refstepcounter{acnum} \actheacnum \label{acControl}:] How the overall
   control of the calculations is orchestrated.
-\item[\refstepcounter{acnum} \actheacnum \label{acSeqDS}:] The implementation
-  for the sequence (array) data structure.
+% \item[\refstepcounter{acnum} \actheacnum \label{acSeqDS}:] The implementation
+%  for the sequence (array) data structure.
 % \item[\refstepcounter{acnum} \actheacnum \label{acPlot}:] The implementation of 
 %   plotting data.
 \end{description}
@@ -189,7 +189,7 @@ followed by a number.
 %\item [\refstepcounter{mnum} \mthemnum \label{mVerifyOut}:] Output Verification Module
 \item [\refstepcounter{mnum} \mthemnum \label{mControl}:] Control Module
 \item [\refstepcounter{mnum} \mthemnum \label{mSpecParams}:] Specification Parameters Module
-\item [\refstepcounter{mnum} \mthemnum \label{mSeqDS}:] Sequence Data Structure Module
+%\item [\refstepcounter{mnum} \mthemnum \label{mSeqDS}:] Sequence Data Structure Module
 %\item [\refstepcounter{mnum} \mthemnum \label{mPlot}:] Plotting Module
 \end{description}
 
@@ -216,7 +216,8 @@ is already available in Matlab and will not be reimplemented.
 & Specification Parameters Module\\
 \midrule
 
-\multirow{1}{0.3\textwidth}{Software Decision} & Sequence Data Structure\\
+{Software Decision} & ~\\
+% \multirow{1}{0.3\textwidth}{Software Decision} & Sequence Data Structure\\
 % & Plotting\\
 \bottomrule
 
@@ -350,14 +351,14 @@ values are input.
 \item[Implemented By:] --
 \end{description}
 
-\subsubsection{Sequence Data Structure Module (\mref{mSeqDS})}
-
-\begin{description}
-\item[Secrets:] The data structure for a sequence data type.
-\item[Services:] Provides array manipulation, including building an array,
-  accessing a specific entry, slicing an array, etc.
-\item[Implemented By:] Matlab
-\end{description}
+%\subsubsection{Sequence Data Structure Module (\mref{mSeqDS})}
+%
+%\begin{description}
+%\item[Secrets:] The data structure for a sequence data type.
+%\item[Services:] Provides array manipulation, including building an array,
+%  accessing a specific entry, slicing an array, etc.
+%\item[Implemented By:] Matlab
+%\end{description}
 
 %\subsubsection{Plotting Module (\mref{mPlot})}
 %

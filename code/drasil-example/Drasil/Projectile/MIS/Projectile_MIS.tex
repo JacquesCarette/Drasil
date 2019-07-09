@@ -80,8 +80,10 @@ implemented modules in a program simulating projectile motion. It is intended to
 ease navigation through the program for design and maintenance purposes.
 
 Complementary documents include the System Requirement Specifications
-and Module Guide.  The full documentation and implementation can be
-found at \sam{No manual version of Projectile? Should this link be removed or  should there be a link?}.
+and Module Guide.
+%The full documentation and implementation can be
+%found at \sam{No manual version of Projectile? Should this link be removed or  
+%should there be a link?}.
 
 % The specification is given in terms of functions, rather than sequences.  For
 % instance, the predicted temperature of the water is given as a function of time
@@ -99,25 +101,10 @@ with the addition that template modules have been adapted from
 multiple assignment statement and conditional rules follow the form $(c_1
 \Rightarrow r_1 | c_2 \Rightarrow r_2 | ... | c_n \Rightarrow r_n )$.
 
-The following table summarizes the primitive data types used by \progname. 
-
-\begin{center}
-\renewcommand{\arraystretch}{1.2}
-\noindent 
-\begin{tabular}{l l p{7.5cm}} 
-\toprule 
-\textbf{Data Type} & \textbf{Notation} & \textbf{Description}\\ 
-\midrule
-character & char & a single symbol or digit\\
-real & $\mathbb{R}$ & any number in (-$\infty$, $\infty$)\\
-\bottomrule
-\end{tabular} 
-\end{center}
-
-\noindent
-The specification of \progname\ uses strings, a derived data type. Strings
-are lists of characters. In addition, \progname\ uses functions, which
-are defined by the data types of their inputs and outputs. Local functions are
+\progname\ uses strings and real numbers. For information on these data types 
+(and others), see \cite{GhezziEtAl2003}, \cite{GriesAndSchneider1993}, and 
+\cite{HoffmanAndStrooper1995}. In addition, \progname\ uses functions, which are
+defined by the data types of their inputs and outputs. Local functions are
 described by giving their type signature followed by their specification.
 
 \newpage

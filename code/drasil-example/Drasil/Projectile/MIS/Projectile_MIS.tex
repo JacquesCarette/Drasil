@@ -196,7 +196,6 @@ None
 
 \noindent Get (filenameIn: string) from user.\\
 \noindent get\_input(filenameIn, Param)\\
-\noindent input\_constraints(Param)\\
 \noindent $p_{\text{land}}$ := func\_p\_land(Param)\\
 \noindent $d_{\text{offset}}$ := func\_d\_offset(Param, $p_{\text{land}}$)\\
 \noindent $s$ := func\_s(Param, $d_{\text{offset}}$)\\
@@ -265,20 +264,25 @@ should be denoted with a `\#' symbol.
 
 \noindent get\_input(filename, Param):
 \begin{itemize}
-\item transition: The file name ``filename" is first associated with the file f. 
-The data from f is read sequentially to populate the state variables from
+\item transition: The file name ``filename" is first associated with the file $f$. 
+The following procedural specification is followed:
+\begin{enumerate}
+\item Read data sequentially from $f$ to populate the state variables from
 FR1 ($v_{\text{launch}}$, $\theta$, and $p_{\text{target}}$) in Param.
+\item input\_constraints()
+\end{enumerate}
+
 \item exception: exc := a file name ``filename" cannot be found OR the format of
 inputFile is incorrect $\Rightarrow$  FileError
 \end{itemize}
 
-\noindent input\_constraints(Param):
+\noindent input\_constraints():
 \begin{itemize}
-\item out: \textit{out} := none
+\item output: \textit{out} := none
 \item exception: exc := ( \\
-$\neg (0 < \text{Param}.v_{\text{launch}}) \Rightarrow$ badSpeed $|$\\
-$\neg (0 < \text{Param}.\theta < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
-$\neg (0 < \text{Param}.p_{\text{target}}) \Rightarrow$ badTargetPosition)
+$\neg (0 < v_{\text{launch}}) \Rightarrow$ badSpeed $|$\\
+$\neg (0 < \theta < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
+$\neg (0 < p_{\text{target}}) \Rightarrow$ badTargetPosition)
 \end{itemize}
  
 \noindent Param.$v_{\text{launch}}$:

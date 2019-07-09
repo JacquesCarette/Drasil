@@ -677,7 +677,8 @@ blockCmtDoc :: [String] -> Doc -> Doc -> Doc
 blockCmtDoc lns start end = start <+> vcat (map text lns) <+> end
 
 docCmtDoc :: [String] -> Doc -> Doc -> Doc
-docCmtDoc lns start end = vcat $ start : map (indent . text) lns ++ [end]
+docCmtDoc lns start end = if null lns then empty else 
+  vcat $ start : map (indent . text) lns ++ [end]
 
 commentedItem :: Doc -> Doc -> Doc
 commentedItem cmt itm = if isEmpty itm then itm else cmt $+$ itm
@@ -706,15 +707,15 @@ dashes :: String -> Int -> String
 dashes s l = replicate (l - length s) '-'
 
 functionDoc :: String -> [(String, String)] -> [String]
-functionDoc desc params = ("\\brief " ++ desc) 
-  : map (\(v, vDesc) -> "\\param " ++ v ++ " " ++ vDesc) params
+functionDoc desc params = (if null desc then [] else ["\\brief " ++ desc])
+  ++ map (\(v, vDesc) -> "\\param " ++ v ++ " " ++ vDesc) params
 
 classDoc :: String -> [String]
-classDoc desc = ["\\brief " ++ desc]
+classDoc desc = if null desc then [] else ["\\brief " ++ desc]
 
 moduleDoc :: String -> String -> String -> [String]
-moduleDoc desc m ext = ["\\file " ++ m ++ ext,
-  "\\brief " ++ desc]
+moduleDoc desc m ext = ["\\file " ++ m ++ ext] ++ if null desc then [] else
+  ["\\brief " ++ desc]
 
 -- Helper Functions --
 

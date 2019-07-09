@@ -44,7 +44,7 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes, mapMaybe)
 import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3,zipWithM)
-import Control.Monad.Reader (Reader, ask, asks, runReader, withReader)
+import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.), view)
 import qualified Prelude as P ((<>))
 
@@ -71,7 +71,7 @@ chooseConstr Warning   = constrWarn
 chooseConstr Exception = constrExc
 
 chooseInStructure :: (RenderSym repr) => Structure -> Reader (State repr) 
-  [repr (Module repr)]
+  [repr (RenderFile repr)]
 chooseInStructure Unbundled   = genInputModNoClass
 chooseInStructure Bundled = genInputModClass
 
@@ -135,12 +135,9 @@ generateCode l unRepr g =
 
 genPackage :: (PackageSym repr) => String -> Reader (State repr) 
   (repr (Package repr))
-genPackage n = packMods n <$> genFiles
+genPackage n = packMods n <$> genModules
 
-genFiles :: (RenderSym repr) => Reader (State repr) [repr (RenderFile repr)]
-genFiles = map fileDoc <$> genModules
-
-genModules :: (RenderSym repr) => Reader (State repr) [repr (Module repr)]
+genModules :: (RenderSym repr) => Reader (State repr) [repr (RenderFile repr)]
 genModules = do
   g <- ask
   let s = csi $ codeSpec g
@@ -199,7 +196,8 @@ varTerm cname = do
 
 ------- INPUT ----------
 
-genInputModClass :: (RenderSym repr) => Reader (State repr) [repr (Module repr)]
+genInputModClass :: (RenderSym repr) => 
+  Reader (State repr) [repr (RenderFile repr)]
 genInputModClass = do
   inputClass <- genInputClass
   derived <- genInputDerived
@@ -213,11 +211,11 @@ genInputModClass = do
            ]
 
 genInputModNoClass :: (RenderSym repr) => Reader (State repr)
-  [repr (Module repr)]
+  [repr (RenderFile repr)]
 genInputModNoClass = do
   inpDer    <- genInputDerived
   inpConstr <- genInputConstraints
-  return [ buildModule "InputParameters" []
+  return [ fileDoc $ buildModule "InputParameters" []
            (catMaybes [inpDer, inpConstr])
            []
          ]
@@ -286,7 +284,7 @@ constrExc :: (RenderSym repr) => Expr -> repr (Body repr)
 constrExc _ = oneLiner $ throw "InputError"
 
 genInputFormatMod :: (RenderSym repr) => Reader (State repr) 
-  [repr (Module repr)]
+  [repr (RenderFile repr)]
 genInputFormatMod = do
   inFunc <- genInputFormat
   let inFmt = maybeToList inFunc
@@ -362,7 +360,7 @@ genCaseBlock t v st cs = do
 ----- OUTPUT -------
 
 genOutputMod :: (RenderSym repr) => Reader (State repr) [repr
-  (Module repr)]
+  (RenderFile repr)]
 genOutputMod = do
   outformat <- genOutputFormat
   let outf = maybeToList outformat
@@ -463,17 +461,19 @@ loggedMethod lName n vals b = block [
 genModule :: (RenderSym repr) => Name
                -> Maybe (Reader (State repr) [repr (Method repr)])
                -> Maybe (Reader (State repr) [repr (Class repr)])
-               -> Reader (State repr) (repr (Module repr))
+               -> Reader (State repr) (repr (RenderFile repr))
 genModule n maybeMs maybeCs = do
   g <- ask
   let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
       updateState = withReader (\s -> s { currentModule = n })
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
-  return $ buildModule n ls ms cs
+  let commMod | CommentFunc `elem` commented g && not (null ms) = docMod ""
+              | otherwise                                       = id
+  return $ commMod $ fileDoc $ buildModule n ls ms cs
 
 
-genMain :: (RenderSym repr) => Reader (State repr) (repr (Module repr))
+genMain :: (RenderSym repr) => Reader (State repr) (repr (RenderFile repr))
 genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 
 genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
@@ -815,7 +815,7 @@ bfunc Index = listAccess
 
 -- medium hacks --
 genModDef :: (RenderSym repr) => CS.Mod -> Reader (State repr) 
-  (repr (Module repr))
+  (repr (RenderFile repr))
 genModDef (CS.Mod n fs) = genModule n (Just $ mapM genFunc fs) Nothing
 
 genFunc :: (RenderSym repr) => Func -> Reader (State repr) (repr (Method repr))

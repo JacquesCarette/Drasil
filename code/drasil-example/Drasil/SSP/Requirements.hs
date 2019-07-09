@@ -1,4 +1,4 @@
-module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, propsDeriv) where
+module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -109,13 +109,10 @@ inputsToOutputTable = llcc (makeTabRef "inputsToOutputTable") $
 nonFuncReqs :: [ConceptInstance]
 nonFuncReqs = [correct, understandable, reusable, maintainable]
 
-propsDeriv :: [Contents]
-propsDeriv = [foldlSP [S "FIXME"]]
-
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   plural output_ `ofThe'` phrase code, S "have the",
-  plural property, S "described in", makeRef2S (propCorSol propsDeriv [])
+  plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
 
 understandable :: ConceptInstance

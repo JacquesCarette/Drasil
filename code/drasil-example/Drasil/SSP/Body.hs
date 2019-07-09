@@ -65,7 +65,7 @@ import Drasil.SSP.Goals (goals)
 import Drasil.SSP.IMods (instModIntro)
 import qualified Drasil.SSP.IMods as SSP (iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
-import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, propsDeriv)
+import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
 import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
   constrained, inputs, outputs, symbols)
@@ -129,8 +129,7 @@ mkSRS = [RefSec $ RefProg intro
           , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs instModIntro ([Label, Input, Output, InConstraints, 
             OutConstraints] ++ stdFields) SSP.iMods ShowDerivation
-          , Constraints  EmptyS dataConstraintUncertainty EmptyS
-            [dataConstraintTable2, dataConstraintTable3]
+          , Constraints  EmptyS dataConstraintUncertainty EmptyS [dataConstraintTable2]
           , CorrSolnPpties propsDeriv
           ]
         ],
@@ -481,6 +480,8 @@ slopeVert = verticesConst $ phrase slope
 -}
 
 -- SECTION 4.2.7 --
+propsDeriv :: [Contents]
+propsDeriv = [LlC dataConstraintTable3]
 
 -- SECTION 5 --
 

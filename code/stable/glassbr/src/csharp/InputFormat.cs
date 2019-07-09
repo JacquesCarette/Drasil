@@ -6,6 +6,17 @@ using System.Collections.Generic;
 public class InputFormat {
     
     public static void get_input(string filename, InputParameters inParams) {
+        StreamWriter outfile;
+        outfile = new StreamWriter("log.txt", true);
+        outfile.WriteLine("function get_input called with inputs: {");
+        outfile.Write("  filename = ");
+        outfile.Write(filename);
+        outfile.WriteLine(", ");
+        outfile.Write("  inParams = ");
+        outfile.WriteLine("Instance of InputParameters object");
+        outfile.WriteLine("  }");
+        outfile.Close();
+        
         StreamReader infile;
         string line;
         List<string> lines = new List<string>(0);

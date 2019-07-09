@@ -11,6 +11,14 @@ import java.util.ArrayList;
 public class InputConstraints {
     
     public static void input_constraints(InputParameters inParams) throws Exception {
+        PrintWriter outfile;
+        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
+        outfile.println("function input_constraints called with inputs: {");
+        outfile.print("  inParams = ");
+        outfile.println("Instance of InputParameters object");
+        outfile.println("  }");
+        outfile.close();
+        
         if (!(((0.1 <= inParams.a) && (inParams.a <= 5.0)))) {
             throw new Exception("InputError");
         }

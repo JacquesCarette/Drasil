@@ -119,6 +119,15 @@ publicInOutFunc :: (RenderSym repr) => Label -> String -> [repr (Value repr)]
   -> Reader (State repr) (repr (Method repr))
 publicInOutFunc = genInOutFunc public static_
 
+publicClass :: (RenderSym repr) => String -> Label -> Maybe Label -> 
+  [repr (StateVar repr)] -> [repr (Method repr)] -> 
+  Reader (State repr) (repr (Class repr))
+publicClass desc n l vs ms = do
+  g <- ask
+  return $ if CommentClass `elem` commented g 
+    then docClass desc (pubClass n l vs ms) 
+    else pubClass n l vs ms
+
 generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
   ([ModData], Label)] -> State repr -> IO ()
 generateCode l unRepr g =
@@ -231,7 +240,10 @@ genInputClass = do
       genClass _ = do
         let inputVars = map (\x -> pubMVar 0 (var (codeName x) (convType $ 
               codeType x))) ins
-        return $ Just $ pubClass "InputParameters" Nothing inputVars []
+        cls <- publicClass 
+          "Structure for holding the input parameters and derived values" 
+          "InputParameters" Nothing inputVars []
+        return $ Just cls
   genClass $ mapMaybe (\x -> Map.lookup (codeName x) (eMap $ codeSpec g)) ins
 
 genInputConstraints :: (RenderSym repr) => Reader (State repr) 

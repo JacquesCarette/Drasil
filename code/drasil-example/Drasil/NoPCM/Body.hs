@@ -65,7 +65,7 @@ import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, wa
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
+import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn, 
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempEnv, 
@@ -149,9 +149,8 @@ mkSRS = [RefSec $ RefProg intro
       , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
         NoPCM.iMods ShowDerivation
-      , Constraints EmptyS dataConstraintUncertainty dataContMid
-        [dataConstTable1, dataConstTable2]
-      , CorrSolnPpties propsDerivNoPCM
+      , Constraints EmptyS dataConstraintUncertainty dataContMid [dataConstTable1]
+      , CorrSolnPpties propsDeriv
       ]
     ],
   ReqrmntSec $ ReqsProg [
@@ -193,7 +192,7 @@ section :: [Section]
 section = sec
 
 labCon :: [LabelledContent]
-labCon = [inputInitQuantsTable, dataConstTable1]
+labCon = [inputInitQuantsTable, dataConstTable1, dataConstTable2]
 
 sec :: [Section]
 sec = extractSection srs
@@ -396,6 +395,9 @@ dataConstListOut = [tempW, watE]
 --------------------------
 --Section 5 : REQUIREMENTS
 --------------------------
+
+propsDeriv :: [Contents]
+propsDeriv = [LlC dataConstTable2]
 
 -- in Requirements.hs
 

@@ -193,21 +193,6 @@ maintainable = cic "maintainable" (foldlSent [
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
   plural traceyMatrix, S "in the", getAcc srs `sAnd` phrase mg]) "Maintainable" nonFuncReqDom
 
-{-NoPCM specific-}
--- Defined in this file since there isn't a NoPCM Requirements.hs file
-
-noPCMNFRequirements :: [ConceptInstance]
-noPCMNFRequirements = [correctNoPCM, verifiable, understandable, reusable, maintainable]
-
-propsDerivNoPCM :: [Contents]
-propsDerivNoPCM = [foldlSP [S "FIXME"]]
-
-correctNoPCM :: ConceptInstance
-correctNoPCM = cic "correct" (foldlSent [
-  plural output_ `ofThe'` phrase code, S "have the",
-  plural property, S "described in", makeRef2S (propCorSol propsDerivNoPCM [])
-  ]) "Correct" nonFuncReqDom
-
 -- The second sentence of the above paragraph is repeated in all examples (not
 -- exactly, but the general idea is). The first sentence is not always
 -- repeated, but it is always either stating that performance is a priority or

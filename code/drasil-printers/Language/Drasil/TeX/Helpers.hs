@@ -69,6 +69,13 @@ mkEnv nm d =
   d $+$
   pure (text ("\\end" ++ H.brace nm))
 
+-- Encapsulate environments with argument
+mkEnvArgs :: String -> String -> D -> D
+mkEnvArgs nm args d =
+  pure (text ("\\begin" ++ H.brace nm ++ H.brace args)) $+$ 
+  d $+$
+  pure (text ("\\end" ++ H.brace nm))
+
 -- for defining (LaTeX) macros
 comm :: String -> String -> Maybe String -> D
 comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<> 

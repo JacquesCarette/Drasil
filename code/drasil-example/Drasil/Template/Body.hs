@@ -11,12 +11,12 @@ import Utils.Drasil
 
 import Drasil.DocLang (DocDesc, generateTraceMap, generateTraceMap', mkDoc)
 
-import Data.Drasil.Concepts.Documentation as Doc (srs)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 
 import qualified Data.Map as Map
 
-srsDoc :: Document
-srsDoc = mkDoc mkSRS (for'' titleize phrase) si
+srs :: Document
+srs = mkDoc mkSRS (for'' titleize phrase) si
 
 mkSRS :: DocDesc
 mkSRS = []

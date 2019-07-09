@@ -21,7 +21,8 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
-  problem, srsDomains, srs)
+  problem, srsDomains)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (constAccel, gravity, physicCon, physicCon',
@@ -51,8 +52,8 @@ import Drasil.Projectile.TMods (tMods)
 import Drasil.Projectile.Unitals (acronyms, constants, inConstraints,
   launAngle, outConstraints, symbols, unitalIdeas, unitalQuants)
 
-srsDoc :: Document
-srsDoc = mkDoc mkSRS (for'' titleize phrase) si
+srs :: Document
+srs = mkDoc mkSRS (for'' titleize phrase) si
 
 mkSRS :: DocDesc
 mkSRS = [
@@ -112,7 +113,7 @@ scope2 = foldlSent_ [S "determines if the", phrase projectile, S "hits the", phr
 si :: SystemInformation
 si = SI {
   _sys         = projectileTitle,
-  _kind        = srs,
+  _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],

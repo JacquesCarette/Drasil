@@ -31,8 +31,9 @@ import Data.Drasil.Concepts.Thermodynamics (thermocon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   constraint, content, datum, definition, document, environment, goalStmt,
   information, input_, model, organization, output_, physical, physics, problem,
-  property, purpose, quantity, reference, software, softwareSys, srs, srsDomains,
+  property, purpose, quantity, reference, software, softwareSys, srsDomains,
   sysCont, system, user, value, variable, doccon, doccon')
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
@@ -86,7 +87,7 @@ unitsColl = collectUnits symMap symbTT
 si :: SystemInformation
 si = SI {
   _sys = swhsPCM,
-  _kind = srs, 
+  _kind = Doc.srs, 
   _authors = [thulasi, brooks, spencerSmith],
   _quants = symbols,
   _concepts = symbTT,
@@ -529,7 +530,7 @@ purpDoc sp pro = foldlSent [S "The main", phrase purpose, S "of this",
   S "is intended to be used as a", phrase reference,
   S "to provide ad hoc access to all", phrase information,
   S "necessary to understand and verify the" +:+. phrase model, S "The",
-  short srs, S "is abstract because the", plural content, S "say what",
+  short Doc.srs, S "is abstract because the", plural content, S "say what",
   phrase problem, S "is being solved, but do not say how to solve it"]
 
 
@@ -583,7 +584,7 @@ charReader2 diffeq = [plural diffeq +:+
 
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
-  phrase document, S "follows the template for an", short srs,
+  phrase document, S "follows the template for an", short Doc.srs,
   S "for", phrase sciCompS, S "proposed by", makeCiteS parnas1972 `sAnd` 
   makeCiteS parnasClements1984]
 

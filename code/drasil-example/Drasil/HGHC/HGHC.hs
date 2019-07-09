@@ -1,4 +1,4 @@
-module Drasil.HGHC.HGHC (srsBody, si, allSymbols, printSetting) where
+module Drasil.HGHC.HGHC (srs, si, allSymbols, printSetting) where
 
 import qualified Data.Map as Map
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
@@ -20,12 +20,13 @@ import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs,
 
 import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
-import Data.Drasil.Concepts.Documentation (srs, doccon, doccon')
+import Data.Drasil.Concepts.Documentation (doccon, doccon')
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
   
 si :: SystemInformation
 si = SI {
   _sys = hghc,
-  _kind = srs,
+  _kind = Doc.srs,
   _authors = [spencerSmith],
   _quants = symbols,
   _concepts = [] :: [UnitaryConceptDict],
@@ -67,5 +68,5 @@ thisSRS = [RefSec $
           Description Verbose IncludeUnits] dataDefs HideDerivation
       ]]]
   
-srsBody :: Document
-srsBody = mkDoc thisSRS for si
+srs :: Document
+srs = mkDoc thisSRS for si

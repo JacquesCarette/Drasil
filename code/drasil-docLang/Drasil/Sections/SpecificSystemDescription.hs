@@ -225,8 +225,8 @@ fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
 fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 
 propCorSolF :: [Contents] -> Section
-propCorSolF c@([LlC t@(LblC _ Table{})]) = SRS.propCorSol (propsIntro t : c) []
-propCorSolF x                            = SRS.propCorSol x []
+propCorSolF c@(LlC t@(LblC _ Table{}) : _) = SRS.propCorSol (propsIntro t : c) []
+propCorSolF x                              = SRS.propCorSol x []
 
 propsIntro :: LabelledContent -> Contents
 propsIntro tab = foldlSP [makeRef2S tab, S "shows the", plural datumConstraint,

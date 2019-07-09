@@ -27,25 +27,25 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   getTraceMapFromIM, getSCSSub, traceMatStandard)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
-import Data.Drasil.Concepts.Thermodynamics (thermocon)
-import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
-  constraint, content, datum, definition, document, environment, goalStmt,
-  information, input_, model, organization, output_, physical, physics, problem,
-  property, purpose, quantity, reference, software, softwareSys, srs, srsDomains,
-  sysCont, system, user, value, variable, doccon, doccon')
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
+import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
+  constraint, content, corSol, datum, definition, document, environment, goalStmt,
+  information, input_, model, organization, output_, physical, physics, problem,
+  property, purpose, quantity, reference, software, softwareSys, solution, srs,
+  srsDomains, sysCont, system, user, value, variable, doccon, doccon')
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
+import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
+import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
   understandability, reusability, maintainability, verifiability)
-import Data.Drasil.Concepts.Physics (physicCon)
-import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
-import Data.Drasil.Software.Products (sciCompS, prodtcon)
+import Data.Drasil.Concepts.Thermodynamics (heatTrans, lawConsEnergy, thermocon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time, physicscon)
 import Data.Drasil.Quantities.Thermodynamics (heatCapSpec, latentHeat, temp)
+import Data.Drasil.Software.Products (sciCompS, prodtcon)
 
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
@@ -56,22 +56,22 @@ import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
-  coil, tank, transient, swhsPCM, phaseChangeMaterial, tankPCM, con)
-import Drasil.SWHS.DataDefs (dataDefs, qDefs)
+import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
+  phsChgMtrl, progName, rightSide, sWHT, swhsPCM, tank, tankPCM, transient, water)
+import Drasil.SWHS.DataDefs (dataDefs, dd1HtFluxC, dd2HtFluxP, qDefs)
 import Drasil.SWHS.GenDefs (genDefs)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
 import Drasil.SWHS.Requirements (dataConTable1, funcReqs, inputInitQuantsTable,
-  nfRequirements, propsDeriv)
-import Drasil.SWHS.TMods (consThermE, sensHtE, latentHtE)
-import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW,
-  htFluxC, htFluxP, htFluxIn, htFluxOut, inSA, outSA, pcmE,
-  pcmHTC, pcmSA, pcmMass, specParamValList, constrained, inputs,
-  outputs, symbols, symbolsAll, unitalChuncks, tauSP, tauW, tempC,
-  tempPCM, tempW, thFluxVect, thickness, volHtGen, watE, wMass, absTol, relTol)
+  nfRequirements, verifyEnergyOutput)
+import Drasil.SWHS.TMods (consThermE, latentHtE, sensHtE)
+import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained, eta,
+  htCapSP, htCapW, htFluxC, htFluxIn, htFluxOut, htFluxP, inSA, inputs, outSA,
+  outputs, pcmE, pcmHTC, pcmMass, pcmSA, relTol, simTime, specParamValList,
+  symbols, symbolsAll, tauSP, tauW, tempC, tempPCM, tempW, thFluxVect,
+  thickness, unitalChuncks, volHtGen, wMass, watE)
 
 -------------------------------------------------------------------------------
 
@@ -175,8 +175,7 @@ mkSRS = [RefSec $ RefProg intro [
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefs ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
          [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
-        , Constraints  EmptyS dataConstraintUncertainty dataConTail
-         [dataConTable1, dataConTable3]
+        , Constraints  EmptyS dataConstraintUncertainty dataConTail [dataConTable1]
         , CorrSolnPpties propsDeriv
         ]
       ],
@@ -435,6 +434,61 @@ outputConstraints = [tempW, tempPCM, watE, pcmE]
 ----------------------------------------------
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
+{-Properties of a Correct Solution-}
+
+propsDeriv :: [Contents]
+propsDeriv = [LlC dataConTable3,
+  propCorSolDeriv1 lawConsEnergy watE energy coil phsChgMtrl
+                   dd1HtFluxC dd2HtFluxP surface heatTrans,
+  propCorSolDeriv2,
+  propCorSolDeriv3 pcmE energy phsChgMtrl water,
+  propCorSolDeriv4,
+  propCorSolDeriv5 equation progName rightSide]
+
+propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk -> ConceptChunk ->
+  CI -> DataDefinition -> DataDefinition -> h -> ConceptChunk -> Contents
+propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
+  foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
+  phrase lce, S "This means that the", phrase ewat,
+  S "should equal the difference between the total", phrase en,
+  phrase input_, S "from the", phrase co `sAnd` S "the",
+  phrase en, phrase output_, S "to the" +:+. short pcmat,
+  S "This can be shown as an", phrase equation, S "by taking",
+  makeRef2S d1hfc `sAnd` makeRef2S d2hfp `sC`
+  S "multiplying each by their respective", phrase su,
+  S "area of", phrase ht `sC` S "and integrating each",
+  S "over the", phrase simTime `sC` S "as follows"]
+
+propCorSolDeriv2 :: Contents
+propCorSolDeriv2 = eqUnR'
+  (sy watE $= defint (eqSymb time) 0 (sy time)
+  (sy coilHTC * sy coilSA * (sy tempC - apply1 tempW time))
+  - defint (eqSymb time) 0 (sy time)
+  (sy pcmHTC * sy pcmSA * (apply1 tempW time -
+  apply1 tempPCM time)))
+
+propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
+propCorSolDeriv3 epcm en pcmat wa =
+  foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
+  phrase en, phrase input_, S "to the", short pcmat,
+  S "from the" +:+. phrase wa, S "This can be expressed as"]
+
+propCorSolDeriv4 :: Contents
+propCorSolDeriv4 = eqUnR'
+  (sy pcmE $= defint (eqSymb time) 0 (sy time)
+  (sy pcmHTC * sy pcmSA * (apply1 tempW time - 
+  apply1 tempPCM time)))
+
+propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
+propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
+  `sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
+  S "checks to gain confidence in any", phrase solution,
+  S "computed by" +:+. short pro, S "The relative",
+  S "error between the results computed by", short pro `sAnd`
+  S "the results calculated from the", short rs, S "of these",
+  plural eq, S "should be less than", ch consTol, makeRef2S verifyEnergyOutput]
+
+-- Remember to insert references in above derivation when available
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --

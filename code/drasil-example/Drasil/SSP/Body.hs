@@ -54,7 +54,6 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, de
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SSP.DataCons (dataConstraintTable3) 
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
@@ -130,7 +129,7 @@ mkSRS = [RefSec $ RefProg intro
           , IMs instModIntro ([Label, Input, Output, InConstraints, 
             OutConstraints] ++ stdFields) SSP.iMods ShowDerivation
           , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
-          , CorrSolnPpties propsDeriv
+          , CorrSolnPpties outputs []
           ]
         ],
     ReqrmntSec $ ReqsProg [
@@ -172,7 +171,7 @@ sec :: [Section]
 sec = extractSection srs
 
 labCon :: [LabelledContent]
-labCon = [figPhysSyst, figIndexConv, figForceActing, dataConstraintTable3] ++ funcReqTables
+labCon = [figPhysSyst, figIndexConv, figForceActing] ++ funcReqTables
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -479,8 +478,6 @@ slopeVert = verticesConst $ phrase slope
 -}
 
 -- SECTION 4.2.7 --
-propsDeriv :: [Contents]
-propsDeriv = [LlC dataConstraintTable3]
 
 -- SECTION 5 --
 

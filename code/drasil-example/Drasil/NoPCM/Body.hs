@@ -48,10 +48,9 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
-  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, outDataConstTbl, tsymb,
-  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
-  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceMap', traceMatStandard)
+  ProblemDescription(PDProg), PDSub(..),  egetDocDesc, generateTraceMap,
+  generateTraceMap', getDocDesc, getSCSSub, getTraceMapFromDD, getTraceMapFromGD,
+  getTraceMapFromIM, getTraceMapFromTM, intro, mkDoc, traceMatStandard, tsymb)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -149,7 +148,7 @@ mkSRS = [RefSec $ RefProg intro
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
         NoPCM.iMods ShowDerivation
       , Constraints dataContMid constrained
-      , CorrSolnPpties propsDeriv
+      , CorrSolnPpties dataConstListOut []
       ]
     ],
   ReqrmntSec $ ReqsProg [
@@ -191,7 +190,7 @@ section :: [Section]
 section = sec
 
 labCon :: [LabelledContent]
-labCon = [inputInitQuantsTable, dataConstTable2]
+labCon = [inputInitQuantsTable]
 
 sec :: [Section]
 sec = extractSection srs
@@ -375,21 +374,12 @@ sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase mater
 
 --TODO: Implement physical properties of a substance
 
-dataConstTable2 :: LabelledContent
-dataConstTable2 = outDataConstTbl dataConstListOut
--- s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
-  -- (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
-  -- (titleize output_ +:+ titleize' variable) True
-
 dataConstListOut :: [ConstrConcept]
 dataConstListOut = [tempW, watE]
 
 --------------------------
 --Section 5 : REQUIREMENTS
 --------------------------
-
-propsDeriv :: [Contents]
-propsDeriv = [LlC dataConstTable2]
 
 -- in Requirements.hs
 

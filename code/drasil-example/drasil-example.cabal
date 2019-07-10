@@ -160,7 +160,6 @@ executable ssp
     , Drasil.SSP.BasicExprs
     , Drasil.SSP.Body
     , Drasil.SSP.Changes
-    , Drasil.SSP.DataCons
     , Drasil.SSP.DataDefs
     , Drasil.SSP.Defs
     , Drasil.SSP.Figures

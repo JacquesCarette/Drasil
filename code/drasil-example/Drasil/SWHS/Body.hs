@@ -21,10 +21,9 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(..),
-  intro, mkDoc, outDataConstTbl, tsymb'',
-  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
-  generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD,
-  getTraceMapFromIM, getSCSSub, traceMatStandard)
+  ciGetDocDesc, egetDocDesc, generateTraceMap, generateTraceMap', getDocDesc,
+  getSCSSub, getTraceMapFromDD, getTraceMapFromGD, getTraceMapFromIM,
+  getTraceMapFromTM, intro, mkDoc, traceMatStandard, tsymb'')
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
@@ -176,7 +175,7 @@ mkSRS = [RefSec $ RefProg intro [
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
          [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
         , Constraints dataConTail inputConstraints
-        , CorrSolnPpties propsDeriv
+        , CorrSolnPpties outputConstraints propsDeriv
         ]
       ],
   ReqrmntSec $ ReqsProg [
@@ -421,12 +420,8 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
 -- Data Constraint: Table 3 --
 ------------------------------
 
-dataConTable3 :: LabelledContent
-dataConTable3 = outDataConstTbl outputConstraints
---FIXME: add "(by A11)" in Physical Constraints of `tempW` and `tempPCM`?
-
 outputConstraints :: [ConstrConcept]
-outputConstraints = [tempW, tempPCM, watE, pcmE]
+outputConstraints = [tempW, tempPCM, watE, pcmE] --FIXME: add "(by A11)" in Physical Constraints of `tempW` and `tempPCM`?
 
 -- Other Notes:
 ---- Will there be a way to have asterisks for certain pieces of the table?
@@ -437,7 +432,7 @@ outputConstraints = [tempW, tempPCM, watE, pcmE]
 {-Properties of a Correct Solution-}
 
 propsDeriv :: [Contents]
-propsDeriv = [LlC dataConTable3,
+propsDeriv = [
   propCorSolDeriv1 lawConsEnergy watE energy coil phsChgMtrl
                    dd1HtFluxC dd2HtFluxP surface heatTrans,
   propCorSolDeriv2,

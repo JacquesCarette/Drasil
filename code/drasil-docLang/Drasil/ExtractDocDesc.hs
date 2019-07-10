@@ -3,7 +3,7 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc) where
 
 import Control.Lens((^.))
 import Drasil.DocumentLanguage
-import Drasil.Sections.SpecificSystemDescription (inDataConstTbl)
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Language.Drasil hiding (Manual, Vector, Verb)
 import Theory.Drasil (Theory(..))
 import Data.List(transpose)
@@ -82,7 +82,7 @@ instance Multiplate DLPlate where
     sc (DDs s f dd d) = DDs <$> pure s <*> pure f <*> pure dd <*> pure d
     sc (IMs s f i d) = IMs <$> pure s <*> pure f <*> pure i <*> pure d
     sc (Constraints s c) = Constraints <$> pure s <*> pure c
-    sc (CorrSolnPpties c) = CorrSolnPpties <$> pure c
+    sc (CorrSolnPpties c cs) = CorrSolnPpties <$> pure c <*> pure cs
     rs (ReqsProg reqs) = ReqsProg <$> traverse (reqSub p) reqs
     rs' (FReqsSub ci con) = FReqsSub <$> pure ci <*> pure con
     rs' (NonFReqsSub c) = NonFReqsSub <$> pure c
@@ -119,7 +119,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (Goals _ _) -> mempty,
   scsSub = Constant <$> \case
     (Constraints _ c) -> mCon [inDataConstTbl c]
-    (CorrSolnPpties c) -> mCon c
+    (CorrSolnPpties c cs) -> mCon [outDataConstTbl c] `mappend` mCon cs
     _ -> mempty,
   reqSub = Constant <$> \case
     (FReqsSub _ c) -> mCon c
@@ -208,7 +208,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (GDs s _ d _) -> def d ++ s ++ der d ++ notes d
       (IMs s _ d _) -> s ++ der d ++ notes d
       (Constraints s _) -> [s]
-      (CorrSolnPpties _) -> [],
+      (CorrSolnPpties _ _) -> [],
     reqSub = Constant . f <$> \case
       (FReqsSub c _) -> def c
       (NonFReqsSub c) -> def c,

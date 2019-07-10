@@ -21,10 +21,9 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
-  auxSpecSent, intro, mkDoc, outDataConstTbl,
-  termDefnF', tsymb, generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
-  getTraceMapFromDD, getTraceMapFromIM, getSCSSub, traceMatStandard,
-  characteristicsLabel, generateTraceMap')
+  auxSpecSent, characteristicsLabel, generateTraceMap, generateTraceMap',
+  getSCSSub, getTraceMapFromDD, getTraceMapFromGD, getTraceMapFromIM,
+  getTraceMapFromTM, intro, mkDoc, termDefnF', traceMatStandard, tsymb)
 
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
@@ -159,7 +158,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
         , Constraints auxSpecSent inputDataConstraints
-        , CorrSolnPpties propsDeriv
+        , CorrSolnPpties [probBr] []
         ]
       ],
   ReqrmntSec $ ReqsProg [
@@ -401,10 +400,6 @@ goalInputs = [plural dimension `ofThe` phrase glaPlane, S "the" +:+ phrase glass
 {--Data Definitions--}
 
 {--Data Constraints--}
-
-propsDeriv :: [Contents]
-propsDeriv = [LlC $ outDataConstTbl [probBr]]
-
 
 {--REQUIREMENTS--}
 

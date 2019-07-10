@@ -16,10 +16,10 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   Verbosity(Verbose), OffShelfSolnsSec(..), GSDSec(..), GSDSub(..),
   TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
   LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), egetDocDesc, generateTraceMap,
-  generateTraceMap', getDocDesc, getSCSSub, getTraceMapFromDD,
-  getTraceMapFromGD, getTraceMapFromIM, getTraceMapFromTM,
-  intro, mkDoc, outDataConstTbl, solutionLabel, traceMatStandard, tsymb)
+  PDSub(..), egetDocDesc, generateTraceMap, generateTraceMap',
+  getDocDesc, getSCSSub, getTraceMapFromDD, getTraceMapFromGD,
+  getTraceMapFromIM, getTraceMapFromTM, intro, mkDoc, solutionLabel,
+  traceMatStandard, tsymb)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -87,7 +87,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
           iModelsNew ShowDerivation
         , Constraints (S "FIXME") inputConstraints
-        , CorrSolnPpties propsDeriv
+        , CorrSolnPpties outputConstraints []
         ]
       ],
     ReqrmntSec $ ReqsProg [
@@ -435,10 +435,6 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 ------------------------------
 -- SECTION 5 : REQUIREMENTS --
 ------------------------------
-
-propsDeriv :: [Contents]
-propsDeriv = [LlC $ outDataConstTbl outputConstraints]
-
 -- in Requirements.hs
 
 -----------------------------------

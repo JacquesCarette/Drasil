@@ -16,7 +16,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
   TSIntro(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
-  generateTraceMap, generateTraceMap', intro, mkDoc, outDataConstTbl, traceMatStandard, tsymb)
+  generateTraceMap, generateTraceMap', intro, mkDoc, traceMatStandard, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -77,7 +77,7 @@ mkSRS = [
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
         , Constraints EmptyS inConstraints
-        , CorrSolnPpties propsDeriv
+        , CorrSolnPpties outConstraints []
         ]
       ],
   ReqrmntSec $
@@ -181,20 +181,6 @@ physSystParts = map foldlSent [
   [S "The", phrase launcher],
   [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `sAnd` getTandS launAngle)],
   [S "The", phrase target]]
-
-----------------------
--- Data Constraints --
-----------------------
-
-outDataCons :: LabelledContent
-outDataCons = outDataConstTbl outConstraints
-
-------------------------------------
--- Properties of Correct Solution --
-------------------------------------
-
-propsDeriv :: [Contents]
-propsDeriv = [LlC outDataCons]
 
 --------------------------
 -- Traceabilty Matrices --

@@ -217,10 +217,12 @@ fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
 fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 
-propCorSolF :: [Contents] -> Section
-propCorSolF c@(LlC t@(LblC _ Table{}) : _) = SRS.propCorSol (propsIntro t : c) []
-propCorSolF x                              = SRS.propCorSol x []
+propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section
+propCorSolF c con = SRS.propCorSol (propsIntro : (LlC $ outDataConstTbl c) : con) []
 
-propsIntro :: LabelledContent -> Contents
-propsIntro tab = foldlSP_ [makeRef2S tab, S "shows the", plural datumConstraint,
-  S "on the", phrase output_ +:+. plural variable, physConsSent]
+propsIntro :: Contents
+propsIntro = foldlSP_ [outputTableSent, physConsSent]
+
+outputTableSent :: Sentence
+outputTableSent = foldlSent [makeRef2S $ outDataConstTbl ([] :: [UncertQ]), S "shows the",
+  plural datumConstraint, S "on the", phrase output_, plural variable]

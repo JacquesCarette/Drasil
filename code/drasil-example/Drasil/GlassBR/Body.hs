@@ -56,7 +56,8 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, con, con')
-import Drasil.GlassBR.DataDefs (dataDefns, qDefns)
+import Drasil.GlassBR.DataDefs (qDefns)
+import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
@@ -86,7 +87,7 @@ si = SI {
   _definitions = map (relToQD symbMap) iMods ++ 
                  concatMap (^. defined_quant) tMods ++
                  concatMap (^. defined_fun) tMods,
-  _datadefs    = dataDefns,
+  _datadefs    = GB.dataDefs,
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = qDefns,
@@ -123,7 +124,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         [ Assumptions
         , TMs [] (Label : stdFields) tMods
         , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) GB.dataDefs ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
         , Constraints EmptyS dataConstraintUncertainty
                       (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],

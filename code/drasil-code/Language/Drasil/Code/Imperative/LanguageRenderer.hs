@@ -707,15 +707,15 @@ dashes :: String -> Int -> String
 dashes s l = replicate (l - length s) '-'
 
 functionDoc :: String -> [(String, String)] -> [String]
-functionDoc desc params = ["\\brief " ++ desc | not (null desc)]
-  ++ map (\(v, vDesc) -> "\\param " ++ v ++ " " ++ vDesc) params
+functionDoc desc params = [doxBrief ++ desc | not (null desc)]
+  ++ map (\(v, vDesc) -> doxParam ++ v ++ " " ++ vDesc) params
 
 classDoc :: String -> [String]
-classDoc desc = ["\\brief " ++ desc | not (null desc)]
+classDoc desc = [doxBrief ++ desc | not (null desc)]
 
 moduleDoc :: String -> String -> String -> [String]
-moduleDoc desc m ext = ("\\file " ++ m ++ ext) : 
-  ["\\brief " ++ desc | not (null desc)]
+moduleDoc desc m ext = (doxFile ++ m ++ ext) : 
+  [doxBrief ++ desc | not (null desc)]
 
 -- Helper Functions --
 
@@ -750,3 +750,10 @@ intValue i = intValue' (getType $ valueType i)
   where intValue' Integer = i
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
+
+
+doxCommand, doxBrief, doxParam, doxFile :: String
+doxCommand = "\\"
+doxBrief = doxCommand ++ "brief "
+doxParam = doxCommand ++ "param "
+doxFile = doxCommand  ++ "file "

@@ -72,7 +72,8 @@ copy_examples() {
 			# We don't expose code in deploy. It's more conveneient to link to GitHub's directory
 			# We place a stub file which Hakyll will replace.
       REL_PATH=$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)
-      ls -d "$(git rev-parse --show-toplevel)/$REL_PATH"*/ | rev | cut -d/ -f2 | rev | tr '\n' '\0' | xargs -0 printf "$REL_PATH%s\n" > "$EXAMPLE_DEST$example_name/src"
+      # On a real deploy, `deploy` folder is itself a git repo, thus we need to ensure the path lookup is in the outer Drasil repo.
+      ls -d "$(cd "$CUR_DIR" && git rev-parse --show-toplevel)/$REL_PATH"*/ | rev | cut -d/ -f2 | rev | tr '\n' '\0' | xargs -0 printf "$REL_PATH%s\n" > "$EXAMPLE_DEST$example_name/src"
 		fi
 	done
 }

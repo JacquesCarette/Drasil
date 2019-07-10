@@ -16,7 +16,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
+  SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -315,15 +315,6 @@ instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   iterBeginFunc t = pair (iterBeginFunc $ pfst t) (iterBeginFunc $ psnd t)
   iterEndFunc t = pair (iterEndFunc $ pfst t) (iterEndFunc $ psnd t)
 
-instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
-  listAccessFunc t v = pair (listAccessFunc (pfst t) (pfst v)) (listAccessFunc (psnd t) 
-    (psnd v))
-  listSetFunc v i toVal = pair (listSetFunc (pfst v) (pfst i) (pfst toVal)) 
-    (listSetFunc (psnd v) (psnd i) (psnd toVal))
-
-  atFunc t l = pair (atFunc (pfst t) l) (atFunc (psnd t) l)
-
-instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
   get v vToGet = pair (get (pfst v) (pfst vToGet)) (get (psnd v) (psnd vToGet))
   set v vToSet toVal = pair (set (pfst v) (pfst vToSet) (pfst toVal))
     (set (psnd v) (psnd vToSet) (psnd toVal))
@@ -333,14 +324,23 @@ instance (Pair p) => FunctionApplication (p CppSrcCode CppHdrCode) where
     (listAdd (psnd v) (psnd i) (psnd vToAdd))
   listAppend v vToApp = pair (listAppend (pfst v) (pfst vToApp)) 
     (listAppend (psnd v) (psnd vToApp))
+
+  iterBegin v = pair (iterBegin $ pfst v) (iterBegin $ psnd v)
+  iterEnd v = pair (iterEnd $ pfst v) (iterEnd $ psnd v)
+
+instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
+  listAccessFunc t v = pair (listAccessFunc (pfst t) (pfst v)) (listAccessFunc (psnd t) 
+    (psnd v))
+  listSetFunc v i toVal = pair (listSetFunc (pfst v) (pfst i) (pfst toVal)) 
+    (listSetFunc (psnd v) (psnd i) (psnd toVal))
+
+  atFunc t l = pair (atFunc (pfst t) l) (atFunc (psnd t) l)
+
   listAccess v i = pair (listAccess (pfst v) (pfst i)) 
     (listAccess (psnd v) (psnd i))
   listSet v i toVal = pair (listSet (pfst v) (pfst i) (pfst toVal)) 
     (listSet (psnd v) (psnd i) (psnd toVal))
   at v l = pair (at (pfst v) l) (at (psnd v) l)
-
-  iterBegin v = pair (iterBegin $ pfst v) (iterBegin $ psnd v)
-  iterEnd v = pair (iterEnd $ pfst v) (iterEnd $ psnd v)
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -828,6 +828,16 @@ instance FunctionSym CppSrcCode where
   iterBeginFunc t = func "begin" (iterator t) []
   iterEndFunc t = func "end" (iterator t) []
 
+  get v vToGet = v $. getFunc vToGet
+  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+
+  listSize v = cast int (v $. listSizeFunc)
+  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
+  listAppend v vToApp = v $. listAppendFunc vToApp
+
+  iterBegin v = v $. iterBeginFunc (listInnerType $ valueType v)
+  iterEnd v = v $. iterEndFunc (listInnerType $ valueType v)
+
 instance SelectorFunction CppSrcCode where
   listAccessFunc t v = func "at" t [intValue v]
   listSetFunc v i toVal = liftA2 fd (valueType v) 
@@ -835,19 +845,9 @@ instance SelectorFunction CppSrcCode where
 
   atFunc t l = listAccessFunc t (var l int) 
 
-instance FunctionApplication CppSrcCode where
-  get v vToGet = v $. getFunc vToGet
-  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
-
-  listSize v = cast int (v $. listSizeFunc)
-  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
-  listAppend v vToApp = v $. listAppendFunc vToApp
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
   at v l = listAccess v (var l int)
-
-  iterBegin v = v $. iterBeginFunc (listInnerType $ valueType v)
-  iterEnd v = v $. iterEndFunc (listInnerType $ valueType v)
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -1321,25 +1321,25 @@ instance FunctionSym CppHdrCode where
   iterBeginFunc _ = liftA2 fd void (return empty)
   iterEndFunc _ = liftA2 fd void (return empty)
 
-instance SelectorFunction CppHdrCode where
-  listAccessFunc _ _ = liftA2 fd void (return empty)
-  listSetFunc _ _ _ = liftA2 fd void (return empty)
-
-  atFunc _ _ = liftA2 fd void (return empty)
-
-instance FunctionApplication CppHdrCode where
   get _ _ = liftA2 mkVal void (return empty)
   set _ _ _ = liftA2 mkVal void (return empty)
 
   listSize _ = liftA2 mkVal void (return empty)
   listAdd _ _ _ = liftA2 mkVal void (return empty)
   listAppend _ _ = liftA2 mkVal void (return empty)
-  listAccess _ _ = liftA2 mkVal void (return empty)
-  listSet _ _ _ = liftA2 mkVal void (return empty)
-  at _ _ = liftA2 mkVal void (return empty)
 
   iterBegin _ = liftA2 mkVal void (return empty)
   iterEnd _ = liftA2 mkVal void (return empty)
+
+instance SelectorFunction CppHdrCode where
+  listAccessFunc _ _ = liftA2 fd void (return empty)
+  listSetFunc _ _ _ = liftA2 fd void (return empty)
+
+  atFunc _ _ = liftA2 fd void (return empty)
+
+  listAccess _ _ = liftA2 mkVal void (return empty)
+  listSet _ _ _ = liftA2 mkVal void (return empty)
+  at _ _ = liftA2 mkVal void (return empty)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)

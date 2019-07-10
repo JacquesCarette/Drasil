@@ -15,7 +15,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
+  SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -328,6 +328,16 @@ instance FunctionSym CSharpCode where
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
   iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
 
+  get v vToGet = v $. getFunc vToGet
+  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+
+  listSize v = v $. listSizeFunc
+  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
+  listAppend v vToApp = v $. listAppendFunc vToApp
+  
+  iterBegin v = v $. iterBeginFunc (valueType v)
+  iterEnd v = v $. iterEndFunc (valueType v)
+
 instance SelectorFunction CSharpCode where
   listAccessFunc t v = liftA2 fd t (listAccessFuncDocD <$> intValue v)
   listSetFunc v i toVal = liftA2 fd (valueType v) 
@@ -335,19 +345,9 @@ instance SelectorFunction CSharpCode where
 
   atFunc t l = listAccessFunc t (var l int)
 
-instance FunctionApplication CSharpCode where
-  get v vToGet = v $. getFunc vToGet
-  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
-
-  listSize v = v $. listSizeFunc
-  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
-  listAppend v vToApp = v $. listAppendFunc vToApp
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
   at v l = listAccess v (var l int)
-  
-  iterBegin v = v $. iterBeginFunc (valueType v)
-  iterEnd v = v $. iterEndFunc (valueType v)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)

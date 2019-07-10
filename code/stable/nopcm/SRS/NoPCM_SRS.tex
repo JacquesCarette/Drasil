@@ -32,10 +32,10 @@
 This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
-The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, \hyperref[Table:ToU]{Tab: ToU} lists the symbol, a description and the SI name.
 \begin{longtable}{l l l}
 \toprule
-Symbol & Description & SI Name
+\textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
 \\
 \midrule
 \endhead
@@ -57,10 +57,10 @@ W & power & watt
 \end{longtable}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
+The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
 \begin{longtabu}{l X[l] l}
 \toprule
-Symbol & Description & Units
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
 \midrule
 \endhead
@@ -148,7 +148,7 @@ $∇$ & Gradient & --
 \label{Sec:TAbbAcc}
 \begin{longtable}{l l}
 \toprule
-Abbreviation & Full Form
+\textbf{Abbreviation} & \textbf{Full Form}
 \\
 \midrule
 \endhead
@@ -298,7 +298,7 @@ This section focuses on the general equations and laws that SWHS is based on.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:consThermE}
 \phantomsection 
 \label{TM:consThermE}
@@ -324,12 +324,13 @@ Notes & The above equation gives the law of conservation of energy for transient
 Source & \hyperref{http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm}{}{}{Fourier Law of Heat Conduction and Heat Equation}
 \\ \midrule \\
 RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:sensHtE}
 \phantomsection 
 \label{TM:sensHtE}
@@ -352,7 +353,8 @@ Notes & $E$ occurs as long as the material does not reach a temperature where a 
 Source & \hyperref{http://en.wikipedia.org/wiki/Sensible_heat}{}{}{Definition of Sensible Heat}
 \\ \midrule \\
 RefBy & \hyperref[IM:heatEInWtr]{IM: heatEInWtr}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
@@ -360,7 +362,7 @@ This section collects the laws and equations that will be used to build the inst
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:nwtnCooling}
 \phantomsection 
 \label{GD:nwtnCooling}
@@ -385,12 +387,13 @@ Notes & Newton's law of cooling describes convective cooling from a surface. The
 Source & \cite[(pg. 8)]{incroperaEtAl2007}
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:rocTempSimp}
 \phantomsection 
 \label{GD:rocTempSimp}
@@ -419,7 +422,8 @@ Notes & The basic equation governing the rate of change of temperature, for a gi
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 Detailed derivation of simplified rate of change of temperature.
 Integrating \hyperref[TM:consThermE]{TM: consThermE} over a volume ($V$), we have:
@@ -448,7 +452,7 @@ This section collects and defines all the data needed to build the instance mode
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:htFluxC}
 \phantomsection 
 \label{DD:htFluxC}
@@ -477,7 +481,8 @@ Notes & \hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
@@ -486,7 +491,7 @@ The goal \hyperref[waterTempGS]{GS: Predict-Water-Temperature} is met by \hyperr
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:eBalanceOnWtr}
 \phantomsection 
 \label{IM:eBalanceOnWtr}
@@ -521,7 +526,8 @@ Notes & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}}$ is 
 Source & \cite[(with PCM removed)]{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}, \hyperref[findMass]{FR: Find-Mass}, and \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 Derivation of the energy balance on water:
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity, ${C_{W}}$. Heat transfer occurs in the water from the heating coil as ${q_{C}}$ (\hyperref[DD:htFluxC]{DD: htFluxC}), over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
@@ -543,7 +549,7 @@ Setting ${τ_{W}}$ = ${m_{W}}$ ${C_{W}}$ / ${h_{C}}$ ${A_{C}}$ , Equation (4) ca
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:heatEInWtr}
 \phantomsection 
 \label{IM:heatEInWtr}
@@ -578,14 +584,15 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}. 
 Source & \cite{koothoor2013}
 \\ \midrule \\
 RefBy & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 \hyperref[Table:InDataConstraints]{Table:InDataConstraints} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.
 \begin{longtable}{l l l l l}
 \toprule
-Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
 \midrule
 \endhead
@@ -615,7 +622,7 @@ ${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & 
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
-Var & Physical Constraints
+\textbf{Var} & \textbf{Physical Constraints}
 \\
 \midrule
 \endhead
@@ -646,7 +653,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \end{itemize}
 \begin{longtabu}{l X[l] l}
 \toprule
-Symbol & Description & Units
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
 \midrule
 \endhead
@@ -709,7 +716,7 @@ This section lists the unlikely changes to be made to the software.
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[assumpTEO]{A: Thermal-Energy-Only} & \hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant} & \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank} & \hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume} & \hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume} & \hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water} & \hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time} & \hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length} & \hyperref[assumpCTNTD]{A: Charging-Tank-No-Temp-Discharge} & \hyperref[assumpWAL]{A: Water-Always-Liquid} & \hyperref[assumpPIT]{A: Perfect-Insulation-Tank} & \hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water} & \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}
+\textbf{} & \textbf{\hyperref[assumpTEO]{A: Thermal-Energy-Only}} & \textbf{\hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant}} & \textbf{\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}} & \textbf{\hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume}} & \textbf{\hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume}} & \textbf{\hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}} & \textbf{\hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time}} & \textbf{\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length}} & \textbf{\hyperref[assumpCTNTD]{A: Charging-Tank-No-Temp-Discharge}} & \textbf{\hyperref[assumpWAL]{A: Water-Always-Liquid}} & \textbf{\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}} & \textbf{\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}} & \textbf{\hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}}
 \\
 \midrule
 \endhead
@@ -757,7 +764,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l}
 \toprule
- & \hyperref[DD:htFluxC]{DD: htFluxC} & \hyperref[TM:consThermE]{TM: consThermE} & \hyperref[TM:sensHtE]{TM: sensHtE} & \hyperref[GD:nwtnCooling]{GD: nwtnCooling} & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & \hyperref[IM:heatEInWtr]{IM: heatEInWtr}
+\textbf{} & \textbf{\hyperref[DD:htFluxC]{DD: htFluxC}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[GD:nwtnCooling]{GD: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}}
 \\
 \midrule
 \endhead
@@ -781,7 +788,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[DD:htFluxC]{DD: htFluxC} & \hyperref[TM:consThermE]{TM: consThermE} & \hyperref[TM:sensHtE]{TM: sensHtE} & \hyperref[GD:nwtnCooling]{GD: nwtnCooling} & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} & \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} & \hyperref[findMass]{FR: Find-Mass} & \hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} & \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}
+\textbf{} & \textbf{\hyperref[DD:htFluxC]{DD: htFluxC}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[GD:nwtnCooling]{GD: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}} & \textbf{\hyperref[findMass]{FR: Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}} & \textbf{\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}}
 \\
 \midrule
 \endhead
@@ -810,7 +817,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 This section contains the standard values that are used for calculations in SWHS.
 \begin{longtabu}{l X[l] l l}
 \toprule
-Symbol & Description & Value & Unit
+\textbf{Symbol} & \textbf{Description} & \textbf{Value} & \textbf{Unit}
 \\
 \midrule
 \endhead

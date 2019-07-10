@@ -50,6 +50,7 @@ glassbr_diff | Glass-BR
 tiny_diff | HGHC toy example
 ssp_diff | Slope Stability Analysis
 nopcm_diff | minimal SWHS example, with PCM removed
+projectile_diff | Projectile motion analysis
 
 ## Running the example(s)
 
@@ -66,6 +67,7 @@ glassbr | Glass-BR
 tiny | HGHC toy example
 ssp | Slope Stability Analysis (SSP)
 nopcm | SWHS without PCM (NoPCM)
+projectile | Projectile motion analysis
 
 This runs the examples manually from the .stack-work folder after building, and the generated docs will
 appear in this folder (i.e. in the SRS and Website folders). Due to this placement, these generated

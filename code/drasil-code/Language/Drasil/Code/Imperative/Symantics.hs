@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.Symantics (
   BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
+  SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..)
@@ -303,6 +303,18 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   iterBeginFunc :: repr (StateType repr) -> repr (Function repr)
   iterEndFunc   :: repr (StateType repr) -> repr (Function repr)
 
+  get :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  set :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
+    repr (Value repr)
+
+  listSize   :: repr (Value repr) -> repr (Value repr)
+  listAdd    :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
+    repr (Value repr)
+  listAppend :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+
+  iterBegin :: repr (Value repr) -> repr (Value repr)
+  iterEnd   :: repr (Value repr) -> repr (Value repr)
+
 class (ValueSym repr, FunctionSym repr, Selector repr) => 
   SelectorFunction repr where
   listAccessFunc :: repr (StateType repr) -> repr (Value repr) -> 
@@ -312,27 +324,13 @@ class (ValueSym repr, FunctionSym repr, Selector repr) =>
 
   atFunc :: repr (StateType repr) -> Label -> repr (Function repr)
 
-class (ValueSym repr, FunctionSym repr, Selector repr, SelectorFunction repr) =>
-  FunctionApplication repr where
-  get :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-  set :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
-    repr (Value repr)
-
-  listSize   :: repr (Value repr) -> repr (Value repr)
-  listAdd    :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
-    repr (Value repr)
-  listAppend :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   listAccess :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   listSet    :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) ->
     repr (Value repr)
   at         :: repr (Value repr) -> Label -> repr (Value repr)
 
-  iterBegin :: repr (Value repr) -> repr (Value repr)
-  iterEnd   :: repr (Value repr) -> repr (Value repr)
-  
-
-class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr, 
-  FunctionApplication repr) => StatementSym repr where
+class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) 
+  => StatementSym repr where
   type Statement repr
   (&=)   :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
   infixr 1 &=

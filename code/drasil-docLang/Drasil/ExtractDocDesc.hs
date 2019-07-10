@@ -30,7 +30,7 @@ data DLPlate f = DLPlate {
   lcsSec :: LCsSec -> f LCsSec,
   ucsSec :: UCsSec -> f UCsSec,
   traceSec :: TraceabilitySec -> f TraceabilitySec,
-  existSolnSec :: ExistingSolnSec -> f ExistingSolnSec,
+  offShelfSolnsSec :: OffShelfSolnsSec -> f OffShelfSolnsSec,
   auxConsSec :: AuxConstntSec -> f AuxConstntSec,
   appendSec :: AppndxSec -> f AppndxSec
 }
@@ -47,7 +47,7 @@ instance Multiplate DLPlate where
     ds (LCsSec x) = LCsSec <$> lcsSec p x
     ds (UCsSec x) = UCsSec <$> ucsSec p x
     ds (TraceabilitySec x) = TraceabilitySec <$> traceSec p x
-    ds (ExistingSolnSec x) = ExistingSolnSec <$> existSolnSec p x
+    ds (OffShelfSolnsSec x) = OffShelfSolnsSec <$> offShelfSolnsSec p x
     ds (AuxConstntSec x) = AuxConstntSec <$> auxConsSec p x
     ds (AppndxSec x) = AppndxSec <$> appendSec p x
     ds Bibliography = pure Bibliography
@@ -89,13 +89,13 @@ instance Multiplate DLPlate where
     ucp (UCsProg c) = UCsProg <$> pure c
     ts (TraceabilityProg llc sen con sect) = TraceabilityProg <$> pure llc <*>
       pure sen <*> pure con <*> pure sect
-    es (ExistSolnProg contents) = ExistSolnProg <$> pure contents
+    es (OffShelfSolnsProg contents) = OffShelfSolnsProg <$> pure contents
     acs (AuxConsProg ci qdef) = AuxConsProg <$> pure ci <*> pure qdef
     aps (AppndxProg con) = AppndxProg <$> pure con
   mkPlate b = DLPlate (b docSec) (b refSec) (b introSec) (b introSub) (b stkSec)
     (b stkSub) (b gsdSec) (b gsdSub) (b ssdSec) (b ssdSub) (b pdSec) (b pdSub)
     (b scsSub) (b reqSec) (b reqSub) (b lcsSec) (b ucsSec)
-    (b traceSec) (b existSolnSec) (b auxConsSec) (b appendSec)
+    (b traceSec) (b offShelfSolnsSec) (b auxConsSec) (b appendSec)
 
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
   ([Section] -> b) -> DLPlate (Constant b)
@@ -127,7 +127,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   ucsSec = Constant <$> \(UCsProg _) -> mempty,
   traceSec = Constant <$> \(TraceabilityProg lc _ c s) ->
     mconcat [mCon lc, mCon c, mSec s],
-  existSolnSec = Constant <$> \(ExistSolnProg c) -> mCon c,
+  offShelfSolnsSec = Constant <$> \(OffShelfSolnsProg c) -> mCon c,
   appendSec = Constant <$> \(AppndxProg c) -> mCon c
 }
 

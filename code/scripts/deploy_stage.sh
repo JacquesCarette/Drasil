@@ -71,9 +71,15 @@ copy_examples() {
 		if [ -d "$example/"src ]; then
 			# We don't expose code in deploy. It's more conveneient to link to GitHub's directory
 			# We place a stub file which Hakyll will replace.
-			echo $(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-) > "$EXAMPLE_DEST$example_name/src"
+      REL_PATH=$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)
+      ls -d "$(git rev-parse --show-toplevel)/$REL_PATH"*/ | rev | cut -d/ -f2 | rev | tr '\n' '\0' | xargs -0 printf "$REL_PATH%s\n" > "$EXAMPLE_DEST$example_name/src"
 		fi
 	done
+}
+
+copy_images() {
+  mkdir -p "$CUR_DIR"deploy/images
+  cp -r "$CUR_DIR"website/images/ "$CUR_DIR"deploy/images
 }
 
 build_website() {
@@ -98,5 +104,6 @@ copy_docs
 copy_graphs
 copy_datafiles
 copy_examples
+copy_images
 build_website
 cd "$CUR_DIR"

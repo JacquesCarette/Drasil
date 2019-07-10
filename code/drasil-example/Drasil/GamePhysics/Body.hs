@@ -49,7 +49,8 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GamePhysics.Concepts (chipmunk, acronyms, threeD, twoD)
-import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
+import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs)
+import qualified Drasil.GamePhysics.DataDefs as GP (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
@@ -90,7 +91,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         [ Assumptions
         , TMs [] (Label : stdFields) tModsNew
         , GDs [] [] [] HideDerivation -- No Gen Defs for Gamephysics
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) GP.dataDefs ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
           iModelsNew ShowDerivation
         , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
@@ -151,7 +152,7 @@ si = SI {
   _quants = symbTT, 
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
-  _datadefs = dataDefns,
+  _datadefs = GP.dataDefs,
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
   _defSequence = blockQDefs,

@@ -71,11 +71,15 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index,
   constrained, inputs, outputs, symbols)
 
 --Document Setup--
-units :: [UnitDefn]
-units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
 
-unitsColl :: [UnitDefn]
-unitsColl = collectUnits symMap symbTT
+srs :: Document
+srs = mkDoc mkSRS for si
+
+printSetting :: PrintingInformation
+printSetting = PI symMap defaultConfiguration
+
+resourcePath :: String
+resourcePath = "../../../datafiles/SSP/"
 
 si :: SystemInformation
 si = SI {
@@ -95,12 +99,6 @@ si = SI {
   _usedinfodb = usedDB,
    refdb = refDB
 }
-
-resourcePath :: String
-resourcePath = "../../../datafiles/SSP/"
-
-srs :: Document
-srs = mkDoc mkSRS for si
   
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro
@@ -144,6 +142,12 @@ mkSRS = [RefSec $ RefProg intro
     (map (LlC . fst) traceyMatrix) [],
   AuxConstntSec $ AuxConsProg ssp [],
   Bibliography]
+
+units :: [UnitDefn]
+units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
+
+unitsColl :: [UnitDefn]
+unitsColl = collectUnits symMap symbTT
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
@@ -204,9 +208,6 @@ usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
-
-printSetting :: PrintingInformation
-printSetting = PI symMap defaultConfiguration
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap

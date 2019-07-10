@@ -81,6 +81,12 @@ import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
 import Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable)
 import Drasil.NoPCM.Unitals (inputs, constrained, specParamValList)
 
+srs :: Document
+srs = mkDoc mkSRS for si
+
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
+
 -- This defines the standard concepts used throughout the document
 units :: [UnitDefn]
 units = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
@@ -223,9 +229,6 @@ si = SI {
 refDB :: ReferenceDB
 refDB = rdb referencesRefList concIns
 
-srs :: Document
-srs = mkDoc mkSRS for si
-
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
@@ -242,9 +245,6 @@ usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw unitsC
  ([] :: [ConceptChunk]) unitsColl label refBy
  dataDefn iMods genDef theory concIns
  section labCon
-
-printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
 
 symbTT :: [DefinedQuantityDict]
 symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symbMap

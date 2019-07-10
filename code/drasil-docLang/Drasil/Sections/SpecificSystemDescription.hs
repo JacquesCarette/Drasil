@@ -148,28 +148,16 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
 
 -- wrapper for datConPar
 datConF :: Sentence -> [LabelledContent] -> Section
-datConF trailing tables = SRS.datCon 
-  (dataConstraintParagraph trailing tables : map LlC tables) []
+datConF trailing tables = SRS.datCon (dataConstraintParagraph trailing : map LlC tables) []
   
 -- optional trailing sentence(s) -> data constraints tables -> Contents
-dataConstraintParagraph :: Sentence -> [LabelledContent] -> Contents
-dataConstraintParagraph trailingSent tables = mkParagraph $ foldlSent_
-  [dataConstraintIntroSent tables, physConsSent, uncertSent,
-   conservConsSent, typValSent, trailingSent]
+dataConstraintParagraph :: Sentence -> Contents
+dataConstraintParagraph trailingSent = foldlSP_ [inputTableSent, physConsSent,
+  uncertSent, conservConsSent, typValSent, trailingSent]
 
-dataConstraintIntroSent :: [LabelledContent] -> Sentence
-dataConstraintIntroSent tables = foldlSent [tableRef, S "the",
-  plural datumConstraint, S "on the", varsSent numTables]
-  where
-    numTables  = length tables
-    tableRef   = foldlList Comma List (map makeRef2S tables) +:+ tableEnd numTables
-    tableEnd 0 = EmptyS
-    tableEnd 1 = S "shows"
-    tableEnd _ = S "show"
-    -- FIXME: varsSent too hardcoded - we need a better way to enforce the data constraint tables
-    varsSent 1 = phrase input_ +:+ plural variable
-    varsSent 2 = phrase input_ `sAnd` phrase output_ +:+ plural variable `sC` S "respectively"
-    varsSent n = error $ "varsSent not implemented for " ++ show n ++ " tables"
+inputTableSent :: Sentence
+inputTableSent = foldlSent [makeRef2S $ inDataConstTbl ([] :: [UncertQ]), S "shows the",
+  plural datumConstraint, S "on the", phrase input_, plural variable]
 
 physConsSent :: Sentence
 physConsSent = foldlSent [S "The", phrase column, S "for", phrase physical,

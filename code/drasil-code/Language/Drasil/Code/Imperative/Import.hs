@@ -214,20 +214,24 @@ genInputModClass = do
   let ic = maybeToList inputClass
       dl = maybeToList derived
       cl = maybeToList constrs
-  sequence [ genModule "InputParameters" Nothing (Just $ return ic),
-             genModule "DerivedValues" (Just $ return dl) Nothing,
-             genModule "InputConstraints" (Just $ return cl) Nothing
+  sequence [ genModule "InputParameters" 
+               "Provides the structure for holding input parameters" 
+               Nothing (Just $ return ic),
+             genModule "DerivedValues" 
+               "Provides the function for calculating derived values" 
+               (Just $ return dl) Nothing,
+             genModule "InputConstraints" 
+               ("Provides the function for checking the physical and " ++
+               "software constraints on the input")
+             (Just $ return cl) Nothing
            ]
 
 genInputModNoClass :: (RenderSym repr) => Reader (State repr)
   [repr (RenderFile repr)]
-genInputModNoClass = do
-  inpDer    <- genInputDerived
-  inpConstr <- genInputConstraints
-  return [ fileDoc $ buildModule "InputParameters" []
-           (catMaybes [inpDer, inpConstr])
-           []
-         ]
+genInputModNoClass = liftS $
+  genModule "InputParameters" ("Provides functions for calculating derived " ++
+    "inputs and checking input constraints") (Just $ concat <$> mapM (fmap 
+    maybeToList) [genInputDerived, genInputConstraints]) Nothing
 
 genInputClass :: (RenderSym repr) => Reader (State repr) (Maybe (repr (Class 
   repr)))
@@ -300,7 +304,8 @@ genInputFormatMod :: (RenderSym repr) => Reader (State repr)
 genInputFormatMod = do
   inFunc <- genInputFormat
   let inFmt = maybeToList inFunc
-  liftS $ genModule "InputFormat" (Just $ return inFmt) Nothing
+  liftS $ genModule "InputFormat" "Provides the function for reading inputs" 
+    (Just $ return inFmt) Nothing
 
 genInputFormat :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Method repr)))
@@ -376,7 +381,8 @@ genOutputMod :: (RenderSym repr) => Reader (State repr) [repr
 genOutputMod = do
   outformat <- genOutputFormat
   let outf = maybeToList outformat
-  liftS $ genModule "OutputFormat" (Just $ return outf) Nothing
+  liftS $ genModule "OutputFormat" "Provides the function for writing outputs" 
+    (Just $ return outf) Nothing
 
 genOutputFormat :: (RenderSym repr) => Reader (State repr) (Maybe (repr 
   (Method repr)))
@@ -470,23 +476,25 @@ loggedMethod lName n vals b = block [
 
 ---- MAIN ---
 
-genModule :: (RenderSym repr) => Name
+genModule :: (RenderSym repr) => Name -> String
                -> Maybe (Reader (State repr) [repr (Method repr)])
                -> Maybe (Reader (State repr) [repr (Class repr)])
                -> Reader (State repr) (repr (RenderFile repr))
-genModule n maybeMs maybeCs = do
+genModule n desc maybeMs maybeCs = do
   g <- ask
   let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
       updateState = withReader (\s -> s { currentModule = n })
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
-  let commMod | CommentFunc `elem` commented g && not (null ms) = docMod ""
+  let commMod | CommentMod `elem` commented g                   = docMod desc
+              | CommentFunc `elem` commented g && not (null ms) = docMod ""
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n ls ms cs
 
 
 genMain :: (RenderSym repr) => Reader (State repr) (repr (RenderFile repr))
-genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
+genMain = genModule "Control" "Controls the flow of the program" 
+  (Just $ liftS genMainFunc) Nothing
 
 genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genMainFunc =
@@ -828,7 +836,7 @@ bfunc Index = listAccess
 -- medium hacks --
 genModDef :: (RenderSym repr) => CS.Mod -> Reader (State repr) 
   (repr (RenderFile repr))
-genModDef (CS.Mod n fs) = genModule n (Just $ mapM genFunc fs) Nothing
+genModDef (CS.Mod n desc fs) = genModule n desc (Just $ mapM genFunc fs) Nothing
 
 genFunc :: (RenderSym repr) => Func -> Reader (State repr) (repr (Method repr))
 genFunc (FDef (FuncDef n desc i o s)) = do

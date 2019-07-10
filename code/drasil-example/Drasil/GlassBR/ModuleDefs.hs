@@ -22,7 +22,8 @@ implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 --from TSD.txt:
 
 readTableMod :: Mod
-readTableMod = packmod "ReadTable" [readTable]
+readTableMod = packmod "ReadTable"
+  "Provides a function for reading glass ASTM data" [readTable]
 
 readTable :: Func
 readTable = funcData "read_table" 
@@ -203,4 +204,6 @@ interpZ = funcDef "interpZ"
   ]
 
 interpMod :: Mod
-interpMod = packmod "Interpolation" [linInterpCT, findCT, extractColumnCT, interpY, interpZ]
+interpMod = packmod "Interpolation" 
+  "Provides functions for linear interpolation on three-dimensional data" 
+  [linInterpCT, findCT, extractColumnCT, interpY, interpZ]

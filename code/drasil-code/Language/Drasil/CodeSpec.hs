@@ -94,7 +94,9 @@ codeSpec SI {_sys = sys
         execOrder = exOrder,
         cMap = constraintMap cs,
         constants = const',
-        mods = prefixFunctions $ packmod "Calculations" (map FCD exOrder) : ms,
+        mods = prefixFunctions $ packmod "Calculations" 
+          "Provides functions for calculating the outputs" 
+          (map FCD exOrder) : ms,
         sysinfodb = db
       }
   in  CodeSpec {
@@ -160,9 +162,9 @@ convertRel :: ChunkDB -> Expr -> QDefinition
 convertRel sm (BinaryOp Eq (C x) r) = ec (symbLookup x $ symbolTable sm) r
 convertRel _ _ = error "Conversion failed"
 
-data Mod = Mod Name [Func]
+data Mod = Mod Name String [Func]
 
-packmod :: Name -> [Func] -> Mod
+packmod :: Name -> String -> [Func] -> Mod
 packmod n = Mod (toCodeName n)
 
 data DMod = DMod [Name] Mod
@@ -236,7 +238,7 @@ modExportMap cs@CSI {
   extInputs = ins,
   derivedInputs = ds
   } chs = Map.fromList $ concatMap mpair (mods cs)
-  where mpair (Mod n fs) = map fname fs `zip` repeat n
+  where mpair (Mod n _ fs) = map fname fs `zip` repeat n
                         ++ getExportInput chs (ins ++ map codevar ds)
                         ++ getExportDerived chs ds
                         ++ getExportConstraints chs (getConstraints (cMap cs) 
@@ -249,12 +251,12 @@ modExportMap cs@CSI {
 type ModDepMap = Map.Map String [String]
 
 modDepMap :: CodeSystInfo -> ModExportMap -> Choices -> ModDepMap
-modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _) -> (n, getModDep m)) 
+modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _ _) -> (n, getModDep m)) 
   (mods cs) ++ ("Control", getDepsControl cs mem)
   : catMaybes [getDepsDerived cs mem chs,
                getDepsConstraints cs mem chs,
                getDepsInFormat chs]
-  where getModDep (Mod name' funcs) =
+  where getModDep (Mod name' _ funcs) =
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)
         fdep (FCD cd) = codeName cd:map codeName (codevarsandfuncs (codeEquat cd) sm mem)
@@ -310,7 +312,7 @@ fname (FDef (FuncDef n _ _ _ _)) = n
 fname (FData (FuncData n _ _)) = n 
 
 prefixFunctions :: [Mod] -> [Mod]
-prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
+prefixFunctions = map (\(Mod nm desc fs) -> Mod nm desc $ map pfunc fs)
   where pfunc f@(FCD _) = f
         pfunc (FData (FuncData n desc d)) = FData (FuncData (funcPrefix ++ n) 
           desc d)

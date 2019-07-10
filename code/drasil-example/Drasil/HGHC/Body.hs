@@ -23,6 +23,12 @@ import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
   
+srs :: Document
+srs = mkDoc mkSRS for si
+
+printSetting :: PrintingInformation
+printSetting = PI allSymbols defaultConfiguration
+
 si :: SystemInformation
 si = SI {
   _sys = hghc,
@@ -42,6 +48,15 @@ si = SI {
    refdb = rdb [] [] -- FIXME?
 }
 
+mkSRS :: DocDesc
+mkSRS = [RefSec $
+    RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
+    SSDSec $ SSDProg [
+      SSDSolChSpec $ SCSProg [
+        DDs [] [Label, Symbol, Units, DefiningEquation,
+          Description Verbose IncludeUnits] dataDefs HideDerivation
+      ]]]
+
 unitsColl :: [UnitDefn] -- FIXME? Probably shouldn't be done here
 unitsColl = collectUnits allSymbols symbols 
 
@@ -55,18 +70,3 @@ usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw unitsColl)
            ([] :: [ConceptChunk]) unitsColl Map.empty Map.empty [] [] [] []
            [] [] []
-
-printSetting :: PrintingInformation
-printSetting = PI allSymbols defaultConfiguration
-  
-mkSRS :: DocDesc
-mkSRS = [RefSec $
-    RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
-    SSDSec $ SSDProg [
-      SSDSolChSpec $ SCSProg [
-        DDs [] [Label, Symbol, Units, DefiningEquation,
-          Description Verbose IncludeUnits] dataDefs HideDerivation
-      ]]]
-  
-srs :: Document
-srs = mkDoc mkSRS for si

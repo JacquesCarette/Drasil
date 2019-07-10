@@ -242,10 +242,10 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 ------------------------------
 
 introStart :: Sentence
-introStart = foldlSent [S "Due to the",
-  foldlList Comma List (map S ["increasing cost", "diminishing availability",
-    "negative environmental impact of fossil fuels"]) `sC`
-  S "there is a higher demand for renewable", plural CT.enerSrc `sAnd`
+introStart = foldlSent [S "Due to",
+  (foldlList Comma List $ map S ["increasing costs", "diminishing availability",
+    "negative environmental impact"]) `sOf` S "fossil fuels" `sC`
+  S "the demand is high for renewable", plural CT.enerSrc `sAnd`
   phrase energy, S "storage technology"]
 
 introStartSWHS :: Sentence

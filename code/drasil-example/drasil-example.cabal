@@ -9,7 +9,7 @@ executable tiny
   hs-source-dirs: .
   main-is: Drasil/HGHC/Main.hs
   other-modules:
-      Drasil.HGHC.HGHC
+      Drasil.HGHC.Body
     , Drasil.HGHC.HeatTransfer
   Build-Depends:
     base >= 4.7,

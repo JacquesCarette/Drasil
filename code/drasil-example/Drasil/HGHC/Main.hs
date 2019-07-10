@@ -6,7 +6,7 @@ module Main (main) where
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.HGHC.HGHC (srs, printSetting) --thisSI
+import Drasil.HGHC.Body (srs, printSetting) --thisSI
 
 -- thisCode :: CodeSpec
 -- thisCode = codeSpec thisSI choices []

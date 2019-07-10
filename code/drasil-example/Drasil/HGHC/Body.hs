@@ -1,4 +1,4 @@
-module Drasil.HGHC.HGHC (srs, si, allSymbols, printSetting) where
+module Drasil.HGHC.Body (srs, si, allSymbols, printSetting) where
 
 import qualified Data.Map as Map
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace

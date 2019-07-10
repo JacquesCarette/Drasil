@@ -14,7 +14,7 @@ import qualified Data.Map as Map
 import Utils.Drasil
 
 import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
-  LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
+  LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), 
   TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),

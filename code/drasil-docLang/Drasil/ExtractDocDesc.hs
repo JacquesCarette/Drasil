@@ -80,7 +80,7 @@ instance Multiplate DLPlate where
     sc (GDs s f g d) = GDs <$> pure s <*> pure f <*> pure g <*> pure d
     sc (DDs s f dd d) = DDs <$> pure s <*> pure f <*> pure dd <*> pure d
     sc (IMs s f i d) = IMs <$> pure s <*> pure f <*> pure i <*> pure d
-    sc (Constraints s1 s2 s3 l) = Constraints <$> pure s1 <*> pure s2 <*> pure s3 <*> pure l
+    sc (Constraints s l) = Constraints <$> pure s <*> pure l
     sc (CorrSolnPpties c) = CorrSolnPpties <$> pure c
     rs (ReqsProg reqs) = ReqsProg <$> traverse (reqSub p) reqs
     rs' (FReqsSub ci con) = FReqsSub <$> pure ci <*> pure con
@@ -117,7 +117,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (PhySysDesc _ _ lc c) -> mCon [lc] `mappend` mCon c
     (Goals _ _) -> mempty,
   scsSub = Constant <$> \case
-    (Constraints _ _ _ lc) -> mCon lc
+    (Constraints _ lc) -> mCon lc
     (CorrSolnPpties c) -> mCon c
     _ -> mempty,
   reqSub = Constant <$> \case
@@ -206,7 +206,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (DDs s _ d _) -> s ++ der d ++ notes d
       (GDs s _ d _) -> def d ++ s ++ der d ++ notes d
       (IMs s _ d _) -> s ++ der d ++ notes d
-      (Constraints s1 s2 s3 _) -> [s1, s2, s3]
+      (Constraints s _) -> [s]
       (CorrSolnPpties _) -> [],
     reqSub = Constant . f <$> \case
       (FReqsSub c _) -> def c

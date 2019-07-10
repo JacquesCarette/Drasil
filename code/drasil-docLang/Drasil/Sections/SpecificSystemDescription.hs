@@ -11,7 +11,6 @@ module Drasil.Sections.SpecificSystemDescription
   , dataDefnF
   , inModelF
   , datConF
-  , dataConstraintUncertainty
   , inDataConstTbl, outDataConstTbl, propCorSolF
   ) where
 
@@ -148,20 +147,19 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   makeRef2S r4]
 
 -- wrapper for datConPar
-datConF :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> Section
-datConF hasUncertainty mid trailing tables = SRS.datCon 
-  (dataConstraintParagraph hasUncertainty mid trailing tables : map LlC tables) []
+datConF :: Sentence -> [LabelledContent] -> Section
+datConF trailing tables = SRS.datCon 
+  (dataConstraintParagraph trailing tables : map LlC tables) []
   
--- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
--- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
-dataConstraintParagraph :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> Contents
-dataConstraintParagraph hasUncertainty middleSent trailingSent tables = mkParagraph $
-  dataConstraintIntroSent tables +:+ middleSent +:+ 
-  dataConstraintClosingSent hasUncertainty trailingSent
+-- optional trailing sentence(s) -> data constraints tables -> Contents
+dataConstraintParagraph :: Sentence -> [LabelledContent] -> Contents
+dataConstraintParagraph trailingSent tables = mkParagraph $ foldlSent_
+  [dataConstraintIntroSent tables, physConsSent, uncertSent,
+   conservConsSent, typValSent, trailingSent]
 
 dataConstraintIntroSent :: [LabelledContent] -> Sentence
-dataConstraintIntroSent tables = foldlSent [tableRef, S "the", plural datumConstraint,
-  S "on the" +:+. varsSent numTables, physConstColSent]
+dataConstraintIntroSent tables = foldlSent [tableRef, S "the",
+  plural datumConstraint, S "on the", varsSent numTables]
   where
     numTables  = length tables
     tableRef   = foldlList Comma List (map makeRef2S tables) +:+ tableEnd numTables
@@ -173,25 +171,26 @@ dataConstraintIntroSent tables = foldlSent [tableRef, S "the", plural datumConst
     varsSent 2 = phrase input_ `sAnd` phrase output_ +:+ plural variable `sC` S "respectively"
     varsSent n = error $ "varsSent not implemented for " ++ show n ++ " tables"
 
-physConstColSent :: Sentence
-physConstColSent = foldlSent_ [S "The", phrase column, S "for", phrase physical,
+physConsSent :: Sentence
+physConsSent = foldlSent [S "The", phrase column, S "for", phrase physical,
   plural constraint, S "gives the",  phrase physical, plural limitation,
   S "on the range" `sOf` plural value, S "that can be taken by the", phrase variable]
 
-dataConstraintClosingSent :: Sentence -> Sentence -> Sentence
-dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
-  [S "The", plural constraint, S "are conservative, to give", 
-  phrase user `ofThe` phrase model, S "the flexibility to", 
-  S "experiment with unusual situations. The", phrase column, S "of typical",
-  plural value, S "is intended to provide a feel for a common scenario"]
-  +:+ uncertaintySent +:+ trailingSent
-
-dataConstraintUncertainty :: Sentence
-dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase column,
+uncertSent :: Sentence
+uncertSent = foldlSent [S "The", phrase uncertainty, phrase column,
   S "provides an estimate of the confidence with which the", phrase physical,
   plural quantity +:+. S "can be measured", S "This", phrase information,
   S "would be part of the", phrase input_, S "if one were performing an",
   phrase uncertainty, S "quantification exercise"]
+
+conservConsSent :: Sentence
+conservConsSent = foldlSent [S "The", plural constraint `sAre` S "conservative" `sC`
+  S "to give", phrase user `ofThe` phrase model,
+  S "the flexibility to experiment with unusual situations"]
+
+typValSent :: Sentence
+typValSent = foldlSent [S "The", phrase column `sOf` S "typical",
+  plural value `sIs` S "intended to provide a feel for a common scenario"]
 
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> String -> Sentence -> LabelledContent
 mkDataConstraintTable col ref lab = llcc (makeTabRef ref) $ uncurry Table 
@@ -229,5 +228,5 @@ propCorSolF c@(LlC t@(LblC _ Table{}) : _) = SRS.propCorSol (propsIntro t : c) [
 propCorSolF x                              = SRS.propCorSol x []
 
 propsIntro :: LabelledContent -> Contents
-propsIntro tab = foldlSP [makeRef2S tab, S "shows the", plural datumConstraint,
-  S "on the", phrase output_ +:+. plural variable, physConstColSent]
+propsIntro tab = foldlSP_ [makeRef2S tab, S "shows the", plural datumConstraint,
+  S "on the", phrase output_ +:+. plural variable, physConsSent]

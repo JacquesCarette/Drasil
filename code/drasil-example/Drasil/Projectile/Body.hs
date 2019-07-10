@@ -16,7 +16,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
   TSIntro(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
-  dataConstraintUncertainty, generateTraceMap, generateTraceMap', inDataConstTbl,
+  generateTraceMap, generateTraceMap', inDataConstTbl,
   intro, mkDoc, outDataConstTbl, traceMatStandard, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
@@ -77,7 +77,7 @@ mkSRS = [
         , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
-        , Constraints EmptyS dataConstraintUncertainty EmptyS [inDataCons]
+        , Constraints EmptyS [inDataCons]
         , CorrSolnPpties propsDeriv
         ]
       ],

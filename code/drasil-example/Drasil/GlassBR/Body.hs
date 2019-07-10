@@ -21,7 +21,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
-  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
+  inDataConstTbl, intro, mkDoc, outDataConstTbl,
   termDefnF', tsymb, generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
   getTraceMapFromDD, getTraceMapFromIM, getSCSSub, traceMatStandard,
   characteristicsLabel, generateTraceMap')
@@ -160,9 +160,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
-        , Constraints EmptyS dataConstraintUncertainty
-                      (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
-                      S "gives", plural value `ofThe` phrase specification,
+        , Constraints (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [], S "gives", plural value `ofThe` phrase specification,
                       plural parameter, S "used in", makeRef2S inputDataConstraints])
                       [inputDataConstraints]
         , CorrSolnPpties propsDeriv

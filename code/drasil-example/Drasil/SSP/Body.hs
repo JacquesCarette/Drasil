@@ -19,7 +19,7 @@ import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), dataConstraintUncertainty, intro, mkDoc, tsymb'',
+  PDSub(..), intro, mkDoc, tsymb'',
   getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceMap', traceMatStandard)
@@ -129,7 +129,7 @@ mkSRS = [RefSec $ RefProg intro
           , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs instModIntro ([Label, Input, Output, InConstraints, 
             OutConstraints] ++ stdFields) SSP.iMods ShowDerivation
-          , Constraints  EmptyS dataConstraintUncertainty EmptyS [dataConstraintTable2]
+          , Constraints EmptyS [dataConstraintTable2]
           , CorrSolnPpties propsDeriv
           ]
         ],

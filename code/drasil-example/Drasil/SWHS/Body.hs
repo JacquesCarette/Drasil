@@ -21,7 +21,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
   InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
   GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(..),
-  dataConstraintUncertainty, intro, mkDoc, outDataConstTbl, tsymb'',
+  intro, mkDoc, outDataConstTbl, tsymb'',
   getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
   generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD,
   getTraceMapFromIM, getSCSSub, traceMatStandard)
@@ -175,7 +175,7 @@ mkSRS = [RefSec $ RefProg intro [
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefs ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
          [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
-        , Constraints  EmptyS dataConstraintUncertainty dataConTail [dataConTable1]
+        , Constraints dataConTail [dataConTable1]
         , CorrSolnPpties propsDeriv
         ]
       ],

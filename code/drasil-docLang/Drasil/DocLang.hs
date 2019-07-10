@@ -20,7 +20,7 @@ module Drasil.DocLang (
   -- Sections.Requirements
   mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, 
   -- Sections.SpecificSystemDescription
-  dataConstraintUncertainty, inDataConstTbl, outDataConstTbl, termDefnF',
+  inDataConstTbl, outDataConstTbl, termDefnF',
   -- Sections.Stakeholders
   -- Sections.TableOfAbbAndAcronyms
   -- Sections.TableOfSymbols
@@ -54,8 +54,7 @@ import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.Requirements (mkInputPropsTable, mkQRTuple, mkQRTupleRef,
     mkValsSourceTable)
-import Drasil.Sections.SpecificSystemDescription (dataConstraintUncertainty,
-    inDataConstTbl, outDataConstTbl, termDefnF')
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl, termDefnF')
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms
 --import Drasil.Sections.TableOfSymbols

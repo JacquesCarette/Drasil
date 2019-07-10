@@ -22,6 +22,7 @@ using std::ofstream;
 
 int main(int argc, const char *argv[]) {
     string filename = argv[1];
+    ofstream outfile;
     InputParameters inParams = InputParameters();
     get_input(filename, inParams);
     derived_values(inParams);

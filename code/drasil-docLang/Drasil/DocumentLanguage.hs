@@ -22,8 +22,8 @@ import Control.Lens ((^.), over)
 import qualified Data.Map as Map (elems)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
-import Drasil.Sections.TableOfSymbols (table)
-import Drasil.Sections.TableOfUnits (tableOfUnits)
+import Drasil.Sections.TableOfSymbols (table, symbTableRef)
+import Drasil.Sections.TableOfUnits (tableOfUnits, unitTableRef)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
   stakeholder, thModel, tOfSymb, userChar, propCorSol, offShelfSol)
@@ -67,7 +67,7 @@ data DocSection = RefSec RefSec
                 | AuxConstntSec AuxConstntSec
                 | Bibliography
                 | AppndxSec AppndxSec
-                | ExistingSolnSec ExistingSolnSec
+                | OffShelfSolnsSec OffShelfSolnsSec
 
 {--}
 
@@ -216,7 +216,7 @@ data TraceabilitySec = TraceabilityProg [LabelledContent] [Sentence] [Contents] 
 {--}
 
 -- | Off-The-Shelf Solutions section 
-newtype ExistingSolnSec = ExistSolnProg [Contents]
+newtype OffShelfSolnsSec = OffShelfSolnsProg [Contents]
 
 {--}
 
@@ -251,7 +251,7 @@ mkSections si = map doit
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t
     doit (AppndxSec a)       = mkAppndxSec a
-    doit (ExistingSolnSec o) = mkExistingSolnSec o
+    doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
 
 -- | Helper for creating the reference section and subsections
@@ -314,38 +314,30 @@ tsI :: TSIntro -> Sentence
 tsI (TypogConvention ts) = typogConvention ts
 tsI SymbOrder = S "The symbols are listed in alphabetical order."
 tsI (SymbConvention ls) = symbConvention ls
-tsI TSPurpose = S "The table that follows summarizes the symbols used in" +:+
-  S "this document along with their units."
+tsI TSPurpose = S "The symbols used in this document are summarized in" +:+
+  Ref symbTableRef +:+. S "along with their units"
 tsI VectorUnits = S "For vector quantities, the units shown are for each component of the vector."
 
 -- | typographic convention writer. Translates a list of typographic conventions
 -- to a sentence
 typogConvention :: [TConvention] -> Sentence
 typogConvention [] = error "No arguments given for typographic conventions"
-typogConvention ts = S "Throughout the document" `sC` makeSentence ts
-  where makeSentence [x]     = tcon x :+: S "."
-        makeSentence [x,y]   = tcon x +:+ S "and" +:+. tcon y
-        makeSentence [x,y,z] = tcon x `sC` tcon y `sC` S "and" +:+. tcon z
-        makeSentence (x:xs)  = tcon x `sC` makeSentence xs
-        makeSentence  _      = error "How did you get here?"
-        tcon (Vector emph)   = S ("symbols in " ++ show emph ++
-                               " will represent vectors, and scalars otherwise")
+typogConvention ts = S "Throughout the document," +:+. foldlList Comma List (map tcon ts)
+  where tcon (Vector emph) = S ("symbols in " ++ show emph ++
+                                " will represent vectors, and scalars otherwise")
         tcon (Verb s) = s
 
 -- | symbolic convention writer.
 symbConvention :: [Literature] -> Sentence
 symbConvention [] = error "Attempting to reference no literature for SymbConvention"
-symbConvention scs = S "The choice of symbols was made to be consistent with the" +:+
-                      makeSentence scs
-  where makeSentence [x]     = scon x :+: S "."
-        makeSentence [x,y]   = scon x +:+ S "and with" +:+. scon y
-        makeSentence [x,y,z] = scon x `sC` scon y `sC` S "and" +:+. scon z
-        makeSentence (x:xs)  = scon x `sC` makeSentence xs
-        makeSentence  _      = error "How did you get here?"
-        scon (Lit x)         = phrase x +:+ S "literature"
-        scon (Doc x)         = S "existing documentation for" +:+ phrase x
-        scon (Doc' x)        = S "existing documentation for" +:+ plural x
-        scon (Manual x)      = S "that used in the" +:+ phrase x +:+ S "manual"
+symbConvention scs = S "The choice of symbols was made to be consistent with the" +:+.
+                      makeSentence (map scon scs)
+  where makeSentence [x,y] = x +:+ S "and with" +:+ y
+        makeSentence xs    = foldlList Comma List xs
+        scon (Lit x)       = phrase x +:+ S "literature"
+        scon (Doc x)       = S "existing documentation for" +:+ phrase x
+        scon (Doc' x)      = S "existing documentation for" +:+ plural x
+        scon (Manual x)    = S "that used in the" +:+ phrase x +:+ S "manual"
 
 -- | Table of units intro builder. Used by mkRefSec
 tuIntro :: [TUIntro] -> Contents
@@ -372,7 +364,7 @@ tuI :: TUIntro -> Sentence
 tuI System  = 
   S "The unit system used throughout is SI (Système International d'Unités)."
 tuI TUPurpose = 
-  S "For each unit, the table lists the symbol, a description and the SI name."
+  S "For each unit" `sC` Ref unitTableRef +:+. S "lists the symbol, a description and the SI name"
 tuI Derived = 
   S "In addition to the basic units, several derived units are also used."
 
@@ -519,8 +511,8 @@ mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) =
 {--}
 
 -- | Helper for making the 'Off-the-Shelf Solutions' section
-mkExistingSolnSec :: ExistingSolnSec -> Section
-mkExistingSolnSec (ExistSolnProg cs) = SRS.offShelfSol cs [] 
+mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
+mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs [] 
 
 {--}
 

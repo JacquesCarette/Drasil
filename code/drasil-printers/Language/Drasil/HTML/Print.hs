@@ -258,7 +258,8 @@ makeColumns = vcat . map (td . pSpec)
 -- | Renders definition tables (Data, General, Theory, etc.)
 makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
-makeDefn dt ps l = refwrap l $ table [dtag dt] (makeDRows ps)
+makeDefn dt ps l = refwrap l $ table [dtag dt]
+  (tr (th (text "Refname") $$ td (bold l)) $$ makeDRows ps)
   where dtag L.General  = "gdefn"
         dtag L.Instance = "idefn"
         dtag L.Theory   = "tdefn"
@@ -411,7 +412,8 @@ bookMLA (School    s) = comm $ pSpec s
 --bookMLA (Thesis     t)  = comm $ show t
 --bookMLA (URL        s)  = dot $ pSpec s
 bookMLA (HowPublished (Verb s)) = comm $ pSpec s
-bookMLA (HowPublished (URL s))  = dot $ pSpec s
+bookMLA (HowPublished (URL l@(S s))) = dot $ pSpec $ Ref External s l
+bookMLA (HowPublished (URL s))       = dot $ pSpec s
 bookMLA  (Editor     p)    = comm $ text "Edited by " <> pSpec (foldlList (map (S . L.nameStr) p))
 bookMLA (Chapter _)       = text ""
 bookMLA (Institution i)   = comm $ pSpec i

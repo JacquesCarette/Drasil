@@ -18,6 +18,17 @@ using std::ofstream;
 #include "InputParameters.hpp"
 
 void get_input(string filename, InputParameters &inParams) {
+    ofstream outfile;
+    outfile.open("log.txt", std::fstream::app);
+    outfile << "function get_input called with inputs: {" << std::endl;
+    outfile << "  filename = ";
+    outfile << filename;
+    outfile << ", " << std::endl;
+    outfile << "  inParams = ";
+    outfile << "Instance of InputParameters object" << std::endl;
+    outfile << "  }" << std::endl;
+    outfile.close();
+    
     ifstream infile;
     string line;
     vector<string> lines(0);

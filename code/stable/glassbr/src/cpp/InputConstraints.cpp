@@ -18,6 +18,14 @@ using std::ofstream;
 #include "InputParameters.hpp"
 
 void input_constraints(InputParameters &inParams) {
+    ofstream outfile;
+    outfile.open("log.txt", std::fstream::app);
+    outfile << "function input_constraints called with inputs: {" << std::endl;
+    outfile << "  inParams = ";
+    outfile << "Instance of InputParameters object" << std::endl;
+    outfile << "  }" << std::endl;
+    outfile.close();
+    
     if (!(((0.1 <= inParams.a) && (inParams.a <= 5.0)))) {
         throw("InputError");
     }

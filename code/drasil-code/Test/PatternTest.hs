@@ -4,7 +4,7 @@ import Language.Drasil.Code (
   PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..), ValueSym(..), ValueExpression(..), 
-  MethodSym(..), ModuleSym(..))
+  FunctionSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer)
 
@@ -28,9 +28,9 @@ patternTestMainMethod = mainMethod "PatternTest" (body [block [
     (Just (litInt 3)) (Just (var "n" int)),
 
   block [
-    varDecDef "obs1" (obj "Observer") (extStateObj "Observer" (obj "Observer") []), 
-    varDecDef "obs2" (obj "Observer") (extStateObj "Observer" (obj "Observer") [])],
+    varDecDef (var "obs1" (obj "Observer")) (extStateObj "Observer" (obj "Observer") []), 
+    varDecDef (var "obs2" (obj "Observer")) (extStateObj "Observer" (obj "Observer") [])],
   block [
     initObserverList (listType static_ (obj "Observer")) [var "obs1" (obj "Observer")], 
-    addObserver (obj "Observer") (var "obs2" (obj "Observer")),
-    notifyObservers void "printNum" (listType static_ (obj "Observer")) []]])
+    addObserver (var "obs2" (obj "Observer")),
+    notifyObservers (func "printNum" void []) (listType static_ (obj "Observer"))]])

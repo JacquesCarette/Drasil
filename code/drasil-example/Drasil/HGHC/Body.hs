@@ -59,8 +59,8 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw unitsColl)
 printSetting :: PrintingInformation
 printSetting = PI allSymbols defaultConfiguration
   
-thisSRS :: DocDesc
-thisSRS = [RefSec $
+mkSRS :: DocDesc
+mkSRS = [RefSec $
     RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
     SSDSec $ SSDProg [
       SSDSolChSpec $ SCSProg [
@@ -69,4 +69,4 @@ thisSRS = [RefSec $
       ]]]
   
 srs :: Document
-srs = mkDoc thisSRS for si
+srs = mkDoc mkSRS for si

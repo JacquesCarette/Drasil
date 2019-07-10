@@ -87,6 +87,9 @@ srs = mkDoc mkSRS for si
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
 
+resourcePath :: String
+resourcePath = "../../../datafiles/NoPCM/"
+
 -- This defines the standard concepts used throughout the document
 units :: [UnitDefn]
 units = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
@@ -99,9 +102,6 @@ symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
  ++ map dqdWr [tempW, watE]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
-
-resourcePath :: String
-resourcePath = "../../../datafiles/NoPCM/"
   
 symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA

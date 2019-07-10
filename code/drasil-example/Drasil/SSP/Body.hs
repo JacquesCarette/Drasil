@@ -55,7 +55,7 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, de
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
-import Drasil.SSP.DataDefs (dataDefns)
+import qualified Drasil.SSP.DataDefs as SSP (dataDefs)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
   slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, defs, defs',
@@ -89,10 +89,10 @@ si = SI {
   _quants = symbols,
   _concepts = symbTT,
   _definitions = [] :: [QDefinition],
-  _datadefs = dataDefns,
+  _datadefs = SSP.dataDefs,
   _inputs = map qw inputs,
   _outputs = map qw outputs,
-  _defSequence = [Parallel (qdFromDD (head dataDefns)) (map qdFromDD (tail dataDefns))],
+  _defSequence = [Parallel (qdFromDD (head SSP.dataDefs)) (map qdFromDD (tail SSP.dataDefs))],
   _constraints = constrained,
   _constants = [],
   _sysinfodb = symMap,
@@ -124,7 +124,7 @@ mkSRS = [RefSec $ RefProg intro
           [Assumptions
           , TMs [] (Label : stdFields) tMods
           , GDs [] ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-          , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+          , DDs [] ([Label, Symbol, Units] ++ stdFields) SSP.dataDefs ShowDerivation
           , IMs instModIntro ([Label, Input, Output, InConstraints, 
             OutConstraints] ++ stdFields) SSP.iMods ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty EmptyS

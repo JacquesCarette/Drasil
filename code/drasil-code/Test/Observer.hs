@@ -15,7 +15,8 @@ classD :: (RenderSym repr) => repr (BlockComment repr)
 classD = docComment ["\\brief This is an arbitrary class acting as an Observer"]
 
 helperClass :: (RenderSym repr) => repr (Class repr)
-helperClass = pubClass "Observer" Nothing [stateVar 0 "x" public dynamic_ int] [observerConstructor, printNumMethod]
+helperClass = pubClass "Observer" Nothing [stateVar 0 public dynamic_ 
+  (var "x" int)] [observerConstructor, printNumMethod]
 
 observerConstructor :: (RenderSym repr) => repr (Method repr)
 observerConstructor = constructor "Observer" [] (oneLiner (assign (objVarSelf "Observer" "x" int) (litInt 5)))

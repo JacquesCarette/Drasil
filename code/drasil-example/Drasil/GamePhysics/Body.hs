@@ -63,6 +63,12 @@ import qualified Data.Map as Map
 srs :: Document
 srs = mkDoc mkSRS for' si
 
+printSetting :: PrintingInformation
+printSetting = PI everything defaultConfiguration
+
+resourcePath :: String
+resourcePath = "../../../datafiles/GamePhysics/"
+
 unitsColl :: [UnitDefn] -- FIXME
 unitsColl = collectUnits everything symbTT 
 
@@ -182,14 +188,6 @@ usedDB = cdb (map qw symbTT) (map nw symbolsAll ++ map nw acronyms
  ++ map nw unitsColl) ([] :: [ConceptChunk]) unitsColl label refBy
  dataDefs iMods genDef theory concIns section
  []
-
-printSetting :: PrintingInformation
-printSetting = PI everything defaultConfiguration
-
-
-
-resourcePath :: String
-resourcePath = "../../../datafiles/GamePhysics/"
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because

@@ -62,7 +62,6 @@ import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, orgDocIntro,
   sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
@@ -73,6 +72,8 @@ import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn,
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
+import Drasil.NoPCM.DataDefs (qDefs)
+import qualified Drasil.NoPCM.DataDefs as NP (dataDefs)
 import Drasil.NoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
@@ -152,7 +153,7 @@ mkSRS = [RefSec $ RefProg intro
       [ Assumptions
       , TMs [] (Label : stdFields) theoreticalModels
       , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
-      , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
+      , DDs [] ([Label, Symbol, Units] ++ stdFields) NP.dataDefs ShowDerivation
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
         NoPCM.iMods ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
@@ -178,8 +179,8 @@ label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
 refBy :: RefbyMap
 refBy = generateRefbyMap label
 
-dataDefn :: [DataDefinition]
-dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
+dataDefs :: [DataDefinition]
+dataDefs = getTraceMapFromDD $ getSCSSub mkSRS
 
 iMods :: [InstanceModel]
 iMods = getTraceMapFromIM $ getSCSSub mkSRS
@@ -215,10 +216,10 @@ si = SI {
   _quants = symbTT,
   _concepts = symbols,
   _definitions = [],
-  _datadefs = [dd1HtFluxC],
+  _datadefs = NP.dataDefs,
   _inputs = inputs ++ map qw [tempW, watE], --inputs ++ outputs?
   _outputs = map qw [tempW, watE],     --outputs
-  _defSequence = [Parallel dd1HtFluxCQD []],
+  _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE],        --constrained
   _constants = specParamValList,
   _sysinfodb = symbMap,
@@ -237,13 +238,13 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans] ++ map nw unitsColl
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains)
-  units label refBy dataDefn iMods genDef theory
+  units label refBy dataDefs iMods genDef theory
   concIns section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw unitsColl)
  ([] :: [ConceptChunk]) unitsColl label refBy
- dataDefn iMods genDef theory concIns
+ dataDefs iMods genDef theory concIns
  section labCon
 
 symbTT :: [DefinedQuantityDict]

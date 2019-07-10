@@ -76,6 +76,15 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htCapSP, htCapW,
 
 -------------------------------------------------------------------------------
 
+srs :: Document
+srs = mkDoc mkSRS for si
+
+printSetting :: PrintingInformation
+printSetting = PI symMap defaultConfiguration
+
+resourcePath :: String
+resourcePath = "../../../datafiles/SWHS/"
+
 units :: [UnitDefn]
 units = map unitWrapper [metre, kilogram, second] ++ 
   map unitWrapper [centigrade, joule, watt]
@@ -103,9 +112,6 @@ si = SI {
    refdb = refDB
 }
 
-resourcePath :: String
-resourcePath = "../../../datafiles/SWHS/"
-
 symMap :: ChunkDB
 symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
@@ -126,9 +132,6 @@ usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronymsFull ++ map nw un
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
-
-printSetting :: PrintingInformation
-printSetting = PI symMap defaultConfiguration
 
   --Note: The second symbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There
@@ -196,10 +199,6 @@ mkSRS = [RefSec $ RefProg intro [
 tSymbIntro :: [TSIntro]
 tSymbIntro = [TSPurpose, SymbConvention
   [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder]
-
---- The document starts here
-srs :: Document
-srs = mkDoc mkSRS for si
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns

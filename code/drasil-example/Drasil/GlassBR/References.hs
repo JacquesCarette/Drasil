@@ -21,7 +21,7 @@ astm2009 = cMisc [author [mononym "ASTM"],
   title "Standard Practice for Determining Load Resistance of Glass in Buildings",
   publisher "ASTM International",
   bookTitle "Standard E1300-09a",
-  year 2009, howPublishedU "www.astm.org"]
+  year 2009, howPublishedU "https://www.astm.org"]
   "astm2009"
 
 astm2016 = cMisc
@@ -45,5 +45,5 @@ beasonEtAl1998 = cMisc
   title "Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts",
   bookTitle "ASCE Library",
   month Feb, year 1998,
-  howPublishedU "doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)"]
+  howPublishedU "https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)"]
   "beasonEtAl1998"

@@ -1,6 +1,6 @@
 -- Standard code to make a table of units
 -- First true example of a (small!) recipe.
-module Drasil.Sections.TableOfUnits (tableOfUnits) where
+module Drasil.Sections.TableOfUnits (tableOfUnits, unitTableRef) where
 
 import Control.Lens ((^.))
 import Language.Drasil
@@ -13,7 +13,10 @@ tableOfUnits u intro = Section (S "Table of Units") [Con intro, Con $ LlC (unitT
 
 -- | Creates the actual table of units from a list of units
 unitTable :: IsUnit s => [s] -> LabelledContent
-unitTable u = llcc (makeTabRef "ToU") $ Table
+unitTable u = llcc unitTableRef $ Table
   [atStart symbol_, atStart description, S "SI Name"]
   (mkTable [Sy . usymb, (^. defn), phrase] u)
   (S "Table of Units") False
+
+unitTableRef :: Reference
+unitTableRef = makeTabRef "ToU"

@@ -388,7 +388,9 @@ layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
   (P.S $ getRefAdd x)
   where layPairs = map (\(x',y) -> (x', map (lay sm) y))
 layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
-layLabelled sm (LblC _ (DerivBlock h d)) = T.Derivation (spec sm h) (map (layUnlabelled sm) d)
+layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
+  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
+  where ref = P.S (refAdd x)
 layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
 layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
 
@@ -399,7 +401,9 @@ layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
-layUnlabelled sm (DerivBlock h d) = T.Derivation (spec sm h) (map (layUnlabelled sm) d)
+layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
+  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
+  where ref = P.S "nolabel1"
 layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)  = T.Figure (P.S "nolabel2") (spec sm c) f wp
 layUnlabelled sm (Graph ps w h t) = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)

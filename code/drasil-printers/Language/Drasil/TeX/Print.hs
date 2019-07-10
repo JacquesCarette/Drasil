@@ -58,8 +58,6 @@ lo (Header d t l)       _  = sec d (spec t) %% label (spec l)
 lo (HDiv _ con _)       sm = print sm con -- FIXME ignoring 2 arguments?
 lo (Paragraph contents) _  = toText $ spec contents
 lo (EqnBlock contents)  _  = makeEquation contents
-lo (Derivation h d)      sm = newline %% toText (bold $ spec h) %% newline %%
-  foldr ((%%) . toText . (`lo` sm)) empty d
 lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)
 lo (Definition _ ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
 lo (List l)               _  = toText $ makeList l

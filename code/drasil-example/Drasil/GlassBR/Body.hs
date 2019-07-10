@@ -70,7 +70,81 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   termsWithDefsOnly, terms)
 import qualified Drasil.GlassBR.Unitals as GB (inputDataConstraints)
 
-{--}
+srs :: Document
+srs = mkDoc mkSRS (for'' titleize phrase) si
+
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
+
+si :: SystemInformation
+si = SI {
+  _sys         = glassBR,
+  _kind        = Doc.srs,
+  _authors     = [nikitha, spencerSmith],
+  _quants      = symbolsForTable,
+  _concepts    = [] :: [DefinedQuantityDict],
+  _definitions = map (relToQD symbMap) iMods ++ 
+                 concatMap (^. defined_quant) tMods ++
+                 concatMap (^. defined_fun) tMods,
+  _datadefs    = dataDefns,
+  _inputs      = inputs,
+  _outputs     = outputs,
+  _defSequence = qDefns,
+  _constraints = constrained,
+  _constants   = constants,
+  _sysinfodb   = symbMap,
+  _usedinfodb = usedDB,
+   refdb       = refDB
+}
+  --FIXME: All named ideas, not just acronyms.
+
+mkSRS :: DocDesc
+mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
+  IntroSec $
+    IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
+      (short glassBR)
+    [IPurpose $ purpOfDocIntro document glassBR glaSlab,
+     IScope incScoR endScoR,
+     IChar [] (undIR ++ appStanddIR) [],
+     IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
+  StkhldrSec $
+    StkhldrProg2
+      [Client glassBR $ S "a" +:+ phrase company
+        +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli),
+      Cstmr glassBR],
+  GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
+    UsrChars [userCharacteristicsIntro], SystCons [] [] ],
+  SSDSec $
+    SSDProg
+      [SSDProblem $ PDProg prob [termsAndDesc]
+        [ PhySysDesc glassBR physSystParts physSystFig []
+        , Goals goalInputs goals],
+       SSDSolChSpec $ SCSProg
+        [ Assumptions
+        , TMs [] (Label : stdFields) tMods
+        , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
+        , Constraints EmptyS dataConstraintUncertainty
+                      (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
+                      S "gives", plural value `ofThe` S "specification",
+                      plural parameter, S "used in", makeRef2S inputDataConstraints])
+                      [inputDataConstraints, outputDataConstraints]
+        , CorrSolnPpties propsDeriv
+        ]
+      ],
+  ReqrmntSec $ ReqsProg [
+    FReqsSub funcReqs funcReqsTables,
+    NonFReqsSub nonfuncReqs
+  ],
+  LCsSec $ LCsProg likelyChgs,
+  UCsSec $ UCsProg unlikelyChgs,
+  TraceabilitySec $
+    TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
+      (map (LlC . fst) traceabilityMatrices) [],
+  AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
+  Bibliography,
+  AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
 
 symbMap :: ChunkDB
 symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
@@ -123,87 +197,11 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ ma
 refDB :: ReferenceDB
 refDB = rdb citations concIns
 
-printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
-
 unitsColl :: [UnitDefn]
 unitsColl = collectUnits symbMap thisSymbols 
-
-srs :: Document
-srs = mkDoc mkSRS (for'' titleize phrase) si
-
-mkSRS :: DocDesc
-mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
-  IntroSec $
-    IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
-      (short glassBR)
-    [IPurpose $ purpOfDocIntro document glassBR glaSlab,
-     IScope incScoR endScoR,
-     IChar [] (undIR ++ appStanddIR) [],
-     IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
-  StkhldrSec $
-    StkhldrProg2
-      [Client glassBR $ S "a" +:+ phrase company
-        +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli),
-      Cstmr glassBR],
-  GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
-    UsrChars [userCharacteristicsIntro], SystCons [] [] ],
-  SSDSec $
-    SSDProg
-      [SSDProblem $ PDProg prob [termsAndDesc]
-        [ PhySysDesc glassBR physSystParts physSystFig []
-        , Goals goalInputs goals],
-       SSDSolChSpec $ SCSProg
-        [ Assumptions
-        , TMs [] (Label : stdFields) tMods
-        , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
-        , Constraints EmptyS dataConstraintUncertainty
-                      (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
-                      S "gives", plural value `ofThe` S "specification",
-                      plural parameter, S "used in", makeRef2S inputDataConstraints])
-                      [inputDataConstraints, outputDataConstraints]
-        , CorrSolnPpties propsDeriv
-        ]
-      ],
-  ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqs funcReqsTables,
-    NonFReqsSub nonfuncReqs
-  ],
-  LCsSec $ LCsProg likelyChgs,
-  UCsSec $ UCsProg unlikelyChgs,
-  TraceabilitySec $
-    TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
-      (map (LlC . fst) traceabilityMatrices) [],
-  AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
-  Bibliography,
-  AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
  
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
-si :: SystemInformation
-si = SI {
-  _sys         = glassBR,
-  _kind        = Doc.srs,
-  _authors     = [nikitha, spencerSmith],
-  _quants      = symbolsForTable,
-  _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = map (relToQD symbMap) iMods ++ 
-                 concatMap (^. defined_quant) tMods ++
-                 concatMap (^. defined_fun) tMods,
-  _datadefs    = dataDefns,
-  _inputs      = inputs,
-  _outputs     = outputs,
-  _defSequence = qDefns,
-  _constraints = constrained,
-  _constants   = constants,
-  _sysinfodb   = symbMap,
-  _usedinfodb = usedDB,
-   refdb       = refDB
-}
-  --FIXME: All named ideas, not just acronyms.
 
 inputDataConstraints, outputDataConstraints :: LabelledContent
 

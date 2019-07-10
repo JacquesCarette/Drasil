@@ -14,7 +14,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
+  SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -317,14 +317,6 @@ instance FunctionSym PythonCode where
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
   iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
 
-instance SelectorFunction PythonCode where
-  listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
-  listSetFunc v i toVal = liftA2 fd (valueType v) 
-    (liftA2 listSetFuncDocD i toVal)
-
-  atFunc t l = listAccessFunc t (var l int)
-
-instance FunctionApplication PythonCode where
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
 
@@ -332,12 +324,20 @@ instance FunctionApplication PythonCode where
     (liftA2 pyListSize v listSizeFunc)
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
   listAppend v vToApp = v $. listAppendFunc vToApp
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (var l int)
 
   iterBegin v = v $. iterBeginFunc (valueType v)
   iterEnd v = v $. iterEndFunc (valueType v)
+
+instance SelectorFunction PythonCode where
+  listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
+  listSetFunc v i toVal = liftA2 fd (valueType v) 
+    (liftA2 listSetFuncDocD i toVal)
+
+  atFunc t l = listAccessFunc t (var l int)
+
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (var l int)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end

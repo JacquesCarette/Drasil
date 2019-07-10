@@ -15,7 +15,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), FunctionApplication(..), StatementSym(..), 
+  SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -343,25 +343,25 @@ instance FunctionSym JavaCode where
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in Java, but Java has no iterators"
   iterEndFunc _ = error "Attempt to use iterEndFunc in Java, but Java has no iterators"
 
-instance SelectorFunction JavaCode where
-  listAccessFunc t i = func "get" t [intValue i]
-  listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
-
-  atFunc t l = listAccessFunc t (var l int)
-
-instance FunctionApplication JavaCode where
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
 
   listSize v = v $. listSizeFunc
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
   listAppend v vToApp = v $. listAppendFunc vToApp
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (var l int)
   
   iterBegin v = v $. iterBeginFunc (valueType v)
   iterEnd v = v $. iterEndFunc (valueType v)
+
+instance SelectorFunction JavaCode where
+  listAccessFunc t i = func "get" t [intValue i]
+  listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
+
+  atFunc t l = listAccessFunc t (var l int)
+
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (var l int)
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end

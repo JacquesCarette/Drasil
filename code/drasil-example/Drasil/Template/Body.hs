@@ -18,6 +18,9 @@ import qualified Data.Map as Map
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
 
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
+
 mkSRS :: DocDesc
 mkSRS = []
 
@@ -58,9 +61,6 @@ label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' []
  
 refBy :: RefbyMap
 refBy = generateRefbyMap label
-
-printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
 
 -- MOVE TO CONCEPTS
 example :: CI -- name of example

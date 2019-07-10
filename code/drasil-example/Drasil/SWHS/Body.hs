@@ -64,14 +64,14 @@ import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
-import Drasil.SWHS.Requirements (dataConTable1, funcReqs, inputInitQuantsTable,
-  nfRequirements, verifyEnergyOutput)
+import Drasil.SWHS.Requirements (funcReqs, inputInitQuantsTable, nfRequirements,
+  verifyEnergyOutput)
 import Drasil.SWHS.TMods (consThermE, latentHtE, sensHtE)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained, eta,
-  htCapSP, htCapW, htFluxC, htFluxIn, htFluxOut, htFluxP, inSA, inputs, outSA,
-  outputs, pcmE, pcmHTC, pcmMass, pcmSA, relTol, simTime, specParamValList,
-  symbols, symbolsAll, tauSP, tauW, tempC, tempPCM, tempW, thFluxVect,
-  thickness, unitalChuncks, volHtGen, wMass, watE)
+  htCapSP, htCapW, htFluxC, htFluxIn, htFluxOut, htFluxP, inSA, inputs,
+  inputConstraints, outSA, outputs, pcmE, pcmHTC, pcmMass, pcmSA, relTol,
+  simTime, specParamValList, symbols, symbolsAll, tauSP, tauW, tempC, tempPCM,
+  tempW, thFluxVect, thickness, unitalChuncks, volHtGen, wMass, watE)
 
 -------------------------------------------------------------------------------
 
@@ -175,7 +175,7 @@ mkSRS = [RefSec $ RefProg intro [
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefs ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
          [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
-        , Constraints dataConTail [dataConTable1]
+        , Constraints dataConTail inputConstraints
         , CorrSolnPpties propsDeriv
         ]
       ],
@@ -224,7 +224,7 @@ section :: [Section]
 section = sec
 
 labCon :: [LabelledContent]
-labCon = [dataConTable1, inputInitQuantsTable]
+labCon = [inputInitQuantsTable]
 
 sec :: [Section]
 sec = extractSection srs'

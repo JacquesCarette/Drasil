@@ -48,7 +48,7 @@ import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
-  ProblemDescription(PDProg), PDSub(..), inDataConstTbl, intro, mkDoc, outDataConstTbl, tsymb,
+  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, outDataConstTbl, tsymb,
   getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
   getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
   generateTraceMap', traceMatStandard)
@@ -148,7 +148,7 @@ mkSRS = [RefSec $ RefProg intro
       , DDs [] ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
         NoPCM.iMods ShowDerivation
-      , Constraints dataContMid [dataConstTable1]
+      , Constraints dataContMid constrained
       , CorrSolnPpties propsDeriv
       ]
     ],
@@ -191,7 +191,7 @@ section :: [Section]
 section = sec
 
 labCon :: [LabelledContent]
-labCon = [inputInitQuantsTable, dataConstTable1, dataConstTable2]
+labCon = [inputInitQuantsTable, dataConstTable2]
 
 sec :: [Section]
 sec = extractSection srs
@@ -374,13 +374,6 @@ sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase mater
   phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
 
 --TODO: Implement physical properties of a substance
-
-dataConstTable1 :: LabelledContent
-dataConstTable1 = inDataConstTbl constrained
--- s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
-  -- titleize' constraint, S "Typical" +:+ titleize value, titleize uncertainty]
-  -- (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
-  -- data_constraint_conListIn) (titleize input_ +:+ titleize' variable) True
 
 dataConstTable2 :: LabelledContent
 dataConstTable2 = outDataConstTbl dataConstListOut

@@ -18,7 +18,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..),
   LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), egetDocDesc, generateTraceMap,
   generateTraceMap', getDocDesc, getSCSSub, getTraceMapFromDD,
-  getTraceMapFromGD, getTraceMapFromIM, getTraceMapFromTM, inDataConstTbl,
+  getTraceMapFromGD, getTraceMapFromIM, getTraceMapFromTM,
   intro, mkDoc, outDataConstTbl, solutionLabel, traceMatStandard, tsymb)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -86,7 +86,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
           iModelsNew ShowDerivation
-        , Constraints (S "FIXME") [inDataConstTbl inputConstraints]
+        , Constraints (S "FIXME") inputConstraints
         , CorrSolnPpties propsDeriv
         ]
       ],

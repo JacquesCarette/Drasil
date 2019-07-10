@@ -3,8 +3,8 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 import Language.Drasil
 import Utils.Drasil
 
-import Drasil.DocLang (inDataConstTbl, mkInputPropsTable)
-import Drasil.DocLang.SRS (propCorSol) 
+import Drasil.DocLang (mkInputPropsTable)
+import Drasil.DocLang.SRS (datCon, propCorSol) 
 
 import Data.Drasil.Concepts.Documentation (assumption, code, condition,
   funcReqDom, input_, likelyChg, mg, mis, module_, nonFuncReqDom, output_,
@@ -23,17 +23,13 @@ import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
-import Drasil.SWHS.Unitals (inputs, inputConstraints, consTol, diam, eta, pcmE,
-  pcmDensity, pcmMass, pcmVol, tFinalMelt, tInitMelt, tankLength, tankVol,
-  tauLP, tauSP, tauW, tempPCM, tempW, watE, wDensity, wMass, wVol)
+import Drasil.SWHS.Unitals (inputs, consTol, diam, eta, pcmE, pcmDensity,
+  pcmMass, pcmVol, tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP,
+  tauW, tempPCM, tempW, watE, wDensity, wMass, wVol)
 
 ------------------------------
 -- Data Constraint: Table 1 --
 ------------------------------
-
--- FIXME: This probably shouldn't be here.
-dataConTable1 :: LabelledContent
-dataConTable1 = inDataConstTbl inputConstraints
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --
@@ -88,7 +84,7 @@ findMassEqn = sy pcmMass $= sy pcmVol * sy pcmDensity -- FIXME: Ref Hack
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
-  plural physicalConstraint , S "shown in", makeRef2S dataConTable1] )
+  plural physicalConstraint, S "shown in", makeRef2S (datCon ([]::[Contents]) ([]::[Section]))])
   "Check-Input-with-Physical_Constraints" funcReqDom
 --
 outputInputDerivQuants = oIDQConstruct oIDQQuants

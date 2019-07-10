@@ -11,7 +11,7 @@ module Drasil.Sections.SpecificSystemDescription
   , dataDefnF
   , inModelF
   , datConF
-  , inDataConstTbl, outDataConstTbl, propCorSolF
+  , inDataConstTbl, outDataConstTbl, propCorSolF, auxSpecSent
   ) where
 
 import Language.Drasil
@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
   physSyst, problem, problemDescription, purpose, quantity, requirement, scope,
   section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
   system, theory, typUnc, uncertainty, user, value, variable)
-import Data.Drasil.Concepts.Math (equation)
+import Data.Drasil.Concepts.Math (equation, parameter)
 
 import Data.Drasil.IdeaDicts (inModel, thModel)
 
@@ -147,8 +147,9 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   makeRef2S r4]
 
 -- wrapper for datConPar
-datConF :: Sentence -> [LabelledContent] -> Section
-datConF trailing tables = SRS.datCon (dataConstraintParagraph trailing : map LlC tables) []
+datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
+  Sentence -> [c] -> Section
+datConF trailing c = SRS.datCon [dataConstraintParagraph trailing, LlC $ inDataConstTbl c] []
   
 -- optional trailing sentence(s) -> data constraints tables -> Contents
 dataConstraintParagraph :: Sentence -> Contents
@@ -179,6 +180,11 @@ conservConsSent = foldlSent [S "The", plural constraint `sAre` S "conservative" 
 typValSent :: Sentence
 typValSent = foldlSent [S "The", phrase column `sOf` S "typical",
   plural value `sIs` S "intended to provide a feel for a common scenario"]
+
+auxSpecSent :: Sentence
+auxSpecSent = foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [], S "gives",
+  plural value `ofThe` phrase specification, plural parameter, S "used in",
+  makeRef2S $ inDataConstTbl ([] :: [UncertQ])]
 
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> String -> Sentence -> LabelledContent
 mkDataConstraintTable col ref lab = llcc (makeTabRef ref) $ uncurry Table 

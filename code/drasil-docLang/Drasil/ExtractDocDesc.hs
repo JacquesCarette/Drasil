@@ -3,6 +3,7 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc) where
 
 import Control.Lens((^.))
 import Drasil.DocumentLanguage
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl)
 import Language.Drasil hiding (Manual, Vector, Verb)
 import Theory.Drasil (Theory(..))
 import Data.List(transpose)
@@ -80,7 +81,7 @@ instance Multiplate DLPlate where
     sc (GDs s f g d) = GDs <$> pure s <*> pure f <*> pure g <*> pure d
     sc (DDs s f dd d) = DDs <$> pure s <*> pure f <*> pure dd <*> pure d
     sc (IMs s f i d) = IMs <$> pure s <*> pure f <*> pure i <*> pure d
-    sc (Constraints s l) = Constraints <$> pure s <*> pure l
+    sc (Constraints s c) = Constraints <$> pure s <*> pure c
     sc (CorrSolnPpties c) = CorrSolnPpties <$> pure c
     rs (ReqsProg reqs) = ReqsProg <$> traverse (reqSub p) reqs
     rs' (FReqsSub ci con) = FReqsSub <$> pure ci <*> pure con
@@ -117,7 +118,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (PhySysDesc _ _ lc c) -> mCon [lc] `mappend` mCon c
     (Goals _ _) -> mempty,
   scsSub = Constant <$> \case
-    (Constraints _ lc) -> mCon lc
+    (Constraints _ c) -> mCon [inDataConstTbl c]
     (CorrSolnPpties c) -> mCon c
     _ -> mempty,
   reqSub = Constant <$> \case

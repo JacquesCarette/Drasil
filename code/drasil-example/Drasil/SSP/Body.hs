@@ -54,7 +54,7 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, de
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
+import Drasil.SSP.DataCons (dataConstraintTable3) 
 import Drasil.SSP.DataDefs (dataDefns)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
@@ -67,8 +67,8 @@ import qualified Drasil.SSP.IMods as SSP (iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
 import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
 import Drasil.SSP.TMods (tMods)
-import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
-  constrained, inputs, outputs, symbols)
+import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
+  inputs, inputsWUncrtn, outputs, symbols)
 
 --Document Setup--
 thisSi :: [UnitDefn]
@@ -129,7 +129,7 @@ mkSRS = [RefSec $ RefProg intro
           , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs instModIntro ([Label, Input, Output, InConstraints, 
             OutConstraints] ++ stdFields) SSP.iMods ShowDerivation
-          , Constraints EmptyS [dataConstraintTable2]
+          , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
           , CorrSolnPpties propsDeriv
           ]
         ],
@@ -172,8 +172,7 @@ sec :: [Section]
 sec = extractSection srs
 
 labCon :: [LabelledContent]
-labCon = [figPhysSyst, figIndexConv, figForceActing, 
-  dataConstraintTable2, dataConstraintTable3] ++ funcReqTables
+labCon = [figPhysSyst, figIndexConv, figForceActing, dataConstraintTable3] ++ funcReqTables
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

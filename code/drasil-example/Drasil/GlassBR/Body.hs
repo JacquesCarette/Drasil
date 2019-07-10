@@ -21,12 +21,12 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
   StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
   TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
-  inDataConstTbl, intro, mkDoc, outDataConstTbl,
+  auxSpecSent, intro, mkDoc, outDataConstTbl,
   termDefnF', tsymb, generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
   getTraceMapFromDD, getTraceMapFromIM, getSCSSub, traceMatStandard,
   characteristicsLabel, generateTraceMap')
 
-import qualified Drasil.DocLang.SRS as SRS (reference, valsOfAuxCons, assumpt, inModel)
+import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
@@ -34,8 +34,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   definition, doccon, doccon', document, emphasis, environment, goal,
   information, input_, interface, model, organization, physical, problem,
   product_, purpose, reference, software, softwareConstraint, softwareSys,
-  specification, srsDomains, standard, sysCont, system, template, term_, user,
-  value, variable)
+  srsDomains, standard, sysCont, system, template, term_, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, code)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
@@ -66,10 +65,9 @@ import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
-  constrained, inputs, outputs, specParamVals, glassTy, glassTypes, glBreakage,
-  lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, termsWithAccDefn,
-  termsWithDefsOnly, terms)
-import qualified Drasil.GlassBR.Unitals as GB (inputDataConstraints)
+  constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
+  glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, probBreak,
+  sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 {--}
 
@@ -160,9 +158,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
-        , Constraints (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [], S "gives", plural value `ofThe` phrase specification,
-                      plural parameter, S "used in", makeRef2S inputDataConstraints])
-                      [inputDataConstraints]
+        , Constraints auxSpecSent inputDataConstraints
         , CorrSolnPpties propsDeriv
         ]
       ],
@@ -405,11 +401,6 @@ goalInputs = [plural dimension `ofThe` phrase glaPlane, S "the" +:+ phrase glass
 {--Data Definitions--}
 
 {--Data Constraints--}
-
-{-input and output tables-}
-
-inputDataConstraints :: LabelledContent
-inputDataConstraints  = inDataConstTbl GB.inputDataConstraints
 
 propsDeriv :: [Contents]
 propsDeriv = [LlC $ outDataConstTbl [probBr]]

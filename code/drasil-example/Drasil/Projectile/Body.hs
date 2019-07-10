@@ -16,8 +16,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
   SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
   TSIntro(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
-  generateTraceMap, generateTraceMap', inDataConstTbl,
-  intro, mkDoc, outDataConstTbl, traceMatStandard, tsymb)
+  generateTraceMap, generateTraceMap', intro, mkDoc, outDataConstTbl, traceMatStandard, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -77,7 +76,7 @@ mkSRS = [
         , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
-        , Constraints EmptyS [inDataCons]
+        , Constraints EmptyS inConstraints
         , CorrSolnPpties propsDeriv
         ]
       ],
@@ -187,8 +186,7 @@ physSystParts = map foldlSent [
 -- Data Constraints --
 ----------------------
 
-inDataCons, outDataCons :: LabelledContent
-inDataCons  = inDataConstTbl  inConstraints
+outDataCons :: LabelledContent
 outDataCons = outDataConstTbl outConstraints
 
 ------------------------------------

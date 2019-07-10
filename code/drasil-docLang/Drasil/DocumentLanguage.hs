@@ -188,7 +188,8 @@ data SCSSub where
   GDs            :: [Sentence] -> Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
-  Constraints    :: Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+--                  Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
   CorrSolnPpties :: [Contents] -> SCSSub
 data DerivationDisplay = ShowDerivation
@@ -455,8 +456,8 @@ mkSolChSpec si (SCSProg l) =
         sDom [u] = u
         sDom u = error $ "Expected ConceptDomain to have a single domain, found " ++
           show (length u) ++ " instead."-}
-    mkSubSCS _ (CorrSolnPpties cs)   = SSD.propCorSolF cs
-    mkSubSCS _ (Constraints end tab) = SSD.datConF end tab
+    mkSubSCS _ (CorrSolnPpties cs) = SSD.propCorSolF cs
+    mkSubSCS _ (Constraints end c) = SSD.datConF end c
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and

@@ -17,12 +17,12 @@ module Drasil.Sections.SpecificSystemDescription
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
+import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSol,
   datum, datumConstraint, definition, element, general, goalStmt, information,
   input_, limitation, model, output_, physical, physicalConstraint, physicalSystem,
-  physSyst, problem, problemDescription, purpose, quantity, requirement, scope,
-  section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
-  system, theory, typUnc, uncertainty, user, value, variable)
+  physSyst, problem, problemDescription, property, purpose, quantity, requirement,
+  scope, section_, softwareConstraint, solutionCharacteristic, specification,
+  symbol_, system, theory, typUnc, uncertainty, user, value, variable)
 import Data.Drasil.Concepts.Math (equation, parameter)
 
 import Data.Drasil.IdeaDicts (inModel, thModel)
@@ -149,7 +149,8 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
 -- wrapper for datConPar
 datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
   Sentence -> [c] -> Section
-datConF trailing c = SRS.datCon [dataConstraintParagraph trailing, LlC $ inDataConstTbl c] []
+datConF _ [] = SRS.datCon [mkParagraph (S "There are no" +:+. plural datumConstraint)] []
+datConF t c  = SRS.datCon [dataConstraintParagraph t, LlC $ inDataConstTbl c] []
   
 -- optional trailing sentence(s) -> data constraints tables -> Contents
 dataConstraintParagraph :: Sentence -> Contents
@@ -218,7 +219,12 @@ fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
 fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
 
 propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section
-propCorSolF c con = SRS.propCorSol (propsIntro : (LlC $ outDataConstTbl c) : con) []
+propCorSolF []  [] = SRS.propCorSol [mkParagraph noPropsSent] []
+propCorSolF [] con = SRS.propCorSol con []
+propCorSolF c  con = SRS.propCorSol (propsIntro : (LlC $ outDataConstTbl c) : con) []
+
+noPropsSent :: Sentence
+noPropsSent = foldlSent [S "There are no", plural property, S "of a", phrase corSol]
 
 propsIntro :: Contents
 propsIntro = foldlSP_ [outputTableSent, physConsSent]

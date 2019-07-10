@@ -39,10 +39,10 @@ data ModData = MD {name :: S.Label, isMainMod :: Bool, modDoc :: Doc}
 md :: S.Label -> Bool -> Doc -> ModData
 md = MD
 
-data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag, 
+data MethodData = MthD {isMainMthd :: Bool, mthdParams :: [ParamData], 
   mthdDoc :: Doc}
 
-mthd :: Bool -> ScopeTag -> Doc -> MethodData
+mthd :: Bool -> [ParamData] -> Doc -> MethodData
 mthd = MthD 
 
 data ParamData = PD {paramName :: String, paramType :: TypeData, 

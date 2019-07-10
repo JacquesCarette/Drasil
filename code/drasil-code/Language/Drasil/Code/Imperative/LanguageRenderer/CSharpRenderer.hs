@@ -41,12 +41,12 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
   docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
-  valList, surroundBody, getterName, setterName, setMain, setEmpty, intValue)
+  valList, surroundBody, getterName, setterName, setMain, setMainMethod,setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
-  fd, ModData(..), md, ParamData(..), pd, updateParamDoc, TypeData(..), td, 
-  ValData(..), vd, updateValDoc, emptyIfEmpty, mapPairFst, liftA4, liftA5, 
-  liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
-  getInnerType, convType)
+  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, updateParamDoc, 
+  TypeData(..), td, ValData(..), vd, updateValDoc, emptyIfEmpty, mapPairFst, 
+  liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, 
+  liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Data.List (nub)
@@ -491,18 +491,17 @@ instance ParameterSym CSharpCode where
   parameterType = fmap paramType
 
 instance MethodSym CSharpCode where
-  -- Bool is True if the method is a main method, False otherwise
-  type Method CSharpCode = (Doc, Bool)
-  method n _ s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t 
-    (liftList paramListDocD ps) b, False)
+  type Method CSharpCode = MethodData
+  method n _ s p t ps b = liftA2 (mthd False) (sequence ps) 
+    (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
     where getBody = oneLiner $ returnState (self c $-> v)
   setMethod c v = method (setterName $ valueName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= v
-  mainMethod c b = setMain <$> method "Main" c public static_ void 
-    [liftA2 (pd "args") (listType static_ string) 
+  mainMethod c b = setMainMethod <$> method "Main" c public static_ 
+    (mState void) [liftA2 (pd "args") (listType static_ string) 
     (return $ text "string[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -530,8 +529,8 @@ instance MethodSym CSharpCode where
     (filter (\pm -> fst pm `notElem` map fst ins) outs))
     (inOutFunc n s p (map fst ins) (map fst outs) b)
 
-  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
-    fmap snd fn)
+  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -544,8 +543,8 @@ instance ClassSym CSharpCode where
   -- Bool is True if the method is a main method, False otherwise
   type Class CSharpCode = (Doc, Bool)
   buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s 
-    (liftList stateVarListDocD vs) (liftList methodListDocD fs), 
-    any (snd . unCSC) fs)
+    (liftList stateVarListDocD vs) (liftList methodListDocD (map (fmap mthdDoc) 
+    fs)), any (isMainMthd . unCSC) fs)
   enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ 
     enumElementsDocD es False) s, False)
   mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
@@ -559,7 +558,7 @@ instance ClassSym CSharpCode where
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ ms cs = fmap (md n (any (snd . unCSC) ms || 
+  buildModule n _ ms cs = fmap (md n (any (isMainMthd . unCSC) ms || 
     any (snd . unCSC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
 

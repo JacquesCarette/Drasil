@@ -33,7 +33,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   functionDoc, classDoc, moduleDoc, valList, prependToBody, appendToBody, 
-  surroundBody, getterName, setterName, setMain, setEmpty, intValue
+  surroundBody, getterName, setterName, setMain, setMainMethod, setEmpty, 
+  intValue
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -46,9 +47,9 @@ import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   ControlStatementSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
-  ModData(..), md, ParamData(..), pd, TypeData(..), td, ValData(..), vd, angles,
-  blank, doubleQuotedText,hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, 
-  getNestDegree)
+  ModData(..), md, MethodData(..), ParamData(..), pd, TypeData(..), td, 
+  ValData(..), vd, angles,blank, doubleQuotedText,hicat,vibcat,vmap, 
+  emptyIfEmpty, emptyIfNull, getNestDegree)
 
 import Data.List (intersperse, last)
 import Data.Maybe (fromMaybe)
@@ -247,9 +248,9 @@ methodDocD n s p t ps b = vcat [
   indent b,
   rbrace]
 
-methodListDocD :: [(Doc, Bool)] -> Doc
+methodListDocD :: [Doc] -> Doc
 methodListDocD ms = vibcat methods
-  where methods = filter (not . isEmpty) (map fst ms)
+  where methods = filter (not . isEmpty) ms
 
 -- StateVar --
 
@@ -743,6 +744,9 @@ setterName s = "Set" ++ capitalize s
 
 setMain :: (Doc, Bool) -> (Doc, Bool)
 setMain (d, _) = (d, True)
+
+setMainMethod :: MethodData -> MethodData
+setMainMethod (MthD _ ps d) = MthD True ps d
 
 setEmpty :: (Doc, Terminator) -> (Doc, Terminator)
 setEmpty (d, _) = (d, Empty)

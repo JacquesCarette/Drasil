@@ -155,9 +155,6 @@ label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
 refBy :: RefbyMap
 refBy = generateRefbyMap label
 
-dataDefs :: [DataDefinition]
-dataDefs = getTraceMapFromDD $ getSCSSub mkSRS
-
 iMods :: [InstanceModel]
 iMods = getTraceMapFromIM $ getSCSSub mkSRS
 
@@ -197,13 +194,13 @@ symMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
   (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units label
-  refBy dataDefs iMods genDefs theory concIns
+  refBy dataDefns iMods genDefs theory concIns
   section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++
  map nw unitsColl) ([] :: [ConceptChunk]) unitsColl label refBy
- dataDefs iMods genDefs theory concIns section 
+ dataDefns iMods genDefs theory concIns section 
  labCon
 
 refDB :: ReferenceDB

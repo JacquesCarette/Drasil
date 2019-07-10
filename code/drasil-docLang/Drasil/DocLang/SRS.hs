@@ -94,7 +94,7 @@ valsOfAuxCons cs ss = section (titleize Doc.consVals)        cs ss valsOfAuxCons
 appendix    cs ss   = section' (titleize Doc.appendix)          cs ss "Appendix"
 
 reference   cs ss = section (titleize' Doc.reference)        cs ss referenceLabel
-offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
+offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "offShelfSolns"
 
 tOfSymb cs ss = section (titleize Doc.tOfSymb) cs ss tOfSymbLabel
 

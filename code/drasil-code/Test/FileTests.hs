@@ -15,9 +15,9 @@ fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory],
 
 writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [
-  varDecDef "e" int (litInt 5),
+  varDecDef (var "e" int) (litInt 5),
   varDec $ var "f" float,
-  var "f" float &= castObj (cast float int) (var "e" int),
+  var "f" float &= castObj (cast float) (var "e" int),
   varDec $ var "fileToWrite" outfile,
 
   openFileW (var "fileToWrite" outfile) (litString "testText.txt"),
@@ -33,7 +33,7 @@ writeStory = block [
   varDec $ var "fileLine" string,
   getFileInputLine (var "fileToRead" infile) (var "fileLine" string),
   discardFileLine (var "fileToRead" infile),
-  listDec "fileContents" 0 (listType dynamic_ string)]
+  listDec 0 (var "fileContents" (listType dynamic_ string))]
 
 readStory :: (RenderSym repr) => repr (Statement repr)
 readStory = getFileInputAll (var "fileToRead" infile) 

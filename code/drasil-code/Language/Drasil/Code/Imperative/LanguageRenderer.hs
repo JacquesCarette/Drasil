@@ -160,7 +160,7 @@ printListDoc :: (RenderSym repr) => Integer -> repr (Value repr) ->
   (String -> repr (Statement repr)) -> 
   repr (Statement repr)
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
-  for (varDecDef l_i S.int (litInt 0)) (i ?< (listSizeAccess v #- litInt 1))
+  for (varDecDef i (litInt 0)) (i ?< (listSizeAccess v #- litInt 1))
     (i &++) (bodyStatements [prFn (v $. listAccess t i), prStrFn ", /f "]), 
   ifNoElse [(listSizeAccess v ?> litInt 0, oneLiner $
     prFn (v $. listAccess t (listSizeAccess v #- litInt 1)))], 
@@ -243,8 +243,8 @@ methodListDocD ms = vibcat methods
 
 -- StateVar --
 
-stateVarDocD :: Label -> Doc -> Doc -> TypeData -> Doc -> Doc
-stateVarDocD l s p t end = s <+> p <+> typeDoc t <+> text l <> end
+stateVarDocD :: Doc -> Doc -> ValData -> Doc -> Doc
+stateVarDocD s p v end = s <+> p <+> typeDoc (valType v) <+> valDoc v <> end
 
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat
@@ -304,10 +304,9 @@ forDocD bStart bEnd sInit vGuard sUpdate b = vcat [
   indent b,
   bEnd]
 
-forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> TypeData -> 
-  ValData -> Doc -> Doc
-forEachDocD l bStart bEnd forEachLabel inLabel t v b =
-  vcat [forEachLabel <+> parens (typeDoc t <+> text l <+> inLabel <+> 
+forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> ValData -> Doc -> Doc
+forEachDocD l bStart bEnd forEachLabel inLabel v b =
+  vcat [forEachLabel <+> parens (typeDoc (valType v) <+> text l <+> inLabel <+> 
     valDoc v) <+> bStart,
   indent b,
   bEnd]
@@ -356,23 +355,23 @@ plusPlusDocD' v plusOp = valDoc v <+> equals <+> valDoc v <+> plusOp <+> int 1
 varDecDocD :: ValData -> Doc
 varDecDocD v = typeDoc (valType v) <+> valDoc v
 
-varDecDefDocD :: Label -> TypeData -> ValData -> Doc
-varDecDefDocD l st v = typeDoc st <+> text l <+> equals <+> valDoc v
+varDecDefDocD :: ValData -> ValData -> Doc
+varDecDefDocD v def = typeDoc (valType v) <+> valDoc v <+> equals <+> valDoc def
 
-listDecDocD :: Label -> ValData -> TypeData -> Doc
-listDecDocD l n st = typeDoc st <+> text l <+> equals <+> new <+> 
-  typeDoc st <> parens (valDoc n)
+listDecDocD :: ValData -> ValData -> Doc
+listDecDocD v n = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
+  typeDoc (valType v) <> parens (valDoc n)
 
-listDecDefDocD :: Label -> TypeData -> [ValData] -> Doc
-listDecDefDocD l st vs = typeDoc st <+> text l <+> equals <+> new <+> 
-  typeDoc st <+> braces (valList vs)
+listDecDefDocD :: ValData -> [ValData] -> Doc
+listDecDefDocD v vs = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
+  typeDoc (valType v) <+> braces (valList vs)
 
-objDecDefDocD :: Label -> TypeData -> ValData -> Doc
+objDecDefDocD :: ValData -> ValData -> Doc
 objDecDefDocD = varDecDefDocD
 
-constDecDefDocD :: Label -> TypeData -> ValData -> Doc -- can this be done without StateType (infer from value)?
-constDecDefDocD l st v = text "const" <+> typeDoc st <+> text l <+> equals <+>
-  valDoc v
+constDecDefDocD :: ValData -> ValData -> Doc
+constDecDefDocD v def = text "const" <+> typeDoc (valType v) <+> valDoc v <+> 
+  equals <+> valDoc def
 
 returnDocD :: [ValData] -> Doc
 returnDocD vs = text "return" <+> valList vs

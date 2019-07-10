@@ -22,4 +22,4 @@ doubleAndAdd = function "doubleAndAdd" public static_ (mState float)
     varDec $ var "doubledSum" float, 
     var "doubledSum" float &= ((litFloat 2.0 #* var "num1" float) #+ 
       (litFloat 2.0 #* var "num2" float)),
-    returnVar "doubledSum" float])
+    returnState (var "doubledSum" float)])

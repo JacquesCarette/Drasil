@@ -43,7 +43,7 @@ nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) ([] :: Derivation)
   [makeCiteInfo incroperaEtAl2007 $ Page [8]] "nwtnCooling" nwtnCoolingDesc
 
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn)
-  (rocTempSimpDeriv genDefDeriv4SWHS [assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV])
+  (rocTempSimpDeriv rocTempDerivConsFlxSWHS [assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV])
   "rocTempSimp" [{-Notes-}]
 
 --
@@ -86,67 +86,67 @@ rocTempSimpDeriv s a = S "Detailed derivation of simplified" +:
   weave [rocTempSimpDerivSent s a, map E rocTempSimpDerivEqns]
 
 rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
-rocTempSimpDerivSent s a = map foldlSentCol [genDefDeriv1, genDefDeriv2,
-  genDefDeriv3, genDefDeriv4 s a, genDefDeriv5]
+rocTempSimpDerivSent s a = map foldlSentCol [rocTempDerivInteg, rocTempDerivGauss,
+  rocTempDerivArbVol, rocTempDerivConsFlx s a, rocTempDerivDens]
 
-genDefDeriv1 :: [Sentence]
-genDefDeriv1 = [S "Integrating", makeRef2S consThermE, S "over a",
+rocTempDerivInteg :: [Sentence]
+rocTempDerivInteg = [S "Integrating", makeRef2S consThermE, S "over a",
   phrase vol, sParen (ch vol) `sC` S "we have"]
 
-genDefDeriv2 :: [Sentence]
-genDefDeriv2 = [S "Applying", titleize gaussDiv, S "to the first term over",
+rocTempDerivGauss :: [Sentence]
+rocTempDerivGauss = [S "Applying", titleize gaussDiv, S "to the first term over",
   (phrase surface +:+ ch surface `ofThe` phrase vol) `sC` S "with",
   ch thFluxVect, S "as the", phrase thFluxVect, S "for the",
   phrase surface `sAnd` ch uNormalVect, S "as a", phrase unit_,
   S "outward", phrase uNormalVect, S "for a", phrase surface]
 
-genDefDeriv3 :: [Sentence]
-genDefDeriv3 = [S "We consider an arbitrary" +:+. phrase vol, S "The",
+rocTempDerivArbVol :: [Sentence]
+rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol, S "The",
   phrase volHtGen, S "is assumed constant. Then (1) can be written as"]
 
-genDefDeriv4 :: Sentence -> [ConceptInstance] -> [Sentence]
-genDefDeriv4 s assumps = [S "Where", 
+rocTempDerivConsFlx :: Sentence -> [ConceptInstance] -> [Sentence]
+rocTempDerivConsFlx s assumps = [S "Where", 
   foldlList Comma List (map ch [htFluxIn, htFluxOut, inSA, outSA]),
   S "are explained in" +:+. makeRef2S rocTempSimp, s, S "Assuming", 
   foldlList Comma List (map ch [density, QT.heatCapSpec, QT.temp]),
   S "are constant over the", phrase vol `sC` S "which is true in our case by",
   foldlList Comma List (map makeRef2S assumps) `sC` S "we have"]
 
-genDefDeriv4SWHS :: Sentence
-genDefDeriv4SWHS = foldlSent [S "The integral over the", phrase surface,
+rocTempDerivConsFlxSWHS :: Sentence
+rocTempDerivConsFlxSWHS = foldlSent [S "The integral over the", phrase surface,
   S "could be simplified because the thermal flux is assumed constant over",
   ch inSA `sAnd` ch outSA `sAnd` E 0, S "on all other" +:+. plural surface,
   S "Outward flux is considered positive"]
 
-genDefDeriv5 :: [Sentence]
-genDefDeriv5 = [S "Using the fact that", ch density :+: S "=" :+: ch mass :+:
-  S "/" :+: ch vol `sC` S "(2) can be written as"]
+rocTempDerivDens :: [Sentence]
+rocTempDerivDens = [S "Using the fact that", ch density :+: S "=" :+: ch mass :+:
+  S "/" :+: ch vol `sC` eqN 2, S "can be written as"]
 
-genDefDerivEqn1, genDefDerivEqn2, genDefDerivEqn3,
-  genDefDerivEqn4, genDefDerivEqn5 :: Expr
+rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq,
+  rocTempDerivConsFlxEq, rocTempDerivDensEq :: Expr
 
-genDefDerivEqn1 = negate (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) + 
+rocTempDerivIntegEq = negate (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) + 
   intAll (eqSymb vol) (sy volHtGen) $=
   intAll (eqSymb vol) (sy density
   * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
 
-genDefDerivEqn2 = negate (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) +
+rocTempDerivGaussEq = negate (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) +
   intAll (eqSymb vol) (sy volHtGen) $= 
   intAll (eqSymb vol)
   (sy density * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
 
-genDefDerivEqn3 = sy htFluxIn * sy inSA - sy htFluxOut *
+rocTempDerivArbVolEq = sy htFluxIn * sy inSA - sy htFluxOut *
   sy outSA + sy volHtGen * sy vol $= 
   intAll (eqSymb vol) (sy density * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
 
-genDefDerivEqn4 = sy density * sy QT.heatCapSpec * sy vol * deriv
+rocTempDerivConsFlxEq = sy density * sy QT.heatCapSpec * sy vol * deriv
   (sy QT.temp) time $= sy htFluxIn * sy inSA - sy htFluxOut *
   sy outSA + sy volHtGen * sy vol
 
-genDefDerivEqn5 = sy mass * sy QT.heatCapSpec * deriv (sy QT.temp)
+rocTempDerivDensEq = sy mass * sy QT.heatCapSpec * deriv (sy QT.temp)
   time $= sy htFluxIn * sy inSA - sy htFluxOut
   * sy outSA + sy volHtGen * sy vol
 
 rocTempSimpDerivEqns :: [Expr]
-rocTempSimpDerivEqns = [genDefDerivEqn1, genDefDerivEqn2, genDefDerivEqn3,
-  genDefDerivEqn4, genDefDerivEqn5]
+rocTempSimpDerivEqns = [rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq, rocTempDerivConsFlxEq,
+  rocTempDerivDensEq]

@@ -55,6 +55,9 @@ import Drasil.Projectile.Unitals (acronyms, constants, inConstraints,
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
 
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
+
 mkSRS :: DocDesc
 mkSRS = [
   RefSec $
@@ -160,9 +163,6 @@ label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
  
 refBy :: RefbyMap
 refBy = generateRefbyMap label
-
-printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
 
 -------------------------
 -- Problem Description --

@@ -44,9 +44,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   valList, surroundBody, getterName, setterName, setMain, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, ParamData(..), pd, updateParamDoc, TypeData(..), td, 
-  ValData(..), vd, updateValDoc, mapPairFst, liftA4, liftA5, liftA6, liftList,
-  lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, getInnerType, 
-  convType)
+  ValData(..), vd, updateValDoc, emptyIfEmpty, mapPairFst, liftA4, liftA5, 
+  liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
+  getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Data.List (nub)
@@ -83,8 +83,8 @@ instance PackageSym CSharpCode where
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (if isEmpty (modDoc (unCSC code)) then return empty else
-    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (liftA2 emptyIfEmpty (fmap modDoc code) $
+      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 

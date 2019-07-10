@@ -36,7 +36,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   appendToBody, getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, ParamData(..), TypeData(..), td, ValData(..), vd, blank, 
-  vibcat, mapPairFst, liftA4, liftA5, mapPairFst, liftList, lift1List, 
+  vibcat, emptyIfEmpty, mapPairFst, liftA4, liftA5, liftList, lift1List, 
   lift2Lists, lift4Pair, liftPair, liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -73,8 +73,8 @@ instance PackageSym PythonCode where
 instance RenderSym PythonCode where
   type RenderFile PythonCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (if isEmpty (modDoc (unPC code)) then return empty else
-    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (liftA2 emptyIfEmpty (fmap modDoc code) $
+      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top _ = return pytop
   bottom = return empty
 
@@ -591,7 +591,7 @@ pyListDecDef v vs = valDoc v <+> equals <+> brackets vs
 pyPrint :: Bool ->  ValData -> ValData ->  ValData -> Doc
 pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
-        fl = if isEmpty (valDoc f) then empty else text ", file=" <> valDoc f
+        fl = emptyIfEmpty (valDoc f) $ text ", file=" <> valDoc f
 
 pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
   -> Maybe (repr (Value repr)) -> repr (Statement repr)
@@ -645,8 +645,7 @@ pyMethod :: Label ->  ValData -> Doc -> Doc -> Doc
 pyMethod n slf ps b = vcat [
   text "def" <+> text n <> parens (valDoc slf <> oneParam <> ps) <> colon,
   indent bodyD]
-      where oneParam | isEmpty ps = empty
-                     | otherwise  = text ", "
+      where oneParam = emptyIfEmpty ps $ text ", "
             bodyD | isEmpty b = text "None"
                   | otherwise = b
 
@@ -675,10 +674,8 @@ pyModule ls fs cs =
   libs $+$
   funcs $+$
   cs
-  where libs | isEmpty ls = empty
-             | otherwise  = ls $+$ blank
-        funcs | isEmpty fs = empty
-              | otherwise  = fs $+$ blank
+  where libs = emptyIfEmpty ls $ ls $+$ blank
+        funcs = emptyIfEmpty fs $ fs $+$ blank
 
 pyInOutCall :: (Label -> PythonCode (StateType PythonCode) -> 
   [PythonCode (Value PythonCode)] -> PythonCode (Value PythonCode)) -> Label -> 

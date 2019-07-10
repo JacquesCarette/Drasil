@@ -46,7 +46,8 @@ import Language.Drasil.Code.Imperative.Symantics (Label, Library,
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   ModData(..), md, ParamData(..), pd, TypeData(..), td, ValData(..), vd, angles,
-  blank, doubleQuotedText,hicat,vibcat,vmap, getNestDegree)
+  blank, doubleQuotedText,hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, 
+  getNestDegree)
 
 import Data.List (intersperse, last)
 import Data.Maybe (fromMaybe)
@@ -273,7 +274,7 @@ ifCondDocD ifStart elif bEnd elseBody (c:cs) =
         elif <+> parens (valDoc v) <+> ifStart,
         indent b,
         bEnd]
-      elseSect = if isEmpty elseBody then empty else vcat [
+      elseSect = emptyIfEmpty elseBody $ vcat [
         text "else" <+> ifStart,
         indent elseBody,
         bEnd]
@@ -677,11 +678,11 @@ blockCmtDoc :: [String] -> Doc -> Doc -> Doc
 blockCmtDoc lns start end = start <+> vcat (map text lns) <+> end
 
 docCmtDoc :: [String] -> Doc -> Doc -> Doc
-docCmtDoc lns start end = if null lns then empty else 
+docCmtDoc lns start end = emptyIfNull lns $
   vcat $ start : map (indent . text) lns ++ [end]
 
 commentedItem :: Doc -> Doc -> Doc
-commentedItem cmt itm = if isEmpty itm then itm else cmt $+$ itm
+commentedItem cmt itm = emptyIfEmpty itm cmt $+$ itm
 
 commentLength :: Int
 commentLength = 75
@@ -724,11 +725,11 @@ valList vs = hcat (intersperse (text ", ") (map valDoc vs))
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statementDocD s, maybeBlank, b]
-  where maybeBlank = if isEmpty b then empty else blank
+  where maybeBlank = emptyIfEmpty b blank
 
 appendToBody :: Doc -> (Doc, Terminator) -> Doc
 appendToBody b s = vcat [b, maybeBlank, fst $ statementDocD s]
-  where maybeBlank = if isEmpty b then empty else blank
+  where maybeBlank = emptyIfEmpty b blank
 
 surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
 surroundBody p b a = prependToBody p (appendToBody b a)

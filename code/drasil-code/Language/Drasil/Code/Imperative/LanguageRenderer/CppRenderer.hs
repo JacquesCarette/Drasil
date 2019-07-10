@@ -43,9 +43,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   ParamData(..), StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
-  angles, blank, doubleQuotedText, mapPairFst, mapPairSnd, vibcat, liftA4, 
-  liftA5, liftA6, liftA8, liftList, lift2Lists, lift1List, lift3Pair, lift4Pair,
-  liftPair, liftPairFst, getInnerType, convType)
+  angles, blank, doubleQuotedText, emptyIfEmpty, mapPairFst, mapPairSnd, vibcat,
+  liftA4, liftA5, liftA6, liftA8, liftList, lift2Lists, lift1List, lift3Pair, 
+  lift4Pair, liftPair, liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.List (nub)
@@ -607,8 +607,8 @@ instance PackageSym CppSrcCode where
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code)
-    (if isEmpty (modDoc (unCPPSC code)) then return empty else
-    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (liftA2 emptyIfEmpty (fmap modDoc code) $
+      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
 
@@ -1047,8 +1047,9 @@ instance MethodSym CppSrcCode where
     let i = var "i" int
         deleteStatements = map (fmap destructSts) vs
         loopIndexDec = varDec i
-        dbody = if all (isEmpty . fst . unCPPSC) deleteStatements then 
-          return empty else bodyStatements $ loopIndexDec : deleteStatements
+        dbody = liftA2 emptyIfEmpty 
+          (fmap vcat (mapM (fmap fst) deleteStatements)) $
+          bodyStatements $ loopIndexDec : deleteStatements
     in pubMethod ('~':n) n void [] dbody
 
   docMain c b = commentedFunc (docComment $ functionDoc 
@@ -1146,8 +1147,8 @@ instance PackageSym CppHdrCode where
 instance RenderSym CppHdrCode where
   type RenderFile CppHdrCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (if isEmpty (modDoc (unCPPHC code)) then return empty else 
-    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (liftA2 emptyIfEmpty (fmap modDoc code) $
+      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
   

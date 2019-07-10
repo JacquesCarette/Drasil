@@ -44,8 +44,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   setterName, setMain,setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, ParamData(..), pd, TypeData(..), td, ValData(..), vd,  
-  angles, mapPairFst, liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, 
-  lift4Pair, liftPair, liftPairFst, getInnerType, convType)
+  angles, emptyIfEmpty, mapPairFst, liftA4, liftA5, liftA6, liftList, lift1List,
+  lift3Pair, lift4Pair, liftPair, liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -87,8 +87,8 @@ instance PackageSym JavaCode where
 instance RenderSym JavaCode where
   type RenderFile JavaCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (if isEmpty (modDoc (unJC code)) then return empty else
-    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (liftA2 emptyIfEmpty (fmap modDoc code) $
+      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
 
@@ -631,8 +631,7 @@ jCast t v = jCast' (getType t) (getType $ valueType v)
 jListDecDef :: ValData -> Doc -> Doc
 jListDecDef v vs = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
   typeDoc (valType v) <+> parens listElements
-  where listElements = if isEmpty vs then empty else text "Arrays.asList" <> 
-                         parens vs
+  where listElements = emptyIfEmpty vs $ text "Arrays.asList" <> parens vs
 
 jConstDecDef :: ValData -> ValData -> Doc
 jConstDecDef v def = text "final" <+> typeDoc (valType v) <+> valDoc v <+> 

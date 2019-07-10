@@ -4,9 +4,10 @@ module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   ScopeTag(..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   ParamData(..), pd, updateParamDoc, StateVarData(..), svd, TypeData(..), td, 
   ValData(..), vd, updateValDoc, blank,verticalComma,angles,doubleQuotedText,
-  himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, mapPairSnd, liftA4, 
-  liftA5, liftA6, liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, 
-  lift3Pair, lift4Pair, liftPairFst, getInnerType, getNestDegree, convType
+  himap,hicat,vicat,vibcat,vmap,vimap,vibmap, emptyIfEmpty, emptyIfNull, 
+  mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, 
+  lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
+  getInnerType, getNestDegree, convType
 ) where
 
 import Language.Drasil.Code.Code (CodeType(..))
@@ -17,7 +18,7 @@ import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
-  (<>), comma, punctuate)
+  (<>), comma, punctuate, empty, isEmpty)
 
 class Pair p where
   pfst :: p x y a -> x a
@@ -106,6 +107,12 @@ vimap c f = vicat c . map f
 
 vibmap :: (a -> Doc) -> [a] -> Doc
 vibmap = vimap blank
+
+emptyIfEmpty :: Doc -> Doc -> Doc
+emptyIfEmpty ifDoc elseDoc = if isEmpty ifDoc then empty else elseDoc
+
+emptyIfNull :: [a] -> Doc -> Doc
+emptyIfNull lst elseDoc = if null lst then empty else elseDoc
 
 mapPairFst :: (a -> b) -> (a, c) -> (b, c)
 mapPairFst f (a, c) = (f a, c)

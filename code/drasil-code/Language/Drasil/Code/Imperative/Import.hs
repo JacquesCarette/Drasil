@@ -17,8 +17,14 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Helpers (ModData(..), convType)
+import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
+  (cppExts)
+import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer 
+  (csExts)
 import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer 
-  (jNameOpts)
+  (jExts, jNameOpts)
+import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer 
+  (pyExts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
   codeType, codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup,
@@ -157,10 +163,10 @@ getDir Java = "java"
 getDir Python = "python"
 
 getExt :: Lang -> [Label]
-getExt Java = [".java"]
-getExt Python = [".py"]
-getExt CSharp = [".cs"]
-getExt Cpp = [".hpp", ".cpp"]
+getExt Java = jExts
+getExt Python = pyExts
+getExt CSharp = csExts
+getExt Cpp = cppExts
 
 getRunnable :: Lang -> Runnable
 getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) 

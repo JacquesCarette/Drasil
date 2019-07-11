@@ -545,7 +545,7 @@ instance MethodSym JavaCode where
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
     
-  parameters = mthdParams . unJC
+  parameters m = map return $ (mthdParams . unJC) m
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc

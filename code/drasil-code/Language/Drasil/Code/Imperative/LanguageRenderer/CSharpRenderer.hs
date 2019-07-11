@@ -530,7 +530,7 @@ instance MethodSym CSharpCode where
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
   
-  parameters = mthdParams . unCSC
+  parameters m = map return $ (mthdParams . unCSC) m
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc

@@ -41,7 +41,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
   moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
   setterName, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Data (Pair(..), Terminator(..),   
+import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
   ScopeTag (..), FuncData(..), fd, ModData(..), md, ParamData(..), pd, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
@@ -546,7 +546,7 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
     (commentedFunc (psnd cmt) (psnd fn)) 
 
-  parameters m = parameters $ pfst m
+  parameters m = pairList (parameters $ pfst m) (parameters $ psnd m)
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -1081,7 +1081,7 @@ instance MethodSym CppSrcCode where
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn)) else fn
 
-  parameters = mthdParams . unCPPSC
+  parameters m = map return $ (mthdParams . unCPPSC) m
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1548,7 +1548,7 @@ instance MethodSym CppHdrCode where
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
     
-  parameters = mthdParams . unCPPHC
+  parameters m = map return $ (mthdParams . unCPPHC) m
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData

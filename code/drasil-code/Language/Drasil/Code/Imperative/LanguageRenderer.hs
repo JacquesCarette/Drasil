@@ -44,7 +44,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   RenderSym(..), BodySym(..), StateTypeSym(getType), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
-  MethodSym(..), BlockCommentSym(..))
+  ParameterSym(..), MethodSym(..), BlockCommentSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
   ModData(..), md, MethodData(..), ParamData(..), pd, TypeData(..), td, 
@@ -724,7 +724,7 @@ moduleDoc desc m ext = (doxFile ++ m ++ ext) :
 docFuncRepr :: (MethodSym repr) => String -> [String] -> repr (Method repr) -> 
   repr (Method repr)
 docFuncRepr desc pComms f = commentedFunc (docComment $ functionDoc desc
-  (zip (map paramName (parameters f)) pComms)) f
+  (zip (map parameterName (parameters f)) pComms)) f
 
 -- Helper Functions --
 

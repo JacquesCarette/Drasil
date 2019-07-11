@@ -1,4 +1,4 @@
-module Language.Drasil.Code.Imperative.Data (Pair(..),
+module Language.Drasil.Code.Imperative.Data (Pair(..), pairList,
   Terminator (..), ScopeTag(..), FuncData(..), fd, ModData(..), md, 
   MethodData(..), mthd, ParamData(..), pd, updateParamDoc, StateVarData(..), 
   svd, TypeData(..), td, ValData(..), vd, updateValDoc
@@ -13,6 +13,11 @@ class Pair p where
   pfst :: p x y a -> x a
   psnd :: p x y b -> y b
   pair :: x a -> y a -> p x y a
+
+pairList :: (Pair p) => [x a] -> [y a] -> [p x y a]
+pairList [] _ = []
+pairList _ [] = []
+pairList (x:xs) (y:ys) = pair x y : pairList xs ys
  
 data Terminator = Semi | Empty
 

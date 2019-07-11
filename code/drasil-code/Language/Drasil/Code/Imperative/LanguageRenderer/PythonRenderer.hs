@@ -506,7 +506,7 @@ instance MethodSym PythonCode where
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
 
-  parameters = mthdParams . unPC
+  parameters m = map return $ (mthdParams . unPC) m
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc

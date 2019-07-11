@@ -1,5 +1,8 @@
 package GlassBR;
 
+/** \file ReadTable.java
+    \brief Provides a function for reading glass ASTM data
+*/
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
@@ -10,6 +13,12 @@ import java.util.ArrayList;
 
 public class ReadTable {
     
+    /** \brief Reads glass ASTM data from a file with the given file name
+        \param filename No description given
+        \param z_vector No description given
+        \param x_matrix No description given
+        \param y_matrix No description given
+    */
     public static void func_read_table(String filename, ArrayList<Double> z_vector, ArrayList<ArrayList<Double>> x_matrix, ArrayList<ArrayList<Double>> y_matrix) throws Exception {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));

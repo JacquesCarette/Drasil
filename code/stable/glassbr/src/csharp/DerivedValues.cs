@@ -1,3 +1,6 @@
+/** \file DerivedValues.cs
+    \brief Provides the function for calculating derived values
+*/
 using System;
 using System.IO;
 using System.Collections;
@@ -5,6 +8,9 @@ using System.Collections.Generic;
 
 public class DerivedValues {
     
+    /** \brief Calculates values that can be immediately derived from the inputs
+        \param inParams No description given
+    */
     public static void derived_values(InputParameters inParams) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);

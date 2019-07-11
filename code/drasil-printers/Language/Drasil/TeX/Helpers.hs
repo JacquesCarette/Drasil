@@ -58,6 +58,9 @@ command0 s = pure $ H.bslash TP.<> text s
 command2 :: String -> String -> String -> D
 command2 s a0 a1 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1
 
+command2D :: String -> D -> D -> D
+command2D s a0 a1 = pure (H.bslash TP.<> text s) <> br a0 <> br a1
+
 -- 3-argument command
 command3 :: String -> String -> String -> String -> D
 command3 s a0 a1 a2 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1 TP.<> H.br a2

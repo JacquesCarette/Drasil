@@ -32,10 +32,10 @@ import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
 import Language.Drasil.Printing.LayoutObj (LayoutObj(Graph, Bib, Figure, Definition,
   List, Table, EqnBlock, Paragraph, Header, HDiv), Document(Document))
 import qualified Language.Drasil.Printing.Import as I
-import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
+import Language.Drasil.Printing.Helpers hiding (br, paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, mkEnvArgs, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
-  newline, superscript, parens, fraction, quote, externalref, commandD,
+  newline, superscript, parens, fraction, quote, externalref, commandD, command2D, br,
   snref, cite, citeInfo, sec, newpage, maketoc, maketitle, document, author, title)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
@@ -98,27 +98,26 @@ data OpenClose = Open | Close
 ------------------ EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
-pExpr :: Expr -> String
-pExpr (Dbl d)        = showEFloat Nothing d ""
-pExpr (Int i)        = show i
-pExpr (Str s)        = "\\text{``" ++ s ++ "\"}"
-pExpr (Div n d)      = "\\frac{" ++ pExpr n ++ "}{" ++ pExpr d ++"}"
-pExpr (Case ps)      = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
-pExpr (Mtx a)        = "\\begin{bmatrix}\n" ++ pMatrix a ++ "\n\\end{bmatrix}"
-pExpr (Row [x])      = brace $ pExpr x -- a bit of a hack...
-pExpr (Row l)        = concatMap pExpr l
-pExpr (Ident s)      = s
-pExpr (Spec s)       = unPL $ L.special s
+pExpr :: Expr -> D
+pExpr (Dbl d)        = pure . text $ showEFloat Nothing d ""
+pExpr (Int i)        = pure . text $ show i
+pExpr (Str s)        = pure . text $ "\\text{``" ++ s ++ "\"}"
+pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
+pExpr (Case ps)      = mkEnv "cases" (cases ps)
+pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
+pExpr (Row l)        = foldl1 (<>) (map pExpr l)
+pExpr (Ident s)      = pure . text $ s
+pExpr (Spec s)       = pure . text $ unPL $ L.special s
 --pExpr (Gr g)         = unPL $ greek g
-pExpr (Sub e)        = "_" ++ brace (pExpr e)
-pExpr (Sup e)        = "^" ++ brace (pExpr e)
-pExpr (Over Hat s)   = "\\hat{" ++ pExpr s ++ "}"
-pExpr (MO o)         = pOps o
-pExpr (Fenced l r m) = fence Open l ++ pExpr m ++ fence Close r
-pExpr (Font Bold e)  = "\\mathbf{" ++ pExpr e ++ "}"
+pExpr (Sub e)        = pure unders <> br (pExpr e)
+pExpr (Sup e)        = pure hat    <> br (pExpr e)
+pExpr (Over Hat s)   = commandD "hat" (pExpr s)
+pExpr (MO o)         = pure . text $ pOps o
+pExpr (Fenced l r m) = fence Open l <> pExpr m <> fence Close r
+pExpr (Font Bold e)  = commandD "mathbf" (pExpr e)
 pExpr (Font Emph e)  = pExpr e -- Emph is ignored here because we're in Math mode
-pExpr (Spc Thin)     = "\\,"
-pExpr (Sqrt e)       = "\\sqrt{" ++ pExpr e ++ "}"
+pExpr (Spc Thin)     = pure . text $ "\\,"
+pExpr (Sqrt e)       = commandD "sqrt" (pExpr e)
 
 pOps :: Ops -> String
 pOps IsIn     = "\\in{}"
@@ -165,29 +164,29 @@ pOps Inte     = "\\int"
 pOps Point    = "."
 pOps Perc     = "\\%"
 
-fence :: OpenClose -> Fence -> String
-fence Open Paren = "\\left("
-fence Close Paren = "\\right)"
-fence Open Curly = "\\{"
-fence Close Curly = "\\}"
-fence _ Abs = "|"
-fence _ Norm = "||"
+fence :: OpenClose -> Fence -> D
+fence Open Paren  = pure . text $ "\\left("
+fence Close Paren = pure . text $ "\\right)"
+fence Open Curly  = pure . text $ "\\{"
+fence Close Curly = pure . text $ "\\}"
+fence _ Abs       = pure . text $ "|"
+fence _ Norm      = pure . text $ "||"
 
 -- | For printing Matrix
-pMatrix :: [[Expr]] -> String
-pMatrix [] = ""
+pMatrix :: [[Expr]] -> D
+pMatrix [] = pure (text "")
 pMatrix [x] = pIn x
-pMatrix (x:xs) = pMatrix [x] ++ "\\\\\n" ++ pMatrix xs
+pMatrix (x:xs) = pIn x <> pure (text "\\\\\n") <> pMatrix xs
 
-pIn :: [Expr] -> String
-pIn [] = ""
+pIn :: [Expr] -> D
+pIn [] = pure (text "")
 pIn [x] = pExpr x
-pIn (x:xs) = pIn [x] ++ " & " ++ pIn xs
+pIn (x:xs) = pExpr x <> pure (text " & ") <> pIn xs
 
-cases :: [(Expr,Expr)] -> String
+cases :: [(Expr,Expr)] -> D
 cases []     = error "Attempt to create case expression without cases"
-cases [p]    = pExpr (fst p) ++ ", & " ++ pExpr (snd p)
-cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
+cases [p]    = pExpr (fst p) <> pure (text ", & ") <> pExpr (snd p)
+cases (p:ps) = cases [p] <> pure (text "\\\\\n") <> cases ps
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
@@ -218,14 +217,14 @@ makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
 -- | determines the length of a Spec
 specLength :: Spec -> Int
 specLength (S x)     = length x
-specLength (E x)     = length $ filter (`notElem` dontCount) $ pExpr x
+--specLength (E x)     = length $ filter (`notElem` dontCount) $ pExpr x
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
 specLength EmptyS    = 0
 specLength _         = 0
 
-dontCount :: String
-dontCount = "\\/[]{}()_^$:"
+dontCount :: [D]
+dontCount = map (pure . text . (\x -> [x])) "\\/[]{}()_^$:"
 
 makeHeaders :: [Spec] -> D
 makeHeaders ls = hpunctuate (text " & ") (map (commandD "textbf" . spec) ls) %% pure dbs
@@ -256,7 +255,7 @@ spec a@(s :+: t) = s' <> t'
     ctx = const $ needs a
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
-spec (E ex) = toMath $ pure $ text $ pExpr ex
+spec (E ex) = toMath $ pExpr ex
 spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s

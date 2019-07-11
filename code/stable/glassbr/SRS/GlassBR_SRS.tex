@@ -66,7 +66,7 @@ $a$ & Plate length (long dimension) & m
 \\
 $AR$ & Aspect ratio & --
 \\
-${AR_{max}}$ & Maximum aspect ratio & --
+$AR_{max}$ & Maximum aspect ratio & --
 \\
 $B$ & Risk of failure & --
 \\
@@ -74,9 +74,9 @@ $b$ & Plate width (short dimension) & m
 \\
 $capacity$ & Capacity or load resistance & Pa
 \\
-${d_{max}}$ & Maximum value for one of the dimensions of the glass plate & m
+$d_{max}$ & Maximum value for one of the dimensions of the glass plate & m
 \\
-${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & m
+$d_{min}$ & Minimum value for one of the dimensions of the glass plate & m
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
@@ -100,7 +100,7 @@ $is-safeProb$ & Variable that is assigned true when probability of failure is le
 \\
 $J$ & Stress distribution factor (Function) & --
 \\
-${J_{tol}}$ & Stress distribution factor (Function) based on Pbtol & --
+$J_{tol}$ & Stress distribution factor (Function) based on Pbtol & --
 \\
 $k$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
@@ -116,45 +116,45 @@ $m$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
 $NFL$ & Non-factored load & Pa
 \\
-${P_{b}}$ & Probability of breakage & --
+$P_{b}$ & Probability of breakage & --
 \\
-${P_{btol}}$ & Tolerable probability of breakage & --
+$P_{btol}$ & Tolerable probability of breakage & --
 \\
-${P_{f}}$ & Probability of failure & --
+$P_{f}$ & Probability of failure & --
 \\
-${P_{ftol}}$ & Tolerable probability of failure & --
+$P_{ftol}$ & Tolerable probability of failure & --
 \\
 $q$ & Applied load (demand) & Pa
 \\
 $\hat{q}$ & Dimensionless load & --
 \\
-${\hat{q}_{tol}}$ & Tolerable load & --
+$\hat{q}_{tol}$ & Tolerable load & --
 \\
 $SD$ & Stand off distance & m
 \\
-${SD_{max}}$ & Maximum stand off distance permissible for input & m
+$SD_{max}$ & Maximum stand off distance permissible for input & m
 \\
-${SD_{min}}$ & Minimum stand off distance permissible for input & m
+$SD_{min}$ & Minimum stand off distance permissible for input & m
 \\
-${SD_{x}}$ & stand off distance ($x$-component) & m
+$SD_{x}$ & stand off distance ($x$-component) & m
 \\
-${SD_{y}}$ & stand off distance ($y$-component) & m
+$SD_{y}$ & stand off distance ($y$-component) & m
 \\
-${SD_{z}}$ & stand off distance ($z$-component) & m
+$SD_{z}$ & stand off distance ($z$-component) & m
 \\
 $t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & mm
 \\
-${t_{d}}$ & Duration of load & s
+$t_{d}$ & Duration of load & s
 \\
 $TNT$ & TNT equivalent factor & --
 \\
 $w$ & Charge weight & kg
 \\
-${w_{max}}$ & Maximum permissible input charge weight & kg
+$w_{max}$ & Maximum permissible input charge weight & kg
 \\
-${w_{min}}$ & Minimum permissible input charge weight & kg
+$w_{min}$ & Minimum permissible input charge weight & kg
 \\
-${w_{TNT}}$ & Explosive mass in equivalent weight of TNT & kg
+$w_{TNT}$ & Explosive mass in equivalent weight of TNT & kg
 \\
 \bottomrule
 \caption{}
@@ -312,11 +312,11 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Specified design load - The magnitude in Pa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
 \item{Long duration load - Any load lasting approximately 30 days.}
 \end{itemize}
-\item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$).}
+\item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates ($SD_{x}$, $SD_{y}$, $SD_{z}$).}
 \item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thicknesses and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
 \item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
 \item{Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.}
-\item{Probability of breakage (${P_{b}}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (\cite{astm2016}).}
+\item{Probability of breakage ($P_{b}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (\cite{astm2016}).}
 \end{enumerate}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
@@ -348,7 +348,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[glassType:\phantomsection\label{assumpGT}]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.
 \item[glassCondition:\phantomsection\label{assumpGC}]Following \cite[(pg. 1)]{astm2009}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass}.)
 \item[explainScenario:\phantomsection\label{assumpES}]This system only considers the external explosion scenario for its calculations. (RefBy: \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk}.)
-\item[standardValues:\phantomsection\label{assumpSV}]The values provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E}, \hyperref[DD:sdfTol]{DD: sdfTol}, \hyperref[DD:nFL]{DD: nFL}, \hyperref[DD:loadDurFactor]{DD: loadDurFactor}, \hyperref[DD:dimlessLoad]{DD: dimlessLoad}, and \hyperref[assumpLDFC]{A: ldfConstant}.)
+\item[standardValues:\phantomsection\label{assumpSV}]The values provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} are assumed for the duration of load ($t_{d}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E}, \hyperref[DD:sdfTol]{DD: sdfTol}, \hyperref[DD:nFL]{DD: nFL}, \hyperref[DD:loadDurFactor]{DD: loadDurFactor}, \hyperref[DD:dimlessLoad]{DD: dimlessLoad}, and \hyperref[assumpLDFC]{A: ldfConstant}.)
 \item[glassLite:\phantomsection\label{assumpGL}]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[DD:calofCapacity]{DD: calofCapacity}, \hyperref[DD:dimlessLoad]{DD: dimlessLoad}, and \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}.)
 \item[boundaryConditions:\phantomsection\label{assumpBC}]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions}.)
 \item[responseType:\phantomsection\label{assumpRT}]The response type considered in GlassBR is flexural. (RefBy: \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass}.)
@@ -368,16 +368,16 @@ This section focuses on the general equations and laws that GlassBR is based on.
 Label & Safety Probability
 \\ \midrule \\
 Equation & \begin{displaymath}
-           is-safeProb={P_{f}}<{P_{ftol}}
+           is-safeProb=P_{f}<P_{ftol}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$is-safeProb$ is the variable that is assigned true when probability of failure is less than tolerable probability of failure (Unitless)}
-              \item{${P_{f}}$ is the probability of failure (Unitless)}
-              \item{${P_{ftol}}$ is the tolerable probability of failure (Unitless)}
+              \item{$P_{f}$ is the probability of failure (Unitless)}
+              \item{$P_{ftol}$ is the tolerable probability of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeProb$, the glass is considered safe. $is-safeProb$ and $is-safeLoad$ (from \hyperref[TM:isSafeLoad]{TM: isSafeLoad}) are either both True or both False. ${P_{f}}$ is the probability of failure, ${P_{ftol}}$ is the tolerable probability of failure.
+Notes & If $is-safeProb$, the glass is considered safe. $is-safeProb$ and $is-safeLoad$ (from \hyperref[TM:isSafeLoad]{TM: isSafeLoad}) are either both True or both False. $P_{f}$ is the probability of failure, $P_{ftol}$ is the tolerable probability of failure.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -476,7 +476,7 @@ Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
            h=\frac{1}{1000} \begin{cases}
-2.16, & t=2.5\\
+                            2.16, & t=2.5\\
 2.59, & t=2.7\\
 2.92, & t=3.0\\
 3.78, & t=4.0\\
@@ -488,7 +488,7 @@ Equation & \begin{displaymath}
 15.09, & t=16.0\\
 18.26, & t=19.0\\
 21.44, & t=22.0
-\end{cases}
+                            \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -519,12 +519,12 @@ Symbol & $LDF$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
-           LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}
+           LDF=\left(\frac{t_{d}}{60}\right)^{\frac{m}{16}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$LDF$ is the load duration factor (Unitless)}
-              \item{${t_{d}}$ is the duration of load (s)}
+              \item{$t_{d}$ is the duration of load (s)}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -587,12 +587,12 @@ Symbol & $NFL$
 Units & Pa
 \\ \midrule \\
 Equation & \begin{displaymath}
-           NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}
+           NFL=\frac{\hat{q}_{tol} E h^{4}}{\left(a b\right)^{2}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$NFL$ is the non-factored load (Pa)}
-              \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
+              \item{$\hat{q}_{tol}$ is the tolerable load (Unitless)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
               \item{$h$ is the minimum thickness (m)}
               \item{$a$ is the plate length (long dimension) (m)}
@@ -601,7 +601,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
-        ${\hat{q}_{tol}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{DD: tolLoad}.
+        $\hat{q}_{tol}$ is the tolerable load defined in \hyperref[DD:tolLoad]{DD: tolLoad}.
         \hyperref[assumpSV]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -626,10 +626,10 @@ Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
            GTF=\begin{cases}
-1, & g=\text{``AN"}\\
+               1, & g=\text{``AN"}\\
 4, & g=\text{``FT"}\\
 2, & g=\text{``HS"}
-\end{cases}
+               \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -698,22 +698,22 @@ RefBy & \hyperref[DD:stressDistFac]{DD: stressDistFac}
 \\ \midrule \\
 Label & Tolerable load
 \\ \midrule \\
-Symbol & ${\hat{q}_{tol}}$
+Symbol & $\hat{q}_{tol}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\hat{q}_{tol}}=interpY\left(\text{``SDF.txt"},AR,{J_{tol}}\right)
+           \hat{q}_{tol}=interpY\left(\text{``SDF.txt"},AR,J_{tol}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
+              \item{$\hat{q}_{tol}$ is the tolerable load (Unitless)}
               \item{$interpY$ is the interpY (Unitless)}
               \item{$AR$ is the aspect ratio (Unitless)}
-              \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
+              \item{$J_{tol}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect} using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in \hyperref[DD:sdfTol]{DD: sdfTol} and \hyperref[DD:aspectRatio]{DD: aspectRatio}, respectively.
+Notes & $\hat{q}_{tol}$ is the tolerable load which is obtained from \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect} using $J_{tol}$ and aspect ratio as parameters using interpolation. Calculations of $J_{tol}$ and $AR$ are defined in \hyperref[DD:sdfTol]{DD: sdfTol} and \hyperref[DD:aspectRatio]{DD: aspectRatio}, respectively.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -731,17 +731,17 @@ RefBy & \hyperref[DD:nFL]{DD: nFL}
 \\ \midrule \\
 Label & Stress distribution factor (Function) based on Pbtol
 \\ \midrule \\
-Symbol & ${J_{tol}}$
+Symbol & $J_{tol}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {J_{tol}}=\ln\left(\ln\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} LDF}\right)
+           J_{tol}=\ln\left(\ln\left(\frac{1}{1-P_{btol}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} LDF}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
-              \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
+              \item{$J_{tol}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
+              \item{$P_{btol}$ is the tolerable probability of breakage (Unitless)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
@@ -751,11 +751,11 @@ Description & \begin{symbDescription}
               \item{$LDF$ is the load duration factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
+Notes & $J_{tol}$  is calculated with reference to  $P_{btol}$.
         $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
         $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
-        ${P_{btol}}$ is the tolerable probability entered by the user.
+        $P_{btol}$ is the tolerable probability entered by the user.
         \hyperref[assumpSV]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -779,14 +779,14 @@ Symbol & $SD$
 Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
-           SD=\sqrt{{SD_{x}}^{2}+{SD_{y}}^{2}+{SD_{z}}^{2}}
+           SD=\sqrt{SD_{x}^{2}+SD_{y}^{2}+SD_{z}^{2}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$SD$ is the stand off distance (m)}
-              \item{${SD_{x}}$ is the stand off distance ($x$-component) (m)}
-              \item{${SD_{y}}$ is the stand off distance ($y$-component) (m)}
-              \item{${SD_{z}}$ is the stand off distance ($z$-component) (m)}
+              \item{$SD_{x}$ is the stand off distance ($x$-component) (m)}
+              \item{$SD_{y}$ is the stand off distance ($y$-component) (m)}
+              \item{$SD_{z}$ is the stand off distance ($z$-component) (m)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -837,16 +837,16 @@ RefBy & \hyperref[DD:tolLoad]{DD: tolLoad} and \hyperref[DD:stressDistFac]{DD: s
 \\ \midrule \\
 Label & Explosive mass in equivalent weight of TNT
 \\ \midrule \\
-Symbol & ${w_{TNT}}$
+Symbol & $w_{TNT}$
 \\ \midrule \\
 Units & kg
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {w_{TNT}}=w TNT
+           w_{TNT}=w TNT
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+              \item{$w_{TNT}$ is the explosive mass in equivalent weight of TNT (kg)}
               \item{$w$ is the charge weight (kg)}
               \item{$TNT$ is the TNT equivalent factor (Unitless)}
               \end{symbDescription}
@@ -867,16 +867,16 @@ RefBy & \hyperref[DD:calofDemand]{DD: calofDemand}
 \\ \midrule \\
 Label & Probability of breakage
 \\ \midrule \\
-Symbol & ${P_{b}}$
+Symbol & $P_{b}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {P_{b}}=1-e^{-B}
+           P_{b}=1-e^{-B}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${P_{b}}$ is the probability of breakage (Unitless)}
+              \item{$P_{b}$ is the probability of breakage (Unitless)}
               \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
@@ -939,17 +939,17 @@ Symbol & $q$
 Units & Pa
 \\ \midrule \\
 Equation & \begin{displaymath}
-           q=interpY\left(\text{``TSD.txt"},SD,{w_{TNT}}\right)
+           q=interpY\left(\text{``TSD.txt"},SD,w_{TNT}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$q$ is the applied load (demand) (Pa)}
               \item{$interpY$ is the interpY (Unitless)}
               \item{$SD$ is the stand off distance (m)}
-              \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+              \item{$w_{TNT}$ is the explosive mass in equivalent weight of TNT (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $q$, or demand, is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
+Notes & $q$, or demand, is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($SD$) and $w_{TNT}$ as parameters. $w_{TNT}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -971,30 +971,30 @@ The goal \hyperref[willBreakGS]{GS: Predict-Glass-Withstands-Explosion} is met b
 \\ \midrule \\
 Label & Safety Req-Pb
 \\ \midrule \\
-Input & ${P_{b}}$, ${P_{btol}}$
+Input & $P_{b}$, $P_{btol}$
 \\ \midrule \\
 Output & $is-safePb$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {P_{b}}>0
+                    P_{b}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    {P_{btol}}>0
+                    P_{btol}>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           is-safePb={P_{b}}<{P_{btol}}
+           is-safePb=P_{b}<P_{btol}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$is-safePb$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
-              \item{${P_{b}}$ is the probability of breakage (Unitless)}
-              \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
+              \item{$P_{b}$ is the probability of breakage (Unitless)}
+              \item{$P_{btol}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safePb$ (from \hyperref[IM:isSafeLR]{IM: isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safePb$ (from \hyperref[IM:isSafeLR]{IM: isSafeLR}) are either both True or both False. $P_{b}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. $P_{btol}$ is the tolerable probability of breakage entered by the user.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -1052,19 +1052,19 @@ RefBy & \hyperref[IM:isSafePb]{IM: isSafePb}
 \\
 \midrule
 \endhead
-$a$ & $a>0\land{}a\geq{}b$ & ${d_{min}}\leq{}a\leq{}{d_{max}}$ & $1.5$ m & 10$\%$
+$a$ & $a>0\land{}a\geq{}b$ & $d_{min}\leq{}a\leq{}d_{max}$ & $1.5$ m & 10$\%$
 \\
-$AR$ & $AR\geq{}1$ & $AR\leq{}{AR_{max}}$ & $1.5$ & 10$\%$
+$AR$ & $AR\geq{}1$ & $AR\leq{}AR_{max}$ & $1.5$ & 10$\%$
 \\
-$b$ & $0<b\leq{}a$ & ${d_{min}}\leq{}b\leq{}{d_{max}}$ & $1.2$ m & 10$\%$
+$b$ & $0<b\leq{}a$ & $d_{min}\leq{}b\leq{}d_{max}$ & $1.2$ m & 10$\%$
 \\
-${P_{btol}}$ & $0<{P_{btol}}<1$ & -- & $0.008$ & 0.1$\%$
+$P_{btol}$ & $0<P_{btol}<1$ & -- & $0.008$ & 0.1$\%$
 \\
-$SD$ & $SD>0$ & ${SD_{min}}\leq{}SD\leq{}{SD_{max}}$ & $45.0$ m & 10$\%$
+$SD$ & $SD>0$ & $SD_{min}\leq{}SD\leq{}SD_{max}$ & $45.0$ m & 10$\%$
 \\
 $TNT$ & $TNT>0$ & -- & $1.0$ & 10$\%$
 \\
-$w$ & $w>0$ & ${w_{min}}\leq{}w\leq{}{w_{max}}$ & $42.0$ kg & 10$\%$
+$w$ & $w>0$ & $w_{min}\leq{}w\leq{}w_{max}$ & $42.0$ kg & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -1076,7 +1076,7 @@ $w$ & $w>0$ & ${w_{min}}\leq{}w\leq{}{w_{max}}$ & $42.0$ kg & 10$\%$
 \\
 \midrule
 \endhead
-${P_{b}}$ & $0<{P_{b}}<1$
+$P_{b}$ & $0<P_{b}<1$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -1099,7 +1099,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]If $is-safePb\land{}is-safeLR$ (from \hyperref[TM:isSafeProb]{TM: isSafeProb} and \hyperref[TM:isSafeLoad]{TM: isSafeLoad}), output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \item[Output-Quantities:\phantomsection\label{outputQuants}]Output the quantities from \hyperref[Table:ReqOutputs]{Table:ReqOutputs}.
 \end{itemize}
-\begin{longtabu}{l X[l] l}
+\begin{longtable}{l l l}
 \toprule
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
@@ -1111,13 +1111,13 @@ $b$ & Plate width (short dimension) & m
 \\
 $g$ & Glass type $g\in{}\{AN,FT,HS\}$ & --
 \\
-${P_{btol}}$ & Tolerable probability of breakage & --
+$P_{btol}$ & Tolerable probability of breakage & --
 \\
-${SD_{x}}$ & stand off distance ($x$-component) & m
+$SD_{x}$ & stand off distance ($x$-component) & m
 \\
-${SD_{y}}$ & stand off distance ($y$-component) & m
+$SD_{y}$ & stand off distance ($y$-component) & m
 \\
-${SD_{z}}$ & stand off distance ($z$-component) & m
+$SD_{z}$ & stand off distance ($z$-component) & m
 \\
 $t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & mm
 \\
@@ -1128,7 +1128,7 @@ $w$ & Charge weight & kg
 \bottomrule
 \caption{Required Inputs following \hyperref[inputGlassProps]{FR: Input-Glass-Props}}
 \label{Table:ReqInputs}
-\end{longtabu}
+\end{longtable}
 \begin{longtable}{l l l l}
 \toprule
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}
@@ -1153,7 +1153,7 @@ $m$ & Surface flaw parameter & \hyperref[assumpSV]{A: standardValues} & $\frac{\
 \\
 $SD$ & Stand off distance & \hyperref[DD:standOffDist]{DD: standOffDist} & m
 \\
-${t_{d}}$ & Duration of load & \hyperref[assumpSV]{A: standardValues} & s
+$t_{d}$ & Duration of load & \hyperref[assumpSV]{A: standardValues} & s
 \\
 \bottomrule
 \caption{Required Assignments following \hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}}
@@ -1179,13 +1179,13 @@ $is-safePb$ & Safety Req-Pb & \hyperref[IM:isSafePb]{IM: isSafePb} & --
 \\
 $J$ & Stress distribution factor (Function) & \hyperref[DD:stressDistFac]{DD: stressDistFac} & --
 \\
-${J_{tol}}$ & Stress distribution factor (Function) based on Pbtol & \hyperref[DD:sdfTol]{DD: sdfTol} & --
+$J_{tol}$ & Stress distribution factor (Function) based on Pbtol & \hyperref[DD:sdfTol]{DD: sdfTol} & --
 \\
 $NFL$ & Non-factored load & \hyperref[DD:nFL]{DD: nFL} & Pa
 \\
 $\hat{q}$ & Dimensionless load & \hyperref[DD:dimlessLoad]{DD: dimlessLoad} & --
 \\
-${\hat{q}_{tol}}$ & Tolerable load & \hyperref[DD:tolLoad]{DD: tolLoad} & --
+$\hat{q}_{tol}$ & Tolerable load & \hyperref[DD:tolLoad]{DD: tolLoad} & --
 \\
 \bottomrule
 \caption{Required Outputs following \hyperref[outputQuants]{FR: Output-Quantities}}
@@ -1401,11 +1401,11 @@ This section contains the standard values that are used for calculations in Glas
 \\
 \midrule
 \endhead
-${AR_{max}}$ & maximum aspect ratio & $5.0$ & --
+$AR_{max}$ & maximum aspect ratio & $5.0$ & --
 \\
-${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $5.0$ & m
+$d_{max}$ & maximum value for one of the dimensions of the glass plate & $5.0$ & m
 \\
-${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $0.1$ & m
+$d_{min}$ & minimum value for one of the dimensions of the glass plate & $0.1$ & m
 \\
 $E$ & modulus of elasticity of glass & $71.7\cdot{}10^{9}$ & Pa
 \\
@@ -1415,15 +1415,15 @@ $LSF$ & load share factor & $1$ & --
 \\
 $m$ & surface flaw parameter & $7.0$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-${SD_{max}}$ & maximum stand off distance permissible for input & $130.0$ & m
+$SD_{max}$ & maximum stand off distance permissible for input & $130.0$ & m
 \\
-${SD_{min}}$ & minimum stand off distance permissible for input & $6.0$ & m
+$SD_{min}$ & minimum stand off distance permissible for input & $6.0$ & m
 \\
-${t_{d}}$ & duration of load & $3.0$ & s
+$t_{d}$ & duration of load & $3.0$ & s
 \\
-${w_{max}}$ & maximum permissible input charge weight & $910.0$ & kg
+$w_{max}$ & maximum permissible input charge weight & $910.0$ & kg
 \\
-${w_{min}}$ & minimum permissible input charge weight & $4.5$ & kg
+$w_{min}$ & minimum permissible input charge weight & $4.5$ & kg
 \\
 \bottomrule
 \caption{Auxiliary Constants}

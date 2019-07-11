@@ -1,6 +1,6 @@
 module Drasil.SWHS.Body where
 
-import Language.Drasil hiding (organization, section, sec)
+import Language.Drasil hiding (organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB,
   SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
@@ -222,14 +222,11 @@ theory = getTraceMapFromTM $ getSCSSub mkSRS
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
-section :: [Section]
-section = sec
-
 labCon :: [LabelledContent]
 labCon = [dataConTable1, inputInitQuantsTable]
 
-sec :: [Section]
-sec = extractSection srs
+section :: [Section]
+section = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

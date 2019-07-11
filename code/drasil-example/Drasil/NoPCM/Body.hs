@@ -1,6 +1,6 @@
 module Drasil.NoPCM.Body where
 
-import Language.Drasil hiding (section, sec)
+import Language.Drasil hiding (section, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
   SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
@@ -196,14 +196,11 @@ concIns =
  goals ++ funcReqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
  [likeChgTLH] ++ unlikelyChgs
 
-section :: [Section]
-section = sec
-
 labCon :: [LabelledContent]
 labCon = [inputInitQuantsTable, dataConstTable1]
 
-sec :: [Section]
-sec = extractSection srs
+section :: [Section]
+section = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

@@ -2,7 +2,7 @@ module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
-import Language.Drasil hiding (organization, section, sec)
+import Language.Drasil hiding (organization, section)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
@@ -180,14 +180,11 @@ theory = getTraceMapFromTM $ getSCSSub mkSRS
 concIns :: [ConceptInstance]
 concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
-section :: [Section]
-section = sec
-
 labelledCon :: [LabelledContent]
 labelledCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
 
-sec :: [Section]
-sec = extractSection srs
+section :: [Section]
+section = extractSection srs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw unitsColl)

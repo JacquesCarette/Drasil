@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.Body where
 
-import Language.Drasil hiding (Vector, organization, section, sec)
+import Language.Drasil hiding (Vector, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
   TraceMap, ccss, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
@@ -134,10 +134,7 @@ concIns :: [ConceptInstance]
 concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
 section :: [Section]
-section = sec
-
-sec :: [Section]
-sec = extractSection srs
+section = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

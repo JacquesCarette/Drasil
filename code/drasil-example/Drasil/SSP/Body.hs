@@ -1,6 +1,6 @@
 module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
 
-import Language.Drasil hiding (number, organization, Verb, section, sec)
+import Language.Drasil hiding (number, organization, Verb, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
   SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
@@ -171,10 +171,7 @@ concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
 section :: [Section]
-section = sec
-
-sec :: [Section]
-sec = extractSection srs
+section = extractSection srs
 
 labCon :: [LabelledContent]
 labCon = [figPhysSyst, figIndexConv, figForceActing, 

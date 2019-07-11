@@ -81,7 +81,7 @@ srs :: Document
 srs = mkDoc mkSRS for si
 
 printSetting :: PrintingInformation
-printSetting = PI symMap defaultConfiguration
+printSetting = PI symbMap defaultConfiguration
 
 resourcePath :: String
 resourcePath = "../../../datafiles/SWHS/"
@@ -92,7 +92,7 @@ units = map unitWrapper [metre, kilogram, second] ++
 --Will there be a table of contents?
 
 unitsColl :: [UnitDefn]
-unitsColl = collectUnits symMap symbTT
+unitsColl = collectUnits symbMap symbTT
 
 si :: SystemInformation
 si = SI {
@@ -108,13 +108,13 @@ si = SI {
   _defSequence = [] :: [Block QDefinition],
   _constraints = constrained,
   _constants = specParamValList,
-  _sysinfodb = symMap,
+  _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB
 }
 
-symMap :: ChunkDB
-symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
+symbMap :: ChunkDB
+symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
   ++ map nw thermocon ++ map nw units ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
@@ -142,10 +142,10 @@ acronyms :: [CI]
 acronyms = ciGetDocDesc mkSRS
 
 shortTT :: [IdeaDict]
-shortTT = concatMap (`getIdeaDict` symMap) $ getDocDesc mkSRS
+shortTT = concatMap (`getIdeaDict` symbMap) $ getDocDesc mkSRS
 
 symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symbMap
 
 mkSRS :: DocDesc
 mkSRS = [RefSec $ RefProg intro [

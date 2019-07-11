@@ -77,11 +77,8 @@ instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
 derivation :: (HasDerivation c, HasShortName c, Referable c) => c -> Contents
-derivation c
-  | Nothing                 <- der = mkParagraph EmptyS
-  | (Just (Derivation h d)) <- der = LlC $ llcc (makeRef2 c) $ DerivBlock h $ map makeDerivCons d
-  | _                       <- der = error "How did you get here in derivation?"
-  where der = (c ^. derivations)
+derivation c = maybe (mkParagraph EmptyS)
+  (\(Derivation h d) -> LlC $ llcc (makeRef2 c) $ DerivBlock h $ map makeDerivCons d) $ c ^. derivations
 
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.

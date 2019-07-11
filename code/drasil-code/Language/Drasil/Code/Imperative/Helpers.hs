@@ -2,10 +2,11 @@
 
 module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   ScopeTag(..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, blank,
-  verticalComma,angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,
-  vibmap, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, 
-  liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
+  ParamData(..), pd, updateParamDoc, StateVarData(..), svd, TypeData(..), td, 
+  ValData(..), vd, updateValDoc, blank,verticalComma,angles,doubleQuotedText,
+  himap,hicat,vicat,vibcat,vmap,vimap,vibmap, emptyIfEmpty, emptyIfNull, 
+  mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, 
+  lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
   getInnerType, getNestDegree, convType
 ) where
 
@@ -17,7 +18,7 @@ import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
-  (<>), comma, punctuate)
+  (<>), comma, punctuate, empty, isEmpty)
 
 class Pair p where
   pfst :: p x y a -> x a
@@ -43,6 +44,15 @@ data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag,
 
 mthd :: Bool -> ScopeTag -> Doc -> MethodData
 mthd = MthD 
+
+data ParamData = PD {paramName :: String, paramType :: TypeData, 
+  paramDoc :: Doc} deriving Eq
+
+pd :: String -> TypeData -> Doc -> ParamData
+pd = PD 
+
+updateParamDoc :: (Doc -> Doc) -> ParamData -> ParamData
+updateParamDoc f v = pd (paramName v) (paramType v) ((f . paramDoc) v)
 
 data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc, 
   destructSts :: (Doc, Terminator)}
@@ -97,6 +107,12 @@ vimap c f = vicat c . map f
 
 vibmap :: (a -> Doc) -> [a] -> Doc
 vibmap = vimap blank
+
+emptyIfEmpty :: Doc -> Doc -> Doc
+emptyIfEmpty ifDoc elseDoc = if isEmpty ifDoc then empty else elseDoc
+
+emptyIfNull :: [a] -> Doc -> Doc
+emptyIfNull lst elseDoc = if null lst then empty else elseDoc
 
 mapPairFst :: (a -> b) -> (a, c) -> (b, c)
 mapPairFst f (a, c) = (f a, c)

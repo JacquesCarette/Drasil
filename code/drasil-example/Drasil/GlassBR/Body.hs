@@ -157,7 +157,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
   (map cw symb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) label refBy
   dataDefs insModel genDef theory concIns
-  section labelledCon
+  section labCon
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
@@ -180,8 +180,8 @@ theory = getTraceMapFromTM $ getSCSSub mkSRS
 concIns :: [ConceptInstance]
 concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 
-labelledCon :: [LabelledContent]
-labelledCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
+labCon :: [LabelledContent]
+labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
 
 section :: [Section]
 section = extractSection srs
@@ -190,7 +190,7 @@ usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw unitsColl)
  ([] :: [ConceptChunk]) unitsColl label refBy
   dataDefs insModel genDef theory concIns
-  section labelledCon
+  section labCon
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

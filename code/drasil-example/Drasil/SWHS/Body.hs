@@ -2,29 +2,24 @@ module Drasil.SWHS.Body where
 
 import Language.Drasil hiding (organization, section, sec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB,
-  SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
-  getIdeaDict, rdb, refdb, _authors, _concepts, _constants, _constraints,
-  _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants,
-  _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Database.Drasil (Block, ChunkDB, ReferenceDB,
+  SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
+  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
+  _quants, _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel)
 import Utils.Drasil
 
 import Control.Lens ((^.))
-import qualified Data.Map as Map
 
-import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocDesc, DocSection (..),
+import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   Field(..), Fields, LFunc(TermExcept), Literature(Doc', Lit), IntroSec(IntroProg),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
   RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose),
-  ReqrmntSec(..), ReqsSub(..), SSDSub(..), SolChSpec (SCSProg), SSDSec(..), 
-  InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
-  TraceabilitySec(TraceabilityProg), LCsSec(..), UCsSec(..),
-  GSDSec(..), GSDSub(..), ProblemDescription(PDProg), PDSub(..),
-  dataConstraintUncertainty, intro, mkDoc, outDataConstTbl, tsymb'',
-  getDocDesc, egetDocDesc, ciGetDocDesc, generateTraceMap,
-  generateTraceMap', getTraceMapFromTM, getTraceMapFromGD, getTraceMapFromDD,
-  getTraceMapFromIM, getSCSSub, traceMatStandard)
+  ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
+  SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
+  TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
+  ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty, intro,
+  mkDoc, outDataConstTbl, tsymb'', traceMatStandard)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import Data.Drasil.Concepts.Thermodynamics (thermocon)
@@ -78,16 +73,13 @@ thisSi = map unitWrapper [metre, kilogram, second] ++
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
-checkSi :: [UnitDefn]
-checkSi = collectUnits symMap symbTT
-
 si :: SystemInformation
 si = SI {
   _sys = swhsPCM,
   _kind = srs, 
   _authors = [thulasi, brooks, spencerSmith],
   _quants = symbols,
-  _concepts = symbTT,
+  _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
   _datadefs = dataDefs,
   _inputs = inputs,
@@ -112,14 +104,11 @@ symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (thisSi ++ [m_2, m_3]) label refBy
-  dataDefn insModel genDef theory concIns
-  section labCon
+  (thisSi ++ [m_2, m_3]) dataDefs insModel genDefs theory concIns sec labCon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronymsFull ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi label refBy dataDefn insModel genDef
- theory concIns section labCon
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -127,20 +116,7 @@ refDB = rdb citations concIns
 printSetting :: PrintingInformation
 printSetting = PI symMap defaultConfiguration
 
-  --Note: The second symbols here is
-    -- Redundant b/c the unitals are not really concepts (yet). There
-    -- Will still likely be a better way to do this.
-  --FIXME: Should be all Named, not just acronyms at the end.
-acronyms :: [CI]
-acronyms = ciGetDocDesc mkSRS
-
-shortTT :: [IdeaDict]
-shortTT = concatMap (`getIdeaDict` symMap) $ getDocDesc mkSRS
-
-symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap
-
-mkSRS :: DocDesc
+mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [
     TUnits,
     tsymb'' tSymbIntro (TermExcept [uNormalVect]),
@@ -162,28 +138,26 @@ mkSRS = [RefSec $ RefProg intro [
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
         , PhySysDesc progName physSystParts figTank []
-        , Goals goalInputs goals]
+        , Goals goalInputs]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
-        , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefs ShowDerivation
+        , TMs [] (Label : stdFields)
+        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-         [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
+         ShowDerivation
         , Constraints  EmptyS dataConstraintUncertainty dataConTail
          [dataConTable1, dataConTable3]
         , CorrSolnPpties propsDeriv
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqs [inputInitQuantsTable],
-    NonFReqsSub nfRequirements
+    FReqsSub [inputInitQuantsTable],
+    NonFReqsSub
   ],
-  LCsSec $ LCsProg likelyChgs,
-  UCsSec $ UCsProg unlikelyChgs,
-  TraceabilitySec $
-    TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
-      (map (LlC . fst) traceabilityMatrices) [],
+  LCsSec,
+  UCsSec,
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]
 
@@ -195,29 +169,15 @@ tSymbIntro = [TSPurpose, SymbConvention
 srs' :: Document
 srs' = mkDoc mkSRS for si
 
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
- 
-refBy :: RefbyMap
-refBy = generateRefbyMap label 
-
-dataDefn :: [DataDefinition]
-dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
-
 insModel :: [InstanceModel]
-insModel = getTraceMapFromIM $ getSCSSub mkSRS
-
-genDef :: [GenDefn]
-genDef = getTraceMapFromGD $ getSCSSub mkSRS
+insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
 theory :: [TheoryModel]
-theory = getTraceMapFromTM $ getSCSSub mkSRS
+theory = [consThermE, sensHtE, latentHtE]
 
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
-
-section :: [Section]
-section = sec
+  ++ nfRequirements
 
 labCon :: [LabelledContent]
 labCon = [dataConTable1, inputInitQuantsTable]
@@ -624,9 +584,6 @@ outputConstraints = [tempW, tempPCM, watE, pcmE]
 --------------------------------------------------
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
-
-traceabilityMatrices :: [(LabelledContent, [Sentence])]
-traceabilityMatrices = traceMatStandard si
 
 ------------------------
 -- Traceabilty Graphs --

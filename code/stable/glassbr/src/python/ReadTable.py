@@ -22,7 +22,7 @@ def func_read_table(filename, z_vector, x_matrix, y_matrix):
     lines = []
     linetokens = []
     infile = open(filename, "r")
-    line = infile.readline()
+    line = infile.readline().rstrip()
     linetokens = line.split(",")
     for j in range(0, int((len(linetokens) / 2)), 1):
         z_vector.append(float(linetokens[((j * 2) + 1)]))

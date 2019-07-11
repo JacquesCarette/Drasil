@@ -164,5 +164,6 @@ convType String = S.string
 convType (List t) = S.listType S.dynamic_ (convType t)
 convType (Iterator t) = S.iterator $ convType t
 convType (Object n) = S.obj n
+convType (Enum n) = S.enumType n
 convType Void = S.void
 convType File = error "convType: File ?"

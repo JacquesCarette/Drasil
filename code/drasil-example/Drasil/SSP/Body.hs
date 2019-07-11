@@ -1,4 +1,4 @@
-module Drasil.SSP.Body (srs, si, symMap, printSetting) where
+module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
 
 import Language.Drasil hiding (number, organization, Verb, section, sec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -76,7 +76,7 @@ srs :: Document
 srs = mkDoc mkSRS for si
 
 printSetting :: PrintingInformation
-printSetting = PI symMap defaultConfiguration
+printSetting = PI symbMap defaultConfiguration
 
 resourcePath :: String
 resourcePath = "../../../datafiles/SSP/"
@@ -95,7 +95,7 @@ si = SI {
   _defSequence = [(\x -> Parallel (head x) (tail x)) $ map qdFromDD SSP.dataDefs],
   _constraints = constrained,
   _constants = [],
-  _sysinfodb = symMap,
+  _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB
 }
@@ -147,7 +147,7 @@ units :: [UnitDefn]
 units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
 
 unitsColl :: [UnitDefn]
-unitsColl = collectUnits symMap symbTT
+unitsColl = collectUnits symbMap symbTT
 
 label :: TraceMap
 label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
@@ -188,8 +188,8 @@ traceyMatrix = traceMatStandard si
 
 
 -- SYMBOL MAP HELPERS --
-symMap :: ChunkDB
-symMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
+symbMap :: ChunkDB
+symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
   ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
   ++ map nw physicsTMs
@@ -210,7 +210,7 @@ refDB :: ReferenceDB
 refDB = rdb citations concIns
 
 symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symbMap
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

@@ -224,7 +224,7 @@ specLength EmptyS    = 0
 specLength _         = 0
 
 dontCount :: [D]
-dontCount = map (pure . text . (\x -> [x])) "\\/[]{}()_^$:"
+dontCount = map (pure . text . (: [])) "\\/[]{}()_^$:"
 
 makeHeaders :: [Spec] -> D
 makeHeaders ls = hpunctuate (text " & ") (map (commandD "textbf" . spec) ls) %% pure dbs

@@ -128,7 +128,7 @@ citeInfo = custRef' "\\cite"
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
-count, usepackage :: String -> D
+count, mathbb, usepackage :: String -> D
 count      = command "newcounter"
 -- changed to command "newcounter" from command "count" (I assume this was
 -- what was intended?)

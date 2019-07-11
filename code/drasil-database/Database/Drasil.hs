@@ -10,7 +10,7 @@ module Database.Drasil (
   , termTable, theoryModelLookup, theoryModelTable, traceLookup, traceMap
   , traceTable, unitTable
   -- ChunkDB.GetChunk
-  , ccss, combine, getIdeaDict, vars
+  , ccss, ccss', combine, getIdeaDict, vars
   -- SystemInformation
   , Block(Parallel), RefMap, ReferenceDB, SystemInformation(..)
   , citeDB, rdb, simpleMap

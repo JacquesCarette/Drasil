@@ -218,7 +218,8 @@ class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) =>
 -- BooleanComparisons of BooleanExpressions and also BooleanExpressions of BooleanComparisons.
 -- This has the drawback of requiring a NumericExpression constraint for the first
 -- 3 functions here, even though they don't really need it.
-class (ValueSym repr, NumericExpression repr) => BooleanExpression repr where
+class (ValueSym repr, NumericExpression repr) => 
+  BooleanExpression repr where
   (?!)  :: repr (Value repr) -> repr (Value repr)
   infixr 6 ?!
   (?&&) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
@@ -285,18 +286,12 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   indexOf :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
-  stringEqual :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-
-  castObj        :: repr (Function repr) -> repr (Value repr) -> 
-    repr (Value repr)
-  castStrToFloat :: repr (Value repr) -> repr (Value repr)
+  cast :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr)
 
 class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   type Function repr
   func           :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Function repr)
-  cast           :: repr (StateType repr) -> repr (Function repr)
-  castListToInt  :: repr (Function repr)
   get            :: repr (Value repr) -> repr (Function repr)
   set            :: repr (Value repr) -> repr (Value repr) -> 
     repr (Function repr)
@@ -314,11 +309,6 @@ class (ValueSym repr, FunctionSym repr, Selector repr) =>
   listAccess :: repr (StateType repr) -> repr (Value repr) -> 
     repr (Function repr)
   listSet    :: repr (Value repr) -> repr (Value repr) -> repr (Function repr)
-
-  listAccessEnum   :: repr (StateType repr) -> repr (Value repr) -> 
-    repr (Function repr)
-  listSetEnum      :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Function repr)
 
   at :: repr (StateType repr) -> Label -> repr (Function repr)
 
@@ -375,23 +365,11 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   printFileStr   :: repr (Value repr) -> String -> repr (Statement repr)
   printFileStrLn :: repr (Value repr) -> String -> repr (Statement repr)
 
-  getIntInput        :: repr (Value repr) -> repr (Statement repr)
-  getFloatInput      :: repr (Value repr) -> repr (Statement repr)
-  getBoolInput       :: repr (Value repr) -> repr (Statement repr)
-  getStringInput     :: repr (Value repr) -> repr (Statement repr)
-  getCharInput       :: repr (Value repr) -> repr (Statement repr)
-  discardInput       :: repr (Statement repr)
-  getIntFileInput    :: repr (Value repr) -> repr (Value repr) -> 
+  getInput         :: repr (Value repr) -> repr (Statement repr)
+  discardInput     :: repr (Statement repr)
+  getFileInput     :: repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)
-  getFloatFileInput  :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Statement repr)
-  getBoolFileInput   :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Statement repr)
-  getStringFileInput :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Statement repr)
-  getCharFileInput   :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Statement repr)
-  discardFileInput   :: repr (Value repr) -> repr (Statement repr)
+  discardFileInput :: repr (Value repr) -> repr (Statement repr)
 
   openFileR :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
   openFileW :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
@@ -521,8 +499,6 @@ class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) =>
   privMVar :: Int -> repr (Value repr) -> repr (StateVar repr)
   pubMVar  :: Int -> repr (Value repr) -> repr (StateVar repr)
   pubGVar  :: Int -> repr (Value repr) -> repr (StateVar repr)
-  listStateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) -> 
-    repr (Value repr) -> repr (StateVar repr)
 
 class (StateVarSym repr, MethodSym repr) => ClassSym repr 
   where

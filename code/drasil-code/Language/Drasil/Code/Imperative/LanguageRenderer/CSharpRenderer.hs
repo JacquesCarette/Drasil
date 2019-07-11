@@ -21,8 +21,8 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, printDoc, outDoc,
-  printFileDocD, boolTypeDocD, 
-  intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, listTypeDocD, voidDocD,
+  printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD, 
+  typeDocD, enumTypeDocD, listTypeDocD, voidDocD,
   constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD, 
   stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
@@ -40,7 +40,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
   docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody, getterName, 
-  setterName, setMain, setEmpty)
+  setterName, setMain, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
   liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
@@ -138,7 +138,7 @@ instance StateTypeSym CSharpCode where
   listType p st = liftA2 listTypeDocD st (list p)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
-  enumType t = return $ typeDocD t
+  enumType t = return $ enumTypeDocD t
   iterator _ = error "Iterator-type variables do not exist in C#"
   void = return voidDocD
 
@@ -222,9 +222,9 @@ instance ValueSym CSharpCode where
   extVar l n t = liftA2 (vd (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
   self l = liftA2 (vd (Just "this")) (obj l) (return selfDocD)
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
-  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (obj en) 
+  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (enumType en) 
     (return $ enumElemDocD en e)
-  enumVar e en = var e (obj en)
+  enumVar e en = var e (enumType en)
   objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
     (fmap valType v) (liftA2 objVarDocD o v)
   objVarSelf l n t = liftA2 (vd (Just $ "this." ++ n)) t (liftA2 objVarDocD 
@@ -315,16 +315,11 @@ instance Selector CSharpCode where
 
   indexOf l v = objAccess l (func "IndexOf" int [v])
 
-  stringEqual v1 v2 = v1 ?== v2
-
-  castObj f v = liftA2 mkVal (fmap funcType f) (liftA2 castObjDocD f v)
-  castStrToFloat v = funcApp "Double.Parse" float [v]
+  cast = csCast
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT = liftA2 fd targT (fmap castDocD targT)
-  castListToInt = cast int
   get v = func (getterName $ valueName v) (valueType v) []
   set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
@@ -336,12 +331,9 @@ instance FunctionSym CSharpCode where
   iterEnd _ = error "Attempt to use iterEnd in C#, but C# has no iterators"
 
 instance SelectorFunction CSharpCode where
-  listAccess t v = liftA2 fd t (fmap listAccessDocD v)
+  listAccess t v = liftA2 fd t (listAccessDocD <$> intValue v)
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
-    (liftA2 listSetDocD i v)
-
-  listAccessEnum t v = listAccess t (castObj (cast int) v)
-  listSetEnum i = listSet (castObj (cast int) i)
+    (liftA2 listSetDocD (intValue i) v)
 
   at t l = listAccess t (var l int)
 
@@ -379,21 +371,9 @@ instance StatementSym CSharpCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getIntInput v = mkSt <$> liftA2 (csInput "Int32.Parse") v inputFunc
-  getFloatInput v = mkSt <$> liftA2 (csInput "Double.Parse") v inputFunc
-  getBoolInput _ = error "Boolean input not yet implemented for C#"
-  getStringInput v = mkSt <$> liftA2 (csInput "") v inputFunc
-  getCharInput _ = error "Char input not yet implemented for C#"
+  getInput v = mkSt <$> liftA2 csInput v inputFunc
   discardInput = mkSt <$> fmap csDiscardInput inputFunc
-
-  getIntFileInput f v = mkSt <$> liftA2 (csInput "Int32.Parse") v 
-    (fmap csFileInput f)
-  getFloatFileInput f v = mkSt <$> liftA2 (csInput "Double.Parse") v 
-    (fmap csFileInput f)
-  getBoolFileInput _ _ = error "Boolean input not yet implemented for C#"
-  getStringFileInput f v = mkSt <$> liftA2 (csInput "") v
-    (fmap csFileInput f)
-  getCharFileInput _ _ = error "Char input not yet implemented for C#"
+  getFileInput f v = mkSt <$> liftA2 csInput v (fmap csFileInput f)
   discardFileInput f = valState $ fmap csFileInput f
 
   openFileR f n = mkSt <$> liftA3 csOpenFileR f n infile
@@ -401,7 +381,7 @@ instance StatementSym CSharpCode where
   openFileA f n = mkSt <$> liftA4 csOpenFileWorA f n outfile litTrue
   closeFile f = valState $ objMethodCall void f "Close" []
 
-  getFileInputLine = getStringFileInput
+  getFileInputLine = getFileInput
   discardFileLine f = valState $ fmap csFileInput f
   stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic_ string) 
     [s $. func "Split" (listType static_ string) [litChar d]]
@@ -519,7 +499,6 @@ instance StateVarSym CSharpCode where
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
-  listStateVar = stateVar
 
 instance ClassSym CSharpCode where
   -- Bool is True if the method is a main method, False otherwise
@@ -563,6 +542,12 @@ csInfileTypeDoc = td File (text "StreamReader")
 csOutfileTypeDoc :: TypeData
 csOutfileTypeDoc = td File (text "StreamWriter")
 
+csCast :: CSharpCode (StateType CSharpCode) -> CSharpCode (Value CSharpCode) -> 
+  CSharpCode (Value CSharpCode)
+csCast t v = csCast' (getType t) (getType $ valueType v)
+  where csCast' Float String = funcApp "Double.Parse" float [v]
+        csCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
+
 csThrowDoc :: ValData -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
   parens (valDoc errMsg)
@@ -579,8 +564,15 @@ csTryCatch tb cb= vcat [
 csDiscardInput :: ValData -> Doc
 csDiscardInput = valDoc
 
-csInput :: Label -> ValData -> ValData -> Doc
-csInput it v inFn = valDoc v <+> equals <+> text it <> parens (valDoc inFn)
+csInput :: ValData -> ValData -> Doc
+csInput v inFn = valDoc v <+> equals <+> text (csInput' (cType $ valType v)) <> 
+  parens (valDoc inFn)
+  where csInput' Integer = "Int32.Parse"
+        csInput' Float = "Double.Parse"
+        csInput' Boolean = "Boolean.Parse"
+        csInput' String = ""
+        csInput' Char = "Char.Parse"
+        csInput' _ = error "Attempt to read value of unreadable type"
 
 csFileInput :: ValData -> ValData
 csFileInput f = vd (valName f) (valType f) (valDoc f <> dot <> text "ReadLine()")

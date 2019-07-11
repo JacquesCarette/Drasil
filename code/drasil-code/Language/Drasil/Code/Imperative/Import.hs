@@ -5,8 +5,7 @@ module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
-import Language.Drasil.Code.Code as C (Code(..), CodeType(List, Char, Float, 
-  String, Boolean, Integer))
+import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -719,8 +718,6 @@ convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division
-convExpr (BinaryOp Eq a b@(Str _)) = liftM2 stringEqual (convExpr a) 
-  (convExpr b) -- hack to deal with string equality
 convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr (Case l)      = doit l -- FIXME this is sub-optimal
   where
@@ -882,7 +879,7 @@ readData ddef = do
   where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Statement repr)]
         inData (Singleton v) = do
             vv <- variable (codeName v) (convType $ codeType v)
-            return [getFileInput (codeType v) v_infile vv]
+            return [getFileInput v_infile vv]
         inData JunkData = return [discardFileLine v_infile]
         inData (Line lp d) = do
           lnI <- lineData Nothing lp
@@ -910,7 +907,7 @@ readData ddef = do
         lineData s (Repeat p Nothing) = do
           pat <- patternData s p v_j
           return $ clearTemps s p ++ 
-            [forRange l_j (litInt 0) (castObj (cast int)
+            [forRange l_j (litInt 0) (cast int
               (listSizeAccess v_linetokens #/ litInt (toInteger $ length p))) 
               (litInt 1) ( bodyStatements pat )] ++ 
             appendTemps s p
@@ -961,7 +958,7 @@ readData ddef = do
           Entry -> Reader (State repr) [repr (Statement repr)]
         entryData s tokIndex (Entry v) = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
-          a <- assign' vv $ getCastFunc (codeType v)
+          a <- assign' vv $ cast (convType $ codeType v)
             (v_linetokens $. listAccess (listInnerType $ 
               valueType v_linetokens) tokIndex)
           return [a]
@@ -969,7 +966,7 @@ readData ddef = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
           return [
             valState $ vv $. listAppend 
-            (getCastFunc (getListType (codeType v) (toInteger $ length indx))
+            (cast (convType $ getListType (codeType v) (toInteger $ length indx))
             (v_linetokens $. listAccess (listInnerType $ valueType v_linetokens)
             tokIndex))]
         entryData _ _ JunkEntry = return []
@@ -991,20 +988,6 @@ readData ddef = do
         v_i = var l_i int
         l_j = "j"
         v_j = var l_j int
-
-getFileInput :: (RenderSym repr) => C.CodeType -> (repr (Value repr) -> repr
-  (Value repr) -> repr (Statement repr))
-getFileInput C.Boolean = getBoolFileInput
-getFileInput C.Integer = getIntFileInput
-getFileInput C.Float = getFloatFileInput
-getFileInput C.Char = getCharFileInput
-getFileInput C.String = getStringFileInput
-getFileInput _ = error "No getFileInput function for the given type"
-
-getCastFunc :: (RenderSym repr) => C.CodeType -> repr (Value repr) ->
-   repr (Value repr)
-getCastFunc C.Float = castStrToFloat
-getCastFunc t = castObj (cast $ convType t)
 
 getListType :: C.CodeType -> Integer -> C.CodeType
 getListType _ 0 = error "No index given"

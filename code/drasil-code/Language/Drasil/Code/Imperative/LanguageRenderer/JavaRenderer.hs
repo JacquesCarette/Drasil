@@ -23,10 +23,10 @@ import Language.Drasil.Code.Imperative.Build.AST (includeExt,
 import Language.Drasil.Code.Imperative.LanguageRenderer ( 
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
-  boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, listTypeDocD, voidDocD, 
-  constructDocD, stateParamDocD, paramListDocD, methodListDocD, stateVarDocD, 
-  stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
-  stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD,
+  boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
+  voidDocD, constructDocD, stateParamDocD, paramListDocD, methodListDocD, 
+  stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, 
+  whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD,
   varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
   commentDocD, mkSt, mkStNoEnd, notOpDocD, negateOpDocD, unExpr, typeUnExpr, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -39,7 +39,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody,
-  getterName, setterName, setMain, setEmpty)
+  getterName, setterName, setMain, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
   liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
@@ -142,7 +142,7 @@ instance StateTypeSym JavaCode where
   listType p st = liftA2 jListType st (list p)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
-  enumType t = return $ typeDocD t
+  enumType t = return $ enumTypeDocD t
   iterator _ = error "Iterator-type variables do not exist in Java"
   void = return voidDocD
 
@@ -226,9 +226,9 @@ instance ValueSym JavaCode where
   extVar l n t = liftA2 (vd (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
   self l = liftA2 (vd (Just "this")) (obj l) (return selfDocD)
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
-  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (obj en) 
+  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (enumType en) 
     (return $ enumElemDocD en e)
-  enumVar e en = var e (obj en)
+  enumVar e en = var e (enumType en)
   objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
     (fmap valType v) (liftA2 objVarDocD o v)
   objVarSelf _ = var
@@ -284,7 +284,7 @@ instance BooleanExpression JavaCode where
   (?<=) = liftA4 typeBinExpr lessEqualOp bool
   (?>) = liftA4 typeBinExpr greaterOp bool
   (?>=) = liftA4 typeBinExpr greaterEqualOp bool
-  (?==) = liftA4 typeBinExpr equalOp bool
+  (?==) = jEquality
   (?!=) = liftA4 typeBinExpr notEqualOp bool
   
 instance ValueExpression JavaCode where
@@ -319,16 +319,11 @@ instance Selector JavaCode where
 
   indexOf l v = objAccess l (func "indexOf" int [v])
 
-  stringEqual v1 str = objAccess v1 (func "equals" bool [str])
-
-  castObj f v = liftA2 mkVal (fmap funcType f) (liftA2 castObjDocD f v)
-  castStrToFloat v = funcApp "Double.parseDouble" float [v]
+  cast = jCast
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT = liftA2 fd targT (fmap castDocD targT)
-  castListToInt = func "ordinal" int []
   get v = func (getterName $ valueName v) (valueType v) []
   set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
@@ -340,11 +335,8 @@ instance FunctionSym JavaCode where
   iterEnd _ = error "Attempt to use iterEnd in Java, but Java has no iterators"
 
 instance SelectorFunction JavaCode where
-  listAccess t i = func "get" t [i]
-  listSet i v = func "set" (listType static_ $ fmap valType v) [i, v]
-
-  listAccessEnum t v = listAccess t (castObj (cast int) v)
-  listSetEnum i = listSet (castObj (cast int) i)
+  listAccess t i = func "get" t [intValue i]
+  listSet i v = func "set" (listType static_ $ fmap valType v) [intValue i, v]
 
   at t l = listAccess t (var l int)
 
@@ -383,25 +375,9 @@ instance StatementSym JavaCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getIntInput v = mkSt <$> liftA3 jInput' (return $ text "Integer.parseInt")
-    v inputFunc
-  getFloatInput v = mkSt <$> liftA3 jInput' (return $ 
-    text "Double.parseDouble") v inputFunc
-  getBoolInput v = mkSt <$> liftA3 jInput (return $ text "nextBoolean()") v 
-    inputFunc
-  getStringInput v = mkSt <$> liftA3 jInput (return $ text "nextLine()") v 
-    inputFunc
-  getCharInput _ = return (mkStNoEnd empty)
+  getInput v = mkSt <$> liftA2 jInput v inputFunc
   discardInput = mkSt <$> fmap jDiscardInput inputFunc
-  getIntFileInput f v = mkSt <$> liftA3 jInput' (return $ 
-    text "Integer.parseInt") v f
-  getFloatFileInput f v = mkSt <$> liftA3 jInput' (return $ 
-    text "Double.parseDouble") v f
-  getBoolFileInput f v = mkSt <$> liftA3 jInput (return $
-    text "nextBoolean()") v f
-  getStringFileInput f v = mkSt <$> liftA3 jInput (return $ 
-    text "nextLine()") v f
-  getCharFileInput _ _ = return (mkStNoEnd empty)
+  getFileInput f v = mkSt <$> liftA2 jInput v f
   discardFileInput f = mkSt <$> fmap jDiscardInput f
 
   openFileR f n = mkSt <$> liftA2 jOpenFileR f n
@@ -539,7 +515,6 @@ instance StateVarSym JavaCode where
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
-  listStateVar = stateVar
 
 instance ClassSym JavaCode where
   -- Bool is True if the method is a main method, False otherwise
@@ -600,6 +575,19 @@ jListType t lst = listTypeDocD t lst
 jArrayType :: JavaCode (StateType JavaCode)
 jArrayType = return $ td (List $ Object "Object") (text "Object[]")
 
+jEquality :: JavaCode (Value JavaCode) -> JavaCode (Value JavaCode) -> 
+  JavaCode (Value JavaCode)
+jEquality v1 v2 = jEquality' (getType $ valueType v2)
+  where jEquality' String = objAccess v1 (func "equals" bool [v2])
+        jEquality' _ = liftA4 typeBinExpr equalOp bool v1 v2
+
+jCast :: JavaCode (StateType JavaCode) -> JavaCode (Value JavaCode) -> 
+  JavaCode (Value JavaCode)
+jCast t v = jCast' (getType t) (getType $ valueType v)
+  where jCast' Float String = funcApp "Double.parseDouble" float [v]
+        jCast' Integer (Enum _) = v $. func "ordinal" int []
+        jCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
+
 jListDecDef :: ValData -> Doc -> Doc
 jListDecDef v vs = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
   typeDoc (valType v) <+> parens listElements
@@ -626,12 +614,16 @@ jTryCatch tb cb = vcat [
 jDiscardInput :: ValData -> Doc
 jDiscardInput inFn = valDoc inFn <> dot <> text "next()"
 
-jInput :: Doc -> ValData -> ValData -> Doc
-jInput it v inFn = valDoc v <+> equals <+> parens (valDoc inFn <> dot <> it)
-
-jInput' :: Doc -> ValData -> ValData -> Doc
-jInput' it v inFn = valDoc v <+> equals <+> it <> parens (valDoc inFn <> dot <> 
-  text "nextLine()")
+jInput :: ValData -> ValData -> Doc
+jInput v inFn = valDoc v <+> equals <+> jInput' (cType $ valType v) 
+  where jInput' Integer = text "Integer.parseInt" <> parens (valDoc inFn <> 
+          dot <> text "nextLine()")
+        jInput' Float = text "Double.parseDouble" <> parens (valDoc inFn <> 
+          dot <> text "nextLine()")
+        jInput' Boolean = valDoc inFn <> dot <> text "nextBoolean()"
+        jInput' String = valDoc inFn <> dot <> text "nextLine()"
+        jInput' Char = valDoc inFn <> dot <> text "next().charAt(0)"
+        jInput' _ = error "Attempt to read value of unreadable type"
 
 jOpenFileR :: ValData -> ValData -> Doc
 jOpenFileR f n = valDoc f <+> equals <+> new <+> text "Scanner" <> parens 
@@ -661,7 +653,7 @@ jListIndexExists greater lst index = parens (valDoc lst <> text ".length" <+>
 jAssignFromArray :: Int -> [JavaCode (Value JavaCode)] -> 
   [JavaCode (Statement JavaCode)]
 jAssignFromArray _ [] = []
-jAssignFromArray c (v:vs) = (v &= castObj (cast $ fmap valType v)
+jAssignFromArray c (v:vs) = (v &= cast (fmap valType v)
   (var ("outputs[" ++ show c ++ "]") (fmap valType v))) : jAssignFromArray (c+1) vs
 
 jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 

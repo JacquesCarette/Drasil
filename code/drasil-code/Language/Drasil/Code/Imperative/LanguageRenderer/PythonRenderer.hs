@@ -17,9 +17,9 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (
-  fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc,
-  intTypeDocD, floatTypeDocD, typeDocD, constructDocD, paramListDocD, 
+import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc', 
+  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
+  floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, 
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
   mkStNoEnd, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', 
@@ -128,7 +128,7 @@ instance StateTypeSym PythonCode where
   listType _ t = liftA2 td (fmap (List . cType) t) (return $ brackets empty)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
-  enumType t = return $ typeDocD t
+  enumType t = return $ enumTypeDocD t
   iterator _ = error "Iterator-type variables do not exist in Python"
   void = return $ td Void (text "NoneType")
 
@@ -202,9 +202,9 @@ instance ValueSym PythonCode where
   extVar l n t = liftA2 (vd (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
   self l = liftA2 (vd (Just "self")) (obj l) (return $ text "self")
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n + 1)) argsList)
-  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (obj en) 
+  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (enumType en) 
     (return $ enumElemDocD en e)
-  enumVar e en = var e (obj en)
+  enumVar e en = var e (enumType en)
   objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
     (fmap valType v) (liftA2 objVarDocD o v)
   objVarSelf l n t = liftA2 (vd (Just $ "self." ++ n)) t (liftA2 objVarDocD
@@ -292,16 +292,11 @@ instance Selector PythonCode where
   
   indexOf l v = objAccess l (func "index" int [v])
 
-  stringEqual v1 v2 = v1 ?== v2
-
-  castObj f v = liftA2 mkVal (fmap funcType f) (liftA2 castObjDocD f v)
-  castStrToFloat = castObj $ cast float
+  cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT = liftA2 fd targT (fmap typeDoc targT)
-  castListToInt = cast int
   get v = func (getterName $ valueName v) (valueType v) []
   set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
 
@@ -316,9 +311,6 @@ instance SelectorFunction PythonCode where
   listAccess t v = liftA2 fd t (fmap pyListAccess v)
   listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
     (liftA2 listSetDocD i v)
-
-  listAccessEnum = listAccess
-  listSetEnum i = listSet (castObj (cast int) i)
 
   at t l = listAccess t (var l int)
 
@@ -358,21 +350,9 @@ instance StatementSym PythonCode where
   printFileStr f s = printFile f (litString s)
   printFileStrLn f s = printFileLn f (litString s)
 
-  getIntInput v = v &= funcApp "int" int [inputFunc]
-  getFloatInput v = v &= funcApp "float" float [inputFunc]
-  getBoolInput v = v &= inputFunc ?!= litString "0"
-  getStringInput v = v &= objMethodCall string inputFunc "rstrip" []
-  getCharInput v = v &= inputFunc
+  getInput = pyInput inputFunc
   discardInput = valState inputFunc
-  getIntFileInput f v = v &= funcApp "int" int [objMethodCall string f 
-    "readline" []]
-  getFloatFileInput f v = v &= funcApp "float" float [objMethodCall string f
-    "readline" []]
-  getBoolFileInput f v =  v &= (objMethodCall string f "readline" [] ?!= 
-    litString "0")
-  getStringFileInput f v = v &= objMethodCall string (objMethodCall string f 
-    "readline" []) "rstrip" []
-  getCharFileInput f v = v &= objMethodCall string f "readline" []
+  getFileInput f = pyInput (objMethodCall string f "readline" [])
   discardFileInput f = valState (objMethodCall string f "readline" [])
 
   openFileR f n = f &= funcApp "open" infile [n, litString "r"]
@@ -380,7 +360,7 @@ instance StatementSym PythonCode where
   openFileA f n = f &= funcApp "open" outfile [n, litString "a"]
   closeFile f = valState $ objMethodCall void f "close" []
 
-  getFileInputLine f v = v &= objMethodCall string f "readline" []
+  getFileInputLine = getFileInput
   discardFileLine f = valState $ objMethodCall string f "readline" []
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
     (listType static_ string) [litString [d]]))  
@@ -496,7 +476,6 @@ instance StateVarSym PythonCode where
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
-  listStateVar = stateVar
 
 instance ClassSym PythonCode where
   type Class PythonCode = (Doc, Bool)
@@ -580,6 +559,16 @@ pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr)
 pyOut newLn printFn v f = pyOut' (getType $ valueType v)
   where pyOut' (List _) = printSt newLn printFn v f
         pyOut' _ = outDoc newLn printFn v f
+
+pyInput :: PythonCode (Value PythonCode) -> PythonCode (Value PythonCode) -> 
+  PythonCode (Statement PythonCode)
+pyInput inSrc v = v &= pyInput' (getType $ valueType v)
+  where pyInput' Integer = funcApp "int" int [inSrc]
+        pyInput' Float = funcApp "float" float [inSrc]
+        pyInput' Boolean = inSrc ?!= litString "0"
+        pyInput' String = objMethodCall string inSrc "rstrip" []
+        pyInput' Char = inSrc
+        pyInput' _ = error "Attempt to read a value of unreadable type"
 
 pyThrow ::  ValData -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valDoc errMsg)

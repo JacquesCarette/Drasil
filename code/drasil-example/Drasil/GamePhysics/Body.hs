@@ -65,13 +65,13 @@ srs :: Document
 srs = mkDoc mkSRS for' si
 
 printSetting :: PrintingInformation
-printSetting = PI everything defaultConfiguration
+printSetting = PI symbMap defaultConfiguration
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
 
 unitsColl :: [UnitDefn] -- FIXME
-unitsColl = collectUnits everything symbTT 
+unitsColl = collectUnits symbMap symbTT 
 
 mkSRS :: DocDesc 
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
@@ -158,13 +158,13 @@ si = SI {
   _defSequence = blockQDefs,
   _constraints = inputConstraints,
   _constants = [],
-  _sysinfodb = everything,
+  _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB
 }
 
 symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
+symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symbMap
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -174,8 +174,8 @@ refDB = rdb citations concIns
 units :: [UnitDefn] -- FIXME
 units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
-everything :: ChunkDB
-everything = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
+symbMap :: ChunkDB
+symbMap = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
   ++ map nw acronyms ++ map nw prodtcon ++ map nw iModelsNew
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived

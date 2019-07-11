@@ -390,7 +390,7 @@ layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
 layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
 layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
-  where ref = P.S $ (refAdd x) ++ "Deriv"
+  where ref = P.S $ refAdd x ++ "Deriv"
 layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
 layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
 

@@ -29,14 +29,14 @@ public class DerivedValues {
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'inParams.h' assigned to ");
         outfile.print(inParams.h);
-        outfile.println(" in module ");
+        outfile.println(" in module DerivedValues");
         outfile.close();
         
         inParams.LDF = Math.pow((3.0 / 60), (7.0 / 16));
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'inParams.LDF' assigned to ");
         outfile.print(inParams.LDF);
-        outfile.println(" in module ");
+        outfile.println(" in module DerivedValues");
         outfile.close();
         
         if (inParams.g.equals("AN")) {
@@ -44,7 +44,7 @@ public class DerivedValues {
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'inParams.GTF' assigned to ");
             outfile.print(inParams.GTF);
-            outfile.println(" in module ");
+            outfile.println(" in module DerivedValues");
             outfile.close();
         }
         else if (inParams.g.equals("FT")) {
@@ -52,7 +52,7 @@ public class DerivedValues {
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'inParams.GTF' assigned to ");
             outfile.print(inParams.GTF);
-            outfile.println(" in module ");
+            outfile.println(" in module DerivedValues");
             outfile.close();
         }
         else if (inParams.g.equals("HS")) {
@@ -60,7 +60,7 @@ public class DerivedValues {
             outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
             outfile.print("var 'inParams.GTF' assigned to ");
             outfile.print(inParams.GTF);
-            outfile.println(" in module ");
+            outfile.println(" in module DerivedValues");
             outfile.close();
         }
         
@@ -68,21 +68,21 @@ public class DerivedValues {
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'inParams.SD' assigned to ");
         outfile.print(inParams.SD);
-        outfile.println(" in module ");
+        outfile.println(" in module DerivedValues");
         outfile.close();
         
         inParams.AR = (inParams.a / inParams.b);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'inParams.AR' assigned to ");
         outfile.print(inParams.AR);
-        outfile.println(" in module ");
+        outfile.println(" in module DerivedValues");
         outfile.close();
         
         inParams.w_TNT = (inParams.w * inParams.TNT);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'inParams.w_TNT' assigned to ");
         outfile.print(inParams.w_TNT);
-        outfile.println(" in module ");
+        outfile.println(" in module DerivedValues");
         outfile.close();
     }
 }

@@ -33,6 +33,11 @@ def func_read_table(filename, z_vector, x_matrix, y_matrix):
     linetokens = line.split(",")
     for j in range(0, int((len(linetokens) / 2)), 1):
         z_vector.append(float(linetokens[((j * 2) + 1)]))
+    outfile = open("log.txt", "a")
+    print("var 'z_vector' assigned to ", end='', file=outfile)
+    print(z_vector, end='', file=outfile)
+    print(" in module ReadTable", file=outfile)
+    outfile.close()
     lines = infile.readlines()
     for i in range(0, len(lines), 1):
         linetokens = lines[i].split(",")
@@ -43,6 +48,16 @@ def func_read_table(filename, z_vector, x_matrix, y_matrix):
             y_matrix_temp.append(float(linetokens[((j * 2) + 1)]))
         x_matrix.append(x_matrix_temp)
         y_matrix.append(y_matrix_temp)
+    outfile = open("log.txt", "a")
+    print("var 'x_matrix' assigned to ", end='', file=outfile)
+    print(x_matrix, end='', file=outfile)
+    print(" in module ReadTable", file=outfile)
+    outfile.close()
+    outfile = open("log.txt", "a")
+    print("var 'y_matrix' assigned to ", end='', file=outfile)
+    print(y_matrix, end='', file=outfile)
+    print(" in module ReadTable", file=outfile)
+    outfile.close()
     infile.close()
 
 

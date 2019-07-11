@@ -59,7 +59,8 @@ import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, progName, sWHT, water, phsChgMtrl,
   coil, tank, transient, swhsPCM, phaseChangeMaterial, tankPCM, con)
-import Drasil.SWHS.DataDefs (dataDefs, qDefs)
+import Drasil.SWHS.DataDefs (qDefs)
+import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
 import Drasil.SWHS.GenDefs (genDefs)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
@@ -101,7 +102,7 @@ si = SI {
   _quants = symbols,
   _concepts = symbTT,
   _definitions = qDefs,
-  _datadefs = dataDefs,
+  _datadefs = SWHS.dataDefs,
   _inputs = inputs,
   _outputs = map qw outputs,
   _defSequence = [] :: [Block QDefinition],
@@ -122,12 +123,12 @@ symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
   (units ++ [m_2, m_3]) label refBy
-  dataDefn insModel genDef theory concIns
+  dataDefs insModel genDef theory concIns
   section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronymsFull ++ map nw unitsColl)
- ([] :: [ConceptChunk]) unitsColl label refBy dataDefn insModel genDef
+ ([] :: [ConceptChunk]) unitsColl label refBy dataDefs insModel genDef
  theory concIns section labCon
 
 refDB :: ReferenceDB
@@ -176,7 +177,7 @@ mkSRS = [RefSec $ RefProg intro [
         [ Assumptions
         , TMs [] (Label : stdFields) [consThermE, sensHtE, latentHtE]
         , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefs ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) SWHS.dataDefs ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
          [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM] ShowDerivation
         , Constraints  EmptyS dataConstraintUncertainty dataConTail
@@ -206,8 +207,8 @@ label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
 refBy :: RefbyMap
 refBy = generateRefbyMap label 
 
-dataDefn :: [DataDefinition]
-dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
+dataDefs :: [DataDefinition]
+dataDefs = getTraceMapFromDD $ getSCSSub mkSRS
 
 insModel :: [InstanceModel]
 insModel = getTraceMapFromIM $ getSCSSub mkSRS

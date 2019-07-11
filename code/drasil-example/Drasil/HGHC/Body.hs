@@ -1,4 +1,4 @@
-module Drasil.HGHC.Body (srs, si, allSymbols, printSetting) where
+module Drasil.HGHC.Body (srs, si, symbMap, printSetting) where
 
 import qualified Data.Map as Map
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
@@ -27,7 +27,7 @@ srs :: Document
 srs = mkDoc mkSRS for si
 
 printSetting :: PrintingInformation
-printSetting = PI allSymbols defaultConfiguration
+printSetting = PI symbMap defaultConfiguration
 
 si :: SystemInformation
 si = SI {
@@ -43,7 +43,7 @@ si = SI {
   _defSequence = [] :: [Block QDefinition],
   _constraints = [] :: [ConstrainedChunk],
   _constants = [],
-  _sysinfodb = allSymbols,
+  _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = rdb [] [] -- FIXME?
 }
@@ -58,10 +58,10 @@ mkSRS = [RefSec $
       ]]]
 
 unitsColl :: [UnitDefn] -- FIXME? Probably shouldn't be done here
-unitsColl = collectUnits allSymbols symbols 
+unitsColl = collectUnits symbMap symbols 
 
-allSymbols :: ChunkDB
-allSymbols = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
+symbMap :: ChunkDB
+symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon')
  ([] :: [ConceptChunk])-- FIXME: Fill in concepts
   siUnits Map.empty Map.empty [] [] [] [] [] [] []

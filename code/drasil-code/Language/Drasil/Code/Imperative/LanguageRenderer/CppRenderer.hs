@@ -533,17 +533,15 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
 
-  docFunc desc pComms f = pair (docFunc desc pComms (pfst f)) (docFunc desc 
-    pComms (psnd f))
+  docFunc desc pComms f = pair (docFunc desc pComms $ pfst f) (docFunc desc 
+    pComms $ psnd f)
 
   inOutFunc n s p ins outs b = pair (inOutFunc n (pfst s) (pfst p) (map pfst 
     ins) (map pfst outs) (pfst b)) (inOutFunc n (psnd s) (psnd p) (map psnd ins)
     (map psnd outs) (psnd b))
 
-  docInOutFunc n d s p ins outs b = pair (docInOutFunc n d (pfst s) (pfst p) 
-    (map (mapPairFst pfst) ins) (map (mapPairFst pfst) outs) (pfst b)) 
-    (docInOutFunc n d (psnd s) (psnd p) (map (mapPairFst psnd) ins) 
-    (map (mapPairFst psnd) outs) (psnd b))
+  docInOutFunc desc iComms oComms f = pair (docInOutFunc desc iComms oComms $ 
+    pfst f) (docInOutFunc desc iComms oComms $ psnd f)
 
   commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
     (commentedFunc (psnd cmt) (psnd fn)) 
@@ -1077,10 +1075,7 @@ instance MethodSym CppSrcCode where
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
     map pointerParam outs) b
 
-  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d $ 
-    map (mapPairFst valueName) ins ++ map (mapPairFst valueName) 
-    (filter (\pm -> fst pm `notElem` map fst ins) outs))
-    (inOutFunc n s p (map fst ins) (map fst outs) b)
+  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
 
   commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
@@ -1547,10 +1542,7 @@ instance MethodSym CppHdrCode where
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
     map pointerParam outs) b
 
-  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d $ 
-    map (mapPairFst valueName) ins ++ map (mapPairFst valueName) 
-    (filter (\pm -> fst pm `notElem` map fst ins) outs))
-    (inOutFunc n s p (map fst ins) (map fst outs) b)
+  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
 
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)

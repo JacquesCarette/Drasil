@@ -46,8 +46,8 @@ import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..),
   fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, TypeData(..), 
   td, ValData(..), vd)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
-  mapPairFst, liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair,
-  liftPair, liftPairFst, getInnerType, convType)
+  liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, 
+  liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -540,9 +540,7 @@ instance MethodSym JavaCode where
             decls = multi $ map varDec outs
             outputs = var "outputs" jArrayType
     
-  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d 
-    (map (mapPairFst valueName) ins)) 
-    (inOutFunc n s p (map fst ins) (map fst outs) b)
+  docInOutFunc desc iComms _ = docFuncRepr desc iComms
             
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

@@ -46,9 +46,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..),  
   fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, updateParamDoc, 
   TypeData(..), td, ValData(..), vd, updateValDoc)
-import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, mapPairFst, 
-  liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, 
-  liftPairFst, getInnerType, convType)
+import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
+  liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
+  getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Data.List (nub)
@@ -525,10 +525,7 @@ instance MethodSym CSharpCode where
     stateParam v) ins ++ map (fmap (updateParamDoc csOut) . stateParam) 
     (filter (`notElem` ins) outs)) b
 
-  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d $ 
-    map (mapPairFst valueName) ins ++ map (mapPairFst valueName) 
-    (filter (\pm -> fst pm `notElem` map fst ins) outs))
-    (inOutFunc n s p (map fst ins) (map fst outs) b)
+  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

@@ -10,39 +10,40 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
-  charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, listTypeDocD, 
-  voidDocD, constructDocD, stateParamDocD, paramListDocD, methodDocD, 
-  methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, 
-  switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, assignDocD, 
-  multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, plusPlusDocD', 
-  varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, statementDocD, 
-  returnDocD, commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd, stratDocD, 
-  notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
-  absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
-  sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
-  asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', 
-  unOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, 
-  binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, litTrueD, 
-  litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
-  selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, 
-  extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
+  charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, 
+  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, 
+  methodDocD, methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, 
+  ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, 
+  assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, 
+  plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, 
+  statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd,
+  stratDocD, notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', 
+  absOpDocD, absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, 
+  expOpDocD', sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, 
+  tanOpDocD', asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, 
+  atanOpDocD', unOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, 
+  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
+  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, 
+  orOpDocD, binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, 
+  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
+  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
+  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
-  sizeDocD, listAccessDocD, listSetDocD, objAccessDocD, castObjDocD, includeD, 
-  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, 
+  sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
+  includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
+  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, 
   prependToBody, appendToBody, surroundBody, getterName, setterName, setMain, 
-  setEmpty
+  setEmpty, intValue
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library,
-  RenderSym(..), BodySym(..), StateTypeSym(listInnerType, getType), 
+  RenderSym(..), BodySym(..), StateTypeSym(getType), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), Selector(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..))
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  ControlStatementSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   ModData(..), md, TypeData(..), td, ValData(..), vd, angles,blank, 
@@ -160,13 +161,12 @@ printListDoc :: (RenderSym repr) => Integer -> repr (Value repr) ->
   (String -> repr (Statement repr)) -> 
   repr (Statement repr)
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
-  for (varDecDef i (litInt 0)) (i ?< (listSizeAccess v #- litInt 1))
-    (i &++) (bodyStatements [prFn (v $. listAccess t i), prStrFn ", /f "]), 
-  ifNoElse [(listSizeAccess v ?> litInt 0, oneLiner $
-    prFn (v $. listAccess t (listSizeAccess v #- litInt 1)))], 
+  for (varDecDef i (litInt 0)) (i ?< (listSize v #- litInt 1))
+    (i &++) (bodyStatements [prFn (listAccess v i), prStrFn ", /f "]), 
+  ifNoElse [(listSize v ?> litInt 0, oneLiner $
+    prFn (listAccess v (listSize v #- litInt 1)))], 
   prLnFn "]"]
-  where t = listInnerType $ valueType v
-        l_i = "list_i" ++ show n
+  where l_i = "list_i" ++ show n
         i = var l_i S.int
 
 printObjDoc :: String -> (String -> repr (Statement repr)) 
@@ -209,6 +209,9 @@ fileTypeDocD = td File (text "File")
 
 typeDocD :: Label -> TypeData
 typeDocD t = td (Object t) (text t)
+
+enumTypeDocD :: Label -> TypeData
+enumTypeDocD t = td (Enum t) (text t)
 
 listTypeDocD :: TypeData -> Doc -> TypeData
 listTypeDocD t lst = td (List (cType t)) (lst <> angles (typeDoc t))
@@ -622,17 +625,17 @@ castDocD t = parens $ typeDoc t
 sizeDocD :: Doc
 sizeDocD = dot <> text "Count"
 
-listAccessDocD :: ValData -> Doc
-listAccessDocD v = brackets $ valDoc v
+listAccessFuncDocD :: ValData -> Doc
+listAccessFuncDocD v = brackets $ valDoc v
 
-listSetDocD :: ValData -> ValData -> Doc
-listSetDocD i v = brackets (valDoc i) <+> equals <+> valDoc v
+listSetFuncDocD :: ValData -> ValData -> Doc
+listSetFuncDocD i v = brackets (valDoc i) <+> equals <+> valDoc v
 
 objAccessDocD :: ValData -> FuncData -> Doc
 objAccessDocD v f = valDoc v <> funcDoc f
 
-castObjDocD :: FuncData -> ValData -> Doc
-castObjDocD f v = funcDoc f <> parens (valDoc v)
+castObjDocD :: Doc -> ValData -> Doc
+castObjDocD t v = t <> parens (valDoc v)
 
 -- Keywords --
 
@@ -724,3 +727,9 @@ setMain (d, _) = (d, True)
 
 setEmpty :: (Doc, Terminator) -> (Doc, Terminator)
 setEmpty (d, _) = (d, Empty)
+
+intValue :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
+intValue i = intValue' (getType $ valueType i)
+  where intValue' Integer = i
+        intValue' (Enum _) = cast S.int i
+        intValue' _ = error "Value passed must be Integer or Enum"

@@ -2,24 +2,18 @@ module Drasil.GamePhysics.Body where
 
 import Language.Drasil hiding (Vector, organization, section, sec)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
-  TraceMap, ccss, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
-  _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
-  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI), cdb, rdb,
+  refdb, _authors, _concepts, _constants, _constraints, _datadefs, _definitions,
+  _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 
-import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
-  Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
-  IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
-  SSDSub(..), SolChSpec(SCSProg), TConvention(..), TSIntro(..),
-  Verbosity(Verbose), OffShelfSolnsSec(..), GSDSec(..), GSDSub(..),
-  TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
-  LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), egetDocDesc, generateTraceMap, generateTraceMap',
-  getDocDesc, getSCSSub, getTraceMapFromDD, getTraceMapFromGD,
-  getTraceMapFromIM, getTraceMapFromTM, intro, mkDoc, solutionLabel,
-  traceMatStandard, tsymb)
+import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
+  Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), IntroSub(..),
+  RefSec(..), RefTab(..), SCSSub(..), SRSDecl, SSDSec(SSDProg), SSDSub(..),
+  SolChSpec(SCSProg), TConvention(..), TSIntro(..), Verbosity(Verbose),
+  OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
+  ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
+  PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -57,15 +51,10 @@ import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 
-import qualified Data.Map as Map
-
 srs :: Document
 srs = mkDoc mkSRS for' sysInfo
 
-checkSi :: [UnitDefn] -- FIXME
-checkSi = collectUnits everything symbTT 
-
-mkSRS :: DocDesc 
+mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
   IntroSec $ IntroProg para1_introduction_intro (short chipmunk)
   [IPurpose para1_purpose_of_document_intro,
@@ -78,54 +67,31 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
    SSDSec $ SSDProg
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
-        , Goals [S "the" +:+ plural input_] goals]
+        , Goals [S "the" +:+ plural input_]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields) tModsNew
-        , GDs [] [] [] HideDerivation -- No Gen Defs for Gamephysics
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-          iModelsNew ShowDerivation
+        , TMs [] (Label : stdFields)
+        , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints (S "FIXME") inputConstraints
         , CorrSolnPpties outputConstraints []
         ]
       ],
     ReqrmntSec $ ReqsProg [
-      FReqsSub funcReqs [],
-      NonFReqsSub nonfuncReqs
+      FReqsSub [],
+      NonFReqsSub
     ],
-    LCsSec $ LCsProg likelyChgs,
-    UCsSec $ UCsProg unlikelyChgs,
+    LCsSec,
+    UCsSec,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
-    TraceabilitySec $ TraceabilityProg (map fst traceabilityMatrices)
-      (map (foldlList Comma List . snd) traceabilityMatrices) (map (LlC . fst) traceabilityMatrices) [],
+    TraceabilitySec $ TraceabilityProg $ traceMatStandard sysInfo,
     AuxConstntSec $ AuxConsProg chipmunk [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
-
-refBy :: RefbyMap
-refBy = generateRefbyMap label
-
-dataDefs :: [DataDefinition]
-dataDefs = getTraceMapFromDD $ getSCSSub mkSRS
-
-iMods :: [InstanceModel]
-iMods = getTraceMapFromIM $ getSCSSub mkSRS
-
-genDef :: [GenDefn]
-genDef = getTraceMapFromGD $ getSCSSub mkSRS
-
-theory :: [TheoryModel]
-theory = getTraceMapFromTM $ getSCSSub mkSRS
-
 concIns :: [ConceptInstance]
-concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
-
-section :: [Section]
-section = sec
+concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
 
 sec :: [Section]
 sec = extractSection srs
@@ -140,7 +106,12 @@ sysInfo = SI {
   _sys = chipmunk,
   _kind = Doc.srs,
   _authors = [alex, luthfi],
-  _quants = symbTT, 
+  -- FIXME: The _quants field should be filled in with all the symbols, however
+  -- #1658 is why this is empty, otherwise we end up with unused (and probably
+  -- should be removed) symbols. But that's for another time. This is "fine"
+  -- because _quants are only used relative to #1658 and in code gen. And
+  -- Gamephysics is not in a place to be able to do codegen.
+  _quants =  [] :: [QuantityDict], -- map qw iModelsNew ++ map qw symbolsAll,
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
   _datadefs = dataDefns,
@@ -153,9 +124,6 @@ sysInfo = SI {
   _usedinfodb = usedDB,
    refdb = refDB
 }
-
-symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -171,15 +139,12 @@ everything = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units
-  label refBy dataDefs iMods genDef theory
-  concIns section []
+  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units dataDefns
+  iModelsNew [] tModsNew concIns sec []
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw symbolsAll ++ map nw acronyms
- ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
- dataDefs iMods genDef theory concIns section
- []
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 printSetting :: PrintingInformation
 printSetting = PI everything defaultConfiguration
@@ -479,9 +444,6 @@ offShelfSols3DList = LlC $ enumBullet solutionLabel [
 -----------------------------------------------------
 -- SECTION 8 : Traceability Matrices and Graph    --
 -----------------------------------------------------
-
-traceabilityMatrices :: [(LabelledContent, [Sentence])]
-traceabilityMatrices = traceMatStandard sysInfo
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

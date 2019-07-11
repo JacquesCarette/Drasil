@@ -2,21 +2,21 @@ module Drasil.Projectile.Body where
 
 import Language.Drasil hiding (Vector)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (Block, ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
-  TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors, _concepts,
-  _constants, _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind,
-  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
+  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
+  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
+  _sysinfodb, _usedinfodb)
 import Utils.Drasil
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
-  DerivationDisplay(ShowDerivation), DocDesc,
+  DerivationDisplay(ShowDerivation),
   DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
   IntroSec(IntroProg), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
-  RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SSDSec(..),
-  SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg), TConvention(..),
-  TSIntro(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
-  generateTraceMap, generateTraceMap', intro, mkDoc, traceMatStandard, tsymb)
+  RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
+  SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
+  TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -32,8 +32,6 @@ import Data.Drasil.Quantities.Physics (iVel, physicscon)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
-
-import qualified Data.Map as Map
 
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, projectileTitle, landingPos,
@@ -52,7 +50,7 @@ import Drasil.Projectile.Unitals (acronyms, constants, inConstraints,
 srsDoc :: Document
 srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
 
-mkSRS :: DocDesc
+mkSRS :: SRSDecl
 mkSRS = [
   RefSec $
     RefProg intro
@@ -69,25 +67,23 @@ mkSRS = [
       [ SSDProblem $ PDProg prob []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
-        , Goals [(phrase iVel +:+ S "vector") `ofThe` phrase projectile] goals]
+        , Goals [(phrase iVel +:+ S "vector") `ofThe` phrase projectile]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields) tMods
-        , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
+        , TMs [] (Label : stdFields)
+        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints EmptyS inConstraints
         , CorrSolnPpties outConstraints []
         ]
       ],
   ReqrmntSec $
     ReqsProg
-      [ FReqsSub funcReqs [inputParamsTable]
-      , NonFReqsSub nonfuncReqs
+      [ FReqsSub [inputParamsTable]
+      , NonFReqsSub
       ],
-  TraceabilitySec $
-    TraceabilityProg
-      (map fst traceMats) (map (foldlList Comma List . snd) traceMats) (map (LlC . fst) traceMats) [],
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard systInfo,
   AuxConstntSec $
     AuxConsProg projectileTitle constants,
   Bibliography
@@ -128,16 +124,11 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
     map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : srsDomains)
-  (map unitWrapper [metre, radian, second]) label refBy dataDefns iMods genDefns tMods
-  concIns ([] :: [Section]) ([] :: [LabelledContent])
+  (map unitWrapper [metre, radian, second]) dataDefns iMods genDefns tMods concIns [] []
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols ++ map nw units)
-  (cw pi_ : srsDomains) units label refBy dataDefns iMods genDefns tMods
-  concIns ([] :: [Section]) ([] :: [LabelledContent])
-
-units :: [UnitDefn]
-units = collectUnits symbMap symbols 
+usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
+  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -147,12 +138,6 @@ refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
-
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
- 
-refBy :: RefbyMap
-refBy = generateRefbyMap label
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
@@ -181,10 +166,3 @@ physSystParts = map foldlSent [
   [S "The", phrase launcher],
   [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `sAnd` getTandS launAngle)],
   [S "The", phrase target]]
-
---------------------------
--- Traceabilty Matrices --
---------------------------
-
-traceMats :: [(LabelledContent, [Sentence])]
-traceMats = traceMatStandard systInfo

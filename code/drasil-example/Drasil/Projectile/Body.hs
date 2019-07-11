@@ -40,7 +40,7 @@ import qualified Data.Map as Map
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, projectileTitle, landingPos,
   launcher, projectile, target)
-import Drasil.Projectile.DataDefs (dataDefns)
+import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
@@ -80,7 +80,7 @@ mkSRS = [
         [ Assumptions
         , TMs [] (Label : stdFields) tMods
         , GDs [] ([Label, Units] ++ stdFields) genDefns ShowDerivation
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefs ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods ShowDerivation
         , Constraints EmptyS dataConstraintUncertainty EmptyS
                       {-(foldlSent [makeRef2S $ valsOfAuxCons [] [],
@@ -121,7 +121,7 @@ si = SI {
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],
-  _datadefs    = dataDefns,
+  _datadefs    = dataDefs,
   _inputs      = [] :: [QuantityDict],
   _outputs     = [] :: [QuantityDict],
   _defSequence = [] :: [Block QDefinition],
@@ -138,12 +138,12 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
     map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : srsDomains)
-  (map unitWrapper [metre, radian, second]) label refBy dataDefns iMods genDefns tMods
+  (map unitWrapper [metre, radian, second]) label refBy dataDefs iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols ++ map nw units)
-  (cw pi_ : srsDomains) units label refBy dataDefns iMods genDefns tMods
+  (cw pi_ : srsDomains) units label refBy dataDefs iMods genDefns tMods
   concIns ([] :: [Section]) ([] :: [LabelledContent])
 
 units :: [UnitDefn]

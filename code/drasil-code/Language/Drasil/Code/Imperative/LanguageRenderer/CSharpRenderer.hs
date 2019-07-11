@@ -15,14 +15,15 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  SelectorFunction(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, printDoc, outDoc,
-  printFileDocD, boolTypeDocD, 
-  intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, listTypeDocD, voidDocD,
+  printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD, 
+  typeDocD, enumTypeDocD, listTypeDocD, voidDocD,
   constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD, 
   stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
@@ -35,12 +36,12 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
   varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetDocD, 
-  listAccessDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetFuncDocD, 
+  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
   docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody, getterName, 
-  setterName, setMain, setEmpty)
+  setterName, setMain, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
   liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
@@ -138,7 +139,7 @@ instance StateTypeSym CSharpCode where
   listType p st = liftA2 listTypeDocD st (list p)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
-  enumType t = return $ typeDocD t
+  enumType t = return $ enumTypeDocD t
   iterator _ = error "Iterator-type variables do not exist in C#"
   void = return voidDocD
 
@@ -163,9 +164,8 @@ instance ControlBlockSym CSharpCode where
       block [
         listDec 0 v_temp,
         for (varDecDef v_i (fromMaybe (litInt 0) b)) 
-          (v_i ?< fromMaybe (vold $. listSize) e) (maybe (v_i &++) (v_i &+=) s)
-          (oneLiner $ valState $ v_temp $. listAppend (vold $. listAccess 
-          (listInnerType (fmap valType vold)) v_i)),
+          (v_i ?< fromMaybe (listSize vold) e) (maybe (v_i &++) (v_i &+=) s)
+          (oneLiner $ valState $ listAppend v_temp (listAccess vold v_i)),
         vnew &= v_temp]
 
 instance UnaryOpSym CSharpCode where
@@ -222,9 +222,9 @@ instance ValueSym CSharpCode where
   extVar l n t = liftA2 (vd (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
   self l = liftA2 (vd (Just "this")) (obj l) (return selfDocD)
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
-  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (obj en) 
+  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (enumType en) 
     (return $ enumElemDocD en e)
-  enumVar e en = var e (obj en)
+  enumVar e en = var e (enumType en)
   objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
     (fmap valType v) (liftA2 objVarDocD o v)
   objVarSelf l n t = liftA2 (vd (Just $ "this." ++ n)) t (liftA2 objVarDocD 
@@ -307,48 +307,52 @@ instance Selector CSharpCode where
 
   selfAccess l = objAccess (self l)
 
-  listSizeAccess v = objAccess v listSize
-
   listIndexExists l i = liftA2 mkVal bool (liftA3 listIndexExistsDocD greaterOp
     l i)
-  argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
+  argExists i = listAccess argsList (litInt $ fromIntegral i)
 
   indexOf l v = objAccess l (func "IndexOf" int [v])
 
-  stringEqual v1 v2 = v1 ?== v2
-
-  castObj f v = liftA2 mkVal (fmap funcType f) (liftA2 castObjDocD f v)
-  castStrToFloat v = funcApp "Double.Parse" float [v]
+  cast = csCast
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT = liftA2 fd targT (fmap castDocD targT)
-  castListToInt = cast int
-  get v = func (getterName $ valueName v) (valueType v) []
-  set v toVal = func (setterName $ valueName v) (valueType v) [toVal]
+  getFunc v = func (getterName $ valueName v) (valueType v) []
+  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
-  listSize = liftA2 fd int (fmap funcDocD (var "Count" int))
-  listAdd _ i v = func "Insert" (fmap valType v) [i, v]
-  listAppend v = func "Add" (fmap valType v) [v]
+  listSizeFunc = liftA2 fd int (fmap funcDocD (var "Count" int))
+  listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
+  listAppendFunc v = func "Add" (fmap valType v) [v]
 
-  iterBegin _ = error "Attempt to use iterBegin in C#, but C# has no iterators"
-  iterEnd _ = error "Attempt to use iterEnd in C#, but C# has no iterators"
+  iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
+  iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
+
+  get v vToGet = v $. getFunc vToGet
+  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+
+  listSize v = v $. listSizeFunc
+  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
+  listAppend v vToApp = v $. listAppendFunc vToApp
+  
+  iterBegin v = v $. iterBeginFunc (valueType v)
+  iterEnd v = v $. iterEndFunc (valueType v)
 
 instance SelectorFunction CSharpCode where
-  listAccess t v = liftA2 fd t (fmap listAccessDocD v)
-  listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
-    (liftA2 listSetDocD i v)
+  listAccessFunc t v = liftA2 fd t (listAccessFuncDocD <$> intValue v)
+  listSetFunc v i toVal = liftA2 fd (valueType v) 
+    (liftA2 listSetFuncDocD (intValue i) toVal)
 
-  listAccessEnum t v = listAccess t (castObj (cast int) v)
-  listSetEnum i = listSet (castObj (cast int) i)
+  atFunc t l = listAccessFunc t (var l int)
 
-  at t l = listAccess t (var l int)
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (var l int)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
   assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
-  assignToListIndex lst index v = valState $ lst $. listSet index v
+  assignToListIndex lst index v = valState $ listSet lst index v
   multiAssign _ _ = error "No multiple assignment statements in C#"
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
@@ -379,21 +383,9 @@ instance StatementSym CSharpCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getIntInput v = mkSt <$> liftA2 (csInput "Int32.Parse") v inputFunc
-  getFloatInput v = mkSt <$> liftA2 (csInput "Double.Parse") v inputFunc
-  getBoolInput _ = error "Boolean input not yet implemented for C#"
-  getStringInput v = mkSt <$> liftA2 (csInput "") v inputFunc
-  getCharInput _ = error "Char input not yet implemented for C#"
+  getInput v = mkSt <$> liftA2 csInput v inputFunc
   discardInput = mkSt <$> fmap csDiscardInput inputFunc
-
-  getIntFileInput f v = mkSt <$> liftA2 (csInput "Int32.Parse") v 
-    (fmap csFileInput f)
-  getFloatFileInput f v = mkSt <$> liftA2 (csInput "Double.Parse") v 
-    (fmap csFileInput f)
-  getBoolFileInput _ _ = error "Boolean input not yet implemented for C#"
-  getStringFileInput f v = mkSt <$> liftA2 (csInput "") v
-    (fmap csFileInput f)
-  getCharFileInput _ _ = error "Char input not yet implemented for C#"
+  getFileInput f v = mkSt <$> liftA2 csInput v (fmap csFileInput f)
   discardFileInput f = valState $ fmap csFileInput f
 
   openFileR f n = mkSt <$> liftA3 csOpenFileR f n infile
@@ -401,7 +393,7 @@ instance StatementSym CSharpCode where
   openFileA f n = mkSt <$> liftA4 csOpenFileWorA f n outfile litTrue
   closeFile f = valState $ objMethodCall void f "Close" []
 
-  getFileInputLine = getStringFileInput
+  getFileInputLine = getFileInput
   discardFileLine f = valState $ fmap csFileInput f
   stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic_ string) 
     [s $. func "Split" (listType static_ string) [litChar d]]
@@ -424,9 +416,9 @@ instance StatementSym CSharpCode where
   changeState fsmName toState = var fsmName string &= litString toState
 
   initObserverList t = listDecDef (var observerListName t)
-  addObserver o = valState $ obsList $. listAdd obsList lastelem o
+  addObserver o = valState $ listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
-          lastelem = obsList $. listSize
+          lastelem = listSize obsList
 
   inOutCall = csInOutCall funcApp
   extInOutCall m = csInOutCall (extFuncApp m)
@@ -456,16 +448,16 @@ instance ControlStatementSym CSharpCode where
   tryCatch tb cb = mkStNoEnd <$> liftA2 csTryCatch tb cb
 
   checkState l = switch (var l string)
-  notifyObservers f t = for initv (v_index ?< (obsList $. listSize)) 
+  notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           v_index = var index int
           initv = varDecDef v_index $ litInt 0
-          notify = oneLiner $ valState $ (obsList $. at t index) $. f
+          notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = while (objVar f (var "EndOfStream" bool) ?!)
-    (oneLiner $ valState $ v $. listAppend (fmap csFileInput f))
+    (oneLiner $ valState $ listAppend v (fmap csFileInput f))
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc
@@ -519,7 +511,6 @@ instance StateVarSym CSharpCode where
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
-  listStateVar = stateVar
 
 instance ClassSym CSharpCode where
   -- Bool is True if the method is a main method, False otherwise
@@ -563,6 +554,12 @@ csInfileTypeDoc = td File (text "StreamReader")
 csOutfileTypeDoc :: TypeData
 csOutfileTypeDoc = td File (text "StreamWriter")
 
+csCast :: CSharpCode (StateType CSharpCode) -> CSharpCode (Value CSharpCode) -> 
+  CSharpCode (Value CSharpCode)
+csCast t v = csCast' (getType t) (getType $ valueType v)
+  where csCast' Float String = funcApp "Double.Parse" float [v]
+        csCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
+
 csThrowDoc :: ValData -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
   parens (valDoc errMsg)
@@ -579,8 +576,15 @@ csTryCatch tb cb= vcat [
 csDiscardInput :: ValData -> Doc
 csDiscardInput = valDoc
 
-csInput :: Label -> ValData -> ValData -> Doc
-csInput it v inFn = valDoc v <+> equals <+> text it <> parens (valDoc inFn)
+csInput :: ValData -> ValData -> Doc
+csInput v inFn = valDoc v <+> equals <+> text (csInput' (cType $ valType v)) <> 
+  parens (valDoc inFn)
+  where csInput' Integer = "Int32.Parse"
+        csInput' Float = "Double.Parse"
+        csInput' Boolean = "Boolean.Parse"
+        csInput' String = ""
+        csInput' Char = "Char.Parse"
+        csInput' _ = error "Attempt to read value of unreadable type"
 
 csFileInput :: ValData -> ValData
 csFileInput f = vd (valName f) (valType f) (valDoc f <> dot <> text "ReadLine()")

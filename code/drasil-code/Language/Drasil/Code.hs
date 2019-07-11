@@ -10,8 +10,8 @@ module Language.Drasil.Code (
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
   StateTypeSym(..), StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..), MethodSym(..), 
-  ModuleSym(..), BlockCommentSym(..),
+  Selector(..), FunctionSym(..), SelectorFunction(..),
+  MethodSym(..), ModuleSym(..), BlockCommentSym(..),
   ModData(..),
   JavaCode(..), PythonCode(..), CSharpCode(..), CppSrcCode(..), CppHdrCode(..),
   unSrc, unHdr
@@ -34,8 +34,8 @@ import Language.Drasil.Code.Imperative.Symantics (PackageSym(..), RenderSym(..),
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
   StateTypeSym(..), StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..), MethodSym(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  Selector(..), FunctionSym(..), SelectorFunction(..),
+  MethodSym(..), ModuleSym(..), BlockCommentSym(..))
 
 import Language.Drasil.Code.Imperative.Helpers (ModData(..))
 

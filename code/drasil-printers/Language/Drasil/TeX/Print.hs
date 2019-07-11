@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Print(genTeX) where
 
 import Prelude hiding (print)
 import Data.List (intersperse, transpose, partition)
-import Text.PrettyPrint (text, (<+>))
+import Text.PrettyPrint (integer, text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Numeric (showEFloat)
 import Control.Applicative (pure)
@@ -35,7 +35,7 @@ import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (br, paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, mkEnvArgs, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
-  newline, superscript, parens, fraction, quote, externalref, commandD, command2D, br,
+  newline, superscript, parens, fraction, quote, externalref, commandD, command2D, br, command0, command, mathbb,
   snref, cite, citeInfo, sec, newpage, maketoc, maketitle, document, author, title)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
@@ -100,7 +100,7 @@ data OpenClose = Open | Close
 -- (Since this is all implicitly in Math, leave it as String for now)
 pExpr :: Expr -> D
 pExpr (Dbl d)        = pure . text $ showEFloat Nothing d ""
-pExpr (Int i)        = pure . text $ show i
+pExpr (Int i)        = pure (integer i)
 pExpr (Str s)        = toText . quote . pure $ text s
 pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
 pExpr (Case ps)      = mkEnv "cases" (cases ps)
@@ -112,57 +112,57 @@ pExpr (Spec s)       = pure . text $ unPL $ L.special s
 pExpr (Sub e)        = pure unders <> br (pExpr e)
 pExpr (Sup e)        = pure hat    <> br (pExpr e)
 pExpr (Over Hat s)   = commandD "hat" (pExpr s)
-pExpr (MO o)         = pure . text $ pOps o
+pExpr (MO o)         = pOps o
 pExpr (Fenced l r m) = fence Open l <> pExpr m <> fence Close r
 pExpr (Font Bold e)  = commandD "mathbf" (pExpr e)
 pExpr (Font Emph e)  = pExpr e -- Emph is ignored here because we're in Math mode
 pExpr (Spc Thin)     = pure . text $ "\\,"
 pExpr (Sqrt e)       = commandD "sqrt" (pExpr e)
 
-pOps :: Ops -> String
-pOps IsIn     = "\\in{}"
-pOps Integer  = "\\mathbb{Z}"
-pOps Rational = "\\mathbb{Q}"
-pOps Real     = "\\mathbb{R}"
-pOps Natural  = "\\mathbb{N}"
-pOps Boolean  = "\\mathbb{B}"
-pOps Comma    = ","
-pOps Prime    = "'"
-pOps Log      = "\\log"
-pOps Ln       = "\\ln"
-pOps Sin      = "\\sin"
-pOps Cos      = "\\cos"
-pOps Tan      = "\\tan"
-pOps Sec      = "\\sec"
-pOps Csc      = "\\csc"
-pOps Cot      = "\\cot"
-pOps Arcsin   = "\\arcsin"
-pOps Arccos   = "\\arccos"
-pOps Arctan   = "\\arctan"
-pOps Not      = "\\neg{}"
-pOps Dim      = "\\mathsf{dim}"
-pOps Exp      = "e"
-pOps Neg      = "-"
-pOps Cross    = "\\times"
-pOps Dot      = "\\cdot{}"
-pOps Eq       = "="
-pOps NEq      = "\\neq{}"
-pOps Lt       = "<"
-pOps Gt       = ">"
-pOps GEq      = "\\geq{}"
-pOps LEq      = "\\leq{}"
-pOps Impl     = "\\implies{}"
-pOps Iff      = "\\iff{}"
-pOps Subt     = "-"
-pOps And      = "\\land{}"
-pOps Or       = "\\lor{}"
-pOps Add      = "+"
-pOps Mul      = " "
-pOps Summ     = "\\displaystyle\\sum"
-pOps Prod     = "\\displaystyle\\prod"
-pOps Inte     = "\\int"
-pOps Point    = "."
-pOps Perc     = "\\%"
+pOps :: Ops -> D
+pOps IsIn     = commandD "in" empty
+pOps Integer  = mathbb "Z"
+pOps Rational = mathbb "Q"
+pOps Real     = mathbb "R"
+pOps Natural  = mathbb "N"
+pOps Boolean  = mathbb "B"
+pOps Comma    = pure $ text ","
+pOps Prime    = pure $ text "'"
+pOps Log      = command0 "log"
+pOps Ln       = command0 "ln"
+pOps Sin      = command0 "sin"
+pOps Cos      = command0 "cos"
+pOps Tan      = command0 "tan"
+pOps Sec      = command0 "sec"
+pOps Csc      = command0 "csc"
+pOps Cot      = command0 "cot"
+pOps Arcsin   = command0 "arcsin"
+pOps Arccos   = command0 "arccos"
+pOps Arctan   = command0 "arctan"
+pOps Not      = commandD "neg" empty
+pOps Dim      = command "mathsf" "dim"
+pOps Exp      = pure $ text "e"
+pOps Neg      = pure hyph
+pOps Cross    = command0 "times"
+pOps Dot      = commandD "cdot" empty
+pOps Eq       = pure assign
+pOps NEq      = commandD "neq" empty
+pOps Lt       = pure lt
+pOps Gt       = pure gt
+pOps GEq      = commandD "geq" empty
+pOps LEq      = commandD "leq" empty
+pOps Impl     = commandD "implies" empty
+pOps Iff      = commandD "iff" empty
+pOps Subt     = pure hyph
+pOps And      = commandD "land" empty
+pOps Or       = commandD "lor" empty
+pOps Add      = pure pls
+pOps Mul      = pure $ text " "
+pOps Summ     = command0 "displaystyle" <> command0 "sum"
+pOps Prod     = command0 "displaystyle" <> command0 "prod"
+pOps Inte     = command0 "int"
+pOps Point    = pure $ text "."
+pOps Perc     = command0 "%"
 
 fence :: OpenClose -> Fence -> D
 fence Open Paren  = pure . text $ "\\left("

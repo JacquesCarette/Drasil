@@ -128,11 +128,14 @@ citeInfo = custRef' "\\cite"
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
-usepackage, count :: String -> D
-usepackage      = command "usepackage"
+count, usepackage :: String -> D
+count      = command "newcounter"
 -- changed to command "newcounter" from command "count" (I assume this was
 -- what was intended?)
-count           = command "newcounter"
+mathbb     = command "mathbb"
+usepackage = command "usepackage"
+
+
 
 includegraphics :: MaxWidthPercent -> String -> D
 includegraphics 100 = command1o "includegraphics" 

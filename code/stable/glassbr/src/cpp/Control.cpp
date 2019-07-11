@@ -39,6 +39,7 @@ int main(int argc, const char *argv[]) {
     double P_b = func_P_b(B);
     bool is_safePb = func_is_safePb(inParams, P_b);
     write_output(is_safePb, is_safeLR, P_b);
+    
     return 0;
 }
 

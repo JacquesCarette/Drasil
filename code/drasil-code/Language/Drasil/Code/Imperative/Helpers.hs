@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.Helpers (blank,verticalComma,
 ) where
 
 import Language.Drasil.Code.Code (CodeType(..))
-import qualified Language.Drasil.Code.Imperative.Symantics as S (Label, 
+import qualified Language.Drasil.Code.Imperative.Symantics as S ( 
   RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
 
 import Prelude hiding ((<>))

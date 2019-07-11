@@ -40,13 +40,14 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
   dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
   doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, valList, surroundBody, getterName, 
-  setterName, setMain, setMainMethod, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
+  getterName, setterName, setMain, setMainMethod, setEmpty, intValue)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
   fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, TypeData(..), 
-  td, ValData(..), vd, angles, emptyIfEmpty, mapPairFst, liftA4, liftA5, liftA6,
-  liftList, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
-  getInnerType, convType)
+  td, ValData(..), vd)
+import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
+  mapPairFst, liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair,
+  liftPair, liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -521,8 +522,7 @@ instance MethodSym JavaCode where
 
   function n = method n ""
 
-  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d (map 
-    (mapPairFst parameterName) ps)) (function n s p t (map fst ps) b)
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
@@ -546,6 +546,8 @@ instance MethodSym JavaCode where
             
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
+    
+  parameters = mthdParams . unJC
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc

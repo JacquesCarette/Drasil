@@ -39,14 +39,15 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, valList, appendToBody, surroundBody, getterName, setterName, 
-  setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
-  ScopeTag (..), FuncData(..), fd, ModData(..), md, ParamData(..), pd,
-  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
-  angles, blank, doubleQuotedText, emptyIfEmpty, mapPairFst, mapPairSnd, vibcat,
-  liftA4, liftA5, liftA6, liftA8, liftList, lift2Lists, lift1List, lift3Pair, 
-  lift4Pair, liftPair, liftPairFst, getInnerType, convType)
+  moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
+  setterName, setEmpty, intValue)
+import Language.Drasil.Code.Imperative.Data (Pair(..), Terminator(..),   
+  ScopeTag (..), FuncData(..), fd, ModData(..), md, ParamData(..), pd, 
+  StateVarData(..), svd, TypeData(..), td, ValData(..), vd)
+import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
+  emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
+  liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
+  getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.List (nub)
@@ -532,8 +533,8 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
 
-  docFunc n d s p t ps b = pair (docFunc n d (pfst s) (pfst p) (pfst t) (map 
-    (mapPairFst pfst) ps) (pfst b)) (docFunc n d (psnd s) (psnd p) (psnd t) (map (mapPairFst psnd) ps) (psnd b))
+  docFunc desc pComms f = pair (docFunc desc pComms (pfst f)) (docFunc desc 
+    pComms (psnd f))
 
   inOutFunc n s p ins outs b = pair (inOutFunc n (pfst s) (pfst p) (map pfst 
     ins) (map pfst outs) (pfst b)) (inOutFunc n (psnd s) (psnd p) (map psnd ins)
@@ -546,6 +547,8 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
 
   commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
     (commentedFunc (psnd cmt) (psnd fn)) 
+
+  parameters m = parameters $ pfst m
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -1066,8 +1069,7 @@ instance MethodSym CppSrcCode where
     (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b blockStart 
     blockEnd)
 
-  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d $ map 
-    (mapPairFst parameterName) ps) (function n s p t (map fst ps) b)
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState v))
@@ -1083,6 +1085,8 @@ instance MethodSym CppSrcCode where
   commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn)) else fn
+
+  parameters = mthdParams . unCPPSC
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1535,8 +1539,7 @@ instance MethodSym CppHdrCode where
 
   function n = method n ""
 
-  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d $ map 
-    (mapPairFst parameterName) ps) (function n s p t (map fst ps) b)
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map (fmap getParam) ins) b
@@ -1552,6 +1555,8 @@ instance MethodSym CppHdrCode where
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
+    
+  parameters = mthdParams . unCPPHC
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData

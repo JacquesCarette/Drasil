@@ -15,6 +15,7 @@ module Language.Drasil.Code.Imperative.Symantics (
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
+import Language.Drasil.Code.Imperative.Data (ParamData)
 
 type Label = String
 type Library = String
@@ -508,9 +509,7 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr) 
-  docFunc :: Label -> String -> repr (Scope repr) -> repr (Permanence repr) -> 
-    repr (MethodType repr) -> [(repr (Parameter repr), String)] -> 
-    repr (Body repr) -> repr (Method repr) 
+  docFunc :: String -> [String] -> repr (Method repr) -> repr (Method repr) 
 
   -- The two lists are inputs and outputs, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
@@ -523,6 +522,8 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
 
   commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
     repr (Method repr)
+
+  parameters :: repr (Method repr) -> [ParamData]
 
 class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => 
   StateVarSym repr where

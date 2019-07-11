@@ -32,13 +32,14 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD,
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
-  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, valList, 
-  appendToBody, getterName, setterName)
-import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
+  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
+  valList, appendToBody, getterName, setterName)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
   fd, ModData(..), md, MethodData(..), mthd, ParamData(..), TypeData(..), td, 
-  ValData(..), vd, blank, vibcat, emptyIfEmpty, mapPairFst, liftA4, liftA5, 
-  liftList, lift1List, lift2Lists, lift4Pair, liftPair, liftPairFst, 
-  getInnerType, convType)
+  ValData(..), vd)
+import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
+  mapPairFst, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
+  liftPair, liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -494,8 +495,7 @@ instance MethodSym PythonCode where
   function n _ _ _ ps b = liftA2 (mthd False) (sequence ps) (liftA2 
     (pyFunction n) (liftList paramListDocD ps) b)
 
-  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d (map 
-    (mapPairFst parameterName) ps)) (function n s p t (map fst ps) b)
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins outs b = function n s p (mState void) (map stateParam ins)
@@ -507,6 +507,8 @@ instance MethodSym PythonCode where
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
+
+  parameters = mthdParams . unPC
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc

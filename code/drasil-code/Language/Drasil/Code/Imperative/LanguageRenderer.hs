@@ -32,24 +32,25 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
   includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, valList, prependToBody, appendToBody, 
-  surroundBody, getterName, setterName, setMain, setMainMethod, setEmpty, 
-  intValue
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, prependToBody, 
+  appendToBody, surroundBody, getterName, setterName, setMain, setMainMethod, 
+  setEmpty, intValue
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library,
-  RenderSym(..), BodySym(..), StateTypeSym(getType), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..))
+  RenderSym(..), BodySym(..), StateTypeSym(getType), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
+  MethodSym(..), BlockCommentSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
-import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
   ModData(..), md, MethodData(..), ParamData(..), pd, TypeData(..), td, 
-  ValData(..), vd, angles,blank, doubleQuotedText,hicat,vibcat,vmap, 
-  emptyIfEmpty, emptyIfNull, getNestDegree)
+  ValData(..), vd)
+import Language.Drasil.Code.Imperative.Helpers (angles,blank, doubleQuotedText,
+  hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
 import Data.List (intersperse, last)
 import Data.Maybe (fromMaybe)
@@ -719,6 +720,11 @@ classDoc desc = [doxBrief ++ desc | not (null desc)]
 moduleDoc :: String -> String -> String -> [String]
 moduleDoc desc m ext = (doxFile ++ m ++ ext) : 
   [doxBrief ++ desc | not (null desc)]
+
+docFuncRepr :: (MethodSym repr) => String -> [String] -> repr (Method repr) -> 
+  repr (Method repr)
+docFuncRepr desc pComms f = commentedFunc (docComment $ functionDoc desc
+  (zip (map paramName (parameters f)) pComms)) f
 
 -- Helper Functions --
 

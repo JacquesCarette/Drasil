@@ -425,10 +425,10 @@ genMethodCall s pr t n desc p b = do
       pTypes = map paramType p
       pNames = map paramName p
       vals = zipWith var pNames pTypes
+      fn = function n s pr t ps bod
   pComms <- paramComments pNames
   return $ if CommentFunc `elem` commented g
-    then docFunc n desc s pr t (zip ps pComms) bod
-    else function n s pr t ps bod
+    then docFunc desc pComms fn else fn
 
 genInOutFunc :: (RenderSym repr) => repr (Scope repr) -> 
   repr (Permanence repr) -> Label -> String -> [repr (Value repr)] -> [repr (Value repr)] 
@@ -442,11 +442,11 @@ genInOutFunc s pr n desc ins outs b = do
       bod = body $ loggedBody doLog
       pNames = map valueName ins
       oNames = map valueName outs
+      fn = inOutFunc n s pr ins outs bod
   pComms <- paramComments pNames
   oComms <- paramComments oNames
   return $ if CommentFunc `elem` commented g 
-    then docInOutFunc n desc s pr (zip ins pComms) (zip outs oComms) bod 
-    else inOutFunc n s pr ins outs bod
+    then docInOutFunc desc pComms oComms fn else fn
 
 paramComments :: [Label] -> Reader (State repr) [String]
 paramComments = mapM varTerm

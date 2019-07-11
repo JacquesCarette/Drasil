@@ -6,9 +6,9 @@ import Language.Drasil.Code (
   PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  MethodSym(..), ModuleSym(..), BlockCommentSym(..))
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  Selector(..), FunctionSym(..), SelectorFunction(..), MethodSym(..), 
+  ModuleSym(..), BlockCommentSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
@@ -36,13 +36,13 @@ helloInitVariables = block [comment "Initializing variables",
   varDecDef (var "oneIndex" int) (indexOf (var "myOtherList" (listType static_ 
     float)) (litFloat 1.0)),
   printLn (var "oneIndex" int),
-  var "a" int &= listSizeAccess (var "myOtherList" (listType static_ float)),
-  valState (objAccess (var "myOtherList" (listType static_ float)) (listAdd 
-    (var "myOtherList" (listType static_ float)) (litInt 2) (litFloat 2.0))),
-  valState (objAccess (var "myOtherList" (listType static_ float)) (listAppend (litFloat 2.5))),
+  var "a" int &= listSize (var "myOtherList" (listType static_ float)),
+  valState (listAdd (var "myOtherList" (listType static_ float)) (litInt 2) 
+    (litFloat 2.0)),
+  valState (listAppend (var "myOtherList" (listType static_ float)) (litFloat 2.5)),
   varDec $ var "e" float,
-  var "e" int &= objAccess (var "myOtherList" (listType static_ float)) (listAccess float (litInt 1)),
-  valState (objAccess (var "myOtherList" (listType static_ float)) (listSet (litInt 1) (litFloat 17.4))),
+  var "e" int &= listAccess (var "myOtherList" (listType static_ float)) (litInt 1),
+  valState (listSet (var "myOtherList" (listType static_ float)) (litInt 1) (litFloat 17.4)),
   listDec 7 (var "myName" (listType static_ string)),
   stringSplit ' ' (var "myName" (listType static_ string)) (litString "Brooks Mac"),
   printLn (var "myName" (listType static_ string)),
@@ -84,7 +84,7 @@ helloIfBody = addComments "If body" (body [
     printLn (var "mySlicedList" (listType static_ float)),
     
     printStrLn "Type an int",
-    getIntInput (var "d" int),
+    getInput (var "d" int),
     printStrLn "Type another",
     discardInput],
   

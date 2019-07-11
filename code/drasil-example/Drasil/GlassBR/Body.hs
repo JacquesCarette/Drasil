@@ -1,30 +1,25 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-import qualified Data.Map as Map
 import Language.Drasil hiding (organization, section, sec)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
-  TraceMap, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
-  _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
-  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel,
-  Theory(defined_fun, defined_quant), TheoryModel)
+import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
+  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
+  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
+  _sysinfodb, _usedinfodb)
+import Theory.Drasil (Theory(defined_fun, defined_quant))
 import Utils.Drasil
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
-  DocDesc, DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..), 
+  DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..),
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
-  LCsSec(..), ProblemDescription(..), PDSub(..), RefSec(RefProg),
-  RefTab(TAandA, TUnits), ReqrmntSec(..), ReqsSub(..), SCSSub(..),
-  SSDSec(..), SSDSub(..), SolChSpec(..), StkhldrSec(StkhldrProg2), 
-  StkhldrSub(Client, Cstmr), TraceabilitySec(TraceabilityProg), 
-  TSIntro(SymbOrder, TSPurpose), UCsSec(..), Verbosity(Verbose),
-  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
-  termDefnF', tsymb, generateTraceMap, getTraceMapFromTM, getTraceMapFromGD,
-  getTraceMapFromDD, getTraceMapFromIM, getSCSSub, traceMatStandard,
-  characteristicsLabel, generateTraceMap')
+  ProblemDescription(..), PDSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
+  ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl, SSDSec(..), SSDSub(..),
+  SolChSpec(..), StkhldrSec(StkhldrProg2),  StkhldrSub(Client, Cstmr),
+  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
+  Verbosity(Verbose), dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
+  outDataConstTbl, termDefnF', tsymb, traceMatStandard, characteristicsLabel)
 
 import qualified Drasil.DocLang.SRS as SRS (reference, valsOfAuxCons, assumpt, inModel)
 
@@ -80,30 +75,11 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]) label refBy
-  dataDefn insModel genDef theory concIns
-  section labelledCon
-
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
- 
-refBy :: RefbyMap
-refBy = generateRefbyMap label 
-
-dataDefn :: [DataDefinition]
-dataDefn = getTraceMapFromDD $ getSCSSub mkSRS
-
-insModel :: [InstanceModel]
-insModel = getTraceMapFromIM $ getSCSSub mkSRS
-
-genDef :: [GenDefn]
-genDef = getTraceMapFromGD $ getSCSSub mkSRS
-
-theory :: [TheoryModel]
-theory = getTraceMapFromTM $ getSCSSub mkSRS
+  ++ map unitWrapper [pascal, newton]) dataDefns iMods [] tMods concIns sec
+  labelledCon
 
 concIns :: [ConceptInstance]
-concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
+concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
 
 section :: [Section]
 section = sec
@@ -115,10 +91,8 @@ sec :: [Section]
 sec = extractSection srs
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols ++ map nw checkSi)
- ([] :: [ConceptChunk]) checkSi label refBy
-  dataDefn insModel genDef theory concIns
-  section labelledCon
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -126,13 +100,10 @@ refDB = rdb citations concIns
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
 
-checkSi :: [UnitDefn]
-checkSi = collectUnits symbMap thisSymbols 
-
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) systInfo
 
-mkSRS :: DocDesc
+mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
@@ -152,13 +123,13 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     SSDProg
       [SSDProblem $ PDProg prob [termsAndDesc]
         [ PhySysDesc glassBR physSystParts physSystFig []
-        , Goals goalInputs goals],
+        , Goals goalInputs],
        SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields) tMods
-        , GDs [] [] [] HideDerivation -- No Gen Defs for GlassBR
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) iMods HideDerivation
+        , TMs [] (Label : stdFields)
+        , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
         , Constraints EmptyS dataConstraintUncertainty
                       (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
                       S "gives", plural value `ofThe` S "specification",
@@ -168,14 +139,12 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqs funcReqsTables,
-    NonFReqsSub nonfuncReqs
+    FReqsSub funcReqsTables,
+    NonFReqsSub
   ],
-  LCsSec $ LCsProg likelyChgs,
-  UCsSec $ UCsProg unlikelyChgs,
-  TraceabilitySec $
-    TraceabilityProg (map fst traceabilityMatrices) (map (foldlList Comma List . snd) traceabilityMatrices)
-      (map (LlC . fst) traceabilityMatrices) [],
+  LCsSec,
+  UCsSec,
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard systInfo,
   AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
@@ -425,9 +394,6 @@ outputDataConstraints = outDataConstTbl [probBr]
 {--UNLIKELY CHANGES--}
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
-
-traceabilityMatrices :: [(LabelledContent, [Sentence])]
-traceabilityMatrices = traceMatStandard systInfo
 
 {--VALUES OF AUXILIARY CONSTANTS--}
 

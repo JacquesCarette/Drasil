@@ -38,7 +38,7 @@ public class InputFormat {
         infile.nextLine();
         inParams.TNT = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        inParams.g = (infile.nextLine());
+        inParams.g = infile.nextLine();
         infile.nextLine();
         inParams.t = Double.parseDouble(infile.nextLine());
         infile.nextLine();

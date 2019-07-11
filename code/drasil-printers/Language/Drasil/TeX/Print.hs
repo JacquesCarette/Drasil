@@ -101,7 +101,7 @@ data OpenClose = Open | Close
 pExpr :: Expr -> D
 pExpr (Dbl d)        = pure . text $ showEFloat Nothing d ""
 pExpr (Int i)        = pure . text $ show i
-pExpr (Str s)        = pure . text $ "\\text{``" ++ s ++ "\"}"
+pExpr (Str s)        = toText . quote . pure $ text s
 pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
 pExpr (Case ps)      = mkEnv "cases" (cases ps)
 pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)

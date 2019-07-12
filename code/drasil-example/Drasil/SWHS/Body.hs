@@ -6,7 +6,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
   _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel)
+import Theory.Drasil (InstanceModel, TheoryModel)
 import Utils.Drasil
 
 import Control.Lens ((^.))

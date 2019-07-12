@@ -98,7 +98,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
     AuxConstntSec $ AuxConsProg chipmunk [],
     Bibliography]
-      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
+      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: SystemInformation
 si = SI {

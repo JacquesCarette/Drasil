@@ -1,6 +1,6 @@
-module Drasil.SSP.Body (srs, si, symMap, printSetting) where
+module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
 
-import Language.Drasil hiding (number, organization, Verb, section, sec)
+import Language.Drasil hiding (number, organization, Verb, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
@@ -12,7 +12,7 @@ import Prelude hiding (sin, cos, tan)
 import Utils.Drasil
 
 import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
-  LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro,
+  LFunc(..), RefSec(..), RefTab(..), TConvention(..),
   TSIntro(..), Fields, Field(..), SRSDecl, SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
@@ -51,7 +51,7 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, de
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
-import Drasil.SSP.DataDefs (dataDefns)
+import qualified Drasil.SSP.DataDefs as SSP (dataDefs)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
   slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, defs, defs',
@@ -67,8 +67,15 @@ import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index,
   constrained, inputs, outputs, symbols)
 
 --Document Setup--
-thisSi :: [UnitDefn]
-thisSi = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
+
+srs :: Document
+srs = mkDoc mkSRS for si
+
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
+
+resourcePath :: String
+resourcePath = "../../../datafiles/SSP/"
 
 si :: SystemInformation
 si = SI {
@@ -78,22 +85,16 @@ si = SI {
   _quants = symbols,
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],
-  _datadefs = dataDefns,
+  _datadefs = SSP.dataDefs,
   _inputs = map qw inputs,
   _outputs = map qw outputs,
-  _defSequence = [Parallel (qdFromDD (head dataDefns)) (map qdFromDD (tail dataDefns))],
+  _defSequence = [(\x -> Parallel (head x) (tail x)) $ map qdFromDD SSP.dataDefs],
   _constraints = constrained,
   _constants = [],
-  _sysinfodb = symMap,
+  _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB
 }
-
-resourcePath :: String
-resourcePath = "../../../datafiles/SSP/"
-
-srs :: Document
-srs = mkDoc mkSRS for si
   
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro
@@ -137,11 +138,14 @@ mkSRS = [RefSec $ RefProg intro
   AuxConstntSec $ AuxConsProg ssp [],
   Bibliography]
 
+units :: [UnitDefn]
+units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
+
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
-sec :: [Section]
-sec = extractSection srs
+section :: [Section]
+section = extractSection srs
 
 labCon :: [LabelledContent]
 labCon = [figPhysSyst, figIndexConv, figForceActing, 
@@ -151,16 +155,16 @@ stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
 -- SYMBOL MAP HELPERS --
-symMap :: ChunkDB
-symMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
+symbMap :: ChunkDB
+symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
   ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
   ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
-  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw thisSi)
-  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) thisSi dataDefns SSP.iMods
-  generalDefinitions tMods concIns sec labCon
+  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
+  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
+  generalDefinitions tMods concIns section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
@@ -168,9 +172,6 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
-
-printSetting :: PrintingInformation
-printSetting = PI symMap defaultConfiguration
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

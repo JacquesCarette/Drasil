@@ -39,13 +39,15 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, valList, surroundBody, getterName, setterName, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
-  ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
-  ParamData(..), StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
-  angles, blank, doubleQuotedText, emptyIfEmpty, mapPairFst, mapPairSnd, vibcat,
-  liftA4, liftA5, liftA6, liftA8, liftList, lift2Lists, lift1List, lift3Pair, 
-  lift4Pair, liftPair, liftPairFst, getInnerType, convType)
+  moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
+  setterName, setEmpty, intValue)
+import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
+  ScopeTag (..), FuncData(..), fd, ModData(..), md, ParamData(..), pd, 
+  StateVarData(..), svd, TypeData(..), td, ValData(..), vd)
+import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
+  emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
+  liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
+  getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.List (nub)
@@ -531,20 +533,20 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
 
-  docFunc n d s p t ps b = pair (docFunc n d (pfst s) (pfst p) (pfst t) (map 
-    (mapPairFst pfst) ps) (pfst b)) (docFunc n d (psnd s) (psnd p) (psnd t) (map (mapPairFst psnd) ps) (psnd b))
+  docFunc desc pComms f = pair (docFunc desc pComms $ pfst f) (docFunc desc 
+    pComms $ psnd f)
 
   inOutFunc n s p ins outs b = pair (inOutFunc n (pfst s) (pfst p) (map pfst 
     ins) (map pfst outs) (pfst b)) (inOutFunc n (psnd s) (psnd p) (map psnd ins)
     (map psnd outs) (psnd b))
 
-  docInOutFunc n d s p ins outs b = pair (docInOutFunc n d (pfst s) (pfst p) 
-    (map (mapPairFst pfst) ins) (map (mapPairFst pfst) outs) (pfst b)) 
-    (docInOutFunc n d (psnd s) (psnd p) (map (mapPairFst psnd) ins) 
-    (map (mapPairFst psnd) outs) (psnd b))
+  docInOutFunc desc iComms oComms f = pair (docInOutFunc desc iComms oComms $ 
+    pfst f) (docInOutFunc desc iComms oComms $ psnd f)
 
   commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
     (commentedFunc (psnd cmt) (psnd fn)) 
+
+  parameters m = pairList (parameters $ pfst m) (parameters $ psnd m)
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -1030,16 +1032,20 @@ instance ParameterSym CppSrcCode where
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
-  method n c s _ t ps b = liftA2 (mthd False) (fmap snd s) (liftA5 
-    (cppsMethod n c) t (liftList paramListDocD ps) b blockStart blockEnd)
+  method n c s _ t ps b = liftA3 (mthd False) (fmap snd s) (sequence ps) 
+    (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b blockStart 
+    blockEnd)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
     where getBody = oneLiner $ returnState (self c $-> v)
   setMethod c v = method (setterName $ valueName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= v
-  mainMethod _ b = fmap (mthd True Pub) (liftA4 cppMainMethod int b blockStart 
-    blockEnd)
+  mainMethod _ b = setMainMethod <$> function "main" public static_ int 
+    [stateParam $ var "argc" int, 
+    liftA2 (pd "argv") (listType static_ string) 
+    (return $ text "const char *argv[]")] 
+    (liftA2 appendToBody b (returnState $ litInt 0))
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
@@ -1057,11 +1063,11 @@ instance MethodSym CppSrcCode where
     [("argc", "Number of command-line arguments"),
     ("argv", "List of command-line arguments")]) (mainMethod c b)
 
-  function n s _ t ps b = liftA2 (mthd False) (fmap snd s) (liftA5 
-    (cppsFunction n) t (liftList paramListDocD ps) b blockStart blockEnd)
+  function n s _ t ps b = liftA3 (mthd False) (fmap snd s) (sequence ps) 
+    (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b blockStart 
+    blockEnd)
 
-  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d $ map 
-    (mapPairFst parameterName) ps) (function n s p t (map fst ps) b)
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState v))
@@ -1069,14 +1075,13 @@ instance MethodSym CppSrcCode where
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
     map pointerParam outs) b
 
-  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d $ 
-    map (mapPairFst valueName) ins ++ map (mapPairFst valueName) 
-    (filter (\pm -> fst pm `notElem` map fst ins) outs))
-    (inOutFunc n s p (map fst ins) (map fst outs) b)
+  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
 
   commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
-    liftA3 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) 
+    liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn)) else fn
+
+  parameters m = map return $ (mthdParams . unCPPSC) m
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1091,12 +1096,12 @@ instance ClassSym CppSrcCode where
   -- Bool is True if the class is a main class, False otherwise
   type Class CppSrcCode = (Doc, Bool)
   buildClass n _ _ vs fs = liftPairFst (liftList methodListDocD 
-    (map (fmap (\(MthD b _ d) -> (d,b))) (fs ++ [destructor n vs])), 
+    (map (fmap mthdDoc) (fs ++ [destructor n vs])), 
     any (isMainMthd . unCPPSC) fs)
   enum _ _ _ = return (empty, False)
   mainClass _ vs fs = liftPairFst (liftA2 (cppMainClass (null vs)) (liftList 
     stateVarListDocD (map (fmap stVarDoc) vs)) (liftList methodListDocD (map 
-    (fmap (\(MthD b _ d) -> (d,b))) fs)), True)
+    (fmap mthdDoc) fs)), True)
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
   
@@ -1112,7 +1117,7 @@ instance ModuleSym CppSrcCode where
     liftA5 cppModuleDoc (liftList vcat (map include l)) 
     (if not (null l) && any (not . isEmpty . fst . unCPPSC) cs then
     return blank else return empty) (liftList methodListDocD (map (fmap 
-    (\(MthD b _ d) -> (d,b))) ms)) (if (any (not . isEmpty . fst . unCPPSC) cs 
+    mthdDoc) ms)) (if (any (not . isEmpty . fst . unCPPSC) cs
     || (all (isEmpty . fst . unCPPSC) cs && not (null l))) && 
     any (not . isEmpty . mthdDoc . unCPPSC) ms then return blank else 
     return empty) (liftList vibcat (map (fmap fst) cs)))
@@ -1513,13 +1518,13 @@ instance ParameterSym CppHdrCode where
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
-  method n _ s _ t ps _ = liftA2 (mthd False) (fmap snd s) 
+  method n _ s _ t ps _ = liftA3 (mthd False) (fmap snd s) (sequence ps)
     (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] (return empty)
   setMethod c v = method (setterName $ valueName v) c public dynamic_ 
     (mState void) [stateParam v] (return empty)
-  mainMethod _ _ = return (mthd True Pub empty)
+  mainMethod _ _ = return (mthd True Pub [] empty)
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
@@ -1529,8 +1534,7 @@ instance MethodSym CppHdrCode where
 
   function n = method n ""
 
-  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d $ map 
-    (mapPairFst parameterName) ps) (function n s p t (map fst ps) b)
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map (fmap getParam) ins) b
@@ -1538,14 +1542,13 @@ instance MethodSym CppHdrCode where
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
     map pointerParam outs) b
 
-  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d $ 
-    map (mapPairFst valueName) ins ++ map (mapPairFst valueName) 
-    (filter (\pm -> fst pm `notElem` map fst ins) outs))
-    (inOutFunc n s p (map fst ins) (map fst outs) b)
+  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
 
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
-    liftA3 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) 
+    liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
+    
+  parameters m = map return $ (mthdParams . unCPPHC) m
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
@@ -1578,7 +1581,7 @@ instance ClassSym CppHdrCode where
 instance ModuleSym CppHdrCode where
   type Module CppHdrCode = ModData
   buildModule n l ms cs = fmap (md n (any (snd . unCPPHC) cs || 
-    any (snd . unCPPHC) methods)) (if all (isEmpty . fst . unCPPHC) cs && all 
+    any (isMainMthd . unCPPHC) ms)) (if all (isEmpty . fst . unCPPHC) cs && all 
     (isEmpty . mthdDoc . unCPPHC) ms then return empty else liftA5 cppModuleDoc
     (liftList vcat (map include l)) (if not (null l) && any 
     (not . isEmpty . fst . unCPPHC) cs then return blank else return empty) 
@@ -1586,7 +1589,7 @@ instance ModuleSym CppHdrCode where
     cs || (all (isEmpty . fst . unCPPHC) cs && not (null l))) && any 
     (not . isEmpty . mthdDoc . unCPPHC) ms then return blank else return empty)
     (liftList vibcat (map (fmap fst) cs)))
-    where methods = map (fmap (\(MthD m _ d) -> (d, m))) ms
+    where methods = map (fmap mthdDoc) ms
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc
@@ -1604,6 +1607,15 @@ getParam v = mkParam (getParamFunc ((cType . valType) v)) v
         getParamFunc (Object _) = cppPointerParamDoc
         getParamFunc _ = stateParamDocD
  
+data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag, 
+  mthdParams :: [ParamData], mthdDoc :: Doc}
+
+mthd :: Bool -> ScopeTag -> [ParamData] -> Doc -> MethodData
+mthd = MthD 
+
+setMainMethod :: MethodData -> MethodData
+setMainMethod (MthD _ s ps d) = MthD True s ps d
+
 -- convenience
 enumsEqualInts :: Bool
 enumsEqualInts = False
@@ -1734,14 +1746,6 @@ cppsFunction n t ps b bStart bEnd = vcat [
 cpphMethod :: Label -> TypeData -> Doc -> Doc -> Doc
 cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
                       | otherwise = typeDoc t <+> text n <> parens ps <> end
-
-cppMainMethod :: TypeData  -> Doc -> Doc -> Doc -> Doc
-cppMainMethod t b bStart bEnd = vcat [
-  typeDoc t <+> text "main" <> parens (text "int argc, const char *argv[]") <+> bStart,
-  indent b,
-  blank,
-  indent $ text "return 0;",
-  bEnd]
 
 cppDestruct :: CppSrcCode (Value CppSrcCode) -> 
   CppSrcCode (Statement CppSrcCode)

@@ -29,6 +29,7 @@ int main(int argc, const char *argv[]) {
     double d_offset = func_d_offset(inParams, p_land);
     string s = func_s(inParams, d_offset);
     write_output(s, d_offset);
+    
     return 0;
 }
 

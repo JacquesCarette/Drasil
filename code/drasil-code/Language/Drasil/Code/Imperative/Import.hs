@@ -31,9 +31,9 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
   programName)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
-import Language.Drasil.Code.DataDesc (Entry(JunkEntry, ListEntry, Entry),
-  LinePattern(Repeat, Straight), Data(Line, Lines, JunkData, Singleton), 
-  DataDesc, isLine, isLines, getInputs, getPatternInputs, junkLine, singleton)
+import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
+  Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
+  getPatternInputs, junkLine, singleton)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (nub, intersperse, (\\), stripPrefix)
@@ -906,38 +906,31 @@ readData ddef = do
         lineData s p@(Straight _) = do
           vs <- getEntryVars s p
           return [stringListVals vs v_linetokens]
-        lineData s p@(Repeat pat _) = do
+        lineData s p@(Repeat ds) = do
           vs <- getEntryVars s p
-          return $ clearTemps s pat ++ stringListLists vs v_linetokens 
-            : appendTemps s pat
+          return $ clearTemps s ds ++ stringListLists vs v_linetokens 
+            : appendTemps s ds
         ---------------
-        clearTemps :: (RenderSym repr) => Maybe String -> [Entry] -> 
+        clearTemps :: (RenderSym repr) => Maybe String -> [DataItem] -> 
           [repr (Statement repr)]
         clearTemps Nothing _ = []
-        clearTemps (Just sfx) es = mapMaybe (clearTemp sfx) es
+        clearTemps (Just sfx) es = map (clearTemp sfx) es
         ---------------
-        clearTemp :: (RenderSym repr) => String -> Entry -> 
-          Maybe (repr (Statement repr))
-        clearTemp sfx (Entry v) = Just $ listDecDef (var (codeName v ++ 
-          sfx) (convType $ getListType (codeType v) 1)) []
-        clearTemp sfx (ListEntry _ v) = Just $ listDecDef (var 
-          (codeName v ++ sfx) (convType $ getListType (codeType v) 1)) []
-        clearTemp _ JunkEntry = Nothing
+        clearTemp :: (RenderSym repr) => String -> DataItem -> 
+          repr (Statement repr)
+        clearTemp sfx v = listDecDef (var (codeName v ++ 
+          sfx) (listInnerType $ convType $ codeType v)) []
         ---------------
-        appendTemps :: (RenderSym repr) => Maybe String -> [Entry] -> 
+        appendTemps :: (RenderSym repr) => Maybe String -> [DataItem] -> 
           [repr (Statement repr)]
         appendTemps Nothing _ = []
-        appendTemps (Just sfx) es = mapMaybe (appendTemp sfx) es
+        appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
-        appendTemp :: (RenderSym repr) => String -> Entry -> 
-          Maybe (repr (Statement repr))
-        appendTemp sfx (Entry v) = Just $ valState $ listAppend 
+        appendTemp :: (RenderSym repr) => String -> DataItem -> 
+          repr (Statement repr)
+        appendTemp sfx v = valState $ listAppend 
           (var (codeName v) (convType $ codeType v)) 
           (var (codeName v ++ sfx) (convType $ codeType v))
-        appendTemp sfx (ListEntry _ v) = Just $ valState $ listAppend 
-          (var (codeName v) (convType $ codeType v))
-          (var (codeName v ++ sfx) (convType $ codeType v))
-        appendTemp _ JunkEntry = Nothing
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_filename, l_i :: Label
         v_line, v_lines, v_linetokens, v_infile, v_filename, v_i ::
@@ -967,9 +960,3 @@ getEntryVarLogs lp = do
   vs <- getEntryVars Nothing lp
   logs <- mapM maybeLog vs
   return $ concat logs
-
-getListType :: C.CodeType -> Integer -> C.CodeType
-getListType _ 0 = error "No index given"
-getListType (C.List t) 1 = t
-getListType (C.List t) n = getListType t (n-1)
-getListType _ _ = error "Not a list type"

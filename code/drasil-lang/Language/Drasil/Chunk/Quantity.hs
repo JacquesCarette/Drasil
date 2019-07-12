@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.UnitDefn(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage(..))
-import Language.Drasil.Symbol (Symbol(Empty))
+import Language.Drasil.Symbol (Symbol(Empty), autoStage)
 
 data QuantityDict = QD { _id' :: IdeaDict
                        , _typ' :: Space
@@ -34,7 +34,7 @@ qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)
 
 -- For when the symbol is constant through stages
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
-mkQuant i t s sp u ab = QD (mkIdea i t ab) sp (const s) u
+mkQuant i t s sp u ab = QD (mkIdea i t ab) sp (autoStage s) u
 
 -- For when the symbol changes depending on the stage
 mkQuant' :: String -> NP -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict

@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Theory.Drasil.DataDefinition where
 
-import Control.Lens(makeLenses, (^.), view)
+import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil
 import Data.Drasil.IdeaDicts (dataDefn)
 
@@ -39,7 +39,7 @@ instance HasShortName       DataDefinition where shortname = lbl
 instance HasRefAddress      DataDefinition where getRefAdd = ra
 instance ConceptDomain      DataDefinition where cdom _ = cdom dataDefn
 instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
-instance Referable DataDefinition where
+instance Referable          DataDefinition where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
@@ -58,5 +58,6 @@ qdFromDD d = d ^. qd
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 mkQuantDef cncpt equation = datadef $ getUnit cncpt
-  where datadef (Just a) = fromEqnSt  (cncpt ^. uid) (cncpt ^. term) EmptyS (symbol cncpt) a equation
-        datadef Nothing  = fromEqnSt' (cncpt ^. uid) (cncpt ^. term) EmptyS (symbol cncpt) equation
+  where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS (getSym cncpt) Real a equation
+        datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS (getSym cncpt) Real equation
+        getSym x = symbol x Equational

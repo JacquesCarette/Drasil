@@ -29,19 +29,19 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, 
   forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
   plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, 
-  statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, notOpDocD, 
-  negateOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
-  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
-  litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
-  objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
-  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
-  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, valList, surroundBody, getterName, 
-  setterName, setMain,setEmpty, intValue)
+  statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, stringListVals', 
+  notOpDocD, negateOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, 
+  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
+  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, 
+  binExpr, binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, 
+  litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, 
+  enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, 
+  stateObjDocD, listStateObjDocD, notNullDocD, funcDocD, castDocD, 
+  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
+  privateDocD, publicDocD, dot, new, forLabel, blockCmtStart, blockCmtEnd, 
+  docCmtStart, observerListName, doubleSlash, blockCmtDoc, docCmtDoc, 
+  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, valList, 
+  surroundBody, getterName, setterName, setMain,setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, ParamData(..), pd, TypeData(..), td, ValData(..), vd,  
   angles, emptyIfEmpty, mapPairFst, liftA4, liftA5, liftA6, liftList, lift1List,
@@ -413,6 +413,8 @@ instance StatementSym JavaCode where
   stringSplit d vnew s = mkSt <$> liftA2 jStringSplit vnew 
     (funcApp "Arrays.asList" (listType static_ string) 
     [s $. func "split" (listType static_ string) [litString [d]]])
+
+  stringListVals = stringListVals'
 
   break = return (mkSt breakDocD)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
   continue = return (mkSt continueDocD)

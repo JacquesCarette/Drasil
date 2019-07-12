@@ -17,23 +17,24 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, 
   plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, 
   statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd,
-  stratDocD, notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', 
-  absOpDocD, absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, 
-  expOpDocD', sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, 
-  tanOpDocD', asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, 
-  atanOpDocD', unOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, 
-  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
-  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, 
-  orOpDocD, binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, 
-  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
-  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
-  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
-  constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
-  sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
-  includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, valList, prependToBody, appendToBody, 
-  surroundBody, getterName, setterName, setMain, setEmpty, intValue
+  stringListVals', stratDocD, notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, 
+  sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, logOpDocD', lnOpDocD, 
+  lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD', cosOpDocD, 
+  cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', acosOpDocD, 
+  acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, unExpr, typeUnExpr, 
+  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD,
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
+  binExpr, binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, 
+  litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, 
+  enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, 
+  stateObjDocD, listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
+  listIndexExistsDocD, funcDocD, castDocD, sizeDocD, listAccessFuncDocD, 
+  listSetFuncDocD, objAccessDocD, castObjDocD, includeD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
+  valList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
+  setMain, setEmpty, intValue
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -408,6 +409,16 @@ mkSt s = (s, Semi)
 
 mkStNoEnd :: Doc -> (Doc, Terminator)
 mkStNoEnd s = (s, Empty)
+
+stringListVals' :: (RenderSym repr) => [repr (Value repr)] -> repr (Value repr)
+  -> repr (Statement repr)
+stringListVals' vals sl = multi $ stringList (getType $ valueType sl)
+    where stringList (List String) = assignVals vals 0
+          stringList _ = error 
+            "Value passed to stringListVals must be a list of strings"
+          assignVals [] _ = []
+          assignVals (v:vs) n = assign v (cast (valueType v) 
+            (listAccess sl (litInt n))) : assignVals vs (n+1)
 
 -- Unary Operators --
 

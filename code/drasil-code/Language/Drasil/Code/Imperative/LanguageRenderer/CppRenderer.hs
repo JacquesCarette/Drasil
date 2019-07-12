@@ -27,16 +27,16 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, 
   switchDocD, forDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
   plusPlusDocD, varDecDocD, varDecDefDocD, objDecDefDocD, constDecDefDocD, 
-  statementDocD, returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, notOpDocD, 
-  negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, 
-  tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, typeUnExpr, 
-  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
-  typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
-  litStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfDocD, funcAppDocD,
-  funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
+  statementDocD, returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd,
+  stringListVals', notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, 
+  sinOpDocD, cosOpDocD, tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, 
+  typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
+  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
+  divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, 
+  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
+  litIntD, litStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfDocD, 
+  funcAppDocD, funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
   moduleDoc, valList, surroundBody, getterName, setterName, setEmpty, intValue)
@@ -420,6 +420,9 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   discardFileLine f = pair (discardFileLine $ pfst f) (discardFileLine $ psnd f)
   stringSplit d vnew s = pair (stringSplit d (pfst vnew) (pfst s)) 
     (stringSplit d (psnd vnew) (psnd s))
+
+  stringListVals vals sl = pair (stringListVals (map pfst vals) (pfst sl))
+    (stringListVals (map psnd vals) (psnd sl))
 
   break = pair break break
   continue = pair continue continue
@@ -940,6 +943,8 @@ instance StatementSym CppSrcCode where
         (oneLiner $ valState $ listAppend vnew v_word)
     ]
 
+  stringListVals = stringListVals'
+
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)
 
@@ -1442,6 +1447,8 @@ instance StatementSym CppHdrCode where
   getFileInputLine _ _ = return (mkStNoEnd empty)
   discardFileLine _ = return (mkStNoEnd empty)
   stringSplit _ _ _ = return (mkStNoEnd empty)
+
+  stringListVals _ _ = return (mkStNoEnd empty)
 
   break = return (mkStNoEnd empty)
   continue = return (mkStNoEnd empty)

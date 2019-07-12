@@ -23,9 +23,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
-  mkStNoEnd, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', 
-  sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', 
-  unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  mkStNoEnd, stringListVals', notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD',
+  expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', 
+  atanOpDocD', unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD,
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
@@ -391,6 +391,8 @@ instance StatementSym PythonCode where
   discardFileLine f = valState $ objMethodCall string f "readline" []
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
     (listType static_ string) [litString [d]]))  
+
+  stringListVals = stringListVals'
 
   break = return (mkStNoEnd breakDocD)
   continue = return (mkStNoEnd continueDocD)

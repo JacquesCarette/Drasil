@@ -958,9 +958,8 @@ readData ddef = do
           Entry -> Reader (State repr) [repr (Statement repr)]
         entryData s tokIndex (Entry v) = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
-          l <- maybeLog vv
-          return [multi $ assign vv (cast (convType $ codeType v)
-            (listAccess v_linetokens tokIndex)) : l]
+          return [assign vv
+            (listAccess v_linetokens tokIndex)]
         entryData s tokIndex (ListEntry indx v) = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
           return [

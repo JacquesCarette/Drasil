@@ -21,7 +21,7 @@ refMDB :: ModelDB
 refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition]
-qDefs = [ddHtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,
+qDefs = [ddHtFluxCQD, ddHtFluxPQD, ddBalanceSolidPCMQD,
   ddBalanceLiquidPCMQD, dd3HtFusionQD, dd4MeltFracQD]
 
 dataDefs :: [DataDefinition] 
@@ -45,14 +45,14 @@ ddHtFluxC = dd ddHtFluxCQD [makeCite koothoor2013] [] "htFluxC"
 --Can't include info in description beyond definition of variables?
 ----
 
-dd2HtFluxPQD :: QDefinition
-dd2HtFluxPQD = mkQuantDef htFluxP htFluxPEqn
+ddHtFluxPQD :: QDefinition
+ddHtFluxPQD = mkQuantDef htFluxP htFluxPEqn
 
 htFluxPEqn :: Expr
 htFluxPEqn = sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
 
 dd2HtFluxP :: DataDefinition
-dd2HtFluxP = dd dd2HtFluxPQD [makeCite koothoor2013] [] "htFluxP"
+dd2HtFluxP = dd ddHtFluxPQD [makeCite koothoor2013] [] "htFluxP"
   [makeRef2S assumpLCCCW]
 
 ----

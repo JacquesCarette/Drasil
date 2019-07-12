@@ -1099,7 +1099,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]If $is-safePb\land{}is-safeLR$ (from \hyperref[TM:isSafeProb]{TM: isSafeProb} and \hyperref[TM:isSafeLoad]{TM: isSafeLoad}), output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
 \item[Output-Quantities:\phantomsection\label{outputQuants}]Output the quantities from \hyperref[Table:ReqOutputs]{Table:ReqOutputs}.
 \end{itemize}
-\begin{longtable}{l l l}
+\begin{longtabu}{l X[l] l}
 \toprule
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
@@ -1128,7 +1128,7 @@ $w$ & Charge weight & kg
 \bottomrule
 \caption{Required Inputs following \hyperref[inputGlassProps]{FR: Input-Glass-Props}}
 \label{Table:ReqInputs}
-\end{longtable}
+\end{longtabu}
 \begin{longtable}{l l l l}
 \toprule
 \textbf{Symbol} & \textbf{Description} & \textbf{Source} & \textbf{Units}

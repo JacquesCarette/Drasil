@@ -218,14 +218,14 @@ makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
 -- | determines the length of a Spec
 specLength :: Spec -> Int
 specLength (S x)     = length x
---specLength (E x)     = length $ filter (`notElem` dontCount) $ pExpr x
+specLength (E x)     = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
 specLength EmptyS    = 0
 specLength _         = 0
 
-dontCount :: [D]
-dontCount = map (pure . text . (: [])) "\\/[]{}()_^$:"
+dontCount :: String
+dontCount = "\\/[]{}()_^$:"
 
 makeHeaders :: [Spec] -> D
 makeHeaders ls = hpunctuate (text " & ") (map (commandD "textbf" . spec) ls) %% pure dbs

@@ -22,7 +22,7 @@ refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition]
 qDefs = [ddHtFluxCQD, ddHtFluxPQD, ddBalanceSolidPCMQD,
-  ddBalanceLiquidPCMQD, dd3HtFusionQD, dd4MeltFracQD]
+  ddBalanceLiquidPCMQD, ddHtFusionQD, dd4MeltFracQD]
 
 dataDefs :: [DataDefinition] 
 dataDefs = [ddHtFluxC, ddHtFluxP, ddBalanceSolidPCM,
@@ -83,15 +83,15 @@ ddBalanceLiquidPCM = dd ddBalanceLiquidPCMQD [makeCite lightstone2012] []
 
 ----
 
-dd3HtFusionQD :: QDefinition
-dd3HtFusionQD = mkQuantDef htFusion htFusionEqn
+ddHtFusionQD :: QDefinition
+ddHtFusionQD = mkQuantDef htFusion htFusionEqn
 
 htFusionEqn :: Expr
 htFusionEqn = sy latentHeat / sy mass
 
 -- FIXME: need to allow page references in references.
 dd3HtFusion :: DataDefinition
-dd3HtFusion = dd dd3HtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
+dd3HtFusion = dd ddHtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
   [] "htFusion" []
 
 ----

@@ -6,6 +6,14 @@ using System.Collections.Generic;
 public class InputConstraints {
     
     public static void input_constraints(InputParameters inParams) {
+        StreamWriter outfile;
+        outfile = new StreamWriter("log.txt", true);
+        outfile.WriteLine("function input_constraints called with inputs: {");
+        outfile.Write("  inParams = ");
+        outfile.WriteLine("Instance of InputParameters object");
+        outfile.WriteLine("  }");
+        outfile.Close();
+        
         if (!(((0.1 <= inParams.a) && (inParams.a <= 5.0)))) {
             throw new Exception("InputError");
         }

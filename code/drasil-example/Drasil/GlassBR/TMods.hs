@@ -14,8 +14,6 @@ import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (tmDemand, demandq, isSafeProb, isSafeLoad, tmLRe, pbTolfail, probFail)
 import Drasil.GlassBR.Symbols (thisSymbols)
 
-import qualified Data.Map as Map
-
 {--}
 
 tMods :: [TheoryModel]
@@ -35,8 +33,7 @@ lrIsSafe = tm (cw lrIsSafeRC)
    [relToQD locSymbMap lrIsSafeRC] [sy isSafeLoad $= sy tmLRe $> sy tmDemand] [] [makeCite astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
    where locSymbMap = cdb thisSymbols ([] :: [IdeaDict]) symb
-                          ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
-                           [] []
+                          ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 lrIsSafeRC :: RelationConcept
 lrIsSafeRC = makeRC "safetyLoad" (nounPhraseSP "Safety Load")
@@ -56,8 +53,7 @@ pbIsSafe = tm (cw pbIsSafeRC)
   [relToQD locSymbMap pbIsSafeRC] [sy isSafeProb $= sy probFail $< sy pbTolfail] [] [makeCite astm2009]
   "isSafeProb" [pbIsSafeDesc]
   where locSymbMap = cdb thisSymbols ([] :: [IdeaDict]) symb
-                          ([] :: [UnitDefn]) Map.empty Map.empty [] [] [] [] []
-                          [] []
+                          ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 pbIsSafeRC :: RelationConcept
 pbIsSafeRC = makeRC "safetyProbability" (nounPhraseSP "Safety Probability")

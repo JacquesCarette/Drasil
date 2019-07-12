@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
   verticalComma,angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,
   vibmap, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, 
   liftList, lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
-  getInnerType, convType
+  getInnerType, getNestDegree, convType
 ) where
 
 import Language.Drasil.Code.Code (CodeType(..))
@@ -151,6 +151,10 @@ getInnerType :: CodeType -> CodeType
 getInnerType (List innerT) = innerT
 getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
 
+getNestDegree :: Integer -> CodeType -> Integer
+getNestDegree n (List t) = getNestDegree (n+1) t
+getNestDegree n _ = n
+
 convType :: (S.RenderSym repr) => CodeType -> repr (S.StateType repr)
 convType Boolean = S.bool
 convType Integer = S.int
@@ -160,5 +164,6 @@ convType String = S.string
 convType (List t) = S.listType S.dynamic_ (convType t)
 convType (Iterator t) = S.iterator $ convType t
 convType (Object n) = S.obj n
+convType (Enum n) = S.enumType n
 convType Void = S.void
 convType File = error "convType: File ?"

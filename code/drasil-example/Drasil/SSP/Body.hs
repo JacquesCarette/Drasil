@@ -2,27 +2,23 @@ module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
 
 import Language.Drasil hiding (number, organization, Verb, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
-  SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
-  rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
-  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, qdFromDD)
+import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
+  SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
+  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
+  _quants, _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
-import qualified Data.Map as Map
 import Utils.Drasil
 
-import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
-  LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), 
-  TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
+import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
+  LFunc(..), RefSec(..), RefTab(..), TConvention(..),
+  TSIntro(..), Fields, Field(..), SRSDecl, SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), dataConstraintUncertainty, intro, mkDoc, tsymb'',
-  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
-  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceMap', traceMatStandard)
+  traceMatStandard)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt, sysCon,
   genDefn, dataDefn, datCon)
@@ -87,7 +83,7 @@ si = SI {
   _kind = Doc.srs, 
   _authors = [henryFrankis, brooks],
   _quants = symbols,
-  _concepts = symbTT,
+  _concepts = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],
   _datadefs = SSP.dataDefs,
   _inputs = map qw inputs,
@@ -100,7 +96,7 @@ si = SI {
    refdb = refDB
 }
   
-mkSRS :: DocDesc
+mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
@@ -119,53 +115,31 @@ mkSRS = [RefSec $ RefProg intro
         [ SSDProblem $ PDProg prob []
           [ TermsAndDefs Nothing terms
           , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
-          , Goals goalsInputs goals]
+          , Goals goalsInputs]
         , SSDSolChSpec $ SCSProg
           [Assumptions
-          , TMs [] (Label : stdFields) tMods
-          , GDs [] ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-          , DDs [] ([Label, Symbol, Units] ++ stdFields) SSP.dataDefs ShowDerivation
+          , TMs [] (Label : stdFields)
+          , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+          , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
           , IMs instModIntro ([Label, Input, Output, InConstraints, 
-            OutConstraints] ++ stdFields) SSP.iMods ShowDerivation
+            OutConstraints] ++ stdFields) ShowDerivation
           , Constraints  EmptyS dataConstraintUncertainty EmptyS
             [dataConstraintTable2, dataConstraintTable3]
           , CorrSolnPpties propsDeriv
           ]
         ],
     ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqs funcReqTables,
-    NonFReqsSub nonFuncReqs
+    FReqsSub funcReqTables,
+    NonFReqsSub
   ],
-  LCsSec $ LCsProg likelyChgs,
-  UCsSec $ UCsProg unlikelyChgs,
-  TraceabilitySec $ TraceabilityProg (map fst traceyMatrix) (map (foldlList Comma List . snd) traceyMatrix)
-    (map (LlC . fst) traceyMatrix) [],
+  LCsSec,
+  UCsSec,
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg ssp [],
   Bibliography]
 
 units :: [UnitDefn]
 units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
-
-unitsColl :: [UnitDefn]
-unitsColl = collectUnits symbMap symbTT
-
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
- 
-refBy :: RefbyMap
-refBy = generateRefbyMap label
-
-dataDefs :: [DataDefinition]
-dataDefs = getTraceMapFromDD $ getSCSSub mkSRS
-
-iMods :: [InstanceModel]
-iMods = getTraceMapFromIM $ getSCSSub mkSRS
-
-genDefs :: [GenDefn]
-genDefs = getTraceMapFromGD $ getSCSSub mkSRS
-
-theory :: [TheoryModel]
-theory = getTraceMapFromTM $ getSCSSub mkSRS
 
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
@@ -180,10 +154,6 @@ labCon = [figPhysSyst, figIndexConv, figForceActing,
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-traceyMatrix :: [(LabelledContent, [Sentence])]
-traceyMatrix = traceMatStandard si
-
-
 -- SYMBOL MAP HELPERS --
 symbMap :: ChunkDB
 symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
@@ -193,21 +163,15 @@ symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
-  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units label
-  refBy dataDefs iMods genDefs theory concIns
-  section labCon
+  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
+  generalDefinitions tMods concIns section labCon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++
- map nw unitsColl) ([] :: [ConceptChunk]) unitsColl label refBy
- dataDefs iMods genDefs theory concIns section 
- labCon
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
-
-symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symbMap
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

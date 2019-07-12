@@ -2,15 +2,14 @@ module Drasil.NoPCM.Body where
 
 import Language.Drasil hiding (section, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
-  SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
-  rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
-  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
+  SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
+  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
+  _quants, _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 
-import qualified Data.Map as Map
+import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -41,18 +40,15 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Drasil.DocLang (DocDesc, Fields, Field(..), Verbosity(Verbose), 
+import Drasil.DocLang (SRSDecl, Fields, Field(..), Verbosity(Verbose), 
   InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
   SolChSpec(..), SSDSec(..), DocSection(..), GSDSec(..), GSDSub(..),
-  AuxConstntSec(AuxConsProg), IntroSec(IntroProg), LCsSec(..), UCsSec(..),
+  AuxConstntSec(AuxConsProg), IntroSec(IntroProg),
   IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
   ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty,
-  inDataConstTbl, intro, mkDoc, outDataConstTbl, tsymb,
-  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
-  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceMap', traceMatStandard)
+  inDataConstTbl, intro, mkDoc, outDataConstTbl, tsymb, traceMatStandard)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -73,7 +69,7 @@ import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn,
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
 import Drasil.NoPCM.DataDefs (qDefs)
-import qualified Drasil.NoPCM.DataDefs as NP (dataDefs)
+import qualified Drasil.NoPCM.DataDefs as NoPCM (dataDefs)
 import Drasil.NoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
@@ -94,10 +90,6 @@ resourcePath = "../../../datafiles/NoPCM/"
 -- This defines the standard concepts used throughout the document
 units :: [UnitDefn]
 units = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
-
-unitsColl :: [UnitDefn]
-unitsColl = collectUnits symbMap symbTT 
-
 -- This contains the list of symbols used throughout the document
 symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
@@ -126,7 +118,7 @@ concepts = map ucw [density, tau, inSA, outSA,
 --Section 1 : REFERENCE MATERIAL
 --------------------------------
   
-mkSRS :: DocDesc
+mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder],
@@ -148,53 +140,32 @@ mkSRS = [RefSec $ RefProg intro
     [ SSDProblem $ PDProg probDescIntro []
       [ TermsAndDefs Nothing terms
       , PhySysDesc progName physSystParts figTank []
-      , Goals goalInputs goals]
+      , Goals goalInputs]
     , SSDSolChSpec $ SCSProg
       [ Assumptions
-      , TMs [] (Label : stdFields) theoreticalModels
-      , GDs [] ([Label, Units] ++ stdFields) genDefs ShowDerivation
-      , DDs [] ([Label, Symbol, Units] ++ stdFields) NP.dataDefs ShowDerivation
+      , TMs [] (Label : stdFields)
+      , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+      , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
       , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-        NoPCM.iMods ShowDerivation
+        ShowDerivation
       , Constraints EmptyS dataConstraintUncertainty dataContMid
         [dataConstTable1, dataConstTable2]
       , CorrSolnPpties propsDerivNoPCM
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqs [inputInitQuantsTable],
-    NonFReqsSub nfRequirements
+    FReqsSub [inputInitQuantsTable],
+    NonFReqsSub
   ],
-  LCsSec $ LCsProg $ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH],
-  UCsSec $ UCsProg unlikelyChgs,
-  TraceabilitySec $
-    TraceabilityProg (map fst traceabilityMatrices)
-      (map (foldlList Comma List . snd) traceabilityMatrices) (map (LlC . fst) traceabilityMatrices) [],
+  LCsSec,
+  UCsSec,
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]
 
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
- 
-refBy :: RefbyMap
-refBy = generateRefbyMap label
-
-dataDefs :: [DataDefinition]
-dataDefs = getTraceMapFromDD $ getSCSSub mkSRS
-
-iMods :: [InstanceModel]
-iMods = getTraceMapFromIM $ getSCSSub mkSRS
-
-genDef :: [GenDefn]
-genDef = getTraceMapFromGD $ getSCSSub mkSRS
-
-theory :: [TheoryModel]
-theory = getTraceMapFromTM $ getSCSSub mkSRS
-
 concIns :: [ConceptInstance]
-concIns =
- goals ++ funcReqs ++ [likeChgTCVOD, likeChgTCVOL] ++ assumptions ++ likelyChgs ++
- [likeChgTLH] ++ unlikelyChgs
+concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
+ [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
 
 labCon :: [LabelledContent]
 labCon = [inputInitQuantsTable, dataConstTable1]
@@ -210,10 +181,13 @@ si = SI {
   _sys = srsSWHS,
   _kind = Doc.srs,
   _authors = [thulasi],
-  _quants = symbTT,
+  -- FIXME: Everything after (and including) \\ should be removed when
+  -- #1658 is resolved. Basically, _quants is used here, but neither tankVol
+  -- or tau appear in the document and thus should not be displayed.
+  _quants = map qw symbols \\ map qw [tankVol, tau],
   _concepts = symbols,
   _definitions = [],
-  _datadefs = NP.dataDefs,
+  _datadefs = NoPCM.dataDefs,
   _inputs = inputs ++ map qw [tempW, watE], --inputs ++ outputs?
   _outputs = map qw [tempW, watE],     --outputs
   _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
@@ -232,20 +206,14 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
-  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans] ++ map nw unitsColl
+  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans]
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
-  (map cw symbols ++ srsDomains)
-  units label refBy dataDefs iMods genDef theory
-  concIns section labCon
+  (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
+  theoreticalModels concIns section labCon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++ map nw unitsColl)
- ([] :: [ConceptChunk]) unitsColl label refBy
- dataDefs iMods genDef theory concIns
- section labCon
-
-symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symbMap
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -416,12 +384,6 @@ dataConstListOut = [tempW, watE]
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
 ----------------------------------------------
-
-traceabilityMatrices :: [(LabelledContent, [Sentence])]
-traceabilityMatrices = traceMatStandard si
-
--- These matrices can probably be generated automatically when enough info is
--- abstracted out.
 
 ------------------------
 -- Traceabilty Graphs --

@@ -5,8 +5,7 @@ module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
-import Language.Drasil.Code.Code as C (Code(..), CodeType(List, Char, Float, 
-  String, Boolean, Integer))
+import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -215,8 +214,8 @@ genInputClass = do
         (repr (Class repr)))
       genClass [] = return Nothing 
       genClass _ = do
-        let inputVars = map (\x -> pubMVar 0 (codeName x) (convType $ 
-              codeType x)) ins
+        let inputVars = map (\x -> pubMVar 0 (var (codeName x) (convType $ 
+              codeType x))) ins
         return $ Just $ pubClass "InputParameters" Nothing inputVars []
   genClass $ mapMaybe (\x -> Map.lookup (codeName x) (eMap $ codeSpec g)) ins
 
@@ -359,7 +358,7 @@ genOutputFormat = do
         outp <- mapM (\x -> do
           v <- variable (codeName x) (convType $ codeType x)
           return [ printFileStr v_outfile (codeName x ++ " = "),
-                   printFileLn v_outfile (convType $ codeType x) v
+                   printFileLn v_outfile v
                  ] ) (outputs $ csi $ codeSpec g)
         mthd <- publicMethod (mState void) "write_output" parms (return [block $
           [
@@ -434,10 +433,10 @@ loggedMethod n vals b =
     printInputs [] _ = []
     printInputs [v] v_outfile = [
       printFileStr v_outfile ("  " ++ valueName v ++ " = "), 
-      printFileLn v_outfile (valueType v) v]
+      printFileLn v_outfile v]
     printInputs (v:vs) v_outfile = [
       printFileStr v_outfile ("  " ++ valueName v ++ " = "), 
-      printFile v_outfile (valueType v) v, 
+      printFile v_outfile v, 
       printFileStrLn v_outfile ", "] ++ printInputs vs v_outfile
     
 
@@ -461,7 +460,7 @@ genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 
 genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genMainFunc =
-  let l_filename = "filename"
+  let v_filename = var "filename" string
   in do
     g <- ask
     ip <- getInputDecl
@@ -471,7 +470,7 @@ genMainFunc =
     varDef <- mapM getCalcCall (execOrder $ csi $ codeSpec g)
     wo <- getOutputCall
     return $ mainMethod "" $ bodyStatements $
-      varDecDef l_filename string (arg 0) :
+      varDecDef v_filename (arg 0) :
       initLogFileVar (logKind g) ++
       catMaybes ([ip, gi, dv, ic] ++ varDef ++ [wo])
 
@@ -479,15 +478,13 @@ getInputDecl :: (RenderSym repr) => Reader (State repr) (Maybe (repr (
   Statement repr)))
 getInputDecl = do
   g <- ask
-  let l_params = "inParams"
-      getDecl :: (RenderSym repr) => Structure -> [CodeChunk] -> 
-        Reader (State repr) (Maybe (repr (Statement repr)))
+  let v_params = var "inParams" (obj "InputParameters")
       getDecl _ [] = return Nothing
       getDecl Unbundled ins = do
         vals <- mapM (\x -> variable (codeName x) (convType $ codeType x)) ins
         return $ Just $ multi $ map varDec vals
-      getDecl Bundled _ = return $ Just $ extObjDecNewVoid l_params 
-        "InputParameters" (obj "InputParameters") 
+      getDecl Bundled _ = return $ Just $ extObjDecNewVoid "InputParameters"
+        v_params 
   getDecl (inStruct g) (inputs $ codeSpec g)
 
 getFuncCall :: (RenderSym repr) => String -> repr (StateType repr) -> 
@@ -537,7 +534,7 @@ getCalcCall :: (RenderSym repr) => CodeDefinition -> Reader (State repr)
   (Maybe (repr (Statement repr)))
 getCalcCall c = do
   val <- getFuncCall (codeName c) (convType $ codeType c) (getCalcParams c)
-  return $ fmap (varDecDef (nopfx $ codeName c) (convType $ codeType c)) val
+  return $ fmap (varDecDef (var (nopfx $ codeName c) (convType $ codeType c))) val
 
 getOutputCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -609,8 +606,7 @@ loggedAssign a b =
       assign a b,
       openFileA v_outfile (litString $ logName g),
       printFileStr v_outfile ("var '" ++ valueName a ++ "' assigned to "),
-      printFile v_outfile (convType $ varType (valueName a) (vMap $ codeSpec g))
-        a,
+      printFile v_outfile a,
       printFileStrLn v_outfile (" in module " ++ currentModule g),
       closeFile v_outfile ]
 
@@ -722,8 +718,6 @@ convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division
-convExpr (BinaryOp Eq a b@(Str _)) = liftM2 stringEqual (convExpr a) 
-  (convExpr b) -- hack to deal with string equality
 convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr (Case l)      = doit l -- FIXME this is sub-optimal
   where
@@ -778,7 +772,7 @@ unop Cot  = cot
 unop Arcsin = arcsin
 unop Arccos = arccos
 unop Arctan = arctan
-unop Dim  = listSizeAccess
+unop Dim  = listSize
 unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
@@ -798,7 +792,7 @@ bfunc Impl  = error "convExpr :=>"
 bfunc Iff   = error "convExpr :<=>"
 bfunc Dot   = error "convExpr DotProduct"
 bfunc Frac  = (#/)
-bfunc Index = \x y -> x $. listAccess (listInnerType $ valueType x) y
+bfunc Index = listAccess
 
 -- medium hacks --
 genModDef :: (RenderSym repr) => CS.Mod -> Reader (State repr) 
@@ -847,8 +841,8 @@ convStmt (FTry t c) = do
   stmt2 <- mapM convStmt c
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmt FContinue = return continue
-convStmt (FDec v (C.List t)) = return $ listDec (codeName v) 0 
-  (listType dynamic_ (convType t))
+convStmt (FDec v (C.List t)) = return $ listDec 0 (var (codeName v)
+  (listType dynamic_ (convType t)))
 convStmt (FDec v t) = do 
   val <- variable (codeName v) (convType t)
   return $ varDec val
@@ -858,7 +852,7 @@ convStmt (FProcCall n l) = do
 convStmt (FAppend a b) = do
   a' <- convExpr a
   b' <- convExpr b
-  return $ valState $ a' $. listAppend b'
+  return $ valState $ listAppend a' b'
 
 genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)
   (repr (Method repr))
@@ -877,15 +871,15 @@ readData ddef = do
   return [block $ [
     varDec v_infile,
     varDec v_line,
-    listDec l_lines 0 (listType dynamic_ string),
-    listDec l_linetokens 0 (listType dynamic_ string),
+    listDec 0 v_lines,
+    listDec 0 v_linetokens,
     openFileR v_infile v_filename ] ++
     concat inD ++ [
     closeFile v_infile ]]
   where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Statement repr)]
         inData (Singleton v) = do
             vv <- variable (codeName v) (convType $ codeType v)
-            return [getFileInput (codeType v) v_infile vv]
+            return [getFileInput v_infile vv]
         inData JunkData = return [discardFileLine v_infile]
         inData (Line lp d) = do
           lnI <- lineData Nothing lp
@@ -894,9 +888,9 @@ readData ddef = do
         inData (Lines lp Nothing d) = do
           lnV <- lineData (Just "_temp") lp
           return [ getFileInputAll v_infile v_lines,
-            forRange l_i (litInt 0) (listSizeAccess v_lines) (litInt 1)
-              (bodyStatements $ stringSplit d v_linetokens (v_lines $.
-                listAccess (listInnerType $ valueType v_lines) v_i) : lnV)
+            forRange l_i (litInt 0) (listSize v_lines) (litInt 1)
+              (bodyStatements $ stringSplit d v_linetokens (
+                listAccess v_lines v_i) : lnV)
             ]
         inData (Lines lp (Just numLines) d) = do
           lnV <- lineData (Just "_temp") lp
@@ -913,8 +907,8 @@ readData ddef = do
         lineData s (Repeat p Nothing) = do
           pat <- patternData s p v_j
           return $ clearTemps s p ++ 
-            [forRange l_j (litInt 0) (castObj (cast int float)
-              (listSizeAccess v_linetokens #/ litInt (toInteger $ length p))) 
+            [forRange l_j (litInt 0) (cast int
+              (listSize v_linetokens #/ litInt (toInteger $ length p))) 
               (litInt 1) ( bodyStatements pat )] ++ 
             appendTemps s p
         lineData s (Repeat p (Just numPat)) = do
@@ -931,10 +925,10 @@ readData ddef = do
         ---------------
         clearTemp :: (RenderSym repr) => String -> Entry -> 
           Maybe (repr (Statement repr))
-        clearTemp sfx (Entry v) = Just $ listDecDef (codeName v ++ sfx) 
-          (convType $ getListType (codeType v) 1) []
-        clearTemp sfx (ListEntry _ v) = Just $ listDecDef (codeName v ++ sfx)
-          (convType $ getListType (codeType v) 1) []
+        clearTemp sfx (Entry v) = Just $ listDecDef (var (codeName v ++ 
+          sfx) (convType $ getListType (codeType v) 1)) []
+        clearTemp sfx (ListEntry _ v) = Just $ listDecDef (var 
+          (codeName v ++ sfx) (convType $ getListType (codeType v) 1)) []
         clearTemp _ JunkEntry = Nothing
         ---------------
         appendTemps :: (RenderSym repr) => Maybe String -> [Entry] -> 
@@ -944,12 +938,12 @@ readData ddef = do
         ---------------
         appendTemp :: (RenderSym repr) => String -> Entry -> 
           Maybe (repr (Statement repr))
-        appendTemp sfx (Entry v) = Just $ valState $ var (codeName v) 
-          (convType $ codeType v) $. listAppend (var (codeName v ++ sfx) 
-          (convType $ codeType v))
-        appendTemp sfx (ListEntry _ v) = Just $ valState $ var (codeName v)
-          (convType $ codeType v) $. listAppend (var (codeName v ++ sfx) 
-          (convType $ codeType v))
+        appendTemp sfx (Entry v) = Just $ valState $ listAppend 
+          (var (codeName v) (convType $ codeType v)) 
+          (var (codeName v ++ sfx) (convType $ codeType v))
+        appendTemp sfx (ListEntry _ v) = Just $ valState $ listAppend 
+          (var (codeName v) (convType $ codeType v))
+          (var (codeName v ++ sfx) (convType $ codeType v))
         appendTemp _ JunkEntry = Nothing
         ---------------
         patternData :: (RenderSym repr) => Maybe String -> [Entry] -> 
@@ -964,17 +958,15 @@ readData ddef = do
           Entry -> Reader (State repr) [repr (Statement repr)]
         entryData s tokIndex (Entry v) = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
-          a <- assign' vv $ getCastFunc (codeType v)
-            (v_linetokens $. listAccess (listInnerType $ 
-              valueType v_linetokens) tokIndex)
+          a <- assign' vv $ cast (convType $ codeType v)
+            (listAccess v_linetokens tokIndex)
           return [a]
         entryData s tokIndex (ListEntry indx v) = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
           return [
-            valState $ vv $. listAppend 
-            (getCastFunc (getListType (codeType v) (toInteger $ length indx))
-            (v_linetokens $. listAccess (listInnerType $ valueType v_linetokens)
-            tokIndex))]
+            valState $ listAppend vv
+            (cast (convType $ getListType (codeType v) (toInteger $ length indx))
+            (listAccess v_linetokens tokIndex))]
         entryData _ _ JunkEntry = return []
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_filename, l_i, l_j :: Label
@@ -994,20 +986,6 @@ readData ddef = do
         v_i = var l_i int
         l_j = "j"
         v_j = var l_j int
-
-getFileInput :: (RenderSym repr) => C.CodeType -> (repr (Value repr) -> repr
-  (Value repr) -> repr (Statement repr))
-getFileInput C.Boolean = getBoolFileInput
-getFileInput C.Integer = getIntFileInput
-getFileInput C.Float = getFloatFileInput
-getFileInput C.Char = getCharFileInput
-getFileInput C.String = getStringFileInput
-getFileInput _ = error "No getFileInput function for the given type"
-
-getCastFunc :: (RenderSym repr) => C.CodeType -> repr (Value repr) ->
-   repr (Value repr)
-getCastFunc C.Float = castStrToFloat
-getCastFunc t = castObj (cast (convType t) string)
 
 getListType :: C.CodeType -> Integer -> C.CodeType
 getListType _ 0 = error "No index given"

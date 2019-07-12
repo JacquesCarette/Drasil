@@ -14,12 +14,13 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (
-  fileDoc', enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, 
-  intTypeDocD, floatTypeDocD, typeDocD, constructDocD, paramListDocD, 
+  SelectorFunction(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..))
+import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc', 
+  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
+  floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, 
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
   mkStNoEnd, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', 
@@ -28,10 +29,10 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD,
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
-  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetDocD, objAccessDocD,
-  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, classDec, dot, 
-  forLabel, observerListName, commentedItem, addCommentsDocD, valList, 
-  appendToBody, getterName, setterName)
+  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD,
+  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
+  commentedItem, addCommentsDocD, valList, appendToBody, getterName, setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
   liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, liftPairFst, 
@@ -98,11 +99,6 @@ instance KeywordSym PythonCode where
   blockCommentEnd = return empty
   docCommentStart = return $ text "##"
   docCommentEnd = return empty
-  
-  printFunc = return $ text "print"
-  printLnFunc = return empty
-  printFileFunc _ = return empty
-  printFileLnFunc _ = return empty
 
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
@@ -133,9 +129,11 @@ instance StateTypeSym PythonCode where
   listType _ t = liftA2 td (fmap (List . cType) t) (return $ brackets empty)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
-  enumType t = return $ typeDocD t
+  enumType t = return $ enumTypeDocD t
   iterator _ = error "Iterator-type variables do not exist in Python"
   void = return $ td Void (text "NoneType")
+
+  getType = cType . unPC
 
 instance ControlBlockSym PythonCode where
   runStrategy l strats rv av = maybe
@@ -147,7 +145,7 @@ instance ControlBlockSym PythonCode where
             "Attempt to assign null return to a Value") (assign v) rv
           strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
-  listSlice _ vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) 
+  listSlice vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
     where getVal = fromMaybe (liftA2 mkVal void (return empty))
 
@@ -205,9 +203,9 @@ instance ValueSym PythonCode where
   extVar l n t = liftA2 (vd (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
   self l = liftA2 (vd (Just "self")) (obj l) (return $ text "self")
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n + 1)) argsList)
-  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (obj en) 
+  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (enumType en) 
     (return $ enumElemDocD en e)
-  enumVar e en = var e (obj en)
+  enumVar e en = var e (enumType en)
   objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
     (fmap valType v) (liftA2 objVarDocD o v)
   objVarSelf l n t = liftA2 (vd (Just $ "self." ++ n)) t (liftA2 objVarDocD
@@ -217,6 +215,10 @@ instance ValueSym PythonCode where
   iterVar n t = var n (iterator t)
 
   inputFunc = liftA2 mkVal string (return $ text "input()")  -- raw_input() for < Python 3.0
+  printFunc = liftA2 mkVal void (return $ text "print")
+  printLnFunc = liftA2 mkVal void (return empty)
+  printFileFunc _ = liftA2 mkVal void (return empty)
+  printFileLnFunc _ = liftA2 mkVal void (return empty)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "sys.argv")
 
   valueName v = fromMaybe 
@@ -284,49 +286,53 @@ instance Selector PythonCode where
 
   selfAccess l = objAccess (self l)
 
-  listSizeAccess v = liftA2 mkVal int (liftA2 pyListSizeAccess v listSize)
-
-  listIndexExists lst index = listSizeAccess lst ?> index
-  argExists i = objAccess argsList (listAccess string (litInt $ fromIntegral i))
+  listIndexExists lst index = listSize lst ?> index
+  argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf l v = objAccess l (func "index" int [v])
 
-  stringEqual v1 v2 = v1 ?== v2
-
-  castObj f v = liftA2 mkVal (fmap funcType f) (liftA2 castObjDocD f v)
-  castStrToFloat = castObj (cast float string)
+  cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  cast targT _ = liftA2 fd targT (fmap typeDoc targT)
-  castListToInt = cast int (listType static_ int)
-  get n t = liftA2 fd t (fmap funcDocD (var n t))
-  set n v = liftA2 fd (fmap valType v) (fmap funcDocD (liftA2 mkVal (fmap 
-    valType v) (fmap fst (assign (var n (fmap valType v)) v))))
+  getFunc v = func (getterName $ valueName v) (valueType v) []
+  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
-  listSize = liftA2 fd int (return $ text "len")
-  listAdd _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
-  listAppend v = func "append" (listType static_ $ fmap valType v) [v]
+  listSizeFunc = liftA2 fd int (return $ text "len")
+  listAddFunc _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
+  listAppendFunc v = func "append" (listType static_ $ fmap valType v) [v]
 
-  iterBegin _ = error "Attempt to use iterBegin in Python, but Python has no iterators"
-  iterEnd _ = error "Attempt to use iterEnd in Python, but Python has no iterators"
+  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
+  iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
+
+  get v vToGet = v $. getFunc vToGet
+  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+
+  listSize v = liftA2 mkVal (fmap funcType listSizeFunc) 
+    (liftA2 pyListSize v listSizeFunc)
+  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
+  listAppend v vToApp = v $. listAppendFunc vToApp
+
+  iterBegin v = v $. iterBeginFunc (valueType v)
+  iterEnd v = v $. iterEndFunc (valueType v)
 
 instance SelectorFunction PythonCode where
-  listAccess t v = liftA2 fd t (fmap pyListAccess v)
-  listSet i v = liftA2 fd (listType static_ $ fmap valType v) 
-    (liftA2 listSetDocD i v)
+  listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
+  listSetFunc v i toVal = liftA2 fd (valueType v) 
+    (liftA2 listSetFuncDocD i toVal)
 
-  listAccessEnum _ = listAccess
-  listSetEnum t i = listSet (castObj (cast int t) i)
+  atFunc t l = listAccessFunc t (var l int)
 
-  at t l = listAccess t (var l int)
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (var l int)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   assign v1 v2 = mkStNoEnd <$> liftA2 assignDocD v1 v2
-  assignToListIndex lst index v = valState $ lst $. listSet index v
+  assignToListIndex lst index v = valState $ listSet lst index v
   multiAssign outs vs = mkStNoEnd <$> lift2Lists multiAssignDoc outs vs
   (&=) = assign
   (&-=) v1 v2 = v1 &= (v1 #- v2)
@@ -335,51 +341,32 @@ instance StatementSym PythonCode where
   (&~-) v = v &= (v #- litInt 1)
 
   varDec _ = return (mkStNoEnd empty)
-  varDecDef l _ v = mkStNoEnd <$> fmap (pyVarDecDef l) v
-  listDec l _ t = mkStNoEnd <$> fmap (pyListDec l) (listType static_ t)
-  listDecDef l _ vs = mkStNoEnd <$> fmap (pyListDecDef l) (liftList 
-    valList vs)
+  varDecDef = assign
+  listDec _ v = mkStNoEnd <$> liftA2 pyListDec v (listType static_ (valueType v))
+  listDecDef v vs = mkStNoEnd <$> liftA2 pyListDecDef v (liftList valList vs)
   objDecDef = varDecDef
-  objDecNew l t vs = varDecDef l t (stateObj t vs)
-  extObjDecNew l lib t vs = varDecDef l t (extStateObj lib t vs)
-  objDecNewVoid l t = varDecDef l t (stateObj t [])
-  extObjDecNewVoid l lib t = varDecDef l t (extStateObj lib t [])
+  objDecNew v vs = varDecDef v (stateObj (valueType v) vs)
+  extObjDecNew lib v vs = varDecDef v (extStateObj lib (valueType v) vs)
+  objDecNewVoid v = varDecDef v (stateObj (valueType v) [])
+  extObjDecNewVoid lib v = varDecDef v (extStateObj lib (valueType v) [])
   constDecDef = varDecDef
 
-  print _ v = mkStNoEnd <$> liftA4 pyOut printFunc v (return $ text ", end=''") 
-    (liftA2 mkVal void (return empty))
-  printLn _ v = mkStNoEnd <$> liftA4 pyOut printFunc v (return empty)
-    (liftA2 mkVal void (return empty))
-  printStr s = print string (litString s)
-  printStrLn s = printLn string (litString s)
+  printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
+    (fromMaybe (liftA2 mkVal void (return empty)) f)
 
-  printFile f _ v = mkStNoEnd <$> liftA4 pyOut printFunc v (return $ 
-    text ", end='', file=") f
-  printFileLn f _ v = mkStNoEnd <$> liftA4 pyOut printFunc v (return $ 
-    text ", file=") f
-  printFileStr f s = printFile f string (litString s)
-  printFileStrLn f s = printFileLn f string (litString s)
+  print v = pyOut False printFunc v Nothing
+  printLn v = pyOut True printFunc v Nothing
+  printStr s = print (litString s)
+  printStrLn s = printLn (litString s)
 
-  printList = print
-  printLnList = printLn
-  printFileList = printFile
-  printFileLnList = printFileLn
+  printFile f v = pyOut False printFunc v (Just f)
+  printFileLn f v = pyOut True printFunc v (Just f)
+  printFileStr f s = printFile f (litString s)
+  printFileStrLn f s = printFileLn f (litString s)
 
-  getIntInput v = v &= funcApp "int" int [inputFunc]
-  getFloatInput v = v &= funcApp "float" float [inputFunc]
-  getBoolInput v = v &= inputFunc ?!= litString "0"
-  getStringInput v = v &= objMethodCall string inputFunc "rstrip" []
-  getCharInput v = v &= inputFunc
+  getInput = pyInput inputFunc
   discardInput = valState inputFunc
-  getIntFileInput f v = v &= funcApp "int" int [objMethodCall string f 
-    "readline" []]
-  getFloatFileInput f v = v &= funcApp "float" float [objMethodCall string f
-    "readline" []]
-  getBoolFileInput f v =  v &= (objMethodCall string f "readline" [] ?!= 
-    litString "0")
-  getStringFileInput f v = v &= objMethodCall string (objMethodCall string f 
-    "readline" []) "rstrip" []
-  getCharFileInput f v = v &= objMethodCall string f "readline" []
+  getFileInput f = pyInput (objMethodCall string f "readline" [])
   discardFileInput f = valState (objMethodCall string f "readline" [])
 
   openFileR f n = f &= funcApp "open" infile [n, litString "r"]
@@ -387,7 +374,7 @@ instance StatementSym PythonCode where
   openFileA f n = f &= funcApp "open" outfile [n, litString "a"]
   closeFile f = valState $ objMethodCall void f "close" []
 
-  getFileInputLine f v = v &= objMethodCall string f "readline" []
+  getFileInputLine = getFileInput
   discardFileLine f = valState $ objMethodCall string f "readline" []
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
     (listType static_ string) [litString [d]]))  
@@ -396,7 +383,6 @@ instance StatementSym PythonCode where
   continue = return (mkStNoEnd continueDocD)
 
   returnState v = mkStNoEnd <$> liftList returnDocD [v]
-  returnVar l t = mkStNoEnd <$> liftList returnDocD [var l t]
   multiReturn [] = error "Attempt to write return statement with no return variables"
   multiReturn vs = mkStNoEnd <$> liftList returnDocD vs
 
@@ -408,14 +394,14 @@ instance StatementSym PythonCode where
 
   throw errMsg = mkStNoEnd <$> fmap pyThrow (litString errMsg)
 
-  initState fsmName initialState = varDecDef fsmName string 
+  initState fsmName initialState = varDecDef (var fsmName string) 
     (litString initialState)
   changeState fsmName toState = var fsmName string &= litString toState
 
-  initObserverList = listDecDef observerListName
-  addObserver t o = valState $ obsList $. listAdd obsList lastelem o
-    where obsList = observerListName `listOf` t
-          lastelem = listSizeAccess obsList
+  initObserverList t = listDecDef (var observerListName t)
+  addObserver o = valState $ listAdd obsList lastelem o
+    where obsList = observerListName `listOf` valueType o
+          lastelem = listSize obsList
 
   inOutCall = pyInOutCall funcApp
   extInOutCall m = pyInOutCall (extFuncApp m)
@@ -438,20 +424,19 @@ instance ControlStatementSym PythonCode where
     "use forRange, forEach, or while instead"
   forRange i initv finalv stepv b = mkStNoEnd <$> liftA5 (pyForRange i) 
     iterInLabel initv finalv stepv b
-  forEach l _ v b = mkStNoEnd <$> liftA4 (pyForEach l) iterForEachLabel 
+  forEach l v b = mkStNoEnd <$> liftA4 (pyForEach l) iterForEachLabel 
     iterInLabel v b
   while v b = mkStNoEnd <$> liftA2 pyWhile v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 pyTryCatch tb cb
 
   checkState l = switch (var l string)
-  notifyObservers ft fn t ps = forRange index initv (listSizeAccess obsList) 
+  notifyObservers f t = forRange index initv (listSize obsList) 
     (litInt 1) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = litInt 0
-          notify = oneLiner $ valState $ (obsList $. at t index) $.
-            func fn ft ps
+          notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = v &= objMethodCall (listType static_ string) f 
     "readlines" []
@@ -477,11 +462,12 @@ instance MethodSym PythonCode where
   type Method PythonCode = (Doc, Bool)
   method n l _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) (self l) (liftList 
     paramListDocD ps) b, False)
-  getMethod n c t = method (getterName n) c public dynamic_ t [] getBody
-    where getBody = oneLiner $ returnState (self c $-> var n t)
-  setMethod setLbl c paramLbl t = method (setterName setLbl) c public dynamic_
-    (mState void) [stateParam $ var paramLbl t] setBody
-    where setBody = oneLiner $ (self c $-> var setLbl t) &= var paramLbl t
+  getMethod c v = method (getterName $ valueName v) c public dynamic_ 
+    (mState $ valueType v) [] getBody
+    where getBody = oneLiner $ returnState (self c $-> v)
+  setMethod c v = method (setterName $ valueName v) c public dynamic_
+    (mState void) [stateParam v] setBody
+    where setBody = oneLiner $ (self c $-> v) &= v
   mainMethod _ b = liftPairFst (b, True)
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -500,11 +486,10 @@ instance MethodSym PythonCode where
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
-  stateVar _ _ _ _ _ = return empty
-  privMVar del l = stateVar del l private dynamic_
-  pubMVar del l = stateVar del l public dynamic_
-  pubGVar del l = stateVar del l public static_
-  listStateVar = stateVar
+  stateVar _ _ _ _ = return empty
+  privMVar del = stateVar del private dynamic_
+  pubMVar del = stateVar del public dynamic_
+  pubGVar del = stateVar del public static_
 
 instance ClassSym PythonCode where
   type Class PythonCode = (Doc, Bool)
@@ -566,29 +551,41 @@ pyInlineIf :: ValData -> ValData ->
 pyInlineIf c v1 v2 = parens $ valDoc v1 <+> text "if" <+> valDoc c <+> 
   text "else" <+> valDoc v2
 
-pyListSizeAccess :: ValData -> FuncData -> Doc
-pyListSizeAccess v f = funcDoc f <> parens (valDoc v)
+pyListSize :: ValData -> FuncData -> Doc
+pyListSize v f = funcDoc f <> parens (valDoc v)
 
 pyStringType :: TypeData
 pyStringType = td String (text "str")
 
-pyVarDecDef :: Label ->  ValData -> Doc
-pyVarDecDef l v = text l <+> equals <+> valDoc v
+pyListDec :: ValData -> TypeData -> Doc
+pyListDec v t = valDoc v <+> equals <+> typeDoc t
 
-pyListDec :: Label -> TypeData -> Doc
-pyListDec l t = text l <+> equals <+> typeDoc t
+pyListDecDef :: ValData -> Doc -> Doc
+pyListDecDef v vs = valDoc v <+> equals <+> brackets vs
 
-pyListDecDef :: Label -> Doc -> Doc
-pyListDecDef l vs = text l <+> equals <+> brackets vs
+pyPrint :: Bool ->  ValData -> ValData ->  ValData -> Doc
+pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
+  where nl = if newLn then empty else text ", end=''"
+        fl = if isEmpty (valDoc f) then empty else text ", file=" <> valDoc f
 
-pyOut :: Doc ->  ValData -> Doc ->  ValData -> Doc
-pyOut prf v txt f = prf <> parens (valDoc v <> txt <> valDoc f)
+pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
+  -> Maybe (repr (Value repr)) -> repr (Statement repr)
+pyOut newLn printFn v f = pyOut' (getType $ valueType v)
+  where pyOut' (List _) = printSt newLn printFn v f
+        pyOut' _ = outDoc newLn printFn v f
+
+pyInput :: PythonCode (Value PythonCode) -> PythonCode (Value PythonCode) -> 
+  PythonCode (Statement PythonCode)
+pyInput inSrc v = v &= pyInput' (getType $ valueType v)
+  where pyInput' Integer = funcApp "int" int [inSrc]
+        pyInput' Float = funcApp "float" float [inSrc]
+        pyInput' Boolean = inSrc ?!= litString "0"
+        pyInput' String = objMethodCall string inSrc "rstrip" []
+        pyInput' Char = inSrc
+        pyInput' _ = error "Attempt to read a value of unreadable type"
 
 pyThrow ::  ValData -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valDoc errMsg)
-
-pyListAccess :: ValData -> Doc
-pyListAccess v = brackets (valDoc v)
 
 pyForRange :: Label -> Doc ->  ValData ->  ValData ->
   ValData -> Doc -> Doc

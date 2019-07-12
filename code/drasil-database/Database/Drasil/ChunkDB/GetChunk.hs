@@ -1,7 +1,7 @@
 -- | Utilities to get grab certain chunks (from Expr, Sentence, etc) by UID and
 -- dereference the chunk it refers to.
 module Database.Drasil.ChunkDB.GetChunk (ccss, combine,
-  getIdeaDict, vars) where
+  getIdeaDict, vars, ccss') where
 
 import Language.Drasil
 
@@ -22,8 +22,11 @@ concpt' a m = map resolve $ dep a
 combine' :: Expr -> ChunkDB -> [DefinedQuantityDict]
 combine' a m = zipWith dqdQd (vars a m) (concpt' a m)
 
-ccss :: [Sentence] -> [Expr]-> ChunkDB -> [DefinedQuantityDict]
+ccss :: [Sentence] -> [Expr] -> ChunkDB -> [DefinedQuantityDict]
 ccss s e c = nub $ concatMap (`combine` c) s ++ concatMap (`combine'` c) e
+
+ccss' :: [Sentence] -> [Expr] -> ChunkDB -> [QuantityDict]
+ccss' s e c = nub $ concatMap (`vars'` c) s ++ concatMap (`vars` c) e
 
 vars' :: Sentence -> ChunkDB -> [QuantityDict]
 vars' a m = map resolve $ sdep a

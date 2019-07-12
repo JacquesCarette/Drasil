@@ -244,7 +244,9 @@ instance NumericExpression PythonCode where
   (#+) = liftA3 binExpr plusOp
   (#-) = liftA3 binExpr minusOp
   (#*) = liftA3 binExpr multOp
-  (#/) = liftA3 binExpr divideOp
+  (#/) v1 v2 = pyDivision (getType $ valueType v1) (getType $ valueType v2) 
+    where pyDivision Integer Integer = liftA2 (binExpr (text "//")) v1 v2
+          pyDivision _ _ = liftA3 binExpr divideOp v1 v2
   (#%) = liftA3 binExpr moduloOp
   (#^) = liftA3 binExpr powerOp
 

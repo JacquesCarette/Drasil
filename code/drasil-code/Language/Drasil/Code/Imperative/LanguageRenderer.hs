@@ -546,10 +546,20 @@ binOpDocD' :: Doc -> Doc -> Doc -> Doc
 binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
   
 binExpr :: Doc -> ValData -> ValData -> ValData
-binExpr b v1 v2 = mkVal (valType v1) (binOpDocD b (valDoc v1) (valDoc v2))
+binExpr b v1 v2 = mkVal (numType (valType v1) (valType v2)) 
+  (binOpDocD b (valDoc v1) (valDoc v2))
 
 binExpr' :: Doc -> ValData -> ValData -> ValData
-binExpr' b v1 v2 = mkVal (valType v1) (binOpDocD' b (valDoc v1) (valDoc v2))
+binExpr' b v1 v2 = mkVal (numType (valType v1) (valType v2)) 
+  (binOpDocD' b (valDoc v1) (valDoc v2))
+
+numType :: TypeData -> TypeData -> TypeData
+numType t1 t2 = numericType (cType t1) (cType t2)
+  where numericType Integer Integer = t1
+        numericType Float _ = t1
+        numericType _ Float = t2
+        numericType _ _ = error "Numeric types required for numeric expression"
+
 
 typeBinExpr :: Doc -> TypeData -> ValData -> ValData -> ValData
 typeBinExpr b t v1 v2 = mkVal t (binOpDocD b (valDoc v1) (valDoc v2))

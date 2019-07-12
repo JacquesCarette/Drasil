@@ -907,8 +907,8 @@ readData ddef = do
         lineData s (Repeat p Nothing) = do
           pat <- patternData s p v_j
           return $ clearTemps s p ++ 
-            [forRange l_j (litInt 0) (cast int
-              (listSize v_linetokens #/ litInt (toInteger $ length p))) 
+            [forRange l_j (litInt 0)
+              (listSize v_linetokens #/ litInt (toInteger $ length p))
               (litInt 1) ( bodyStatements pat )] ++ 
             appendTemps s p
         lineData s (Repeat p (Just numPat)) = do

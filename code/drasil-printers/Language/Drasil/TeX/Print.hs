@@ -195,12 +195,12 @@ cases (p:ps) = cases [p] <> pure (text "\\\\\n") <> cases ps
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
-  pure (text "\\toprule")
+  command0 "toprule"
   %% makeHeaders (head lls)
-  %% pure (text "\\midrule")
-  %% pure (text "\\endhead")
+  %% command0 "midrule"
+  %% command0 "endhead"
   %% makeRows (tail lls)
-  %% pure (text "\\bottomrule")
+  %% command0 "bottomrule"
   %% (if bool then caption t else caption empty)
   %% label r
   where ltab = tabType $ anyLong lls

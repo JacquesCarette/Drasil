@@ -3,7 +3,7 @@
 -- semantics at all, but just a description of how things look.
 
 module Language.Drasil.Symbol(Decoration(..), Symbol(..), autoStage, compsy,
- upperLeft, sub, sup, hat, vec, prime, staged) where
+ upperLeft, sub, sup, hat, vec, prime) where
 
 import Language.Drasil.Unicode(Special)
 import Language.Drasil.Stages (Stage(..))

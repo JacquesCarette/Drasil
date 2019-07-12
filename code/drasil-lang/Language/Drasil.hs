@@ -125,7 +125,7 @@ module Language.Drasil (
   , Space(..)
   , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD)
   -- Symbol
-  , Decoration(..), Symbol(..), sub, sup, vec, hat, prime, compsy, staged
+  , Decoration(..), Symbol(..), compsy, hat, prime, sub, sup, upperLeft, vec
   -- Misc
   , mkTable
   -- People
@@ -258,8 +258,7 @@ import Language.Drasil.Sentence (Sentence(..), sParen, sDash, sC, (+:+), (+:+.),
   , SentenceStyle(..))
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS)
-import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
-  prime, compsy, staged)
+import Language.Drasil.Symbol
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc -- all of it

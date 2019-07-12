@@ -3,7 +3,7 @@
 -- | The logic to render Python code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
-  PythonCode(..)
+  PythonCode(..), pyExts
 ) where
 
 import Utils.Drasil (indent)
@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
-  floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, 
+  floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
   mkStNoEnd, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', 
@@ -32,11 +32,14 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD,
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
-  commentedItem, addCommentsDocD, valList, appendToBody, getterName, setterName)
-import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
-  fd, ModData(..), md, TypeData(..), td, ValData(..), vd, blank, vibcat, liftA4,
-  liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, liftPairFst, 
-  getInnerType, convType)
+  commentedItem, addCommentsDocD, classDoc, moduleDoc, docFuncRepr,
+  valList, appendToBody, getterName, setterName)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
+  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), TypeData(..), td, 
+  ValData(..), vd)
+import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
+  liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
+  liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -44,6 +47,12 @@ import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
   equals, vcat, colon, brackets, isEmpty, render)
+
+pyExts :: [String]
+pyExts = [pyExt]
+
+pyExt :: String
+pyExt = ".py"
 
 newtype PythonCode a = PC {unPC :: a}
 
@@ -66,13 +75,17 @@ instance PackageSym PythonCode where
 instance RenderSym PythonCode where
   type RenderFile PythonCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (if isEmpty (modDoc (unPC code)) then return empty else
-    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (liftA2 emptyIfEmpty (fmap modDoc code) $
+      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top _ = return pytop
   bottom = return empty
 
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) pyExt) m
+
   commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
     (liftA2 commentedItem cmt (fmap modDoc m))
+
+  moduleName m = name (unPC m)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
@@ -454,35 +467,46 @@ instance MethodTypeSym PythonCode where
   construct n = return $ td (Object n) (constructDocD n)
 
 instance ParameterSym PythonCode where
-  type Parameter PythonCode = Doc
-  stateParam = fmap valDoc
+  type Parameter PythonCode = ParamData
+  stateParam = fmap (mkParam valDoc)
   pointerParam = stateParam
 
+  parameterName = paramName . unPC
+  parameterType = fmap paramType
+
 instance MethodSym PythonCode where
-  type Method PythonCode = (Doc, Bool)
-  method n l _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) (self l) (liftList 
-    paramListDocD ps) b, False)
+  type Method PythonCode = MethodData
+  method n l _ _ _ ps b = liftA2 (mthd False) (sequence ps) (liftA3 (pyMethod n)
+    (self l) (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
     where getBody = oneLiner $ returnState (self c $-> v)
   setMethod c v = method (setterName $ valueName v) c public dynamic_
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= v
-  mainMethod _ b = liftPairFst (b, True)
+  mainMethod _ = fmap (mthd True [])
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method initName n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Python"
 
-  function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList 
-    paramListDocD ps) b, False)
+  docMain = mainMethod
+
+  function n _ _ _ ps b = liftA2 (mthd False) (sequence ps) (liftA2 
+    (pyFunction n) (liftList paramListDocD ps) b)
+
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins outs b = function n s p (mState void) (map stateParam ins)
     (liftA2 appendToBody b (multiReturn outs))
 
-  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
-    fmap snd fn)
+  docInOutFunc desc iComms _ = docFuncRepr desc iComms
+
+  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+
+  parameters m = map return $ (mthdParams . unPC) m
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
@@ -494,25 +518,29 @@ instance StateVarSym PythonCode where
 instance ClassSym PythonCode where
   type Class PythonCode = (Doc, Bool)
   buildClass n p _ _ fs = liftPairFst (liftA2 (pyClass n) pname (liftList 
-    methodListDocD fs), any (snd . unPC) fs)
+    methodListDocD (map (fmap mthdDoc) fs)), any (isMainMthd . unPC) fs)
     where pname = case p of Nothing -> return empty
                             Just pn -> return $ parens (text pn)
   enum n es _ = liftPairFst (liftA2 (pyClass n) (return empty) (return $ 
     enumElementsDocD' es), False)
-  mainClass _ _ fs = liftPairFst (liftList methodListDocD fs, True)
+  mainClass _ _ fs = liftPairFst (liftList methodListDocD (map (fmap mthdDoc) 
+    fs), True)
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
+
+  docClass d = commentedClass (docComment $ classDoc d)
 
   commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
     fmap snd cs)
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n ls fs cs = fmap (md n (any (snd . unPC) fs || 
+  buildModule n ls fs cs = fmap (md n (any (isMainMthd . unPC) fs || 
     any (snd . unPC) cs)) (if all (isEmpty . fst . unPC) cs && all 
-    (isEmpty . fst . unPC) fs then return empty else
+    (isEmpty . mthdDoc . unPC) fs then return empty else
     liftA3 pyModule (liftList pyModuleImportList (map include ls)) 
-    (liftList methodListDocD fs) (liftList pyModuleClassList cs))
+    (liftList methodListDocD (map (fmap mthdDoc) fs)) (liftList 
+    pyModuleClassList cs))
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
@@ -566,7 +594,7 @@ pyListDecDef v vs = valDoc v <+> equals <+> brackets vs
 pyPrint :: Bool ->  ValData -> ValData ->  ValData -> Doc
 pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
-        fl = if isEmpty (valDoc f) then empty else text ", file=" <> valDoc f
+        fl = emptyIfEmpty (valDoc f) $ text ", file=" <> valDoc f
 
 pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
   -> Maybe (repr (Value repr)) -> repr (Statement repr)
@@ -620,8 +648,7 @@ pyMethod :: Label ->  ValData -> Doc -> Doc -> Doc
 pyMethod n slf ps b = vcat [
   text "def" <+> text n <> parens (valDoc slf <> oneParam <> ps) <> colon,
   indent bodyD]
-      where oneParam | isEmpty ps = empty
-                     | otherwise  = text ", "
+      where oneParam = emptyIfEmpty ps $ text ", "
             bodyD | isEmpty b = text "None"
                   | otherwise = b
 
@@ -650,10 +677,8 @@ pyModule ls fs cs =
   libs $+$
   funcs $+$
   cs
-  where libs | isEmpty ls = empty
-             | otherwise  = ls $+$ blank
-        funcs | isEmpty fs = empty
-              | otherwise  = fs $+$ blank
+  where libs = emptyIfEmpty ls $ ls $+$ blank
+        funcs = emptyIfEmpty fs $ fs $+$ blank
 
 pyInOutCall :: (Label -> PythonCode (StateType PythonCode) -> 
   [PythonCode (Value PythonCode)] -> PythonCode (Value PythonCode)) -> Label -> 

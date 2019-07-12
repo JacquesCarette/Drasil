@@ -4,7 +4,7 @@
 -- | The logic to render C# code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (
   -- * C# Code Configuration -- defines syntax of all C# code
-  CSharpCode(..)
+  CSharpCode(..), csExts
 ) where
 
 import Utils.Drasil (indent)
@@ -23,8 +23,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, printDoc, outDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD, 
-  typeDocD, enumTypeDocD, listTypeDocD, voidDocD,
-  constructDocD, stateParamDocD, paramListDocD, methodDocD, methodListDocD, 
+  typeDocD, enumTypeDocD, listTypeDocD, voidDocD, constructDocD, stateParamDocD,
+  paramListDocD, mkParam, methodDocD, methodListDocD, 
   stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
@@ -40,12 +40,15 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody, getterName, 
-  setterName, setMain, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
-  fd, ModData(..), md, TypeData(..), td, ValData(..), vd, updateValDoc, liftA4, 
-  liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
-  liftPairFst, getInnerType, convType)
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
+  docFuncRepr, valList, surroundBody, getterName, setterName, setMain, 
+  setMainMethod,setEmpty, intValue)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..),  
+  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, updateParamDoc, 
+  TypeData(..), td, ValData(..), vd, updateValDoc)
+import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
+  liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
+  getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Data.List (nub)
@@ -54,6 +57,12 @@ import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   equals, semi, vcat, lbrace, rbrace, colon, render, isEmpty)
+
+csExts :: [String]
+csExts = [csExt]
+
+csExt :: String
+csExt = ".cs"
 
 newtype CSharpCode a = CSC {unCSC :: a} deriving Eq
 
@@ -76,13 +85,17 @@ instance PackageSym CSharpCode where
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (if isEmpty (modDoc (unCSC code)) then return empty else
-    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (liftA2 emptyIfEmpty (fmap modDoc code) $
+      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
 
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) csExt) m
+
   commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
     (liftA2 commentedItem cmt (fmap modDoc m))
+    
+  moduleName m = name (unCSC m)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
@@ -472,38 +485,52 @@ instance MethodTypeSym CSharpCode where
   construct n = return $ td (Object n) (constructDocD n)
 
 instance ParameterSym CSharpCode where
-  type Parameter CSharpCode = Doc
-  stateParam = fmap stateParamDocD
+  type Parameter CSharpCode = ParamData
+  stateParam = fmap (mkParam stateParamDocD)
   pointerParam = stateParam
 
+  parameterName = paramName . unCSC
+  parameterType = fmap paramType
+
 instance MethodSym CSharpCode where
-  -- Bool is True if the method is a main method, False otherwise
-  type Method CSharpCode = (Doc, Bool)
-  method n _ s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t 
-    (liftList paramListDocD ps) b, False)
+  type Method CSharpCode = MethodData
+  method n _ s p t ps b = liftA2 (mthd False) (sequence ps) 
+    (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
     where getBody = oneLiner $ returnState (self c $-> v)
   setMethod c v = method (setterName $ valueName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= v
-  mainMethod c b = setMain <$> method "Main" c public static_ void 
-    [return $ text "string[] args"] b
+  mainMethod c b = setMainMethod <$> method "Main" c public static_ 
+    (mState void) [liftA2 (pd "args") (listType static_ string) 
+    (return $ text "string[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in C#"
 
+  docMain c b = commentedFunc (docComment $ functionDoc 
+    "Controls the flow of the program" 
+    [("args", "List of command-line arguments")]) (mainMethod c b)
+
   function n = method n ""
+
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
   inOutFunc n s p ins outs b = function n s p (mState void) (map (\v -> 
-    if v `elem` outs then fmap csRef (stateParam v) else stateParam v) ins ++
-    map (fmap csOut . stateParam) (filter (`notElem` ins) outs)) b
+    if v `elem` outs then fmap (updateParamDoc csRef) (stateParam v) else 
+    stateParam v) ins ++ map (fmap (updateParamDoc csOut) . stateParam) 
+    (filter (`notElem` ins) outs)) b
 
-  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
-    fmap snd fn)
+  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
+
+  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+  
+  parameters m = map return $ (mthdParams . unCSC) m
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -516,20 +543,22 @@ instance ClassSym CSharpCode where
   -- Bool is True if the method is a main method, False otherwise
   type Class CSharpCode = (Doc, Bool)
   buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s 
-    (liftList stateVarListDocD vs) (liftList methodListDocD fs), 
-    any (snd . unCSC) fs)
+    (liftList stateVarListDocD vs) (liftList methodListDocD (map (fmap mthdDoc) 
+    fs)), any (isMainMthd . unCSC) fs)
   enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ 
     enumElementsDocD es False) s, False)
   mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
+  docClass d = commentedClass (docComment $ classDoc d)
+
   commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
     fmap snd cs)
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ ms cs = fmap (md n (any (snd . unCSC) ms || 
+  buildModule n _ ms cs = fmap (md n (any (isMainMthd . unCSC) ms || 
     any (snd . unCSC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
 

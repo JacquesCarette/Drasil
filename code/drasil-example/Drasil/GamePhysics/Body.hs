@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.Body where
 
-import Language.Drasil hiding (Vector, organization, section, sec)
+import Language.Drasil hiding (Vector, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI), cdb, rdb,
   refdb, _authors, _concepts, _constants, _constraints, _datadefs, _definitions,
@@ -43,7 +43,8 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GamePhysics.Concepts (chipmunk, acronyms, threeD, twoD)
-import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
+import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs)
+import qualified Drasil.GamePhysics.DataDefs as GP (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
@@ -53,7 +54,13 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 
 srs :: Document
-srs = mkDoc mkSRS for' sysInfo
+srs = mkDoc mkSRS for' si
+
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
+
+resourcePath :: String
+resourcePath = "../../../datafiles/GamePhysics/"
 
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
@@ -88,24 +95,13 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     LCsSec,
     UCsSec,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
-    TraceabilitySec $ TraceabilityProg $ traceMatStandard sysInfo,
+    TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
     AuxConstntSec $ AuxConsProg chipmunk [],
     Bibliography]
-      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
+      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
-concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
-
-sec :: [Section]
-sec = extractSection srs
-
-stdFields :: Fields
-stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
-    --FIXME: Need to be able to print defn for gravitational constant.
-
-sysInfo :: SystemInformation
-sysInfo = SI {
+si :: SystemInformation
+si = SI {
   _sys = chipmunk,
   _kind = Doc.srs,
   _authors = [alex, luthfi],
@@ -117,16 +113,27 @@ sysInfo = SI {
   _quants =  [] :: [QuantityDict], -- map qw iModelsNew ++ map qw symbolsAll,
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
-  _datadefs = dataDefns,
+  _datadefs = GP.dataDefs,
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
   _defSequence = blockQDefs,
   _constraints = inputConstraints,
   _constants = [],
-  _sysinfodb = everything,
+  _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB
 }
+
+concIns :: [ConceptInstance]
+concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
+
+section :: [Section]
+section = extractSection srs
+
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
+
+--FIXME: Need to be able to print defn for gravitational constant.
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -136,26 +143,18 @@ refDB = rdb citations concIns
 units :: [UnitDefn] -- FIXME
 units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
-everything :: ChunkDB
-everything = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
+symbMap :: ChunkDB
+symbMap = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
   ++ map nw acronyms ++ map nw prodtcon ++ map nw iModelsNew
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units dataDefns
-  iModelsNew [] tModsNew concIns sec []
+  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units GP.dataDefs
+  iModelsNew [] tModsNew concIns section []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
-
-printSetting :: PrintingInformation
-printSetting = PI everything defaultConfiguration
-
-
-
-resourcePath :: String
-resourcePath = "../../../datafiles/GamePhysics/"
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because

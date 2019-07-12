@@ -57,7 +57,7 @@ W & power & watt
 \end{longtable}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
+The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
 \begin{longtabu}{l X[l] l}
 \toprule
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
@@ -412,10 +412,10 @@ Label & Sensible heat energy
 \\ \midrule \\
 Equation & \begin{displaymath}
            E=\begin{cases}
-{C^{S}} m ΔT, & T<{T_{melt}}\\
+             {C^{S}} m ΔT, & T<{T_{melt}}\\
 {C^{L}} m ΔT, & {T_{melt}}<T<{T_{boil}}\\
 {C^{V}} m ΔT, & {T_{boil}}<T
-\end{cases}
+             \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -856,11 +856,11 @@ Output Constraints & \begin{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
            \frac{\,d{T_{P}}}{\,dt}=\begin{cases}
-\frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}<{{T_{melt}}^{P}}\\
+                                   \frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}<{{T_{melt}}^{P}}\\
 \frac{1}{{{τ_{P}}^{L}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}>{{T_{melt}}^{P}}\\
 0, & {T_{P}}={{T_{melt}}^{P}}\\
 0, & 0<ϕ<1
-\end{cases}
+                                   \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -966,11 +966,11 @@ Output Constraints & \begin{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
            {E_{P}}=\begin{cases}
-{{C_{P}}^{S}} {m_{P}} \left({T_{P}}\left(t\right)-{T_{init}}\right), & {T_{P}}<{{T_{melt}}^{P}}\\
+                   {{C_{P}}^{S}} {m_{P}} \left({T_{P}}\left(t\right)-{T_{init}}\right), & {T_{P}}<{{T_{melt}}^{P}}\\
 {{{E_{P}}_{melt}}^{init}}+{H_{f}} {m_{P}}+{{C_{P}}^{L}} {m_{P}} \left({T_{P}}\left(t\right)-{{T_{melt}}^{P}}\right), & {T_{P}}>{{T_{melt}}^{P}}\\
 {{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & {T_{P}}={{T_{melt}}^{P}}\\
 {{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & 0<ϕ<1
-\end{cases}
+                   \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}

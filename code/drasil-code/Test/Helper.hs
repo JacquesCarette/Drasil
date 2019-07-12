@@ -3,20 +3,16 @@ module Test.Helper (helper) where
 import Language.Drasil.Code.Imperative.Symantics (
   RenderSym(..), PermanenceSym(..), BodySym(..), StateTypeSym(..), 
   StatementSym(..),  ValueSym(..), NumericExpression(..), ScopeSym(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), ModuleSym(..),
-  BlockCommentSym(..))
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 helper :: (RenderSym repr) => repr (RenderFile repr)
-helper = fileDoc (buildModule "Helper" [] [commentedFunc funcD doubleAndAdd] [])
-
-funcD :: (RenderSym repr) => repr (BlockComment repr)
-funcD = docComment ["\\brief This function adds two numbers",
-                    "\\param num1 First number to add",
-                    "\\param num2 Second number to add"]
+helper = fileDoc (buildModule "Helper" [] [doubleAndAdd] [])
 
 doubleAndAdd :: (RenderSym repr) => repr (Method repr)
-doubleAndAdd = function "doubleAndAdd" public static_ (mState float) 
+doubleAndAdd = docFunc "This function adds two numbers" 
+  ["First number to add", "Second number to add"] $ 
+  function "doubleAndAdd"  public static_ (mState float) 
   [stateParam $ var "num1" float, stateParam $ var "num2" float]
   (bodyStatements [
     varDec $ var "doubledSum" float, 

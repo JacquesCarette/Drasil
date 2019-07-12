@@ -30,14 +30,14 @@ void derived_values(InputParameters &inParams) {
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'inParams.h' assigned to ";
     outfile << inParams.h;
-    outfile << " in module " << std::endl;
+    outfile << " in module DerivedValues" << std::endl;
     outfile.close();
     
     inParams.LDF = pow((3.0 / 60), (7.0 / 16));
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'inParams.LDF' assigned to ";
     outfile << inParams.LDF;
-    outfile << " in module " << std::endl;
+    outfile << " in module DerivedValues" << std::endl;
     outfile.close();
     
     if ((inParams.g == "AN")) {
@@ -45,7 +45,7 @@ void derived_values(InputParameters &inParams) {
         outfile.open("log.txt", std::fstream::app);
         outfile << "var 'inParams.GTF' assigned to ";
         outfile << inParams.GTF;
-        outfile << " in module " << std::endl;
+        outfile << " in module DerivedValues" << std::endl;
         outfile.close();
     }
     else if ((inParams.g == "FT")) {
@@ -53,7 +53,7 @@ void derived_values(InputParameters &inParams) {
         outfile.open("log.txt", std::fstream::app);
         outfile << "var 'inParams.GTF' assigned to ";
         outfile << inParams.GTF;
-        outfile << " in module " << std::endl;
+        outfile << " in module DerivedValues" << std::endl;
         outfile.close();
     }
     else if ((inParams.g == "HS")) {
@@ -61,29 +61,32 @@ void derived_values(InputParameters &inParams) {
         outfile.open("log.txt", std::fstream::app);
         outfile << "var 'inParams.GTF' assigned to ";
         outfile << inParams.GTF;
-        outfile << " in module " << std::endl;
+        outfile << " in module DerivedValues" << std::endl;
         outfile.close();
+    }
+    else {
+        throw("Undefined case encountered in function GTF");
     }
     
     inParams.SD = sqrt((pow(inParams.SD_x, 2) + (pow(inParams.SD_y, 2) + pow(inParams.SD_z, 2))));
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'inParams.SD' assigned to ";
     outfile << inParams.SD;
-    outfile << " in module " << std::endl;
+    outfile << " in module DerivedValues" << std::endl;
     outfile.close();
     
     inParams.AR = (inParams.a / inParams.b);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'inParams.AR' assigned to ";
     outfile << inParams.AR;
-    outfile << " in module " << std::endl;
+    outfile << " in module DerivedValues" << std::endl;
     outfile.close();
     
     inParams.w_TNT = (inParams.w * inParams.TNT);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'inParams.w_TNT' assigned to ";
     outfile << inParams.w_TNT;
-    outfile << " in module " << std::endl;
+    outfile << " in module DerivedValues" << std::endl;
     outfile.close();
 }
 

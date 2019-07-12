@@ -70,7 +70,7 @@
           <div class="subsection">
             <h2>Table of Symbols</h2>
             <p class="paragraph">
-              The symbols used in this document are summarized in <a href=#Table:ToS>Tab: ToS</a> along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order.
+              The symbols used in this document are summarized in <a href=#Table:ToS>Tab: ToS</a> along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
             </p>
             <div id="Table:ToS">
               <table class="table">
@@ -489,7 +489,7 @@
               This document describes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -620,7 +620,7 @@
                     Centre of mass: The mean location of the distribution of mass of the object.
                   </li>
                   <li>
-                    Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length.
+                    Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from <a href=#cartesianWiki>cartesianWiki</a>).
                   </li>
                   <li>
                     Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.
@@ -2630,7 +2630,7 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
         </p>
         <div id="Table:TraceMatAvsAll">
           <table class="table">
@@ -4648,8 +4648,13 @@
             </div>
           </li>
           <li>
+            <div id="cartesianWiki">
+              [8]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
+            </div>
+          </li>
+          <li>
             <div id="sciComp2013">
-              [8]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
+              [9]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
             </div>
           </li>
         </ul>

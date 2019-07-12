@@ -1,6 +1,6 @@
 module Drasil.SWHS.Body where
 
-import Language.Drasil hiding (organization, section, sec)
+import Language.Drasil hiding (organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
@@ -14,19 +14,20 @@ import Control.Lens ((^.))
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   Field(..), Fields, LFunc(TermExcept), Literature(Doc', Lit), IntroSec(IntroProg),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
-  RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose),
-  ReqrmntSec(..), ReqsSub(..), SRSDecl,  SSDSub(..), SolChSpec (SCSProg),
+  RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose, VectorUnits),
+  ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
   SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
   ProblemDescription(PDProg), PDSub(..), intro, mkDoc, tsymb'', traceMatStandard)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Concepts.Computation (compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   constraint, content, corSol, datum, definition, document, environment, goalStmt,
   information, input_, model, organization, output_, physical, physics, problem,
-  property, purpose, quantity, reference, software, softwareSys, solution, srs,
+  property, purpose, quantity, reference, software, softwareSys, solution,
   srsDomains, sysCont, system, user, value, variable, doccon, doccon')
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
 import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
@@ -52,7 +53,8 @@ import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
   phsChgMtrl, progName, rightSide, sWHT, swhsPCM, tank, tankPCM, transient, water)
-import Drasil.SWHS.DataDefs (dataDefs, dd1HtFluxC, dd2HtFluxP, qDefs)
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, qDefs)
+import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
 import Drasil.SWHS.GenDefs (genDefs)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
@@ -69,43 +71,49 @@ import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained, eta,
 
 -------------------------------------------------------------------------------
 
-thisSi :: [UnitDefn]
-thisSi = map unitWrapper [metre, kilogram, second] ++ 
+srs :: Document
+srs = mkDoc mkSRS for si
+
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
+
+resourcePath :: String
+resourcePath = "../../../datafiles/SWHS/"
+
+units :: [UnitDefn]
+units = map unitWrapper [metre, kilogram, second] ++ 
   map unitWrapper [centigrade, joule, watt]
 --Will there be a table of contents?
 
 si :: SystemInformation
 si = SI {
   _sys = swhsPCM,
-  _kind = srs, 
+  _kind = Doc.srs, 
   _authors = [thulasi, brooks, spencerSmith],
   _quants = symbols,
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
-  _datadefs = dataDefs,
+  _datadefs = SWHS.dataDefs,
   _inputs = inputs,
   _outputs = map qw outputs,
   _defSequence = [] :: [Block QDefinition],
   _constraints = constrained,
   _constants = specParamValList,
-  _sysinfodb = symMap,
+  _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB
 }
 
-resourcePath :: String
-resourcePath = "../../../datafiles/SWHS/"
-
-symMap :: ChunkDB
-symMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
+symbMap :: ChunkDB
+symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   (nw heatEInPCM : map nw symbols ++ map nw acronymsFull
-  ++ map nw thermocon ++ map nw thisSi ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
+  ++ map nw thermocon ++ map nw units ++ map nw [m_2, m_3] ++ map nw [absTol, relTol]
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (thisSi ++ [m_2, m_3]) dataDefs insModel genDefs theory concIns sec labCon
+  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs theory concIns section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
@@ -114,13 +122,10 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
 refDB :: ReferenceDB
 refDB = rdb citations concIns
 
-printSetting :: PrintingInformation
-printSetting = PI symMap defaultConfiguration
-
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [
     TUnits,
-    tsymb'' tSymbIntro (TermExcept [uNormalVect]),
+    tsymb'' tSymbIntro $ TermExcept [uNormalVect],
     TAandA],
   IntroSec $
     IntroProg (introP1 CT.enerSrc energy swhsPCM phsChgMtrl
@@ -165,11 +170,7 @@ mkSRS = [RefSec $ RefProg intro [
 
 tSymbIntro :: [TSIntro]
 tSymbIntro = [TSPurpose, SymbConvention
-  [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder]
-
---- The document starts here
-srs' :: Document
-srs' = mkDoc mkSRS for si
+  [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder, VectorUnits]
 
 insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -184,8 +185,8 @@ concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
 labCon :: [LabelledContent]
 labCon = [inputInitQuantsTable]
 
-sec :: [Section]
-sec = extractSection srs'
+section :: [Section]
+section = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -534,7 +535,7 @@ purpDoc sp pro = foldlSent [S "The main", phrase purpose, S "of this",
   S "is intended to be used as a", phrase reference,
   S "to provide ad hoc access to all", phrase information,
   S "necessary to understand and verify the" +:+. phrase model, S "The",
-  short srs, S "is abstract because the", plural content, S "say what",
+  short Doc.srs, S "is abstract because the", plural content, S "say what",
   phrase problem, S "is being solved, but do not say how to solve it"]
 
 
@@ -588,7 +589,7 @@ charReader2 diffeq = [plural diffeq +:+
 
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
-  phrase document, S "follows the template for an", short srs,
+  phrase document, S "follows the template for an", short Doc.srs,
   S "for", phrase sciCompS, S "proposed by", makeCiteS parnas1972 `sAnd` 
   makeCiteS parnasClements1984]
 

@@ -18,14 +18,14 @@ public class DerivedValues {
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'inParams.h' assigned to ");
         outfile.Write(inParams.h);
-        outfile.WriteLine(" in module ");
+        outfile.WriteLine(" in module DerivedValues");
         outfile.Close();
         
         inParams.LDF = Math.Pow((3.0 / 60), (7.0 / 16));
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'inParams.LDF' assigned to ");
         outfile.Write(inParams.LDF);
-        outfile.WriteLine(" in module ");
+        outfile.WriteLine(" in module DerivedValues");
         outfile.Close();
         
         if ((inParams.g == "AN")) {
@@ -33,7 +33,7 @@ public class DerivedValues {
             outfile = new StreamWriter("log.txt", true);
             outfile.Write("var 'inParams.GTF' assigned to ");
             outfile.Write(inParams.GTF);
-            outfile.WriteLine(" in module ");
+            outfile.WriteLine(" in module DerivedValues");
             outfile.Close();
         }
         else if ((inParams.g == "FT")) {
@@ -41,7 +41,7 @@ public class DerivedValues {
             outfile = new StreamWriter("log.txt", true);
             outfile.Write("var 'inParams.GTF' assigned to ");
             outfile.Write(inParams.GTF);
-            outfile.WriteLine(" in module ");
+            outfile.WriteLine(" in module DerivedValues");
             outfile.Close();
         }
         else if ((inParams.g == "HS")) {
@@ -49,29 +49,32 @@ public class DerivedValues {
             outfile = new StreamWriter("log.txt", true);
             outfile.Write("var 'inParams.GTF' assigned to ");
             outfile.Write(inParams.GTF);
-            outfile.WriteLine(" in module ");
+            outfile.WriteLine(" in module DerivedValues");
             outfile.Close();
+        }
+        else {
+            throw new Exception("Undefined case encountered in function GTF");
         }
         
         inParams.SD = Math.Sqrt((Math.Pow(inParams.SD_x, 2) + (Math.Pow(inParams.SD_y, 2) + Math.Pow(inParams.SD_z, 2))));
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'inParams.SD' assigned to ");
         outfile.Write(inParams.SD);
-        outfile.WriteLine(" in module ");
+        outfile.WriteLine(" in module DerivedValues");
         outfile.Close();
         
         inParams.AR = (inParams.a / inParams.b);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'inParams.AR' assigned to ");
         outfile.Write(inParams.AR);
-        outfile.WriteLine(" in module ");
+        outfile.WriteLine(" in module DerivedValues");
         outfile.Close();
         
         inParams.w_TNT = (inParams.w * inParams.TNT);
         outfile = new StreamWriter("log.txt", true);
         outfile.Write("var 'inParams.w_TNT' assigned to ");
         outfile.Write(inParams.w_TNT);
-        outfile.WriteLine(" in module ");
+        outfile.WriteLine(" in module DerivedValues");
         outfile.Close();
     }
 }

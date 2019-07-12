@@ -60,7 +60,7 @@ module Language.Drasil (
   , Constraint(..), ConstraintReason(..)
   -- Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
-  , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
+  , cuc, cvc, constrained', cuc', constrainedNRV'
   , cnstrw, cnstrw'
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat, ec
@@ -72,7 +72,7 @@ module Language.Drasil (
   , uncrtnw
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS
-  , uc, uc', ucs, ucs', ucs'', ucsWS
+  , uc, uc', ucs, ucs', ucsWS
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary, unitary', unit_symb
   -- Chunk.Relation
@@ -237,7 +237,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc',
-  ucs, ucs', ucs'', ucsWS)
+  ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- for Printing

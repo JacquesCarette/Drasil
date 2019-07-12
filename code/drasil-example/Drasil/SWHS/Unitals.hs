@@ -476,15 +476,13 @@ tankLengthMax = mkQuantDef (unitary "tankLengthMax"
 fracMinAux    = mkQuantDef fracMin $ dbl 1.0e-6
 
 -- Used in Constraint 5
-pcmDensityMin = mkQuantDef (unitary' "pcmDensityMin"
+pcmDensityMin = mkQuantDef (unitary "pcmDensityMin"
   (nounPhraseSP "minimum density of PCM")
-  (staged (sup (eqSymb pcmDensity) (Atomic "min")) (sup (codeSymb pcmDensity) 
-  (Atomic "min"))) densityU Rational) 500
+  (sup (eqSymb pcmDensity) (Atomic "min")) densityU Rational) 500
 
-pcmDensityMax = mkQuantDef (unitary' "pcmDensityMax"
+pcmDensityMax = mkQuantDef (unitary "pcmDensityMax"
   (nounPhraseSP "maximum density of PCM")
-  (staged (sup (eqSymb pcmDensity) (Atomic "max")) (sup (codeSymb pcmDensity) 
-  (Atomic "max"))) densityU Rational) 20000
+  (sup (eqSymb pcmDensity) (Atomic "max")) densityU Rational) 20000
 
 -- Used in Constraint 7
 htCapSPMin = mkQuantDef (unitary "htCapSPMin"
@@ -519,15 +517,13 @@ coilSAMax = mkQuantDef (unitary "coilSAMax"
   (sup (eqSymb coilSA) (Atomic "max")) m_2 Rational) 100000
 
 -- Used in Constraint 12
-wDensityMin = mkQuantDef (unitary' "wDensityMin"
+wDensityMin = mkQuantDef (unitary "wDensityMin"
   (nounPhraseSP "minimum density of water")
-  (staged (sup (eqSymb wDensity) (Atomic "min")) (sup (codeSymb wDensity) 
-  (Atomic "min"))) densityU Rational) 950
+  (sup (eqSymb wDensity) (Atomic "min")) densityU Rational) 950
 
-wDensityMax = mkQuantDef (unitary' "wDensityMax"
+wDensityMax = mkQuantDef (unitary "wDensityMax"
   (nounPhraseSP "maximum density of water")
-  (staged (sup (eqSymb wDensity) (Atomic "max")) (sup (codeSymb wDensity) 
-  (Atomic "max"))) densityU Rational) 1000
+  (sup (eqSymb wDensity) (Atomic "max")) densityU Rational) 1000
   
 -- Used in Constraint 13
 htCapWMin = mkQuantDef (unitary "htCapWMin"

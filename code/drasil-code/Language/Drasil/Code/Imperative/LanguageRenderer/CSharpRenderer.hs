@@ -29,8 +29,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
   constDecDefDocD, statementDocD, returnDocD, mkSt, mkStNoEnd, stringListVals',
-  commentDocD, notOpDocD, negateOpDocD, unExpr, typeUnExpr, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  stringListLists', commentDocD, notOpDocD, negateOpDocD, unExpr, typeUnExpr, 
+  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr,
   mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
@@ -410,6 +410,7 @@ instance StatementSym CSharpCode where
     [s $. func "Split" (listType static_ string) [litChar d]]
 
   stringListVals = stringListVals'
+  stringListLists = stringListLists'
 
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)

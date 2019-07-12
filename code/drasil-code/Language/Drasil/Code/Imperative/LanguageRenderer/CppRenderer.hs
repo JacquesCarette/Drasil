@@ -28,18 +28,19 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   switchDocD, forDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
   plusPlusDocD, varDecDocD, varDecDefDocD, objDecDefDocD, constDecDefDocD, 
   statementDocD, returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd,
-  stringListVals', notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, 
-  sinOpDocD, cosOpDocD, tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, 
-  typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
-  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
-  divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, 
-  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
-  litIntD, litStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfDocD, 
-  funcAppDocD, funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, 
-  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot,
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, valList, surroundBody, getterName, setterName, setEmpty, intValue)
+  stringListVals', stringListLists', notOpDocD, negateOpDocD, sqrtOpDocD, 
+  absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, tanOpDocD, asinOpDocD, acosOpDocD,
+  atanOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, 
+  binExpr, binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, 
+  litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, objVarDocD, 
+  inlineIfDocD, funcAppDocD, funcDocD, castDocD, objAccessDocD, castObjDocD, 
+  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
+  classDec, dot, blockCmtStart, blockCmtEnd, docCmtStart, observerListName, 
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, valList, surroundBody, getterName, 
+  setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator(..),  
   ScopeTag (..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
   ParamData(..), StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
@@ -423,6 +424,8 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
 
   stringListVals vals sl = pair (stringListVals (map pfst vals) (pfst sl))
     (stringListVals (map psnd vals) (psnd sl))
+  stringListLists lsts sl = pair (stringListLists (map pfst lsts) (pfst sl))
+    (stringListLists (map psnd lsts) (psnd sl))
 
   break = pair break break
   continue = pair continue continue
@@ -944,6 +947,7 @@ instance StatementSym CppSrcCode where
     ]
 
   stringListVals = stringListVals'
+  stringListLists = stringListLists'
 
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)
@@ -1449,6 +1453,7 @@ instance StatementSym CppHdrCode where
   stringSplit _ _ _ = return (mkStNoEnd empty)
 
   stringListVals _ _ = return (mkStNoEnd empty)
+  stringListLists _ _ = return (mkStNoEnd empty)
 
   break = return (mkStNoEnd empty)
   continue = return (mkStNoEnd empty)

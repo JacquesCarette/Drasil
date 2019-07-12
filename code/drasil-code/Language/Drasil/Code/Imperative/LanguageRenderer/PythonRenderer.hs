@@ -23,17 +23,18 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
-  mkStNoEnd, stringListVals', notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD',
-  expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', 
-  atanOpDocD', unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD,
-  litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
-  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD,
-  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
-  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, valList, 
-  appendToBody, getterName, setterName)
+  mkStNoEnd, stringListVals', stringListLists', notOpDocD', negateOpDocD, 
+  sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', 
+  asinOpDocD', acosOpDocD', atanOpDocD', unExpr, typeUnExpr, equalOpDocD, 
+  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD, litFloatD, litIntD, 
+  litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
+  funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, listAccessFuncDocD, 
+  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
+  classDec, dot, forLabel, observerListName, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, valList, appendToBody, getterName, 
+  setterName)
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
   fd, ModData(..), md, ParamData(..), TypeData(..), td, ValData(..), vd, blank, 
   vibcat, emptyIfEmpty, mapPairFst, liftA4, liftA5, liftList, lift1List, 
@@ -393,6 +394,7 @@ instance StatementSym PythonCode where
     (listType static_ string) [litString [d]]))  
 
   stringListVals = stringListVals'
+  stringListLists = stringListLists'
 
   break = return (mkStNoEnd breakDocD)
   continue = return (mkStNoEnd continueDocD)

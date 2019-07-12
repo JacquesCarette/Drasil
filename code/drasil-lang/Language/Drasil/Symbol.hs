@@ -159,6 +159,6 @@ unicodeConv x = x
 unicodeString :: String -> String
 unicodeString = concatMap (\x -> if isLatin1 x then [x] else getName $ nameList x)
   where
-    nameList = (splitOn " ") . map toLower . getCharacterName
-    getName ("greek":_:_:name) = intercalate " " name
+    nameList = splitOn " " . map toLower . getCharacterName
+    getName ("greek":_:_:name) = unwords name
     getName _ = error "unicodeString not fully implemented"

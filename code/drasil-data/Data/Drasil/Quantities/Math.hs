@@ -11,14 +11,14 @@ import Data.Drasil.SI_Units (metre, m_2, radian)
 gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect, pi_, 
   uNormalVect :: DefinedQuantityDict
 
-gradient    = dqd' CM.gradient (const lNabla)          Real Nothing
-normalVect  = dqd' CM.normalV  (const $ vec lN)        Real Nothing
-uNormalVect = dqd' CM.normalV  (const $ vec $ hat lN)  Real Nothing
-unitVect    = dqd' CM.unitV    (const $ vec $ hat lI)  Real Nothing
-unitVectj   = dqd' CM.unitV    (const $ vec $ hat lJ)  Real Nothing
-perpVect    = dqd' CM.perpV    (const $ vec lN)        Real Nothing
-pi_         = dqd' CM.pi_      (const lPi)             Real Nothing
-euclidNorm  = dqd' CM.euclidN  (const $ Concat [Atomic "||", vec lR, Atomic "||"])
+gradient    = dqdMayUnit CM.gradient lNabla         Real Nothing
+normalVect  = dqdMayUnit CM.normalV  (vec lN)       Real Nothing
+uNormalVect = dqdMayUnit CM.normalV  (vec $ hat lN) Real Nothing
+unitVect    = dqdMayUnit CM.unitV    (vec $ hat lI) Real Nothing
+unitVectj   = dqdMayUnit CM.unitV    (vec $ hat lJ) Real Nothing
+perpVect    = dqdMayUnit CM.perpV    (vec lN)       Real Nothing
+pi_         = dqdMayUnit CM.pi_      lPi            Real Nothing
+euclidNorm  = dqdMayUnit CM.euclidN  (Concat [Atomic "||", vec lR, Atomic "||"])
                                                         Real Nothing  
 
 area, diameter, surface, surArea, orientation :: UnitalChunk

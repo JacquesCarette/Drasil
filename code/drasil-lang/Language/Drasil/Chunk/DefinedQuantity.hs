@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd',
+module Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqdMayUnit, dqd',
   dqdQd, dqdWr) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
@@ -38,6 +38,9 @@ instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 -- For when the symbol is constant through stages (maps unicode to strings for code gen)
 dqd :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
 dqd c s sp = DQD c (autoStage s) sp . Just . unitWrapper
+
+dqdMayUnit :: ConceptChunk -> Symbol -> Space -> Maybe UnitDefn -> DefinedQuantityDict
+dqdMayUnit c s = DQD c (autoStage s)
 
 -- For when the symbol changes depending on the stage
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict

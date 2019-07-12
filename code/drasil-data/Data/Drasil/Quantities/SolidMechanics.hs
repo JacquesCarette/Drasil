@@ -17,4 +17,4 @@ stffness = uc CSM.stffness cK stiffnessU
 nrmStrss = uc CSM.nrmStrss lSigma pascal
 
 poissnsR :: DefinedQuantityDict
-poissnsR = dqd' CSM.poissnsR (const lNu) Real Nothing
+poissnsR = dqdMayUnit CSM.poissnsR lNu Real Nothing

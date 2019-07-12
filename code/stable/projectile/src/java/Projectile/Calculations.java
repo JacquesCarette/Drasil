@@ -11,11 +11,11 @@ import java.util.ArrayList;
 public class Calculations {
     
     public static double func_t_flight(InputParameters inParams) throws Exception {
-        return ((2 * (inParams.v_launch * Math.sin(inParams.angle))) / 9.8);
+        return ((2 * (inParams.v_launch * Math.sin(inParams.theta))) / 9.8);
     }
     
     public static double func_p_land(InputParameters inParams) throws Exception {
-        return ((2 * (Math.pow(inParams.v_launch, 2) * (Math.sin(inParams.angle) * Math.cos(inParams.angle)))) / 9.8);
+        return ((2 * (Math.pow(inParams.v_launch, 2) * (Math.sin(inParams.theta) * Math.cos(inParams.theta)))) / 9.8);
     }
     
     public static double func_d_offset(InputParameters inParams, double p_land) throws Exception {

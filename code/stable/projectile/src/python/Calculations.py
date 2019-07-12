@@ -5,10 +5,10 @@ import math
 import InputParameters
 
 def func_t_flight(inParams):
-    return ((2 * (inParams.v_launch * math.sin(inParams.angle))) / 9.8)
+    return ((2 * (inParams.v_launch * math.sin(inParams.theta))) / 9.8)
 
 def func_p_land(inParams):
-    return ((2 * ((inParams.v_launch ** 2) * (math.sin(inParams.angle) * math.cos(inParams.angle)))) / 9.8)
+    return ((2 * ((inParams.v_launch ** 2) * (math.sin(inParams.theta) * math.cos(inParams.theta)))) / 9.8)
 
 def func_d_offset(inParams, p_land):
     return (p_land - inParams.p_target)

@@ -9,7 +9,7 @@ public class InputConstraints {
         if (!((inParams.v_launch > 0))) {
             Console.WriteLine("Warning: constraint violated");
         }
-        if (!(((0 < inParams.angle) && (inParams.angle < (3.14159265 / 2))))) {
+        if (!(((0 < inParams.theta) && (inParams.theta < (3.14159265 / 2))))) {
             Console.WriteLine("Warning: constraint violated");
         }
         if (!((inParams.p_target > 0))) {

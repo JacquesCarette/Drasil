@@ -10,6 +10,7 @@ import Language.Drasil.Stages (Stage(..))
 
 import Data.Char (isLatin1, toLower)
 import Data.Char.Properties.Names (getCharacterName)
+import Data.List.Split (splitOn)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
 -- (bolding/etc)
@@ -155,4 +156,5 @@ unicodeConv (Concat ss) = Concat $ map unicodeConv ss
 unicodeConv x = x
 
 unicodeString :: String -> String
-unicodeString = concat . (map (\x -> if isLatin1 x then [x] else getCharacterName x))
+unicodeString = concat . (map (\x -> if isLatin1 x then [x] else getName x))
+  where getName x = map toLower $ last (splitOn " " $ getCharacterName x)

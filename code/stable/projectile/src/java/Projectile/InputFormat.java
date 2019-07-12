@@ -19,7 +19,7 @@ public class InputFormat {
         infile.nextLine();
         inParams.v_launch = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        inParams.angle = Double.parseDouble(infile.nextLine());
+        inParams.theta = Double.parseDouble(infile.nextLine());
         infile.nextLine();
         inParams.p_target = Double.parseDouble(infile.nextLine());
         infile.close();

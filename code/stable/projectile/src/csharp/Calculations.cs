@@ -6,11 +6,11 @@ using System.Collections.Generic;
 public class Calculations {
     
     public static double func_t_flight(InputParameters inParams) {
-        return ((2 * (inParams.v_launch * Math.Sin(inParams.angle))) / 9.8);
+        return ((2 * (inParams.v_launch * Math.Sin(inParams.theta))) / 9.8);
     }
     
     public static double func_p_land(InputParameters inParams) {
-        return ((2 * (Math.Pow(inParams.v_launch, 2) * (Math.Sin(inParams.angle) * Math.Cos(inParams.angle)))) / 9.8);
+        return ((2 * (Math.Pow(inParams.v_launch, 2) * (Math.Sin(inParams.theta) * Math.Cos(inParams.theta)))) / 9.8);
     }
     
     public static double func_d_offset(InputParameters inParams, double p_land) {

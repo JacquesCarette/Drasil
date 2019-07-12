@@ -17,7 +17,7 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpTHCCoL,
   assumpCWTAT, assumpTPCAV)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
-import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, ddHtFusion, dd4MeltFrac,
+import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, ddHtFusion, ddMeltFrac,
   ddBalanceSolidPCM, ddBalanceLiquidPCM)
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
@@ -140,7 +140,7 @@ eBalanceOnWtrDerivDesc5 = [S "Which simplifies to"]
 eBalanceOnWtrDerivDesc6 :: Expr -> Expr -> [Sentence]
 eBalanceOnWtrDerivDesc6 eq33 eq44 = 
   [S "Setting", E eq33, sParen (makeRef2S ddHtFusion) `sAnd` E eq44,
-  sParen (makeRef2S dd4MeltFrac) `sC` S "Equation (5) can be written as"]
+  sParen (makeRef2S ddMeltFrac) `sC` S "Equation (5) can be written as"]
 
 eBalanceOnWtrDerivDesc7 :: Expr -> [Sentence]
 eBalanceOnWtrDerivDesc7 eq55 = 
@@ -259,7 +259,7 @@ balPCMDescNote = foldlSent [
   S "The temperature remains constant at",
   E (sy tempMeltP) `sC` S "even with the heating (or cooling)" `sC`
   S "until the phase change has occurred for all of the material; that is as long as",
-  E (0 $< sy meltFrac $< 1), sParen (S "from" +:+ makeRef2S dd4MeltFrac),
+  E (0 $< sy meltFrac $< 1), sParen (S "from" +:+ makeRef2S ddMeltFrac),
   S "is determined as part of the heat energy in the PCM, as given in" +:+.
   sParen (makeRef2S heatEInPCM),
   -- Addition based on smiths manual version.

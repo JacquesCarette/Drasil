@@ -26,7 +26,7 @@ qDefs = [ddHtFluxCQD, ddHtFluxPQD, ddBalanceSolidPCMQD,
 
 dataDefs :: [DataDefinition] 
 dataDefs = [ddHtFluxC, ddHtFluxP, ddBalanceSolidPCM,
-  ddBalanceLiquidPCM, ddHtFusion, dd4MeltFrac]
+  ddBalanceLiquidPCM, ddHtFusion, ddMeltFrac]
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
@@ -106,8 +106,8 @@ ddMeltFracQD = mkQuantDef meltFrac meltFracEqn
 meltFracEqn :: Expr
 meltFracEqn = sy latentEP / (sy htFusion * sy pcmMass)
 
-dd4MeltFrac :: DataDefinition
-dd4MeltFrac = dd ddMeltFracQD [makeCite koothoor2013] [] "meltFrac"
+ddMeltFrac :: DataDefinition
+ddMeltFrac = dd ddMeltFracQD [makeCite koothoor2013] [] "meltFrac"
  [S "The" +:+ phrase value `sOf` E (sy meltFrac) `sIs` S "constrained to" +:+.
   E (0 $<= sy meltFrac $<= 1), makeRef2S ddHtFusion]
 

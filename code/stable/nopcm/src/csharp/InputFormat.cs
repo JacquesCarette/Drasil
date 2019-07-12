@@ -7,9 +7,6 @@ public class InputFormat {
     
     public static void get_input(string filename, out double A_C, out double C_W, out double h_C, out double T_init, out double t_final, out double L, out double T_C, out double t_step, out double rho_W, out double D, out double A_tol, out double R_tol, out double T_W, out double E_W) {
         StreamReader infile;
-        string line;
-        List<string> lines = new List<string>(0);
-        List<string> linetokens = new List<string>(0);
         infile = new StreamReader(filename);
         infile.ReadLine();
         A_C = Double.Parse(infile.ReadLine());

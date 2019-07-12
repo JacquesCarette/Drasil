@@ -6,50 +6,52 @@ import Language.Drasil.Code (
   PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  MethodSym(..), ModuleSym(..), BlockCommentSym(..))
-import Prelude hiding (return,print,log,exp,sin,cos,tan)
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  Selector(..), FunctionSym(..), SelectorFunction(..), MethodSym(..), 
+  ModuleSym(..))
+import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
 helloWorld :: (PackageSym repr) => repr (Package repr)
-helloWorld = packMods "HelloWorld" [commentedMod description $ 
+helloWorld = packMods "HelloWorld" [docMod description $ 
   fileDoc (buildModule "HelloWorld" ["Helper"] [helloWorldMain] []), helper]
 
-description :: (RenderSym repr) => repr (BlockComment repr)
-description = blockComment ["This module tests various GOOL functions",
-                            "It should run without errors."]
+description :: String
+description = "Tests various GOOL functions. It should run without errors."
 
 helloWorldMain :: (RenderSym repr) => repr (Method repr)
 helloWorldMain = mainMethod "HelloWorld" (body [ helloInitVariables, 
     helloListSlice,
-    block [ifCond [(var "b" int ?>= litInt 6, bodyStatements [varDecDef "dummy" string (litString "dummy")]),
+    block [ifCond [(var "b" int ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (var "b" int ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,
     helloSwitch, helloForLoop, helloWhileLoop, helloForEachLoop, helloTryCatch]])
 
 helloInitVariables :: (RenderSym repr) => repr (Block repr)
 helloInitVariables = block [comment "Initializing variables",
   varDec $ var "a" int, 
-  varDecDef "b" int (litInt 5),
-  listDecDef "myOtherList" (listType static_ float) [litFloat 1.0, litFloat 1.5],
-  varDecDef "oneIndex" int (indexOf (var "myOtherList" (listType static_ float)) (litFloat 1.0)),
+  varDecDef (var "b" int) (litInt 5),
+  listDecDef (var "myOtherList" (listType static_ float)) [litFloat 1.0, 
+    litFloat 1.5],
+  varDecDef (var "oneIndex" int) (indexOf (var "myOtherList" (listType static_ 
+    float)) (litFloat 1.0)),
   printLn (var "oneIndex" int),
-  var "a" int &= listSizeAccess (var "myOtherList" (listType static_ float)),
-  valState (objAccess (var "myOtherList" (listType static_ float)) (listAdd 
-    (var "myOtherList" (listType static_ float)) (litInt 2) (litFloat 2.0))),
-  valState (objAccess (var "myOtherList" (listType static_ float)) (listAppend (litFloat 2.5))),
+  var "a" int &= listSize (var "myOtherList" (listType static_ float)),
+  valState (listAdd (var "myOtherList" (listType static_ float)) (litInt 2) 
+    (litFloat 2.0)),
+  valState (listAppend (var "myOtherList" (listType static_ float)) (litFloat 2.5)),
   varDec $ var "e" float,
-  var "e" int &= objAccess (var "myOtherList" (listType static_ float)) (listAccess float (litInt 1)),
-  valState (objAccess (var "myOtherList" (listType static_ float)) (listSet (litInt 1) (litFloat 17.4))),
-  listDec "myName" 7 (listType static_ string),
+  var "e" int &= listAccess (var "myOtherList" (listType static_ float)) (litInt 1),
+  valState (listSet (var "myOtherList" (listType static_ float)) (litInt 1) (litFloat 17.4)),
+  listDec 7 (var "myName" (listType static_ string)),
   stringSplit ' ' (var "myName" (listType static_ string)) (litString "Brooks Mac"),
   printLn (var "myName" (listType static_ string)),
-  listDecDef "boringList" (listType dynamic_ bool) [litFalse, litFalse, litFalse, litFalse, litFalse],
+  listDecDef (var "boringList" (listType dynamic_ bool)) 
+    [litFalse, litFalse, litFalse, litFalse, litFalse],
   printLn (var "boringList" (listType dynamic_ bool)),
-  listDec "mySlicedList" 2 $ listType static_ float]
+  listDec 2 $ var "mySlicedList" (listType static_ float)]
 
 helloListSlice :: (RenderSym repr) => repr (Block repr)
-helloListSlice = listSlice (listType static_ float) (var "mySlicedList" (listType static_ float)) (var "myOtherList" (listType static_ float)) (Just (litInt 1)) (Just (litInt 3)) Nothing
+helloListSlice = listSlice (var "mySlicedList" (listType static_ float)) (var "myOtherList" (listType static_ float)) (Just (litInt 1)) (Just (litInt 3)) Nothing
 
 helloIfBody :: (RenderSym repr) => repr (Body repr)
 helloIfBody = addComments "If body" (body [
@@ -69,9 +71,9 @@ helloIfBody = addComments "If body" (body [
     (&~-) (var "c" int),
     (&~-) (var "b" int),
 
-    listDec "myList" 5 (listType static_ int),
-    objDecDef "myObj" char (litChar 'o'),
-    constDecDef "myConst" string (litString "Imconstant"),
+    listDec 5 (var "myList" (listType static_ int)),
+    objDecDef (var "myObj" char) (litChar 'o'),
+    constDecDef (const "myConst" string) (litString "Imconstant"),
 
     printLn (var "a" int),
     printLn (var "b" int),
@@ -81,7 +83,7 @@ helloIfBody = addComments "If body" (body [
     printLn (var "mySlicedList" (listType static_ float)),
     
     printStrLn "Type an int",
-    getIntInput (var "d" int),
+    getInput (var "d" int),
     printStrLn "Type another",
     discardInput],
   
@@ -137,7 +139,7 @@ helloWhileLoop :: (RenderSym repr) => repr (Statement repr)
 helloWhileLoop = while (var "a" int ?< litInt 13) (bodyStatements [printStrLn "Hello", (&++) (var "a" int)]) 
 
 helloForEachLoop :: (RenderSym repr) => repr (Statement repr)
-helloForEachLoop = forEach "num" float (listVar "myOtherList" static_ float) 
+helloForEachLoop = forEach "num" (listVar "myOtherList" static_ float) 
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" float [iterVar "num" float, litFloat 1.0])))
 
 helloTryCatch :: (RenderSym repr) => repr (Statement repr)

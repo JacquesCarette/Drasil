@@ -61,14 +61,28 @@ repeated e = Repeat e Nothing
 repeated' :: [Entry] -> Integer -> LinePattern
 repeated' e i = Repeat e (Just i)
 
+isLine :: Data -> Bool
+isLine Line{} = True
+isLine _ = False
+
+isLines :: Data -> Bool
+isLines Lines{} = True
+isLines _ = False
+
 getInputs :: DataDesc -> [CodeChunk]
 getInputs d = nub $ concatMap getDataInputs d
-  where getDataInputs (Singleton v) = [v]
-        getDataInputs (Line lp _) = getPatternInputs lp
-        getDataInputs (Lines lp _ _) = getPatternInputs lp
-        getDataInputs JunkData = []
-        getPatternInputs (Straight e) = concatMap getEntryInputs e
-        getPatternInputs (Repeat e _) = concatMap getEntryInputs e
-        getEntryInputs (Entry v) = [v]
-        getEntryInputs (ListEntry _ v) = [v]
-        getEntryInputs JunkEntry = []        
+
+getDataInputs :: Data -> [CodeChunk]
+getDataInputs (Singleton v) = [v]
+getDataInputs (Line lp _) = getPatternInputs lp
+getDataInputs (Lines lp _ _) = getPatternInputs lp
+getDataInputs JunkData = []
+
+getPatternInputs :: LinePattern -> [CodeChunk]
+getPatternInputs (Straight e) = concatMap getEntryInputs e
+getPatternInputs (Repeat e _) = concatMap getEntryInputs e
+
+getEntryInputs :: Entry -> [CodeChunk]
+getEntryInputs (Entry v) = [v]
+getEntryInputs (ListEntry _ v) = [v]
+getEntryInputs JunkEntry = []        

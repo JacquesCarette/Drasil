@@ -16,14 +16,14 @@ def derived_values(inParams):
     outfile = open("log.txt", "a")
     print("var 'inParams.h' assigned to ", end='', file=outfile)
     print(inParams.h, end='', file=outfile)
-    print(" in module ", file=outfile)
+    print(" in module DerivedValues", file=outfile)
     outfile.close()
     
     inParams.LDF = ((3.0 / 60) ** (7.0 / 16))
     outfile = open("log.txt", "a")
     print("var 'inParams.LDF' assigned to ", end='', file=outfile)
     print(inParams.LDF, end='', file=outfile)
-    print(" in module ", file=outfile)
+    print(" in module DerivedValues", file=outfile)
     outfile.close()
     
     if ((inParams.g == "AN")) :
@@ -31,21 +31,21 @@ def derived_values(inParams):
         outfile = open("log.txt", "a")
         print("var 'inParams.GTF' assigned to ", end='', file=outfile)
         print(inParams.GTF, end='', file=outfile)
-        print(" in module ", file=outfile)
+        print(" in module DerivedValues", file=outfile)
         outfile.close()
     elif ((inParams.g == "FT")) :
         inParams.GTF = 4
         outfile = open("log.txt", "a")
         print("var 'inParams.GTF' assigned to ", end='', file=outfile)
         print(inParams.GTF, end='', file=outfile)
-        print(" in module ", file=outfile)
+        print(" in module DerivedValues", file=outfile)
         outfile.close()
     elif ((inParams.g == "HS")) :
         inParams.GTF = 2
         outfile = open("log.txt", "a")
         print("var 'inParams.GTF' assigned to ", end='', file=outfile)
         print(inParams.GTF, end='', file=outfile)
-        print(" in module ", file=outfile)
+        print(" in module DerivedValues", file=outfile)
         outfile.close()
     else :
         raise Exception("Undefined case encountered in function GTF")
@@ -54,21 +54,21 @@ def derived_values(inParams):
     outfile = open("log.txt", "a")
     print("var 'inParams.SD' assigned to ", end='', file=outfile)
     print(inParams.SD, end='', file=outfile)
-    print(" in module ", file=outfile)
+    print(" in module DerivedValues", file=outfile)
     outfile.close()
     
     inParams.AR = (inParams.a / inParams.b)
     outfile = open("log.txt", "a")
     print("var 'inParams.AR' assigned to ", end='', file=outfile)
     print(inParams.AR, end='', file=outfile)
-    print(" in module ", file=outfile)
+    print(" in module DerivedValues", file=outfile)
     outfile.close()
     
     inParams.w_TNT = (inParams.w * inParams.TNT)
     outfile = open("log.txt", "a")
     print("var 'inParams.w_TNT' assigned to ", end='', file=outfile)
     print(inParams.w_TNT, end='', file=outfile)
-    print(" in module ", file=outfile)
+    print(" in module DerivedValues", file=outfile)
     outfile.close()
 
 

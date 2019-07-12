@@ -29,8 +29,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, 
   forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
   plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, 
-  statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, stringListVals',
-  stringListLists', notOpDocD, negateOpDocD, unExpr, typeUnExpr, equalOpDocD,
+  statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, stringListVals', 
+  stringListLists', notOpDocD, negateOpDocD, unExpr, typeUnExpr, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
@@ -41,12 +41,14 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, valList, surroundBody, getterName, setterName, setMain,setEmpty, 
-  intValue)
-import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
-  fd, ModData(..), md, ParamData(..), pd, TypeData(..), td, ValData(..), vd,  
-  angles, emptyIfEmpty, mapPairFst, liftA4, liftA5, liftA6, liftList, lift1List,
-  lift3Pair, lift4Pair, liftPair, liftPairFst, getInnerType, convType)
+  moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
+  setMain, setMainMethod, setEmpty, intValue)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
+  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, TypeData(..), 
+  td, ValData(..), vd)
+import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
+  liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, 
+  liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -501,18 +503,17 @@ instance ParameterSym JavaCode where
   parameterType = fmap paramType
 
 instance MethodSym JavaCode where
-  -- Bool is True if the method is a main method, False otherwise
-  type Method JavaCode = (Doc, Bool)
-  method n _ s p t ps b = liftPairFst (liftA5 (jMethod n) s p t (liftList 
-    paramListDocD ps) b, False)
+  type Method JavaCode = MethodData
+  method n _ s p t ps b = liftA2 (mthd False) (sequence ps) (liftA5 (jMethod n) 
+    s p t (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
     where getBody = oneLiner $ returnState (self c $-> v)
   setMethod c v = method (setterName $ valueName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= v
-  mainMethod c b = setMain <$> method "main" c public static_ (mState void) 
-    [liftA2 (pd "args") (listType static_ string) 
+  mainMethod c b = setMainMethod <$> method "main" c public static_ 
+    (mState void) [liftA2 (pd "args") (listType static_ string) 
     (return $ text "String[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -525,8 +526,7 @@ instance MethodSym JavaCode where
 
   function n = method n ""
 
-  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d (map 
-    (mapPairFst parameterName) ps)) (function n s p t (map fst ps) b)
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
@@ -544,12 +544,12 @@ instance MethodSym JavaCode where
             decls = multi $ map varDec outs
             outputs = var "outputs" jArrayType
     
-  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d 
-    (map (mapPairFst valueName) ins)) 
-    (inOutFunc n s p (map fst ins) (map fst outs) b)
+  docInOutFunc desc iComms _ = docFuncRepr desc iComms
             
-  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
-    fmap snd fn)
+  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+    
+  parameters m = map return $ (mthdParams . unJC) m
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
@@ -562,8 +562,8 @@ instance ClassSym JavaCode where
   -- Bool is True if the method is a main method, False otherwise
   type Class JavaCode = (Doc, Bool)
   buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s 
-    (liftList stateVarListDocD vs) (liftList methodListDocD fs), 
-    any (snd . unJC) fs)
+    (liftList stateVarListDocD vs) (liftList methodListDocD (map (fmap mthdDoc) 
+    fs)), any (isMainMthd . unJC) fs)
   enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ 
     enumElementsDocD es enumsEqualInts) s, False)
   mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
@@ -577,7 +577,7 @@ instance ClassSym JavaCode where
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
-  buildModule n _ ms cs = fmap (md n (any (snd . unJC) ms || 
+  buildModule n _ ms cs = fmap (md n (any (isMainMthd . unJC) ms || 
     any (snd . unJC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
 

@@ -28,17 +28,19 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   asinOpDocD', acosOpDocD', atanOpDocD', unExpr, typeUnExpr, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD, litFloatD, litIntD, 
+  moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD, litFloatD, litIntD,
   litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
-  funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, listAccessFuncDocD, 
+  funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, listAccessFuncDocD,
   objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
   classDec, dot, forLabel, observerListName, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, valList, appendToBody, getterName, 
+  classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
   setterName)
-import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
-  fd, ModData(..), md, ParamData(..), TypeData(..), td, ValData(..), vd, blank, 
-  vibcat, emptyIfEmpty, mapPairFst, liftA4, liftA5, liftList, lift1List, 
-  lift2Lists, lift4Pair, liftPair, liftPairFst, getInnerType, convType)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
+  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), TypeData(..), td, 
+  ValData(..), vd)
+import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
+  liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
+  liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -479,16 +481,16 @@ instance ParameterSym PythonCode where
   parameterType = fmap paramType
 
 instance MethodSym PythonCode where
-  type Method PythonCode = (Doc, Bool)
-  method n l _ _ _ ps b = liftPairFst (liftA3 (pyMethod n) (self l) (liftList 
-    paramListDocD ps) b, False)
+  type Method PythonCode = MethodData
+  method n l _ _ _ ps b = liftA2 (mthd False) (sequence ps) (liftA3 (pyMethod n)
+    (self l) (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
     where getBody = oneLiner $ returnState (self c $-> v)
   setMethod c v = method (setterName $ valueName v) c public dynamic_
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= v
-  mainMethod _ b = liftPairFst (b, True)
+  mainMethod _ = fmap (mthd True [])
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method initName n public dynamic_ (construct n)
@@ -496,22 +498,21 @@ instance MethodSym PythonCode where
 
   docMain = mainMethod
 
-  function n _ _ _ ps b = liftPairFst (liftA2 (pyFunction n) (liftList 
-    paramListDocD ps) b, False)
+  function n _ _ _ ps b = liftA2 (mthd False) (sequence ps) (liftA2 
+    (pyFunction n) (liftList paramListDocD ps) b)
 
-  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d (map 
-    (mapPairFst parameterName) ps)) (function n s p t (map fst ps) b)
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins outs b = function n s p (mState void) (map stateParam ins)
     (liftA2 appendToBody b (multiReturn outs))
 
-  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d 
-    (map (mapPairFst valueName) ins)) 
-    (inOutFunc n s p (map fst ins) (map fst outs) b)
+  docInOutFunc desc iComms _ = docFuncRepr desc iComms
 
-  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
-    fmap snd fn)
+  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+
+  parameters m = map return $ (mthdParams . unPC) m
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
@@ -523,12 +524,13 @@ instance StateVarSym PythonCode where
 instance ClassSym PythonCode where
   type Class PythonCode = (Doc, Bool)
   buildClass n p _ _ fs = liftPairFst (liftA2 (pyClass n) pname (liftList 
-    methodListDocD fs), any (snd . unPC) fs)
+    methodListDocD (map (fmap mthdDoc) fs)), any (isMainMthd . unPC) fs)
     where pname = case p of Nothing -> return empty
                             Just pn -> return $ parens (text pn)
   enum n es _ = liftPairFst (liftA2 (pyClass n) (return empty) (return $ 
     enumElementsDocD' es), False)
-  mainClass _ _ fs = liftPairFst (liftList methodListDocD fs, True)
+  mainClass _ _ fs = liftPairFst (liftList methodListDocD (map (fmap mthdDoc) 
+    fs), True)
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
@@ -539,11 +541,12 @@ instance ClassSym PythonCode where
 
 instance ModuleSym PythonCode where
   type Module PythonCode = ModData
-  buildModule n ls fs cs = fmap (md n (any (snd . unPC) fs || 
+  buildModule n ls fs cs = fmap (md n (any (isMainMthd . unPC) fs || 
     any (snd . unPC) cs)) (if all (isEmpty . fst . unPC) cs && all 
-    (isEmpty . fst . unPC) fs then return empty else
+    (isEmpty . mthdDoc . unPC) fs then return empty else
     liftA3 pyModule (liftList pyModuleImportList (map include ls)) 
-    (liftList methodListDocD fs) (liftList pyModuleClassList cs))
+    (liftList methodListDocD (map (fmap mthdDoc) fs)) (liftList 
+    pyModuleClassList cs))
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc

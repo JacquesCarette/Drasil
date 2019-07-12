@@ -38,7 +38,7 @@ import Language.Drasil.Code.Imperative.Symantics (PackageSym(..), RenderSym(..),
   Selector(..), FunctionSym(..), SelectorFunction(..),
   MethodSym(..), ModuleSym(..), BlockCommentSym(..))
 
-import Language.Drasil.Code.Imperative.Helpers (ModData(..))
+import Language.Drasil.Code.Imperative.Data (ModData(..))
 
 import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer 
   (JavaCode (..))

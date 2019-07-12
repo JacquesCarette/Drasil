@@ -9,7 +9,7 @@ import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  ValueExpression(..), FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,    
@@ -42,7 +42,7 @@ import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes, mapMaybe)
 import Control.Applicative ((<$>))
-import Control.Monad (when,liftM2,liftM3,zipWithM)
+import Control.Monad (when,liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.))
 import qualified Prelude as P ((<>))
@@ -903,20 +903,13 @@ readData ddef = do
         ---------------
         lineData :: (RenderSym repr) => Maybe String -> LinePattern -> 
           Reader (State repr) [repr (Statement repr)]
-        lineData s (Straight p) = patternData s p (litInt 0)
-        lineData s (Repeat p Nothing) = do
-          pat <- patternData s p v_j
-          return $ clearTemps s p ++ 
-            [forRange l_j (litInt 0)
-              (listSize v_linetokens #/ litInt (toInteger $ length p))
-              (litInt 1) ( bodyStatements pat )] ++ 
-            appendTemps s p
-        lineData s (Repeat p (Just numPat)) = do
-          pat <- patternData s p v_j
-          return $ clearTemps s p ++ 
-            [forRange l_j (litInt 0) (litInt numPat) (litInt 1) 
-              (bodyStatements pat)] ++ 
-            appendTemps s p
+        lineData s p@(Straight _) = do
+          vs <- getEntryVars s p
+          return [stringListVals vs v_linetokens]
+        lineData s p@(Repeat pat _) = do
+          vs <- getEntryVars s p
+          return $ clearTemps s pat ++ stringListLists vs v_linetokens 
+            : appendTemps s pat
         ---------------
         clearTemps :: (RenderSym repr) => Maybe String -> [Entry] -> 
           [repr (Statement repr)]
@@ -946,30 +939,8 @@ readData ddef = do
           (var (codeName v ++ sfx) (convType $ codeType v))
         appendTemp _ JunkEntry = Nothing
         ---------------
-        patternData :: (RenderSym repr) => Maybe String -> [Entry] -> 
-          repr (Value repr) -> Reader (State repr) [repr (Statement repr)]
-        patternData s d patNo = do
-          let l = toInteger $ length d
-          ent <- zipWithM (entryData s) 
-            (map (\z -> (patNo #* litInt l) #+ litInt z) [0..l-1]) d
-          return $ concat ent
-        ---------------
-        entryData :: (RenderSym repr) => Maybe String -> repr (Value repr) -> 
-          Entry -> Reader (State repr) [repr (Statement repr)]
-        entryData s tokIndex (Entry v) = do
-          vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
-          return [assign vv
-            (listAccess v_linetokens tokIndex)]
-        entryData s tokIndex (ListEntry indx v) = do
-          vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
-          return [
-            valState (listAppend vv
-            (cast (convType $ getListType (codeType v) (toInteger $ length indx))
-            (listAccess v_linetokens tokIndex)))]
-        entryData _ _ JunkEntry = return []
-        ---------------
-        l_line, l_lines, l_linetokens, l_infile, l_filename, l_i, l_j :: Label
-        v_line, v_lines, v_linetokens, v_infile, v_filename, v_i, v_j ::
+        l_line, l_lines, l_linetokens, l_infile, l_filename, l_i :: Label
+        v_line, v_lines, v_linetokens, v_infile, v_filename, v_i ::
           (RenderSym repr) => (repr (Value repr))
         l_line = "line"
         v_line = var l_line string
@@ -983,18 +954,17 @@ readData ddef = do
         v_filename = var l_filename string
         l_i = "i"
         v_i = var l_i int
-        l_j = "j"
-        v_j = var l_j int
 
-getEntryVars :: (RenderSym repr) => LinePattern -> 
+getEntryVars :: (RenderSym repr) => Maybe String -> LinePattern -> 
   Reader (State repr) [repr (Value repr)]
-getEntryVars lp = mapM (\v -> variable (codeName v) (convType $ codeType v))
-  (getPatternInputs lp)
+getEntryVars s lp = mapM (maybe (\v -> variable (codeName v) (convType $ 
+  codeType v)) (\st v -> variable (codeName v ++ st) (listInnerType $
+  convType $ codeType v)) s) (getPatternInputs lp)
 
 getEntryVarLogs :: (RenderSym repr) => LinePattern -> 
   Reader (State repr) [repr (Statement repr)]
 getEntryVarLogs lp = do
-  vs <- getEntryVars lp
+  vs <- getEntryVars Nothing lp
   logs <- mapM maybeLog vs
   return $ concat logs
 

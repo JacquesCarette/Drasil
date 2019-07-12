@@ -6,9 +6,9 @@ module Language.Drasil.Code.Imperative.Symantics (
   -- Typeclasses
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
-  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), 
+  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  Selector(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..)
@@ -140,7 +140,15 @@ class BinaryOpSym repr where
   andOp          :: repr (BinaryOp repr)
   orOp           :: repr (BinaryOp repr)
 
-class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
+class (StateTypeSym repr) => VariableSym repr where
+  type Variable repr
+  var :: Label -> repr (StateType repr) -> repr (Variable repr)
+
+  variableName :: repr (Variable repr) -> String
+  variableType :: repr (Variable repr) -> repr (StateType repr)
+  variableDoc  :: repr (Variable repr) -> Doc
+
+class (VariableSym repr, StateVarSym repr) => ValueSym repr where
   type Value repr
   litTrue   :: repr (Value repr)
   litFalse  :: repr (Value repr)
@@ -157,7 +165,7 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
 
 
   const        :: Label -> repr (StateType repr) -> repr (Value repr)
-  var          :: Label -> repr (StateType repr) -> repr (Value repr)
+  varVal       :: repr (Variable repr) -> repr (Value repr)
   extVar       :: Library -> Label -> repr (StateType repr) -> repr (Value repr)
 --  global       :: Label -> repr (Value repr)         -- not sure how this one works, but in GOOL it was hardcoded to give an error so I'm leaving it out for now
   self         :: Label -> repr (Value repr)
@@ -179,7 +187,6 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
   printFileLnFunc :: repr (Value repr) -> repr (Value repr)
   argsList  :: repr (Value repr)
 
-  valueName :: repr (Value repr) -> String -- Function for converting a value to a string of the value's name
   valueType :: repr (Value repr) -> repr (StateType repr)
 
 class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => 

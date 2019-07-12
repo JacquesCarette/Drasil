@@ -13,7 +13,7 @@ patternTest = packMods "PatternTest" [fileDoc (buildModule "PatternTest" ["Obser
 
 patternTestMainMethod :: (RenderSym repr) => repr (Method repr)
 patternTestMainMethod = mainMethod "PatternTest" (body [block [
-  varDec $ var "n" int,
+  varDec $ varVal "n" int,
   initState "myFSM" "Off", 
   changeState "myFSM" "On",
   checkState "myFSM" 
@@ -25,12 +25,12 @@ patternTestMainMethod = mainMethod "PatternTest" (body [block [
   runStrategy "myStrat" 
     [("myStrat", oneLiner (printStrLn "myStrat")), 
       ("yourStrat", oneLiner (printStrLn "yourStrat"))]
-    (Just (litInt 3)) (Just (var "n" int)),
+    (Just (litInt 3)) (Just (varVal "n" int)),
 
   block [
-    varDecDef (var "obs1" (obj "Observer")) (extStateObj "Observer" (obj "Observer") []), 
-    varDecDef (var "obs2" (obj "Observer")) (extStateObj "Observer" (obj "Observer") [])],
+    varDecDef (varVal "obs1" (obj "Observer")) (extStateObj "Observer" (obj "Observer") []), 
+    varDecDef (varVal "obs2" (obj "Observer")) (extStateObj "Observer" (obj "Observer") [])],
   block [
-    initObserverList (listType static_ (obj "Observer")) [var "obs1" (obj "Observer")], 
-    addObserver (var "obs2" (obj "Observer")),
+    initObserverList (listType static_ (obj "Observer")) [varVal "obs1" (obj "Observer")], 
+    addObserver (varVal "obs2" (obj "Observer")),
     notifyObservers (func "printNum" void []) (listType static_ (obj "Observer"))]])

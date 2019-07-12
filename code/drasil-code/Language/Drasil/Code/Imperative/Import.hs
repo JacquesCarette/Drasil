@@ -82,8 +82,8 @@ chooseLogging LogAll v = Just <$> loggedVar v
 chooseLogging _      _ = return Nothing
 
 initLogFileVar :: (RenderSym repr) => Logging -> [repr (Statement repr)]
-initLogFileVar LogVar = [varDec $ var "outfile" outfile]
-initLogFileVar LogAll = [varDec $ var "outfile" outfile]
+initLogFileVar LogVar = [varDec $ varVal "outfile" outfile]
+initLogFileVar LogAll = [varDec $ varVal "outfile" outfile]
 initLogFileVar _ = []
 
 
@@ -212,7 +212,7 @@ genInputClass = do
         (repr (Class repr)))
       genClass [] = return Nothing 
       genClass _ = do
-        let inputVars = map (\x -> pubMVar 0 (var (codeName x) (convType $ 
+        let inputVars = map (\x -> pubMVar 0 (varVal (codeName x) (convType $ 
               codeType x))) ins
         return $ Just $ pubClass "InputParameters" Nothing inputVars []
   genClass $ mapMaybe (\x -> Map.lookup (codeName x) (eMap $ codeSpec g)) ins
@@ -350,7 +350,7 @@ genOutputFormat = do
       genOutput Nothing = return Nothing
       genOutput (Just _) = do
         let l_outfile = "outputfile"
-            v_outfile = var l_outfile outfile
+            v_outfile = varVal l_outfile outfile
         parms <- getOutputParams
         outp <- mapM (\x -> do
           v <- variable (codeName x) (convType $ codeType x)
@@ -379,7 +379,7 @@ genMethodCall s pr doComments doLog t n p b = do
       commBody _           = id
       pTypes = map parameterType p
       pNames = map parameterName p
-      vals = zipWith var pNames pTypes
+      vals = zipWith varVal pNames pTypes
   bod <- commBody doComments (loggedBody doLog)
   return $ function n s pr t p (body bod)
 
@@ -414,7 +414,7 @@ loggedMethod :: (RenderSym repr) => Label -> [repr (Value repr)] ->
   Reader (State repr) [repr (Block repr)]
 loggedMethod n vals b =
   let l_outfile = "outfile"
-      v_outfile = var l_outfile outfile
+      v_outfile = varVal l_outfile outfile
   in do
     g <- ask
     rest <- b
@@ -457,7 +457,7 @@ genMain = genModule "Control" (Just $ liftS genMainFunc) Nothing
 
 genMainFunc :: (RenderSym repr) => Reader (State repr) (repr (Method repr))
 genMainFunc =
-  let v_filename = var "filename" string
+  let v_filename = varVal "filename" string
   in do
     g <- ask
     logInFile <- maybeLog v_filename
@@ -476,7 +476,7 @@ getInputDecl :: (RenderSym repr) => Reader (State repr) (Maybe (repr (
   Statement repr)))
 getInputDecl = do
   g <- ask
-  let v_params = var "inParams" (obj "InputParameters")
+  let v_params = varVal "inParams" (obj "InputParameters")
       getDecl _ [] = return Nothing
       getDecl Unbundled ins = do
         vals <- mapM (\x -> variable (codeName x) (convType $ codeType x)) ins
@@ -548,8 +548,8 @@ getInputFormatIns = do
   g <- ask
   let getIns :: (RenderSym repr) => Structure -> [repr (Value repr)]
       getIns Unbundled = []
-      getIns Bundled = [var "inParams" (obj "InputParameters")]
-  return $ var "filename" string : getIns (inStruct g)
+      getIns Bundled = [varVal "inParams" (obj "InputParameters")]
+  return $ varVal "filename" string : getIns (inStruct g)
 
 getInputFormatOuts :: (RenderSym repr) => Reader (State repr) 
   [repr (Value repr)]
@@ -561,7 +561,7 @@ getInputFormatOuts = do
   return $ getOuts (inStruct g)
   
 toValues :: (RenderSym repr) => [CodeChunk] -> [repr (Value repr)]
-toValues = map (\c -> var (codeName c) ((convType . codeType) c))
+toValues = map (\c -> varVal (codeName c) ((convType . codeType) c))
 
 getDerivedParams :: (RenderSym repr) => 
   Reader (State repr) [repr (Parameter repr)]
@@ -602,7 +602,7 @@ loggedVar :: (RenderSym repr) => repr (Value repr) ->
   Reader (State repr) (repr (Statement repr))
 loggedVar v =
   let l_outfile = "outfile"
-      v_outfile = var l_outfile outfile
+      v_outfile = varVal l_outfile outfile
   in do
     g <- ask
     return $ multi [
@@ -629,13 +629,13 @@ variable s' t' = do
         maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
                | s `elem` map codeName (inputs cs) = return $ inputVariable 
                  (inStruct g) s t
-               | otherwise                         = return $ var s t
+               | otherwise                         = return $ varVal s t
   doit s' t'
 
 inputVariable :: (RenderSym repr) => Structure -> String -> 
   repr (StateType repr) -> repr (Value repr)
-inputVariable Unbundled s t = var s t
-inputVariable Bundled s t = var "inParams" (obj "InputParameters") $-> var s t
+inputVariable Unbundled s t = varVal s t
+inputVariable Bundled s t = varVal "inParams" (obj "InputParameters") $-> varVal s t
   
 fApp :: (RenderSym repr) => String -> String -> repr (StateType repr) -> 
   [repr (Value repr)] -> Reader (State repr) (repr (Value repr))
@@ -665,7 +665,7 @@ getParams cs = do
   return $ inPs ++ conPs ++ ps
 
 mkParam :: (RenderSym repr) => CodeChunk -> repr (Parameter repr)
-mkParam p = paramFunc (codeType p) $ var pName pType
+mkParam p = paramFunc (codeType p) $ varVal pName pType
   where paramFunc (C.List _) = pointerParam
         paramFunc _ = stateParam
         pName = codeName p
@@ -675,7 +675,7 @@ getInputParams :: (RenderSym repr) => Structure -> [CodeChunk] ->
   [repr (Parameter repr)]
 getInputParams _ [] = []
 getInputParams Unbundled cs = map mkParam cs
-getInputParams Bundled _ = [pointerParam $ var pName pType]
+getInputParams Bundled _ = [pointerParam $ varVal pName pType]
   where pName = "inParams"
         pType = obj "InputParameters"
 
@@ -684,7 +684,7 @@ getConstParams :: [CodeChunk] -> [repr (Parameter repr)]
 getConstParams _ = []
 
 getArgs :: (RenderSym repr) => [repr (Parameter repr)] -> [repr (Value repr)]
-getArgs = map (\p -> var (parameterName p) (parameterType p))
+getArgs = map (\p -> varVal (parameterName p) (parameterType p))
 
 convExpr :: (RenderSym repr) => Expr -> Reader (State repr) (repr (Value repr))
 convExpr (Dbl d) = return $ litFloat d
@@ -840,7 +840,7 @@ convStmt (FTry t c) = do
   stmt2 <- mapM convStmt c
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmt FContinue = return continue
-convStmt (FDec v (C.List t)) = return $ listDec 0 (var (codeName v)
+convStmt (FDec v (C.List t)) = return $ listDec 0 (varVal (codeName v)
   (listType dynamic_ (convType t)))
 convStmt (FDec v t) = do 
   val <- variable (codeName v) (convType t)
@@ -859,7 +859,7 @@ genDataFunc nameTitle ddef = do
   parms <- getParams $ getInputs ddef
   publicMethod (mState void) nameTitle (p_filename : parms)  (readData ddef)
   where l_filename = "filename"
-        v_filename = var l_filename string
+        v_filename = varVal l_filename string
         p_filename = stateParam v_filename
 
 -- this is really ugly!!
@@ -917,8 +917,8 @@ readData ddef = do
         ---------------
         clearTemp :: (RenderSym repr) => String -> DataItem -> 
           repr (Statement repr)
-        clearTemp sfx v = listDecDef (var (codeName v ++ 
-          sfx) (listInnerType $ convType $ codeType v)) []
+        clearTemp sfx v = listDecDef (varVal (codeName v ++ sfx) 
+          (listInnerType $ convType $ codeType v)) []
         ---------------
         appendTemps :: (RenderSym repr) => Maybe String -> [DataItem] -> 
           [repr (Statement repr)]
@@ -928,24 +928,24 @@ readData ddef = do
         appendTemp :: (RenderSym repr) => String -> DataItem -> 
           repr (Statement repr)
         appendTemp sfx v = valState $ listAppend 
-          (var (codeName v) (convType $ codeType v)) 
-          (var (codeName v ++ sfx) (convType $ codeType v))
+          (varVal (codeName v) (convType $ codeType v)) 
+          (varVal (codeName v ++ sfx) (convType $ codeType v))
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_filename, l_i :: Label
         v_line, v_lines, v_linetokens, v_infile, v_filename, v_i ::
           (RenderSym repr) => (repr (Value repr))
         l_line = "line"
-        v_line = var l_line string
+        v_line = varVal l_line string
         l_lines = "lines"
-        v_lines = var l_lines (listType static_ string)
+        v_lines = varVal l_lines (listType static_ string)
         l_linetokens = "linetokens"
-        v_linetokens = var l_linetokens (listType static_ string)
+        v_linetokens = varVal l_linetokens (listType static_ string)
         l_infile = "infile"
-        v_infile = var l_infile infile
+        v_infile = varVal l_infile infile
         l_filename = "filename"
-        v_filename = var l_filename string
+        v_filename = varVal l_filename string
         l_i = "i"
-        v_i = var l_i int
+        v_i = varVal l_i int
 
 getEntryVars :: (RenderSym repr) => Maybe String -> LinePattern -> 
   Reader (State repr) [repr (Value repr)]

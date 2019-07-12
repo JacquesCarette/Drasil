@@ -44,7 +44,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
   ScopeTag (..), FuncData(..), fd, ModData(..), md, ParamData(..), pd, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), vd)
+  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
@@ -202,6 +202,14 @@ instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
   andOp = pair andOp andOp
   orOp = pair orOp orOp
 
+instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
+  type Variable (p CppSrcCode CppHdrCode) = VarData
+  var n t = pair (var n $ pfst t) (var n $ psnd t)
+
+  variableName v = variableName $ pfst v
+  variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
+  variableDoc v = variableDoc $ pfst v
+
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   type Value (p CppSrcCode CppHdrCode) = ValData
   litTrue = pair litTrue litTrue
@@ -215,7 +223,7 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   ($:) l1 l2 = pair (($:) l1 l2) (($:) l1 l2)
 
   const n t = pair (const n $ pfst t) (const n $ psnd t)
-  var n t = pair (var n $ pfst t) (var n $ psnd t)
+  varVal v = pair (varVal $ pfst v) (varVal $ psnd v)
   extVar l n t = pair (extVar l n $ pfst t) (extVar l n $ psnd t)
   self l = pair (self l) (self l)
   arg n = pair (arg n) (arg n)
@@ -234,7 +242,6 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   printFileLnFunc v = pair (printFileLnFunc $ pfst v) (printFileLnFunc $ psnd v)
   argsList = pair argsList argsList
 
-  valueName v = valueName $ pfst v
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
 
 instance (Pair p) => NumericExpression (p CppSrcCode CppHdrCode) where
@@ -700,9 +707,9 @@ instance ControlBlockSym CppSrcCode where
 
   listSlice vnew vold b e s = 
     let l_temp = "temp"
-        v_temp = var l_temp (fmap valType vnew)
+        v_temp = varVal l_temp (fmap valType vnew)
         l_i = "i_temp"
-        v_i = var l_i int
+        v_i = varVal l_i int
     in
       block [
         listDec 0 v_temp,
@@ -746,6 +753,14 @@ instance BinaryOpSym CppSrcCode where
   andOp = return andOpDocD
   orOp = return orOpDocD
 
+instance VariableSym CppSrcCode where
+  type Variable CppSrcCode = VarData
+  var n t = liftA2 (vard n) t (return $ varDocD n) 
+
+  variableName v = varName . unCPPSC
+  variableType v = varType . unCPPSC
+  variableDoc v = varDoc . unCPPSC
+
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
   litTrue = liftA2 (vd (Just "true")) bool (return litTrueD)
@@ -760,17 +775,17 @@ instance ValueSym CppSrcCode where
   ($->) = objVar
   ($:) = enumElement
 
-  const = var
-  var n t = liftA2 (vd (Just n)) t (return $ varDocD n) 
-  extVar _ = var
+  const = varVal
+  varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
+  extVar _ = varVal
   self l = liftA2 (vd (Just "this")) (obj l) (return selfDocD)
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n+1)) argsList)
   enumElement en e = liftA2 (vd (Just e)) (enumType en) (return $ text e)
-  enumVar e en = var e (enumType en)
+  enumVar e en = varVal e (enumType en)
   objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
     (fmap valType v) (liftA2 objVarDocD o v)
-  objVarSelf _ = var
-  listVar n p t = var n (listType p t)
+  objVarSelf _ = varVal
+  listVar n p t = varVal n (listType p t)
   n `listOf` t = listVar n static_ t
   iterVar l t = liftA2 mkVal (iterator t) (return $ text $ "(*" ++ l ++ ")")
   
@@ -781,9 +796,6 @@ instance ValueSym CppSrcCode where
   printFileLnFunc f = liftA2 mkVal void (fmap valDoc f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
-  valueName v = fromMaybe 
-    (error $ "Attempt to print unprintable Value (" ++ render (valDoc $ unCPPSC 
-    v) ++ ")") (valName $ unCPPSC v)
   valueType = fmap valType
 
 instance NumericExpression CppSrcCode where
@@ -882,11 +894,11 @@ instance SelectorFunction CppSrcCode where
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 cppListSetDoc (intValue i) toVal)
 
-  atFunc t l = listAccessFunc t (var l int) 
+  atFunc t l = listAccessFunc t (varVal l int) 
 
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (var l int)
+  at v l = listAccess v (varVal l int)
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -935,9 +947,9 @@ instance StatementSym CppSrcCode where
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, v]
   discardFileLine f = mkSt <$> fmap (cppDiscardInput "\\n") f
   stringSplit d vnew s = let l_ss = "ss"
-                             v_ss = var l_ss (obj "std::stringstream")
+                             v_ss = varVal l_ss (obj "std::stringstream")
                              l_word = "word"
-                             v_word = var l_word string
+                             v_word = varVal l_word string
                          in
     multi [
       valState $ vnew $. func "clear" void [],
@@ -965,11 +977,11 @@ instance StatementSym CppSrcCode where
 
   throw errMsg = mkSt <$> fmap cppThrowDoc (litString errMsg)
 
-  initState fsmName initialState = varDecDef (var fsmName string)
+  initState fsmName initialState = varDecDef (varVal fsmName string)
     (litString initialState)
-  changeState fsmName toState = var fsmName string &= litString toState
+  changeState fsmName toState = varVal fsmName string &= litString toState
 
-  initObserverList t = listDecDef (var observerListName t)
+  initObserverList t = listDecDef (varVal observerListName t)
   addObserver o = valState $ listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
           lastelem = listSize obsList
@@ -993,27 +1005,27 @@ instance ControlStatementSym CppSrcCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
-    (var i int ?< finalv) (var i int &+= stepv)
-  forEach l v = for (varDecDef (var l (iterator t)) (iterBegin v)) 
-    (var l (iterator t) ?!= iterEnd v) (var l (iterator t) &++)
+  forRange i initv finalv stepv = for (varDecDef (varVal i int) initv) 
+    (varVal i int ?< finalv) (varVal i int &+= stepv)
+  forEach l v = for (varDecDef (varVal l (iterator t)) (iterBegin v)) 
+    (varVal l (iterator t) ?!= iterEnd v) (varVal l (iterator t) &++)
     where t = listInnerType $ valueType v
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 cppTryCatch tb cb
 
-  checkState l = switchAsIf (var l string) 
+  checkState l = switchAsIf (varVal l string) 
 
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
-          v_index = var index int
+          v_index = varVal index int
           initv = varDecDef v_index $ litInt 0
           notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = let l_line = "nextLine"
-                            v_line = var l_line string
+                            v_line = varVal l_line string
                         in
     multi [varDec v_line,
       while (funcApp "std::getline" string [f, v_line])
@@ -1059,7 +1071,7 @@ instance MethodSym CppSrcCode where
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
   destructor n vs = 
-    let i = var "i" int
+    let i = varVal "i" int
         deleteStatements = map (fmap destructSts) vs
         loopIndexDec = varDec i
         dbody = liftA2 emptyIfEmpty 
@@ -1275,6 +1287,14 @@ instance BinaryOpSym CppHdrCode where
   andOp = return empty
   orOp = return empty
 
+instance VariableSym CppHdrCode where
+  type Variable CppHdrCode = VarData
+  var n t = liftA2 (vard n) t (return $ varDocD n) 
+
+  variableName v = varName . unCPPHC
+  variableType v = varType . unCPPHC
+  variableDoc v = varDoc . unCPPHC
+
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
   litTrue = liftA2 mkVal void (return empty)
@@ -1288,7 +1308,7 @@ instance ValueSym CppHdrCode where
   ($:) _ _ = liftA2 mkVal void (return empty)
 
   const _ _ = liftA2 mkVal void (return empty)
-  var n t = liftA2 (vd (Just n)) t (return $ varDocD n) 
+  varVal _ = liftA2 mkVal void (return empty)
   extVar _ _ _ = liftA2 mkVal void (return empty)
   self _ = liftA2 mkVal void (return empty)
   arg _ = liftA2 mkVal void (return empty)
@@ -1307,7 +1327,6 @@ instance ValueSym CppHdrCode where
   printFileLnFunc _ = liftA2 mkVal void (return empty)
   argsList = liftA2 mkVal void (return empty)
 
-  valueName _ = error "Attempted to extract string from Value for C++ header file"
   valueType = error "Attempted to extract type from Value for C++ header file"
 
 instance NumericExpression CppHdrCode where
@@ -1765,7 +1784,7 @@ cppDestruct v = cppDestruct' (getType $ valueType v)
   where cppDestruct' (List _) = deleteLoop
         cppDestruct' _ = free v
         i = "i"
-        v_i = var i int
+        v_i = varVal i int
         guard = v_i ?< listSize v
         loopBody = oneLiner $ free (at v i)
         initv = v_i &= litInt 0

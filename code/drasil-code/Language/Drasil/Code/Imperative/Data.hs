@@ -1,7 +1,7 @@
 module Language.Drasil.Code.Imperative.Data (Pair(..), pairList,
   Terminator (..), ScopeTag(..), FuncData(..), fd, ModData(..), md, 
   MethodData(..), mthd, ParamData(..), pd, updateParamDoc, StateVarData(..), 
-  svd, TypeData(..), td, ValData(..), vd, updateValDoc
+  svd, TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -59,12 +59,15 @@ data TypeData = TD {cType :: CodeType, typeDoc :: Doc} deriving Eq
 td :: CodeType -> Doc -> TypeData
 td = TD
 
--- Maybe String is the String representation of the value
-data ValData = VD {valName :: Maybe String, valType :: TypeData, valDoc :: Doc}
+data ValData = VD {valType :: TypeData, valDoc :: Doc}
   deriving Eq
 
-vd :: Maybe String -> TypeData -> Doc -> ValData
+vd :: TypeData -> Doc -> ValData
 vd = VD
 
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 updateValDoc f v = vd (valName v) (valType v) ((f . valDoc) v)
+
+data VarData = VarD {varName :: String, varType :: TypeData, varDoc :: Doc}
+
+vard = VarD

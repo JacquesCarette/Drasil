@@ -15,30 +15,30 @@ fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory],
 
 writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [
-  varDecDef (var "e" int) (litInt 5),
-  varDec $ var "f" float,
-  var "f" float &= cast float (var "e" int),
-  varDec $ var "fileToWrite" outfile,
+  varDecDef (varVal "e" int) (litInt 5),
+  varDec $ varVal "f" float,
+  varVal "f" float &= cast float (varVal "e" int),
+  varDec $ varVal "fileToWrite" outfile,
 
-  openFileW (var "fileToWrite" outfile) (litString "testText.txt"),
-  printFile (var "fileToWrite" outfile) (litInt 0),
-  printFileLn (var "fileToWrite" outfile) (litFloat 0.89),
-  printFileStr (var "fileToWrite" outfile) "ello",
-  printFileStrLn (var "fileToWrite" outfile) "bye",
-  printFileStrLn (var "fileToWrite" outfile) "!!",
-  closeFile (var "fileToWrite" outfile),
+  openFileW (varVal "fileToWrite" outfile) (litString "testText.txt"),
+  printFile (varVal "fileToWrite" outfile) (litInt 0),
+  printFileLn (varVal "fileToWrite" outfile) (litFloat 0.89),
+  printFileStr (varVal "fileToWrite" outfile) "ello",
+  printFileStrLn (varVal "fileToWrite" outfile) "bye",
+  printFileStrLn (varVal "fileToWrite" outfile) "!!",
+  closeFile (varVal "fileToWrite" outfile),
 
-  varDec $ var "fileToRead" infile,
-  openFileR (var "fileToRead" infile) (litString "testText.txt"),
-  varDec $ var "fileLine" string,
-  getFileInputLine (var "fileToRead" infile) (var "fileLine" string),
-  discardFileLine (var "fileToRead" infile),
-  listDec 0 (var "fileContents" (listType dynamic_ string))]
+  varDec $ varVal "fileToRead" infile,
+  openFileR (varVal "fileToRead" infile) (litString "testText.txt"),
+  varDec $ varVal "fileLine" string,
+  getFileInputLine (varVal "fileToRead" infile) (varVal "fileLine" string),
+  discardFileLine (varVal "fileToRead" infile),
+  listDec 0 (varVal "fileContents" (listType dynamic_ string))]
 
 readStory :: (RenderSym repr) => repr (Statement repr)
-readStory = getFileInputAll (var "fileToRead" infile) 
-  (var "fileContents" (listType dynamic_ string))
+readStory = getFileInputAll (varVal "fileToRead" infile) 
+  (varVal "fileContents" (listType dynamic_ string))
 
 goodBye :: (RenderSym repr) => repr (Block repr)
-goodBye = block [printLn (var "fileContents" (listType dynamic_ string)), 
-  closeFile (var "fileToRead" infile)]
+goodBye = block [printLn (varVal "fileContents" (listType dynamic_ string)), 
+  closeFile (varVal "fileToRead" infile)]

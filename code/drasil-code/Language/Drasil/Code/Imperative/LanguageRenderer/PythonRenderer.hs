@@ -12,7 +12,7 @@ import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
+  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
@@ -37,7 +37,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   setterName)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
   fd, ModData(..), md, MethodData(..), mthd, ParamData(..), TypeData(..), td, 
-  ValData(..), vd)
+  ValData(..), vd, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType)
@@ -198,35 +198,41 @@ instance BinaryOpSym PythonCode where
   andOp = return $ text "and"
   orOp = return $ text "or"
 
+instance VariableSym PythonCode where
+  type Variable PythonCode = VarData
+  var n t = liftA2 (vard n) t (return $ varDocD n) 
+
+  variableName v = varName . unPC
+  variableType v = varType . unPC
+  variableDoc v = varDoc . unPC
+
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
-  litTrue = liftA2 (vd (Just "True")) bool (return $ text "True")
-  litFalse = liftA2 (vd (Just "False")) bool (return $ text "False")
-  litChar c = liftA2 (vd (Just $ "\'" ++ [c] ++ "\'")) char 
-    (return $ litCharD c)
-  litFloat v = liftA2 (vd (Just $ show v)) float (return $ litFloatD v)
-  litInt v = liftA2 (vd (Just $ show v)) int (return $ litIntD v)
-  litString s = liftA2 (vd (Just $ "\"" ++ s ++ "\"")) string 
-    (return $ litStringD s)
+  litTrue = liftA2 mkVal bool (return $ text "True")
+  litFalse = liftA2 mkVal bool (return $ text "False")
+  litChar c = liftA2 mkVal char (return $ litCharD c)
+  litFloat v = liftA2 mkVal float (return $ litFloatD v)
+  litInt v = liftA2 mkVal int (return $ litIntD v)
+  litString s = liftA2 mkVal string (return $ litStringD s)
 
   ($->) = objVar
   ($:) = enumElement
 
-  const = var
-  var n t = liftA2 (vd (Just n)) t (return $ varDocD n) 
-  extVar l n t = liftA2 (vd (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
-  self l = liftA2 (vd (Just "self")) (obj l) (return $ text "self")
+  const = varVal
+  varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
+  extVar l n t = liftA2 (mkVal (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
+  self l = liftA2 (mkVal (Just "self")) (obj l) (return $ text "self")
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n + 1)) argsList)
-  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (enumType en) 
+  enumElement en e = liftA2 (mkVal (Just $ en ++ "." ++ e)) (enumType en) 
     (return $ enumElemDocD en e)
-  enumVar e en = var e (enumType en)
-  objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
+  enumVar e en = varVal e (enumType en)
+  objVar o v = liftA2 (mkVal (Just $ valueName o ++ "." ++ valueName v))
     (fmap valType v) (liftA2 objVarDocD o v)
-  objVarSelf l n t = liftA2 (vd (Just $ "self." ++ n)) t (liftA2 objVarDocD
-    (self l) (var n t))
-  listVar n p t = var n (listType p t)
+  objVarSelf l n t = liftA2 (mkVal (Just $ "self." ++ n)) t (liftA2 objVarDocD
+    (self l) (varVal n t))
+  listVar n p t = varVal n (listType p t)
   n `listOf` t = listVar n static_ t
-  iterVar n t = var n (iterator t)
+  iterVar n t = varVal n (iterator t)
 
   inputFunc = liftA2 mkVal string (return $ text "input()")  -- raw_input() for < Python 3.0
   printFunc = liftA2 mkVal void (return $ text "print")
@@ -235,9 +241,6 @@ instance ValueSym PythonCode where
   printFileLnFunc _ = liftA2 mkVal void (return empty)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "sys.argv")
 
-  valueName v = fromMaybe 
-    (error $ "Attempt to print unprintable Value (" ++ render (valDoc $ unPC v) 
-    ++ ")") (valName $ unPC v)
   valueType = fmap valType
 
 instance NumericExpression PythonCode where
@@ -290,7 +293,7 @@ instance ValueExpression PythonCode where
     valList vs))
   listStateObj t _ = liftA2 mkVal t (fmap typeDoc t)
 
-  exists v = v ?!= var "None" void
+  exists v = v ?!= varVal "None" void
   notNull = exists
 
 instance Selector PythonCode where
@@ -338,11 +341,11 @@ instance SelectorFunction PythonCode where
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD i toVal)
 
-  atFunc t l = listAccessFunc t (var l int)
+  atFunc t l = listAccessFunc t (varVal l int)
 
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (var l int)
+  at v l = listAccess v (varVal l int)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
@@ -409,15 +412,15 @@ instance StatementSym PythonCode where
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
-  free v = v &= var "None" void
+  free v = v &= varVal "None" void
 
   throw errMsg = mkStNoEnd <$> fmap pyThrow (litString errMsg)
 
-  initState fsmName initialState = varDecDef (var fsmName string) 
+  initState fsmName initialState = varDecDef (varVal fsmName string) 
     (litString initialState)
-  changeState fsmName toState = var fsmName string &= litString toState
+  changeState fsmName toState = varVal fsmName string &= litString toState
 
-  initObserverList t = listDecDef (var observerListName t)
+  initObserverList t = listDecDef (varVal observerListName t)
   addObserver o = valState $ listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
           lastelem = listSize obsList
@@ -449,7 +452,7 @@ instance ControlStatementSym PythonCode where
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 pyTryCatch tb cb
 
-  checkState l = switch (var l string)
+  checkState l = switch (varVal l string)
   notifyObservers f t = forRange index initv (listSize obsList) 
     (litInt 1) notify
     where obsList = observerListName `listOf` t

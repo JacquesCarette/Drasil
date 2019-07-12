@@ -171,7 +171,7 @@ printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[",
     prFn (listAccess v (listSize v #- litInt 1)))], 
   prLnFn "]"]
   where l_i = "list_i" ++ show n
-        i = var l_i S.int
+        i = varValVal l_i S.int
 
 printObjDoc :: String -> (String -> repr (Statement repr)) 
   -> repr (Statement repr)
@@ -379,7 +379,7 @@ listDecDefDocD v vs = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+>
   typeDoc (valType v) <+> braces (valList vs)
 
 objDecDefDocD :: ValData -> ValData -> Doc
-objDecDefDocD = varDecDefDocD
+objDecDefDocD = varValDecDefDocD
 
 constDecDefDocD :: ValData -> ValData -> Doc
 constDecDefDocD v def = text "const" <+> typeDoc (valType v) <+> valDoc v <+> 
@@ -598,7 +598,7 @@ typeBinExpr :: Doc -> TypeData -> ValData -> ValData -> ValData
 typeBinExpr b t v1 v2 = mkVal t (binOpDocD b (valDoc v1) (valDoc v2))
 
 mkVal :: TypeData -> Doc -> ValData
-mkVal = vd Nothing
+mkVal = vd
 
 -- Literals --
 

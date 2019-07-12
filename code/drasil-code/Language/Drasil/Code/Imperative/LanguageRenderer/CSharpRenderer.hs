@@ -45,7 +45,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   setMainMethod,setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..),  
   fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, updateParamDoc, 
-  TypeData(..), td, ValData(..), vd, updateValDoc)
+  TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
   liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
   getInnerType, convType)
@@ -170,9 +170,9 @@ instance ControlBlockSym CSharpCode where
 
   listSlice vnew vold b e s = 
     let l_temp = "temp"
-        v_temp = var l_temp (fmap valType vnew)
+        v_temp = varVal l_temp (fmap valType vnew)
         l_i = "i_temp"
-        v_i = var l_i int
+        v_i = varVal l_i int
     in
       block [
         listDec 0 v_temp,
@@ -216,6 +216,14 @@ instance BinaryOpSym CSharpCode where
   andOp = return andOpDocD
   orOp = return orOpDocD
 
+instance VariableSym CSharpCode where
+  type Variable CSharpCode = VarData
+  var n t = liftA2 (vard n) t (return $ varDocD n) 
+
+  variableName v = varName . unCSC
+  variableType v = varType . unCSC
+  variableDoc v = varDoc . unCSC
+
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
   litTrue = liftA2 (vd (Just "true")) bool (return litTrueD)
@@ -230,21 +238,21 @@ instance ValueSym CSharpCode where
   ($->) = objVar
   ($:) = enumElement
 
-  const = var
-  var n t = liftA2 (vd (Just n)) t (return $ varDocD n) 
+  const = varVal
+  varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
   extVar l n t = liftA2 (vd (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
   self l = liftA2 (vd (Just "this")) (obj l) (return selfDocD)
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
   enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (enumType en) 
     (return $ enumElemDocD en e)
-  enumVar e en = var e (enumType en)
+  enumVar e en = varVal e (enumType en)
   objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
     (fmap valType v) (liftA2 objVarDocD o v)
   objVarSelf l n t = liftA2 (vd (Just $ "this." ++ n)) t (liftA2 objVarDocD 
-    (self l) (var n t))
-  listVar n p t = var n (listType p t)
+    (self l) (varVal n t))
+  listVar n p t = varVal n (listType p t)
   n `listOf` t = listVar n static_ t
-  iterVar n t = var n (iterator t)
+  iterVar n t = varVal n (iterator t)
   
   inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")
   printFunc = liftA2 mkVal void (return $ text "Console.Write")
@@ -253,9 +261,6 @@ instance ValueSym CSharpCode where
   printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "WriteLine") f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
-  valueName v = fromMaybe 
-    (error $ "Attempt to print unprintable Value (" ++ render (valDoc $ unCSC v)
-    ++ ")") (valName $ unCSC v)
   valueType = fmap valType
 
 instance NumericExpression CSharpCode where
@@ -308,7 +313,7 @@ instance ValueExpression CSharpCode where
     (liftList valList vs))
 
   exists = notNull
-  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (var "null" 
+  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (varVal "null" 
     (fmap valType v)))
 
 instance Selector CSharpCode where
@@ -334,7 +339,7 @@ instance FunctionSym CSharpCode where
   getFunc v = func (getterName $ valueName v) (valueType v) []
   setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
-  listSizeFunc = liftA2 fd int (fmap funcDocD (var "Count" int))
+  listSizeFunc = liftA2 fd int (fmap funcDocD (varVal "Count" int))
   listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
   listAppendFunc v = func "Add" (fmap valType v) [v]
 
@@ -356,11 +361,11 @@ instance SelectorFunction CSharpCode where
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD (intValue i) toVal)
 
-  atFunc t l = listAccessFunc t (var l int)
+  atFunc t l = listAccessFunc t (varVal l int)
 
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (var l int)
+  at v l = listAccess v (varVal l int)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
@@ -428,10 +433,10 @@ instance StatementSym CSharpCode where
 
   throw errMsg = mkSt <$> fmap csThrowDoc (litString errMsg)
 
-  initState fsmName initialState = varDecDef (var fsmName string) (litString initialState)
-  changeState fsmName toState = var fsmName string &= litString toState
+  initState fsmName initialState = varDecDef (varVal fsmName string) (litString initialState)
+  changeState fsmName toState = varVal fsmName string &= litString toState
 
-  initObserverList t = listDecDef (var observerListName t)
+  initObserverList t = listDecDef (varVal observerListName t)
   addObserver o = valState $ listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
           lastelem = listSize obsList
@@ -455,24 +460,24 @@ instance ControlStatementSym CSharpCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
-    (var i int ?< finalv) (var i int &+= stepv)
+  forRange i initv finalv stepv = for (varDecDef (varVal i int) initv) 
+    (varVal i int ?< finalv) (varVal i int &+= stepv)
   forEach l v b = mkStNoEnd <$> liftA6 (forEachDocD l) blockStart blockEnd 
     iterForEachLabel iterInLabel v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 csTryCatch tb cb
 
-  checkState l = switch (var l string)
+  checkState l = switch (varVal l string)
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
-          v_index = var index int
+          v_index = varVal index int
           initv = varDecDef v_index $ litInt 0
           notify = oneLiner $ valState $ at obsList index $. f
 
-  getFileInputAll f v = while (objVar f (var "EndOfStream" bool) ?!)
+  getFileInputAll f v = while (objVar f (varVal "EndOfStream" bool) ?!)
     (oneLiner $ valState $ listAppend v (fmap csFileInput f))
 
 instance ScopeSym CSharpCode where

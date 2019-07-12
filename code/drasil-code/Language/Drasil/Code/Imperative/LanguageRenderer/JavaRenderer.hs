@@ -45,7 +45,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   setMain, setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
   fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, TypeData(..), 
-  td, ValData(..), vd)
+  td, ValData(..), vd, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType)
@@ -175,9 +175,9 @@ instance ControlBlockSym JavaCode where
 
   listSlice vnew vold b e s = 
     let l_temp = "temp"
-        v_temp = var l_temp (fmap valType vnew)
+        v_temp = varVal l_temp (fmap valType vnew)
         l_i = "i_temp"
-        v_i = var l_i int
+        v_i = varVal l_i int
     in
       block [
         listDec 0 v_temp,
@@ -221,6 +221,14 @@ instance BinaryOpSym JavaCode where
   andOp = return andOpDocD
   orOp = return orOpDocD
 
+instance VariableSym JavaCode where
+  type Variable JavaCode = VarData
+  var n t = liftA2 (vard n) t (return $ varDocD n) 
+
+  variableName v = varName . unJC
+  variableType v = varType . unJC
+  variableDoc v = varDoc . unJC
+
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
   litTrue = liftA2 (vd (Just "true")) bool (return litTrueD)
@@ -235,20 +243,20 @@ instance ValueSym JavaCode where
   ($->) = objVar
   ($:) = enumElement
 
-  const = var
-  var n t = liftA2 (vd (Just n)) t (return $ varDocD n) 
+  const = varVal
+  varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
   extVar l n t = liftA2 (vd (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
   self l = liftA2 (vd (Just "this")) (obj l) (return selfDocD)
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
   enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (enumType en) 
     (return $ enumElemDocD en e)
-  enumVar e en = var e (enumType en)
+  enumVar e en = varVal e (enumType en)
   objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
     (fmap valType v) (liftA2 objVarDocD o v)
-  objVarSelf _ = var
-  listVar n p t = var n (listType p t)
+  objVarSelf _ = varVal
+  listVar n p t = varVal n (listType p t)
   n `listOf` t = listVar n static_ t
-  iterVar n t = var n (iterator t)
+  iterVar n t = varVal n (iterator t)
   
   inputFunc = liftA2 mkVal (obj "Scanner") (return $ parens (
     text "new Scanner(System.in)"))
@@ -258,9 +266,6 @@ instance ValueSym JavaCode where
   printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "println") f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
-  valueName v = fromMaybe 
-    (error $ "Attempt to print unprintable Value (" ++ render (valDoc $ unJC v) 
-    ++ ")") (valName $ unJC v)
   valueType = fmap valType
 
 instance NumericExpression JavaCode where
@@ -313,7 +318,7 @@ instance ValueExpression JavaCode where
     (liftList valList vs))
 
   exists = notNull
-  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (var "null"
+  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (varVal "null"
     (fmap valType v)))
 
 instance Selector JavaCode where
@@ -360,11 +365,11 @@ instance SelectorFunction JavaCode where
   listAccessFunc t i = func "get" t [intValue i]
   listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
 
-  atFunc t l = listAccessFunc t (var l int)
+  atFunc t l = listAccessFunc t (varVal l int)
 
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (var l int)
+  at v l = listAccess v (varVal l int)
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
@@ -434,11 +439,11 @@ instance StatementSym JavaCode where
 
   throw errMsg = mkSt <$> fmap jThrowDoc (litString errMsg)
 
-  initState fsmName initialState = varDecDef (var fsmName string) 
+  initState fsmName initialState = varDecDef (varVal fsmName string) 
     (litString initialState)
-  changeState fsmName toState = var fsmName string &= litString toState
+  changeState fsmName toState = varVal fsmName string &= litString toState
 
-  initObserverList t = listDecDef (var observerListName t)
+  initObserverList t = listDecDef (varVal observerListName t)
   addObserver o = valState $ listAdd obsList lastelem o
     where obsList = observerListName `listOf` valueType o
           lastelem = listSize obsList
@@ -462,20 +467,20 @@ instance ControlStatementSym JavaCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
-    (var i int ?< finalv) (var i int &+= stepv)
+  forRange i initv finalv stepv = for (varDecDef (varVal i int) initv) 
+    (varVal i int ?< finalv) (varVal i int &+= stepv)
   forEach l v b = mkStNoEnd <$> liftA6 (forEachDocD l) blockStart blockEnd
     iterForEachLabel iterInLabel v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 jTryCatch tb cb
   
-  checkState l = switch (var l string)
+  checkState l = switch (varVal l string)
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (v_index &++) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
-          v_index = var index int
+          v_index = varVal index int
           initv = varDecDef v_index $ litInt 0
           notify = oneLiner $ valState $ at obsList index $. f
 
@@ -533,16 +538,16 @@ instance MethodSym JavaCode where
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
   inOutFunc n s p ins outs b = function n s p jArrayType
     (map stateParam ins) (liftA3 surroundBody decls b (multi (varDecDef outputs
-        (var ("new Object[" ++ show (length outs) ++ "]") jArrayType)
+        (varVal ("new Object[" ++ show (length outs) ++ "]") jArrayType)
       : assignArray 0 outs
       ++ [returnState outputs])))
       where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
               [JavaCode (Statement JavaCode)]
             assignArray _ [] = []
-            assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
+            assignArray c (v:vs) = (varVal ("outputs[" ++ show c ++ "]") 
               (fmap valType v) &= v) : assignArray (c+1) vs
             decls = multi $ map varDec outs
-            outputs = var "outputs" jArrayType
+            outputs = varVal "outputs" jArrayType
     
   docInOutFunc desc iComms _ = docFuncRepr desc iComms
             
@@ -697,7 +702,7 @@ jAssignFromArray :: Int -> [JavaCode (Value JavaCode)] ->
   [JavaCode (Statement JavaCode)]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (fmap valType v)
-  (var ("outputs[" ++ show c ++ "]") (fmap valType v))) : jAssignFromArray (c+1) vs
+  (varVal ("outputs[" ++ show c ++ "]") (fmap valType v))) : jAssignFromArray (c+1) vs
 
 jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 
   [JavaCode (Value JavaCode)] -> JavaCode (Value JavaCode)) -> Label -> 
@@ -705,5 +710,5 @@ jInOutCall :: (Label -> JavaCode (StateType JavaCode) ->
   JavaCode (Statement JavaCode)
 jInOutCall f n ins [] = valState $ f n void ins
 jInOutCall f n ins [out] = assign out $ f n (fmap valType out) ins
-jInOutCall f n ins outs = multi $ varDecDef (var "outputs" jArrayType) (f n 
+jInOutCall f n ins outs = multi $ varDecDef (varVal "outputs" jArrayType) (f n 
   jArrayType ins) : jAssignFromArray 0 outs

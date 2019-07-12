@@ -14,7 +14,7 @@ observer = fileDoc (buildModule "Observer" [] [] [docClass
 
 helperClass :: (RenderSym repr) => repr (Class repr)
 helperClass = pubClass "Observer" Nothing [stateVar 0 public dynamic_ 
-  (var "x" int)] [observerConstructor, printNumMethod]
+  (varVal "x" int)] [observerConstructor, printNumMethod]
 
 observerConstructor :: (RenderSym repr) => repr (Method repr)
 observerConstructor = constructor "Observer" [] (oneLiner (assign (objVarSelf "Observer" "x" int) (litInt 5)))

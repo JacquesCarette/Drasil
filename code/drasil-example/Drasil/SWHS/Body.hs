@@ -14,7 +14,7 @@ import Control.Lens ((^.))
 import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   Field(..), Fields, LFunc(TermExcept), Literature(Doc', Lit), IntroSec(IntroProg),
   IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
-  RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose),
+  RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose, VectorUnits),
   ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
   SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
@@ -126,7 +126,7 @@ refDB = rdb citations concIns
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [
     TUnits,
-    tsymb'' tSymbIntro (TermExcept [uNormalVect]),
+    tsymb'' tSymbIntro $ TermExcept [uNormalVect],
     TAandA],
   IntroSec $
     IntroProg (introP1 CT.enerSrc energy swhsPCM phsChgMtrl
@@ -173,7 +173,7 @@ mkSRS = [RefSec $ RefProg intro [
 
 tSymbIntro :: [TSIntro]
 tSymbIntro = [TSPurpose, SymbConvention
-  [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder]
+  [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder, VectorUnits]
 
 insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]

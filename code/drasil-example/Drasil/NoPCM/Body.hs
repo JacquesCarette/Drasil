@@ -40,15 +40,15 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Drasil.DocLang (SRSDecl, Fields, Field(..), Verbosity(Verbose), 
-  InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
-  SolChSpec(..), SSDSec(..), DocSection(..), GSDSec(..), GSDSub(..),
-  AuxConstntSec(AuxConsProg), IntroSec(IntroProg),
-  IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
-  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
-  ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty,
-  inDataConstTbl, intro, mkDoc, outDataConstTbl, tsymb, traceMatStandard)
+import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
+  DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..), InclUnits(IncludeUnits),
+  IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
+  PDSub(..), ProblemDescription(PDProg), RefSec(RefProg), RefTab(TAandA, TUnits),
+  ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
+  SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose), 
+  TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits),
+  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
+  tsymb, traceMatStandard)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -121,7 +121,7 @@ concepts = map ucw [density, tau, inSA, outSA,
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro
   [TUnits,
-  tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder],
+  tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
   TAandA],
   IntroSec $ IntroProg (introStart enerSrc energy progName)
     (introEnd progName program)

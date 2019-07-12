@@ -151,10 +151,10 @@ unicodeConv :: Symbol -> Symbol
 unicodeConv (Atomic st) = Atomic $ unicodeString st
 unicodeConv (Atop d s) = Atop d $ unicodeConv s
 unicodeConv (Corners a b c d s) =
-  (Corners (map unicodeConv a) (map unicodeConv b) (map unicodeConv c) (map unicodeConv d) (unicodeConv s))
+  Corners (map unicodeConv a) (map unicodeConv b) (map unicodeConv c) (map unicodeConv d) (unicodeConv s)
 unicodeConv (Concat ss) = Concat $ map unicodeConv ss
 unicodeConv x = x
 
 unicodeString :: String -> String
-unicodeString = concat . (map (\x -> if isLatin1 x then [x] else getName x))
+unicodeString = concatMap (\x -> if isLatin1 x then [x] else getName x)
   where getName x = map toLower $ last (splitOn " " $ getCharacterName x)

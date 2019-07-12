@@ -5,8 +5,6 @@ import math
 import InputParameters
 
 def get_input(filename, inParams):
-    lines = []
-    linetokens = []
     infile = open(filename, "r")
     infile.readline()
     inParams.v_launch = float(infile.readline())

@@ -19,9 +19,6 @@ using std::ofstream;
 
 void get_input(string filename, InputParameters &inParams) {
     ifstream infile;
-    string line;
-    vector<string> lines(0);
-    vector<string> linetokens(0);
     infile.open(filename, std::fstream::in);
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile >> inParams.v_launch;

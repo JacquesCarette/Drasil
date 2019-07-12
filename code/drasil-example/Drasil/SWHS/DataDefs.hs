@@ -22,7 +22,7 @@ refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition]
 qDefs = [ddHtFluxCQD, ddHtFluxPQD, ddBalanceSolidPCMQD,
-  ddBalanceLiquidPCMQD, ddHtFusionQD, dd4MeltFracQD]
+  ddBalanceLiquidPCMQD, ddHtFusionQD, ddMeltFracQD]
 
 dataDefs :: [DataDefinition] 
 dataDefs = [ddHtFluxC, ddHtFluxP, ddBalanceSolidPCM,
@@ -96,8 +96,8 @@ ddHtFusion = dd ddHtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
 
 ----
 
-dd4MeltFracQD :: QDefinition
-dd4MeltFracQD = mkQuantDef meltFrac meltFracEqn
+ddMeltFracQD :: QDefinition
+ddMeltFracQD = mkQuantDef meltFrac meltFracEqn
 
 --FIXME: "Phi is the melt fraction" is produced; 
   --"Phi is the fraction of the PCM that is liquid" is what is supposed to be
@@ -107,7 +107,7 @@ meltFracEqn :: Expr
 meltFracEqn = sy latentEP / (sy htFusion * sy pcmMass)
 
 dd4MeltFrac :: DataDefinition
-dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013] [] "meltFrac"
+dd4MeltFrac = dd ddMeltFracQD [makeCite koothoor2013] [] "meltFrac"
  [S "The" +:+ phrase value `sOf` E (sy meltFrac) `sIs` S "constrained to" +:+.
   E (0 $<= sy meltFrac $<= 1), makeRef2S ddHtFusion]
 

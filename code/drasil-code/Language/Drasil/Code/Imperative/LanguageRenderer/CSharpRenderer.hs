@@ -41,10 +41,12 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doubleSlash, blockCmtDoc, 
   docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
-  valList, surroundBody, getterName, setterName, setMain, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..),  
-  fd, ModData(..), md, ParamData(..), pd, updateParamDoc, TypeData(..), td, 
-  ValData(..), vd, updateValDoc, emptyIfEmpty, mapPairFst, liftA4, liftA5, 
+  docFuncRepr, valList, surroundBody, getterName, setterName, setMain, 
+  setMainMethod,setEmpty, intValue)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..),  
+  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, updateParamDoc, 
+  TypeData(..), td, ValData(..), vd, updateValDoc)
+import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
   liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
   getInnerType, convType)
 
@@ -491,18 +493,17 @@ instance ParameterSym CSharpCode where
   parameterType = fmap paramType
 
 instance MethodSym CSharpCode where
-  -- Bool is True if the method is a main method, False otherwise
-  type Method CSharpCode = (Doc, Bool)
-  method n _ s p t ps b = liftPairFst (liftA5 (methodDocD n) s p t 
-    (liftList paramListDocD ps) b, False)
+  type Method CSharpCode = MethodData
+  method n _ s p t ps b = liftA2 (mthd False) (sequence ps) 
+    (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
     where getBody = oneLiner $ returnState (self c $-> v)
   setMethod c v = method (setterName $ valueName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= v
-  mainMethod c b = setMain <$> method "Main" c public static_ void 
-    [liftA2 (pd "args") (listType static_ string) 
+  mainMethod c b = setMainMethod <$> method "Main" c public static_ 
+    (mState void) [liftA2 (pd "args") (listType static_ string) 
     (return $ text "string[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -515,8 +516,7 @@ instance MethodSym CSharpCode where
 
   function n = method n ""
 
-  docFunc n d s p t ps b = commentedFunc (docComment $ functionDoc d $ map 
-    (mapPairFst parameterName) ps) (function n s p t (map fst ps) b)
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
@@ -525,13 +525,12 @@ instance MethodSym CSharpCode where
     stateParam v) ins ++ map (fmap (updateParamDoc csOut) . stateParam) 
     (filter (`notElem` ins) outs)) b
 
-  docInOutFunc n d s p ins outs b = commentedFunc (docComment $ functionDoc d $ 
-    map (mapPairFst valueName) ins ++ map (mapPairFst valueName) 
-    (filter (\pm -> fst pm `notElem` map fst ins) outs))
-    (inOutFunc n s p (map fst ins) (map fst outs) b)
+  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
 
-  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
-    fmap snd fn)
+  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+  
+  parameters m = map return $ (mthdParams . unCSC) m
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -544,8 +543,8 @@ instance ClassSym CSharpCode where
   -- Bool is True if the method is a main method, False otherwise
   type Class CSharpCode = (Doc, Bool)
   buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s 
-    (liftList stateVarListDocD vs) (liftList methodListDocD fs), 
-    any (snd . unCSC) fs)
+    (liftList stateVarListDocD vs) (liftList methodListDocD (map (fmap mthdDoc) 
+    fs)), any (isMainMthd . unCSC) fs)
   enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ 
     enumElementsDocD es False) s, False)
   mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
@@ -559,7 +558,7 @@ instance ClassSym CSharpCode where
 
 instance ModuleSym CSharpCode where
   type Module CSharpCode = ModData
-  buildModule n _ ms cs = fmap (md n (any (snd . unCSC) ms || 
+  buildModule n _ ms cs = fmap (md n (any (isMainMthd . unCSC) ms || 
     any (snd . unCSC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
 

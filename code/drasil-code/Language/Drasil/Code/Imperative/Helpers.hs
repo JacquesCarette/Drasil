@@ -1,17 +1,14 @@
 {-# LANGUAGE TupleSections #-}
 
-module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
-  ScopeTag(..), FuncData(..), fd, ModData(..), md, MethodData(..), mthd, 
-  ParamData(..), pd, updateParamDoc, StateVarData(..), svd, TypeData(..), td, 
-  ValData(..), vd, updateValDoc, blank,verticalComma,angles,doubleQuotedText,
-  himap,hicat,vicat,vibcat,vmap,vimap,vibmap, emptyIfEmpty, emptyIfNull, 
-  mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, liftA7, liftA8, liftList, 
-  lift2Lists, lift1List, liftPair, lift3Pair, lift4Pair, liftPairFst, 
-  getInnerType, getNestDegree, convType
+module Language.Drasil.Code.Imperative.Helpers (blank,verticalComma,
+  angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
+  emptyIfEmpty, emptyIfNull, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, 
+  liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 
+  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType
 ) where
 
 import Language.Drasil.Code.Code (CodeType(..))
-import qualified Language.Drasil.Code.Imperative.Symantics as S (Label, 
+import qualified Language.Drasil.Code.Imperative.Symantics as S ( 
   RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
 
 import Prelude hiding ((<>))
@@ -19,61 +16,6 @@ import Control.Applicative (liftA2, liftA3)
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
   (<>), comma, punctuate, empty, isEmpty)
-
-class Pair p where
-  pfst :: p x y a -> x a
-  psnd :: p x y b -> y b
-  pair :: x a -> y a -> p x y a
-
-data Terminator = Semi | Empty
-
-data ScopeTag = Pub | Priv deriving Eq
-
-data FuncData = FD {funcType :: TypeData, funcDoc :: Doc}
-
-fd :: TypeData -> Doc -> FuncData
-fd = FD
-
-data ModData = MD {name :: S.Label, isMainMod :: Bool, modDoc :: Doc}
-
-md :: S.Label -> Bool -> Doc -> ModData
-md = MD
-
-data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag, 
-  mthdDoc :: Doc}
-
-mthd :: Bool -> ScopeTag -> Doc -> MethodData
-mthd = MthD 
-
-data ParamData = PD {paramName :: String, paramType :: TypeData, 
-  paramDoc :: Doc} deriving Eq
-
-pd :: String -> TypeData -> Doc -> ParamData
-pd = PD 
-
-updateParamDoc :: (Doc -> Doc) -> ParamData -> ParamData
-updateParamDoc f v = pd (paramName v) (paramType v) ((f . paramDoc) v)
-
-data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc, 
-  destructSts :: (Doc, Terminator)}
-
-svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
-svd = SVD
-
-data TypeData = TD {cType :: CodeType, typeDoc :: Doc} deriving Eq
-
-td :: CodeType -> Doc -> TypeData
-td = TD
-
--- Maybe String is the String representation of the value
-data ValData = VD {valName :: Maybe String, valType :: TypeData, valDoc :: Doc}
-  deriving Eq
-
-vd :: Maybe String -> TypeData -> Doc -> ValData
-vd = VD
-
-updateValDoc :: (Doc -> Doc) -> ValData -> ValData
-updateValDoc f v = vd (valName v) (valType v) ((f . valDoc) v)
 
 blank :: Doc
 blank = text ""

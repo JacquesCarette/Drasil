@@ -32,7 +32,7 @@
 This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
-The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, \hyperref[Table:ToU]{Tab: ToU} lists the symbol, a description and the SI name.
 \begin{longtable}{l l l}
 \toprule
 \textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
@@ -55,7 +55,7 @@ s & time & second
 \end{longtable}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-The table that follows summarizes the symbols used in this document along with their units. The symbols are listed in alphabetical order.
+The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. The symbols are listed in alphabetical order.
 \begin{longtabu}{l X[l] l}
 \toprule
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
@@ -1221,7 +1221,7 @@ This section lists the unlikely changes to be made to the software.
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements on the data definitions, theoretical models, general definitions, and instance models.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
 \begin{longtable}{l l l l l l l l l}
 \toprule
 \textbf{} & \textbf{\hyperref[assumpGT]{A: glassType}} & \textbf{\hyperref[assumpGC]{A: glassCondition}} & \textbf{\hyperref[assumpES]{A: explainScenario}} & \textbf{\hyperref[assumpSV]{A: standardValues}} & \textbf{\hyperref[assumpGL]{A: glassLite}} & \textbf{\hyperref[assumpBC]{A: boundaryConditions}} & \textbf{\hyperref[assumpRT]{A: responseType}} & \textbf{\hyperref[assumpLDFC]{A: ldfConstant}}
@@ -1277,6 +1277,18 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[checkGlassSafety]{FR: Check-Glass-Safety} &  &  &  &  &  &  &  & 
 \\
 \hyperref[outputQuants]{FR: Output-Quantities} &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR: Verifiable} &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk} &  &  & X &  &  &  &  & 
 \\
@@ -1344,26 +1356,40 @@ The purpose of the traceability matrices is to provide easy references on what h
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:riskFun]{DD: riskFun}} & \textbf{\hyperref[DD:minThick]{DD: minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD: loadDurFactor}} & \textbf{\hyperref[DD:stressDistFac]{DD: stressDistFac}} & \textbf{\hyperref[DD:nFL]{DD: nFL}} & \textbf{\hyperref[DD:gTF]{DD: gTF}} & \textbf{\hyperref[DD:dimlessLoad]{DD: dimlessLoad}} & \textbf{\hyperref[DD:tolLoad]{DD: tolLoad}} & \textbf{\hyperref[DD:sdfTol]{DD: sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD: standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD: aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD: eqTNTW}} & \textbf{\hyperref[DD:probOfBreak]{DD: probOfBreak}} & \textbf{\hyperref[DD:calofCapacity]{DD: calofCapacity}} & \textbf{\hyperref[DD:calofDemand]{DD: calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM: isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM: isSafeLoad}} & \textbf{\hyperref[IM:isSafePb]{IM: isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM: isSafeLR}} & \textbf{\hyperref[inputGlassProps]{FR: Input-Glass-Props}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}} & \textbf{\hyperref[checkGlassSafety]{FR: Check-Glass-Safety}} & \textbf{\hyperref[outputQuants]{FR: Output-Quantities}}
+\textbf{} & \textbf{\hyperref[DD:riskFun]{DD: riskFun}} & \textbf{\hyperref[DD:minThick]{DD: minThick}} & \textbf{\hyperref[DD:loadDurFactor]{DD: loadDurFactor}} & \textbf{\hyperref[DD:stressDistFac]{DD: stressDistFac}} & \textbf{\hyperref[DD:nFL]{DD: nFL}} & \textbf{\hyperref[DD:gTF]{DD: gTF}} & \textbf{\hyperref[DD:dimlessLoad]{DD: dimlessLoad}} & \textbf{\hyperref[DD:tolLoad]{DD: tolLoad}} & \textbf{\hyperref[DD:sdfTol]{DD: sdfTol}} & \textbf{\hyperref[DD:standOffDist]{DD: standOffDist}} & \textbf{\hyperref[DD:aspectRatio]{DD: aspectRatio}} & \textbf{\hyperref[DD:eqTNTW]{DD: eqTNTW}} & \textbf{\hyperref[DD:probOfBreak]{DD: probOfBreak}} & \textbf{\hyperref[DD:calofCapacity]{DD: calofCapacity}} & \textbf{\hyperref[DD:calofDemand]{DD: calofDemand}} & \textbf{\hyperref[TM:isSafeProb]{TM: isSafeProb}} & \textbf{\hyperref[TM:isSafeLoad]{TM: isSafeLoad}} & \textbf{\hyperref[IM:isSafePb]{IM: isSafePb}} & \textbf{\hyperref[IM:isSafeLR]{IM: isSafeLR}} & \textbf{\hyperref[inputGlassProps]{FR: Input-Glass-Props}} & \textbf{\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}} & \textbf{\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints}} & \textbf{\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities}} & \textbf{\hyperref[checkGlassSafety]{FR: Check-Glass-Safety}} & \textbf{\hyperref[outputQuants]{FR: Output-Quantities}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}} & \textbf{\hyperref[portable]{NFR: Portable}}
 \\
 \midrule
 \endhead
-\hyperref[inputGlassProps]{FR: Input-Glass-Props} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[willBreakGS]{GS: Predict-Glass-Withstands-Explosion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputGlassProps]{FR: Input-Glass-Props} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+\hyperref[checkInputWithDataCons]{FR: Check-Input-with-Data\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[checkGlassSafety]{FR: Check-Glass-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  & 
+\hyperref[outputValsAndKnownQuants]{FR: Output-Values-and-Known-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputQuants]{FR: Output-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[checkGlassSafety]{FR: Check-Glass-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputQuants]{FR: Output-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR: Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
-\caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}
+\caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}
 \label{Table:TraceMatAllvsR}
 \end{longtable}
 \section{Values of Auxiliary Constants}
@@ -1412,7 +1438,7 @@ title={Standard Practice for Determining Load Resistance of Glass in Buildings},
 publisher={ASTM International},
 booktitle={Standard E1300-09a},
 year={2009},
-howpublished={\url{www.astm.org}}}
+howpublished={\url{https://www.astm.org}}}
 
 @misc{astm2012,
 author={ASTM},
@@ -1436,7 +1462,7 @@ title={Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts},
 booktitle={ASCE Library},
 month=feb,
 year={1998},
-howpublished={\url{doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)}}}
+howpublished={\url{https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)}}}
 
 @booklet{campidelli,
 title={Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading},

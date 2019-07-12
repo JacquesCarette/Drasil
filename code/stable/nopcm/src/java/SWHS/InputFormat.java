@@ -27,9 +27,6 @@ public class InputFormat {
         double E_W;
         
         Scanner infile;
-        String line;
-        ArrayList<String> lines = new ArrayList<String>(0);
-        ArrayList<String> linetokens = new ArrayList<String>(0);
         infile = new Scanner(new File(filename));
         infile.nextLine();
         A_C = Double.parseDouble(infile.nextLine());

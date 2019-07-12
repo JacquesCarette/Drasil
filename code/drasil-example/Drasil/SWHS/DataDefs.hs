@@ -26,7 +26,7 @@ qDefs = [ddHtFluxCQD, ddHtFluxPQD, ddBalanceSolidPCMQD,
 
 dataDefs :: [DataDefinition] 
 dataDefs = [ddHtFluxC, ddHtFluxP, ddBalanceSolidPCM,
-  ddBalanceLiquidPCM, dd3HtFusion, dd4MeltFrac]
+  ddBalanceLiquidPCM, ddHtFusion, dd4MeltFrac]
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
@@ -90,8 +90,8 @@ htFusionEqn :: Expr
 htFusionEqn = sy latentHeat / sy mass
 
 -- FIXME: need to allow page references in references.
-dd3HtFusion :: DataDefinition
-dd3HtFusion = dd ddHtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
+ddHtFusion :: DataDefinition
+ddHtFusion = dd ddHtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
   [] "htFusion" []
 
 ----
@@ -109,7 +109,7 @@ meltFracEqn = sy latentEP / (sy htFusion * sy pcmMass)
 dd4MeltFrac :: DataDefinition
 dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013] [] "meltFrac"
  [S "The" +:+ phrase value `sOf` E (sy meltFrac) `sIs` S "constrained to" +:+.
-  E (0 $<= sy meltFrac $<= 1), makeRef2S dd3HtFusion]
+  E (0 $<= sy meltFrac $<= 1), makeRef2S ddHtFusion]
 
 --Need to add units to data definition descriptions
 

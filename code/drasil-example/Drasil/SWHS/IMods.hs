@@ -17,7 +17,7 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpTHCCoL,
   assumpCWTAT, assumpTPCAV)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
-import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, dd3HtFusion, dd4MeltFrac,
+import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, ddHtFusion, dd4MeltFrac,
   ddBalanceSolidPCM, ddBalanceLiquidPCM)
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
@@ -61,7 +61,7 @@ balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy timeFinal)
   phrase tempPCM +:+. sParen (unwrap $ getUnit tempPCM),
   (E $ sy tempC) `isThe` phrase tempC +:+. sParen (unwrap $ getUnit tempC),
   E $ sy tauW $= (sy wMass * sy htCapW) / (sy coilHTC * sy coilSA),
-  S "is a constant", sParen (makeRef2S dd3HtFusion) +:+. sParen (unwrap $ getUnit tauW),
+  S "is a constant", sParen (makeRef2S ddHtFusion) +:+. sParen (unwrap $ getUnit tauW),
   E $ sy eta $= (sy pcmHTC * sy pcmSA) / (sy coilHTC * sy coilSA),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
@@ -139,7 +139,7 @@ eBalanceOnWtrDerivDesc5 = [S "Which simplifies to"]
 
 eBalanceOnWtrDerivDesc6 :: Expr -> Expr -> [Sentence]
 eBalanceOnWtrDerivDesc6 eq33 eq44 = 
-  [S "Setting", E eq33, sParen (makeRef2S dd3HtFusion) `sAnd` E eq44,
+  [S "Setting", E eq33, sParen (makeRef2S ddHtFusion) `sAnd` E eq44,
   sParen (makeRef2S dd4MeltFrac) `sC` S "Equation (5) can be written as"]
 
 eBalanceOnWtrDerivDesc7 :: Expr -> [Sentence]
@@ -456,7 +456,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation `sIs` S "derived using" +:
   S "when", phrase melting, S "starts" `sIs` ch pcmInitMltE +:+. sParen (unwrap $ getUnit pcmInitMltE),
   S "The", phrase energy, S "required to melt all of the", short phsChgMtrl `sIs`
   E (sy htFusion * sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE) +:+.
-  sParen (makeRef2S dd3HtFusion), phrase heatCapSpec `ofThe'` phrase liquid, short phsChgMtrl `sIs`
+  sParen (makeRef2S ddHtFusion), phrase heatCapSpec `ofThe'` phrase liquid, short phsChgMtrl `sIs`
   ch htCapLP, sParen (unwrap $ getUnit htCapLP) `andThe` phrase change `sIn`
   phrase temp `sIs` E (sy tempPCM - sy tempMeltP) +:+.
   sParen (unwrap $ getUnit tempMeltP), ch pcmE, S "during", phrase melting, S "of the",

@@ -9,7 +9,7 @@ module Language.Drasil.Chunk.Constrained (
 import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Chunk.Concept (cw)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqdWr)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
 import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Chunk.Unitary (unitary)
@@ -76,13 +76,13 @@ instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 instance MayHaveUnit   ConstrConcept where getUnit = getUnit . view defq
 
-constrained' :: (Concept c, Quantity c, MayHaveUnit c) =>
+constrained' :: (Concept c, MayHaveUnit c, Quantity c) =>
   c -> [Constraint] -> Expr -> ConstrConcept
-constrained' q cs rv = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) cs (Just rv)
+constrained' q cs rv = ConstrConcept (dqdWr q) cs (Just rv)
 
-constrainedNRV' :: (MayHaveUnit c, Concept c, Quantity c) =>
+constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) =>
   c -> [Constraint] -> ConstrConcept
-constrainedNRV' q cs = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) cs Nothing
+constrainedNRV' q cs = ConstrConcept (dqdWr q) cs Nothing
 
 cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u
             -> Space -> [Constraint] -> Expr -> ConstrConcept

@@ -2,13 +2,14 @@
 -- gets rendered as a (unique) symbol.  This is actually NOT based on
 -- semantics at all, but just a description of how things look.
 
-module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy,
+module Language.Drasil.Symbol(Decoration(..), Symbol(..), autoStage, compsy,
  upperLeft, sub, sup, hat, vec, prime, staged) where
 
 import Language.Drasil.Unicode(Special)
 import Language.Drasil.Stages (Stage(..))
 
-import Data.Char (toLower)
+import Data.Char (isLatin1, toLower)
+import Data.Char.Properties.Names (getCharacterName)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
 -- (bolding/etc)
@@ -137,7 +138,21 @@ vec = Atop Vector
 prime :: Symbol -> Symbol
 prime = Atop Prime
 
+autoStage :: Symbol -> (Stage -> Symbol)
+autoStage s = staged s (unicodeConv s)
+
 -- | Helper for creating a symbol that depends on the stage
 staged :: Symbol -> Symbol -> Stage -> Symbol
 staged eqS _ Equational = eqS
 staged _ impS Implementation = impS 
+
+unicodeConv :: Symbol -> Symbol
+unicodeConv (Atomic st) = Atomic $ unicodeString st
+unicodeConv (Atop d s) = Atop d $ unicodeConv s
+unicodeConv (Corners a b c d s) =
+  (Corners (map unicodeConv a) (map unicodeConv b) (map unicodeConv c) (map unicodeConv d) (unicodeConv s))
+unicodeConv (Concat ss) = Concat $ map unicodeConv ss
+unicodeConv x = x
+
+unicodeString :: String -> String
+unicodeString = concat . (map (\x -> if isLatin1 x then [x] else getCharacterName x))

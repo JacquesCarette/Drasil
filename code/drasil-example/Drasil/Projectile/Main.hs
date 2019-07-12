@@ -6,10 +6,10 @@ import Language.Drasil.Code (Choices(..), CodeSpec, Comments(..),
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
-import Drasil.Projectile.Body (printSetting, srsDoc, systInfo)
+import Drasil.Projectile.Body (printSetting, si, srs)
 
 code :: CodeSpec
-code = codeSpec systInfo choices []
+code = codeSpec si choices []
 
 choices :: Choices
 choices = Choices {
@@ -25,6 +25,6 @@ choices = Choices {
 
 main :: IO()
 main = do
-  gen (DocSpec SRS     "Projectile_SRS") srsDoc printSetting
-  gen (DocSpec Website "Projectile_SRS") srsDoc printSetting
+  gen (DocSpec SRS     "Projectile_SRS") srs printSetting
+  gen (DocSpec Website "Projectile_SRS") srs printSetting
   genCode choices code

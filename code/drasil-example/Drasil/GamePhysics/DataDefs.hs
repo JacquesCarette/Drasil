@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns,
+module Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefs,
   ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
   angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, 
   coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD
@@ -30,8 +30,8 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import Data.Drasil.Theories.Physics (torque, torqueDD)
 ----- Data Definitions -----
 
-dataDefns :: [DataDefinition]
-dataDefns = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
+dataDefs :: [DataDefinition]
+dataDefs = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD,
  coeffRestitutionDD, reVelInCollDD, impulseVDD, potEnergyDD, momentOfInertiaDD]
 

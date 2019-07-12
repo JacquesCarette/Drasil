@@ -99,6 +99,7 @@ int main(int argc, const char *argv[]) {
     outfile << " in module Control" << std::endl;
     outfile.close();
     write_output(is_safePb, is_safeLR, P_b);
+    
     return 0;
 }
 

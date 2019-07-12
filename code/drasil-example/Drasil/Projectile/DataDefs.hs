@@ -1,4 +1,4 @@
-module Drasil.Projectile.DataDefs (dataDefns, speedIX, speedIY) where
+module Drasil.Projectile.DataDefs (dataDefs, speedIX, speedIY) where
 
 import Prelude hiding (sin, cos)
 import Language.Drasil
@@ -11,8 +11,8 @@ import Data.Drasil.Quantities.Physics (speed, iSpeed, ixVel, iyVel, velocity)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.Unitals (launAngle)
 
-dataDefns :: [DataDefinition]
-dataDefns = [vecMag, speedIX, speedIY]
+dataDefs :: [DataDefinition]
+dataDefs = [vecMag, speedIX, speedIY]
 
 ----------
 vecMag :: DataDefinition

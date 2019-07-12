@@ -4,7 +4,7 @@
 -- | The logic to render Java code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code
-  JavaCode(..), jNameOpts
+  JavaCode(..), jExts, jNameOpts
 ) where
 
 import Utils.Drasil (indent)
@@ -25,25 +25,28 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
   boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
-  voidDocD, constructDocD, stateParamDocD, paramListDocD, methodListDocD, 
-  stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, forEachDocD, 
-  whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD,
-  varDecDefDocD, listDecDocD, objDecDefDocD, statementDocD, returnDocD,
-  commentDocD, mkSt, mkStNoEnd, notOpDocD, negateOpDocD, unExpr, typeUnExpr, 
-  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
-  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
-  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
-  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
-  funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, surroundBody,
-  getterName, setterName, setMain, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
-  fd, ModData(..), md, TypeData(..), td, ValData(..), vd,  angles, liftA4, 
-  liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair,
+  voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam, 
+  methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, 
+  forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
+  plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, 
+  statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, notOpDocD, 
+  negateOpDocD, unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
+  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
+  litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
+  objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
+  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
+  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
+  getterName, setterName, setMain, setMainMethod, setEmpty, intValue)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
+  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, TypeData(..), 
+  td, ValData(..), vd)
+import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
+  liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -52,6 +55,12 @@ import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   semi, vcat, lbrace, rbrace, render, colon, comma, isEmpty, render)
+
+jExts :: [String]
+jExts = [jExt]
+
+jExt :: String
+jExt = ".java"
 
 jNameOpts :: NameOpts
 jNameOpts = NameOpts {
@@ -80,13 +89,17 @@ instance PackageSym JavaCode where
 instance RenderSym JavaCode where
   type RenderFile JavaCode = ModData
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (if isEmpty (modDoc (unJC code)) then return empty else
-    liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+    (liftA2 emptyIfEmpty (fmap modDoc code) $
+      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
 
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) jExt) m
+
   commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
     (liftA2 commentedItem cmt (fmap modDoc m))
+
+  moduleName m = name (unJC m)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -478,29 +491,38 @@ instance MethodTypeSym JavaCode where
   construct n = return $ td (Object n) (constructDocD n)
 
 instance ParameterSym JavaCode where
-  type Parameter JavaCode = Doc
-  stateParam = fmap stateParamDocD
+  type Parameter JavaCode = ParamData
+  stateParam = fmap (mkParam stateParamDocD)
   pointerParam = stateParam
 
+  parameterName = paramName . unJC
+  parameterType = fmap paramType
+
 instance MethodSym JavaCode where
-  -- Bool is True if the method is a main method, False otherwise
-  type Method JavaCode = (Doc, Bool)
-  method n _ s p t ps b = liftPairFst (liftA5 (jMethod n) s p t (liftList 
-    paramListDocD ps) b, False)
+  type Method JavaCode = MethodData
+  method n _ s p t ps b = liftA2 (mthd False) (sequence ps) (liftA5 (jMethod n) 
+    s p t (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
     where getBody = oneLiner $ returnState (self c $-> v)
   setMethod c v = method (setterName $ valueName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= v
-  mainMethod c b = setMain <$> method "main" c public static_ void 
-    [return $ text "String[] args"] b
+  mainMethod c b = setMainMethod <$> method "main" c public static_ 
+    (mState void) [liftA2 (pd "args") (listType static_ string) 
+    (return $ text "String[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Java"
 
+  docMain c b = commentedFunc (docComment $ functionDoc 
+    "Controls the flow of the program" 
+    [("args", "List of command-line arguments")]) (mainMethod c b)
+
   function n = method n ""
+
+  docFunc = docFuncRepr
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
@@ -517,9 +539,13 @@ instance MethodSym JavaCode where
               (fmap valType v) &= v) : assignArray (c+1) vs
             decls = multi $ map varDec outs
             outputs = var "outputs" jArrayType
+    
+  docInOutFunc desc iComms _ = docFuncRepr desc iComms
             
-  commentedFunc cmt fn = liftPair (liftA2 commentedItem cmt (fmap fst fn), 
-    fmap snd fn)
+  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
+    
+  parameters m = map return $ (mthdParams . unJC) m
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
@@ -532,20 +558,22 @@ instance ClassSym JavaCode where
   -- Bool is True if the method is a main method, False otherwise
   type Class JavaCode = (Doc, Bool)
   buildClass n p s vs fs = liftPairFst (liftA4 (classDocD n p) inherit s 
-    (liftList stateVarListDocD vs) (liftList methodListDocD fs), 
-    any (snd . unJC) fs)
+    (liftList stateVarListDocD vs) (liftList methodListDocD (map (fmap mthdDoc) 
+    fs)), any (isMainMthd . unJC) fs)
   enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ 
     enumElementsDocD es enumsEqualInts) s, False)
   mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
+  
+  docClass d = commentedClass (docComment $ classDoc d)
 
   commentedClass cmt cs = liftPair (liftA2 commentedItem cmt (fmap fst cs), 
     fmap snd cs)
 
 instance ModuleSym JavaCode where
   type Module JavaCode = ModData
-  buildModule n _ ms cs = fmap (md n (any (snd . unJC) ms || 
+  buildModule n _ ms cs = fmap (md n (any (isMainMthd . unJC) ms || 
     any (snd . unJC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
 
@@ -603,8 +631,7 @@ jCast t v = jCast' (getType t) (getType $ valueType v)
 jListDecDef :: ValData -> Doc -> Doc
 jListDecDef v vs = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
   typeDoc (valType v) <+> parens listElements
-  where listElements = if isEmpty vs then empty else text "Arrays.asList" <> 
-                         parens vs
+  where listElements = emptyIfEmpty vs $ text "Arrays.asList" <> parens vs
 
 jConstDecDef :: ValData -> ValData -> Doc
 jConstDecDef v def = text "final" <+> typeDoc (valType v) <+> valDoc v <+> 

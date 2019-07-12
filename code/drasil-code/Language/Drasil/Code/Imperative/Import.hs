@@ -16,9 +16,16 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Helpers (ModData(..), convType)
+import Language.Drasil.Code.Imperative.Data (ModData(..))
+import Language.Drasil.Code.Imperative.Helpers (convType)
+import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
+  (cppExts)
+import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer 
+  (csExts)
 import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer 
-  (jNameOpts)
+  (jExts, jNameOpts)
+import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer 
+  (pyExts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
   codeType, codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup,
@@ -27,7 +34,7 @@ import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (Entry(JunkEntry, ListEntry, Entry),
   LinePattern(Repeat, Straight), Data(Line, Lines, JunkData, Singleton), 
-  DataDesc, getInputs, junkLine, singleton)
+  DataDesc, isLine, isLines, getInputs, getPatternInputs, junkLine, singleton)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (nub, intersperse, (\\), stripPrefix)
@@ -69,10 +76,10 @@ chooseInStructure Unbundled   = genInputModNoClass
 chooseInStructure Bundled = genInputModClass
 
 chooseLogging :: (RenderSym repr) => Logging -> (repr (Value repr) -> 
-  repr (Value repr) -> Reader (State repr) (repr (Statement repr)))
-chooseLogging LogVar = loggedAssign
-chooseLogging LogAll = loggedAssign
-chooseLogging _      = \x y -> return $ assign x y
+  Reader (State repr) (Maybe (repr (Statement repr))))
+chooseLogging LogVar v = Just <$> loggedVar v
+chooseLogging LogAll v = Just <$> loggedVar v
+chooseLogging _      _ = return Nothing
 
 initLogFileVar :: (RenderSym repr) => Logging -> [repr (Statement repr)]
 initLogFileVar LogVar = [varDec $ var "outfile" outfile]
@@ -96,11 +103,12 @@ generator chs spec = State {
   physCBody = chooseConstr $ onPhysConstraint chs
 }
 
-assign' :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) ->
-  Reader (State repr) (repr (Statement repr))
-assign' x y = do
+maybeLog :: (RenderSym repr) => repr (Value repr) ->
+  Reader (State repr) [repr (Statement repr)]
+maybeLog v = do
   g <- ask
-  chooseLogging (logKind g) x y
+  l <- chooseLogging (logKind g) v
+  return $ maybeToList l
 
 publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label -> 
   [ParamData repr] -> Reader (State repr) [repr (Block repr)] -> 
@@ -156,10 +164,10 @@ getDir Java = "java"
 getDir Python = "python"
 
 getExt :: Lang -> [Label]
-getExt Java = [".java"]
-getExt Python = [".py"]
-getExt CSharp = [".cs"]
-getExt Cpp = [".hpp", ".cpp"]
+getExt Java = jExts
+getExt Python = pyExts
+getExt CSharp = csExts
+getExt Cpp = cppExts
 
 getRunnable :: Lang -> Runnable
 getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) 
@@ -183,27 +191,17 @@ liftS = fmap (: [])
 ------- INPUT ----------
 
 genInputModClass :: (RenderSym repr) => Reader (State repr) [repr (Module repr)]
-genInputModClass = do
-  inputClass <- genInputClass
-  derived <- genInputDerived
-  constrs <- genInputConstraints
-  let ic = maybeToList inputClass
-      dl = maybeToList derived
-      cl = maybeToList constrs
-  sequence [ genModule "InputParameters" Nothing (Just $ return ic),
-             genModule "DerivedValues" (Just $ return dl) Nothing,
-             genModule "InputConstraints" (Just $ return cl) Nothing
-           ]
+genInputModClass = sequence 
+  [genModule "InputParameters" Nothing (Just $ fmap maybeToList genInputClass),
+  genModule "DerivedValues" (Just $ fmap maybeToList genInputDerived) Nothing,
+  genModule "InputConstraints" (Just $ fmap maybeToList genInputConstraints) 
+    Nothing]
 
 genInputModNoClass :: (RenderSym repr) => Reader (State repr)
   [repr (Module repr)]
-genInputModNoClass = do
-  inpDer    <- genInputDerived
-  inpConstr <- genInputConstraints
-  return [ buildModule "InputParameters" []
-           (catMaybes [inpDer, inpConstr])
-           []
-         ]
+genInputModNoClass = liftS $
+  genModule "InputParameters" (Just $ concat <$> mapM (fmap maybeToList) 
+    [genInputDerived, genInputConstraints]) Nothing
 
 genInputClass :: (RenderSym repr) => Reader (State repr) (Maybe (repr (Class 
   repr)))
@@ -267,10 +265,8 @@ constrExc _ = oneLiner $ throw "InputError"
 
 genInputFormatMod :: (RenderSym repr) => Reader (State repr) 
   [repr (Module repr)]
-genInputFormatMod = do
-  inFunc <- genInputFormat
-  let inFmt = maybeToList inFunc
-  liftS $ genModule "InputFormat" (Just $ return inFmt) Nothing
+genInputFormatMod = liftS $ genModule "InputFormat" (Just $ 
+  fmap maybeToList genInputFormat) Nothing
 
 genInputFormat :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Method repr)))
@@ -325,7 +321,7 @@ genCalcBlock :: (RenderSym repr) => CalcType -> String ->
 genCalcBlock t v st (Case e) = genCaseBlock t v st e
 genCalcBlock t v st e
     | t == CalcAssign  = fmap block $ liftS $ do { vv <- variable v st; ee <-
-      convExpr e; assign' vv ee}
+      convExpr e; l <- maybeLog vv; return $ multi $ assign vv ee : l}
     | otherwise        = block <$> liftS (returnState <$> convExpr e)
 
 genCaseBlock :: (RenderSym repr) => CalcType -> String -> repr (StateType repr) 
@@ -463,6 +459,7 @@ genMainFunc =
   let v_filename = var "filename" string
   in do
     g <- ask
+    logInFile <- maybeLog v_filename
     ip <- getInputDecl
     gi <- getInputCall
     dv <- getDerivedCall
@@ -470,8 +467,8 @@ genMainFunc =
     varDef <- mapM getCalcCall (execOrder $ csi $ codeSpec g)
     wo <- getOutputCall
     return $ mainMethod "" $ bodyStatements $
-      varDecDef v_filename (arg 0) :
       initLogFileVar (logKind g) ++
+      varDecDef v_filename (arg 0) : logInFile ++
       catMaybes ([ip, gi, dv, ic] ++ varDef ++ [wo])
 
 getInputDecl :: (RenderSym repr) => Reader (State repr) (Maybe (repr (
@@ -534,7 +531,9 @@ getCalcCall :: (RenderSym repr) => CodeDefinition -> Reader (State repr)
   (Maybe (repr (Statement repr)))
 getCalcCall c = do
   val <- getFuncCall (codeName c) (convType $ codeType c) (getCalcParams c)
-  return $ fmap (varDecDef (var (nopfx $ codeName c) (convType $ codeType c))) val
+  v <- variable (nopfx $ codeName c) (convType $ codeType c)
+  l <- maybeLog v
+  return $ fmap (multi . (: l) . varDecDef v) val
 
 getOutputCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -595,18 +594,17 @@ getOutputParams = do
 
 -----
 
-loggedAssign :: (RenderSym repr) => repr (Value repr) -> 
-  repr (Value repr) -> Reader (State repr) (repr (Statement repr))
-loggedAssign a b =
+loggedVar :: (RenderSym repr) => repr (Value repr) -> 
+  Reader (State repr) (repr (Statement repr))
+loggedVar v =
   let l_outfile = "outfile"
       v_outfile = var l_outfile outfile
   in do
     g <- ask
     return $ multi [
-      assign a b,
       openFileA v_outfile (litString $ logName g),
-      printFileStr v_outfile ("var '" ++ valueName a ++ "' assigned to "),
-      printFile v_outfile a,
+      printFileStr v_outfile ("var '" ++ valueName v ++ "' assigned to "),
+      printFile v_outfile v,
       printFileStrLn v_outfile (" in module " ++ currentModule g),
       closeFile v_outfile ]
 
@@ -813,8 +811,11 @@ genFunc (FCD cd) = genCalcFunc cd
 
 convStmt :: (RenderSym repr) => FuncStmt -> Reader (State repr) 
   (repr (Statement repr))
-convStmt (FAsg v e) = convExpr e >>= 
-  assign' (var (codeName v) (convType $ codeType v))
+convStmt (FAsg v e) = do
+  e' <- convExpr e
+  v' <- variable (codeName v) (convType $ codeType v)
+  l <- maybeLog v'
+  return $ multi $ assign v' e' : l
 convStmt (FFor v e st) = do
   stmts <- mapM convStmt st
   e' <- convExpr $ getUpperBound e
@@ -868,38 +869,38 @@ readData :: (RenderSym repr) => DataDesc -> Reader (State repr)
   [repr (Block repr)]
 readData ddef = do
   inD <- mapM inData ddef
-  return [block $ [
-    varDec v_infile,
-    varDec v_line,
-    listDec 0 v_lines,
-    listDec 0 v_linetokens,
-    openFileR v_infile v_filename ] ++
+  return [block $ 
+    varDec v_infile :
+    (if any (\d -> isLine d || isLines d) ddef then [varDec v_line, listDec 0 v_linetokens] else []) ++
+    [listDec 0 v_lines | any isLines ddef] ++
+    openFileR v_infile v_filename :
     concat inD ++ [
     closeFile v_infile ]]
   where inData :: (RenderSym repr) => Data -> Reader (State repr) [repr (Statement repr)]
         inData (Singleton v) = do
             vv <- variable (codeName v) (convType $ codeType v)
-            return [getFileInput v_infile vv]
+            l <- maybeLog vv
+            return [multi $ getFileInput v_infile vv : l]
         inData JunkData = return [discardFileLine v_infile]
         inData (Line lp d) = do
           lnI <- lineData Nothing lp
+          logs <- getEntryVarLogs lp
           return $ [getFileInputLine v_infile v_line, 
-            stringSplit d v_linetokens v_line] ++ lnI
-        inData (Lines lp Nothing d) = do
+            stringSplit d v_linetokens v_line] ++ lnI ++ logs
+        inData (Lines lp ls d) = do
           lnV <- lineData (Just "_temp") lp
-          return [ getFileInputAll v_infile v_lines,
-            forRange l_i (litInt 0) (listSize v_lines) (litInt 1)
-              (bodyStatements $ stringSplit d v_linetokens (
-                listAccess v_lines v_i) : lnV)
-            ]
-        inData (Lines lp (Just numLines) d) = do
-          lnV <- lineData (Just "_temp") lp
-          return [ forRange l_i (litInt 0) (litInt numLines) (litInt 1)
-            ( bodyStatements $
-              [getFileInputLine v_infile v_line,
-               stringSplit d v_linetokens v_line
-              ] ++ lnV)
-            ]
+          logs <- getEntryVarLogs lp
+          let readLines Nothing = [getFileInputAll v_infile v_lines,
+                forRange l_i (litInt 0) (listSize v_lines) (litInt 1)
+                  (bodyStatements $ stringSplit d v_linetokens (
+                  listAccess v_lines v_i) : lnV)]
+              readLines (Just numLines) = [forRange l_i (litInt 0) 
+                (litInt numLines) (litInt 1)
+                (bodyStatements $
+                  [getFileInputLine v_infile v_line,
+                   stringSplit d v_linetokens v_line
+                  ] ++ lnV)]
+          return $ readLines ls ++ logs
         ---------------
         lineData :: (RenderSym repr) => Maybe String -> LinePattern -> 
           Reader (State repr) [repr (Statement repr)]
@@ -958,15 +959,15 @@ readData ddef = do
           Entry -> Reader (State repr) [repr (Statement repr)]
         entryData s tokIndex (Entry v) = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
-          a <- assign' vv $ cast (convType $ codeType v)
-            (listAccess v_linetokens tokIndex)
-          return [a]
+          l <- maybeLog vv
+          return [multi $ assign vv (cast (convType $ codeType v)
+            (listAccess v_linetokens tokIndex)) : l]
         entryData s tokIndex (ListEntry indx v) = do
           vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
           return [
-            valState $ listAppend vv
+            valState (listAppend vv
             (cast (convType $ getListType (codeType v) (toInteger $ length indx))
-            (listAccess v_linetokens tokIndex))]
+            (listAccess v_linetokens tokIndex)))]
         entryData _ _ JunkEntry = return []
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_filename, l_i, l_j :: Label
@@ -986,6 +987,18 @@ readData ddef = do
         v_i = var l_i int
         l_j = "j"
         v_j = var l_j int
+
+getEntryVars :: (RenderSym repr) => LinePattern -> 
+  Reader (State repr) [repr (Value repr)]
+getEntryVars lp = mapM (\v -> variable (codeName v) (convType $ codeType v))
+  (getPatternInputs lp)
+
+getEntryVarLogs :: (RenderSym repr) => LinePattern -> 
+  Reader (State repr) [repr (Statement repr)]
+getEntryVarLogs lp = do
+  vs <- getEntryVars lp
+  logs <- mapM maybeLog vs
+  return $ concat logs
 
 getListType :: C.CodeType -> Integer -> C.CodeType
 getListType _ 0 = error "No index given"

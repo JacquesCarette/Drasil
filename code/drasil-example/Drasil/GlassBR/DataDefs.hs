@@ -1,4 +1,4 @@
-module Drasil.GlassBR.DataDefs (aspRat, dataDefns, dimLL, qDefns, glaTyFac, 
+module Drasil.GlassBR.DataDefs (aspRat, dataDefs, dimLL, qDefns, glaTyFac, 
   hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac, 
   eqTNTWDD, probOfBreak, calofCapacity, calofDemand) where
   
@@ -32,8 +32,8 @@ import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
 -- DATA DEFINITIONS --
 ----------------------
 
-dataDefns :: [DataDefinition] 
-dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, 
+dataDefs :: [DataDefinition] 
+dataDefs = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, 
   dimLL, tolPre, tolStrDisFac, standOffDis, aspRat, eqTNTWDD, probOfBreak,
   calofCapacity, calofDemand]
 

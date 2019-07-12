@@ -11,16 +11,19 @@ import Utils.Drasil
 
 import Drasil.DocLang (SRSDecl, mkDoc)
 
-import Data.Drasil.Concepts.Documentation as Doc (srs)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 
-srsDoc :: Document
-srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
+srs :: Document
+srs = mkDoc mkSRS (for'' titleize phrase) si
+
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = []
 
-systInfo :: SystemInformation
-systInfo = SI {
+si :: SystemInformation
+si = SI {
   _sys         = example,
   _kind        = Doc.srs,
   _authors     = [authorName],
@@ -52,9 +55,6 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
 
 refDB :: ReferenceDB
 refDB = rdb [] []
-
-printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
 
 -- MOVE TO CONCEPTS
 example :: CI -- name of example

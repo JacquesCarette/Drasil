@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-import Language.Drasil hiding (organization, section, sec)
+import Language.Drasil hiding (organization, section)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
@@ -51,7 +51,8 @@ import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
 import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, con, con')
-import Drasil.GlassBR.DataDefs (dataDefns, qDefns)
+import Drasil.GlassBR.DataDefs (qDefns)
+import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
@@ -65,43 +66,33 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   termsWithDefsOnly, terms)
 import qualified Drasil.GlassBR.Unitals as GB (inputDataConstraints)
 
-{--}
-
-symbMap :: ChunkDB
-symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
-  ++ map nw con' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
-  ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
-  ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
-   ++ [nw distance, nw algorithm] ++
-  map nw fundamentals ++ map nw derived ++ map nw physicalcon)
-  (map cw symb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
-  ++ map unitWrapper [pascal, newton]) dataDefns iMods [] tMods concIns sec
-  labelledCon
-
-concIns :: [ConceptInstance]
-concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
-
-section :: [Section]
-section = sec
-
-labelledCon :: [LabelledContent]
-labelledCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
-
-sec :: [Section]
-sec = extractSection srs
-
-usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
-
-refDB :: ReferenceDB
-refDB = rdb citations concIns
+srs :: Document
+srs = mkDoc mkSRS (for'' titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap defaultConfiguration
 
-srs :: Document
-srs = mkDoc mkSRS (for'' titleize phrase) systInfo
+si :: SystemInformation
+si = SI {
+  _sys         = glassBR,
+  _kind        = Doc.srs,
+  _authors     = [nikitha, spencerSmith],
+  _quants      = symbolsForTable,
+  _concepts    = [] :: [DefinedQuantityDict],
+  _definitions = map (relToQD symbMap) iMods ++ 
+                 concatMap (^. defined_quant) tMods ++
+                 concatMap (^. defined_fun) tMods,
+  _datadefs    = GB.dataDefs,
+  _inputs      = inputs,
+  _outputs     = outputs,
+  _defSequence = qDefns,
+  _constraints = constrained,
+  _constants   = constants,
+  _sysinfodb   = symbMap,
+  _usedinfodb = usedDB,
+   refdb       = refDB
+}
+  --FIXME: All named ideas, not just acronyms.
 
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
@@ -144,35 +135,40 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   ],
   LCsSec,
   UCsSec,
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard systInfo,
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg glassBR auxiliaryConstants,
   Bibliography,
   AppndxSec $ AppndxProg [appdxIntro, LlC demandVsSDFig, LlC dimlessloadVsARFig]]
- 
+
+symbMap :: ChunkDB
+symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
+  ++ map nw con' ++ map nw terms ++ map nw doccon ++ map nw doccon' ++ map nw educon
+  ++ [nw sciCompS] ++ map nw compcon ++ map nw mathcon ++ map nw mathcon'
+  ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
+   ++ [nw distance, nw algorithm] ++
+  map nw fundamentals ++ map nw derived ++ map nw physicalcon)
+  (map cw symb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
+  ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns section
+  labCon
+
+concIns :: [ConceptInstance]
+concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
+
+labCon :: [LabelledContent]
+labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
+
+usedDB :: ChunkDB
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+
+refDB :: ReferenceDB
+refDB = rdb citations concIns
+
+section :: [Section]
+section = extractSection srs
+
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
-systInfo :: SystemInformation
-systInfo = SI {
-  _sys         = glassBR,
-  _kind        = Doc.srs,
-  _authors     = [nikitha, spencerSmith],
-  _quants      = symbolsForTable,
-  _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = map (relToQD symbMap) iMods ++ 
-                 concatMap (^. defined_quant) tMods ++
-                 concatMap (^. defined_fun) tMods,
-  _datadefs    = dataDefns,
-  _inputs      = inputs,
-  _outputs     = outputs,
-  _defSequence = qDefns,
-  _constraints = constrained,
-  _constants   = constants,
-  _sysinfodb   = symbMap,
-  _usedinfodb = usedDB,
-   refdb       = refDB
-}
-  --FIXME: All named ideas, not just acronyms.
 
 inputDataConstraints, outputDataConstraints :: LabelledContent
 

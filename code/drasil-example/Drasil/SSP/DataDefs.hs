@@ -1,4 +1,4 @@
-module Drasil.SSP.DataDefs (dataDefns, intersliceWtrF, angleA, angleB, lengthB,
+module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
   lengthLb, lengthLs, slcHeight, stressDD, ratioVariation, convertFunc1, 
   convertFunc2, nrmForceSumDD, watForceSumDD) where 
 
@@ -25,8 +25,8 @@ import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle,
 --  Data Definitions  --
 ------------------------
 
-dataDefns :: [DataDefinition]
-dataDefns = [intersliceWtrF, angleA, angleB, lengthB, lengthLb, lengthLs,
+dataDefs :: [DataDefinition]
+dataDefs = [intersliceWtrF, angleA, angleB, lengthB, lengthLb, lengthLs,
   slcHeight, stressDD, torqueDD, ratioVariation, convertFunc1, 
   convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
 

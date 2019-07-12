@@ -3,8 +3,6 @@ import sys
 import math
 
 def get_input(filename):
-    lines = []
-    linetokens = []
     infile = open(filename, "r")
     infile.readline()
     A_C = float(infile.readline())

@@ -23,9 +23,6 @@ public class InputFormat {
         outfile.close();
         
         Scanner infile;
-        String line;
-        ArrayList<String> lines = new ArrayList<String>(0);
-        ArrayList<String> linetokens = new ArrayList<String>(0);
         infile = new Scanner(new File(filename));
         infile.nextLine();
         inParams.a = Double.parseDouble(infile.nextLine());

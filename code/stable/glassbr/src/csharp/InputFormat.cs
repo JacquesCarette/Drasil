@@ -18,9 +18,6 @@ public class InputFormat {
         outfile.Close();
         
         StreamReader infile;
-        string line;
-        List<string> lines = new List<string>(0);
-        List<string> linetokens = new List<string>(0);
         infile = new StreamReader(filename);
         infile.ReadLine();
         inParams.a = Double.Parse(infile.ReadLine());

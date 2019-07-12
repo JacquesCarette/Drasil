@@ -61,6 +61,14 @@ repeated e = Repeat e Nothing
 repeated' :: [Entry] -> Integer -> LinePattern
 repeated' e i = Repeat e (Just i)
 
+isLine :: Data -> Bool
+isLine Line{} = True
+isLine _ = False
+
+isLines :: Data -> Bool
+isLines Lines{} = True
+isLines _ = False
+
 getInputs :: DataDesc -> [CodeChunk]
 getInputs d = nub $ concatMap getDataInputs d
 

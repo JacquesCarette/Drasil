@@ -25,7 +25,7 @@ qDefs = [ddHtFluxCQD, ddHtFluxPQD, ddBalanceSolidPCMQD,
   ddBalanceLiquidPCMQD, dd3HtFusionQD, dd4MeltFracQD]
 
 dataDefs :: [DataDefinition] 
-dataDefs = [ddHtFluxC, dd2HtFluxP, ddBalanceSolidPCM,
+dataDefs = [ddHtFluxC, ddHtFluxP, ddBalanceSolidPCM,
   ddBalanceLiquidPCM, dd3HtFusion, dd4MeltFrac]
 
 -- FIXME? This section looks strange. Some data defs are created using
@@ -51,8 +51,8 @@ ddHtFluxPQD = mkQuantDef htFluxP htFluxPEqn
 htFluxPEqn :: Expr
 htFluxPEqn = sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
 
-dd2HtFluxP :: DataDefinition
-dd2HtFluxP = dd ddHtFluxPQD [makeCite koothoor2013] [] "htFluxP"
+ddHtFluxP :: DataDefinition
+ddHtFluxP = dd ddHtFluxPQD [makeCite koothoor2013] [] "htFluxP"
   [makeRef2S assumpLCCCW]
 
 ----

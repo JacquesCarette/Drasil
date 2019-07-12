@@ -17,7 +17,7 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpTHCCoL,
   assumpCWTAT, assumpTPCAV)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
-import Drasil.SWHS.DataDefs (ddHtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,
+import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, dd3HtFusion, dd4MeltFrac,
   ddBalanceSolidPCM, ddBalanceLiquidPCM)
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
@@ -84,7 +84,7 @@ eBalanceOnWtrDeriv =
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc1 htTransEnd overAreas extraAssumps assumpNIHGBWP,
-  eBalanceOnWtrDerivDesc2 ddHtFluxC dd2HtFluxP,
+  eBalanceOnWtrDerivDesc2 ddHtFluxC ddHtFluxP,
   eBalanceOnWtrDerivDesc3 wMass htCapW,
   eBalanceOnWtrDerivDesc4 eq2,
   eBalanceOnWtrDerivDesc5,
@@ -107,7 +107,7 @@ eBalanceOnWtrDerivDesc1 htEnd oa ea htA = [S "To find the", phrase rOfChng `sOf`
 
 htTransEnd :: Sentence
 htTransEnd = foldlSent_ [S " " `sAnd` S "from the", phrase water, S "into the PCM as",
-  E $ sy htFluxP, sParen (makeRef2S dd2HtFluxP)]
+  E $ sy htFluxP, sParen (makeRef2S ddHtFluxP)]
 
 overAreas :: Sentence
 overAreas = S "over areas" +:+ ((E $ sy coilSA) `sAnd` (E $ sy pcmSA) `sC` S "respectively")
@@ -289,7 +289,7 @@ eBalanceOnPCMDerivSentences :: [Sentence]
 eBalanceOnPCMDerivSentences = map foldlSentCol [
   eBalanceOnPCMDerivDesc1 rOfChng tempPCM energy water vol pcmVol pcmMass heatCapSpec
   htCapSP htFlux htFluxP phaseChange pcmSA heat assumpNIHGBWP volHtGen,
-  eBalanceOnPCMDerivDesc2 dd2HtFluxP htFluxP,
+  eBalanceOnPCMDerivDesc2 ddHtFluxP htFluxP,
   eBalanceOnPCMDerivDesc3 eq6,
   eBalanceOnPCMDerivDesc4 eq7
   ]

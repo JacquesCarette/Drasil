@@ -90,8 +90,8 @@ public class ReadTable {
         
         StreamReader infile;
         string line;
-        List<string> lines = new List<string>(0);
         List<string> linetokens = new List<string>(0);
+        List<string> lines = new List<string>(0);
         infile = new StreamReader(filename);
         line = (infile.ReadLine());
         linetokens = new List<string>(line.Split(','));

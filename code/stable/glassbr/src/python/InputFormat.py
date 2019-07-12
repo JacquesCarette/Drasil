@@ -20,8 +20,6 @@ def get_input(filename, inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    lines = []
-    linetokens = []
     infile = open(filename, "r")
     infile.readline()
     inParams.a = float(infile.readline())

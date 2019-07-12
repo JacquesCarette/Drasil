@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Print(genTeX) where
 
 import Prelude hiding (print)
 import Data.List (intersperse, transpose, partition)
-import Text.PrettyPrint (text, (<+>))
+import Text.PrettyPrint (integer, text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Numeric (showEFloat)
 import Control.Applicative (pure)
@@ -32,10 +32,10 @@ import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
 import Language.Drasil.Printing.LayoutObj (LayoutObj(Graph, Bib, Figure, Definition,
   List, Table, EqnBlock, Paragraph, Header, HDiv), Document(Document))
 import qualified Language.Drasil.Printing.Import as I
-import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
+import Language.Drasil.Printing.Helpers hiding (br, paren, sqbrac)
 import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, mkEnvArgs, item', description,
   includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
-  newline, superscript, parens, fraction, quote, externalref, commandD,
+  newline, superscript, parens, fraction, quote, externalref, commandD, command2D, br, command0, command, mathbb,
   snref, cite, citeInfo, sec, newpage, maketoc, maketitle, document, author, title)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
@@ -98,96 +98,96 @@ data OpenClose = Open | Close
 ------------------ EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
-pExpr :: Expr -> String
-pExpr (Dbl d)    = showEFloat Nothing d ""
-pExpr (Int i)    = show i
-pExpr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
-pExpr (Div n d) = "\\frac{" ++ pExpr n ++ "}{" ++ pExpr d ++"}"
-pExpr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
-pExpr (Mtx a)    = "\\begin{bmatrix}\n" ++ pMatrix a ++ "\n\\end{bmatrix}"
-pExpr (Row [x]) = brace $ pExpr x -- a bit of a hack...
-pExpr (Row l) = concatMap pExpr l
-pExpr (Ident s) = s
-pExpr (Spec s) = unPL $ L.special s
---pExpr (Gr g) = unPL $ greek g
-pExpr (Sub e) = "_" ++ brace (pExpr e)
-pExpr (Sup e) = "^" ++ brace (pExpr e)
-pExpr (Over Hat s)     = "\\hat{" ++ pExpr s ++ "}"
-pExpr (MO o) = pOps o
-pExpr (Fenced l r m)    = fence Open l ++ pExpr m ++ fence Close r
-pExpr (Font Bold e) = "\\mathbf{" ++ pExpr e ++ "}"
-pExpr (Font Emph e) = pExpr e -- Emph is ignored here because we're in Math mode
-pExpr (Spc Thin) = "\\,"
-pExpr (Sqrt e)  = "\\sqrt{" ++ pExpr e ++ "}"
+pExpr :: Expr -> D
+pExpr (Dbl d)        = pure . text $ showEFloat Nothing d ""
+pExpr (Int i)        = pure (integer i)
+pExpr (Str s)        = toText . quote . pure $ text s
+pExpr (Div n d)      = command2D "frac" (pExpr n) (pExpr d)
+pExpr (Case ps)      = mkEnv "cases" (cases ps)
+pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
+pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
+pExpr (Row l)        = foldl1 (<>) (map pExpr l)
+pExpr (Ident s)      = pure . text $ s
+pExpr (Spec s)       = pure . text $ unPL $ L.special s
+--pExpr (Gr g)         = unPL $ greek g
+pExpr (Sub e)        = pure unders <> br (pExpr e)
+pExpr (Sup e)        = pure hat    <> br (pExpr e)
+pExpr (Over Hat s)   = commandD "hat" (pExpr s)
+pExpr (MO o)         = pOps o
+pExpr (Fenced l r m) = fence Open l <> pExpr m <> fence Close r
+pExpr (Font Bold e)  = commandD "mathbf" (pExpr e)
+pExpr (Font Emph e)  = pExpr e -- Emph is ignored here because we're in Math mode
+pExpr (Spc Thin)     = pure . text $ "\\,"
+pExpr (Sqrt e)       = commandD "sqrt" (pExpr e)
 
-pOps :: Ops -> String
-pOps IsIn     = "\\in{}"
-pOps Integer  = "\\mathbb{Z}"
-pOps Rational = "\\mathbb{Q}"
-pOps Real     = "\\mathbb{R}"
-pOps Natural  = "\\mathbb{N}"
-pOps Boolean  = "\\mathbb{B}"
-pOps Comma    = ","
-pOps Prime    = "'"
-pOps Log      = "\\log"
-pOps Ln       = "\\ln"
-pOps Sin      = "\\sin"
-pOps Cos      = "\\cos"
-pOps Tan      = "\\tan"
-pOps Sec      = "\\sec"
-pOps Csc      = "\\csc"
-pOps Cot      = "\\cot"
-pOps Arcsin   = "\\arcsin"
-pOps Arccos   = "\\arccos"
-pOps Arctan   = "\\arctan"
-pOps Not      = "\\neg{}"
-pOps Dim      = "\\mathsf{dim}"
-pOps Exp      = "e"
-pOps Neg      = "-"
-pOps Cross    = "\\times"
-pOps Dot      = "\\cdot{}"
-pOps Eq       = "="
-pOps NEq      = "\\neq{}"
-pOps Lt       = "<"
-pOps Gt       = ">"
-pOps GEq      = "\\geq{}"
-pOps LEq      = "\\leq{}"
-pOps Impl     = "\\implies{}"
-pOps Iff      = "\\iff{}"
-pOps Subt     = "-"
-pOps And      = "\\land{}"
-pOps Or       = "\\lor{}"
-pOps Add      = "+"
-pOps Mul      = " "
-pOps Summ     = "\\displaystyle\\sum"
-pOps Prod     = "\\displaystyle\\prod"
-pOps Inte     = "\\int"
-pOps Point    = "."
-pOps Perc     = "\\%"
+pOps :: Ops -> D
+pOps IsIn     = commandD "in" empty
+pOps Integer  = mathbb "Z"
+pOps Rational = mathbb "Q"
+pOps Real     = mathbb "R"
+pOps Natural  = mathbb "N"
+pOps Boolean  = mathbb "B"
+pOps Comma    = pure $ text ","
+pOps Prime    = pure $ text "'"
+pOps Log      = command0 "log"
+pOps Ln       = command0 "ln"
+pOps Sin      = command0 "sin"
+pOps Cos      = command0 "cos"
+pOps Tan      = command0 "tan"
+pOps Sec      = command0 "sec"
+pOps Csc      = command0 "csc"
+pOps Cot      = command0 "cot"
+pOps Arcsin   = command0 "arcsin"
+pOps Arccos   = command0 "arccos"
+pOps Arctan   = command0 "arctan"
+pOps Not      = commandD "neg" empty
+pOps Dim      = command "mathsf" "dim"
+pOps Exp      = pure $ text "e"
+pOps Neg      = pure hyph
+pOps Cross    = command0 "times"
+pOps Dot      = commandD "cdot" empty
+pOps Eq       = pure assign
+pOps NEq      = commandD "neq" empty
+pOps Lt       = pure lt
+pOps Gt       = pure gt
+pOps GEq      = commandD "geq" empty
+pOps LEq      = commandD "leq" empty
+pOps Impl     = commandD "implies" empty
+pOps Iff      = commandD "iff" empty
+pOps Subt     = pure hyph
+pOps And      = commandD "land" empty
+pOps Or       = commandD "lor" empty
+pOps Add      = pure pls
+pOps Mul      = pure $ text " "
+pOps Summ     = command0 "displaystyle" <> command0 "sum"
+pOps Prod     = command0 "displaystyle" <> command0 "prod"
+pOps Inte     = command0 "int"
+pOps Point    = pure $ text "."
+pOps Perc     = command0 "%"
 
-fence :: OpenClose -> Fence -> String
-fence Open Paren = "\\left("
-fence Close Paren = "\\right)"
-fence Open Curly = "\\{"
-fence Close Curly = "\\}"
-fence _ Abs = "|"
-fence _ Norm = "||"
+fence :: OpenClose -> Fence -> D
+fence Open Paren  = pure . text $ "\\left("
+fence Close Paren = pure . text $ "\\right)"
+fence Open Curly  = pure . text $ "\\{"
+fence Close Curly = pure . text $ "\\}"
+fence _ Abs       = pure . text $ "|"
+fence _ Norm      = pure . text $ "||"
 
 -- | For printing Matrix
-pMatrix :: [[Expr]] -> String
-pMatrix [] = ""
+pMatrix :: [[Expr]] -> D
+pMatrix [] = pure (text "")
 pMatrix [x] = pIn x
-pMatrix (x:xs) = pMatrix [x] ++ "\\\\\n" ++ pMatrix xs
+pMatrix (x:xs) = pIn x <> pure (text "\\\\\n") <> pMatrix xs
 
-pIn :: [Expr] -> String
-pIn [] = ""
+pIn :: [Expr] -> D
+pIn [] = pure (text "")
 pIn [x] = pExpr x
-pIn (x:xs) = pIn [x] ++ " & " ++ pIn xs
+pIn (x:xs) = pExpr x <> pure (text " & ") <> pIn xs
 
-cases :: [(Expr,Expr)] -> String
+cases :: [(Expr,Expr)] -> D
 cases []     = error "Attempt to create case expression without cases"
-cases [p]    = pExpr (fst p) ++ ", & " ++ pExpr (snd p)
-cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
+cases [p]    = pExpr (fst p) <> pure (text ", & ") <> pExpr (snd p)
+cases (p:ps) = cases [p] <> pure (text "\\\\\n") <> cases ps
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
@@ -195,12 +195,12 @@ cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
-  pure (text "\\toprule")
+  command0 "toprule"
   %% makeHeaders (head lls)
-  %% pure (text "\\midrule")
-  %% pure (text "\\endhead")
+  %% command0 "midrule"
+  %% command0 "endhead"
   %% makeRows (tail lls)
-  %% pure (text "\\bottomrule")
+  %% command0 "bottomrule"
   %% (if bool then caption t else caption empty)
   %% label r
   where ltab = tabType $ anyLong lls
@@ -218,7 +218,7 @@ makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
 -- | determines the length of a Spec
 specLength :: Spec -> Int
 specLength (S x)     = length x
-specLength (E x)     = length $ filter (`notElem` dontCount) $ pExpr x
+specLength (E x)     = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
 specLength EmptyS    = 0
@@ -256,7 +256,7 @@ spec a@(s :+: t) = s' <> t'
     ctx = const $ needs a
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
-spec (E ex) = toMath $ pure $ text $ pExpr ex
+spec (E ex) = toMath $ pExpr ex
 spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s

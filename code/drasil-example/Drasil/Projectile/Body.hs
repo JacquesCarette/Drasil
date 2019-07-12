@@ -21,7 +21,8 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
-  problem, srsDomains, srs)
+  problem, srsDomains)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (constAccel, gravity, physicCon, physicCon',
@@ -37,7 +38,7 @@ import Data.Drasil.SI_Units (metre, radian, second)
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, projectileTitle, landingPos,
   launcher, projectile, target)
-import Drasil.Projectile.DataDefs (dataDefns)
+import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
@@ -49,8 +50,11 @@ import Drasil.Projectile.TMods (tMods)
 import Drasil.Projectile.Unitals (acronyms, constants, inConstraints,
   launAngle, outConstraints, symbols, unitalIdeas, unitalQuants)
 
-srsDoc :: Document
-srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
+srs :: Document
+srs = mkDoc mkSRS (for'' titleize phrase) si
+
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [
@@ -89,7 +93,7 @@ mkSRS = [
       [ FReqsSub [inputParamsTable]
       , NonFReqsSub
       ],
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard systInfo,
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
     AuxConsProg projectileTitle constants,
   Bibliography
@@ -105,15 +109,15 @@ scope1 = foldlSent_ [S "the", phrase analysis `sOf` S "a", phrase twoD,
   phrase constAccel]
 scope2 = foldlSent_ [S "determines if the", phrase projectile, S "hits the", phrase target]
 
-systInfo :: SystemInformation
-systInfo = SI {
+si :: SystemInformation
+si = SI {
   _sys         = projectileTitle,
-  _kind        = srs,
+  _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],
-  _datadefs    = dataDefns,
+  _datadefs    = dataDefs,
   _inputs      = [] :: [QuantityDict],
   _outputs     = [] :: [QuantityDict],
   _defSequence = [] :: [Block QDefinition],
@@ -130,7 +134,7 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
     map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : srsDomains)
-  (map unitWrapper [metre, radian, second]) dataDefns iMods genDefns tMods concIns [] []
+  (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
@@ -144,9 +148,6 @@ refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
-
-printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
 
 -------------------------
 -- Problem Description --

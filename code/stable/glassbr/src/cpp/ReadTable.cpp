@@ -91,8 +91,8 @@ void func_read_table(string filename, vector<double> &z_vector, vector<vector<do
     
     ifstream infile;
     string line;
-    vector<string> lines(0);
     vector<string> linetokens(0);
+    vector<string> lines(0);
     infile.open(filename, std::fstream::in);
     std::getline(infile, line);
     linetokens.clear();

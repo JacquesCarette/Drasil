@@ -6,7 +6,7 @@ module Main (main) where
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.HGHC.HGHC (srsBody, printSetting) --thisSI
+import Drasil.HGHC.Body (srs, printSetting) --thisSI
 
 -- thisCode :: CodeSpec
 -- thisCode = codeSpec thisSI choices []
@@ -26,7 +26,7 @@ thisChoices = Choices {
   
 main :: IO ()            
 main = do
-  gen (DocSpec Website "Tiny_SRS") srsBody printSetting
-  gen (DocSpec SRS "Tiny_SRS")     srsBody printSetting
+  gen (DocSpec Website "Tiny_SRS") srs printSetting
+  gen (DocSpec SRS "Tiny_SRS")     srs printSetting
   -- When ready to generate code, uncomment this file
   --genCode thisChoices thisCode

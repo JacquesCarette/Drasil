@@ -26,8 +26,8 @@ def func_read_table(filename, z_vector, x_matrix, y_matrix):
     print("  }", file=outfile)
     outfile.close()
     
-    lines = []
     linetokens = []
+    lines = []
     infile = open(filename, "r")
     line = infile.readline().rstrip()
     linetokens = line.split(",")

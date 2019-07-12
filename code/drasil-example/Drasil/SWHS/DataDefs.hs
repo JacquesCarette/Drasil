@@ -25,7 +25,7 @@ qDefs = [ddHtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,
   ddBalanceLiquidPCMQD, dd3HtFusionQD, dd4MeltFracQD]
 
 dataDefs :: [DataDefinition] 
-dataDefs = [dd1HtFluxC, dd2HtFluxP, ddBalanceSolidPCM,
+dataDefs = [ddHtFluxC, dd2HtFluxP, ddBalanceSolidPCM,
   ddBalanceLiquidPCM, dd3HtFusion, dd4MeltFrac]
 
 -- FIXME? This section looks strange. Some data defs are created using
@@ -38,8 +38,8 @@ ddHtFluxCQD = mkQuantDef htFluxC htFluxCEqn
 htFluxCEqn :: Expr
 htFluxCEqn = sy coilHTC * (sy tempC - apply1 tempW time)
 
-dd1HtFluxC :: DataDefinition
-dd1HtFluxC = dd ddHtFluxCQD [makeCite koothoor2013] [] "htFluxC"
+ddHtFluxC :: DataDefinition
+ddHtFluxC = dd ddHtFluxCQD [makeCite koothoor2013] [] "htFluxC"
   [makeRef2S assumpLCCCW, makeRef2S assumpTHCCoT]
 
 --Can't include info in description beyond definition of variables?

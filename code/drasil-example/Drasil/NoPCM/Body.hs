@@ -58,7 +58,7 @@ import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, orgDocIntro,
   sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, ddHtFluxCQD)
+import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxCQD)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
@@ -158,7 +158,7 @@ mkSRS = [RefSec $ RefProg intro
   Bibliography]
 
 dataDefn :: [DataDefinition]
-dataDefn = [dd1HtFluxC]
+dataDefn = [ddHtFluxC]
 
 concIns :: [ConceptInstance]
 concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
@@ -184,7 +184,7 @@ si = SI {
   _quants = map qw symbols \\ map qw [tankVol, tau],
   _concepts = symbols,
   _definitions = [],
-  _datadefs = [dd1HtFluxC],
+  _datadefs = [ddHtFluxC],
   _inputs = inputs ++ map qw [tempW, watE], --inputs ++ outputs?
   _outputs = map qw [tempW, watE],     --outputs
   _defSequence = [Parallel ddHtFluxCQD []],

@@ -23,7 +23,7 @@ import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
+import Drasil.SWHS.DataDefs (ddHtFluxC, dd2HtFluxP)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
 import Drasil.SWHS.Unitals (inputs, inputConstraints, coilHTC, coilSA, consTol,
   diam, eta, pcmE, pcmHTC, pcmSA, pcmDensity, pcmMass, pcmVol, simTime,
@@ -200,7 +200,7 @@ maintainable = cic "maintainable" (foldlSent [
 
 propsDeriv :: [Contents]
 propsDeriv =
-  [propCorSolDeriv1 CT.lawConsEnergy watE energy coil phsChgMtrl dd1HtFluxC
+  [propCorSolDeriv1 CT.lawConsEnergy watE energy coil phsChgMtrl ddHtFluxC
     dd2HtFluxP surface CT.heatTrans,
   propCorSolDeriv2,
   propCorSolDeriv3 pcmE energy phsChgMtrl water,

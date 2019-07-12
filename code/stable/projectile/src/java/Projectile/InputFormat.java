@@ -12,9 +12,6 @@ public class InputFormat {
     
     public static void get_input(String filename, InputParameters inParams) throws Exception {
         Scanner infile;
-        String line;
-        ArrayList<String> lines = new ArrayList<String>(0);
-        ArrayList<String> linetokens = new ArrayList<String>(0);
         infile = new Scanner(new File(filename));
         infile.nextLine();
         inParams.v_launch = Double.parseDouble(infile.nextLine());

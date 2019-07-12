@@ -7,9 +7,6 @@ public class InputFormat {
     
     public static void get_input(string filename, InputParameters inParams) {
         StreamReader infile;
-        string line;
-        List<string> lines = new List<string>(0);
-        List<string> linetokens = new List<string>(0);
         infile = new StreamReader(filename);
         infile.ReadLine();
         inParams.v_launch = Double.Parse(infile.ReadLine());

@@ -10,6 +10,7 @@ import Language.Drasil.Stages (Stage(..))
 
 import Data.Char (isLatin1, toLower)
 import Data.Char.Properties.Names (getCharacterName)
+import Data.List (intercalate)
 import Data.List.Split (splitOn)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
@@ -156,5 +157,8 @@ unicodeConv (Concat ss) = Concat $ map unicodeConv ss
 unicodeConv x = x
 
 unicodeString :: String -> String
-unicodeString = concatMap (\x -> if isLatin1 x then [x] else getName x)
-  where getName x = map toLower $ last (splitOn " " $ getCharacterName x)
+unicodeString = concatMap (\x -> if isLatin1 x then [x] else getName $ nameList x)
+  where
+    nameList = (splitOn " ") . map toLower . getCharacterName
+    getName ("greek":_:_:name) = intercalate " " name
+    getName _ = error "unicodeString not fully implemented"

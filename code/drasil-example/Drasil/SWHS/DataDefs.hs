@@ -21,7 +21,7 @@ refMDB :: ModelDB
 refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition]
-qDefs = [dd1HtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,
+qDefs = [ddHtFluxCQD, dd2HtFluxPQD, ddBalanceSolidPCMQD,
   ddBalanceLiquidPCMQD, dd3HtFusionQD, dd4MeltFracQD]
 
 dataDefs :: [DataDefinition] 
@@ -32,14 +32,14 @@ dataDefs = [dd1HtFluxC, dd2HtFluxP, ddBalanceSolidPCM,
 --    terms, some using defns, and some with a brand new description.
 --    I think this will need an overhaul after we fix Data Definitions.
 
-dd1HtFluxCQD :: QDefinition
-dd1HtFluxCQD = mkQuantDef htFluxC htFluxCEqn
+ddHtFluxCQD :: QDefinition
+ddHtFluxCQD = mkQuantDef htFluxC htFluxCEqn
 
 htFluxCEqn :: Expr
 htFluxCEqn = sy coilHTC * (sy tempC - apply1 tempW time)
 
 dd1HtFluxC :: DataDefinition
-dd1HtFluxC = dd dd1HtFluxCQD [makeCite koothoor2013] [] "htFluxC"
+dd1HtFluxC = dd ddHtFluxCQD [makeCite koothoor2013] [] "htFluxC"
   [makeRef2S assumpLCCCW, makeRef2S assumpTHCCoT]
 
 --Can't include info in description beyond definition of variables?

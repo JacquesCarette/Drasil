@@ -329,7 +329,8 @@ genCaseBlock :: (RenderSym repr) => CalcType -> String -> repr (StateType repr)
 genCaseBlock t v st cs = do
   ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (fmap body $ liftS $
     genCalcBlock t v st e)) cs
-  return $ block [ifNoElse ifs]
+  return $ block [ifCond ifs (oneLiner $ throw $ 
+    "Undefined case encountered in function " ++ v)]
 
 ----- OUTPUT -------
 
@@ -692,7 +693,7 @@ convExpr :: (RenderSym repr) => Expr -> Reader (State repr) (repr (Value repr))
 convExpr (Dbl d) = return $ litFloat d
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
-convExpr Perc{}  = error "convExpr: Perc"
+convExpr (Perc a b) = return $ litFloat $ fromIntegral a / (10 ** fromIntegral b)
 convExpr (AssocA Add l) = foldr1 (#+)  <$> mapM convExpr l
 convExpr (AssocA Mul l) = foldr1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l) = foldr1 (?&&) <$> mapM convExpr l

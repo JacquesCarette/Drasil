@@ -86,14 +86,27 @@ public class ReadTable {
         
         Scanner infile;
         String line;
-        ArrayList<String> lines = new ArrayList<String>(0);
         ArrayList<String> linetokens = new ArrayList<String>(0);
+        ArrayList<String> lines = new ArrayList<String>(0);
         infile = new Scanner(new File(filename));
         line = infile.nextLine();
         linetokens = new ArrayList<String>(Arrays.asList(line.split(",")));
         for (int j = 0; (j < (int)((linetokens.size() / 2))); j += 1) {
             z_vector.add(Double.parseDouble(linetokens.get(((j * 2) + 1))));
         }
+        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
+        outfile.print("var 'z_vector' assigned to ");
+        outfile.print("[");
+        for (int list_i1 = 0; (list_i1 < (z_vector.size() - 1)); list_i1++) {
+            outfile.print(z_vector.get(list_i1));
+            outfile.print(", /f ");
+        }
+        if ((z_vector.size() > 0)) {
+            outfile.print(z_vector.get((z_vector.size() - 1)));
+        }
+        outfile.print("]");
+        outfile.println(" in module ReadTable");
+        outfile.close();
         while (infile.hasNextLine()) {
             lines.add(infile.nextLine());
         }
@@ -108,6 +121,64 @@ public class ReadTable {
             x_matrix.add(x_matrix_temp);
             y_matrix.add(y_matrix_temp);
         }
+        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
+        outfile.print("var 'x_matrix' assigned to ");
+        outfile.print("[");
+        for (int list_i2 = 0; (list_i2 < (x_matrix.size() - 1)); list_i2++) {
+            outfile.print("[");
+            for (int list_i1 = 0; (list_i1 < (x_matrix.get(list_i2).size() - 1)); list_i1++) {
+                outfile.print(x_matrix.get(list_i2).get(list_i1));
+                outfile.print(", /f ");
+            }
+            if ((x_matrix.get(list_i2).size() > 0)) {
+                outfile.print(x_matrix.get(list_i2).get((x_matrix.get(list_i2).size() - 1)));
+            }
+            outfile.print("]");
+            outfile.print(", /f ");
+        }
+        if ((x_matrix.size() > 0)) {
+            outfile.print("[");
+            for (int list_i1 = 0; (list_i1 < (x_matrix.get((x_matrix.size() - 1)).size() - 1)); list_i1++) {
+                outfile.print(x_matrix.get((x_matrix.size() - 1)).get(list_i1));
+                outfile.print(", /f ");
+            }
+            if ((x_matrix.get((x_matrix.size() - 1)).size() > 0)) {
+                outfile.print(x_matrix.get((x_matrix.size() - 1)).get((x_matrix.get((x_matrix.size() - 1)).size() - 1)));
+            }
+            outfile.print("]");
+        }
+        outfile.print("]");
+        outfile.println(" in module ReadTable");
+        outfile.close();
+        outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
+        outfile.print("var 'y_matrix' assigned to ");
+        outfile.print("[");
+        for (int list_i2 = 0; (list_i2 < (y_matrix.size() - 1)); list_i2++) {
+            outfile.print("[");
+            for (int list_i1 = 0; (list_i1 < (y_matrix.get(list_i2).size() - 1)); list_i1++) {
+                outfile.print(y_matrix.get(list_i2).get(list_i1));
+                outfile.print(", /f ");
+            }
+            if ((y_matrix.get(list_i2).size() > 0)) {
+                outfile.print(y_matrix.get(list_i2).get((y_matrix.get(list_i2).size() - 1)));
+            }
+            outfile.print("]");
+            outfile.print(", /f ");
+        }
+        if ((y_matrix.size() > 0)) {
+            outfile.print("[");
+            for (int list_i1 = 0; (list_i1 < (y_matrix.get((y_matrix.size() - 1)).size() - 1)); list_i1++) {
+                outfile.print(y_matrix.get((y_matrix.size() - 1)).get(list_i1));
+                outfile.print(", /f ");
+            }
+            if ((y_matrix.get((y_matrix.size() - 1)).size() > 0)) {
+                outfile.print(y_matrix.get((y_matrix.size() - 1)).get((y_matrix.get((y_matrix.size() - 1)).size() - 1)));
+            }
+            outfile.print("]");
+        }
+        outfile.print("]");
+        outfile.println(" in module ReadTable");
+        outfile.close();
         infile.close();
     }
 }

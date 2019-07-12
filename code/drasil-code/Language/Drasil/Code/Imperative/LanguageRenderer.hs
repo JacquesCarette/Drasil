@@ -11,7 +11,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
   charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, 
+  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
   methodDocD, methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, 
   ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, 
   assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, 
@@ -31,9 +31,9 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
   includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, valList, 
-  prependToBody, appendToBody, surroundBody, getterName, setterName, setMain, 
-  setEmpty, intValue
+  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, valList, prependToBody, appendToBody, 
+  surroundBody, getterName, setterName, setMain, setEmpty, intValue
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -46,10 +46,12 @@ import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   ControlStatementSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Helpers (Terminator(..), FuncData(..), 
-  ModData(..), md, TypeData(..), td, ValData(..), vd, angles,blank, 
-  doubleQuotedText,hicat,vibcat,vmap, getNestDegree)
+  ModData(..), md, ParamData(..), pd, TypeData(..), td, ValData(..), vd, angles,
+  blank, doubleQuotedText,hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, 
+  getNestDegree)
 
 import Data.List (intersperse, last)
+import Data.Maybe (fromMaybe)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
@@ -229,8 +231,13 @@ constructDocD _ = empty
 stateParamDocD :: ValData -> Doc
 stateParamDocD v = typeDoc (valType v) <+> valDoc v
 
-paramListDocD :: [Doc] -> Doc
-paramListDocD = hicat (text ", ")
+paramListDocD :: [ParamData] -> Doc
+paramListDocD = hicat (text ", ") . map paramDoc
+
+mkParam :: (ValData -> Doc) -> ValData -> ParamData
+mkParam f v = pd (fromMaybe 
+  (error "Attempt to create Parameter from Value with no string representation")
+  (valName v)) (valType v) (f v)
 
 -- Method --
 
@@ -268,7 +275,7 @@ ifCondDocD ifStart elif bEnd elseBody (c:cs) =
         elif <+> parens (valDoc v) <+> ifStart,
         indent b,
         bEnd]
-      elseSect = if isEmpty elseBody then empty else vcat [
+      elseSect = emptyIfEmpty elseBody $ vcat [
         text "else" <+> ifStart,
         indent elseBody,
         bEnd]
@@ -672,10 +679,11 @@ blockCmtDoc :: [String] -> Doc -> Doc -> Doc
 blockCmtDoc lns start end = start <+> vcat (map text lns) <+> end
 
 docCmtDoc :: [String] -> Doc -> Doc -> Doc
-docCmtDoc lns start end = vcat $ start : map (indent . text) lns ++ [end]
+docCmtDoc lns start end = emptyIfNull lns $
+  vcat $ start : map (indent . text) lns ++ [end]
 
 commentedItem :: Doc -> Doc -> Doc
-commentedItem cmt itm = if isEmpty itm then itm else cmt $+$ itm
+commentedItem cmt itm = emptyIfEmpty itm cmt $+$ itm
 
 commentLength :: Int
 commentLength = 75
@@ -700,6 +708,17 @@ endCommentDelimit c = commentDelimit (endCommentLabel ++ " " ++ c)
 dashes :: String -> Int -> String
 dashes s l = replicate (l - length s) '-'
 
+functionDoc :: String -> [(String, String)] -> [String]
+functionDoc desc params = [doxBrief ++ desc | not (null desc)]
+  ++ map (\(v, vDesc) -> doxParam ++ v ++ " " ++ vDesc) params
+
+classDoc :: String -> [String]
+classDoc desc = [doxBrief ++ desc | not (null desc)]
+
+moduleDoc :: String -> String -> String -> [String]
+moduleDoc desc m ext = (doxFile ++ m ++ ext) : 
+  [doxBrief ++ desc | not (null desc)]
+
 -- Helper Functions --
 
 valList :: [ValData] -> Doc
@@ -707,11 +726,11 @@ valList vs = hcat (intersperse (text ", ") (map valDoc vs))
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statementDocD s, maybeBlank, b]
-  where maybeBlank = if isEmpty b then empty else blank
+  where maybeBlank = emptyIfEmpty b blank
 
 appendToBody :: Doc -> (Doc, Terminator) -> Doc
 appendToBody b s = vcat [b, maybeBlank, fst $ statementDocD s]
-  where maybeBlank = if isEmpty b then empty else blank
+  where maybeBlank = emptyIfEmpty b blank
 
 surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
 surroundBody p b a = prependToBody p (appendToBody b a)
@@ -733,3 +752,10 @@ intValue i = intValue' (getType $ valueType i)
   where intValue' Integer = i
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
+
+
+doxCommand, doxBrief, doxParam, doxFile :: String
+doxCommand = "\\"
+doxBrief = doxCommand ++ "brief "
+doxParam = doxCommand ++ "param "
+doxFile = doxCommand  ++ "file "

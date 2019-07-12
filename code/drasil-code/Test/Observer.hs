@@ -4,15 +4,13 @@ import Language.Drasil.Code.Imperative.Symantics (
   RenderSym(..), PermanenceSym(..),
   BodySym(..), StateTypeSym(..), StatementSym(..), ValueSym(..), ScopeSym(..), 
   MethodTypeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
-  ModuleSym(..), BlockCommentSym(..))
+  ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 observer :: (RenderSym repr) => repr (RenderFile repr)
-observer = fileDoc (buildModule "Observer" [] [] [commentedClass classD 
+observer = fileDoc (buildModule "Observer" [] [] [docClass 
+  "This is an arbitrary class acting as an Observer"
   helperClass])
-
-classD :: (RenderSym repr) => repr (BlockComment repr)
-classD = docComment ["\\brief This is an arbitrary class acting as an Observer"]
 
 helperClass :: (RenderSym repr) => repr (Class repr)
 helperClass = pubClass "Observer" Nothing [stateVar 0 public dynamic_ 

@@ -37,9 +37,7 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
   Citation(Cite), BibRef)
-import Language.Drasil.Printing.LayoutObj (Tags, Document(Document),
-  LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
-  HDiv))
+import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 

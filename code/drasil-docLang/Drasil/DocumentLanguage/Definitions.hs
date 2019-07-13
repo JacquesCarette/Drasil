@@ -76,14 +76,15 @@ instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
-derivation :: HasDerivation c => c -> [Contents]
-derivation g = map makeDerivationContents (g ^. derivations)
+derivation :: (HasDerivation c, HasShortName c, Referable c) => c -> Contents
+derivation c = maybe (mkParagraph EmptyS)
+  (\(Derivation h d) -> LlC $ llcc (makeRef2 c) $ DerivBlock h $ map makeDerivCons d) $ c ^. derivations
 
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
-makeDerivationContents :: Sentence -> Contents
-makeDerivationContents (E e) = UlC $ ulcc $ EqnBlock e
-makeDerivationContents s     = UlC $ ulcc $ Paragraph s
+makeDerivCons :: Sentence -> RawContent
+makeDerivCons (E e) = EqnBlock e
+makeDerivCons s     = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String, [Contents])]

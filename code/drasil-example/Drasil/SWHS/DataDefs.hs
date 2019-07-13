@@ -39,8 +39,8 @@ htFluxCEqn :: Expr
 htFluxCEqn = sy coilHTC * (sy tempC - apply1 tempW time)
 
 dd1HtFluxC :: DataDefinition
-dd1HtFluxC = dd dd1HtFluxCQD [makeCite koothoor2013] [] "htFluxC"
-  [makeRef2S assumpLCCCW, makeRef2S assumpTHCCoT]
+dd1HtFluxC = dd dd1HtFluxCQD [makeCite koothoor2013]
+  Nothing "htFluxC" [makeRef2S assumpLCCCW, makeRef2S assumpTHCCoT]
 
 --Can't include info in description beyond definition of variables?
 ----
@@ -52,8 +52,8 @@ htFluxPEqn :: Expr
 htFluxPEqn = sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
 
 dd2HtFluxP :: DataDefinition
-dd2HtFluxP = dd dd2HtFluxPQD [makeCite koothoor2013] [] "htFluxP"
-  [makeRef2S assumpLCCCW]
+dd2HtFluxP = dd dd2HtFluxPQD [makeCite koothoor2013]
+  Nothing "htFluxP" [makeRef2S assumpLCCCW]
 
 ----
 
@@ -65,8 +65,8 @@ balanceSolidPCMEqn = (sy pcmMass * sy htCapSP) /
   (sy pcmHTC * sy pcmSA)
 
 ddBalanceSolidPCM :: DataDefinition
-ddBalanceSolidPCM = dd ddBalanceSolidPCMQD [makeCite lightstone2012] []
-  "balanceSolidPCM" []
+ddBalanceSolidPCM = dd ddBalanceSolidPCMQD [makeCite lightstone2012]
+  Nothing "balanceSolidPCM" []
 
 ----
 
@@ -78,8 +78,8 @@ balanceLiquidPCMEqn = (sy pcmMass * sy htCapLP) /
   (sy pcmHTC * sy pcmSA)
 
 ddBalanceLiquidPCM :: DataDefinition
-ddBalanceLiquidPCM = dd ddBalanceLiquidPCMQD [makeCite lightstone2012] []
-  "balanceLiquidPCM" []
+ddBalanceLiquidPCM = dd ddBalanceLiquidPCMQD [makeCite lightstone2012]
+  Nothing "balanceLiquidPCM" []
 
 ----
 
@@ -92,7 +92,7 @@ htFusionEqn = sy latentHeat / sy mass
 -- FIXME: need to allow page references in references.
 dd3HtFusion :: DataDefinition
 dd3HtFusion = dd dd3HtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
-  [] "htFusion" []
+  Nothing "htFusion" []
 
 ----
 
@@ -107,9 +107,10 @@ meltFracEqn :: Expr
 meltFracEqn = sy latentEP / (sy htFusion * sy pcmMass)
 
 dd4MeltFrac :: DataDefinition
-dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013] [] "meltFrac"
- [S "The" +:+ phrase value `sOf` E (sy meltFrac) `sIs` S "constrained to" +:+.
-  E (0 $<= sy meltFrac $<= 1), makeRef2S dd3HtFusion]
+dd4MeltFrac = dd dd4MeltFracQD [makeCite koothoor2013]
+  Nothing "meltFrac" [meltFracConst, makeRef2S dd3HtFusion]
+  where meltFracConst = S "The" +:+ phrase value `sOf` E (sy meltFrac) `sIs`
+                        S "constrained to" +:+. E (0 $<= sy meltFrac $<= 1)
 
 --Need to add units to data definition descriptions
 

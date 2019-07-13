@@ -22,7 +22,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   information, input_, interface, model, object, organization, physical,
   physicalSim, physics, problem, product_, project, quantity, realtime,
   reference, section_, simulation, software, softwareSys, srsDomains, system,
-  systemConstraint, sysCont, task, template, user, doccon, doccon')
+  systemConstraint, sysCont, task, template, user, doccon, doccon', property)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
@@ -34,7 +34,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody)
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon, mathcon', rightHand)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
@@ -74,7 +74,9 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
    SSDSec $ SSDProg
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
-        , Goals [S "the" +:+ plural input_]]
+        , Goals [S "the kinematic" +:+ plural property :+: S ", and" +:+ plural QP.force +:+
+                 S "including any" +:+ sParen (phrase CP.collision +:+ plural QP.force) +:+
+                 S "applied on a set of" +:+ plural CP.rigidBody]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)

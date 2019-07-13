@@ -631,7 +631,9 @@
             <div id="Sec:GoalStmt">
               <div class="subsubsection">
                 <h3>Goal Statements</h3>
-                <p class="paragraph">Given the inputs, the goal statements are:</p>
+                <p class="paragraph">
+                  Given the kinematic properties, and forces including any (collision forces) applied on a set of rigid bodies, the goal statements are:
+                </p>
                 <div class="list">
                   <p>
                     <div id="linearGS">
@@ -1055,6 +1057,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:linDisp">
                   <table class="ddefn">
                     <tr>
@@ -1116,6 +1119,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:linVel">
                   <table class="ddefn">
                     <tr>
@@ -1177,6 +1181,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:linAcc">
                   <table class="ddefn">
                     <tr>
@@ -1240,6 +1245,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:angDisp">
                   <table class="ddefn">
                     <tr>
@@ -1299,6 +1305,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:angVel">
                   <table class="ddefn">
                     <tr>
@@ -1358,6 +1365,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:angAccel">
                   <table class="ddefn">
                     <tr>
@@ -1417,6 +1425,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:impulse">
                   <table class="ddefn">
                     <tr>
@@ -1521,6 +1530,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:chalses">
                   <table class="ddefn">
                     <tr>
@@ -1587,6 +1597,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:torque">
                   <table class="ddefn">
                     <tr>
@@ -1639,6 +1650,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:kEnergy">
                   <table class="ddefn">
                     <tr>
@@ -1701,6 +1713,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:coeffRestitution">
                   <table class="ddefn">
                     <tr>
@@ -1769,6 +1782,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:reVeInColl">
                   <table class="ddefn">
                     <tr>
@@ -1835,6 +1849,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:impulseV">
                   <table class="ddefn">
                     <tr>
@@ -1873,7 +1888,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          An impulse (vector) <em><b>J</b></em> occurs when a force <em><b>F</b></em> acts over a body over an interval of time Derivation of impulse (vector).
+                          An impulse (vector) <em><b>J</b></em> occurs when a force <em><b>F</b></em> acts over a body over an interval of time.
                         </p>
                         <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
                       </td>
@@ -1888,24 +1903,27 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph">
-                  Derivation of impulse (vector) - Newton's second law of motion states:
-                </p>
-                <div class="equation">
-                  <em><b>F</b> = m&#8239;<b>a</b> = m&#8239;<div class="fraction">
-                                                              <span class="fup">
-                                                                &#8239;d<b>v</b>
-                                                              </span>
-                                                              <span class="fdn">&#8239;dt</span>
-                                                            </div></em>
-                </div>
-                <p class="paragraph">Rearranging :</p>
-                <div class="equation">
-                  <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;(&int;<sub><b>v</b><sub>1</sub></sub><sup><b>v</b><sub>2</sub></sup>1&#8239;d<b>v</b>)</em>
-                </div>
-                <p class="paragraph">Integrating the right hand side :</p>
-                <div class="equation">
-                  <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;<b>v</b><sub>2</sub>&minus;m&#8239;<b>v</b><sub>1</sub> = m&#8239;Δ<b>v</b></em>
+                <div id="DD:impulseVDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of impulse (vector):</h4>
+                    <p class="paragraph">Newton's second law of motion states:</p>
+                    <div class="equation">
+                      <em><b>F</b> = m&#8239;<b>a</b> = m&#8239;<div class="fraction">
+                                                                  <span class="fup">
+                                                                    &#8239;d<b>v</b>
+                                                                  </span>
+                                                                  <span class="fdn">&#8239;dt</span>
+                                                                </div></em>
+                    </div>
+                    <p class="paragraph">Rearranging :</p>
+                    <div class="equation">
+                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;(&int;<sub><b>v</b><sub>1</sub></sub><sup><b>v</b><sub>2</sub></sup>1&#8239;d<b>v</b>)</em>
+                    </div>
+                    <p class="paragraph">Integrating the right hand side :</p>
+                    <div class="equation">
+                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;<b>v</b><sub>2</sub>&minus;m&#8239;<b>v</b><sub>1</sub> = m&#8239;Δ<b>v</b></em>
+                    </div>
+                  </div>
                 </div>
                 <div id="DD:potEnergy">
                   <table class="ddefn">
@@ -1967,6 +1985,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:momentOfInertia">
                   <table class="ddefn">
                     <tr>
@@ -2028,6 +2047,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -2146,6 +2166,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="IM:rotMot">
                   <table class="idefn">
                     <tr>
@@ -2237,6 +2258,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="IM:col2D">
                   <table class="idefn">
                     <tr>
@@ -2331,13 +2353,14 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:DataConstraints">
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
+                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -2423,6 +2446,14 @@
                   </table>
                   <p class="caption">Input Data Constraints</p>
                 </div>
+              </div>
+            </div>
+            <div id="Sec:CorSolProps">
+              <div class="subsubsection">
+                <h3>Properties of a Correct Solution</h3>
+                <p class="paragraph">
+                  <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+                </p>
                 <div id="Table:OutDataConstraints">
                   <table class="table">
                     <tr><th>Var</th></tr>
@@ -2433,12 +2464,6 @@
                   </table>
                   <p class="caption">Output Data Constraints</p>
                 </div>
-              </div>
-            </div>
-            <div id="Sec:CorSolProps">
-              <div class="subsubsection">
-                <h3>Properties of a Correct Solution</h3>
-                <p class="paragraph">FIXME.</p>
               </div>
             </div>
           </div>

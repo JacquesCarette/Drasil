@@ -16,12 +16,12 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
   ProblemDescription(..), PDSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl, SSDSec(..), SSDSub(..),
-  SolChSpec(..), StkhldrSec(StkhldrProg2),  StkhldrSub(Client, Cstmr),
+  SolChSpec(..), StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
-  Verbosity(Verbose), dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
-  outDataConstTbl, termDefnF', tsymb, traceMatStandard, characteristicsLabel)
+  Verbosity(Verbose), auxSpecSent, characteristicsLabel, intro, mkDoc,
+  termDefnF', tsymb, traceMatStandard)
 
-import qualified Drasil.DocLang.SRS as SRS (reference, valsOfAuxCons, assumpt, inModel)
+import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
@@ -57,14 +57,13 @@ import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs, propsDeriv)
+import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
-  constrained, inputs, outputs, specParamVals, glassTy, glassTypes, glBreakage,
-  lateralLoad, load, loadTypes, pbTol, probBr, probBreak, sD, termsWithAccDefn,
-  termsWithDefsOnly, terms)
-import qualified Drasil.GlassBR.Unitals as GB (inputDataConstraints)
+  constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
+  glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, probBreak,
+  sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
@@ -121,12 +120,8 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) HideDerivation
-        , Constraints EmptyS dataConstraintUncertainty
-                      (foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [],
-                      S "gives", plural value `ofThe` S "specification",
-                      plural parameter, S "used in", makeRef2S inputDataConstraints])
-                      [inputDataConstraints, outputDataConstraints]
-        , CorrSolnPpties propsDeriv
+        , Constraints auxSpecSent inputDataConstraints
+        , CorrSolnPpties [probBr] []
         ]
       ],
   ReqrmntSec $ ReqsProg [
@@ -169,8 +164,6 @@ section = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
-inputDataConstraints, outputDataConstraints :: LabelledContent
 
 --------------------------------------------------------------------------------
 termsAndDescBullets :: Contents
@@ -373,11 +366,6 @@ goalInputs = [plural dimension `ofThe` phrase glaPlane, S "the" +:+ phrase glass
 {--Data Definitions--}
 
 {--Data Constraints--}
-
-{-input and output tables-}
-
-inputDataConstraints = inDataConstTbl GB.inputDataConstraints
-outputDataConstraints = outDataConstTbl [probBr]
 
 {--REQUIREMENTS--}
 

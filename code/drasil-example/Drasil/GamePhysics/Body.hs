@@ -13,8 +13,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   SolChSpec(SCSProg), TConvention(..), TSIntro(..), Verbosity(Verbose),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
-  outDataConstTbl, outDataConstTbl, tsymb, traceMatStandard, solutionLabel)
+  PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -48,7 +47,7 @@ import qualified Drasil.GamePhysics.DataDefs as GP (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
-import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, propsDeriv)
+import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
@@ -81,11 +80,9 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         , TMs [] (Label : stdFields)
         , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-          ShowDerivation
-        , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
-            [inDataConstTbl inputConstraints, outDataConstTbl outputConstraints]
-        , CorrSolnPpties propsDeriv
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , Constraints (S "FIXME") inputConstraints
+        , CorrSolnPpties outputConstraints []
         ]
       ],
     ReqrmntSec $ ReqsProg [
@@ -209,7 +206,6 @@ para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldl
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope_of_requirements_intro_p1 :: Sentence
-
 scope_of_requirements_intro_p1 = foldlSent_
   [S "the", phrase physicalSim `sOf` getAcc twoD, 
   plural CP.rigidBody, S "acted on by", plural QP.force]
@@ -228,7 +224,6 @@ scope_of_requirements_intro_p1 = foldlSent_
 -------------------------------------
 
 organizationOfDocumentsIntro :: Sentence
-
 organizationOfDocumentsIntro = foldlSent 
   [S "The", phrase organization, S "of this", phrase document, 
   S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
@@ -404,7 +399,6 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 ------------------------------
 -- SECTION 5 : REQUIREMENTS --
 ------------------------------
-
 -- in Requirements.hs
 
 -----------------------------------

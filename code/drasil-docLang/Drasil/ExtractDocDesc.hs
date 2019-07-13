@@ -3,13 +3,13 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc, sentencePla
 
 import Control.Lens((^.))
 import Drasil.DocumentLanguage.Core
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Language.Drasil hiding (Manual, Vector, Verb)
 import Theory.Drasil (Theory(..))
 import Data.List(transpose)
 
 import Data.Functor.Constant (Constant(Constant))
-import Data.Generics.Multiplate (appendPlate,
-  foldFor, purePlate, preorderFold)
+import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
   ([Section] -> b) -> DLPlate (Constant b)
@@ -31,8 +31,8 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (PhySysDesc _ _ lc c) -> mCon [lc] `mappend` mCon c
     (Goals _ _) -> mempty,
   scsSub = Constant <$> \case
-    (Constraints _ _ _ lc) -> mCon lc
-    (CorrSolnPpties c) -> mCon c
+    (Constraints _ c) -> mCon [inDataConstTbl c]
+    (CorrSolnPpties c cs) -> mCon [outDataConstTbl c] `mappend` mCon cs
     _ -> mempty,
   reqSub = Constant <$> \case
     (FReqsSub _ c) -> mCon c
@@ -117,8 +117,8 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (DDs s _ d _) -> s ++ der d ++ notes d
       (GDs s _ d _) -> def d ++ s ++ der d ++ notes d
       (IMs s _ d _) -> s ++ der d ++ notes d
-      (Constraints s1 s2 s3 _) -> [s1, s2, s3]
-      (CorrSolnPpties _) -> [],
+      (Constraints s _) -> [s]
+      (CorrSolnPpties _ _) -> [],
     reqSub = Constant . f <$> \case
       (FReqsSub c _) -> def c
       (NonFReqsSub c) -> def c,

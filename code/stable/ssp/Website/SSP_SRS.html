@@ -4929,7 +4929,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The minimization function must enforce the constraints on the critical slip surface expressed in <a href=#assumpSSC>A: Slip-Surface-Concave</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a>. The sizes of <em><b>x</b><sub>wt</sub></em> and <em><b>y</b><sub>wt</sub></em> must be equal and not 1. The sizes of <em><b>x</b><sub>slope</sub></em> and <em><b>y</b><sub>slope</sub></em> must be equal and at least 2. The first and last <em><b>x</b><sub>wt</sub></em> values must be equal to the first and last <em><b>x</b><sub>slope</sub></em> values. <em><b>x</b><sub>wt</sub></em> and <em><b>x</b><sub>slope</sub></em> values must be monotonically increasing. <em>x<sub>slip</sub><sup>maxExt</sup></em>, <em>x<sub>slip</sub><sup>maxEtr</sup></em>, <em>x<sub>slip</sub><sup>minExt</sup></em>, and <em>x<sub>slip</sub><sup>minEtr</sup></em> must be between or equal to the minimum and maximum <em><b>x</b><sub>slope</sub></em> values. <em>y<sub>slip</sub><sup>max</sup></em> cannot be below the minimum <em><b>y</b><sub>slope</sub></em> value. <em>y<sub>slip</sub><sup>min</sup></em> cannot be above the maximum <em><b>y</b><sub>slope</sub></em> value. All <em>x</em> values of <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must be between <em>x<sub>slip</sub><sup>minEtr</sup></em> and <em>x<sub>slip</sub><sup>maxExt</sup></em>. All <em>y</em> values of <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must not be below <em>y<sub>slip</sub><sup>min</sup></em>. For any given vertex in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> the <em>y</em> value must not exceed the <em><b>y</b><sub>slope</sub></em> value corresponding to the same <em>x</em> value. The first and last vertices in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must each be equal to one of the vertices formed by <em><b>x</b><sub>slope</sub></em> and <em><b>y</b><sub>slope</sub></em>. The slope between consecutive vertices must be always increasing as <em>x</em> increases. The internal angle between consecutive vertices in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must not be below 110 degrees.
+                          The minimization function must enforce the constraints on the critical slip surface expressed in <a href=#assumpSSC>A: Slip-Surface-Concave</a> and <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>. The sizes of <em><b>x</b><sub>wt</sub></em> and <em><b>y</b><sub>wt</sub></em> must be equal and not 1. The sizes of <em><b>x</b><sub>slope</sub></em> and <em><b>y</b><sub>slope</sub></em> must be equal and at least 2. The first and last <em><b>x</b><sub>wt</sub></em> values must be equal to the first and last <em><b>x</b><sub>slope</sub></em> values. <em><b>x</b><sub>wt</sub></em> and <em><b>x</b><sub>slope</sub></em> values must be monotonically increasing. <em>x<sub>slip</sub><sup>maxExt</sup></em>, <em>x<sub>slip</sub><sup>maxEtr</sup></em>, <em>x<sub>slip</sub><sup>minExt</sup></em>, and <em>x<sub>slip</sub><sup>minEtr</sup></em> must be between or equal to the minimum and maximum <em><b>x</b><sub>slope</sub></em> values. <em>y<sub>slip</sub><sup>max</sup></em> cannot be below the minimum <em><b>y</b><sub>slope</sub></em> value. <em>y<sub>slip</sub><sup>min</sup></em> cannot be above the maximum <em><b>y</b><sub>slope</sub></em> value. All <em>x</em> values of <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must be between <em>x<sub>slip</sub><sup>minEtr</sup></em> and <em>x<sub>slip</sub><sup>maxExt</sup></em>. All <em>y</em> values of <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must not be below <em>y<sub>slip</sub><sup>min</sup></em>. For any given vertex in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> the <em>y</em> value must not exceed the <em><b>y</b><sub>slope</sub></em> value corresponding to the same <em>x</em> value. The first and last vertices in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must each be equal to one of the vertices formed by <em><b>x</b><sub>slope</sub></em> and <em><b>y</b><sub>slope</sub></em>. The slope between consecutive vertices must be always increasing as <em>x</em> increases. The internal angle between consecutive vertices in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must not be below 110 degrees.
                         </p>
                       </td>
                     </tr>
@@ -4954,7 +4954,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -5059,6 +5059,14 @@
                   </table>
                   <p class="caption">Input Data Constraints</p>
                 </div>
+              </div>
+            </div>
+            <div id="Sec:CorSolProps">
+              <div class="subsubsection">
+                <h3>Properties of a Correct Solution</h3>
+                <p class="paragraph">
+                  <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+                </p>
                 <div id="Table:OutDataConstraints">
                   <table class="table">
                     <tr>
@@ -5076,12 +5084,6 @@
                   </table>
                   <p class="caption">Output Data Constraints</p>
                 </div>
-              </div>
-            </div>
-            <div id="Sec:CorSolProps">
-              <div class="subsubsection">
-                <h3>Properties of a Correct Solution</h3>
-                <p class="paragraph">FIXME.</p>
               </div>
             </div>
           </div>
@@ -5108,7 +5110,7 @@
               </p>
               <p>
                 <div id="verifyInput">
-                  Verify-Input: Verify that the input data lie within the physical constraints shown in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
+                  Verify-Input: Verify that the input data lie within the physical constraints shown in <a href=#Sec:DataConstraints>Section: Data Constraints</a>.
                 </div>
               </p>
               <p>
@@ -5118,7 +5120,7 @@
               </p>
               <p>
                 <div id="verifyOutput">
-                  Verify-Output: Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a>.
+                  Verify-Output: Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
                 </div>
               </p>
               <p>

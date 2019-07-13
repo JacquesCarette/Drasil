@@ -35,7 +35,7 @@ import Drasil.Sections.TableOfSymbols (table, symbTableRef)
 import Drasil.Sections.TableOfUnits (tableOfUnits, unitTableRef)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
-  stakeholder, thModel, tOfSymb, userChar, propCorSol, offShelfSol)
+  stakeholder, thModel, tOfSymb, userChar, offShelfSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -44,7 +44,7 @@ import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
 import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
-  solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
+  propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
 import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
   stakeholderIntro, tClientF, tCustomerF)
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF,
@@ -291,8 +291,8 @@ mkSolChSpec si (SCSProg l) =
       map (LlC . instanceModel fields si') ims
     mkSubSCS si' (Assumptions ci) =
       SSD.assumpF $ mkEnumSimpleD $ map (`helperCI` si') ci
-    mkSubSCS _ (CorrSolnPpties cs)   = SRS.propCorSol cs []
-    mkSubSCS _ (Constraints a b c d) = SSD.datConF a b c d
+    mkSubSCS _ (Constraints end cs)  = SSD.datConF end cs
+    mkSubSCS _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
 
 helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a

@@ -170,14 +170,16 @@ instance ControlBlockSym CSharpCode where
 
   listSlice vnew vold b e s = 
     let l_temp = "temp"
-        v_temp = varVal l_temp (fmap valType vnew)
+        var_temp = var l_temp (fmap valType vnew)
+        v_temp = varVal var_temp
         l_i = "i_temp"
-        v_i = varVal l_i int
+        var_i = var l_i int
+        v_i = varVal var_i
     in
       block [
-        listDec 0 v_temp,
-        for (varDecDef v_i (fromMaybe (litInt 0) b)) 
-          (v_i ?< fromMaybe (listSize vold) e) (maybe (v_i &++) (v_i &+=) s)
+        listDec 0 var_temp,
+        for (varDecDef var_i (fromMaybe (litInt 0) b)) 
+          (v_i ?< fromMaybe (listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
           (oneLiner $ valState $ listAppend v_temp (listAccess vold v_i)),
         vnew &= v_temp]
 
@@ -221,11 +223,11 @@ instance VariableSym CSharpCode where
   var n t = liftA2 (vard n) t (return $ varDocD n) 
   const = var
   extVar l n t = liftA2 (vard $ l ++ "." ++ n) t (return $ extVarDocD l n)
-  self l = liftA2 (vd "this") (obj l) (return selfDocD)
+  self l = liftA2 (vard "this") (obj l) (return selfDocD)
   enumVar e en = var e (enumType en)
   objVar o v = liftA2 (vard $ variableName o ++ "." ++ variableName v)
     (variableType v) (liftA2 objVarDocD o v)
-  objVarSelf l n t = liftA2 (vd $ "this." ++ n) t (liftA2 objVarDocD (self l) 
+  objVarSelf l n t = liftA2 (vard $ "this." ++ n) t (liftA2 objVarDocD (self l) 
     (var n t))
   listVar n p t = var n (listType p t)
   n `listOf` t = listVar n static_ t
@@ -233,9 +235,9 @@ instance VariableSym CSharpCode where
 
   ($->) = objVar
 
-  variableName v = varName . unCSC
-  variableType v = varType . unCSC
-  variableDoc v = varDoc . unCSC
+  variableName = varName . unCSC
+  variableType = varType . unCSC
+  variableDoc = varDoc . unCSC
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
@@ -311,8 +313,8 @@ instance ValueExpression CSharpCode where
     (liftList valList vs))
 
   exists = notNull
-  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (varVal "null" 
-    (fmap valType v)))
+  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (varVal (var
+    "null" (fmap valType v))))
 
 instance Selector CSharpCode where
   objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
@@ -321,7 +323,7 @@ instance Selector CSharpCode where
   objMethodCall t o f ps = objAccess o (func f t ps)
   objMethodCallNoParams t o f = objMethodCall t o f []
 
-  selfAccess l = objAccess (self l)
+  selfAccess l = objAccess (varVal $ self l)
 
   listIndexExists l i = liftA2 mkVal bool (liftA3 listIndexExistsDocD greaterOp
     l i)
@@ -337,7 +339,7 @@ instance FunctionSym CSharpCode where
   getFunc v = func (getterName $ valueName v) (valueType v) []
   setFunc t v toVal = func (setterName $ valueName v) t [toVal]
 
-  listSizeFunc = liftA2 fd int (fmap funcDocD (varVal "Count" int))
+  listSizeFunc = liftA2 fd int (fmap funcDocD (varVal (var "Count" int)))
   listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
   listAppendFunc v = func "Add" (fmap valType v) [v]
 
@@ -359,11 +361,11 @@ instance SelectorFunction CSharpCode where
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD (intValue i) toVal)
 
-  atFunc t l = listAccessFunc t (varVal l int)
+  atFunc t l = listAccessFunc t (varVal $ var l int)
 
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (varVal l int)
+  at v l = listAccess v (varVal $ var l int)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
@@ -433,12 +435,12 @@ instance StatementSym CSharpCode where
 
   throw errMsg = mkSt <$> fmap csThrowDoc (litString errMsg)
 
-  initState fsmName initialState = varDecDef (varVal fsmName string) (litString initialState)
-  changeState fsmName toState = varVal fsmName string &= litString toState
+  initState fsmName initialState = varDecDef (var fsmName string) (litString initialState)
+  changeState fsmName toState = var fsmName string &= litString toState
 
-  initObserverList t = listDecDef (varVal observerListName t)
+  initObserverList t = listDecDef (var observerListName t)
   addObserver o = valState $ listAdd obsList lastelem o
-    where obsList = observerListName `listOf` valueType o
+    where obsList = varVal $ observerListName `listOf` valueType o
           lastelem = listSize obsList
 
   inOutCall = csInOutCall funcApp
@@ -460,8 +462,8 @@ instance ControlStatementSym CSharpCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef (varVal i int) initv) 
-    (varVal i int ?< finalv) (varVal i int &+= stepv)
+  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
+    (varVal (var i int) ?< finalv) (var i int &+= stepv)
   forEach l v b = mkStNoEnd <$> liftA6 (forEachDocD l) blockStart blockEnd 
     iterForEachLabel iterInLabel v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
@@ -470,11 +472,12 @@ instance ControlStatementSym CSharpCode where
 
   checkState l = switch (varVal l string)
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
-    (v_index &++) notify
-    where obsList = observerListName `listOf` t
+    (var_index &++) notify
+    where obsList = varVal $ observerListName `listOf` t
           index = "observerIndex"
-          v_index = varVal index int
-          initv = varDecDef v_index $ litInt 0
+          var_index = var index int
+          v_index = varVal var_index
+          initv = varDecDef var_index $ litInt 0
           notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = while (objVar f (varVal "EndOfStream" bool) ?!)
@@ -506,10 +509,10 @@ instance MethodSym CSharpCode where
     (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
-    where getBody = oneLiner $ returnState (self c $-> v)
+    where getBody = oneLiner $ returnState (varVal $ self c $-> v)
   setMethod c v = method (setterName $ valueName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
-    where setBody = oneLiner $ (self c $-> v) &= v
+    where setBody = oneLiner $ (varVal $ self c $-> v) &= v
   mainMethod c b = setMainMethod <$> method "Main" c public static_ 
     (mState void) [liftA2 (pd "args") (listType static_ string) 
     (return $ text "string[] args")] b

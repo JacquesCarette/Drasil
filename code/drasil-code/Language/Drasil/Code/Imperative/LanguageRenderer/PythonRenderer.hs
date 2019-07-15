@@ -208,16 +208,16 @@ instance VariableSym PythonCode where
   objVar o v = liftA2 (vard $ variableName o ++ "." ++ variableName v)
     (variableType v) (liftA2 objVarDocD o v)
   objVarSelf l n t = liftA2 (vard $ "self." ++ n) t (liftA2 objVarDocD
-    (self l) (varVal n t))
+    (self l) (var n t))
   listVar n p t = var n (listType p t)
   n `listOf` t = listVar n static_ t
   iterVar n t = var n (iterator t)
 
   ($->) = objVar
 
-  variableName v = varName . unPC
-  variableType v = varType . unPC
-  variableDoc v = varDoc . unPC
+  variableName = varName . unPC
+  variableType = varType . unPC
+  variableDoc = varDoc . unPC
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
@@ -293,7 +293,7 @@ instance ValueExpression PythonCode where
     valList vs))
   listStateObj t _ = liftA2 mkVal t (fmap typeDoc t)
 
-  exists v = v ?!= varVal "None" void
+  exists v = v ?!= varVal (var "None" void)
   notNull = exists
 
 instance Selector PythonCode where
@@ -303,7 +303,7 @@ instance Selector PythonCode where
   objMethodCall t o f ps = objAccess o (func f t ps)
   objMethodCallNoParams t o f = objMethodCall t o f []
 
-  selfAccess l = objAccess (self l)
+  selfAccess l = objAccess (varVal $ self l)
 
   listIndexExists lst index = listSize lst ?> index
   argExists i = listAccess argsList (litInt $ fromIntegral i)
@@ -341,11 +341,11 @@ instance SelectorFunction PythonCode where
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD i toVal)
 
-  atFunc t l = listAccessFunc t (varVal l int)
+  atFunc t l = listAccessFunc t (varVal $ var l int)
 
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (varVal l int)
+  at v l = listAccess v (varVal $ var l int)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
@@ -412,17 +412,17 @@ instance StatementSym PythonCode where
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
-  free v = v &= varVal "None" void
+  free v = v &= varVal (var "None" void)
 
   throw errMsg = mkStNoEnd <$> fmap pyThrow (litString errMsg)
 
-  initState fsmName initialState = varDecDef (varVal fsmName string) 
+  initState fsmName initialState = varDecDef (var fsmName string) 
     (litString initialState)
-  changeState fsmName toState = varVal fsmName string &= litString toState
+  changeState fsmName toState = var fsmName string &= litString toState
 
-  initObserverList t = listDecDef (varVal observerListName t)
+  initObserverList t = listDecDef (var observerListName t)
   addObserver o = valState $ listAdd obsList lastelem o
-    where obsList = observerListName `listOf` valueType o
+    where obsList = varVal $ observerListName `listOf` valueType o
           lastelem = listSize obsList
 
   inOutCall = pyInOutCall funcApp
@@ -455,7 +455,7 @@ instance ControlStatementSym PythonCode where
   checkState l = switch (varVal l string)
   notifyObservers f t = forRange index initv (listSize obsList) 
     (litInt 1) notify
-    where obsList = observerListName `listOf` t
+    where obsList = varVal $ observerListName `listOf` t
           index = "observerIndex"
           initv = litInt 0
           notify = oneLiner $ valState $ at obsList index $. f
@@ -489,7 +489,7 @@ instance MethodSym PythonCode where
     (self l) (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
-    where getBody = oneLiner $ returnState (self c $-> v)
+    where getBody = oneLiner $ returnState (varVal $ self c $-> v)
   setMethod c v = method (setterName $ valueName v) c public dynamic_
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= v
@@ -653,9 +653,9 @@ pyListSlice :: ValData -> ValData ->
 pyListSlice vnew vold b e s = valDoc vnew <+> equals <+> valDoc vold <> 
   brackets (valDoc b <> colon <> valDoc e <> colon <> valDoc s)
 
-pyMethod :: Label ->  ValData -> Doc -> Doc -> Doc
+pyMethod :: Label -> VarData -> Doc -> Doc -> Doc
 pyMethod n slf ps b = vcat [
-  text "def" <+> text n <> parens (valDoc slf <> oneParam <> ps) <> colon,
+  text "def" <+> text n <> parens (varDoc slf <> oneParam <> ps) <> colon,
   indent bodyD]
       where oneParam = emptyIfEmpty ps $ text ", "
             bodyD | isEmpty b = text "None"

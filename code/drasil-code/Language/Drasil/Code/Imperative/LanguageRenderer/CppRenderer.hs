@@ -708,14 +708,16 @@ instance ControlBlockSym CppSrcCode where
 
   listSlice vnew vold b e s = 
     let l_temp = "temp"
-        v_temp = varVal l_temp (fmap valType vnew)
+        var_temp = var l_temp (fmap valType vnew)
+        v_temp = varVal var_temp
         l_i = "i_temp"
-        v_i = varVal l_i int
+        var_i = var l_i int
+        v_i = varVal var_i
     in
       block [
-        listDec 0 v_temp,
-        for (varDecDef v_i (fromMaybe (litInt 0) b)) 
-          (v_i ?< fromMaybe (listSize vold) e) (maybe (v_i &++) (v_i &+=) s)
+        listDec 0 var_temp,
+        for (varDecDef var_i (fromMaybe (litInt 0) b)) 
+          (v_i ?< fromMaybe (listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
           (oneLiner $ valState $ listAppend v_temp (listAccess vold v_i)),
         vnew &= v_temp]
 
@@ -770,9 +772,9 @@ instance VariableSym CppSrcCode where
 
   ($->) = objVar
 
-  variableName v = varName . unCPPSC
-  variableType v = varType . unCPPSC
-  variableDoc v = varDoc . unCPPSC
+  variableName = varName . unCPPSC
+  variableType = varType . unCPPSC
+  variableDoc = varDoc . unCPPSC
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
@@ -856,7 +858,7 @@ instance Selector CppSrcCode where
   objMethodCall t o f ps = objAccess o (func f t ps)
   objMethodCallNoParams t o f = objMethodCall t o f []
 
-  selfAccess l = objAccess (self l)
+  selfAccess l = objAccess (varVal $ self l)
 
   listIndexExists v i = listSize v ?> i
   argExists i = listAccess argsList (litInt $ fromIntegral i)
@@ -894,11 +896,11 @@ instance SelectorFunction CppSrcCode where
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 cppListSetDoc (intValue i) toVal)
 
-  atFunc t l = listAccessFunc t (varVal l int) 
+  atFunc t l = listAccessFunc t (varVal $ var l int) 
 
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (varVal l int)
+  at v l = listAccess v (varVal $ var l int)
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -907,7 +909,7 @@ instance StatementSym CppSrcCode where
   multiAssign _ _ = error "No multiple assignment statements in C++"
   (&=) = assign
   (&-=) vr vl = vr &= (varVal vr #- vl)
-  (&+=) vr vl = mkSt <$> liftA2 plusEqualsDocD v1 v2
+  (&+=) vr vl = mkSt <$> liftA2 plusEqualsDocD vr vl
   (&++) v = mkSt <$> fmap plusPlusDocD v
   (&~-) v = v &= (varVal v #- litInt 1)
 
@@ -949,15 +951,17 @@ instance StatementSym CppSrcCode where
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, v]
   discardFileLine f = mkSt <$> fmap (cppDiscardInput "\\n") f
   stringSplit d vnew s = let l_ss = "ss"
-                             v_ss = varVal l_ss (obj "std::stringstream")
+                             var_ss = var l_ss (obj "std::stringstream")
+                             v_ss = varVal var_ss
                              l_word = "word"
-                             v_word = varVal l_word string
+                             var_word = var l_word string
+                             v_word = var var_word
                          in
     multi [
       valState $ vnew $. func "clear" void [],
-      varDec v_ss,
+      varDec var_ss,
       valState $ objMethodCall string v_ss "str" [s],
-      varDec v_word,
+      varDec var_word,
       while (funcApp "std::getline" string [v_ss, v_word, litChar d]) 
         (oneLiner $ valState $ listAppend vnew v_word)
     ]
@@ -979,13 +983,13 @@ instance StatementSym CppSrcCode where
 
   throw errMsg = mkSt <$> fmap cppThrowDoc (litString errMsg)
 
-  initState fsmName initialState = varDecDef (varVal fsmName string)
+  initState fsmName initialState = varDecDef (var fsmName string)
     (litString initialState)
-  changeState fsmName toState = varVal fsmName string &= litString toState
+  changeState fsmName toState = var fsmName string &= litString toState
 
-  initObserverList t = listDecDef (varVal observerListName t)
+  initObserverList t = listDecDef (var observerListName t)
   addObserver o = valState $ listAdd obsList lastelem o
-    where obsList = observerListName `listOf` valueType o
+    where obsList = varVal $ observerListName `listOf` valueType o
           lastelem = listSize obsList
 
   inOutCall = cppInOutCall funcApp
@@ -1007,10 +1011,10 @@ instance ControlStatementSym CppSrcCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef (varVal i int) initv) 
-    (varVal i int ?< finalv) (varVal i int &+= stepv)
-  forEach l v = for (varDecDef (varVal l (iterator t)) (iterBegin v)) 
-    (varVal l (iterator t) ?!= iterEnd v) (varVal l (iterator t) &++)
+  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
+    (varVal (var i int) ?< finalv) (var i int &+= stepv)
+  forEach l v = for (varDecDef (var l (iterator t)) (iterBegin v)) 
+    (varVal (var l (iterator t)) ?!= iterEnd v) (var l (iterator t) &++)
     where t = listInnerType $ valueType v
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
@@ -1019,17 +1023,19 @@ instance ControlStatementSym CppSrcCode where
   checkState l = switchAsIf (varVal l string) 
 
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
-    (v_index &++) notify
-    where obsList = observerListName `listOf` t
+    (var_index &++) notify
+    where obsList = varVal $ observerListName `listOf` t
           index = "observerIndex"
-          v_index = varVal index int
-          initv = varDecDef v_index $ litInt 0
+          var_index = var index int
+          v_index = varVal var_index
+          initv = varDecDef var_index $ litInt 0
           notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = let l_line = "nextLine"
-                            v_line = varVal l_line string
+                            var_line = var l_line string
+                            v_line = varVal var_line
                         in
-    multi [varDec v_line,
+    multi [varDec var_line,
       while (funcApp "std::getline" string [f, v_line])
       (oneLiner $ valState $ listAppend v v_line)]
 
@@ -1060,10 +1066,10 @@ instance MethodSym CppSrcCode where
     blockEnd)
   getMethod c v = method (getterName $ valueName v) c public dynamic_ 
     (mState $ valueType v) [] getBody
-    where getBody = oneLiner $ returnState (self c $-> v)
+    where getBody = oneLiner $ returnState (varVal $ self c $-> v)
   setMethod c v = method (setterName $ valueName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
-    where setBody = oneLiner $ (self c $-> v) &= v
+    where setBody = oneLiner $ (varVal $ self c $-> v) &= v
   mainMethod _ b = setMainMethod <$> function "main" public static_ int 
     [stateParam $ var "argc" int, 
     liftA2 (pd "argv") (listType static_ string) 
@@ -1073,7 +1079,7 @@ instance MethodSym CppSrcCode where
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
   destructor n vs = 
-    let i = varVal "i" int
+    let i = var "i" int
         deleteStatements = map (fmap destructSts) vs
         loopIndexDec = varDec i
         dbody = liftA2 emptyIfEmpty 
@@ -1294,7 +1300,7 @@ instance VariableSym CppHdrCode where
   var n t = liftA2 (vard n) t (return $ varDocD n) 
   const _ _ = liftA2 (vard "") void (return empty)
   extVar _ _ _ = liftA2 (vard "") void (return empty)
-  self _ = liftA2 mkVal (vard "") (return empty)
+  self _ = liftA2 (vard "") void (return empty)
   enumVar _ _ = liftA2 (vard "") void (return empty)
   objVar _ _ = liftA2 (vard "") void (return empty)
   objVarSelf _ _ _ = liftA2 (vard "") void (return empty)
@@ -1304,9 +1310,9 @@ instance VariableSym CppHdrCode where
 
   ($->) _ _ = liftA2 mkVal void (return empty)
 
-  variableName v = varName . unCPPHC
-  variableType v = varType . unCPPHC
-  variableDoc v = varDoc . unCPPHC
+  variableName = varName . unCPPHC
+  variableType = varType . unCPPHC
+  variableDoc = varDoc . unCPPHC
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
@@ -1787,11 +1793,12 @@ cppDestruct v = cppDestruct' (getType $ valueType v)
   where cppDestruct' (List _) = deleteLoop
         cppDestruct' _ = free v
         i = "i"
-        v_i = varVal i int
+        var_i = var i int
+        v_i = varVal var_i
         guard = v_i ?< listSize v
         loopBody = oneLiner $ free (at v i)
-        initv = v_i &= litInt 0
-        deleteLoop = for initv guard (v_i &++) loopBody
+        initv = var_i &= litInt 0
+        deleteLoop = for initv guard (var_i &++) loopBody
 
 cpphVarsFuncsList :: ScopeTag -> [StateVarData] -> [MethodData] -> Doc
 cpphVarsFuncsList st vs fs = 

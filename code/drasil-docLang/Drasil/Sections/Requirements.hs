@@ -1,11 +1,12 @@
-module Drasil.Sections.Requirements (fReqF, mkInputPropsTable, mkQRTuple,
+module Drasil.Sections.Requirements (fReqF, fReqF', mkInputPropsTable, mkQRTuple,
   mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
 
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (description, functionalRequirement,
-  input_, nonfunctionalRequirement, section_, software, symbol_)
+import Data.Drasil.Concepts.Documentation (description, funcReqDom,
+  functionalRequirement, input_, nonfunctionalRequirement, output_, quantity,
+  section_, software, symbol_)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -15,8 +16,26 @@ import Drasil.DocumentLanguage.Units (toSentence)
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
-fReqF :: [Contents] -> Section
-fReqF listOfFReqs = SRS.funcReq (fReqIntro : listOfFReqs) []
+fReqF :: (Quantity q, MayHaveUnit q) => [q] -> [q] -> [ConceptInstance]
+  -> [LabelledContent] -> Section
+fReqF i o listOfFReqs tables = SRS.funcReq (fReqIntro : reqContents) []
+  where
+    reqContents = mkEnumSimpleD fullReqs ++ map LlC (inTable : tables) -- ++ [outTable])
+    fullReqs    = inReq (inReqDesc inTable) : listOfFReqs-- ++ [outReq (outReqDesc outTable)]
+    inTable     = mkInputPropsTable i (inReq EmptyS) -- passes empty Sentence to make stub of inReq
+    --outTable    = mkValsSourceTable o "ReqOutputs" (S "Required" +:+ titleize' output_ `follows` (outReq EmptyS))
+                                                     -- passes empty Sentence to make stub of outReq
+
+inReqDesc :: (HasShortName r, Referable r) => r -> Sentence 
+inReqDesc  t = foldlSent [atStart input_,  S "the", plural quantity, S "from", makeRef2S t]
+--outReqDesc t = foldlSent [atStart output_, S "the", plural quantity, S "from", makeRef2S t]
+
+inReq :: Sentence -> ConceptInstance
+inReq  s = cic "inputQuants"  s "Input-Quantities"  funcReqDom
+--outReq s = cic "outputQuants" s "Output-Quantities" funcReqDom
+
+fReqF' :: [Contents] -> Section
+fReqF' listOfFReqs = SRS.funcReq (fReqIntro : listOfFReqs) []
 
 nfReqF :: [Contents] -> Section
 nfReqF nfrs = SRS.nonfuncReq (nfReqIntro : nfrs) []

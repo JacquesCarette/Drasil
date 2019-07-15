@@ -3,9 +3,10 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, chgsStart,
   displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple, enumSimpleU,
   eqN, eqUnR, eqUnR', eqnWSource, fromReplace, fmtU, follows, getTandS,
   itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
-  maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
-  showingCxnBw, sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc,
-  tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
+  maybeWOVerb, mkEnumAbbrevList, mkEnumSimple, mkEnumSimpleD, mkListTuple,
+  mkTableFromColumns, noRefs, refineChain, showingCxnBw, sortBySymbol,
+  sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym, typUncr, underConsidertn,
+  unwrap, weave, zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
@@ -132,6 +133,22 @@ enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevLi
 
 enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
 enumSimpleU s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
+
+-- | mkEnumSimple is a convenience function for converting lists into
+-- Simple-type Enumerations.
+mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
+mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
+
+-- | mkEnumSimpleD is a convenience function for transforming types which are
+-- instances of the constraints Referable, HasShortName, and Definition, into
+-- Simple-type Enumerations.
+mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
+mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
+
+-- | Creates a list tuple filling in the title with a ShortName and filling
+-- reference information.
+mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
+mkListTuple f x = (S . getStringSN $ shortname x, f x, Just $ refAdd x)
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]

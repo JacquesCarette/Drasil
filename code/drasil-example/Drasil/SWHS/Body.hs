@@ -159,7 +159,7 @@ mkSRS = [RefSec $ RefProg intro [
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub [inputInitQuantsTable],
+    FReqsSub' [inputInitQuantsTable],
     NonFReqsSub
   ],
   LCsSec,

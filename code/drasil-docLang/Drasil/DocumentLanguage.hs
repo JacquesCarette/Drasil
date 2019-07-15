@@ -23,9 +23,9 @@ import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name c
                                                      -- Vector - Name conflict (defined in file)
 import Utils.Drasil
 
-import Database.Drasil(SystemInformation(SI), citeDB, termTable, ccss, ccss',
-  _authors, _kind, _quants, _sys, _usedinfodb, _sysinfodb, collectUnits,
-  ChunkDB, traceTable, refbyTable, generateRefbyMap)
+import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _inputs,
+  _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB,
+  collectUnits, generateRefbyMap, refbyTable, termTable, traceTable)
 
 import Control.Lens ((^.), over, set)
 import qualified Data.Map as Map (elems)
@@ -41,7 +41,7 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
+import qualified Drasil.Sections.Requirements as R (reqF, fReqF', fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
   propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
@@ -83,7 +83,7 @@ mkSections si dd = map doit dd
     doit (AuxConstntSec acs) = mkAuxConsSec acs 
     doit Bibliography        = mkBib (citeDB si)
     doit (GSDSec gs')        = mkGSDSec gs'
-    doit (ReqrmntSec r)      = mkReqrmntSec r
+    doit (ReqrmntSec r)      = mkReqrmntSec si r
     doit (LCsSec lc)         = mkLCsSec lc
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t si
@@ -186,22 +186,6 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
 -- | Table of units intro builder. Used by mkRefSec
 tuIntro :: [TUIntro] -> Contents
 tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
-
--- | mkEnumSimple is a convenience function for converting lists into
--- Simple-type Enumerations.
-mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
-mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
-
--- | mkEnumSimpleD is a convenience function for transforming types which are
--- instances of the constraints Referable, HasShortName, and Definition, into
--- Simple-type Enumerations.
-mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
-mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
-
--- | Creates a list tuple filling in the title with a ShortName and filling
--- reference information.
-mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
-mkListTuple f x = (S . getStringSN $ shortname x, f x, Just $ refAdd x)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
@@ -310,11 +294,12 @@ imStub = SRS.inModel   [] []
 pdStub = SRS.probDesc  [] []
 
 -- | Helper for making the 'Requirements' section
-mkReqrmntSec :: ReqrmntSec -> Section
-mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
+mkReqrmntSec :: SystemInformation -> ReqrmntSec -> Section
+mkReqrmntSec (SI {_inputs = is, _outputs = os}) (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
-    mkSubs (FReqsSub frs tbs) = R.fReqF  (mkEnumSimpleD frs ++ map LlC tbs)
+    mkSubs (FReqsSub' frs tbs) = R.fReqF' (mkEnumSimpleD frs ++ map LlC tbs)
+    mkSubs (FReqsSub frs tbs) = R.fReqF is os frs tbs
     mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 {--}

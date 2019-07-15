@@ -125,7 +125,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqsTables,
+    FReqsSub' funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,

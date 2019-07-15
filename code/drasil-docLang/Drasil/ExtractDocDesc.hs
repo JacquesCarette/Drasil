@@ -35,6 +35,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (CorrSolnPpties c cs) -> mCon [outDataConstTbl c] `mappend` mCon cs
     _ -> mempty,
   reqSub = Constant <$> \case
+    (FReqsSub' _ c) -> mCon c
     (FReqsSub _ c) -> mCon c
     (NonFReqsSub _) -> mempty,
   lcsSec = Constant <$> \(LCsProg _) -> mempty,
@@ -120,6 +121,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (Constraints s _) -> [s]
       (CorrSolnPpties _ _) -> [],
     reqSub = Constant . f <$> \case
+      (FReqsSub' c _) -> def c
       (FReqsSub c _) -> def c
       (NonFReqsSub c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,

@@ -88,7 +88,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         ]
       ],
     ReqrmntSec $ ReqsProg [
-      FReqsSub [],
+      FReqsSub' [],
       NonFReqsSub
     ],
     LCsSec,

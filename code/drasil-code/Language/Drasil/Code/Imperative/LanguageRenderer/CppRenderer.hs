@@ -1641,8 +1641,8 @@ isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
-getParam :: ValData -> ParamData
-getParam v = mkParam (getParamFunc ((cType . valType) v)) v
+getParam :: VarData -> ParamData
+getParam v = mkParam (getParamFunc ((cType . varType) v)) v
   where getParamFunc (List _) = cppPointerParamDoc
         getParamFunc (Object _) = cppPointerParamDoc
         getParamFunc _ = stateParamDocD
@@ -1766,8 +1766,8 @@ cppOpenFile :: Label -> ValData -> ValData -> Doc
 cppOpenFile mode f n = valDoc f <> dot <> text "open" <> 
   parens (valDoc n <> comma <+> text mode)
 
-cppPointerParamDoc :: ValData -> Doc
-cppPointerParamDoc v = typeDoc (valType v) <+> text "&" <> valDoc v
+cppPointerParamDoc :: VarData -> Doc
+cppPointerParamDoc v = typeDoc (varType v) <+> text "&" <> varDoc v
 
 cppsMethod :: Label -> Label -> TypeData -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 

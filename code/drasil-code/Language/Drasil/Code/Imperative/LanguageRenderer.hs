@@ -53,7 +53,6 @@ import Language.Drasil.Code.Imperative.Helpers (angles,blank, doubleQuotedText,
   hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
 import Data.List (intersperse, last)
-import Data.Maybe (fromMaybe)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
@@ -230,8 +229,8 @@ constructDocD _ = empty
 
 -- Parameters --
 
-stateParamDocD :: ValData -> Doc
-stateParamDocD v = typeDoc (valType v) <+> valDoc v
+stateParamDocD :: VarData -> Doc
+stateParamDocD v = typeDoc (varType v) <+> varDoc v
 
 paramListDocD :: [ParamData] -> Doc
 paramListDocD = hicat (text ", ") . map paramDoc

@@ -665,7 +665,7 @@ getParams cs = do
   return $ inPs ++ conPs ++ ps
 
 mkParam :: (RenderSym repr) => CodeChunk -> repr (Parameter repr)
-mkParam p = paramFunc (codeType p) $ varVal pName pType
+mkParam p = paramFunc (codeType p) $ var pName pType
   where paramFunc (C.List _) = pointerParam
         paramFunc _ = stateParam
         pName = codeName p
@@ -675,7 +675,7 @@ getInputParams :: (RenderSym repr) => Structure -> [CodeChunk] ->
   [repr (Parameter repr)]
 getInputParams _ [] = []
 getInputParams Unbundled cs = map mkParam cs
-getInputParams Bundled _ = [pointerParam $ varVal pName pType]
+getInputParams Bundled _ = [pointerParam $ var pName pType]
   where pName = "inParams"
         pType = obj "InputParameters"
 
@@ -859,7 +859,7 @@ genDataFunc nameTitle ddef = do
   parms <- getParams $ getInputs ddef
   publicMethod (mState void) nameTitle (p_filename : parms)  (readData ddef)
   where l_filename = "filename"
-        v_filename = varVal l_filename string
+        v_filename = var l_filename string
         p_filename = stateParam v_filename
 
 -- this is really ugly!!

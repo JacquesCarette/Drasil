@@ -477,7 +477,7 @@ instance MethodTypeSym PythonCode where
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
-  stateParam = fmap (mkParam valDoc)
+  stateParam = fmap (mkParam varDoc)
   pointerParam = stateParam
 
   parameterName = paramName . unPC

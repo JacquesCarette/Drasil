@@ -1,9 +1,12 @@
+## \file InputConstraints.py
 from __future__ import print_function
 import sys
 import math
 
 import InputParameters
 
+## \brief Verifies that input values satisfy the physical constraints and software constraints
+# \param inParams No description given
 def input_constraints(inParams):
     if (not((inParams.v_launch > 0))) :
         print("Warning: constraint violated")

@@ -1,5 +1,7 @@
 package Projectile;
 
+/** \file InputConstraints.java
+*/
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
@@ -10,6 +12,9 @@ import java.util.ArrayList;
 
 public class InputConstraints {
     
+    /** \brief Verifies that input values satisfy the physical constraints and software constraints
+        \param inParams No description given
+    */
     public static void input_constraints(InputParameters inParams) throws Exception {
         if (!((inParams.v_launch > 0))) {
             System.out.println("Warning: constraint violated");

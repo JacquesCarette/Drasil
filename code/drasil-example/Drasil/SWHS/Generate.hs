@@ -17,7 +17,7 @@ import Drasil.SWHS.Body (srs, printSetting) -- si
 --   impType = Program,
 --   logFile = "log.txt",
 --   logging = LogNone,         -- LogNone, LogFunc
---   comments = CommentNone,    -- CommentNone, CommentFunc
+--   comments = [],    -- CommentFunc, CommentClass, CommentMod
 --   onSfwrConstraint = Warning,  -- Warning, Exception
 --   onPhysConstraint = Warning,  -- Warning, Exception
 --   inputStructure = Unbundled    -- Unbundled, Bundled

@@ -18,5 +18,5 @@ symbolsForTable = inputs ++ outputs ++ tmSymbols ++ map qw specParamVals ++
 thisSymbols :: [QuantityDict]
 thisSymbols = map qw iMods
   -- include all module functions as symbols
-  ++ (map asVC (concatMap (\(Mod _ l) -> l) allMods) \\ symbolsForTable)
+  ++ (map asVC (concatMap (\(Mod _ _ l) -> l) allMods) \\ symbolsForTable)
   ++ map qw implVars ++ symbolsForTable

@@ -1,5 +1,8 @@
 package GlassBR;
 
+/** \file Interpolation.java
+    \brief Provides functions for linear interpolation on three-dimensional data
+*/
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
@@ -10,6 +13,13 @@ import java.util.ArrayList;
 
 public class Interpolation {
     
+    /** \brief Performs linear interpolation
+        \param x_1 No description given
+        \param y_1 No description given
+        \param x_2 No description given
+        \param y_2 No description given
+        \param x No description given
+    */
     public static double func_lin_interp(double x_1, double y_1, double x_2, double y_2, double x) throws Exception {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
@@ -34,6 +44,10 @@ public class Interpolation {
         return ((((y_2 - y_1) / (x_2 - x_1)) * (x - x_1)) + y_1);
     }
     
+    /** \brief Finds the array index for a value closest to the given value
+        \param arr No description given
+        \param v No description given
+    */
     public static int func_find(ArrayList<Double> arr, double v) throws Exception {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
@@ -62,6 +76,10 @@ public class Interpolation {
         throw new Exception("Bound error");
     }
     
+    /** \brief Extracts a column from a 2D matrix
+        \param mat No description given
+        \param j No description given
+    */
     public static ArrayList<Double> func_extractColumn(ArrayList<ArrayList<Double>> mat, int j) throws Exception {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
@@ -105,6 +123,11 @@ public class Interpolation {
         return col;
     }
     
+    /** \brief Linearly interpolates a y value at given x and z values
+        \param filename No description given
+        \param x No description given
+        \param z No description given
+    */
     public static double func_interpY(String filename, double x, double z) throws Exception {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
@@ -226,6 +249,11 @@ public class Interpolation {
         return func_lin_interp(z_vector.get(i), y_1, z_vector.get((i + 1)), y_2, z);
     }
     
+    /** \brief Linearly interpolates a z value at given x and y values
+        \param filename No description given
+        \param x No description given
+        \param y No description given
+    */
     public static double func_interpZ(String filename, double x, double y) throws Exception {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));

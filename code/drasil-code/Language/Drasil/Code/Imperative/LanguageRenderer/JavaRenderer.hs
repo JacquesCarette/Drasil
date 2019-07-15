@@ -267,6 +267,7 @@ instance ValueSym JavaCode where
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
   valueType = fmap valType
+  valueDoc = valDoc . unJC
 
 instance NumericExpression JavaCode where
   (#~) = liftA2 unExpr negateOp

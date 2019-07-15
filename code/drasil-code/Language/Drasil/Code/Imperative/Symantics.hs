@@ -192,6 +192,7 @@ class (VariableSym repr, StateVarSym repr) => ValueSym repr where
   argsList  :: repr (Value repr)
 
   valueType :: repr (Value repr) -> repr (StateType repr)
+  valueDoc :: repr (Value repr) -> Doc
 
 class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => 
   NumericExpression repr where
@@ -433,7 +434,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
 
   comment :: Label -> repr (Statement repr)
 
-  free :: repr (Value repr) -> repr (Statement repr)
+  free :: repr (Variable repr) -> repr (Statement repr)
 
   throw :: Label -> repr (Statement repr)
 

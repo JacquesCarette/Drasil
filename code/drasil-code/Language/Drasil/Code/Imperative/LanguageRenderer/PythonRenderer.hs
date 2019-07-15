@@ -37,7 +37,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   setterName)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
   fd, ModData(..), md, MethodData(..), mthd, ParamData(..), TypeData(..), td, 
-  ValData(..), vd, VarData(..), vard)
+  ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType)
@@ -47,7 +47,7 @@ import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
-  equals, vcat, colon, brackets, isEmpty, render)
+  equals, vcat, colon, brackets, isEmpty)
 
 pyExts :: [String]
 pyExts = [pyExt]
@@ -242,6 +242,7 @@ instance ValueSym PythonCode where
   argsList = liftA2 mkVal (listType static_ string) (return $ text "sys.argv")
 
   valueType = fmap valType
+  valueDoc = valDoc . unPC
 
 instance NumericExpression PythonCode where
   (#~) = liftA2 unExpr negateOp

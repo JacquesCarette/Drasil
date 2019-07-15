@@ -388,8 +388,8 @@ returnDocD vs = text "return" <+> valList vs
 commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt
 
-freeDocD :: ValData -> Doc
-freeDocD v = text "delete" <+> valDoc v
+freeDocD :: VarData -> Doc
+freeDocD v = text "delete" <+> varDoc v
 
 throwDocD :: Doc -> Doc
 throwDocD errMsg = text "throw new" <+> text "System.ApplicationException" <>

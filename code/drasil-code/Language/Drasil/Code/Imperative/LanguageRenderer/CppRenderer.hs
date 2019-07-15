@@ -244,6 +244,7 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   argsList = pair argsList argsList
 
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
+  valueDoc v = valueDoc $ pfst v
 
 instance (Pair p) => NumericExpression (p CppSrcCode CppHdrCode) where
   (#~) v = pair ((#~) $ pfst v) ((#~) $ psnd v)
@@ -799,6 +800,7 @@ instance ValueSym CppSrcCode where
   argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
   valueType = fmap valType
+  valueDoc = valDoc . unCPPSC
 
 instance NumericExpression CppSrcCode where
   (#~) = liftA2 unExpr negateOp
@@ -1337,7 +1339,9 @@ instance ValueSym CppHdrCode where
   printFileLnFunc _ = liftA2 mkVal void (return empty)
   argsList = liftA2 mkVal void (return empty)
 
-  valueType = error "Attempted to extract type from Value for C++ header file"
+  valueType _ = error "Attempted to extract type from Value for C++ header file"
+  valueDoc _ = error "Attempted to extract doc from Value for C++ header file"
+
 
 instance NumericExpression CppHdrCode where
   (#~) _ = liftA2 mkVal void (return empty)
@@ -1788,16 +1792,18 @@ cpphMethod :: Label -> TypeData -> Doc -> Doc -> Doc
 cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
                       | otherwise = typeDoc t <+> text n <> parens ps <> end
 
-cppDestruct :: CppSrcCode (Value CppSrcCode) -> 
+cppDestruct :: CppSrcCode (Variable CppSrcCode) -> 
   CppSrcCode (Statement CppSrcCode)
-cppDestruct v = cppDestruct' (getType $ valueType v)
+cppDestruct v = cppDestruct' (getType $ variableType v)
   where cppDestruct' (List _) = deleteLoop
         cppDestruct' _ = free v
         i = "i"
         var_i = var i int
         v_i = varVal var_i
-        guard = v_i ?< listSize v
-        loopBody = oneLiner $ free (at v i)
+        guard = v_i ?< listSize (varVal v)
+        listelem = at v i
+        loopBody = oneLiner $ free (liftA2 (vard "") (valueType listelem) 
+          (valueDoc listelem))
         initv = var_i &= litInt 0
         deleteLoop = for initv guard (var_i &++) loopBody
 

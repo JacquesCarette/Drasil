@@ -262,6 +262,7 @@ instance ValueSym CSharpCode where
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
   valueType = fmap valType
+  valueDoc = valDoc . unCSC
 
 instance NumericExpression CSharpCode where
   (#~) = liftA2 unExpr negateOp

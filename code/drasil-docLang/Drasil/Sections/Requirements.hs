@@ -31,8 +31,8 @@ inReqDesc  t = foldlSent [atStart input_,  S "the", plural value, S "from", make
 --outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", makeRef2S t]
 
 inReq :: Sentence -> ConceptInstance
-inReq  s = cic "inputVals"  s "Input-Values"  funcReqDom
---outReq s = cic "inputVals" s "Output-Values" funcReqDom
+inReq  s = cic "inputValues"  s "Input-Values"  funcReqDom
+--outReq s = cic "inputValues" s "Output-Values" funcReqDom
 
 fReqF' :: [Contents] -> Section
 fReqF' listOfFReqs = SRS.funcReq (fReqIntro : listOfFReqs) []

@@ -10,7 +10,6 @@ import Language.Drasil.Stages (Stage(..))
 
 import Data.Char (isLatin1, toLower)
 import Data.Char.Properties.Names (getCharacterName)
-import Data.List (intercalate)
 import Data.List.Split (splitOn)
 
 -- | Decorations on symbols/characters such as hats or Vector representations

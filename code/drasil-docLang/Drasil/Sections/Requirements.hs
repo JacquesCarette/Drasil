@@ -5,8 +5,8 @@ import Language.Drasil
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
-  functionalRequirement, input_, nonfunctionalRequirement, output_, quantity,
-  section_, software, symbol_)
+  functionalRequirement, input_, nonfunctionalRequirement, output_, section_,
+  software, symbol_, value)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -27,12 +27,12 @@ fReqF i o listOfFReqs tables = SRS.funcReq (fReqIntro : reqContents) []
                                                      -- passes empty Sentence to make stub of outReq
 
 inReqDesc :: (HasShortName r, Referable r) => r -> Sentence 
-inReqDesc  t = foldlSent [atStart input_,  S "the", plural quantity, S "from", makeRef2S t]
---outReqDesc t = foldlSent [atStart output_, S "the", plural quantity, S "from", makeRef2S t]
+inReqDesc  t = foldlSent [atStart input_,  S "the", plural value, S "from", makeRef2S t]
+--outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", makeRef2S t]
 
 inReq :: Sentence -> ConceptInstance
-inReq  s = cic "inputQuants"  s "Input-Quantities"  funcReqDom
---outReq s = cic "outputQuants" s "Output-Quantities" funcReqDom
+inReq  s = cic "inputVals"  s "Input-Values"  funcReqDom
+--outReq s = cic "inputVals" s "Output-Values" funcReqDom
 
 fReqF' :: [Contents] -> Section
 fReqF' listOfFReqs = SRS.funcReq (fReqIntro : listOfFReqs) []

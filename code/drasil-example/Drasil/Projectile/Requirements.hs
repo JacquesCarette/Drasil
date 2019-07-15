@@ -4,11 +4,10 @@ import Language.Drasil
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Computation (inParam)
+import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (assumption, code, datumConstraint,
-  environment, funcReqDom, likelyChg, mg, mis, module_,
-  nonFuncReqDom, output_, property, quantity, requirement, srs, traceyMatrix,
-  unlikelyChg, vavPlan)
+  environment, funcReqDom, likelyChg, mg, mis, module_, nonFuncReqDom, output_,
+  property, requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
 
@@ -20,21 +19,21 @@ import Drasil.Projectile.Unitals (flightDur, landPos, message, offset)
 {--Functional Requirements--}
 
 funcReqs :: [ConceptInstance]
-funcReqs = [verifyParams, calcValues, outputValues]
+funcReqs = [verifyInVals, calcValues, outputValues]
 
-verifyParams, calcValues, outputValues :: ConceptInstance
+verifyInVals, calcValues, outputValues :: ConceptInstance
 
-verifyParams = cic "verifyParams" verifyParamsDesc "Verify-Parameters" funcReqDom
-calcValues   = cic "calcValues"   calcValuesDesc   "Calculate-Values"  funcReqDom
-outputValues = cic "outputValues" outputValuesDesc "Output-Values"     funcReqDom
+verifyInVals = cic "verifyInVals" verifyParamsDesc "Verify-Input-Values" funcReqDom
+calcValues   = cic "calcValues"   calcValuesDesc   "Calculate-Values"    funcReqDom
+outputValues = cic "outputValues" outputValuesDesc "Output-Values"       funcReqDom
 
 verifyParamsDesc, calcValuesDesc, outputValuesDesc :: Sentence
-verifyParamsDesc = foldlSent [S "Check the entered", plural inParam,
+verifyParamsDesc = foldlSent [S "Check the entered", plural inValue,
   S "to ensure that they do not exceed the", plural datumConstraint,
   S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
-  S "If any of the", plural inParam, S "are out of bounds" `sC`
+  S "If any of the", plural inValue, S "are out of bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
-calcValuesDesc = foldlSent [S "Calculate the following" +: plural quantity,
+calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
   foldlList Comma List [
     ch flightDur +:+ sParen (S "from" +:+ makeRef2S timeIM),
     ch landPos   +:+ sParen (S "from" +:+ makeRef2S landPosIM),

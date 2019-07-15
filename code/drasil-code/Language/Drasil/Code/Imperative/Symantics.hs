@@ -157,6 +157,9 @@ class (StateTypeSym repr) => VariableSym repr where
   -- Use for iterator variables, i.e. in a forEach loop.
   iterVar      :: Label -> repr (StateType repr) -> repr (Variable repr)
 
+  ($->) :: repr (Variable repr) -> repr (Variable repr) -> repr (Variable repr)
+  infixl 9 $->
+
   variableName :: repr (Variable repr) -> String
   variableType :: repr (Variable repr) -> repr (StateType repr)
   variableDoc  :: repr (Variable repr) -> Doc
@@ -171,8 +174,6 @@ class (VariableSym repr, StateVarSym repr) => ValueSym repr where
   litString :: String -> repr (Value repr)
 
   --other operators ($)
-  ($->) :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-  infixl 9 $->
   ($:)  :: Label -> Label -> repr (Value repr)
   infixl 9 $:
 

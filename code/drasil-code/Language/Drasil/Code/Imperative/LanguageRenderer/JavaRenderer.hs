@@ -235,28 +235,26 @@ instance VariableSym JavaCode where
   n `listOf` t = listVar n static_ t
   iterVar n t = var n (iterator t)
 
+  ($->) = objVar
+
   variableName v = varName . unJC
   variableType v = varType . unJC
   variableDoc v = varDoc . unJC
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
-  litTrue = liftA2 (vd (Just "true")) bool (return litTrueD)
-  litFalse = liftA2 (vd (Just "false")) bool (return litFalseD)
-  litChar c = liftA2 (vd (Just $ "\'" ++ [c] ++ "\'")) char 
-    (return $ litCharD c)
-  litFloat v = liftA2 (vd (Just $ show v)) float (return $ litFloatD v)
-  litInt v = liftA2 (vd (Just $ show v)) int (return $ litIntD v)
-  litString s = liftA2 (vd (Just $ "\"" ++ s ++ "\"")) string 
-    (return $ litStringD s)
+  litTrue = liftA2 mkVal bool (return litTrueD)
+  litFalse = liftA2 mkVal bool (return litFalseD)
+  litChar c = liftA2 mkVal char (return $ litCharD c)
+  litFloat v = liftA2 mkVal float (return $ litFloatD v)
+  litInt v = liftA2 mkVal int (return $ litIntD v)
+  litString s = liftA2 mkVal string (return $ litStringD s)
 
-  ($->) = objVar
   ($:) = enumElement
 
   varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
-  enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (enumType en) 
-    (return $ enumElemDocD en e)
+  enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
   
   inputFunc = liftA2 mkVal (obj "Scanner") (return $ parens (
     text "new Scanner(System.in)"))

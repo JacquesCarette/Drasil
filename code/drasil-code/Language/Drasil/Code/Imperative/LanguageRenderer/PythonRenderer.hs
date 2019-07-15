@@ -213,6 +213,8 @@ instance VariableSym PythonCode where
   n `listOf` t = listVar n static_ t
   iterVar n t = var n (iterator t)
 
+  ($->) = objVar
+
   variableName v = varName . unPC
   variableType v = varType . unPC
   variableDoc v = varDoc . unPC
@@ -226,7 +228,6 @@ instance ValueSym PythonCode where
   litInt v = liftA2 mkVal int (return $ litIntD v)
   litString s = liftA2 mkVal string (return $ litStringD s)
 
-  ($->) = objVar
   ($:) = enumElement
 
   varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 

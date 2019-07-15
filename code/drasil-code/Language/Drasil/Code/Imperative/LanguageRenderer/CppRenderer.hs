@@ -214,6 +214,8 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   listVar n p t = pair (listVar n (pfst p) (pfst t)) (listVar n (psnd p) (psnd t))
   n `listOf` t = pair (n `listOf` pfst t) (n `listOf` psnd t)
   iterVar l t = pair (iterVar l $ pfst t) (iterVar l $ psnd t)
+  
+  ($->) v1 v2 = pair (($->) (pfst v1) (pfst v2)) (($->) (psnd v1) (psnd v2))
 
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
@@ -228,7 +230,6 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   litInt v = pair (litInt v) (litInt v)
   litString s = pair (litString s) (litString s)
 
-  ($->) v1 v2 = pair (($->) (pfst v1) (pfst v2)) (($->) (psnd v1) (psnd v2))
   ($:) l1 l2 = pair (($:) l1 l2) (($:) l1 l2)
 
   varVal v = pair (varVal $ pfst v) (varVal $ psnd v)
@@ -767,32 +768,31 @@ instance VariableSym CppSrcCode where
   n `listOf` t = listVar n static_ t
   iterVar l t = liftA2 (vard l) (iterator t) (return $ text $ "(*" ++ l ++ ")")
 
+  ($->) = objVar
+
   variableName v = varName . unCPPSC
   variableType v = varType . unCPPSC
   variableDoc v = varDoc . unCPPSC
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
-  litTrue = liftA2 (vd (Just "true")) bool (return litTrueD)
-  litFalse = liftA2 (vd (Just "false")) bool (return litFalseD)
-  litChar c = liftA2 (vd (Just $ "\'" ++ [c] ++ "\'")) char 
-    (return $ litCharD c)
-  litFloat v = liftA2 (vd (Just $ show v)) float (return $ litFloatD v)
-  litInt v = liftA2 (vd (Just $ show v)) int (return $ litIntD v)
-  litString s = liftA2 (vd (Just $ "\"" ++ s ++ "\"")) string 
-    (return $ litStringD s)
+  litTrue = liftA2 mkVal bool (return litTrueD)
+  litFalse = liftA2 mkVal bool (return litFalseD)
+  litChar c = liftA2 mkVal char (return $ litCharD c)
+  litFloat v = liftA2 mkVal float (return $ litFloatD v)
+  litInt v = liftA2 mkVal int (return $ litIntD v)
+  litString s = liftA2 mkVal string (return $ litStringD s)
 
-  ($->) = objVar
   ($:) = enumElement
 
   varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n+1)) argsList)
-  enumElement en e = liftA2 (vd (Just e)) (enumType en) (return $ text e)
+  enumElement en e = liftA2 mkVal (enumType en) (return $ text e)
   
   inputFunc = liftA2 mkVal string (return $ text "std::cin")
   printFunc = liftA2 mkVal void (return $ text "std::cout")
   printLnFunc = liftA2 mkVal void (return $ text "std::cout")
-  printFileFunc f = liftA2 mkVal void (fmap valDoc f) -- is this right?
+  printFileFunc f = liftA2 mkVal void (fmap valDoc f)
   printFileLnFunc f = liftA2 mkVal void (fmap valDoc f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
@@ -1300,6 +1300,8 @@ instance VariableSym CppHdrCode where
   listOf _ _ = liftA2 (vard "") void (return empty)
   iterVar _ _ = liftA2 (vard "") void (return empty)
 
+  ($->) _ _ = liftA2 mkVal void (return empty)
+
   variableName v = varName . unCPPHC
   variableType v = varType . unCPPHC
   variableDoc v = varDoc . unCPPHC
@@ -1313,7 +1315,6 @@ instance ValueSym CppHdrCode where
   litInt _ = liftA2 mkVal void (return empty)
   litString _ = liftA2 mkVal void (return empty)
 
-  ($->) _ _ = liftA2 mkVal void (return empty)
   ($:) _ _ = liftA2 mkVal void (return empty)
 
   varVal _ = liftA2 mkVal void (return empty)

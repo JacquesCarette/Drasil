@@ -460,7 +460,7 @@ instance ControlStatementSym PythonCode where
           initv = litInt 0
           notify = oneLiner $ valState $ at obsList index $. f
 
-  getFileInputAll f v = v &= objMethodCall (listType static_ string) f 
+  getFileInputAll f v = v &= objMethodCall (listType static_ string) f
     "readlines" []
 
 instance ScopeSym PythonCode where
@@ -600,10 +600,10 @@ pyListDec v = varDoc v <+> equals <+> typeDoc (varType v)
 pyListDecDef :: VarData -> Doc -> Doc
 pyListDecDef v vs = varDoc v <+> equals <+> brackets vs
 
-pyPrint :: Bool ->  ValData -> ValData ->  ValData -> Doc
+pyPrint :: Bool ->  ValData -> ValData -> VarData -> Doc
 pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
-        fl = emptyIfEmpty (valDoc f) $ text ", file=" <> valDoc f
+        fl = emptyIfEmpty (varDoc f) $ text ", file=" <> varDoc f
 
 pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
   -> Maybe (repr (Value repr)) -> repr (Statement repr)
@@ -611,9 +611,9 @@ pyOut newLn printFn v f = pyOut' (getType $ valueType v)
   where pyOut' (List _) = printSt newLn printFn v f
         pyOut' _ = outDoc newLn printFn v f
 
-pyInput :: PythonCode (Value PythonCode) -> PythonCode (Value PythonCode) -> 
+pyInput :: PythonCode (Value PythonCode) -> PythonCode (Variable PythonCode) -> 
   PythonCode (Statement PythonCode)
-pyInput inSrc v = v &= pyInput' (getType $ valueType v)
+pyInput inSrc v = v &= pyInput' (getType $ variableType v)
   where pyInput' Integer = funcApp "int" int [inSrc]
         pyInput' Float = funcApp "float" float [inSrc]
         pyInput' Boolean = inSrc ?!= litString "0"

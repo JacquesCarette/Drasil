@@ -408,14 +408,14 @@ instance StatementSym JavaCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = mkSt <$> liftA2 jInput v inputFunc
+  getInput v = v &= liftA2 jInput (variableType v) inputFunc
   discardInput = mkSt <$> fmap jDiscardInput inputFunc
-  getFileInput f v = mkSt <$> liftA2 jInput v f
+  getFileInput f v = v &= liftA2 jInput (variableType v) f
   discardFileInput f = mkSt <$> fmap jDiscardInput f
 
-  openFileR f n = mkSt <$> liftA2 jOpenFileR f n
-  openFileW f n = mkSt <$> liftA3 jOpenFileWorA f n litFalse
-  openFileA f n = mkSt <$> liftA3 jOpenFileWorA f n litTrue
+  openFileR f n = f &= liftA2 jOpenFileR n infile
+  openFileW f n = f &= liftA3 jOpenFileWorA n outfile litFalse
+  openFileA f n = f &= liftA3 jOpenFileWorA n outfile litTrue 
   closeFile f = valState $ objMethodCall void f "close" []
 
   getFileInputLine f v = v &= f $. func "nextLine" string []
@@ -488,7 +488,7 @@ instance ControlStatementSym JavaCode where
           notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = while (f $. func "hasNextLine" bool [])
-    (oneLiner $ valState $ listAppend v (f $. func "nextLine" string []))
+    (oneLiner $ valState $ listAppend (varVal v) (f $. func "nextLine" string []))
 
 instance ScopeSym JavaCode where
   type Scope JavaCode = Doc
@@ -665,8 +665,8 @@ jTryCatch tb cb = vcat [
 jDiscardInput :: ValData -> Doc
 jDiscardInput inFn = valDoc inFn <> dot <> text "next()"
 
-jInput :: ValData -> ValData -> Doc
-jInput v inFn = valDoc v <+> equals <+> jInput' (cType $ valType v) 
+jInput :: TypeData -> ValData -> ValData
+jInput t inFn = vd t $ jInput' (cType t) 
   where jInput' Integer = text "Integer.parseInt" <> parens (valDoc inFn <> 
           dot <> text "nextLine()")
         jInput' Float = text "Double.parseDouble" <> parens (valDoc inFn <> 
@@ -676,15 +676,14 @@ jInput v inFn = valDoc v <+> equals <+> jInput' (cType $ valType v)
         jInput' Char = valDoc inFn <> dot <> text "next().charAt(0)"
         jInput' _ = error "Attempt to read value of unreadable type"
 
-jOpenFileR :: ValData -> ValData -> Doc
-jOpenFileR f n = valDoc f <+> equals <+> new <+> text "Scanner" <> parens 
+jOpenFileR :: ValData -> TypeData -> ValData
+jOpenFileR n t = vd t $ new <+> text "Scanner" <> parens 
   (new <+> text "File" <> parens (valDoc n))
 
-jOpenFileWorA :: ValData -> ValData -> 
-  ValData -> Doc
-jOpenFileWorA f n wa = valDoc f <+> equals <+> new <+> 
-  text "PrintWriter" <> parens (new <+> text "FileWriter" <> parens (new <+> 
-  text "File" <> parens (valDoc n) <> comma <+> valDoc wa))
+jOpenFileWorA :: ValData -> TypeData -> ValData
+jOpenFileWorA n t wa = vd t $ new <+> text "PrintWriter" <> 
+  parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> 
+  parens (valDoc n) <> comma <+> valDoc wa))
 
 jStringSplit :: VarData -> ValData -> Doc
 jStringSplit vnew s = varDoc vnew <+> equals <+> new <+> typeDoc (varType vnew)

@@ -383,7 +383,8 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
     repr (Statement repr)
 
   -- newLn, printFunc, value to print, maybe a file to print to 
-  printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> repr (Statement repr)
+  printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> 
+    Maybe (repr (Value repr)) -> repr (Statement repr)
 
   print      :: repr (Value repr) -> repr (Statement repr)
   printLn    :: repr (Value repr) -> repr (Statement repr)
@@ -397,18 +398,21 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   printFileStr   :: repr (Value repr) -> String -> repr (Statement repr)
   printFileStrLn :: repr (Value repr) -> String -> repr (Statement repr)
 
-  getInput         :: repr (Value repr) -> repr (Statement repr)
+  getInput         :: repr (Variable repr) -> repr (Statement repr)
   discardInput     :: repr (Statement repr)
-  getFileInput     :: repr (Value repr) -> repr (Value repr) -> 
+  getFileInput     :: repr (Value repr) -> repr (Variable repr) -> 
     repr (Statement repr)
   discardFileInput :: repr (Value repr) -> repr (Statement repr)
 
-  openFileR :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
-  openFileW :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
-  openFileA :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+  openFileR :: repr (Variable repr) -> repr (Value repr) -> 
+    repr (Statement repr)
+  openFileW :: repr (Variable repr) -> repr (Value repr) -> 
+    repr (Statement repr)
+  openFileA :: repr (Variable repr) -> repr (Value repr) -> 
+    repr (Statement repr)
   closeFile :: repr (Value repr) -> repr (Statement repr)
 
-  getFileInputLine :: repr (Value repr) -> repr (Value repr) -> 
+  getFileInputLine :: repr (Value repr) -> repr (Variable repr) -> 
     repr (Statement repr)
   discardFileLine  :: repr (Value repr) -> repr (Statement repr)
   stringSplit      :: Char -> repr (Variable repr) -> repr (Value repr) -> 
@@ -477,7 +481,7 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
   notifyObservers :: repr (Function repr) -> repr (StateType repr) -> 
     repr (Statement repr)
 
-  getFileInputAll  :: repr (Value repr) -> repr (Value repr) -> 
+  getFileInputAll  :: repr (Value repr) -> repr (Variable repr) -> 
     repr (Statement repr)
 
 class ScopeSym repr where

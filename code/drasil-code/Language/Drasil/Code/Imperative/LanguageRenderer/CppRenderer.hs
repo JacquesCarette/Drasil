@@ -795,7 +795,7 @@ instance ValueSym CppSrcCode where
   printFunc = liftA2 mkVal void (return $ text "std::cout")
   printLnFunc = liftA2 mkVal void (return $ text "std::cout")
   printFileFunc f = liftA2 mkVal void (fmap valDoc f)
-  printFileLnFunc f = liftA2 mkVal void (fmap valDoc f)
+  printFileLnFunc f = liftA2 mkVal void (fmap varDoc f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
   valueType = fmap valType
@@ -1037,7 +1037,7 @@ instance ControlStatementSym CppSrcCode where
                         in
     multi [varDec var_line,
       while (funcApp "std::getline" string [f, v_line])
-      (oneLiner $ valState $ listAppend v v_line)]
+      (oneLiner $ valState $ listAppend (varVal v) v_line)]
 
 instance ScopeSym CppSrcCode where
   type Scope CppSrcCode = (Doc, ScopeTag)
@@ -1756,14 +1756,14 @@ cppDiscardInput sep inFn = valDoc inFn <> dot <> text "ignore" <> parens
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 
-cppInput :: ValData -> ValData -> Doc -> Doc
+cppInput :: VarData -> ValData -> Doc -> Doc
 cppInput v inFn end = vcat [
-  valDoc inFn <+> text ">>" <+> valDoc v <> end,
+  valDoc inFn <+> text ">>" <+> varDoc v <> end,
   valDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]
 
-cppOpenFile :: Label -> ValData -> ValData -> Doc
-cppOpenFile mode f n = valDoc f <> dot <> text "open" <> 
+cppOpenFile :: Label -> VarData -> ValData -> Doc
+cppOpenFile mode f n = varDoc f <> dot <> text "open" <> 
   parens (valDoc n <> comma <+> text mode)
 
 cppPointerParamDoc :: VarData -> Doc

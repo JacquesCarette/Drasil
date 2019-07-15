@@ -403,14 +403,14 @@ instance StatementSym CSharpCode where
   printFileStr f s = outDoc False (printFileFunc f) (litString s) (Just f)
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
-  getInput v = mkSt <$> liftA2 csInput v inputFunc
+  getInput v = v &= liftA2 csInput (variableType v) inputFunc
   discardInput = mkSt <$> fmap csDiscardInput inputFunc
-  getFileInput f v = mkSt <$> liftA2 csInput v (fmap csFileInput f)
+  getFileInput f v = v &= liftA2 csInput (variableType v) (fmap csFileInput f)
   discardFileInput f = valState $ fmap csFileInput f
 
-  openFileR f n = mkSt <$> liftA3 csOpenFileR f n infile
-  openFileW f n = mkSt <$> liftA4 csOpenFileWorA f n outfile litFalse
-  openFileA f n = mkSt <$> liftA4 csOpenFileWorA f n outfile litTrue
+  openFileR f n = f &= liftA2 csOpenFileR n infile
+  openFileW f n = f &= liftA3 csOpenFileWorA n outfile litFalse
+  openFileA f n = f &= liftA3 csOpenFileWorA n outfile litTrue
   closeFile f = valState $ objMethodCall void f "Close" []
 
   getFileInputLine = getFileInput
@@ -480,8 +480,9 @@ instance ControlStatementSym CSharpCode where
           initv = varDecDef var_index $ litInt 0
           notify = oneLiner $ valState $ at obsList index $. f
 
-  getFileInputAll f v = while (objVar f (varVal "EndOfStream" bool) ?!)
-    (oneLiner $ valState $ listAppend v (fmap csFileInput f))
+  getFileInputAll f v = while ((f $. liftA2 fd bool (return $ text 
+    "EndOfStream")) ?!) (oneLiner $ valState $ listAppend (varVal v) (fmap 
+    csFileInput f))
 
 instance ScopeSym CSharpCode where
   type Scope CSharpCode = Doc
@@ -616,8 +617,8 @@ csTryCatch tb cb= vcat [
 csDiscardInput :: ValData -> Doc
 csDiscardInput = valDoc
 
-csInput :: ValData -> ValData -> Doc
-csInput v inFn = valDoc v <+> equals <+> text (csInput' (cType $ valType v)) <> 
+csInput :: TypeData -> ValData -> ValData
+csInput t inFn = vd t $ text (csInput' (cType t)) <> 
   parens (valDoc inFn)
   where csInput' Integer = "Int32.Parse"
         csInput' Float = "Double.Parse"
@@ -627,15 +628,14 @@ csInput v inFn = valDoc v <+> equals <+> text (csInput' (cType $ valType v)) <>
         csInput' _ = error "Attempt to read value of unreadable type"
 
 csFileInput :: ValData -> ValData
-csFileInput f = vd (valName f) (valType f) (valDoc f <> dot <> text "ReadLine()")
+csFileInput f = vd (valType f) (valDoc f <> dot <> text "ReadLine()")
 
-csOpenFileR :: ValData -> ValData -> TypeData -> Doc
-csOpenFileR f n r = valDoc f <+> equals <+> new <+> typeDoc r <> 
+csOpenFileR :: ValData -> TypeData -> ValData
+csOpenFileR n r = vd r $ new <+> typeDoc r <> 
   parens (valDoc n)
 
-csOpenFileWorA :: ValData -> ValData -> TypeData 
-  -> ValData -> Doc
-csOpenFileWorA f n w a = valDoc f <+> equals <+> new <+> typeDoc w <> 
+csOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
+csOpenFileWorA n w a = vd w $ new <+> typeDoc w <> 
   parens (valDoc n <> comma <+> valDoc a)
 
 csRef :: Doc -> Doc

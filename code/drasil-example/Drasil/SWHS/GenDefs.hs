@@ -37,13 +37,12 @@ import Drasil.SWHS.Unitals (deltaT, htFluxIn, htFluxOut, htTransCoeff, inSA,
 genDefs :: [GenDefn]
 genDefs = [nwtnCooling, rocTempSimp] 
 
--- FIXME: page reference
 nwtnCooling, rocTempSimp :: GenDefn
-nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) ([] :: Derivation) 
+nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) Nothing
   [makeCiteInfo incroperaEtAl2007 $ Page [8]] "nwtnCooling" nwtnCoolingDesc
 
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn)
-  (rocTempSimpDeriv rocTempDerivConsFlxSWHS [assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV])
+  (Just $ rocTempSimpDeriv rocTempDerivConsFlxSWHS [assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV])
   "rocTempSimp" [{-Notes-}]
 
 --
@@ -81,9 +80,8 @@ rocTempSimpRel = sy QPP.mass * sy QT.heatCapSpec *
 ---------------------------------------
 
 rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
-rocTempSimpDeriv s a = S "Detailed derivation of simplified" +:
-  (phrase rOfChng `sOf` phrase temp) :
-  weave [rocTempSimpDerivSent s a, map E rocTempSimpDerivEqns]
+rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phrase rOfChng `sOf` phrase temp)
+  (weave [rocTempSimpDerivSent s a, map E rocTempSimpDerivEqns])
 
 rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
 rocTempSimpDerivSent s a = map foldlSentCol [rocTempDerivInteg, rocTempDerivGauss,
@@ -102,7 +100,7 @@ rocTempDerivGauss = [S "Applying", titleize gaussDiv, S "to the first term over"
 
 rocTempDerivArbVol :: [Sentence]
 rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol, S "The",
-  phrase volHtGen, S "is assumed constant. Then (1) can be written as"]
+  phrase volHtGen, S "is assumed constant. Then", eqN 1, S "can be written as"]
 
 rocTempDerivConsFlx :: Sentence -> [ConceptInstance] -> [Sentence]
 rocTempDerivConsFlx s assumps = [S "Where", 

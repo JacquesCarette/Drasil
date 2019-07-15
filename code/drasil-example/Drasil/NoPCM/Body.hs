@@ -42,8 +42,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   PDSub(..), ProblemDescription(PDProg), RefSec(RefProg), RefTab(TAandA, TUnits),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
   SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose), 
-  TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits),
-  dataConstraintUncertainty, inDataConstTbl, intro, mkDoc, outDataConstTbl,
+  TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
   tsymb, traceMatStandard)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
@@ -56,7 +55,7 @@ import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
+import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn, 
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempEnv, 
@@ -142,11 +141,9 @@ mkSRS = [RefSec $ RefProg intro
       , TMs [] (Label : stdFields)
       , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
       , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-      , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-        ShowDerivation
-      , Constraints EmptyS dataConstraintUncertainty dataContMid
-        [dataConstTable1, dataConstTable2]
-      , CorrSolnPpties propsDerivNoPCM
+      , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+      , Constraints dataContMid constrained
+      , CorrSolnPpties dataConstListOut []
       ]
     ],
   ReqrmntSec $ ReqsProg [
@@ -164,7 +161,7 @@ concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
  [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
 
 labCon :: [LabelledContent]
-labCon = [inputInitQuantsTable, dataConstTable1]
+labCon = [inputInitQuantsTable]
 
 section :: [Section]
 section = extractSection srs
@@ -308,19 +305,6 @@ sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase mater
   phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
 
 --TODO: Implement physical properties of a substance
-
-dataConstTable1 :: LabelledContent
-dataConstTable1 = inDataConstTbl constrained
--- s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
-  -- titleize' constraint, S "Typical" +:+ titleize value, titleize uncertainty]
-  -- (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
-  -- data_constraint_conListIn) (titleize input_ +:+ titleize' variable) True
-
-dataConstTable2 :: LabelledContent
-dataConstTable2 = outDataConstTbl dataConstListOut
--- s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
-  -- (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
-  -- (titleize output_ +:+ titleize' variable) True
 
 dataConstListOut :: [ConstrConcept]
 dataConstListOut = [tempW, watE]

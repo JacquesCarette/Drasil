@@ -17,8 +17,7 @@ import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), dataConstraintUncertainty, intro, mkDoc, tsymb'',
-  traceMatStandard)
+  PDSub(..), intro, mkDoc, tsymb'', traceMatStandard)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt, sysCon,
   genDefn, dataDefn, datCon)
@@ -50,7 +49,6 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, de
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
 import qualified Drasil.SSP.DataDefs as SSP (dataDefs)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
@@ -61,10 +59,10 @@ import Drasil.SSP.Goals (goals)
 import Drasil.SSP.IMods (instModIntro)
 import qualified Drasil.SSP.IMods as SSP (iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
-import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, propsDeriv)
+import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
 import Drasil.SSP.TMods (tMods)
-import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
-  constrained, inputs, outputs, symbols)
+import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
+  inputs, inputsWUncrtn, outputs, symbols)
 
 --Document Setup--
 
@@ -121,11 +119,9 @@ mkSRS = [RefSec $ RefProg intro
           , TMs [] (Label : stdFields)
           , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
           , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-          , IMs instModIntro ([Label, Input, Output, InConstraints, 
-            OutConstraints] ++ stdFields) ShowDerivation
-          , Constraints  EmptyS dataConstraintUncertainty EmptyS
-            [dataConstraintTable2, dataConstraintTable3]
-          , CorrSolnPpties propsDeriv
+          , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+          , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
+          , CorrSolnPpties outputs []
           ]
         ],
     ReqrmntSec $ ReqsProg [
@@ -148,8 +144,7 @@ section :: [Section]
 section = extractSection srs
 
 labCon :: [LabelledContent]
-labCon = [figPhysSyst, figIndexConv, figForceActing, 
-  dataConstraintTable2, dataConstraintTable3] ++ funcReqTables
+labCon = [figPhysSyst, figIndexConv, figForceActing] ++ funcReqTables
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

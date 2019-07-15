@@ -16,7 +16,7 @@ dataDefs = [vecMag, speedIX, speedIY]
 
 ----------
 vecMag :: DataDefinition
-vecMag = ddNoRefs vecMagQD [{-Derivation-}] "vecMag" [magNote]
+vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
 
 vecMagQD :: QDefinition
 vecMagQD = mkQuantDef speed vecMagEqn
@@ -26,7 +26,7 @@ vecMagEqn = UnaryOp Abs (sy velocity)
 
 ----------
 speedIX :: DataDefinition
-speedIX = ddNoRefs speedIXQD [{-Derivation-}] "speedIX" [speedRef, figRef]
+speedIX = ddNoRefs speedIXQD Nothing "speedIX" [speedRef, figRef]
 
 speedIXQD :: QDefinition
 speedIXQD = mkQuantDef ixVel speedIXEqn
@@ -36,7 +36,7 @@ speedIXEqn = sy iSpeed * cos (sy launAngle)
 
 ----------
 speedIY :: DataDefinition
-speedIY = ddNoRefs speedIYQD [{-Derivation-}] "speedIY" [speedRef, figRef]
+speedIY = ddNoRefs speedIYQD Nothing "speedIY" [speedRef, figRef]
 
 speedIYQD :: QDefinition
 speedIYQD = mkQuantDef iyVel speedIYEqn

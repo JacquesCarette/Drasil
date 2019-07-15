@@ -38,8 +38,8 @@ eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCapW, qw coilHTC, qw pcmSA,
  qw pcmHTC, qw coilSA, qw tempPCM, qw timeFinal, qw tempC, qw tempInit]
   [sy tempInit $< sy tempC] (qw tempW)
-   [0 $< sy time $< sy timeFinal] [makeCite koothoor2013] eBalanceOnWtrDeriv
-   "eBalanceOnWtr" [balWtrDesc]
+   [0 $< sy time $< sy timeFinal] [makeCite koothoor2013]
+   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtrRC :: RelationConcept
 eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " ++
@@ -77,9 +77,8 @@ balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy timeFinal)
 ----------------------------------------------
 -- type Derivation = [Sentence]
 eBalanceOnWtrDeriv :: Derivation
-eBalanceOnWtrDeriv =
-  S "Derivation of the" +:+ phrase energy +:+ S "balance on" +: phrase water :
-  weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtr_deriv_eqns__im1]
+eBalanceOnWtrDeriv = mkDerivName (S "the" +:+ phrase energy +:+ S "balance on water")
+  (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtr_deriv_eqns__im1])
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
@@ -125,7 +124,7 @@ eBalanceOnWtrDerivDesc2 dd1 dd2 = [S "Using", makeRef2S dd1 `sAnd` makeRef2S dd2
   S "for", ch dd1 `sAnd` ch dd2, S "respectively, this can be written as"]
 
 eBalanceOnWtrDerivDesc3 :: [Sentence]
-eBalanceOnWtrDerivDesc3 = [S "Dividing (3) by", E eq1 `sC` S "we obtain"]
+eBalanceOnWtrDerivDesc3 = [S "Dividing", eqN 3, S "by", E eq1 `sC` S "we obtain"]
 
 eBalanceOnWtrDerivDesc4 :: [Sentence] -> [Sentence]
 eBalanceOnWtrDerivDesc4 eq22 = [S "Factoring the negative sign out of",
@@ -205,8 +204,8 @@ eBalanceOnPCM :: InstanceModel
 eBalanceOnPCM = im eBalanceOnPCMRC [qw tempMeltP, qw timeFinal, qw tempInit, qw pcmSA,
  qw pcmHTC, qw pcmMass, qw htCapSP, qw htCapLP]
   [sy tempInit $< sy tempMeltP] (qw tempPCM)
-   [0 $< sy time $< sy timeFinal] [makeCite koothoor2013] eBalanceOnPCMDeriv 
-   "eBalanceOnPCM" [balPCMDescNote]
+   [0 $< sy time $< sy timeFinal] [makeCite koothoor2013]
+   (Just eBalanceOnPCMDeriv ) "eBalanceOnPCM" [balPCMDescNote]
 
 eBalanceOnPCMRC :: RelationConcept
 eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
@@ -273,13 +272,12 @@ balPCMDescNote = foldlSent [
 --    Derivation of eBalanceOnPCM          --
 ----------------------------------------------
 eBalanceOnPCMDeriv :: Derivation
-eBalanceOnPCMDeriv =
-  [S "Detailed derivation of the" +:+ phrase energy +:+ S "balance on the PCM during " +:+ 
-    S "sensible heating phase:" ] ++
-  weave [eBalanceOnPCMDerivSentences, map E eBalanceOnPCM_deriv_eqns__im2]
+eBalanceOnPCMDeriv = mkDerivName (S "the" +:+ phrase energy +:+
+  S "balance on the PCM during sensible heating phase")
+  (weave [eBalanceOnPCMDerivSentences, map E eBalanceOnPCM_deriv_eqns__im2]
   ++ eBalanceOnPCMDerivDesc5 htCapSP htCapLP tauSP tauLP surface area melting vol assumpVCMPN
   ++ eBalanceOnPCMDerivDesc6 tempPCM
-  ++ eBalanceOnPCMDerivDesc7 boiling solid liquid assumpNGSP
+  ++ eBalanceOnPCMDerivDesc7 boiling solid liquid assumpNGSP)
 
 eBalanceOnPCMDerivSentences :: [Sentence]
 eBalanceOnPCMDerivSentences = map foldlSentCol [
@@ -318,8 +316,8 @@ eBalanceOnPCMDerivDesc4 = [S "Setting", ch tauSP, S "=", ch pcmMass, ch htCapSP,
 
 eBalanceOnPCMDerivDesc5 ::  UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk -> ConceptChunk -> ConceptChunk-> ConceptChunk
   -> ConceptChunk -> ConceptInstance -> [Sentence]
-eBalanceOnPCMDerivDesc5 hsp hlp tsp tlp sur ar melt vo ass17= 
-  [S "Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same" +:+
+eBalanceOnPCMDerivDesc5 hsp hlp tsp tlp sur ar melt vo ass17 = 
+  [eqN 6 +:+ S "applies for the solid PCM. In the case where all of the PCM is melted, the same" +:+
    S "derivation applies, except that" +:+ (E $ sy hsp) +:+ S "is replaced by" +:+ (E $ sy hlp) `sC`
    S "and thus" +:+ (E $ sy tsp) +:+ S "is replaced by" +:+. (E $ sy tlp) +:+ S "Although a small change in" +:+
    phrase sur +:+ phrase ar +:+ S "would be expected with" +:+ phrase melt `sC` S "this is not included" `sC`
@@ -372,8 +370,8 @@ eBalanceOnPCM_deriv_eqns__im2 = [eBalanceOnPCM_Eqn1, eBalanceOnPCM_Eqn2,
 ---------
 heatEInWtr :: InstanceModel
 heatEInWtr = im heatEInWtrRC [qw tempInit, qw wMass, qw htCapW, qw wMass] 
-  [] (qw watE) [0 $< sy time $< sy timeFinal] [makeCite koothoor2013] [] "heatEInWtr"
-  [htWtrDesc]
+  [] (qw watE) [0 $< sy time $< sy timeFinal] [makeCite koothoor2013]
+  Nothing "heatEInWtr" [htWtrDesc]
 
 heatEInWtrRC :: RelationConcept
 heatEInWtrRC = makeRC "heatEInWtrRC" (nounPhraseSP "Heat energy in the water")

@@ -3,13 +3,13 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc, sentencePla
 
 import Control.Lens((^.))
 import Drasil.DocumentLanguage.Core
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Language.Drasil hiding (Manual, Vector, Verb)
 import Theory.Drasil (Theory(..))
 import Data.List(transpose)
 
 import Data.Functor.Constant (Constant(Constant))
-import Data.Generics.Multiplate (appendPlate,
-  foldFor, purePlate, preorderFold)
+import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
   ([Section] -> b) -> DLPlate (Constant b)
@@ -31,8 +31,8 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (PhySysDesc _ _ lc c) -> mCon [lc] `mappend` mCon c
     (Goals _ _) -> mempty,
   scsSub = Constant <$> \case
-    (Constraints _ _ _ lc) -> mCon lc
-    (CorrSolnPpties c) -> mCon c
+    (Constraints _ c) -> mCon [inDataConstTbl c]
+    (CorrSolnPpties c cs) -> mCon [outDataConstTbl c] `mappend` mCon cs
     _ -> mempty,
   reqSub = Constant <$> \case
     (FReqsSub _ c) -> mCon c
@@ -117,8 +117,8 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (DDs s _ d _) -> s ++ der d ++ notes d
       (GDs s _ d _) -> def d ++ s ++ der d ++ notes d
       (IMs s _ d _) -> s ++ der d ++ notes d
-      (Constraints s1 s2 s3 _) -> [s1, s2, s3]
-      (CorrSolnPpties _) -> [],
+      (Constraints s _) -> [s]
+      (CorrSolnPpties _ _) -> [],
     reqSub = Constant . f <$> \case
       (FReqsSub c _) -> def c
       (NonFReqsSub c) -> def c,
@@ -131,7 +131,10 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
     def :: Definition a => [a] -> [Sentence]
     def = map (^. defn)
     der :: HasDerivation a => [a] -> [Sentence]
-    der = concatMap (^. derivations)
+    der = concatMap (getDerivSent . (^. derivations))
+    getDerivSent :: Maybe Derivation -> [Sentence]
+    getDerivSent Nothing = []
+    getDerivSent (Just (Derivation h s)) = h : s
     notes :: HasAdditionalNotes a => [a] -> [Sentence]
     notes = concatMap (^. getNotes)
 
@@ -152,6 +155,7 @@ getCon :: RawContent -> [Sentence]
 getCon (Table s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)       = [s]
 getCon EqnBlock{}          = []
+getCon (DerivBlock h d)    = h : concatMap getCon d
 getCon (Enumeration lst)   = getLT lst
 getCon (Figure l _ _)    = [l]
 getCon (Bib bref)          = getBib bref

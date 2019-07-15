@@ -35,7 +35,7 @@ eBalanceOnWtr = im eBalanceOnWtrRC [qw tempC, qw tempInit, qw timeFinal,
   [sy tempInit $<= sy tempC] (qw tempW) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
   [0 $< sy time $< sy timeFinal] [makeCiteInfo koothoor2013 $ RefNote "with PCM removed"] 
-  eBalanceOnWtrDeriv "eBalanceOnWtr" [balWtrDesc]
+  (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtrRC :: RelationConcept
 eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " ++
@@ -64,9 +64,8 @@ balWtrDesc = foldlSent [(E $ sy tempW) `isThe` phrase tempW +:+.
 --    Derivation of eBalanceOnWtr           --
 ----------------------------------------------
 eBalanceOnWtrDeriv :: Derivation
-eBalanceOnWtrDeriv =
-  S "Derivation of the" +:+ phrase energy +:+ S "balance on" +: phrase water :
-  weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns]
+eBalanceOnWtrDeriv = mkDerivName (S "the" +:+ phrase energy +:+ S "balance on water")
+  (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns])
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [

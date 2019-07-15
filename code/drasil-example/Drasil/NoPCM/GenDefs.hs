@@ -12,5 +12,5 @@ genDefs = [nwtnCooling, rocTempSimp]
 
 rocTempSimp :: GenDefn
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn)
-  (rocTempSimpDeriv EmptyS [assumpCWTAT, assumpDWCoW, assumpSHECoW]) 
+  (Just $ rocTempSimpDeriv EmptyS [assumpCWTAT, assumpDWCoW, assumpSHECoW])
   "rocTempSimp" [{-Notes-}]

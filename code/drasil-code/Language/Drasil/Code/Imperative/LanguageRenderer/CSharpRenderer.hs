@@ -28,9 +28,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
-  constDecDefDocD, statementDocD, returnDocD, mkSt, mkStNoEnd,
-  commentDocD, notOpDocD, negateOpDocD, unExpr, typeUnExpr, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  constDecDefDocD, statementDocD, returnDocD, mkSt, mkStNoEnd, stringListVals',
+  stringListLists', commentDocD, notOpDocD, negateOpDocD, unExpr, typeUnExpr, 
+  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr,
   mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
@@ -410,6 +410,9 @@ instance StatementSym CSharpCode where
   discardFileLine f = valState $ fmap csFileInput f
   stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic_ string) 
     [s $. func "Split" (listType static_ string) [litChar d]]
+
+  stringListVals = stringListVals'
+  stringListLists = stringListLists'
 
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)

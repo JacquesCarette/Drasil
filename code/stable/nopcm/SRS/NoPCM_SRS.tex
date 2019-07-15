@@ -57,7 +57,7 @@ W & power & watt
 \end{longtable}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
+The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
 \begin{longtabu}{l X[l] l}
 \toprule
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
@@ -425,7 +425,8 @@ RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} and \hyperref[IM:eBalanceOnWt
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-Detailed derivation of simplified rate of change of temperature.
+\paragraph{Detailed derivation of simplified rate of change of temperature:}
+\label{GD:rocTempSimpDeriv}
 Integrating \hyperref[TM:consThermE]{TM: consThermE} over a volume ($V$), we have:
 \begin{displaymath}
 -\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
@@ -529,7 +530,8 @@ RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[out
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-Derivation of the energy balance on water:
+\paragraph{Detailed derivation of the energy balance on water:}
+\label{IM:eBalanceOnWtrDeriv}
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity, ${C_{W}}$. Heat transfer occurs in the water from the heating coil as ${q_{C}}$ (\hyperref[DD:htFluxC]{DD: htFluxC}), over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 \begin{displaymath}
 {m_{W}} {C_{W}} \frac{\,d{T_{W}}}{\,dt}={q_{C}} {A_{C}}
@@ -589,7 +591,7 @@ RefBy & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energ
 \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.
 \begin{longtable}{l l l l l}
 \toprule
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
@@ -620,6 +622,9 @@ ${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & 
 \caption{Input Data Constraints}
 \label{Table:InDataConstraints}
 \end{longtable}
+\subsubsection{Properties of a Correct Solution}
+\label{Sec:CorSolProps}
+\hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 \begin{longtable}{l l}
 \toprule
 \textbf{Var} & \textbf{Physical Constraints}
@@ -634,9 +639,6 @@ ${E_{W}}$ & ${E_{W}}\geq{}0$
 \caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
 \end{longtable}
-\subsubsection{Properties of a Correct Solution}
-\label{Sec:CorSolProps}
-FIXME.
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -646,7 +648,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \begin{itemize}
 \item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]Input the following quantities described in \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the tank parameters, material properties and initial conditions.
 \item[Find-Mass:\phantomsection\label{findMass}]Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, using ${m_{W}}={V_{W}} {ρ_{W}}=π \left(\frac{D}{2}\right)^{2} L {ρ_{W}}$, where ${V_{W}}$ is the volume of water.
-\item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]Verify that the inputs satisfy the required physical constraints shown in \hyperref[Table:InDataConstraints]{Table:InDataConstraints}.
+\item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]Verify that the inputs satisfy the required physical constraints shown in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.
 \item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the mass from \hyperref[findMass]{FR: Find-Mass}, and ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).
 \item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).
 \item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).

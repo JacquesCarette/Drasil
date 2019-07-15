@@ -476,7 +476,7 @@ Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
            h=\frac{1}{1000} \begin{cases}
-2.16, & t=2.5\\
+                            2.16, & t=2.5\\
 2.59, & t=2.7\\
 2.92, & t=3.0\\
 3.78, & t=4.0\\
@@ -488,7 +488,7 @@ Equation & \begin{displaymath}
 15.09, & t=16.0\\
 18.26, & t=19.0\\
 21.44, & t=22.0
-\end{cases}
+                            \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -552,7 +552,7 @@ Symbol & $J$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
-           J=interpZ\left(SDF.txt,AR,\hat{q}\right)
+           J=interpZ\left(\text{``SDF.txt''},AR,\hat{q}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -626,10 +626,10 @@ Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
            GTF=\begin{cases}
-1, & g=AN\\
-4, & g=FT\\
-2, & g=HS
-\end{cases}
+               1, & g=\text{``AN''}\\
+4, & g=\text{``FT''}\\
+2, & g=\text{``HS''}
+               \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -703,7 +703,7 @@ Symbol & ${\hat{q}_{tol}}$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\hat{q}_{tol}}=interpY\left(SDF.txt,AR,{J_{tol}}\right)
+           {\hat{q}_{tol}}=interpY\left(\text{``SDF.txt''},AR,{J_{tol}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -939,7 +939,7 @@ Symbol & $q$
 Units & Pa
 \\ \midrule \\
 Equation & \begin{displaymath}
-           q=interpY\left(TSD.txt,SD,{w_{TNT}}\right)
+           q=interpY\left(\text{``TSD.txt''},SD,{w_{TNT}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1045,7 +1045,7 @@ RefBy & \hyperref[IM:isSafePb]{IM: isSafePb}
 \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} gives the values of the specification parameters used in \hyperref[Table:InDataConstraints]{Table:InDataConstraints}.
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} gives the values of the specification parameters used in \hyperref[Table:InDataConstraints]{Table:InDataConstraints}.
 \begin{longtable}{l l l l l}
 \toprule
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
@@ -1070,6 +1070,9 @@ $w$ & $w>0$ & ${w_{min}}\leq{}w\leq{}{w_{max}}$ & $42.0$ kg & 10$\%$
 \caption{Input Data Constraints}
 \label{Table:InDataConstraints}
 \end{longtable}
+\subsubsection{Properties of a Correct Solution}
+\label{Sec:CorSolProps}
+\hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 \begin{longtable}{l l}
 \toprule
 \textbf{Var} & \textbf{Physical Constraints}
@@ -1082,9 +1085,6 @@ ${P_{b}}$ & $0<{P_{b}}<1$
 \caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
 \end{longtable}
-\subsubsection{Properties of a Correct Solution}
-\label{Sec:CorSolProps}
-FIXME.
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.

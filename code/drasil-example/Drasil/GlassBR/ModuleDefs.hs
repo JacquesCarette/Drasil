@@ -6,9 +6,8 @@ module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Language.Drasil.Code (($:=), Func, FuncStmt(..), Ind(..), Mod, asExpr, 
-  fdec, ffor, funcData, funcDef, junk, listEntry, multiLine, packmod, repeated, 
-  singleLine)
+import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, asExpr, 
+  fdec, ffor, funcData, funcDef, multiLine, packmod, repeated, singleLine)
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]
@@ -26,9 +25,8 @@ readTableMod = packmod "ReadTable" [readTable]
 
 readTable :: Func
 readTable = funcData "read_table"
-  [ singleLine (repeated [junk, listEntry [WithPattern] zVector]) ',',
-    multiLine (repeated [listEntry [WithLine, WithPattern] xMatrix,
-                         listEntry [WithLine, WithPattern] yMatrix]) ','
+  [ singleLine (repeated [zVector]) ',',
+    multiLine (repeated [xMatrix, yMatrix]) ','
   ]
 
 -----

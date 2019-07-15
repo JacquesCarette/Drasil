@@ -1,12 +1,12 @@
 module Drasil.NoPCM.Body where
 
-import Language.Drasil hiding (section, sec)
+import Language.Drasil hiding (section, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
   _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, TheoryModel)
+import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 
 import Data.List ((\\))
@@ -40,15 +40,14 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Drasil.DocLang (SRSDecl, Fields, Field(..), Verbosity(Verbose), 
-  InclUnits(IncludeUnits), SCSSub(..), DerivationDisplay(..), SSDSub(..),
-  SolChSpec(..), SSDSec(..), DocSection(..), GSDSec(..), GSDSub(..),
-  AuxConstntSec(AuxConsProg), IntroSec(IntroProg),
-  IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
-  ReqrmntSec(..), ReqsSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
-  TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, SymbConvention, TSPurpose),
-  ProblemDescription(PDProg), PDSub(..), dataConstraintUncertainty,
-  inDataConstTbl, intro, mkDoc, outDataConstTbl, tsymb, traceMatStandard)
+import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
+  DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..), InclUnits(IncludeUnits),
+  IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
+  PDSub(..), ProblemDescription(PDProg), RefSec(RefProg), RefTab(TAandA, TUnits),
+  ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
+  SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose), 
+  TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
+  tsymb, traceMatStandard)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -58,10 +57,9 @@ import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, orgDocIntro,
   sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
-import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxCQD)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
   parnasClements1986, smithLai2005)
-import Drasil.SWHS.Requirements (nfRequirements, propsDerivNoPCM)
+import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn, 
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempEnv, 
@@ -69,6 +67,8 @@ import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn,
 
 import Drasil.NoPCM.Assumptions
 import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
+import Drasil.NoPCM.DataDefs (qDefs)
+import qualified Drasil.NoPCM.DataDefs as NoPCM (dataDefs)
 import Drasil.NoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
@@ -77,18 +77,23 @@ import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
 import Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable)
 import Drasil.NoPCM.Unitals (inputs, constrained, specParamValList)
 
--- This defines the standard units used throughout the document
-thisSi :: [UnitDefn]
-thisSi = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
+srs :: Document
+srs = mkDoc mkSRS for si
 
--- This contains the list of symbols used throughout the document
-symbols :: [DefinedQuantityDict]
-symbols = pi_ : map dqdWr units ++ map dqdWr constrained
- ++ map dqdWr [tempW, watE]
- ++ [gradient, uNormalVect] ++ map dqdWr [surface]
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
 
 resourcePath :: String
 resourcePath = "../../../datafiles/NoPCM/"
+
+-- This defines the standard concepts used throughout the document
+units :: [UnitDefn]
+units = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
+-- This contains the list of symbols used throughout the document
+symbols :: [DefinedQuantityDict]
+symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
+ ++ map dqdWr [tempW, watE]
+ ++ [gradient, uNormalVect] ++ map dqdWr [surface]
   
 symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
@@ -97,8 +102,8 @@ symbolsAll = map qw symbols ++ map qw specParamValList ++
   map qw [coilSAMax] ++ map qw [tauW] ++ map qw [eta] ++
   map qw [absTol, relTol]
 
-units :: [UnitaryConceptDict]
-units = map ucw [density, tau, inSA, outSA,
+concepts :: [UnitaryConceptDict]
+concepts = map ucw [density, tau, inSA, outSA,
   htCapL, QT.htFlux, htFluxIn, htFluxOut, volHtGen,
   htTransCoeff, mass, tankVol, QT.temp, QT.heatCapSpec,
   deltaT, tempEnv, thFluxVect, time, htFluxC,
@@ -115,7 +120,7 @@ units = map ucw [density, tau, inSA, outSA,
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro
   [TUnits,
-  tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder],
+  tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
   TAandA],
   IntroSec $ IntroProg (introStart enerSrc energy progName)
     (introEnd progName program)
@@ -140,11 +145,9 @@ mkSRS = [RefSec $ RefProg intro
       , TMs [] (Label : stdFields)
       , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
       , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-      , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-        ShowDerivation
-      , Constraints EmptyS dataConstraintUncertainty dataContMid
-        [dataConstTable1, dataConstTable2]
-      , CorrSolnPpties propsDerivNoPCM
+      , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+      , Constraints dataContMid constrained
+      , CorrSolnPpties dataConstListOut []
       ]
     ],
   ReqrmntSec $ ReqsProg [
@@ -157,18 +160,15 @@ mkSRS = [RefSec $ RefProg intro
   AuxConstntSec $ AuxConsProg progName specParamValList,
   Bibliography]
 
-dataDefn :: [DataDefinition]
-dataDefn = [ddHtFluxC]
-
 concIns :: [ConceptInstance]
 concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
  [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
 
 labCon :: [LabelledContent]
-labCon = [inputInitQuantsTable, dataConstTable1]
+labCon = [inputInitQuantsTable]
 
-sec :: [Section]
-sec = extractSection srs
+section :: [Section]
+section = extractSection srs
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -184,10 +184,10 @@ si = SI {
   _quants = map qw symbols \\ map qw [tankVol, tau],
   _concepts = symbols,
   _definitions = [],
-  _datadefs = [ddHtFluxC],
+  _datadefs = NoPCM.dataDefs,
   _inputs = inputs ++ map qw [tempW, watE], --inputs ++ outputs?
   _outputs = map qw [tempW, watE],     --outputs
-  _defSequence = [Parallel ddHtFluxCQD []],
+  _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE],        --constrained
   _constants = specParamValList,
   _sysinfodb = symbMap,
@@ -198,9 +198,6 @@ si = SI {
 refDB :: ReferenceDB
 refDB = rdb referencesRefList concIns
 
-srs :: Document
-srs = mkDoc mkSRS for si
-
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
@@ -208,15 +205,12 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans]
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
-  (map cw symbols ++ srsDomains) thisSi dataDefn NoPCM.iMods genDefs
-  theoreticalModels concIns sec labCon
+  (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
+  theoreticalModels concIns section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
-
-printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -345,19 +339,6 @@ sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase mater
   phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
 
 --TODO: Implement physical properties of a substance
-
-dataConstTable1 :: LabelledContent
-dataConstTable1 = inDataConstTbl constrained
--- s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
-  -- titleize' constraint, S "Typical" +:+ titleize value, titleize uncertainty]
-  -- (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
-  -- data_constraint_conListIn) (titleize input_ +:+ titleize' variable) True
-
-dataConstTable2 :: LabelledContent
-dataConstTable2 = outDataConstTbl dataConstListOut
--- s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
-  -- (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
-  -- (titleize output_ +:+ titleize' variable) True
 
 dataConstListOut :: [ConstrConcept]
 dataConstListOut = [tempW, watE]

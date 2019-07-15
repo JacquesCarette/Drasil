@@ -152,9 +152,10 @@ data SCSSub where
   GDs            :: [Sentence] -> Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
-  Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+--                  Sentence -> [LabelledContent] Fields  -> [UncertainWrapper] -> [ConstrainedChunk] -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
-  CorrSolnPpties :: [Contents] -> SCSSub
+  CorrSolnPpties :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
 data DerivationDisplay = ShowDerivation
                        | HideDerivation
 {--}
@@ -264,8 +265,8 @@ instance Multiplate DLPlate where
     sc (GDs s f g d) = GDs <$> pure s <*> pure f <*> pure g <*> pure d
     sc (DDs s f dd d) = DDs <$> pure s <*> pure f <*> pure dd <*> pure d
     sc (IMs s f i d) = IMs <$> pure s <*> pure f <*> pure i <*> pure d
-    sc (Constraints s1 s2 s3 l) = Constraints <$> pure s1 <*> pure s2 <*> pure s3 <*> pure l
-    sc (CorrSolnPpties c) = CorrSolnPpties <$> pure c
+    sc (Constraints s c) = Constraints <$> pure s <*> pure c
+    sc (CorrSolnPpties c cs) = CorrSolnPpties <$> pure c <*> pure cs
     rs (ReqsProg reqs) = ReqsProg <$> traverse (reqSub p) reqs
     rs' (FReqsSub ci con) = FReqsSub <$> pure ci <*> pure con
     rs' (NonFReqsSub c) = NonFReqsSub <$> pure c

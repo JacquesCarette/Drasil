@@ -1,5 +1,4 @@
-module Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
-  nonfuncReqs, propsDeriv) where
+module Drasil.Projectile.Requirements (funcReqs, inputParamsTable, nonfuncReqs) where
 
 import Language.Drasil
 import Drasil.DocLang (mkInputPropsTable)
@@ -60,13 +59,10 @@ outputValuesDesc = foldlSent [atStart output_, ch message,
 nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, portable]
 
-propsDeriv :: [Contents]
-propsDeriv = [mkParagraph $ S "Not applicable."]
-
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   plural output_ `ofThe'` phrase code, S "have the",
-  plural property, S "described in", makeRef2S (propCorSol propsDeriv [])
+  plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance

@@ -32,8 +32,7 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 {--}
 
 constrained :: [ConstrainedChunk]
-constrained = map cnstrw inputsWUncrtn ++ map cnstrw inputsWUnitsUncrtn ++ 
-  map cnstrw derivedInsWUnitsUncrtn ++ map cnstrw derivedInsWUncrtn ++ 
+constrained = map cnstrw inputDataConstraints ++ 
   [cnstrw probBr, cnstrw probFail] 
 
 plateLen, plateWidth, charWeight, standOffDist :: UncertQ

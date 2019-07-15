@@ -442,7 +442,7 @@
               The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the GlassBR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -967,6 +967,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:minThick">
                   <table class="ddefn">
                     <tr>
@@ -1067,6 +1068,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:loadDurFactor">
                   <table class="ddefn">
                     <tr>
@@ -1132,6 +1134,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:stressDistFac">
                   <table class="ddefn">
                     <tr>
@@ -1156,7 +1159,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>J = interpZ(SDF.txt,AR,q&#770;)</em>
+                          <em>J = interpZ("SDF.txt",AR,q&#770;)</em>
                         </div>
                       </td>
                     </tr>
@@ -1199,6 +1202,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:nFL">
                   <table class="ddefn">
                     <tr>
@@ -1274,6 +1278,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:gTF">
                   <table class="ddefn">
                     <tr>
@@ -1298,9 +1303,9 @@
                         <div class="equation">
                           <em>GTF = <span class="casebr">{</span>
                                     <div class="cases">
-                                      <span>1 , <span class="case">g = AN</span></span>
-                                      <span>4 , <span class="case">g = FT</span></span>
-                                      <span>2 , <span class="case">g = HS</span></span>
+                                      <span>1 , <span class="case">g = "AN"</span></span>
+                                      <span>4 , <span class="case">g = "FT"</span></span>
+                                      <span>2 , <span class="case">g = "HS"</span></span>
                                     </div></em>
                         </div>
                       </td>
@@ -1338,6 +1343,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:dimlessLoad">
                   <table class="ddefn">
                     <tr>
@@ -1420,6 +1426,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:tolLoad">
                   <table class="ddefn">
                     <tr>
@@ -1442,7 +1449,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>q&#770;<sub>tol</sub> = interpY(SDF.txt,AR,J<sub>tol</sub>)</em>
+                          <em>q&#770;<sub>tol</sub> = interpY("SDF.txt",AR,J<sub>tol</sub>)</em>
                         </div>
                       </td>
                     </tr>
@@ -1479,6 +1486,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:sdfTol">
                   <table class="ddefn">
                     <tr>
@@ -1578,6 +1586,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:standOffDist">
                   <table class="ddefn">
                     <tr>
@@ -1635,6 +1644,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:aspectRatio">
                   <table class="ddefn">
                     <tr>
@@ -1696,6 +1706,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:eqTNTW">
                   <table class="ddefn">
                     <tr>
@@ -1748,6 +1759,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:probOfBreak">
                   <table class="ddefn">
                     <tr>
@@ -1809,6 +1821,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:calofCapacity">
                   <table class="ddefn">
                     <tr>
@@ -1867,6 +1880,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:calofDemand">
                   <table class="ddefn">
                     <tr>
@@ -1889,7 +1903,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>q = interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
+                          <em>q = interpY("TSD.txt",SD,w<sub>TNT</sub>)</em>
                         </div>
                       </td>
                     </tr>
@@ -1928,6 +1942,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -2099,7 +2114,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
+                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -2174,6 +2189,14 @@
                   </table>
                   <p class="caption">Input Data Constraints</p>
                 </div>
+              </div>
+            </div>
+            <div id="Sec:CorSolProps">
+              <div class="subsubsection">
+                <h3>Properties of a Correct Solution</h3>
+                <p class="paragraph">
+                  <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+                </p>
                 <div id="Table:OutDataConstraints">
                   <table class="table">
                     <tr>
@@ -2189,12 +2212,6 @@
                   </table>
                   <p class="caption">Output Data Constraints</p>
                 </div>
-              </div>
-            </div>
-            <div id="Sec:CorSolProps">
-              <div class="subsubsection">
-                <h3>Properties of a Correct Solution</h3>
-                <p class="paragraph">FIXME.</p>
               </div>
             </div>
           </div>
@@ -2236,7 +2253,7 @@
               </p>
               <p>
                 <div id="checkGlassSafety">
-                  Check-Glass-Safety: If <em>is-safePb &and; is-safeLR</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a> and <a href=#TM:isSafeLoad>TM: isSafeLoad</a>), output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
+                  Check-Glass-Safety: If <em>is-safePb &and; is-safeLR</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a> and <a href=#TM:isSafeLoad>TM: isSafeLoad</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
                 </div>
               </p>
               <p>
@@ -2560,7 +2577,7 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
         </p>
         <div id="Table:TraceMatAvsAll">
           <table class="table">

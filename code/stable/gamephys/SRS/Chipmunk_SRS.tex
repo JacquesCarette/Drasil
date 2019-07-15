@@ -57,7 +57,7 @@ s & time & second
 \end{longtable}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order.
+The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
 \begin{longtabu}{l X[l] l}
 \toprule
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
@@ -299,12 +299,12 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Rigid body: A solid body in which deformation is neglected.}
 \item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
 \item{Centre of mass: The mean location of the distribution of mass of the object.}
-\item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length.}
+\item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from \cite{cartesianWiki}).}
 \item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.}
 \end{itemize}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the inputs, the goal statements are:
+Given the kinematic properties, and forces including any (collision forces) applied on a set of rigid bodies, the goal statements are:
 \begin{itemize}
 \item[Determine-Linear-Properties:\phantomsection\label{linearGS}]Determine their new positions and velocities over a period of time.
 \item[Determine-Angular-Properties:\phantomsection\label{angularGS}]Determine their new orientations and angular velocities over a period of time.
@@ -950,7 +950,7 @@ Description & \begin{symbDescription}
               \item{$Δ\mathbf{v}$ is the change in velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & An impulse (vector) $\mathbf{J}$ occurs when a force $\mathbf{F}$ acts over a body over an interval of time Derivation of impulse (vector).
+Notes & An impulse (vector) $\mathbf{J}$ occurs when a force $\mathbf{F}$ acts over a body over an interval of time.
         \hyperref[assumpOT]{A: objectTy}
 \\ \midrule \\
 Source & --
@@ -959,7 +959,9 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-Derivation of impulse (vector) - Newton's second law of motion states:
+\paragraph{Detailed derivation of impulse (vector):}
+\label{DD:impulseVDeriv}
+Newton's second law of motion states:
 \begin{displaymath}
 \mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}
 \end{displaymath}
@@ -1205,7 +1207,7 @@ RefBy &
 \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
 \begin{longtable}{l l l l}
 \toprule
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
@@ -1238,6 +1240,9 @@ $ϕ$ & -- & $\frac{π}{2}$ rad & 10$\%$
 \caption{Input Data Constraints}
 \label{Table:InDataConstraints}
 \end{longtable}
+\subsubsection{Properties of a Correct Solution}
+\label{Sec:CorSolProps}
+\hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 \begin{longtable}{l}
 \toprule
 \textbf{Var}
@@ -1256,9 +1261,6 @@ $ω$
 \caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
 \end{longtable}
-\subsubsection{Properties of a Correct Solution}
-\label{Sec:CorSolProps}
-FIXME.
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -1587,6 +1589,13 @@ editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},
 pages={"107-121"},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
+
+@misc{cartesianWiki,
+author={Wikipedia Contributors},
+title={Cartesian coordinate system},
+howpublished={\url{https://en.wikipedia.org/wiki/Cartesian\_coordinate\_system}},
+month=jun,
+year={2019}}
 
 @article{sciComp2013,
 author={Wilson, Greg and Aruliah, D. A. and Titus, C. and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumblet, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},

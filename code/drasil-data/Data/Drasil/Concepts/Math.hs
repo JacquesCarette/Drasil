@@ -3,6 +3,7 @@ module Data.Drasil.Concepts.Math where
 import Language.Drasil hiding (number)
 import Language.Drasil.ShortHands (lX, lY, lZ)
 import Data.Drasil.IdeaDicts
+import Data.Drasil.Citations (cartesianWiki)
 import Utils.Drasil
 
 import Control.Lens ((^.))
@@ -29,9 +30,10 @@ angle        = dcc "angle"        (cn' "angle")                   ("The amount o
                                                                   "coincidence with another")
 area         = dcc "area"         (cn' "area")                    "A part of an object or surface"
 calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
-cartesian    = dcc "cartesian"    (pn' "Cartesian coordinate system") ("A coordinate system that specifies each point uniquely in a plane by a set " ++
-                                                                  "of numerical coordinates, which are the signed distances to the point from " ++
-                                                                  "two fixed perpendicular oriented lines, measured in the same unit of length.")
+cartesian    = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "A coordinate system that specifies each point uniquely in a plane by a set" `sOf`
+                                                                  S "numerical coordinates, which are the signed distances to the point from" +:+
+                                                                  S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+.
+                                                                  sParen (S "from" +:+ makeRef2S cartesianWiki)
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
 constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++

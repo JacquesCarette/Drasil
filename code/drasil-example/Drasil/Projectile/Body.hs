@@ -1,6 +1,7 @@
-module Drasil.Projectile.Body where
+module Drasil.Projectile.Body (printSetting, si, srs) where
 
 import Language.Drasil hiding (Vector)
+import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
@@ -16,12 +17,12 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
-  Verbosity(Verbose), dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
-  outDataConstTbl, traceMatStandard, tsymb)
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
-  problem, srsDomains, srs)
+  problem, srsDomains)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (constAccel, gravity, physicCon, physicCon',
@@ -37,20 +38,22 @@ import Data.Drasil.SI_Units (metre, radian, second)
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, projectileTitle, landingPos,
   launcher, projectile, target)
-import Drasil.Projectile.DataDefs (dataDefns)
+import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.References (citations)
-import Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
-  nonfuncReqs, propsDeriv)
+import Drasil.Projectile.Requirements (funcReqs, inputParamsTable, nonfuncReqs)
 import Drasil.Projectile.TMods (tMods)
-import Drasil.Projectile.Unitals (acronyms, constants, inConstraints,
-  launAngle, outConstraints, symbols, unitalIdeas, unitalQuants)
+import Drasil.Projectile.Unitals (acronyms, constants, constrained, inConstraints,
+  inputs, launAngle, outConstraints, outputs, symbols, unitalIdeas, unitalQuants)
 
-srsDoc :: Document
-srsDoc = mkDoc mkSRS (for'' titleize phrase) systInfo
+srs :: Document
+srs = mkDoc mkSRS (for'' titleize phrase) si
+
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [
@@ -76,12 +79,8 @@ mkSRS = [
         , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-        , Constraints EmptyS dataConstraintUncertainty EmptyS
-                      {-(foldlSent [makeRef2S $ valsOfAuxCons [] [],
-                      S "gives", plural value `ofThe` S "specification",
-                      plural parameter, S "used in", makeRef2S inDataCons])-}
-                      [inDataCons, outDataCons]
-        , CorrSolnPpties propsDeriv
+        , Constraints EmptyS inConstraints
+        , CorrSolnPpties outConstraints []
         ]
       ],
   ReqrmntSec $
@@ -89,7 +88,7 @@ mkSRS = [
       [ FReqsSub [inputParamsTable]
       , NonFReqsSub
       ],
-  TraceabilitySec $ TraceabilityProg $ traceMatStandard systInfo,
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $
     AuxConsProg projectileTitle constants,
   Bibliography
@@ -105,20 +104,21 @@ scope1 = foldlSent_ [S "the", phrase analysis `sOf` S "a", phrase twoD,
   phrase constAccel]
 scope2 = foldlSent_ [S "determines if the", phrase projectile, S "hits the", phrase target]
 
-systInfo :: SystemInformation
-systInfo = SI {
+si :: SystemInformation
+si = SI {
   _sys         = projectileTitle,
-  _kind        = srs,
+  _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = [] :: [QDefinition],
-  _datadefs    = dataDefns,
-  _inputs      = [] :: [QuantityDict],
-  _outputs     = [] :: [QuantityDict],
+  _definitions = map (relToQD symbMap) iMods ++
+                 map (relToQD symbMap) genDefns,
+  _datadefs    = dataDefs,
+  _inputs      = inputs,
+  _outputs     = outputs,
   _defSequence = [] :: [Block QDefinition],
-  _constraints = [] :: [ConstrainedChunk],
-  _constants   = [] :: [QDefinition],
+  _constraints = map cnstrw constrained,
+  _constants   = constants,
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
    refdb       = refDB
@@ -130,7 +130,7 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
     map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : srsDomains)
-  (map unitWrapper [metre, radian, second]) dataDefns iMods genDefns tMods concIns [] []
+  (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
@@ -144,9 +144,6 @@ refDB = rdb citations concIns
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
-
-printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
 
 -------------------------
 -- Problem Description --
@@ -172,11 +169,3 @@ physSystParts = map foldlSent [
   [S "The", phrase launcher],
   [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `sAnd` getTandS launAngle)],
   [S "The", phrase target]]
-
-----------------------
--- Data Constraints --
-----------------------
-
-inDataCons, outDataCons :: LabelledContent
-inDataCons  = inDataConstTbl  inConstraints
-outDataCons = outDataConstTbl outConstraints

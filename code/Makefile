@@ -16,8 +16,8 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 #####
 
 # Current list of examples
-SRC_EXAMPLES = glassbr nopcm
-EXAMPLES = $(SRC_EXAMPLES) tiny swhs ssp gamephys projectile template
+SRC_EXAMPLES = glassbr nopcm projectile
+EXAMPLES = $(SRC_EXAMPLES) tiny swhs ssp gamephys template
 
 # where they live
 TINY_DIR  = Tiny

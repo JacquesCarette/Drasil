@@ -37,9 +37,7 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Editor, Pages, Type, Month, Organization, Institution, Chapter, HowPublished, School, Note,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
   Citation(Cite), BibRef)
-import Language.Drasil.Printing.LayoutObj (Tags, Document(Document),
-  LayoutObj(Graph, Bib, List, Header, Figure, Definition, Table, EqnBlock, Paragraph, 
-  HDiv))
+import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
@@ -105,7 +103,7 @@ pSpec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for cita
 pSpec (Ref Cite2    r a)      = reflinkInfo r (text r) (pSpec a) -- no difference for citations?
 pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
 pSpec EmptyS             = text "" -- Expected in the output
-pSpec (Quote q)          = text "&quot;" <> pSpec q <> text "&quot;"
+pSpec (Quote q)          = doubleQuotes $ pSpec q
 -- pSpec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
 -- pSpec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
 
@@ -150,7 +148,7 @@ uSymb (L.US ls) = formatu t b
 pExpr :: Expr -> Doc
 pExpr (Dbl d)        = text $ showEFloat Nothing d ""
 pExpr (Int i)        = text $ show i
-pExpr (Str s)        = text s
+pExpr (Str s)        = doubleQuotes $ text s
 pExpr (Div a b)      = fraction (pExpr a) (pExpr b)
 pExpr (Case ps)      = cases ps pExpr
 pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "</table>"

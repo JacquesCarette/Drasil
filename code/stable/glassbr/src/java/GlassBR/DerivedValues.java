@@ -57,6 +57,9 @@ public class DerivedValues {
             outfile.println(" in module DerivedValues");
             outfile.close();
         }
+        else {
+            throw new Exception("Undefined case encountered in function GTF");
+        }
         
         inParams.SD = Math.sqrt((Math.pow(inParams.SD_x, 2) + (Math.pow(inParams.SD_y, 2) + Math.pow(inParams.SD_z, 2))));
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));

@@ -59,6 +59,7 @@ data RawContent = Table [Sentence] [[Sentence]] Title Bool
   -- ^ table has: header-row data(rows) label/caption showlabel?
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
+               | DerivBlock Sentence [RawContent]
                | Enumeration ListType -- ^ Lists
                | Defini DType [(Identifier, [Contents])]
                | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
@@ -101,6 +102,7 @@ refLabelledCon Figure{}       = raw "Fig:" +::+ name
 refLabelledCon Graph{}        = raw "Fig:" +::+ name
 refLabelledCon Defini{}       = raw "Def:" +::+ name
 refLabelledCon EqnBlock{}     = raw "EqnB:" +::+ name
+refLabelledCon DerivBlock{}   = raw "Deriv:" +::+ name
 refLabelledCon Enumeration{}  = raw "Lst:" +::+ name 
 refLabelledCon Paragraph{}    = error "Shouldn't reference paragraphs"
 refLabelledCon Bib{}          = error $ 

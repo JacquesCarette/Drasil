@@ -36,10 +36,10 @@ quote x = lq <> x <> rq
   rq = pure $ text "''"
 
 -- Make 1-argument command
-command :: String -> (String -> D)
+command :: String -> String -> D
 command s c = pure $ (H.bslash TP.<> text s) TP.<> H.br c
 
-commandD :: String -> (D -> D)
+commandD :: String -> D -> D
 commandD s c = pure (H.bslash TP.<> text s) <> br c
 
 -- 1-argument command, with optional argument
@@ -57,6 +57,9 @@ command0 s = pure $ H.bslash TP.<> text s
 -- 2-argument command
 command2 :: String -> String -> String -> D
 command2 s a0 a1 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1
+
+command2D :: String -> D -> D -> D
+command2D s a0 a1 = pure (H.bslash TP.<> text s) <> br a0 <> br a1
 
 -- 3-argument command
 command3 :: String -> String -> String -> String -> D
@@ -125,11 +128,14 @@ citeInfo = custRef' "\\cite"
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
-usepackage, count :: String -> D
-usepackage      = command "usepackage"
+count, mathbb, usepackage :: String -> D
+count      = command "newcounter"
 -- changed to command "newcounter" from command "count" (I assume this was
 -- what was intended?)
-count           = command "newcounter"
+mathbb     = command "mathbb"
+usepackage = command "usepackage"
+
+
 
 includegraphics :: MaxWidthPercent -> String -> D
 includegraphics 100 = command1o "includegraphics" 
@@ -137,12 +143,13 @@ includegraphics 100 = command1o "includegraphics"
 includegraphics wp = command1o "includegraphics" 
   (Just $ "width=" ++ show (wp / 100) ++ "\\textwidth")
 
-author, caption, item, label, title :: D -> D
-author          = commandD "author"
-caption         = commandD "caption"
-item            = commandD "item"
-label           = commandD "label"
-title           = commandD "title"
+author, caption, item, label, title, bold :: D -> D
+author  = commandD "author"
+caption = commandD "caption"
+item    = commandD "item"
+label   = commandD "label"
+title   = commandD "title"
+bold    = commandD "textbf"
 
 item' :: D -> D -> D
 item' bull = command1oD "item" (Just bull)

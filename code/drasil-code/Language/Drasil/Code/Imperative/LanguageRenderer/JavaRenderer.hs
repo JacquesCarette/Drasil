@@ -372,14 +372,14 @@ instance SelectorFunction JavaCode where
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
-  assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
-  assignToListIndex lst index v = valState $ listSet lst index v
+  assign vr vl = mkSt <$> liftA2 assignDocD vr vl
+  assignToListIndex lst index v = valState $ listSet (varVal lst) index v
   multiAssign _ _ = error "No multiple assignment statements in Java"
   (&=) = assign
-  (&-=) v1 v2 = v1 &= (v1 #- v2)
-  (&+=) v1 v2 = mkSt <$> liftA2 plusEqualsDocD v1 v2
+  (&-=) vr vl = vr &= (varVal vr #- vl)
+  (&+=) vr vl = mkSt <$> liftA2 plusEqualsDocD vr vl
   (&++) v = mkSt <$> fmap plusPlusDocD v
-  (&~-) v = v &= (v #- litInt 1)
+  (&~-) v = v &= (varVal v #- litInt 1)
 
   varDec v = mkSt <$> fmap varDecDocD v
   varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def

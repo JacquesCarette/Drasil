@@ -350,14 +350,14 @@ instance SelectorFunction PythonCode where
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
-  assign v1 v2 = mkStNoEnd <$> liftA2 assignDocD v1 v2
-  assignToListIndex lst index v = valState $ listSet lst index v
-  multiAssign outs vs = mkStNoEnd <$> lift2Lists multiAssignDoc outs vs
+  assign vr vl = mkStNoEnd <$> liftA2 assignDocD vr vl
+  assignToListIndex lst index v = valState $ listSet (varVal lst) index v
+  multiAssign vrs vls = mkStNoEnd <$> lift2Lists multiAssignDoc vrs vls
   (&=) = assign
-  (&-=) v1 v2 = v1 &= (v1 #- v2)
-  (&+=) v1 v2 = mkStNoEnd <$> liftA3 plusEqualsDocD' v1 plusOp v2
+  (&-=) vr vl = vr &= (varVal vr #- vl)
+  (&+=) vr vl = mkStNoEnd <$> liftA3 plusEqualsDocD' vr plusOp vl
   (&++) v = mkStNoEnd <$> liftA2 plusPlusDocD' v plusOp
-  (&~-) v = v &= (v #- litInt 1)
+  (&~-) v = v &= (varVal v #- litInt 1)
 
   varDec _ = return (mkStNoEnd empty)
   varDecDef = assign

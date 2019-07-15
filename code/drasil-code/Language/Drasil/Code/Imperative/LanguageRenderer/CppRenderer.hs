@@ -366,14 +366,14 @@ instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
-  assign v1 v2 = pair (assign (pfst v1) (pfst v2)) (assign (psnd v1) (psnd v2))
+  assign vr vl = pair (assign (pfst vr) (pfst vl)) (assign (psnd vr) (psnd vl))
   assignToListIndex lst index v = pair (assignToListIndex (pfst lst) (pfst 
     index) (pfst v)) (assignToListIndex (psnd lst) (psnd index) (psnd v))
-  multiAssign vs1 vs2 = pair (multiAssign (map pfst vs1) (map pfst vs2)) 
-    (multiAssign (map psnd vs1) (map psnd vs2))
-  (&=) v1 v2 = pair ((&=) (pfst v1) (pfst v2)) ((&=) (psnd v1) (psnd v2))
-  (&-=) v1 v2 = pair ((&-=) (pfst v1) (pfst v2)) ((&-=) (psnd v1) (psnd v2))
-  (&+=) v1 v2 = pair ((&+=) (pfst v1) (pfst v2)) ((&+=) (psnd v1) (psnd v2))
+  multiAssign vrs vls = pair (multiAssign (map pfst vrs) (map pfst vls)) 
+    (multiAssign (map psnd vrs) (map psnd vls))
+  (&=) vr vl = pair ((&=) (pfst vr) (pfst vl)) ((&=) (psnd vr) (psnd vl))
+  (&-=) vr vl = pair ((&-=) (pfst vr) (pfst vl)) ((&-=) (psnd vr) (psnd vl))
+  (&+=) vr vl = pair ((&+=) (pfst vr) (pfst vl)) ((&+=) (psnd vr) (psnd vl))
   (&++) v = pair ((&++) $ pfst v) ((&++) $ psnd v)
   (&~-) v = pair ((&~-) $ pfst v) ((&~-) $ psnd v)
 
@@ -902,14 +902,14 @@ instance SelectorFunction CppSrcCode where
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
-  assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
-  assignToListIndex lst index v = valState $ listSet lst index v
+  assign vr vl = mkSt <$> liftA2 assignDocD vr vl
+  assignToListIndex lst index v = valState $ listSet (varVal lst) index v
   multiAssign _ _ = error "No multiple assignment statements in C++"
   (&=) = assign
-  (&-=) v1 v2 = v1 &= (v1 #- v2)
-  (&+=) v1 v2 = mkSt <$> liftA2 plusEqualsDocD v1 v2
+  (&-=) vr vl = vr &= (varVal vr #- vl)
+  (&+=) vr vl = mkSt <$> liftA2 plusEqualsDocD v1 v2
   (&++) v = mkSt <$> fmap plusPlusDocD v
-  (&~-) v = v &= (v #- litInt 1)
+  (&~-) v = v &= (varVal v #- litInt 1)
 
   varDec v = mkSt <$> fmap varDecDocD v
   varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def

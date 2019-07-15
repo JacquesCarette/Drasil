@@ -339,29 +339,29 @@ class (ValueSym repr, FunctionSym repr, Selector repr) =>
   atFunc :: repr (StateType repr) -> Label -> repr (Function repr)
 
   listAccess :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-  listSet    :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) ->
-    repr (Value repr)
+  listSet    :: repr (Value repr) -> repr (Value repr) -> 
+    repr (Value repr) -> repr (Value repr)
   at         :: repr (Value repr) -> Label -> repr (Value repr)
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) 
   => StatementSym repr where
   type Statement repr
-  (&=)   :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+  (&=)   :: repr (Variable repr) -> repr (Value repr) -> repr (Statement repr)
   infixr 1 &=
-  (&-=)  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+  (&-=)  :: repr (Variable repr) -> repr (Value repr) -> repr (Statement repr)
   infixl 1 &-=
-  (&+=)  :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
+  (&+=)  :: repr (Variable repr) -> repr (Value repr) -> repr (Statement repr)
   infixl 1 &+=
-  (&++)  :: repr (Value repr) -> repr (Statement repr)
+  (&++)  :: repr (Variable repr) -> repr (Statement repr)
   infixl 8 &++
-  (&~-)  :: repr (Value repr) -> repr (Statement repr)
+  (&~-)  :: repr (Variable repr) -> repr (Statement repr)
   infixl 8 &~-
 
-  assign            :: repr (Value repr) -> repr (Value repr) -> 
+  assign            :: repr (Variable repr) -> repr (Value repr) -> 
     repr (Statement repr)
-  assignToListIndex :: repr (Value repr) -> repr (Value repr) -> 
+  assignToListIndex :: repr (Variable repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Statement repr)
-  multiAssign       :: [repr (Value repr)] -> [repr (Value repr)] ->
+  multiAssign       :: [repr (Variable repr)] -> [repr (Value repr)] ->
     repr (Statement repr) 
 
   varDec           :: repr (Value repr) -> repr (Statement repr)

@@ -343,24 +343,24 @@ stratDocD b resultState = vcat [
 
 -- Statements --
 
-assignDocD :: ValData -> ValData -> Doc
-assignDocD v1 v2 = valDoc v1 <+> equals <+> valDoc v2
+assignDocD :: VarData -> ValData -> Doc
+assignDocD vr vl = varDoc vr <+> equals <+> valDoc vl
 
-multiAssignDoc :: [ValData] -> [ValData] -> Doc
-multiAssignDoc vs1 vs2 = valList vs1 <+> equals <+> valList vs2
+multiAssignDoc :: [VarData] -> [ValData] -> Doc
+multiAssignDoc vrs vls = varList vrs <+> equals <+> valList vls
 
-plusEqualsDocD :: ValData -> ValData -> Doc
-plusEqualsDocD v1 v2 = valDoc v1 <+> text "+=" <+> valDoc v2
+plusEqualsDocD :: VarData -> ValData -> Doc
+plusEqualsDocD vr vl = varDoc vr <+> text "+=" <+> valDoc vl
 
-plusEqualsDocD' :: ValData -> Doc -> ValData -> Doc
-plusEqualsDocD' v1 plusOp v2 = valDoc v1 <+> equals <+> valDoc v1 <+> 
-  plusOp <+> valDoc v2
+plusEqualsDocD' :: VarData -> Doc -> ValData -> Doc
+plusEqualsDocD' vr plusOp vl = varDoc vr <+> equals <+> varDoc vr <+> 
+  plusOp <+> valDoc vl
 
-plusPlusDocD :: ValData -> Doc
-plusPlusDocD v = valDoc v <> text "++"
+plusPlusDocD :: VarData -> Doc
+plusPlusDocD v = varDoc v <> text "++"
 
-plusPlusDocD' :: ValData -> Doc -> Doc
-plusPlusDocD' v plusOp = valDoc v <+> equals <+> valDoc v <+> plusOp <+> int 1
+plusPlusDocD' :: VarData -> Doc -> Doc
+plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> plusOp <+> int 1
 
 varDecDocD :: ValData -> Doc
 varDecDocD v = typeDoc (valType v) <+> valDoc v
@@ -769,6 +769,9 @@ docFuncRepr desc pComms f = commentedFunc (docComment $ functionDoc desc
 
 valList :: [ValData] -> Doc
 valList vs = hcat (intersperse (text ", ") (map valDoc vs))
+
+varList :: [VarData] -> Doc
+varList vs = hcat (intersperse (text ", ") (map varDoc vs))
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statementDocD s, maybeBlank, b]

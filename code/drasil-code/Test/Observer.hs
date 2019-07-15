@@ -20,4 +20,4 @@ observerConstructor :: (RenderSym repr) => repr (Method repr)
 observerConstructor = constructor "Observer" [] (oneLiner (assign (objVarSelf "Observer" "x" int) (litInt 5)))
 
 printNumMethod :: (RenderSym repr) => repr (Method repr)
-printNumMethod = method "printNum" "Observer" public dynamic_ (mState void) [] (oneLiner (printLn (objVarSelf "Observer" "x" int)))
+printNumMethod = method "printNum" "Observer" public dynamic_ (mState void) [] (oneLiner (printLn (varVal $ objVarSelf "Observer" "x" int)))

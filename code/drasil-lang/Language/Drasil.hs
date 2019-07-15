@@ -230,7 +230,7 @@ import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)

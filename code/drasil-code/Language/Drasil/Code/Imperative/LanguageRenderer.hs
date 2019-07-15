@@ -42,13 +42,13 @@ import Utils.Drasil (capitalize, indent, indentList)
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   RenderSym(..), BodySym(..), StateTypeSym(getType, listInnerType), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  Selector(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ParameterSym(..), MethodSym(..), BlockCommentSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
   ModData(..), md, MethodData(..), ParamData(..), pd, TypeData(..), td, 
-  ValData(..), vd)
+  ValData(..), vd, VarData(..))
 import Language.Drasil.Code.Imperative.Helpers (angles,blank, doubleQuotedText,
   hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
@@ -171,7 +171,7 @@ printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[",
     prFn (listAccess v (listSize v #- litInt 1)))], 
   prLnFn "]"]
   where l_i = "list_i" ++ show n
-        i = varValVal l_i S.int
+        i = varVal l_i S.int
 
 printObjDoc :: String -> (String -> repr (Statement repr)) 
   -> repr (Statement repr)
@@ -236,10 +236,8 @@ stateParamDocD v = typeDoc (valType v) <+> valDoc v
 paramListDocD :: [ParamData] -> Doc
 paramListDocD = hicat (text ", ") . map paramDoc
 
-mkParam :: (ValData -> Doc) -> ValData -> ParamData
-mkParam f v = pd (fromMaybe 
-  (error "Attempt to create Parameter from Value with no string representation")
-  (valName v)) (valType v) (f v)
+mkParam :: (VarData -> Doc) -> VarData -> ParamData
+mkParam f v = pd (varName v) (varType v) (f v)
 
 -- Method --
 
@@ -379,7 +377,7 @@ listDecDefDocD v vs = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+>
   typeDoc (valType v) <+> braces (valList vs)
 
 objDecDefDocD :: ValData -> ValData -> Doc
-objDecDefDocD = varValDecDefDocD
+objDecDefDocD = varDecDefDocD
 
 constDecDefDocD :: ValData -> ValData -> Doc
 constDecDefDocD v def = text "const" <+> typeDoc (valType v) <+> valDoc v <+> 
@@ -439,7 +437,7 @@ stringListLists' lsts sl = stringList (getType $ valueType sl)
           : appendLists vs (n+1)
         numLists = litInt (toInteger $ length lsts)
         l_i = "stringlist_i"
-        v_i = var l_i S.int
+        v_i = varVal $ var l_i S.int
         
 
 -- Unary Operators --

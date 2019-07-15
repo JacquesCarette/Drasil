@@ -66,8 +66,9 @@ vd :: TypeData -> Doc -> ValData
 vd = VD
 
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
-updateValDoc f v = vd (valName v) (valType v) ((f . valDoc) v)
+updateValDoc f v = vd (valType v) ((f . valDoc) v)
 
 data VarData = VarD {varName :: String, varType :: TypeData, varDoc :: Doc}
 
+vard :: String -> TypeData -> Doc -> VarData
 vard = VarD

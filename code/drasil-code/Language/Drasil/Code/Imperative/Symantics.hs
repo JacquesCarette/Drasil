@@ -15,6 +15,7 @@ module Language.Drasil.Code.Imperative.Symantics (
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
 type Library = String

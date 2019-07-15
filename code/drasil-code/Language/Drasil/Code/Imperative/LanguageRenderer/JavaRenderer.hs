@@ -386,9 +386,11 @@ instance StatementSym JavaCode where
   listDec n v = mkSt <$> liftA2 listDecDocD v (litInt n)
   listDecDef v vs = mkSt <$> liftA2 jListDecDef v (liftList valList vs)
   objDecDef v def = mkSt <$> liftA2 objDecDefDocD v def
-  objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) vs)
+  objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
+    vs)
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) [])
+  objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
+    [])
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
 
@@ -635,13 +637,13 @@ jCast t v = jCast' (getType t) (getType $ valueType v)
         jCast' Integer (Enum _) = v $. func "ordinal" int []
         jCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
-jListDecDef :: ValData -> Doc -> Doc
-jListDecDef v vs = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
-  typeDoc (valType v) <+> parens listElements
+jListDecDef :: VarData -> Doc -> Doc
+jListDecDef v vs = typeDoc (varType v) <+> varDoc v <+> equals <+> new <+> 
+  typeDoc (varType v) <+> parens listElements
   where listElements = emptyIfEmpty vs $ text "Arrays.asList" <> parens vs
 
-jConstDecDef :: ValData -> ValData -> Doc
-jConstDecDef v def = text "final" <+> typeDoc (valType v) <+> valDoc v <+> 
+jConstDecDef :: VarData -> ValData -> Doc
+jConstDecDef v def = text "final" <+> typeDoc (varType v) <+> varDoc v <+> 
   equals <+> valDoc def
 
 jThrowDoc :: ValData -> Doc

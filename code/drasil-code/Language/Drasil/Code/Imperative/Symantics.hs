@@ -364,21 +364,21 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   multiAssign       :: [repr (Variable repr)] -> [repr (Value repr)] ->
     repr (Statement repr) 
 
-  varDec           :: repr (Value repr) -> repr (Statement repr)
-  varDecDef        :: repr (Value repr) -> repr (Value repr) -> 
+  varDec           :: repr (Variable repr) -> repr (Statement repr)
+  varDecDef        :: repr (Variable repr) -> repr (Value repr) -> 
     repr (Statement repr)
-  listDec          :: Integer -> repr (Value repr) -> repr (Statement repr)
-  listDecDef       :: repr (Value repr) -> [repr (Value repr)] -> 
+  listDec          :: Integer -> repr (Variable repr) -> repr (Statement repr)
+  listDecDef       :: repr (Variable repr) -> [repr (Value repr)] -> 
     repr (Statement repr)
-  objDecDef        :: repr (Value repr) -> repr (Value repr) -> 
+  objDecDef        :: repr (Variable repr) -> repr (Value repr) -> 
     repr (Statement repr)
-  objDecNew        :: repr (Value repr) -> [repr (Value repr)] -> 
+  objDecNew        :: repr (Variable repr) -> [repr (Value repr)] -> 
     repr (Statement repr)
-  extObjDecNew     :: Library -> repr (Value repr) -> 
+  extObjDecNew     :: Library -> repr (Variable repr) -> 
     [repr (Value repr)] -> repr (Statement repr)
-  objDecNewVoid    :: repr (Value repr) -> repr (Statement repr)
-  extObjDecNewVoid :: Library -> repr (Value repr) -> repr (Statement repr)
-  constDecDef      :: repr (Value repr) -> repr (Value repr) -> 
+  objDecNewVoid    :: repr (Variable repr) -> repr (Statement repr)
+  extObjDecNewVoid :: Library -> repr (Variable repr) -> repr (Statement repr)
+  constDecDef      :: repr (Variable repr) -> repr (Value repr) -> 
     repr (Statement repr)
 
   -- newLn, printFunc, value to print, maybe a file to print to 

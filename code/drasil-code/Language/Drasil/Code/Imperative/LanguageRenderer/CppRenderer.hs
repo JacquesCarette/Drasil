@@ -14,9 +14,9 @@ import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), 
+  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..),
+  Selector(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -916,9 +916,11 @@ instance StatementSym CppSrcCode where
   listDec n v = mkSt <$> liftA2 cppListDecDoc v (litInt n)
   listDecDef v vs = mkSt <$> liftA2 cppListDecDefDoc v (liftList valList vs)
   objDecDef v def = mkSt <$> liftA2 objDecDefDocD v def
-  objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) vs)
+  objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
+    vs)
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) [])
+  objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
+    [])
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
@@ -1722,11 +1724,11 @@ cppCast t v = cppCast' (getType t) (getType $ valueType v)
 cppListSetDoc :: ValData -> ValData -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens (valDoc i) <+> equals <+> valDoc v
 
-cppListDecDoc :: ValData -> ValData -> Doc
-cppListDecDoc v n = typeDoc (valType v) <+> valDoc v <> parens (valDoc n)
+cppListDecDoc :: VarData -> ValData -> Doc
+cppListDecDoc v n = typeDoc (varType v) <+> varDoc v <> parens (valDoc n)
 
-cppListDecDefDoc :: ValData -> Doc -> Doc
-cppListDecDefDoc v vs = typeDoc (valType v) <+> valDoc v <> braces vs
+cppListDecDefDoc :: VarData -> Doc -> Doc
+cppListDecDefDoc v vs = typeDoc (varType v) <+> varDoc v <> braces vs
 
 cppPrint :: Bool -> ValData -> ValData -> Doc
 cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> valDoc v <+> end

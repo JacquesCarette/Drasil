@@ -165,13 +165,13 @@ printListDoc :: (RenderSym repr) => Integer -> repr (Value repr) ->
   (String -> repr (Statement repr)) -> 
   repr (Statement repr)
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
-  for (varDecDef i (litInt 0)) (i ?< (listSize v #- litInt 1))
-    (i &++) (bodyStatements [prFn (listAccess v i), prStrFn ", /f "]), 
+  for (varDecDef i (litInt 0)) (varVal i ?< (listSize v #- litInt 1))
+    (i &++) (bodyStatements [prFn (listAccess v (varVal i)), prStrFn ", /f "]), 
   ifNoElse [(listSize v ?> litInt 0, oneLiner $
     prFn (listAccess v (listSize v #- litInt 1)))], 
   prLnFn "]"]
   where l_i = "list_i" ++ show n
-        i = varVal l_i S.int
+        i = var l_i S.int
 
 printObjDoc :: String -> (String -> repr (Statement repr)) 
   -> repr (Statement repr)
@@ -362,25 +362,25 @@ plusPlusDocD v = varDoc v <> text "++"
 plusPlusDocD' :: VarData -> Doc -> Doc
 plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> plusOp <+> int 1
 
-varDecDocD :: ValData -> Doc
-varDecDocD v = typeDoc (valType v) <+> valDoc v
+varDecDocD :: VarData -> Doc
+varDecDocD v = typeDoc (varType v) <+> varDoc v
 
-varDecDefDocD :: ValData -> ValData -> Doc
-varDecDefDocD v def = typeDoc (valType v) <+> valDoc v <+> equals <+> valDoc def
+varDecDefDocD :: VarData -> ValData -> Doc
+varDecDefDocD v def = typeDoc (varType v) <+> varDoc v <+> equals <+> valDoc def
 
-listDecDocD :: ValData -> ValData -> Doc
-listDecDocD v n = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
-  typeDoc (valType v) <> parens (valDoc n)
+listDecDocD :: VarData -> ValData -> Doc
+listDecDocD v n = typeDoc (varType v) <+> varDoc v <+> equals <+> new <+> 
+  typeDoc (varType v) <> parens (valDoc n)
 
-listDecDefDocD :: ValData -> [ValData] -> Doc
-listDecDefDocD v vs = typeDoc (valType v) <+> valDoc v <+> equals <+> new <+> 
-  typeDoc (valType v) <+> braces (valList vs)
+listDecDefDocD :: VarData -> [ValData] -> Doc
+listDecDefDocD v vs = typeDoc (varType v) <+> varDoc v <+> equals <+> new <+> 
+  typeDoc (varType v) <+> braces (valList vs)
 
-objDecDefDocD :: ValData -> ValData -> Doc
+objDecDefDocD :: VarData -> ValData -> Doc
 objDecDefDocD = varDecDefDocD
 
-constDecDefDocD :: ValData -> ValData -> Doc
-constDecDefDocD v def = text "const" <+> typeDoc (valType v) <+> valDoc v <+> 
+constDecDefDocD :: VarData -> ValData -> Doc
+constDecDefDocD v def = text "const" <+> typeDoc (varType v) <+> varDoc v <+> 
   equals <+> valDoc def
 
 returnDocD :: [ValData] -> Doc

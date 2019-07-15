@@ -3,10 +3,10 @@ module Drasil.NoPCM.DataDefs where --exports all of it
 import Language.Drasil
 import Theory.Drasil (DataDefinition)
 
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd1HtFluxCQD)
+import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxCQD)
 
 qDefs :: [QDefinition]
-qDefs = [dd1HtFluxCQD]
+qDefs = [ddHtFluxCQD]
 
 dataDefs :: [DataDefinition] 
-dataDefs = [dd1HtFluxC]
+dataDefs = [ddHtFluxC]

@@ -170,7 +170,7 @@ instance ControlBlockSym CSharpCode where
 
   listSlice vnew vold b e s = 
     let l_temp = "temp"
-        var_temp = var l_temp (fmap valType vnew)
+        var_temp = var l_temp (variableType vnew)
         v_temp = varVal var_temp
         l_i = "i_temp"
         var_i = var l_i int

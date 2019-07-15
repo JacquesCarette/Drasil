@@ -100,9 +100,10 @@ class (PermanenceSym repr) => StateTypeSym repr where
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 
-    Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) -> repr (Block repr)
+    Maybe (repr (Value repr)) -> Maybe (repr (Variable repr)) -> 
+    repr (Block repr)
 
-  listSlice        :: repr (Value repr) -> repr (Value repr) -> 
+  listSlice        :: repr (Variable repr) -> repr (Value repr) -> 
     Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) ->
     Maybe (repr (Value repr)) -> repr (Block repr)
 
@@ -410,7 +411,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   getFileInputLine :: repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)
   discardFileLine  :: repr (Value repr) -> repr (Statement repr)
-  stringSplit      :: Char -> repr (Value repr) -> repr (Value repr) -> 
+  stringSplit      :: Char -> repr (Variable repr) -> repr (Value repr) -> 
     repr (Statement repr)
 
   stringListVals :: [repr (Variable repr)] -> repr (Value repr) -> 

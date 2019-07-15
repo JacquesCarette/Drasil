@@ -648,9 +648,9 @@ pyTryCatch tryB catchB = vcat [
   text "except" <+> text "Exception" <+> text "as" <+> text "exc" <+> colon,
   indent catchB]
 
-pyListSlice :: ValData -> ValData -> 
+pyListSlice :: VarData -> ValData -> 
   ValData -> ValData -> ValData -> Doc
-pyListSlice vnew vold b e s = valDoc vnew <+> equals <+> valDoc vold <> 
+pyListSlice vnew vold b e s = varDoc vnew <+> equals <+> valDoc vold <> 
   brackets (valDoc b <> colon <> valDoc e <> colon <> valDoc s)
 
 pyMethod :: Label -> VarData -> Doc -> Doc -> Doc

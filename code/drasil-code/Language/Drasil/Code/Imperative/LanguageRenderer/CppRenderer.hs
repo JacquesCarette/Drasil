@@ -708,7 +708,7 @@ instance ControlBlockSym CppSrcCode where
 
   listSlice vnew vold b e s = 
     let l_temp = "temp"
-        var_temp = var l_temp (fmap valType vnew)
+        var_temp = var l_temp (variableType vnew)
         v_temp = varVal var_temp
         l_i = "i_temp"
         var_i = var l_i int
@@ -958,12 +958,12 @@ instance StatementSym CppSrcCode where
                              v_word = var var_word
                          in
     multi [
-      valState $ vnew $. func "clear" void [],
+      valState $ varVal vnew $. func "clear" void [],
       varDec var_ss,
       valState $ objMethodCall string v_ss "str" [s],
       varDec var_word,
       while (funcApp "std::getline" string [v_ss, v_word, litChar d]) 
-        (oneLiner $ valState $ listAppend vnew v_word)
+        (oneLiner $ valState $ listAppend (varVal vnew) v_word)
     ]
 
   stringListVals = stringListVals'

@@ -175,7 +175,7 @@ instance ControlBlockSym JavaCode where
 
   listSlice vnew vold b e s = 
     let l_temp = "temp"
-        var_temp = var l_temp (fmap valType vnew)
+        var_temp = var l_temp (variableType vnew)
         v_temp = varVal var_temp
         l_i = "i_temp"
         var_i = var l_i int
@@ -686,8 +686,8 @@ jOpenFileWorA f n wa = valDoc f <+> equals <+> new <+>
   text "PrintWriter" <> parens (new <+> text "FileWriter" <> parens (new <+> 
   text "File" <> parens (valDoc n) <> comma <+> valDoc wa))
 
-jStringSplit :: ValData -> ValData -> Doc
-jStringSplit vnew s = valDoc vnew <+> equals <+> new <+> typeDoc (valType vnew)
+jStringSplit :: VarData -> ValData -> Doc
+jStringSplit vnew s = varDoc vnew <+> equals <+> new <+> typeDoc (varType vnew)
   <> parens (valDoc s)
 
 jMethod :: Label -> Doc -> Doc -> TypeData -> Doc -> Doc -> Doc

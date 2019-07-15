@@ -336,8 +336,8 @@ instance Selector CSharpCode where
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  getFunc v = func (getterName $ valueName v) (valueType v) []
-  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
+  getFunc v = func (getterName $ variableName v) (variableType v) []
+  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
 
   listSizeFunc = liftA2 fd int (fmap funcDocD (varVal (var "Count" int)))
   listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
@@ -507,12 +507,12 @@ instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
   method n _ s p t ps b = liftA2 (mthd False) (sequence ps) 
     (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
-  getMethod c v = method (getterName $ valueName v) c public dynamic_ 
-    (mState $ valueType v) [] getBody
+  getMethod c v = method (getterName $ variableName v) c public dynamic_ 
+    (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (varVal $ self c $-> v)
-  setMethod c v = method (setterName $ valueName v) c public dynamic_ 
+  setMethod c v = method (setterName $ variableName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
-    where setBody = oneLiner $ (varVal $ self c $-> v) &= v
+    where setBody = oneLiner $ (self c $-> v) &= varVal v
   mainMethod c b = setMainMethod <$> method "Main" c public static_ 
     (mState void) [liftA2 (pd "args") (listType static_ string) 
     (return $ text "string[] args")] b

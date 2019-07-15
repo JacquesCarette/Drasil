@@ -870,8 +870,8 @@ instance Selector CppSrcCode where
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  getFunc v = func (getterName $ valueName v) (valueType v) []
-  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
+  getFunc v = func (getterName $ variableName v) (variableType v) []
+  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
 
   listSizeFunc = func "size" int []
   listAddFunc l i v = func "insert" (listType static_ $ fmap valType v) 
@@ -1064,12 +1064,12 @@ instance MethodSym CppSrcCode where
   method n c s _ t ps b = liftA3 (mthd False) (fmap snd s) (sequence ps) 
     (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b blockStart 
     blockEnd)
-  getMethod c v = method (getterName $ valueName v) c public dynamic_ 
-    (mState $ valueType v) [] getBody
+  getMethod c v = method (getterName $ variableName v) c public dynamic_ 
+    (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (varVal $ self c $-> v)
-  setMethod c v = method (setterName $ valueName v) c public dynamic_ 
+  setMethod c v = method (setterName $ variableName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
-    where setBody = oneLiner $ (varVal $ self c $-> v) &= v
+    where setBody = oneLiner $ (self c $-> v) &= varVal v
   mainMethod _ b = setMainMethod <$> function "main" public static_ int 
     [stateParam $ var "argc" int, 
     liftA2 (pd "argv") (listType static_ string) 
@@ -1560,9 +1560,9 @@ instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
   method n _ s _ t ps _ = liftA3 (mthd False) (fmap snd s) (sequence ps)
     (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement)
-  getMethod c v = method (getterName $ valueName v) c public dynamic_ 
-    (mState $ valueType v) [] (return empty)
-  setMethod c v = method (setterName $ valueName v) c public dynamic_ 
+  getMethod c v = method (getterName $ variableName v) c public dynamic_ 
+    (mState $ variableType v) [] (return empty)
+  setMethod c v = method (setterName $ variableName v) c public dynamic_ 
     (mState void) [stateParam v] (return empty)
   mainMethod _ _ = return (mthd True Pub [] empty)
   privMethod n c = method n c private dynamic_

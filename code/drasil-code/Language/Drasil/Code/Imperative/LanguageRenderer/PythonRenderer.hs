@@ -315,8 +315,8 @@ instance Selector PythonCode where
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  getFunc v = func (getterName $ valueName v) (valueType v) []
-  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
+  getFunc v = func (getterName $ variableName v) (variableType v) []
+  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
 
   listSizeFunc = liftA2 fd int (return $ text "len")
   listAddFunc _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
@@ -487,12 +487,12 @@ instance MethodSym PythonCode where
   type Method PythonCode = MethodData
   method n l _ _ _ ps b = liftA2 (mthd False) (sequence ps) (liftA3 (pyMethod n)
     (self l) (liftList paramListDocD ps) b)
-  getMethod c v = method (getterName $ valueName v) c public dynamic_ 
-    (mState $ valueType v) [] getBody
+  getMethod c v = method (getterName $ variableName v) c public dynamic_ 
+    (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (varVal $ self c $-> v)
-  setMethod c v = method (setterName $ valueName v) c public dynamic_
+  setMethod c v = method (setterName $ variableName v) c public dynamic_
     (mState void) [stateParam v] setBody
-    where setBody = oneLiner $ (self c $-> v) &= v
+    where setBody = oneLiner $ (self c $-> v) &= varVal v
   mainMethod _ = fmap (mthd True [])
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_

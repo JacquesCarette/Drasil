@@ -306,8 +306,8 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   type Function repr
   func           :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Function repr)
-  getFunc        :: repr (Value repr) -> repr (Function repr)
-  setFunc        :: repr (StateType repr) -> repr (Value repr) -> 
+  getFunc        :: repr (Variable repr) -> repr (Function repr)
+  setFunc        :: repr (StateType repr) -> repr (Variable repr) -> 
     repr (Value repr) -> repr (Function repr)
 
   listSizeFunc       :: repr (Function repr)
@@ -318,8 +318,8 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   iterBeginFunc :: repr (StateType repr) -> repr (Function repr)
   iterEndFunc   :: repr (StateType repr) -> repr (Function repr)
 
-  get :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-  set :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) -> 
+  get :: repr (Value repr) -> repr (Variable repr) -> repr (Value repr)
+  set :: repr (Value repr) -> repr (Variable repr) -> repr (Value repr) -> 
     repr (Value repr)
 
   listSize   :: repr (Value repr) -> repr (Value repr)
@@ -508,8 +508,8 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   method      :: Label -> Label -> repr (Scope repr) -> 
     repr (Permanence repr) -> repr (MethodType repr) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
-  getMethod   :: Label -> repr (Value repr) -> repr (Method repr)
-  setMethod   :: Label -> repr (Value repr) -> repr (Method repr) 
+  getMethod   :: Label -> repr (Variable repr) -> repr (Method repr)
+  setMethod   :: Label -> repr (Variable repr) -> repr (Method repr) 
   mainMethod  :: Label -> repr (Body repr) -> repr (Method repr)
   privMethod  :: Label -> Label -> repr (MethodType repr) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)

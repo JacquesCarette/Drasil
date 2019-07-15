@@ -56,7 +56,7 @@ import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
-  equals, semi, vcat, lbrace, rbrace, colon, render, isEmpty)
+  semi, vcat, lbrace, rbrace, colon, isEmpty)
 
 csExts :: [String]
 csExts = [csExt]
@@ -236,7 +236,7 @@ instance VariableSym CSharpCode where
   ($->) = objVar
 
   variableName = varName . unCSC
-  variableType = varType . unCSC
+  variableType = fmap varType
   variableDoc = varDoc . unCSC
 
 instance ValueSym CSharpCode where
@@ -530,8 +530,9 @@ instance MethodSym CSharpCode where
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
-    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
+  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v) 
+    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
+    varVal v))
   inOutFunc n s p ins outs b = function n s p (mState void) (map (\v -> 
     if v `elem` outs then fmap (updateParamDoc csRef) (stateParam v) else 
     stateParam v) ins ++ map (fmap (updateParamDoc csOut) . stateParam) 
@@ -646,9 +647,9 @@ csOut p = text "out" <+> p
 
 csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) -> 
   [CSharpCode (Value CSharpCode)] -> CSharpCode (Value CSharpCode)) -> Label -> 
-  [CSharpCode (Value CSharpCode)] -> [CSharpCode (Value CSharpCode)] -> 
+  [CSharpCode (Value CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
   CSharpCode (Statement CSharpCode)
-csInOutCall f n ins [out] = assign out $ f n (fmap valType out) ins
+csInOutCall f n ins [out] = assign out $ f n (variableType out) ins
 csInOutCall f n ins outs = valState $ f n void (nub $ map (\v -> 
-  if v `elem` outs then fmap (updateValDoc csRef) v else v) ins ++
-  map (fmap (updateValDoc csOut)) (filter (`notElem` ins) outs))
+  if v `elem` map varVal outs then fmap (updateValDoc csRef) v else v) ins ++
+  map (fmap (updateValDoc csOut)) (filter (`notElem` ins) (map varVal outs)))

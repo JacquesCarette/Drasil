@@ -69,6 +69,7 @@ updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 updateValDoc f v = vd (valType v) ((f . valDoc) v)
 
 data VarData = VarD {varName :: String, varType :: TypeData, varDoc :: Doc}
+  deriving Eq
 
 vard :: String -> TypeData -> Doc -> VarData
 vard = VarD

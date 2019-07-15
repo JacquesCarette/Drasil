@@ -216,7 +216,7 @@ instance VariableSym PythonCode where
   ($->) = objVar
 
   variableName = varName . unPC
-  variableType = varType . unPC
+  variableType = fmap varType
   variableDoc = varDoc . unPC
 
 instance ValueSym PythonCode where
@@ -508,7 +508,7 @@ instance MethodSym PythonCode where
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins outs b = function n s p (mState void) (map stateParam ins)
-    (liftA2 appendToBody b (multiReturn outs))
+    (liftA2 appendToBody b (multiReturn $ map varVal outs))
 
   docInOutFunc desc iComms _ = docFuncRepr desc iComms
 
@@ -600,10 +600,10 @@ pyListDec v = varDoc v <+> equals <+> typeDoc (varType v)
 pyListDecDef :: VarData -> Doc -> Doc
 pyListDecDef v vs = varDoc v <+> equals <+> brackets vs
 
-pyPrint :: Bool ->  ValData -> ValData -> VarData -> Doc
+pyPrint :: Bool ->  ValData -> ValData -> ValData -> Doc
 pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
-        fl = emptyIfEmpty (varDoc f) $ text ", file=" <> varDoc f
+        fl = emptyIfEmpty (valDoc f) $ text ", file=" <> valDoc f
 
 pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
   -> Maybe (repr (Value repr)) -> repr (Statement repr)
@@ -691,7 +691,7 @@ pyModule ls fs cs =
 
 pyInOutCall :: (Label -> PythonCode (StateType PythonCode) -> 
   [PythonCode (Value PythonCode)] -> PythonCode (Value PythonCode)) -> Label -> 
-  [PythonCode (Value PythonCode)] -> [PythonCode (Value PythonCode)] -> 
+  [PythonCode (Value PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
   PythonCode (Statement PythonCode)
 pyInOutCall f n ins [] = valState $ f n void ins
 pyInOutCall f n ins outs = multiAssign outs [f n void ins]

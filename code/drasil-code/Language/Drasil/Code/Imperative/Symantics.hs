@@ -445,10 +445,10 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   addObserver      :: repr (Value repr) -> repr (Statement repr)
 
   -- The two lists are inputs and outputs, respectively
-  inOutCall :: Label -> [repr (Value repr)] -> [repr (Value repr)] -> 
+  inOutCall :: Label -> [repr (Value repr)] -> [repr (Variable repr)] -> 
     repr (Statement repr)
   extInOutCall :: Library -> Label -> [repr (Value repr)] ->
-    [repr (Value repr)] -> repr (Statement repr)
+    [repr (Variable repr)] -> repr (Statement repr)
 
   state     :: repr (Statement repr) -> repr (Statement repr)
   loopState :: repr (Statement repr) -> repr (Statement repr)
@@ -532,7 +532,7 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
 
   -- The two lists are inputs and outputs, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    [repr (Value repr)] -> [repr (Value repr)] -> 
+    [repr (Variable repr)] -> [repr (Variable repr)] -> 
     repr (Body repr) -> repr (Method repr)
   -- Parameters are: brief description, input descriptions, output descriptions, function
   docInOutFunc :: String -> [String] -> [String] -> repr (Method repr) -> 

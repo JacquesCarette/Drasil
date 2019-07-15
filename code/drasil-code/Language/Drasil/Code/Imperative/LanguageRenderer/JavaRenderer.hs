@@ -240,7 +240,7 @@ instance VariableSym JavaCode where
   ($->) = objVar
 
   variableName = varName . unJC
-  variableType = varType . unJC
+  variableType = fmap varType
   variableDoc = varDoc . unJC
 
 instance ValueSym JavaCode where
@@ -537,12 +537,13 @@ instance MethodSym JavaCode where
   docFunc = docFuncRepr
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
-  inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
-    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState v))
+  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v) 
+    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
+    varVal v))
   inOutFunc n s p ins outs b = function n s p jArrayType
     (map stateParam ins) (liftA3 surroundBody decls b (multi (varDecDef outputs
         (varVal (var ("new Object[" ++ show (length outs) ++ "]") jArrayType))
-      : assignArray 0 outs
+      : assignArray 0 (map varVal outs)
       ++ [returnState (varVal outputs)])))
       where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
               [JavaCode (Statement JavaCode)]
@@ -680,7 +681,7 @@ jOpenFileR :: ValData -> TypeData -> ValData
 jOpenFileR n t = vd t $ new <+> text "Scanner" <> parens 
   (new <+> text "File" <> parens (valDoc n))
 
-jOpenFileWorA :: ValData -> TypeData -> ValData
+jOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
 jOpenFileWorA n t wa = vd t $ new <+> text "PrintWriter" <> 
   parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> 
   parens (valDoc n) <> comma <+> valDoc wa))
@@ -700,17 +701,18 @@ jListIndexExists :: Doc -> ValData -> ValData -> Doc
 jListIndexExists greater lst index = parens (valDoc lst <> text ".length" <+> 
   greater <+> valDoc index)
 
-jAssignFromArray :: Int -> [JavaCode (Value JavaCode)] -> 
+jAssignFromArray :: Int -> [JavaCode (Variable JavaCode)] -> 
   [JavaCode (Statement JavaCode)]
 jAssignFromArray _ [] = []
-jAssignFromArray c (v:vs) = (v &= cast (fmap valType v)
-  (varVal ("outputs[" ++ show c ++ "]") (fmap valType v))) : jAssignFromArray (c+1) vs
+jAssignFromArray c (v:vs) = (v &= cast (variableType v)
+  (varVal (var ("outputs[" ++ show c ++ "]") (variableType v))))
+  : jAssignFromArray (c+1) vs
 
 jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 
   [JavaCode (Value JavaCode)] -> JavaCode (Value JavaCode)) -> Label -> 
-  [JavaCode (Value JavaCode)] -> [JavaCode (Value JavaCode)] -> 
+  [JavaCode (Value JavaCode)] -> [JavaCode (Variable JavaCode)] -> 
   JavaCode (Statement JavaCode)
 jInOutCall f n ins [] = valState $ f n void ins
-jInOutCall f n ins [out] = assign out $ f n (fmap valType out) ins
-jInOutCall f n ins outs = multi $ varDecDef (varVal "outputs" jArrayType) (f n 
+jInOutCall f n ins [out] = assign out $ f n (variableType out) ins
+jInOutCall f n ins outs = multi $ varDecDef (var "outputs" jArrayType) (f n 
   jArrayType ins) : jAssignFromArray 0 outs

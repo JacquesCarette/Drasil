@@ -44,7 +44,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
   ScopeTag (..), FuncData(..), fd, ModData(..), md, ParamData(..), pd, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, VarData(..), vard)
+  StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
@@ -773,7 +773,7 @@ instance VariableSym CppSrcCode where
   ($->) = objVar
 
   variableName = varName . unCPPSC
-  variableType = varType . unCPPSC
+  variableType = fmap varType
   variableDoc = varDoc . unCPPSC
 
 instance ValueSym CppSrcCode where
@@ -795,7 +795,7 @@ instance ValueSym CppSrcCode where
   printFunc = liftA2 mkVal void (return $ text "std::cout")
   printLnFunc = liftA2 mkVal void (return $ text "std::cout")
   printFileFunc f = liftA2 mkVal void (fmap valDoc f)
-  printFileLnFunc f = liftA2 mkVal void (fmap varDoc f)
+  printFileLnFunc f = liftA2 mkVal void (fmap valDoc f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
   valueType = fmap valType
@@ -948,14 +948,14 @@ instance StatementSym CppSrcCode where
   openFileA f n = mkSt <$> liftA2 (cppOpenFile "std::fstream::app") f n
   closeFile f = valState $ objMethodCall void f "close" []
 
-  getFileInputLine f v = valState $ funcApp "std::getline" string [f, v]
+  getFileInputLine f v = valState $ funcApp "std::getline" string [f, varVal v]
   discardFileLine f = mkSt <$> fmap (cppDiscardInput "\\n") f
   stringSplit d vnew s = let l_ss = "ss"
                              var_ss = var l_ss (obj "std::stringstream")
                              v_ss = varVal var_ss
                              l_word = "word"
                              var_word = var l_word string
-                             v_word = var var_word
+                             v_word = varVal var_word
                          in
     multi [
       valState $ varVal vnew $. func "clear" void [],
@@ -1098,8 +1098,9 @@ instance MethodSym CppSrcCode where
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
-    (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState v))
+  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v)
+    (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ 
+    varVal v))
   inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
     map pointerParam outs) b
@@ -1308,10 +1309,10 @@ instance VariableSym CppHdrCode where
   listOf _ _ = liftA2 (vard "") void (return empty)
   iterVar _ _ = liftA2 (vard "") void (return empty)
 
-  ($->) _ _ = liftA2 mkVal void (return empty)
+  ($->) _ _ = liftA2 (vard "") void (return empty)
 
   variableName = varName . unCPPHC
-  variableType = varType . unCPPHC
+  variableType = fmap varType
   variableDoc = varDoc . unCPPHC
 
 instance ValueSym CppHdrCode where
@@ -1576,7 +1577,7 @@ instance MethodSym CppHdrCode where
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [v] b = function n s p (mState (fmap valType v)) 
+  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v) 
     (map (fmap getParam) ins) b
   inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
     if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
@@ -1843,7 +1844,7 @@ cppModuleDoc ls blnk1 fs blnk2 cs = vcat [
 
 cppInOutCall :: (Label -> CppSrcCode (StateType CppSrcCode) -> 
   [CppSrcCode (Value CppSrcCode)] -> CppSrcCode (Value CppSrcCode)) -> Label -> 
-  [CppSrcCode (Value CppSrcCode)] -> [CppSrcCode (Value CppSrcCode)] -> 
+  [CppSrcCode (Value CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
   CppSrcCode (Statement CppSrcCode)
-cppInOutCall f n ins [out] = assign out $ f n (fmap valType out) ins
-cppInOutCall f n ins outs = valState $ f n void (nub $ ins ++ outs)
+cppInOutCall f n ins [out] = assign out $ f n (variableType out) ins
+cppInOutCall f n ins outs = valState $ f n void (nub $ ins ++ map varVal outs)

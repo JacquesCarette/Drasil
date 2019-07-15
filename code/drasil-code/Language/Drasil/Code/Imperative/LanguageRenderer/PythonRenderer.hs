@@ -201,6 +201,17 @@ instance BinaryOpSym PythonCode where
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
   var n t = liftA2 (vard n) t (return $ varDocD n) 
+  const = var
+  extVar l n t = liftA2 (vard $ l ++ "." ++ n) t (return $ extVarDocD l n)
+  self l = liftA2 (vard "self") (obj l) (return $ text "self")
+  enumVar e en = var e (enumType en)
+  objVar o v = liftA2 (vard $ variableName o ++ "." ++ variableName v)
+    (variableType v) (liftA2 objVarDocD o v)
+  objVarSelf l n t = liftA2 (vard $ "self." ++ n) t (liftA2 objVarDocD
+    (self l) (varVal n t))
+  listVar n p t = var n (listType p t)
+  n `listOf` t = listVar n static_ t
+  iterVar n t = var n (iterator t)
 
   variableName v = varName . unPC
   variableType v = varType . unPC
@@ -218,21 +229,9 @@ instance ValueSym PythonCode where
   ($->) = objVar
   ($:) = enumElement
 
-  const = varVal
   varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
-  extVar l n t = liftA2 (mkVal (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
-  self l = liftA2 (mkVal (Just "self")) (obj l) (return $ text "self")
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n + 1)) argsList)
-  enumElement en e = liftA2 (mkVal (Just $ en ++ "." ++ e)) (enumType en) 
-    (return $ enumElemDocD en e)
-  enumVar e en = varVal e (enumType en)
-  objVar o v = liftA2 (mkVal (Just $ valueName o ++ "." ++ valueName v))
-    (fmap valType v) (liftA2 objVarDocD o v)
-  objVarSelf l n t = liftA2 (mkVal (Just $ "self." ++ n)) t (liftA2 objVarDocD
-    (self l) (varVal n t))
-  listVar n p t = varVal n (listType p t)
-  n `listOf` t = listVar n static_ t
-  iterVar n t = varVal n (iterator t)
+  enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
 
   inputFunc = liftA2 mkVal string (return $ text "input()")  -- raw_input() for < Python 3.0
   printFunc = liftA2 mkVal void (return $ text "print")

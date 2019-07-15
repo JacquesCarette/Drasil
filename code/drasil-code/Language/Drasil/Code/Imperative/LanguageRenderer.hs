@@ -637,8 +637,8 @@ argDocD n args = valDoc args <> brackets (valDoc n)
 enumElemDocD :: Label -> Label -> Doc
 enumElemDocD en e = text en <> dot <> text e
 
-objVarDocD :: ValData -> ValData ->  Doc
-objVarDocD n1 n2 = valDoc n1 <> dot <> valDoc n2
+objVarDocD :: VarData -> VarData ->  Doc
+objVarDocD n1 n2 = varDoc n1 <> dot <> varDoc n2
 
 inlineIfDocD :: ValData -> ValData -> 
   ValData -> Doc

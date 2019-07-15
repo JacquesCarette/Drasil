@@ -219,6 +219,17 @@ instance BinaryOpSym CSharpCode where
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
   var n t = liftA2 (vard n) t (return $ varDocD n) 
+  const = var
+  extVar l n t = liftA2 (vard $ l ++ "." ++ n) t (return $ extVarDocD l n)
+  self l = liftA2 (vd "this") (obj l) (return selfDocD)
+  enumVar e en = var e (enumType en)
+  objVar o v = liftA2 (vard $ variableName o ++ "." ++ variableName v)
+    (variableType v) (liftA2 objVarDocD o v)
+  objVarSelf l n t = liftA2 (vd $ "this." ++ n) t (liftA2 objVarDocD (self l) 
+    (var n t))
+  listVar n p t = var n (listType p t)
+  n `listOf` t = listVar n static_ t
+  iterVar n t = var n (iterator t)
 
   variableName v = varName . unCSC
   variableType v = varType . unCSC
@@ -238,21 +249,10 @@ instance ValueSym CSharpCode where
   ($->) = objVar
   ($:) = enumElement
 
-  const = varVal
   varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
-  extVar l n t = liftA2 (vd (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
-  self l = liftA2 (vd (Just "this")) (obj l) (return selfDocD)
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
   enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (enumType en) 
     (return $ enumElemDocD en e)
-  enumVar e en = varVal e (enumType en)
-  objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
-    (fmap valType v) (liftA2 objVarDocD o v)
-  objVarSelf l n t = liftA2 (vd (Just $ "this." ++ n)) t (liftA2 objVarDocD 
-    (self l) (varVal n t))
-  listVar n p t = varVal n (listType p t)
-  n `listOf` t = listVar n static_ t
-  iterVar n t = varVal n (iterator t)
   
   inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")
   printFunc = liftA2 mkVal void (return $ text "Console.Write")

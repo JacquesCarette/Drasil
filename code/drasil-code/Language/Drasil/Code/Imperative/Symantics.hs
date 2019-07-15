@@ -142,7 +142,20 @@ class BinaryOpSym repr where
 
 class (StateTypeSym repr) => VariableSym repr where
   type Variable repr
-  var :: Label -> repr (StateType repr) -> repr (Variable repr)
+  var          :: Label -> repr (StateType repr) -> repr (Variable repr)
+  const        :: Label -> repr (StateType repr) -> repr (Variable repr)
+  extVar       :: Library -> Label -> repr (StateType repr) -> 
+    repr (Variable repr)
+  self         :: Label -> repr (Variable repr)
+  objVar       :: repr (Variable repr) -> repr (Variable repr) -> repr (Variable repr)
+  objVarSelf   :: Label -> Label -> repr (StateType repr) -> 
+    repr (Variable repr)
+  enumVar      :: Label -> Label -> repr (Variable repr)
+  listVar      :: Label -> repr (Permanence repr) -> repr (StateType repr) -> 
+    repr (Variable repr)
+  listOf       :: Label -> repr (StateType repr) -> repr (Variable repr)
+  -- Use for iterator variables, i.e. in a forEach loop.
+  iterVar      :: Label -> repr (StateType repr) -> repr (Variable repr)
 
   variableName :: repr (Variable repr) -> String
   variableType :: repr (Variable repr) -> repr (StateType repr)
@@ -163,22 +176,10 @@ class (VariableSym repr, StateVarSym repr) => ValueSym repr where
   ($:)  :: Label -> Label -> repr (Value repr)
   infixl 9 $:
 
-
-  const        :: Label -> repr (StateType repr) -> repr (Value repr)
   varVal       :: repr (Variable repr) -> repr (Value repr)
-  extVar       :: Library -> Label -> repr (StateType repr) -> repr (Value repr)
 --  global       :: Label -> repr (Value repr)         -- not sure how this one works, but in GOOL it was hardcoded to give an error so I'm leaving it out for now
-  self         :: Label -> repr (Value repr)
   arg          :: Integer -> repr (Value repr)
   enumElement  :: Label -> Label -> repr (Value repr)
-  enumVar      :: Label -> Label -> repr (Value repr)
-  objVar       :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-  objVarSelf   :: Label -> Label -> repr (StateType repr) -> repr (Value repr)
-  listVar      :: Label -> repr (Permanence repr) -> repr (StateType repr) -> 
-    repr (Value repr)
-  listOf       :: Label -> repr (StateType repr) -> repr (Value repr)
-  -- Use for iterator variables, i.e. in a forEach loop.
-  iterVar      :: Label -> repr (StateType repr) -> repr (Value repr)
 
   inputFunc :: repr (Value repr)
   printFunc       :: repr (Value repr)

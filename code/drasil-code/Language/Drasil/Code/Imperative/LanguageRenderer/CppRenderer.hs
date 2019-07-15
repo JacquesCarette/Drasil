@@ -205,6 +205,15 @@ instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
   var n t = pair (var n $ pfst t) (var n $ psnd t)
+  const n t = pair (const n $ pfst t) (const n $ psnd t)
+  extVar l n t = pair (extVar l n $ pfst t) (extVar l n $ psnd t)
+  self l = pair (self l) (self l)
+  enumVar e en = pair (enumVar e en) (enumVar e en)
+  objVar o v = pair (objVar (pfst o) (pfst v)) (objVar (psnd o) (psnd v))
+  objVarSelf l n t = pair (objVarSelf l n $ pfst t) (objVarSelf l n $ psnd t)
+  listVar n p t = pair (listVar n (pfst p) (pfst t)) (listVar n (psnd p) (psnd t))
+  n `listOf` t = pair (n `listOf` pfst t) (n `listOf` psnd t)
+  iterVar l t = pair (iterVar l $ pfst t) (iterVar l $ psnd t)
 
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
@@ -222,18 +231,9 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   ($->) v1 v2 = pair (($->) (pfst v1) (pfst v2)) (($->) (psnd v1) (psnd v2))
   ($:) l1 l2 = pair (($:) l1 l2) (($:) l1 l2)
 
-  const n t = pair (const n $ pfst t) (const n $ psnd t)
   varVal v = pair (varVal $ pfst v) (varVal $ psnd v)
-  extVar l n t = pair (extVar l n $ pfst t) (extVar l n $ psnd t)
-  self l = pair (self l) (self l)
   arg n = pair (arg n) (arg n)
   enumElement en e = pair (enumElement en e) (enumElement en e)
-  enumVar e en = pair (enumVar e en) (enumVar e en)
-  objVar o v = pair (objVar (pfst o) (pfst v)) (objVar (psnd o) (psnd v))
-  objVarSelf l n t = pair (objVarSelf l n $ pfst t) (objVarSelf l n $ psnd t)
-  listVar n p t = pair (listVar n (pfst p) (pfst t)) (listVar n (psnd p) (psnd t))
-  n `listOf` t = pair (n `listOf` pfst t) (n `listOf` psnd t)
-  iterVar l t = pair (iterVar l $ pfst t) (iterVar l $ psnd t)
   
   inputFunc = pair inputFunc inputFunc
   printFunc = pair printFunc printFunc
@@ -756,6 +756,16 @@ instance BinaryOpSym CppSrcCode where
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
   var n t = liftA2 (vard n) t (return $ varDocD n) 
+  const = var
+  extVar _ = var
+  self l = liftA2 (vard "this") (obj l) (return selfDocD)
+  enumVar e en = var e (enumType en)
+  objVar o v = liftA2 (vard $ variableName o ++ "." ++ variableName v)
+    (variableType v) (liftA2 objVarDocD o v)
+  objVarSelf _ = var
+  listVar n p t = var n (listType p t)
+  n `listOf` t = listVar n static_ t
+  iterVar l t = liftA2 (vard l) (iterator t) (return $ text $ "(*" ++ l ++ ")")
 
   variableName v = varName . unCPPSC
   variableType v = varType . unCPPSC
@@ -775,19 +785,9 @@ instance ValueSym CppSrcCode where
   ($->) = objVar
   ($:) = enumElement
 
-  const = varVal
   varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
-  extVar _ = varVal
-  self l = liftA2 (vd (Just "this")) (obj l) (return selfDocD)
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n+1)) argsList)
   enumElement en e = liftA2 (vd (Just e)) (enumType en) (return $ text e)
-  enumVar e en = varVal e (enumType en)
-  objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
-    (fmap valType v) (liftA2 objVarDocD o v)
-  objVarSelf _ = varVal
-  listVar n p t = varVal n (listType p t)
-  n `listOf` t = listVar n static_ t
-  iterVar l t = liftA2 mkVal (iterator t) (return $ text $ "(*" ++ l ++ ")")
   
   inputFunc = liftA2 mkVal string (return $ text "std::cin")
   printFunc = liftA2 mkVal void (return $ text "std::cout")
@@ -1290,6 +1290,15 @@ instance BinaryOpSym CppHdrCode where
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
   var n t = liftA2 (vard n) t (return $ varDocD n) 
+  const _ _ = liftA2 (vard "") void (return empty)
+  extVar _ _ _ = liftA2 (vard "") void (return empty)
+  self _ = liftA2 mkVal (vard "") (return empty)
+  enumVar _ _ = liftA2 (vard "") void (return empty)
+  objVar _ _ = liftA2 (vard "") void (return empty)
+  objVarSelf _ _ _ = liftA2 (vard "") void (return empty)
+  listVar _ _ _ = liftA2 (vard "") void (return empty)
+  listOf _ _ = liftA2 (vard "") void (return empty)
+  iterVar _ _ = liftA2 (vard "") void (return empty)
 
   variableName v = varName . unCPPHC
   variableType v = varType . unCPPHC
@@ -1307,18 +1316,9 @@ instance ValueSym CppHdrCode where
   ($->) _ _ = liftA2 mkVal void (return empty)
   ($:) _ _ = liftA2 mkVal void (return empty)
 
-  const _ _ = liftA2 mkVal void (return empty)
   varVal _ = liftA2 mkVal void (return empty)
-  extVar _ _ _ = liftA2 mkVal void (return empty)
-  self _ = liftA2 mkVal void (return empty)
   arg _ = liftA2 mkVal void (return empty)
   enumElement _ _ = liftA2 mkVal void (return empty)
-  enumVar _ _ = liftA2 mkVal void (return empty)
-  objVar _ _ = liftA2 mkVal void (return empty)
-  objVarSelf _ _ _ = liftA2 mkVal void (return empty)
-  listVar _ _ _ = liftA2 mkVal void (return empty)
-  listOf _ _ = liftA2 mkVal void (return empty)
-  iterVar _ _ = liftA2 mkVal void (return empty)
   
   inputFunc = liftA2 mkVal void (return empty)
   printFunc = liftA2 mkVal void (return empty)

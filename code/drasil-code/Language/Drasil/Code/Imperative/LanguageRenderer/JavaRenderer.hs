@@ -224,6 +224,16 @@ instance BinaryOpSym JavaCode where
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
   var n t = liftA2 (vard n) t (return $ varDocD n) 
+  const = var
+  extVar l n t = liftA2 (vard $ l ++ "." ++ n) t (return $ extVarDocD l n)
+  self l = liftA2 (vard "this") (obj l) (return selfDocD)
+  enumVar e en = var e (enumType en)
+  objVar o v = liftA2 (vard $ variableName o ++ "." ++ variableName v)
+    (variableType v) (liftA2 objVarDocD o v)
+  objVarSelf _ = var
+  listVar n p t = var n (listType p t)
+  n `listOf` t = listVar n static_ t
+  iterVar n t = var n (iterator t)
 
   variableName v = varName . unJC
   variableType v = varType . unJC
@@ -243,20 +253,10 @@ instance ValueSym JavaCode where
   ($->) = objVar
   ($:) = enumElement
 
-  const = varVal
   varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
-  extVar l n t = liftA2 (vd (Just $ l ++ "." ++ n)) t (return $ extVarDocD l n)
-  self l = liftA2 (vd (Just "this")) (obj l) (return selfDocD)
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
   enumElement en e = liftA2 (vd (Just $ en ++ "." ++ e)) (enumType en) 
     (return $ enumElemDocD en e)
-  enumVar e en = varVal e (enumType en)
-  objVar o v = liftA2 (vd (Just $ valueName o ++ "." ++ valueName v))
-    (fmap valType v) (liftA2 objVarDocD o v)
-  objVarSelf _ = varVal
-  listVar n p t = varVal n (listType p t)
-  n `listOf` t = listVar n static_ t
-  iterVar n t = varVal n (iterator t)
   
   inputFunc = liftA2 mkVal (obj "Scanner") (return $ parens (
     text "new Scanner(System.in)"))

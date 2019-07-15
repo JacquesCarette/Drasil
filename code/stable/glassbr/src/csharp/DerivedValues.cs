@@ -58,6 +58,9 @@ public class DerivedValues {
             outfile.WriteLine(" in module DerivedValues");
             outfile.Close();
         }
+        else {
+            throw new Exception("Undefined case encountered in function GTF");
+        }
         
         inParams.SD = Math.Sqrt((Math.Pow(inParams.SD_x, 2) + (Math.Pow(inParams.SD_y, 2) + Math.Pow(inParams.SD_z, 2))));
         outfile = new StreamWriter("log.txt", true);

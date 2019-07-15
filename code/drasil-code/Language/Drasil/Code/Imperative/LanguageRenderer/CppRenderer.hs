@@ -27,7 +27,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, 
   switchDocD, forDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
   plusPlusDocD, varDecDocD, varDecDefDocD, objDecDefDocD, constDecDefDocD, 
-  statementDocD, returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, notOpDocD, 
+  statementDocD, returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, 
+  stringListVals', stringListLists', notOpDocD, 
   negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, 
   tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, typeUnExpr, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -422,6 +423,11 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   discardFileLine f = pair (discardFileLine $ pfst f) (discardFileLine $ psnd f)
   stringSplit d vnew s = pair (stringSplit d (pfst vnew) (pfst s)) 
     (stringSplit d (psnd vnew) (psnd s))
+
+  stringListVals vals sl = pair (stringListVals (map pfst vals) (pfst sl))
+    (stringListVals (map psnd vals) (psnd sl))
+  stringListLists lsts sl = pair (stringListLists (map pfst lsts) (pfst sl))
+    (stringListLists (map psnd lsts) (psnd sl))
 
   break = pair break break
   continue = pair continue continue
@@ -942,6 +948,9 @@ instance StatementSym CppSrcCode where
         (oneLiner $ valState $ listAppend vnew v_word)
     ]
 
+  stringListVals = stringListVals'
+  stringListLists = stringListLists'
+
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)
 
@@ -1449,6 +1458,9 @@ instance StatementSym CppHdrCode where
   getFileInputLine _ _ = return (mkStNoEnd empty)
   discardFileLine _ = return (mkStNoEnd empty)
   stringSplit _ _ _ = return (mkStNoEnd empty)
+
+  stringListVals _ _ = return (mkStNoEnd empty)
+  stringListLists _ _ = return (mkStNoEnd empty)
 
   break = return (mkStNoEnd empty)
   continue = return (mkStNoEnd empty)

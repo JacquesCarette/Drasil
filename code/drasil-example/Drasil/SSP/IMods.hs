@@ -5,6 +5,7 @@ import Prelude hiding (tan, product, sin, cos)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, imNoDeriv)
 import Utils.Drasil
+import Drasil.DocLang.SRS (propCorSol) 
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint,
@@ -17,7 +18,6 @@ import Drasil.SSP.Assumptions (assumpSSC, assumpINSFL,
   assumpES, assumpSF, assumpSL)
 import Drasil.SSP.BasicExprs (eqlExpr, eqlExprN, eqlExprSepG, eqlExprNSepG,   
   eqlExprNoKQ, eqlExprNNoKQ, sliceExpr, momExpr, momExprNoKQ)
-import Drasil.SSP.DataCons (dataConstraintTable3)
 import Drasil.SSP.DataDefs (convertFunc1, convertFunc2, 
   intersliceWtrF, lengthB, angleA, angleB, slcHeight, ratioVariation)
 import Drasil.SSP.GenDefs (normShrRGD, momentEqlGD, normForcEqGD, mobShearWOGD, 
@@ -48,8 +48,10 @@ iMods = [fctSfty, nrmShrFor, nrmShrForNum, nrmShrForDen, intsliceFs, crtSlpId]
 --
 
 fctSfty :: InstanceModel
-fctSfty = im fctSftyRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [] (qw fs) [] (map makeCite [chen2005, karchewski2012]) fctSftyDeriv "fctSfty" [fctSftyDesc]
+fctSfty = im fctSftyRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle,
+  qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
+  [] (qw fs) [] (map makeCite [chen2005, karchewski2012])
+  (Just fctSftyDeriv) "fctSfty" [fctSftyDesc]
 
 fctSftyRC :: RelationConcept
 fctSftyRC = makeRC "fctSftyRC" factorOfSafety fctSftyDesc fctSftyRel -- fctSftyL
@@ -67,11 +69,11 @@ fctSftyDesc = foldlSent_ [ch shearRNoIntsl, S "is defined in", makeRef2S
   S "and", ch shearFNoIntsl, S "is defined in", makeRef2S mobShearWOGD]
 
 fctSftyDeriv :: Derivation
-fctSftyDeriv = weave [fctSftyDerivSentences1, map E fctSftyDerivEqns1] ++
+fctSftyDeriv = mkDerivNoHeader (weave [fctSftyDerivSentences1, map E fctSftyDerivEqns1] ++
   [E fctSftyDerivEqn10b, E fctSftyDerivEqn10c, fctSftyDerivEllipsis,
   E fctSftyDerivEqn10d, E fctSftyDerivEqn10e, E fctSftyDerivEqn10f] ++ 
   weave [fctSftyDerivSentences2, map E fctSftyDerivEqns2] ++  
-  fctSftyDerivSentence20
+  fctSftyDerivSentence20)
 
 fctSftyDerivSentences1 :: [Sentence]
 fctSftyDerivSentences1 = map foldlSentCol [fctSftyDerivSentence1,
@@ -366,8 +368,8 @@ fctSftyDerivEqn18 = sy fs * (idx (sy mobShrC) (sy numbSlices - int 1) *
 nrmShrFor :: InstanceModel
 nrmShrFor = im nrmShrForRC [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [] (qw normToShear) [] (map makeCite [chen2005, karchewski2012]) nrmShrDeriv "nrmShrFor" 
-  [nrmShrFDesc]
+  [] (qw normToShear) [] (map makeCite [chen2005, karchewski2012])
+  (Just nrmShrDeriv) "nrmShrFor" [nrmShrFDesc]
 
 nrmShrForRC :: RelationConcept
 nrmShrForRC = makeRC "nrmShrForRC" (nounPhraseSP "normal and shear force proportionality constant")
@@ -382,7 +384,8 @@ nrmShrFDesc = foldlSent [ch nrmShearNum, S "is defined in",
   makeRef2S nrmShrForDen]
 
 nrmShrDeriv :: Derivation
-nrmShrDeriv = weave [nrmShrDerivationSentences, map E nrmShrDerivEqns] ++ nrmShrDerivSentence5
+nrmShrDeriv = mkDerivNoHeader (weave [nrmShrDerivationSentences, map E nrmShrDerivEqns] ++
+  nrmShrDerivSentence5)
 
 nrmShrDerivSentence1 :: [Sentence]
 nrmShrDerivSentence1 = [S "From the", phrase momentEqlGD `sOf`
@@ -450,8 +453,8 @@ nrmShrDerivEqn4 = sy normToShear $= sum1toN
 nrmShrForNum :: InstanceModel
 nrmShrForNum = im nrmShrForNumRC [qw slopeDist, qw slopeHght, qw waterHght, 
   qw waterWeight, qw slipDist, qw slipHght]
-  [] (qw nrmShearNum) [] (map makeCite [chen2005, karchewski2012]) nrmShrFNumDeriv 
-  "nrmShrForNum" [nrmShrFNumDesc]
+  [] (qw nrmShearNum) [] (map makeCite [chen2005, karchewski2012])
+  (Just nrmShrFNumDeriv) "nrmShrForNum" [nrmShrFNumDesc]
 
 nrmShrForNumRC :: RelationConcept
 nrmShrForNumRC = makeRC "nrmShrForNumRC" (nounPhraseSP "normal and shear force proportionality constant numerator")
@@ -472,8 +475,8 @@ nrmShrFNumRel = inxi nrmShearNum $= case_ [case1,case2,case3]
           (sy numbSlices - 1)), sy index $= sy numbSlices)
 
 nrmShrFNumDeriv :: Derivation
-nrmShrFNumDeriv = [S "See" +:+ makeRef2S nrmShrFor +:+ 
-  S "for the derivation of" +:+. ch nrmShearNum]
+nrmShrFNumDeriv = mkDerivNoHeader [foldlSent [S "See", makeRef2S nrmShrFor,
+  S "for the derivation" `sOf` ch nrmShearNum]]
 
 nrmShrFNumDesc :: Sentence
 nrmShrFNumDesc = foldlSent [ch baseWthX, S "is defined in", 
@@ -488,8 +491,8 @@ nrmShrFNumDesc = foldlSent [ch baseWthX, S "is defined in",
 
 nrmShrForDen :: InstanceModel
 nrmShrForDen = im nrmShrForDenRC [qw slipDist, qw constF]
-  [] (qw nrmShearDen) [] (map makeCite [chen2005, karchewski2012]) nrmShrFDenDeriv
-  "nrmShrForDen" [nrmShrFDenDesc]
+  [] (qw nrmShearDen) [] (map makeCite [chen2005, karchewski2012])
+  (Just nrmShrFDenDeriv) "nrmShrForDen" [nrmShrFDenDesc]
 
 nrmShrForDenRC :: RelationConcept
 nrmShrForDenRC = makeRC "nrmShrForDenRC" (nounPhraseSP "normal and shear force proportionality constant denominator")
@@ -506,8 +509,8 @@ nrmShrFDenRel = inxi nrmShearDen $= case_ [
   ]
 
 nrmShrFDenDeriv :: Derivation
-nrmShrFDenDeriv = [S "See" +:+ makeRef2S nrmShrFor +:+ 
-  S "for the derivation of" +:+. ch nrmShearDen]
+nrmShrFDenDeriv = mkDerivNoHeader [foldlSent [S "See", makeRef2S nrmShrFor,
+  S "for the derivation" `sOf` ch nrmShearDen]]
 
 nrmShrFDenDesc :: Sentence
 nrmShrFDenDesc = foldlSent [ch baseWthX, S "is defined in", 
@@ -517,8 +520,9 @@ nrmShrFDenDesc = foldlSent [ch baseWthX, S "is defined in",
 --------------------------------------------------------------------------
 
 intsliceFs :: InstanceModel
-intsliceFs = im intsliceFsRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion, qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
-  [] (qw intNormForce) [] [makeCite chen2005] intrSlcDeriv "intsliceFs" [sliceFsDesc]
+intsliceFs = im intsliceFsRC [qw slopeDist, qw slopeHght, qw waterHght, qw effCohesion,
+  qw fricAngle, qw dryWeight, qw satWeight, qw waterWeight, qw slipDist, qw slipHght, qw constF]
+  [] (qw intNormForce) [] [makeCite chen2005] (Just intrSlcDeriv) "intsliceFs" [sliceFsDesc]
 
 intsliceFsRC :: RelationConcept
 intsliceFsRC = makeRC "intsliceFsRC" (nounPhraseSP "interslice normal forces")
@@ -542,8 +546,7 @@ sliceFsDesc = foldlSent [ch shearFNoIntsl, S "is defined in",
   makeRef2S convertFunc2]
 
 intrSlcDeriv :: Derivation
-intrSlcDeriv = weave [intrSlcDerivationSentences, map E intrSlcDerivEqns] ++
-  intrSlcDerivSentence3
+intrSlcDeriv = mkDerivNoHeader (weave [intrSlcDerivationSentences, map E intrSlcDerivEqns] ++ intrSlcDerivSentence3)
 
 intrSlcDerivSentence1 :: [Sentence]
 intrSlcDerivSentence1 = [S "This derivation is identical to the derivation for",
@@ -597,7 +600,7 @@ crtSlpIdRel = sy fsMin $= apply (sy minFunction) [sy slopeDist,
 crtSlpIdDesc :: Sentence
 crtSlpIdDesc = foldlSent [S "The", phrase minFunction, S "must enforce the",
   plural constraint, S "on the", phrase crtSlpSrf, S "expressed in" +:+.
-  (makeRef2S assumpSSC `sAnd` makeRef2S dataConstraintTable3), 
+  (makeRef2S assumpSSC `sAnd` makeRef2S (propCorSol [] [])), 
   S "The sizes of", ch waterDist `sAnd` ch waterHght +:+. 
   S "must be equal and not 1", S "The", S "sizes of", ch slopeDist `sAnd` 
   ch slopeHght +:+. (S "must be equal" `sAnd` S "at least 2"),

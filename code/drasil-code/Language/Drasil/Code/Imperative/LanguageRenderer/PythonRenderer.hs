@@ -23,17 +23,18 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
-  mkStNoEnd, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', 
-  sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', 
-  unExpr, typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD,
-  litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
-  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD,
-  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
-  commentedItem, addCommentsDocD, classDoc, moduleDoc, docFuncRepr,
-  valList, appendToBody, getterName, setterName)
+  mkStNoEnd, stringListVals', stringListLists', notOpDocD', negateOpDocD, 
+  sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', 
+  asinOpDocD', acosOpDocD', atanOpDocD', unExpr, typeUnExpr, equalOpDocD, 
+  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD, litFloatD, litIntD,
+  litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
+  funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, listAccessFuncDocD,
+  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
+  classDec, dot, forLabel, observerListName, commentedItem, addCommentsDocD, 
+  classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
+  setterName)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
   fd, ModData(..), md, MethodData(..), mthd, ParamData(..), TypeData(..), td, 
   ValData(..), vd)
@@ -246,7 +247,9 @@ instance NumericExpression PythonCode where
   (#+) = liftA3 binExpr plusOp
   (#-) = liftA3 binExpr minusOp
   (#*) = liftA3 binExpr multOp
-  (#/) = liftA3 binExpr divideOp
+  (#/) v1 v2 = pyDivision (getType $ valueType v1) (getType $ valueType v2) 
+    where pyDivision Integer Integer = liftA2 (binExpr (text "//")) v1 v2
+          pyDivision _ _ = liftA3 binExpr divideOp v1 v2
   (#%) = liftA3 binExpr moduloOp
   (#^) = liftA3 binExpr powerOp
 
@@ -391,6 +394,9 @@ instance StatementSym PythonCode where
   discardFileLine f = valState $ objMethodCall string f "readline" []
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
     (listType static_ string) [litString [d]]))  
+
+  stringListVals = stringListVals'
+  stringListLists = stringListLists'
 
   break = return (mkStNoEnd breakDocD)
   continue = return (mkStNoEnd continueDocD)

@@ -63,9 +63,8 @@ data SCSSub where
   GDs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
   DDs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
   IMs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
-  Constraints    :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> SCSSub
-  CorrSolnPpties :: [Contents] -> SCSSub
-
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+  CorrSolnPpties :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
 newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
@@ -104,8 +103,8 @@ mkDocDesc cdb = map sec where
   scsSub (GDs s f dd) = DL.GDs s f (allInDB gendefTable) dd
   scsSub (DDs s f dd) = DL.DDs s f (allInDB dataDefnTable) dd
   scsSub (IMs s f dd) = DL.IMs s f (allInDB insmodelTable) dd
-  scsSub (Constraints ls s1 s2 lc) = DL.Constraints ls s1 s2 lc
-  scsSub (CorrSolnPpties c) = DL.CorrSolnPpties c
+  scsSub (Constraints s c) = DL.Constraints s c
+  scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
   expandFromDB :: ([a] -> [a]) -> Getting (UMap a) ChunkDB (UMap a) -> [a]
   expandFromDB f = f . asOrderedList . (cdb ^.)
   allInDB :: Getting (UMap a) ChunkDB (UMap a) -> [a]

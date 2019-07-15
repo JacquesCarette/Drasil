@@ -454,10 +454,10 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
   ifCond     :: [(repr (Value repr), repr (Body repr))] -> repr (Body repr) ->
     repr (Statement repr)
   ifNoElse   :: [(repr (Value repr), repr (Body repr))] -> repr (Statement repr)
-  switch     :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] -> 
-    repr (Body repr) -> repr (Statement repr) -- is there value in separating Literals into their own type?
-  switchAsIf :: repr (Value repr) -> [(repr (Value repr), repr (Body repr))] ->
-    repr (Body repr) -> repr (Statement repr)
+  switch     :: repr (Variable repr) -> [(repr (Value repr), repr (Body repr))]
+    -> repr (Body repr) -> repr (Statement repr) -- is there value in separating Literals into their own type?
+  switchAsIf :: repr (Variable repr) -> [(repr (Value repr), repr (Body repr))] 
+    -> repr (Body repr) -> repr (Statement repr)
 
   ifExists :: repr (Value repr) -> repr (Body repr) -> repr (Body repr) ->
     repr (Statement repr)

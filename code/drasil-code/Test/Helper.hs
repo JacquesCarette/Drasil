@@ -10,10 +10,12 @@ helper :: (RenderSym repr) => repr (RenderFile repr)
 helper = fileDoc (buildModule "Helper" [] [doubleAndAdd] [])
 
 doubleAndAdd :: (RenderSym repr) => repr (Method repr)
-doubleAndAdd = function "doubleAndAdd" public static_ (mState float) 
+doubleAndAdd = docFunc "This function adds two numbers" 
+  ["First number to add", "Second number to add"] $ 
+  function "doubleAndAdd"  public static_ (mState float) 
   [stateParam $ var "num1" float, stateParam $ var "num2" float]
   (bodyStatements [
     varDec $ var "doubledSum" float, 
     var "doubledSum" float &= ((litFloat 2.0 #* var "num1" float) #+ 
       (litFloat 2.0 #* var "num2" float)),
-    returnVar "doubledSum" float])
+    returnState (var "doubledSum" float)])

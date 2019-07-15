@@ -32,10 +32,10 @@
 This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
-The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, \hyperref[Table:ToU]{Tab: ToU} lists the symbol, a description and the SI name.
 \begin{longtable}{l l l}
 \toprule
-Symbol & Description & SI Name
+\textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
 \\
 \midrule
 \endhead
@@ -57,10 +57,10 @@ s & time & second
 \end{longtable}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-The table that follows summarizes the symbols used in this document along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order.
+The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
 \begin{longtabu}{l X[l] l}
 \toprule
-Symbol & Description & Units
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
 \midrule
 \endhead
@@ -194,7 +194,7 @@ $ϕ$ & Orientation & rad
 \label{Sec:TAbbAcc}
 \begin{longtable}{l l}
 \toprule
-Abbreviation & Full Form
+\textbf{Abbreviation} & \textbf{Full Form}
 \\
 \midrule
 \endhead
@@ -291,7 +291,7 @@ There are no system constraints.
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-A system is needed to create a simple, lightweight, fast, and portable 2D rigid body physics library, which will allow for more accessible game development and the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (\hyperref[Sec:ExistingSolns]{Section: Off-The-Shelf Solutions}).
+A system is needed to create a simple, lightweight, fast, and portable 2D rigid body physics library, which will allow for more accessible game development and the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (\hyperref[Sec:offShelfSolns]{Section: Off-The-Shelf Solutions}).
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
@@ -299,12 +299,12 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Rigid body: A solid body in which deformation is neglected.}
 \item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
 \item{Centre of mass: The mean location of the distribution of mass of the object.}
-\item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length.}
+\item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from \cite{cartesianWiki}).}
 \item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.}
 \end{itemize}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the inputs, the goal statements are:
+Given the kinematic properties, and forces including any (collision forces) applied on a set of rigid bodies, the goal statements are:
 \begin{itemize}
 \item[Determine-Linear-Properties:\phantomsection\label{linearGS}]Determine their new positions and velocities over a period of time.
 \item[Determine-Angular-Properties:\phantomsection\label{angularGS}]Determine their new orientations and angular velocities over a period of time.
@@ -330,7 +330,7 @@ This section focuses on the general equations and laws that Chipmunk2D is based 
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:NewtonSecLawMot}
 \phantomsection 
 \label{TM:NewtonSecLawMot}
@@ -352,12 +352,13 @@ Notes & The net force $\mathbf{F}$ (N) on a body is proportional to the accelera
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:NewtonThirdLawMot}
 \phantomsection 
 \label{TM:NewtonThirdLawMot}
@@ -378,12 +379,13 @@ Notes & Every action has an equal and opposite reaction. In other words, the for
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:UniversalGravLaw}
 \phantomsection 
 \label{TM:UniversalGravLaw}
@@ -409,12 +411,13 @@ Notes & Two rigid bodies in the universe attract each other with a force $\mathb
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:ChaslesThm}
 \phantomsection 
 \label{TM:ChaslesThm}
@@ -437,12 +440,13 @@ Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of 
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:NewtonSecLawRotMot}
 \phantomsection 
 \label{TM:NewtonSecLawRotMot}
@@ -464,7 +468,8 @@ Notes & The net torque $τ$ (Nm) on a rigid body is proportional to its angular 
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
@@ -475,7 +480,7 @@ This section collects and defines all the data needed to build the instance mode
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:ctrOfMass}
 \phantomsection 
 \label{DD:ctrOfMass}
@@ -503,12 +508,13 @@ Notes & \hyperref[assumpOT]{A: objectTy}
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[IM:transMot]{IM: transMot} and \hyperref[IM:col2D]{IM: col2D}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:linDisp}
 \phantomsection 
 \label{DD:linDisp}
@@ -520,7 +526,7 @@ Symbol & $\mathbf{r}(t)$
 Units & m
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{r}(t)=\frac{d\,\mathbf{p}\left(t\right)}{d\,t}
+           \mathbf{r}(t)=\frac{\,d\mathbf{p}\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -536,12 +542,13 @@ Notes & \hyperref[assumpOT]{A: objectTy}
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[IM:transMot]{IM: transMot}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:linVel}
 \phantomsection 
 \label{DD:linVel}
@@ -553,7 +560,7 @@ Symbol & $\mathbf{v}(t)$
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{v}(t)=\frac{d\,\mathbf{r}\left(t\right)}{d\,t}
+           \mathbf{v}(t)=\frac{\,d\mathbf{r}\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -569,12 +576,13 @@ Notes & \hyperref[assumpOT]{A: objectTy}
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[IM:transMot]{IM: transMot}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:linAcc}
 \phantomsection 
 \label{DD:linAcc}
@@ -586,7 +594,7 @@ Symbol & $\mathbf{a}(t)$
 Units & $\frac{\text{m}}{\text{s}^{2}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{a}(t)=\frac{d\,\mathbf{v}\left(t\right)}{d\,t}
+           \mathbf{a}(t)=\frac{\,d\mathbf{v}\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -602,12 +610,13 @@ Notes & \hyperref[assumpOT]{A: objectTy}
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[IM:transMot]{IM: transMot}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angDisp}
 \phantomsection 
 \label{DD:angDisp}
@@ -619,7 +628,7 @@ Symbol & $θ$
 Units & rad
 \\ \midrule \\
 Equation & \begin{displaymath}
-           θ=\frac{d\,ϕ\left(t\right)}{d\,t}
+           θ=\frac{\,dϕ\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -635,12 +644,13 @@ Notes & \hyperref[assumpOT]{A: objectTy}
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[IM:rotMot]{IM: rotMot}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angVel}
 \phantomsection 
 \label{DD:angVel}
@@ -652,7 +662,7 @@ Symbol & $ω$
 Units & $\frac{\text{rad}}{\text{s}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           ω=\frac{d\,θ\left(t\right)}{d\,t}
+           ω=\frac{\,dθ\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -668,12 +678,13 @@ Notes & \hyperref[assumpOT]{A: objectTy}
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[IM:rotMot]{IM: rotMot}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angAccel}
 \phantomsection 
 \label{DD:angAccel}
@@ -685,7 +696,7 @@ Symbol & $α$
 Units & $\frac{\text{rad}}{\text{s}^{2}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
-           α=\frac{d\,ω\left(t\right)}{d\,t}
+           α=\frac{\,dω\left(t\right)}{\,dt}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -701,12 +712,13 @@ Notes & \hyperref[assumpOT]{A: objectTy}
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[IM:rotMot]{IM: rotMot}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:impulse}
 \phantomsection 
 \label{DD:impulse}
@@ -743,12 +755,13 @@ Notes & \hyperref[assumpOT]{A: objectTy}
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[IM:col2D]{IM: col2D}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:chalses}
 \phantomsection 
 \label{DD:chalses}
@@ -778,12 +791,13 @@ Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of 
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:torque}
 \phantomsection 
 \label{DD:torque}
@@ -809,12 +823,13 @@ Notes & The torque on a body measures the the tendency of a force to rotate the 
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:kEnergy}
 \phantomsection 
 \label{DD:kEnergy}
@@ -843,12 +858,13 @@ Notes & The kinetic energy of an object is the energy it possess due to its moti
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:coeffRestitution}
 \phantomsection 
 \label{DD:coeffRestitution}
@@ -875,12 +891,13 @@ Notes & The coefficient of restitution ${C_{R}}$ is a unitless, dimensionless qu
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:reVeInColl}
 \phantomsection 
 \label{DD:reVeInColl}
@@ -906,12 +923,13 @@ Notes & In a collision, the velocity of a rigid body \hyperref[assumpOT]{A: obje
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:impulseV}
 \phantomsection 
 \label{DD:impulseV}
@@ -932,17 +950,20 @@ Description & \begin{symbDescription}
               \item{$Δ\mathbf{v}$ is the change in velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & An impulse (vector) $\mathbf{J}$ occurs when a force $\mathbf{F}$ acts over a body over an interval of time Derivation of impulse (vector).
+Notes & An impulse (vector) $\mathbf{J}$ occurs when a force $\mathbf{F}$ acts over a body over an interval of time.
         \hyperref[assumpOT]{A: objectTy}
 \\ \midrule \\
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
-Derivation of impulse (vector) - Newton's second law of motion states:
+\paragraph{Detailed derivation of impulse (vector):}
+\label{DD:impulseVDeriv}
+Newton's second law of motion states:
 \begin{displaymath}
-\mathbf{F}=m \mathbf{a}=m \frac{d\,\mathbf{v}}{d\,t}
+\mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}
 \end{displaymath}
 Rearranging :
 \begin{displaymath}
@@ -955,7 +976,7 @@ Integrating the right hand side :
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:potEnergy}
 \phantomsection 
 \label{DD:potEnergy}
@@ -985,12 +1006,13 @@ Notes & The potential energy of an object is the energy held by an object becaus
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:momentOfInertia}
 \phantomsection 
 \label{DD:momentOfInertia}
@@ -1017,7 +1039,8 @@ Notes & The moment of inertia $\mathbf{I}$ of a body measures how much torque is
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
@@ -1026,7 +1049,7 @@ The goal \hyperref[linearGS]{GS: Determine-Linear-Properties} is met by \hyperre
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:transMot}
 \phantomsection 
 \label{IM:transMot}
@@ -1056,7 +1079,7 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{a}_{i}}=\frac{d\,{\mathbf{v}_{i}}\left(t\right)}{d\,t}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
+           {\mathbf{a}_{i}}=\frac{\,d{\mathbf{v}_{i}}\left(t\right)}{\,dt}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1073,12 +1096,13 @@ Notes & The above equation expresses the total acceleration of the rigid body \h
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:rotMot}
 \phantomsection 
 \label{IM:rotMot}
@@ -1107,7 +1131,7 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           α=\frac{d\,ω\left(t\right)}{d\,t}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}
+           α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1123,12 +1147,13 @@ Notes & The above equation for the total angular acceleration of the rigid body 
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:col2D}
 \phantomsection 
 \label{IM:col2D}
@@ -1177,14 +1202,15 @@ Notes & This instance model is based on our assumptions regarding rigid body \hy
 Source & --
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
 \begin{longtable}{l l l l}
 \toprule
-Var & Physical Constraints & Typical Value & Uncert.
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
 \midrule
 \endhead
@@ -1214,9 +1240,12 @@ $ϕ$ & -- & $\frac{π}{2}$ rad & 10$\%$
 \caption{Input Data Constraints}
 \label{Table:InDataConstraints}
 \end{longtable}
+\subsubsection{Properties of a Correct Solution}
+\label{Sec:CorSolProps}
+\hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 \begin{longtable}{l}
 \toprule
-Var
+\textbf{Var}
 \\
 \midrule
 \endhead
@@ -1232,9 +1261,6 @@ $ω$
 \caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
 \end{longtable}
-\subsubsection{Properties of a Correct Solution}
-\label{Sec:CorSolProps}
-FIXME.
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -1282,7 +1308,7 @@ This section lists the unlikely changes to be made to the software.
 \item[Objects-Rigid-Bodies:\phantomsection\label{ucORB}]All objects are rigid bodies.
 \end{itemize}
 \section{Off-The-Shelf Solutions}
-\label{Sec:ExistingSolns}
+\label{Sec:offShelfSolns}
 As mentioned in \hyperref[Sec:ProbDesc]{Section: Problem Description}, there already exist free open source game physics libraries. Similar 2D physics libraries are:
 \begin{itemize}
 \item{Box2D: http://box2d.org/}
@@ -1296,10 +1322,10 @@ Free open source 3D game physics libraries include:
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements on the data definitions, theoretical models, general definitions, and instance models.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
 \begin{longtable}{l l l l l l l l}
 \toprule
- & \hyperref[assumpOT]{A: objectTy} & \hyperref[assumpOD]{A: objectDimension} & \hyperref[assumpCST]{A: coordinateSystemTy} & \hyperref[assumpAD]{A: axesDefined} & \hyperref[assumpCT]{A: collisionType} & \hyperref[assumpDI]{A: dampingInvolvement} & \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement}
+\textbf{} & \textbf{\hyperref[assumpOT]{A: objectTy}} & \textbf{\hyperref[assumpOD]{A: objectDimension}} & \textbf{\hyperref[assumpCST]{A: coordinateSystemTy}} & \textbf{\hyperref[assumpAD]{A: axesDefined}} & \textbf{\hyperref[assumpCT]{A: collisionType}} & \textbf{\hyperref[assumpDI]{A: dampingInvolvement}} & \textbf{\hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement}}
 \\
 \midrule
 \endhead
@@ -1367,6 +1393,20 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  & 
 \\
+\hyperref[highPerformance]{NFR: High-Performance} &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  & 
+\\
+\hyperref[reliable]{NFR: Reliable} &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  & 
+\\
 \hyperref[lcVODES]{LC: Variable-ODE-Solver} &  &  &  &  &  &  & 
 \\
 \hyperref[lcEC]{LC: Expanded-Collisions} &  &  &  &  & X &  & 
@@ -1389,7 +1429,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[DD:chalses]{DD: chalses} & \hyperref[DD:torque]{DD: torque} & \hyperref[DD:kEnergy]{DD: kEnergy} & \hyperref[DD:coeffRestitution]{DD: coeffRestitution} & \hyperref[DD:reVeInColl]{DD: reVeInColl} & \hyperref[DD:impulseV]{DD: impulseV} & \hyperref[DD:potEnergy]{DD: potEnergy} & \hyperref[DD:momentOfInertia]{DD: momentOfInertia} & \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} & \hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot} & \hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[IM:col2D]{IM: col2D}
+\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chalses]{DD: chalses}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:ChaslesThm]{TM: ChaslesThm}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}}
 \\
 \midrule
 \endhead
@@ -1445,30 +1485,48 @@ The purpose of the traceability matrices is to provide easy references on what h
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
 \end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[DD:ctrOfMass]{DD: ctrOfMass} & \hyperref[DD:linDisp]{DD: linDisp} & \hyperref[DD:linVel]{DD: linVel} & \hyperref[DD:linAcc]{DD: linAcc} & \hyperref[DD:angDisp]{DD: angDisp} & \hyperref[DD:angVel]{DD: angVel} & \hyperref[DD:angAccel]{DD: angAccel} & \hyperref[DD:impulse]{DD: impulse} & \hyperref[DD:chalses]{DD: chalses} & \hyperref[DD:torque]{DD: torque} & \hyperref[DD:kEnergy]{DD: kEnergy} & \hyperref[DD:coeffRestitution]{DD: coeffRestitution} & \hyperref[DD:reVeInColl]{DD: reVeInColl} & \hyperref[DD:impulseV]{DD: impulseV} & \hyperref[DD:potEnergy]{DD: potEnergy} & \hyperref[DD:momentOfInertia]{DD: momentOfInertia} & \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} & \hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot} & \hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw} & \hyperref[TM:ChaslesThm]{TM: ChaslesThm} & \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & \hyperref[IM:transMot]{IM: transMot} & \hyperref[IM:rotMot]{IM: rotMot} & \hyperref[IM:col2D]{IM: col2D} & \hyperref[simSpace]{FR: Simulation-Space} & \hyperref[inputInitialConds]{FR: Input-Initial-Conditions} & \hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} & \hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} & \hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} & \hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} & \hyperref[deterColls]{FR: Determine-Collisions} & \hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}
+\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chalses]{DD: chalses}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:ChaslesThm]{TM: ChaslesThm}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}} & \textbf{\hyperref[simSpace]{FR: Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR: Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR: Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[highPerformance]{NFR: High-Performance}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[portable]{NFR: Portable}} & \textbf{\hyperref[reliable]{NFR: Reliable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
 \\
 \midrule
 \endhead
-\hyperref[simSpace]{FR: Simulation-Space} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[linearGS]{GS: Determine-Linear-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputInitialConds]{FR: Input-Initial-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[angularGS]{GS: Determine-Angular-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[simSpace]{FR: Simulation-Space} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputInitialConds]{FR: Input-Initial-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[deterColls]{FR: Determine-Collisions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[deterColls]{FR: Determine-Collisions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[highPerformance]{NFR: High-Performance} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reliable]{NFR: Reliable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
-\caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}
+\caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}
 \label{Table:TraceMatAllvsR}
 \end{longtable}
 \section{Values of Auxiliary Constants}
@@ -1531,6 +1589,13 @@ editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},
 pages={"107-121"},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
+
+@misc{cartesianWiki,
+author={Wikipedia Contributors},
+title={Cartesian coordinate system},
+howpublished={\url{https://en.wikipedia.org/wiki/Cartesian\_coordinate\_system}},
+month=jun,
+year={2019}}
 
 @article{sciComp2013,
 author={Wilson, Greg and Aruliah, D. A. and Titus, C. and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumblet, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},

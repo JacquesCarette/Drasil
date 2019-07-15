@@ -6,18 +6,18 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
-import Drasil.GlassBR.Body (systInfo, srs, printSetting)
+import Drasil.GlassBR.Body (si, srs, printSetting)
 import Drasil.GlassBR.ModuleDefs (allMods)
 
 code :: CodeSpec
-code = codeSpec systInfo choices allMods
+code = codeSpec si choices allMods
 
 choices :: Choices
 choices = Choices {
   lang = [Python, Cpp, CSharp, Java],
   impType = Program,
   logFile = "log.txt",
-  logging = LogNone,
+  logging = LogAll,
   comments = CommentNone,
   onSfwrConstraint = Exception,
   onPhysConstraint = Exception,

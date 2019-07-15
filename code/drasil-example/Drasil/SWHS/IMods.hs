@@ -38,8 +38,8 @@ eBalanceOnWtr :: InstanceModel
 eBalanceOnWtr = im eBalanceOnWtrRC [qw wMass, qw htCapW, qw coilHTC, qw pcmSA,
  qw pcmHTC, qw coilSA, qw tempPCM, qw timeFinal, qw tempC, qw tempInit]
   [sy tempInit $< sy tempC] (qw tempW)
-   [0 $< sy time $< sy timeFinal] [makeCite koothoor2013] eBalanceOnWtrDeriv
-   "eBalanceOnWtr" [balWtrDesc]
+   [0 $< sy time $< sy timeFinal] [makeCite koothoor2013]
+   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" [balWtrDesc]
 
 eBalanceOnWtrRC :: RelationConcept
 eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " ++
@@ -77,9 +77,8 @@ balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy timeFinal)
 ----------------------------------------------
 -- type Derivation = [Sentence]
 eBalanceOnWtrDeriv :: Derivation
-eBalanceOnWtrDeriv =
-  S "Derivation of the" +:+ phrase energy +:+ S "balance on water:" :
-  weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtr_deriv_eqns__im1]
+eBalanceOnWtrDeriv = mkDerivName (S "the" +:+ phrase energy +:+ S "balance on water")
+  (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtr_deriv_eqns__im1])
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
@@ -209,8 +208,8 @@ eBalanceOnPCM :: InstanceModel
 eBalanceOnPCM = im eBalanceOnPCMRC [qw tempMeltP, qw timeFinal, qw tempInit, qw pcmSA,
  qw pcmHTC, qw pcmMass, qw htCapSP, qw htCapLP]
   [sy tempInit $< sy tempMeltP] (qw tempPCM)
-   [0 $< sy time $< sy timeFinal] [makeCite koothoor2013] eBalanceOnPCMDeriv 
-   "eBalanceOnPCM" [balPCMDescNote]
+   [0 $< sy time $< sy timeFinal] [makeCite koothoor2013]
+   (Just eBalanceOnPCMDeriv ) "eBalanceOnPCM" [balPCMDescNote]
 
 eBalanceOnPCMRC :: RelationConcept
 eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
@@ -277,13 +276,12 @@ balPCMDescNote = foldlSent [
 --    Derivation of eBalanceOnPCM          --
 ----------------------------------------------
 eBalanceOnPCMDeriv :: Derivation
-eBalanceOnPCMDeriv =
-  [S "Detailed derivation of the" +:+ phrase energy +:+ S "balance on the PCM during " +:+ 
-    S "sensible heating phase:" ] ++
-  weave [eBalanceOnPCMDerivSentences, map E eBalanceOnPCM_deriv_eqns__im2]
+eBalanceOnPCMDeriv = mkDerivName (S "the" +:+ phrase energy +:+
+  S "balance on the PCM during sensible heating phase")
+  (weave [eBalanceOnPCMDerivSentences, map E eBalanceOnPCM_deriv_eqns__im2]
   ++ eBalanceOnPCMDerivDesc5 htCapSP htCapLP tauSP tauLP surface area melting vol assumpVCMPN
   ++ eBalanceOnPCMDerivDesc6 tempPCM
-  ++ eBalanceOnPCMDerivDesc7 boiling solid liquid assumpNGSP
+  ++ eBalanceOnPCMDerivDesc7 boiling solid liquid assumpNGSP)
 
 eBalanceOnPCMDerivSentences :: [Sentence]
 eBalanceOnPCMDerivSentences = map foldlSentCol [
@@ -382,8 +380,8 @@ eBalanceOnPCM_deriv_eqns__im2 = [eBalanceOnPCM_Eqn1, eBalanceOnPCM_Eqn2,
 ---------
 heatEInWtr :: InstanceModel
 heatEInWtr = im heatEInWtrRC [qw tempInit, qw wMass, qw htCapW, qw wMass] 
-  [] (qw watE) [0 $< sy time $< sy timeFinal] [makeCite koothoor2013] [] "heatEInWtr"
-  [htWtrDesc]
+  [] (qw watE) [0 $< sy time $< sy timeFinal] [makeCite koothoor2013]
+  Nothing "heatEInWtr" [htWtrDesc]
 
 heatEInWtrRC :: RelationConcept
 heatEInWtrRC = makeRC "heatEInWtrRC" (nounPhraseSP "Heat energy in the water")

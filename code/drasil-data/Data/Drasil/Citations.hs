@@ -1,5 +1,4 @@
-module Data.Drasil.Citations (campidelli, koothoor2013, parnas1972, parnasClements1986, 
-  parnasClements1984, smithLai2005, jnlCGJ) where
+module Data.Drasil.Citations where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
 import Data.Drasil.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem, 
@@ -9,11 +8,18 @@ import Data.Drasil.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem,
 -- CITATIONS --
 ---------------
 
-campidelli, koothoor2013, parnas1972, parnasClements1984, parnasClements1986, smithLai2005 :: Citation
+campidelli, cartesianWiki, koothoor2013, parnas1972, parnasClements1984,
+  parnasClements1986, smithLai2005 :: Citation
 
 campidelli = cBooklet
   "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading"
   [author [mCampidelli]] "campidelli"
+
+cartesianWiki = cMisc
+  [author [mononym "Wikipedia Contributors"], title "Cartesian coordinate system",
+  howPublishedU "https://en.wikipedia.org/wiki/Cartesian_coordinate_system",
+  month Jun, year 2019]
+  "cartesianWiki"
 
 koothoor2013 = 
   cMThesis [nKoothoor] 

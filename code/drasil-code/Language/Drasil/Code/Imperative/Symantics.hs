@@ -413,9 +413,9 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   stringSplit      :: Char -> repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)
 
-  stringListVals :: [repr (Value repr)] -> repr (Value repr) -> 
+  stringListVals :: [repr (Variable repr)] -> repr (Value repr) -> 
     repr (Statement repr)
-  stringListLists :: [repr (Value repr)] -> repr (Value repr) ->
+  stringListLists :: [repr (Variable repr)] -> repr (Value repr) ->
     repr (Statement repr)
 
   break :: repr (Statement repr)

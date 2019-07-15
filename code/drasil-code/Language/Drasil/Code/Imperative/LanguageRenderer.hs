@@ -409,20 +409,20 @@ mkSt s = (s, Semi)
 mkStNoEnd :: Doc -> (Doc, Terminator)
 mkStNoEnd s = (s, Empty)
 
-stringListVals' :: (RenderSym repr) => [repr (Value repr)] -> repr (Value repr)
-  -> repr (Statement repr)
-stringListVals' vals sl = multi $ stringList (getType $ valueType sl)
-    where stringList (List String) = assignVals vals 0
+stringListVals' :: (RenderSym repr) => [repr (Variable repr)] -> 
+  repr (Value repr) -> repr (Statement repr)
+stringListVals' vars sl = multi $ stringList (getType $ valueType sl)
+    where stringList (List String) = assignVals vars 0
           stringList _ = error 
             "Value passed to stringListVals must be a list of strings"
           assignVals [] _ = []
-          assignVals (v:vs) n = assign v (cast (valueType v) 
+          assignVals (v:vs) n = assign v (cast (variableType v) 
             (listAccess sl (litInt n))) : assignVals vs (n+1)
 
-stringListLists' :: (RenderSym repr) => [repr (Value repr)] -> repr (Value repr)
+stringListLists' :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr)
   -> repr (Statement repr)
 stringListLists' lsts sl = stringList (getType $ valueType sl)
-  where stringList (List String) = listVals (map (getType . valueType) lsts)
+  where stringList (List String) = listVals (map (getType . variableType) lsts)
         stringList _ = error 
           "Value passed to stringListLists must be a list of strings"
         listVals [] = loop
@@ -430,7 +430,7 @@ stringListLists' lsts sl = stringList (getType $ valueType sl)
         listVals _ = error 
           "All values passed to stringListLists must have list types"
         loop = forRange l_i (litInt 0) (listSize sl #/ numLists) (litInt 1)
-          (bodyStatements $ appendLists lsts 0)
+          (bodyStatements $ appendLists (map varVal lsts) 0)
         appendLists [] _ = []
         appendLists (v:vs) n = valState (listAppend v (cast (listInnerType $ 
           valueType v) (listAccess sl ((v_i #* numLists) #+ litInt n)))) 

@@ -29,14 +29,14 @@ import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
   Month, Number, Note, Journal, Editor, Chapter, Institution, Edition, BookTitle,
   Author, Address), Citation(Cite), BibRef)
-import Language.Drasil.Printing.LayoutObj (LayoutObj(Graph, Bib, Figure, Definition,
-  List, Table, EqnBlock, Paragraph, Header, HDiv), Document(Document))
+import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (br, paren, sqbrac)
-import Language.Drasil.TeX.Helpers (label, caption, centering, mkEnv, mkEnvArgs, item', description,
-  includegraphics, center, figure, item, symbDescription, enumerate, itemize, toEqn, empty,
-  newline, superscript, parens, fraction, quote, externalref, commandD, command2D, br, command0, command, mathbb,
-  snref, cite, citeInfo, sec, newpage, maketoc, maketitle, document, author, title)
+import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
+  cite, citeInfo, command, command0, commandD, command2D, description, document,
+  empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
+  itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgs, newline, newpage,
+  parens, quote, sec, snref, superscript, symbDescription, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -53,7 +53,7 @@ buildStd sm (Document t a c) =
   document (maketitle %% maketoc %% newpage %% print sm c)
 
 -- clean until here; lo needs its sub-functions fixed first though
-lo ::  LayoutObj -> PrintingInformation -> D
+lo :: LayoutObj -> PrintingInformation -> D
 lo (Header d t l)       _  = sec d (spec t) %% label (spec l)
 lo (HDiv _ con _)       sm = print sm con -- FIXME ignoring 2 arguments?
 lo (Paragraph contents) _  = toText $ spec contents
@@ -228,7 +228,7 @@ dontCount :: String
 dontCount = "\\/[]{}()_^$:"
 
 makeHeaders :: [Spec] -> D
-makeHeaders ls = hpunctuate (text " & ") (map (commandD "textbf" . spec) ls) %% pure dbs
+makeHeaders ls = hpunctuate (text " & ") (map (bold . spec) ls) %% pure dbs
 
 makeRows :: [[Spec]] -> D
 makeRows = foldr (\c -> (%%) (makeColumns c %% pure dbs)) empty
@@ -339,7 +339,6 @@ makeDefTable sm ps l = mkEnvArgs "tabular" (col rr colAwidth ++ col (rr ++ "\\ar
   pure $ dbs <+> text "\\bottomrule"
   ]
   where
-    bold = commandD "textbf"
     col s x = ">" ++ brace s ++ "p" ++ brace (show x ++ tw)
     rr = "\\raggedright"
     tw = "\\textwidth"

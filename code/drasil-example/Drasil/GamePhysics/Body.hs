@@ -13,8 +13,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   SolChSpec(SCSProg), TConvention(..), TSIntro(..), Verbosity(Verbose),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
-  outDataConstTbl, outDataConstTbl, tsymb, traceMatStandard, solutionLabel)
+  PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -23,7 +22,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   information, input_, interface, model, object, organization, physical,
   physicalSim, physics, problem, product_, project, quantity, realtime,
   reference, section_, simulation, software, softwareSys, srsDomains, system,
-  systemConstraint, sysCont, task, template, user, doccon, doccon')
+  systemConstraint, sysCont, task, template, user, doccon, doccon', property)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
@@ -35,7 +34,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody)
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon, mathcon', rightHand)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
@@ -48,7 +47,7 @@ import qualified Drasil.GamePhysics.DataDefs as GP (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
-import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, propsDeriv)
+import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
@@ -75,17 +74,17 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
    SSDSec $ SSDProg
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
-        , Goals [S "the" +:+ plural input_]]
+        , Goals [S "the kinematic" +:+ plural property :+: S ", and" +:+ plural QP.force +:+
+                 S "including any" +:+ sParen (phrase CP.collision +:+ plural QP.force) +:+
+                 S "applied on a set of" +:+ plural CP.rigidBody]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
         , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-          ShowDerivation
-        , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
-            [inDataConstTbl inputConstraints, outDataConstTbl outputConstraints]
-        , CorrSolnPpties propsDeriv
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , Constraints (S "FIXME") inputConstraints
+        , CorrSolnPpties outputConstraints []
         ]
       ],
     ReqrmntSec $ ReqsProg [
@@ -209,7 +208,6 @@ para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldl
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope_of_requirements_intro_p1 :: Sentence
-
 scope_of_requirements_intro_p1 = foldlSent_
   [S "the", phrase physicalSim `sOf` getAcc twoD, 
   plural CP.rigidBody, S "acted on by", plural QP.force]
@@ -228,7 +226,6 @@ scope_of_requirements_intro_p1 = foldlSent_
 -------------------------------------
 
 organizationOfDocumentsIntro :: Sentence
-
 organizationOfDocumentsIntro = foldlSent 
   [S "The", phrase organization, S "of this", phrase document, 
   S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
@@ -404,7 +401,6 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 ------------------------------
 -- SECTION 5 : REQUIREMENTS --
 ------------------------------
-
 -- in Requirements.hs
 
 -----------------------------------

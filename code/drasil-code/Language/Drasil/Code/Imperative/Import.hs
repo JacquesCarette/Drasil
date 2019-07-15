@@ -9,7 +9,7 @@ import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  ValueExpression(..), FunctionSym(..), SelectorFunction(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,    
@@ -32,9 +32,9 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
   programName)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
-import Language.Drasil.Code.DataDesc (Entry(JunkEntry, ListEntry, Entry),
-  LinePattern(Repeat, Straight), Data(Line, Lines, JunkData, Singleton), 
-  DataDesc, isLine, isLines, getInputs, getPatternInputs, junkLine, singleton)
+import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
+  Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
+  getPatternInputs, junkLine, singleton)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (nub, intersperse, (\\), stripPrefix)
@@ -43,7 +43,7 @@ import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes, mapMaybe)
 import Control.Applicative ((<$>))
-import Control.Monad (when,liftM2,liftM3,zipWithM)
+import Control.Monad (when,liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.))
 import qualified Prelude as P ((<>))
@@ -111,7 +111,7 @@ maybeLog v = do
   return $ maybeToList l
 
 publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label -> 
-  [ParamData repr] -> Reader (State repr) [repr (Block repr)] -> 
+  [repr (Parameter repr)] -> Reader (State repr) [repr (Block repr)] -> 
   Reader (State repr) (repr (Method repr))
 publicMethod mt l pl u = do
   g <- ask
@@ -367,9 +367,9 @@ genOutputFormat = do
 
 -----
 
-genMethodCall :: (RenderSym repr) => repr (Scope repr) -> repr
-  (Permanence repr) -> Comments -> Logging -> repr (MethodType repr) ->
-  Label -> [ParamData repr] -> Reader (State repr) [repr (Block repr)] -> 
+genMethodCall :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr)
+  -> Comments -> Logging -> repr (MethodType repr) -> Label -> 
+  [repr (Parameter repr)] -> Reader (State repr) [repr (Block repr)] -> 
   Reader (State repr) (repr (Method repr))
 genMethodCall s pr doComments doLog t n p b = do
   let loggedBody LogFunc = loggedMethod n vals b
@@ -377,11 +377,11 @@ genMethodCall s pr doComments doLog t n p b = do
       loggedBody _       = b
       commBody CommentFunc = commMethod n pNames
       commBody _           = id
-      pTypes = map paramType p
-      pNames = map paramName p
+      pTypes = map parameterType p
+      pNames = map parameterName p
       vals = zipWith var pNames pTypes
   bod <- commBody doComments (loggedBody doLog)
-  return $ function n s pr t (map param p) (body bod)
+  return $ function n s pr t p (body bod)
 
 genInOutFunc :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) 
   -> Comments -> Logging -> Label -> [repr (Value repr)] -> [repr (Value repr)] 
@@ -486,7 +486,7 @@ getInputDecl = do
   getDecl (inStruct g) (inputs $ codeSpec g)
 
 getFuncCall :: (RenderSym repr) => String -> repr (StateType repr) -> 
-  Reader (State repr) [ParamData repr] -> 
+  Reader (State repr) [repr (Parameter repr)] -> 
   Reader (State repr) (Maybe (repr (Value repr)))
 getFuncCall n t funcPs = do
   g <- ask
@@ -563,7 +563,8 @@ getInputFormatOuts = do
 toValues :: (RenderSym repr) => [CodeChunk] -> [repr (Value repr)]
 toValues = map (\c -> var (codeName c) ((convType . codeType) c))
 
-getDerivedParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
+getDerivedParams :: (RenderSym repr) => 
+  Reader (State repr) [repr (Parameter repr)]
 getDerivedParams = do
   g <- ask
   let s = csi $ codeSpec g
@@ -571,7 +572,8 @@ getDerivedParams = do
       reqdVals = concatMap (flip codevars (sysinfodb s) . codeEquat) dvals
   getParams reqdVals
 
-getConstraintParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
+getConstraintParams :: (RenderSym repr) => 
+  Reader (State repr) [repr (Parameter repr)]
 getConstraintParams = do 
   g <- ask
   let cm = cMap $ csi $ codeSpec g
@@ -582,13 +584,14 @@ getConstraintParams = do
         mem) (getConstraints cm varsList)
   getParams reqdVals
 
-getCalcParams :: (RenderSym repr) => CodeDefinition -> Reader (State repr) 
-  [ParamData repr]
+getCalcParams :: (RenderSym repr) => CodeDefinition -> 
+  Reader (State repr) [repr (Parameter repr)]
 getCalcParams c = do
   g <- ask
   getParams $ codevars' (codeEquat c) $ sysinfodb $ csi $ codeSpec g
 
-getOutputParams :: (RenderSym repr) => Reader (State repr) [ParamData repr]
+getOutputParams :: (RenderSym repr) => Reader (State repr) 
+  [repr (Parameter repr)]
 getOutputParams = do
   g <- ask
   getParams $ outputs $ csi $ codeSpec g
@@ -647,14 +650,8 @@ fAppInOut m n ins outs = do
   return $ if m /= currentModule g then extInOutCall m n ins outs 
     else inOutCall n ins outs
 
-data ParamData repr = PD {
-  param :: (ParameterSym repr) => repr (Parameter repr),
-  paramType :: (StateTypeSym repr) => repr (StateType repr),
-  paramName :: Label
-}
-
 getParams :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
-  [ParamData repr]
+  [repr (Parameter repr)]
 getParams cs = do
   g <- ask
   let ins = inputs $ codeSpec g
@@ -667,27 +664,27 @@ getParams cs = do
       ps = map mkParam csSubIns
   return $ inPs ++ conPs ++ ps
 
-mkParam :: (RenderSym repr) => CodeChunk -> ParamData repr
-mkParam p = PD (paramFunc (codeType p) $ var pName pType) pType pName
+mkParam :: (RenderSym repr) => CodeChunk -> repr (Parameter repr)
+mkParam p = paramFunc (codeType p) $ var pName pType
   where paramFunc (C.List _) = pointerParam
         paramFunc _ = stateParam
         pName = codeName p
         pType = convType $ codeType p
 
 getInputParams :: (RenderSym repr) => Structure -> [CodeChunk] ->
-  [ParamData repr]
+  [repr (Parameter repr)]
 getInputParams _ [] = []
 getInputParams Unbundled cs = map mkParam cs
-getInputParams Bundled _ = [PD (pointerParam $ var pName pType) pType pName]
+getInputParams Bundled _ = [pointerParam $ var pName pType]
   where pName = "inParams"
         pType = obj "InputParameters"
 
 -- Right now, we always inline constants. In the future, this will be captured by a choice and this function should be updated to read that choice
-getConstParams :: [CodeChunk] -> [ParamData repr]
+getConstParams :: [CodeChunk] -> [repr (Parameter repr)]
 getConstParams _ = []
 
-getArgs :: (RenderSym repr) => [ParamData repr] -> [repr (Value repr)]
-getArgs = map (\p -> var (paramName p) (paramType p))
+getArgs :: (RenderSym repr) => [repr (Parameter repr)] -> [repr (Value repr)]
+getArgs = map (\p -> var (parameterName p) (parameterType p))
 
 convExpr :: (RenderSym repr) => Expr -> Reader (State repr) (repr (Value repr))
 convExpr (Dbl d) = return $ litFloat d
@@ -860,7 +857,7 @@ genDataFunc :: (RenderSym repr) => Name -> DataDesc -> Reader (State repr)
   (repr (Method repr))
 genDataFunc nameTitle ddef = do
   parms <- getParams $ getInputs ddef
-  publicMethod (mState void) nameTitle (PD p_filename string l_filename : parms)  (readData ddef)
+  publicMethod (mState void) nameTitle (p_filename : parms)  (readData ddef)
   where l_filename = "filename"
         v_filename = var l_filename string
         p_filename = stateParam v_filename
@@ -905,74 +902,37 @@ readData ddef = do
         ---------------
         lineData :: (RenderSym repr) => Maybe String -> LinePattern -> 
           Reader (State repr) [repr (Statement repr)]
-        lineData s (Straight p) = patternData s p (litInt 0)
-        lineData s (Repeat p Nothing) = do
-          pat <- patternData s p v_j
-          return $ clearTemps s p ++ 
-            [forRange l_j (litInt 0) (cast int
-              (listSize v_linetokens #/ litInt (toInteger $ length p))) 
-              (litInt 1) ( bodyStatements pat )] ++ 
-            appendTemps s p
-        lineData s (Repeat p (Just numPat)) = do
-          pat <- patternData s p v_j
-          return $ clearTemps s p ++ 
-            [forRange l_j (litInt 0) (litInt numPat) (litInt 1) 
-              (bodyStatements pat)] ++ 
-            appendTemps s p
+        lineData s p@(Straight _) = do
+          vs <- getEntryVars s p
+          return [stringListVals vs v_linetokens]
+        lineData s p@(Repeat ds) = do
+          vs <- getEntryVars s p
+          return $ clearTemps s ds ++ stringListLists vs v_linetokens 
+            : appendTemps s ds
         ---------------
-        clearTemps :: (RenderSym repr) => Maybe String -> [Entry] -> 
+        clearTemps :: (RenderSym repr) => Maybe String -> [DataItem] -> 
           [repr (Statement repr)]
         clearTemps Nothing _ = []
-        clearTemps (Just sfx) es = mapMaybe (clearTemp sfx) es
+        clearTemps (Just sfx) es = map (clearTemp sfx) es
         ---------------
-        clearTemp :: (RenderSym repr) => String -> Entry -> 
-          Maybe (repr (Statement repr))
-        clearTemp sfx (Entry v) = Just $ listDecDef (var (codeName v ++ 
-          sfx) (convType $ getListType (codeType v) 1)) []
-        clearTemp sfx (ListEntry _ v) = Just $ listDecDef (var 
-          (codeName v ++ sfx) (convType $ getListType (codeType v) 1)) []
-        clearTemp _ JunkEntry = Nothing
+        clearTemp :: (RenderSym repr) => String -> DataItem -> 
+          repr (Statement repr)
+        clearTemp sfx v = listDecDef (var (codeName v ++ 
+          sfx) (listInnerType $ convType $ codeType v)) []
         ---------------
-        appendTemps :: (RenderSym repr) => Maybe String -> [Entry] -> 
+        appendTemps :: (RenderSym repr) => Maybe String -> [DataItem] -> 
           [repr (Statement repr)]
         appendTemps Nothing _ = []
-        appendTemps (Just sfx) es = mapMaybe (appendTemp sfx) es
+        appendTemps (Just sfx) es = map (appendTemp sfx) es
         ---------------
-        appendTemp :: (RenderSym repr) => String -> Entry -> 
-          Maybe (repr (Statement repr))
-        appendTemp sfx (Entry v) = Just $ valState $ listAppend 
+        appendTemp :: (RenderSym repr) => String -> DataItem -> 
+          repr (Statement repr)
+        appendTemp sfx v = valState $ listAppend 
           (var (codeName v) (convType $ codeType v)) 
           (var (codeName v ++ sfx) (convType $ codeType v))
-        appendTemp sfx (ListEntry _ v) = Just $ valState $ listAppend 
-          (var (codeName v) (convType $ codeType v))
-          (var (codeName v ++ sfx) (convType $ codeType v))
-        appendTemp _ JunkEntry = Nothing
         ---------------
-        patternData :: (RenderSym repr) => Maybe String -> [Entry] -> 
-          repr (Value repr) -> Reader (State repr) [repr (Statement repr)]
-        patternData s d patNo = do
-          let l = toInteger $ length d
-          ent <- zipWithM (entryData s) 
-            (map (\z -> (patNo #* litInt l) #+ litInt z) [0..l-1]) d
-          return $ concat ent
-        ---------------
-        entryData :: (RenderSym repr) => Maybe String -> repr (Value repr) -> 
-          Entry -> Reader (State repr) [repr (Statement repr)]
-        entryData s tokIndex (Entry v) = do
-          vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
-          l <- maybeLog vv
-          return [multi $ assign vv (cast (convType $ codeType v)
-            (listAccess v_linetokens tokIndex)) : l]
-        entryData s tokIndex (ListEntry indx v) = do
-          vv <- variable (codeName v ++ fromMaybe "" s) (convType $ codeType v)
-          return [
-            valState (listAppend vv
-            (cast (convType $ getListType (codeType v) (toInteger $ length indx))
-            (listAccess v_linetokens tokIndex)))]
-        entryData _ _ JunkEntry = return []
-        ---------------
-        l_line, l_lines, l_linetokens, l_infile, l_filename, l_i, l_j :: Label
-        v_line, v_lines, v_linetokens, v_infile, v_filename, v_i, v_j ::
+        l_line, l_lines, l_linetokens, l_infile, l_filename, l_i :: Label
+        v_line, v_lines, v_linetokens, v_infile, v_filename, v_i ::
           (RenderSym repr) => (repr (Value repr))
         l_line = "line"
         v_line = var l_line string
@@ -986,23 +946,16 @@ readData ddef = do
         v_filename = var l_filename string
         l_i = "i"
         v_i = var l_i int
-        l_j = "j"
-        v_j = var l_j int
 
-getEntryVars :: (RenderSym repr) => LinePattern -> 
+getEntryVars :: (RenderSym repr) => Maybe String -> LinePattern -> 
   Reader (State repr) [repr (Value repr)]
-getEntryVars lp = mapM (\v -> variable (codeName v) (convType $ codeType v))
-  (getPatternInputs lp)
+getEntryVars s lp = mapM (maybe (\v -> variable (codeName v) (convType $ 
+  codeType v)) (\st v -> variable (codeName v ++ st) (listInnerType $
+  convType $ codeType v)) s) (getPatternInputs lp)
 
 getEntryVarLogs :: (RenderSym repr) => LinePattern -> 
   Reader (State repr) [repr (Statement repr)]
 getEntryVarLogs lp = do
-  vs <- getEntryVars lp
+  vs <- getEntryVars Nothing lp
   logs <- mapM maybeLog vs
   return $ concat logs
-
-getListType :: C.CodeType -> Integer -> C.CodeType
-getListType _ 0 = error "No index given"
-getListType (C.List t) 1 = t
-getListType (C.List t) n = getListType t (n-1)
-getListType _ _ = error "Not a list type"

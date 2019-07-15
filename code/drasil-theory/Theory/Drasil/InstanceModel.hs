@@ -28,7 +28,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _imOutput :: Output
                         , _outCons :: OutputConstraints
                         , _ref :: [Reference]
-                        , _deri :: Derivation
+                        , _deri :: Maybe Derivation
                         ,  lb :: ShortName
                         ,  ra :: String
                         , _notes :: [Sentence]
@@ -57,7 +57,7 @@ instance Referable          InstanceModel where
 
 -- | Smart constructor for instance models with everything defined
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
+  OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 im rcon _ _  _ _  [] _  _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
 im rcon i ic o oc r der sn = 
   IM rcon i ic o oc r der (shortname' sn) (prependAbrv inModel sn)
@@ -67,11 +67,11 @@ imNoDeriv :: RelationConcept -> Inputs -> InputConstraints -> Output ->
   OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
 imNoDeriv rcon _ _  _ _ [] _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
 imNoDeriv rcon i ic o oc r sn =
-  IM rcon i ic o oc r [] (shortname' sn) (prependAbrv inModel sn)
+  IM rcon i ic o oc r Nothing (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no references
 imNoRefs :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
+  OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 imNoRefs rcon i ic o oc der sn = 
   IM rcon i ic o oc [] der (shortname' sn) (prependAbrv inModel sn)
 
@@ -79,5 +79,5 @@ imNoRefs rcon i ic o oc der sn =
 imNoDerivNoRefs :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> String -> [Sentence] -> InstanceModel
 imNoDerivNoRefs rcon i ic o oc sn = 
-  IM rcon i ic o oc [] [] (shortname' sn) (prependAbrv inModel sn)
+  IM rcon i ic o oc [] Nothing (shortname' sn) (prependAbrv inModel sn)
 

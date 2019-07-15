@@ -17,8 +17,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
-  Verbosity(Verbose), dataConstraintUncertainty, inDataConstTbl, intro, mkDoc,
-  outDataConstTbl, traceMatStandard, tsymb)
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
 
 import Data.Drasil.Concepts.Computation (inParam)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -45,8 +44,7 @@ import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.References (citations)
-import Drasil.Projectile.Requirements (funcReqs, inputParamsTable,
-  nonfuncReqs, propsDeriv)
+import Drasil.Projectile.Requirements (funcReqs, inputParamsTable, nonfuncReqs)
 import Drasil.Projectile.TMods (tMods)
 import Drasil.Projectile.Unitals (acronyms, constants, constrained, inConstraints,
   inputs, launAngle, outConstraints, outputs, symbols, unitalIdeas, unitalQuants)
@@ -81,12 +79,8 @@ mkSRS = [
         , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-        , Constraints EmptyS dataConstraintUncertainty EmptyS
-                      {-(foldlSent [makeRef2S $ valsOfAuxCons [] [],
-                      S "gives", plural value `ofThe` S "specification",
-                      plural parameter, S "used in", makeRef2S inDataCons])-}
-                      [inDataCons, outDataCons]
-        , CorrSolnPpties propsDeriv
+        , Constraints EmptyS inConstraints
+        , CorrSolnPpties outConstraints []
         ]
       ],
   ReqrmntSec $
@@ -175,11 +169,3 @@ physSystParts = map foldlSent [
   [S "The", phrase launcher],
   [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `sAnd` getTandS launAngle)],
   [S "The", phrase target]]
-
-----------------------
--- Data Constraints --
-----------------------
-
-inDataCons, outDataCons :: LabelledContent
-inDataCons  = inDataConstTbl  inConstraints
-outDataCons = outDataConstTbl outConstraints

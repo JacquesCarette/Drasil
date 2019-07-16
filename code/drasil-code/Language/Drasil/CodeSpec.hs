@@ -248,7 +248,7 @@ modExportMap cs@CSI {
                         ++ getExportDerived chs ds
                         ++ getExportConstraints chs (getConstraints (cMap cs) 
                           (ins ++ map codevar ds))
-                        ++ getExportInputFormat ins
+                        ++ getExportInputFormat chs ins
                         ++ getExportOutput (outputs cs)
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
@@ -359,19 +359,21 @@ getExportInput chs ins = inExp $ inputStructure chs
 
 getExportDerived :: Choices -> [Derived] -> [Export]
 getExportDerived _ [] = []
-getExportDerived chs _ = [("derived_values", dMod $ inputStructure chs)]
-  where dMod Unbundled = "InputParameters"
-        dMod Bundled = "DerivedValues"
+getExportDerived chs _ = [("derived_values", dMod $ inputModule chs)]
+  where dMod Combined = "InputParameters"
+        dMod Separated = "DerivedValues"
 
 getExportConstraints :: Choices -> [Constraint] -> [Export]
 getExportConstraints _ [] = []
-getExportConstraints chs _ = [("input_constraints", cMod $ inputStructure chs)]
-  where cMod Unbundled = "InputParameters"
-        cMod Bundled = "InputConstraints"
+getExportConstraints chs _ = [("input_constraints", cMod $ inputModule chs)]
+  where cMod Combined = "InputParameters"
+        cMod Separated = "InputConstraints"
         
-getExportInputFormat :: [Input] -> [Export]
-getExportInputFormat [] = []
-getExportInputFormat _ = [("get_input", "InputFormat")]
+getExportInputFormat :: Choices -> [Input] -> [Export]
+getExportInputFormat _ [] = []
+getExportInputFormat chs _ = [("get_input", fMod $ inputModule chs)]
+  where fMod Combined = "InputParameters"
+        fMod Separated = "InputFormat"
 
 getExportOutput :: [Output] -> [Export]
 getExportOutput [] = []
@@ -390,28 +392,32 @@ getDepsControl cs mem =
 
 getDepsDerived :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
-getDepsDerived cs mem chs = derivedDeps $ inputStructure chs
-  where derivedDeps Unbundled = Nothing
-        derivedDeps Bundled = Just ("DerivedValues", nub $ mapMaybe (
+getDepsDerived cs mem chs = derivedDeps (inputStructure chs) (inputModule chs)
+  where derivedDeps Bundled Separated = Just ("DerivedValues", nub $ mapMaybe (
           (`Map.lookup` mem) . codeName) (concatMap (flip codevars 
           (sysinfodb cs) . codeEquat) (derivedInputs cs)))
+        derivedDeps _ _ = Nothing
+        
 
 getDepsConstraints :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
-getDepsConstraints cs mem chs = constraintDeps $ inputStructure chs
-  where constraintDeps Unbundled = Nothing
-        constraintDeps Bundled = Just ("InputConstraints", nub $ mapMaybe (
-          (`Map.lookup` mem) .codeName) reqdVals)
+getDepsConstraints cs mem chs = constraintDeps (inputStructure chs) 
+  (inputModule chs)
+  where constraintDeps Bundled Separated = Just ("InputConstraints", nub $ 
+          mapMaybe ((`Map.lookup` mem) . codeName) reqdVals)
+        constraintDeps _ _ = Nothing
         ins = extInputs cs ++ map codevar (derivedInputs cs)
         cm = cMap cs
         varsList = filter (\i -> Map.member (i ^. uid) cm) ins
         reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v
           (sysinfodb cs) mem) (getConstraints cm varsList)
+        
 
 getDepsInFormat :: Choices -> Maybe (String, [String])
-getDepsInFormat chs = inFormatDeps $ inputStructure chs
-  where inFormatDeps Unbundled = Nothing
-        inFormatDeps Bundled = Just ("InputFormat", ["InputParameters"])
+getDepsInFormat chs = inFormatDeps (inputStructure chs) (inputModule chs)
+  where inFormatDeps Bundled Separated = Just ("InputFormat", 
+          ["InputParameters"])
+        inFormatDeps _ _ = Nothing
 
 subsetOf :: (Eq a) => [a] -> [a] -> Bool
 xs `subsetOf` ys = all (`elem` ys) xs

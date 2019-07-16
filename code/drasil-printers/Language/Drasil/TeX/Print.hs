@@ -221,10 +221,10 @@ specLength (E x)     = length $ filter (`notElem` dontCount) $ TP.render $ runPr
 specLength (S x)     = length x
 specLength (a :+: b) = specLength a + specLength b
 specLength (Sy _)    = 1
-specLength (Sp _)    = 0
+specLength (Sp _)    = 1
 specLength Ref{}     = 0
 specLength EmptyS    = 0
-specLength (Quote q) = 2 + specLength q
+specLength (Quote q) = 4 + specLength q
 specLength HARDNL    = 0
 
 dontCount :: String

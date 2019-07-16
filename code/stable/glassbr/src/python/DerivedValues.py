@@ -1,9 +1,13 @@
+## \file DerivedValues.py
+# \brief Provides the function for calculating derived values
 from __future__ import print_function
 import sys
 import math
 
 import InputParameters
 
+## \brief Calculates values that can be immediately derived from the inputs
+# \param inParams No description given
 def derived_values(inParams):
     outfile = open("log.txt", "a")
     print("function derived_values called with inputs: {", file=outfile)

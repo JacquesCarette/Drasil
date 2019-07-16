@@ -1342,7 +1342,6 @@ instance ValueSym CppHdrCode where
   valueType _ = error "Attempted to extract type from Value for C++ header file"
   valueDoc _ = error "Attempted to extract doc from Value for C++ header file"
 
-
 instance NumericExpression CppHdrCode where
   (#~) _ = liftA2 mkVal void (return empty)
   (#/^) _ = liftA2 mkVal void (return empty)

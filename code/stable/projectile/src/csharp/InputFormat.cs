@@ -1,3 +1,5 @@
+/** \file InputFormat.cs
+*/
 using System;
 using System.IO;
 using System.Collections;
@@ -5,6 +7,9 @@ using System.Collections.Generic;
 
 public class InputFormat {
     
+    /** \brief Reads input from a file with the given file name
+        \param filename No description given
+    */
     public static void get_input(string filename, InputParameters inParams) {
         StreamReader infile;
         infile = new StreamReader(filename);

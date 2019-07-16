@@ -53,7 +53,7 @@ import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
   phsChgMtrl, progName, rightSide, sWHT, swhsPCM, tank, tankPCM, transient, water)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, qDefs)
+import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, qDefs)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
 import Drasil.SWHS.GenDefs (genDefs)
 import Drasil.SWHS.Goals (goals)
@@ -394,7 +394,7 @@ outputConstraints = [tempW, tempPCM, watE, pcmE] --FIXME: add "(by A11)" in Phys
 propsDeriv :: [Contents]
 propsDeriv = [
   propCorSolDeriv1 lawConsEnergy watE energy coil phsChgMtrl
-                   dd1HtFluxC dd2HtFluxP surface heatTrans,
+                   ddHtFluxC ddHtFluxP surface heatTrans,
   propCorSolDeriv2,
   propCorSolDeriv3 pcmE energy phsChgMtrl water,
   propCorSolDeriv4,

@@ -1,5 +1,8 @@
 package GlassBR;
 
+/** \file InputFormat.java
+    \brief Provides the function for reading inputs
+*/
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
@@ -10,6 +13,10 @@ import java.util.ArrayList;
 
 public class InputFormat {
     
+    /** \brief Reads input from a file with the given file name
+        \param filename No description given
+        \param inParams No description given
+    */
     public static void get_input(String filename, InputParameters inParams) throws Exception {
         PrintWriter outfile;
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));

@@ -15,8 +15,8 @@ endif
 
 build: Projectile$(TARGET_EXTENSION)
 
-Projectile$(TARGET_EXTENSION): Control.cs InputParameters.cs InputConstraints.cs InputFormat.cs OutputFormat.cs Calculations.cs
-	$(CSC) -out:Projectile$(TARGET_EXTENSION) Control.cs InputParameters.cs InputConstraints.cs InputFormat.cs OutputFormat.cs Calculations.cs
+Projectile$(TARGET_EXTENSION): Control.cs InputParameters.cs InputFormat.cs InputConstraints.cs OutputFormat.cs Calculations.cs
+	$(CSC) -out:Projectile$(TARGET_EXTENSION) Control.cs InputParameters.cs InputFormat.cs InputConstraints.cs OutputFormat.cs Calculations.cs
 
 run: build
 	./Projectile$(TARGET_EXTENSION) $(RUNARGS)

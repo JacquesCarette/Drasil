@@ -1,3 +1,5 @@
+/** \file Control.cpp
+*/
 #include <algorithm>
 #include <iostream>
 #include <fstream>
@@ -19,6 +21,10 @@ using std::ofstream;
 #include "OutputFormat.hpp"
 #include "Calculations.hpp"
 
+/** \brief Controls the flow of the program
+    \param argc Number of command-line arguments
+    \param argv List of command-line arguments
+*/
 int main(int argc, const char *argv[]) {
     string filename = argv[1];
     InputParameters inParams = InputParameters();

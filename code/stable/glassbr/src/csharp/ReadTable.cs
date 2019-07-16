@@ -1,3 +1,6 @@
+/** \file ReadTable.cs
+    \brief Provides a function for reading glass ASTM data
+*/
 using System;
 using System.IO;
 using System.Collections;
@@ -5,6 +8,12 @@ using System.Collections.Generic;
 
 public class ReadTable {
     
+    /** \brief Reads glass ASTM data from a file with the given file name
+        \param filename No description given
+        \param z_vector No description given
+        \param x_matrix No description given
+        \param y_matrix No description given
+    */
     public static void func_read_table(string filename, List<double> z_vector, List<List<double>> x_matrix, List<List<double>> y_matrix) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);

@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Drasil.SWHS.Concepts (water)
-import Drasil.SWHS.DataDefs (dd1HtFluxC)
+import Drasil.SWHS.DataDefs (ddHtFluxC)
 import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc3,
  heatEInWtr)
 import Drasil.SWHS.References (koothoor2013)
@@ -70,7 +70,7 @@ eBalanceOnWtrDeriv = mkDerivName (S "the" +:+ phrase energy +:+ S "balance on wa
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ (E $ sy coilSA)) EmptyS assumpNIHGBW,
-  eBalanceOnWtrDerivDesc2 dd1HtFluxC,
+  eBalanceOnWtrDerivDesc2 ddHtFluxC,
   eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4]
 
 eBalanceOnWtrDerivDesc2 :: DataDefinition -> [Sentence]
@@ -107,3 +107,4 @@ instModIntro :: Sentence
 instModIntro = foldlSent [S "The", phrase goal, makeRef2S waterTempGS,
   S "is met by", makeRef2S eBalanceOnWtr `andThe` phrase goal,
   makeRef2S waterEnergyGS, S "is met by", makeRef2S heatEInWtr]
+  

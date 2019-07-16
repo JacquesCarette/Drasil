@@ -46,9 +46,8 @@ commandD s c = pure (H.bslash TP.<> text s) <> br c
 command1o :: String -> Maybe String -> String -> D
 command1o s o c = pure $ (H.bslash TP.<> text s) TP.<> maybe TP.empty H.sq o TP.<> H.br c
 
--- no braces!
 command1oD :: String -> Maybe D -> D -> D
-command1oD s o c = pure (H.bslash TP.<> text s) <> maybe empty sq o <> c
+command1oD s o c = pure (H.bslash TP.<> text s) <> maybe empty sq o <> br c
 
 -- 0-argument command
 command0 :: String -> D

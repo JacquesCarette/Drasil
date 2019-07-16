@@ -317,9 +317,9 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:PhysSyst}
 The physical system of SWHS, as shown in \hyperref[Figure:Tank]{Fig:Tank}, includes the following elements:
 \begin{itemize}
-\item[PS1:]Tank containing water.
-\item[PS2:]Heating coil at bottom of tank. (${q_{C}}$ represents the heat flux into the water from the coil.)
-\item[PS3:]PCM suspended in tank. (${q_{P}}$ represents the heat flux into the PCM from water.)
+\item[PS1:]{Tank containing water.}
+\item[PS2:]{Heating coil at bottom of tank. (${q_{C}}$ represents the heat flux into the water from the coil.)}
+\item[PS3:]{PCM suspended in tank. (${q_{P}}$ represents the heat flux into the PCM from water.)}
 \end{itemize}
 \begin{figure}
 \begin{center}
@@ -332,10 +332,10 @@ The physical system of SWHS, as shown in \hyperref[Figure:Tank]{Fig:Tank}, inclu
 \label{Sec:GoalStmt}
 Given the temperature of the heating coil, the initial conditions for the temperature of the water and the temperature of the phase change material, and the material properties, the goal statements are:
 \begin{itemize}
-\item[Predict-Water-Temperature:\phantomsection\label{waterTempGS}]Predict the temperature of the water over time.
-\item[Predict-PCM-Temperature:\phantomsection\label{pcmTempGS}]Predict the temperature of the phase change material over time.
-\item[Predict-Water-Energy:\phantomsection\label{waterEnergyGS}]Predict the change in heat energy in the water over time.
-\item[Predict-PCM-Energy:\phantomsection\label{pcmEnergyGS}]Predict the change in heat energy in the PCM over time.
+\item[Predict-Water-Temperature:\phantomsection\label{waterTempGS}]{Predict the temperature of the water over time.}
+\item[Predict-PCM-Temperature:\phantomsection\label{pcmTempGS}]{Predict the temperature of the phase change material over time.}
+\item[Predict-Water-Energy:\phantomsection\label{waterEnergyGS}]{Predict the change in heat energy in the water over time.}
+\item[Predict-PCM-Energy:\phantomsection\label{pcmEnergyGS}]{Predict the change in heat energy in the PCM over time.}
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -344,26 +344,26 @@ The instance models that govern SWHS are presented in \hyperref[Sec:IMs]{Section
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 \begin{itemize}
-\item[Thermal-Energy-Only:\phantomsection\label{assumpTEO}]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (RefBy: \hyperref[TM:consThermE]{TM: consThermE}.)
-\item[Heat-Transfer-Coeffs-Constant:\phantomsection\label{assumpHTCC}]All heat transfer coefficients are constant over time. (RefBy: \hyperref[GD:nwtnCooling]{GD: nwtnCooling}.)
-\item[Constant-Water-Temp-Across-Tank:\phantomsection\label{assumpCWTAT}]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)
-\item[Temp-PCM-Constant-Across-Volume:\phantomsection\label{assumpTPCAV}]The temperature of the phase change material is the same throughout the volume of PCM. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}, \hyperref[likeChgUTP]{LC: Uniform-Temperature-PCM}, and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)
-\item[Density-Water-PCM-Constant-over-Volume:\phantomsection\label{assumpDWPCoV}]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)
-\item[Specific-Heat-Energy-Constant-over-Volume:\phantomsection\label{assumpSHECov}]The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)
-\item[Newton-Law-Convective-Cooling-Coil-Water:\phantomsection\label{assumpLCCCW}]Newton's law of convective cooling applies between the heating coil and the water. (RefBy: \hyperref[DD:htFluxP]{DD: htFluxP} and \hyperref[DD:htFluxC]{DD: htFluxC}.)
-\item[Temp-Heating-Coil-Constant-over-Time:\phantomsection\label{assumpTHCCoT}]The temperature of the heating coil is constant over time. (RefBy: \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} and \hyperref[DD:htFluxC]{DD: htFluxC}.)
-\item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]The temperature of the heating coil does not vary along its length. (RefBy: \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)
-\item[Law-Convective-Cooling-Water-PCM:\phantomsection\label{assumpLCCWP}]Newton's law of convective cooling applies between the water and the PCM.
-\item[Charging-Tank-No-Temp-Discharge:\phantomsection\label{assumpCTNOD}]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM} is less than (or equal) to the temperature of the heating coil. (RefBy: \hyperref[likeChgDT]{LC: Discharging-Tank} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)
-\item[Same-Initial-Temp-Water-PCM:\phantomsection\label{assumpSITWP}]The initial temperature of the water and the PCM is the same. (RefBy: \hyperref[likeChgDITPW]{LC: Different-Initial-Temps-PCM-Water}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, and \hyperref[assumpCTNOD]{A: Charging-Tank-No-Temp-Discharge}.)
-\item[PCM-Initially-Solid:\phantomsection\label{assumpPIS}]The simulation will start with the PCM in a solid state. (RefBy: \hyperref[IM:heatEInPCM]{IM: heatEInPCM} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)
-\item[Water-Always-Liquid:\phantomsection\label{assumpWAL}]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: \hyperref[unlikeChgWPFS]{UC: Water-PCM-Fixed-States}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)
-\item[Perfect-Insulation-Tank:\phantomsection\label{assumpPIT}]The tank is perfectly insulated so that there is no heat loss from the tank. (RefBy: \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)
-\item[No-Internal-Heat-Generation-By-Water-PCM:\phantomsection\label{assumpNIHGBWP}]No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero. (RefBy: \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)
-\item[Volume-Change-Melting-PCM-Negligible:\phantomsection\label{assumpVCMPN}]The volume change of the PCM due to melting is negligible. (RefBy: \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)
-\item[No-Gaseous-State-PCM:\phantomsection\label{assumpNGSP}]The PCM is either in a liquid state or a solid state but not a gaseous state. (RefBy: \hyperref[unlikeChgWPFS]{UC: Water-PCM-Fixed-States}, \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)
-\item[Atmospheric-Pressure-Tank:\phantomsection\label{assumpAPT}]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively. (RefBy: \hyperref[IM:heatEInWtr]{IM: heatEInWtr} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)
-\item[Volume-Coil-Negligible:\phantomsection\label{assumpVCN}]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: \hyperref[findMass]{FR: Find-Mass}.)
+\item[Thermal-Energy-Only:\phantomsection\label{assumpTEO}]{The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (RefBy: \hyperref[TM:consThermE]{TM: consThermE}.)}
+\item[Heat-Transfer-Coeffs-Constant:\phantomsection\label{assumpHTCC}]{All heat transfer coefficients are constant over time. (RefBy: \hyperref[GD:nwtnCooling]{GD: nwtnCooling}.)}
+\item[Constant-Water-Temp-Across-Tank:\phantomsection\label{assumpCWTAT}]{The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
+\item[Temp-PCM-Constant-Across-Volume:\phantomsection\label{assumpTPCAV}]{The temperature of the phase change material is the same throughout the volume of PCM. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}, \hyperref[likeChgUTP]{LC: Uniform-Temperature-PCM}, and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
+\item[Density-Water-PCM-Constant-over-Volume:\phantomsection\label{assumpDWPCoV}]{The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)}
+\item[Specific-Heat-Energy-Constant-over-Volume:\phantomsection\label{assumpSHECov}]{The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)}
+\item[Newton-Law-Convective-Cooling-Coil-Water:\phantomsection\label{assumpLCCCW}]{Newton's law of convective cooling applies between the heating coil and the water. (RefBy: \hyperref[DD:htFluxP]{DD: htFluxP} and \hyperref[DD:htFluxC]{DD: htFluxC}.)}
+\item[Temp-Heating-Coil-Constant-over-Time:\phantomsection\label{assumpTHCCoT}]{The temperature of the heating coil is constant over time. (RefBy: \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} and \hyperref[DD:htFluxC]{DD: htFluxC}.)}
+\item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]{The temperature of the heating coil does not vary along its length. (RefBy: \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
+\item[Law-Convective-Cooling-Water-PCM:\phantomsection\label{assumpLCCWP}]{Newton's law of convective cooling applies between the water and the PCM.}
+\item[Charging-Tank-No-Temp-Discharge:\phantomsection\label{assumpCTNOD}]{The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM} is less than (or equal) to the temperature of the heating coil. (RefBy: \hyperref[likeChgDT]{LC: Discharging-Tank} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
+\item[Same-Initial-Temp-Water-PCM:\phantomsection\label{assumpSITWP}]{The initial temperature of the water and the PCM is the same. (RefBy: \hyperref[likeChgDITPW]{LC: Different-Initial-Temps-PCM-Water}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, and \hyperref[assumpCTNOD]{A: Charging-Tank-No-Temp-Discharge}.)}
+\item[PCM-Initially-Solid:\phantomsection\label{assumpPIS}]{The simulation will start with the PCM in a solid state. (RefBy: \hyperref[IM:heatEInPCM]{IM: heatEInPCM} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)}
+\item[Water-Always-Liquid:\phantomsection\label{assumpWAL}]{The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: \hyperref[unlikeChgWPFS]{UC: Water-PCM-Fixed-States}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
+\item[Perfect-Insulation-Tank:\phantomsection\label{assumpPIT}]{The tank is perfectly insulated so that there is no heat loss from the tank. (RefBy: \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
+\item[No-Internal-Heat-Generation-By-Water-PCM:\phantomsection\label{assumpNIHGBWP}]{No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero. (RefBy: \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)}
+\item[Volume-Change-Melting-PCM-Negligible:\phantomsection\label{assumpVCMPN}]{The volume change of the PCM due to melting is negligible. (RefBy: \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)}
+\item[No-Gaseous-State-PCM:\phantomsection\label{assumpNGSP}]{The PCM is either in a liquid state or a solid state but not a gaseous state. (RefBy: \hyperref[unlikeChgWPFS]{UC: Water-PCM-Fixed-States}, \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)}
+\item[Atmospheric-Pressure-Tank:\phantomsection\label{assumpAPT}]{The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively. (RefBy: \hyperref[IM:heatEInWtr]{IM: heatEInWtr} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
+\item[Volume-Coil-Negligible:\phantomsection\label{assumpVCN}]{When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible. (RefBy: \hyperref[findMass]{FR: Find-Mass}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -1085,17 +1085,17 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
-\item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]Input the following quantities described in \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the tank parameters, material properties and initial conditions.
-\item[Find-Mass:\phantomsection\label{findMass}]Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, using ${m_{W}}={V_{W}} {ρ_{W}}=\left({V_{tank}}-{V_{P}}\right) {ρ_{W}}=\left(π \left(\frac{D}{2}\right)^{2} L-{V_{P}}\right) {ρ_{W}}$, ${m_{P}}={V_{P}} {ρ_{P}}$, and \hyperref[assumpVCN]{A: Volume-Coil-Negligible}, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank.
-\item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]Verify that the inputs satisfy the required physical constraints shown in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.
-\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the masses from \hyperref[findMass]{FR: Find-Mass}, ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}), $η$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}), ${{τ_{P}}^{S}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}), and ${{τ_{P}}^{L}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
-\item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).
-\item[Calculate-Temperature-PCM-Over-Time:\phantomsection\label{calcTempPCMOverTime}]Calculate and output the temperature of the phase change material (${T_{P}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
-\item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).
-\item[Calculate-Change-Heat\_Energy-PCM-Over-Time:\phantomsection\label{calcChgHeatEnergyPCMOverTime}]Calculate and output the change in heat energy in the PCM (${E_{P}}$($t$)) over the simulation time (from \hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
-\item[Verify-Energy-Output-Follow-Conservation-of-Energy:\phantomsection\label{verifyEnergyOutput}]Verify that the energy outputs (${E_{W}}$($t$) and ${E_{P}}$($t$)) follow the law of conservation of energy, as outlined in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}, with relative error no greater than ${C_{tol}}$.
-\item[Calculate-PCM-Melt-Begin-Time:\phantomsection\label{calcPCMMeltBegin}]Calculate and output the time at which the PCM begins to melt ${{t_{melt}}^{init}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
-\item[Calculate-PCM-Melt-End-Time:\phantomsection\label{calcPCMMeltEnd}]Calculate and output the time at which the PCM stops melting ${{t_{melt}}^{final}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
+\item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]{Input the following quantities described in \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the tank parameters, material properties and initial conditions.}
+\item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, using ${m_{W}}={V_{W}} {ρ_{W}}=\left({V_{tank}}-{V_{P}}\right) {ρ_{W}}=\left(π \left(\frac{D}{2}\right)^{2} L-{V_{P}}\right) {ρ_{W}}$, ${m_{P}}={V_{P}} {ρ_{P}}$, and \hyperref[assumpVCN]{A: Volume-Coil-Negligible}, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank.}
+\item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]{Verify that the inputs satisfy the required physical constraints shown in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.}
+\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]{Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the masses from \hyperref[findMass]{FR: Find-Mass}, ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}), $η$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}), ${{τ_{P}}^{S}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}), and ${{τ_{P}}^{L}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).}
+\item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]{Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).}
+\item[Calculate-Temperature-PCM-Over-Time:\phantomsection\label{calcTempPCMOverTime}]{Calculate and output the temperature of the phase change material (${T_{P}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).}
+\item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]{Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).}
+\item[Calculate-Change-Heat\_Energy-PCM-Over-Time:\phantomsection\label{calcChgHeatEnergyPCMOverTime}]{Calculate and output the change in heat energy in the PCM (${E_{P}}$($t$)) over the simulation time (from \hyperref[IM:heatEInPCM]{IM: heatEInPCM}).}
+\item[Verify-Energy-Output-Follow-Conservation-of-Energy:\phantomsection\label{verifyEnergyOutput}]{Verify that the energy outputs (${E_{W}}$($t$) and ${E_{P}}$($t$)) follow the law of conservation of energy, as outlined in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}, with relative error no greater than ${C_{tol}}$.}
+\item[Calculate-PCM-Melt-Begin-Time:\phantomsection\label{calcPCMMeltBegin}]{Calculate and output the time at which the PCM begins to melt ${{t_{melt}}^{init}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).}
+\item[Calculate-PCM-Melt-End-Time:\phantomsection\label{calcPCMMeltEnd}]{Calculate and output the time at which the PCM stops melting ${{t_{melt}}^{final}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).}
 \end{itemize}
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -1151,30 +1151,30 @@ ${ρ_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 \begin{itemize}
-\item[Correct:\phantomsection\label{correct}]The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
-\item[Verifiable:\phantomsection\label{verifiable}]The code is tested with complete verification and validation plan.
-\item[Understandable:\phantomsection\label{understandable}]The code is modularized with complete module guide and module interface specification.
-\item[Reusable:\phantomsection\label{reusable}]The code is modularized.
-\item[Maintainable:\phantomsection\label{maintainable}]The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.}
+\item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
+\item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
+\item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
+\item[Maintainable:\phantomsection\label{maintainable}]{The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.}
 \end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}
 This section lists the likely changes to be made to the software.
 \begin{itemize}
-\item[Uniform-Temperature-PCM:\phantomsection\label{likeChgUTP}]\hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
-\item[Temperature-Coil-Variable-Over-Day:\phantomsection\label{likeChgTCVOD}]\hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
-\item[Temperature-Coil-Variable-Over-Length:\phantomsection\label{likeChgTCVOL}]\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.
-\item[Discharging-Tank:\phantomsection\label{likeChgDT}]\hyperref[assumpCTNOD]{A: Charging-Tank-No-Temp-Discharge} - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
-\item[Different-Initial-Temps-PCM-Water:\phantomsection\label{likeChgDITPW}]\hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM} - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
-\item[Tank-Lose-Heat:\phantomsection\label{likeChgTLH}]\hyperref[assumpPIT]{A: Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.
+\item[Uniform-Temperature-PCM:\phantomsection\label{likeChgUTP}]{\hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.}
+\item[Temperature-Coil-Variable-Over-Day:\phantomsection\label{likeChgTCVOD}]{\hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.}
+\item[Temperature-Coil-Variable-Over-Length:\phantomsection\label{likeChgTCVOL}]{\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.}
+\item[Discharging-Tank:\phantomsection\label{likeChgDT}]{\hyperref[assumpCTNOD]{A: Charging-Tank-No-Temp-Discharge} - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.}
+\item[Different-Initial-Temps-PCM-Water:\phantomsection\label{likeChgDITPW}]{\hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM} - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.}
+\item[Tank-Lose-Heat:\phantomsection\label{likeChgTLH}]{\hyperref[assumpPIT]{A: Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.}
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 This section lists the unlikely changes to be made to the software.
 \begin{itemize}
-\item[Water-PCM-Fixed-States:\phantomsection\label{unlikeChgWPFS}]\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpNGSP]{A: No-Gaseous-State-PCM} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.
-\item[No-Internal-Heat-Generation:\phantomsection\label{unlikeChgNIHG}]\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM} - Is used for the derivations of \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.
-\item[No-Gaseous-State:\phantomsection\label{unlikeChgNGS}]\hyperref[assumpNGSP]{A: No-Gaseous-State-PCM} - Is used for the derivation of \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} and for the equation given by \hyperref[IM:heatEInPCM]{IM: heatEInPCM} to be valid.
+\item[Water-PCM-Fixed-States:\phantomsection\label{unlikeChgWPFS}]{\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpNGSP]{A: No-Gaseous-State-PCM} - It is unlikely for the change of water from liquid to a solid or the state change of the phase change material from a liquid to a gas to be considered.}
+\item[No-Internal-Heat-Generation:\phantomsection\label{unlikeChgNIHG}]{\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM} - Is used for the derivations of \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.}
+\item[No-Gaseous-State:\phantomsection\label{unlikeChgNGS}]{\hyperref[assumpNGSP]{A: No-Gaseous-State-PCM} - Is used for the derivation of \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} and for the equation given by \hyperref[IM:heatEInPCM]{IM: heatEInPCM} to be valid.}
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

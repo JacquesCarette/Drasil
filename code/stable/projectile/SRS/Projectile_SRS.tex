@@ -194,9 +194,9 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:PhysSyst}
 The physical system of Projectile, as shown in \hyperref[Figure:Launch]{Fig:Launch}, includes the following elements:
 \begin{itemize}
-\item[PS1:]The launcher.
-\item[PS2:]The projectile (with initial velocity ${\mathbf{v}^{i}}$ and launch angle $θ$).
-\item[PS3:]The target.
+\item[PS1:]{The launcher.}
+\item[PS2:]{The projectile (with initial velocity ${\mathbf{v}^{i}}$ and launch angle $θ$).}
+\item[PS3:]{The target.}
 \end{itemize}
 \begin{figure}
 \begin{center}
@@ -209,7 +209,7 @@ The physical system of Projectile, as shown in \hyperref[Figure:Launch]{Fig:Laun
 \label{Sec:GoalStmt}
 Given the initial velocity vector of the projectile, the goal statements are:
 \begin{itemize}
-\item[targetHit:\phantomsection\label{targetHit}]Determine if the projectile hits the target.
+\item[targetHit:\phantomsection\label{targetHit}]{Determine if the projectile hits the target.}
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -218,20 +218,20 @@ The instance models that govern Projectile are presented in \hyperref[Sec:IMs]{S
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 \begin{itemize}
-\item[twoDMotion:\phantomsection\label{twoDMotion}]The projectile motion is two-dimensional (2D). (RefBy: \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:posVec]{GD: posVec}.)
-\item[cartSyst:\phantomsection\label{cartSyst}]A Cartesian coordinate system is used (from \hyperref[neglectCurv]{A: neglectCurv}). (RefBy: \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:posVec]{GD: posVec}.)
-\item[yAxisGravity:\phantomsection\label{yAxisGravity}]The direction of the $y$-axis is directed opposite to gravity. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}, and \hyperref[accelYGravity]{A: accelYGravity}.)
-\item[launchOrigin:\phantomsection\label{launchOrigin}]The launcher is coincident with the origin. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)
-\item[targetXAxis:\phantomsection\label{targetXAxis}]The target lies on the $x$-axis (from \hyperref[neglectCurv]{A: neglectCurv}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.)
-\item[posXDirection:\phantomsection\label{posXDirection}]The positive $x$-direction is from the launcher to the target. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[IM:offsetIM]{IM: offsetIM}, \hyperref[IM:messageIM]{IM: messageIM}, and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)
-\item[constAccel:\phantomsection\label{constAccel}]The acceleration is constant (from \hyperref[accelXZero]{A: accelXZero}, \hyperref[accelYGravity]{A: accelYGravity}, \hyperref[neglectDrag]{A: neglectDrag}, and \hyperref[freeFlight]{A: freeFlight}). (RefBy: \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:posVec]{GD: posVec}.)
-\item[accelXZero:\phantomsection\label{accelXZero}]The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[constAccel]{A: constAccel}.)
-\item[accelYGravity:\phantomsection\label{accelYGravity}]The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A: yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[constAccel]{A: constAccel}.)
-\item[neglectDrag:\phantomsection\label{neglectDrag}]Air drag is neglected. (RefBy: \hyperref[constAccel]{A: constAccel}.)
-\item[pointMass:\phantomsection\label{pointMass}]The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD: rectVel} and \hyperref[GD:rectPos]{GD: rectPos}.)
-\item[freeFlight:\phantomsection\label{freeFlight}]The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A: constAccel}.)
-\item[neglectCurv:\phantomsection\label{neglectCurv}]The distance is small enough that the curvature of the Earth can be neglected. (RefBy: \hyperref[targetXAxis]{A: targetXAxis} and \hyperref[cartSyst]{A: cartSyst}.)
-\item[timeStartZero:\phantomsection\label{timeStartZero}]Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD: velVec}, \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectVel]{GD: rectVel}, \hyperref[GD:rectPos]{GD: rectPos}, and \hyperref[GD:posVec]{GD: posVec}.)
+\item[twoDMotion:\phantomsection\label{twoDMotion}]{The projectile motion is two-dimensional (2D). (RefBy: \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:posVec]{GD: posVec}.)}
+\item[cartSyst:\phantomsection\label{cartSyst}]{A Cartesian coordinate system is used (from \hyperref[neglectCurv]{A: neglectCurv}). (RefBy: \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:posVec]{GD: posVec}.)}
+\item[yAxisGravity:\phantomsection\label{yAxisGravity}]{The direction of the $y$-axis is directed opposite to gravity. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}, and \hyperref[accelYGravity]{A: accelYGravity}.)}
+\item[launchOrigin:\phantomsection\label{launchOrigin}]{The launcher is coincident with the origin. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)}
+\item[targetXAxis:\phantomsection\label{targetXAxis}]{The target lies on the $x$-axis (from \hyperref[neglectCurv]{A: neglectCurv}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}.)}
+\item[posXDirection:\phantomsection\label{posXDirection}]{The positive $x$-direction is from the launcher to the target. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[IM:offsetIM]{IM: offsetIM}, \hyperref[IM:messageIM]{IM: messageIM}, and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)}
+\item[constAccel:\phantomsection\label{constAccel}]{The acceleration is constant (from \hyperref[accelXZero]{A: accelXZero}, \hyperref[accelYGravity]{A: accelYGravity}, \hyperref[neglectDrag]{A: neglectDrag}, and \hyperref[freeFlight]{A: freeFlight}). (RefBy: \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:posVec]{GD: posVec}.)}
+\item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[constAccel]{A: constAccel}.)}
+\item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A: yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[constAccel]{A: constAccel}.)}
+\item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A: constAccel}.)}
+\item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD: rectVel} and \hyperref[GD:rectPos]{GD: rectPos}.)}
+\item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A: constAccel}.)}
+\item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the Earth can be neglected. (RefBy: \hyperref[targetXAxis]{A: targetXAxis} and \hyperref[cartSyst]{A: cartSyst}.)}
+\item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD: velVec}, \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectVel]{GD: rectVel}, \hyperref[GD:rectPos]{GD: rectPos}, and \hyperref[GD:posVec]{GD: posVec}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -866,10 +866,10 @@ This section provides the functional requirements, the tasks and behaviours that
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
-\item[Input-Parameters:\phantomsection\label{inputParams}]Input the quantities from \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the launch angle, launch speed, and target position.
-\item[Verify-Parameters:\phantomsection\label{verifyParams}]Check the entered input parameters to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
-\item[Calculate-Values:\phantomsection\label{calcValues}]Calculate the following quantities: ${t_{flight}}$ (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}), ${p_{land}}$ (from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}), ${d_{offset}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}), and $s$ (from \hyperref[IM:messageIM]{IM: messageIM}).
-\item[Output-Values:\phantomsection\label{outputValues}]Output $s$ (from \hyperref[IM:messageIM]{IM: messageIM}) and ${d_{offset}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}).
+\item[Input-Parameters:\phantomsection\label{inputParams}]{Input the quantities from \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the launch angle, launch speed, and target position.}
+\item[Verify-Parameters:\phantomsection\label{verifyParams}]{Check the entered input parameters to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.}
+\item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following quantities: ${t_{flight}}$ (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}), ${p_{land}}$ (from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}), ${d_{offset}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}), and $s$ (from \hyperref[IM:messageIM]{IM: messageIM}).}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output $s$ (from \hyperref[IM:messageIM]{IM: messageIM}) and ${d_{offset}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}).}
 \end{itemize}
 \begin{longtable}{l l l}
 \toprule
@@ -891,12 +891,12 @@ $θ$ & Launch angle & rad
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 \begin{itemize}
-\item[Correct:\phantomsection\label{correct}]The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
-\item[Verifiable:\phantomsection\label{verifiable}]The code is tested with complete verification and validation plan.
-\item[Understandable:\phantomsection\label{understandable}]The code is modularized with complete module guide and module interface specification.
-\item[Reusable:\phantomsection\label{reusable}]The code is modularized.
-\item[Maintainable:\phantomsection\label{maintainable}]The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
-\item[Portable:\phantomsection\label{portable}]The code is able to be run in different environments.
+\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.}
+\item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
+\item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
+\item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
+\item[Maintainable:\phantomsection\label{maintainable}]{The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.}
+\item[Portable:\phantomsection\label{portable}]{The code is able to be run in different environments.}
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

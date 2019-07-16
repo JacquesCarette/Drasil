@@ -1,9 +1,13 @@
+## \file InputConstraints.py
+# \brief Provides the function for checking the physical and software constraints on the input
 from __future__ import print_function
 import sys
 import math
 
 import InputParameters
 
+## \brief Verifies that input values satisfy the physical constraints and software constraints
+# \param inParams No description given
 def input_constraints(inParams):
     outfile = open("log.txt", "a")
     print("function input_constraints called with inputs: {", file=outfile)

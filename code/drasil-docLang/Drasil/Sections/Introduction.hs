@@ -123,8 +123,8 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
   S "For readers that would like a more bottom up approach" `sC`
   S "they can start reading the", plural bottom `sIn` makeRef2S bottomSec `sAnd`
   S "trace back to find any additional information they require"],
-  folder $ [refineChain (zip [goalStmt, thModel, inModel]
-           [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]), trailingSentence]]
+  folder [refineChain (zip [goalStmt, thModel, inModel]
+         [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]), trailingSentence]]
   where
     folder = case trailingSentence of
       EmptyS -> foldlSP_

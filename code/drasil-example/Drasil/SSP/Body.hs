@@ -103,7 +103,7 @@ mkSRS = [RefSec $ RefProg intro
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
         phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
         [phrase soilMechanics]
-    , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd],
+    , IOrgSec orgSecStart inModel (SRS.inModel [] []) orgSecEnd],
     --FIXME: issue #235
     GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
       UsrChars [userCharIntro], SystCons [sysConstraints] []],

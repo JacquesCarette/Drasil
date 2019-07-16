@@ -91,7 +91,7 @@ varLogFile :: (RenderSym repr) => repr (Variable repr)
 varLogFile = var "outfile" outfile
 
 valLogFile :: (RenderSym repr) => repr (Value repr)
-valLogFile = varVal var_logfile
+valLogFile = varVal varLogFile
 
 generator :: (RenderSym repr) => Choices -> CodeSpec -> State repr
 generator chs spec = State {

@@ -119,7 +119,8 @@ data Choices = Choices {
   comments :: [Comments],
   onSfwrConstraint :: ConstraintBehaviour,
   onPhysConstraint :: ConstraintBehaviour,
-  inputStructure :: Structure
+  inputStructure :: Structure,
+  inputModule :: InputModule
 }
 
 data ImplementationType = Library
@@ -139,6 +140,9 @@ data ConstraintBehaviour = Warning
                          
 data Structure = Unbundled
                | Bundled
+
+data InputModule = Combined
+                 | Separated
              
 defaultChoices :: Choices
 defaultChoices = Choices {
@@ -149,7 +153,8 @@ defaultChoices = Choices {
   comments = [],
   onSfwrConstraint = Exception,
   onPhysConstraint = Warning,
-  inputStructure = Bundled
+  inputStructure = Bundled,
+  inputModule = Combined
 }
 
 type Name = String

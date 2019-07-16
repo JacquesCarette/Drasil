@@ -548,10 +548,10 @@ class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) =>
   StateVarSym repr where
   type StateVar repr
   stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->
-    repr (Value repr) -> repr (StateVar repr)
-  privMVar :: Int -> repr (Value repr) -> repr (StateVar repr)
-  pubMVar  :: Int -> repr (Value repr) -> repr (StateVar repr)
-  pubGVar  :: Int -> repr (Value repr) -> repr (StateVar repr)
+    repr (Variable repr) -> repr (StateVar repr)
+  privMVar :: Int -> repr (Variable repr) -> repr (StateVar repr)
+  pubMVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
+  pubGVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
 
 class (StateVarSym repr, MethodSym repr) => ClassSym repr 
   where

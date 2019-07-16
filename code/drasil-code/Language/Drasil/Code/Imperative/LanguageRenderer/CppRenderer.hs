@@ -1801,9 +1801,9 @@ cppDestruct v = cppDestruct' (getType $ variableType v)
         var_i = var i int
         v_i = varVal var_i
         guard = v_i ?< listSize (varVal v)
-        listelem = at v i
+        listelem = at (varVal v) i
         loopBody = oneLiner $ free (liftA2 (vard "") (valueType listelem) 
-          (valueDoc listelem))
+          (return $ valueDoc listelem))
         initv = var_i &= litInt 0
         deleteLoop = for initv guard (var_i &++) loopBody
 

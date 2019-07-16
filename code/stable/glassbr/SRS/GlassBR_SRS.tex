@@ -219,10 +219,12 @@ Uncert. & Typical Uncertainty
 \section{Introduction}
 \label{Sec:Intro}
 Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR, aims to predict the blast risk involved with the glass slab using an intuitive interface.
+\newline
 The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
 The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the GlassBR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
+\newline
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
@@ -233,6 +235,7 @@ Reviewers of this documentation should have an understanding of second year calc
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}, with some aspects taken from Volere template 16 \cite{rbrtsn2012}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
+\newline
 The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}). The data definitions are used to support the definitions of the different models.
 \section{Stakeholders}
 \label{Sec:Stakeholder}
@@ -450,8 +453,11 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+        \newline
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+        \newline
         $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
+        \newline
         $J$ is the stress distribution factor (Function), as defined in \hyperref[DD:stressDistFac]{DD: stressDistFac}.
 \\ \midrule \\
 Source & \cite{astm2009}, \cite[(Eqs. 4-5)]{beasonEtAl1998}, and \cite[(Eq. 14)]{campidelli}
@@ -529,6 +535,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpSV]{A: standardValues}
+        \newline
         \hyperref[assumpLDFC]{A: ldfConstant}
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -563,7 +570,9 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
+        \newline
         $\hat{q}$ is the dimensionless load defined in \hyperref[DD:dimlessLoad]{DD: dimlessLoad}.
+        \newline
         $AR$ is the aspect ratio defined in \hyperref[DD:aspectRatio]{DD: aspectRatio}.
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -600,8 +609,11 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+        \newline
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+        \newline
         ${\hat{q}_{tol}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{DD: tolLoad}.
+        \newline
         \hyperref[assumpSV]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -638,7 +650,9 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & AN is annealed glass.
+        \newline
         FT is fully tempered glass.
+        \newline
         HS is heat strengthened glass.
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -676,10 +690,15 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[DD:calofDemand]{DD: calofDemand}.
+        \newline
         $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+        \newline
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+        \newline
         $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{DD: gTF}.
+        \newline
         $\hat{q}$ is calculated with reference to \hyperref[assumpGL]{A: glassLite}.
+        \newline
         \hyperref[assumpSV]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009} and \cite[(Eq. 7)]{campidelli}
@@ -752,10 +771,15 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
+        \newline
         $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+        \newline
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+        \newline
         $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
+        \newline
         ${P_{btol}}$ is the tolerable probability entered by the user.
+        \newline
         \hyperref[assumpSV]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -914,8 +938,11 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load, as defined in \hyperref[DD:nFL]{DD: nFL}. $GTF$ is the glass type factor, as defined in \hyperref[DD:gTF]{DD: gTF}.
+        \newline
         \hyperref[assumpGL]{A: glassLite}
+        \newline
         \hyperref[DD:gTF]{DD: gTF}
+        \newline
         \hyperref[DD:nFL]{DD: nFL}
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -960,6 +987,7 @@ RefBy & \hyperref[IM:isSafeLR]{IM: isSafeLR} and \hyperref[DD:dimlessLoad]{DD: d
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+\newline
 The goal \hyperref[willBreakGS]{GS: Predict-Glass-Withstands-Explosion} is met by \hyperref[IM:isSafePb]{IM: isSafePb}, \hyperref[IM:isSafeLR]{IM: isSafeLR}.
 \par~
 

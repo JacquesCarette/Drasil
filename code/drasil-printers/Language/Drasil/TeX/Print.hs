@@ -70,7 +70,13 @@ lo (Graph ps w h c l)   _  = toText $ makeGraph
   (spec c) (spec l)
 
 print :: PrintingInformation -> [LayoutObj] -> D
-print sm = foldr (($+$) . (`lo` sm)) empty
+print sm l = foldr (($+$) . (`lo` sm)) empty $ linePar l
+  where
+    linePar []  = []
+    linePar [x] = [x]
+    linePar (x@Paragraph{}:y@Paragraph{}:zs) = x : Paragraph HARDNL : linePar (y : zs)
+    linePar (x            :y@Paragraph{}:zs) = x : linePar (y : zs)
+    linePar (x            :y            :zs) = x : y : linePar zs
 
 ------------------ Symbol ----------------------------
 symbol :: L.Symbol -> String
@@ -345,13 +351,10 @@ makeDefTable sm ps l = mkEnvArgs "tabular" (col rr colAwidth ++ col (rr ++ "\\ar
 
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
-makeDRows sm [(f,d)]    = dBoilerplate %% pure (text (f ++ " & ")) <>
-  vcat (map (`lo` sm) d)
-makeDRows sm ((f,d):ps) = dBoilerplate %% (pure (text (f ++ " & ")) <>
-  vcat (map (`lo` sm) d))
-                       %% makeDRows sm ps
-dBoilerplate :: D
-dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
+makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d) ls
+  where dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
+--makeDRows sm [(f,d)]    = dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d
+--makeDRows sm ((f,d):ps) = dBoilerplate %% (pure (text (f ++ " & ")) <> print sm d %% makeDRows sm ps
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------

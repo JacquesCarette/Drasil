@@ -33,8 +33,8 @@ import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (br, paren, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
-  cite, citeInfo, command, command0, commandD, command2D, description, document,
-  empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
+  cite, command, command0, commandD, command2D, description, document, empty,
+  enumerate, externalref, figure, fraction, includegraphics, item, item',
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgs, newline, newpage,
   parens, quote, sec, snref, superscript, symbDescription, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
@@ -265,8 +265,11 @@ spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
 spec (Ref Internal r sn) = snref r $ spec sn
-spec (Ref Cite2    r EmptyS) = cite (pure $ text r)
-spec (Ref Cite2    r i)      = citeInfo (pure $ text r) (spec i)
+spec (Ref Cite2    r i) = cite (pure $ text r) info
+  where
+    info = case i of
+      EmptyS -> Nothing
+      x      -> Just (spec x)
 spec (Ref External r sn) = externalref r $ spec sn
 spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q

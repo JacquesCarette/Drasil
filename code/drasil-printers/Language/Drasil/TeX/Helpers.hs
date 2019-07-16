@@ -116,14 +116,9 @@ href = command2 "href"
 custRef :: String -> D -> D
 custRef t x = pure (text t) <> br x
 
-custRef' :: String -> D -> D -> D
-custRef' t x i = pure (text t) <> sq i <> br x
+cite :: D -> Maybe D -> D
+cite c i = command1oD "cite" i c
 
-cite :: D -> D
-cite = custRef "\\cite"
-
-citeInfo :: D -> D -> D
-citeInfo = custRef' "\\cite"
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 

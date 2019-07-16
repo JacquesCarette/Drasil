@@ -73,24 +73,24 @@ print :: PrintingInformation -> [LayoutObj] -> D
 print sm = foldr (($+$) . (`lo` sm)) empty
 
 ------------------ Symbol ----------------------------
-symbol :: L.Symbol -> String
-symbol (L.Atomic s)  = s
-symbol (L.Special s) = unPL $ L.special s
-symbol (L.Concat sl) = concatMap symbol sl
+symbol :: L.Symbol -> D
+symbol (L.Atomic s)  = pure $ text s
+symbol (L.Special s) = pure $ text $ unPL (L.special s)
+symbol (L.Concat sl) = foldl (<>) empty $ map symbol sl
 --
 -- handle the special cases first, then general case
-symbol (L.Corners [] [] [x] [] s) = brace $ symbol s ++ "^" ++ brace (symbol x)
-symbol (L.Corners [] [] [] [x] s) = brace $ symbol s ++ "_" ++ brace (symbol x)
+symbol (L.Corners [] [] [x] [] s) = br $ symbol s <> pure hat <> br (symbol x)
+symbol (L.Corners [] [] [] [x] s) = br $ symbol s <> pure unders <> br (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol L.Corners{}                = error "rendering of Corners (general)"
 symbol (L.Atop f s)               = sFormat f s
-symbol L.Empty                    = ""
+symbol L.Empty                    = empty
 
-sFormat :: L.Decoration -> L.Symbol -> String
-sFormat L.Hat    s = "\\hat{" ++ symbol s ++ "}"
-sFormat L.Vector s = "\\mathbf{" ++ symbol s ++ "}"
-sFormat L.Prime  s = symbol s ++ "'"
+sFormat :: L.Decoration -> L.Symbol -> D
+sFormat L.Hat    s = commandD "hat" (symbol s)
+sFormat L.Vector s = commandD "mathbf" (symbol s)
+sFormat L.Prime  s = symbol s <> pure (text "'")
 
 data OpenClose = Open | Close
 
@@ -304,7 +304,7 @@ pUnit (L.US ls) = formatu t b
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
     p_symb (L.Concat s) = foldl (<>) empty $ map p_symb s
-    p_symb n = let cn = symbolNeeds n in switch (const cn) $ pure $ text $ symbol n
+    p_symb n = let cn = symbolNeeds n in switch (const cn) $ symbol n
 
 {-
 pUnit :: L.USymb -> D

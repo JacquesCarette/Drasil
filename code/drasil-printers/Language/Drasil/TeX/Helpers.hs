@@ -85,7 +85,7 @@ comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<>
 
 -- this one is special enough, let this sub-optimal implementation stand
 renewcomm :: String -> String -> D
-renewcomm b1 b2 = command2 "renewcommand" ("\\" ++ b1) b2
+renewcomm b1 = command2 "renewcommand" ("\\" ++ b1)
 
 -- Useful to have empty 
 empty :: D
@@ -108,7 +108,7 @@ ref      t x = pure (text $ t ++ "~\\ref") <> br x
 hyperref t x = command0 "hyperref" <> sq x <> br (pure (text (t ++ "~")) <> x)
 externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
   br empty <> br x
-snref    r t = command1oD "hyperref" (Just (pure $ text r)) t
+snref    r   = command1oD "hyperref" (Just (pure $ text r))
 
 href :: String -> String -> D
 href = command2 "href"

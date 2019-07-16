@@ -85,7 +85,7 @@ comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<>
 
 -- this one is special enough, let this sub-optimal implementation stand
 renewcomm :: String -> String -> D
-renewcomm b1 b2 = pure $ text "\\renewcommand" TP.<> H.br ("\\" ++ b1) TP.<> H.br b2
+renewcomm b1 b2 = command2 "renewcommand" ("\\" ++ b1) b2
 
 -- Useful to have empty 
 empty :: D
@@ -104,17 +104,14 @@ genSec d
 -- For references
 ref, sref, hyperref, externalref, snref :: String -> D -> D
 sref         = if numberedSections then ref else hyperref
-ref      t   = custRef (t ++ "~\\ref")
+ref      t x = pure (text $ t ++ "~\\ref") <> br x
 hyperref t x = command0 "hyperref" <> sq x <> br (pure (text (t ++ "~")) <> x)
 externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
   br empty <> br x
-snref    r t = command0 "hyperref" <> sq (pure $ text r) <> br t
+snref    r t = command1oD "hyperref" (Just (pure $ text r)) t
 
 href :: String -> String -> D
 href = command2 "href"
-
-custRef :: String -> D -> D
-custRef t x = pure (text t) <> br x
 
 cite :: D -> Maybe D -> D
 cite c i = command1oD "cite" i c
@@ -128,8 +125,6 @@ count      = command "newcounter"
 -- what was intended?)
 mathbb     = command "mathbb"
 usepackage = command "usepackage"
-
-
 
 includegraphics :: MaxWidthPercent -> String -> D
 includegraphics 100 = command1o "includegraphics" 
@@ -151,7 +146,7 @@ item' bull = command1oD "item" (Just bull)
 maketitle, maketoc, newline, newpage, centering :: D
 maketitle = command0 "maketitle"
 maketoc   = command0 "tableofcontents"
-newline   = command0 "par" <> pure (text "~\n")
+newline   = command0 "par~\n"
 newpage   = command0 "newpage"
 centering = command0 "centering"
 

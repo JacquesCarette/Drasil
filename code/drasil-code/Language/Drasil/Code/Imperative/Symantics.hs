@@ -553,8 +553,7 @@ class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) =>
   pubMVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
   pubGVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
 
-class (StateVarSym repr, MethodSym repr) => ClassSym repr 
-  where
+class (StateVarSym repr, MethodSym repr) => ClassSym repr where
   type Class repr
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
     [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)

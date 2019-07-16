@@ -146,7 +146,7 @@ helloWhileLoop = while (varVal (var "a" int) ?< litInt 13) (bodyStatements
   [printStrLn "Hello", (&++) (var "a" int)]) 
 
 helloForEachLoop :: (RenderSym repr) => repr (Statement repr)
-helloForEachLoop = forEach "num" (listVar "myOtherList" static_ float) 
+helloForEachLoop = forEach "num" (varVal $ listVar "myOtherList" static_ float) 
   (oneLiner (printLn (extFuncApp "Helper" "doubleAndAdd" float [varVal $ 
   iterVar "num" float, litFloat 1.0])))
 

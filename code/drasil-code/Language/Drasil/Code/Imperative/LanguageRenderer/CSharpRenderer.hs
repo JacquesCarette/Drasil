@@ -482,7 +482,7 @@ instance ControlStatementSym CSharpCode where
           notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = while ((f $. liftA2 fd bool (return $ text 
-    "EndOfStream")) ?!) (oneLiner $ valState $ listAppend (varVal v) (fmap 
+    ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (varVal v) (fmap 
     csFileInput f))
 
 instance ScopeSym CSharpCode where

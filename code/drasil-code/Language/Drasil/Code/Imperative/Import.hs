@@ -83,10 +83,15 @@ chooseLogging LogAll v = Just <$> loggedVar v
 chooseLogging _      _ = return Nothing
 
 initLogFileVar :: (RenderSym repr) => Logging -> [repr (Statement repr)]
-initLogFileVar LogVar = [varDec $ var "outfile" outfile]
-initLogFileVar LogAll = [varDec $ var "outfile" outfile]
+initLogFileVar LogVar = [varDec varLogFile]
+initLogFileVar LogAll = [varDec varLogFile]
 initLogFileVar _ = []
 
+varLogFile :: (RenderSym repr) => repr (Variable repr)
+varLogFile = var "outfile" outfile
+
+valLogFile :: (RenderSym repr) => repr (Value repr)
+valLogFile = varVal var_logfile
 
 generator :: (RenderSym repr) => Choices -> CodeSpec -> State repr
 generator chs spec = State {
@@ -449,25 +454,22 @@ paramComments = mapM varTerm
 loggedMethod :: (RenderSym repr) => Label -> Label -> [repr (Variable repr)] -> 
   [repr (Block repr)] -> [repr (Block repr)]
 loggedMethod lName n vars b = block [
-      varDec var_outfile,
-      openFileA var_outfile (litString lName),
-      printFileStrLn v_outfile ("function " ++ n ++ " called with inputs: {"),
+      varDec varLogFile,
+      openFileA varLogFile (litString lName),
+      printFileStrLn valLogFile ("function " ++ n ++ " called with inputs: {"),
       multi $ printInputs vars,
-      printFileStrLn v_outfile "  }",
-      closeFile v_outfile ]
+      printFileStrLn valLogFile "  }",
+      closeFile valLogFile ]
       : b
   where
-    l_outfile = "outfile"
-    var_outfile = var l_outfile outfile
-    v_outfile = varVal var_outfile
     printInputs [] = []
     printInputs [v] = [
-      printFileStr v_outfile ("  " ++ variableName v ++ " = "), 
-      printFileLn v_outfile (varVal v)]
+      printFileStr valLogFile ("  " ++ variableName v ++ " = "), 
+      printFileLn valLogFile (varVal v)]
     printInputs (v:vs) = [
-      printFileStr v_outfile ("  " ++ variableName v ++ " = "), 
-      printFile v_outfile (varVal v), 
-      printFileStrLn v_outfile ", "] ++ printInputs vs
+      printFileStr valLogFile ("  " ++ variableName v ++ " = "), 
+      printFile valLogFile (varVal v), 
+      printFileStrLn valLogFile ", "] ++ printInputs vs
     
 
 ---- MAIN ---
@@ -638,18 +640,14 @@ getOutputParams = do
 
 loggedVar :: (RenderSym repr) => repr (Variable repr) -> 
   Reader (State repr) (repr (Statement repr))
-loggedVar v =
-  let l_outfile = "outfile"
-      var_outfile = var l_outfile outfile
-      v_outfile = varVal var_outfile
-  in do
+loggedVar v = do
     g <- ask
     return $ multi [
-      openFileA var_outfile (litString $ logName g),
-      printFileStr v_outfile ("var '" ++ variableName v ++ "' assigned to "),
-      printFile v_outfile (varVal v),
-      printFileStrLn v_outfile (" in module " ++ currentModule g),
-      closeFile v_outfile ]
+      openFileA varLogFile (litString $ logName g),
+      printFileStr valLogFile ("var '" ++ variableName v ++ "' assigned to "),
+      printFile valLogFile (varVal v),
+      printFileStrLn valLogFile (" in module " ++ currentModule g),
+      closeFile valLogFile ]
 
 -- helpers
 

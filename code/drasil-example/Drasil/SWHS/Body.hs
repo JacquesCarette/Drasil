@@ -130,7 +130,7 @@ mkSRS = [RefSec $ RefProg intro [
     IntroProg (introP1 enerSrc energy swhsPCM phsChgMtrl progName thermalEnergy latentHeat unit_)
               (introP2 swhsPCM program progName)
     [IPurpose $ purpDoc swhsPCM progName,
-     IScope scopeReqs,
+     IScope scope,
      IChar [] (charReader1 htTransTheo ++ charReader2 de) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        $ orgDocEnd swhsPCM progName],
@@ -546,8 +546,8 @@ purpDoc sp pro = foldlSent [S "The main", phrase purpose, S "of this",
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 
-scopeReqs :: Sentence
-scopeReqs = foldlSent_ [phrase thermalAnalysis `sOf` S "a single" +:+. phrase tankPCM,
+scope :: Sentence
+scope = foldlSent_ [phrase thermalAnalysis `sOf` S "a single" +:+. phrase tankPCM,
   S "This entire", phrase document `sIs` S "written assuming that the substances inside the",
   phrase sWHT `sAre` phrase water `sAnd` short phsChgMtrl]
 

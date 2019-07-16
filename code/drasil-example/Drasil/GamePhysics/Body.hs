@@ -65,7 +65,7 @@ mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
   IntroSec $ IntroProg para1_introduction_intro (short chipmunk)
   [IPurpose para1_purpose_of_document_intro,
-   IScope scope_of_requirements_intro_p1,
+   IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
    IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
    GSDSec $ GSDProg2 [
@@ -207,9 +207,8 @@ para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldl
 ---------------------------------
 -- 2.2 : Scope of Requirements --
 ---------------------------------
-scope_of_requirements_intro_p1 :: Sentence
-scope_of_requirements_intro_p1 = foldlSent_
-  [S "the", phrase physicalSim `sOf` getAcc twoD, 
+scope :: Sentence
+scope = foldlSent_ [S "the", phrase physicalSim `sOf` getAcc twoD,
   plural CP.rigidBody, S "acted on by", plural QP.force]
 
 --scope_of_requirements_intro_p2 = EmptyS

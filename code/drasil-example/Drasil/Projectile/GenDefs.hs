@@ -23,7 +23,7 @@ genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
 ----------
 rectVelGD :: GenDefn
-rectVelGD = gd rectVelRC (getUnit speed) rectVelDeriv 
+rectVelGD = gd rectVelRC (getUnit speed) (Just rectVelDeriv)
   [makeCiteInfo hibbeler2004 $ Page [8]] "rectVel" [{-Notes-}]
 
 rectVelRC :: RelationConcept
@@ -36,8 +36,8 @@ rectVelRel :: Relation
 rectVelRel = sy speed $= sy iSpeed + sy QP.constAccel * sy time
 
 rectVelDeriv :: Derivation
-rectVelDeriv = (S "Detailed derivation" `sOf` phrase rectilinear +: phrase velocity) :
-               weave [rectVelDerivSents, map E rectVelDerivEqns]
+rectVelDeriv = mkDerivName (phrase rectilinear +:+ phrase velocity)
+               (weave [rectVelDerivSents, map E rectVelDerivEqns])
 
 rectVelDerivSents :: [Sentence]
 rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent]
@@ -55,7 +55,7 @@ rectVelDerivEqn2 = defint (eqSymb speed) (sy iSpeed) (sy speed) 1 $=
 
 ----------
 rectPosGD :: GenDefn
-rectPosGD = gd rectPosRC (getUnit scalarPos) rectPosDeriv
+rectPosGD = gd rectPosRC (getUnit scalarPos) (Just rectPosDeriv)
   [makeCiteInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
 
 rectPosRC :: RelationConcept
@@ -68,8 +68,8 @@ rectPosRel :: Relation
 rectPosRel = sy scalarPos $= sy iPos + sy iSpeed * sy time + sy QP.constAccel * square (sy time) / 2
 
 rectPosDeriv :: Derivation
-rectPosDeriv = (S "Detailed derivation" `sOf` phrase rectilinear +: phrase position) :
-               weave [rectPosDerivSents, map E rectPosDerivEqns]
+rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)
+               (weave [rectPosDerivSents, map E rectPosDerivEqns])
 
 rectPosDerivSents :: [Sentence]
 rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
@@ -89,7 +89,8 @@ rectPosDerivEqn3 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) 1 $=
 
 ----------
 velVecGD :: GenDefn
-velVecGD = gdNoRefs velVecRC (getUnit velocity) velVecDeriv "velVec" [{-Notes-}]
+velVecGD = gdNoRefs velVecRC (getUnit velocity)
+           (Just velVecDeriv) "velVec" [{-Notes-}]
 
 velVecRC :: RelationConcept
 velVecRC = makeRC "velVecRC" (nounPhraseSent $ foldlSent_ 
@@ -101,15 +102,15 @@ velVecRel :: Relation
 velVecRel = sy velocity $= vec2D (sy ixVel + sy xConstAccel * sy time) (sy iyVel + sy yConstAccel * sy time)
 
 velVecDeriv :: Derivation
-velVecDeriv = [S "Detailed derivation" `sOf` phrase velocity +: phrase vector,
-               velVecDerivSent, E velVecRel]
+velVecDeriv = mkDerivName (phrase velocity +:+ phrase vector) [velVecDerivSent, E velVecRel]
 
 velVecDerivSent :: Sentence
 velVecDerivSent = vecDeriv [(velocity, velocityXY), (acceleration, accelerationXY)] rectVelGD
 
 ----------
 posVecGD :: GenDefn
-posVecGD = gdNoRefs posVecRC (getUnit position) posVecDeriv "posVec" [{-Notes-}]
+posVecGD = gdNoRefs posVecRC (getUnit position) 
+           (Just posVecDeriv) "posVec" [{-Notes-}]
 
 posVecRC :: RelationConcept
 posVecRC = makeRC "posVecRC" (nounPhraseSent $ foldlSent_ 
@@ -123,8 +124,7 @@ posVecRel = sy position $= vec2D
               (sy iyPos + sy iyVel * sy time + sy yConstAccel * square (sy time) / 2)
 
 posVecDeriv :: Derivation
-posVecDeriv = [S "Detailed derivation" `sOf` phrase position +: phrase vector,
-               posVecDerivSent, E posVecRel]
+posVecDeriv = mkDerivName (phrase position +:+ phrase vector) [posVecDerivSent, E posVecRel]
 
 posVecDerivSent :: Sentence
 posVecDerivSent = vecDeriv [(position, positionXY), (velocity, velocityXY), (acceleration, accelerationXY)] rectPosGD

@@ -43,7 +43,7 @@ newtonSLDesc = foldlSent [S "The net", phrase QP.force, ch QP.force,
 --
 
 weightGD :: GenDefn
-weightGD = gd weightRC (getUnit QP.weight) weightDeriv [weightSrc] 
+weightGD = gd weightRC (getUnit QP.weight) (Just weightDeriv) [weightSrc] 
   "weight" [{-Notes-}]
 
 weightRC :: RelationConcept
@@ -57,7 +57,7 @@ weightSrc = makeURI "weightSrc" "https://en.wikipedia.org/wiki/Weight" $
   shortname' "Definition of Weight"
 
 weightDeriv :: Derivation
-weightDeriv = weave [weightDerivSentences, weightDerivEqns]
+weightDeriv = mkDerivName (phrase QP.weight) $ weave [weightDerivSentences, weightDerivEqns]
 
 weightDerivSentences, weightDerivEqns :: [Sentence]
 weightDerivSentences = map foldlSentCol [weightDerivAccelSentence, 
@@ -103,7 +103,7 @@ weightDerivSpecWeightEqn = sy QP.weight $= sy QPP.vol * sy QPP.specWeight
 --
 
 hsPressureGD :: GenDefn
-hsPressureGD = gd hsPressureRC (getUnit QP.pressure) [{-Derivation-}]   
+hsPressureGD = gd hsPressureRC (getUnit QP.pressure) Nothing
   [hsPressureSrc] "hsPressure" [hsPressureNotes]
 
 hsPressureRC :: RelationConcept
@@ -125,8 +125,7 @@ hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+
 --
 
 torqueDD :: DataDefinition
-torqueDD = ddNoRefs torque [{-- Derivation --}] "torque"
-  [torqueDesc] 
+torqueDD = ddNoRefs torque Nothing "torque" [torqueDesc] 
 
 torque :: QDefinition
 torque = mkQuantDef QP.torque torqueEqn

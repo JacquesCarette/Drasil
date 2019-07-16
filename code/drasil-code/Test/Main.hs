@@ -5,7 +5,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (JavaCode(.
 import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (PythonCode(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (CSharpCode(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (CppSrcCode(..), CppHdrCode(..))
-import Language.Drasil.Code.Imperative.Helpers (ModData(..))
+import Language.Drasil.Code.Imperative.Data (ModData(..))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))

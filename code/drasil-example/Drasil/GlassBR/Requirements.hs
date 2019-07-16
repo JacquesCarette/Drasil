@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs, propsDeriv) where
+module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs) where
 
 import Control.Lens ((^.))
 
@@ -104,13 +104,10 @@ outputQuantsTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqO
 nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, portable]
 
-propsDeriv :: [Contents]
-propsDeriv = [foldlSP [S "FIXME"]]
-
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   plural output_ `ofThe'` phrase code, S "have the",
-  plural property, S "described in", makeRef2S (propCorSol propsDeriv [])
+  plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance

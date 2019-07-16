@@ -217,12 +217,15 @@ makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
 
 -- | determines the length of a Spec
 specLength :: Spec -> Int
-specLength (S x)     = length x
 specLength (E x)     = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
-specLength (Sy _)    = 1
+specLength (S x)     = length x
 specLength (a :+: b) = specLength a + specLength b
+specLength (Sy _)    = 1
+specLength (Sp _)    = 0
+specLength Ref{}     = 0
 specLength EmptyS    = 0
-specLength _         = 0
+specLength (Quote q) = 2 + specLength q
+specLength HARDNL    = 0
 
 dontCount :: String
 dontCount = "\\/[]{}()_^$:"

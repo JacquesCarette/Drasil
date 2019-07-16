@@ -166,12 +166,12 @@ pOps Point    = pure $ text "."
 pOps Perc     = command0 "%"
 
 fence :: OpenClose -> Fence -> D
-fence Open Paren  = pure . text $ "\\left("
-fence Close Paren = pure . text $ "\\right)"
-fence Open Curly  = pure . text $ "\\{"
-fence Close Curly = pure . text $ "\\}"
-fence _ Abs       = pure . text $ "|"
-fence _ Norm      = pure . text $ "||"
+fence Open Paren  = command0 "left("
+fence Close Paren = command0 "right)"
+fence Open Curly  = command0 "{"
+fence Close Curly = command0 "}"
+fence _ Abs       = pure $ text "|"
+fence _ Norm      = pure $ text "||"
 
 -- | For printing Matrix
 pMatrix :: [[Expr]] -> D
@@ -243,14 +243,14 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
-needs (S _)            = Text
-needs (E _)            = Math
-needs (Sy _)           = Text
-needs (Sp _)           = Math
-needs HARDNL           = Text
-needs Ref{}            = Text
-needs EmptyS           = Text
-needs (Quote _)        = Text
+needs (S _)     = Text
+needs (E _)     = Math
+needs (Sy _)    = Text
+needs (Sp _)    = Math
+needs HARDNL    = Text
+needs Ref{}     = Text
+needs EmptyS    = Text
+needs (Quote _) = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -263,7 +263,7 @@ spec (E ex) = toMath $ pExpr ex
 spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
-spec HARDNL = pure $ text "\\newline"
+spec HARDNL = command0 "newline"
 spec (Ref Internal r sn) = snref r $ spec sn
 spec (Ref Cite2    r EmptyS) = cite (pure $ text r)
 spec (Ref Cite2    r i)      = citeInfo (pure $ text r) (spec i)
@@ -276,13 +276,13 @@ escapeChars '_' = "\\_"
 escapeChars c = [c]
 
 symbolNeeds :: L.Symbol -> MathContext
-symbolNeeds (L.Atomic _)          = Text
-symbolNeeds (L.Special _)         = Math
-symbolNeeds (L.Concat [])         = Math
-symbolNeeds (L.Concat (s:_))      = symbolNeeds s
-symbolNeeds L.Corners{}           = Math
-symbolNeeds (L.Atop _ _)          = Math
-symbolNeeds L.Empty               = Curr
+symbolNeeds (L.Atomic _)     = Text
+symbolNeeds (L.Special _)    = Math
+symbolNeeds (L.Concat [])    = Math
+symbolNeeds (L.Concat (s:_)) = symbolNeeds s
+symbolNeeds L.Corners{}      = Math
+symbolNeeds (L.Atop _ _)     = Math
+symbolNeeds L.Empty          = Curr
 
 pUnit :: L.USymb -> D
 pUnit (L.US ls) = formatu t b
@@ -336,8 +336,8 @@ endDefn = pure (text "\\end{minipage}")
 makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = mkEnvArgs "tabular" (col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth) $ vcat [
-  pure (text "\\toprule ") <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l, --shortname instead of refname?
-  pure (text "\\phantomsection "), label l,
+  command0 "toprule " <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l, --shortname instead of refname?
+  command0 "phantomsection ", label l,
   makeDRows sm ps,
   pure $ dbs <+> text "\\bottomrule"
   ]
@@ -385,7 +385,7 @@ lspec (S s) = pure $ text s
 lspec r = spec r
 
 mlref :: Maybe Label -> D
-mlref = maybe empty $ (<>) (pure $ text "\\phantomsection") . label . lspec
+mlref = maybe empty $ (<>) (command0 "phantomsection") . label . lspec
 
 pItem :: ItemType -> D
 pItem (Flat s) = item $ spec s
@@ -453,9 +453,9 @@ makeGraph ps w h c l =
          ]
      ++  map (\(a,b) -> q a <> pure (text " -> ") <> q b <> pure (text ";")) ps
      ++  [ pure $ text "}",
-           pure $ text "\\end{dot2tex}",
-           pure $ text "\\end{tikzpicture}",
-           pure $ text "\\end{adjustbox}",
+           command "end" "dot2tex",
+           command "end" "tikzpicture",
+           command "end" "adjustbox",
            caption c,
            label l
          ]

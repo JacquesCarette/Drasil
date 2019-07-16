@@ -65,8 +65,7 @@ mkSRS = [
       ],
   IntroSec $
     IntroProg justification (phrase projectileTitle)
-      [ IScope scope EmptyS
-      ],
+      [ IScope scope ],
   SSDSec $
     SSDProg
       [ SSDProblem $ PDProg prob []

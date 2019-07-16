@@ -65,7 +65,7 @@ mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
   IntroSec $ IntroProg para1_introduction_intro (short chipmunk)
   [IPurpose para1_purpose_of_document_intro,
-   IScope scope_of_requirements_intro_p1 EmptyS,
+   IScope scope_of_requirements_intro_p1,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
    IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
    GSDSec $ GSDProg2 [

@@ -124,7 +124,7 @@ mkSRS = [RefSec $ RefProg intro
   IntroSec $ IntroProg (introStart enerSrc energy progName)
     (introEnd progName program)
   [IPurpose $ purpDoc progName,
-  IScope scopeReqs EmptyS,
+  IScope scopeReqs,
   IChar [] (charReader1 htTransTheo ++ charReader2 M.de) [],
   IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
   GSDSec $ GSDProg2 

@@ -2,15 +2,16 @@ module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, 
   charIntRdrF) where
 
 import Language.Drasil
-import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, goalStmt, thModel, inModel)
+import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
+  charOfIR, orgOfDoc, goalStmt, thModel, inModel)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   decision, definition, desSpec, design, designDoc, document, documentation,
-  environment, goal, goalStmt, implementation, input_, intReader, model,
-  organization, purpose, requirement, scope, section_, softwareDoc, softwareVAV,
-  srs, system, theory, user, vavPlan)
+  environment, goal, goalStmt, implementation, intReader, model, organization,
+  purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs, system,
+  theory, user, vavPlan)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986)
 
@@ -75,18 +76,10 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 
 
 -- | constructor for scope of requirements subsection
--- mainRequirement  - the main requirement for the program
--- programName      - the name of the program
--- intendedPurpose  - the intended purpose of the program
-scopeOfRequirements :: Idea a => Sentence -> a -> Sentence -> Section
-scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq
-  [mkParagraph $ foldlSent [phrase scope `ofThe'` plural requirement,
-                            S "includes", mainRequirement] +:+ ins] []
-  where
-    ins = case intendedPurpose of
-      EmptyS -> EmptyS
-      _      -> S "Given the appropriate" +:+ plural input_ `sC`
-                short programName +:+. intendedPurpose
+-- req - the main requirement for the program
+scopeOfRequirements :: Sentence -> Section
+scopeOfRequirements req = SRS.scpOfReq [foldlSP
+  [phrase scope `ofThe'` plural requirement, S "includes", req]] []
 
 -- | constructor for characteristics of the intended reader subsection
 -- progName

@@ -130,7 +130,7 @@ mkSRS = [RefSec $ RefProg intro [
     IntroProg (introP1 enerSrc energy swhsPCM phsChgMtrl progName thermalEnergy latentHeat unit_)
               (introP2 swhsPCM program progName)
     [IPurpose $ purpDoc swhsPCM progName,
-     IScope scopeReqs EmptyS,
+     IScope scopeReqs,
      IChar [] (charReader1 htTransTheo ++ charReader2 de) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        $ orgDocEnd swhsPCM progName],

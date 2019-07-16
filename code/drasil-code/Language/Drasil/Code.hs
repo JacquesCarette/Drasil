@@ -8,9 +8,9 @@ module Language.Drasil.Code (
   junkLine, multiLine, repeated, singleLine, singleton,
   PackageSym(..), RenderSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  StateTypeSym(..), StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..),
+  StateTypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..),
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..),
   MethodSym(..), ModuleSym(..), BlockCommentSym(..),
   ModData(..),
   JavaCode(..), PythonCode(..), CSharpCode(..), CppSrcCode(..), CppHdrCode(..),
@@ -33,9 +33,9 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..), Con
 
 import Language.Drasil.Code.Imperative.Symantics (PackageSym(..), RenderSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  StateTypeSym(..), StatementSym(..), ControlStatementSym(..),  ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..),
+  StateTypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..),
   MethodSym(..), ModuleSym(..), BlockCommentSym(..))
 
 import Language.Drasil.Code.Imperative.Data (ModData(..))

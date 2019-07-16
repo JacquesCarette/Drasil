@@ -52,6 +52,7 @@ import qualified Prelude as P ((<>))
 data State repr = State {
   codeSpec :: CodeSpec,
   inStruct :: Structure,
+  inMod :: InputModule,
   logName :: String,
   logKind :: Logging,
   commented :: [Comments],
@@ -70,10 +71,15 @@ chooseConstr :: (RenderSym repr) => ConstraintBehaviour -> Expr -> repr
 chooseConstr Warning   = constrWarn
 chooseConstr Exception = constrExc
 
-chooseInStructure :: (RenderSym repr) => Structure -> Reader (State repr) 
+chooseInModule :: (RenderSym repr) => InputModule -> Reader (State repr) 
   [repr (RenderFile repr)]
-chooseInStructure Unbundled   = genInputModNoClass
-chooseInStructure Bundled = genInputModClass
+chooseInModule Combined = genInputModCombined
+chooseInModule Separated = genInputModSeparated
+
+chooseInStructure :: (RenderSym repr) => Structure -> Reader (State repr) 
+  (Maybe (repr (Class repr)))
+chooseInStructure Unbundled = return Nothing
+chooseInStructure Bundled = genInputClass
 
 chooseLogging :: (RenderSym repr) => Logging -> (repr (Value repr) -> 
   Reader (State repr) (Maybe (repr (Statement repr))))
@@ -86,12 +92,12 @@ initLogFileVar LogVar = [varDec $ var "outfile" outfile]
 initLogFileVar LogAll = [varDec $ var "outfile" outfile]
 initLogFileVar _ = []
 
-
 generator :: (RenderSym repr) => Choices -> CodeSpec -> State repr
 generator chs spec = State {
   -- constants
   codeSpec = spec,
   inStruct = inputStructure chs,
+  inMod = inputModule chs,
   logKind  = logging chs,
   commented = comments chs,
   -- state
@@ -152,11 +158,10 @@ genModules = do
   g <- ask
   let s = csi $ codeSpec g
   mn     <- genMain
-  inp    <- chooseInStructure $ inStruct g
-  inpf   <- genInputFormatMod
+  inp    <- chooseInModule $ inMod g
   out    <- genOutputMod
   moddef <- traverse genModDef (mods s) -- hack ?
-  return $ mn : inp ++ inpf ++ out ++ moddef
+  return $ mn : inp ++ out ++ moddef
 
 -- private utilities used in generateCode
 getDir :: Lang -> String
@@ -206,27 +211,35 @@ varTerm cname = do
 
 ------- INPUT ----------
 
-genInputModClass :: (RenderSym repr) => 
+genInputModSeparated :: (RenderSym repr) => 
   Reader (State repr) [repr (RenderFile repr)]
-genInputModClass = sequence 
-  [genModule "InputParameters" 
-    "Provides the structure for holding input parameters"
-    Nothing (Just $ fmap maybeToList genInputClass),
-  genModule "DerivedValues" 
-    "Provides the function for calculating derived values" 
-    (Just $ fmap maybeToList genInputDerived) Nothing,
-  genModule "InputConstraints" 
-    ("Provides the function for checking the physical and " ++
-    "software constraints on the input") 
-    (Just $ fmap maybeToList genInputConstraints) 
-    Nothing]
+genInputModSeparated = do
+  g <- ask
+  sequence 
+    [genModule "InputParameters" 
+      "Provides the structure for holding input parameters"
+      Nothing (Just $ fmap maybeToList (chooseInStructure $ inStruct g)),
+    genModule "InputFormat" 
+      "Provides the function for reading inputs" 
+      (Just $ fmap maybeToList genInputFormat) Nothing,
+    genModule "DerivedValues" 
+      "Provides the function for calculating derived values" 
+      (Just $ fmap maybeToList genInputDerived) Nothing,
+    genModule "InputConstraints" 
+      ("Provides the function for checking the physical and " ++
+      "software constraints on the input") 
+      (Just $ fmap maybeToList genInputConstraints) 
+      Nothing]
 
-genInputModNoClass :: (RenderSym repr) => Reader (State repr)
+genInputModCombined :: (RenderSym repr) => Reader (State repr)
   [repr (RenderFile repr)]
-genInputModNoClass = liftS $
-  genModule "InputParameters" ("Provides functions for calculating derived " ++
-  "inputs and checking input constraints") (Just $ concat <$> mapM (fmap 
-    maybeToList) [genInputDerived, genInputConstraints]) Nothing
+genInputModCombined = do
+  g <- ask
+  liftS $ genModule "InputParameters" 
+    ("Provides functions for calculating derived inputs and checking input" ++
+    " constraints") (Just $ concat <$> mapM (fmap maybeToList) 
+    [genInputFormat, genInputDerived, genInputConstraints]) 
+    (Just $ fmap maybeToList (chooseInStructure $ inStruct g))
 
 genInputClass :: (RenderSym repr) => Reader (State repr) (Maybe (repr (Class 
   repr)))
@@ -293,12 +306,6 @@ constrWarn _ = oneLiner $ printStrLn "Warning: constraint violated"
 
 constrExc :: (RenderSym repr) => Expr -> repr (Body repr)
 constrExc _ = oneLiner $ throw "InputError"
-
-genInputFormatMod :: (RenderSym repr) => Reader (State repr) 
-  [repr (RenderFile repr)]
-genInputFormatMod = liftS $ genModule "InputFormat" 
-  "Provides the function for reading inputs" 
-  (Just $ fmap maybeToList genInputFormat) Nothing
 
 genInputFormat :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Method repr)))

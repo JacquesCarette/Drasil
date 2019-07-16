@@ -324,14 +324,7 @@ pUnit (UDiv n d) = toMath $
 
 makeDefn :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefn _  [] _ = error "Empty definition"
-makeDefn sm ps l = beginDefn %% makeDefTable sm ps l %% endDefn
-
-beginDefn :: D
-beginDefn = newline
-  %% pure (text "\\noindent \\begin{minipage}{\\textwidth}")
-
-endDefn :: D
-endDefn = pure (text "\\end{minipage}")
+makeDefn sm ps l = newline %% command0 "noindent " <> mkEnvArgs "minipage" "\\textwidth" (makeDefTable sm ps l)
 
 makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"

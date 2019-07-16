@@ -360,59 +360,59 @@ This section focuses on the general equations and laws that GlassBR is based on.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{TM:isSafeProb}
-\phantomsection 
-\label{TM:isSafeProb}
-\\ \midrule \\
-Label & Safety Probability
-\\ \midrule \\
-Equation & \begin{displaymath}
-           is-safeProb={P_{f}}<{P_{ftol}}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$is-safeProb$ is the variable that is assigned true when probability of failure is less than tolerable probability of failure (Unitless)}
-              \item{${P_{f}}$ is the probability of failure (Unitless)}
-              \item{${P_{ftol}}$ is the tolerable probability of failure (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & If $is-safeProb$, the glass is considered safe. $is-safeProb$ and $is-safeLoad$ (from \hyperref[TM:isSafeLoad]{TM: isSafeLoad}) are either both True or both False. ${P_{f}}$ is the probability of failure, ${P_{ftol}}$ is the tolerable probability of failure.
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[TM:isSafeLoad]{TM: isSafeLoad} and \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{TM:isSafeProb}
+          \phantomsection 
+          \label{TM:isSafeProb}
+          \\ \midrule \\
+          Label & Safety Probability
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     is-safeProb={P_{f}}<{P_{ftol}}
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$is-safeProb$ is the variable that is assigned true when probability of failure is less than tolerable probability of failure (Unitless)}
+                        \item{${P_{f}}$ is the probability of failure (Unitless)}
+                        \item{${P_{ftol}}$ is the tolerable probability of failure (Unitless)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & If $is-safeProb$, the glass is considered safe. $is-safeProb$ and $is-safeLoad$ (from \hyperref[TM:isSafeLoad]{TM: isSafeLoad}) are either both True or both False. ${P_{f}}$ is the probability of failure, ${P_{ftol}}$ is the tolerable probability of failure.
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[TM:isSafeLoad]{TM: isSafeLoad} and \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{TM:isSafeLoad}
-\phantomsection 
-\label{TM:isSafeLoad}
-\\ \midrule \\
-Label & Safety Load
-\\ \midrule \\
-Equation & \begin{displaymath}
-           is-safeLoad=capacity>Load
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$is-safeLoad$ is the variable that is assigned true when load resistance (capacity) is greater than applied load (demand) (Unitless)}
-              \item{$capacity$ is the capacity or load resistance (Pa)}
-              \item{$Load$ is the applied load (demand) or pressure (Pa)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & If $is-safeLoad$, the glass is considered safe. $is-safeProb$ (from \hyperref[TM:isSafeProb]{TM: isSafeProb}) and $is-safeLoad$ are either both True or both False. LR is the load resistance (also called capacity), $Load$ (also referred as the Demand) is the 3 second duration equivalent pressure.
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[TM:isSafeProb]{TM: isSafeProb} and \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{TM:isSafeLoad}
+          \phantomsection 
+          \label{TM:isSafeLoad}
+          \\ \midrule \\
+          Label & Safety Load
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     is-safeLoad=capacity>Load
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$is-safeLoad$ is the variable that is assigned true when load resistance (capacity) is greater than applied load (demand) (Unitless)}
+                        \item{$capacity$ is the capacity or load resistance (Pa)}
+                        \item{$Load$ is the applied load (demand) or pressure (Pa)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & If $is-safeLoad$, the glass is considered safe. $is-safeProb$ (from \hyperref[TM:isSafeProb]{TM: isSafeProb}) and $is-safeLoad$ are either both True or both False. LR is the load resistance (also called capacity), $Load$ (also referred as the Demand) is the 3 second duration equivalent pressure.
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[TM:isSafeProb]{TM: isSafeProb} and \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 There are no general definitions.
@@ -422,61 +422,61 @@ This section collects and defines all the data needed to build the instance mode
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:riskFun}
-\phantomsection 
-\label{DD:riskFun}
-\\ \midrule \\
-Label & Risk of failure
-\\ \midrule \\
-Symbol & $B$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{displaymath}
-           B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} LDF e^{J}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$B$ is the risk of failure (Unitless)}
-              \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
-              \item{$a$ is the plate length (long dimension) (m)}
-              \item{$b$ is the plate width (short dimension) (m)}
-              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
-              \item{$E$ is the modulus of elasticity of glass (Pa)}
-              \item{$h$ is the minimum thickness (m)}
-              \item{$LDF$ is the load duration factor (Unitless)}
-              \item{$J$ is the stress distribution factor (Function) (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
-        $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
-        $J$ is the stress distribution factor (Function), as defined in \hyperref[DD:stressDistFac]{DD: stressDistFac}.
-\\ \midrule \\
-Source & \cite{astm2009}, \cite[(Eqs. 4-5)]{beasonEtAl1998}, and \cite[(Eq. 14)]{campidelli}
-\\ \midrule \\
-RefBy & \hyperref[DD:probOfBreak]{DD: probOfBreak}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:riskFun}
+          \phantomsection 
+          \label{DD:riskFun}
+          \\ \midrule \\
+          Label & Risk of failure
+          \\ \midrule \\
+          Symbol & $B$
+          \\ \midrule \\
+          Units & Unitless
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} LDF e^{J}
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$B$ is the risk of failure (Unitless)}
+                        \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+                        \item{$a$ is the plate length (long dimension) (m)}
+                        \item{$b$ is the plate width (short dimension) (m)}
+                        \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+                        \item{$E$ is the modulus of elasticity of glass (Pa)}
+                        \item{$h$ is the minimum thickness (m)}
+                        \item{$LDF$ is the load duration factor (Unitless)}
+                        \item{$J$ is the stress distribution factor (Function) (Unitless)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+                  $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+                  $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
+                  $J$ is the stress distribution factor (Function), as defined in \hyperref[DD:stressDistFac]{DD: stressDistFac}.
+          \\ \midrule \\
+          Source & \cite{astm2009}, \cite[(Eqs. 4-5)]{beasonEtAl1998}, and \cite[(Eq. 14)]{campidelli}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:probOfBreak]{DD: probOfBreak}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:minThick}
-\phantomsection 
-\label{DD:minThick}
-\\ \midrule \\
-Label & Minimum thickness
-\\ \midrule \\
-Symbol & $h$
-\\ \midrule \\
-Units & m
-\\ \midrule \\
-Equation & \begin{displaymath}
-           h=\frac{1}{1000} \begin{cases}
-                            2.16, & t=2.5\\
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:minThick}
+          \phantomsection 
+          \label{DD:minThick}
+          \\ \midrule \\
+          Label & Minimum thickness
+          \\ \midrule \\
+          Symbol & $h$
+          \\ \midrule \\
+          Units & m
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     h=\frac{1}{1000} \begin{cases}
+                                      2.16, & t=2.5\\
 2.59, & t=2.7\\
 2.92, & t=3.0\\
 3.78, & t=4.0\\
@@ -488,475 +488,475 @@ Equation & \begin{displaymath}
 15.09, & t=16.0\\
 18.26, & t=19.0\\
 21.44, & t=22.0
-                            \end{cases}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$h$ is the minimum thickness (m)}
-              \item{$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (mm)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[DD:sdfTol]{DD: sdfTol}, \hyperref[DD:riskFun]{DD: riskFun}, \hyperref[DD:nFL]{DD: nFL}, and \hyperref[DD:dimlessLoad]{DD: dimlessLoad}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+                                      \end{cases}
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$h$ is the minimum thickness (m)}
+                        \item{$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (mm)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & $t$ is a function that maps from the nominal thickness ($h$) to the minimum thickness.
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:sdfTol]{DD: sdfTol}, \hyperref[DD:riskFun]{DD: riskFun}, \hyperref[DD:nFL]{DD: nFL}, and \hyperref[DD:dimlessLoad]{DD: dimlessLoad}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:loadDurFactor}
-\phantomsection 
-\label{DD:loadDurFactor}
-\\ \midrule \\
-Label & Load duration factor
-\\ \midrule \\
-Symbol & $LDF$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{displaymath}
-           LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$LDF$ is the load duration factor (Unitless)}
-              \item{${t_{d}}$ is the duration of load (s)}
-              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & \hyperref[assumpSV]{A: standardValues}
-        \hyperref[assumpLDFC]{A: ldfConstant}
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[DD:sdfTol]{DD: sdfTol} and \hyperref[DD:riskFun]{DD: riskFun}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:loadDurFactor}
+          \phantomsection 
+          \label{DD:loadDurFactor}
+          \\ \midrule \\
+          Label & Load duration factor
+          \\ \midrule \\
+          Symbol & $LDF$
+          \\ \midrule \\
+          Units & Unitless
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$LDF$ is the load duration factor (Unitless)}
+                        \item{${t_{d}}$ is the duration of load (s)}
+                        \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & \hyperref[assumpSV]{A: standardValues}
+                  \hyperref[assumpLDFC]{A: ldfConstant}
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:sdfTol]{DD: sdfTol} and \hyperref[DD:riskFun]{DD: riskFun}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:stressDistFac}
-\phantomsection 
-\label{DD:stressDistFac}
-\\ \midrule \\
-Label & Stress distribution factor (Function)
-\\ \midrule \\
-Symbol & $J$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{displaymath}
-           J=interpZ\left(\text{``SDF.txt''},AR,\hat{q}\right)
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$J$ is the stress distribution factor (Function) (Unitless)}
-              \item{$interpZ$ is the interpZ (Unitless)}
-              \item{$AR$ is the aspect ratio (Unitless)}
-              \item{$\hat{q}$ is the dimensionless load (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
-        $\hat{q}$ is the dimensionless load defined in \hyperref[DD:dimlessLoad]{DD: dimlessLoad}.
-        $AR$ is the aspect ratio defined in \hyperref[DD:aspectRatio]{DD: aspectRatio}.
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[DD:riskFun]{DD: riskFun}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:stressDistFac}
+          \phantomsection 
+          \label{DD:stressDistFac}
+          \\ \midrule \\
+          Label & Stress distribution factor (Function)
+          \\ \midrule \\
+          Symbol & $J$
+          \\ \midrule \\
+          Units & Unitless
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     J=interpZ\left(\text{``SDF.txt''},AR,\hat{q}\right)
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$J$ is the stress distribution factor (Function) (Unitless)}
+                        \item{$interpZ$ is the interpZ (Unitless)}
+                        \item{$AR$ is the aspect ratio (Unitless)}
+                        \item{$\hat{q}$ is the dimensionless load (Unitless)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
+                  $\hat{q}$ is the dimensionless load defined in \hyperref[DD:dimlessLoad]{DD: dimlessLoad}.
+                  $AR$ is the aspect ratio defined in \hyperref[DD:aspectRatio]{DD: aspectRatio}.
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:riskFun]{DD: riskFun}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:nFL}
-\phantomsection 
-\label{DD:nFL}
-\\ \midrule \\
-Label & Non-factored load
-\\ \midrule \\
-Symbol & $NFL$
-\\ \midrule \\
-Units & Pa
-\\ \midrule \\
-Equation & \begin{displaymath}
-           NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$NFL$ is the non-factored load (Pa)}
-              \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
-              \item{$E$ is the modulus of elasticity of glass (Pa)}
-              \item{$h$ is the minimum thickness (m)}
-              \item{$a$ is the plate length (long dimension) (m)}
-              \item{$b$ is the plate width (short dimension) (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
-        ${\hat{q}_{tol}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{DD: tolLoad}.
-        \hyperref[assumpSV]{A: standardValues}
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[DD:calofCapacity]{DD: calofCapacity}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:nFL}
+          \phantomsection 
+          \label{DD:nFL}
+          \\ \midrule \\
+          Label & Non-factored load
+          \\ \midrule \\
+          Symbol & $NFL$
+          \\ \midrule \\
+          Units & Pa
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$NFL$ is the non-factored load (Pa)}
+                        \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
+                        \item{$E$ is the modulus of elasticity of glass (Pa)}
+                        \item{$h$ is the minimum thickness (m)}
+                        \item{$a$ is the plate length (long dimension) (m)}
+                        \item{$b$ is the plate width (short dimension) (m)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+                  $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+                  ${\hat{q}_{tol}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{DD: tolLoad}.
+                  \hyperref[assumpSV]{A: standardValues}
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:calofCapacity]{DD: calofCapacity}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:gTF}
-\phantomsection 
-\label{DD:gTF}
-\\ \midrule \\
-Label & Glass type factor
-\\ \midrule \\
-Symbol & $GTF$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{displaymath}
-           GTF=\begin{cases}
-               1, & g=\text{``AN''}\\
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:gTF}
+          \phantomsection 
+          \label{DD:gTF}
+          \\ \midrule \\
+          Label & Glass type factor
+          \\ \midrule \\
+          Symbol & $GTF$
+          \\ \midrule \\
+          Units & Unitless
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     GTF=\begin{cases}
+                         1, & g=\text{``AN''}\\
 4, & g=\text{``FT''}\\
 2, & g=\text{``HS''}
-               \end{cases}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$GTF$ is the glass type factor (Unitless)}
-              \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & AN is annealed glass.
-        FT is fully tempered glass.
-        HS is heat strengthened glass.
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[DD:calofCapacity]{DD: calofCapacity} and \hyperref[DD:dimlessLoad]{DD: dimlessLoad}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+                         \end{cases}
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$GTF$ is the glass type factor (Unitless)}
+                        \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (Unitless)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & AN is annealed glass.
+                  FT is fully tempered glass.
+                  HS is heat strengthened glass.
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:calofCapacity]{DD: calofCapacity} and \hyperref[DD:dimlessLoad]{DD: dimlessLoad}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:dimlessLoad}
-\phantomsection 
-\label{DD:dimlessLoad}
-\\ \midrule \\
-Label & Dimensionless load
-\\ \midrule \\
-Symbol & $\hat{q}$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{displaymath}
-           \hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$\hat{q}$ is the dimensionless load (Unitless)}
-              \item{$q$ is the applied load (demand) (Pa)}
-              \item{$a$ is the plate length (long dimension) (m)}
-              \item{$b$ is the plate width (short dimension) (m)}
-              \item{$E$ is the modulus of elasticity of glass (Pa)}
-              \item{$h$ is the minimum thickness (m)}
-              \item{$GTF$ is the glass type factor (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[DD:calofDemand]{DD: calofDemand}.
-        $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
-        $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{DD: gTF}.
-        $\hat{q}$ is calculated with reference to \hyperref[assumpGL]{A: glassLite}.
-        \hyperref[assumpSV]{A: standardValues}
-\\ \midrule \\
-Source & \cite{astm2009} and \cite[(Eq. 7)]{campidelli}
-\\ \midrule \\
-RefBy & \hyperref[DD:stressDistFac]{DD: stressDistFac}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:dimlessLoad}
+          \phantomsection 
+          \label{DD:dimlessLoad}
+          \\ \midrule \\
+          Label & Dimensionless load
+          \\ \midrule \\
+          Symbol & $\hat{q}$
+          \\ \midrule \\
+          Units & Unitless
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     \hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$\hat{q}$ is the dimensionless load (Unitless)}
+                        \item{$q$ is the applied load (demand) (Pa)}
+                        \item{$a$ is the plate length (long dimension) (m)}
+                        \item{$b$ is the plate width (short dimension) (m)}
+                        \item{$E$ is the modulus of elasticity of glass (Pa)}
+                        \item{$h$ is the minimum thickness (m)}
+                        \item{$GTF$ is the glass type factor (Unitless)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[DD:calofDemand]{DD: calofDemand}.
+                  $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+                  $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+                  $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{DD: gTF}.
+                  $\hat{q}$ is calculated with reference to \hyperref[assumpGL]{A: glassLite}.
+                  \hyperref[assumpSV]{A: standardValues}
+          \\ \midrule \\
+          Source & \cite{astm2009} and \cite[(Eq. 7)]{campidelli}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:stressDistFac]{DD: stressDistFac}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:tolLoad}
-\phantomsection 
-\label{DD:tolLoad}
-\\ \midrule \\
-Label & Tolerable load
-\\ \midrule \\
-Symbol & ${\hat{q}_{tol}}$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{displaymath}
-           {\hat{q}_{tol}}=interpY\left(\text{``SDF.txt''},AR,{J_{tol}}\right)
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
-              \item{$interpY$ is the interpY (Unitless)}
-              \item{$AR$ is the aspect ratio (Unitless)}
-              \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect} using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in \hyperref[DD:sdfTol]{DD: sdfTol} and \hyperref[DD:aspectRatio]{DD: aspectRatio}, respectively.
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[DD:nFL]{DD: nFL}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:tolLoad}
+          \phantomsection 
+          \label{DD:tolLoad}
+          \\ \midrule \\
+          Label & Tolerable load
+          \\ \midrule \\
+          Symbol & ${\hat{q}_{tol}}$
+          \\ \midrule \\
+          Units & Unitless
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     {\hat{q}_{tol}}=interpY\left(\text{``SDF.txt''},AR,{J_{tol}}\right)
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
+                        \item{$interpY$ is the interpY (Unitless)}
+                        \item{$AR$ is the aspect ratio (Unitless)}
+                        \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & ${\hat{q}_{tol}}$ is the tolerable load which is obtained from \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect} using ${J_{tol}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{tol}}$ and $AR$ are defined in \hyperref[DD:sdfTol]{DD: sdfTol} and \hyperref[DD:aspectRatio]{DD: aspectRatio}, respectively.
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:nFL]{DD: nFL}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:sdfTol}
-\phantomsection 
-\label{DD:sdfTol}
-\\ \midrule \\
-Label & Stress distribution factor (Function) based on Pbtol
-\\ \midrule \\
-Symbol & ${J_{tol}}$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{displaymath}
-           {J_{tol}}=\ln\left(\ln\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} LDF}\right)
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
-              \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
-              \item{$a$ is the plate length (long dimension) (m)}
-              \item{$b$ is the plate width (short dimension) (m)}
-              \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
-              \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
-              \item{$E$ is the modulus of elasticity of glass (Pa)}
-              \item{$h$ is the minimum thickness (m)}
-              \item{$LDF$ is the load duration factor (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
-        $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
-        $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
-        ${P_{btol}}$ is the tolerable probability entered by the user.
-        \hyperref[assumpSV]{A: standardValues}
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[DD:tolLoad]{DD: tolLoad}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:sdfTol}
+          \phantomsection 
+          \label{DD:sdfTol}
+          \\ \midrule \\
+          Label & Stress distribution factor (Function) based on Pbtol
+          \\ \midrule \\
+          Symbol & ${J_{tol}}$
+          \\ \midrule \\
+          Units & Unitless
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     {J_{tol}}=\ln\left(\ln\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} LDF}\right)
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
+                        \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
+                        \item{$a$ is the plate length (long dimension) (m)}
+                        \item{$b$ is the plate width (short dimension) (m)}
+                        \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+                        \item{$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
+                        \item{$E$ is the modulus of elasticity of glass (Pa)}
+                        \item{$h$ is the minimum thickness (m)}
+                        \item{$LDF$ is the load duration factor (Unitless)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & ${J_{tol}}$  is calculated with reference to  ${P_{btol}}$.
+                  $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+                  $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+                  $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
+                  ${P_{btol}}$ is the tolerable probability entered by the user.
+                  \hyperref[assumpSV]{A: standardValues}
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:tolLoad]{DD: tolLoad}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:standOffDist}
-\phantomsection 
-\label{DD:standOffDist}
-\\ \midrule \\
-Label & Stand off distance
-\\ \midrule \\
-Symbol & $SD$
-\\ \midrule \\
-Units & m
-\\ \midrule \\
-Equation & \begin{displaymath}
-           SD=\sqrt{{SD_{x}}^{2}+{SD_{y}}^{2}+{SD_{z}}^{2}}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$SD$ is the stand off distance (m)}
-              \item{${SD_{x}}$ is the stand off distance ($x$-component) (m)}
-              \item{${SD_{y}}$ is the stand off distance ($y$-component) (m)}
-              \item{${SD_{z}}$ is the stand off distance ($z$-component) (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[DD:calofDemand]{DD: calofDemand}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:standOffDist}
+          \phantomsection 
+          \label{DD:standOffDist}
+          \\ \midrule \\
+          Label & Stand off distance
+          \\ \midrule \\
+          Symbol & $SD$
+          \\ \midrule \\
+          Units & m
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     SD=\sqrt{{SD_{x}}^{2}+{SD_{y}}^{2}+{SD_{z}}^{2}}
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$SD$ is the stand off distance (m)}
+                        \item{${SD_{x}}$ is the stand off distance ($x$-component) (m)}
+                        \item{${SD_{y}}$ is the stand off distance ($y$-component) (m)}
+                        \item{${SD_{z}}$ is the stand off distance ($z$-component) (m)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:calofDemand]{DD: calofDemand}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:aspectRatio}
-\phantomsection 
-\label{DD:aspectRatio}
-\\ \midrule \\
-Label & Aspect ratio
-\\ \midrule \\
-Symbol & $AR$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{displaymath}
-           AR=\frac{a}{b}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$AR$ is the aspect ratio (Unitless)}
-              \item{$a$ is the plate length (long dimension) (m)}
-              \item{$b$ is the plate width (short dimension) (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[DD:tolLoad]{DD: tolLoad} and \hyperref[DD:stressDistFac]{DD: stressDistFac}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:aspectRatio}
+          \phantomsection 
+          \label{DD:aspectRatio}
+          \\ \midrule \\
+          Label & Aspect ratio
+          \\ \midrule \\
+          Symbol & $AR$
+          \\ \midrule \\
+          Units & Unitless
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     AR=\frac{a}{b}
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$AR$ is the aspect ratio (Unitless)}
+                        \item{$a$ is the plate length (long dimension) (m)}
+                        \item{$b$ is the plate width (short dimension) (m)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:tolLoad]{DD: tolLoad} and \hyperref[DD:stressDistFac]{DD: stressDistFac}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:eqTNTW}
-\phantomsection 
-\label{DD:eqTNTW}
-\\ \midrule \\
-Label & Explosive mass in equivalent weight of TNT
-\\ \midrule \\
-Symbol & ${w_{TNT}}$
-\\ \midrule \\
-Units & kg
-\\ \midrule \\
-Equation & \begin{displaymath}
-           {w_{TNT}}=w TNT
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
-              \item{$w$ is the charge weight (kg)}
-              \item{$TNT$ is the TNT equivalent factor (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[DD:calofDemand]{DD: calofDemand}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:eqTNTW}
+          \phantomsection 
+          \label{DD:eqTNTW}
+          \\ \midrule \\
+          Label & Explosive mass in equivalent weight of TNT
+          \\ \midrule \\
+          Symbol & ${w_{TNT}}$
+          \\ \midrule \\
+          Units & kg
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     {w_{TNT}}=w TNT
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+                        \item{$w$ is the charge weight (kg)}
+                        \item{$TNT$ is the TNT equivalent factor (Unitless)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[DD:calofDemand]{DD: calofDemand}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:probOfBreak}
-\phantomsection 
-\label{DD:probOfBreak}
-\\ \midrule \\
-Label & Probability of breakage
-\\ \midrule \\
-Symbol & ${P_{b}}$
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & \begin{displaymath}
-           {P_{b}}=1-e^{-B}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${P_{b}}$ is the probability of breakage (Unitless)}
-              \item{$B$ is the risk of failure (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $B$ is the risk of failure, as defined in \hyperref[DD:riskFun]{DD: riskFun}.
-\\ \midrule \\
-Source & \cite{astm2009} and \cite{beasonEtAl1998}
-\\ \midrule \\
-RefBy & \hyperref[IM:isSafePb]{IM: isSafePb}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:probOfBreak}
+          \phantomsection 
+          \label{DD:probOfBreak}
+          \\ \midrule \\
+          Label & Probability of breakage
+          \\ \midrule \\
+          Symbol & ${P_{b}}$
+          \\ \midrule \\
+          Units & Unitless
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     {P_{b}}=1-e^{-B}
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{${P_{b}}$ is the probability of breakage (Unitless)}
+                        \item{$B$ is the risk of failure (Unitless)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & $B$ is the risk of failure, as defined in \hyperref[DD:riskFun]{DD: riskFun}.
+          \\ \midrule \\
+          Source & \cite{astm2009} and \cite{beasonEtAl1998}
+          \\ \midrule \\
+          RefBy & \hyperref[IM:isSafePb]{IM: isSafePb}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:calofCapacity}
-\phantomsection 
-\label{DD:calofCapacity}
-\\ \midrule \\
-Label & Load resistance
-\\ \midrule \\
-Symbol & $LR$
-\\ \midrule \\
-Units & Pa
-\\ \midrule \\
-Equation & \begin{displaymath}
-           LR=NFL GTF LSF
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$LR$ is the load resistance (Pa)}
-              \item{$NFL$ is the non-factored load (Pa)}
-              \item{$GTF$ is the glass type factor (Unitless)}
-              \item{$LSF$ is the load share factor (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load, as defined in \hyperref[DD:nFL]{DD: nFL}. $GTF$ is the glass type factor, as defined in \hyperref[DD:gTF]{DD: gTF}.
-        \hyperref[assumpGL]{A: glassLite}
-        \hyperref[DD:gTF]{DD: gTF}
-        \hyperref[DD:nFL]{DD: nFL}
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[IM:isSafeLR]{IM: isSafeLR}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:calofCapacity}
+          \phantomsection 
+          \label{DD:calofCapacity}
+          \\ \midrule \\
+          Label & Load resistance
+          \\ \midrule \\
+          Symbol & $LR$
+          \\ \midrule \\
+          Units & Pa
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     LR=NFL GTF LSF
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$LR$ is the load resistance (Pa)}
+                        \item{$NFL$ is the non-factored load (Pa)}
+                        \item{$GTF$ is the glass type factor (Unitless)}
+                        \item{$LSF$ is the load share factor (Unitless)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load, as defined in \hyperref[DD:nFL]{DD: nFL}. $GTF$ is the glass type factor, as defined in \hyperref[DD:gTF]{DD: gTF}.
+                  \hyperref[assumpGL]{A: glassLite}
+                  \hyperref[DD:gTF]{DD: gTF}
+                  \hyperref[DD:nFL]{DD: nFL}
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[IM:isSafeLR]{IM: isSafeLR}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:calofDemand}
-\phantomsection 
-\label{DD:calofDemand}
-\\ \midrule \\
-Label & Applied load (demand)
-\\ \midrule \\
-Symbol & $q$
-\\ \midrule \\
-Units & Pa
-\\ \midrule \\
-Equation & \begin{displaymath}
-           q=interpY\left(\text{``TSD.txt''},SD,{w_{TNT}}\right)
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$q$ is the applied load (demand) (Pa)}
-              \item{$interpY$ is the interpY (Unitless)}
-              \item{$SD$ is the stand off distance (m)}
-              \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & $q$, or demand, is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[IM:isSafeLR]{IM: isSafeLR} and \hyperref[DD:dimlessLoad]{DD: dimlessLoad}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{DD:calofDemand}
+          \phantomsection 
+          \label{DD:calofDemand}
+          \\ \midrule \\
+          Label & Applied load (demand)
+          \\ \midrule \\
+          Symbol & $q$
+          \\ \midrule \\
+          Units & Pa
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     q=interpY\left(\text{``TSD.txt''},SD,{w_{TNT}}\right)
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$q$ is the applied load (demand) (Pa)}
+                        \item{$interpY$ is the interpY (Unitless)}
+                        \item{$SD$ is the stand off distance (m)}
+                        \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & $q$, or demand, is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[IM:isSafeLR]{IM: isSafeLR} and \hyperref[DD:dimlessLoad]{DD: dimlessLoad}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
@@ -964,85 +964,85 @@ The goal \hyperref[willBreakGS]{GS: Predict-Glass-Withstands-Explosion} is met b
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:isSafePb}
-\phantomsection 
-\label{IM:isSafePb}
-\\ \midrule \\
-Label & Safety Req-Pb
-\\ \midrule \\
-Input & ${P_{b}}$, ${P_{btol}}$
-\\ \midrule \\
-Output & $is-safePb$
-\\ \midrule \\
-Input Constraints & \begin{displaymath}
-                    {P_{b}}>0
-                    \end{displaymath}
-                    \begin{displaymath}
-                    {P_{btol}}>0
-                    \end{displaymath}
-\\ \midrule \\
-Output Constraints & 
-\\ \midrule \\
-Equation & \begin{displaymath}
-           is-safePb={P_{b}}<{P_{btol}}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$is-safePb$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
-              \item{${P_{b}}$ is the probability of breakage (Unitless)}
-              \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safePb$ (from \hyperref[IM:isSafeLR]{IM: isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[IM:isSafeLR]{IM: isSafeLR}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{IM:isSafePb}
+          \phantomsection 
+          \label{IM:isSafePb}
+          \\ \midrule \\
+          Label & Safety Req-Pb
+          \\ \midrule \\
+          Input & ${P_{b}}$, ${P_{btol}}$
+          \\ \midrule \\
+          Output & $is-safePb$
+          \\ \midrule \\
+          Input Constraints & \begin{displaymath}
+                              {P_{b}}>0
+                              \end{displaymath}
+                              \begin{displaymath}
+                              {P_{btol}}>0
+                              \end{displaymath}
+          \\ \midrule \\
+          Output Constraints & 
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     is-safePb={P_{b}}<{P_{btol}}
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$is-safePb$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
+                        \item{${P_{b}}$ is the probability of breakage (Unitless)}
+                        \item{${P_{btol}}$ is the tolerable probability of breakage (Unitless)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safePb$ (from \hyperref[IM:isSafeLR]{IM: isSafeLR}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[IM:isSafeLR]{IM: isSafeLR}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{IM:isSafeLR}
-\phantomsection 
-\label{IM:isSafeLR}
-\\ \midrule \\
-Label & Safety Req-LR
-\\ \midrule \\
-Input & $is-safeLR$, $LR$, $q$
-\\ \midrule \\
-Output & $is-safeLR$
-\\ \midrule \\
-Input Constraints & \begin{displaymath}
-                    LR>0
-                    \end{displaymath}
-                    \begin{displaymath}
-                    q>0
-                    \end{displaymath}
-\\ \midrule \\
-Output Constraints & 
-\\ \midrule \\
-Equation & \begin{displaymath}
-           is-safeLR=LR>q
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$is-safeLR$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
-              \item{$LR$ is the load resistance (Pa)}
-              \item{$q$ is the applied load (demand) (Pa)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofDemand]{DD: calofDemand}.
-\\ \midrule \\
-Source & \cite{astm2009}
-\\ \midrule \\
-RefBy & \hyperref[IM:isSafePb]{IM: isSafePb}
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
+          \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+          \toprule \textbf{Refname} & \textbf{IM:isSafeLR}
+          \phantomsection 
+          \label{IM:isSafeLR}
+          \\ \midrule \\
+          Label & Safety Req-LR
+          \\ \midrule \\
+          Input & $is-safeLR$, $LR$, $q$
+          \\ \midrule \\
+          Output & $is-safeLR$
+          \\ \midrule \\
+          Input Constraints & \begin{displaymath}
+                              LR>0
+                              \end{displaymath}
+                              \begin{displaymath}
+                              q>0
+                              \end{displaymath}
+          \\ \midrule \\
+          Output Constraints & 
+          \\ \midrule \\
+          Equation & \begin{displaymath}
+                     is-safeLR=LR>q
+                     \end{displaymath}
+          \\ \midrule \\
+          Description & \begin{symbDescription}
+                        \item{$is-safeLR$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
+                        \item{$LR$ is the load resistance (Pa)}
+                        \item{$q$ is the applied load (demand) (Pa)}
+                        \end{symbDescription}
+          \\ \midrule \\
+          Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofDemand]{DD: calofDemand}.
+          \\ \midrule \\
+          Source & \cite{astm2009}
+          \\ \midrule \\
+          RefBy & \hyperref[IM:isSafePb]{IM: isSafePb}
+          \\ \bottomrule
+          \end{tabular}
+          \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 \hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} gives the values of the specification parameters used in \hyperref[Table:InDataConstraints]{Table:InDataConstraints}.

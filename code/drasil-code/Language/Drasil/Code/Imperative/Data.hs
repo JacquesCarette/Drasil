@@ -69,7 +69,9 @@ updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 updateValDoc f v = vd (valType v) ((f . valDoc) v)
 
 data VarData = VarD {varName :: String, varType :: TypeData, varDoc :: Doc}
-  deriving Eq
+
+instance Eq VarData where
+  VarD n1 t1 _ == VarD n2 t2 _ = n1 == n2 && t1 == t2 
 
 vard :: String -> TypeData -> Doc -> VarData
 vard = VarD

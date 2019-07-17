@@ -295,12 +295,12 @@ Uncert. & Typical Uncertainty
 \section{Introduction}
 \label{Sec:Intro}
 A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in significant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
-\newline
+
 The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (SSP). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
 The primary purpose of this document is to record the requirements of SSP and the models that will be used to meet those requirements. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SSP. With the exception of system constraints in \hyperref[Sec:SysConstraints]{Section: System Constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
-\newline
+
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
@@ -311,7 +311,7 @@ Reviewers of this documentation should have an understanding of undergraduate le
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor \cite{koothoor2013} as well as Smith and Lai \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
-\newline
+
 The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}). The instance models provide the set of algebraic equations that must be solved.
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -1449,7 +1449,7 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & This equation is based on the assumption that the surface and base of a slice are straight lines (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
-        \newline
+        
         ${\mathbf{h}^{R}}$ and ${\mathbf{h}^{L}}$ are defined in \hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD} and \hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD}, respectively.
 \\ \midrule \\
 Source & \cite{fredlund1977}
@@ -1754,9 +1754,9 @@ RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
-\newline
+
 The goals \hyperref[identifyCritAndFS]{GS: Identify-Crit-and-FS}, \hyperref[determineNormalF]{GS: Determine-Normal-Forces}, and \hyperref[determineShearF]{GS: Determine-Shear-Forces} are met by the simultaneous solution of \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, and \hyperref[IM:intsliceFs]{IM: intsliceFs}. The goal \hyperref[identifyCritAndFS]{GS: Identify-Crit-and-FS} is also contributed to by \hyperref[IM:crtSlpId]{IM: crtSlpId}.
-\newline
+
 The Morgenstern-Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed slip surface into a series of vertical slices of mass. Static equilibrium analysis is performed, using two force equations and one moment equation as in \hyperref[TM:equilibrium]{TM: equilibrium}. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}) so the assumption \hyperref[GD:normShrR]{GD: normShrR} and corresponding equation \hyperref[GD:normShrR]{GD: normShrR} are used. The force equilibrium equations can be modified to be expressed only in terms of known physical values, as done in \hyperref[GD:resShearWO]{GD: resShearWO} and \hyperref[GD:mobShearWO]{GD: mobShearWO}.
 \par~
 

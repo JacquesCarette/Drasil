@@ -74,7 +74,7 @@ print sm l = foldr (($+$) . (`lo` sm)) empty $ linePar l
   where
     linePar []  = []
     linePar [x] = [x]
-    linePar (x@Paragraph{}:y@Paragraph{}:zs) = x : Paragraph HARDNL : linePar (y : zs)
+    linePar (x@Paragraph{}:y@Paragraph{}:zs) = x : Paragraph (S "") : linePar (y : zs)
     linePar (x            :y@Paragraph{}:zs) = x : linePar (y : zs)
     linePar (x            :y            :zs) = x : y : linePar zs
 

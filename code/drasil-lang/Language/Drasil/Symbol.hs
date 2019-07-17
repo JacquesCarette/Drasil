@@ -2,8 +2,8 @@
 -- gets rendered as a (unique) symbol.  This is actually NOT based on
 -- semantics at all, but just a description of how things look.
 
-module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy,
- upperLeft, sub, sup, hat, vec, prime, staged) where
+module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy, sub, subMax,
+  subMin, sup, supMax, supMin, hat, vec, prime, staged, upperLeft) where
 
 import Language.Drasil.Unicode(Special)
 import Language.Drasil.Stages (Stage(..))
@@ -15,7 +15,8 @@ import Data.Char (toLower)
 data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
 
 -- | Symbols can be:
--- - atomic (strings such as "A" or "max" that represent a single idea)
+-- - variable (string such as "x" that represent a value that can vary)
+-- - label (strings such as "max" or "target" that represent a single idea)
 -- - special characters (ex. unicode)
 -- - Decorated symbols
 -- - Concatenations of symbols, including subscripts and superscripts
@@ -131,6 +132,13 @@ sub b lr = Corners [] [] [] [lr] b
 -- Arguments: Base symbol, then superscripted symbol.
 sup :: Symbol -> Symbol -> Symbol
 sup b ur = Corners [] [] [ur] [] b
+
+-- Helpers for common modifiers
+subMax, subMin, supMax, supMin :: Symbol -> Symbol
+subMax s = sub s (Label "max")
+subMin s = sub s (Label "min")
+supMax s = sup s (Label "max")
+supMin s = sup s (Label "min")
 
 -- | Helper for creating a symbol with a hat ("^") atop it.
 hat :: Symbol -> Symbol

@@ -159,31 +159,31 @@ dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax,
 
 dimMax     = mkQuantDef (unitary "dimMax"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "max")) metre Real) (dbl 5)
+  (subMax lD) metre Real) (dbl 5)
 
 dimMin     = mkQuantDef (unitary "dimMin"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "min")) metre Real) (dbl 0.1)
+  (subMin lD) metre Real) (dbl 0.1)
 
 arMax     = mkQuantDef (vc "arMax"
   (nounPhraseSP "maximum aspect ratio")
-  (sub (Atomic "AR") (Atomic "max")) Rational) (dbl 5)
+  (subMax (Atomic "AR")) Rational) (dbl 5)
 
 cWeightMax = mkQuantDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
-  (sub (eqSymb charWeight) (Atomic "max")) kilogram Rational) (dbl 910)
+  (subMax (eqSymb charWeight)) kilogram Rational) (dbl 910)
 
 cWeightMin = mkQuantDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
-  (sub (eqSymb charWeight) (Atomic "min")) kilogram Rational) (dbl 4.5)
+  (subMin (eqSymb charWeight)) kilogram Rational) (dbl 4.5)
 
 sdMax     = mkQuantDef (unitary "sdMax"
   (nounPhraseSP "maximum stand off distance permissible for input")
-  (sub (eqSymb standOffDist) (Atomic "max")) metre Real) (dbl 130)
+  (subMax (eqSymb standOffDist)) metre Real) (dbl 130)
 
 sdMin     = mkQuantDef (unitary "sdMin"
   (nounPhraseSP "minimum stand off distance permissible for input") 
-  (sub (eqSymb standOffDist) (Atomic "min")) metre Real) (dbl 6)
+  (subMin (eqSymb standOffDist)) metre Real) (dbl 6)
 
 
 {--}

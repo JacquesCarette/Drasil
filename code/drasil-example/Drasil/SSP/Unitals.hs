@@ -127,12 +127,12 @@ xMinEtrSlip = uqc "x_slip^minEtr" (cn "minimum exit x-coordinate")
 
 yMaxSlip = uqc "y_slip^max" (cn "maximum y-coordinate") 
   "maximum potential y-coordinate of a point on a slip surface"
-  (sup (sub lY (Atomic "slip")) (Atomic "max")) metre Real [] (dbl 30) 
+  (supMax (sub lY (Atomic "slip"))) metre Real [] (dbl 30) 
   defaultUncrt
 
 yMinSlip = uqc "y_slip^min" (cn "minimum y-coordinate") 
   "minimum potential y-coordinate of a point on a slip surface"
-  (sup (sub lY (Atomic "slip")) (Atomic "min")) metre Real [] (dbl 0) 
+  (supMin (sub lY (Atomic "slip"))) metre Real [] (dbl 0) 
   defaultUncrt
 
 effCohesion = uqc "c'" (cn "effective cohesion")
@@ -172,7 +172,7 @@ fs = constrained' (dqd' fsConcept (const $ sub cF (Atomic "S")) Real Nothing)
 fsMin :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
 fsMin = dqd' (dcc "fsMin" (cn "minimum factor of safety") 
   "The minimum factor of safety associated with the critical slip surface")
-  (const $ sup (eqSymb fs) (Atomic "min")) Real Nothing 
+  (const $ supMin (eqSymb fs)) Real Nothing 
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
 

@@ -249,6 +249,7 @@ instance ValueSym CSharpCode where
   litString s = liftA2 mkVal string (return $ litStringD s)
 
   ($:) = enumElement
+  ($!) = valueOf
 
   valueOf v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)

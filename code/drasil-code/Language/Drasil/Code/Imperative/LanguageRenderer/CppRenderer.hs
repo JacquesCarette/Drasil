@@ -50,7 +50,7 @@ import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
   getInnerType, convType)
 
-import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
+import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp,($!))
 import Data.List (nub)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
@@ -231,6 +231,7 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   litString s = pair (litString s) (litString s)
 
   ($:) l1 l2 = pair (($:) l1 l2) (($:) l1 l2)
+  ($!) v = pair (($!) $ pfst v) (($!) $ psnd v)
 
   valueOf v = pair (valueOf $ pfst v) (valueOf $ psnd v)
   arg n = pair (arg n) (arg n)
@@ -787,6 +788,7 @@ instance ValueSym CppSrcCode where
   litString s = liftA2 mkVal string (return $ litStringD s)
 
   ($:) = enumElement
+  ($!) = valueOf
 
   valueOf v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n+1)) argsList)
@@ -1327,6 +1329,7 @@ instance ValueSym CppHdrCode where
   litString _ = liftA2 mkVal void (return empty)
 
   ($:) _ _ = liftA2 mkVal void (return empty)
+  ($!) _ = liftA2 mkVal void (return empty)
 
   valueOf _ = liftA2 mkVal void (return empty)
   arg _ = liftA2 mkVal void (return empty)

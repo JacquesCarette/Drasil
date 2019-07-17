@@ -265,11 +265,10 @@ spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
 spec (Ref Internal r sn) = snref r $ spec sn
-spec (Ref Cite2    r i) = cite (pure $ text r) info
+spec (Ref Cite2    r i) = cite (pure $ text r) (info i)
   where
-    info = case i of
-      EmptyS -> Nothing
-      x      -> Just (spec x)
+    info EmptyS = Nothing
+    info x      = Just (spec x)
 spec (Ref External r sn) = externalref r $ spec sn
 spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q

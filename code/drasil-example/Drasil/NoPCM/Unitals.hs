@@ -21,7 +21,7 @@ constrained =  [coilSA, htCapW, coilHTC, tempInit,
 tempInit :: UncertQ
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
   "The temperature at the beginning of the simulation"
-  (sub (eqSymb temp)(Atomic "init")) centigrade Real
+  (sub (eqSymb temp) (Label "init")) centigrade Real
   [physc $ Bounded (Exc,0) (Exc,100)] (dbl 40) defaultUncrt
 
 specParamValList :: [QDefinition]

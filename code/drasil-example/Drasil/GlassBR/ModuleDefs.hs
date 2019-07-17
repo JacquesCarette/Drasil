@@ -34,8 +34,8 @@ readTable = funcData "read_table"
 -----
 
 one, two :: Symbol
-one = Atomic "1"
-two = Atomic "2"
+one = Label "1"
+two = Label "2"
 
 -- No need to be too verbose
 var :: String -> Symbol -> Space -> QuantityDict
@@ -56,17 +56,17 @@ j       = var "j"         lJ                          Natural
 k       = var "k"         (sub lK two)                Natural
 y       = var "y"         lY                          Real
 z       = var "z"         lZ                          Real
-zVector = var "zVector" (sub lZ (Atomic "vector")) (Vect Real)
-yMatrix = var "yMatrix" (sub lY (Atomic "matrix")) (Vect $ Vect Real)
-xMatrix = var "xMatrix" (sub lX (Atomic "matrix")) (Vect $ Vect Real)
-arr     = var "arr"       (Atomic "arr")             (Vect Real)--FIXME: temporary variable for findCT?
+zVector = var "zVector" (sub lZ (Label "vector")) (Vect Real)
+yMatrix = var "yMatrix" (sub lY (Label "matrix")) (Vect $ Vect Real)
+xMatrix = var "xMatrix" (sub lX (Label "matrix")) (Vect $ Vect Real)
+arr     = var "arr"       (Label "arr")             (Vect Real)--FIXME: temporary variable for findCT?
 x_z_1   = var "x_z_1"     (sub lX (sub lZ one))      (Vect Real)
 y_z_1   = var "y_z_1"     (sub lY (sub lZ one))      (Vect Real)
 x_z_2   = var "x_z_2"     (sub lX (sub lZ two))      (Vect Real)
 y_z_2   = var "y_z_2"     (sub lY (sub lZ two))      (Vect Real)
-mat     = var "mat"       (Atomic "mat")             (Vect $ Vect Real)
-col     = var "col"       (Atomic "col")             (Vect Real)
-filename= var "filename"  (Atomic "filename")         String
+mat     = var "mat"       (Label "mat")             (Vect $ Vect Real)
+col     = var "col"       (Label "col")             (Vect Real)
+filename= var "filename"  (Label "filename")         String
 
 ------------------------------------------------------------------------------------------
 --

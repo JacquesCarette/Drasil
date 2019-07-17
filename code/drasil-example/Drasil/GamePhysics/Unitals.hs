@@ -75,25 +75,25 @@ forceParam, massParam, momtParam, contParam, timeParam :: String -> String -> Un
 forceParam n w = ucs'
  (dccWDS ("force" ++ n) (cn $ "force exerted by the " ++ w ++ 
   " body (on another body)") (phrase QP.force)) 
-  (sub (eqSymb QP.force) (Atomic n)) Real newton
+  (sub (eqSymb QP.force) (Label n)) Real newton
 
 massParam n w = ucs'
  (dccWDS ("mass" ++ n) (cn $ "mass of the " ++ w ++ " body") 
-  (phrase QPP.mass)) (sub (eqSymb QPP.mass) (Atomic n)) Real kilogram
+  (phrase QPP.mass)) (sub (eqSymb QPP.mass) (Label n)) Real kilogram
 
 momtParam n w = ucs'
  (dccWDS ("momentOfInertia" ++ n) (compoundPhrase'
   (QP.momentOfInertia ^. term) (cn $ "of rigid body " ++ n))
-  (phrase QP.momentOfInertia)) (sub (eqSymb QP.momentOfInertia) (Atomic w)) Real momtInertU
+  (phrase QP.momentOfInertia)) (sub (eqSymb QP.momentOfInertia) (Label w)) Real momtInertU
 
 contParam n w = ucs'
  (dccWDS ("r_" ++ n ++ "P") (contdispN n) 
   (phrase QP.displacement)) (sub (eqSymb QP.displacement)
-  (Concat [Atomic w, cP])) Real metre
+  (Concat [Label w, cP])) Real metre
 
 timeParam n w = ucs'
  (dccWDS ("time" ++ n) (cn $ "time at a point in " ++ w ++ " body ") 
-  (phrase QP.time)) (sub (eqSymb QP.time) (Atomic n)) Real second
+  (phrase QP.time)) (sub (eqSymb QP.time) (Label n)) Real second
 
 contdispN :: String -> NP
 contdispN n = cn $ "displacement vector between the centre of mass of rigid body " 
@@ -118,8 +118,8 @@ perpParam n w = ucs'
  (dccWDS ("|| r_A" ++ n ++ " x n ||") 
   (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perpVect ^. term))
   (cn $ "to the contact displacement vector of rigid body " ++ n)) 
-  (phrase QM.perpVect)) (Concat [Atomic "||", w, Atomic "*", --should be x for cross
-  eqSymb QM.perpVect, Atomic "||"]) Real metre
+  (phrase QM.perpVect)) (Concat [Label "||", w, Label "*", --should be x for cross
+  eqSymb QM.perpVect, Label "||"]) Real metre
 
 rigidParam n w = ucs'
  (dccWDS ("rig_mass" ++ n) (compoundPhrase' (QPP.mass ^. term)
@@ -154,7 +154,7 @@ dispNorm = ucs' (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the displacem
 
 sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distance")
                (phrase QM.euclidNorm) ) (sup (eqSymb QM.euclidNorm) 
-               (Atomic "2")) Real m_2
+               (Label "2")) Real m_2
 
 rOB    = uc' "rOB" 
   (nounPhraseSP "displacement vector between the origin and point B")
@@ -169,7 +169,7 @@ posCM = ucs "p_CM" (nounPhraseSP "Center of Mass")
  --"mass-weighted average position of a rigid " ++
  -- "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
-  (sub (eqSymb QP.position) (Atomic "CM")) Real metre
+  (sub (eqSymb QP.position) (Label "CM")) Real metre
 
 massI = ucs' (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
                 (cn "of the j-th particle")) (phrase QPP.mass)) 
@@ -213,7 +213,7 @@ massIRigidBody = ucs' (dccWDS "massI" (compoundPhrase' (QPP.mass ^. term)
 normalLen = ucs' (dccWDS "length of the normal vector" (compoundPhrase'
                   (cn "length of the") (QM.normalVect ^. term)) 
                   (phrase QM.normalVect))
-                  (Concat [Atomic "||", eqSymb QM.normalVect, Atomic "||"]) Real metre
+                  (Concat [Label "||", eqSymb QM.normalVect, Label "||"]) Real metre
 
 rRot = ucs' (dccWDS "r_j" (compoundPhrase' (QP.distance ^. term)
                 (cn "between the j-th particle and the axis of rotation")) (phrase QP.distance)) 
@@ -223,7 +223,7 @@ timeT = ucs' (dccWDS "t" (cn "point in time") (phrase QP.time))
                 (eqSymb QP.time) Real second
 
 inittime = ucs' (dccWDS "t_0" (cn "denotes the initial time") 
-                (phrase QP.time)) (sub (eqSymb QP.time) (Atomic "0")) Real second
+                (phrase QP.time)) (sub (eqSymb QP.time) (Label "0")) Real second
 
 momtInertK = ucs' (dccWDS "momentOfInertiaK" (compoundPhrase'
                (QP.momentOfInertia ^. term) 
@@ -267,8 +267,8 @@ contDispB  = contParam  "B" "B"
 contDispK  = contParam  "k" "k"
 massA      = rigidParam "A" cA
 massB      = rigidParam "B" cB
-velo_1     = velBodyParam "first" (Atomic "1")
-velo_2     = velBodyParam "second" (Atomic "2")
+velo_1     = velBodyParam "first" (Label "1")
+velo_2     = velBodyParam "second" (Label "2")
 time_1     = timeParam "1" "first"
 time_2     = timeParam "2" "second"
 

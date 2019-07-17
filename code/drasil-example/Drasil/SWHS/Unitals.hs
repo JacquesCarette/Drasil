@@ -68,12 +68,12 @@ inSA, outSA, htCapL, htCapS, htCapV,
 inSA = uc' "inSA" (nounPhraseSP
   "surface area over which heat is transferred in")
   "Surface area over which thermal energy is transferred into an object"
-  (sub cA (Atomic "in")) m_2
+  (sub cA (Label "in")) m_2
 
 outSA = uc' "outSA" (nounPhraseSP
   "surface area over which heat is transferred out")
   "Surface area over which thermal energy is transferred out of an object"
-  (sub cA (Atomic "out")) m_2
+  (sub cA (Label "out")) m_2
 
 htCapL = uc' "htCapL" (nounPhraseSP "specific heat capacity of a liquid")
   ("The amount of energy required to raise the temperature of a given " ++
@@ -95,8 +95,7 @@ htCapV = uc' "htCapV"
 pcmInitMltE = uc' "pcmInitMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
   "Change in thermal energy in the phase change material at the melting point"
-  (sup (sub (sub (eqSymb sensHeat)
-  (Atomic "P")) (Atomic "melt")) (Atomic "init")) joule
+  (sup (sub (sub (eqSymb sensHeat) (Label "P")) (Label "melt")) (Label "init")) joule
 
 volHtGen = uc' "volHtGen"
   (nounPhraseSP "volumetric heat generation per unit volume")
@@ -126,11 +125,11 @@ htFluxC = uc' "htFluxC"
 
 htFluxIn = uc' "htFluxIn" (nounPhraseSP "heat flux input")
   "The rate of heat energy transfer into an object per unit time"
-  (sub (eqSymb htFlux) (Atomic "in")) UT.thermalFlux
+  (sub (eqSymb htFlux) (Label "in")) UT.thermalFlux
 
 htFluxOut = uc' "htFluxOut" (nounPhraseSP "heat flux output")
   "The rate of heat energy transfer into an object per unit time"
-  (sub (eqSymb htFlux) (Atomic "out")) UT.thermalFlux
+  (sub (eqSymb htFlux) (Label "out")) UT.thermalFlux
 
 htFluxP = uc' "htFluxP" (nounPhraseSP "heat flux into the PCM from water")
   ("The rate of heat energy transfer into the phase" ++
@@ -144,23 +143,23 @@ latentEP = uc' "latentEP" (nounPhraseSP "latent heat energy added to PCM")
 
 tempEnv = uc' "tempEnv" (nounPhraseSP "temperature of the environment")
   "The tempature of a given environment"
-  (sub (eqSymb temp) (Atomic "env")) centigrade
+  (sub (eqSymb temp) (Label "env")) centigrade
 
 tInitMelt = uc' "tInitMelt"
   (nounPhraseSP "time at which melting of PCM begins")
   ("Time at which the phase change material " ++
     "begins changing from a solid to a liquid")
-  (sup (sub (eqSymb time) (Atomic "melt")) (Atomic "init")) second
+  (sup (sub (eqSymb time) (Label "melt")) (Label "init")) second
 
 tFinalMelt = uc' "tFinalMelt"
   (nounPhraseSP "time at which melting of PCM ends")
   ("Time at which the phase change material " ++
     "finishes changes from a solid to a liquid")
-  (sup (sub (eqSymb time) (Atomic "melt")) (Atomic "final")) second
+  (sup (sub (eqSymb time) (Label "melt")) (Label "final")) second
   
 tankVol = uc' "tankVol" (nounPhraseSP "volume of the cylindrical tank")
   "The amount of space encompassed by a tank"
-  (sub (eqSymb vol) (Atomic "tank")) m_3
+  (sub (eqSymb vol) (Label "tank")) m_3
 
 wVol = uc' "wVol" (vol `of_` water)
   "The amount of space occupied by a given quantity of water"
@@ -219,12 +218,12 @@ meltFrac = dqd' (dcc "meltFrac" (nounPhraseSP "melt fraction")
 fracMin = dqd' (dcc "fracMin" 
   (nounPhraseSP "minimum fraction of the tank volume taken up by the PCM")
   "minimum fraction of the tank volume taken up by the PCM")
-   (const $ Atomic "MINFRACT") Real Nothing
+   (const $ Variable "MINFRACT") Real Nothing
 
 consTol = dqd' (dcc "consTol" 
   (nounPhraseSP "relative tolerance for conservation of energy") 
   "relative tolerance for conservation of energy")
-  (const $ sub cC $ Atomic "tol") Real Nothing
+  (const $ sub cC $ Label "tol") Real Nothing
 
 -----------------
 -- Constraints --
@@ -286,7 +285,7 @@ pcmSA = uqc "pcmSA"
 -- Constraint 5
 pcmDensity = uq (cuc'' "pcmDensity" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
-  (staged (sub (eqSymb density) cP) (sub (Atomic "rho") cP)) densityU Rational
+  (staged (sub (eqSymb density) cP) (sub (Variable "rho") cP)) densityU Rational
   [gtZeroConstr, sfwrc $ Bounded (Exc, sy pcmDensityMin) (Exc, sy pcmDensityMax)]
   (dbl 1007)) defaultUncrt
 
@@ -295,7 +294,7 @@ tempMeltP = uqc "tempMeltP"
   (nounPhraseSP "melting point temperature for PCM")
   ("Temperature at which the phase change " ++
     "material transitions from a solid to a liquid")
-  (sup (sub (eqSymb temp) (Atomic "melt")) cP) centigrade Rational
+  (sup (sub (eqSymb temp) (Label "melt")) cP) centigrade Rational
   [physc $ Bounded (Exc,0) (Exc, sy tempC)] (dbl 44.2) defaultUncrt
 
 -- Constraint 7
@@ -345,7 +344,7 @@ tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
 -- Constraint 12
 wDensity = uq (cuc'' "wDensity" (density `of_` water)
   "Mass per unit volume of water"
-  (staged (sub (eqSymb density) cW) (sub (Atomic "rho") cW)) densityU Rational
+  (staged (sub (eqSymb density) cW) (sub (Variable "rho") cW)) densityU Rational
   [gtZeroConstr, sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)]
   (dbl 1000)) defaultUncrt
 
@@ -379,21 +378,21 @@ pcmHTC = uqc "pcmHTC"
 -- Constraint 16
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
   "The temperature at the beginning of the simulation"
-  (sub (eqSymb temp)(Atomic "init")) centigrade Rational
+  (sub (eqSymb temp) (Label "init")) centigrade Rational
   [physc $ Bounded (Exc,0) (Exc, sy meltPt)] (dbl 40) defaultUncrt
   
 -- Constraint 17
 timeFinal = uqc "timeFinal" (nounPhraseSP "final time")
   ("The amount of time elapsed from the beginning of the " ++
   "simulation to its conclusion") (sub (eqSymb time) 
-  (Atomic "final")) second Rational
+  (Label "final")) second Rational
   [gtZeroConstr,
   sfwrc $ UpTo (Exc, sy timeFinalMax)] (dbl 50000) defaultUncrt
 
 timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   ("The finite discretization of time used in the numerical method" ++
     "for solving the computational model")
-  (sub (eqSymb time) (Atomic "step")) second Rational
+  (sub (eqSymb time) (Label "step")) second Rational
   [physc $ Bounded (Exc,0) (Exc, sy timeFinal)]
   (dbl 0.01) defaultUncrt
   
@@ -436,12 +435,12 @@ pcmE = cuc' "pcmE" (nounPhraseSP "change in heat energy in the PCM")
 absTol, relTol :: UncertainChunk
 
 absTol = uvc "absTol" (nounPhraseSP "absolute tolerance") 
-  (sub cA (Atomic "tol")) Real
+  (sub cA (Label "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
    (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
 relTol = uvc "relTol" (nounPhraseSP "relative tolerance") 
-  (sub cR (Atomic "tol")) Real
+  (sub cR (Label "tol")) Real
   [ physc $ Bounded (Exc,0) (Exc,1)] 
   (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 

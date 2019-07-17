@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Data (ModData(..))
-import Language.Drasil.Code.Imperative.Helpers (convType, getStr)
+import Language.Drasil.Code.Imperative.Helpers (convType, getStr, stringList)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
   (cppExts)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer 
@@ -40,7 +40,7 @@ import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (nub, intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
-import qualified Data.Map as Map (lookup)
+import qualified Data.Map as Map (lookup, elems)
 import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes, mapMaybe)
 import Control.Applicative ((<$>))
 import Control.Monad (when,liftM2,liftM3)
@@ -209,35 +209,77 @@ varTerm cname = do
   return $ (maybe "No description given" (getStr db . phraseNP . view term) 
     . Map.lookup cname) (vMap $ codeSpec g)
 
+----- Descriptions -----
+
+modDesc :: Reader (State repr) [String] -> Reader (State repr) String
+modDesc = fmap ((++) "Provides " . stringList)
+
+inputParametersDesc :: Reader (State repr) [String]
+inputParametersDesc = do
+  g <- ask
+  ifDesc <- inputFormatDesc
+  dvDesc <- derivedValuesDesc
+  icDesc <- inputConstraintsDesc
+  let im = inMod g
+      st = inStruct g
+      ipDesc Separated = inDesc st
+      ipDesc Combined = inDesc st ++ [ifDesc, dvDesc, icDesc]
+      inDesc Bundled = ["the structure for holding input parameters"]
+      inDesc Unbundled = [""]
+  return $ ipDesc im
+
+inputFormatDesc :: Reader (State repr) String
+inputFormatDesc = do
+  g <- ask
+  let ifDesc Nothing = ""
+      ifDesc (Just _) = "the function for reading inputs"
+  return $ ifDesc $ Map.lookup "get_input" (eMap $ codeSpec g)
+
+derivedValuesDesc :: Reader (State repr) String
+derivedValuesDesc = do
+  g <- ask
+  let dvDesc Nothing = ""
+      dvDesc (Just _) = "the function for calculating derived values"
+  return $ dvDesc $ Map.lookup "derived_values" (eMap $ codeSpec g)
+
+inputConstraintsDesc :: Reader (State repr) String
+inputConstraintsDesc = do
+  g <- ask
+  let cns = concat $ Map.elems (cMap $ csi $ codeSpec g)
+      cKinds = stringList [if null (map isPhysC cns) then "" else "physical",
+        if null (map isSfwrC cns) then "" else "software"]
+      icDesc Nothing = ""
+      icDesc (Just _) = "the function for checking the " ++ cKinds ++ 
+        " constraints on the input"
+  return $ icDesc $ Map.lookup "input_constraints" (eMap $ codeSpec g)
+
 ------- INPUT ----------
 
 genInputModSeparated :: (RenderSym repr) => 
   Reader (State repr) [repr (RenderFile repr)]
 genInputModSeparated = do
   g <- ask
+  ipDesc <- modDesc inputParametersDesc
+  ifDesc <- modDesc (liftS inputFormatDesc)
+  dvDesc <- modDesc (liftS derivedValuesDesc)
+  icDesc <- modDesc (liftS inputConstraintsDesc)
   sequence 
-    [genModule "InputParameters" 
-      "Provides the structure for holding input parameters"
+    [genModule "InputParameters" ipDesc 
       Nothing (Just $ fmap maybeToList (chooseInStructure $ inStruct g)),
-    genModule "InputFormat" 
-      "Provides the function for reading inputs" 
+    genModule "InputFormat" ifDesc
       (Just $ fmap maybeToList genInputFormat) Nothing,
-    genModule "DerivedValues" 
-      "Provides the function for calculating derived values" 
+    genModule "DerivedValues" dvDesc
       (Just $ fmap maybeToList genInputDerived) Nothing,
-    genModule "InputConstraints" 
-      ("Provides the function for checking the physical and " ++
-      "software constraints on the input") 
-      (Just $ fmap maybeToList genInputConstraints) 
-      Nothing]
+    genModule "InputConstraints" icDesc 
+      (Just $ fmap maybeToList genInputConstraints) Nothing]
 
 genInputModCombined :: (RenderSym repr) => Reader (State repr)
   [repr (RenderFile repr)]
 genInputModCombined = do
   g <- ask
-  liftS $ genModule "InputParameters" 
-    ("Provides functions for calculating derived inputs and checking input" ++
-    " constraints") (Just $ concat <$> mapM (fmap maybeToList) 
+  ipDesc <- modDesc inputParametersDesc
+  liftS $ genModule "InputParameters" ipDesc
+    (Just $ concat <$> mapM (fmap maybeToList) 
     [genInputFormat, genInputDerived, genInputConstraints]) 
     (Just $ fmap maybeToList (chooseInStructure $ inStruct g))
 

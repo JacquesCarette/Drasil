@@ -1,3 +1,6 @@
+/** \file InputConstraints.hpp
+    \brief Provides the function for checking the physical and software constraints on the input
+*/
 #ifndef InputConstraints_h
 #define InputConstraints_h
 
@@ -11,6 +14,9 @@ using std::ofstream;
 
 #include "InputParameters.hpp"
 
+/** \brief Verifies that input values satisfy the physical constraints and software constraints
+    \param inParams No description given
+*/
 void input_constraints(InputParameters &inParams);
 
 #endif

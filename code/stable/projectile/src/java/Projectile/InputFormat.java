@@ -1,5 +1,7 @@
 package Projectile;
 
+/** \file InputFormat.java
+*/
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
@@ -10,6 +12,10 @@ import java.util.ArrayList;
 
 public class InputFormat {
     
+    /** \brief Reads input from a file with the given file name
+        \param filename No description given
+        \param inParams No description given
+    */
     public static void get_input(String filename, InputParameters inParams) throws Exception {
         Scanner infile;
         infile = new Scanner(new File(filename));

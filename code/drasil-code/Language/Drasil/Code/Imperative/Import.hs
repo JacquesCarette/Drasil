@@ -275,7 +275,7 @@ inFmtFuncDesc :: Reader (State repr) String
 inFmtFuncDesc = do
   g <- ask
   let ifDesc Nothing = ""
-      ifDesc _ = "Reads input from a file with the given filename"
+      ifDesc _ = "Reads input from a file with the given file name"
   return $ ifDesc $ Map.lookup "get_input" (eMap $ codeSpec g)
 
 inConsFuncDesc :: Reader (State repr) String

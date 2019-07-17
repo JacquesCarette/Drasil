@@ -1002,12 +1002,12 @@ instance StatementSym CppSrcCode where
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym CppSrcCode where
-  ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd 
-    b bs
+  ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b 
+    bs
   ifNoElse bs = ifCond bs $ body []
   switch v cs c = mkStNoEnd <$> lift3Pair switchDocD (state break) v c cs
   switchAsIf v cs = ifCond cases
-    where cases = map (\(l, b) -> (varVal v ?== l, b)) cs
+    where cases = map (\(l, b) -> (v ?== l, b)) cs
 
   ifExists _ ifBody _ = mkStNoEnd <$> ifBody -- All variables are initialized in C++
 
@@ -1022,7 +1022,7 @@ instance ControlStatementSym CppSrcCode where
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 cppTryCatch tb cb
 
-  checkState l = switchAsIf (var l string) 
+  checkState l = switchAsIf (varVal l string) 
 
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (var_index &++) notify

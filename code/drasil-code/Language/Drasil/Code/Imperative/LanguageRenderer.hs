@@ -283,7 +283,7 @@ ifCondDocD ifStart elif bEnd elseBody (c:cs) =
     vmap elseIfSect cs,
     elseSect]
 
-switchDocD :: (Doc, Terminator) -> VarData -> Doc -> 
+switchDocD :: (Doc, Terminator) -> ValData -> Doc -> 
   [(ValData, Doc)] -> Doc
 switchDocD breakState v defBody cs = 
   let caseDoc (l, result) = vcat [
@@ -297,7 +297,7 @@ switchDocD breakState v defBody cs =
           defBody,
           fst breakState]]
   in vcat [
-      text "switch" <> parens (varDoc v) <+> lbrace,
+      text "switch" <> parens (valDoc v) <+> lbrace,
       indentList [
         vmap caseDoc cs,
         defaultSection],

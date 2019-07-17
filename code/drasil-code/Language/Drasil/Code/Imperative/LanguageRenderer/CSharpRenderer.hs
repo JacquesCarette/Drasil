@@ -457,7 +457,7 @@ instance ControlStatementSym CSharpCode where
   ifNoElse bs = ifCond bs $ body []
   switch v cs c = mkStNoEnd <$> lift3Pair switchDocD (state break) v c cs
   switchAsIf v cs = ifCond cases
-    where cases = map (\(l, b) -> (varVal v ?== l, b)) cs
+    where cases = map (\(l, b) -> (v ?== l, b)) cs
 
   ifExists v ifBody = ifCond [(notNull v, ifBody)]
 
@@ -471,7 +471,7 @@ instance ControlStatementSym CSharpCode where
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 csTryCatch tb cb
 
-  checkState l = switch (var l string)
+  checkState l = switch (varVal l string)
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (var_index &++) notify
     where obsList = varVal $ observerListName `listOf` t

@@ -439,7 +439,7 @@ instance ControlStatementSym PythonCode where
   ifNoElse bs = ifCond bs $ body []
   switch = switchAsIf
   switchAsIf v cs = ifCond cases
-    where cases = map (\(l, b) -> (varVal v ?== l, b)) cs
+    where cases = map (\(l, b) -> (v ?== l, b)) cs
 
   ifExists v ifBody = ifCond [(notNull v, ifBody)]
 
@@ -453,7 +453,7 @@ instance ControlStatementSym PythonCode where
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 pyTryCatch tb cb
 
-  checkState l = switch (var l string)
+  checkState l = switch (varVal l string)
   notifyObservers f t = forRange index initv (listSize obsList) 
     (litInt 1) notify
     where obsList = varVal $ observerListName `listOf` t

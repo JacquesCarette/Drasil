@@ -1,0 +1,12 @@
+pip3 install --upgrade pip
+pip3 install jupyter
+
+jupyter notebook
+
+
+
+Can do:
+
+- Create headings and sections
+- create tables
+- link to url or other things via html

@@ -253,6 +253,13 @@ inputConstraintsDesc = do
         " constraints on the input"
   return $ icDesc $ Map.lookup "input_constraints" (eMap $ codeSpec g)
 
+outputFormatDesc :: Reader (State repr) String
+outputFormatDesc = do
+  g <- ask
+  let ofDesc Nothing = ""
+      ofDesc (Just _) = "the function for writing outputs"
+  return $ ofDesc $ Map.lookup "write_output" (eMap $ codeSpec g)
+
 ------- INPUT ----------
 
 genInputModSeparated :: (RenderSym repr) => 
@@ -423,8 +430,9 @@ genOutputMod :: (RenderSym repr) => Reader (State repr) [repr
   (RenderFile repr)]
 genOutputMod = do
   outformat <- genOutputFormat
+  ofDesc <- modDesc $ liftS outputFormatDesc
   let outf = maybeToList outformat
-  liftS $ genModule "OutputFormat" "Provides the function for writing outputs" 
+  liftS $ genModule "OutputFormat" ofDesc
     (Just $ return outf) Nothing
 
 genOutputFormat :: (RenderSym repr) => Reader (State repr) (Maybe (repr 

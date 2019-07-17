@@ -50,10 +50,9 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, de
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
 import qualified Drasil.SSP.DataDefs as SSP (dataDefs)
-import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
-  intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
-  slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, defs, defs',
-  waterTable)
+import Drasil.SSP.Defs (acronyms, crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
+  intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil,
+  soilLyr, soilMechanics, soilPrpty, ssa, ssp, stabAnalysis, waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (goals)
 import Drasil.SSP.IMods (instModIntro)
@@ -99,12 +98,12 @@ mkSRS = [RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
-    , IScope scpIncl EmptyS
+    , IScope scope
     , IChar []
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
         phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
         [phrase soilMechanics]
-    , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd],
+    , IOrgSec orgSecStart inModel (SRS.inModel [] []) orgSecEnd],
     --FIXME: issue #235
     GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
       UsrChars [userCharIntro], SystCons [sysConstraints] []],
@@ -232,14 +231,14 @@ purposeDoc pname =
 
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
-scpIncl :: Sentence
-scpIncl = foldlSent_ [S "stability analysis of a", phrase twoD, sParen(getAcc twoD),
-  phrase soil, S "mass" `sC` S "composed of a single homogeneous", phrase layer,
+scope :: Sentence
+scope = foldlSent_ [phrase stabAnalysis, S "of a", phrase twoD, sParen (getAcc twoD),
+  phrase soil, phrase mass `sC` S "composed of a single homogeneous", phrase layer,
   S "with", phrase constant +:+. plural mtrlPrpty, S "The", phrase soil,
-  S "mass is assumed to extend infinitely in the third" +:+. phrase dimension,
-  S "The", phrase analysis, S "will be at an instant in", phrase time :+: S ";",
-  plural factor, S "that", S "may change the", plural soilPrpty, S "over", phrase time,
-  S "will not be considered"]
+  phrase mass `sIs` S "assumed to extend infinitely in the third" +:+.
+  phrase dimension, S "The", phrase analysis, S "will be at an instant" `sIn`
+  phrase time :+: S ";", plural factor, S "that may change the", plural soilPrpty,
+  S "over", phrase time, S "will not be considered"]
 
 -- SECTION 2.3 --
 -- Characteristics of the Intended Reader generated in IChar

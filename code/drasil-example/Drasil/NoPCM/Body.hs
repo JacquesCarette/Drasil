@@ -22,7 +22,7 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
 import Data.Drasil.Concepts.Software (softwarecon)
 import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
-  temp, thermalConduction, thermocon)
+  temp, thermalAnalysis, thermalConduction, thermocon)
 
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
@@ -49,8 +49,8 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
-  orgDocIntro, physSyst1, physSyst2, purpDoc, scopeReqEnd, scopeReqStart,
-  sysCntxtDesc, sysCntxtFig, systContRespBullets, sysCntxtRespIntro, userChars)
+  orgDocIntro, physSyst1, physSyst2, purpDoc, sysCntxtDesc, sysCntxtFig,
+  systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
@@ -121,7 +121,7 @@ mkSRS = [RefSec $ RefProg intro
   IntroSec $
     IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
     [ IPurpose $ purpDoc (phrase progName) progName
-    , IScope (scopeReqStart sWHT) scopeReqEnd
+    , IScope scope
     , IChar [] charsOfReader []
     , IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
     ],
@@ -222,6 +222,9 @@ introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. 
 -------------------------------------
 --Section 2.2 : SCOPE OF REQUIREMENTS
 -------------------------------------
+
+scope :: Sentence
+scope = phrase thermalAnalysis `sOf` S "a single" +:+ phrase sWHT
 
 --------------------------------------------------
 --Section 2.3 : CHARACTERISTICS Of INTENDED READER

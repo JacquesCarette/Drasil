@@ -1,7 +1,0 @@
-Requirements of Projectile
-
-1) Input speed (v) in m/s, angle (theta) in deg, and distance (d) in m.
-2) Verify 0 < v, 0 < theta < 90, and 0 < d.
-3) Output:
-	a) if the target is hit (within 2% of d), and
-	b) how off the projectile was from the target.

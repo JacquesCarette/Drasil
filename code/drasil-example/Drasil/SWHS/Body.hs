@@ -35,7 +35,9 @@ import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
   understandability, reusability, maintainability, verifiability)
-import Data.Drasil.Concepts.Thermodynamics (heatTrans, lawConsEnergy, thermocon)
+import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatTrans, htFlux,
+  htTransTheo, lawConsEnergy, thermalAnalysis, thermalConduction, thermalEnergy,
+  thermocon)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 import Data.Drasil.Quantities.Physics (energy, time, physicscon)
@@ -45,15 +47,12 @@ import Data.Drasil.Software.Products (sciCompS, prodtcon)
 import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (heatTrans,
-  thermalConduction, htFlux, heatCapSpec, thermalEnergy, htTransTheo,
-  thermalAnalysis, enerSrc)
 
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
   phsChgMtrl, progName, rightSide, sWHT, swhsPCM, tank, tankPCM, transient, water)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, qDefs)
+import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, qDefs)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
 import Drasil.SWHS.GenDefs (genDefs)
 import Drasil.SWHS.Goals (goals)
@@ -128,13 +127,11 @@ mkSRS = [RefSec $ RefProg intro [
     tsymb'' tSymbIntro $ TermExcept [uNormalVect],
     TAandA],
   IntroSec $
-    IntroProg (introP1 CT.enerSrc energy swhsPCM phsChgMtrl
-    progName CT.thermalEnergy latentHeat unit_) (introP2 swhsPCM program
-    progName)
+    IntroProg (introP1 enerSrc energy swhsPCM phsChgMtrl progName thermalEnergy latentHeat unit_)
+              (introP2 swhsPCM program progName)
     [IPurpose $ purpDoc swhsPCM progName,
-     IScope (scopeReqs1 CT.thermalAnalysis tankPCM) $
-       scopeReqs2 temp CT.thermalEnergy water phsChgMtrl sWHT,
-     IChar [] (charReader1 CT.htTransTheo ++ charReader2 de) [],
+     IScope scope,
+     IChar [] (charReader1 htTransTheo ++ charReader2 de) [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] [])
        $ orgDocEnd swhsPCM progName],
   GSDSec $ GSDProg2 
@@ -170,7 +167,7 @@ mkSRS = [RefSec $ RefProg intro [
 
 tSymbIntro :: [TSIntro]
 tSymbIntro = [TSPurpose, SymbConvention
-  [Lit (nw CT.heatTrans), Doc' (nw progName)], SymbOrder, VectorUnits]
+  [Lit (nw heatTrans), Doc' (nw progName)], SymbOrder, VectorUnits]
 
 insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -274,7 +271,7 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 -----------------------------------------
 
 terms :: [ConceptChunk]
-terms = map cw [CT.htFlux, phaseChangeMaterial, CT.heatCapSpec, CT.thermalConduction, transient]
+terms = map cw [htFlux, phaseChangeMaterial, cw heatCapSpec, thermalConduction, transient]
 
 -- Included heat flux and specific heat in NamedChunks even though they are
 -- already in SWHSUnits
@@ -394,7 +391,7 @@ outputConstraints = [tempW, tempPCM, watE, pcmE] --FIXME: add "(by A11)" in Phys
 propsDeriv :: [Contents]
 propsDeriv = [
   propCorSolDeriv1 lawConsEnergy watE energy coil phsChgMtrl
-                   dd1HtFluxC dd2HtFluxP surface heatTrans,
+                   ddHtFluxC ddHtFluxP surface heatTrans,
   propCorSolDeriv2,
   propCorSolDeriv3 pcmE energy phsChgMtrl water,
   propCorSolDeriv4,
@@ -549,18 +546,10 @@ purpDoc sp pro = foldlSent [S "The main", phrase purpose, S "of this",
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 
-scopeReqs1 :: ConceptChunk -> ConceptChunk -> Sentence
-scopeReqs1 ta tp = foldlSent_ [phrase ta,
-  S "of a single", phrase tp]
-
-scopeReqs2 :: UnitalChunk -> ConceptChunk -> ConceptChunk -> CI ->
-  ConceptChunk -> Sentence
-scopeReqs2 t te wa pcmat sw = foldlSent_ [S "predicts the",
-  phrase t `sAnd` phrase te,
-  S "histories for the", phrase wa `sAnd` S "the" +:+.
-  short pcmat, S "This entire", phrase document,
-  S "is written assuming that the substances inside the",
-  phrase sw, S "are", phrase wa `sAnd` short pcmat]
+scope :: Sentence
+scope = foldlSent_ [phrase thermalAnalysis `sOf` S "a single" +:+. phrase tankPCM,
+  S "This entire", phrase document `sIs` S "written assuming that the substances inside the",
+  phrase sWHT `sAre` phrase water `sAnd` short phsChgMtrl]
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar

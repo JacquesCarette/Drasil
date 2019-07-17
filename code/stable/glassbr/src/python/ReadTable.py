@@ -1,7 +1,14 @@
+## \file ReadTable.py
+# \brief Provides a function for reading glass ASTM data
 from __future__ import print_function
 import sys
 import math
 
+## \brief Reads glass ASTM data from a file with the given file name
+# \param filename No description given
+# \param z_vector No description given
+# \param x_matrix No description given
+# \param y_matrix No description given
 def func_read_table(filename, z_vector, x_matrix, y_matrix):
     outfile = open("log.txt", "a")
     print("function func_read_table called with inputs: {", file=outfile)

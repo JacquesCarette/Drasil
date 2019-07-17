@@ -4,16 +4,22 @@ module Language.Drasil.Code.Imperative.Helpers (blank,verticalComma,
   angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
   emptyIfEmpty, emptyIfNull, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, 
   liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 
-  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType
+  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType, getStr
 ) where
 
-import Language.Drasil.Code.Code (CodeType(..))
+import Database.Drasil(ChunkDB, termTable)
+
+import Language.Drasil
+import Language.Drasil.Chunk.Code (symbToCodeName)
+import qualified Language.Drasil.Code.Code as C (CodeType(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S ( 
   RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
+import Control.Lens (view)
 import Data.List (intersperse)
+import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
   (<>), comma, punctuate, empty, isEmpty)
 
@@ -105,23 +111,31 @@ liftPair (a, b) = liftA2 (,) a b
 liftPairFst :: Functor f => (f a, b) -> f (a, b)
 liftPairFst (c, n) = fmap (, n) c
 
-getInnerType :: CodeType -> CodeType
-getInnerType (List innerT) = innerT
+getInnerType :: C.CodeType -> C.CodeType
+getInnerType (C.List innerT) = innerT
 getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
 
-getNestDegree :: Integer -> CodeType -> Integer
-getNestDegree n (List t) = getNestDegree (n+1) t
+getNestDegree :: Integer -> C.CodeType -> Integer
+getNestDegree n (C.List t) = getNestDegree (n+1) t
 getNestDegree n _ = n
 
-convType :: (S.RenderSym repr) => CodeType -> repr (S.StateType repr)
-convType Boolean = S.bool
-convType Integer = S.int
-convType Float = S.float
-convType Char = S.char
-convType String = S.string
-convType (List t) = S.listType S.dynamic_ (convType t)
-convType (Iterator t) = S.iterator $ convType t
-convType (Object n) = S.obj n
-convType (Enum n) = S.enumType n
-convType Void = S.void
-convType File = error "convType: File ?"
+convType :: (S.RenderSym repr) => C.CodeType -> repr (S.StateType repr)
+convType C.Boolean = S.bool
+convType C.Integer = S.int
+convType C.Float = S.float
+convType C.Char = S.char
+convType C.String = S.string
+convType (C.List t) = S.listType S.dynamic_ (convType t)
+convType (C.Iterator t) = S.iterator $ convType t
+convType (C.Object n) = S.obj n
+convType (C.Enum n) = S.enumType n
+convType C.Void = S.void
+convType C.File = error "convType: File ?"
+
+getStr :: ChunkDB -> Sentence -> String
+getStr _ (S s) = s
+getStr _ (P s) = symbToCodeName s
+getStr db ((:+:) s1 s2) = getStr db s1 ++ getStr db s2
+getStr db (Ch _ u) = maybe "" (getStr db . phraseNP . view term . fst)
+  (Map.lookup u (termTable db))
+getStr _ _ = error "Term is not a string" 

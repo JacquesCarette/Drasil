@@ -95,7 +95,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
     introSec = Constant . f <$> \(IntroProg s1 s2 _) -> [s1, s2],
     introSub = Constant . f <$> \case
       (IPurpose s) -> [s]
-      (IScope s1 s2) -> [s1, s2]
+      (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
       (IOrgSec s1 _ _ s2) -> [s1, s2],
     stkSec = Constant . f <$> \case

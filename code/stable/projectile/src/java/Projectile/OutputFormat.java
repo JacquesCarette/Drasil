@@ -1,5 +1,7 @@
 package Projectile;
 
+/** \file OutputFormat.java
+*/
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
@@ -10,6 +12,10 @@ import java.util.ArrayList;
 
 public class OutputFormat {
     
+    /** \brief Writes the output values to output.txt
+        \param s output message as a string
+        \param d_offset distance between the target position and the landing position
+    */
     public static void write_output(String s, double d_offset) throws Exception {
         PrintWriter outputfile;
         outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));

@@ -1,0 +1,583 @@
+\documentclass[12pt, titlepage]{article}
+
+\usepackage{amsmath, mathtools}
+
+\usepackage[round]{natbib}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{xr}
+\usepackage{hyperref}
+\usepackage{longtable}
+\usepackage{xfrac}
+\usepackage{tabularx}
+\usepackage{float}
+\usepackage{siunitx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[section]{placeins}
+\usepackage{caption}
+\usepackage{fullpage}
+\usepackage[nottoc, numbib]{tocbibind}
+
+\hypersetup{
+bookmarks=true,     % show bookmarks bar?
+colorlinks=true,       % false: boxed links; true: colored links
+linkcolor=red,          % color of internal links (change box color with linkbordercolor)
+citecolor=blue,      % color of links to bibliography
+filecolor=magenta,  % color of file links
+urlcolor=cyan          % color of external links
+}
+
+\usepackage{array}
+
+%% Comments
+\newif\ifcomments\commentstrue
+
+\ifcomments
+\newcommand{\authornote}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{orange}{[TODO: #1]}}
+\else
+\newcommand{\authornote}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornote{blue}{SS}{#1}}
+\newcommand{\bmac}[1]{\authornote{red}{BM}{#1}}
+\newcommand{\sam}[1]{\authornote{magenta}{SC}{#1}}
+
+\newcommand{\progname}{Projectile}
+
+\begin{document}
+
+\title{Module Interface Specification for Projectile}
+
+\author{Samuel J. Crawford}
+
+\date{\today}
+
+\maketitle
+
+\pagenumbering{roman}
+
+\newpage
+
+\tableofcontents
+
+\newpage
+
+\section{Symbols, Abbreviations and Acronyms}
+
+See SRS Documentation at \url{https://jacquescarette.github.io/Drasil/examples/Projectile/srs/Projectile_SRS.pdf}
+
+\pagenumbering{arabic}
+
+\section{Introduction}
+
+The following document details the Module Interface Specifications for the
+implemented modules in a program simulating projectile motion. It is intended to 
+ease navigation through the program for design and maintenance purposes.
+
+Complementary documents include the System Requirement Specifications
+and Module Guide.
+%The full documentation and implementation can be
+%found at \sam{No manual version of Projectile? Should this link be removed or  
+%should there be a link?}.
+
+% The specification is given in terms of functions, rather than sequences.  For
+% instance, the predicted temperature of the water is given as a function of time
+% ($\mathbb{R} \rightarrow \mathbb{R})$, not as a sequence ($\mathbb{R}^n$). This
+% approach is more straightforward for the specification, but in the
+% implementation stage, it will likely be necessary to introduce a
+% sequence, assuming that a numerical solver is used for the system of ODEs.
+
+\section{Notation}
+
+The structure of the MIS for modules comes from \citet{HoffmanAndStrooper1995},
+with the addition that template modules have been adapted from
+\cite{GhezziEtAl2003}.  The mathematical notation comes from Chapter 3 of
+\citet{HoffmanAndStrooper1995}.  For instance, the symbol := is used for a
+multiple assignment statement and conditional rules follow the form $(c_1
+\Rightarrow r_1 | c_2 \Rightarrow r_2 | ... | c_n \Rightarrow r_n )$.
+
+\progname\ uses strings and real numbers. For information on these data types 
+(and others), see \cite{GhezziEtAl2003}, \cite{GriesAndSchneider1993}, and 
+\cite{HoffmanAndStrooper1995}. In addition, \progname\ uses functions, which are
+defined by the data types of their inputs and outputs. Local functions are
+described by giving their type signature followed by their specification.
+
+\newpage
+\section{Module Decomposition}
+
+The following table is taken directly from the Module Guide document for this project.
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{p{0.3\textwidth} p{0.6\textwidth}}
+\toprule
+\textbf{Level 1} & \textbf{Level 2}\\
+\midrule
+
+{Hardware-Hiding} & ~ \\
+\midrule
+
+\multirow{5}{0.3\textwidth}{Behaviour-Hiding} & Input Parameters\\
+& Calculations\\
+& Output Format\\
+% & Output Verification\\
+& Control Module\\
+& Specification Parameters Module\\
+\midrule
+
+\multirow{1}{0.3\textwidth}{Software Decision} & Sequence Data Structure\\
+% & Plotting\\
+\bottomrule
+
+\end{tabular}
+\caption{Module Hierarchy}
+\label{TblMH}
+\end{table}
+
+\newpage
+
+\section{MIS of Control Module} \label{Main}
+
+\subsection{Module}
+
+main
+
+\subsection{Uses}
+
+Param (Section~\ref{Parameters}), Calculations (Section~\ref{Calc}),
+% verify\_output (Section~\ref{VerifyOutput}), plot(Section~\ref{Plot}),
+Output (Section~\ref{Output})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+\begin{tabular}{p{2cm} p{4cm} p{4cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+main & - & - & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+
+None
+
+\subsubsection{Access Routine Semantics}
+
+\noindent main():
+\begin{itemize}
+\item transition: Modify the state of Param module and the environment variables
+  for the Output module by following these steps\\
+\end{itemize}
+
+\noindent Get (filenameIn: string) from user.\\
+\noindent get\_input(filenameIn, Param)\\
+\noindent $p_{\text{land}}$ := func\_p\_land(Param)\\
+\noindent $d_{\text{offset}}$ := func\_d\_offset(Param, $p_{\text{land}}$)\\
+\noindent $s$ := func\_s(Param, $d_{\text{offset}}$)\\
+\noindent \#\textit{Output calculated values to a file.}\\
+% \noindent verify\_output($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
+% \noindent plot($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$)\\
+\noindent write\_output($s$, $d_{\text{offset}}$)\\
+
+\newpage
+
+\section{MIS of Input Parameters Module} \label{Parameters}
+
+The secrets of this module are the data structure for input parameters and how 
+the values are input and verified.
+
+\subsection{Module}
+
+Param
+
+\subsection{Uses}
+
+SpecParam (Section~\ref{SpecParam})
+
+\subsection{Syntax}
+
+\begin{tabular}{p{3cm} p{2.5cm} p{1cm} >{\raggedright\arraybackslash}p{7.5cm}}
+\toprule
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\midrule
+get\_input & string, Param & - &  FileError \\
+input\_constraints & Param & - & badSpeed, badAngle, badTargetPosition\\
+$v_{\text{launch}}$ & - & $\mathbb{R}$ & -\\
+$\theta$ & - & $\mathbb{R}$ & -\\
+$p_{\text{target}}$ & - & $\mathbb{R}$ & -\\
+\bottomrule
+\end{tabular}
+
+\subsection{Semantics}
+
+\subsubsection{Environment Variables}
+
+inputFile: sequence of string \#\textit{f[i] is the ith string in the text file f}
+
+\subsubsection{State Variables}
+
+\# To Support IM1 and IM2 \\
+$v_{\text{launch}}$: $\mathbb{R}$\\
+$\theta$: $\mathbb{R}$\\
+\# To Support IM3 and IM4 \\
+$p_{\text{target}}$: $\mathbb{R}$\\
+
+\subsubsection{Assumptions}
+
+\begin{itemize}
+
+\item get\_input will be called before the values of any state variables will 
+be accessed or verified.
+
+\item The file contains the string equivalents of the numeric values for
+each input parameter in order, each on a new line. Any comments in the input file 
+should be denoted with a `\#' symbol.
+
+\end{itemize}
+
+\subsubsection{Access Routine Semantics}
+
+\noindent get\_input(filename, Param):
+\begin{itemize}
+\item transition: The file name ``filename" is first associated with the file $f$. 
+The following procedural specification is followed:
+\begin{enumerate}
+\item Read data sequentially from $f$ to populate the state variables from
+FR1 ($v_{\text{launch}}$, $\theta$, and $p_{\text{target}}$) in Param.
+\item input\_constraints()
+\end{enumerate}
+
+\item exception: exc := a file name ``filename" cannot be found OR the format of
+inputFile is incorrect $\Rightarrow$  FileError
+\end{itemize}
+
+\noindent input\_constraints():
+\begin{itemize}
+\item output: \textit{out} := none
+\item exception: exc := ( \\
+$\neg (0 < v_{\text{launch}}) \Rightarrow$ badSpeed $|$\\
+$\neg (0 < \theta < \frac{\pi}{2}) \Rightarrow$ badAngle $|$\\
+$\neg (0 < p_{\text{target}}) \Rightarrow$ badTargetPosition)
+\end{itemize}
+ 
+\noindent Param.$v_{\text{launch}}$:
+\begin{itemize}
+\item output: \textit{out} := $v_{\text{launch}}$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$\theta$:
+\begin{itemize}
+\item output: \textit{out} := $\theta$
+\item exception: none
+\end{itemize}
+
+\noindent Param.$p_{\text{target}}$:
+\begin{itemize}
+\item output: \textit{out} := $p_{\text{target}}$
+\item exception: none
+\end{itemize}
+
+\subsection{Considerations}
+
+The value of each state variable can be accessed through its name (getter).  An
+access program is available for each state variable.  There are no setters for
+the state variables, since the values will be set by get\_input and
+not changed for the life of the program.
+
+See Appendix (Section~\ref{Appendix}) for the complete list of exceptions and
+ associated error messages.
+
+\newpage
+
+\section{MIS of Calculations Module} \label{Calc}
+
+The secret of this module is how the required values are calculated.
+
+\subsection{Module}
+
+Calculations
+
+\subsection{Uses}
+
+Param (Section~\ref{Parameters}), SpecParam (Section~\ref{SpecParam})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Access Programs}
+
+\begin{center}
+ \begin{tabular}{p{3cm} p{3cm} p{1cm} p{8cm}}
+ \hline
+ \textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+ \hline
+ func\_p\_land & Param & $\mathbb{R}$ & None \\
+ \hline
+ func\_d\_offset & Param, $\mathbb{R}$ & $\mathbb{R}$ & None \\
+ \hline
+ func\_s & Param, $\mathbb{R}$ & String & None \\
+ \hline
+ \end{tabular}
+ \end{center}
+
+\subsection{Semantics}
+
+\subsubsection{Assumptions}
+
+All of the fields Param have been assigned values before any of the access
+ routines for this module are called.
+
+\subsubsection{Access Routine Semantics}
+
+func\_p\_land(Param):
+ \begin{itemize}
+ \item out: $\textit{out} := \frac{2 * v_{\text{launch}}^2 * sin(\theta) * cos(\theta)}{g}$
+ \item exception: exc := none
+ \end{itemize}
+ 
+func\_d\_offset(Param, $p_{\text{land}}$):
+ \begin{itemize}
+ \item out: $\textit{out} := p_{\text{land}} - p_{\text{target}}$
+ \item exception: exc := none
+ \end{itemize}
+ 
+func\_s(Param, $d_{\text{offset}}$):
+ \begin{itemize}
+ \item out: $\textit{out} := $ ( \\
+$|\frac{d_{\text{offset}}}{p_{\text{target}}}| < \epsilon \Rightarrow$ ``The target was hit." $|$\\
+$d_{\text{offset}} < 0 \Rightarrow$ ``The projectile fell short."$|$\\
+$\text{True} \Rightarrow$ ``The projectile went long.")
+ \item exception: exc := none
+ \end{itemize}
+
+%\newpage
+%\section{MIS of Output Verification Module} \label{VerifyOutput}
+%
+%\subsection{Module}
+%
+%verify\_output
+%
+%\subsection{Uses}
+%
+%Param (Section~\ref{Parameters})
+%
+%\subsection{Syntax}
+%
+%\subsubsection{Exported Constant}
+%
+%ADMIS\_ER = $1 \times 10^{-6}$
+%
+%\subsubsection{Exported Access Programs}
+%
+%\begin{center}
+%\begin{tabular}{p{3cm} p{7cm} p{1cm} p{2cm}}
+%\hline
+%\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+%\hline
+%verify\_output & $T_W(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 T_P(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 E_W(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 E_P(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 t_\text{final}: \mathbb{R}$ & - & EWAT\_NOT\_CONSERVE, EPCM\_NOT\_CONSERVE \\
+%\hline
+%\end{tabular}
+%\end{center}
+%
+%\subsection{Semantics}
+%
+%\subsubsection{State Variables}
+%
+%None
+%
+%\subsubsection{Assumptions}
+%
+%All of the fields of the input parameters structure have been assigned a
+%value.  
+%
+%\subsubsection{Access Routine Semantics}
+%
+%\noindent verify\_output($T_W, T_P, E_W, E_P$, $t_\text{final}$):
+%\begin{itemize}
+%\item exception: exc := (
+%\end{itemize}
+%
+%\noindent $
+%(\forall t | 0 \leq t \leq t_\text{final} : \text{relErr}(E_W,
+%\int_{0}^{t} h_C A_C (T_C - T_W(t)) dt - \int_{0}^{t} h_P A_P (T_W(t)
+%- T_P(t)) dt) < \text{ADMIS\_ER}) \Rightarrow \text{EWAT\_NOT\_CONSERVE}
+%$
+%
+%$|$
+%
+%\noindent $ 
+%(\forall t | 0 \leq t \leq t_\text{final} : \text{relErr}(E_{P}, \int_{0}^{t}
+%h_{P} A_{P} (T_{W}(t) - T_{P}(t)) dt) < \text{ADMIS\_ER}) \Rightarrow
+%\text{EPCM\_NOT\_CONSERVE} 
+%$
+%)
+%
+%\subsubsection{Local Functions}
+%
+%relErr: $\mathbb{R}$ $\times$ $\mathbb{R}$ $\rightarrow$ $\mathbb{R}$ \\
+%$\text{relErr}(t, e) \equiv \frac{|t - e|}{|t|}$ \\
+%\newline
+
+%
+%\newpage
+%\section{MIS of Plotting Module} \label{Plot}
+%
+%\subsection{Module}
+%
+%plot
+%
+%\subsection{Uses}
+%
+%N/A
+%
+%\subsection{Syntax}
+%
+%\subsubsection{Exported Access Programs}
+%
+%\begin{center}
+%\begin{tabular}{p{2cm} p{8cm} p{2cm} p{2cm}}
+%\hline
+%\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+%\hline
+%plot & $T_W(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 T_P(t):\mathbb{R} \rightarrow \mathbb{R},
+%                 E_W(t):\mathbb{R} \rightarrow \mathbb{R},
+%       E_P(t):\mathbb{R} \rightarrow \mathbb{R}$, $t_\text{final}: \mathbb{R}$ & - & - \\
+%\hline
+%\end{tabular}
+%\end{center}
+%
+%\subsection{Semantics}
+%
+%\subsubsection{State Variables}
+%
+%None
+%
+%\subsubsection{Environment Variables}
+%
+%win: 2D sequence of pixels displayed on the screen\\
+%
+%\subsubsection{Assumptions}
+%
+%None
+%
+%\subsubsection{Access Routine Semantics}
+%
+%\noindent plot($T_w$, $T_p$, $E_w$, $E_p$, $t_\text{final}$):
+%\begin{itemize}
+%\item transition: Modify win to display a plot where the vertical axis
+%  is time and one horizontal axis is temperature and the other
+%  horizontal axis is energy.  The time should run from $0$ to $t_\text{final}$
+%\item exception: none
+%\end{itemize}
+
+\newpage
+\section{MIS of Output Module} \label{Output}
+
+\subsection{Module}
+
+Output
+
+\subsection{Uses}
+
+Param (Section~\ref{Parameters})
+
+\subsection{Syntax}
+
+\subsubsection{Exported Access Program}
+
+\begin{center}
+\begin{tabular}{p{3cm} p{7cm} p{2cm} p{2cm}}
+\hline
+\textbf{Name} & \textbf{In} & \textbf{Out} & \textbf{Exceptions} \\
+\hline
+write\_output & String, String, $\mathbb{R}$ & - & - \\
+\hline
+\end{tabular}
+\end{center}
+
+\subsection{Semantics}
+
+\subsubsection{State Variables}
+
+None
+
+\subsubsection{Environment Variables}
+
+file: The file named ``output".
+
+\subsubsection{Access Routine Semantics}
+
+\noindent write\_output($s$, $d_{\text{offset}}$):
+\begin{itemize}
+\item transition:  Write to environment variable named ``file" the calculated values $s$ and $d_{\text{offset}}$.
+\item exception: none
+\end{itemize}
+
+\newpage
+
+\section{MIS of Specification Parameters} \label{SpecParam}
+
+The secrets of this module is the value of the specification parameters.
+
+\subsection{Module}
+
+SpecParam
+
+\subsection{Uses}
+
+N/A
+
+\subsection{Syntax}
+
+\subsubsection{Exported Constants}
+
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable*}[l]{l} 
+\# From Table 10 in SRS\\
+  $g$ := 9.8\\
+  $\epsilon$ := 0.02\\
+\end{longtable*}
+
+\subsection{Semantics}
+
+N/A
+
+\newpage
+
+\bibliographystyle {plainnat}
+\bibliography {MIS}
+
+\section{Appendix} \label{Appendix}
+
+\renewcommand{\arraystretch}{1.2}
+
+\begin{longtable}{l p{12cm}}
+\toprule
+\textbf{Message ID} & \textbf{Error Message} \\
+\midrule
+badSpeed & InputError: Speed must be positive.\\
+badAngle & InputError: Angle must be between zero and pi over two radians.\\
+badTargetPosition & InputError: Target position must be positive.\\
+\bottomrule
+\caption{Possible Exceptions} \\
+\end{longtable}
+
+
+\end{document}

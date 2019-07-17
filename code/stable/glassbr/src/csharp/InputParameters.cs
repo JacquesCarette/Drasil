@@ -1,8 +1,13 @@
+/** \file InputParameters.cs
+    \brief Provides the structure for holding input parameters
+*/
 using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 
+/** \brief Structure for holding the input parameters and derived values
+*/
 public class InputParameters {
     public double a;
     public double b;

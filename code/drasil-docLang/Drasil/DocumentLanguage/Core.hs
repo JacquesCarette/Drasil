@@ -97,7 +97,7 @@ data IntroSec = IntroProg Sentence Sentence [IntroSub]
 -- | Introduction subsections
 data IntroSub where
   IPurpose :: Sentence -> IntroSub
-  IScope   :: Sentence -> Sentence -> IntroSub
+  IScope   :: Sentence -> IntroSub
   IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
   IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
 
@@ -242,7 +242,7 @@ instance Multiplate DLPlate where
     intro (IntroProg s1 s2 progs) = IntroProg <$> pure s1 <*> pure s2 <*>
       traverse (introSub p) progs
     intro' (IPurpose s) = IPurpose <$> pure s
-    intro' (IScope s1 s2) = IScope <$> pure s1 <*> pure s2
+    intro' (IScope s) = IScope <$> pure s
     intro' (IChar s1 s2 s3) = IChar <$> pure s1 <*> pure s2 <*> pure s3
     intro' (IOrgSec s1 c sect s2) = IOrgSec <$> pure s1 <*> pure c <*> pure sect <*> pure s2
     stk (StkhldrProg c s) = StkhldrProg <$> pure c <*> pure s

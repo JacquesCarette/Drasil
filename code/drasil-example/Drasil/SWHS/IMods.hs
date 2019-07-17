@@ -17,7 +17,7 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpTHCCoL,
   assumpCWTAT, assumpTPCAV)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,
+import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, ddHtFusion, ddMeltFrac,
   ddBalanceSolidPCM, ddBalanceLiquidPCM)
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
@@ -61,7 +61,7 @@ balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy timeFinal)
   phrase tempPCM +:+. sParen (unwrap $ getUnit tempPCM),
   (E $ sy tempC) `isThe` phrase tempC +:+. sParen (unwrap $ getUnit tempC),
   E $ sy tauW $= (sy wMass * sy htCapW) / (sy coilHTC * sy coilSA),
-  S "is a constant", sParen (makeRef2S dd3HtFusion) +:+. sParen (unwrap $ getUnit tauW),
+  S "is a constant", sParen (makeRef2S ddHtFusion) +:+. sParen (unwrap $ getUnit tauW),
   E $ sy eta $= (sy pcmHTC * sy pcmSA) / (sy coilHTC * sy coilSA),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
@@ -83,7 +83,7 @@ eBalanceOnWtrDeriv = mkDerivName (S "the" +:+ phrase energy +:+ S "balance on wa
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc1 htTransEnd overAreas extraAssumps assumpNIHGBWP,
-  eBalanceOnWtrDerivDesc2 dd1HtFluxC dd2HtFluxP,
+  eBalanceOnWtrDerivDesc2 ddHtFluxC ddHtFluxP,
   eBalanceOnWtrDerivDesc3 wMass htCapW,
   eBalanceOnWtrDerivDesc4 eq2,
   eBalanceOnWtrDerivDesc5,
@@ -97,7 +97,7 @@ eBalanceOnWtrDerivDesc1 htEnd oa ea htA = [S "To find the", phrase rOfChng `sOf`
   phrase tank, (E $ sy wVol) `sC` S "which has", phrase mass +:+. ((E $ sy wMass) `sAnd`
   phrase heatCapSpec `sC` (E $ sy htCapW)), atStart heatTrans, S "occurs in the",
   phrase water, S "from the", phrase coil, S "as", E $ sy htFluxC,
-  sParen (makeRef2S dd1HtFluxC) :+: htEnd `sC` EmptyS +:+. oa, ea, S "No", phrase heatTrans, S "occurs to", S "outside" `ofThe`
+  sParen (makeRef2S ddHtFluxC) :+: htEnd `sC` EmptyS +:+. oa, ea, S "No", phrase heatTrans, S "occurs to", S "outside" `ofThe`
   phrase tank `sC` S "since it has been assumed to be perfectly insulated" +:+.
   sParen (makeRef2S assumpPIT), S "Since the", phrase assumption,
   S "is made that no internal heat is generated" +:+. (sParen (makeRef2S htA) `sC`
@@ -106,7 +106,7 @@ eBalanceOnWtrDerivDesc1 htEnd oa ea htA = [S "To find the", phrase rOfChng `sOf`
 
 htTransEnd :: Sentence
 htTransEnd = foldlSent_ [S " " `sAnd` S "from the", phrase water, S "into the PCM as",
-  E $ sy htFluxP, sParen (makeRef2S dd2HtFluxP)]
+  E $ sy htFluxP, sParen (makeRef2S ddHtFluxP)]
 
 overAreas :: Sentence
 overAreas = S "over areas" +:+ ((E $ sy coilSA) `sAnd` (E $ sy pcmSA) `sC` S "respectively")
@@ -138,8 +138,8 @@ eBalanceOnWtrDerivDesc5 = [S "Which simplifies to"]
 
 eBalanceOnWtrDerivDesc6 :: Expr -> Expr -> [Sentence]
 eBalanceOnWtrDerivDesc6 eq33 eq44 = 
-  [S "Setting", E eq33, sParen (makeRef2S dd3HtFusion) `sAnd` E eq44,
-  sParen (makeRef2S dd4MeltFrac) `sC` S "Equation (5) can be written as"]
+  [S "Setting", E eq33, sParen (makeRef2S ddHtFusion) `sAnd` E eq44,
+  sParen (makeRef2S ddMeltFrac) `sC` S "Equation (5) can be written as"]
 
 eBalanceOnWtrDerivDesc7 :: Expr -> [Sentence]
 eBalanceOnWtrDerivDesc7 eq55 = 
@@ -258,7 +258,7 @@ balPCMDescNote = foldlSent [
   S "The temperature remains constant at",
   E (sy tempMeltP) `sC` S "even with the heating (or cooling)" `sC`
   S "until the phase change has occurred for all of the material; that is as long as",
-  E (0 $< sy meltFrac $< 1), sParen (S "from" +:+ makeRef2S dd4MeltFrac),
+  E (0 $< sy meltFrac $< 1), sParen (S "from" +:+ makeRef2S ddMeltFrac),
   S "is determined as part of the heat energy in the PCM, as given in" +:+.
   sParen (makeRef2S heatEInPCM),
   -- Addition based on smiths manual version.
@@ -287,7 +287,7 @@ eBalanceOnPCMDerivSentences :: [Sentence]
 eBalanceOnPCMDerivSentences = map foldlSentCol [
   eBalanceOnPCMDerivDesc1 rOfChng tempPCM energy water vol pcmVol pcmMass heatCapSpec
   htCapSP htFlux htFluxP phaseChange pcmSA heat assumpNIHGBWP volHtGen,
-  eBalanceOnPCMDerivDesc2 dd2HtFluxP htFluxP,
+  eBalanceOnPCMDerivDesc2 ddHtFluxP htFluxP,
   eBalanceOnPCMDerivDesc3 eq6,
   eBalanceOnPCMDerivDesc4 eq7
   ]
@@ -454,7 +454,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation `sIs` S "derived using" +:
   S "when", phrase melting, S "starts" `sIs` ch pcmInitMltE +:+. sParen (unwrap $ getUnit pcmInitMltE),
   S "The", phrase energy, S "required to melt all of the", short phsChgMtrl `sIs`
   E (sy htFusion * sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE) +:+.
-  sParen (makeRef2S dd3HtFusion), phrase heatCapSpec `ofThe'` phrase liquid, short phsChgMtrl `sIs`
+  sParen (makeRef2S ddHtFusion), phrase heatCapSpec `ofThe'` phrase liquid, short phsChgMtrl `sIs`
   ch htCapLP, sParen (unwrap $ getUnit htCapLP) `andThe` phrase change `sIn`
   phrase temp `sIs` E (sy tempPCM - sy tempMeltP) +:+.
   sParen (unwrap $ getUnit tempMeltP), ch pcmE, S "during", phrase melting, S "of the",

@@ -178,7 +178,6 @@ class (VariableSym repr, StateVarSym repr) => ValueSym repr where
   --other operators ($)
   ($:)  :: Label -> Label -> repr (Value repr)
   infixl 9 $:
-  ($!)  :: repr (Variable repr) -> repr (Value repr)
 
   valueOf       :: repr (Variable repr) -> repr (Value repr)
 --  global       :: Label -> repr (Value repr)         -- not sure how this one works, but in GOOL it was hardcoded to give an error so I'm leaving it out for now

@@ -2,7 +2,7 @@ module Main (main) where
 
 import Language.Drasil.Code (Choices(..), CodeSpec, Comments(..), 
   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
-  Structure(..), codeSpec)
+  Structure(..), InputModule(..), codeSpec)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
@@ -20,7 +20,8 @@ choices = Choices {
   comments = [CommentFunc],
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
-  inputStructure = Bundled
+  inputStructure = Bundled,
+  inputModule = Separated
 }
 
 main :: IO()

@@ -1,0 +1,17 @@
+Installing Moose on Mac
+based on https://mooseframework.org/getting_started/index.html
+
+> xcode-select --install
+Xcode already installed
+
+Download a headers package
+>open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
+
+Download Xquartz via https://www.xquartz.org/
+
+Download Moose Package
+
+Run Installer
+
+Click OK to add source to .bash_profile
+

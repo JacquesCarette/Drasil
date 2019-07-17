@@ -36,7 +36,7 @@ import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering
   cite, command, command0, commandD, command2D, description, document, empty,
   enumerate, externalref, figure, fraction, includegraphics, item, item',
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgs, newline, newpage,
-  parens, quote, sec, snref, superscript, symbDescription, title, toEqn)
+  parens, quote, sec, snref, superscript, symbDescription, texSym, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -129,22 +129,22 @@ pOps Natural  = mathbb "N"
 pOps Boolean  = mathbb "B"
 pOps Comma    = pure $ text ","
 pOps Prime    = pure $ text "'"
-pOps Log      = command0 "log"
-pOps Ln       = command0 "ln"
-pOps Sin      = command0 "sin"
-pOps Cos      = command0 "cos"
-pOps Tan      = command0 "tan"
-pOps Sec      = command0 "sec"
-pOps Csc      = command0 "csc"
-pOps Cot      = command0 "cot"
-pOps Arcsin   = command0 "arcsin"
-pOps Arccos   = command0 "arccos"
-pOps Arctan   = command0 "arctan"
+pOps Log      = texSym "log"
+pOps Ln       = texSym "ln"
+pOps Sin      = texSym "sin"
+pOps Cos      = texSym "cos"
+pOps Tan      = texSym "tan"
+pOps Sec      = texSym "sec"
+pOps Csc      = texSym "csc"
+pOps Cot      = texSym "cot"
+pOps Arcsin   = texSym "arcsin"
+pOps Arccos   = texSym "arccos"
+pOps Arctan   = texSym "arctan"
 pOps Not      = commandD "neg" empty
 pOps Dim      = command "mathsf" "dim"
 pOps Exp      = pure $ text "e"
 pOps Neg      = pure hyph
-pOps Cross    = command0 "times"
+pOps Cross    = texSym "times"
 pOps Dot      = commandD "cdot" empty
 pOps Eq       = pure assign
 pOps NEq      = commandD "neq" empty
@@ -161,15 +161,15 @@ pOps Add      = pure pls
 pOps Mul      = pure $ text " "
 pOps Summ     = command0 "displaystyle" <> command0 "sum"
 pOps Prod     = command0 "displaystyle" <> command0 "prod"
-pOps Inte     = command0 "int"
+pOps Inte     = texSym "int"
 pOps Point    = pure $ text "."
-pOps Perc     = command0 "%"
+pOps Perc     = texSym "%"
 
 fence :: OpenClose -> Fence -> D
-fence Open Paren  = command0 "left("
-fence Close Paren = command0 "right)"
-fence Open Curly  = command0 "{"
-fence Close Curly = command0 "}"
+fence Open Paren  = texSym "left("
+fence Close Paren = texSym "right)"
+fence Open Curly  = texSym "{"
+fence Close Curly = texSym "}"
 fence _ Abs       = pure $ text "|"
 fence _ Norm      = pure $ text "||"
 

@@ -53,6 +53,10 @@ command1oD s o c = pure (H.bslash TP.<> text s) <> maybe empty sq o <> br c
 command0 :: String -> D
 command0 s = pure $ H.bslash TP.<> text s
 
+-- Make LaTeX symbol
+texSym :: String -> D
+texSym s = pure $ H.bslash TP.<> text s
+
 -- 2-argument command
 command2 :: String -> String -> String -> D
 command2 s a0 a1 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1

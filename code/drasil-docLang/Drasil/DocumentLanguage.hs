@@ -222,11 +222,10 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
   where
     mkSubIntro :: SystemInformation -> IntroSub -> Section
     mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
-    mkSubIntro SI {_sys = sys} (IScope main intendedPurp) =
-      Intro.scopeOfRequirements main sys intendedPurp
+    mkSubIntro _ (IScope main) = Intro.scopeOfRequirements main
     mkSubIntro SI {_sys = sys} (IChar assumed topic asset) =
       Intro.charIntRdrF sys assumed topic asset (SRS.userChar [] [])
-    mkSubIntro _ (IOrgSec i b s t)  = Intro.orgSec i b s t
+    mkSubIntro _ (IOrgSec i b s t) = Intro.orgSec i b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
 -- | Helper for making the 'Stakeholders' section

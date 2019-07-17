@@ -60,7 +60,7 @@ module Language.Drasil (
   , Constraint(..), ConstraintReason(..)
   -- Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
-  , cuc, cvc, constrained', cuc', constrainedNRV'
+  , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
   , cnstrw, cnstrw'
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', equat, ec
@@ -125,7 +125,7 @@ module Language.Drasil (
   , Space(..)
   , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD)
   -- Symbol
-  , Decoration(..), Symbol(..), compsy, hat, prime, sub, sup, upperLeft, vec
+  , Decoration(..), Symbol(..), autoStage, compsy, hat, prime, sub, sup, upperLeft, vec
   -- Misc
   , mkTable
   -- People

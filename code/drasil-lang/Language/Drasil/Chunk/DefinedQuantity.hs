@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage)
-import Language.Drasil.Symbol (Symbol, autoStage)
+import Language.Drasil.Symbol (Symbol)
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -37,10 +37,10 @@ instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 
 -- For when the symbol is constant through stages (maps unicode to strings for code gen)
 dqd :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
-dqd c s sp = DQD c (autoStage s) sp . Just . unitWrapper
+dqd c s sp = DQD c (const s) sp . Just . unitWrapper
 
 dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
-dqdNoUnit c s sp = DQD c (autoStage s) sp Nothing
+dqdNoUnit c s sp = DQD c (const s) sp Nothing
 
 -- For when the symbol changes depending on the stage
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict

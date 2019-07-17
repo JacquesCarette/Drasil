@@ -1,15 +1,11 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Constrained (
-    ConstrainedChunk(..)
-  , ConstrConcept(..)
-  , cuc, cvc, constrained', cuc', constrainedNRV'
-  , cnstrw, cnstrw'
-  ) where
+module Language.Drasil.Chunk.Constrained (ConstrainedChunk(..), ConstrConcept(..),
+  cnstrw, cnstrw', constrained', constrainedNRV', cuc, cuc', cuc'', cvc) where
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.Chunk.Concept (cw)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqdWr)
+import Language.Drasil.Chunk.Concept (cw, dcc)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
 import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Chunk.Unitary (unitary)
@@ -22,6 +18,7 @@ import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr(..))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
+import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
 
 -- | ConstrainedChunks are 'Symbolic Quantities'
@@ -88,6 +85,12 @@ cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u
             -> Space -> [Constraint] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
   ConstrConcept (dqd (cw (ucs nam trm desc sym space un)) sym space uu) cs (Just rv)
+  where uu = unitWrapper un
+
+cuc'' :: (IsUnit u) => String -> NP -> String -> (Stage -> Symbol) -> u
+            -> Space -> [Constraint] -> Expr -> ConstrConcept
+cuc'' nam trm desc sym un space cs rv =
+  ConstrConcept (dqd' (dcc nam trm desc) sym space (Just uu)) cs (Just rv)
   where uu = unitWrapper un
 
 cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept

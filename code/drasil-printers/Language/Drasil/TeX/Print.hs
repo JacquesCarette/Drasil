@@ -74,9 +74,10 @@ print sm = foldr (($+$) . (`lo` sm)) empty
 
 ------------------ Symbol ----------------------------
 symbol :: L.Symbol -> String
-symbol (L.Atomic s)  = s
-symbol (L.Special s) = unPL $ L.special s
-symbol (L.Concat sl) = concatMap symbol sl
+symbol (L.Variable s) = s
+symbol (L.Label s)    = "\\text{" ++ s ++ "}"
+symbol (L.Special s)  = unPL $ L.special s
+symbol (L.Concat sl)  = concatMap symbol sl
 --
 -- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = brace $ symbol s ++ "^" ++ brace (symbol x)
@@ -273,13 +274,14 @@ escapeChars '_' = "\\_"
 escapeChars c = [c]
 
 symbolNeeds :: L.Symbol -> MathContext
-symbolNeeds (L.Atomic _)          = Text
-symbolNeeds (L.Special _)         = Math
-symbolNeeds (L.Concat [])         = Math
-symbolNeeds (L.Concat (s:_))      = symbolNeeds s
-symbolNeeds L.Corners{}           = Math
-symbolNeeds (L.Atop _ _)          = Math
-symbolNeeds L.Empty               = Curr
+symbolNeeds (L.Variable _)   = Text
+symbolNeeds (L.Label _)      = Text
+symbolNeeds (L.Special _)    = Math
+symbolNeeds (L.Concat [])    = Math
+symbolNeeds (L.Concat (s:_)) = symbolNeeds s
+symbolNeeds L.Corners{}      = Math
+symbolNeeds (L.Atop _ _)     = Math
+symbolNeeds L.Empty          = Curr
 
 pUnit :: L.USymb -> D
 pUnit (L.US ls) = formatu t b

@@ -24,7 +24,8 @@ programName :: CommonIdea c => c -> String
 programName = toCodeName . abrv
 
 symbToCodeName :: Symbol -> String
-symbToCodeName (Atomic s) = toCodeName s
+symbToCodeName (Variable s) = toCodeName s
+symbToCodeName (Label s) = toCodeName s
 symbToCodeName (Special sp) = specialToCodeName sp
 --symbToCodeName (Greek g) = greekToCodeName g
 symbToCodeName (Atop d s) = decorate (symbToCodeName s) d

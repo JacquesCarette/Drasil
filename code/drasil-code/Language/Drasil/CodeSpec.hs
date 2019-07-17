@@ -217,8 +217,8 @@ fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
 fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
 
 asVC :: Func -> QuantityDict
-asVC (FDef (FuncDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
-asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
+asVC (FDef (FuncDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
+asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
 asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
 
 asExpr :: Func -> Expr
@@ -230,8 +230,8 @@ asExpr' f = sy $ asVC' f
 
 -- FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
-asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
-asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
+asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
+asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
 
 

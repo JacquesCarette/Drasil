@@ -8,8 +8,7 @@ import Control.Arrow (second)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
-  Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
-  DType(Data, Theory, Instance, General), MaxWidthPercent,
+  Symbol(..), DType(Data, Theory, Instance, General), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
@@ -109,10 +108,11 @@ pSpec (Quote q)          = doubleQuotes $ pSpec q
 
 -- | Renders symbols for HTML document
 symbol :: L.Symbol -> String
-symbol (L.Atomic s)  = s
-symbol (L.Special s) = unPH $ L.special s
-symbol (L.Concat sl) = concatMap symbol sl
---symbol (Greek g)   = unPH $ greek g
+symbol (L.Variable s) = s
+symbol (L.Label s)    = s
+symbol (L.Special s)  = unPH $ L.special s
+symbol (L.Concat sl)  = concatMap symbol sl
+--symbol (Greek g)      = unPH $ greek g
 -- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = symbol s ++ (render . sup . text) (symbol x)
 symbol (L.Corners [] [] [] [x] s) = symbol s ++ (render . sub . text) (symbol x)

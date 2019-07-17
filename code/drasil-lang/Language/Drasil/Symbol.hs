@@ -21,17 +21,17 @@ data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
 -- - Concatenations of symbols, including subscripts and superscripts
 -- - empty! (this is to give this a monoid-like flavour)
 data Symbol =
-    Var     String
-  | Label   String 
-  | Special Special
-  | Atop    Decoration Symbol
-  | Corners [Symbol] [Symbol] [Symbol] [Symbol] Symbol
+    Variable String
+  | Label    String 
+  | Special  Special
+  | Atop     Decoration Symbol
+  | Corners  [Symbol] [Symbol] [Symbol] [Symbol] Symbol
           -- upleft   lowleft  upright  lowright base
           -- [1]      [2]      [3]      [4]      [5]
           --  Visually:  [1]   [3]
           --    (out)       [5]
           --             [2]   [4]
-  | Concat [Symbol]
+  | Concat   [Symbol]
           -- [s1, s2] -> s1s2
   | Empty
   deriving Eq
@@ -100,15 +100,15 @@ compsy (Atop _ b) a =
  case compsy b a of
     EQ -> GT
     other -> other
-compsy (Special a) (Special b) = compare a b
-compsy (Special _) _           = LT
-compsy _           (Special _) = GT
-compsy (Var x)     (Var y)     =
+compsy (Special a)  (Special b)  = compare a b
+compsy (Special _)  _            = LT
+compsy _            (Special _)  = GT
+compsy (Variable x) (Variable y) =
   case compare (map toLower x) (map toLower y) of
     EQ -> compare x y
     other -> other
-compsy (Var _) _ = LT
-compsy _ (Var _) = GT
+compsy (Variable _) _ = LT
+compsy _ (Variable _) = GT
 compsy (Label x) (Label y) =
   case compare (map toLower x) (map toLower y) of
     EQ -> compare x y

@@ -164,8 +164,8 @@ printListDoc :: (RenderSym repr) => Integer -> repr (Value repr) ->
   (String -> repr (Statement repr)) -> 
   repr (Statement repr)
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
-  for (varDecDef i (litInt 0)) (varVal i ?< (listSize v #- litInt 1))
-    (i &++) (bodyStatements [prFn (listAccess v (varVal i)), prStrFn ", /f "]), 
+  for (varDecDef i (litInt 0)) (valueOf i ?< (listSize v #- litInt 1))
+    (i &++) (bodyStatements [prFn (listAccess v (valueOf i)), prStrFn ", /f "]), 
   ifNoElse [(listSize v ?> litInt 0, oneLiner $
     prFn (listAccess v (listSize v #- litInt 1)))], 
   prLnFn "]"]
@@ -429,14 +429,14 @@ stringListLists' lsts sl = stringList (getType $ valueType sl)
         listVals _ = error 
           "All values passed to stringListLists must have list types"
         loop = forRange l_i (litInt 0) (listSize sl #/ numLists) (litInt 1)
-          (bodyStatements $ appendLists (map varVal lsts) 0)
+          (bodyStatements $ appendLists (map valueOf lsts) 0)
         appendLists [] _ = []
         appendLists (v:vs) n = valState (listAppend v (cast (listInnerType $ 
           valueType v) (listAccess sl ((v_i #* numLists) #+ litInt n)))) 
           : appendLists vs (n+1)
         numLists = litInt (toInteger $ length lsts)
         l_i = "stringlist_i"
-        v_i = varVal $ var l_i S.int
+        v_i = valueOf $ var l_i S.int
         
 
 -- Unary Operators --

@@ -230,7 +230,7 @@ instance ValueSym PythonCode where
 
   ($:) = enumElement
 
-  varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
+  valueOf v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n + 1)) argsList)
   enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
 
@@ -294,7 +294,7 @@ instance ValueExpression PythonCode where
     valList vs))
   listStateObj t _ = liftA2 mkVal t (fmap typeDoc t)
 
-  exists v = v ?!= varVal (var "None" void)
+  exists v = v ?!= valueOf (var "None" void)
   notNull = exists
 
 instance Selector PythonCode where
@@ -304,7 +304,7 @@ instance Selector PythonCode where
   objMethodCall t o f ps = objAccess o (func f t ps)
   objMethodCallNoParams t o f = objMethodCall t o f []
 
-  selfAccess l = objAccess (varVal $ self l)
+  selfAccess l = objAccess (valueOf $ self l)
 
   listIndexExists lst index = listSize lst ?> index
   argExists i = listAccess argsList (litInt $ fromIntegral i)
@@ -342,23 +342,23 @@ instance SelectorFunction PythonCode where
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD i toVal)
 
-  atFunc t l = listAccessFunc t (varVal $ var l int)
+  atFunc t l = listAccessFunc t (valueOf $ var l int)
 
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (varVal $ var l int)
+  at v l = listAccess v (valueOf $ var l int)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
   assign vr vl = mkStNoEnd <$> liftA2 assignDocD vr vl
-  assignToListIndex lst index v = valState $ listSet (varVal lst) index v
+  assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
   multiAssign vrs vls = mkStNoEnd <$> lift2Lists multiAssignDoc vrs vls
   (&=) = assign
-  (&-=) vr vl = vr &= (varVal vr #- vl)
+  (&-=) vr vl = vr &= (valueOf vr #- vl)
   (&+=) vr vl = mkStNoEnd <$> liftA3 plusEqualsDocD' vr plusOp vl
   (&++) v = mkStNoEnd <$> liftA2 plusPlusDocD' v plusOp
-  (&~-) v = v &= (varVal v #- litInt 1)
+  (&~-) v = v &= (valueOf v #- litInt 1)
 
   varDec _ = return (mkStNoEnd empty)
   varDecDef = assign
@@ -413,7 +413,7 @@ instance StatementSym PythonCode where
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
-  free v = v &= varVal (var "None" void)
+  free v = v &= valueOf (var "None" void)
 
   throw errMsg = mkStNoEnd <$> fmap pyThrow (litString errMsg)
 
@@ -423,7 +423,7 @@ instance StatementSym PythonCode where
 
   initObserverList t = listDecDef (var observerListName t)
   addObserver o = valState $ listAdd obsList lastelem o
-    where obsList = varVal $ observerListName `listOf` valueType o
+    where obsList = valueOf $ observerListName `listOf` valueType o
           lastelem = listSize obsList
 
   inOutCall = pyInOutCall funcApp
@@ -453,10 +453,10 @@ instance ControlStatementSym PythonCode where
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 pyTryCatch tb cb
 
-  checkState l = switch (varVal $ var l string)
+  checkState l = switch (valueOf $ var l string)
   notifyObservers f t = forRange index initv (listSize obsList) 
     (litInt 1) notify
-    where obsList = varVal $ observerListName `listOf` t
+    where obsList = valueOf $ observerListName `listOf` t
           index = "observerIndex"
           initv = litInt 0
           notify = oneLiner $ valState $ at obsList index $. f
@@ -490,10 +490,10 @@ instance MethodSym PythonCode where
     (self l) (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] getBody
-    where getBody = oneLiner $ returnState (varVal $ self c $-> v)
+    where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
   setMethod c v = method (setterName $ variableName v) c public dynamic_
     (mState void) [stateParam v] setBody
-    where setBody = oneLiner $ (self c $-> v) &= varVal v
+    where setBody = oneLiner $ (self c $-> v) &= valueOf v
   mainMethod _ = fmap (mthd True [])
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -509,7 +509,7 @@ instance MethodSym PythonCode where
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins outs b = function n s p (mState void) (map stateParam ins)
-    (liftA2 appendToBody b (multiReturn $ map varVal outs))
+    (liftA2 appendToBody b (multiReturn $ map valueOf outs))
 
   docInOutFunc desc iComms _ = docFuncRepr desc iComms
 

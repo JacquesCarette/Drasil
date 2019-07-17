@@ -91,7 +91,7 @@ varLogFile :: (RenderSym repr) => repr (Variable repr)
 varLogFile = var "outfile" outfile
 
 valLogFile :: (RenderSym repr) => repr (Value repr)
-valLogFile = varVal varLogFile
+valLogFile = valueOf varLogFile
 
 generator :: (RenderSym repr) => Choices -> CodeSpec -> State repr
 generator chs spec = State {
@@ -395,7 +395,7 @@ genOutputFormat = do
       genOutput (Just _) = do
         let l_outfile = "outputfile"
             var_outfile = var l_outfile outfile
-            v_outfile = varVal var_outfile
+            v_outfile = valueOf var_outfile
         parms <- getOutputParams
         outp <- mapM (\x -> do
           v <- value (codeName x) (convType $ codeType x)
@@ -465,10 +465,10 @@ loggedMethod lName n vars b = block [
     printInputs [] = []
     printInputs [v] = [
       printFileStr valLogFile ("  " ++ variableName v ++ " = "), 
-      printFileLn valLogFile (varVal v)]
+      printFileLn valLogFile (valueOf v)]
     printInputs (v:vs) = [
       printFileStr valLogFile ("  " ++ variableName v ++ " = "), 
-      printFile valLogFile (varVal v), 
+      printFile valLogFile (valueOf v), 
       printFileStrLn valLogFile ", "] ++ printInputs vs
     
 
@@ -548,7 +548,7 @@ getInOutCall n inFunc outFunc = do
       getCall (Just m) = do
         ins <- inFunc
         outs <- outFunc
-        stmt <- fAppInOut m n (map varVal ins) outs 
+        stmt <- fAppInOut m n (map valueOf ins) outs 
         return $ Just stmt
   getCall $ Map.lookup n (eMap $ codeSpec g)
 
@@ -645,7 +645,7 @@ loggedVar v = do
     return $ multi [
       openFileA varLogFile (litString $ logName g),
       printFileStr valLogFile ("var '" ++ variableName v ++ "' assigned to "),
-      printFile valLogFile (varVal v),
+      printFile valLogFile (valueOf v),
       printFileStrLn valLogFile (" in module " ++ currentModule g),
       closeFile valLogFile ]
 
@@ -660,7 +660,7 @@ value s t = do
   g <- ask
   let cs = codeSpec g
       mm = constMap cs
-  maybe (do { v <- variable s t; return $ varVal v }) 
+  maybe (do { v <- variable s t; return $ valueOf v }) 
     (convExpr . codeEquat) (Map.lookup s mm)
 
 variable :: (RenderSym repr) => String -> repr (StateType repr) -> 
@@ -724,7 +724,7 @@ getConstParams :: [CodeChunk] -> [repr (Parameter repr)]
 getConstParams _ = []
 
 getArgs :: (RenderSym repr) => [repr (Parameter repr)] -> [repr (Value repr)]
-getArgs = map (\p -> varVal (var (parameterName p) (parameterType p)))
+getArgs = map (\p -> valueOf (var (parameterName p) (parameterType p)))
 
 convExpr :: (RenderSym repr) => Expr -> Reader (State repr) (repr (Value repr))
 convExpr (Dbl d) = return $ litFloat d
@@ -969,8 +969,8 @@ readData ddef = do
         appendTemp :: (RenderSym repr) => String -> DataItem -> 
           repr (Statement repr)
         appendTemp sfx v = valState $ listAppend 
-          (varVal $ var (codeName v) (convType $ codeType v)) 
-          (varVal $ var (codeName v ++ sfx) (convType $ codeType v))
+          (valueOf $ var (codeName v) (convType $ codeType v)) 
+          (valueOf $ var (codeName v ++ sfx) (convType $ codeType v))
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_filename, l_i :: Label
         var_line, var_lines, var_linetokens, var_infile :: 
@@ -979,20 +979,20 @@ readData ddef = do
           (RenderSym repr) => repr (Value repr)
         l_line = "line"
         var_line = var l_line string
-        v_line = varVal var_line
+        v_line = valueOf var_line
         l_lines = "lines"
         var_lines = var l_lines (listType static_ string)
-        v_lines = varVal var_lines
+        v_lines = valueOf var_lines
         l_linetokens = "linetokens"
         var_linetokens = var l_linetokens (listType static_ string)
-        v_linetokens = varVal var_linetokens
+        v_linetokens = valueOf var_linetokens
         l_infile = "infile"
         var_infile = var l_infile infile
-        v_infile = varVal var_infile
+        v_infile = valueOf var_infile
         l_filename = "filename"
-        v_filename = varVal $ var l_filename string
+        v_filename = valueOf $ var l_filename string
         l_i = "i"
-        v_i = varVal $ var l_i int
+        v_i = valueOf $ var l_i int
 
 getEntryVars :: (RenderSym repr) => Maybe String -> LinePattern -> 
   Reader (State repr) [repr (Variable repr)]

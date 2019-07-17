@@ -17,29 +17,29 @@ writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [
   varDecDef (var "e" int) (litInt 5),
   varDec $ var "f" float,
-  var "f" float &= cast float (varVal $ var "e" int),
+  var "f" float &= cast float (valueOf $ var "e" int),
   varDec $ var "fileToWrite" outfile,
 
   openFileW (var "fileToWrite" outfile) (litString "testText.txt"),
-  printFile (varVal $ var "fileToWrite" outfile) (litInt 0),
-  printFileLn (varVal $ var "fileToWrite" outfile) (litFloat 0.89),
-  printFileStr (varVal $ var "fileToWrite" outfile) "ello",
-  printFileStrLn (varVal $ var "fileToWrite" outfile) "bye",
-  printFileStrLn (varVal $ var "fileToWrite" outfile) "!!",
-  closeFile (varVal $ var "fileToWrite" outfile),
+  printFile (valueOf $ var "fileToWrite" outfile) (litInt 0),
+  printFileLn (valueOf $ var "fileToWrite" outfile) (litFloat 0.89),
+  printFileStr (valueOf $ var "fileToWrite" outfile) "ello",
+  printFileStrLn (valueOf $ var "fileToWrite" outfile) "bye",
+  printFileStrLn (valueOf $ var "fileToWrite" outfile) "!!",
+  closeFile (valueOf $ var "fileToWrite" outfile),
 
   varDec $ var "fileToRead" infile,
   openFileR (var "fileToRead" infile) (litString "testText.txt"),
   varDec $ var "fileLine" string,
-  getFileInputLine (varVal $ var "fileToRead" infile) (var "fileLine" string),
-  discardFileLine (varVal $ var "fileToRead" infile),
+  getFileInputLine (valueOf $ var "fileToRead" infile) (var "fileLine" string),
+  discardFileLine (valueOf $ var "fileToRead" infile),
   listDec 0 (var "fileContents" (listType dynamic_ string))]
 
 readStory :: (RenderSym repr) => repr (Statement repr)
-readStory = getFileInputAll (varVal $ var "fileToRead" infile) 
+readStory = getFileInputAll (valueOf $ var "fileToRead" infile) 
   (var "fileContents" (listType dynamic_ string))
 
 goodBye :: (RenderSym repr) => repr (Block repr)
 goodBye = block [
-  printLn (varVal $ var "fileContents" (listType dynamic_ string)), 
-  closeFile (varVal$ var "fileToRead" infile)]
+  printLn (valueOf $ var "fileContents" (listType dynamic_ string)), 
+  closeFile (valueOf $ var "fileToRead" infile)]

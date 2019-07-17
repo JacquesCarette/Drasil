@@ -176,10 +176,10 @@ instance ControlBlockSym JavaCode where
   listSlice vnew vold b e s = 
     let l_temp = "temp"
         var_temp = var l_temp (variableType vnew)
-        v_temp = varVal var_temp
+        v_temp = valueOf var_temp
         l_i = "i_temp"
         var_i = var l_i int
-        v_i = varVal var_i
+        v_i = valueOf var_i
     in
       block [
         listDec 0 var_temp,
@@ -254,7 +254,7 @@ instance ValueSym JavaCode where
 
   ($:) = enumElement
 
-  varVal v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
+  valueOf v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
   enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
   
@@ -319,7 +319,7 @@ instance ValueExpression JavaCode where
     (liftList valList vs))
 
   exists = notNull
-  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (varVal (var 
+  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf (var 
     "null" (fmap valType v))))
 
 instance Selector JavaCode where
@@ -329,7 +329,7 @@ instance Selector JavaCode where
   objMethodCall t o f ps = objAccess o (func f t ps)
   objMethodCallNoParams t o f = objMethodCall t o f []
 
-  selfAccess l = objAccess (varVal $ self l)
+  selfAccess l = objAccess (valueOf $ self l)
 
   listIndexExists l i = liftA2 mkVal bool (liftA3 jListIndexExists greaterOp l 
     i)
@@ -366,23 +366,23 @@ instance SelectorFunction JavaCode where
   listAccessFunc t i = func "get" t [intValue i]
   listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
 
-  atFunc t l = listAccessFunc t (varVal $ var l int)
+  atFunc t l = listAccessFunc t (valueOf $ var l int)
 
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (varVal $ var l int)
+  at v l = listAccess v (valueOf $ var l int)
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
   assign vr vl = mkSt <$> liftA2 assignDocD vr vl
-  assignToListIndex lst index v = valState $ listSet (varVal lst) index v
+  assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
   multiAssign _ _ = error "No multiple assignment statements in Java"
   (&=) = assign
-  (&-=) vr vl = vr &= (varVal vr #- vl)
+  (&-=) vr vl = vr &= (valueOf vr #- vl)
   (&+=) vr vl = mkSt <$> liftA2 plusEqualsDocD vr vl
   (&++) v = mkSt <$> fmap plusPlusDocD v
-  (&~-) v = v &= (varVal v #- litInt 1)
+  (&~-) v = v &= (valueOf v #- litInt 1)
 
   varDec v = mkSt <$> fmap varDecDocD v
   varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
@@ -448,7 +448,7 @@ instance StatementSym JavaCode where
 
   initObserverList t = listDecDef (var observerListName t)
   addObserver o = valState $ listAdd obsList lastelem o
-    where obsList = varVal $ observerListName `listOf` valueType o
+    where obsList = valueOf $ observerListName `listOf` valueType o
           lastelem = listSize obsList
 
   inOutCall = jInOutCall funcApp
@@ -471,25 +471,25 @@ instance ControlStatementSym JavaCode where
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
   forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
-    (varVal (var i int) ?< finalv) (var i int &+= stepv)
+    (valueOf (var i int) ?< finalv) (var i int &+= stepv)
   forEach l v b = mkStNoEnd <$> liftA6 (forEachDocD l) blockStart blockEnd
     iterForEachLabel iterInLabel v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 jTryCatch tb cb
   
-  checkState l = switch (varVal $ var l string)
+  checkState l = switch (valueOf $ var l string)
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (var_index &++) notify
-    where obsList = varVal $ observerListName `listOf` t
+    where obsList = valueOf $ observerListName `listOf` t
           index = "observerIndex"
           var_index = var index int
-          v_index = varVal var_index
+          v_index = valueOf var_index
           initv = varDecDef var_index $ litInt 0
           notify = oneLiner $ valState $ at obsList index $. f
 
   getFileInputAll f v = while (f $. func "hasNextLine" bool [])
-    (oneLiner $ valState $ listAppend (varVal v) (f $. func "nextLine" string []))
+    (oneLiner $ valState $ listAppend (valueOf v) (f $. func "nextLine" string []))
 
 instance ScopeSym JavaCode where
   type Scope JavaCode = Doc
@@ -517,10 +517,10 @@ instance MethodSym JavaCode where
     s p t (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] getBody
-    where getBody = oneLiner $ returnState (varVal $ self c $-> v)
+    where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
-    where setBody = oneLiner $ (self c $-> v) &= varVal v
+    where setBody = oneLiner $ (self c $-> v) &= valueOf v
   mainMethod c b = setMainMethod <$> method "main" c public static_ 
     (mState void) [liftA2 (pd "args") (listType static_ string) 
     (return $ text "String[] args")] b
@@ -540,12 +540,12 @@ instance MethodSym JavaCode where
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
   inOutFunc n s p ins [v] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
-    varVal v))
+    valueOf v))
   inOutFunc n s p ins outs b = function n s p jArrayType
     (map stateParam ins) (liftA3 surroundBody decls b (multi (varDecDef outputs
-        (varVal (var ("new Object[" ++ show (length outs) ++ "]") jArrayType))
-      : assignArray 0 (map varVal outs)
-      ++ [returnState (varVal outputs)])))
+        (valueOf (var ("new Object[" ++ show (length outs) ++ "]") jArrayType))
+      : assignArray 0 (map valueOf outs)
+      ++ [returnState (valueOf outputs)])))
       where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
               [JavaCode (Statement JavaCode)]
             assignArray _ [] = []
@@ -706,7 +706,7 @@ jAssignFromArray :: Int -> [JavaCode (Variable JavaCode)] ->
   [JavaCode (Statement JavaCode)]
 jAssignFromArray _ [] = []
 jAssignFromArray c (v:vs) = (v &= cast (variableType v)
-  (varVal (var ("outputs[" ++ show c ++ "]") (variableType v))))
+  (valueOf (var ("outputs[" ++ show c ++ "]") (variableType v))))
   : jAssignFromArray (c+1) vs
 
 jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 

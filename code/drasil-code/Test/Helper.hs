@@ -17,6 +17,6 @@ doubleAndAdd = docFunc "This function adds two numbers"
   [stateParam $ var "num1" float, stateParam $ var "num2" float]
   (bodyStatements [
     varDec $ var "doubledSum" float, 
-    var "doubledSum" float &= ((litFloat 2.0 #* varVal (var "num1" float)) #+ 
-      (litFloat 2.0 #* varVal (var "num2" float))),
-    returnState (varVal (var "doubledSum" float))])
+    var "doubledSum" float &= ((litFloat 2.0 #* valueOf (var "num1" float)) #+ 
+      (litFloat 2.0 #* valueOf (var "num2" float))),
+    returnState (valueOf (var "doubledSum" float))])

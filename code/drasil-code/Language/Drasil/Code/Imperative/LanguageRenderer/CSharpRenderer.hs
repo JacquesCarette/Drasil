@@ -471,7 +471,7 @@ instance ControlStatementSym CSharpCode where
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 csTryCatch tb cb
 
-  checkState l = switch (varVal l string)
+  checkState l = switch (varVal $ var l string)
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (var_index &++) notify
     where obsList = varVal $ observerListName `listOf` t

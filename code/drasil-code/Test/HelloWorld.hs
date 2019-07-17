@@ -134,7 +134,7 @@ helloIfExists = ifExists (varVal $ var "boringList" (listType dynamic_ bool))
   (oneLiner (printStrLn "Ew, boring list!")) (oneLiner (printStrLn "Great, no bores!"))
 
 helloSwitch :: (RenderSym repr) => repr (Statement repr)
-helloSwitch = switch (var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)), 
+helloSwitch = switch (varVal $ var "a" int) [(litInt 5, oneLiner (var "b" int &= litInt 10)), 
   (litInt 0, oneLiner (var "b" int &= litInt 5))]
   (oneLiner (var "b" int &= litInt 0))
 

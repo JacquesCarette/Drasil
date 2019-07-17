@@ -1022,7 +1022,7 @@ instance ControlStatementSym CppSrcCode where
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 cppTryCatch tb cb
 
-  checkState l = switchAsIf (varVal l string) 
+  checkState l = switchAsIf (varVal $ var l string) 
 
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (var_index &++) notify

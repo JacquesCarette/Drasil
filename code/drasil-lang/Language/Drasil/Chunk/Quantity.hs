@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.UnitDefn(UnitDefn, MayHaveUnit(getUnit))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage(..))
-import Language.Drasil.Symbol (Symbol(Empty), autoStage)
+import Language.Drasil.Symbol (Symbol(Empty))
 
 data QuantityDict = QD { _id' :: IdeaDict
                        , _typ' :: Space
@@ -33,7 +33,7 @@ qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
 qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)
 
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
-mkQuant i t s sp u ab = QD (mkIdea i t ab) sp (autoStage s) u
+mkQuant i t s sp u ab = QD (mkIdea i t ab) sp (const s) u
 
 -- | implVar makes an variable that is implementation-only
 implVar :: String -> NP -> Symbol -> Space -> QuantityDict
@@ -45,11 +45,11 @@ implVar i des sym = vcSt i des f
 
 -- | Creates a Quantity from an uid, term, symbol, and space
 vc :: String -> NP -> Symbol -> Space -> QuantityDict
-vc i des sym space = QD (nw $ nc i des) space (autoStage sym) Nothing
+vc i des sym space = QD (nw $ nc i des) space (const sym) Nothing
 
 -- | Creates a Quantity from an uid, term, symbol, space, and unit
 vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
-vcUnit i des sym space u = QD (nw $ nc i des) space (autoStage sym) (Just u)
+vcUnit i des sym space u = QD (nw $ nc i des) space (const sym) (Just u)
 
 -- | Like cv, but creates a QuantityDict from something that knows about stages
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict

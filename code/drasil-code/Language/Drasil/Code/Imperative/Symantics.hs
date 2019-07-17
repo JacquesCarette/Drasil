@@ -7,8 +7,8 @@ module Language.Drasil.Code.Imperative.Symantics (
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..)
@@ -265,6 +265,9 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
   exists  :: repr (Value repr) -> repr (Value repr)
   notNull :: repr (Value repr) -> repr (Value repr)
 
+class (ValueExpression repr) => InternalValue repr where
+  cast :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr)
+
 -- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,
 -- but really one might want one of these values as part of an expression, so the
 -- constraint would have to go both ways. I'm not sure what the solution is for
@@ -288,8 +291,6 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
   argExists       :: Integer -> repr (Value repr)
 
   indexOf :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-
-  cast :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr)
 
 class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   type Function repr
@@ -319,7 +320,7 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   iterBegin :: repr (Value repr) -> repr (Value repr)
   iterEnd   :: repr (Value repr) -> repr (Value repr)
 
-class (ValueSym repr, FunctionSym repr, Selector repr) => 
+class (ValueSym repr, InternalValue repr, FunctionSym repr, Selector repr) => 
   SelectorFunction repr where
   listAccessFunc :: repr (StateType repr) -> repr (Value repr) -> 
     repr (Function repr)

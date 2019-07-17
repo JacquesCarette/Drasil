@@ -14,8 +14,8 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -311,6 +311,9 @@ instance ValueExpression CSharpCode where
   notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (var "null" 
     (fmap valType v)))
 
+instance InternalValue CSharpCode where
+  cast = csCast
+
 instance Selector CSharpCode where
   objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
   ($.) = objAccess
@@ -325,8 +328,6 @@ instance Selector CSharpCode where
   argExists i = listAccess argsList (litInt $ fromIntegral i)
 
   indexOf l v = objAccess l (func "IndexOf" int [v])
-
-  cast = csCast
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData

@@ -15,8 +15,8 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -293,6 +293,9 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
 
   exists v = pair (exists $ pfst v) (exists $ psnd v)
   notNull v = pair (notNull $ pfst v) (notNull $ psnd v)
+  
+instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
+  cast t v = pair (cast (pfst t) (pfst v)) (cast (psnd t) (psnd v))
 
 instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
   objAccess v f = pair (objAccess (pfst v) (pfst f)) (objAccess (psnd v) 
@@ -311,8 +314,6 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
   argExists i = pair (argExists i) (argExists i)
   
   indexOf l v = pair (indexOf (pfst l) (pfst v)) (indexOf (psnd l) (psnd v))
-
-  cast t v = pair (cast (pfst t) (pfst v)) (cast (psnd t) (psnd v))
 
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
   type Function (p CppSrcCode CppHdrCode) = FuncData
@@ -837,6 +838,9 @@ instance ValueExpression CppSrcCode where
   exists = notNull
   notNull v = v
 
+instance InternalValue CppSrcCode where
+  cast = cppCast
+
 instance Selector CppSrcCode where
   objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
   ($.) = objAccess
@@ -850,8 +854,6 @@ instance Selector CppSrcCode where
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf l v = funcApp "find" int [iterBegin l, iterEnd l, v] #- iterBegin l
-
-  cast = cppCast
 
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
@@ -1362,6 +1364,9 @@ instance ValueExpression CppHdrCode where
   exists _ = liftA2 mkVal void (return empty)
   notNull _ = liftA2 mkVal void (return empty)
 
+instance InternalValue CppHdrCode where
+  cast _ _ = liftA2 mkVal void (return empty)
+
 instance Selector CppHdrCode where
   objAccess _ _ = liftA2 mkVal void (return empty)
   ($.) _ _ = liftA2 mkVal void (return empty)
@@ -1375,8 +1380,6 @@ instance Selector CppHdrCode where
   argExists _ = liftA2 mkVal void (return empty)
   
   indexOf _ _ = liftA2 mkVal void (return empty)
-
-  cast _ _ = liftA2 mkVal void (return empty)
 
 instance FunctionSym CppHdrCode where
   type Function CppHdrCode = FuncData

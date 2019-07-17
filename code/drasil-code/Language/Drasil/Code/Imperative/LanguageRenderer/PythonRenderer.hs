@@ -13,8 +13,8 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -293,6 +293,9 @@ instance ValueExpression PythonCode where
   exists v = v ?!= var "None" void
   notNull = exists
 
+instance InternalValue PythonCode where
+  cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
+
 instance Selector PythonCode where
   objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
   ($.) = objAccess 
@@ -306,8 +309,6 @@ instance Selector PythonCode where
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf l v = objAccess l (func "index" int [v])
-
-  cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData

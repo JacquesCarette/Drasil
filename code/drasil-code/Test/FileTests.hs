@@ -1,8 +1,8 @@
 module Test.FileTests (fileTests) where
 
 import Language.Drasil.Code (PackageSym(..), RenderSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), StateTypeSym(..), 
-  StatementSym(..), ControlStatementSym(..), ValueSym(..), Selector(..),
+  BodySym(..), BlockSym(..), StateTypeSym(..), StatementSym(..), 
+  ControlStatementSym(..), ValueSym(..),
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
@@ -15,9 +15,6 @@ fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory],
 
 writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [
-  varDecDef (var "e" int) (litInt 5),
-  varDec $ var "f" float,
-  var "f" float &= cast float (var "e" int),
   varDec $ var "fileToWrite" outfile,
 
   openFileW (var "fileToWrite" outfile) (litString "testText.txt"),

@@ -42,7 +42,7 @@ import Utils.Drasil (capitalize, indent, indentList)
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   RenderSym(..), BodySym(..), StateTypeSym(getType, listInnerType), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), Selector(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), InternalValue(..),
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ParameterSym(..), MethodSym(..), BlockCommentSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))

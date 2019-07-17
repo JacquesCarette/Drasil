@@ -1,6 +1,6 @@
 module Drasil.NoPCM.Body where
 
-import Language.Drasil hiding (section, section)
+import Language.Drasil hiding (Symbol(..), section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,

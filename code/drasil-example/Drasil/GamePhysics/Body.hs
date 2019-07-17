@@ -1,6 +1,6 @@
 module Drasil.GamePhysics.Body where
 
-import Language.Drasil hiding (Vector, organization, section)
+import Language.Drasil hiding (Symbol(..), Vector, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI), cdb, rdb,
   refdb, _authors, _concepts, _constants, _constraints, _datadefs, _definitions,

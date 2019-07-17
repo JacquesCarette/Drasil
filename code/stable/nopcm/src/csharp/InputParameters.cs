@@ -5,6 +5,40 @@ using System.Collections.Generic;
 
 public class InputParameters {
     
+    public static void get_input(string filename, out double A_C, out double C_W, out double h_C, out double T_init, out double t_final, out double L, out double T_C, out double t_step, out double rho_W, out double D, out double A_tol, out double R_tol, out double T_W, out double E_W) {
+        StreamReader infile;
+        infile = new StreamReader(filename);
+        infile.ReadLine();
+        A_C = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        C_W = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        h_C = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        T_init = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        t_final = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        L = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        T_C = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        t_step = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        rho_W = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        D = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        A_tol = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        R_tol = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        T_W = Double.Parse(infile.ReadLine());
+        infile.ReadLine();
+        E_W = Double.Parse(infile.ReadLine());
+        infile.Close();
+    }
+    
     public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
         if (!((A_C <= 100000))) {
             Console.WriteLine("Warning: constraint violated");

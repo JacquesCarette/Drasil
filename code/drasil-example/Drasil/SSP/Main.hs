@@ -2,7 +2,7 @@ module Main (main) where
 
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
---   Structure(..))
+--   Structure(..), InputModule(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -20,7 +20,8 @@ import Drasil.SSP.Body (srs, printSetting) -- si
 --   comments = [],    -- CommentFunc, CommentClass, CommentMod
 --   onSfwrConstraint = Warning,  -- Warning, Exception
 --   onPhysConstraint = Warning,  -- Warning, Exception
---   inputStructure = Unbundled    -- Unbundled, Bundled
+--   inputStructure = Unbundled,    -- Unbundled, Bundled
+--   inputModule = Combined    -- Combined, Separated
 -- }
        
 main :: IO ()            

@@ -23,7 +23,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
 
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
-import Data.Drasil.Concepts.Computation (computerApp, inDatum, inParam, compcon, algorithm)
+import Data.Drasil.Concepts.Computation (computerApp, inDatum, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   assumption, characteristic, company, condition, content, dataConst, datum,
   definition, doccon, doccon', document, emphasis, environment, goal,
@@ -35,7 +35,7 @@ import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
-import Data.Drasil.Concepts.Math (graph, parameter, mathcon, mathcon')
+import Data.Drasil.Concepts.Math (graph, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (dimension, physicalcon, materialProprty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
@@ -99,7 +99,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
     IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
       (short glassBR)
     [IPurpose $ purpOfDocIntro document glassBR glaSlab,
-     IScope incScoR endScoR,
+     IScope scope,
      IChar [] (undIR ++ appStanddIR) [],
      IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
@@ -222,12 +222,10 @@ appStanddIR = [S "applicable" +:+ plural standard +:+
   (map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
   makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section]))]
 
-incScoR, endScoR :: Sentence
-incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
-  S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
-  S "related to", phrase blastTy]
-endScoR = foldl (+:+) EmptyS [S "predicts whether a", phrase glaSlab, 
-  S "is safe" `sOr` S "not"]
+scope :: Sentence
+scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
+  S "under a", phrase blast, S "loading following the ASTM", phrase standard,
+  sParen $ makeRef2S astm2009]
 
 {--Purpose of Document--}
 
@@ -257,9 +255,8 @@ orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   plural aspect, S "taken from Volere", phrase template,
   S "16", makeCiteS rbrtsn2012]
 
-orgOfDocIntroEnd = foldl (+:+) EmptyS [atStartNP' $ the Doc.dataDefn,
-  S "are used to support", plural definition `ofThe` S "different",
-  plural model]
+orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `sAre`
+  S "used to support", plural definition `ofThe` S "different", plural model]
 
 {--STAKEHOLDERS--}
 

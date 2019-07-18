@@ -17,6 +17,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Data (ModData(..))
+import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (convType, getStr)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
   (cppExts)
@@ -142,12 +143,16 @@ generateCode l unRepr g =
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
      when (l == Java) $ createDirectoryIfMissing False prog
-     createCodeFiles $ makeBuild (last unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l) $ C.Code $
-            map (if l == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
-            C.unCode $ makeCode (map (fst . ($ pckg)) unRepr) (getExt l)
+     createCodeFiles $ C.Code $ concatMap C.unCode [code, makefile, doxConf]
      setCurrentDirectory workingDir
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         pckg = runReader (genPackage prog) g
+        code = C.Code $ 
+          map (if l == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
+          C.unCode $ makeCode (map (fst . ($ pckg)) unRepr) (getExt l)
+        makefile = makeBuild (last unRepr pckg) (getBuildConfig l) 
+          (getRunnable l) (getExt l) code
+        doxConf = makeDoxConfig prog code (commented g)
 
 genPackage :: (PackageSym repr) => String -> Reader (State repr) 
   (repr (Package repr))

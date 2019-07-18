@@ -57,11 +57,11 @@ complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
 -- unless the compared symbols are the exact same, in which case it is ordered
 -- after the undecorated symbol.
 compsy :: Symbol -> Symbol -> Ordering
-compsy (Concat (Label "Δ" : x)) y =
+compsy (Concat (Variable "Δ" : x)) y =
   case compsy (Concat x) y of
     EQ -> GT
     other -> other
-compsy a (Concat (Label "Δ" : y)) =
+compsy a (Concat (Variable "Δ" : y)) =
   case compsy a (Concat y) of
     EQ -> LT
     other -> other
@@ -104,19 +104,20 @@ compsy (Atop _ b) a =
 compsy (Special a)  (Special b)  = compare a b
 compsy (Special _)  _            = LT
 compsy _            (Special _)  = GT
-compsy (Variable x) (Variable y) =
-  case compare (map toLower x) (map toLower y) of
-    EQ -> compare x y
-    other -> other
+compsy (Variable x) (Variable y) = compsyLower x y
+compsy (Variable x) (Label y)    = compsyLower x y
+compsy (Label x)    (Variable y) = compsyLower x y
+compsy (Label x)    (Label y)    = compsyLower x y
 compsy (Variable _) _ = LT
 compsy _ (Variable _) = GT
-compsy (Label x) (Label y) =
-  case compare (map toLower x) (map toLower y) of
-    EQ -> compare x y
-    other -> other
 compsy (Label _) _ = LT
 compsy _ (Label _) = GT
 compsy Empty Empty = EQ
+
+compsyLower :: String -> String -> Ordering
+compsyLower x y = case compare (map toLower x) (map toLower y) of
+  EQ    -> compare x y 
+  other -> other
 
 -- | Helper for creating a symbol with a superscript on the left side of the symbol.
 -- Arguments: Base symbol, then superscripted symbol.

@@ -22,8 +22,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat),
   NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Arctan, Arccos, Arcsin,
   Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
   Rational, Integer, IsIn, Point, Perc), Spacing(Thin), Fonts(Emph, Bold), 
-  Expr(Spc, Sqrt, Font, Fenced, MO, Over, Sup, Sub, Ident, Spec, Row, 
-  Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat), Label,
+  Expr(..), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
@@ -75,7 +74,7 @@ print sm = foldr (($+$) . (`lo` sm)) empty
 ------------------ Symbol ----------------------------
 symbol :: L.Symbol -> String
 symbol (L.Variable s) = s
-symbol (L.Label s)    = "\\text{" ++ s ++ "}"
+symbol (L.Label s)    = s -- "\\text{" ++ s ++ "}"
 symbol (L.Special s)  = unPL $ L.special s
 symbol (L.Concat sl)  = concatMap symbol sl
 --
@@ -109,6 +108,7 @@ pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
 pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Ident s)      = pure . text $ s
+pExpr (Label s)      = pure . text $ s -- command "text" s
 pExpr (Spec s)       = pure . text $ unPL $ L.special s
 --pExpr (Gr g)         = unPL $ greek g
 pExpr (Sub e)        = pure unders <> br (pExpr e)

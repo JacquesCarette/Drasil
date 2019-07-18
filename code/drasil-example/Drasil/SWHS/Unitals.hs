@@ -511,7 +511,7 @@ htFusionMin = mkQuantDef (unitary "htFusionMin"
 
 htFusionMax = mkQuantDef (unitary "htFusionMax"
   (nounPhraseSP "maximum specific latent heat of fusion")
-  (subMin (eqSymb htFusion)) UT.heatCapSpec Rational) 1000000 
+  (subMax (eqSymb htFusion)) UT.heatCapSpec Rational) 1000000 
 
 -- Used in Constraint 10
 coilSAMax = mkQuantDef (unitary "coilSAMax"

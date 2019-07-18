@@ -228,7 +228,7 @@ eop sm Add (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [expr e sm]]
 
 symbol :: Symbol -> P.Expr
 symbol (Variable s) = P.Ident s
-symbol (Label s)    = P.Ident s
+symbol (Label s)    = P.Label s
 symbol (Special s)  = P.Spec s
 --symbol (Greek g)    = P.Gr g
 symbol (Concat sl)  = P.Row $ map symbol sl

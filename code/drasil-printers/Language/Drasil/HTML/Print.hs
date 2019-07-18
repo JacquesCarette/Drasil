@@ -28,8 +28,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   Dot, Cross, Neg, Exp, Not, Dim, Arctan, Arccos, Arcsin, Cot, Csc, Sec, Tan, 
   Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
   Real, Rational, Natural, Integer, IsIn, Point, Perc), 
-  Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
-  Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
+  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
@@ -154,6 +153,7 @@ pExpr (Case ps)      = cases ps pExpr
 pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "</table>"
 pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
+pExpr (Label s)      = text s
 pExpr (Spec s)       = text $ unPH $ L.special s
 --pExpr (Gr g)         = unPH $ greek g
 pExpr (Sub e)        = sub $ pExpr e

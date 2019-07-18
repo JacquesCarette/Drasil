@@ -8,6 +8,7 @@ import Utils.Drasil
 import Control.Lens ((^.))
 import Prelude hiding (log)
 
+import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
@@ -31,8 +32,7 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 {--}
 
 constrained :: [ConstrainedChunk]
-constrained = map cnstrw inputsWUncrtn ++ map cnstrw inputsWUnitsUncrtn ++ 
-  map cnstrw derivedInsWUnitsUncrtn ++ map cnstrw derivedInsWUncrtn ++ 
+constrained = map cnstrw inputDataConstraints ++ 
   [cnstrw probBr, cnstrw probFail] 
 
 plateLen, plateWidth, charWeight, standOffDist :: UncertQ
@@ -221,13 +221,13 @@ loadDur    = unitary "loadDur"    (nounPhraseSP "duration of load")
 minThick   = unitary "minThick"   (nounPhraseSP "minimum thickness")
   lH metre Rational
 
-sdx         = unitary "sdx" (nounPhraseSP "stand off distance (x-component)")
+sdx         = unitary "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
   (sub (eqSymb standOffDist) lX) metre Real
 
-sdy         = unitary "sdy" (nounPhraseSP "stand off distance (y-component)")
+sdy         = unitary "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
   (sub (eqSymb standOffDist) lY) metre Real
 
-sdz         = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
+sdz         = unitary "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
   (sub (eqSymb standOffDist) lZ) metre Real
 
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?

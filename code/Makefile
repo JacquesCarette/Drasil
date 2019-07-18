@@ -16,7 +16,8 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 #####
 
 # Current list of examples
-EXAMPLES = tiny glassbr nopcm swhs ssp gamephys projectile template
+SRC_EXAMPLES = glassbr nopcm projectile
+EXAMPLES = $(SRC_EXAMPLES) tiny swhs ssp gamephys template
 
 # where they live
 TINY_DIR  = Tiny
@@ -48,9 +49,9 @@ DCP_E_SUFFIX = _deploy_code_path
 
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
 TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES))
-MOVE_DF_EXAMPLES =  $(addsuffix $(MOVE_DF_E_SUFFIX), $(EXAMPLES))
+MOVE_DF_EXAMPLES =  $(addsuffix $(MOVE_DF_E_SUFFIX), $(SRC_EXAMPLES))
 TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
-CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(EXAMPLES))
+CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(SRC_EXAMPLES))
 DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST MOVE_DF TEX CODE DCP
@@ -144,14 +145,13 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack
 graphs: $(GRAPH_PACKAGES)
 ###
 
+%$(MOVE_DF_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(MOVE_DF_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(GEN_E_SUFFIX)
-
-# GlassBR is odd, so it needs some special rules just for itself
-$(GLASSBR_EXE)$(MOVE_DF_E_SUFFIX): $(GLASSBR_EXE)$(GEN_E_SUFFIX)
-	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)python && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)python/
-	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)java && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)java/
-	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)csharp && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)csharp/
-	test -d $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)cpp && cp ./datafiles/$(GLASSBR_DIR)/*.txt $(BUILD_FOLDER)$(GLASSBR_DIR)/$(EXAMPLE_CODE_SUBFOLDER)cpp/
+	test -d $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)python && cp ./datafiles/$(EDIR)/*.txt $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)python/
+	test -d $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)java && cp ./datafiles/$(EDIR)/*.txt $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)java/
+	test -d $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)csharp && cp ./datafiles/$(EDIR)/*.txt $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)csharp/
+	test -d $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)cpp && cp ./datafiles/$(EDIR)/*.txt $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)cpp/
 
 prog: $(MOVE_DF_EXAMPLES)
 
@@ -171,22 +171,7 @@ tex: $(TEX_EXAMPLES)
 %$(CODE_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(MOVE_DF_E_SUFFIX)
-	@EDIR=$(EDIR) BUILD_FOLDER=$(BUILD_FOLDER) EXAMPLE_CODE_SUBFOLDER=$(EXAMPLE_CODE_SUBFOLDER) MAKE="$(MAKE)" "$(SHELL)" $(SCRIPT_FOLDER)code_build.sh; \
-	# If you're reading this comment because you got NoPCM working, then you should remove everything below this line until the next target. \
-	# (Next line with zero idents) Additionally you should remove the "; \" from the line immediately preceeding the comment on the previous line. \
-	RET=$$?; \
-	if [ $* = $(NOPCM_EXE) ]; then \
-		if [ $$RET != 0 ]; then \
-			echo "$(NOPCM_DIR) failed to compile as expected. Letting it slide...for now."; \
-			exit 0; \
-		else \
-			echo "$(NOPCM_DIR) surprisingly did not fail to compile!"; \
-			echo "Failing this build because you should check the Drasil makefile and alter the code as indicated by the comment for the currently invoked target"; \
-			exit 1; \
-		fi; \
-	else \
-		exit $$RET; \
-	fi
+	@EDIR=$(EDIR) BUILD_FOLDER=$(BUILD_FOLDER) EXAMPLE_CODE_SUBFOLDER=$(EXAMPLE_CODE_SUBFOLDER) MAKE="$(MAKE)" "$(SHELL)" $(SCRIPT_FOLDER)code_build.sh
 
 code: $(CODE_EXAMPLES)
 

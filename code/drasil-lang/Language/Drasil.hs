@@ -66,7 +66,7 @@ module Language.Drasil (
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat, ec
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant
-  , codeVC, vc, implVar , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
+  , codeVC, implVar , dcc, dcc', dccWDS, dccWDS', vc, vc'', vcUnit, ccs, cc, cc', cic
   -- Chunk.UncertainQuantity
   , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
   , uncrtnw
@@ -82,7 +82,7 @@ module Language.Drasil (
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
   -- Derivation
-  , Derivation
+  , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
   -- ShortName
   , ShortName, shortname', getStringSN
   --Citations
@@ -129,7 +129,7 @@ module Language.Drasil (
   -- Misc
   , mkTable
   -- People
-  , People, Person, person, HasName, name, manyNames, person', personWM
+  , People, Person, person, HasName, name, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   , comparePeople
   -- Stages
@@ -209,7 +209,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
-import Language.Drasil.Derivation (Derivation)
+import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
   -- Types
@@ -264,8 +264,8 @@ import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat,
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc -- all of it
-import Language.Drasil.People (People, Person, person, HasName(..), manyNames
-  , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
+import Language.Drasil.People (People, Person, person, HasName(..),
+  person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'', comparePeople)
 import Language.Drasil.RefProg(Reference(..), RefInfo(..))
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..), prepend)

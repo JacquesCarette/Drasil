@@ -3,7 +3,7 @@
 Last updated: July 19, 2018
 --------------------------------------------------
 
-HGHC.hs
+Body.hs
   - The main document body representation for the Tiny example
   
 HeatTransfer.hs

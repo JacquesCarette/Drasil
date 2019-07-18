@@ -29,37 +29,44 @@
           <div class="subsection">
             <h2>Table of Units</h2>
             <p class="paragraph">
-              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
+              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, <a href=#Table:ToU>Tab: ToU</a> lists the symbol, a description and the SI name.
             </p>
             <div id="Table:ToU">
               <table class="table">
                 <tr>
                   <th>Symbol</th>
                   <th>Description</th>
+                  <th>SI Name</th>
                 </tr>
                 <tr>
                   <td>&deg;C</td>
-                  <td>temperature (centigrade)</td>
+                  <td>temperature</td>
+                  <td>centigrade</td>
                 </tr>
                 <tr>
                   <td>J</td>
-                  <td>energy (joule)</td>
+                  <td>energy</td>
+                  <td>joule</td>
                 </tr>
                 <tr>
                   <td>kg</td>
-                  <td>mass (kilogram)</td>
+                  <td>mass</td>
+                  <td>kilogram</td>
                 </tr>
                 <tr>
                   <td>m</td>
-                  <td>length (metre)</td>
+                  <td>length</td>
+                  <td>metre</td>
                 </tr>
                 <tr>
                   <td>s</td>
-                  <td>time (second)</td>
+                  <td>time</td>
+                  <td>second</td>
                 </tr>
                 <tr>
                   <td>W</td>
-                  <td>power (watt)</td>
+                  <td>power</td>
+                  <td>watt</td>
                 </tr>
               </table>
             </div>
@@ -69,7 +76,7 @@
           <div class="subsection">
             <h2>Table of Symbols</h2>
             <p class="paragraph">
-              The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
+              The symbols used in this document are summarized in <a href=#Table:ToS>Tab: ToS</a> along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
             </p>
             <div id="Table:ToS">
               <table class="table">
@@ -374,7 +381,7 @@
                 </tr>
                 <tr>
                   <td><em>π</em></td>
-                  <td>Circumference to diameter ratio</td>
+                  <td>Ratio of circumference to diameter for any circle</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -521,7 +528,7 @@
               The main purpose of this document is to describe the modelling of solar water heating systems incorporating PCM. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -529,7 +536,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, SWHS predicts the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
+              The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
             </p>
           </div>
         </div>
@@ -837,6 +844,10 @@
                 <div id="TM:consThermE">
                   <table class="tdefn">
                     <tr>
+                      <th>Refname</th>
+                      <td><b>TM:consThermE</b></td>
+                    </tr>
+                    <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Conservation of thermal energy</p></td>
                     </tr>
@@ -846,10 +857,10 @@
                         <div class="equation">
                           <em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
                                                                                 <span class="fup">
-                                                                                  &part;&#8239;T
+                                                                                  &#8239;&part;T
                                                                                 </span>
                                                                                 <span class="fdn">
-                                                                                  &part;&#8239;t
+                                                                                  &#8239;&part;t
                                                                                 </span>
                                                                               </div></em>
                         </div>
@@ -903,6 +914,10 @@
                 </div>
                 <div id="TM:sensHtE">
                   <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:sensHtE</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Sensible heat energy</p></td>
@@ -987,6 +1002,10 @@
                 <div id="TM:latentHtE">
                   <table class="tdefn">
                     <tr>
+                      <th>Refname</th>
+                      <td><b>TM:latentHtE</b></td>
+                    </tr>
+                    <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Latent heat energy</p></td>
                     </tr>
@@ -996,10 +1015,10 @@
                         <div class="equation">
                           <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
                                                                     <span class="fup">
-                                                                      d&#8239;Q(τ)
+                                                                      &#8239;dQ(τ)
                                                                     </span>
                                                                     <span class="fdn">
-                                                                      d&#8239;τ
+                                                                      &#8239;dτ
                                                                     </span>
                                                                   </div>&#8239;dτ</em>
                         </div>
@@ -1023,10 +1042,10 @@
                         <p class="paragraph">
                           <em>Q</em> is the change in thermal energy (J), latent heat energy. <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
                                                                                                                                         <span class="fup">
-                                                                                                                                          d&#8239;Q(τ)
+                                                                                                                                          &#8239;dQ(τ)
                                                                                                                                         </span>
                                                                                                                                         <span class="fdn">
-                                                                                                                                          d&#8239;τ
+                                                                                                                                          &#8239;dτ
                                                                                                                                         </span>
                                                                                                                                       </div>&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em> (s). <em>t</em> is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:htFusion>DD: htFusion</a>. <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
                         </p>
@@ -1060,6 +1079,10 @@
                 </p>
                 <div id="GD:nwtnCooling">
                   <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:nwtnCooling</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Newton's law of cooling</p></td>
@@ -1107,8 +1130,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="GD:rocTempSimp">
                   <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:rocTempSimp</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td>
@@ -1120,8 +1148,8 @@
                       <td>
                         <div class="equation">
                           <em>m&#8239;C&#8239;<div class="fraction">
-                                                <span class="fup">d&#8239;T</span>
-                                                <span class="fdn">d&#8239;t</span>
+                                                <span class="fup">&#8239;dT</span>
+                                                <span class="fdn">&#8239;dt</span>
                                               </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
                         </div>
                       </td>
@@ -1177,65 +1205,69 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph">
-                  Detailed derivation of simplified rate of change of temperature :
-                </p>
-                <p class="paragraph">
-                  Integrating <a href=#TM:consThermE>TM: consThermE</a> over a volume (<em>V</em>), we have:
-                </p>
-                <div class="equation">
-                  <em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                             <span class="fup">
-                                                                                                                                               &part;&#8239;T
-                                                                                                                                             </span>
-                                                                                                                                             <span class="fdn">
-                                                                                                                                               &part;&#8239;t
-                                                                                                                                             </span>
-                                                                                                                                           </div>&#8239;dV</em>
-                </div>
-                <p class="paragraph">
-                  Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
-                </p>
-                <div class="equation">
-                  <em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                                          <span class="fup">
-                                                                                                                                                            &part;&#8239;T
-                                                                                                                                                          </span>
-                                                                                                                                                          <span class="fdn">
-                                                                                                                                                            &part;&#8239;t
-                                                                                                                                                          </span>
-                                                                                                                                                        </div>&#8239;dV</em>
-                </div>
-                <p class="paragraph">
-                  We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
-                </p>
-                <div class="equation">
-                  <em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                                          <span class="fup">
-                                                                                                                                                            &part;&#8239;T
-                                                                                                                                                          </span>
-                                                                                                                                                          <span class="fdn">
-                                                                                                                                                            &part;&#8239;t
-                                                                                                                                                          </span>
-                                                                                                                                                        </div>&#8239;dV</em>
-                </div>
-                <p class="paragraph">
-                  Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. The integral over the surface could be simplified because the thermal flux is assumed constant over <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> and <em>0</em> on all other surfaces. Outward flux is considered positive. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>, <a href=#assumpDWPCoV>A: Density-Water-PCM-Constant-over-Volume</a>, and <a href=#assumpSHECov>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
-                </p>
-                <div class="equation">
-                  <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
-                                                <span class="fup">d&#8239;T</span>
-                                                <span class="fdn">d&#8239;t</span>
-                                              </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-                </div>
-                <p class="paragraph">
-                  Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
-                </p>
-                <div class="equation">
-                  <em>m&#8239;C&#8239;<div class="fraction">
-                                        <span class="fup">d&#8239;T</span>
-                                        <span class="fdn">d&#8239;t</span>
-                                      </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
+                <div id="GD:rocTempSimpDeriv">
+                  <div class="subsubsubsection">
+                    <h4>
+                      Detailed derivation of simplified rate of change of temperature:
+                    </h4>
+                    <p class="paragraph">
+                      Integrating <a href=#TM:consThermE>TM: consThermE</a> over a volume (<em>V</em>), we have:
+                    </p>
+                    <div class="equation">
+                      <em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
+                                                                                                                                                 <span class="fup">
+                                                                                                                                                   &#8239;&part;T
+                                                                                                                                                 </span>
+                                                                                                                                                 <span class="fdn">
+                                                                                                                                                   &#8239;&part;t
+                                                                                                                                                 </span>
+                                                                                                                                               </div>&#8239;dV</em>
+                    </div>
+                    <p class="paragraph">
+                      Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
+                    </p>
+                    <div class="equation">
+                      <em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
+                                                                                                                                                              <span class="fup">
+                                                                                                                                                                &#8239;&part;T
+                                                                                                                                                              </span>
+                                                                                                                                                              <span class="fdn">
+                                                                                                                                                                &#8239;&part;t
+                                                                                                                                                              </span>
+                                                                                                                                                            </div>&#8239;dV</em>
+                    </div>
+                    <p class="paragraph">
+                      We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
+                    </p>
+                    <div class="equation">
+                      <em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
+                                                                                                                                                              <span class="fup">
+                                                                                                                                                                &#8239;&part;T
+                                                                                                                                                              </span>
+                                                                                                                                                              <span class="fdn">
+                                                                                                                                                                &#8239;&part;t
+                                                                                                                                                              </span>
+                                                                                                                                                            </div>&#8239;dV</em>
+                    </div>
+                    <p class="paragraph">
+                      Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. The integral over the surface could be simplified because the thermal flux is assumed constant over <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> and <em>0</em> on all other surfaces. Outward flux is considered positive. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>, <a href=#assumpDWPCoV>A: Density-Water-PCM-Constant-over-Volume</a>, and <a href=#assumpSHECov>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
+                    </p>
+                    <div class="equation">
+                      <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
+                                                    <span class="fup">&#8239;dT</span>
+                                                    <span class="fdn">&#8239;dt</span>
+                                                  </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
+                    </div>
+                    <p class="paragraph">
+                      Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
+                    </p>
+                    <div class="equation">
+                      <em>m&#8239;C&#8239;<div class="fraction">
+                                            <span class="fup">&#8239;dT</span>
+                                            <span class="fdn">&#8239;dt</span>
+                                          </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1247,6 +1279,10 @@
                 </p>
                 <div id="DD:htFluxC">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:htFluxC</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td>
@@ -1316,8 +1352,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:htFluxP">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:htFluxP</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Heat flux into the PCM from water</p></td>
@@ -1382,8 +1423,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:balanceSolidPCM">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:balanceSolidPCM</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">ODE parameter for solid PCM</p></td>
@@ -1451,8 +1497,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:balanceLiquidPCM">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:balanceLiquidPCM</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">ODE parameter for liquid PCM</p></td>
@@ -1520,8 +1571,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:htFusion">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:htFusion</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Specific latent heat of fusion</p></td>
@@ -1583,8 +1639,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:meltFrac">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:meltFrac</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Melt fraction</p></td>
@@ -1650,8 +1711,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:aspectRatio">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:aspectRatio</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Aspect ratio</p></td>
@@ -1695,6 +1761,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -1708,6 +1775,10 @@
                 </p>
                 <div id="IM:eBalanceOnWtr">
                   <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:eBalanceOnWtr</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td>
@@ -1749,8 +1820,8 @@
                       <td>
                         <div class="equation">
                           <em><div class="fraction">
-                                <span class="fup">d&#8239;T<sub>W</sub></span>
-                                <span class="fdn">d&#8239;t</span>
+                                <span class="fup">&#8239;dT<sub>W</sub></span>
+                                <span class="fdn">&#8239;dt</span>
                               </div> = <div class="fraction">
                                          <span class="fup">1</span>
                                          <span class="fdn">τ<sub>W</sub></span>
@@ -1815,148 +1886,160 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph">Derivation of the energy balance on water:</p>
-                <p class="paragraph">
-                  To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#DD:htFluxC>DD: htFluxC</a>)  and from the water into the PCM as <em>q<sub>P</sub></em> (<a href=#DD:htFluxP>DD: htFluxP</a>), over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
-                </p>
-                <div class="equation">
-                  <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-                                                                <span class="fup">
-                                                                  d&#8239;T<sub>W</sub>
-                                                                </span>
-                                                                <span class="fdn">d&#8239;t</span>
-                                                              </div> = q<sub>C</sub>&#8239;A<sub>C</sub>&minus;q<sub>P</sub>&#8239;A<sub>P</sub></em>
-                </div>
-                <p class="paragraph">
-                  Using <a href=#DD:htFluxC>DD: htFluxC</a> and <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>C</sub></em> and <em>q<sub>P</sub></em> respectively, this can be written as:
-                </p>
-                <div class="equation">
-                  <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-                                                                <span class="fup">
-                                                                  d&#8239;T<sub>W</sub>
-                                                                </span>
-                                                                <span class="fdn">d&#8239;t</span>
-                                                              </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&minus;h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
-                </div>
-                <p class="paragraph">
-                  Dividing (3) by <em>m<sub>W</sub></em><em>C<sub>W</sub></em>, we obtain:
-                </p>
-                <div class="equation">
-                  <em><div class="fraction">
-                        <span class="fup">d&#8239;T<sub>W</sub></span>
-                        <span class="fdn">d&#8239;t</span>
-                      </div> = <div class="fraction">
-                                 <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
-                                 <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
-                               </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&minus;<div class="fraction">
-                                                                                        <span class="fup">
-                                                                                          h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                        </span>
-                                                                                        <span class="fdn">
-                                                                                          m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                                                        </span>
-                                                                                      </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
-                </div>
-                <p class="paragraph">
-                  Factoring the negative sign out of the second term of the RHS of Equation (4) and multiplying it by <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> yields:
-                </p>
-                <div class="equation">
-                  <em><div class="fraction">
-                        <span class="fup">d&#8239;T<sub>W</sub></span>
-                        <span class="fdn">d&#8239;t</span>
-                      </div> = <div class="fraction">
-                                 <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
-                                 <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
-                               </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&plus;<div class="fraction">
-                                                                                       <span class="fup">
-                                                                                         h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                       </span>
-                                                                                       <span class="fdn">
-                                                                                         h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                       </span>
-                                                                                     </div>&#8239;<div class="fraction">
-                                                                                                    <span class="fup">
-                                                                                                      h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                                    </span>
-                                                                                                    <span class="fdn">
-                                                                                                      m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                                                                    </span>
-                                                                                                  </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
-                </div>
-                <p class="paragraph">Which simplifies to:</p>
-                <div class="equation">
-                  <em><div class="fraction">
-                        <span class="fup">d&#8239;T<sub>W</sub></span>
-                        <span class="fdn">d&#8239;t</span>
-                      </div> = <div class="fraction">
-                                 <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
-                                 <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
-                               </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&plus;<div class="fraction">
-                                                                                       <span class="fup">
-                                                                                         h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                       </span>
-                                                                                       <span class="fdn">
-                                                                                         h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                       </span>
-                                                                                     </div>&#8239;<div class="fraction">
-                                                                                                    <span class="fup">
-                                                                                                      h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                                    </span>
-                                                                                                    <span class="fdn">
-                                                                                                      m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                                                                    </span>
-                                                                                                  </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
-                </div>
-                <p class="paragraph">
-                  Setting <em>τ<sub>W</sub> = <div class="fraction">
-                                                <span class="fup">
-                                                  m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                </span>
-                                                <span class="fdn">
-                                                  h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                </span>
-                                              </div></em> (<a href=#DD:htFusion>DD: htFusion</a>) and <em>η = <div class="fraction">
-                                                                                                                <span class="fup">
-                                                                                                                  h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                                                </span>
-                                                                                                                <span class="fdn">
-                                                                                                                  h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                                                </span>
-                                                                                                              </div></em> (<a href=#DD:meltFrac>DD: meltFrac</a>), Equation (5) can be written as:
-                </p>
-                <div class="equation">
-                  <em><div class="fraction">
-                        <span class="fup">d&#8239;T<sub>W</sub></span>
-                        <span class="fdn">d&#8239;t</span>
-                      </div> = <div class="fraction">
-                                 <span class="fup">1</span>
-                                 <span class="fdn">τ<sub>W</sub></span>
-                               </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&plus;<div class="fraction">
-                                                                                       <span class="fup">
-                                                                                         η
-                                                                                       </span>
-                                                                                       <span class="fdn">
-                                                                                         τ<sub>W</sub>
-                                                                                       </span>
-                                                                                     </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
-                </div>
-                <p class="paragraph">
-                  Finally, factoring out <em><div class="fraction">
-                                               <span class="fup">1</span>
-                                               <span class="fdn">τ<sub>W</sub></span>
-                                             </div></em> , we are left with the governing ODE for (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>):
-                </p>
-                <div class="equation">
-                  <em><div class="fraction">
-                        <span class="fup">d&#8239;T<sub>W</sub></span>
-                        <span class="fdn">d&#8239;t</span>
-                      </div> = <div class="fraction">
-                                 <span class="fup">1</span>
-                                 <span class="fdn">τ<sub>W</sub></span>
-                               </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>&plus;η&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>))</em>
+                <div id="IM:eBalanceOnWtrDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of the energy balance on water:</h4>
+                    <p class="paragraph">
+                      To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#DD:htFluxC>DD: htFluxC</a>)  and from the water into the PCM as <em>q<sub>P</sub></em> (<a href=#DD:htFluxP>DD: htFluxP</a>), over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+                    </p>
+                    <div class="equation">
+                      <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
+                                                                    <span class="fup">
+                                                                      &#8239;dT<sub>W</sub>
+                                                                    </span>
+                                                                    <span class="fdn">
+                                                                      &#8239;dt
+                                                                    </span>
+                                                                  </div> = q<sub>C</sub>&#8239;A<sub>C</sub>&minus;q<sub>P</sub>&#8239;A<sub>P</sub></em>
+                    </div>
+                    <p class="paragraph">
+                      Using <a href=#DD:htFluxC>DD: htFluxC</a> and <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>C</sub></em> and <em>q<sub>P</sub></em> respectively, this can be written as:
+                    </p>
+                    <div class="equation">
+                      <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
+                                                                    <span class="fup">
+                                                                      &#8239;dT<sub>W</sub>
+                                                                    </span>
+                                                                    <span class="fdn">
+                                                                      &#8239;dt
+                                                                    </span>
+                                                                  </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&minus;h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
+                    </div>
+                    <p class="paragraph">
+                      Dividing (3) by <em>m<sub>W</sub></em><em>C<sub>W</sub></em>, we obtain:
+                    </p>
+                    <div class="equation">
+                      <em><div class="fraction">
+                            <span class="fup">&#8239;dT<sub>W</sub></span>
+                            <span class="fdn">&#8239;dt</span>
+                          </div> = <div class="fraction">
+                                     <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
+                                     <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
+                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&minus;<div class="fraction">
+                                                                                            <span class="fup">
+                                                                                              h<sub>P</sub>&#8239;A<sub>P</sub>
+                                                                                            </span>
+                                                                                            <span class="fdn">
+                                                                                              m<sub>W</sub>&#8239;C<sub>W</sub>
+                                                                                            </span>
+                                                                                          </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
+                    </div>
+                    <p class="paragraph">
+                      Factoring the negative sign out of the second term of the RHS of Equation (4) and multiplying it by <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> yields:
+                    </p>
+                    <div class="equation">
+                      <em><div class="fraction">
+                            <span class="fup">&#8239;dT<sub>W</sub></span>
+                            <span class="fdn">&#8239;dt</span>
+                          </div> = <div class="fraction">
+                                     <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
+                                     <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
+                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&plus;<div class="fraction">
+                                                                                           <span class="fup">
+                                                                                             h<sub>C</sub>&#8239;A<sub>C</sub>
+                                                                                           </span>
+                                                                                           <span class="fdn">
+                                                                                             h<sub>C</sub>&#8239;A<sub>C</sub>
+                                                                                           </span>
+                                                                                         </div>&#8239;<div class="fraction">
+                                                                                                        <span class="fup">
+                                                                                                          h<sub>P</sub>&#8239;A<sub>P</sub>
+                                                                                                        </span>
+                                                                                                        <span class="fdn">
+                                                                                                          m<sub>W</sub>&#8239;C<sub>W</sub>
+                                                                                                        </span>
+                                                                                                      </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
+                    </div>
+                    <p class="paragraph">Which simplifies to:</p>
+                    <div class="equation">
+                      <em><div class="fraction">
+                            <span class="fup">&#8239;dT<sub>W</sub></span>
+                            <span class="fdn">&#8239;dt</span>
+                          </div> = <div class="fraction">
+                                     <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
+                                     <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
+                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&plus;<div class="fraction">
+                                                                                           <span class="fup">
+                                                                                             h<sub>P</sub>&#8239;A<sub>P</sub>
+                                                                                           </span>
+                                                                                           <span class="fdn">
+                                                                                             h<sub>C</sub>&#8239;A<sub>C</sub>
+                                                                                           </span>
+                                                                                         </div>&#8239;<div class="fraction">
+                                                                                                        <span class="fup">
+                                                                                                          h<sub>C</sub>&#8239;A<sub>C</sub>
+                                                                                                        </span>
+                                                                                                        <span class="fdn">
+                                                                                                          m<sub>W</sub>&#8239;C<sub>W</sub>
+                                                                                                        </span>
+                                                                                                      </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
+                    </div>
+                    <p class="paragraph">
+                      Setting <em>τ<sub>W</sub> = <div class="fraction">
+                                                    <span class="fup">
+                                                      m<sub>W</sub>&#8239;C<sub>W</sub>
+                                                    </span>
+                                                    <span class="fdn">
+                                                      h<sub>C</sub>&#8239;A<sub>C</sub>
+                                                    </span>
+                                                  </div></em> (<a href=#DD:htFusion>DD: htFusion</a>) and <em>η = <div class="fraction">
+                                                                                                                    <span class="fup">
+                                                                                                                      h<sub>P</sub>&#8239;A<sub>P</sub>
+                                                                                                                    </span>
+                                                                                                                    <span class="fdn">
+                                                                                                                      h<sub>C</sub>&#8239;A<sub>C</sub>
+                                                                                                                    </span>
+                                                                                                                  </div></em> (<a href=#DD:meltFrac>DD: meltFrac</a>), Equation (5) can be written as:
+                    </p>
+                    <div class="equation">
+                      <em><div class="fraction">
+                            <span class="fup">&#8239;dT<sub>W</sub></span>
+                            <span class="fdn">&#8239;dt</span>
+                          </div> = <div class="fraction">
+                                     <span class="fup">1</span>
+                                     <span class="fdn">τ<sub>W</sub></span>
+                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&plus;<div class="fraction">
+                                                                                           <span class="fup">
+                                                                                             η
+                                                                                           </span>
+                                                                                           <span class="fdn">
+                                                                                             τ<sub>W</sub>
+                                                                                           </span>
+                                                                                         </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
+                    </div>
+                    <p class="paragraph">
+                      Finally, factoring out <em><div class="fraction">
+                                                   <span class="fup">1</span>
+                                                   <span class="fdn">τ<sub>W</sub></span>
+                                                 </div></em> , we are left with the governing ODE for (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>):
+                    </p>
+                    <div class="equation">
+                      <em><div class="fraction">
+                            <span class="fup">&#8239;dT<sub>W</sub></span>
+                            <span class="fdn">&#8239;dt</span>
+                          </div> = <div class="fraction">
+                                     <span class="fup">1</span>
+                                     <span class="fdn">τ<sub>W</sub></span>
+                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>&plus;η&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>))</em>
+                    </div>
+                  </div>
                 </div>
                 <div id="IM:eBalanceOnPCM">
                   <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:eBalanceOnPCM</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td>
@@ -1998,8 +2081,8 @@
                       <td>
                         <div class="equation">
                           <em><div class="fraction">
-                                <span class="fup">d&#8239;T<sub>P</sub></span>
-                                <span class="fdn">d&#8239;t</span>
+                                <span class="fup">&#8239;dT<sub>P</sub></span>
+                                <span class="fdn">&#8239;dt</span>
                               </div> = <span class="casebr">{</span>
                                        <div class="cases">
                                          <span>
@@ -2094,72 +2177,80 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph">
-                  Detailed derivation of the energy balance on the PCM during  sensible heating phase:
-                </p>
-                <p class="paragraph">
-                  To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> over phase change material surface area <em>A<sub>P</sub></em>. There is no heat flux output. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
-                </p>
-                <div class="equation">
-                  <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
-                                                                            <span class="fup">
-                                                                              d&#8239;T<sub>P</sub>
-                                                                            </span>
-                                                                            <span class="fdn">
-                                                                              d&#8239;t
-                                                                            </span>
-                                                                          </div> = q<sub>P</sub>&#8239;A<sub>P</sub></em>
+                <div id="IM:eBalanceOnPCMDeriv">
+                  <div class="subsubsubsection">
+                    <h4>
+                      Detailed derivation of the energy balance on the PCM during sensible heating phase:
+                    </h4>
+                    <p class="paragraph">
+                      To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> over phase change material surface area <em>A<sub>P</sub></em>. There is no heat flux output. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+                    </p>
+                    <div class="equation">
+                      <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
+                                                                                <span class="fup">
+                                                                                  &#8239;dT<sub>P</sub>
+                                                                                </span>
+                                                                                <span class="fdn">
+                                                                                  &#8239;dt
+                                                                                </span>
+                                                                              </div> = q<sub>P</sub>&#8239;A<sub>P</sub></em>
+                    </div>
+                    <p class="paragraph">
+                      Using <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>P</sub></em>, this equation can be written as:
+                    </p>
+                    <div class="equation">
+                      <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
+                                                                                <span class="fup">
+                                                                                  &#8239;dT<sub>P</sub>
+                                                                                </span>
+                                                                                <span class="fdn">
+                                                                                  &#8239;dt
+                                                                                </span>
+                                                                              </div> = h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
+                    </div>
+                    <p class="paragraph">
+                      Dividing by <em>m<sub>P</sub></em> <em>C<sub>P</sub><sup>S</sup></em> we obtain:
+                    </p>
+                    <div class="equation">
+                      <em><div class="fraction">
+                            <span class="fup">&#8239;dT<sub>P</sub></span>
+                            <span class="fdn">&#8239;dt</span>
+                          </div> = <div class="fraction">
+                                     <span class="fup">h<sub>P</sub>&#8239;A<sub>P</sub></span>
+                                     <span class="fdn">
+                                       m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
+                                     </span>
+                                   </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
+                    </div>
+                    <p class="paragraph">
+                      Setting <em>τ<sub>P</sub><sup>S</sup></em> = <em>m<sub>P</sub></em> <em>C<sub>P</sub><sup>S</sup></em> / <em>h<sub>P</sub></em> <em>A<sub>P</sub></em> , this can be written as:
+                    </p>
+                    <div class="equation">
+                      <em><div class="fraction">
+                            <span class="fup">&#8239;dT<sub>P</sub></span>
+                            <span class="fdn">&#8239;dt</span>
+                          </div> = <div class="fraction">
+                                     <span class="fup">1</span>
+                                     <span class="fdn">τ<sub>P</sub><sup>S</sup></span>
+                                   </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
+                    </div>
+                    <p class="paragraph">
+                      Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>τ<sub>P</sub><sup>S</sup></em> is replaced by <em>τ<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#assumpVCMPN>A: Volume-Change-Melting-PCM-Negligible</a>).
+                    </p>
+                    <p class="paragraph">
+                      In the case where <em>T<sub>P</sub> = T<sub>melt</sub><sup>P</sup></em> and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d <em>T<sub>P</sub></em> / d <em>t</em> = 0.
+                    </p>
+                    <p class="paragraph">
+                      This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (<a href=#assumpNGSP>A: No-Gaseous-State-PCM</a>).
+                    </p>
+                  </div>
                 </div>
-                <p class="paragraph">
-                  Using <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>P</sub></em>, this equation can be written as:
-                </p>
-                <div class="equation">
-                  <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
-                                                                            <span class="fup">
-                                                                              d&#8239;T<sub>P</sub>
-                                                                            </span>
-                                                                            <span class="fdn">
-                                                                              d&#8239;t
-                                                                            </span>
-                                                                          </div> = h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
-                </div>
-                <p class="paragraph">
-                  Dividing by <em>m<sub>P</sub></em> <em>C<sub>P</sub><sup>S</sup></em> we obtain:
-                </p>
-                <div class="equation">
-                  <em><div class="fraction">
-                        <span class="fup">d&#8239;T<sub>P</sub></span>
-                        <span class="fdn">d&#8239;t</span>
-                      </div> = <div class="fraction">
-                                 <span class="fup">h<sub>P</sub>&#8239;A<sub>P</sub></span>
-                                 <span class="fdn">
-                                   m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
-                                 </span>
-                               </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
-                </div>
-                <p class="paragraph">
-                  Setting <em>τ<sub>P</sub><sup>S</sup></em> = <em>m<sub>P</sub></em> <em>C<sub>P</sub><sup>S</sup></em> / <em>h<sub>P</sub></em> <em>A<sub>P</sub></em> , this can be written as:
-                </p>
-                <div class="equation">
-                  <em><div class="fraction">
-                        <span class="fup">d&#8239;T<sub>P</sub></span>
-                        <span class="fdn">d&#8239;t</span>
-                      </div> = <div class="fraction">
-                                 <span class="fup">1</span>
-                                 <span class="fdn">τ<sub>P</sub><sup>S</sup></span>
-                               </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
-                </div>
-                <p class="paragraph">
-                  Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>τ<sub>P</sub><sup>S</sup></em> is replaced by <em>τ<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#assumpVCMPN>A: Volume-Change-Melting-PCM-Negligible</a>).
-                </p>
-                <p class="paragraph">
-                  In the case where <em>T<sub>P</sub> = T<sub>melt</sub><sup>P</sup></em> and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d <em>T<sub>P</sub></em> / d <em>t</em> = 0.
-                </p>
-                <p class="paragraph">
-                  This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (<a href=#assumpNGSP>A: No-Gaseous-State-PCM</a>).
-                </p>
                 <div id="IM:heatEInWtr">
                   <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:heatEInWtr</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Heat energy in the water</p></td>
@@ -2241,8 +2332,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="IM:heatEInPCM">
                   <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:heatEInPCM</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Heat energy in the PCM</p></td>
@@ -2368,20 +2464,21 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:DataConstraints">
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A: PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <span class="fdn">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                h<sub>min</sub>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div></em>, where <em>h<sub>min</sub></em> is the thickness of a &quot;sheet&quot; of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A: PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <span class="fup">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     2
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <span class="fdn">
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     h<sub>min</sub>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   </span>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </div></em>, where <em>h<sub>min</sub></em> is the thickness of a "sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -2570,6 +2667,14 @@
                   </table>
                   <p class="caption">Input Data Constraints</p>
                 </div>
+              </div>
+            </div>
+            <div id="Sec:CorSolProps">
+              <div class="subsubsection">
+                <h3>Properties of a Correct Solution</h3>
+                <p class="paragraph">
+                  <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+                </p>
                 <div id="Table:OutDataConstraints">
                   <table class="table">
                     <tr>
@@ -2599,11 +2704,6 @@
                   </table>
                   <p class="caption">Output Data Constraints</p>
                 </div>
-              </div>
-            </div>
-            <div id="Sec:CorSolProps">
-              <div class="subsubsection">
-                <h3>Properties of a Correct Solution</h3>
                 <p class="paragraph">
                   A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:htFluxC>DD: htFluxC</a> and <a href=#DD:htFluxP>DD: htFluxP</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
                 </p>
@@ -2617,7 +2717,7 @@
                   <em>E<sub>P</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
                 </div>
                 <p class="paragraph">
-                  Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanity&quot; checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than <em>C<sub>tol</sub></em> <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>.
+                  Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as "sanity" checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than <em>C<sub>tol</sub></em> <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>.
                 </p>
               </div>
             </div>
@@ -2657,7 +2757,7 @@
               </p>
               <p>
                 <div id="checkWithPhysConsts">
-                  Check-Input-with-Physical_Constraints: Verify that the inputs satisfy the required physical constraints shown in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
+                  Check-Input-with-Physical_Constraints: Verify that the inputs satisfy the required physical constraints shown in <a href=#Sec:DataConstraints>Section: Data Constraints</a>.
                 </div>
               </p>
               <p>
@@ -2919,7 +3019,7 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
         </p>
         <div id="Table:TraceMatAvsAll">
           <table class="table">
@@ -3608,6 +3708,121 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#correct>NFR: Correct</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiable>NFR: Verifiable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#understandable>NFR: Understandable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#reusable>NFR: Reusable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a></td>
               <td></td>
               <td></td>
@@ -4204,9 +4419,19 @@
               <th>
                 <a href=#calcPCMMeltEnd>FR: Calculate-PCM-Melt-End-Time</a>
               </th>
+              <th><a href=#correct>NFR: Correct</a></th>
+              <th><a href=#verifiable>NFR: Verifiable</a></th>
+              <th><a href=#understandable>NFR: Understandable</a></th>
+              <th><a href=#reusable>NFR: Reusable</a></th>
+              <th><a href=#maintainable>NFR: Maintainable</a></th>
             </tr>
             <tr>
               <td><a href=#waterTempGS>GS: Predict-Water-Temperature</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4264,9 +4489,19 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#waterEnergyGS>GS: Predict-Water-Energy</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4324,9 +4559,19 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#inputInitQuants>FR: Input-Initial-Quantities</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4384,11 +4629,21 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#checkWithPhysConsts>FR: Check-Input-with-Physical_Constraints</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4448,6 +4703,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
@@ -4466,6 +4726,11 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4512,6 +4777,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
@@ -4532,6 +4802,11 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4576,11 +4851,21 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4640,6 +4925,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
@@ -4659,6 +4949,186 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#correct>NFR: Correct</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiable>NFR: Verifiable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#understandable>NFR: Understandable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#reusable>NFR: Reusable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

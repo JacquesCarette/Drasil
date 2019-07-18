@@ -101,12 +101,12 @@ expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (pr
 expr (AssocA Add l)    sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
 expr (AssocA Mul l)    sm = P.Row $ mulExpr l sm
 expr (Deriv Part a b)  sm =
-  P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
-        (P.Row [P.Spec Partial, P.Spc P.Thin,
+  P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, expr a sm])
+        (P.Row [P.Spc P.Thin, P.Spec Partial,
                 symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb])
 expr (Deriv Total a b)sm =
-  P.Div (P.Row [P.Ident "d", P.Spc P.Thin, expr a sm])
-        (P.Row [P.Ident "d", P.Spc P.Thin, symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb])
+  P.Div (P.Row [P.Spc P.Thin, P.Ident "d", expr a sm])
+        (P.Row [P.Spc P.Thin, P.Ident "d", symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb]) 
 expr (C c)            sm = symbol $ lookupC (sm ^. ckdb) c
 expr (FCall f [x])    sm = P.Row [expr f sm, parens $ expr x sm]
 expr (FCall f l)      sm = P.Row [expr f sm,
@@ -387,20 +387,26 @@ layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
   dtyp (layPairs pairs) 
   (P.S $ getRefAdd x)
   where layPairs = map (\(x',y) -> (x', map (lay sm) y))
-layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
-layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
-layLabelled  _ (LblC _ (Bib bib))               = T.Bib $ map layCite bib
+layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
+layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
+  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
+  where ref = P.S $ refAdd x ++ "Deriv"
+layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
+layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
 layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
-layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
-layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
-layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
-layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
-layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
+layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
+layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
+  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
+  where ref = P.S "nolabel1"
+layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
+layUnlabelled sm (Figure c f wp)  = T.Figure (P.S "nolabel2") (spec sm c) f wp
+layUnlabelled sm (Graph ps w h t) = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (\(x,y) -> (x, map temp y ))

@@ -2,15 +2,16 @@ module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, 
   charIntRdrF) where
 
 import Language.Drasil
-import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, goalStmt, thModel, inModel)
+import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
+  charOfIR, orgOfDoc, goalStmt, thModel, inModel)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation as Doc (characteristic, decision,
-  definition, desSpec, design, designDoc, document, documentation, environment,
-  goal, goalStmt, implementation, intReader, model, organization, purpose,
-  requirement, scope, section_, softwareDoc, softwareVAV, srs, system, theory,
-  user, vavPlan)
+import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
+  decision, definition, desSpec, design, designDoc, document, documentation,
+  environment, goal, goalStmt, implementation, intReader, model, organization,
+  purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs, system,
+  theory, user, vavPlan)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986)
 
@@ -75,17 +76,10 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 
 
 -- | constructor for scope of requirements subsection
--- mainRequirement  - the main requirement for the program
--- programName      - the name of the program
--- intendedPurpose  - the intended purpose of the program
-scopeOfRequirements :: Idea a => Sentence -> a -> Sentence -> Section
-scopeOfRequirements mainRequirement _ EmptyS = SRS.scpOfReq [scpBody] []
-  where scpBody = foldlSP [phrase scope `ofThe'` plural requirement,
-                  S "includes", mainRequirement]
-scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [scpBody] []
-  where scpBody = foldlSP [phrase scope `ofThe'` plural requirement,
-                  S "includes" +:+. mainRequirement, S "Given the appropriate",
-                  S "inputs" `sC` short programName +:+ intendedPurpose]
+-- req - the main requirement for the program
+scopeOfRequirements :: Sentence -> Section
+scopeOfRequirements req = SRS.scpOfReq [foldlSP
+  [phrase scope `ofThe'` plural requirement, S "includes", req]] []
 
 -- | constructor for characteristics of the intended reader subsection
 -- progName
@@ -105,19 +99,16 @@ charIntRdrF progName assumed topic asset r =
 -- sectionRef - reference to user characteristic section
 intReaderIntro :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] ->
   Section -> [Contents]
-intReaderIntro progName assumed topic [] sectionRef = 
-  [foldlSP [S "Reviewers of this", phrase documentation,
-  S "should have an understanding of" +:+. 
-  foldlList Comma List (assumed ++ topic), S "The", plural user,
-  S "of", short progName, S "can have a lower level of expertise, as", 
-  S "explained in", makeRef2S sectionRef]]
 intReaderIntro progName assumed topic asset sectionRef = 
   [foldlSP [S "Reviewers of this", phrase documentation,
-  S "should have an understanding of" +:+. 
-  foldlList Comma List (assumed ++ topic), S "It would be an asset to",
-  S "understand" +:+. foldlList Comma List asset, S "The", plural user,
-  S "of", short progName, S "can have a lower level of expertise, as", 
-  S "explained in", makeRef2S sectionRef]]
+  S "should have an understanding of" +:+.
+  foldlList Comma List (assumed ++ topic), assetSent, S "The",
+  plural user `sOf` short progName, S "can have a lower level" `sOf`
+  S "expertise, as explained" `sIn` makeRef2S sectionRef]]
+  where
+    assetSent = case asset of
+      [] -> EmptyS
+      _  -> S "It would be an asset to understand" +:+. foldlList Comma List asset
 
 -- | Doc.organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
 orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
@@ -127,15 +118,14 @@ orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 --    trailing sentences -> [Contents]
 orgIntro :: NamedIdea c => Sentence -> c -> Section -> Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
-          intro, S "The presentation follows the standard pattern of presenting",
-          foldlsC (map plural [Doc.goal, theory, definition]) `sC` S "and assumptions.",
-          S "For readers that would like a more bottom up approach" `sC`
-          S "they can start reading the", plural bottom,
-          S "in", makeRef2S bottomSec +:+
-          S "and trace back to find any additional information they require"],
-          mkParagraph $ lastS trailingSentence]
-          where lastS EmptyS = refineChain $ zip [goalStmt, thModel, inModel]
-                  [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]
-                lastS t = refineChain (zip [goalStmt, thModel, inModel] 
-                  [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]) 
-                  +:+. t
+  intro, S "The presentation follows the standard pattern of presenting" +:+.
+  foldlList Comma List (map plural [nw Doc.goal, nw theory, nw definition, nw assumption]),
+  S "For readers that would like a more bottom up approach" `sC`
+  S "they can start reading the", plural bottom `sIn` makeRef2S bottomSec `sAnd`
+  S "trace back to find any additional information they require"],
+  folder [refineChain (zip [goalStmt, thModel, inModel]
+         [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]), trailingSentence]]
+  where
+    folder = case trailingSentence of
+      EmptyS -> foldlSP_
+      _      -> foldlSP

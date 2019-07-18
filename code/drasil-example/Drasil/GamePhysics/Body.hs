@@ -1,26 +1,19 @@
 module Drasil.GamePhysics.Body where
 
-import Language.Drasil hiding (Vector, organization, section, sec)
+import Language.Drasil hiding (Vector, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (ChunkDB, RefbyMap, ReferenceDB, SystemInformation(SI),
-  TraceMap, ccss, cdb, collectUnits, generateRefbyMap, rdb, refdb, _authors,
-  _concepts, _constants, _constraints, _datadefs, _definitions, _defSequence,
-  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
+import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI), cdb, rdb,
+  refdb, _authors, _concepts, _constants, _constraints, _datadefs, _definitions,
+  _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 
-import Drasil.DocLang (DerivationDisplay(..), DocDesc, DocSection(..), 
-  Emphasis(..), Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), 
-  IntroSub(..), RefSec(..), RefTab(..), SCSSub(..), SSDSec(SSDProg), 
-  SSDSub(..), SolChSpec(SCSProg), TConvention(..), TSIntro(..),
-  Verbosity(Verbose), ExistingSolnSec(..), GSDSec(..), GSDSub(..),
-  TraceabilitySec(TraceabilityProg), ReqrmntSec(..), ReqsSub(..),
-  LCsSec(..), UCsSec(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), generateTraceMap', dataConstraintUncertainty, inDataConstTbl,
-  intro, mkDoc, outDataConstTbl, outDataConstTbl, tsymb,
-  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
-  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  traceMatStandard, solutionLabel)
+import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
+  Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), IntroSub(..),
+  RefSec(..), RefTab(..), SCSSub(..), SRSDecl, SSDSec(SSDProg), SSDSub(..),
+  SolChSpec(SCSProg), TConvention(..), TSIntro(..), Verbosity(Verbose),
+  OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
+  ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
+  PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -29,7 +22,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   information, input_, interface, model, object, organization, physical,
   physicalSim, physics, problem, product_, project, quantity, realtime,
   reference, section_, simulation, software, softwareSys, srsDomains, system,
-  systemConstraint, sysCont, task, template, user, doccon, doccon')
+  systemConstraint, sysCont, task, template, user, doccon, doccon', property)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
@@ -41,42 +34,38 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, rightHand, physicCon)
-import qualified Data.Drasil.Concepts.Math as CM (equation, law, mathcon, mathcon')
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision)
+import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
+  mathcon, mathcon', rightHand)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GamePhysics.Concepts (chipmunk, acronyms, threeD, twoD)
-import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefns)
+import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs)
+import qualified Drasil.GamePhysics.DataDefs as GP (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
-import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, propsDeriv)
+import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 
-import qualified Data.Map as Map
-
-authors :: People
-authors = [alex, luthfi]
-
-auths :: Sentence
-auths = S $ manyNames authors
-
 srs :: Document
-srs = mkDoc mkSRS for' sysInfo
+srs = mkDoc mkSRS for' si
 
-checkSi :: [UnitDefn] -- FIXME
-checkSi = collectUnits everything symbTT 
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
 
-mkSRS :: DocDesc 
+resourcePath :: String
+resourcePath = "../../../datafiles/GamePhysics/"
+
+mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
   IntroSec $ IntroProg para1_introduction_intro (short chipmunk)
   [IPurpose para1_purpose_of_document_intro,
-   IScope scope_of_requirements_intro_p1 EmptyS,
+   IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
    IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
    GSDSec $ GSDProg2 [
@@ -85,85 +74,65 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
    SSDSec $ SSDProg
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
-        , Goals [S "the" +:+ plural input_] goals]
+        , Goals [S "the kinematic" +:+ plural property :+: S ", and" +:+ plural QP.force +:+
+                 S "including any" +:+ sParen (phrase CP.collision +:+ plural QP.force) +:+
+                 S "applied on a set of" +:+ plural CP.rigidBody]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
-        , TMs [] (Label : stdFields) tModsNew
-        , GDs [] [] [] HideDerivation -- No Gen Defs for Gamephysics
-        , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-          iModelsNew ShowDerivation
-        , Constraints EmptyS dataConstraintUncertainty (S "FIXME")
-            [inDataConstTbl inputConstraints, outDataConstTbl outputConstraints]
-        , CorrSolnPpties propsDeriv
+        , TMs [] (Label : stdFields)
+        , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , Constraints (S "FIXME") inputConstraints
+        , CorrSolnPpties outputConstraints []
         ]
       ],
     ReqrmntSec $ ReqsProg [
-      FReqsSub funcReqs [],
-      NonFReqsSub nonfuncReqs
+      FReqsSub [],
+      NonFReqsSub
     ],
-    LCsSec $ LCsProg likelyChgs,
-    UCsSec $ UCsProg unlikelyChgs,
-    ExistingSolnSec $ ExistSolnProg offShelfSols,
-    TraceabilitySec $ TraceabilityProg (map fst traceabilityMatrices)
-      (map (foldlList Comma List . snd) traceabilityMatrices) (map (LlC . fst) traceabilityMatrices) [],
+    LCsSec,
+    UCsSec,
+    OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
+    TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
     AuxConstntSec $ AuxConsProg chipmunk [],
     Bibliography]
-      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
+      where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
-
-refBy :: RefbyMap
-refBy = generateRefbyMap label
-
-dataDefs :: [DataDefinition]
-dataDefs = getTraceMapFromDD $ getSCSSub mkSRS
-
-iMods :: [InstanceModel]
-iMods = getTraceMapFromIM $ getSCSSub mkSRS
-
-genDef :: [GenDefn]
-genDef = getTraceMapFromGD $ getSCSSub mkSRS
-
-theory :: [TheoryModel]
-theory = getTraceMapFromTM $ getSCSSub mkSRS
-
-concIns :: [ConceptInstance]
-concIns = assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
-
-section :: [Section]
-section = sec
-
-sec :: [Section]
-sec = extractSection srs
-
-stdFields :: Fields
-stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
-    --FIXME: Need to be able to print defn for gravitational constant.
-
-sysInfo :: SystemInformation
-sysInfo = SI {
+si :: SystemInformation
+si = SI {
   _sys = chipmunk,
   _kind = Doc.srs,
-  _authors = authors,
-  _quants = symbTT, 
+  _authors = [alex, luthfi],
+  -- FIXME: The _quants field should be filled in with all the symbols, however
+  -- #1658 is why this is empty, otherwise we end up with unused (and probably
+  -- should be removed) symbols. But that's for another time. This is "fine"
+  -- because _quants are only used relative to #1658 and in code gen. And
+  -- Gamephysics is not in a place to be able to do codegen.
+  _quants =  [] :: [QuantityDict], -- map qw iModelsNew ++ map qw symbolsAll,
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
-  _datadefs = dataDefns,
+  _datadefs = GP.dataDefs,
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
   _defSequence = blockQDefs,
   _constraints = inputConstraints,
   _constants = [],
-  _sysinfodb = everything,
+  _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB
 }
 
-symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) everything
+concIns :: [ConceptInstance]
+concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
+
+section :: [Section]
+section = extractSection srs
+
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
+
+--FIXME: Need to be able to print defn for gravitational constant.
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -173,29 +142,18 @@ refDB = rdb citations concIns
 units :: [UnitDefn] -- FIXME
 units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
-everything :: ChunkDB
-everything = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
+symbMap :: ChunkDB
+symbMap = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
   ++ map nw acronyms ++ map nw prodtcon ++ map nw iModelsNew
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units
-  label refBy dataDefs iMods genDef theory
-  concIns section []
+  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units GP.dataDefs
+  iModelsNew [] tModsNew concIns section []
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw symbolsAll ++ map nw acronyms
- ++ map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
- dataDefs iMods genDef theory concIns section
- []
-
-printSetting :: PrintingInformation
-printSetting = PI everything defaultConfiguration
-
-
-
-resourcePath :: String
-resourcePath = "../../../datafiles/GamePhysics/"
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
@@ -249,10 +207,8 @@ para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldl
 ---------------------------------
 -- 2.2 : Scope of Requirements --
 ---------------------------------
-scope_of_requirements_intro_p1 :: Sentence
-
-scope_of_requirements_intro_p1 = foldlSent_
-  [S "the", phrase physicalSim `sOf` getAcc twoD, 
+scope :: Sentence
+scope = foldlSent_ [S "the", phrase physicalSim `sOf` getAcc twoD,
   plural CP.rigidBody, S "acted on by", plural QP.force]
 
 --scope_of_requirements_intro_p2 = EmptyS
@@ -269,7 +225,6 @@ scope_of_requirements_intro_p1 = foldlSent_
 -------------------------------------
 
 organizationOfDocumentsIntro :: Sentence
-
 organizationOfDocumentsIntro = foldlSent 
   [S "The", phrase organization, S "of this", phrase document, 
   S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
@@ -378,7 +333,7 @@ probDescIntro = foldlSent_
 -----------------------------------------
 
 terms :: [ConceptChunk]
-terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand]
+terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand]
 
 -----------------------------
 -- 4.1.2 : Goal Statements --
@@ -445,7 +400,6 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 ------------------------------
 -- SECTION 5 : REQUIREMENTS --
 ------------------------------
-
 -- in Requirements.hs
 
 -----------------------------------
@@ -490,9 +444,6 @@ offShelfSols3DList = LlC $ enumBullet solutionLabel [
 -----------------------------------------------------
 -- SECTION 8 : Traceability Matrices and Graph    --
 -----------------------------------------------------
-
-traceabilityMatrices :: [(LabelledContent, [Sentence])]
-traceabilityMatrices = traceMatStandard sysInfo
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

@@ -32,24 +32,24 @@
 This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
-The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
-\begin{longtable}{l l}
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, \hyperref[Table:ToU]{Tab: ToU} lists the symbol, a description and the SI name.
+\begin{longtable}{l l l}
 \toprule
-Symbol & Description
+\textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
 \\
 \midrule
 \endhead
-${}^{\circ}$ & angle (degree)
+${}^{\circ}$ & angle & degree
 \\
-kg & mass (kilogram)
+kg & mass & kilogram
 \\
-m & length (metre)
+m & length & metre
 \\
-N & force (newton)
+N & force & newton
 \\
-Pa & pressure (pascal)
+Pa & pressure & pascal
 \\
-s & time (second)
+s & time & second
 \\
 \bottomrule
 \caption{}
@@ -57,10 +57,10 @@ s & time (second)
 \end{longtable}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-The table that follows summarizes the symbols used in this document along with their units. Throughout the document, values with a subscript $i$ implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass.
+The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. Throughout the document, values with a subscript $i$ implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass. For vector quantities, the units shown are for each component of the vector.
 \begin{longtabu}{l X[l] l}
 \toprule
-Symbol & Description & Units
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
 \midrule
 \endhead
@@ -86,9 +86,9 @@ ${F_{S}}$ & Factor of Safety: The global stability metric of a slip surface of a
 \\
 ${{F_{S}}^{min}}$ & Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface & --
 \\
-${F_{x}}$ & X-Component of the Force:  & N
+${F_{x}}$ & X-Coordinate of the Force:  & N
 \\
-${F_{y}}$ & Y-Component of the Force:  & N
+${F_{y}}$ & Y-Coordinate of the Force:  & N
 \\
 $\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
@@ -218,7 +218,7 @@ ${γ_{w}}$ & Unit Weight of Water: The weight of one cubic meter of water. & $\f
 \\
 $λ$ & Proportionality Constant: for the interslice normal to shear force ratio & --
 \\
-$π$ & Circumference to Diameter Ratio: The ratio of a circle's circumference to its diameter & --
+$π$ & Ratio of Circumference to Diameter for Any Circle: The ratio of a circle's circumference to its diameter & --
 \\
 $ρ$ & Density: mass per unit volume & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
@@ -254,13 +254,13 @@ ${\mathbf{ℓ}_{s}}$ & Surface Lengths of Slices: in the direction parallel to t
 \label{Sec:TAbbAcc}
 \begin{longtable}{l l}
 \toprule
-Abbreviation & Full Form
+\textbf{Abbreviation} & \textbf{Full Form}
 \\
 \midrule
 \endhead
-2D & two-dimensional
+2D & Two-Dimensional
 \\
-3D & three-dimensional
+3D & Three-Dimensional
 \\
 A & Assumption
 \\
@@ -294,7 +294,7 @@ Uncert. & Typical Uncertainty
 \end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
-A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
+A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in significant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
 The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (SSP). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -439,7 +439,7 @@ This section focuses on the general equations and laws that SSP is based on.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:factOfSafety}
 \phantomsection 
 \label{TM:factOfSafety}
@@ -459,12 +459,13 @@ Description & \begin{symbDescription}
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:mobShr]{GD: mobShr}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:equilibrium}
 \phantomsection 
 \label{TM:equilibrium}
@@ -476,22 +477,23 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${F_{x}}$ is the x-component of the force (N)}
-              \item{${F_{y}}$ is the y-component of the force (N)}
+              \item{${F_{x}}$ is the x-coordinate of the force (N)}
+              \item{${F_{y}}$ is the y-coordinate of the force (N)}
               \item{$M$ is the moment (Nm)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & For a body in static equilibrium, the net forces and moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the x-component of the force ${F_{x}}$ and y-component of the force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
+Notes & For a body in static equilibrium, the net forces and moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the x-coordinate of the force ${F_{x}}$ and y-coordinate of the force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:normForcEq]{GD: normForcEq}, \hyperref[GD:momentEql]{GD: momentEql}, and \hyperref[GD:bsShrFEq]{GD: bsShrFEq}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:mcShrStrgth}
 \phantomsection 
 \label{TM:mcShrStrgth}
@@ -514,12 +516,13 @@ Notes & In this model the shear strength $τ$ is proportional to the product of 
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:resShr]{GD: resShr}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:effStress}
 \phantomsection 
 \label{TM:effStress}
@@ -541,12 +544,13 @@ Notes & $σ$ is defined in \hyperref[DD:stress]{DD: stress}.
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:effNormF]{GD: effNormF}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:NewtonSecLawMot}
 \phantomsection 
 \label{TM:NewtonSecLawMot}
@@ -568,7 +572,8 @@ Notes & The net force $\mathbf{F}$ (N) on a body is proportional to the accelera
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[GD:weight]{GD: weight}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
@@ -576,7 +581,7 @@ This section collects the laws and equations that will be used to build the inst
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:normForcEq}
 \phantomsection 
 \label{GD:normForcEq}
@@ -609,13 +614,16 @@ Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in th
 Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{GD:normForcEqDeriv}
 Normal force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:bsShrFEq}
 \phantomsection 
 \label{GD:bsShrFEq}
@@ -648,13 +656,16 @@ Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in th
 Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{GD:bsShrFEqDeriv}
 Base shear force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:resShr}
 \phantomsection 
 \label{GD:resShr}
@@ -681,13 +692,16 @@ Notes & ${\mathbf{ℓ}_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
 Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & \hyperref[GD:mobShr]{GD: mobShr}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{GD:resShrDeriv}
 Derived by substituting \hyperref[DD:stress]{DD: stress} into the Mohr-Coulomb shear strength, \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}, and multiplying both sides of the equation by the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction. The effective angle of friction $φ'$ and the effective cohesion $c'$ are not indexed by $i$ becaused they are assumed to be isotropic (\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}) and the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}, \hyperref[assumpSP]{A: Soil-Properties}).
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:mobShr}
 \phantomsection 
 \label{GD:mobShr}
@@ -716,13 +730,16 @@ Notes & ${\mathbf{ℓ}_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
 Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{GD:mobShrDeriv}
 Mobilized shear forces is derived by dividing the definition of the $\mathbf{P}$ from \hyperref[GD:resShr]{GD: resShr}. by the definition of the factor of safety from \hyperref[TM:factOfSafety]{TM: factOfSafety}. The factor of safety ${F_{S}}$ is not indexed by $i$ because it is assumed to be constant for the entire slip surface (\hyperref[assumpFOS]{A: Factor-of-Safety}).
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:effNormF}
 \phantomsection 
 \label{GD:effNormF}
@@ -747,13 +764,16 @@ Notes & ${\mathbf{U}_{b}}$ is defined in \hyperref[GD:baseWtrF]{GD: baseWtrF}.
 Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{GD:effNormFDeriv}
 Derived by substituting \hyperref[DD:stress]{DD: stress} into \hyperref[TM:effStress]{TM: effStress} and multiplying both sides of the equation by the the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:resShearWO}
 \phantomsection 
 \label{GD:resShearWO}
@@ -785,12 +805,13 @@ Notes & $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\ma
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
 RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} and \hyperref[IM:fctSfty]{IM: fctSfty}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:mobShearWO}
 \phantomsection 
 \label{GD:mobShearWO}
@@ -818,12 +839,13 @@ Notes & $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\ma
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
 RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} and \hyperref[IM:fctSfty]{IM: fctSfty}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:normShrR}
 \phantomsection 
 \label{GD:normShrR}
@@ -848,12 +870,13 @@ Notes & Mathematical representation of the primary assumption for the Morgenster
 Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} and \hyperref[IM:fctSfty]{IM: fctSfty}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:momentEql}
 \phantomsection 
 \label{GD:momentEql}
@@ -889,8 +912,11 @@ Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} for t
 Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{GD:momentEqlDeriv}
 Moment is equal to torque, so the equation from \hyperref[DD:torque]{DD: torque} will be used to calculate moments:
 \begin{displaymath}
 τ=\mathbf{r}\times\mathbf{F}
@@ -915,7 +941,7 @@ The moment for the interslice normal water force acting on slice interface $i-1$
 \begin{displaymath}
 {\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
 \end{displaymath}
-The interslice shear force at slice interface $i$ tends to rotate in the clockwise direction, and the length of the moment arm is the length from the slice edge to the slice midpoint, equivalent to half of the width of the slice, so the moment is.:
+The interslice shear force at slice interface $i$ tends to rotate in the clockwise direction, and the length of the moment arm is the length from the slice edge to the slice midpoint, equivalent to half of the width of the slice, so the moment is:
 \begin{displaymath}
 {\mathbf{X}}_{i} \frac{{\mathbf{b}}_{i}}{2}
 \end{displaymath}
@@ -950,7 +976,7 @@ The base hydrostatic force and slice weight both act in the direction of the poi
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:weight}
 \phantomsection 
 \label{GD:weight}
@@ -972,14 +998,17 @@ Description & \begin{symbDescription}
 Source & \hyperref{https://en.wikipedia.org/wiki/Weight}{}{}{Definition of Weight}
 \\ \midrule \\
 RefBy & \hyperref[GD:sliceWght]{GD: sliceWght} and \hyperref[GD:momentEql]{GD: momentEql}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{Detailed derivation of weight:}
+\label{GD:weightDeriv}
 Under the influence of gravity, and assuming a 2D Cartesian coordinate system with down as positive, an object has an acceleration vector of:
 \begin{displaymath}
 \mathbf{a}=\begin{bmatrix}
-0\\
+           0\\
 g \mathbf{\hat{j}}
-\end{bmatrix}
+           \end{bmatrix}
 \end{displaymath}
 Since there is only one non-zero vector component, the scalar value $W$ will be used for the weight. In this scenario, Newton's second law of motion from \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} can be expressed as:
 \begin{displaymath}
@@ -996,7 +1025,7 @@ W=V γ
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:sliceWght}
 \phantomsection 
 \label{GD:sliceWght}
@@ -1007,10 +1036,10 @@ Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \begin{cases}
-\left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{slope,i-1}}-{\mathbf{y}_{slip,i-1}}\right) {γ_{Sat}}, & {\mathbf{y}_{wt,i}}>{\mathbf{y}_{slope,i}}\lor{}{\mathbf{y}_{wt,i-1}}>{\mathbf{y}_{slope,i-1}}\\
+                                                         \left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{slope,i-1}}-{\mathbf{y}_{slip,i-1}}\right) {γ_{Sat}}, & {\mathbf{y}_{wt,i}}>{\mathbf{y}_{slope,i}}\lor{}{\mathbf{y}_{wt,i-1}}>{\mathbf{y}_{slope,i-1}}\\
 \left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{wt,i}}+{\mathbf{y}_{slope,i-1}}-{\mathbf{y}_{wt,i-1}}\right) {γ_{dry}}+\left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}\right) {γ_{Sat}}, & {\mathbf{y}_{slope,i}}\geq{}{\mathbf{y}_{wt,i}}\geq{}{\mathbf{y}_{slip,i}}\land{}{\mathbf{y}_{slope,i-1}}\geq{}{\mathbf{y}_{wt,i-1}}\geq{}{\mathbf{y}_{slip,i-1}}\\
 \left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{slope,i-1}}-{\mathbf{y}_{slip,i-1}}\right) {γ_{dry}}, & {\mathbf{y}_{wt,i}}<{\mathbf{y}_{slip,i}}\lor{}{\mathbf{y}_{wt,i-1}}<{\mathbf{y}_{slip,i-1}}
-\end{cases}
+                                                         \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1029,8 +1058,11 @@ Notes & This equation is based on the assumption that the surface and the base o
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[GD:normForcEq]{GD: normForcEq}, \hyperref[GD:momentEql]{GD: momentEql}, \hyperref[GD:mobShearWO]{GD: mobShearWO}, and \hyperref[GD:bsShrFEq]{GD: bsShrFEq}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{GD:sliceWghtDeriv}
 For the case where the water table is above the slope surface, the weights come from the weight of the saturated soil. Substituting values for saturated soil into the equation for weight from \hyperref[GD:weight]{GD: weight} yields:
 \begin{displaymath}
 {\mathbf{W}}_{i}={\mathbf{V}_{sat,i}} {γ_{Sat}}
@@ -1058,7 +1090,7 @@ For the case where the water table is between the slope surface and slip surface
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:hsPressure}
 \phantomsection 
 \label{GD:hsPressure}
@@ -1082,12 +1114,13 @@ Notes & This equation is derived from Bernoulli's equation for a slow moving flu
 Source & \hyperref{https://en.wikipedia.org/wiki/Pressure}{}{}{Definition of Pressure}
 \\ \midrule \\
 RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF} and \hyperref[GD:baseWtrF]{GD: baseWtrF}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:baseWtrF}
 \phantomsection 
 \label{GD:baseWtrF}
@@ -1098,9 +1131,9 @@ Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{U}_{b,i}}={\mathbf{ℓ}_{b,i}} {γ_{w}} \frac{1}{2} \begin{cases}
-{\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}, & {\mathbf{y}_{wt,i}}>{\mathbf{y}_{slip,i}}\lor{}{\mathbf{y}_{wt,i-1}}>{\mathbf{y}_{slip,i-1}}\\
+                                                                     {\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}, & {\mathbf{y}_{wt,i}}>{\mathbf{y}_{slip,i}}\lor{}{\mathbf{y}_{wt,i-1}}>{\mathbf{y}_{slip,i-1}}\\
 0, & {\mathbf{y}_{wt,i}}\leq{}{\mathbf{y}_{slip,i}}\land{}{\mathbf{y}_{wt,i-1}}\leq{}{\mathbf{y}_{slip,i-1}}
-\end{cases}
+                                                                     \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1117,8 +1150,11 @@ Notes & This equation is based on the assumption that the base of a slice is a s
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[GD:effNormF]{GD: effNormF}, and \hyperref[GD:baseWtrF]{GD: baseWtrF}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{GD:baseWtrFDeriv}
 The base hydrostatic forces come from the hydrostatic pressure exerted by the water above the base of each slice. The equation for hydrostatic pressure from \hyperref[GD:hsPressure]{GD: hsPressure} is:
 \begin{displaymath}
 p=γ h
@@ -1135,7 +1171,7 @@ This equation is the non-zero case of \hyperref[GD:baseWtrF]{GD: baseWtrF}. The 
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:srfWtrF}
 \phantomsection 
 \label{GD:srfWtrF}
@@ -1146,9 +1182,9 @@ Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{U}_{t,i}}={\mathbf{ℓ}_{s,i}} {γ_{w}} \frac{1}{2} \begin{cases}
-{\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}, & {\mathbf{y}_{wt,i}}>{\mathbf{y}_{slope,i}}\lor{}{\mathbf{y}_{wt,i-1}}>{\mathbf{y}_{slope,i-1}}\\
+                                                                     {\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}, & {\mathbf{y}_{wt,i}}>{\mathbf{y}_{slope,i}}\lor{}{\mathbf{y}_{wt,i-1}}>{\mathbf{y}_{slope,i-1}}\\
 0, & {\mathbf{y}_{wt,i}}\leq{}{\mathbf{y}_{slope,i}}\land{}{\mathbf{y}_{wt,i-1}}\leq{}{\mathbf{y}_{slope,i-1}}
-\end{cases}
+                                                                     \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1165,8 +1201,11 @@ Notes & This equation is based on the assumption that the surface of a slice is 
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF}, \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, \hyperref[GD:normForcEq]{GD: normForcEq}, \hyperref[GD:momentEql]{GD: momentEql}, \hyperref[GD:mobShearWO]{GD: mobShearWO}, and \hyperref[GD:bsShrFEq]{GD: bsShrFEq}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{GD:srfWtrFDeriv}
 The surface hydrostatic forces come from the hydrostatic pressure exerted by the water above the surface of each slice. The equation for hydrostatic pressure from \hyperref[GD:hsPressure]{GD: hsPressure} is:
 \begin{displaymath}
 p=γ h
@@ -1186,7 +1225,7 @@ This section collects and defines all the data needed to build the instance mode
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:intersliceWtrF}
 \phantomsection 
 \label{DD:intersliceWtrF}
@@ -1199,10 +1238,10 @@ Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{H}=\begin{cases}
-\frac{\left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{slip,i}}\right)^{2}}{2} {γ_{w}}+\left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}\right)^{2} {γ_{w}}, & {\mathbf{y}_{wt,i}}\geq{}{\mathbf{y}_{slope,i}}\\
+                      \frac{\left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{slip,i}}\right)^{2}}{2} {γ_{w}}+\left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}\right)^{2} {γ_{w}}, & {\mathbf{y}_{wt,i}}\geq{}{\mathbf{y}_{slope,i}}\\
 \frac{\left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}\right)^{2}}{2} {γ_{w}}, & {\mathbf{y}_{slope,i}}>{\mathbf{y}_{wt,i}}>{\mathbf{y}_{slip,i}}\\
 0, & {\mathbf{y}_{wt,i}}\leq{}{\mathbf{y}_{slip,i}}
-\end{cases}
+                      \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1217,12 +1256,13 @@ Description & \begin{symbDescription}
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, and \hyperref[GD:mobShearWO]{GD: mobShearWO}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angleA}
 \phantomsection 
 \label{DD:angleA}
@@ -1249,12 +1289,13 @@ Notes & This equation is based on the assumption that the base of a slice is a s
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, \hyperref[GD:normForcEq]{GD: normForcEq}, \hyperref[GD:momentEql]{GD: momentEql}, \hyperref[GD:mobShearWO]{GD: mobShearWO}, \hyperref[DD:lengthLb]{DD: lengthLb}, \hyperref[GD:bsShrFEq]{GD: bsShrFEq}, \hyperref[DD:convertFunc2]{DD: convertFunc2}, and \hyperref[DD:convertFunc1]{DD: convertFunc1}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:angleB}
 \phantomsection 
 \label{DD:angleB}
@@ -1281,12 +1322,13 @@ Notes & This equation is based on the assumption that the surface of a slice is 
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, \hyperref[GD:normForcEq]{GD: normForcEq}, \hyperref[GD:momentEql]{GD: momentEql}, \hyperref[GD:mobShearWO]{GD: mobShearWO}, \hyperref[DD:lengthLs]{DD: lengthLs}, and \hyperref[GD:bsShrFEq]{GD: bsShrFEq}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:lengthB}
 \phantomsection 
 \label{DD:lengthB}
@@ -1310,12 +1352,13 @@ Description & \begin{symbDescription}
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:sliceWght]{GD: sliceWght}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}, \hyperref[GD:momentEql]{GD: momentEql}, \hyperref[DD:lengthLs]{DD: lengthLs}, and \hyperref[DD:lengthLb]{DD: lengthLb}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:lengthLb}
 \phantomsection 
 \label{DD:lengthLb}
@@ -1342,12 +1385,13 @@ Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB} and $\math
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:resShr]{GD: resShr}, \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[GD:mobShr]{GD: mobShr}, and \hyperref[GD:baseWtrF]{GD: baseWtrF}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:lengthLs}
 \phantomsection 
 \label{DD:lengthLs}
@@ -1374,12 +1418,13 @@ Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB} and $\math
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[GD:srfWtrF]{GD: srfWtrF}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:slcHeight}
 \phantomsection 
 \label{DD:slcHeight}
@@ -1406,12 +1451,13 @@ Notes & This equation is based on the assumption that the surface and base of a 
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} and \hyperref[GD:momentEql]{GD: momentEql}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:stress}
 \phantomsection 
 \label{DD:stress}
@@ -1435,12 +1481,13 @@ Description & \begin{symbDescription}
 Source & \cite{huston2008}
 \\ \midrule \\
 RefBy & \hyperref[GD:resShr]{GD: resShr}, \hyperref[TM:effStress]{TM: effStress}, and \hyperref[GD:effNormF]{GD: effNormF}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:torque}
 \phantomsection 
 \label{DD:torque}
@@ -1466,12 +1513,13 @@ Notes & The torque on a body measures the the tendency of a force to rotate the 
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[GD:momentEql]{GD: momentEql}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:ratioVariation}
 \phantomsection 
 \label{DD:ratioVariation}
@@ -1484,14 +1532,14 @@ Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{f}=\begin{cases}
-1, & const_f\\
+                      1, & const_f\\
 \sin\left(π \frac{{\mathbf{x}_{slip,i}}-{\mathbf{x}_{slip,0}}}{{\mathbf{x}_{slip,n}}-{\mathbf{x}_{slip,0}}}\right), & \neg{}const_f
-\end{cases}
+                      \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{f}$ is the interslice normal to shear force ratio variation function (Unitless)}
-              \item{$π$ is the circumference to diameter ratio (Unitless)}
+              \item{$π$ is the ratio of circumference to diameter for any circle (Unitless)}
               \item{${\mathbf{x}_{slip}}$ is the x-coordinates of the slip surface (m)}
               \item{$i$ is the index (Unitless)}
               \item{$n$ is the number of slices (Unitless)}
@@ -1501,12 +1549,13 @@ Description & \begin{symbDescription}
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}, \hyperref[GD:normShrR]{GD: normShrR}, \hyperref[DD:convertFunc2]{DD: convertFunc2}, and \hyperref[DD:convertFunc1]{DD: convertFunc1}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:convertFunc1}
 \phantomsection 
 \label{DD:convertFunc1}
@@ -1536,12 +1585,13 @@ Notes & $\mathbf{f}$ is defined in \hyperref[DD:ratioVariation]{DD: ratioVariati
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
 RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs}, \hyperref[IM:fctSfty]{IM: fctSfty}, and \hyperref[DD:convertFunc2]{DD: convertFunc2}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:convertFunc2}
 \phantomsection 
 \label{DD:convertFunc2}
@@ -1572,12 +1622,13 @@ Notes & $\mathbf{f}$ is defined in \hyperref[DD:ratioVariation]{DD: ratioVariati
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
 RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} and \hyperref[IM:fctSfty]{IM: fctSfty}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:nrmForceSumDD}
 \phantomsection 
 \label{DD:nrmForceSumDD}
@@ -1601,12 +1652,13 @@ Description & \begin{symbDescription}
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:watForceSumDD}
 \phantomsection 
 \label{DD:watForceSumDD}
@@ -1630,12 +1682,13 @@ Description & \begin{symbDescription}
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & 
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:sliceHghtRightDD}
 \phantomsection 
 \label{DD:sliceHghtRightDD}
@@ -1660,12 +1713,13 @@ Description & \begin{symbDescription}
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:sliceHghtLeftDD}
 \phantomsection 
 \label{DD:sliceHghtLeftDD}
@@ -1690,7 +1744,8 @@ Description & \begin{symbDescription}
 Source & \cite{fredlund1977}
 \\ \midrule \\
 RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Instance Models}
 \label{Sec:IMs}
@@ -1700,7 +1755,7 @@ The Morgenstern-Price method is a vertical slice, limit equilibrium slope stabil
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:fctSfty}
 \phantomsection 
 \label{IM:fctSfty}
@@ -1734,8 +1789,11 @@ Notes & $\mathbf{R}$ is defined in \hyperref[GD:resShearWO]{GD: resShearWO}, $\m
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
 RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:intsliceFs]{IM: intsliceFs}, \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR: Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{IM:fctSftyDeriv}
 The mobilized shear force defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding Equation (1) below:
 \begin{displaymath}
 \left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{c}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{{\mathbf{N'}}_{i} \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{S}}}
@@ -1832,7 +1890,7 @@ ${F_{S}}$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) 
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:nrmShrFor}
 \phantomsection 
 \label{IM:nrmShrFor}
@@ -1863,8 +1921,11 @@ Notes & ${\mathbf{C}_{num}}$ is defined in \hyperref[IM:nrmShrForNum]{IM: nrmShr
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
 RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}, \hyperref[IM:intsliceFs]{IM: intsliceFs}, \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR: Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{IM:nrmShrForDeriv}
 From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR}, Equation (14) can be derived:
 \begin{displaymath}
 0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+λ \frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)+\frac{-{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
@@ -1885,7 +1946,7 @@ Equation (16) for $λ$ is a function of the unknown interslice normal forces $\m
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:nrmShrForNum}
 \phantomsection 
 \label{IM:nrmShrForNum}
@@ -1902,10 +1963,10 @@ Output Constraints &
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{C}_{num,i}}=\begin{cases}
-{\mathbf{b}}_{1} \left({\mathbf{G}}_{1}+{\mathbf{H}}_{1}\right) \tan\left({\mathbf{α}}_{1}\right), & i=1\\
+                                {\mathbf{b}}_{1} \left({\mathbf{G}}_{1}+{\mathbf{H}}_{1}\right) \tan\left({\mathbf{α}}_{1}\right), & i=1\\
 {\mathbf{b}}_{i} \left({{\mathbf{F}_{x}}^{G}}+{{\mathbf{F}_{x}}^{H}}\right) \tan\left({\mathbf{α}}_{i}\right)+\mathbf{h} -2 {\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
 {\mathbf{b}}_{n} \left({\mathbf{G}}_{n-1}+{\mathbf{H}}_{n-1}\right) \tan\left({\mathbf{α}}_{n-1}\right), & i=n
-\end{cases}
+                                \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1928,13 +1989,16 @@ Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $\mathbf{
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
 RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{IM:nrmShrForNumDeriv}
 See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${\mathbf{C}_{num}}$.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:nrmShrForDen}
 \phantomsection 
 \label{IM:nrmShrForDen}
@@ -1951,10 +2015,10 @@ Output Constraints &
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{C}_{den,i}}=\begin{cases}
-{\mathbf{b}}_{1} {\mathbf{f}}_{1} {\mathbf{G}}_{1}, & i=1\\
+                                {\mathbf{b}}_{1} {\mathbf{f}}_{1} {\mathbf{G}}_{1}, & i=1\\
 {\mathbf{b}}_{i} \left({\mathbf{f}}_{i} {\mathbf{G}}_{i}+{\mathbf{f}}_{i-1} {\mathbf{G}}_{i-1}\right), & 2\leq{}i\leq{}n-1\\
 {\mathbf{b}}_{n} {\mathbf{G}}_{n-1} {\mathbf{f}}_{n-1}, & i=1
-\end{cases}
+                                \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1971,13 +2035,16 @@ Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB} and $\math
 Source & \cite{chen2005} and \cite{karchewski2012}
 \\ \midrule \\
 RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{IM:nrmShrForDenDeriv}
 See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${\mathbf{C}_{den}}$.
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:intsliceFs}
 \phantomsection 
 \label{IM:intsliceFs}
@@ -1994,10 +2061,10 @@ Output Constraints &
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{G}}_{i}=\begin{cases}
-\frac{{F_{S}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}}{{\mathbf{Φ}}_{1}}, & i=1\\
+                            \frac{{F_{S}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}}{{\mathbf{Φ}}_{1}}, & i=1\\
 \frac{{\mathbf{Ψ}}_{i-1} {\mathbf{G}}_{i-1}+{F_{S}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}}{{\mathbf{Φ}}_{i}}, & 2\leq{}i\leq{}n-1\\
 0, & i=0\lor{}i=n
-\end{cases}
+                            \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -2016,8 +2083,11 @@ Notes & $\mathbf{T}$ is defined in \hyperref[GD:mobShearWO]{GD: mobShearWO}, $\m
 Source & \cite{chen2005}
 \\ \midrule \\
 RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:intsliceFs]{IM: intsliceFs}, \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces}, \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces}, \hyperref[displayFS]{FR: Display-Factor-of-Safety}, and \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+\paragraph{}
+\label{IM:intsliceFsDeriv}
 This derivation is identical to the derivation for \hyperref[IM:fctSfty]{IM: fctSfty} up until Equation (3) shown again below:
 \begin{displaymath}
 {\mathbf{G}}_{i} {\mathbf{Φ}}_{i}={\mathbf{Ψ}}_{i-1} {\mathbf{G}}_{i-1} {\mathbf{Φ}}_{i-1}+{F_{S}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}
@@ -2030,7 +2100,7 @@ The cases shown in \hyperref[IM:intsliceFs]{IM: intsliceFs} for when $i=0$, $i=1
 \par~
 
 \noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:crtSlpId}
 \phantomsection 
 \label{IM:crtSlpId}
@@ -2064,19 +2134,20 @@ Description & \begin{symbDescription}
               \item{$const_f$ is the decision on f (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The minimization function must enforce the constraints on the critical slip surface expressed in \hyperref[assumpSSC]{A: Slip-Surface-Concave} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints}. The sizes of ${\mathbf{x}_{wt}}$ and ${\mathbf{y}_{wt}}$ must be equal and not 1. The sizes of ${\mathbf{x}_{slope}}$ and ${\mathbf{y}_{slope}}$ must be equal and at least 2. The first and last ${\mathbf{x}_{wt}}$ values must be equal to the first and last ${\mathbf{x}_{slope}}$ values. ${\mathbf{x}_{wt}}$ and ${\mathbf{x}_{slope}}$ values must be monotonically increasing. ${{x_{slip}}^{maxExt}}$, ${{x_{slip}}^{maxEtr}}$, ${{x_{slip}}^{minExt}}$, and ${{x_{slip}}^{minEtr}}$ must be between or equal to the minimum and maximum ${\mathbf{x}_{slope}}$ values. ${{y_{slip}}^{max}}$ cannot be below the minimum ${\mathbf{y}_{slope}}$ value. ${{y_{slip}}^{min}}$ cannot be above the maximum ${\mathbf{y}_{slope}}$ value. All $x$ values of ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must be between ${{x_{slip}}^{minEtr}}$ and ${{x_{slip}}^{maxExt}}$. All $y$ values of ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must not be below ${{y_{slip}}^{min}}$. For any given vertex in ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ the $y$ value must not exceed the ${\mathbf{y}_{slope}}$ value corresponding to the same $x$ value. The first and last vertices in ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must each be equal to one of the vertices formed by ${\mathbf{x}_{slope}}$ and ${\mathbf{y}_{slope}}$. The slope between consecutive vertices must be always increasing as $x$ increases. The internal angle between consecutive vertices in ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must not be below 110 degrees.
+Notes & The minimization function must enforce the constraints on the critical slip surface expressed in \hyperref[assumpSSC]{A: Slip-Surface-Concave} and \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}. The sizes of ${\mathbf{x}_{wt}}$ and ${\mathbf{y}_{wt}}$ must be equal and not 1. The sizes of ${\mathbf{x}_{slope}}$ and ${\mathbf{y}_{slope}}$ must be equal and at least 2. The first and last ${\mathbf{x}_{wt}}$ values must be equal to the first and last ${\mathbf{x}_{slope}}$ values. ${\mathbf{x}_{wt}}$ and ${\mathbf{x}_{slope}}$ values must be monotonically increasing. ${{x_{slip}}^{maxExt}}$, ${{x_{slip}}^{maxEtr}}$, ${{x_{slip}}^{minExt}}$, and ${{x_{slip}}^{minEtr}}$ must be between or equal to the minimum and maximum ${\mathbf{x}_{slope}}$ values. ${{y_{slip}}^{max}}$ cannot be below the minimum ${\mathbf{y}_{slope}}$ value. ${{y_{slip}}^{min}}$ cannot be above the maximum ${\mathbf{y}_{slope}}$ value. All $x$ values of ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must be between ${{x_{slip}}^{minEtr}}$ and ${{x_{slip}}^{maxExt}}$. All $y$ values of ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must not be below ${{y_{slip}}^{min}}$. For any given vertex in ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ the $y$ value must not exceed the ${\mathbf{y}_{slope}}$ value corresponding to the same $x$ value. The first and last vertices in ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must each be equal to one of the vertices formed by ${\mathbf{x}_{slope}}$ and ${\mathbf{y}_{slope}}$. The slope between consecutive vertices must be always increasing as $x$ increases. The internal angle between consecutive vertices in ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must not be below 110 degrees.
 \\ \midrule \\
 Source & \cite{li2010}
 \\ \midrule \\
 RefBy & \hyperref[displayGraph]{FR: Display-Graph} and \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}
-\\ \bottomrule \end{tabular}
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 \begin{longtable}{l l l l}
 \toprule
-Var & Physical Constraints & Typical Value & Uncert.
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
 \midrule
 \endhead
@@ -2114,9 +2185,12 @@ $φ'$ & $0<φ'<90$ & $25.0$ ${}^{\circ}$ & 10$\%$
 \caption{Input Data Constraints}
 \label{Table:InDataConstraints}
 \end{longtable}
+\subsubsection{Properties of a Correct Solution}
+\label{Sec:CorSolProps}
+\hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
 \begin{longtable}{l l}
 \toprule
-Var & Physical Constraints
+\textbf{Var} & \textbf{Physical Constraints}
 \\
 \midrule
 \endhead
@@ -2128,9 +2202,6 @@ $(x,y)$ & --
 \caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
 \end{longtable}
-\subsubsection{Properties of a Correct Solution}
-\label{Sec:CorSolProps}
-FIXME.
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -2139,9 +2210,9 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 \begin{itemize}
 \item[Read-and-Store:\phantomsection\label{readAndStore}]Read the inputs, shown in \hyperref[Table:ReqInputs]{Table:ReqInputs}, and store the data.
-\item[Verify-Input:\phantomsection\label{verifyInput}]Verify that the input data lie within the physical constraints shown in \hyperref[Table:InDataConstraints]{Table:InDataConstraints}.
+\item[Verify-Input:\phantomsection\label{verifyInput}]Verify that the input data lie within the physical constraints shown in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.
 \item[Determine-Critical-Slip-Surface:\phantomsection\label{determineCritSlip}]Determine the critical slip surface for the input slope, corresponding to the minimum factor of safety, by using \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, and \hyperref[IM:intsliceFs]{IM: intsliceFs} to calculate the factor of safety for a slip surface and using \hyperref[IM:crtSlpId]{IM: crtSlpId} to find the slip surface that minimizes it.
-\item[Verify-Output:\phantomsection\label{verifyOutput}]Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints}.
+\item[Verify-Output:\phantomsection\label{verifyOutput}]Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
 \item[Display-Input:\phantomsection\label{displayInput}]Display as output the user-supplied inputs listed in \hyperref[Table:inputsToOutputTable]{Table:inputsToOutputTable}.
 \item[Display-Graph:\phantomsection\label{displayGraph}]Display the critical slip surface of the 2D slope, as determined from \hyperref[IM:crtSlpId]{IM: crtSlpId}, graphically.
 \item[Display-Factor-of-Safety:\phantomsection\label{displayFS}]Display the value of the factor of safety for the critical slip surface, as determined from \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, and \hyperref[IM:intsliceFs]{IM: intsliceFs}.
@@ -2151,7 +2222,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \end{itemize}
 \begin{longtable}{l l l}
 \toprule
-Symbol & Description & Units
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
 \midrule
 \endhead
@@ -2195,7 +2266,7 @@ $φ'$ & Effective angle of friction & ${}^{\circ}$
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
-Symbol & Name
+\textbf{Symbol} & \textbf{Name}
 \\
 \midrule
 \endhead
@@ -2246,7 +2317,7 @@ This section lists the unlikely changes to be made to the software.
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
 \begin{longtable}{l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[assumpSSC]{A: Slip-Surface-Concave} & \hyperref[assumpFOS]{A: Factor-of-Safety} & \hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} & \hyperref[assumpSP]{A: Soil-Properties} & \hyperref[assumpSLI]{A: Soil-Layers-Isotropic} & \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} & \hyperref[assumpPSC]{A: Plane-Strain-Conditions} & \hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} & \hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines} & \hyperref[assumpES]{A: Edge-Slices} & \hyperref[assumpSF]{A: Seismic-Force} & \hyperref[assumpSL]{A: Surface-Load} & \hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge} & \hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge} & \hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic} & \hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}
+\textbf{} & \textbf{\hyperref[assumpSSC]{A: Slip-Surface-Concave}} & \textbf{\hyperref[assumpFOS]{A: Factor-of-Safety}} & \textbf{\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}} & \textbf{\hyperref[assumpSP]{A: Soil-Properties}} & \textbf{\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}} & \textbf{\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear}} & \textbf{\hyperref[assumpPSC]{A: Plane-Strain-Conditions}} & \textbf{\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}} & \textbf{\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}} & \textbf{\hyperref[assumpES]{A: Edge-Slices}} & \textbf{\hyperref[assumpSF]{A: Seismic-Force}} & \textbf{\hyperref[assumpSL]{A: Surface-Load}} & \textbf{\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge}} & \textbf{\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge}} & \textbf{\hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic}} & \textbf{\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}}
 \\
 \midrule
 \endhead
@@ -2376,7 +2447,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF} & \hyperref[DD:angleA]{DD: angleA} & \hyperref[DD:angleB]{DD: angleB} & \hyperref[DD:lengthB]{DD: lengthB} & \hyperref[DD:lengthLb]{DD: lengthLb} & \hyperref[DD:lengthLs]{DD: lengthLs} & \hyperref[DD:slcHeight]{DD: slcHeight} & \hyperref[DD:stress]{DD: stress} & \hyperref[DD:torque]{DD: torque} & \hyperref[DD:ratioVariation]{DD: ratioVariation} & \hyperref[DD:convertFunc1]{DD: convertFunc1} & \hyperref[DD:convertFunc2]{DD: convertFunc2} & \hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD} & \hyperref[DD:watForceSumDD]{DD: watForceSumDD} & \hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD} & \hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD} & \hyperref[TM:factOfSafety]{TM: factOfSafety} & \hyperref[TM:equilibrium]{TM: equilibrium} & \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} & \hyperref[TM:effStress]{TM: effStress} & \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} & \hyperref[GD:normForcEq]{GD: normForcEq} & \hyperref[GD:bsShrFEq]{GD: bsShrFEq} & \hyperref[GD:resShr]{GD: resShr} & \hyperref[GD:mobShr]{GD: mobShr} & \hyperref[GD:effNormF]{GD: effNormF} & \hyperref[GD:resShearWO]{GD: resShearWO} & \hyperref[GD:mobShearWO]{GD: mobShearWO} & \hyperref[GD:normShrR]{GD: normShrR} & \hyperref[GD:momentEql]{GD: momentEql} & \hyperref[GD:weight]{GD: weight} & \hyperref[GD:sliceWght]{GD: sliceWght} & \hyperref[GD:hsPressure]{GD: hsPressure} & \hyperref[GD:baseWtrF]{GD: baseWtrF} & \hyperref[GD:srfWtrF]{GD: srfWtrF} & \hyperref[IM:fctSfty]{IM: fctSfty} & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} & \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} & \hyperref[IM:intsliceFs]{IM: intsliceFs} & \hyperref[IM:crtSlpId]{IM: crtSlpId}
+\textbf{} & \textbf{\hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}} & \textbf{\hyperref[DD:angleA]{DD: angleA}} & \textbf{\hyperref[DD:angleB]{DD: angleB}} & \textbf{\hyperref[DD:lengthB]{DD: lengthB}} & \textbf{\hyperref[DD:lengthLb]{DD: lengthLb}} & \textbf{\hyperref[DD:lengthLs]{DD: lengthLs}} & \textbf{\hyperref[DD:slcHeight]{DD: slcHeight}} & \textbf{\hyperref[DD:stress]{DD: stress}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:ratioVariation]{DD: ratioVariation}} & \textbf{\hyperref[DD:convertFunc1]{DD: convertFunc1}} & \textbf{\hyperref[DD:convertFunc2]{DD: convertFunc2}} & \textbf{\hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD}} & \textbf{\hyperref[DD:watForceSumDD]{DD: watForceSumDD}} & \textbf{\hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD}} & \textbf{\hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD}} & \textbf{\hyperref[TM:factOfSafety]{TM: factOfSafety}} & \textbf{\hyperref[TM:equilibrium]{TM: equilibrium}} & \textbf{\hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}} & \textbf{\hyperref[TM:effStress]{TM: effStress}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[GD:normForcEq]{GD: normForcEq}} & \textbf{\hyperref[GD:bsShrFEq]{GD: bsShrFEq}} & \textbf{\hyperref[GD:resShr]{GD: resShr}} & \textbf{\hyperref[GD:mobShr]{GD: mobShr}} & \textbf{\hyperref[GD:effNormF]{GD: effNormF}} & \textbf{\hyperref[GD:resShearWO]{GD: resShearWO}} & \textbf{\hyperref[GD:mobShearWO]{GD: mobShearWO}} & \textbf{\hyperref[GD:normShrR]{GD: normShrR}} & \textbf{\hyperref[GD:momentEql]{GD: momentEql}} & \textbf{\hyperref[GD:weight]{GD: weight}} & \textbf{\hyperref[GD:sliceWght]{GD: sliceWght}} & \textbf{\hyperref[GD:hsPressure]{GD: hsPressure}} & \textbf{\hyperref[GD:baseWtrF]{GD: baseWtrF}} & \textbf{\hyperref[GD:srfWtrF]{GD: srfWtrF}} & \textbf{\hyperref[IM:fctSfty]{IM: fctSfty}} & \textbf{\hyperref[IM:nrmShrFor]{IM: nrmShrFor}} & \textbf{\hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}} & \textbf{\hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}} & \textbf{\hyperref[IM:intsliceFs]{IM: intsliceFs}} & \textbf{\hyperref[IM:crtSlpId]{IM: crtSlpId}}
 \\
 \midrule
 \endhead
@@ -2468,7 +2539,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF} & \hyperref[DD:angleA]{DD: angleA} & \hyperref[DD:angleB]{DD: angleB} & \hyperref[DD:lengthB]{DD: lengthB} & \hyperref[DD:lengthLb]{DD: lengthLb} & \hyperref[DD:lengthLs]{DD: lengthLs} & \hyperref[DD:slcHeight]{DD: slcHeight} & \hyperref[DD:stress]{DD: stress} & \hyperref[DD:torque]{DD: torque} & \hyperref[DD:ratioVariation]{DD: ratioVariation} & \hyperref[DD:convertFunc1]{DD: convertFunc1} & \hyperref[DD:convertFunc2]{DD: convertFunc2} & \hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD} & \hyperref[DD:watForceSumDD]{DD: watForceSumDD} & \hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD} & \hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD} & \hyperref[TM:factOfSafety]{TM: factOfSafety} & \hyperref[TM:equilibrium]{TM: equilibrium} & \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth} & \hyperref[TM:effStress]{TM: effStress} & \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} & \hyperref[GD:normForcEq]{GD: normForcEq} & \hyperref[GD:bsShrFEq]{GD: bsShrFEq} & \hyperref[GD:resShr]{GD: resShr} & \hyperref[GD:mobShr]{GD: mobShr} & \hyperref[GD:effNormF]{GD: effNormF} & \hyperref[GD:resShearWO]{GD: resShearWO} & \hyperref[GD:mobShearWO]{GD: mobShearWO} & \hyperref[GD:normShrR]{GD: normShrR} & \hyperref[GD:momentEql]{GD: momentEql} & \hyperref[GD:weight]{GD: weight} & \hyperref[GD:sliceWght]{GD: sliceWght} & \hyperref[GD:hsPressure]{GD: hsPressure} & \hyperref[GD:baseWtrF]{GD: baseWtrF} & \hyperref[GD:srfWtrF]{GD: srfWtrF} & \hyperref[IM:fctSfty]{IM: fctSfty} & \hyperref[IM:nrmShrFor]{IM: nrmShrFor} & \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} & \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen} & \hyperref[IM:intsliceFs]{IM: intsliceFs} & \hyperref[IM:crtSlpId]{IM: crtSlpId} & \hyperref[readAndStore]{FR: Read-and-Store} & \hyperref[verifyInput]{FR: Verify-Input} & \hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface} & \hyperref[verifyOutput]{FR: Verify-Output} & \hyperref[displayInput]{FR: Display-Input} & \hyperref[displayGraph]{FR: Display-Graph} & \hyperref[displayFS]{FR: Display-Factor-of-Safety} & \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces} & \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces} & \hyperref[writeToFile]{FR: Write-Results-To-File} & \hyperref[correct]{NFR: Correct} & \hyperref[understandable]{NFR: Understandable} & \hyperref[reusable]{NFR: Reusable} & \hyperref[maintainable]{NFR: Maintainable}
+\textbf{} & \textbf{\hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}} & \textbf{\hyperref[DD:angleA]{DD: angleA}} & \textbf{\hyperref[DD:angleB]{DD: angleB}} & \textbf{\hyperref[DD:lengthB]{DD: lengthB}} & \textbf{\hyperref[DD:lengthLb]{DD: lengthLb}} & \textbf{\hyperref[DD:lengthLs]{DD: lengthLs}} & \textbf{\hyperref[DD:slcHeight]{DD: slcHeight}} & \textbf{\hyperref[DD:stress]{DD: stress}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:ratioVariation]{DD: ratioVariation}} & \textbf{\hyperref[DD:convertFunc1]{DD: convertFunc1}} & \textbf{\hyperref[DD:convertFunc2]{DD: convertFunc2}} & \textbf{\hyperref[DD:nrmForceSumDD]{DD: nrmForceSumDD}} & \textbf{\hyperref[DD:watForceSumDD]{DD: watForceSumDD}} & \textbf{\hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD}} & \textbf{\hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD}} & \textbf{\hyperref[TM:factOfSafety]{TM: factOfSafety}} & \textbf{\hyperref[TM:equilibrium]{TM: equilibrium}} & \textbf{\hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}} & \textbf{\hyperref[TM:effStress]{TM: effStress}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[GD:normForcEq]{GD: normForcEq}} & \textbf{\hyperref[GD:bsShrFEq]{GD: bsShrFEq}} & \textbf{\hyperref[GD:resShr]{GD: resShr}} & \textbf{\hyperref[GD:mobShr]{GD: mobShr}} & \textbf{\hyperref[GD:effNormF]{GD: effNormF}} & \textbf{\hyperref[GD:resShearWO]{GD: resShearWO}} & \textbf{\hyperref[GD:mobShearWO]{GD: mobShearWO}} & \textbf{\hyperref[GD:normShrR]{GD: normShrR}} & \textbf{\hyperref[GD:momentEql]{GD: momentEql}} & \textbf{\hyperref[GD:weight]{GD: weight}} & \textbf{\hyperref[GD:sliceWght]{GD: sliceWght}} & \textbf{\hyperref[GD:hsPressure]{GD: hsPressure}} & \textbf{\hyperref[GD:baseWtrF]{GD: baseWtrF}} & \textbf{\hyperref[GD:srfWtrF]{GD: srfWtrF}} & \textbf{\hyperref[IM:fctSfty]{IM: fctSfty}} & \textbf{\hyperref[IM:nrmShrFor]{IM: nrmShrFor}} & \textbf{\hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}} & \textbf{\hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}} & \textbf{\hyperref[IM:intsliceFs]{IM: intsliceFs}} & \textbf{\hyperref[IM:crtSlpId]{IM: crtSlpId}} & \textbf{\hyperref[readAndStore]{FR: Read-and-Store}} & \textbf{\hyperref[verifyInput]{FR: Verify-Input}} & \textbf{\hyperref[determineCritSlip]{FR: Determine-Critical-Slip-Surface}} & \textbf{\hyperref[verifyOutput]{FR: Verify-Output}} & \textbf{\hyperref[displayInput]{FR: Display-Input}} & \textbf{\hyperref[displayGraph]{FR: Display-Graph}} & \textbf{\hyperref[displayFS]{FR: Display-Factor-of-Safety}} & \textbf{\hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces}} & \textbf{\hyperref[displayShear]{FR: Display-Interslice-Shear-Forces}} & \textbf{\hyperref[writeToFile]{FR: Write-Results-To-File}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
 \\
 \midrule
 \endhead

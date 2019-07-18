@@ -74,7 +74,7 @@ $\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 ${\mathbf{a}^{c}}$ & Constant acceleration vector & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${d_{offset}}$ & Distance between the target position and the landing position & m
+${d_{\text{offset}}}$ & Distance between the target position and the landing position & m
 \\
 $g$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
@@ -82,9 +82,9 @@ $p$ & Scalar position & m
 \\
 ${p^{i}}$ & Initial position & m
 \\
-${p_{land}}$ & Landing position & m
+${p_{\text{land}}}$ & Landing position & m
 \\
-${p_{target}}$ & Target position & m
+${p_{\text{target}}}$ & Target position & m
 \\
 ${p_{x}}$ & $x$-component of position & m
 \\
@@ -100,13 +100,13 @@ $s$ & Output message as a string & --
 \\
 $t$ & Time & s
 \\
-${t_{flight}}$ & Flight duration & s
+${t_{\text{flight}}}$ & Flight duration & s
 \\
 $v$ & Speed & $\frac{\text{m}}{\text{s}}$
 \\
 ${v^{i}}$ & Initial speed & $\frac{\text{m}}{\text{s}}$
 \\
-${v_{launch}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
+${v_{\text{launch}}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
 \\
 ${v_{x}}$ & $x$-component of velocity & $\frac{\text{m}}{\text{s}}$
 \\
@@ -610,35 +610,35 @@ This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: 
 \\ \midrule \\
 Label & Calculation of landing time
 \\ \midrule \\
-Input & ${v_{launch}}$, $θ$
+Input & ${v_{\text{launch}}}$, $θ$
 \\ \midrule \\
-Output & ${t_{flight}}$
+Output & ${t_{\text{flight}}}$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {v_{launch}}>0
+                    {v_{\text{launch}}}>0
                     \end{displaymath}
                     \begin{displaymath}
                     0<θ<\frac{π}{2}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {t_{flight}}>0
+                     {t_{\text{flight}}}>0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {t_{flight}}=\frac{2 {v_{launch}} \sin\left(θ\right)}{g}
+           {t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${t_{flight}}$ is the flight duration (s)}
-              \item{${v_{launch}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${t_{\text{flight}}}$ is the flight duration (s)}
+              \item{${v_{\text{launch}}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (rad)}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         $g$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
-        The constraint ${t_{flight}}>0$ is from \hyperref[timeStartZero]{A: timeStartZero}.
+        The constraint ${t_{\text{flight}}}>0$ is from \hyperref[timeStartZero]{A: timeStartZero}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -652,21 +652,21 @@ We know that ${{p_{y}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${
 \begin{displaymath}
 {p_{y}}={{v_{y}}^{i}} t-\frac{g t^{2}}{2}
 \end{displaymath}
-To find the time that the projectile lands, we want to find the $t$ value (${t_{flight}}$) where ${p_{y}}=0$ (since the target is on the $x$-axis from \hyperref[targetXAxis]{A: targetXAxis}). From the equation above we get:
+To find the time that the projectile lands, we want to find the $t$ value (${t_{\text{flight}}}$) where ${p_{y}}=0$ (since the target is on the $x$-axis from \hyperref[targetXAxis]{A: targetXAxis}). From the equation above we get:
 \begin{displaymath}
-{{v_{y}}^{i}} {t_{flight}}-\frac{g {t_{flight}}^{2}}{2}=0
+{{v_{y}}^{i}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0
 \end{displaymath}
-Dividing by ${t_{flight}}$ (with the constraint ${t_{flight}}>0$) gives us:
+Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}>0$) gives us:
 \begin{displaymath}
-{{v_{y}}^{i}}-\frac{g {t_{flight}}}{2}=0
+{{v_{y}}^{i}}-\frac{g {t_{\text{flight}}}}{2}=0
 \end{displaymath}
-Solving for ${t_{flight}}$ gives us:
+Solving for ${t_{\text{flight}}}$ gives us:
 \begin{displaymath}
-{t_{flight}}=\frac{2 {{v_{y}}^{i}}}{g}
+{t_{\text{flight}}}=\frac{2 {{v_{y}}^{i}}}{g}
 \end{displaymath}
-From \hyperref[DD:speedIY]{DD: speedIY} (with ${v^{i}}={v_{launch}}$) we can replace ${{v_{y}}^{i}}$:
+From \hyperref[DD:speedIY]{DD: speedIY} (with ${v^{i}}={v_{\text{launch}}}$) we can replace ${{v_{y}}^{i}}$:
 \begin{displaymath}
-{t_{flight}}=\frac{2 {v_{launch}} \sin\left(θ\right)}{g}
+{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
 \end{displaymath}
 \par~
 
@@ -678,35 +678,35 @@ From \hyperref[DD:speedIY]{DD: speedIY} (with ${v^{i}}={v_{launch}}$) we can rep
 \\ \midrule \\
 Label & Calculation of landing position
 \\ \midrule \\
-Input & ${v_{launch}}$, $θ$
+Input & ${v_{\text{launch}}}$, $θ$
 \\ \midrule \\
-Output & ${p_{land}}$
+Output & ${p_{\text{land}}}$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {v_{launch}}>0
+                    {v_{\text{launch}}}>0
                     \end{displaymath}
                     \begin{displaymath}
                     0<θ<\frac{π}{2}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {p_{land}}>0
+                     {p_{\text{land}}}>0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {p_{land}}=\frac{2 {v_{launch}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+           {p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${p_{land}}$ is the landing position (m)}
-              \item{${v_{launch}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${p_{\text{land}}}$ is the landing position (m)}
+              \item{${v_{\text{launch}}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (rad)}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         $g$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
-        The constraint ${p_{land}}>0$ is from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint ${p_{\text{land}}}>0$ is from \hyperref[posXDirection]{A: posXDirection}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -720,17 +720,17 @@ We know that ${{p_{x}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${
 \begin{displaymath}
 {p_{x}}={{v_{x}}^{i}} t
 \end{displaymath}
-To find the landing position, we want to find the ${p_{x}}$ value (${p_{land}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
+To find the landing position, we want to find the ${p_{x}}$ value (${p_{\text{land}}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
 \begin{displaymath}
-{p_{land}}=\frac{{{v_{x}}^{i}}\cdot{}2 {v_{launch}} \sin\left(θ\right)}{g}
+{p_{\text{land}}}=\frac{{{v_{x}}^{i}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
 \end{displaymath}
-From \hyperref[DD:speedIX]{DD: speedIX} (with ${v^{i}}={v_{launch}}$) we can replace ${{v_{x}}^{i}}$:
+From \hyperref[DD:speedIX]{DD: speedIX} (with ${v^{i}}={v_{\text{launch}}}$) we can replace ${{v_{x}}^{i}}$:
 \begin{displaymath}
-{p_{land}}=\frac{{v_{launch}} \cos\left(θ\right)\cdot{}2 {v_{launch}} \sin\left(θ\right)}{g}
+{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
 \end{displaymath}
 Rearranging this gives us the required equation:
 \begin{displaymath}
-{p_{land}}=\frac{2 {v_{launch}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
 \end{displaymath}
 \par~
 
@@ -742,31 +742,31 @@ Rearranging this gives us the required equation:
 \\ \midrule \\
 Label & Offset
 \\ \midrule \\
-Input & ${p_{land}}$, ${p_{target}}$
+Input & ${p_{\text{land}}}$, ${p_{\text{target}}}$
 \\ \midrule \\
-Output & ${d_{offset}}$
+Output & ${d_{\text{offset}}}$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {p_{land}}>0
+                    {p_{\text{land}}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    {p_{target}}>0
+                    {p_{\text{target}}}>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {d_{offset}}={p_{land}}-{p_{target}}
+           {d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${d_{offset}}$ is the distance between the target position and the landing position (m)}
-              \item{${p_{land}}$ is the landing position (m)}
-              \item{${p_{target}}$ is the target position (m)}
+              \item{${d_{\text{offset}}}$ is the distance between the target position and the landing position (m)}
+              \item{${p_{\text{land}}}$ is the landing position (m)}
+              \item{${p_{\text{target}}}$ is the target position (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${p_{land}}$ is from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
-        The constraints ${p_{land}}>0$ and ${p_{target}}>0$ are from \hyperref[posXDirection]{A: posXDirection}.
+Notes & ${p_{\text{land}}}$ is from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
+        The constraints ${p_{\text{land}}}>0$ and ${p_{\text{target}}}>0$ are from \hyperref[posXDirection]{A: posXDirection}.
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -784,37 +784,37 @@ RefBy & \hyperref[outputValues]{FR: Output-Values}, \hyperref[IM:messageIM]{IM: 
 \\ \midrule \\
 Label & Output message
 \\ \midrule \\
-Input & ${d_{offset}}$, ${p_{target}}$
+Input & ${d_{\text{offset}}}$, ${p_{\text{target}}}$
 \\ \midrule \\
 Output & $s$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {p_{target}}>0
+                    {p_{\text{target}}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    {d_{offset}}>-{p_{land}}
+                    {d_{\text{offset}}}>-{p_{\text{land}}}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
            s=\begin{cases}
-             \text{``The target was hit.''}, & |\frac{{d_{offset}}}{{p_{target}}}|<ε\\
-\text{``The projectile fell short.''}, & {d_{offset}}<0\\
-\text{``The projectile went long.''}, & {d_{offset}}>0
+             \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|<ε\\
+\text{``The projectile fell short.''}, & {d_{\text{offset}}}<0\\
+\text{``The projectile went long.''}, & {d_{\text{offset}}}>0
              \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$s$ is the output message as a string (Unitless)}
-              \item{${d_{offset}}$ is the distance between the target position and the landing position (m)}
-              \item{${p_{target}}$ is the target position (m)}
+              \item{${d_{\text{offset}}}$ is the distance between the target position and the landing position (m)}
+              \item{${p_{\text{target}}}$ is the target position (m)}
               \item{$ε$ is the hit tolerance (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${d_{offset}}$ is from \hyperref[IM:offsetIM]{IM: offsetIM}.
-        The constraint ${p_{target}}>0$ is from \hyperref[posXDirection]{A: posXDirection}.
-        The constraint ${d_{offset}}>-{p_{land}}$ is from the fact that ${p_{land}}>0$, from \hyperref[posXDirection]{A: posXDirection}.
+Notes & ${d_{\text{offset}}}$ is from \hyperref[IM:offsetIM]{IM: offsetIM}.
+        The constraint ${p_{\text{target}}}>0$ is from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint ${d_{\text{offset}}}>-{p_{\text{land}}}$ is from the fact that ${p_{\text{land}}}>0$, from \hyperref[posXDirection]{A: posXDirection}.
         $ε$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
 \\ \midrule \\
 Source & --
@@ -832,9 +832,9 @@ RefBy & \hyperref[outputValues]{FR: Output-Values} and \hyperref[calcValues]{FR:
 \\
 \midrule
 \endhead
-${p_{target}}$ & ${p_{target}}>0$ & $1000$ m & 10$\%$
+${p_{\text{target}}}$ & ${p_{\text{target}}}>0$ & $1000$ m & 10$\%$
 \\
-${v_{launch}}$ & ${v_{launch}}>0$ & $100$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
+${v_{\text{launch}}}$ & ${v_{\text{launch}}}>0$ & $100$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
 $θ$ & $0<θ<\frac{π}{2}$ & $\frac{π}{4}$ rad & 10$\%$
 \\
@@ -851,9 +851,9 @@ $θ$ & $0<θ<\frac{π}{2}$ & $\frac{π}{4}$ rad & 10$\%$
 \\
 \midrule
 \endhead
-${p_{land}}$ & ${p_{land}}>0$
+${p_{\text{land}}}$ & ${p_{\text{land}}}>0$
 \\
-${d_{offset}}$ & ${d_{offset}}>-{p_{land}}$
+${d_{\text{offset}}}$ & ${d_{\text{offset}}}>-{p_{\text{land}}}$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -868,8 +868,8 @@ This section provides the functional requirements, the tasks and behaviours that
 \begin{itemize}
 \item[Input-Parameters:\phantomsection\label{inputParams}]Input the quantities from \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the launch angle, launch speed, and target position.
 \item[Verify-Parameters:\phantomsection\label{verifyParams}]Check the entered input parameters to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
-\item[Calculate-Values:\phantomsection\label{calcValues}]Calculate the following quantities: ${t_{flight}}$ (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}), ${p_{land}}$ (from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}), ${d_{offset}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}), and $s$ (from \hyperref[IM:messageIM]{IM: messageIM}).
-\item[Output-Values:\phantomsection\label{outputValues}]Output $s$ (from \hyperref[IM:messageIM]{IM: messageIM}) and ${d_{offset}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}).
+\item[Calculate-Values:\phantomsection\label{calcValues}]Calculate the following quantities: ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}), ${p_{\text{land}}}$ (from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}), ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}), and $s$ (from \hyperref[IM:messageIM]{IM: messageIM}).
+\item[Output-Values:\phantomsection\label{outputValues}]Output $s$ (from \hyperref[IM:messageIM]{IM: messageIM}) and ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}).
 \end{itemize}
 \begin{longtable}{l l l}
 \toprule
@@ -877,9 +877,9 @@ This section provides the functional requirements, the tasks and behaviours that
 \\
 \midrule
 \endhead
-${p_{target}}$ & Target position & m
+${p_{\text{target}}}$ & Target position & m
 \\
-${v_{launch}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
+${v_{\text{launch}}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
 \\
 $θ$ & Launch angle & rad
 \\

@@ -1,28 +1,23 @@
-module Drasil.SSP.Body (srs, si, symMap, printSetting) where
+module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
 
-import Language.Drasil hiding (number, organization, Verb, section, sec)
+import Language.Drasil hiding (number, organization, Verb, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (Block(Parallel), ChunkDB, RefbyMap, ReferenceDB,
-  SystemInformation(SI), TraceMap, ccss, cdb, collectUnits, generateRefbyMap,
-  rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
-  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel, qdFromDD)
+import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
+  SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
+  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
+  _quants, _sys, _sysinfodb, _usedinfodb)
+import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
-import qualified Data.Map as Map
 import Utils.Drasil
 
-import Drasil.DocLang (DocDesc, DocSection(..), IntroSec(..), IntroSub(..), 
-  LCsSec(..), LFunc(..), RefSec(..), RefTab(..), TConvention(..), --TSIntro, 
-  TSIntro(..), UCsSec(..), Fields, Field(..), SSDSec(..), SSDSub(..),
+import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
+  LFunc(..), RefSec(..), RefTab(..), TConvention(..),
+  TSIntro(..), Fields, Field(..), SRSDecl, SSDSec(..), SSDSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), dataConstraintUncertainty, intro, mkDoc, tsymb'',
-  getDocDesc, egetDocDesc, generateTraceMap, getTraceMapFromTM,
-  getTraceMapFromGD, getTraceMapFromDD, getTraceMapFromIM, getSCSSub,
-  generateTraceMap', traceMatStandard)
+  PDSub(..), intro, mkDoc, tsymb'', traceMatStandard)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt, sysCon,
   genDefn, dataDefn, datCon)
@@ -54,28 +49,30 @@ import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, de
 
 import Drasil.SSP.Assumptions (assumptions)
 import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
-import Drasil.SSP.DataCons (dataConstraintTable2, dataConstraintTable3) 
-import Drasil.SSP.DataDefs (dataDefns)
-import Drasil.SSP.Defs (acronyms, crtSlpSrf, effFandS, factor, fsConcept, 
-  intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope,
-  slpSrf, soil, soilLyr, soilMechanics, soilPrpty, ssa, ssp, defs, defs',
-  waterTable)
+import qualified Drasil.SSP.DataDefs as SSP (dataDefs)
+import Drasil.SSP.Defs (acronyms, crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
+  intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil,
+  soilLyr, soilMechanics, soilPrpty, ssa, ssp, stabAnalysis, waterTable)
 import Drasil.SSP.GenDefs (generalDefinitions)
 import Drasil.SSP.Goals (goals)
 import Drasil.SSP.IMods (instModIntro)
 import qualified Drasil.SSP.IMods as SSP (iMods)
 import Drasil.SSP.References (citations, morgenstern1965)
-import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, propsDeriv)
+import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
 import Drasil.SSP.TMods (tMods)
-import Drasil.SSP.Unitals (effCohesion, fricAngle, fs, index, 
-  constrained, inputs, outputs, symbols)
+import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
+  inputs, inputsWUncrtn, outputs, symbols)
 
 --Document Setup--
-thisSi :: [UnitDefn]
-thisSi = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
 
-checkSi :: [UnitDefn]
-checkSi = collectUnits symMap symbTT
+srs :: Document
+srs = mkDoc mkSRS for si
+
+printSetting :: PrintingInformation
+printSetting = PI symbMap defaultConfiguration
+
+resourcePath :: String
+resourcePath = "../../../datafiles/SSP/"
 
 si :: SystemInformation
 si = SI {
@@ -83,36 +80,30 @@ si = SI {
   _kind = Doc.srs, 
   _authors = [henryFrankis, brooks],
   _quants = symbols,
-  _concepts = symbTT,
+  _concepts = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],
-  _datadefs = dataDefns,
+  _datadefs = SSP.dataDefs,
   _inputs = map qw inputs,
   _outputs = map qw outputs,
-  _defSequence = [Parallel (qdFromDD (head dataDefns)) (map qdFromDD (tail dataDefns))],
+  _defSequence = [(\x -> Parallel (head x) (tail x)) $ map qdFromDD SSP.dataDefs],
   _constraints = constrained,
   _constants = [],
-  _sysinfodb = symMap,
+  _sysinfodb = symbMap,
   _usedinfodb = usedDB,
    refdb = refDB
 }
-
-resourcePath :: String
-resourcePath = "../../../datafiles/SSP/"
-
-srs :: Document
-srs = mkDoc mkSRS for si
   
-mkSRS :: DocDesc
+mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1
-    , IScope scpIncl EmptyS
+    , IScope scope
     , IChar []
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
         phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
         [phrase soilMechanics]
-    , IOrgSec orgSecStart inModel (SRS.inModel [] [])  orgSecEnd],
+    , IOrgSec orgSecStart inModel (SRS.inModel [] []) orgSecEnd],
     --FIXME: issue #235
     GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
       UsrChars [userCharIntro], SystCons [sysConstraints] []],
@@ -121,95 +112,60 @@ mkSRS = [RefSec $ RefProg intro
         [ SSDProblem $ PDProg prob []
           [ TermsAndDefs Nothing terms
           , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
-          , Goals goalsInputs goals]
+          , Goals goalsInputs]
         , SSDSolChSpec $ SCSProg
           [Assumptions
-          , TMs [] (Label : stdFields) tMods
-          , GDs [] ([Label, Units] ++ stdFields) generalDefinitions ShowDerivation
-          , DDs [] ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs instModIntro ([Label, Input, Output, InConstraints, 
-            OutConstraints] ++ stdFields) SSP.iMods ShowDerivation
-          , Constraints  EmptyS dataConstraintUncertainty EmptyS
-            [dataConstraintTable2, dataConstraintTable3]
-          , CorrSolnPpties propsDeriv
+          , TMs [] (Label : stdFields)
+          , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+          , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+          , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+          , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
+          , CorrSolnPpties outputs []
           ]
         ],
     ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqs funcReqTables,
-    NonFReqsSub nonFuncReqs
+    FReqsSub funcReqTables,
+    NonFReqsSub
   ],
-  LCsSec $ LCsProg likelyChgs,
-  UCsSec $ UCsProg unlikelyChgs,
-  TraceabilitySec $ TraceabilityProg (map fst traceyMatrix) (map (foldlList Comma List . snd) traceyMatrix)
-    (map (LlC . fst) traceyMatrix) [],
+  LCsSec,
+  UCsSec,
+  TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
   AuxConstntSec $ AuxConsProg ssp [],
   Bibliography]
 
-label :: TraceMap
-label = Map.union (generateTraceMap mkSRS) $ generateTraceMap' concIns
- 
-refBy :: RefbyMap
-refBy = generateRefbyMap label
-
-dataDefs :: [DataDefinition]
-dataDefs = getTraceMapFromDD $ getSCSSub mkSRS
-
-iMods :: [InstanceModel]
-iMods = getTraceMapFromIM $ getSCSSub mkSRS
-
-genDefs :: [GenDefn]
-genDefs = getTraceMapFromGD $ getSCSSub mkSRS
-
-theory :: [TheoryModel]
-theory = getTraceMapFromTM $ getSCSSub mkSRS
+units :: [UnitDefn]
+units = map unitWrapper [metre, degree, kilogram, second] ++ map unitWrapper [newton, pascal]
 
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ funcReqs ++ nonFuncReqs ++ likelyChgs ++ unlikelyChgs
 
 section :: [Section]
-section = sec
-
-sec :: [Section]
-sec = extractSection srs
+section = extractSection srs
 
 labCon :: [LabelledContent]
-labCon = [figPhysSyst, figIndexConv, figForceActing, 
-  dataConstraintTable2, dataConstraintTable3] ++ funcReqTables
+labCon = [figPhysSyst, figIndexConv, figForceActing] ++ funcReqTables
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
 
-traceyMatrix :: [(LabelledContent, [Sentence])]
-traceyMatrix = traceMatStandard si
-
-
 -- SYMBOL MAP HELPERS --
-symMap :: ChunkDB
-symMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
+symbMap :: ChunkDB
+symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw acronyms ++ map nw doccon ++ map nw prodtcon ++ map nw generalDefinitions ++ map nw SSP.iMods
   ++ map nw defs ++ map nw defs' ++ map nw softwarecon ++ map nw physicCon 
   ++ map nw physicsTMs
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
-  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw thisSi)
-  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) thisSi label
-  refBy dataDefs iMods genDefs theory concIns
-  section labCon
+  ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
+  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
+  generalDefinitions tMods concIns section labCon
 
 usedDB :: ChunkDB
-usedDB = cdb (map qw symbTT) (map nw symbols ++ map nw acronyms ++
- map nw checkSi) ([] :: [ConceptChunk]) checkSi label refBy
- dataDefs iMods genDefs theory concIns section 
- labCon
+usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
-
-printSetting :: PrintingInformation
-printSetting = PI symMap defaultConfiguration
-
-symbTT :: [DefinedQuantityDict]
-symbTT = ccss (getDocDesc mkSRS) (egetDocDesc mkSRS) symMap
 
 -- SECTION 1 --
 --automatically generated in mkSRS -
@@ -223,7 +179,8 @@ tableOfSymbIntro :: [TSIntro]
 tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
   [plural value, S "with a subscript", ch index, S "implies that the",
   phrase value, S "will be taken at and analyzed at a", phrase slice
-  `sOr` phrase slice, S "interface composing the total slip", phrase mass]]]
+  `sOr` phrase slice, S "interface composing the total slip", phrase mass]],
+  VectorUnits]
 
 -- SECTION 1.3 --
 --automatically generated in mkSRS
@@ -274,14 +231,14 @@ purposeDoc pname =
 
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in IScope
-scpIncl :: Sentence
-scpIncl = foldlSent_ [S "stability analysis of a", phrase twoD, sParen(getAcc twoD),
-  phrase soil, S "mass" `sC` S "composed of a single homogeneous", phrase layer,
+scope :: Sentence
+scope = foldlSent_ [phrase stabAnalysis, S "of a", phrase twoD, sParen (getAcc twoD),
+  phrase soil, phrase mass `sC` S "composed of a single homogeneous", phrase layer,
   S "with", phrase constant +:+. plural mtrlPrpty, S "The", phrase soil,
-  S "mass is assumed to extend infinitely in the third" +:+. phrase dimension,
-  S "The", phrase analysis, S "will be at an instant in", phrase time :+: S ";",
-  plural factor, S "that", S "may change the", plural soilPrpty, S "over", phrase time,
-  S "will not be considered"]
+  phrase mass `sIs` S "assumed to extend infinitely in the third" +:+.
+  phrase dimension, S "The", phrase analysis, S "will be at an instant" `sIn`
+  phrase time :+: S ";", plural factor, S "that may change the", plural soilPrpty,
+  S "over", phrase time, S "will not be considered"]
 
 -- SECTION 2.3 --
 -- Characteristics of the Intended Reader generated in IChar

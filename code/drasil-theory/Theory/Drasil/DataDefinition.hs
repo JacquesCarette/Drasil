@@ -16,7 +16,7 @@ data ScopeType =
 data DataDefinition = DatDef { _qd :: QDefinition
                              , _scp :: ScopeType
                              , _ref :: [Reference]
-                             , _deri :: Derivation
+                             , _deri :: Maybe Derivation
                              , lbl :: ShortName
                              , ra :: String
                              , _notes :: [Sentence]
@@ -44,12 +44,12 @@ instance Referable DataDefinition where
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 -- | Smart constructor for data definitions 
-dd :: QDefinition -> [Reference] -> Derivation -> String -> [Sentence] -> DataDefinition
+dd :: QDefinition -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 dd q []   _   _  = error $ "Source field of " ++ q ^. uid ++ " is empty"
 dd q refs der sn = DatDef q Global refs der (shortname' sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references
-ddNoRefs :: QDefinition -> Derivation -> String -> [Sentence] -> DataDefinition
+ddNoRefs :: QDefinition -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 ddNoRefs q der sn = DatDef q Global [] der (shortname' sn) (prependAbrv dataDefn sn)
 
 qdFromDD :: DataDefinition -> QDefinition

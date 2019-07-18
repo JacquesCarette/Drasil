@@ -23,7 +23,7 @@
           <div class="subsection">
             <h2>Table of Units</h2>
             <p class="paragraph">
-              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
+              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, <a href=#Table:ToU>Tab: ToU</a> lists the symbol, a description and the SI name.
             </p>
             <div id="Table:ToU">
               <table class="table">
@@ -65,7 +65,7 @@
           <div class="subsection">
             <h2>Table of Symbols</h2>
             <p class="paragraph">
-              The table that follows summarizes the symbols used in this document along with their units. The symbols are listed in alphabetical order.
+              The symbols used in this document are summarized in <a href=#Table:ToS>Tab: ToS</a> along with their units. The symbols are listed in alphabetical order.
             </p>
             <div id="Table:ToS">
               <table class="table">
@@ -442,7 +442,7 @@
               The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the GlassBR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
-              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
             </p>
           </div>
         </div>
@@ -450,7 +450,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, GlassBR predicts whether a glass slab is safe or not.
+              The scope of the requirements includes determining the safety of a glass slab under a blast loading following the ASTM standard (<a href=#astm2009>astm2009</a>).
             </p>
           </div>
         </div>
@@ -760,6 +760,10 @@
                 <div id="TM:isSafeProb">
                   <table class="tdefn">
                     <tr>
+                      <th>Refname</th>
+                      <td><b>TM:isSafeProb</b></td>
+                    </tr>
+                    <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Safety Probability</p></td>
                     </tr>
@@ -811,6 +815,10 @@
                 </div>
                 <div id="TM:isSafeLoad">
                   <table class="tdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>TM:isSafeLoad</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Safety Load</p></td>
@@ -875,6 +883,10 @@
                 </p>
                 <div id="DD:riskFun">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:riskFun</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Risk of failure</p></td>
@@ -955,8 +967,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:minThick">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:minThick</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Minimum thickness</p></td>
@@ -1051,8 +1068,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:loadDurFactor">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:loadDurFactor</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Load duration factor</p></td>
@@ -1112,8 +1134,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:stressDistFac">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:stressDistFac</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td>
@@ -1132,7 +1159,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>J = interpZ(SDF.txt,AR,q&#770;)</em>
+                          <em>J = interpZ("SDF.txt",AR,q&#770;)</em>
                         </div>
                       </td>
                     </tr>
@@ -1175,8 +1202,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:nFL">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:nFL</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Non-factored load</p></td>
@@ -1246,8 +1278,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:gTF">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:gTF</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Glass type factor</p></td>
@@ -1266,9 +1303,9 @@
                         <div class="equation">
                           <em>GTF = <span class="casebr">{</span>
                                     <div class="cases">
-                                      <span>1 , <span class="case">g = AN</span></span>
-                                      <span>4 , <span class="case">g = FT</span></span>
-                                      <span>2 , <span class="case">g = HS</span></span>
+                                      <span>1 , <span class="case">g = "AN"</span></span>
+                                      <span>4 , <span class="case">g = "FT"</span></span>
+                                      <span>2 , <span class="case">g = "HS"</span></span>
                                     </div></em>
                         </div>
                       </td>
@@ -1306,8 +1343,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:dimlessLoad">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:dimlessLoad</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Dimensionless load</p></td>
@@ -1384,8 +1426,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:tolLoad">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:tolLoad</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Tolerable load</p></td>
@@ -1402,7 +1449,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>q&#770;<sub>tol</sub> = interpY(SDF.txt,AR,J<sub>tol</sub>)</em>
+                          <em>q&#770;<sub>tol</sub> = interpY("SDF.txt",AR,J<sub>tol</sub>)</em>
                         </div>
                       </td>
                     </tr>
@@ -1439,8 +1486,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:sdfTol">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:sdfTol</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td>
@@ -1534,8 +1586,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:standOffDist">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:standOffDist</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Stand off distance</p></td>
@@ -1587,8 +1644,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:aspectRatio">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:aspectRatio</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Aspect ratio</p></td>
@@ -1644,8 +1706,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:eqTNTW">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:eqTNTW</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td>
@@ -1692,8 +1759,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:probOfBreak">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:probOfBreak</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Probability of breakage</p></td>
@@ -1749,8 +1821,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:calofCapacity">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:calofCapacity</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Load resistance</p></td>
@@ -1803,8 +1880,13 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
                 <div id="DD:calofDemand">
                   <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:calofDemand</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Applied load (demand)</p></td>
@@ -1821,7 +1903,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>q = interpY(TSD.txt,SD,w<sub>TNT</sub>)</em>
+                          <em>q = interpY("TSD.txt",SD,w<sub>TNT</sub>)</em>
                         </div>
                       </td>
                     </tr>
@@ -1860,6 +1942,7 @@
                     </tr>
                   </table>
                 </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -1873,6 +1956,10 @@
                 </p>
                 <div id="IM:isSafePb">
                   <table class="idefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>IM:isSafePb</b></td>
+                    </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Safety Req-Pb</p></td>
@@ -1951,6 +2038,10 @@
                 <div id="IM:isSafeLR">
                   <table class="idefn">
                     <tr>
+                      <th>Refname</th>
+                      <td><b>IM:isSafeLR</b></td>
+                    </tr>
+                    <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Safety Req-LR</p></td>
                     </tr>
@@ -2023,7 +2114,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
+                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -2098,6 +2189,14 @@
                   </table>
                   <p class="caption">Input Data Constraints</p>
                 </div>
+              </div>
+            </div>
+            <div id="Sec:CorSolProps">
+              <div class="subsubsection">
+                <h3>Properties of a Correct Solution</h3>
+                <p class="paragraph">
+                  <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+                </p>
                 <div id="Table:OutDataConstraints">
                   <table class="table">
                     <tr>
@@ -2113,12 +2212,6 @@
                   </table>
                   <p class="caption">Output Data Constraints</p>
                 </div>
-              </div>
-            </div>
-            <div id="Sec:CorSolProps">
-              <div class="subsubsection">
-                <h3>Properties of a Correct Solution</h3>
-                <p class="paragraph">FIXME.</p>
               </div>
             </div>
           </div>
@@ -2160,7 +2253,7 @@
               </p>
               <p>
                 <div id="checkGlassSafety">
-                  Check-Glass-Safety: If <em>is-safePb &and; is-safeLR</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a> and <a href=#TM:isSafeLoad>TM: isSafeLoad</a>), output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
+                  Check-Glass-Safety: If <em>is-safePb &and; is-safeLR</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a> and <a href=#TM:isSafeLoad>TM: isSafeLoad</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
                 </div>
               </p>
               <p>
@@ -2484,7 +2577,7 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements on the data definitions, theoretical models, general definitions, and instance models.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
         </p>
         <div id="Table:TraceMatAvsAll">
           <table class="table">
@@ -2771,6 +2864,72 @@
             </tr>
             <tr>
               <td><a href=#outputQuants>FR: Output-Quantities</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#correct>NFR: Correct</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiable>NFR: Verifiable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#understandable>NFR: Understandable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#reusable>NFR: Reusable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR: Portable</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3354,9 +3513,57 @@
               </th>
               <th><a href=#checkGlassSafety>FR: Check-Glass-Safety</a></th>
               <th><a href=#outputQuants>FR: Output-Quantities</a></th>
+              <th><a href=#correct>NFR: Correct</a></th>
+              <th><a href=#verifiable>NFR: Verifiable</a></th>
+              <th><a href=#understandable>NFR: Understandable</a></th>
+              <th><a href=#reusable>NFR: Reusable</a></th>
+              <th><a href=#maintainable>NFR: Maintainable</a></th>
+              <th><a href=#portable>NFR: Portable</a></th>
+            </tr>
+            <tr>
+              <td>
+                <a href=#willBreakGS>GS: Predict-Glass-Withstands-Explosion</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#inputGlassProps>FR: Input-Glass-Props</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3412,11 +3619,23 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#checkInputWithDataCons>FR: Check-Input-with-Data_Constraints</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3472,6 +3691,12 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#checkGlassSafety>FR: Check-Glass-Safety</a></td>
@@ -3492,6 +3717,12 @@
               <td></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3528,10 +3759,220 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#correct>NFR: Correct</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#verifiable>NFR: Verifiable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#understandable>NFR: Understandable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#reusable>NFR: Reusable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#portable>NFR: Portable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
           </table>
           <p class="caption">
-            Traceability Matrix Showing the Connections Between Requirements and Other Items
+            Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items
           </p>
         </div>
       </div>
@@ -3633,22 +4074,22 @@
         <ul class="hide-list-style">
           <li>
             <div id="astm2009">
-              [1]: ASTM. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. www.astm.org.
+              [1]: ASTM. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. <a href="https://www.astm.org">https://www.astm.org</a>.
             </div>
           </li>
           <li>
             <div id="astm2012">
-              [2]: ASTM. <em>Standard Specification for Heat-Strengthened and Fully Tempered Flat Glass</em>. West Conshohocken, PA: ASTM International, 2012. https://doi.org/10.1520/C1048-12E01.
+              [2]: ASTM. <em>Standard Specification for Heat-Strengthened and Fully Tempered Flat Glass</em>. West Conshohocken, PA: ASTM International, 2012. <a href="https://doi.org/10.1520/C1048-12E01">https://doi.org/10.1520/C1048-12E01</a>.
             </div>
           </li>
           <li>
             <div id="astm2016">
-              [3]: ASTM. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. https://doi.org/10.1520/C1036-16.
+              [3]: ASTM. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. <a href="https://doi.org/10.1520/C1036-16">https://doi.org/10.1520/C1036-16</a>.
             </div>
           </li>
           <li>
             <div id="beasonEtAl1998">
-              [4]: Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. February, 1998. doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215).
+              [4]: Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. February, 1998. <a href="https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)">https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)</a>.
             </div>
           </li>
           <li>
@@ -3668,7 +4109,7 @@
           </li>
           <li>
             <div id="rbrtsn2012">
-              [8]: Robertson, James and Robertson, Suzanne. <em>Volere requirements specification template edition 16</em>. 2012. https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf.
+              [8]: Robertson, James and Robertson, Suzanne. <em>Volere requirements specification template edition 16</em>. 2012. <a href="https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf">https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf</a>.
             </div>
           </li>
           <li>

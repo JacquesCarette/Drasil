@@ -1,3 +1,6 @@
+/** \file InputConstraints.cs
+    \brief Provides the function for checking the physical and software constraints on the input
+*/
 using System;
 using System.IO;
 using System.Collections;
@@ -5,7 +8,18 @@ using System.Collections.Generic;
 
 public class InputConstraints {
     
+    /** \brief Verifies that input values satisfy the physical constraints and software constraints
+        \param inParams No description given
+    */
     public static void input_constraints(InputParameters inParams) {
+        StreamWriter outfile;
+        outfile = new StreamWriter("log.txt", true);
+        outfile.WriteLine("function input_constraints called with inputs: {");
+        outfile.Write("  inParams = ");
+        outfile.WriteLine("Instance of InputParameters object");
+        outfile.WriteLine("  }");
+        outfile.Close();
+        
         if (!(((0.1 <= inParams.a) && (inParams.a <= 5.0)))) {
             throw new Exception("InputError");
         }

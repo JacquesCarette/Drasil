@@ -1,22 +1,28 @@
 module Main (main) where
 
-import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
-  ImplementationType(..), Lang(..), Logging(..), Structure(..))
+import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
+  ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
+  Structure(..), InputModule(..))
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
-import Drasil.GlassBR.Body (code, srs, printSetting)
+import Drasil.GlassBR.Body (si, srs, printSetting)
+import Drasil.GlassBR.ModuleDefs (allMods)
+
+code :: CodeSpec
+code = codeSpec si choices allMods
 
 choices :: Choices
 choices = Choices {
   lang = [Python, Cpp, CSharp, Java],
   impType = Program,
   logFile = "log.txt",
-  logging = LogNone,
-  comments = CommentNone,
+  logging = LogAll,
+  comments = [CommentFunc, CommentClass, CommentMod],
   onSfwrConstraint = Exception,
   onPhysConstraint = Exception,
-  inputStructure = AsClass
+  inputStructure = Bundled,
+  inputModule = Separated
 }
   
 main :: IO()

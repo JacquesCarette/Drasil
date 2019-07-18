@@ -1,10 +1,9 @@
-module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, propsDeriv, requirements) where
+module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs) where
 
 import Language.Drasil hiding (Vector, organization)
-import Drasil.DocLang (mkEnumSimpleD, reqF)
 import Utils.Drasil
 
-import qualified Drasil.DocLang.SRS as SRS
+import qualified Drasil.DocLang.SRS as SRS (propCorSol, solCharSpec)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, body, code,
   environment, funcReqDom, input_, likelyChg, mg, mis, module_, nonFuncReqDom,
   output_, physicalConstraint, physicalSim, property, requirement, srs,
@@ -25,18 +24,9 @@ import Drasil.GamePhysics.Concepts (twoD)
 -- SECTION 5 : REQUIREMENTS --
 ------------------------------
 
-propsDeriv :: [Contents]
-propsDeriv = [foldlSP [S "FIXME"]]
-
-requirements :: Section
-requirements = reqF [funcReqsSection, nonfuncReqsSection]
-
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
-
-funcReqsSection :: Section
-funcReqsSection = SRS.funcReq (mkEnumSimpleD funcReqs) []
 
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
@@ -52,47 +42,46 @@ simSpaceDesc, inputInitialCondsDesc,
   -- | template for requirements
 requirementTemplate :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
 requirementTemplate a b x z = foldlSent [S "Determine the", a `sAnd` b, 
-  S "over a period of", (phrase QP.time), S "of the", x, z]
+  S "over a period of", phrase QP.time, S "of the", x, z]
 
   -- | with added constraint
 requirementS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
-requirementS a b = requirementTemplate (plural a) (plural b) ((getAcc twoD)
-  +:+ (plural CP.rigidBody))
+requirementS a b = requirementTemplate (plural a) (plural b) (getAcc twoD
+  +:+ plural CP.rigidBody)
 
   -- | without added constraint
 requirementS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
 requirementS' a b = requirementS a b EmptyS 
 
 -- some requirements look like they could be parametrized
-simSpaceDesc = foldlSent [S "Create a", (phrase CP.space), S "for all of the",
-  (plural CP.rigidBody), S "in the", (phrase physicalSim), 
+simSpaceDesc = foldlSent [S "Create a", phrase CP.space, S "for all of the",
+  plural CP.rigidBody, S "in the", phrase physicalSim, 
   S "to interact in"]
 
-inputInitialCondsDesc = foldlSent [S "Input the initial", 
-  (plural QPP.mass) `sC` (plural QP.velocity) `sC` 
-  (plural QM.orientation) `sC` (plural QP.angularVelocity), 
-  S "of" `sC` S "and", (plural QP.force), S "applied on", 
-  (plural CP.rigidBody)]
+inputInitialCondsDesc = foldlSent [S "Input the initial", foldlList Comma List
+  [plural QPP.mass, plural QP.velocity, plural QM.orientation,
+  plural QP.angularVelocity `sOf` EmptyS, plural QP.force +:+ S "applied on"],
+  plural CP.rigidBody]
 
-inputSurfacePropsDesc = foldlSent [S "Input the", (phrase CM.surface), 
-  (plural property), S "of the", plural body, S "such as",
-  (phrase CP.friction) `sOr` (phrase CP.elasticity)]
+inputSurfacePropsDesc = foldlSent [S "Input", (phrase CM.surface +:+
+  plural property) `ofThe` plural body, S "such as", phrase CP.friction `sOr`
+  phrase CP.elasticity]
 
 verifyPhysConsDesc = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
-  (makeRef2S $ SRS.solCharSpec ([]::[Contents]) ([]::[Section]))]
+  makeRef2S (SRS.solCharSpec [] [])]
 
-calcTransOverTimeDesc = requirementS (QP.position) (QP.velocity) 
-  (S "acted upon by a" +:+ (phrase QP.force))
+calcTransOverTimeDesc = requirementS QP.position QP.velocity 
+  (S "acted upon by a" +:+ phrase QP.force)
 
-calcRotOverTimeDesc = requirementS' (QM.orientation) (QP.angularVelocity)
+calcRotOverTimeDesc = requirementS' QM.orientation QP.angularVelocity
 
 deterCollsDesc = foldlSent [S "Determine if any of the", 
-  (plural CP.rigidBody), S "in the", (phrase CP.space), 
+  plural CP.rigidBody, S "in the", phrase CP.space, 
   S "have collided"]
 
-deterCollRespOverTimeDesc = requirementS (QP.position) (QP.velocity) 
-  (S "that have undergone a" +:+ (phrase CP.collision))
+deterCollRespOverTimeDesc = requirementS QP.position QP.velocity 
+  (S "that have undergone a" +:+ phrase CP.collision)
 
 simSpace, inputInitialConds, inputSurfaceProps, verifyPhysCons, calcTransOverTime,
   calcRotOverTime, deterColls, deterCollRespOverTime :: ConceptInstance
@@ -110,9 +99,6 @@ deterCollRespOverTime = cic "deterCollRespOverTime" deterCollRespOverTimeDesc "D
 -- 5.2 : Nonfunctional Requirements --
 --------------------------------------
 
-nonfuncReqsSection :: Section
-nonfuncReqsSection = SRS.nonfuncReq (mkEnumSimpleD nonfuncReqs) []
-
 nonfuncReqs :: [ConceptInstance] 
 nonfuncReqs = [highPerformance, correct, understandable, portable, reliable, reusable, maintainable]
 
@@ -122,9 +108,8 @@ highPerformance = cic "highPerformance" (foldlSent [
   ]) "High-Performance" nonFuncReqDom
 
 correct :: ConceptInstance
-correct = cic "correct" (foldlSent [
-  plural output_ `ofThe'` phrase code, S "have the",
-  plural property, S "described in", makeRef2S (SRS.propCorSol propsDeriv [])
+correct = cic "correct" (foldlSent [plural output_ `ofThe'` phrase code,
+  S "have the", plural property, S "described" `sIn` makeRef2S (SRS.propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
 understandable :: ConceptInstance

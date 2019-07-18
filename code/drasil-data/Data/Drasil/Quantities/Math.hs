@@ -2,8 +2,9 @@ module Data.Drasil.Quantities.Math where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
+import Theory.Drasil (mkQuantDef)
 
-import Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradient, 
+import qualified Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradient, 
     normalV, orient, perpV, pi_, surArea, surface, unitV)
 import Data.Drasil.SI_Units (metre, m_2, radian)
 
@@ -17,7 +18,7 @@ unitVect    = dqd' CM.unitV    (const $ vec $ hat lI)  Real Nothing
 unitVectj   = dqd' CM.unitV    (const $ vec $ hat lJ)  Real Nothing
 perpVect    = dqd' CM.perpV    (const $ vec lN)        Real Nothing
 pi_         = dqd' CM.pi_      (const lPi)             Real Nothing
-euclidNorm  = dqd' CM.euclidN  (const $ Concat [Atomic "||", (vec lR), Atomic "||"])
+euclidNorm  = dqd' CM.euclidN  (const $ Concat [Atomic "||", vec lR, Atomic "||"])
                                                         Real Nothing  
 
 area, diameter, surface, surArea, orientation :: UnitalChunk
@@ -27,3 +28,8 @@ diameter    = ucs' CM.diameter lD   Real    metre
 surface     = ucs' CM.surface  cS   Real    m_2
 surArea     = ucs' CM.surArea  cA   Real    m_2
 orientation = ucs' CM.orient   lPhi Radians radian
+
+-- Constants
+
+piConst :: QDefinition
+piConst = mkQuantDef pi_ (Dbl 3.14159265)

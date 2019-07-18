@@ -1,56 +1,30 @@
 {-# LANGUAGE TupleSections #-}
 
-module Language.Drasil.Code.Imperative.Helpers (Pair(..), Terminator (..),
-  ScopeTag(..), ModData(..), md, MethodData(..), mthd, StateVarData(..), svd,
-  blank,oneTabbed,oneTab,verticalComma, angles,doubleQuotedText,capitalize,
-  himap,hicat,vicat,vibcat,vmap,vimap,vibmap, mapPairFst, mapPairSnd, liftA4, 
-  liftA5, liftA6, liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, 
-  lift3Pair, lift4Pair, liftPairFst
+module Language.Drasil.Code.Imperative.Helpers (blank,verticalComma,
+  angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
+  emptyIfEmpty, emptyIfNull, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, 
+  liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 
+  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType, getStr
 ) where
 
-import Language.Drasil.Code.Imperative.New (Label)
+import Database.Drasil(ChunkDB, termTable)
+
+import Language.Drasil
+import Language.Drasil.Chunk.Code (symbToCodeName)
+import qualified Language.Drasil.Code.Code as C (CodeType(..))
+import qualified Language.Drasil.Code.Imperative.Symantics as S ( 
+  RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
-import Data.Char (toUpper)
+import Control.Lens (view)
 import Data.List (intersperse)
+import qualified Data.Map as Map (lookup)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
-  (<>), comma, punctuate, nest)
-
-class Pair p where
-  pfst :: p x y a -> x a
-  psnd :: p x y b -> y b
-  pair :: x a -> y a -> p x y a
-
-data Terminator = Semi | Empty
-
-data ScopeTag = Pub | Priv deriving Eq
-
-data ModData = MD {name :: Label, isMainMod :: Bool, modDoc :: Doc}
-
-md :: Label -> Bool -> Doc -> ModData
-md = MD
-
-data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag, 
-  mthdDoc :: Doc}
-
-mthd :: Bool -> ScopeTag -> Doc -> MethodData
-mthd = MthD 
-
-data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc, 
-  destructSts :: (Doc, Terminator)}
-
-svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
-svd = SVD
+  (<>), comma, punctuate, empty, isEmpty)
 
 blank :: Doc
 blank = text ""
-
-oneTabbed :: [Doc] -> Doc
-oneTabbed = vcat . map oneTab
-
-oneTab :: Doc -> Doc
-oneTab = nest 4
 
 verticalComma :: (a -> Doc) -> [a] -> Doc
 verticalComma f = vcat . punctuate comma . map f
@@ -60,10 +34,6 @@ angles d = char '<' <> d <> char '>'
 
 doubleQuotedText :: String -> Doc
 doubleQuotedText = doubleQuotes . text
-
-capitalize :: String -> String
-capitalize [] = error "capitalize called on an empty String"
-capitalize (c:cs) = toUpper c : cs
 
 himap :: Doc -> (a -> Doc) -> [a] -> Doc
 himap c f = hcat . intersperse c . map f
@@ -85,6 +55,12 @@ vimap c f = vicat c . map f
 
 vibmap :: (a -> Doc) -> [a] -> Doc
 vibmap = vimap blank
+
+emptyIfEmpty :: Doc -> Doc -> Doc
+emptyIfEmpty ifDoc elseDoc = if isEmpty ifDoc then empty else elseDoc
+
+emptyIfNull :: [a] -> Doc -> Doc
+emptyIfNull lst elseDoc = if null lst then empty else elseDoc
 
 mapPairFst :: (a -> b) -> (a, c) -> (b, c)
 mapPairFst f (a, c) = (f a, c)
@@ -134,3 +110,32 @@ liftPair (a, b) = liftA2 (,) a b
 
 liftPairFst :: Functor f => (f a, b) -> f (a, b)
 liftPairFst (c, n) = fmap (, n) c
+
+getInnerType :: C.CodeType -> C.CodeType
+getInnerType (C.List innerT) = innerT
+getInnerType _ = error "Attempt to extract inner type of list from a non-list type" 
+
+getNestDegree :: Integer -> C.CodeType -> Integer
+getNestDegree n (C.List t) = getNestDegree (n+1) t
+getNestDegree n _ = n
+
+convType :: (S.RenderSym repr) => C.CodeType -> repr (S.StateType repr)
+convType C.Boolean = S.bool
+convType C.Integer = S.int
+convType C.Float = S.float
+convType C.Char = S.char
+convType C.String = S.string
+convType (C.List t) = S.listType S.dynamic_ (convType t)
+convType (C.Iterator t) = S.iterator $ convType t
+convType (C.Object n) = S.obj n
+convType (C.Enum n) = S.enumType n
+convType C.Void = S.void
+convType C.File = error "convType: File ?"
+
+getStr :: ChunkDB -> Sentence -> String
+getStr _ (S s) = s
+getStr _ (P s) = symbToCodeName s
+getStr db ((:+:) s1 s2) = getStr db s1 ++ getStr db s2
+getStr db (Ch _ u) = maybe "" (getStr db . phraseNP . view term . fst)
+  (Map.lookup u (termTable db))
+getStr _ _ = error "Term is not a string" 

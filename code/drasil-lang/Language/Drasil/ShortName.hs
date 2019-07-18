@@ -1,4 +1,4 @@
-module Language.Drasil.ShortName(ShortName, getStringSN, shortname') where
+module Language.Drasil.ShortName where
 
 newtype ShortName = ShortNm String
 

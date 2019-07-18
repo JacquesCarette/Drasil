@@ -3,8 +3,8 @@ module Language.Drasil.Code.Imperative.Build.Import (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.New (Label)
-import Language.Drasil.Code.Imperative.Helpers (ModData(..))
+import Language.Drasil.Code.Imperative.Symantics (Label)
+import Language.Drasil.Code.Imperative.Data (ModData(..))
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig(BuildConfig),
   BuildDependencies(..), Ext(..), includeExt, NameOpts, nameOpts, packSep,
   Runnable(Runnable), BuildName(..), RunType(..))

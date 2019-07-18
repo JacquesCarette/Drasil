@@ -62,7 +62,7 @@ sysCont     cs ss = section' (titleize Doc.sysCont)              cs ss  "SysCont
 userChar    cs ss = section' (titleize' Doc.userCharacteristic)  cs ss  "UserChars"
 sysCon      cs ss = section' (titleize' Doc.systemConstraint)    cs ss  "SysConstraints"
 
-scpOfTheProj cs ss = section' (at_start (Doc.scpOfTheProj titleize)) cs ss "ProjScope"
+scpOfTheProj cs ss = section' (atStart (Doc.scpOfTheProj titleize)) cs ss "ProjScope"
 prodUCTable cs ss  = section' (titleize Doc.prodUCTable)      cs ss      "UseCaseTable"
 indPRCase   cs ss  = section (titleize' Doc.indPRCase)       cs ss      indPRCaseLabel
 
@@ -94,7 +94,7 @@ valsOfAuxCons cs ss = section (titleize Doc.consVals)        cs ss valsOfAuxCons
 appendix    cs ss   = section' (titleize Doc.appendix)          cs ss "Appendix"
 
 reference   cs ss = section (titleize' Doc.reference)        cs ss referenceLabel
-offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
+offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "offShelfSolns"
 
 tOfSymb cs ss = section (titleize Doc.tOfSymb) cs ss tOfSymbLabel
 

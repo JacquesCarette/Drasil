@@ -12,8 +12,6 @@ import Data.Drasil.Concepts.Documentation (model)
 import Data.Drasil.Concepts.Physics (friction, linear)
 import Data.Drasil.Theories.Physics (newtonSL)
 
-import Data.Drasil.SentenceStructures (getTandS)
-
 import Drasil.SSP.Assumptions (assumpENSL, assumpSBSBISL)
 import Drasil.SSP.Defs (factorOfSafety)
 import Drasil.SSP.References (fredlund1977)
@@ -30,34 +28,34 @@ tMods = [factOfSafety, equilibrium, mcShrStrgth, effStress, newtonSL]
 
 ------------- New Chunk -----------
 factOfSafety :: TheoryModel
-factOfSafety = tm (cw factOfSafety_rc)
+factOfSafety = tm (cw factOfSafetyRC)
   [qw fs, qw resistiveShear, qw mobilizedShear] ([] :: [ConceptChunk])
-  [] [factOfSafety_rel] [] [makeCite fredlund1977] "factOfSafety" []
+  [] [factOfSafetyRel] [] [makeCite fredlund1977] "factOfSafety" []
 
 ------------------------------------
-factOfSafety_rc :: RelationConcept
-factOfSafety_rc = makeRC "factOfSafety_rc" factorOfSafety EmptyS factOfSafety_rel
+factOfSafetyRC :: RelationConcept
+factOfSafetyRC = makeRC "factOfSafetyRC" factorOfSafety EmptyS factOfSafetyRel
 
-factOfSafety_rel :: Relation
-factOfSafety_rel = (sy fs) $= (sy resistiveShear) / (sy mobilizedShear)
+factOfSafetyRel :: Relation
+factOfSafetyRel = sy fs $= sy resistiveShear / sy mobilizedShear
 
 --
 ------------- New Chunk -----------
 equilibrium :: TheoryModel
-equilibrium = tm (cw equilibrium_rc)
+equilibrium = tm (cw equilibriumRC)
   [qw fx] ([] :: [ConceptChunk])
-  [] [eq_rel] [] [makeCite fredlund1977] "equilibrium" [eq_desc]
+  [] [eqRel] [] [makeCite fredlund1977] "equilibrium" [eqDesc]
 
 ------------------------------------  
-equilibrium_rc :: RelationConcept
-equilibrium_rc = makeRC "equilibrium_rc" (nounPhraseSP "equilibrium") eq_desc eq_rel
+equilibriumRC :: RelationConcept
+equilibriumRC = makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
 
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
-eq_rel :: Relation
-eq_rel = foldr (($=) . sum_all (Atomic "i") . sy) 0 [fx, fy, momntOfBdy]
+eqRel :: Relation
+eqRel = foldr (($=) . sumAll (Atomic "i") . sy) 0 [fx, fy, momntOfBdy]
 
-eq_desc :: Sentence
-eq_desc = foldlSent [S "For a body in static equilibrium, the net",
+eqDesc :: Sentence
+eqDesc = foldlSent [S "For a body in static equilibrium, the net",
   plural force, S "and", plural momntOfBdy +:+. S "acting on the body will cancel out",
   S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
@@ -67,21 +65,21 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
 --
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
-mcShrStrgth = tm (cw mcShrStrgth_rc)
+mcShrStrgth = tm (cw mcShrStrgthRC)
   [qw shrStress, qw effNormStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
-  [] [mcSS_rel] [] [makeCite fredlund1977] "mcShrStrgth" [mcSS_desc]
+  [] [mcShrStrgthRel] [] [makeCite fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
 
 ------------------------------------
-mcShrStrgth_rc :: RelationConcept
-mcShrStrgth_rc = makeRC "mcShrStrgth_rc" (nounPhraseSP "Mohr-Coulumb shear strength")
-  mcSS_desc mcSS_rel
+mcShrStrgthRC :: RelationConcept
+mcShrStrgthRC = makeRC "mcShrStrgthRC" (nounPhraseSP "Mohr-Coulumb shear strength")
+  mcShrStrgthDesc mcShrStrgthRel
 
-mcSS_rel :: Relation
-mcSS_rel = (sy shrStress) $= ((sy effNormStress) * (tan (sy fricAngle)) + (sy effCohesion))
+mcShrStrgthRel :: Relation
+mcShrStrgthRel = sy shrStress $= (sy effNormStress * tan (sy fricAngle) + sy effCohesion)
 
-mcSS_desc :: Sentence
-mcSS_desc = foldlSent [S "In this", phrase model, S "the",
+mcShrStrgthDesc :: Sentence
+mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
   getTandS shrStress, S "is proportional to the product of the",
   phrase effNormStress, ch effNormStress, S "on the plane", 
   S "with its static", phrase friction, S "in the angular form" +:+.
@@ -97,18 +95,18 @@ mcSS_desc = foldlSent [S "In this", phrase model, S "the",
 --
 ------------- New Chunk -----------
 effStress :: TheoryModel
-effStress = tm (cw effStress_rc)
+effStress = tm (cw effStressRC)
   [qw effectiveStress, qw totStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effS_rel] [] [makeCite fredlund1977] "effStress" [effS_desc]
+  [] [effStressRel] [] [makeCite fredlund1977] "effStress" [effStressDesc]
 
 ------------------------------------
-effStress_rc :: RelationConcept
-effStress_rc = makeRC "effStress_rc"
-  (nounPhraseSP "effective stress") effS_desc effS_rel -- l4
+effStressRC :: RelationConcept
+effStressRC = makeRC "effStressRC"
+  (nounPhraseSP "effective stress") effStressDesc effStressRel -- l4
 
-effS_rel :: Relation
-effS_rel = (sy effectiveStress) $= (sy totStress) - (sy porePressure)
+effStressRel :: Relation
+effStressRel = sy effectiveStress $= sy totStress - sy porePressure
 
-effS_desc :: Sentence
-effS_desc = foldlSent [ch totStress, S "is defined in", makeRef2S stressDD]
+effStressDesc :: Sentence
+effStressDesc = foldlSent [ch totStress, S "is defined in", makeRef2S stressDD]

@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs, propsDeriv) where
+module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs) where
 
 import Control.Lens ((^.))
 
@@ -18,7 +18,6 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.SentenceStructures (follows)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
 import Drasil.GlassBR.Concepts (glass)
@@ -26,9 +25,8 @@ import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL,
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
 import Drasil.GlassBR.IMods (iMods)
 import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
-import Drasil.GlassBR.Unitals (blast, charWeight, glassTy, glass_type, 
-  isSafeLR, isSafePb, loadSF, nomThick, notSafe, pbTol, plateLen, plateWidth, 
-  safeMessage, sdx, sdy, sdz, tNT)
+import Drasil.GlassBR.Unitals (inputs, blast, glassTy, isSafeLR, isSafePb, 
+  loadSF, notSafe, safeMessage)
 
 {--Functional Requirements--}
 
@@ -51,19 +49,14 @@ outputQuants               = cic "outputQuants"               outputQuantsDesc  
 
 inputGlassPropsDesc, checkInputWithDataConsDesc, outputValsAndKnownQuantsDesc, checkGlassSafetyDesc :: Sentence
 
-inputGlassPropsDesc = foldlSent [at_start input_, S "the", plural quantity, S "from",
+inputGlassPropsDesc = foldlSent [atStart input_, S "the", plural quantity, S "from",
   makeRef2S inputGlassPropsTable `sC` S "which define the" +:+ foldlList Comma List
-  [phrase glass +:+ plural dimension, (glassTy ^. defn), S "tolerable" +:+
-  phrase probability `sOf` phrase failure, (plural characteristic `ofThe` 
-  phrase blast)]]
+  [phrase glass +:+ plural dimension, glassTy ^. defn, S "tolerable" +:+
+  phrase probability `sOf` phrase failure, plural characteristic `ofThe` 
+  phrase blast]]
 
 inputGlassPropsTable :: LabelledContent
-inputGlassPropsTable = mkInputPropsTable requiredInputs inputGlassProps
-  where
-    requiredInputs :: [QuantityDict]
-    requiredInputs = (map qw [plateLen, plateWidth, charWeight])
-      ++ (map qw [pbTol, tNT]) ++ (map qw [sdx, sdy, sdz])
-      ++ (map qw [glass_type, nomThick])
+inputGlassPropsTable = mkInputPropsTable inputs inputGlassProps
 
 sysSetValsFollowingAssumpsDesc :: Sentence
 sysSetValsFollowingAssumpsDesc = foldlSent [S "The", phrase system, S "shall set the known",
@@ -91,7 +84,7 @@ outputValsAndKnownQuantsDesc = foldlSent [titleize output_, S "the", plural inQt
   S "from", makeRef2S sysSetValsFollowingAssumps]
 
 checkGlassSafetyDesc = foldlSent_ [S "If", E (sy isSafePb $&& sy isSafeLR),
-  sParen (S "from" +:+ (makeRef2S pbIsSafe) `sAnd` (makeRef2S lrIsSafe)) `sC`
+  sParen (S "from" +:+ makeRef2S pbIsSafe `sAnd` makeRef2S lrIsSafe) `sC`
   phrase output_, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase output_,
   S "the", phrase message, Quote (notSafe ^. defn)]
@@ -100,7 +93,7 @@ outputQuantsDesc :: Sentence
 outputQuantsDesc = foldlSent [titleize output_, S "the", plural quantity, S "from", makeRef2S outputQuantsTable]
 
 outputQuantsTable :: LabelledContent
-outputQuantsTable = mkValsSourceTable ((mkQRTuple iMods) ++ (mkQRTuple r6DDs)) "ReqOutputs"
+outputQuantsTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
                               (S "Required" +:+ titleize' output_ `follows` outputQuants)
   where
     r6DDs :: [DataDefinition]
@@ -111,13 +104,10 @@ outputQuantsTable = mkValsSourceTable ((mkQRTuple iMods) ++ (mkQRTuple r6DDs)) "
 nonfuncReqs :: [ConceptInstance]
 nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, portable]
 
-propsDeriv :: [Contents]
-propsDeriv = [foldlSP [S "FIXME"]]
-
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   plural output_ `ofThe'` phrase code, S "have the",
-  plural property, S "described in", makeRef2S (propCorSol propsDeriv [])
+  plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance

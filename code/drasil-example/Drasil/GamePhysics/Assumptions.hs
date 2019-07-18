@@ -4,9 +4,9 @@ import Language.Drasil hiding (organization)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation as Doc (simulation, assumpDom)
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody,  
-  cartesian, rightHand, collision, joint, damping, force, friction)
-import qualified Data.Drasil.Concepts.Math as CM (constraint)
+import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, force,
+  friction, joint, rigidBody)
+import qualified Data.Drasil.Concepts.Math as CM (cartesian, constraint, rightHand)
 
 import Drasil.GamePhysics.Concepts (twoD)
 
@@ -16,25 +16,25 @@ assumptions = [assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
 
 assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI,
   assumpCAJI :: ConceptInstance
-assumpOT = cic "assumpOT" (foldlSent assumptions_assum1) "objectTy" assumpDom
-assumpOD = cic "assumpOD" (foldlSent assumptions_assum2) "objectDimension" assumpDom
-assumpCST = cic "assumpCST" (foldlSent assumptions_assum3) "coordinateSystemTy" assumpDom
-assumpAD = cic "assumpAD" (foldlSent assumptions_assum4) "axesDefined" assumpDom
-assumpCT = cic "assumpCT" (foldlSent assumptions_assum5) "collisionType" assumpDom
-assumpDI = cic "assumpDI" (foldlSent assumptions_assum6) "dampingInvolvement" assumpDom
-assumpCAJI = cic "assumpCAJI" (foldlSent assumptions_assum7) "constraintsAndJointsInvolvement" assumpDom
+assumpOT = cic "assumpOT" (foldlSent assumpOTDesc) "objectTy" assumpDom
+assumpOD = cic "assumpOD" (foldlSent assumpODDesc) "objectDimension" assumpDom
+assumpCST = cic "assumpCST" (foldlSent assumpCSTDesc) "coordinateSystemTy" assumpDom
+assumpAD = cic "assumpAD" (foldlSent assumpADDesc) "axesDefined" assumpDom
+assumpCT = cic "assumpCT" (foldlSent assumpCTDesc) "collisionType" assumpDom
+assumpDI = cic "assumpDI" (foldlSent assumpDIDesc) "dampingInvolvement" assumpDom
+assumpCAJI = cic "assumpCAJI" (foldlSent assumpCAJIDesc) "constraintsAndJointsInvolvement" assumpDom
 
-assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
-  assumptions_assum6, assumptions_assum7 :: [Sentence]
+assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc, assumpCTDesc, 
+  assumpDIDesc, assumpCAJIDesc :: [Sentence]
 
 allObject :: Sentence -> [Sentence]
 allObject thing = [S "All objects are", thing]
 
 thereNo :: [Sentence] -> [Sentence]
 thereNo [x]      = [S "There is no", x, S "involved throughout the", 
-  (phrase simulation)]
+  phrase simulation]
 thereNo l        = [S "There are no", foldlList Comma List l, S "involved throughout the", 
-  (phrase simulation)]
+  phrase simulation]
 
 implies :: Sentence -> [Sentence]
 implies f = [S "and this implies that there are no", f] 
@@ -42,22 +42,20 @@ implies f = [S "and this implies that there are no", f]
 -- as was done in the original file,but it displays correctly
 --(line 52 was added for assumption6)
 
-assumptions_assum1 = allObject (plural CP.rigidBody)
-assumptions_assum2 = allObject (getAcc twoD)
-assumptions_assum3 = [S "The library uses a", (phrase CP.cartesian)]
-assumptions_assum4 = [S "The axes are defined using", 
-  (phrase CP.rightHand)]
-assumptions_assum5 = [S "All", (plural CP.rigidBody), 
-  (plural CP.collision), S "are vertex-to-edge", 
-  (plural CP.collision)]
+assumpOTDesc = allObject (plural CP.rigidBody)
+assumpODDesc = allObject (getAcc twoD)
+assumpCSTDesc = [S "The library uses a", phrase CM.cartesian]
+assumpADDesc = [S "The axes are defined using", phrase CM.rightHand]
+assumpCTDesc = [S "All", plural CP.rigidBody, plural CP.collision,
+  S "are vertex-to-edge", plural CP.collision]
 
-assumptions_assum6 = (thereNo [(phrase CP.damping)]) ++ (implies (phrase CP.friction +:+ plural CP.force))
-assumptions_assum7 = thereNo [(plural CM.constraint), (plural CP.joint)]
+assumpDIDesc = thereNo [phrase CP.damping] ++ implies (phrase CP.friction +:+ plural CP.force)
+assumpCAJIDesc = thereNo [plural CM.constraint, plural CP.joint]
 
 {-assumptions_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 
-  [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
-  assumptions_assum6, assumptions_assum7]-}
+  [assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc, assumpCTDesc, 
+  assumpDIDesc, assumpCAJIDesc]-}
 
 assumptionsListA :: [[Sentence]]
-assumptionsListA = [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4,
-  assumptions_assum5, assumptions_assum6, assumptions_assum7]
+assumptionsListA = [assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc,
+  assumpCTDesc, assumpDIDesc, assumpCAJIDesc]

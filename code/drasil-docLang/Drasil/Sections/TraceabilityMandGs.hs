@@ -1,76 +1,78 @@
-module Drasil.Sections.TraceabilityMandGs
-  ( traceMGF,
-    traceGIntro,
-    generateTraceTable
-   ) where
+module Drasil.Sections.TraceabilityMandGs (generateTraceTable,tvAssumps,
+  tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
+  tvChanges, traceMatAssumpOther, traceMatRefinement, traceMatOtherReq,
+  traceMatStandard) where
 
+import Drasil.DocumentLanguage.Core (TraceConfig(TraceConfig))
+import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
+  traceMReferrers, traceView, traceViewCC, TraceViewCat)
+
+import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
+  goalStmt, goalStmtDom, requirement, reqDom, item, section_, likelyChg,
+  unlikelyChg)
+import qualified Data.Drasil.IdeaDicts as Doc (genDefn, dataDefn, inModel, thModel)
+import Database.Drasil(SystemInformation, _sysinfodb, gendefTable, dataDefnTable,
+  insmodelTable, theoryModelTable)
 import Language.Drasil
-import Database.Drasil(ChunkDB, SystemInformation, refbyLookup, refbyTable,
-  _sysinfodb)
-import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (purpose, component, dependency, item,
- reference, section_, traceyGraph, traceyMatrix)
-import Data.Drasil.Concepts.Math ( graph)
-import Data.Drasil.SentenceStructures (showingCxnBw, tableShows)
-import Data.Drasil.Utils (makeTMatrix)
-
-import Drasil.DocumentLanguage.Definitions (helpToRefField)
-import qualified Drasil.DocLang.SRS as SRS
-
-import Control.Lens ((^.))
-import Data.List (nub)
-import qualified Data.Map as Map
-
--- wrapper for traceMGIntro
-traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
-traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents)
-
--- generalized traceability matrix and graph introduction: variables are references to the three tables
--- generally found in this section (in order of being mentioned)
-traceMIntro :: [LabelledContent] -> [Sentence] -> Contents
-traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
-        `ofThe'` plural traceyMatrix, S "is to provide easy", plural reference, 
-        S "on what has to be additionally modified if a certain",
-        phrase component, S "is changed. Every time a", phrase component, 
-        S "is changed, the", plural item, S "in the row of that", 
-        phrase component, S "that are marked with an", Quote (S "X"), 
-        S "should be modified as well"] +:+ foldlSent (zipWith tableShows refs trailings)
-
--- generalized traceability matrix and graph introduction: variables are references to the three tables
--- generally found in this section (in order of being mentioned)
-traceGIntro :: [LabelledContent] -> [Sentence] -> [UnlabelledContent]
-traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
-        [phrase purpose `ofThe'` plural traceyGraph,
-        S "is also to provide easy", plural reference, S "on what has to be",
-        S "additionally modified if a certain", phrase component +:+. S "is changed", 
-        S "The arrows in the", plural graph, S "represent" +:+.
-        plural dependency, S "The", phrase component, S "at the tail of an arrow",
-        S "is depended on by the", phrase component, S "at the head of that arrow. Therefore, if a",
-        phrase component, S "is changed, the", plural component, S "that it points to should also",
-        S "be changed"] +:+ foldlSent (zipWith tableShows refs trailings)]
- 
-traceMRow :: ChunkDB -> [UID]
-traceMRow = nub . Map.keys . (^. refbyTable)
-
-traceMCol :: ChunkDB -> [UID]
-traceMCol = nub . concat . Map.elems . (^. refbyTable)
-
-traceMHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [Sentence]
-traceMHeader f c = map (`helpToRefField` c) $ f $ _sysinfodb c
- 
-traceMRowHeader :: SystemInformation -> [Sentence]
-traceMRowHeader = traceMHeader traceMRow
-
-traceMColHeader :: SystemInformation -> [Sentence]
-traceMColHeader = traceMHeader traceMCol
-
-traceMColumns :: ChunkDB -> [[UID]]
-traceMColumns c = map (`refbyLookup` (c ^. refbyTable)) $ traceMRow c
- 
 generateTraceTable :: SystemInformation -> LabelledContent
-generateTraceTable c = llcc (makeTabRef "Tracey") $ Table
-  (EmptyS : traceMColHeader c)
-  (makeTMatrix (traceMRowHeader c) (traceMColumns $ _sysinfodb c) $ traceMCol $ _sysinfodb c)
-  (showingCxnBw traceyMatrix $
-  titleize' item +:+ S "of Different" +:+ titleize' section_) True
+generateTraceTable = generateTraceTableView "Tracey"
+  (titleize' item +:+ S "of Different" +:+ titleize' section_) [tvEverything] [tvEverything]
+
+tvEverything :: TraceViewCat
+tvEverything = flip (const id)
+
+tvAssumps :: TraceViewCat
+tvAssumps = traceViewCC assumpDom
+
+tvDataDefns :: TraceViewCat
+tvDataDefns = traceView dataDefnTable
+
+tvGenDefns :: TraceViewCat
+tvGenDefns = traceView gendefTable
+
+tvTheoryModels :: TraceViewCat
+tvTheoryModels = traceView theoryModelTable
+
+tvInsModels :: TraceViewCat
+tvInsModels = traceView insmodelTable
+
+tvGoals :: TraceViewCat
+tvGoals = traceViewCC goalStmtDom
+
+tvReqs :: TraceViewCat
+tvReqs = traceViewCC reqDom
+
+tvChanges :: TraceViewCat
+tvChanges = traceViewCC chgProbDom
+
+traceMatAssumpOther :: TraceConfig
+traceMatAssumpOther = TraceConfig "TraceMatAvsAll" [plural Doc.dataDefn,
+  plural Doc.thModel, plural Doc.genDefn, plural Doc.inModel, plural requirement,
+  plural likelyChg, plural unlikelyChg +:+ S "on the" +:+. plural assumption]
+  (titleize' assumption +:+ S "and Other" +:+ titleize' item) [tvAssumps]
+  [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvChanges]
+
+traceMatRefinement :: TraceConfig
+traceMatRefinement = TraceConfig "TraceMatRefvsRef" [plural Doc.dataDefn,
+  plural Doc.thModel, plural Doc.genDefn, plural Doc.inModel +:+.
+  S "with each other"] (titleize' item +:+ S "and Other" +:+ titleize' section_)
+  [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
+  [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels]
+
+traceMatOtherReq :: SystemInformation -> TraceConfig
+traceMatOtherReq si = TraceConfig "TraceMatAllvsR" [x plural +:+ S "on the" +:+
+  plural Doc.dataDefn, plural Doc.thModel, plural Doc.genDefn, plural Doc.inModel]
+  (x titleize' +:+ S "and Other" +:+ titleize' item) [tvDataDefns, tvTheoryModels,
+  tvGenDefns, tvInsModels, tvReqs] [tvGoals, tvReqs] where
+    x g = foldl (\a (f,t) -> a `sC'` case traceMReferrers (flip f $ _sysinfodb si) $
+      _sysinfodb si of
+      [] -> mempty
+      _ -> g t) mempty [(tvReqs, requirement), (tvGoals, goalStmt)]
+    sC' EmptyS b = b
+    sC' a EmptyS = a
+    sC' a b = sC a b
+
+traceMatStandard :: SystemInformation -> [TraceConfig]
+traceMatStandard s = map ($ s) [const traceMatAssumpOther, const traceMatRefinement,
+  traceMatOtherReq]

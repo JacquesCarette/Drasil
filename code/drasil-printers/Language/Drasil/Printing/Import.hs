@@ -58,6 +58,7 @@ mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
 -- and decimal point position and a counter and exponent
 digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
+digitsProcess ds pos _ (-3) = [P.Int 0, P.MO P.Point] ++ replicate (3 - pos) (P.Int 0) ++ map P.Int ds
 digitsProcess (hd:tl) pos coun ex 
   | pos /= coun = P.Int hd : digitsProcess tl pos (coun + 1) ex
   | ex /= 0 = [P.MO P.Point, P.Int hd] ++ map P.Int tl ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
@@ -78,17 +79,9 @@ digitsProcess [] pos coun ex
 -- https://en.wikipedia.org/wiki/Scientific_notation
 processExpo :: Int -> (Int, Int)
 processExpo a 
-  | a == 0 = (3, -3)
-  | a == 1 = (1, 0)
-  | a == 2 = (2, 0)
-  | a == -1 = (3, -3) 
-  | a == -2 = (1, -3)
-  | a > 0 && mod (a-1)  3 == 0 = (1, a-1)
-  | a > 0 && mod (a-1)  3 == 1 = (2, a-2)
-  | a > 0 && mod (a-1)  3 == 2 = (3, a-3)
-  | a < 0 && mod (-a) 3 == 0 = (3, a-3)
-  | a < 0 && mod (-a) 3 == 1 = (2, a-2)
-  | a < 0 && mod (-a) 3 == 2 = (1, a-1)
+  | mod (a-1) 3 == 0 = (1, a-1)
+  | mod (a-1) 3 == 1 = (2, a-2)
+  | mod (a-1) 3 == 2 = (3, a-3)
   | otherwise = error "The cases of processExpo should be exhaustive!"
 
 -- | expr translation function from Drasil to layout AST
@@ -97,20 +90,23 @@ expr (Dbl d)           sm = case sm ^. getSetting of
   Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
      (fst $ processExpo $ snd $ floatToDigits 10 d) 0
      (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
-  Scientific           ->  P.Dbl d
+  Scientific  ->  P.Dbl d
 expr (Int i)            _ = P.Int i
-expr (Str s)            _ = P.Str   s
+expr (Str s)            _ = P.Str s
+expr (Perc a b)        sm = P.Row [expr (Dbl val) sm, P.MO P.Perc]
+  where
+    val = fromIntegral a / (10 ** fromIntegral (b - 2))
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
 expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
 expr (AssocA Add l)    sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
 expr (AssocA Mul l)    sm = P.Row $ mulExpr l sm
-expr (Deriv Part a b) sm =
-  P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
-        (P.Row [P.Spec Partial, P.Spc P.Thin,
+expr (Deriv Part a b)  sm =
+  P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, expr a sm])
+        (P.Row [P.Spc P.Thin, P.Spec Partial,
                 symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb])
 expr (Deriv Total a b)sm =
-  P.Div (P.Row [P.Ident "d", P.Spc P.Thin, expr a sm])
-        (P.Row [P.Ident "d", P.Spc P.Thin, symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb])
+  P.Div (P.Row [P.Spc P.Thin, P.Ident "d", expr a sm])
+        (P.Row [P.Spc P.Thin, P.Ident "d", symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb]) 
 expr (C c)            sm = symbol $ lookupC (sm ^. ckdb) c
 expr (FCall f [x])    sm = P.Row [expr f sm, parens $ expr x sm]
 expr (FCall f l)      sm = P.Row [expr f sm,
@@ -152,7 +148,7 @@ expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b)   sm = pow sm a b
 expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
 expr (Operator o d e)     sm = eop sm o d e
-expr (IsIn  a b)          sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
+expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space b]
 expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. ckdb) c) ri
 
 lookupC :: ChunkDB -> UID -> Symbol
@@ -391,20 +387,26 @@ layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
   dtyp (layPairs pairs) 
   (P.S $ getRefAdd x)
   where layPairs = map (\(x',y) -> (x', map (lay sm) y))
-layLabelled sm (LblC _ (Paragraph c))           = T.Paragraph (spec sm c)
-layLabelled sm (LblC _ (Enumeration cs))        = T.List $ makeL sm cs
-layLabelled  _ (LblC _ (Bib bib))               = T.Bib $ map layCite bib
+layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
+layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
+  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
+  where ref = P.S $ refAdd x ++ "Deriv"
+layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
+layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
 layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
-layUnlabelled sm (Paragraph c)          = T.Paragraph (spec sm c)
-layUnlabelled sm (EqnBlock c)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
-layUnlabelled sm (Enumeration cs)       = T.List $ makeL sm cs
-layUnlabelled sm (Figure c f wp)    = T.Figure (P.S "nolabel2") (spec sm c) f wp
-layUnlabelled sm (Graph ps w h t)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
+layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
+layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
+  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
+  where ref = P.S "nolabel1"
+layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
+layUnlabelled sm (Figure c f wp)  = T.Figure (P.S "nolabel2") (spec sm c) f wp
+layUnlabelled sm (Graph ps w h t) = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (\(x,y) -> (x, map temp y ))

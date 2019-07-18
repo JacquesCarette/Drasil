@@ -15,60 +15,108 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-void derived_values() {
+void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T_init, double &t_final, double &L, double &T_C, double &t_step, double &rho_W, double &D, double &A_tol, double &R_tol, double &T_W, double &E_W) {
+    ifstream infile;
+    infile.open(filename, std::fstream::in);
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> A_C;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> C_W;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> h_C;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> T_init;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> t_final;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> L;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> T_C;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> t_step;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> rho_W;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> D;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> A_tol;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> R_tol;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> T_W;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile >> E_W;
+    infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    infile.close();
 }
 
-void input_constraints(InputParameters &inParams) {
-    if (!((inParams.A_C <= A_C_max))) {
+void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
+    if (!((A_C <= 100000))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!(((C_W_min < inParams.C_W) && (inParams.C_W < C_W_max)))) {
+    if (!(((4170 < C_W) && (C_W < 4210)))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!(((h_C_min <= inParams.h_C) && (inParams.h_C <= h_C_max)))) {
+    if (!(((10 <= h_C) && (h_C <= 10000)))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!((inParams.t_final < t_final_max))) {
+    if (!((t_final < 86400))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!(((L_min <= inParams.L) && (inParams.L <= L_max)))) {
+    if (!(((0.1 <= L) && (L <= 50)))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!(((rho_W_min < inParams.rho_W) && (inParams.rho_W <= rho_W_max)))) {
+    if (!(((950 < rho_W) && (rho_W <= 1000)))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
     
-    if (!((inParams.A_C > 0))) {
+    if (!((A_C > 0))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!((inParams.C_W > 0))) {
+    if (!((C_W > 0))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!((inParams.h_C > 0))) {
+    if (!((h_C > 0))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!(((0 < inParams.T_init) && (inParams.T_init < 100)))) {
+    if (!(((0 < T_init) && (T_init < 100)))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!((inParams.t_final > 0))) {
+    if (!((t_final > 0))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!((inParams.L > 0))) {
+    if (!((L > 0))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!(((0 < inParams.T_C) && (inParams.T_C < 100)))) {
+    if (!(((0 < T_C) && (T_C < 100)))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!((inParams.rho_W > 0))) {
+    if (!(((0 < t_step) && (t_step < t_final)))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!((inParams.D > 0))) {
+    if (!((rho_W > 0))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!(((inParams.T_init <= inParams.T_W) && (inParams.T_W <= inParams.T_C)))) {
+    if (!((D > 0))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!((inParams.E_W >= 0))) {
+    if (!(((T_init <= T_W) && (T_W <= T_C)))) {
+        std::cout << "Warning: constraint violated" << std::endl;
+    }
+    if (!((E_W >= 0))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
 }

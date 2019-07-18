@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: June 3, 2019
+Last updated: June 11, 2019
 --------------------------------------------------
 
 **Concepts**
@@ -27,12 +27,6 @@ People.hs
 README.md
   - This file
 
-SentenceStructures.hs
-  - Contains functions for building `Sentence`s
-  
 SI_Units.hs
   - Contains the fundamental SI Units, and several derived units
-  
-Utils.hs
-  - Contains utility functions for use with Drasil
   

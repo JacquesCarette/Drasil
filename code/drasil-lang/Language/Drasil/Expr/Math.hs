@@ -69,7 +69,7 @@ dim = UnaryOp Dim
 idx :: Expr -> Expr -> Expr
 idx = BinaryOp Index
 
--- | Smart constructors for integers, doubles, strings
+-- | Smart constructors for integers, doubles, strings, percents
 int :: Integer -> Expr
 int = Int
 
@@ -79,6 +79,9 @@ dbl = Dbl
 str :: String -> Expr
 str = Str
 
+perc :: Integer -> Integer -> Expr
+perc = Perc
+
 -- | Smart constructor for set membership
 -- FIXME: first argument really ought to be restricted to a
 -- 'variable', as IsIn should only be used as a type proxy
@@ -87,20 +90,20 @@ isin = IsIn
 
 -- | Smart constructor for the summation, product, and integrals
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
-int_all, sum_all, prod_all :: Symbol -> Expr -> Expr
+intAll, sumAll, prodAll :: Symbol -> Expr -> Expr
 
 defint v low high = Operator Add (BoundedDD v Continuous low high)
-int_all v = Operator Add (AllDD v Continuous)
+intAll v = Operator Add (AllDD v Continuous)
 
 defsum v low high = Operator Add (BoundedDD v Discrete low high)
-sum_all v = Operator Add (AllDD v Discrete)
+sumAll v = Operator Add (AllDD v Discrete)
 
 defprod v low high = Operator Mul (BoundedDD v Discrete low high)
-prod_all v = Operator Mul (AllDD v Discrete)
+prodAll v = Operator Mul (AllDD v Discrete)
 
 -- | Smart constructor for 'real interval' membership
-real_interval :: HasUID c => c -> RealInterval Expr Expr -> Expr
-real_interval c = RealI (c ^. uid)
+realInterval :: HasUID c => c -> RealInterval Expr Expr -> Expr
+realInterval c = RealI (c ^. uid)
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
 euclidean :: [Expr] -> Expr

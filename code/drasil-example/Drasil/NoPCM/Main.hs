@@ -1,11 +1,16 @@
 module Main (main) where
 
-import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
-  ImplementationType(..), Lang(..), Logging(..), Structure(..))
+import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, 
+  ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
+  Structure(..), InputModule(..))
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.NoPCM.Body (srs, code, printSetting)
+import Drasil.NoPCM.Body (si, srs, printSetting)
+
+code :: CodeSpec
+code = codeSpec si choices []
+-- Sub interpolation mod into list when possible
 
 choices :: Choices
 choices = Choices {
@@ -13,10 +18,11 @@ choices = Choices {
   impType = Program,
   logFile = "log.txt",
   logging = LogNone,
-  comments = CommentNone,
+  comments = [],
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
-  inputStructure = Loose
+  inputStructure = Unbundled,
+  inputModule = Combined
 }       
        
 main :: IO ()            

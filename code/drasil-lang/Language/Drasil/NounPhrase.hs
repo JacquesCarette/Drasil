@@ -5,7 +5,7 @@ module Language.Drasil.NounPhrase
   , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS, cnUM
   , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
-  , at_startNP, at_startNP', titleizeNP, titleizeNP'
+  , atStartNP, atStartNP', titleizeNP, titleizeNP'
   -- re-export these
   , CapitalizationRule(..), PluralRule(..)
   ) where
@@ -33,17 +33,17 @@ type Capitalization = Sentence  --Using type synonyms for clarity.
 type PluralString   = String
 
 instance NounPhrase NP where
-  phraseNP (ProperNoun n _)             = S n
-  phraseNP (CommonNoun n _ _)           = S n
-  phraseNP (Phrase n _ _ _)             = n
-  pluralNP n@(ProperNoun _ p)           = sPlur (phraseNP n) p
-  pluralNP n@(CommonNoun _ p _)         = sPlur (phraseNP n) p
-  pluralNP (Phrase _ p _ _)             = p
-  sentenceCase n@ProperNoun {}   _ = phraseNP n
+  phraseNP (ProperNoun n _)           = S n
+  phraseNP (CommonNoun n _ _)         = S n
+  phraseNP (Phrase n _ _ _)           = n
+  pluralNP n@(ProperNoun _ p)         = sPlur (phraseNP n) p
+  pluralNP n@(CommonNoun _ p _)       = sPlur (phraseNP n) p
+  pluralNP (Phrase _ p _ _)           = p
+  sentenceCase n@ProperNoun {}      _ = phraseNP n
   sentenceCase n@(CommonNoun _ _ r) f = cap (f n) r
   sentenceCase n@(Phrase _ _ r _)   f = cap (f n) r
-  titleCase n@ProperNoun {}      _ = phraseNP n
-  titleCase n@CommonNoun {}    f = cap (f n) CapWords
+  titleCase n@ProperNoun {}         _ = phraseNP n
+  titleCase n@CommonNoun {}         f = cap (f n) CapWords
   titleCase n@(Phrase _ _ _ r)      f = cap (f n) r
   
 -- ===Constructors=== --
@@ -169,11 +169,11 @@ compoundPhraseP1 = compoundPhrase''' pluralNP
 
 -- === Helpers === 
 -- | Helper function for getting the sentence case of a noun phrase.
-at_startNP, at_startNP' :: NounPhrase n => n -> Capitalization
+atStartNP, atStartNP' :: NounPhrase n => n -> Capitalization
 -- | Singular sentence case.
-at_startNP  n = sentenceCase n phraseNP
+atStartNP  n = sentenceCase n phraseNP
 -- | Plural sentence case.
-at_startNP' n = sentenceCase n pluralNP
+atStartNP' n = sentenceCase n pluralNP
 
 -- | Helper function for getting the title case of a noun phrase.
 titleizeNP, titleizeNP' :: NounPhrase n => n -> Capitalization
@@ -214,23 +214,23 @@ findHyph :: String -> String
 findHyph "" = ""
 findHyph [x] = [x]
 findHyph (x:y:xs) 
-      | x == '-'    = '-' : (toUpper y : xs)
-      | otherwise   = x : findHyph (y:xs)
+  | x == '-'  = '-' : (toUpper y : xs)
+  | otherwise = x : findHyph (y:xs)
 
 capFirstWord :: String -> String
-capFirstWord (c:cs)
-    | not (isLetter c)          = c : cs
-    | not (isLatin1 c)          = c : cs
-    | otherwise                 = toUpper c : cs
 capFirstWord "" = ""
+capFirstWord (c:cs)
+  | not (isLetter c) = c : cs
+  | not (isLatin1 c) = c : cs
+  | otherwise        = toUpper c : cs
 
 capWords :: String -> String
-capWords (c:cs)
-    | not (isLetter c)          = c : cs
-    | not (isLatin1 c)          = c : cs
-    | (c : cs) `elem` doNotCaps = toLower c : cs
-    | otherwise                 = toUpper c : cs
 capWords "" = ""
+capWords (c:cs)
+  | not (isLetter c)          = c : cs
+  | not (isLatin1 c)          = c : cs
+  | (c : cs) `elem` doNotCaps = toLower c : cs
+  | otherwise                 = toUpper c : cs
 
 doNotCaps :: [String]
 doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",

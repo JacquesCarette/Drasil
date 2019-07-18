@@ -9,9 +9,9 @@ module Language.Drasil (
   -- Expr.Math
   , log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, square, euclidean
-  , dim, idx, int, dbl, str, isin, case_
-  , sum_all, defsum, prod_all, defprod, defint, int_all
-  , real_interval
+  , dim, idx, int, dbl, str, perc, isin, case_
+  , sumAll, defsum, prodAll, defprod, defint, intAll
+  , realInterval
   , deriv, pderiv
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2
@@ -66,7 +66,7 @@ module Language.Drasil (
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat, ec
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant
-  , codeVC, vc, implVar , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc', cic
+  , codeVC, implVar , dcc, dcc', dccWDS, dccWDS', vc, vc'', vcUnit, ccs, cc, cc', cic
   -- Chunk.UncertainQuantity
   , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
   , uncrtnw
@@ -82,7 +82,7 @@ module Language.Drasil (
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
   -- Derivation
-  , Derivation
+  , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
   -- ShortName
   , ShortName, shortname', getStringSN
   --Citations
@@ -105,7 +105,7 @@ module Language.Drasil (
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
-  , CapitalizationRule(..), at_startNP, at_startNP'
+  , CapitalizationRule(..), atStartNP, atStartNP'
   , PluralRule(..)
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
@@ -129,7 +129,7 @@ module Language.Drasil (
   -- Misc
   , mkTable
   -- People
-  , People, Person, person, HasName, name, manyNames, person', personWM
+  , People, Person, person, HasName, name, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   , comparePeople
   -- Stages
@@ -142,7 +142,7 @@ module Language.Drasil (
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
   -- Development.Sentence
-  , introduceAbb, phrase, plural, phrase's, plural's, at_start, at_start'
+  , introduceAbb, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
   , titleize, titleize'
   -- Uncertainty.Core
   , Uncertainty, uncty
@@ -168,11 +168,11 @@ module Language.Drasil (
   , month
   -- Chunk.UnitDefn
   , UnitDefn(..)
-  , from_udefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
+  , fromUDefn, unitCon, makeDerU
+  , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
   , scale, shift
   , derUC, derUC', derUC''
-  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
+  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
 ) where
 
@@ -183,12 +183,12 @@ import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), Deri
 import Language.Drasil.Expr.Extract (dep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
-          dim, idx, int, dbl, str, isin, case_,
-          sum_all, defsum, prod_all, defprod,
-          real_interval,
+          dim, idx, int, dbl, str, perc, isin, case_,
+          sumAll, defsum, prodAll, defprod,
+          realInterval,
           apply, apply1, apply2,
           sy, deriv, pderiv,
-          cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
+          cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, extractSection
@@ -209,7 +209,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
-import Language.Drasil.Derivation (Derivation)
+import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)
 import Language.Drasil.Data.Date (Month(..))
 import Language.Drasil.Chunk.Citation (
   -- Types
@@ -264,8 +264,8 @@ import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat,
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc -- all of it
-import Language.Drasil.People (People, Person, person, HasName(..), manyNames
-  , person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
+import Language.Drasil.People (People, Person, person, HasName(..),
+  person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'', comparePeople)
 import Language.Drasil.RefProg(Reference(..), RefInfo(..))
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..), prepend)
@@ -276,9 +276,9 @@ import Language.Drasil.Uncertainty(defaultUncrt, uncVal, uncPrec)
 
 import Language.Drasil.Development.Sentence -- are these really development?
 import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
-  , from_udefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
+  , fromUDefn, unitCon, makeDerU
+  , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
   , scale, shift
   , derUC, derUC', derUC''
-  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
+  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit))

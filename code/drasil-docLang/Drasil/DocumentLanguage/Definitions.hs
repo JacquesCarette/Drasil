@@ -14,7 +14,7 @@ module Drasil.DocumentLanguage.Definitions (
 ) where
 
 import Data.Map (keys)
-import Data.List (elem)
+import Data.List (elem, nub)
 import Control.Lens ((^.))
 
 import Language.Drasil
@@ -26,8 +26,6 @@ import Database.Drasil (SystemInformation, citeDB, conceptinsLookup,
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
   TheoryModel, inCons, outCons, imOutput, imInputs)
 import Utils.Drasil
-
-import Data.Drasil.Utils (eqUnR')
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
@@ -78,14 +76,15 @@ instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
-derivation :: HasDerivation c => c -> [Contents]
-derivation g = map makeDerivationContents (g ^. derivations)
+derivation :: (HasDerivation c, HasShortName c, Referable c) => c -> Contents
+derivation c = maybe (mkParagraph EmptyS)
+  (\(Derivation h d) -> LlC $ llcc (makeRef2 c) $ DerivBlock h $ map makeDerivCons d) $ c ^. derivations
 
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
-makeDerivationContents :: Sentence -> Contents
-makeDerivationContents (E e) = UlC $ ulcc $ EqnBlock e
-makeDerivationContents s     = UlC $ ulcc $ Paragraph s
+makeDerivCons :: Sentence -> RawContent
+makeDerivCons (E e) = EqnBlock e
+makeDerivCons s     = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String, [Contents])]
@@ -97,7 +96,7 @@ nonEmpty _   f xs = f xs
 
 -- | Create the fields for a model from a relation concept (used by tmodel)
 mkTMField :: TheoryModel -> SystemInformation -> Field -> ModRow -> ModRow
-mkTMField t _ l@Label fs  = (show l, [mkParagraph $ at_start t]) : fs
+mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
 mkTMField t _ l@DefiningEquation fs =
   (show l, map eqUnR' (t ^. invariants)) : fs 
 mkTMField t m l@(Description v u) fs = (show l,
@@ -110,7 +109,7 @@ mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
 helperRefs :: HasUID t => t -> SystemInformation -> Sentence
-helperRefs t s = foldlSent $ map (`helpToRefField` s) $ refbyLookup (t ^. uid) (_sysinfodb s ^. refbyTable)
+helperRefs t s = foldlList Comma List $ map (`helpToRefField` s) $ nub $ refbyLookup (t ^. uid) (_sysinfodb s ^. refbyTable)
 
 helpToRefField :: UID -> SystemInformation -> Sentence
 helpToRefField t si
@@ -133,7 +132,7 @@ helperSources x  = [mkParagraph $ foldlList Comma List $ map Ref x]
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
-mkDDField d _ l@Label fs = (show l, [mkParagraph $ at_start d]) : fs
+mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
 mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb d]) : fs
 mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless d]) : fs
 mkDDField d _ l@DefiningEquation fs = (show l, [eqUnR' $ sy d $= d ^. defnExpr]) : fs 
@@ -163,7 +162,7 @@ buildDDescription' Verbose u d m = [UlC . ulcc . Enumeration $ Definitions $
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: GenDefn -> SystemInformation -> Field -> ModRow -> ModRow
-mkGDField g _ l@Label fs = (show l, [mkParagraph $ at_start g]) : fs
+mkGDField g _ l@Label fs = (show l, [mkParagraph $ atStart g]) : fs
 mkGDField g _ l@Units fs = 
   maybe fs (\udef -> (show l, [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
 mkGDField g _ l@DefiningEquation fs = (show l, [eqUnR' $ g ^. relat]) : fs
@@ -176,7 +175,7 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
 -- | Create the fields for an instance model from an 'InstanceModel' chunk
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
-mkIMField i _ l@Label fs  = (show l, [mkParagraph $ at_start i]) : fs
+mkIMField i _ l@Label fs  = (show l, [mkParagraph $ atStart i]) : fs
 mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' $ i ^. relat]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs

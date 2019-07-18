@@ -1,5 +1,5 @@
 Name:		drasil-utils
-Version:	0.1.0
+Version:	0.1.1
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -10,7 +10,10 @@ library
     Utils.Drasil
 
   other-modules:
-     Utils.Drasil.Fold
+     Utils.Drasil.Document
+   , Utils.Drasil.English
+   , Utils.Drasil.Fold
+   , Utils.Drasil.Misc
    , Utils.Drasil.Phrase
    , Utils.Drasil.Sentence
 

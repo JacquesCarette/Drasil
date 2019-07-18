@@ -6,15 +6,11 @@ module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Language.Drasil.Code (($:=), Func, FuncStmt(..), Ind(..), Mod, asExpr, 
-  fdec, ffor, funcData, funcDef, junk, junkLine, listEntry, multiLine, packmod, 
-  repeated, singleLine, singleton)
-
-import Drasil.GlassBR.Unitals (charWeight, glass_type, nomThick, pbTol, 
-  plateLen, plateWidth, sdx, sdy, sdz, tNT)
+import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, asExpr, 
+  fdec, ffor, funcData, funcDef, multiLine, packmod, repeated, singleLine)
 
 allMods :: [Mod]
-allMods = [readTableMod, inputMod, interpMod]
+allMods = [readTableMod, interpMod]
 
 -- It's a bit odd that this has to be explicitly built here...
 implVars :: [QuantityDict]
@@ -25,36 +21,14 @@ implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 --from TSD.txt:
 
 readTableMod :: Mod
-readTableMod = packmod "ReadTable" [readTable]
+readTableMod = packmod "ReadTable"
+  "Provides a function for reading glass ASTM data" [readTable]
 
 readTable :: Func
 readTable = funcData "read_table"
-  [ singleLine (repeated [junk, listEntry [WithPattern] zVector]) ',',
-    multiLine (repeated [listEntry [WithLine, WithPattern] xMatrix,
-                         listEntry [WithLine, WithPattern] yMatrix]) ','
-  ]
-
------
-
---from defaultInput.txt:
-
-inputMod :: Mod
-inputMod = packmod "InputFormat" [inputData]
-
-inputData :: Func
-inputData = funcData "get_input"
-  [ junkLine,
-    singleton plateLen, singleton plateWidth, singleton nomThick,
-    junkLine,
-    singleton glass_type,
-    junkLine,
-    singleton charWeight,
-    junkLine,
-    singleton tNT,
-    junkLine,
-    singleton sdx, singleton sdy, singleton sdz,
-    junkLine,
-    singleton pbTol
+  "Reads glass ASTM data from a file with the given file name"
+  [ singleLine (repeated [zVector]) ',',
+    multiLine (repeated [xMatrix, yMatrix]) ','
   ]
 
 -----
@@ -144,20 +118,24 @@ interpOver ptx pty ind vv =
 -- Note how this one uses a semantic function in its body
 -- But it is also 'wrong' in the sense that it assumes x_1 <= x <= x_2
 linInterpCT :: Func
-linInterpCT = funcDef "lin_interp" [x_1, y_1, x_2, y_2, x] Real
+linInterpCT = funcDef "lin_interp" "Performs linear interpolation" 
+  [x_1, y_1, x_2, y_2, x] Real
   [ FRet $ onLine (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
 
 findCT :: Func
-findCT = funcDef "find" [arr, v] Natural
+findCT = funcDef "find" 
+  "Finds the array index for a value closest to the given value" 
+  [arr, v] Natural
   [
     ffor i (sy i $< (dim (sy arr) - 1))
-      [ FCond ((vLook arr i 0 $<= (sy v)) $&& ((sy v) $<= vLook arr i 1))
+      [ FCond ((vLook arr i 0 $<= sy v) $&& (sy v $<= vLook arr i 1))
         [ FRet $ sy i ] [] ],
     FThrow "Bound error"
   ]
 
 extractColumnCT :: Func
-extractColumnCT = funcDef "extractColumn" [mat, j] (Vect Real)
+extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
+  [mat, j] (Vect Real)
   [
     fdec col,
     --
@@ -167,7 +145,9 @@ extractColumnCT = funcDef "extractColumn" [mat, j] (Vect Real)
   ]
 
 interpY :: Func
-interpY = funcDef "interpY" [filename, x, z] Real
+interpY = funcDef "interpY" 
+  "Linearly interpolates a y value at given x and z values" 
+  [filename, x, z] Real
   [
   -- hack
   fdec xMatrix,
@@ -191,7 +171,9 @@ interpY = funcDef "interpY" [filename, x, z] Real
   ]
 
 interpZ :: Func
-interpZ = funcDef "interpZ" [filename, x, y] Real
+interpZ = funcDef "interpZ" 
+  "Linearly interpolates a z value at given x and y values" 
+  [filename, x, y] Real
   [
     -- hack
   fdec xMatrix,
@@ -220,4 +202,6 @@ interpZ = funcDef "interpZ" [filename, x, y] Real
   ]
 
 interpMod :: Mod
-interpMod = packmod "Interpolation" [linInterpCT, findCT, extractColumnCT, interpY, interpZ]
+interpMod = packmod "Interpolation" 
+  "Provides functions for linear interpolation on three-dimensional data" 
+  [linInterpCT, findCT, extractColumnCT, interpY, interpZ]

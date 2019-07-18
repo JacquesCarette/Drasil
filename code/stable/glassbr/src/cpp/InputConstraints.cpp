@@ -18,16 +18,24 @@ using std::ofstream;
 #include "InputParameters.hpp"
 
 void input_constraints(InputParameters &inParams) {
+    ofstream outfile;
+    outfile.open("log.txt", std::fstream::app);
+    outfile << "function input_constraints called with inputs: {" << std::endl;
+    outfile << "  inParams = ";
+    outfile << "Instance of InputParameters object" << std::endl;
+    outfile << "  }" << std::endl;
+    outfile.close();
+    
     if (!(((0.1 <= inParams.a) && (inParams.a <= 5.0)))) {
         throw("InputError");
     }
     if (!(((0.1 <= inParams.b) && (inParams.b <= 5.0)))) {
         throw("InputError");
     }
-    if (!(((6.0 <= inParams.SD) && (inParams.SD <= 130.0)))) {
+    if (!(((4.5 <= inParams.w) && (inParams.w <= 910.0)))) {
         throw("InputError");
     }
-    if (!(((4.5 <= inParams.w) && (inParams.w <= 910.0)))) {
+    if (!(((6.0 <= inParams.SD) && (inParams.SD <= 130.0)))) {
         throw("InputError");
     }
     if (!((inParams.AR <= 5.0))) {
@@ -43,19 +51,19 @@ void input_constraints(InputParameters &inParams) {
     if (!(((0 < inParams.b) && (inParams.b <= inParams.a)))) {
         throw("InputError");
     }
-    if (!((inParams.SD > 0))) {
-        throw("InputError");
-    }
     if (!((inParams.w > 0))) {
-        throw("InputError");
-    }
-    if (!((inParams.AR >= 1))) {
         throw("InputError");
     }
     if (!(((0 < inParams.P_btol) && (inParams.P_btol < 1)))) {
         throw("InputError");
     }
     if (!((inParams.TNT > 0))) {
+        throw("InputError");
+    }
+    if (!((inParams.SD > 0))) {
+        throw("InputError");
+    }
+    if (!((inParams.AR >= 1))) {
         throw("InputError");
     }
 }

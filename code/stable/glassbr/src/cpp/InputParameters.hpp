@@ -1,3 +1,6 @@
+/** \file InputParameters.hpp
+    \brief Provides the structure for holding input parameters
+*/
 #ifndef InputParameters_h
 #define InputParameters_h
 
@@ -9,13 +12,13 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
+/** \brief Structure for holding the input parameters and derived values
+*/
 class InputParameters {
     public:
         double a;
         double b;
-        double SD;
         double w;
-        double AR;
         double P_btol;
         double TNT;
         string g;
@@ -26,9 +29,10 @@ class InputParameters {
         double h;
         double LDF;
         double GTF;
+        double SD;
+        double AR;
         double w_TNT;
         
-        InputParameters();
         ~InputParameters();
     
     private:

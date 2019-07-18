@@ -2,56 +2,77 @@ from __future__ import print_function
 import sys
 import math
 
-A_C = 0.0
-C_W = 0.0
-h_C = 0.0
-T_init = 0.0
-t_final = 0.0
-L = 0.0
-T_C = 0.0
-rho_W = 0.0
-D = 0.0
-T_W = 0.0
-E_W = 0.0
+def get_input(filename):
+    infile = open(filename, "r")
+    infile.readline()
+    A_C = float(infile.readline())
+    infile.readline()
+    C_W = float(infile.readline())
+    infile.readline()
+    h_C = float(infile.readline())
+    infile.readline()
+    T_init = float(infile.readline())
+    infile.readline()
+    t_final = float(infile.readline())
+    infile.readline()
+    L = float(infile.readline())
+    infile.readline()
+    T_C = float(infile.readline())
+    infile.readline()
+    t_step = float(infile.readline())
+    infile.readline()
+    rho_W = float(infile.readline())
+    infile.readline()
+    D = float(infile.readline())
+    infile.readline()
+    A_tol = float(infile.readline())
+    infile.readline()
+    R_tol = float(infile.readline())
+    infile.readline()
+    T_W = float(infile.readline())
+    infile.readline()
+    E_W = float(infile.readline())
+    infile.close()
+    
+    return A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, A_tol, R_tol, T_W, E_W
 
-def derived_values():
-    None
-
-def input_constraints(inParams):
-    if (not((inParams.A_C <= A_C_max))) :
+def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W):
+    if (not((A_C <= 100000))) :
         print("Warning: constraint violated")
-    if (not(((C_W_min < inParams.C_W) and (inParams.C_W < C_W_max)))) :
+    if (not(((4170 < C_W) and (C_W < 4210)))) :
         print("Warning: constraint violated")
-    if (not(((h_C_min <= inParams.h_C) and (inParams.h_C <= h_C_max)))) :
+    if (not(((10 <= h_C) and (h_C <= 10000)))) :
         print("Warning: constraint violated")
-    if (not((inParams.t_final < t_final_max))) :
+    if (not((t_final < 86400))) :
         print("Warning: constraint violated")
-    if (not(((L_min <= inParams.L) and (inParams.L <= L_max)))) :
+    if (not(((0.1 <= L) and (L <= 50)))) :
         print("Warning: constraint violated")
-    if (not(((rho_W_min < inParams.rho_W) and (inParams.rho_W <= rho_W_max)))) :
+    if (not(((950 < rho_W) and (rho_W <= 1000)))) :
         print("Warning: constraint violated")
     
-    if (not((inParams.A_C > 0))) :
+    if (not((A_C > 0))) :
         print("Warning: constraint violated")
-    if (not((inParams.C_W > 0))) :
+    if (not((C_W > 0))) :
         print("Warning: constraint violated")
-    if (not((inParams.h_C > 0))) :
+    if (not((h_C > 0))) :
         print("Warning: constraint violated")
-    if (not(((0 < inParams.T_init) and (inParams.T_init < 100)))) :
+    if (not(((0 < T_init) and (T_init < 100)))) :
         print("Warning: constraint violated")
-    if (not((inParams.t_final > 0))) :
+    if (not((t_final > 0))) :
         print("Warning: constraint violated")
-    if (not((inParams.L > 0))) :
+    if (not((L > 0))) :
         print("Warning: constraint violated")
-    if (not(((0 < inParams.T_C) and (inParams.T_C < 100)))) :
+    if (not(((0 < T_C) and (T_C < 100)))) :
         print("Warning: constraint violated")
-    if (not((inParams.rho_W > 0))) :
+    if (not(((0 < t_step) and (t_step < t_final)))) :
         print("Warning: constraint violated")
-    if (not((inParams.D > 0))) :
+    if (not((rho_W > 0))) :
         print("Warning: constraint violated")
-    if (not(((inParams.T_init <= inParams.T_W) and (inParams.T_W <= inParams.T_C)))) :
+    if (not((D > 0))) :
         print("Warning: constraint violated")
-    if (not((inParams.E_W >= 0))) :
+    if (not(((T_init <= T_W) and (T_W <= T_C)))) :
+        print("Warning: constraint violated")
+    if (not((E_W >= 0))) :
         print("Warning: constraint violated")
 
 

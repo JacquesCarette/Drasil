@@ -7,8 +7,8 @@ module Language.Drasil.Code.CodeGeneration (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.New
-import Language.Drasil.Code.Imperative.Helpers (ModData(..))
+import Language.Drasil.Code.Imperative.Symantics
+import Language.Drasil.Code.Imperative.Data (ModData(..))
 
 import Text.PrettyPrint.HughesPJ (Doc,render)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))

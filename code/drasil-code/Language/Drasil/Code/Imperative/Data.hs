@@ -1,7 +1,8 @@
 module Language.Drasil.Code.Imperative.Data (Pair(..), pairList,
   Terminator (..), ScopeTag(..), FuncData(..), fd, ModData(..), md, 
-  MethodData(..), mthd, ParamData(..), pd, updateParamDoc, StateVarData(..), 
-  svd, TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard
+  MethodData(..), mthd, OpData(..), od, ParamData(..), pd, updateParamDoc, 
+  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc,
+  VarData(..), vard
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -38,6 +39,11 @@ data MethodData = MthD {isMainMthd :: Bool, mthdParams :: [ParamData],
 
 mthd :: Bool -> [ParamData] -> Doc -> MethodData
 mthd = MthD 
+
+data OpData = OD {opPrec :: Int, opDoc :: Doc}
+
+od :: Int -> Doc -> OpData
+od = OD
 
 data ParamData = PD {paramName :: String, paramType :: TypeData, 
   paramDoc :: Doc} deriving Eq

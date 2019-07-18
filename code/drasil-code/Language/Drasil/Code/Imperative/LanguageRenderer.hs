@@ -17,24 +17,25 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, 
   plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, 
   statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd,
-  stringListVals', stringListLists', stratDocD, notOpDocD, notOpDocD', 
+  stringListVals', stringListLists', stratDocD, unOpPrec, notOpDocD, notOpDocD',
   negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, 
   logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD',
   cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', 
   acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, unExpr, 
-  typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
-  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
-  divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, 
-  binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, 
-  litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
-  argDocD, enumElemDocD, objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, 
-  stateObjDocD, listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
-  listIndexExistsDocD, funcDocD, castDocD, sizeDocD, listAccessFuncDocD, 
-  listSetFuncDocD, objAccessDocD, castObjDocD, includeD, breakDocD, 
-  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
-  docFuncRepr, valList, prependToBody, appendToBody, surroundBody, getterName, 
-  setterName, setMain, setMainMethod, setEmpty, intValue
+  typeUnExpr, powerPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD, 
+  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
+  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, 
+  orOpDocD, binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, 
+  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
+  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
+  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
+  constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
+  sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
+  includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
+  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, prependToBody, 
+  appendToBody, surroundBody, getterName, setterName, setMain, setMainMethod, 
+  setEmpty, intValue
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList)
@@ -47,8 +48,8 @@ import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   ControlStatementSym(..), ParameterSym(..), MethodSym(..), BlockCommentSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
-  ModData(..), md, MethodData(..), ParamData(..), pd, TypeData(..), td, 
-  ValData(..), vd, VarData(..))
+  ModData(..), md, MethodData(..), OpData(..), od, ParamData(..), pd,
+  TypeData(..), td, ValData(..), vd, VarData(..))
 import Language.Drasil.Code.Imperative.Helpers (angles,blank, doubleQuotedText,
   hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
@@ -441,80 +442,83 @@ stringListLists' lsts sl = stringList (getType $ valueType sl)
 
 -- Unary Operators --
 
-notOpDocD :: Doc
-notOpDocD = text "!"
+unOpPrec :: String -> OpData
+unOpPrec = od 9 . text
 
-notOpDocD' :: Doc
-notOpDocD' = text "not"
+notOpDocD :: OpData
+notOpDocD = unOpPrec "!"
 
-negateOpDocD :: Doc
-negateOpDocD = text "-"
+notOpDocD' :: OpData
+notOpDocD' = unOpPrec "not"
 
-sqrtOpDocD :: Doc
-sqrtOpDocD = text "sqrt"
+negateOpDocD :: OpData
+negateOpDocD = unOpPrec "-"
 
-sqrtOpDocD' :: Doc
-sqrtOpDocD' = text "math.sqrt"
+sqrtOpDocD :: OpData
+sqrtOpDocD = unOpPrec "sqrt"
 
-absOpDocD :: Doc
-absOpDocD = text "fabs"
+sqrtOpDocD' :: OpData
+sqrtOpDocD' = unOpPrec "math.sqrt"
 
-absOpDocD' :: Doc
-absOpDocD' = text "math.fabs"
+absOpDocD :: OpData
+absOpDocD = unOpPrec "fabs"
 
-logOpDocD :: Doc
-logOpDocD = text "log"
+absOpDocD' :: OpData
+absOpDocD' = unOpPrec "math.fabs"
 
-logOpDocD' :: Doc
-logOpDocD' = text "math.log"
+logOpDocD :: OpData
+logOpDocD = unOpPrec "log"
 
-lnOpDocD :: Doc
-lnOpDocD = text "ln"
+logOpDocD' :: OpData
+logOpDocD' = unOpPrec "math.log"
 
-lnOpDocD' :: Doc
-lnOpDocD' = text "math.ln"
+lnOpDocD :: OpData
+lnOpDocD = unOpPrec "ln"
 
-expOpDocD :: Doc
-expOpDocD = text "exp"
+lnOpDocD' :: OpData
+lnOpDocD' = unOpPrec "math.ln"
 
-expOpDocD' :: Doc
-expOpDocD' = text "math.exp"
+expOpDocD :: OpData
+expOpDocD = unOpPrec "exp"
 
-sinOpDocD :: Doc
-sinOpDocD = text "sin"
+expOpDocD' :: OpData
+expOpDocD' = unOpPrec "math.exp"
 
-sinOpDocD' :: Doc
-sinOpDocD' = text "math.sin"
+sinOpDocD :: OpData
+sinOpDocD = unOpPrec "sin"
 
-cosOpDocD :: Doc
-cosOpDocD = text "cos"
+sinOpDocD' :: OpData
+sinOpDocD' = unOpPrec "math.sin"
 
-cosOpDocD' :: Doc
-cosOpDocD' = text "math.cos"
+cosOpDocD :: OpData
+cosOpDocD = unOpPrec "cos"
 
-tanOpDocD :: Doc
-tanOpDocD = text "tan"
+cosOpDocD' :: OpData
+cosOpDocD' = unOpPrec "math.cos"
 
-tanOpDocD' :: Doc
-tanOpDocD' = text "math.tan"
+tanOpDocD :: OpData
+tanOpDocD = unOpPrec "tan"
 
-asinOpDocD :: Doc
-asinOpDocD = text "asin"
+tanOpDocD' :: OpData
+tanOpDocD' = unOpPrec "math.tan"
 
-asinOpDocD' :: Doc
-asinOpDocD' = text "math.asin"
+asinOpDocD :: OpData
+asinOpDocD = unOpPrec "asin"
 
-acosOpDocD :: Doc
-acosOpDocD = text "acos"
+asinOpDocD' :: OpData
+asinOpDocD' = unOpPrec "math.asin"
 
-acosOpDocD' :: Doc
-acosOpDocD' = text "math.acos"
+acosOpDocD :: OpData
+acosOpDocD = unOpPrec "acos"
 
-atanOpDocD :: Doc
-atanOpDocD = text "atan"
+acosOpDocD' :: OpData
+acosOpDocD' = unOpPrec "math.acos"
 
-atanOpDocD' :: Doc
-atanOpDocD' = text "math.atan"
+atanOpDocD :: OpData
+atanOpDocD = unOpPrec "atan"
+
+atanOpDocD' :: OpData
+atanOpDocD' = unOpPrec "math.atan"
 
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD op v = op <> parens v
@@ -527,47 +531,68 @@ typeUnExpr u t v = mkVal t (unOpDocD u (valDoc v))
 
 -- Binary Operators --
 
-equalOpDocD :: Doc
-equalOpDocD = text "=="
+compEqualPrec :: String -> OpData
+compEqualPrec = od 4 . text
 
-notEqualOpDocD :: Doc
-notEqualOpDocD = text "!="
+compPrec :: String -> OpData
+compPrec = od 5 . text
 
-greaterOpDocD :: Doc
-greaterOpDocD = text ">"
+addPrec :: String -> OpData
+addPrec = od 6 . text
 
-greaterEqualOpDocD :: Doc
-greaterEqualOpDocD = text ">="
+multPrec :: String -> OpData
+multPrec = od 7 . text
 
-lessOpDocD :: Doc
-lessOpDocD = text "<"
+powerPrec :: String -> OpData
+powerPrec = od 8 . text
 
-lessEqualOpDocD :: Doc
-lessEqualOpDocD = text "<="
+andPrec :: String -> OpData 
+andPrec = od 3 . text
 
-plusOpDocD :: Doc
-plusOpDocD = text "+"
+orPrec :: String -> OpData
+orPrec = od 2 . text
 
-minusOpDocD :: Doc
-minusOpDocD = text "-"
+equalOpDocD :: OpData
+equalOpDocD = compEqualPrec "=="
 
-multOpDocD :: Doc
-multOpDocD = text "*"
+notEqualOpDocD :: OpData
+notEqualOpDocD = compEqualPrec "!="
 
-divideOpDocD :: Doc
-divideOpDocD = text "/"
+greaterOpDocD :: OpData
+greaterOpDocD = compPrec ">"
 
-moduloOpDocD :: Doc
-moduloOpDocD = text "%"
+greaterEqualOpDocD :: OpData
+greaterEqualOpDocD = compPrec ">="
 
-powerOpDocD :: Doc
-powerOpDocD = text "pow"
+lessOpDocD :: OpData
+lessOpDocD = compPrec "<"
 
-andOpDocD :: Doc
-andOpDocD = text "&&"
+lessEqualOpDocD :: OpData
+lessEqualOpDocD = compPrec "<="
 
-orOpDocD :: Doc
-orOpDocD = text "||"
+plusOpDocD :: OpData
+plusOpDocD = addPrec "+"
+
+minusOpDocD :: OpData
+minusOpDocD = addPrec "-"
+
+multOpDocD :: OpData
+multOpDocD = multPrec "*"
+
+divideOpDocD :: OpData
+divideOpDocD = multPrec "/"
+
+moduloOpDocD :: OpData
+moduloOpDocD = multPrec "%"
+
+powerOpDocD :: OpData
+powerOpDocD = powerPrec "pow"
+
+andOpDocD :: OpData
+andOpDocD = andPrec "&&"
+
+orOpDocD :: OpData
+orOpDocD = orPrec "||"
 
 binOpDocD :: Doc -> Doc -> Doc -> Doc
 binOpDocD op v1 v2 = parens (v1 <+> op <+> v2)

@@ -30,22 +30,22 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
   plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, 
   statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, stringListVals', 
-  stringListLists', notOpDocD, negateOpDocD, unExpr, typeUnExpr, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
-  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
-  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
-  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
-  funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
-  setMain, setMainMethod, setEmpty, intValue)
+  stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, typeUnExpr, 
+  powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
+  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
+  divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
+  typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
+  litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
+  inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
+  notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
+  forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName, 
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
+  getterName, setterName, setMain, setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
-  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, TypeData(..), 
-  td, ValData(..), vd, VarData(..), vard)
+  fd, ModData(..), md, MethodData(..), mthd, OpData(..), od, ParamData(..), pd, 
+  TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType)
@@ -189,25 +189,25 @@ instance ControlBlockSym JavaCode where
         vnew &= v_temp]
 
 instance UnaryOpSym JavaCode where
-  type UnaryOp JavaCode = Doc
+  type UnaryOp JavaCode = OpData
   notOp = return notOpDocD
   negateOp = return negateOpDocD
-  sqrtOp = return $ text "Math.sqrt"
-  absOp = return $ text "Math.abs"
-  logOp = return $ text "Math.log10"
-  lnOp = return $ text "Math.log"
-  expOp = return $ text "Math.exp"
-  sinOp = return $ text "Math.sin"
-  cosOp = return $ text "Math.cos"
-  tanOp = return $ text "Math.tan"
-  asinOp = return $ text "Math.asin"
-  acosOp = return $ text "Math.acos"
-  atanOp = return $ text "Math.atan"
-  floorOp = return $ text "Math.floor"
-  ceilOp = return $ text "Math.ceil"
+  sqrtOp = return $ unOpPrec "Math.sqrt"
+  absOp = return $ unOpPrec "Math.abs"
+  logOp = return $ unOpPrec "Math.log10"
+  lnOp = return $ unOpPrec "Math.log"
+  expOp = return $ unOpPrec "Math.exp"
+  sinOp = return $ unOpPrec "Math.sin"
+  cosOp = return $ unOpPrec "Math.cos"
+  tanOp = return $ unOpPrec "Math.tan"
+  asinOp = return $ unOpPrec "Math.asin"
+  acosOp = return $ unOpPrec "Math.acos"
+  atanOp = return $ unOpPrec "Math.atan"
+  floorOp = return $ unOpPrec "Math.floor"
+  ceilOp = return $ unOpPrec "Math.ceil"
 
 instance BinaryOpSym JavaCode where
-  type BinaryOp JavaCode = Doc
+  type BinaryOp JavaCode = OpData
   equalOp = return equalOpDocD
   notEqualOp = return notEqualOpDocD
   greaterOp = return greaterOpDocD
@@ -218,7 +218,7 @@ instance BinaryOpSym JavaCode where
   minusOp = return minusOpDocD
   multOp = return multOpDocD
   divideOp = return divideOpDocD
-  powerOp = return $ text "Math.pow"
+  powerOp = return $ powerPrec "Math.pow"
   moduloOp = return moduloOpDocD
   andOp = return andOpDocD
   orOp = return orOpDocD

@@ -29,12 +29,12 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
   constDecDefDocD, statementDocD, returnDocD, mkSt, mkStNoEnd, stringListVals',
-  stringListLists', commentDocD, notOpDocD, negateOpDocD, unExpr, typeUnExpr, 
-  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr,
-  mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
-  varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
+  stringListLists', commentDocD, unOpPrec, notOpDocD, negateOpDocD, unExpr, 
+  typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
+  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
+  divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
+  typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
+  litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
   inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
   notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetFuncDocD, 
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
@@ -44,8 +44,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   docFuncRepr, valList, surroundBody, getterName, setterName, setMain, 
   setMainMethod,setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..),  
-  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, updateParamDoc, 
-  TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard)
+  fd, ModData(..), md, MethodData(..), mthd, OpData(..), od, ParamData(..), pd, 
+  updateParamDoc, TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), 
+  vard)
 import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
   liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
   getInnerType, convType)
@@ -184,25 +185,25 @@ instance ControlBlockSym CSharpCode where
         vnew &= v_temp]
 
 instance UnaryOpSym CSharpCode where
-  type UnaryOp CSharpCode = Doc
+  type UnaryOp CSharpCode = OpData
   notOp = return notOpDocD
   negateOp = return negateOpDocD
-  sqrtOp = return $ text "Math.Sqrt"
-  absOp = return $ text "Math.Abs"
-  logOp = return $ text "Math.Log10"
-  lnOp = return $ text "Math.Log"
-  expOp = return $ text "Math.Exp"
-  sinOp = return $ text "Math.Sin"
-  cosOp = return $ text "Math.Cos"
-  tanOp = return $ text "Math.Tan"
-  asinOp = return $ text "Math.Asin"
-  acosOp = return $ text "Math.Acos"
-  atanOp = return $ text "Math.Atan"
-  floorOp = return $ text "Math.Floor"
-  ceilOp = return $ text "Math.Ceiling"
+  sqrtOp = return $ unOpPrec "Math.Sqrt"
+  absOp = return $ unOpPrec "Math.Abs"
+  logOp = return $ unOpPrec "Math.Log10"
+  lnOp = return $ unOpPrec "Math.Log"
+  expOp = return $ unOpPrec "Math.Exp"
+  sinOp = return $ unOpPrec "Math.Sin"
+  cosOp = return $ unOpPrec "Math.Cos"
+  tanOp = return $ unOpPrec "Math.Tan"
+  asinOp = return $ unOpPrec "Math.Asin"
+  acosOp = return $ unOpPrec "Math.Acos"
+  atanOp = return $ unOpPrec "Math.Atan"
+  floorOp = return $ unOpPrec "Math.Floor"
+  ceilOp = return $ unOpPrec "Math.Ceiling"
 
 instance BinaryOpSym CSharpCode where
-  type BinaryOp CSharpCode = Doc
+  type BinaryOp CSharpCode = OpData
   equalOp = return equalOpDocD
   notEqualOp = return notEqualOpDocD
   greaterOp = return greaterOpDocD
@@ -213,7 +214,7 @@ instance BinaryOpSym CSharpCode where
   minusOp = return minusOpDocD
   multOp = return multOpDocD
   divideOp = return divideOpDocD
-  powerOp = return $ text "Math.Pow"
+  powerOp = return $ powerPrec "Math.Pow"
   moduloOp = return moduloOpDocD
   andOp = return andOpDocD
   orOp = return orOpDocD

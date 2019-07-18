@@ -74,7 +74,7 @@ print sm = foldr (($+$) . (`lo` sm)) empty
 ------------------ Symbol ----------------------------
 symbol :: L.Symbol -> String
 symbol (L.Variable s) = s
-symbol (L.Label s)    = s -- "\\text{" ++ s ++ "}"
+symbol (L.Label s)    = s
 symbol (L.Special s)  = unPL $ L.special s
 symbol (L.Concat sl)  = concatMap symbol sl
 --

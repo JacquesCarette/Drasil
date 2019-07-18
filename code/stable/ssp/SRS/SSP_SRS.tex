@@ -92,9 +92,9 @@ ${F_{y}}$ & Y-Coordinate of the Force:  & N
 \\
 $\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
-${{\mathbf{F}_{x}}^{G}}$ & Sums of the Interslice Normal Forces: for each pair of adjacent interslice boundaries & N
+${{\mathbf{F}_{\text{x}}}^{G}}$ & Sums of the Interslice Normal Forces: for each pair of adjacent interslice boundaries & N
 \\
-${{\mathbf{F}_{x}}^{H}}$ & Sums of the Interslice Normal Water Forces: for each pair of adjacent interslice boundaries & N
+${{\mathbf{F}_{\text{x}}}^{H}}$ & Sums of the Interslice Normal Water Forces: for each pair of adjacent interslice boundaries & N
 \\
 $\mathbf{f}$ & Interslice Normal to Shear Force Ratio Variation Function: function of distance in the x-direction & --
 \\
@@ -1635,16 +1635,16 @@ RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} and \hyperref[IM:fctSfty]{IM: f
 \\ \midrule \\
 Label & Sums of the interslice normal forces
 \\ \midrule \\
-Symbol & ${{\mathbf{F}_{x}}^{G}}$
+Symbol & ${{\mathbf{F}_{\text{x}}}^{G}}$
 \\ \midrule \\
 Units & N
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{\mathbf{F}_{x}}^{G}}={\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}
+           {{\mathbf{F}_{\text{x}}}^{G}}={\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${{\mathbf{F}_{x}}^{G}}$ is the sums of the interslice normal forces (N)}
+              \item{${{\mathbf{F}_{\text{x}}}^{G}}$ is the sums of the interslice normal forces (N)}
               \item{$\mathbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
@@ -1665,16 +1665,16 @@ RefBy &
 \\ \midrule \\
 Label & Sums of the interslice normal water forces
 \\ \midrule \\
-Symbol & ${{\mathbf{F}_{x}}^{H}}$
+Symbol & ${{\mathbf{F}_{\text{x}}}^{H}}$
 \\ \midrule \\
 Units & N
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{\mathbf{F}_{x}}^{H}}={\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}
+           {{\mathbf{F}_{\text{x}}}^{H}}={\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${{\mathbf{F}_{x}}^{H}}$ is the sums of the interslice normal water forces (N)}
+              \item{${{\mathbf{F}_{\text{x}}}^{H}}$ is the sums of the interslice normal water forces (N)}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
@@ -1940,7 +1940,7 @@ This equation can be simplified by applying assumptions \hyperref[assumpSF]{A: S
 \end{displaymath}
 Taking the summation of all slices, and applying \hyperref[assumpES]{A: Edge-Slices} to set ${\mathbf{G}}_{0}$, ${\mathbf{G}}_{n}$, ${\mathbf{H}}_{0}$, and ${\mathbf{H}}_{n}$ equal to zero, a general equation for the proportionality constant $λ$ is developed in Equation (16), which combines \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, and \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}:
 \begin{displaymath}
-λ=\frac{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({{\mathbf{F}_{x}}^{G}}+{{\mathbf{F}_{x}}^{H}}\right) \tan\left({\mathbf{α}}_{i}\right)+{\mathbf{h}}_{i} -2 {\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}}
+λ=\frac{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({{\mathbf{F}_{\text{x}}}^{G}}+{{\mathbf{F}_{\text{x}}}^{H}}\right) \tan\left({\mathbf{α}}_{i}\right)+{\mathbf{h}}_{i} -2 {\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}}
 \end{displaymath}
 Equation (16) for $λ$ is a function of the unknown interslice normal forces $\mathbf{G}$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}) which itself depends on the unknown factor of safety ${F_{\text{S}}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}).
 \par~
@@ -1964,7 +1964,7 @@ Output Constraints &
 Equation & \begin{displaymath}
            {\mathbf{C}_{\text{num},i}}=\begin{cases}
                                        {\mathbf{b}}_{1} \left({\mathbf{G}}_{1}+{\mathbf{H}}_{1}\right) \tan\left({\mathbf{α}}_{1}\right), & i=1\\
-{\mathbf{b}}_{i} \left({{\mathbf{F}_{x}}^{G}}+{{\mathbf{F}_{x}}^{H}}\right) \tan\left({\mathbf{α}}_{i}\right)+\mathbf{h} -2 {\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
+{\mathbf{b}}_{i} \left({{\mathbf{F}_{\text{x}}}^{G}}+{{\mathbf{F}_{\text{x}}}^{H}}\right) \tan\left({\mathbf{α}}_{i}\right)+\mathbf{h} -2 {\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
 {\mathbf{b}}_{n} \left({\mathbf{G}}_{n-1}+{\mathbf{H}}_{n-1}\right) \tan\left({\mathbf{α}}_{n-1}\right), & i=n
                                        \end{cases}
            \end{displaymath}
@@ -1976,8 +1976,8 @@ Description & \begin{symbDescription}
               \item{$\mathbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{α}$ is the base angles (${}^{\circ}$)}
-              \item{${{\mathbf{F}_{x}}^{G}}$ is the sums of the interslice normal forces (N)}
-              \item{${{\mathbf{F}_{x}}^{H}}$ is the sums of the interslice normal water forces (N)}
+              \item{${{\mathbf{F}_{\text{x}}}^{G}}$ is the sums of the interslice normal forces (N)}
+              \item{${{\mathbf{F}_{\text{x}}}^{H}}$ is the sums of the interslice normal water forces (N)}
               \item{$\mathbf{h}$ is the y-direction heights of slices (m)}
               \item{${\mathbf{U}_{t}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{β}$ is the surface angles (${}^{\circ}$)}

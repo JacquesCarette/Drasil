@@ -3,7 +3,8 @@
 -- semantics at all, but just a description of how things look.
 
 module Language.Drasil.Symbol(Decoration(..), Symbol(..), compsy, sub, subMax,
-  subMin, sup, supMax, supMin, hat, vec, prime, staged, upperLeft) where
+  subMin, subX, subY, subZ, sup, supMax, supMin, hat, vec, prime, staged,
+  upperLeft) where
 
 import Language.Drasil.Unicode(Special)
 import Language.Drasil.Stages (Stage(..))
@@ -135,9 +136,12 @@ sup :: Symbol -> Symbol -> Symbol
 sup b ur = Corners [] [] [ur] [] b
 
 -- Helpers for common modifiers
-subMax, subMin, supMax, supMin :: Symbol -> Symbol
+subMax, subMin, subX, subY, subZ, supMax, supMin :: Symbol -> Symbol
 subMax s = sub s (Label "max")
 subMin s = sub s (Label "min")
+subX   s = sub s (Label "x")
+subY   s = sub s (Label "y")
+subZ   s = sub s (Label "z")
 supMax s = sup s (Label "max")
 supMin s = sup s (Label "min")
 

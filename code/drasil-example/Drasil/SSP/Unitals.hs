@@ -371,11 +371,11 @@ fy = uc' "fy" (cn "y-coordinate of the force") ""
 
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 
   "for each pair of adjacent interslice boundaries"
-  (sup (sub (vec cF) lX) cG) newton
+  (sup (subX (vec cF)) cG) newton
 
 watForceSum = uc' "F_x^H" (cn "sums of the interslice normal water forces") 
   "for each pair of adjacent interslice boundaries"
-  (sup (sub (vec cF) lX) cH) newton
+  (sup (subX (vec cF)) cH) newton
 
 sliceHghtRight = uc' "h^R" (cn "heights of the right side of slices") 
   "assuming slice surfaces have negative slope"

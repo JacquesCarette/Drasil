@@ -222,13 +222,13 @@ minThick   = unitary "minThick"   (nounPhraseSP "minimum thickness")
   lH metre Rational
 
 sdx         = unitary "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
-  (sub (eqSymb standOffDist) lX) metre Real
+  (subX (eqSymb standOffDist)) metre Real
 
 sdy         = unitary "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
-  (sub (eqSymb standOffDist) lY) metre Real
+  (subY (eqSymb standOffDist)) metre Real
 
 sdz         = unitary "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
-  (sub (eqSymb standOffDist) lZ) metre Real
+  (subZ (eqSymb standOffDist)) metre Real
 
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
   lK sFlawPU Real

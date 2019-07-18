@@ -26,7 +26,7 @@ public class Control {
         double R_tol;
         double T_W;
         double E_W;
-        Object[] outputs = InputFormat.get_input(filename);
+        Object[] outputs = InputParameters.get_input(filename);
         A_C = (double)(outputs[0]);
         C_W = (double)(outputs[1]);
         h_C = (double)(outputs[2]);

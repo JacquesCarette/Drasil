@@ -11,21 +11,19 @@ module Drasil.Sections.SpecificSystemDescription
   , dataDefnF
   , inModelF
   , datConF
-  , dataConstraintUncertainty
-  , inDataConstTbl, outDataConstTbl 
-  , listofTablesToRefs
+  , inDataConstTbl, outDataConstTbl, propCorSolF, auxSpecSent
   ) where
 
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (assumption, column, constraint,
+import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSol,
   datum, datumConstraint, definition, element, general, goalStmt, information,
   input_, limitation, model, output_, physical, physicalConstraint, physicalSystem,
-  physSyst, problem, problemDescription, purpose, quantity, requirement, scope,
-  section_, softwareConstraint, solutionCharacteristic, specification, symbol_,
-  system, theory, typUnc, uncertainty, user, value, variable)
-import Data.Drasil.Concepts.Math (equation)
+  physSyst, problem, problemDescription, property, purpose, quantity, requirement,
+  scope, section_, softwareConstraint, solutionCharacteristic, specification,
+  symbol_, system, theory, typUnc, uncertainty, user, value, variable)
+import Data.Drasil.Concepts.Math (equation, parameter)
 
 import Data.Drasil.IdeaDicts (inModel, thModel)
 
@@ -144,54 +142,50 @@ inModelIntro :: Section -> Section -> Section -> Section -> Contents
 inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_, 
   S "transforms the", phrase problem, S "defined in", makeRef2S r1,
   S "into one which is expressed in mathematical terms. It uses concrete", 
-  plural symbol_, S "defined in", makeRef2S r2, 
-  S "to replace the abstract", plural symbol_, S "in the", 
-  plural model, S "identified in", makeRef2S r3 :+: end]
-    where end = S " and" +:+ makeRef2S r4
+  plural symbol_, S "defined in", makeRef2S r2, S "to replace the abstract",
+  plural symbol_, S "in the", plural model, S "identified in", makeRef2S r3 `sAnd`
+  makeRef2S r4]
 
 -- wrapper for datConPar
-datConF :: Sentence -> Sentence -> Sentence -> [LabelledContent] -> Section
-datConF hasUncertainty mid trailing tables = SRS.datCon 
-  (dataConstraintParagraph hasUncertainty (listofTablesToRefs tables) mid trailing : map LlC tables) []
+datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
+  Sentence -> [c] -> Section
+datConF _ [] = SRS.datCon [mkParagraph (S "There are no" +:+. plural datumConstraint)] []
+datConF t c  = SRS.datCon [dataConstraintParagraph t, LlC $ inDataConstTbl c] []
   
--- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
--- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
-dataConstraintParagraph :: Sentence -> Sentence -> Sentence -> Sentence -> Contents
-dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = mkParagraph $
-  dataConstraintIntroSent tableRef +:+ middleSent +:+ 
-  dataConstraintClosingSent hasUncertainty trailingSent
+-- optional trailing sentence(s) -> data constraints tables -> Contents
+dataConstraintParagraph :: Sentence -> Contents
+dataConstraintParagraph trailingSent = foldlSP_ [inputTableSent, physConsSent,
+  uncertSent, conservConsSent, typValSent, trailingSent]
 
--- makes a list of references to tables takes
--- l  list of layout objects that can be referenced
--- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: (HasShortName l, Referable l) => [l] -> Sentence
-listofTablesToRefs  []     = EmptyS
-listofTablesToRefs  [x]    = makeRef2S x +:+ S "shows"
-listofTablesToRefs  [x,y]  = makeRef2S x `sAnd` makeRef2S y +:+ S "show" -- for proper grammar with multiple tables
-                                                                                    -- no Oxford comma in case there is only two tables to be referenced
-listofTablesToRefs  (x:xs) = makeRef2S x `sC` listofTablesToRefs xs
- 
-dataConstraintIntroSent :: Sentence -> Sentence
-dataConstraintIntroSent tableRef = foldlSent [tableRef, S "the", plural datumConstraint, S "on the", phrase input_, 
-  S "and", phrase output_ +:+. (plural variable `sC` S "respectively"), S "The", 
-  phrase column, S "for", phrase physical, plural constraint, S "gives the", 
-  phrase physical, plural limitation, S "on the range of", plural value, 
-  S "that can be taken by the", phrase variable]
+inputTableSent :: Sentence
+inputTableSent = foldlSent [makeRef2S $ inDataConstTbl ([] :: [UncertQ]), S "shows the",
+  plural datumConstraint, S "on the", phrase input_, plural variable]
 
-dataConstraintClosingSent :: Sentence -> Sentence -> Sentence
-dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
-  [S "The", plural constraint, S "are conservative, to give", 
-  phrase user `ofThe` phrase model, S "the flexibility to", 
-  S "experiment with unusual situations. The", phrase column, S "of typical",
-  plural value, S "is intended to provide a feel for a common scenario"]
-  +:+ uncertaintySent +:+ trailingSent
+physConsSent :: Sentence
+physConsSent = foldlSent [S "The", phrase column, S "for", phrase physical,
+  plural constraint, S "gives the",  phrase physical, plural limitation,
+  S "on the range" `sOf` plural value, S "that can be taken by the", phrase variable]
 
-dataConstraintUncertainty :: Sentence
-dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase column,
+uncertSent :: Sentence
+uncertSent = foldlSent [S "The", phrase uncertainty, phrase column,
   S "provides an estimate of the confidence with which the", phrase physical,
   plural quantity +:+. S "can be measured", S "This", phrase information,
   S "would be part of the", phrase input_, S "if one were performing an",
   phrase uncertainty, S "quantification exercise"]
+
+conservConsSent :: Sentence
+conservConsSent = foldlSent [S "The", plural constraint `sAre` S "conservative" `sC`
+  S "to give", phrase user `ofThe` phrase model,
+  S "the flexibility to experiment with unusual situations"]
+
+typValSent :: Sentence
+typValSent = foldlSent [S "The", phrase column `sOf` S "typical",
+  plural value `sIs` S "intended to provide a feel for a common scenario"]
+
+auxSpecSent :: Sentence
+auxSpecSent = foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [], S "gives",
+  plural value `ofThe` phrase specification, plural parameter, S "used in",
+  makeRef2S $ inDataConstTbl ([] :: [UncertQ])]
 
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> String -> Sentence -> LabelledContent
 mkDataConstraintTable col ref lab = llcc (makeTabRef ref) $ uncurry Table 
@@ -207,10 +201,7 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
             (short typUnc, map typUncr $ sortBySymbol qlst)]  "InDataConstraints" $
             S "Input Data Constraints"
   where
-    getRVal c = uns (c ^. reasVal)
-      where uns (Just e) = e
-            uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
-
+    getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ (c ^. uid)) (c ^. reasVal)
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
@@ -226,3 +217,18 @@ fmtPhys c = foldConstraints c $ filter isPhysC (c ^. constraints)
 -- | formats software constraints
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
 fmtSfwr c = foldConstraints c $ filter isSfwrC (c ^. constraints)
+
+propCorSolF :: (Quantity c, Constrained c) => [c] -> [Contents] -> Section
+propCorSolF []  [] = SRS.propCorSol [mkParagraph noPropsSent] []
+propCorSolF [] con = SRS.propCorSol con []
+propCorSolF c  con = SRS.propCorSol (propsIntro : (LlC $ outDataConstTbl c) : con) []
+
+noPropsSent :: Sentence
+noPropsSent = foldlSent [S "There are no", plural property, S "of a", phrase corSol]
+
+propsIntro :: Contents
+propsIntro = foldlSP_ [outputTableSent, physConsSent]
+
+outputTableSent :: Sentence
+outputTableSent = foldlSent [makeRef2S $ outDataConstTbl ([] :: [UncertQ]), S "shows the",
+  plural datumConstraint, S "on the", phrase output_, plural variable]

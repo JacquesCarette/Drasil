@@ -2,7 +2,7 @@ module Language.Drasil.People
   ( People, Person
   , person, person', personWM, personWM', mononym
   , HasName
-  , name, manyNames, nameStr
+  , name, nameStr
   , Conv(..) --This is needed to unwrap names for the bibliography
   , lstName
   , rendPersLFM, rendPersLFM', rendPersLFM''
@@ -78,16 +78,6 @@ instance HasName Person where
 
 name :: (HasName n) => n -> String
 name = nameStr
--- this is a weirder recursion, so it's ok to do it explicitly
--- make it work for short lists too, but it shouldn't be used that way!
--- | Used for rendering lists of names (one or more).
-manyNames :: (HasName p) => [p] -> String
-manyNames [x,y] = name x ++ " and " ++ name y
-manyNames names = nameList names
-  where nameList [] = ""
-        nameList [x] = name x
-        nameList [x,y] = name x ++ ", and " ++ name y
-        nameList (x : y : rest) = name x ++ ", " ++ nameList (y : rest)
 
 lstName :: Person -> String
 lstName Person {_surname = l} = l

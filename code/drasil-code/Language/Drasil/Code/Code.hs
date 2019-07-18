@@ -18,4 +18,5 @@ data CodeType = Boolean
               | List CodeType
               | Iterator CodeType
               | Object String
+              | Enum String
               | Void deriving Eq

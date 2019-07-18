@@ -204,10 +204,8 @@ makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
   %% (if bool then caption t else caption empty)
   %% label r
   where ltab = tabType $ anyLong lls
-        tabType True  = ltabu
-        tabType False = ltable
-        ltabu  = "longtabu" --Only needed if "X[l]" is used
-        ltable = "longtable"
+        tabType True  = "longtabu" --Only needed if "X[l]" is used
+        tabType False = "longtable"
         descr True  = "X[l]"
         descr False = "l"
   --returns "X[l]" for columns with long fields
@@ -217,15 +215,15 @@ makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
 
 -- | determines the length of a Spec
 specLength :: Spec -> Int
-specLength (E x)     = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
-specLength (S x)     = length x
-specLength (a :+: b) = specLength a + specLength b
-specLength (Sy _)    = 1
-specLength (Sp _)    = 1
-specLength Ref{}     = 0
-specLength EmptyS    = 0
-specLength (Quote q) = 4 + specLength q
-specLength HARDNL    = 0
+specLength (E x)       = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
+specLength (S x)       = length x
+specLength (a :+: b)   = specLength a + specLength b
+specLength (Sy _)      = 1
+specLength (Sp _)      = 1
+specLength (Ref _ _ s) = specLength s
+specLength EmptyS      = 0
+specLength (Quote q)   = 4 + specLength q
+specLength HARDNL      = 0
 
 dontCount :: String
 dontCount = "\\/[]{}()_^$:"

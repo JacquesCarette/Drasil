@@ -109,7 +109,7 @@ genSec d
 ref, sref, hyperref, externalref, snref :: String -> D -> D
 sref         = if numberedSections then ref else hyperref
 ref      t x = pure (text $ t ++ "~\\ref") <> br x
-hyperref t x = command0 "hyperref" <> sq x <> br (pure (text (t ++ "~")) <> x)
+hyperref t x = command1oD "hyperref" (Just x) (pure (text (t ++ "~")) <> x)
 externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
   br empty <> br x
 snref    r   = command1oD "hyperref" (Just (pure $ text r))
@@ -117,8 +117,8 @@ snref    r   = command1oD "hyperref" (Just (pure $ text r))
 href :: String -> String -> D
 href = command2 "href"
 
-cite :: D -> Maybe D -> D
-cite c i = command1oD "cite" i c
+cite :: String -> Maybe D -> D
+cite c i = command1oD "cite" i (pure $ text c)
 
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff

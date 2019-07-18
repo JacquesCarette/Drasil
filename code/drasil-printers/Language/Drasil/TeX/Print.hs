@@ -264,12 +264,12 @@ spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
-spec (Ref Internal r sn) = snref r $ spec sn
-spec (Ref Cite2    r i) = cite (pure $ text r) (info i)
+spec (Ref Internal r sn) = snref r (spec sn)
+spec (Ref Cite2    r i)  = cite r (info i)
   where
     info EmptyS = Nothing
     info x      = Just (spec x)
-spec (Ref External r sn) = externalref r $ spec sn
+spec (Ref External r sn) = externalref r (spec sn)
 spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q
 

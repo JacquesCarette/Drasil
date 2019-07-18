@@ -152,7 +152,7 @@ generateCode l unRepr g =
           C.unCode $ makeCode (map (fst . ($ pckg)) unRepr) (getExt l)
         makefile = makeBuild (last unRepr pckg) (getBuildConfig l) 
           (getRunnable l) (getExt l) code
-        doxConf = makeDoxConfig prog code (commented g)
+        doxConf = makeDoxConfig prog code l (commented g)
 
 genPackage :: (PackageSym repr) => String -> Reader (State repr) 
   (repr (Package repr))

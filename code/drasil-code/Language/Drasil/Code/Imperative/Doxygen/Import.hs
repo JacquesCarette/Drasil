@@ -10,8 +10,8 @@ import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
 
 makeDoxConfig :: String -> Code -> Lang -> [Comments] -> Code
-makeDoxConfig prog (Code c) l cms = Code $ if null cms then [] else 
-  [("doxConfig", genDoxConfig prog (map fst c) l)]
+makeDoxConfig prog (Code c) l cms = Code 
+  [("doxConfig", genDoxConfig prog (map fst c) l) | not (null cms)]
 
 optimizeOutput :: Lang -> String
 optimizeOutput Java = "YES"

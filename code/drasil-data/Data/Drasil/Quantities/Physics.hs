@@ -15,6 +15,7 @@ import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
 import Theory.Drasil (mkQuantDef)
+import Language.Drasil
 
 restitutionCoef :: DefinedQuantityDict
 restitutionCoef = dqd' CP.restitutionCoef (const $ sub cC cR) Real Nothing

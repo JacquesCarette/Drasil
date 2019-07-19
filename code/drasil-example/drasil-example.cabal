@@ -191,7 +191,7 @@ executable ssp
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
-executable chipmunkdocs
+executable gamephysics
   hs-source-dirs: .
   main-is: Drasil/GamePhysics/Main.hs
   other-modules:

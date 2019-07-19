@@ -35,7 +35,7 @@ GLASSBR_EXE = glassbr
 NOPCM_EXE = nopcm
 SWHS_EXE  = swhs
 SSP_EXE   = ssp
-GAMEPHYS_EXE  = chipmunkdocs
+GAMEPHYS_EXE  = gamephysics
 PROJECTILE_EXE = projectile
 TEMPLATE_EXE = template
 

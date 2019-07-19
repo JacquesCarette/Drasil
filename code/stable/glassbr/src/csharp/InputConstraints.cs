@@ -1,5 +1,5 @@
 /** \file InputConstraints.cs
-    \brief Provides the function for checking the physical and software constraints on the input
+    \brief Provides the function for checking the physical constraints and software constraints on the input
 */
 using System;
 using System.IO;

@@ -23,7 +23,7 @@ ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP"   
 defs :: [NamedChunk]
 defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
   soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
-  slopeStability, ssa]
+  stabAnalysis, ssa]
 
 defs' :: [ConceptChunk]
 defs' = [slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable]
@@ -45,7 +45,7 @@ stability = nc "stability" (cn "stability")
 morPrice = nc "morPrice"   (pn  "Morgenstern-Price")
 
 soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
-  slopeStability, ssa :: NamedChunk
+  stabAnalysis, ssa :: NamedChunk
 --slpSrf    = compoundNC slip surface
 soilPrpty = compoundNC soil     property
 mtrlPrpty = compoundNC material property
@@ -53,8 +53,8 @@ itslPrpty = compoundNC intrslce property
 slopeSrf  = compoundNC slope surface
 soilLyr   = compoundNC soil layer
 soilMechanics = compoundNC soil mechanics
-slopeStability = compoundNC slope stability
-ssa = compoundNC slopeStability analysis
+stabAnalysis = compoundNC stability analysis
+ssa = compoundNC slope stabAnalysis
 
 effFandS, slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable :: ConceptChunk
 effFandS = dccWDS "effective forces and stresses" 

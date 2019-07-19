@@ -231,11 +231,6 @@ instance ValueSym PythonCode where
   n `listOf` t = listVar n static_ t
   iterVar n t = var n (iterator t)
 
-  inputFunc = liftA2 mkVal string (return $ text "input()")  -- raw_input() for < Python 3.0
-  printFunc = liftA2 mkVal void (return $ text "print")
-  printLnFunc = liftA2 mkVal void (return empty)
-  printFileFunc _ = liftA2 mkVal void (return empty)
-  printFileLnFunc _ = liftA2 mkVal void (return empty)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "sys.argv")
 
   valueName v = fromMaybe 
@@ -297,6 +292,12 @@ instance ValueExpression PythonCode where
   notNull = exists
 
 instance InternalValue PythonCode where
+  inputFunc = liftA2 mkVal string (return $ text "input()")  -- raw_input() for < Python 3.0
+  printFunc = liftA2 mkVal void (return $ text "print")
+  printLnFunc = liftA2 mkVal void (return empty)
+  printFileFunc _ = liftA2 mkVal void (return empty)
+  printFileLnFunc _ = liftA2 mkVal void (return empty)
+  
   cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
 
 instance Selector PythonCode where

@@ -230,11 +230,6 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   n `listOf` t = pair (n `listOf` pfst t) (n `listOf` psnd t)
   iterVar l t = pair (iterVar l $ pfst t) (iterVar l $ psnd t)
   
-  inputFunc = pair inputFunc inputFunc
-  printFunc = pair printFunc printFunc
-  printLnFunc = pair printLnFunc printLnFunc
-  printFileFunc v = pair (printFileFunc $ pfst v) (printFileFunc $ psnd v)
-  printFileLnFunc v = pair (printFileLnFunc $ pfst v) (printFileLnFunc $ psnd v)
   argsList = pair argsList argsList
 
   valueName v = valueName $ pfst v
@@ -298,6 +293,12 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
   notNull v = pair (notNull $ pfst v) (notNull $ psnd v)
   
 instance (Pair p) => InternalValue (p CppSrcCode CppHdrCode) where
+  inputFunc = pair inputFunc inputFunc
+  printFunc = pair printFunc printFunc
+  printLnFunc = pair printLnFunc printLnFunc
+  printFileFunc v = pair (printFileFunc $ pfst v) (printFileFunc $ psnd v)
+  printFileLnFunc v = pair (printFileLnFunc $ pfst v) (printFileLnFunc $ psnd v)
+
   cast t v = pair (cast (pfst t) (pfst v)) (cast (psnd t) (psnd v))
 
 instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
@@ -785,11 +786,6 @@ instance ValueSym CppSrcCode where
   n `listOf` t = listVar n static_ t
   iterVar l t = liftA2 mkVal (iterator t) (return $ text $ "(*" ++ l ++ ")")
   
-  inputFunc = liftA2 mkVal string (return $ text "std::cin")
-  printFunc = liftA2 mkVal void (return $ text "std::cout")
-  printLnFunc = liftA2 mkVal void (return $ text "std::cout")
-  printFileFunc f = liftA2 mkVal void (fmap valDoc f) -- is this right?
-  printFileLnFunc f = liftA2 mkVal void (fmap valDoc f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
   valueName v = fromMaybe 
@@ -849,6 +845,12 @@ instance ValueExpression CppSrcCode where
   notNull v = v
 
 instance InternalValue CppSrcCode where
+  inputFunc = liftA2 mkVal string (return $ text "std::cin")
+  printFunc = liftA2 mkVal void (return $ text "std::cout")
+  printLnFunc = liftA2 mkVal void (return $ text "std::cout")
+  printFileFunc f = liftA2 mkVal void (fmap valDoc f) -- is this right?
+  printFileLnFunc f = liftA2 mkVal void (fmap valDoc f)
+
   cast = cppCast
 
 instance Selector CppSrcCode where
@@ -1319,11 +1321,6 @@ instance ValueSym CppHdrCode where
   listOf _ _ = liftA2 mkVal void (return empty)
   iterVar _ _ = liftA2 mkVal void (return empty)
   
-  inputFunc = liftA2 mkVal void (return empty)
-  printFunc = liftA2 mkVal void (return empty)
-  printLnFunc = liftA2 mkVal void (return empty)
-  printFileFunc _ = liftA2 mkVal void (return empty)
-  printFileLnFunc _ = liftA2 mkVal void (return empty)
   argsList = liftA2 mkVal void (return empty)
 
   valueName v = fromMaybe 
@@ -1382,6 +1379,12 @@ instance ValueExpression CppHdrCode where
   notNull _ = liftA2 mkVal void (return empty)
 
 instance InternalValue CppHdrCode where
+  inputFunc = liftA2 mkVal void (return empty)
+  printFunc = liftA2 mkVal void (return empty)
+  printLnFunc = liftA2 mkVal void (return empty)
+  printFileFunc _ = liftA2 mkVal void (return empty)
+  printFileLnFunc _ = liftA2 mkVal void (return empty)
+  
   cast _ _ = liftA2 mkVal void (return empty)
 
 instance Selector CppHdrCode where

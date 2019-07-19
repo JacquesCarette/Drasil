@@ -176,11 +176,6 @@ class (StateTypeSym repr, StateVarSym repr) => ValueSym repr where
   -- Use for iterator variables, i.e. in a forEach loop.
   iterVar      :: Label -> repr (StateType repr) -> repr (Value repr)
 
-  inputFunc :: repr (Value repr)
-  printFunc       :: repr (Value repr)
-  printLnFunc     :: repr (Value repr)
-  printFileFunc   :: repr (Value repr) -> repr (Value repr)
-  printFileLnFunc :: repr (Value repr) -> repr (Value repr)
   argsList  :: repr (Value repr)
 
   valueName :: repr (Value repr) -> String -- Function for converting a value to a string of the value's name
@@ -270,6 +265,12 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
   notNull :: repr (Value repr) -> repr (Value repr)
 
 class (ValueExpression repr) => InternalValue repr where
+  inputFunc       :: repr (Value repr)
+  printFunc       :: repr (Value repr)
+  printLnFunc     :: repr (Value repr)
+  printFileFunc   :: repr (Value repr) -> repr (Value repr)
+  printFileLnFunc :: repr (Value repr) -> repr (Value repr)
+
   cast :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr)
 
 -- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,

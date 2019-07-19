@@ -249,11 +249,6 @@ instance ValueSym CSharpCode where
   n `listOf` t = listVar n static_ t
   iterVar n t = var n (iterator t)
   
-  inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")
-  printFunc = liftA2 mkVal void (return $ text "Console.Write")
-  printLnFunc = liftA2 mkVal void (return $ text "Console.WriteLine")
-  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "Write") f)
-  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "WriteLine") f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
   valueName v = fromMaybe 
@@ -315,6 +310,12 @@ instance ValueExpression CSharpCode where
     (fmap valType v)))
 
 instance InternalValue CSharpCode where
+  inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")
+  printFunc = liftA2 mkVal void (return $ text "Console.Write")
+  printLnFunc = liftA2 mkVal void (return $ text "Console.WriteLine")
+  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "Write") f)
+  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "WriteLine") f)
+  
   cast = csCast
 
 instance Selector CSharpCode where

@@ -253,12 +253,6 @@ instance ValueSym JavaCode where
   n `listOf` t = listVar n static_ t
   iterVar n t = var n (iterator t)
   
-  inputFunc = liftA2 mkVal (obj "Scanner") (return $ parens (
-    text "new Scanner(System.in)"))
-  printFunc = liftA2 mkVal void (return $ text "System.out.print")
-  printLnFunc = liftA2 mkVal void (return $ text "System.out.println")
-  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "print") f)
-  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "println") f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
   valueName v = fromMaybe 
@@ -320,6 +314,13 @@ instance ValueExpression JavaCode where
     (fmap valType v)))
 
 instance InternalValue JavaCode where
+  inputFunc = liftA2 mkVal (obj "Scanner") (return $ parens (
+    text "new Scanner(System.in)"))
+  printFunc = liftA2 mkVal void (return $ text "System.out.print")
+  printLnFunc = liftA2 mkVal void (return $ text "System.out.println")
+  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "print") f)
+  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "println") f)
+  
   cast = jCast
 
 instance Selector JavaCode where

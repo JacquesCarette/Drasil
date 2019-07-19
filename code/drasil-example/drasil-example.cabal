@@ -84,6 +84,7 @@ executable nopcm
     , Drasil.NoPCM.GenDefs
     , Drasil.NoPCM.Goals
     , Drasil.NoPCM.Requirements
+    , Drasil.NoPCM.References
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Body
     , Drasil.SWHS.Changes

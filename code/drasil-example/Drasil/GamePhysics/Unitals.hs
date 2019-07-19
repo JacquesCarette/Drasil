@@ -75,7 +75,7 @@ forceParam, massParam, momtParam, contParam, timeParam :: String -> String -> Un
 forceParam n w = ucs'
  (dccWDS ("force" ++ n) (cn $ "force exerted by the " ++ w ++ 
   " body (on another body)") (phrase QP.force)) 
-  (sub (eqSymb QP.force) (Label n)) Real newton
+  (sub (eqSymb QP.force) (Variable n)) Real newton
 
 massParam n w = ucs'
  (dccWDS ("mass" ++ n) (cn $ "mass of the " ++ w ++ " body") 
@@ -84,12 +84,12 @@ massParam n w = ucs'
 momtParam n w = ucs'
  (dccWDS ("momentOfInertia" ++ n) (compoundPhrase'
   (QP.momentOfInertia ^. term) (cn $ "of rigid body " ++ n))
-  (phrase QP.momentOfInertia)) (sub (eqSymb QP.momentOfInertia) (Label w)) Real momtInertU
+  (phrase QP.momentOfInertia)) (sub (eqSymb QP.momentOfInertia) (Variable w)) Real momtInertU
 
 contParam n w = ucs'
  (dccWDS ("r_" ++ n ++ "P") (contdispN n) 
   (phrase QP.displacement)) (sub (eqSymb QP.displacement)
-  (Concat [Label w, cP])) Real metre
+  (Variable (w ++ "P"))) Real metre
 
 timeParam n w = ucs'
  (dccWDS ("time" ++ n) (cn $ "time at a point in " ++ w ++ " body ") 
@@ -159,7 +159,7 @@ sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distance")
 rOB    = uc' "rOB" 
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
-  (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre
+  (sub (eqSymb QP.displacement) (Concat [Label "O", cB])) metre
 
 {-r_F    = uc' "r_F" 
   (nounPhraseSP "position vector of the point where is applied, measured from the axis of rotation")
@@ -195,17 +195,17 @@ mTot = ucs' (dccWDS "M" (compoundPhrase' (cn "total mass of the")
                  (CP.rigidBody ^. term)) (phrase QPP.mass)) cM Real kilogram
 
 timeC = ucs' (dccWDS "timeC" (cn "denotes the time at collision") 
-                (phrase QP.time)) (sub (eqSymb QP.time) lC) Real second
+                (phrase QP.time)) (sub (eqSymb QP.time) (Label "c")) Real second
 
 initRelVel = ucs' (dccWDS "v_i^AB" (compoundPhrase'
                  (compoundPhrase' (cn "initial relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
-                 (sup (sub (eqSymb QP.velocity) lI) (Concat [cA, cB])) Real velU
+                 (sup (sub (eqSymb QP.velocity) (Label "i")) (Concat [Variable "A", Variable "B"])) Real velU
 
 finRelVel = ucs' (dccWDS "v_f^AB" (compoundPhrase'
                  (compoundPhrase' (cn "final relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
-                 (sup (sub (eqSymb QP.velocity) lF) (Concat [cA, cB])) Real velU
+                 (sup (sub (eqSymb QP.velocity) lF) (Concat [Variable "A", Variable "B"])) Real velU
 
 massIRigidBody = ucs' (dccWDS "massI" (compoundPhrase' (QPP.mass ^. term) 
                 (cn "of the i-th rigid body")) (phrase QPP.mass)) 
@@ -255,7 +255,7 @@ mass_1     = massParam  "1" "first"
 mass_2     = massParam  "2" "second"
 velA       = velParam   "A" cA
 velB       = velParam   "B" cB
-velO       = velParam   "origin" cO
+velO       = velParam   "origin" (Label "O")
 angVelA    = angParam   "A" cA
 angVelB    = angParam   "B" cB
 perpLenA   = perpParam  "A" $ eqSymb contDispA

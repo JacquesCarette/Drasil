@@ -1,9 +1,9 @@
-srs: Tiny_SRS.pdf
+srs: HGHC_SRS.pdf
 
-Tiny_SRS.pdf: Tiny_SRS.tex
-	lualatex $(TEXFLAGS) Tiny_SRS
-	-bibtex $(BIBTEXFLAGS) Tiny_SRS
-	lualatex $(TEXFLAGS) Tiny_SRS
-	lualatex $(TEXFLAGS) Tiny_SRS
+HGHC_SRS.pdf: HGHC_SRS.tex
+	lualatex $(TEXFLAGS) HGHC_SRS
+	-bibtex $(BIBTEXFLAGS) HGHC_SRS
+	lualatex $(TEXFLAGS) HGHC_SRS
+	lualatex $(TEXFLAGS) HGHC_SRS
 
 .PHONY: srs

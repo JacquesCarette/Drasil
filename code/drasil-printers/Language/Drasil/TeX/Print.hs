@@ -32,12 +32,12 @@ import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
   Author, Address), Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import qualified Language.Drasil.Printing.Import as I
-import Language.Drasil.Printing.Helpers hiding (br, paren, sqbrac)
+import Language.Drasil.Printing.Helpers hiding (br, paren, sq, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
   cite, citeInfo, command, command0, commandD, command2D, description, document,
   empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgs, newline, newpage,
-  parens, quote, sec, snref, superscript, symbDescription, title, toEqn)
+  parens, quote, sec, snref, sq, superscript, symbDescription, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -466,17 +466,16 @@ makeGraph ps w h c l =
 ---------------------------
 -- **THE MAIN FUNCTION** --
 makeBib :: PrintingInformation -> BibRef -> D
-makeBib sm bib = mkEnvArgs "filecontents*" (bibFname ++ ".bib") (spec $ mkBibRef sm bib) %% bibLines
+makeBib sm bib = mkEnvArgs "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bib) %% bibLines
   where bibLines = command "nocite" "*" %% command "bibstyle" bibStyleT %%
-                   command0 "printbibliography" <> pure (sq "heading=none")
+                   command0 "printbibliography" <> sq (pure $ text "heading=none")
 
-mkBibRef :: PrintingInformation -> BibRef -> Spec
-mkBibRef sm = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map (renderF sm)
+mkBibRef :: PrintingInformation -> BibRef -> D
+mkBibRef sm = foldl1 (\x y -> x <> pure (text "\n\n") <> y) . map (renderF sm)
 
-renderF :: PrintingInformation -> Citation -> Spec
-renderF sm (Cite cid refType fields) =
-  S (showT refType) :+: S ("{" ++ cid ++ ",\n") :+:
-  (foldl1 (:+:) . intersperse (S ",\n") . map (showBibTeX sm)) fields :+: S "}"
+renderF :: PrintingInformation -> Citation -> D
+renderF sm (Cite cid refType fields) = (pure $ text (showT refType)) <>
+  br (foldl1 (<>) . intersperse (pure $ text ",\n") $ (pure $ text cid) : (map (showBibTeX sm) fields))
 
 showT :: L.CitationKind -> String
 showT L.Article       = "@article"
@@ -493,7 +492,7 @@ showT L.Proceedings   = "@proceedings"
 showT L.TechReport    = "@techreport"
 showT L.Unpublished   = "@unpublished"
 
-showBibTeX :: PrintingInformation -> CiteField -> Spec
+showBibTeX :: PrintingInformation -> CiteField -> D
 showBibTeX  _ (Address      s) = showField "address" s
 showBibTeX sm (Author       p) = showField "author" (rendPeople sm p)
 showBibTeX  _ (BookTitle    b) = showField "booktitle" b
@@ -502,7 +501,7 @@ showBibTeX  _ (Edition      e) = showField "edition" (wrapS e)
 showBibTeX sm (Editor       e) = showField "editor" (rendPeople sm e)
 showBibTeX  _ (Institution  i) = showField "institution" i
 showBibTeX  _ (Journal      j) = showField "journal" j
-showBibTeX  _ (Month        m) = S "month=" :+: bibTeXMonth m
+showBibTeX  _ (Month        m) = pure . text $ "month=" ++ bibTeXMonth m
 showBibTeX  _ (Note         n) = showField "note" n
 showBibTeX  _ (Number       n) = showField "number" (wrapS n)
 showBibTeX  _ (Organization o) = showField "organization" o
@@ -523,27 +522,27 @@ showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
   -- showField "sortkey" (LS.spec sm (rendPeople p))
 -- showBibTeX sm (Author    p) = showField "author" $ LS.spec sm (rendPeople p)
 
-showField :: String -> Spec -> Spec
-showField f s = S f :+: S "={" :+: s :+: S "}"
+showField :: String -> Spec -> D
+showField f s = (pure $ text (f ++ "=")) <> (br $ spec s)
 
 rendPeople :: PrintingInformation -> L.People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
 rendPeople sm people = I.spec sm $
   foldl1 (\x y -> x L.+:+ L.S "and" L.+:+ y) $ map (L.S . L.rendPersLFM) people
 
-bibTeXMonth :: L.Month -> Spec
-bibTeXMonth L.Jan = S "jan"
-bibTeXMonth L.Feb = S "feb"
-bibTeXMonth L.Mar = S "mar"
-bibTeXMonth L.Apr = S "apr"
-bibTeXMonth L.May = S "may"
-bibTeXMonth L.Jun = S "jun"
-bibTeXMonth L.Jul = S "jul"
-bibTeXMonth L.Aug = S "aug"
-bibTeXMonth L.Sep = S "sep"
-bibTeXMonth L.Oct = S "oct"
-bibTeXMonth L.Nov = S "nov"
-bibTeXMonth L.Dec = S "dec"
+bibTeXMonth :: L.Month -> String
+bibTeXMonth L.Jan = "jan"
+bibTeXMonth L.Feb = "feb"
+bibTeXMonth L.Mar = "mar"
+bibTeXMonth L.Apr = "apr"
+bibTeXMonth L.May = "may"
+bibTeXMonth L.Jun = "jun"
+bibTeXMonth L.Jul = "jul"
+bibTeXMonth L.Aug = "aug"
+bibTeXMonth L.Sep = "sep"
+bibTeXMonth L.Oct = "oct"
+bibTeXMonth L.Nov = "nov"
+bibTeXMonth L.Dec = "dec"
 
 wrapS :: Show a => a -> Spec
 wrapS = S . show

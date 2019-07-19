@@ -3,8 +3,8 @@ module Test.PatternTest (patternTest) where
 import Language.Drasil.Code (
   PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
-  StatementSym(..), ControlStatementSym(..), ValueSym(..), ValueExpression(..), 
-  FunctionSym(..), MethodSym(..), ModuleSym(..))
+  StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..),
+  ValueExpression(..), FunctionSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer)
 
@@ -31,6 +31,6 @@ patternTestMainMethod = mainMethod "PatternTest" (body [block [
     varDecDef (var "obs1" (obj "Observer")) (extStateObj "Observer" (obj "Observer") []), 
     varDecDef (var "obs2" (obj "Observer")) (extStateObj "Observer" (obj "Observer") [])],
   block [
-    initObserverList (listType static_ (obj "Observer")) [var "obs1" (obj "Observer")], 
-    addObserver (var "obs2" (obj "Observer")),
+    initObserverList (listType static_ (obj "Observer")) [valueOf $ var "obs1" (obj "Observer")], 
+    addObserver (valueOf $ var "obs2" (obj "Observer")),
     notifyObservers (func "printNum" void []) (listType static_ (obj "Observer"))]])

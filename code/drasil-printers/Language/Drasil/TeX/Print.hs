@@ -11,7 +11,8 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (
   RenderSpecial(..), People, rendPersLFM,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document, special, USymb(US)) 
+  Decoration(Prime, Hat, Vector), Document, special, USymb(US))
+-- import Utils.Drasil (checkValidStr)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -258,6 +259,8 @@ spec a@(s :+: t) = s' <> t'
     t' = switch ctx $ spec t
 spec (E ex) = toMath $ pExpr ex
 spec (S s)  = pure $ text (concatMap escapeChars s)
+{-spec (S s)  = either error (pure . text . (concatMap escapeChars)) $ checkValidStr s invalid
+  where invalid = ['&', '#', '$', '%', '&', '~', '^', '\\', '{', '}'] -}
 spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = pure $ text "\\newline"
@@ -463,17 +466,9 @@ makeGraph ps w h c l =
 ---------------------------
 -- **THE MAIN FUNCTION** --
 makeBib :: PrintingInformation -> BibRef -> D
-makeBib sm bib = spec $
-  S ("\\begin{filecontents*}{"++bibFname++".bib}\n") :+:
-  mkBibRef sm bib :+:
-  S "\n\\end{filecontents*}\n" :+:
-  S bibLines
-
-bibLines :: String
-bibLines =
-  "\\nocite{*}\n" ++
-  "\\bibstyle{" ++ bibStyleT ++ "}\n" ++
-  "\\printbibliography[heading=none]"
+makeBib sm bib = mkEnvArgs "filecontents*" (bibFname ++ ".bib") (spec $ mkBibRef sm bib) %% bibLines
+  where bibLines = command "nocite" "*" %% command "bibstyle" bibStyleT %%
+                   command0 "printbibliography" <> pure (sq "heading=none")
 
 mkBibRef :: PrintingInformation -> BibRef -> Spec
 mkBibRef sm = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map (renderF sm)

@@ -25,7 +25,7 @@ GLASSBR_DIR = GlassBR
 NOPCM_DIR = NoPCM
 SWHS_DIR  = SWHS
 SSP_DIR   = SSP
-GAMEPHYS_DIR  = Chipmunk
+GAMEPHYS_DIR  = GamePhysics
 PROJECTILE_DIR = Projectile
 TEMPLATE_DIR = Template
 

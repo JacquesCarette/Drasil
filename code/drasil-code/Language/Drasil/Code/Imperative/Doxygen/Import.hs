@@ -4,22 +4,17 @@ module Language.Drasil.Code.Imperative.Doxygen.Import (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.Helpers (blank)
-import Language.Drasil.CodeSpec (Comments, Lang(..))
+import Language.Drasil.CodeSpec (Comments)
 
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
 
-makeDoxConfig :: String -> Code -> Lang -> [Comments] -> Code
-makeDoxConfig prog (Code c) l cms = Code 
-  [("doxConfig", genDoxConfig prog (map fst c) l) | not (null cms)]
+makeDoxConfig :: String -> Code -> Doc -> [Comments] -> Code
+makeDoxConfig prog (Code c) opt cms = Code 
+  [("doxConfig", genDoxConfig prog (map fst c) opt) | not (null cms)]
 
-optimizeOutput :: Lang -> String
-optimizeOutput Java = "YES"
-optimizeOutput Python = "YES"
-optimizeOutput _ = "NO"
-
-genDoxConfig :: String -> [FilePath] -> Lang -> Doc
-genDoxConfig prog fs l = vcat [
+genDoxConfig :: String -> [FilePath] -> Doc -> Doc
+genDoxConfig prog fs opt = vcat [
   text "# Doxyfile 1.8.15",
   blank,
   text "# This file describes the settings to be used by the documentation system",
@@ -295,7 +290,7 @@ genDoxConfig prog fs l = vcat [
   text "# qualified scopes will look different, etc.",
   text "# The default value is: NO.",
   blank,
-  text $ "OPTIMIZE_OUTPUT_JAVA   = " ++ optimizeOutput l,
+  text "OPTIMIZE_OUTPUT_JAVA   =" <+> opt,
   blank,
   text "# Set the OPTIMIZE_FOR_FORTRAN tag to YES if your project consists of Fortran",
   text "# sources. Doxygen will then generate output that is tailored for Fortran.",

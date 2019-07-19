@@ -6,7 +6,7 @@ import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
-import Language.Drasil.Code.Imperative.Symantics (Label,
+import Language.Drasil.Code.Imperative.Symantics (Label, KeywordSym(..),
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), FunctionSym(..), 
@@ -49,6 +49,7 @@ import Control.Monad (when,liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.), view)
 import qualified Prelude as P ((<>))
+import Text.PrettyPrint.HughesPJ (Doc)
 
 -- Private State, used to push these options around the generator
 data State repr = State {
@@ -143,9 +144,9 @@ publicClass desc n l vs ms = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
-  ([ModData], Label)] -> State repr -> IO ()
-generateCode l unRepr g =
+generateCode :: (PackageSym repr, KeywordSym repr) => Lang -> [repr (Package repr) -> 
+  ([ModData], Label)] -> (repr (Keyword repr) -> Doc) -> State repr -> IO ()
+generateCode l unRepr unReprDox g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
@@ -159,7 +160,7 @@ generateCode l unRepr g =
           C.unCode $ makeCode (map (fst . ($ pckg)) unRepr) (getExt l)
         makefile = makeBuild (last unRepr pckg) (getBuildConfig l) 
           (getRunnable l) (getExt l) code
-        doxConf = makeDoxConfig prog code l (commented g)
+        doxConf = makeDoxConfig prog code (unReprDox optimizeDox) (commented g)
 
 genPackage :: (PackageSym repr) => String -> Reader (State repr) 
   (repr (Package repr))

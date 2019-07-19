@@ -1,28 +1,28 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: July 19, 2019
 --------------------------------------------------
 
 **DesignDec**
-  - Chipmunk's arbiters and vectors
+  - Contains arbiters and vectors for Game Physics example
 
 Body.hs
-  - The main document body representation for the Chipmunk example
+  - The main document body representation for the Game Physics example
   
 Changes.hs
-  - A list of likely and unlikely changes to the Chipmunk engine
+  - A list of likely and unlikely changes to the Game Physics engine
   
 Concepts.hs
-  - Example-specific concepts for Chipmunk
+  - Example-specific concepts for Game Physics
   
 DataDefs.hs
-  - Chipmunk's data definitions
+  - Data definitions for Game Physics Example
 
 GDef.hs
-  - Chipmunk's general definitions (not currently implemented)
+  - General definitions (not currently implemented) for the Game Physics example
 
 IMods.hs
-  - Chipmunk's instance models
+  - Instance models for the Game Physics example
   
 Main.hs 
   - A list of what should be generated
@@ -31,10 +31,10 @@ README.md
   - This file
   
 References.hs
-  - Chipmunk's references
+  - References for the Game Physics example
   
 TMods.hs
-  - Chipmunk's theoretical models
+  - Theoretical models for the Game Physics example
   
 Unitals.hs
-  - Chimpunk's example-specific quantities
+  - Example-specific quantities for the Game Physics

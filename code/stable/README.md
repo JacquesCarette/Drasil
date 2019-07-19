@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 26, 2018
+Last updated: July 19, 2019
 --------------------------------------------------
 
 **gamephysics**

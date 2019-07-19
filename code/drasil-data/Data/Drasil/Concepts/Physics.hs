@@ -204,3 +204,4 @@ isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
 
 chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity") (S "The" +:+ phrase chgInVelocity +:+
  S "of a" +:+ phrase rigidBody)
+

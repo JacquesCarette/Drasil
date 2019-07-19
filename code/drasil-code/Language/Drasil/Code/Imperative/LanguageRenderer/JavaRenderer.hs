@@ -15,7 +15,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -337,15 +337,6 @@ instance Selector JavaCode where
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  getFunc v = func (getterName $ valueName v) (valueType v) []
-  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
-
-  listSizeFunc = func "size" int []
-  listAddFunc _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
-  listAppendFunc v = func "add" (listType static_ $ fmap valType v) [v]
-
-  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Java, but Java has no iterators"
-  iterEndFunc _ = error "Attempt to use iterEndFunc in Java, but Java has no iterators"
 
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
@@ -358,14 +349,25 @@ instance FunctionSym JavaCode where
   iterEnd v = v $. iterEndFunc (valueType v)
 
 instance SelectorFunction JavaCode where
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (var l int)
+
+instance InternalFunction JavaCode where
+  getFunc v = func (getterName $ valueName v) (valueType v) []
+  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
+
+  listSizeFunc = func "size" int []
+  listAddFunc _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
+  listAppendFunc v = func "add" (listType static_ $ fmap valType v) [v]
+
+  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Java, but Java has no iterators"
+  iterEndFunc _ = error "Attempt to use iterEndFunc in Java, but Java has no iterators"
+  
   listAccessFunc t i = func "get" t [intValue i]
   listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
 
   atFunc t l = listAccessFunc t (var l int)
-
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (var l int)
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end

@@ -15,7 +15,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -332,15 +332,6 @@ instance Selector CSharpCode where
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  getFunc v = func (getterName $ valueName v) (valueType v) []
-  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
-
-  listSizeFunc = liftA2 fd int (fmap funcDocD (var "Count" int))
-  listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
-  listAppendFunc v = func "Add" (fmap valType v) [v]
-
-  iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
-  iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
 
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
@@ -353,15 +344,26 @@ instance FunctionSym CSharpCode where
   iterEnd v = v $. iterEndFunc (valueType v)
 
 instance SelectorFunction CSharpCode where
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (var l int)
+
+instance InternalFunction CSharpCode where
+  getFunc v = func (getterName $ valueName v) (valueType v) []
+  setFunc t v toVal = func (setterName $ valueName v) t [toVal]
+
+  listSizeFunc = liftA2 fd int (fmap funcDocD (var "Count" int))
+  listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
+  listAppendFunc v = func "Add" (fmap valType v) [v]
+
+  iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
+  iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
+
   listAccessFunc t v = liftA2 fd t (listAccessFuncDocD <$> intValue v)
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD (intValue i) toVal)
 
   atFunc t l = listAccessFunc t (var l int)
-
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (var l int)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)

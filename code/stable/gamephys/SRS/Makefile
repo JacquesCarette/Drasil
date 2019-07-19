@@ -1,9 +1,9 @@
-srs: Chipmunk_SRS.pdf
+srs: GamePhysics_SRS.pdf
 
-Chipmunk_SRS.pdf: Chipmunk_SRS.tex
-	lualatex $(TEXFLAGS) Chipmunk_SRS
-	-bibtex $(BIBTEXFLAGS) Chipmunk_SRS
-	lualatex $(TEXFLAGS) Chipmunk_SRS
-	lualatex $(TEXFLAGS) Chipmunk_SRS
+GamePhysics_SRS.pdf: GamePhysics_SRS.tex
+	lualatex $(TEXFLAGS) GamePhysics_SRS
+	-bibtex $(BIBTEXFLAGS) GamePhysics_SRS
+	lualatex $(TEXFLAGS) GamePhysics_SRS
+	lualatex $(TEXFLAGS) GamePhysics_SRS
 
 .PHONY: srs

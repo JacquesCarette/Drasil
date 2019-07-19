@@ -15,7 +15,8 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), StatementSym(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -369,6 +370,12 @@ instance InternalFunction JavaCode where
 
   atFunc t l = listAccessFunc t (var l int)
 
+instance InternalStatement JavaCode where
+  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
+
+  state = fmap statementDocD
+  loopState = fmap (statementDocD . setEmpty)
+
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
@@ -391,8 +398,6 @@ instance StatementSym JavaCode where
   objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) [])
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
-
-  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
 
   print v = outDoc False printFunc v Nothing
   printLn v = outDoc True printLnFunc v Nothing
@@ -449,8 +454,6 @@ instance StatementSym JavaCode where
   inOutCall = jInOutCall funcApp
   extInOutCall m = jInOutCall (extFuncApp m)
 
-  state = fmap statementDocD
-  loopState = fmap (statementDocD . setEmpty)
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym JavaCode where

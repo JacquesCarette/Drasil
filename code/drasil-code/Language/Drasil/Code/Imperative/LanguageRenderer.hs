@@ -43,7 +43,7 @@ import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   RenderSym(..), BodySym(..), StateTypeSym(getType, listInnerType), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), InternalValue(..),
-  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  FunctionSym(..), SelectorFunction(..), InternalStatement(..), StatementSym(..), 
   ControlStatementSym(..), ParameterSym(..), MethodSym(..), BlockCommentSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 

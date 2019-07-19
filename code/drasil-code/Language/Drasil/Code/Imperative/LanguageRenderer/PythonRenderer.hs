@@ -14,7 +14,8 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), StatementSym(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -340,12 +341,19 @@ instance InternalFunction PythonCode where
 
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
   iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
-  
+
   listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD i toVal)
 
   atFunc t l = listAccessFunc t (var l int)
+
+instance InternalStatement PythonCode where
+  printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
+    (fromMaybe (liftA2 mkVal void (return empty)) f)
+
+  state = fmap statementDocD
+  loopState = fmap statementDocD 
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
@@ -369,9 +377,6 @@ instance StatementSym PythonCode where
   objDecNewVoid v = varDecDef v (stateObj (valueType v) [])
   extObjDecNewVoid lib v = varDecDef v (extStateObj lib (valueType v) [])
   constDecDef = varDecDef
-
-  printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
-    (fromMaybe (liftA2 mkVal void (return empty)) f)
 
   print v = pyOut False printFunc v Nothing
   printLn v = pyOut True printFunc v Nothing
@@ -428,8 +433,6 @@ instance StatementSym PythonCode where
   inOutCall = pyInOutCall funcApp
   extInOutCall m = pyInOutCall (extFuncApp m)
 
-  state = fmap statementDocD
-  loopState = fmap statementDocD 
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym PythonCode where

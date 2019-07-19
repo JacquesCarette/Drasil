@@ -8,7 +8,8 @@ module Language.Drasil.Code.Imperative.Symantics (
   BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), StatementSym(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..)
@@ -336,8 +337,16 @@ class (ValueSym repr, InternalValue repr) => InternalFunction repr where
 
   atFunc :: repr (StateType repr) -> Label -> repr (Function repr)
 
-class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) 
-  => StatementSym repr where
+class (Selector repr) => InternalStatement repr where
+  -- newLn, printFunc, value to print, maybe a file to print to 
+  printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> 
+    Maybe (repr (Value repr)) -> repr (Statement repr)
+
+  state     :: repr (Statement repr) -> repr (Statement repr)
+  loopState :: repr (Statement repr) -> repr (Statement repr)
+
+class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
+  InternalFunction repr, InternalStatement repr) => StatementSym repr where
   type Statement repr
   (&=)   :: repr (Value repr) -> repr (Value repr) -> repr (Statement repr)
   infixr 1 &=
@@ -373,9 +382,6 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   extObjDecNewVoid :: Library -> repr (Value repr) -> repr (Statement repr)
   constDecDef      :: repr (Value repr) -> repr (Value repr) -> 
     repr (Statement repr)
-
-  -- newLn, printFunc, value to print, maybe a file to print to 
-  printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> Maybe (repr (Value repr)) -> repr (Statement repr)
 
   print      :: repr (Value repr) -> repr (Statement repr)
   printLn    :: repr (Value repr) -> repr (Statement repr)
@@ -438,8 +444,6 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   extInOutCall :: Library -> Label -> [repr (Value repr)] ->
     [repr (Value repr)] -> repr (Statement repr)
 
-  state     :: repr (Statement repr) -> repr (Statement repr)
-  loopState :: repr (Statement repr) -> repr (Statement repr)
   multi     :: [repr (Statement repr)] -> repr (Statement repr)
 
 class (StatementSym repr, BodySym repr) => ControlStatementSym repr where

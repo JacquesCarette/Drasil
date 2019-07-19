@@ -16,7 +16,8 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), StatementSym(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -359,6 +360,13 @@ instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where
 
   atFunc t l = pair (atFunc (pfst t) l) (atFunc (psnd t) l)
 
+instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
+  printSt nl p v f = pair (printSt nl (pfst p) (pfst v) (fmap pfst f)) 
+    (printSt nl (psnd p) (psnd v) (fmap psnd f))
+    
+  state s = pair (state $ pfst s) (state $ psnd s)
+  loopState s = pair (loopState $ pfst s) (loopState $ psnd s)
+
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
   assign v1 v2 = pair (assign (pfst v1) (pfst v2)) (assign (psnd v1) (psnd v2))
@@ -389,9 +397,6 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (extObjDecNewVoid lib $ psnd v)
   constDecDef v def = pair (constDecDef (pfst v) (pfst def)) (constDecDef 
     (psnd v) (psnd def))
-
-  printSt nl p v f = pair (printSt nl (pfst p) (pfst v) (fmap pfst f)) 
-    (printSt nl (psnd p) (psnd v) (fmap psnd f))
 
   print v = pair (print $ pfst v) (print $ psnd v)
   printLn v = pair (printLn $ pfst v) (printLn $ psnd v)
@@ -460,8 +465,6 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   extInOutCall m n ins outs = pair (extInOutCall m n (map pfst ins) (map pfst 
     outs)) (extInOutCall m n (map psnd ins) (map psnd outs)) 
 
-  state s = pair (state $ pfst s) (state $ psnd s)
-  loopState s = pair (loopState $ pfst s) (loopState $ psnd s)
   multi ss = pair (multi $ map pfst ss) (multi $ map psnd ss)
 
 instance (Pair p) => ControlStatementSym (p CppSrcCode CppHdrCode) where
@@ -894,6 +897,12 @@ instance InternalFunction CppSrcCode where
 
   atFunc t l = listAccessFunc t (var l int) 
 
+instance InternalStatement CppSrcCode where
+  printSt nl p v _ = mkSt <$> liftA2 (cppPrint nl) p v
+
+  state = fmap statementDocD
+  loopState = fmap (statementDocD . setEmpty)
+
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
   assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
@@ -915,8 +924,6 @@ instance StatementSym CppSrcCode where
   objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) [])
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
-
-  printSt nl p v _ = mkSt <$> liftA2 (cppPrint nl) p v
 
   print v = outDoc False printFunc v Nothing
   printLn v = outDoc True printLnFunc v Nothing
@@ -983,8 +990,6 @@ instance StatementSym CppSrcCode where
   inOutCall = cppInOutCall funcApp
   extInOutCall m = cppInOutCall (extFuncApp m)
 
-  state = fmap statementDocD
-  loopState = fmap (statementDocD . setEmpty)
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym CppSrcCode where
@@ -1420,6 +1425,12 @@ instance InternalFunction CppHdrCode where
 
   atFunc _ _ = liftA2 fd void (return empty)
 
+instance InternalStatement CppHdrCode where
+  printSt _ _ _ _ = return (mkStNoEnd empty)
+
+  state _ = return (mkStNoEnd empty)
+  loopState _ = return (mkStNoEnd empty)
+
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
   assign _ _ = return (mkStNoEnd empty)
@@ -1441,8 +1452,6 @@ instance StatementSym CppHdrCode where
   objDecNewVoid _ = return (mkStNoEnd empty)
   extObjDecNewVoid _ _ = return (mkStNoEnd empty)
   constDecDef _ _ = return (mkStNoEnd empty)
-
-  printSt _ _ _ _ = return (mkStNoEnd empty)
 
   print _ = return (mkStNoEnd empty)
   printLn _ = return (mkStNoEnd empty)
@@ -1494,8 +1503,6 @@ instance StatementSym CppHdrCode where
   inOutCall _ _ _ = return (mkStNoEnd empty)
   extInOutCall _ _ _ _ = return (mkStNoEnd empty)
 
-  state _ = return (mkStNoEnd empty)
-  loopState _ = return (mkStNoEnd empty)
   multi _ = return (mkStNoEnd empty)
 
 instance ControlStatementSym CppHdrCode where

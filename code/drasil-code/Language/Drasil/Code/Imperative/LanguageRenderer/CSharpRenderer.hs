@@ -15,7 +15,8 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
   UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), StatementSym(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
@@ -365,6 +366,12 @@ instance InternalFunction CSharpCode where
 
   atFunc t l = listAccessFunc t (var l int)
 
+instance InternalStatement CSharpCode where
+  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
+  
+  state = fmap statementDocD
+  loopState = fmap (statementDocD . setEmpty)
+
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
   assign v1 v2 = mkSt <$> liftA2 assignDocD v1 v2
@@ -386,8 +393,6 @@ instance StatementSym CSharpCode where
   objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (valueType v) [])
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
-
-  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
 
   print v = outDoc False printFunc v Nothing
   printLn v = outDoc True printLnFunc v Nothing
@@ -442,8 +447,6 @@ instance StatementSym CSharpCode where
   inOutCall = csInOutCall funcApp
   extInOutCall m = csInOutCall (extFuncApp m)
 
-  state = fmap statementDocD
-  loopState = fmap (statementDocD . setEmpty)
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym CSharpCode where

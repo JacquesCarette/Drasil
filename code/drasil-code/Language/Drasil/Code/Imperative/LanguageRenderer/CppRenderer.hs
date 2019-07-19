@@ -121,6 +121,8 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   docCommentStart = pair docCommentStart docCommentStart
   docCommentEnd = pair docCommentEnd docCommentEnd
 
+  optimizeDox = pair optimizeDox optimizeDox
+
 instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   type Permanence (p CppSrcCode CppHdrCode) = Doc
   static_ = pair static_ static_
@@ -661,6 +663,8 @@ instance KeywordSym CppSrcCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
+  
+  optimizeDox = return $ text "NO"
 
 instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = Doc
@@ -1222,6 +1226,9 @@ instance KeywordSym CppHdrCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
+
+  
+  optimizeDox = return empty
 
 instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = Doc

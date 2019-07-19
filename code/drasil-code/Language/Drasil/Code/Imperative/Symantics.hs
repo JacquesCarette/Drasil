@@ -63,6 +63,8 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   docCommentStart   :: repr (Keyword repr)
   docCommentEnd     :: repr (Keyword repr)
 
+  optimizeDox :: repr (Keyword repr)
+
 class PermanenceSym repr where
   type Permanence repr
   static_  :: repr (Permanence repr)

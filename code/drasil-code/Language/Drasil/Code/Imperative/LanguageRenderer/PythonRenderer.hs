@@ -114,6 +114,8 @@ instance KeywordSym PythonCode where
   docCommentStart = return $ text "##"
   docCommentEnd = return empty
 
+  optimizeDox = return $ text "YES"
+
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
   static_ = return staticDocD

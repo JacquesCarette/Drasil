@@ -127,6 +127,8 @@ instance KeywordSym JavaCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
+  
+  optimizeDox = return $ text "YES"
 
 instance PermanenceSym JavaCode where
   type Permanence JavaCode = Doc

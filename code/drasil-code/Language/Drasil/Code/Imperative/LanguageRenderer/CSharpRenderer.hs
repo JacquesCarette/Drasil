@@ -122,6 +122,8 @@ instance KeywordSym CSharpCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
+  
+  optimizeDox = return $ text "NO"
 
 instance PermanenceSym CSharpCode where
   type Permanence CSharpCode = Doc

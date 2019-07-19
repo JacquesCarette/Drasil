@@ -10,7 +10,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   force, gravitationalAccel, gravitationalConst, impulseS, impulseV, 
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position, 
   restitutionCoef, time, torque, velocity, kEnergy, chgInVelocity, potEnergy, height, 
-  gravitationalConstValue, gravitationalAccelConst)
+  gravitationalConstValue)
 
 import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, normalVect, 
   orientation, perpVect, pi_, unitVect)
@@ -306,7 +306,7 @@ nonNegativeConstraint = physc $ UpFrom (Inc,0)
 lengthCons     = constrained' QPP.len               [nonNegativeConstraint] (dbl 44.2)
 massCons       = constrained' QPP.mass              [nonNegativeConstraint] (dbl 56.2)
 mmntOfInCons   = constrained' QP.momentOfInertia    [nonNegativeConstraint] (dbl 74.5)
-gravAccelCons  = constrained' QP.gravitationalConst [] (dbl 0)
+gravAccelCons  = constrained' QP.gravitationalConst [] (QP.gravitationalConstValue ^. defnExpr)
 posCons        = constrained' QP.position           [] (dbl 0.412) --FIXME: should be (0.412, 0.502) vector
 veloCons       = constrained' QP.velocity           [] (dbl 2.51)
 orientCons     = constrained' QM.orientation        [physc $ Bounded (Inc, 0) (Inc, 2 * sy QM.pi_)] (sy QM.pi_ / 2) -- physical constraint not needed space is radians

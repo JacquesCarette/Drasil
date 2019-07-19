@@ -38,6 +38,7 @@ acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
 
 constants :: [QDefinition]
 constants = [grav, piConst, tol]
+--constants = [grav, piConst, tol, gravitationalAccelConst]
 
 inputs :: [QuantityDict]
 inputs = map qw [launSpeed, launAngle, targPos]

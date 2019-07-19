@@ -30,9 +30,13 @@
 \section{Reference Material}
 \label{Sec:RefMat}
 This section records information for easy reference.
+\par~
+
 \subsection{Table of Units}
 \label{Sec:ToU}
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, \hyperref[Table:ToU]{Tab: ToU} lists the symbol, a description and the SI name.
+\par~
+
 \begin{longtable}{l l l}
 \toprule
 \textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
@@ -58,6 +62,8 @@ s & time & second
 \subsection{Table of Symbols}
 \label{Sec:ToS}
 The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
+\par~
+
 \begin{longtabu}{l X[l] l}
 \toprule
 \textbf{Symbol} & \textbf{Description} & \textbf{Units}
@@ -237,30 +243,47 @@ Uncert. & Typical Uncertainty
 \section{Introduction}
 \label{Sec:Intro}
 Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
+\par~
 
 The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
+\par~
+
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
 This document describes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
+\par~
 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
+\par~
+
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
 The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces.
+\par~
+
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
 Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
+\par~
+
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{dParnas1972} and \cite{parnasClements1984}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
+\par~
 
 The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}).
+\par~
+
 \section{General System Description}
 \label{Sec:GenSysDesc}
 This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
+\par~
+
 \subsection{System Context}
 \label{Sec:SysContext}
 \hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Chipmunk2D). Arrows are used to show the data flow between the system and its environment.
+\par~
+
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/GamePhysics/sysctx.png}
@@ -269,6 +292,8 @@ This section provides general information about the system. It identifies the in
 \end{center}
 \end{figure}
 The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
+\par~
+
 \begin{itemize}
 \item{User Responsibilities}
 \begin{itemize}
@@ -286,18 +311,28 @@ The interaction between the product and the user is through an application progr
 \subsection{User Characteristics}
 \label{Sec:UserChars}
 The end user of Chipmunk2D should have an understanding of first year programming concepts and an understanding of high school physics.
+\par~
+
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
 There are no system constraints.
+\par~
+
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+\par~
+
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
 A system is needed to create a simple, lightweight, fast, and portable 2D rigid body physics library, which will allow for more accessible game development and the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (\hyperref[Sec:offShelfSolns]{Section: Off-The-Shelf Solutions}).
+\par~
+
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+\par~
+
 \begin{itemize}
 \item{Rigid body: A solid body in which deformation is neglected.}
 \item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
@@ -308,6 +343,8 @@ This subsection provides a list of terms that are used in the subsequent section
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
 Given the kinematic properties, and forces including any (collision forces) applied on a set of rigid bodies, the goal statements are:
+\par~
+
 \begin{itemize}
 \item[Determine-Linear-Properties:\phantomsection\label{linearGS}]Determine their new positions and velocities over a period of time.
 \item[Determine-Angular-Properties:\phantomsection\label{angularGS}]Determine their new orientations and angular velocities over a period of time.
@@ -315,9 +352,13 @@ Given the kinematic properties, and forces including any (collision forces) appl
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern Chipmunk2D are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+\par~
+
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
+\par~
+
 \begin{itemize}
 \item[objectTy:\phantomsection\label{assumpOT}]All objects are rigid bodies. (RefBy: \hyperref[DD:chalses]{DD: chalses}, \hyperref[DD:reVeInColl]{DD: reVeInColl}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[DD:momentOfInertia]{DD: momentOfInertia}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulseV]{DD: impulseV}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[TM:ChaslesThm]{TM: ChaslesThm}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)
 \item[objectDimension:\phantomsection\label{assumpOD}]All objects are 2D. (RefBy: \hyperref[DD:chalses]{DD: chalses}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)
@@ -332,6 +373,8 @@ This section simplifies the original problem and helps in developing the theoret
 This section focuses on the general equations and laws that Chipmunk2D is based on.
 \par~
 
+\par~
+
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:NewtonSecLawMot}
@@ -339,6 +382,8 @@ This section focuses on the general equations and laws that Chipmunk2D is based 
 \label{TM:NewtonSecLawMot}
 \\ \midrule \\
 Label & Newton's second law of motion
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{F}=m \mathbf{a}
@@ -351,10 +396,15 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The net force $\mathbf{F}$ (N) on a body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the body, where $m$ (kg) denotes the mass of the body as the constant of proportionality.
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -367,6 +417,8 @@ RefBy &
 \label{TM:NewtonThirdLawMot}
 \\ \midrule \\
 Label & Newton's third law of motion
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{F}_{1}}=-{\mathbf{F}_{2}}
@@ -378,10 +430,15 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & Every action has an equal and opposite reaction. In other words, the force ${\mathbf{F}_{1}}$ (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force ${\mathbf{F}_{2}}$ (N) exerted on the first rigid body by the second.
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -394,6 +451,8 @@ RefBy &
 \label{TM:UniversalGravLaw}
 \\ \midrule \\
 Label & Newton's law of universal gravitation
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{F}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \frac{\mathbf{r}}{||\mathbf{r}||}
@@ -410,10 +469,15 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -426,6 +490,8 @@ RefBy &
 \label{TM:ChaslesThm}
 \\ \midrule \\
 Label & Chasles' theorem
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}
@@ -439,10 +505,15 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -455,6 +526,8 @@ RefBy &
 \label{TM:NewtonSecLawRotMot}
 \\ \midrule \\
 Label & Newton's second law for rotational motion
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            τ=\mathbf{I} α
@@ -467,19 +540,28 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The net torque $τ$ (Nm) on a rigid body is proportional to its angular acceleration $α$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional \hyperref[assumpOD]{A: objectDimension}.
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 There are no general definitions.
+\par~
+
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -489,10 +571,16 @@ This section collects and defines all the data needed to build the instance mode
 \label{DD:ctrOfMass}
 \\ \midrule \\
 Label & Center of Mass
+        \par~
+
 \\ \midrule \\
 Symbol & ${\mathbf{p}_{CM}}$
+         \par~
+
 \\ \midrule \\
 Units & m
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{p}_{CM}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{M}
@@ -506,15 +594,24 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpOT]{A: objectTy}
-        
+        \par~
+
         \hyperref[assumpOD]{A: objectDimension}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
 RefBy & \hyperref[IM:transMot]{IM: transMot} and \hyperref[IM:col2D]{IM: col2D}
+        \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -524,10 +621,16 @@ RefBy & \hyperref[IM:transMot]{IM: transMot} and \hyperref[IM:col2D]{IM: col2D}
 \label{DD:linDisp}
 \\ \midrule \\
 Label & Linear Displacement
+        \par~
+
 \\ \midrule \\
 Symbol & $\mathbf{r}(t)$
+         \par~
+
 \\ \midrule \\
 Units & m
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{r}(t)=\frac{\,d\mathbf{p}\left(t\right)}{\,dt}
@@ -540,17 +643,27 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpOT]{A: objectTy}
-        
+        \par~
+
         \hyperref[assumpOD]{A: objectDimension}
-        
+        \par~
+
         \hyperref[assumpDI]{A: dampingInvolvement}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
 RefBy & \hyperref[IM:transMot]{IM: transMot}
+        \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -560,10 +673,16 @@ RefBy & \hyperref[IM:transMot]{IM: transMot}
 \label{DD:linVel}
 \\ \midrule \\
 Label & Linear Velocity
+        \par~
+
 \\ \midrule \\
 Symbol & $\mathbf{v}(t)$
+         \par~
+
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{v}(t)=\frac{\,d\mathbf{r}\left(t\right)}{\,dt}
@@ -576,17 +695,27 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpOT]{A: objectTy}
-        
+        \par~
+
         \hyperref[assumpOD]{A: objectDimension}
-        
+        \par~
+
         \hyperref[assumpDI]{A: dampingInvolvement}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
 RefBy & \hyperref[IM:transMot]{IM: transMot}
+        \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -596,10 +725,16 @@ RefBy & \hyperref[IM:transMot]{IM: transMot}
 \label{DD:linAcc}
 \\ \midrule \\
 Label & Linear Acceleration
+        \par~
+
 \\ \midrule \\
 Symbol & $\mathbf{a}(t)$
+         \par~
+
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}^{2}}$
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{a}(t)=\frac{\,d\mathbf{v}\left(t\right)}{\,dt}
@@ -612,17 +747,27 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpOT]{A: objectTy}
-        
+        \par~
+
         \hyperref[assumpOD]{A: objectDimension}
-        
+        \par~
+
         \hyperref[assumpDI]{A: dampingInvolvement}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
 RefBy & \hyperref[IM:transMot]{IM: transMot}
+        \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -632,10 +777,16 @@ RefBy & \hyperref[IM:transMot]{IM: transMot}
 \label{DD:angDisp}
 \\ \midrule \\
 Label & Angular Displacement
+        \par~
+
 \\ \midrule \\
 Symbol & $θ$
+         \par~
+
 \\ \midrule \\
 Units & rad
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            θ=\frac{\,dϕ\left(t\right)}{\,dt}
@@ -648,17 +799,27 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpOT]{A: objectTy}
-        
+        \par~
+
         \hyperref[assumpOD]{A: objectDimension}
-        
+        \par~
+
         \hyperref[assumpDI]{A: dampingInvolvement}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
 RefBy & \hyperref[IM:rotMot]{IM: rotMot}
+        \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -668,10 +829,16 @@ RefBy & \hyperref[IM:rotMot]{IM: rotMot}
 \label{DD:angVel}
 \\ \midrule \\
 Label & Angular Velocity
+        \par~
+
 \\ \midrule \\
 Symbol & $ω$
+         \par~
+
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}}$
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            ω=\frac{\,dθ\left(t\right)}{\,dt}
@@ -684,17 +851,27 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpOT]{A: objectTy}
-        
+        \par~
+
         \hyperref[assumpOD]{A: objectDimension}
-        
+        \par~
+
         \hyperref[assumpDI]{A: dampingInvolvement}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
 RefBy & \hyperref[IM:rotMot]{IM: rotMot}
+        \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -704,10 +881,16 @@ RefBy & \hyperref[IM:rotMot]{IM: rotMot}
 \label{DD:angAccel}
 \\ \midrule \\
 Label & Angular Acceleration
+        \par~
+
 \\ \midrule \\
 Symbol & $α$
+         \par~
+
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}^{2}}$
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            α=\frac{\,dω\left(t\right)}{\,dt}
@@ -720,17 +903,27 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpOT]{A: objectTy}
-        
+        \par~
+
         \hyperref[assumpOD]{A: objectDimension}
-        
+        \par~
+
         \hyperref[assumpDI]{A: dampingInvolvement}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
 RefBy & \hyperref[IM:rotMot]{IM: rotMot}
+        \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -740,10 +933,16 @@ RefBy & \hyperref[IM:rotMot]{IM: rotMot}
 \label{DD:impulse}
 \\ \midrule \\
 Label & Impulse (scalar)
+        \par~
+
 \\ \midrule \\
 Symbol & $j$
+         \par~
+
 \\ \midrule \\
 Units & Ns
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            j=\frac{-\left(1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{A}}}+\frac{1}{{m_{B}}}\right) ||\mathbf{n}||^{2}+\frac{||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{A}}}+\frac{||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{B}}}}
@@ -764,19 +963,30 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpOT]{A: objectTy}
-        
+        \par~
+
         \hyperref[assumpOD]{A: objectDimension}
-        
+        \par~
+
         \hyperref[assumpAD]{A: axesDefined}
-        
+        \par~
+
         \hyperref[assumpCT]{A: collisionType}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
 RefBy & \hyperref[IM:col2D]{IM: col2D}
+        \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -786,10 +996,16 @@ RefBy & \hyperref[IM:col2D]{IM: col2D}
 \label{DD:chalses}
 \\ \midrule \\
 Label & Velocity At Point B
+        \par~
+
 \\ \midrule \\
 Symbol & ${\mathbf{v}_{B}}$
+         \par~
+
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{v}_{B}}={\mathbf{v}_{O}}+ω\times{\mathbf{r}_{OB}}
@@ -803,19 +1019,29 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
-        
+        \par~
+
         \hyperref[assumpOT]{A: objectTy}
-        
+        \par~
+
         \hyperref[assumpOD]{A: objectDimension}
-        
+        \par~
+
         \hyperref[assumpDI]{A: dampingInvolvement}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -825,10 +1051,16 @@ RefBy &
 \label{DD:torque}
 \\ \midrule \\
 Label & Torque
+        \par~
+
 \\ \midrule \\
 Symbol & $τ$
+         \par~
+
 \\ \midrule \\
 Units & Nm
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            τ=\mathbf{r}\times\mathbf{F}
@@ -841,13 +1073,20 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -857,10 +1096,16 @@ RefBy &
 \label{DD:kEnergy}
 \\ \midrule \\
 Label & Kinetic energy
+        \par~
+
 \\ \midrule \\
 Symbol & $KE$
+         \par~
+
 \\ \midrule \\
 Units & J
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            KE=\frac{m \mathbf{v}^{2}}{2}
@@ -873,19 +1118,29 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The kinetic energy of an object is the energy it possess due to its motion.
-        
+        \par~
+
         \hyperref[assumpOT]{A: objectTy}
-        
+        \par~
+
         \hyperref[assumpOD]{A: objectDimension}
-        
+        \par~
+
         \hyperref[assumpDI]{A: dampingInvolvement}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -895,10 +1150,16 @@ RefBy &
 \label{DD:coeffRestitution}
 \\ \midrule \\
 Label & Coefficient of restitution
+        \par~
+
 \\ \midrule \\
 Symbol & ${C_{R}}$
+         \par~
+
 \\ \midrule \\
 Units & Unitless
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            {C_{R}}=-\left(\frac{{{\mathbf{v}_{f}}^{AB}}\cdot{}\mathbf{n}}{{{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}\right)
@@ -912,13 +1173,20 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The coefficient of restitution ${C_{R}}$ is a unitless, dimensionless quantity that determines the elasticity of a collision between two rigid bodies. ${C_{R}}=1$ results in an elastic collision, while ${C_{R}}<1$ results in an inelastic collision, and ${C_{R}}=0$ results in a totally inelastic collision.
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -928,10 +1196,16 @@ RefBy &
 \label{DD:reVeInColl}
 \\ \midrule \\
 Label & Initial Relative Velocity Between Rigid Bodies of A and B
+        \par~
+
 \\ \midrule \\
 Symbol & ${{\mathbf{v}_{i}}^{AB}}$
+         \par~
+
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            {{\mathbf{v}_{i}}^{AB}}={\mathbf{v}^{AP}}-{\mathbf{v}^{BP}}
@@ -944,13 +1218,20 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & In a collision, the velocity of a rigid body \hyperref[assumpOT]{A: objectTy} A colliding with another rigid body B relative to that body ${{\mathbf{v}_{i}}^{AB}}$ is the difference between the velocities of A and B at point P.
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -960,10 +1241,16 @@ RefBy &
 \label{DD:impulseV}
 \\ \midrule \\
 Label & Impulse (vector)
+        \par~
+
 \\ \midrule \\
 Symbol & $\mathbf{J}$
+         \par~
+
 \\ \midrule \\
 Units & Ns
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{J}=m Δ\mathbf{v}
@@ -976,26 +1263,38 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & An impulse (vector) $\mathbf{J}$ occurs when a force $\mathbf{F}$ acts over a body over an interval of time.
-        
+        \par~
+
         \hyperref[assumpOT]{A: objectTy}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 \paragraph{Detailed derivation of impulse (vector):}
 \label{DD:impulseVDeriv}
 Newton's second law of motion states:
+\par~
+
 \begin{displaymath}
 \mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}
 \end{displaymath}
 Rearranging :
+\par~
+
 \begin{displaymath}
 \int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)
 \end{displaymath}
 Integrating the right hand side :
+\par~
+
 \begin{displaymath}
 \int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}
 \end{displaymath}
@@ -1008,10 +1307,16 @@ Integrating the right hand side :
 \label{DD:potEnergy}
 \\ \midrule \\
 Label & Potential energy
+        \par~
+
 \\ \midrule \\
 Symbol & $PE$
+         \par~
+
 \\ \midrule \\
 Units & J
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            PE=m g h
@@ -1025,19 +1330,29 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The potential energy of an object is the energy held by an object because of its position to other objects.
-        
+        \par~
+
         \hyperref[assumpOT]{A: objectTy}
-        
+        \par~
+
         \hyperref[assumpOD]{A: objectDimension}
-        
+        \par~
+
         \hyperref[assumpDI]{A: dampingInvolvement}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -1047,10 +1362,16 @@ RefBy &
 \label{DD:momentOfInertia}
 \\ \midrule \\
 Label & Moment of inertia
+        \par~
+
 \\ \midrule \\
 Symbol & $\mathbf{I}$
+         \par~
+
 \\ \midrule \\
 Units & kg$\text{m}^{2}$
+        \par~
+
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{I}=\displaystyle\sum{{m_{j}} {r_{j}}^{2}}
@@ -1063,20 +1384,31 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The moment of inertia $\mathbf{I}$ of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.
-        
+        \par~
+
         \hyperref[assumpOT]{A: objectTy}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+\par~
 
 The goal \hyperref[linearGS]{GS: Determine-Linear-Properties} is met by \hyperref[IM:transMot]{IM: transMot} and \hyperref[IM:col2D]{IM: col2D}. The goal \hyperref[angularGS]{GS: Determine-Angular-Properties} is met by \hyperref[IM:rotMot]{IM: rotMot} and \hyperref[IM:col2D]{IM: col2D}.
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -1086,10 +1418,16 @@ The goal \hyperref[linearGS]{GS: Determine-Linear-Properties} is met by \hyperre
 \label{IM:transMot}
 \\ \midrule \\
 Label & Force on the translational motion of a set of 2d rigid bodies
+        \par~
+
 \\ \midrule \\
 Input & ${\mathbf{v}_{i}}$, $t$, $g$, ${\mathbf{F}_{i}}$, ${m_{j}}$
+        \par~
+
 \\ \midrule \\
 Output & ${\mathbf{a}_{i}}$
+         \par~
+
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
                     {\mathbf{v}_{i}}>0
@@ -1123,13 +1461,20 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The above equation expresses the total acceleration of the rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linAcc]{DD: linAcc}.  It is currently assumed that there is no damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} involved. \hyperref[DD:ctrOfMass]{DD: ctrOfMass}.
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -1139,10 +1484,16 @@ RefBy &
 \label{IM:rotMot}
 \\ \midrule \\
 Label & Force on the rotational motion of a set of 2D rigid body
+        \par~
+
 \\ \midrule \\
 Input & $ω$, $t$, ${τ_{i}}$, $\mathbf{I}$
+        \par~
+
 \\ \midrule \\
 Output & $α$
+         \par~
+
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
                     ω>0
@@ -1174,13 +1525,20 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The above equation for the total angular acceleration of the rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} i is derived from T5, and the resultant outputs are then obtained from this equation using \hyperref[DD:angDisp]{DD: angDisp} \hyperref[DD:angVel]{DD: angVel} \hyperref[DD:angAccel]{DD: angAccel}. It is currently assumed that there is no damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} involved. \hyperref[assumpAD]{A: axesDefined}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \par~
 
 \noindent \begin{minipage}{\textwidth}
@@ -1190,10 +1548,16 @@ RefBy &
 \label{IM:col2D}
 \\ \midrule \\
 Label & Collisions on 2D rigid bodies
+        \par~
+
 \\ \midrule \\
 Input & $t$, $j$, ${m_{A}}$, $\mathbf{n}$
+        \par~
+
 \\ \midrule \\
 Output & ${t_{c}}$
+         \par~
+
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
                     t>0
@@ -1229,16 +1593,25 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & This instance model is based on our assumptions regarding rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} collisions \hyperref[assumpCT]{A: collisionType} Again, this does not take damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} into account. \hyperref[assumpAD]{A: axesDefined}. \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[DD:impulse]{DD: impulse}
+        \par~
+
 \\ \midrule \\
 Source & --
+         \par~
+
 \\ \midrule \\
-RefBy & 
+RefBy & \par~
+
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\par~
+
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 \hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
+\par~
+
 \begin{longtable}{l l l l}
 \toprule
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
@@ -1274,6 +1647,8 @@ $ϕ$ & -- & $\frac{π}{2}$ rad & 10$\%$
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
 \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+\par~
+
 \begin{longtable}{l}
 \toprule
 \textbf{Var}
@@ -1295,9 +1670,13 @@ $ω$
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+\par~
+
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
+\par~
+
 \begin{itemize}
 \item[Simulation-Space:\phantomsection\label{simSpace}]Create a space for all of the rigid bodies in the physical simulation to interact in.
 \item[Input-Initial-Conditions:\phantomsection\label{inputInitialConds}]Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
@@ -1311,6 +1690,8 @@ This section provides the functional requirements, the tasks and behaviours that
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
+\par~
+
 \begin{itemize}
 \item[High-Performance:\phantomsection\label{highPerformance}]The code has a short reponse time when performing computation.
 \item[Correct:\phantomsection\label{correct}]The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
@@ -1323,6 +1704,8 @@ This section provides the non-functional requirements, the qualities that the so
 \section{Likely Changes}
 \label{Sec:LCs}
 This section lists the likely changes to be made to the software.
+\par~
+
 \begin{itemize}
 \item[Variable-ODE-Solver:\phantomsection\label{lcVODES}]The internal ODE-solving algorithm used by the library may be changed in the future.
 \item[Expanded-Collisions:\phantomsection\label{lcEC}]\hyperref[assumpCT]{A: collisionType} - The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions.
@@ -1332,6 +1715,8 @@ This section lists the likely changes to be made to the software.
 \section{Unlikely Changes}
 \label{Sec:UCs}
 This section lists the unlikely changes to be made to the software.
+\par~
+
 \begin{itemize}
 \item[Simulate-Rigid-Bodies:\phantomsection\label{ucSRB}]The goal of the system is to simulate the interactions of rigid bodies.
 \item[External-Input:\phantomsection\label{ucEI}]There will always be a source of input data external to the software.
@@ -1341,11 +1726,15 @@ This section lists the unlikely changes to be made to the software.
 \section{Off-The-Shelf Solutions}
 \label{Sec:offShelfSolns}
 As mentioned in \hyperref[Sec:ProbDesc]{Section: Problem Description}, there already exist free open source game physics libraries. Similar 2D physics libraries are:
+\par~
+
 \begin{itemize}
 \item{Box2D: http://box2d.org/}
 \item{Nape Physics Engine: http://napephys.com/}
 \end{itemize}
 Free open source 3D game physics libraries include:
+\par~
+
 \begin{itemize}
 \item{Bullet: http://bulletphysics.org/}
 \item{Open Dynamics Engine: http://www.ode.org/}
@@ -1354,6 +1743,8 @@ Free open source 3D game physics libraries include:
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+\par~
+
 \begin{longtable}{l l l l l l l l}
 \toprule
 \textbf{} & \textbf{\hyperref[assumpOT]{A: objectTy}} & \textbf{\hyperref[assumpOD]{A: objectDimension}} & \textbf{\hyperref[assumpCST]{A: coordinateSystemTy}} & \textbf{\hyperref[assumpAD]{A: axesDefined}} & \textbf{\hyperref[assumpCT]{A: collisionType}} & \textbf{\hyperref[assumpDI]{A: dampingInvolvement}} & \textbf{\hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement}}
@@ -1563,6 +1954,8 @@ The purpose of the traceability matrices is to provide easy references on what h
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 There are no auxiliary constants.
+\par~
+
 \section{References}
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}

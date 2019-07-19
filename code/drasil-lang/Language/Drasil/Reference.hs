@@ -4,9 +4,13 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Chunk.Citation (Citation)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
-import Language.Drasil.Classes (Referable(renderRef))
+import Language.Drasil.Classes (CommonIdea(abrv), Referable(renderRef))
 import Language.Drasil.RefProg (Reference(..), RefInfo(..))
 import Language.Drasil.Sentence (Sentence(Ref))
+import Language.Drasil.ShortName (shortname')
+
+shortRef :: (CommonIdea l, Referable l) => l -> Int -> Sentence
+shortRef l i = Ref $ Reference (l ^. uid) (renderRef l) (shortname' $ abrv l ++ show (i + 1)) None
 
 makeRef2 :: (Referable l, HasShortName l) => l -> Reference
 makeRef2 l = Reference (l ^. uid) (renderRef l) (shortname l) None

@@ -1,19 +1,22 @@
 module Drasil.DocumentLanguage.TraceabilityMatrix where
 
 import Language.Drasil
-import Database.Drasil(ChunkDB, SystemInformation, refbyTable, conceptinsTable,
-  _sysinfodb, defTable, defLookup, traceTable, traceLookup, asOrderedList, UMap)
+import Database.Drasil (ChunkDB, SystemInformation, UMap, asOrderedList,
+  citeDB, conceptinsLookup, conceptinsTable, datadefnLookup, dataDefnTable,
+  defTable, defLookup, gendefLookup, gendefTable, insmodelLookup, insmodelTable,
+  labelledconLookup, labelledcontentTable, refbyTable,
+  sectionLookup, sectionTable, theoryModelLookup, theoryModelTable,
+  traceTable, traceLookup, _sysinfodb)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
   item, reference, traceyGraph, traceyMatrix)
 import Data.Drasil.Concepts.Math (graph)
 
-import Drasil.DocumentLanguage.Definitions (helpToRefField)
 import qualified Drasil.DocLang.SRS as SRS
 
 import Control.Lens ((^.), Getting)
-import Data.List (nub)
+import Data.List (elemIndex, nub)
 import qualified Data.Map as Map
 
 type TraceViewCat = [UID] -> ChunkDB -> [UID]
@@ -53,7 +56,24 @@ traceMReferrers :: ([UID] -> [UID]) -> ChunkDB -> [UID]
 traceMReferrers f = f . nub . concat . Map.elems . (^. refbyTable)
 
 traceMHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [Sentence]
-traceMHeader f c = map (`helpToRefField` c) $ f $ _sysinfodb c
+traceMHeader f c = map (\x -> helpToShortName x c (x `elemIndex` l)) l
+  where l = f $ _sysinfodb c
+
+helpToShortName :: UID -> SystemInformation -> Maybe Int -> Sentence
+helpToShortName t si (Just i)
+  | t `elem` Map.keys (s ^. dataDefnTable)        = shortRef   (datadefnLookup    t (s ^. dataDefnTable)) i
+  | t `elem` Map.keys (s ^. insmodelTable)        = makeRef2S $ insmodelLookup    t (s ^. insmodelTable)
+  | t `elem` Map.keys (s ^. gendefTable)          = makeRef2S $ gendefLookup      t (s ^. gendefTable)
+  | t `elem` Map.keys (s ^. theoryModelTable)     = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
+  | t `elem` Map.keys (s ^. conceptinsTable)      = makeRef2S $ conceptinsLookup  t (s ^. conceptinsTable)
+  | t `elem` Map.keys (s ^. sectionTable)         = makeRef2S $ sectionLookup     t (s ^. sectionTable)
+  | t `elem` Map.keys (s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
+  | t `elem` map (^. uid) r = EmptyS
+  | otherwise = error $ t ++ "Caught."
+  where
+    s = _sysinfodb si
+    r = citeDB si
+helpToShortName t _ Nothing = error $ t ++ " not found. (Should never occur.)"
  
 traceMColHeader :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
 traceMColHeader f = traceMHeader (traceMReferees f)

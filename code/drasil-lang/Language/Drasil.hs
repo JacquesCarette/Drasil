@@ -137,7 +137,7 @@ module Language.Drasil (
   -- Symbol.Helpers
   , eqSymb, codeSymb, hasStageSymbol
   -- Reference
-  , makeRef2S, makeCite, makeCiteS, makeRef2, makeCiteInfo, makeCiteInfoS
+  , makeRef2S, makeCite, makeCiteS, makeRef2, makeCiteInfo, makeCiteInfoS, shortRef
   -- Label.Type
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -258,7 +258,8 @@ import Language.Drasil.Space (Space(..)
 import Language.Drasil.Sentence (Sentence(..), sParen, sDash, sC, (+:+), (+:+.), (+:), ch
   , SentenceStyle(..))
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
-import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS)
+import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo,
+  makeCiteInfoS, shortRef)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), sub, sup, vec, hat, 
   prime, compsy, staged)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)

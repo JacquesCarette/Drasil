@@ -113,12 +113,12 @@ helperRefs t s = foldlList Comma List $ map (`helpToRefField` s) $ nub $ refbyLo
 
 helpToRefField :: UID -> SystemInformation -> Sentence
 helpToRefField t si
-  | t `elem` keys (s ^. dataDefnTable) = makeRef2S $ datadefnLookup t (s ^. dataDefnTable)
-  | t `elem` keys (s ^. insmodelTable) = makeRef2S $ insmodelLookup t (s ^. insmodelTable)
-  | t `elem` keys (s ^. gendefTable) = makeRef2S $ gendefLookup t (s ^. gendefTable)
-  | t `elem` keys (s ^. theoryModelTable) = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
-  | t `elem` keys (s ^. conceptinsTable) = makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
-  | t `elem` keys (s ^. sectionTable) = makeRef2S $ sectionLookup t (s ^. sectionTable)
+  | t `elem` keys (s ^. dataDefnTable)        = makeRef2S $ datadefnLookup    t (s ^. dataDefnTable)
+  | t `elem` keys (s ^. insmodelTable)        = makeRef2S $ insmodelLookup    t (s ^. insmodelTable)
+  | t `elem` keys (s ^. gendefTable)          = makeRef2S $ gendefLookup      t (s ^. gendefTable)
+  | t `elem` keys (s ^. theoryModelTable)     = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
+  | t `elem` keys (s ^. conceptinsTable)      = makeRef2S $ conceptinsLookup  t (s ^. conceptinsTable)
+  | t `elem` keys (s ^. sectionTable)         = makeRef2S $ sectionLookup     t (s ^. sectionTable)
   | t `elem` keys (s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
   | t `elem` map (^. uid) r = EmptyS
   | otherwise = error $ t ++ "Caught."

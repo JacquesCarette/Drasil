@@ -10,14 +10,14 @@ import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..),
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
@@ -79,8 +79,6 @@ instance RenderSym PythonCode where
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
     (liftA2 emptyIfEmpty (fmap modDoc code) $
       liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
-  top _ = return pytop
-  bottom = return empty
 
   docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) pyExt) m
 
@@ -88,6 +86,10 @@ instance RenderSym PythonCode where
     (liftA2 commentedItem cmt (fmap modDoc m))
 
   moduleName m = name (unPC m)
+
+instance InternalFile PythonCode where
+  top _ = return pytop
+  bottom = return empty
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc

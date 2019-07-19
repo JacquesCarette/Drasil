@@ -11,14 +11,14 @@ import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', moduleDocD, classDocD, enumDocD,
@@ -88,8 +88,6 @@ instance RenderSym CSharpCode where
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
     (liftA2 emptyIfEmpty (fmap modDoc code) $
       liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
-  top _ = liftA2 cstop endStatement (include "")
-  bottom = return empty
 
   docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) csExt) m
 
@@ -97,6 +95,10 @@ instance RenderSym CSharpCode where
     (liftA2 commentedItem cmt (fmap modDoc m))
     
   moduleName m = name (unCSC m)
+
+instance InternalFile CSharpCode where
+  top _ = liftA2 cstop endStatement (include "")
+  bottom = return empty
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc

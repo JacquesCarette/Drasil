@@ -11,14 +11,14 @@ import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..),
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..),
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
   NameOpts(NameOpts), packSep)
@@ -93,8 +93,6 @@ instance RenderSym JavaCode where
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
     (liftA2 emptyIfEmpty (fmap modDoc code) $
       liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
-  top _ = liftA3 jtop endStatement (include "") (list static_)
-  bottom = return empty
 
   docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) jExt) m
 
@@ -102,6 +100,10 @@ instance RenderSym JavaCode where
     (liftA2 commentedItem cmt (fmap modDoc m))
 
   moduleName m = name (unJC m)
+
+instance InternalFile JavaCode where
+  top _ = liftA3 jtop endStatement (include "") (list static_)
+  bottom = return empty
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc

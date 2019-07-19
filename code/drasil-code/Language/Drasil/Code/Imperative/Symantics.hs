@@ -4,14 +4,14 @@ module Language.Drasil.Code.Imperative.Symantics (
   -- Types
   Label, Library,
   -- Typeclasses
-  PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
-  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..), 
+  PermanenceSym(..), BodySym(..), ControlBlockSym(..), BlockSym(..), 
+  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   BlockCommentSym(..)
 ) where
 
@@ -24,11 +24,10 @@ class (RenderSym repr) => PackageSym repr where
   type Package repr 
   packMods :: Label -> [repr (RenderFile repr)] -> repr (Package repr)
 
-class (ModuleSym repr, ControlBlockSym repr) => RenderSym repr where
+class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) => 
+  RenderSym repr where 
   type RenderFile repr
   fileDoc :: repr (Module repr) -> repr (RenderFile repr)
-  top :: repr (Module repr) -> repr (Block repr)
-  bottom :: repr (Block repr)
 
   docMod :: String -> repr (RenderFile repr) -> repr (RenderFile repr)
 
@@ -36,6 +35,10 @@ class (ModuleSym repr, ControlBlockSym repr) => RenderSym repr where
     repr (RenderFile repr)
 
   moduleName :: repr (RenderFile repr) -> String
+
+class (ModuleSym repr) => InternalFile repr where
+  top :: repr (Module repr) -> repr (Block repr)
+  bottom :: repr (Block repr)
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   type Keyword repr

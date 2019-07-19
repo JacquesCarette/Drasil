@@ -12,14 +12,14 @@ import Utils.Drasil (indent, indentList)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
   fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDoc,
@@ -86,8 +86,6 @@ instance (Pair p) => PackageSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = ModData
   fileDoc code = pair (fileDoc $ pfst code) (fileDoc $ psnd code)
-  top m = pair (top $ pfst m) (top $ psnd m)
-  bottom = pair bottom bottom
 
   docMod d m = pair (docMod d $ pfst m) (docMod d $ psnd m)
 
@@ -95,6 +93,10 @@ instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
     (commentedMod (psnd cmt) (psnd m))
 
   moduleName m = moduleName $ pfst m
+
+instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
+  top m = pair (top $ pfst m) (top $ psnd m)
+  bottom = pair bottom bottom
 
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
@@ -624,8 +626,6 @@ instance RenderSym CppSrcCode where
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code)
     (liftA2 emptyIfEmpty (fmap modDoc code) $
       liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
-  top m = liftA3 cppstop m (list dynamic_) endStatement
-  bottom = return empty
 
   docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) cppSrcExt) m
 
@@ -633,6 +633,10 @@ instance RenderSym CppSrcCode where
     (fmap isMainMod m) (liftA2 commentedItem cmt (fmap modDoc m)) else m 
     
   moduleName m = name (unCPPSC m)
+
+instance InternalFile CppSrcCode where
+  top m = liftA3 cppstop m (list dynamic_) endStatement
+  bottom = return empty
   
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -1176,8 +1180,6 @@ instance RenderSym CppHdrCode where
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
     (liftA2 emptyIfEmpty (fmap modDoc code) $
       liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
-  top m = liftA3 cpphtop m (list dynamic_) endStatement
-  bottom = return $ text "#endif"
   
   docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) cppHdrExt) m
 
@@ -1186,6 +1188,10 @@ instance RenderSym CppHdrCode where
     (liftA2 commentedItem cmt (fmap modDoc m))
     
   moduleName m = name (unCPPHC m)
+
+instance InternalFile CppHdrCode where
+  top m = liftA3 cpphtop m (list dynamic_) endStatement
+  bottom = return $ text "#endif"
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc

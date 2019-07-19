@@ -56,7 +56,7 @@ buildStd sm (Document t a c) =
 lo :: LayoutObj -> PrintingInformation -> D
 lo (Header d t l)       _  = sec d (spec t) %% label (spec l)
 lo (HDiv _ con _)       sm = print sm con -- FIXME ignoring 2 arguments?
-lo (Paragraph contents) _  = toText $ spec contents
+lo (Paragraph contents) _  = toText (spec contents) %% newline
 lo (EqnBlock contents)  _  = makeEquation contents
 lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)
 lo (Definition _ ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
@@ -70,13 +70,13 @@ lo (Graph ps w h c l)   _  = toText $ makeGraph
   (spec c) (spec l)
 
 print :: PrintingInformation -> [LayoutObj] -> D
-print sm l = foldr (($+$) . (`lo` sm)) empty $ linePar l
-  where
+print sm l = foldr (($+$) . (`lo` sm)) empty {-$ linePar-} l
+{-  where
     linePar []  = []
     linePar [x] = [x]
     linePar (x@Paragraph{}:y@Paragraph{}:zs) = x : Paragraph (S "") : linePar (y : zs)
     linePar (x            :y@Paragraph{}:zs) = x : linePar (y : zs)
-    linePar (x            :y            :zs) = x : y : linePar zs
+    linePar (x            :y            :zs) = x : y : linePar zs-}
 
 ------------------ Symbol ----------------------------
 symbol :: L.Symbol -> String

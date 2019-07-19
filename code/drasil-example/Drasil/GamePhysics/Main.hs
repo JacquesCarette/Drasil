@@ -28,5 +28,5 @@ main :: IO ()
 main = do
   gen (DocSpec SRS "GamePhysics_SRS") srs  printSetting
   gen (DocSpec Website "GamePhysics_SRS") srs printSetting
-  -- When ready to generate code from GamePhys, uncomment this file
+  -- When ready to generate code from GamePhysics, uncomment this file
   -- genCode choices code

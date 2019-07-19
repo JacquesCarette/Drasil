@@ -3,7 +3,7 @@
 Last updated: July 26, 2018
 --------------------------------------------------
 
-**gamephys**
+**gamephysics**
   - Contains the (currently) expected output for the GamePhysics example
 
 **glassbr**

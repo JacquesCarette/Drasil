@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
@@ -509,6 +509,7 @@ instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
   private = pair private private
   public = pair public public
 
+instance (Pair p) => InternalScope (p CppSrcCode CppHdrCode) where
   includeScope s = pair (includeScope $ pfst s) (includeScope $ psnd s)
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
@@ -1035,6 +1036,7 @@ instance ScopeSym CppSrcCode where
   private = return (privateDocD, Priv)
   public = return (publicDocD, Pub)
 
+instance InternalScope CppSrcCode where
   includeScope _ = return (empty, Priv)
 
 instance MethodTypeSym CppSrcCode where
@@ -1531,6 +1533,7 @@ instance ScopeSym CppHdrCode where
   private = return (privateDocD, Priv)
   public = return (publicDocD, Pub)
 
+instance InternalScope CppHdrCode where
   includeScope _ = return (empty, Priv)
 
 instance MethodTypeSym CppHdrCode where

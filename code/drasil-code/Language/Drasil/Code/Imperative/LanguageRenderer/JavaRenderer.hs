@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
@@ -493,6 +493,7 @@ instance ScopeSym JavaCode where
   private = return privateDocD
   public = return publicDocD
 
+instance InternalScope JavaCode where
   includeScope s = s
 
 instance MethodTypeSym JavaCode where

@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (
@@ -486,6 +486,7 @@ instance ScopeSym CSharpCode where
   private = return privateDocD
   public = return publicDocD
 
+instance InternalScope CSharpCode where
   includeScope s = s
 
 instance MethodTypeSym CSharpCode where

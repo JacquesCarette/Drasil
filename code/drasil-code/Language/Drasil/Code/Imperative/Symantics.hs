@@ -10,7 +10,7 @@ module Language.Drasil.Code.Imperative.Symantics (
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
+  ControlStatementSym(..), ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
   BlockCommentSym(..)
 ) where
@@ -481,6 +481,7 @@ class ScopeSym repr where
   private :: repr (Scope repr)
   public  :: repr (Scope repr)
 
+class (ScopeSym repr) => InternalScope repr where
   includeScope :: repr (Scope repr) -> repr (Scope repr)
 
 class MethodTypeSym repr where
@@ -535,8 +536,8 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
 
   parameters :: repr (Method repr) -> [repr (Parameter repr)]
 
-class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => 
-  StateVarSym repr where
+class (ScopeSym repr, InternalScope repr, PermanenceSym repr, StateTypeSym repr)
+   => StateVarSym repr where
   type StateVar repr
   stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->
     repr (Value repr) -> repr (StateVar repr)

@@ -56,8 +56,6 @@ import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, orgDocIntro,
   sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
-import Drasil.SWHS.References (incroperaEtAl2007, koothoor2013, lightstone2012, 
-  parnasClements1986, smithLai2005)
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn, 
@@ -74,6 +72,7 @@ import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
 import Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable)
+import Drasil.NoPCM.References (citations)
 import Drasil.NoPCM.Unitals (inputs, constrained, specParamValList)
 
 srs :: Document
@@ -194,7 +193,7 @@ si = SI {
 }
 
 refDB :: ReferenceDB
-refDB = rdb referencesRefList concIns
+refDB = rdb citations concIns
 
 symbMap :: ChunkDB
 symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
@@ -375,6 +374,3 @@ dataConstListOut = [tempW, watE]
 ------------
 --REFERENCES
 ------------
-
-referencesRefList :: BibRef
-referencesRefList = [incroperaEtAl2007, koothoor2013, lightstone2012, parnasClements1986, smithLai2005]

@@ -1,8 +1,8 @@
 module Test.Observer (observer) where
 
 import Language.Drasil.Code.Imperative.Symantics (
-  RenderSym(..), PermanenceSym(..),
-  BodySym(..), StateTypeSym(..), StatementSym(..), ValueSym(..), ScopeSym(..), 
+  RenderSym(..), PermanenceSym(..), BodySym(..), StateTypeSym(..), 
+  StatementSym(..), VariableSym(..), ValueSym(..), ScopeSym(..), 
   MethodTypeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
   ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -20,4 +20,4 @@ observerConstructor :: (RenderSym repr) => repr (Method repr)
 observerConstructor = constructor "Observer" [] (oneLiner (assign (objVarSelf "Observer" "x" int) (litInt 5)))
 
 printNumMethod :: (RenderSym repr) => repr (Method repr)
-printNumMethod = method "printNum" "Observer" public dynamic_ (mState void) [] (oneLiner (printLn (objVarSelf "Observer" "x" int)))
+printNumMethod = method "printNum" "Observer" public dynamic_ (mState void) [] (oneLiner (printLn (valueOf $ objVarSelf "Observer" "x" int)))

@@ -4,7 +4,8 @@ module Language.Drasil.Code.Imperative.Helpers (blank,verticalComma,
   angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
   emptyIfEmpty, emptyIfNull, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, 
   liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 
-  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType, getStr
+  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType, getStr,
+  stringList
 ) where
 
 import Database.Drasil(ChunkDB, termTable)
@@ -139,3 +140,13 @@ getStr db ((:+:) s1 s2) = getStr db s1 ++ getStr db s2
 getStr db (Ch _ u) = maybe "" (getStr db . phraseNP . view term . fst)
   (Map.lookup u (termTable db))
 getStr _ _ = error "Term is not a string" 
+
+stringList :: [String] -> String
+stringList s = mkStr (filter (not . null) s)
+  where mkStr [] = ""
+        mkStr [d] = d
+        mkStr [d1, d2] = d1 ++ " and " ++ d2
+        mkStr (d:ds) = d ++ manyStrs ds
+        manyStrs [] = error "impossible case in manyStrs"
+        manyStrs [d] = ", and " ++ d
+        manyStrs (d:ds) = ", " ++ d ++ manyStrs ds

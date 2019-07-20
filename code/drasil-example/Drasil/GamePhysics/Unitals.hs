@@ -67,7 +67,6 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
   QP.chgInVelocity, QP.potEnergy, QP.height, rRot]
 
-
 -----------------------
 -- PARAMETRIZED HACK --
 -----------------------
@@ -162,10 +161,6 @@ rOB    = uc' "rOB"
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre
-
-{-r_F    = uc' "r_F" 
-  (nounPhraseSP "position vector of the point where is applied, measured from the axis of rotation")
-  (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre-}
   
 posCM = ucs "p_CM" (nounPhraseSP "Center of Mass")
  --"mass-weighted average position of a rigid " ++

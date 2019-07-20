@@ -301,9 +301,6 @@ outputConstraints :: [UncertQ]
 outputConstraints = map (`uq` defaultUncrt) 
   [posOutCons, veloOutCons, orientOutCons, angVeloOutCons]
 
-nonNegativeConstraint :: Constraint -- should be pulled out and put somewhere for generic constraints
-nonNegativeConstraint = physc $ UpFrom (Inc,0)
-
 lengthCons     = constrained' QPP.len               [gtZeroConstr] (dbl 44.2)
 massCons       = constrained' QPP.mass              [gtZeroConstr] (dbl 56.2)
 mmntOfInCons   = constrained' QP.momentOfInertia    [gtZeroConstr] (dbl 74.5)

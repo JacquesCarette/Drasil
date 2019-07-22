@@ -46,7 +46,7 @@ import Data.Map (member)
 import qualified Data.Map as Map (lookup, elems)
 import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes, mapMaybe)
 import Control.Applicative ((<$>))
-import Control.Monad (when,liftM2,liftM3)
+import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.), view)
 import qualified Prelude as P ((<>))
@@ -150,7 +150,6 @@ generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
-     when (l == Java) $ createDirectoryIfMissing False prog
      createCodeFiles $ makeBuild (last unRepr pckg) (getBuildConfig l)   
        (getRunnable l) (getExt l) $ makeCode (map (fst . ($ pckg)) unRepr)
      setCurrentDirectory workingDir

@@ -10,6 +10,8 @@ import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.Data (FileData(..), ModData(modDoc))
 
 import Text.PrettyPrint.HughesPJ (Doc,render)
+import System.Directory (createDirectoryIfMissing)
+import System.FilePath.Posix (takeDirectory)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 
 -- | Takes code
@@ -28,6 +30,7 @@ createCodeFiles (Code cs) = mapM_ createCodeFile cs
 
 createCodeFile :: (FilePath, Doc) -> IO ()
 createCodeFile (path, code) = do
+  createDirectoryIfMissing True (takeDirectory path)
   h <- openFile path WriteMode
   hPutStrLn h (render code)
   hClose h

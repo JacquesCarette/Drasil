@@ -8,6 +8,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (CppSrcCode(
 import Language.Drasil.Code.Imperative.Data (FileData(..), ModData(..))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
+import System.FilePath.Posix (takeDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.HelloWorld (helloWorld)
@@ -58,6 +59,7 @@ createCodeFile :: (Label, (FilePath, Doc)) -> IO ()
 createCodeFile (n, (path, code)) = do
     createDirectoryIfMissing False n
     setCurrentDirectory n
+    createDirectoryIfMissing True (takeDirectory path)
     h <- openFile path WriteMode
     hPutStrLn h (render code)
     hClose h

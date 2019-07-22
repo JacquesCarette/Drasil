@@ -2,7 +2,7 @@ module Utils.Drasil (
   -- Document
   indent, indentList,
   -- English
-  capitalize,
+  capitalize, stringList,
   -- Fold
   EnumType(..), WrapType(..), SepType(..), FoldType(..), foldConstraints,
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,

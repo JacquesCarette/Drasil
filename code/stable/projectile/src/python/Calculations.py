@@ -29,9 +29,7 @@ def func_s(inParams, d_offset):
         return "The target was hit."
     elif ((d_offset < 0)) :
         return "The projectile fell short."
-    elif ((d_offset > 0)) :
-        return "The projectile went long."
     else :
-        raise Exception("Undefined case encountered in function func_s")
+        return "The projectile went long."
 
 

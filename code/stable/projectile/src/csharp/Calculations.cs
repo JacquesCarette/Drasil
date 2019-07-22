@@ -40,11 +40,8 @@ public class Calculations {
         else if ((d_offset < 0)) {
             return "The projectile fell short.";
         }
-        else if ((d_offset > 0)) {
-            return "The projectile went long.";
-        }
         else {
-            throw new Exception("Undefined case encountered in function func_s");
+            return "The projectile went long.";
         }
     }
 }

@@ -103,7 +103,8 @@ yConstAccel = uc CP.yConstAccel (sup (sub lA lY) lC) accelU
 ---------------Constants-----------------------------
 
 gravitationalConstValue :: QDefinition
-gravitationalConstValue = mkQuantDef gravitationalConst (Dbl 0.00000000006673)
+gravitationalConstValue = mkQuantDef gravitationalConst (Dbl 6.6743E-11)
 --(Dbl 6.673 * 10E-11)
+--(Dbl 0.00000000006673)
 gravitationalAccelConst :: QDefinition
 gravitationalAccelConst = mkQuantDef gravitationalAccel (Dbl 9.8)

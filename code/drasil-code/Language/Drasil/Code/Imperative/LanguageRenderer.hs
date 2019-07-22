@@ -4,7 +4,7 @@
 module Language.Drasil.Code.Imperative.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
-  docCmtStart, observerListName,
+  docCmtStart, observerListName, addExt,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
@@ -47,9 +47,9 @@ import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ParameterSym(..), MethodSym(..), BlockCommentSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
-import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
-  ModData(..), md, MethodData(..), ParamData(..), pd, TypeData(..), td, 
-  ValData(..), vd, VarData(..))
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..), 
+  fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), 
+  ParamData(..), pd, TypeData(..), td, ValData(..), vd, VarData(..))
 import Language.Drasil.Code.Imperative.Helpers (angles,blank, doubleQuotedText,
   hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
@@ -77,13 +77,16 @@ docCmtStart = text "/**"
 observerListName :: Label
 observerListName = "observerList"
 
+addExt :: String -> String -> String
+addExt ext nm = nm ++ "." ++ ext
+
 ----------------------------------
 -- Functions for rendering code --
 ----------------------------------
 
-packageDocD :: Label -> Doc -> ModData -> ModData
-packageDocD n end (MD l b m) = md l b (vibcat [text "package" <+> text n <> end,
-  m])
+packageDocD :: Label -> Doc -> FileData -> FileData
+packageDocD n end f = fileD (n ++ "/" ++ filePath f) (updateModDoc (vibcat [
+  text "package" <+> text n <> end, modDoc (fileMod f)]) (fileMod f))
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat [

@@ -88,7 +88,7 @@ aspectRatio = uvc "aspectRatio" (aR ^. term)
     sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5) defaultUncrt
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
-  (sub cP (Label "btol")) Real
+  (sub cP (Concat [lBreak, lTol])) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (uncty 0.001 Nothing)
 
 charWeight = uqcND "charWeight" (nounPhraseSP "charge weight") 
@@ -126,24 +126,22 @@ glassTypeCon  = cvc "glassTypeCon" (nounPhraseSent $ S "glass type" +:+
 {--}
 
 outputs :: [QuantityDict]
-outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr] 
-
-probBr :: ConstrainedChunk
-probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
-  (sub cP (Label "b")) Rational
-  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr]
 
 tmSymbols :: [QuantityDict]
 tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad] 
 
-probFail :: ConstrainedChunk
-probFail = cvc "probFail" (nounPhraseSP "probability of failure")
-  (sub cP (Label "f")) Rational
+probBr, probFail, pbTolfail :: ConstrainedChunk
+probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
+  (sub cP lBreak) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
-pbTolfail :: ConstrainedChunk
+probFail = cvc "probFail" (nounPhraseSP "probability of failure")
+  (sub cP lFail) Rational
+  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+
 pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure") 
-  (sub cP (Label "ftol")) Real
+  (sub cP (Concat [lFail, lTol])) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (Just $ dbl 0.008) 
   
 
@@ -217,7 +215,7 @@ eqTNTWeight = unitary "eqTNTWeight"
   (sub (eqSymb charWeight) (eqSymb tNT)) kilogram Real
 
 loadDur    = unitary "loadDur"    (nounPhraseSP "duration of load")
-  (sub lT (Label "d")) second Real
+  (sub lT lDur) second Real
 
 minThick   = unitary "minThick"   (nounPhraseSP "minimum thickness")
   lH metre Rational
@@ -277,14 +275,19 @@ riskFun      = vc "riskFun"    (nounPhraseSP "risk of failure") cB Real
 
 sdfTol       = vc "sdfTol"     (nounPhraseSP $ "stress distribution" ++
   " factor (Function) based on Pbtol") 
-  (sub (eqSymb stressDistFac) (Label "tol")) Real
+  (sub (eqSymb stressDistFac) lTol) Real
 
 stressDistFac = vc "stressDistFac" (nounPhraseSP $ "stress distribution" 
   ++ " factor (Function)") cJ Real
 
 tolLoad       = vc "tolLoad"       (nounPhraseSP "tolerable load")
-  (sub (eqSymb dimlessLoad) (Label "tol")) Real
+  (sub (eqSymb dimlessLoad) lTol) Real
 
+lBreak, lDur, lFail, lTol :: Symbol
+lBreak = Label "b"
+lDur   = Label "d"
+lFail  = Label "f"
+lTol   = Label "tol"
 
 terms :: [ConceptChunk]
 terms = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,

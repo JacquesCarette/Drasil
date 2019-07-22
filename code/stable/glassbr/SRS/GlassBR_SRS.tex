@@ -118,11 +118,11 @@ $NFL$ & Non-factored load & Pa
 \\
 ${P_{\text{b}}}$ & Probability of breakage & --
 \\
-${P_{\text{btol}}}$ & Tolerable probability of breakage & --
+${P_{\text{b}\text{tol}}}$ & Tolerable probability of breakage & --
 \\
 ${P_{\text{f}}}$ & Probability of failure & --
 \\
-${P_{\text{ftol}}}$ & Tolerable probability of failure & --
+${P_{\text{f}\text{tol}}}$ & Tolerable probability of failure & --
 \\
 $q$ & Applied load (demand) & Pa
 \\
@@ -368,16 +368,16 @@ This section focuses on the general equations and laws that GlassBR is based on.
 Label & Safety Probability
 \\ \midrule \\
 Equation & \begin{displaymath}
-           is-safeProb={P_{\text{f}}}<{P_{\text{ftol}}}
+           is-safeProb={P_{\text{f}}}<{P_{\text{f}\text{tol}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$is-safeProb$ is the variable that is assigned true when probability of failure is less than tolerable probability of failure (Unitless)}
               \item{${P_{\text{f}}}$ is the probability of failure (Unitless)}
-              \item{${P_{\text{ftol}}}$ is the tolerable probability of failure (Unitless)}
+              \item{${P_{\text{f}\text{tol}}}$ is the tolerable probability of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeProb$, the glass is considered safe. $is-safeProb$ and $is-safeLoad$ (from \hyperref[TM:isSafeLoad]{TM: isSafeLoad}) are either both True or both False. ${P_{\text{f}}}$ is the probability of failure, ${P_{\text{ftol}}}$ is the tolerable probability of failure.
+Notes & If $is-safeProb$, the glass is considered safe. $is-safeProb$ and $is-safeLoad$ (from \hyperref[TM:isSafeLoad]{TM: isSafeLoad}) are either both True or both False. ${P_{\text{f}}}$ is the probability of failure, ${P_{\text{f}\text{tol}}}$ is the tolerable probability of failure.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -736,12 +736,12 @@ Symbol & ${J_{\text{tol}}}$
 Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{btol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} LDF}\right)
+           {J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} LDF}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${J_{\text{tol}}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
-              \item{${P_{\text{btol}}}$ is the tolerable probability of breakage (Unitless)}
+              \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
@@ -751,11 +751,11 @@ Description & \begin{symbDescription}
               \item{$LDF$ is the load duration factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${J_{\text{tol}}}$  is calculated with reference to  ${P_{\text{btol}}}$.
+Notes & ${J_{\text{tol}}}$  is calculated with reference to  ${P_{\text{b}\text{tol}}}$.
         $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
         $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
         $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
-        ${P_{\text{btol}}}$ is the tolerable probability entered by the user.
+        ${P_{\text{b}\text{tol}}}$ is the tolerable probability entered by the user.
         \hyperref[assumpSV]{A: standardValues}
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -971,7 +971,7 @@ The goal \hyperref[willBreakGS]{GS: Predict-Glass-Withstands-Explosion} is met b
 \\ \midrule \\
 Label & Safety Req-Pb
 \\ \midrule \\
-Input & ${P_{\text{b}}}$, ${P_{\text{btol}}}$
+Input & ${P_{\text{b}}}$, ${P_{\text{b}\text{tol}}}$
 \\ \midrule \\
 Output & $is-safePb$
 \\ \midrule \\
@@ -979,22 +979,22 @@ Input Constraints & \begin{displaymath}
                     {P_{\text{b}}}>0
                     \end{displaymath}
                     \begin{displaymath}
-                    {P_{\text{btol}}}>0
+                    {P_{\text{b}\text{tol}}}>0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           is-safePb={P_{\text{b}}}<{P_{\text{btol}}}
+           is-safePb={P_{\text{b}}}<{P_{\text{b}\text{tol}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$is-safePb$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
               \item{${P_{\text{b}}}$ is the probability of breakage (Unitless)}
-              \item{${P_{\text{btol}}}$ is the tolerable probability of breakage (Unitless)}
+              \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safePb$ (from \hyperref[IM:isSafeLR]{IM: isSafeLR}) are either both True or both False. ${P_{\text{b}}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{\text{btol}}}$ is the tolerable probability of breakage entered by the user.
+Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safePb$ (from \hyperref[IM:isSafeLR]{IM: isSafeLR}) are either both True or both False. ${P_{\text{b}}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage entered by the user.
 \\ \midrule \\
 Source & \cite{astm2009}
 \\ \midrule \\
@@ -1058,7 +1058,7 @@ $AR$ & $AR\geq{}1$ & $AR\leq{}{AR_{\text{max}}}$ & $1.5$ & 10$\%$
 \\
 $b$ & $0<b\leq{}a$ & ${d_{\text{min}}}\leq{}b\leq{}{d_{\text{max}}}$ & $1.2$ m & 10$\%$
 \\
-${P_{\text{btol}}}$ & $0<{P_{\text{btol}}}<1$ & -- & $0.008$ & 0.1$\%$
+${P_{\text{b}\text{tol}}}$ & $0<{P_{\text{b}\text{tol}}}<1$ & -- & $0.008$ & 0.1$\%$
 \\
 $SD$ & $SD>0$ & ${SD_{\text{min}}}\leq{}SD\leq{}{SD_{\text{max}}}$ & $45.0$ m & 10$\%$
 \\
@@ -1111,7 +1111,7 @@ $b$ & Plate width (short dimension) & m
 \\
 $g$ & Glass type $g\in{}\{AN,FT,HS\}$ & --
 \\
-${P_{\text{btol}}}$ & Tolerable probability of breakage & --
+${P_{\text{b}\text{tol}}}$ & Tolerable probability of breakage & --
 \\
 ${SD_{\text{x}}}$ & stand off distance ($x$-component) & m
 \\

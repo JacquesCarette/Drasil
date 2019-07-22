@@ -35,7 +35,7 @@ instance HasSymbol     DefinedQuantityDict where symbol = view symb
 instance Quantity      DefinedQuantityDict where 
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 
--- For when the symbol is constant through stages (maps unicode to strings for code gen)
+-- For when the symbol is constant through stages
 dqd :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
 dqd c s sp = DQD c (const s) sp . Just . unitWrapper
 

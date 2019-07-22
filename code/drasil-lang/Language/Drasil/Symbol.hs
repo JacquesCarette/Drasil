@@ -139,14 +139,16 @@ vec = Atop Vector
 prime :: Symbol -> Symbol
 prime = Atop Prime
 
-autoStage :: Symbol -> (Stage -> Symbol)
-autoStage s = staged s (unicodeConv s)
-
 -- | Helper for creating a symbol that depends on the stage
 staged :: Symbol -> Symbol -> Stage -> Symbol
 staged eqS _ Equational = eqS
 staged _ impS Implementation = impS 
 
+-- | Helper for creating a symbol with Unicode in it.
+autoStage :: Symbol -> (Stage -> Symbol)
+autoStage s = staged s (unicodeConv s)
+
+-- | Helper for autoStage that apples unicodeString to all Symbols with Strings
 unicodeConv :: Symbol -> Symbol
 unicodeConv (Atomic st) = Atomic $ unicodeString st
 unicodeConv (Atop d s) = Atop d $ unicodeConv s
@@ -155,6 +157,10 @@ unicodeConv (Corners a b c d s) =
 unicodeConv (Concat ss) = Concat $ map unicodeConv ss
 unicodeConv x = x
 
+-- | Helper for unicodeConv that converts each Unicode character to text equivalent
+-- If a character is Latin, it it just returned.
+-- If a character is Unicode and Greek, just the name of the symbol is returned (eg. theta).
+-- Otherwise, an error is thrown.
 unicodeString :: String -> String
 unicodeString = concatMap (\x -> if isLatin1 x then [x] else getName $ nameList x)
   where

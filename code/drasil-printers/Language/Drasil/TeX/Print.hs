@@ -70,13 +70,7 @@ lo (Graph ps w h c l)   _  = toText $ makeGraph
   (spec c) (spec l)
 
 print :: PrintingInformation -> [LayoutObj] -> D
-print sm l = foldr (($+$) . (`lo` sm)) empty {-$ linePar-} l
-{-  where
-    linePar []  = []
-    linePar [x] = [x]
-    linePar (x@Paragraph{}:y@Paragraph{}:zs) = x : Paragraph (S "") : linePar (y : zs)
-    linePar (x            :y@Paragraph{}:zs) = x : linePar (y : zs)
-    linePar (x            :y            :zs) = x : y : linePar zs-}
+print sm = foldr (($+$) . (`lo` sm)) empty
 
 ------------------ Symbol ----------------------------
 symbol :: L.Symbol -> String

@@ -10,6 +10,7 @@ import Prelude hiding (log)
 
 import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
 import Data.Drasil.Constraints (gtZeroConstr)
+import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac, 

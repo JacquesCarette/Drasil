@@ -11,10 +11,10 @@ import Data.Drasil.SI_Units (degree, metre, m_3, newton, pascal, specificWeight)
 import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
 import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
-import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
-  vol)
+import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight, vol)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, force, 
-  gravitationalAccel, height, pressure, torque, weight)
+  gravitationalAccel, height, pressure, subX, subY, subZ, supMax, supMin,
+  torque, weight)
 
 
 symbols :: [DefinedQuantityDict]

@@ -103,3 +103,13 @@ constant, final, initial :: Symbol
 constant = Label "c"
 final    = Label "f"
 initial  = Label "i"
+
+-- Helpers for common modifiers
+subMax, subMin, subX, subY, subZ, supMax, supMin :: Symbol -> Symbol
+subMax s = sub s (Label "max")
+subMin s = sub s (Label "min")
+subX   s = sub s (Label "x")
+subY   s = sub s (Label "y")
+subZ   s = sub s (Label "z")
+supMax s = sup s (Label "max")
+supMin s = sup s (Label "min")

@@ -1,0 +1,27 @@
+# Jupyter Tests For Drasil
+
+## Installing via Mac
+
+Run:
+```
+pip3 install --upgrade pip
+pip3 install jupyter
+```
+
+
+## Running Jupyter
+
+While in any directory, run:
+```
+jupyter notebook
+```
+
+This creates a local host for Jupyter and opens a web browser window for your file system in Jupyter.
+Click on any `.ipynb` file to view the notebook.
+
+
+#### Helpful Links
+
+[Jupyter test directory on Github](https://github.com/JacquesCarette/Drasil/tree/jupInit/People/DanScime/Jupyter-Tests)
+
+[HTML To Markdown - Table Converter](https://jmalarcon.github.io/markdowntables/)

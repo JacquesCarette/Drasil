@@ -26,12 +26,12 @@ htOutputs = map qw qDefs
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: QuantityDict
 cladThick    = vc "cladThick"    (cn''' "clad thickness")
-  (lTau `sub` cladLabel) Real
+  (sub lTau cladLabel) Real
 coolFilmCond = vc "coolFilmCond" (cn' "initial coolant film conductance")
-  (lH `sub` (Label "b")) Real
+  (sub lH (Label "b")) Real
 gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")
-  (lH `sub` (Label "p")) Real
-cladCond     = vc "cladCond"     (cnIES "clad conductivity") (lK `sub` cladLabel) Real
+  (sub lH (Label "p")) Real
+cladCond     = vc "cladCond"     (cnIES "clad conductivity") (sub lK cladLabel) Real
 
 htTransCladCoolEq, htTransCladFuelEq :: Expr
 htTransCladCool, htTransCladFuel :: QDefinition
@@ -44,7 +44,7 @@ htTransCladCoolDD = ddNoRefs htTransCladCool Nothing "htTransCladCool"--Label
 
 htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   "convective heat transfer coefficient between clad and coolant")
-  EmptyS (lH `sub` cladLabel) Real heatTransferCoef htTransCladCoolEq
+  EmptyS (sub lH cladLabel) Real heatTransferCoef htTransCladCoolEq
 
 htTransCladCoolEq =
   2 * sy cladCond * sy coolFilmCond / (2 * sy cladCond + sy cladThick 
@@ -58,7 +58,7 @@ htTransCladFuelDD = ddNoRefs htTransCladFuel Nothing "htTransCladFuel"--Label
 
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
-  EmptyS (lH `sub` (Label "g")) Real heatTransferCoef htTransCladFuelEq
+  EmptyS (sub lH (Label "g")) Real heatTransferCoef htTransCladFuelEq
 
 htTransCladFuelEq = (2 * sy cladCond * sy gapFilmCond) / (2 * sy cladCond
   + (sy cladThick * sy gapFilmCond))

@@ -28,9 +28,9 @@ cladThick, coolFilmCond, gapFilmCond, cladCond :: QuantityDict
 cladThick    = vc "cladThick"    (cn''' "clad thickness")
   (sub lTau cladLabel) Real
 coolFilmCond = vc "coolFilmCond" (cn' "initial coolant film conductance")
-  (sub lH (Label "b")) Real
+  (sub lH labelB) Real
 gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")
-  (sub lH (Label "p")) Real
+  (sub lH labelP) Real
 cladCond     = vc "cladCond"     (cnIES "clad conductivity") (sub lK cladLabel) Real
 
 htTransCladCoolEq, htTransCladFuelEq :: Expr
@@ -58,7 +58,7 @@ htTransCladFuelDD = ddNoRefs htTransCladFuel Nothing "htTransCladFuel"--Label
 
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
-  EmptyS (sub lH (Label "g")) Real heatTransferCoef htTransCladFuelEq
+  EmptyS (sub lH labelG) Real heatTransferCoef htTransCladFuelEq
 
 htTransCladFuelEq = (2 * sy cladCond * sy gapFilmCond) / (2 * sy cladCond
   + (sy cladThick * sy gapFilmCond))
@@ -72,5 +72,8 @@ nuclearPhys, fp :: NamedChunk
 nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")
 fp = nc "fp" (cn "FP")
 
-cladLabel :: Symbol
+labelB, cladLabel, labelG, labelP :: Symbol
+labelB    = Label "b"
 cladLabel = Label "c"
+labelG    = Label "g"
+labelP    = Label "p"

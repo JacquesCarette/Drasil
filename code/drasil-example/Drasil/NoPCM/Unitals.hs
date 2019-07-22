@@ -3,6 +3,7 @@ module Drasil.NoPCM.Unitals where
 import Language.Drasil
 
 import Data.Drasil.SI_Units (centigrade)
+import Data.Drasil.Quantities.Physics (initial)
 import Data.Drasil.Quantities.Thermodynamics (temp)
 
 import Drasil.SWHS.Unitals (coilHTC, coilSA, diam, htCapW, tankLength, 
@@ -21,7 +22,7 @@ constrained =  [coilSA, htCapW, coilHTC, tempInit,
 tempInit :: UncertQ
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
   "The temperature at the beginning of the simulation"
-  (sub (eqSymb temp) (Label "init")) centigrade Real
+  (sub (eqSymb temp) initial) centigrade Real
   [physc $ Bounded (Exc,0) (Exc,100)] (dbl 40) defaultUncrt
 
 specParamValList :: [QDefinition]

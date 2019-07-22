@@ -15,7 +15,7 @@ public class Control {
         double A_C;
         double C_W;
         double h_C;
-        double T_init;
+        double T_i;
         double t_final;
         double L;
         double T_C;
@@ -30,7 +30,7 @@ public class Control {
         A_C = (double)(outputs[0]);
         C_W = (double)(outputs[1]);
         h_C = (double)(outputs[2]);
-        T_init = (double)(outputs[3]);
+        T_i = (double)(outputs[3]);
         t_final = (double)(outputs[4]);
         L = (double)(outputs[5]);
         T_C = (double)(outputs[6]);
@@ -41,7 +41,7 @@ public class Control {
         R_tol = (double)(outputs[11]);
         T_W = (double)(outputs[12]);
         E_W = (double)(outputs[13]);
-        InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W);
+        InputParameters.input_constraints(A_C, C_W, h_C, T_i, t_final, L, T_C, t_step, rho_W, D, T_W, E_W);
         OutputFormat.write_output(T_W, E_W);
     }
 }

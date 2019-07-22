@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class InputParameters {
     
-    public static void get_input(string filename, out double A_C, out double C_W, out double h_C, out double T_init, out double t_final, out double L, out double T_C, out double t_step, out double rho_W, out double D, out double A_tol, out double R_tol, out double T_W, out double E_W) {
+    public static void get_input(string filename, out double A_C, out double C_W, out double h_C, out double T_i, out double t_final, out double L, out double T_C, out double t_step, out double rho_W, out double D, out double A_tol, out double R_tol, out double T_W, out double E_W) {
         StreamReader infile;
         infile = new StreamReader(filename);
         infile.ReadLine();
@@ -15,7 +15,7 @@ public class InputParameters {
         infile.ReadLine();
         h_C = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        T_init = Double.Parse(infile.ReadLine());
+        T_i = Double.Parse(infile.ReadLine());
         infile.ReadLine();
         t_final = Double.Parse(infile.ReadLine());
         infile.ReadLine();
@@ -39,7 +39,7 @@ public class InputParameters {
         infile.Close();
     }
     
-    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
+    public static void input_constraints(double A_C, double C_W, double h_C, double T_i, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
         if (!((A_C <= 100000))) {
             Console.WriteLine("Warning: constraint violated");
         }
@@ -68,7 +68,7 @@ public class InputParameters {
         if (!((h_C > 0))) {
             Console.WriteLine("Warning: constraint violated");
         }
-        if (!(((0 < T_init) && (T_init < 100)))) {
+        if (!(((0 < T_i) && (T_i < 100)))) {
             Console.WriteLine("Warning: constraint violated");
         }
         if (!((t_final > 0))) {
@@ -89,7 +89,7 @@ public class InputParameters {
         if (!((D > 0))) {
             Console.WriteLine("Warning: constraint violated");
         }
-        if (!(((T_init <= T_W) && (T_W <= T_C)))) {
+        if (!(((T_i <= T_W) && (T_W <= T_C)))) {
             Console.WriteLine("Warning: constraint violated");
         }
         if (!((E_W >= 0))) {

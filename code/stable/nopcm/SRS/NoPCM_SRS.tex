@@ -116,7 +116,7 @@ ${T_{\text{C}}}$ & Temperature of the heating coil & ${}^{\circ}$C
 \\
 ${T_{\text{env}}}$ & Temperature of the environment & ${}^{\circ}$C
 \\
-${T_{\text{init}}}$ & Initial temperature & ${}^{\circ}$C
+${T_{\text{i}}}$ & Initial temperature & ${}^{\circ}$C
 \\
 ${T_{\text{W}}}$ & Temperature of the water & ${}^{\circ}$C
 \\
@@ -504,7 +504,7 @@ Input & ${T_{\text{C}}}$, ${T_{\text{init}}}$, ${t_{\text{final}}}$, ${A_{\text{
 Output & ${T_{\text{W}}}$
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {T_{\text{init}}}\leq{}{T_{\text{C}}}
+                    {T_{\text{i}}}\leq{}{T_{\text{C}}}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
@@ -569,7 +569,7 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)
+           {E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{i}}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -578,10 +578,10 @@ Description & \begin{symbDescription}
               \item{${C_{\text{W}}}$ is the specific heat capacity of water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
               \item{${m_{\text{W}}}$ is the mass of water (kg)}
               \item{${T_{\text{W}}}$ is the temperature of the water (${}^{\circ}$C)}
-              \item{${T_{\text{init}}}$ is the initial temperature (${}^{\circ}$C)}
+              \item{${T_{\text{i}}}$ is the initial temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}. ${E_{\text{W}}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{\text{init}}}$) (J). ${C_{\text{W}}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{\text{W}}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{\text{W}}}$ and the initial temperature, ${T_{\text{init}}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{\text{W}}}<100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}. ${E_{\text{W}}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{\text{i}}}$) (J). ${C_{\text{W}}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{\text{W}}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{\text{W}}}$ and the initial temperature, ${T_{\text{i}}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{\text{W}}}<100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
 \\ \midrule \\
 Source & \cite{koothoor2013}
 \\ \midrule \\
@@ -610,7 +610,7 @@ $L$ & $L>0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ m & 10$\%$
 \\
 ${T_{\text{C}}}$ & $0<{T_{\text{C}}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10$\%$
 \\
-${T_{\text{init}}}$ & $0<{T_{\text{init}}}<100$ & -- & $40.0$ ${}^{\circ}$C & 10$\%$
+${T_{\text{i}}}$ & $0<{T_{\text{i}}}<100$ & -- & $40.0$ ${}^{\circ}$C & 10$\%$
 \\
 ${t_{\text{final}}}$ & ${t_{\text{final}}}>0$ & ${t_{\text{final}}}<{{t_{\text{final}}}^{\text{max}}}$ & $50.0\cdot{}10^{3}$ s & 10$\%$
 \\
@@ -631,7 +631,7 @@ ${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}>0$ & ${{ρ_{\text{W}}}^{\text{min}}}<{ρ_{\
 \\
 \midrule
 \endhead
-${T_{\text{W}}}$ & ${T_{\text{init}}}\leq{}{T_{\text{W}}}\leq{}{T_{\text{C}}}$
+${T_{\text{W}}}$ & ${T_{\text{i}}}\leq{}{T_{\text{W}}}\leq{}{T_{\text{C}}}$
 \\
 ${E_{\text{W}}}$ & ${E_{\text{W}}}\geq{}0$
 \\
@@ -675,7 +675,7 @@ ${R_{\text{tol}}}$ & Relative tolerance & --
 \\
 ${T_{\text{C}}}$ & Temperature of the heating coil & ${}^{\circ}$C
 \\
-${T_{\text{init}}}$ & Initial temperature & ${}^{\circ}$C
+${T_{\text{i}}}$ & Initial temperature & ${}^{\circ}$C
 \\
 ${t_{\text{final}}}$ & Final time & s
 \\

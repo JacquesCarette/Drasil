@@ -501,7 +501,7 @@ showBibTeX  _ (Edition      e) = showField "edition" (wrapS e)
 showBibTeX sm (Editor       e) = showField "editor" (rendPeople sm e)
 showBibTeX  _ (Institution  i) = showField "institution" i
 showBibTeX  _ (Journal      j) = showField "journal" j
-showBibTeX  _ (Month        m) = pure . text $ "month=" ++ bibTeXMonth m
+showBibTeX  _ (Month        m) = showField "month" (bibTeXMonth m)
 showBibTeX  _ (Note         n) = showField "note" n
 showBibTeX  _ (Number       n) = showField "number" (wrapS n)
 showBibTeX  _ (Organization o) = showField "organization" o
@@ -530,19 +530,19 @@ rendPeople _ []  = S "N.a." -- "No authors given"
 rendPeople sm people = I.spec sm $
   foldl1 (\x y -> x L.+:+ L.S "and" L.+:+ y) $ map (L.S . L.rendPersLFM) people
 
-bibTeXMonth :: L.Month -> String
-bibTeXMonth L.Jan = "jan"
-bibTeXMonth L.Feb = "feb"
-bibTeXMonth L.Mar = "mar"
-bibTeXMonth L.Apr = "apr"
-bibTeXMonth L.May = "may"
-bibTeXMonth L.Jun = "jun"
-bibTeXMonth L.Jul = "jul"
-bibTeXMonth L.Aug = "aug"
-bibTeXMonth L.Sep = "sep"
-bibTeXMonth L.Oct = "oct"
-bibTeXMonth L.Nov = "nov"
-bibTeXMonth L.Dec = "dec"
+bibTeXMonth :: L.Month -> Spec
+bibTeXMonth L.Jan = S "jan"
+bibTeXMonth L.Feb = S "feb"
+bibTeXMonth L.Mar = S "mar"
+bibTeXMonth L.Apr = S "apr"
+bibTeXMonth L.May = S "may"
+bibTeXMonth L.Jun = S "jun"
+bibTeXMonth L.Jul = S "jul"
+bibTeXMonth L.Aug = S "aug"
+bibTeXMonth L.Sep = S "sep"
+bibTeXMonth L.Oct = S "oct"
+bibTeXMonth L.Nov = S "nov"
+bibTeXMonth L.Dec = S "dec"
 
 wrapS :: Show a => a -> Spec
 wrapS = S . show

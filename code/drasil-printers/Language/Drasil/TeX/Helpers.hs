@@ -154,10 +154,9 @@ bold    = commandD "textbf"
 item' :: D -> D -> D
 item' bull = command1oD "item" (Just bull)
 
-maketitle, maketoc, newline, newpage, centering :: D
+maketitle, maketoc, newpage, centering :: D
 maketitle = command0 "maketitle"
 maketoc   = command0 "tableofcontents"
-newline   = command0 "par" <> pure (text "~\n")
 newpage   = command0 "newpage"
 centering = command0 "centering"
 
@@ -190,23 +189,24 @@ superscript a b = a <> pure H.hat <> br b
 
 -- Macro / Command def'n --
 --TeX--
-srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS
- , modcounter, modnum :: D
+srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS,
+  modcounter, modnum, newline :: D
 srsComms = bullet %% counter %% ddefnum %% ddref %% colAw %% colBw %% arrayS
 lpmComms = pure $ text ""
 
-counter       = count "datadefnum"
-modcounter    = count "modnum"
+counter    = count "datadefnum"
+modcounter = count "modnum"
 
 bullet  = comm "blt"             "- "                Nothing
 ddefnum = comm "ddthedatadefnum" "MG\\thedatadefnum" Nothing
 ddref   = comm "ddref"           "MG\\ref{#1}"       (Just "1")
 colAw   = comm "colAwidth"       "0.2\\textwidth"    Nothing
 colBw   = comm "colBwidth"       "0.73\\textwidth"   Nothing
-
-modnum    = comm "mthemodnum"        "M\\themodnum"        Nothing
+modnum  = comm "mthemodnum"      "M\\themodnum"      Nothing
 
 arrayS  = renewcomm "arraystretch" "1.2"
+
+newline = pure $ text ""
 
 fraction :: D -> D -> D
 fraction n d = command0 "frac" <> br n <> br d

@@ -30,12 +30,10 @@
 \section{Reference Material}
 \label{Sec:RefMat}
 This section records information for easy reference.
-\par~
 
 \subsection{Table of Units}
 \label{Sec:ToU}
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, \hyperref[Table:ToU]{Tab: ToU} lists the symbol, a description and the SI name.
-\par~
 
 \begin{longtable}{l l l}
 \toprule
@@ -56,7 +54,6 @@ s & time & second
 \subsection{Table of Symbols}
 \label{Sec:ToS}
 The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
-\par~
 
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -175,30 +172,24 @@ Uncert. & Typical Uncertainty
 \section{Introduction}
 \label{Sec:Intro}
 Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. The program documented here is called Projectile.
-\par~
 
 The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
-\par~
 
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
 The scope of the requirements includes the analysis of a two-dimensional (2D) projectile motion problem with constant acceleration.
-\par~
 
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
-\par~
 
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
 A system is needed to efficiently and correctly predict the landing position of a projectile.
-\par~
 
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
-\par~
 
 \begin{itemize}
 \item{Launcher: Where the projectile is launched from and the device that does the launching.}
@@ -211,7 +202,6 @@ This subsection provides a list of terms that are used in the subsequent section
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
 The physical system of Projectile, as shown in \hyperref[Figure:Launch]{Fig:Launch}, includes the following elements:
-\par~
 
 \begin{itemize}
 \item[PS1:]The launcher.
@@ -228,7 +218,6 @@ The physical system of Projectile, as shown in \hyperref[Figure:Launch]{Fig:Laun
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
 Given the initial velocity vector of the projectile, the goal statements are:
-\par~
 
 \begin{itemize}
 \item[targetHit:\phantomsection\label{targetHit}]Determine if the projectile hits the target.
@@ -236,12 +225,10 @@ Given the initial velocity vector of the projectile, the goal statements are:
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern Projectile are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
-\par~
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
-\par~
 
 \begin{itemize}
 \item[twoDMotion:\phantomsection\label{twoDMotion}]The projectile motion is two-dimensional (2D). (RefBy: \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:posVec]{GD: posVec}.)
@@ -262,9 +249,7 @@ This section simplifies the original problem and helps in developing the theoret
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that Projectile is based on.
-\par~
 
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -273,8 +258,7 @@ This section focuses on the general equations and laws that Projectile is based 
 \label{TM:acceleration}
 \\ \midrule \\
 Label & Acceleration
-        \par~
-
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{a}=\frac{\,d\mathbf{v}}{\,dt}
@@ -287,16 +271,13 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{accelerationWiki} and \cite[(pg. 7)]{hibbeler2004}
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[GD:rectVel]{GD: rectVel}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -305,8 +286,7 @@ RefBy & \hyperref[GD:rectVel]{GD: rectVel}
 \label{TM:velocity}
 \\ \midrule \\
 Label & Velocity
-        \par~
-
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{v}=\frac{\,d\mathbf{p}}{\,dt}
@@ -319,21 +299,17 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{velocityWiki} and \cite[(pg. 6)]{hibbeler2004}
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[GD:rectPos]{GD: rectPos}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
 This section collects the laws and equations that will be used to build the instance models.
-\par~
 
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -342,12 +318,10 @@ This section collects the laws and equations that will be used to build the inst
 \label{GD:rectVel}
 \\ \midrule \\
 Label & Rectilinear (1D) velocity as a function of time for constant acceleration
-        \par~
-
+        
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
-        \par~
-
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
            v={v^{i}}+{a^{c}} t
@@ -361,36 +335,30 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite[(pg. 8)]{hibbeler2004}
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:rectPos]{GD: rectPos}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 \paragraph{Detailed derivation of rectilinear velocity:}
 \label{GD:rectVelDeriv}
 Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${v^{i}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
-\par~
 
 \begin{displaymath}
 {a^{c}}=\frac{\,dv}{\,dt}
 \end{displaymath}
 Rearranging and integrating, we have:
-\par~
 
 \begin{displaymath}
 \int_{{v^{i}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt
 \end{displaymath}
 Performing the integration, we have the required equation:
-\par~
 
 \begin{displaymath}
 v={v^{i}}+{a^{c}} t
 \end{displaymath}
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -399,12 +367,10 @@ v={v^{i}}+{a^{c}} t
 \label{GD:rectPos}
 \\ \midrule \\
 Label & Rectilinear (1D) position as a function of time for constant acceleration
-        \par~
-
+        
 \\ \midrule \\
 Units & m
-        \par~
-
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
            p={p^{i}}+{v^{i}} t+\frac{{a^{c}} t^{2}}{2}
@@ -419,42 +385,35 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite[(pg. 8)]{hibbeler2004}
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[GD:posVec]{GD: posVec}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 \paragraph{Detailed derivation of rectilinear position:}
 \label{GD:rectPosDeriv}
 Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM: velocity} is now one-dimensional. The initial position (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${p^{i}}$. From \hyperref[TM:velocity]{TM: velocity}, using the above symbols we have:
-\par~
 
 \begin{displaymath}
 v=\frac{\,dp}{\,dt}
 \end{displaymath}
 Rearranging and integrating, we have:
-\par~
 
 \begin{displaymath}
 \int_{{p^{i}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt
 \end{displaymath}
 From \hyperref[GD:rectVel]{GD: rectVel} we can replace $v$:
-\par~
 
 \begin{displaymath}
 \int_{{p^{i}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{i}}+{a^{c}} t}\,dt
 \end{displaymath}
 Performing the integration, we have the required equation:
-\par~
 
 \begin{displaymath}
 p={p^{i}}+{v^{i}} t+\frac{{a^{c}} t^{2}}{2}
 \end{displaymath}
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -463,12 +422,10 @@ p={p^{i}}+{v^{i}} t+\frac{{a^{c}} t^{2}}{2}
 \label{GD:velVec}
 \\ \midrule \\
 Label & Velocity vector as a function of time for 2D motion under constant acceleration
-        \par~
-
+        
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
-        \par~
-
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{v}=\begin{bmatrix}
@@ -487,11 +444,9 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
-         \par~
-
+         
 \\ \midrule \\
-RefBy & \par~
-
+RefBy & 
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -510,7 +465,6 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{v_{x}}^{i}}\\
 {{v_{y}}^{i}}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectVel]{GD: rectVel} can be applied to each coordinate of the velocity vector to yield the required equation:
-\par~
 
 \begin{displaymath}
 \mathbf{v}=\begin{bmatrix}
@@ -518,7 +472,6 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
 {{v_{y}}^{i}}+{{a_{y}}^{c}} t
            \end{bmatrix}
 \end{displaymath}
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -527,12 +480,10 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
 \label{GD:posVec}
 \\ \midrule \\
 Label & Position vector as a function of time for 2D motion under constant acceleration
-        \par~
-
+        
 \\ \midrule \\
 Units & m
-        \par~
-
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{p}=\begin{bmatrix}
@@ -553,12 +504,10 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Source & --
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -580,7 +529,6 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  {{v_{x}}^{i}}\\
 {{v_{y}}^{i}}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectPos]{GD: rectPos} can be applied to each coordinate of the position vector to yield the required equation:
-\par~
 
 \begin{displaymath}
 \mathbf{p}=\begin{bmatrix}
@@ -591,9 +539,7 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
-\par~
 
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -602,16 +548,13 @@ This section collects and defines all the data needed to build the instance mode
 \label{DD:vecMag}
 \\ \midrule \\
 Label & Speed
-        \par~
-
+        
 \\ \midrule \\
 Symbol & $v$
-         \par~
-
+         
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
-        \par~
-
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
            v=|\mathbf{v}|
@@ -623,22 +566,17 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & For a given velocity vector $\mathbf{v}$, the magnitude of the vector ($|\mathbf{v}|$) is the scalar called speed.
-        \par~
-
+        
 \\ \midrule \\
 Source & --
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[DD:speedIY]{DD: speedIY} and \hyperref[DD:speedIX]{DD: speedIX}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\par~
 
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -647,16 +585,13 @@ RefBy & \hyperref[DD:speedIY]{DD: speedIY} and \hyperref[DD:speedIX]{DD: speedIX
 \label{DD:speedIX}
 \\ \midrule \\
 Label & $x$-component of initial velocity
-        \par~
-
+        
 \\ \midrule \\
 Symbol & ${{v_{x}}^{i}}$
-         \par~
-
+         
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
-        \par~
-
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
            {{v_{x}}^{i}}={v^{i}} \cos\left(θ\right)
@@ -669,25 +604,19 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${v^{i}}$ is from \hyperref[DD:vecMag]{DD: vecMag}.
-        \par~
-
+        
         $θ$ is shown in \hyperref[Figure:Launch]{Fig:Launch}.
-        \par~
-
+        
 \\ \midrule \\
 Source & --
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\par~
 
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -696,16 +625,13 @@ RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}
 \label{DD:speedIY}
 \\ \midrule \\
 Label & $y$-component of initial velocity
-        \par~
-
+        
 \\ \midrule \\
 Symbol & ${{v_{y}}^{i}}$
-         \par~
-
+         
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
-        \par~
-
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
            {{v_{y}}^{i}}={v^{i}} \sin\left(θ\right)
@@ -718,30 +644,23 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${v^{i}}$ is from \hyperref[DD:vecMag]{DD: vecMag}.
-        \par~
-
+        
         $θ$ is shown in \hyperref[Figure:Launch]{Fig:Launch}.
-        \par~
-
+        
 \\ \midrule \\
 Source & --
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\par~
 
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
-\par~
 
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -750,16 +669,13 @@ This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: 
 \label{IM:calOfLandingTime}
 \\ \midrule \\
 Label & Calculation of landing time
-        \par~
-
+        
 \\ \midrule \\
 Input & ${v_{launch}}$, $θ$
-        \par~
-
+        
 \\ \midrule \\
 Output & ${t_{flight}}$
-         \par~
-
+         
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
                     {v_{launch}}>0
@@ -784,58 +700,47 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
-        \par~
-
+        
         $g$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
-        \par~
-
+        
         The constraint ${t_{flight}}>0$ is from \hyperref[timeStartZero]{A: timeStartZero}.
-        \par~
-
+        
 \\ \midrule \\
 Source & --
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[calcValues]{FR: Calculate-Values}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 \paragraph{Detailed derivation of flight duration:}
 \label{IM:calOfLandingTimeDeriv}
 We know that ${{p_{y}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{y}}^{c}}=-g$ (\hyperref[accelYGravity]{A: accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
-\par~
 
 \begin{displaymath}
 {p_{y}}={{v_{y}}^{i}} t-\frac{g t^{2}}{2}
 \end{displaymath}
 To find the time that the projectile lands, we want to find the $t$ value (${t_{flight}}$) where ${p_{y}}=0$ (since the target is on the $x$-axis from \hyperref[targetXAxis]{A: targetXAxis}). From the equation above we get:
-\par~
 
 \begin{displaymath}
 {{v_{y}}^{i}} {t_{flight}}-\frac{g {t_{flight}}^{2}}{2}=0
 \end{displaymath}
 Dividing by ${t_{flight}}$ (with the constraint ${t_{flight}}>0$) gives us:
-\par~
 
 \begin{displaymath}
 {{v_{y}}^{i}}-\frac{g {t_{flight}}}{2}=0
 \end{displaymath}
 Solving for ${t_{flight}}$ gives us:
-\par~
 
 \begin{displaymath}
 {t_{flight}}=\frac{2 {{v_{y}}^{i}}}{g}
 \end{displaymath}
 From \hyperref[DD:speedIY]{DD: speedIY} (with ${v^{i}}={v_{launch}}$) we can replace ${{v_{y}}^{i}}$:
-\par~
 
 \begin{displaymath}
 {t_{flight}}=\frac{2 {v_{launch}} \sin\left(θ\right)}{g}
 \end{displaymath}
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -844,16 +749,13 @@ From \hyperref[DD:speedIY]{DD: speedIY} (with ${v^{i}}={v_{launch}}$) we can rep
 \label{IM:calOfLandingDist}
 \\ \midrule \\
 Label & Calculation of landing position
-        \par~
-
+        
 \\ \midrule \\
 Input & ${v_{launch}}$, $θ$
-        \par~
-
+        
 \\ \midrule \\
 Output & ${p_{land}}$
-         \par~
-
+         
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
                     {v_{launch}}>0
@@ -878,52 +780,42 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
-        \par~
-
+        
         $g$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
-        \par~
-
+        
         The constraint ${p_{land}}>0$ is from \hyperref[posXDirection]{A: posXDirection}.
-        \par~
-
+        
 \\ \midrule \\
 Source & --
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[IM:offsetIM]{IM: offsetIM} and \hyperref[calcValues]{FR: Calculate-Values}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
 \paragraph{Detailed derivation of landing position:}
 \label{IM:calOfLandingDistDeriv}
 We know that ${{p_{x}}^{i}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{x}}^{c}}=0$ (\hyperref[accelXZero]{A: accelXZero}). Substituting these values into the x-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
-\par~
 
 \begin{displaymath}
 {p_{x}}={{v_{x}}^{i}} t
 \end{displaymath}
 To find the landing position, we want to find the ${p_{x}}$ value (${p_{land}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
-\par~
 
 \begin{displaymath}
 {p_{land}}=\frac{{{v_{x}}^{i}}\cdot{}2 {v_{launch}} \sin\left(θ\right)}{g}
 \end{displaymath}
 From \hyperref[DD:speedIX]{DD: speedIX} (with ${v^{i}}={v_{launch}}$) we can replace ${{v_{x}}^{i}}$:
-\par~
 
 \begin{displaymath}
 {p_{land}}=\frac{{v_{launch}} \cos\left(θ\right)\cdot{}2 {v_{launch}} \sin\left(θ\right)}{g}
 \end{displaymath}
 Rearranging this gives us the required equation:
-\par~
 
 \begin{displaymath}
 {p_{land}}=\frac{2 {v_{launch}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
 \end{displaymath}
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -932,16 +824,13 @@ Rearranging this gives us the required equation:
 \label{IM:offsetIM}
 \\ \midrule \\
 Label & Offset
-        \par~
-
+        
 \\ \midrule \\
 Input & ${p_{land}}$, ${p_{target}}$
-        \par~
-
+        
 \\ \midrule \\
 Output & ${d_{offset}}$
-         \par~
-
+         
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
                     {p_{land}}>0
@@ -963,25 +852,19 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${p_{land}}$ is from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
-        \par~
-
+        
         The constraints ${p_{land}}>0$ and ${p_{target}}>0$ are from \hyperref[posXDirection]{A: posXDirection}.
-        \par~
-
+        
 \\ \midrule \\
 Source & --
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[outputValues]{FR: Output-Values}, \hyperref[IM:messageIM]{IM: messageIM}, and \hyperref[calcValues]{FR: Calculate-Values}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\par~
 
-\par~
 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
@@ -990,16 +873,13 @@ RefBy & \hyperref[outputValues]{FR: Output-Values}, \hyperref[IM:messageIM]{IM: 
 \label{IM:messageIM}
 \\ \midrule \\
 Label & Output message
-        \par~
-
+        
 \\ \midrule \\
 Input & ${d_{offset}}$, ${p_{target}}$
-        \par~
-
+        
 \\ \midrule \\
 Output & $s$
-         \par~
-
+         
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
                     {p_{target}}>0
@@ -1026,34 +906,26 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & ${d_{offset}}$ is from \hyperref[IM:offsetIM]{IM: offsetIM}.
-        \par~
-
+        
         The constraint ${p_{target}}>0$ is from \hyperref[posXDirection]{A: posXDirection}.
-        \par~
-
+        
         The constraint ${d_{offset}}>-{p_{land}}$ is from the fact that ${p_{land}}>0$, from \hyperref[posXDirection]{A: posXDirection}.
-        \par~
-
+        
         $ε$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
-        \par~
-
+        
 \\ \midrule \\
 Source & --
-         \par~
-
+         
 \\ \midrule \\
 RefBy & \hyperref[outputValues]{FR: Output-Values} and \hyperref[calcValues]{FR: Calculate-Values}
-        \par~
-
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\par~
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
 \hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
-\par~
 
 \begin{longtable}{l l l l}
 \toprule
@@ -1074,7 +946,6 @@ $θ$ & $0<θ<\frac{π}{2}$ & $\frac{π}{4}$ rad & 10$\%$
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
 \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
-\par~
 
 \begin{longtable}{l l}
 \toprule
@@ -1093,12 +964,10 @@ ${d_{offset}}$ & ${d_{offset}}>-{p_{land}}$
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
-\par~
 
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
-\par~
 
 \begin{itemize}
 \item[Input-Parameters:\phantomsection\label{inputParams}]Input the quantities from \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the launch angle, launch speed, and target position.
@@ -1125,7 +994,6 @@ $θ$ & Launch angle & rad
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
-\par~
 
 \begin{itemize}
 \item[Correct:\phantomsection\label{correct}]The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
@@ -1138,7 +1006,6 @@ This section provides the non-functional requirements, the qualities that the so
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
-\par~
 
 \begin{longtable}{l l l l l l l l l l l l l l l}
 \toprule
@@ -1267,7 +1134,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 This section contains the standard values that are used for calculations in Projectile.
-\par~
 
 \begin{longtable}{l l l l}
 \toprule

@@ -1,7 +1,7 @@
 module Language.Drasil.TeX.Print(genTeX) where
 
 import Prelude hiding (print)
-import Data.List (intersperse, transpose, partition)
+import Data.List (transpose, partition)
 import Text.PrettyPrint (integer, text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Numeric (showEFloat)
@@ -232,7 +232,7 @@ makeHeaders :: [Spec] -> D
 makeHeaders ls = hpunctuate (text " & ") (map (bold . spec) ls) %% pure dbs
 
 makeRows :: [[Spec]] -> D
-makeRows = foldr (\c -> (%%) (makeColumns c %% pure dbs)) empty
+makeRows = mconcat . map (\c -> makeColumns c %% pure dbs)
 
 makeColumns :: [Spec] -> D
 makeColumns ls = hpunctuate (text " & ") $ map spec ls
@@ -471,11 +471,11 @@ makeBib sm bib = mkEnvArgs "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bib
                    command0 "printbibliography" <> sq (pure $ text "heading=none")
 
 mkBibRef :: PrintingInformation -> BibRef -> D
-mkBibRef sm = foldl1 (\x y -> x <> pure (text "\n\n") <> y) . map (renderF sm)
+mkBibRef sm = mconcat . map (renderF sm)
 
 renderF :: PrintingInformation -> Citation -> D
-renderF sm (Cite cid refType fields) = (pure $ text (showT refType)) <>
-  br (foldl1 (<>) . intersperse (pure $ text ",\n") $ (pure $ text cid) : (map (showBibTeX sm) fields))
+renderF sm (Cite cid refType fields) = pure (text (showT refType)) <>
+  br (hpunctuate (text ",\n") $ pure (text cid) : map (showBibTeX sm) fields)
 
 showT :: L.CitationKind -> String
 showT L.Article       = "@article"
@@ -523,7 +523,7 @@ showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
 -- showBibTeX sm (Author    p) = showField "author" $ LS.spec sm (rendPeople p)
 
 showField :: String -> Spec -> D
-showField f s = (pure $ text (f ++ "=")) <> (br $ spec s)
+showField f s = pure (text (f ++ "=")) <> br (spec s)
 
 rendPeople :: PrintingInformation -> L.People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"

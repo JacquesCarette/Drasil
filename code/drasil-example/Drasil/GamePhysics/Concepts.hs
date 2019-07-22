@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Concepts (centreMass, threeD, twoD, chipmunk, acronyms) where
+module Drasil.GamePhysics.Concepts (centreMass, threeD, twoD, gamePhysics, acronyms) where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
@@ -10,7 +10,7 @@ import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, physics, thModel)
 
 acronyms :: [CI]
 acronyms = [assumption, centreMass, dataDefn, genDefn, goalStmt,
-    inModel, likelyChg, ode, requirement, srs, thModel, threeD, twoD, chipmunk,
+    inModel, likelyChg, ode, requirement, srs, thModel, threeD, twoD, gamePhysics,
     typUnc, unlikelyChg]
 
 --FIXME: Should use of' combinator.
@@ -18,6 +18,6 @@ centMass :: NP --FIXME: Need to be able to cap plural.
 centMass = nounPhrase' "centre of mass" "centres of mass" 
   (Replace (S "centre of mass"))
 
-centreMass, chipmunk :: CI
+centreMass, gamePhysics :: CI
 centreMass = commonIdeaWithDict "centreMass" centMass "CM" [physics]
-chipmunk   = commonIdeaWithDict "chipmunk" (pn "Chipmunk2D game physics library") "Chipmunk2D" [physics]
+gamePhysics   = commonIdeaWithDict "gamePhysics" (pn "game physics library") "Game Physics" [physics]

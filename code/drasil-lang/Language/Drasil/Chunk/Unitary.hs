@@ -1,15 +1,16 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Unitary (Unitary(..), UnitaryChunk, mkUnitary,
-  unitary, unit_symb) where
+  unitary, unitary', unit_symb) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, usymb, Quantity, HasSpace(typ))
-import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, qw)
+import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn, unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
+import Language.Drasil.Stages (Stage)
 import Language.Drasil.NounPhrase (NP)
 
 import Control.Lens ((^.), makeLenses)
@@ -35,9 +36,13 @@ instance MayHaveUnit   UnitaryChunk where getUnit u = Just $ u ^. un
 
 -- Builds the Quantity part from the uid, term, symbol and space.
 -- assumes there's no abbreviation.
-unitary :: (IsUnit u) =>
-  String -> NP -> Symbol -> u -> Space -> UnitaryChunk
+unitary :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
 unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu -- Unit doesn't have a unitDefn, so [] is passed in
+  where uu = unitWrapper u
+
+-- Same as unitary but with a symbol that changes based on the stage
+unitary' :: (IsUnit u) => String -> NP -> (Stage -> Symbol) -> u -> Space -> UnitaryChunk
+unitary' i t s u space = UC (mkQuant' i t s space (Just uu) Nothing) uu -- Unit doesn't have a unitDefn, so [] is passed in
   where uu = unitWrapper u
 
 mkUnitary :: (Unitary u, MayHaveUnit u) => u -> UnitaryChunk

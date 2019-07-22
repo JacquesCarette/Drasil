@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Quantity (QuantityDict, codeVC, implVar, mkQuant,
-  qw, vc, vc'', vcSt, vcUnit) where
+  mkQuant', qw, vc, vc'', vcSt, vcUnit) where
 
 import Control.Lens ((^.),makeLenses,view)
 
@@ -34,6 +34,9 @@ qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)
 
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
 mkQuant i t s sp u ab = QD (mkIdea i t ab) sp (const s) u
+
+mkQuant' :: String -> NP -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
+mkQuant' i t s sp u ab = QD (mkIdea i t ab) sp s u
 
 -- | implVar makes an variable that is implementation-only
 implVar :: String -> NP -> Symbol -> Space -> QuantityDict

@@ -20,8 +20,13 @@ This creates a local host for Jupyter and opens a web browser window for your fi
 Click on any `.ipynb` file to view the notebook.
 
 
-#### Helpful Links
+## Helpful Links
 
 [Jupyter test directory on Github](https://github.com/JacquesCarette/Drasil/tree/jupInit/People/DanScime/Jupyter-Tests)
 
 [HTML To Markdown - Table Converter](https://jmalarcon.github.io/markdowntables/)
+
+
+## Notes
+- Tables look better with Markdown, do not squish as they have ability to scroll.
+- Linking to table, best way seems to put a `<div id="..."></div>` in the first cell of the table.

@@ -30,3 +30,4 @@ Click on any `.ipynb` file to view the notebook.
 ## Notes
 - Tables look better with Markdown, do not squish as they have ability to scroll.
 - Linking to table, best way seems to put a `<div id="..."></div>` in the first cell of the table.
+- Can use math via `$.....$` as in Latex.

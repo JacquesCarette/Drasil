@@ -5,7 +5,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (JavaCode(.
 import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (PythonCode(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (CSharpCode(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (CppSrcCode(..), CppHdrCode(..))
-import Language.Drasil.Code.Imperative.Data (ModData(..))
+import Language.Drasil.Code.Imperative.Data (FileData(..), ModData(..))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
@@ -19,37 +19,32 @@ main = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "java"
   setCurrentDirectory "java"
-  genCode (classes unJC) [".java"]
+  genCode (classes unJC)
   setCurrentDirectory workingDir
   createDirectoryIfMissing False "python"
   setCurrentDirectory "python"
-  genCode (classes unPC) [".py"]
+  genCode (classes unPC)
   setCurrentDirectory workingDir 
   createDirectoryIfMissing False "csharp"
   setCurrentDirectory "csharp"
-  genCode (classes unCSC) [".cs"]
+  genCode (classes unCSC)
   setCurrentDirectory workingDir
   createDirectoryIfMissing False "cpp"
   setCurrentDirectory "cpp"
-  genCode (classes unCPPSC) [".cpp"]
-  genCode (classes unCPPHC) [".hpp"]
+  genCode (classes unCPPSC)
+  genCode (classes unCPPHC)
   setCurrentDirectory workingDir
     
-genCode :: [([ModData], Label)] -> [Label] -> IO()
-genCode files exts = createCodeFiles (concatMap (\(ms, l) -> replicate (length ms) l) files) $ makeCode (concatMap fst files) exts
+genCode :: [([FileData], Label)] -> IO()
+genCode files = createCodeFiles (concatMap (\(ms, l) -> replicate (length ms) l) files) $ makeCode (concatMap fst files)
 
-classes :: (PackageSym repr) => (repr (Package repr) -> ([ModData], Label)) -> [([ModData], Label)]
+classes :: (PackageSym repr) => (repr (Package repr) -> ([FileData], Label)) -> [([FileData], Label)]
 classes unRepr = map unRepr [helloWorld, patternTest, fileTests]
 
--- | Takes code and extensions
-makeCode :: [ModData] -> [Label] -> [(FilePath, Doc)]
-makeCode files exts =
-    [(nm ++ ext, file) | (nm, (file, ext)) <- zip (repeatListElems (length exts) (map name files)) (zip (map modDoc files) (cycle exts))]
-
-repeatListElems :: Int -> [a] -> [a]
-repeatListElems _ [] = []
-repeatListElems 1 xs = xs
-repeatListElems n (x:xs) = replicate n x ++ repeatListElems n xs
+-- | Takes code
+makeCode :: [FileData] -> [(FilePath, Doc)]
+makeCode files = zip (map filePath files)
+  (map (modDoc . fileMod) files)
 
 ------------------
 -- IO Functions --

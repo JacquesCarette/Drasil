@@ -7,20 +7,15 @@ module Language.Drasil.Code.CodeGeneration (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.Symantics
-import Language.Drasil.Code.Imperative.Data (ModData(..))
+import Language.Drasil.Code.Imperative.Data (FileData(..), ModData(modDoc))
 
 import Text.PrettyPrint.HughesPJ (Doc,render)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 
--- | Takes code and extensions
-makeCode :: [[ModData]] -> [Label] -> Code
-makeCode files exts = Code
-  [(nm, contents) | (MD nm _ contents) <- concat [map (applyExt ext) files' 
-    | (files', ext) <- zip files exts]]
-
-applyExt :: Label -> ModData -> ModData
-applyExt ext (MD n b d) = MD (n ++ ext) b d
+-- | Takes code
+makeCode :: [[FileData]] -> Code
+makeCode files = Code $ zip (map filePath $ concat files) 
+  (map (modDoc . fileMod) $ concat files)
 
 ------------------
 -- IO Functions --

@@ -2,14 +2,14 @@
 module Language.Drasil (
   -- Expr
   Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..), DerivType(..)
-  , Relation
+  , Completeness(..), Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   -- Expr.Extract
   , dep
   -- Expr.Math
   , log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, square, euclidean
-  , dim, idx, int, dbl, str, perc, isin, case_
+  , dim, idx, int, dbl, str, perc, isin, completeCase, incompleteCase
   , sumAll, defsum, prodAll, defprod, defint, intAll
   , realInterval
   , deriv, pderiv
@@ -177,13 +177,13 @@ module Language.Drasil (
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
-import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), DerivType(..),
-          BoolOper(..), Relation,
+import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), 
+          DerivType(..), BoolOper(..), Completeness(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Extract (dep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
-          dim, idx, int, dbl, str, perc, isin, case_,
+          dim, idx, int, dbl, str, perc, isin, completeCase, incompleteCase,
           sumAll, defsum, prodAll, defprod,
           realInterval,
           apply, apply1, apply2,

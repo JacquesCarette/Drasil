@@ -458,7 +458,7 @@ sliceWght = makeRC "sliceWght" (nounPhraseSP "slice weight") sliceWghtNotes
   sliceWghtEqn
 
 sliceWghtEqn :: Expr
-sliceWghtEqn = inxi slcWght $= inxi baseWthX * 0.5 * case_ [case1, case2, case3]
+sliceWghtEqn = inxi slcWght $= inxi baseWthX * 0.5 * completeCase [case1, case2, case3]
   where case1 = (((inxi slopeHght - inxi slipHght) + 
           (inxiM1 slopeHght - inxiM1 slipHght)) * sy satWeight,
           (inxi waterHght $> inxi slopeHght) $|| 
@@ -593,7 +593,7 @@ baseWtrF = makeRC "baseWtrF" (nounPhraseSP "base hydrostatic force")
 
 bsWtrFEqn :: Expr
 bsWtrFEqn = inxi baseHydroForce $= inxi baseLngth * sy waterWeight * 0.5 * 
-  case_ [case1, case2]
+  completeCase [case1, case2]
   where case1 = ((inxi waterHght - inxi slipHght) + 
           (inxiM1 waterHght - inxiM1 slipHght), 
           (inxi waterHght $> inxi slipHght) $|| 
@@ -676,7 +676,7 @@ srfWtrF = makeRC "srfWtrF" (nounPhraseSP "surface hydrostatic force")
 
 srfWtrFEqn :: Relation
 srfWtrFEqn = inxi surfHydroForce $= inxi surfLngth * sy waterWeight * 0.5 * 
-  case_ [case1, case2]
+  completeCase [case1, case2]
   where case1 = ((inxi waterHght - inxi slopeHght) + 
           (inxiM1 waterHght - inxiM1 slopeHght), 
           (inxi waterHght $> inxi slopeHght) $|| 

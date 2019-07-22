@@ -71,25 +71,15 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
 -----------------------
 --FIXME: parametrized hack
 --FIXME: "A" is not being capitalized when it should be.
-forceParam, massParam, momtParam, contParam, timeParam :: String -> String -> UnitalChunk
+forceParam, massParam, timeParam :: String -> String -> UnitalChunk
 forceParam n w = ucs'
  (dccWDS ("force" ++ n) (cn $ "force exerted by the " ++ w ++ 
   " body (on another body)") (phrase QP.force)) 
-  (sub (eqSymb QP.force) (Variable n)) Real newton
+  (sub (eqSymb QP.force) (Label n)) Real newton
 
 massParam n w = ucs'
  (dccWDS ("mass" ++ n) (cn $ "mass of the " ++ w ++ " body") 
   (phrase QPP.mass)) (sub (eqSymb QPP.mass) (Label n)) Real kilogram
-
-momtParam n w = ucs'
- (dccWDS ("momentOfInertia" ++ n) (compoundPhrase'
-  (QP.momentOfInertia ^. term) (cn $ "of rigid body " ++ n))
-  (phrase QP.momentOfInertia)) (sub (eqSymb QP.momentOfInertia) (Variable w)) Real momtInertU
-
-contParam n w = ucs'
- (dccWDS ("r_" ++ n ++ "P") (contdispN n) 
-  (phrase QP.displacement)) (sub (eqSymb QP.displacement)
-  (Variable (w ++ "P"))) Real metre
 
 timeParam n w = ucs'
  (dccWDS ("time" ++ n) (cn $ "time at a point in " ++ w ++ " body ") 
@@ -99,20 +89,22 @@ contdispN :: String -> NP
 contdispN n = cn $ "displacement vector between the centre of mass of rigid body " 
   ++ n ++ " and contact point P"
 
-perpParam, rigidParam, velParam, velBodyParam, angParam :: String -> Symbol -> UnitalChunk
-
-velParam n w = ucs'
- (dccWDS ("velocity" ++ n) ( compoundPhrase' (QP.velocity ^. term)
-  (cn $ "at point " ++ n)) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
-
-velBodyParam n w = ucs'
- (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
-  (cn $ "of the  " ++ n ++ " body")) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
+angParam, contParam, momtParam, perpParam, rigidParam, velBodyParam, velParam :: String -> Symbol -> UnitalChunk
 
 angParam n w = ucs'
  (dccWDS ("angular velocity" ++ n) (compoundPhrase'
   (cn $ n ++ " body's") (QP.angularVelocity ^. term))
   (phrase QP.angularVelocity)) (sub (eqSymb QP.angularVelocity) w) Real angVelU
+
+contParam n w = ucs'
+ (dccWDS ("r_" ++ n ++ "P") (contdispN n) 
+  (phrase QP.displacement)) (sub (eqSymb QP.displacement)
+  (Concat [w, Label "P"])) Real metre
+
+momtParam n w = ucs'
+ (dccWDS ("momentOfInertia" ++ n) (compoundPhrase'
+  (QP.momentOfInertia ^. term) (cn $ "of rigid body " ++ n))
+  (phrase QP.momentOfInertia)) (sub (eqSymb QP.momentOfInertia) w) Real momtInertU
 
 perpParam n w = ucs'
  (dccWDS ("|| r_A" ++ n ++ " x n ||") 
@@ -124,6 +116,14 @@ perpParam n w = ucs'
 rigidParam n w = ucs'
  (dccWDS ("rig_mass" ++ n) (compoundPhrase' (QPP.mass ^. term)
   (cn $ "of rigid body " ++ n)) (phrase QPP.mass)) (sub (eqSymb QPP.mass) w) Real kilogram
+
+velBodyParam n w = ucs'
+ (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
+  (cn $ "of the  " ++ n ++ " body")) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
+
+velParam n w = ucs'
+ (dccWDS ("velocity" ++ n) ( compoundPhrase' (QP.velocity ^. term)
+  (cn $ "at point " ++ n)) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
 
 -----------------------
 -- CHUNKS WITH UNITS --
@@ -159,7 +159,7 @@ sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distance")
 rOB    = uc' "rOB" 
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
-  (sub (eqSymb QP.displacement) (Concat [Label "O", cB])) metre
+  (sub (eqSymb QP.displacement) (Concat [labelO, labelB])) metre
 
 {-r_F    = uc' "r_F" 
   (nounPhraseSP "position vector of the point where is applied, measured from the axis of rotation")
@@ -200,12 +200,12 @@ timeC = ucs' (dccWDS "timeC" (cn "denotes the time at collision")
 initRelVel = ucs' (dccWDS "v_i^AB" (compoundPhrase'
                  (compoundPhrase' (cn "initial relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
-                 (sup (sub (eqSymb QP.velocity) (Label "i")) (Concat [Variable "A", Variable "B"])) Real velU
+                 (sup (sub (eqSymb QP.velocity) (Label "i")) (Concat [labelA, labelB])) Real velU
 
 finRelVel = ucs' (dccWDS "v_f^AB" (compoundPhrase'
                  (compoundPhrase' (cn "final relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
-                 (sup (sub (eqSymb QP.velocity) lF) (Concat [Variable "A", Variable "B"])) Real velU
+                 (sup (sub (eqSymb QP.velocity) (Label "f")) (Concat [labelA, labelB])) Real velU
 
 massIRigidBody = ucs' (dccWDS "massI" (compoundPhrase' (QPP.mass ^. term) 
                 (cn "of the i-th rigid body")) (phrase QPP.mass)) 
@@ -244,33 +244,39 @@ forceI = ucs' (dccWDS "forceI" (compoundPhrase'
 
 velAP = ucs' (dccWDS "v^AP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body A")) 
-              (phrase QP.velocity))(sup (eqSymb QP.velocity)(Concat [cA, cP])) Real velU
+              (phrase QP.velocity))(sup (eqSymb QP.velocity)(Concat [labelA, labelP])) Real velU
 velBP = ucs' (dccWDS "v^BP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body B")) 
-              (phrase QP.velocity))(sup (eqSymb QP.velocity)(Concat [cB, cP])) Real velU
+              (phrase QP.velocity))(sup (eqSymb QP.velocity)(Concat [labelB, labelP])) Real velU
 
 force_1    = forceParam "1" "first"
 force_2    = forceParam "2" "second"
 mass_1     = massParam  "1" "first"
 mass_2     = massParam  "2" "second"
-velA       = velParam   "A" cA
-velB       = velParam   "B" cB
-velO       = velParam   "origin" (Label "O")
-angVelA    = angParam   "A" cA
-angVelB    = angParam   "B" cB
+velA       = velParam   "A" labelA
+velB       = velParam   "B" labelB
+velO       = velParam   "origin" labelO
+angVelA    = angParam   "A" labelA
+angVelB    = angParam   "B" labelB
 perpLenA   = perpParam  "A" $ eqSymb contDispA
 perpLenB   = perpParam  "B" $ eqSymb contDispB
-momtInertA = momtParam  "A" "A"
-momtInertB = momtParam  "B" "B"
-contDispA  = contParam  "A" "A"
-contDispB  = contParam  "B" "B"
-contDispK  = contParam  "k" "k"
-massA      = rigidParam "A" cA
-massB      = rigidParam "B" cB
-velo_1     = velBodyParam "first" (Label "1")
+momtInertA = momtParam  "A" labelA
+momtInertB = momtParam  "B" labelB
+contDispA  = contParam  "A" labelA
+contDispB  = contParam  "B" labelB
+contDispK  = contParam  "k" lK
+massA      = rigidParam "A" labelA
+massB      = rigidParam "B" labelB
+velo_1     = velBodyParam "first"  (Label "1")
 velo_2     = velBodyParam "second" (Label "2")
 time_1     = timeParam "1" "first"
 time_2     = timeParam "2" "second"
+
+labelA, labelB, labelO, labelP :: Symbol
+labelA = Label "A"
+labelB = Label "B"
+labelO = Label "O"
+labelP = Label "P"
 
 --------------------------
 -- CHUNKS WITHOUT UNITS --

@@ -129,7 +129,7 @@ outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr]
 
 probBr :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
-  (sub cP lB) Rational
+  (sub cP (Label "b")) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
 tmSymbols :: [QuantityDict]
@@ -137,7 +137,7 @@ tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]
 
 probFail :: ConstrainedChunk
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
-  (sub cP lF) Rational
+  (sub cP (Label "f")) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
 pbTolfail :: ConstrainedChunk
@@ -216,7 +216,7 @@ eqTNTWeight = unitary "eqTNTWeight"
   (sub (eqSymb charWeight) (eqSymb tNT)) kilogram Real
 
 loadDur    = unitary "loadDur"    (nounPhraseSP "duration of load")
-  (sub lT lD) second Real
+  (sub lT (Label "d")) second Real
 
 minThick   = unitary "minThick"   (nounPhraseSP "minimum thickness")
   lH metre Rational

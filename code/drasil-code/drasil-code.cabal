@@ -10,6 +10,7 @@ library
       Language.Drasil.Code
   other-modules:
       Language.Drasil.Chunk.Code
+    , Language.Drasil.Chunk.CodeQuantity
     , Language.Drasil.Code.Code
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.Imperative.Symantics

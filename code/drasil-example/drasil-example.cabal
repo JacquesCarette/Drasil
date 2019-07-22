@@ -5,7 +5,7 @@ Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
 Synopsis:	A framework for code and document generation for scientific software - Example SubPackage
 
-executable tiny
+executable hghc
   hs-source-dirs: .
   main-is: Drasil/HGHC/Main.hs
   other-modules:

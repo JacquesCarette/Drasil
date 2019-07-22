@@ -8,7 +8,7 @@ import Language.Drasil (MaxWidthPercent)
 
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
-import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$), (%%))
+import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$))
 
 --import Language.Drasil.Config (numberedSections, hyperSettings)
 --import Language.Drasil.Document (MaxWidthPercent)
@@ -180,8 +180,8 @@ sec :: Int -> D -> D
 sec d b1 = genSec d <> br b1
 
 subscript, superscript :: D -> D -> D
-subscript a b = a <> pure H.unders <> br b
-superscript a b = a <> pure H.hat <> br b
+subscript   a b = a <> pure H.unders <> br b
+superscript a b = a <> pure H.hat    <> br b
 
 -- grave, acute :: Char -> D
 -- grave c = (pure $ text "\\`{") <> pure (TP.char c) <> (pure $ text "}")
@@ -189,10 +189,7 @@ superscript a b = a <> pure H.hat <> br b
 
 -- Macro / Command def'n --
 --TeX--
-srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS,
-  modcounter, modnum, newline :: D
-srsComms = bullet %% counter %% ddefnum %% ddref %% colAw %% colBw %% arrayS
-lpmComms = pure $ text ""
+bullet, counter, ddefnum, ddref, colAw, colBw, arrayS, modcounter, modnum, newline :: D
 
 counter    = count "datadefnum"
 modcounter = count "modnum"

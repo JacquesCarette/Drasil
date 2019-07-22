@@ -26,7 +26,7 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
        
 main :: IO ()
 main = do
-  gen (DocSpec SRS "Chipmunk_SRS") srs  printSetting
-  gen (DocSpec Website "Chipmunk_SRS") srs printSetting
-  -- When ready to generate code from GamePhys, uncomment this file
+  gen (DocSpec SRS "GamePhysics_SRS") srs  printSetting
+  gen (DocSpec Website "GamePhysics_SRS") srs printSetting
+  -- When ready to generate code from GamePhysics, uncomment this file
   -- genCode choices code

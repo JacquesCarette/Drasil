@@ -21,7 +21,7 @@
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
-\title{Software Requirements Specification for Chipmunk2D}
+\title{Software Requirements Specification for Game Physics}
 \author{Alex Halliwushka and Luthfi Mawarid}
 \begin{document}
 \maketitle
@@ -209,13 +209,13 @@ A & Assumption
 \\
 CM & Centre of Mass
 \\
-Chipmunk2D & Chipmunk2D game physics library
-\\
 DD & Data Definition
 \\
 GD & General Definition
 \\
 GS & Goal Statement
+\\
+Game Physics & game physics library
 \\
 IM & Instance Model
 \\
@@ -241,11 +241,11 @@ Uncert. & Typical Uncertainty
 \label{Sec:Intro}
 Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the Software Requirements Specification (SRS) for Game Physics. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-This document describes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
+This document describes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Game Physics are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 
@@ -255,7 +255,7 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
+Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Game Physics can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
@@ -269,7 +269,7 @@ This section provides general information about the system. It identifies the in
 
 \subsection{System Context}
 \label{Sec:SysContext}
-\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Chipmunk2D). Arrows are used to show the data flow between the system and its environment.
+\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Game Physics). Arrows are used to show the data flow between the system and its environment.
 
 \begin{figure}
 \begin{center}
@@ -287,7 +287,7 @@ The interaction between the product and the user is through an application progr
 \item{Ensure application programming interface use complies with the user guide.}
 \item{Ensure required software assumptions (FIXME REF) are appropriate for any particular problem the software addresses.}
 \end{itemize}
-\item{Chipmunk2D Responsibilities}
+\item{Game Physics Responsibilities}
 \begin{itemize}
 \item{Determine if the inputs and simulation state satisfy the required physical and system constraints (FIXME REF).}
 \item{Calculate the new state of all rigid bodies within the simulation at each simulation step.}
@@ -296,7 +296,7 @@ The interaction between the product and the user is through an application progr
 \end{itemize}
 \subsection{User Characteristics}
 \label{Sec:UserChars}
-The end user of Chipmunk2D should have an understanding of first year programming concepts and an understanding of high school physics.
+The end user of Game Physics should have an understanding of first year programming concepts and an understanding of high school physics.
 
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
@@ -331,7 +331,7 @@ Given the kinematic properties, and forces including any (collision forces) appl
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern Chipmunk2D are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern Game Physics are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
@@ -348,7 +348,7 @@ This section simplifies the original problem and helps in developing the theoret
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
-This section focuses on the general equations and laws that Chipmunk2D is based on.
+This section focuses on the general equations and laws that Game Physics is based on.
 
 
 \noindent \begin{minipage}{\textwidth}

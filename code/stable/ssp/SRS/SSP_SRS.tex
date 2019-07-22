@@ -212,7 +212,7 @@ $γ$ & Specific Weight: weight per unit volume & $\frac{\text{N}}{\text{m}^{3}}$
 \\
 ${γ_{\text{dry}}}$ & Soil Dry Unit Weight: The weight of a dry soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-${γ_{\text{Sat}}}$ & Soil Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
+${γ_{\text{sat}}}$ & Soil Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
 ${γ_{w}}$ & Unit Weight of Water: The weight of one cubic meter of water. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
@@ -1036,8 +1036,8 @@ Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \begin{cases}
-                                                         \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{Sat}}}, & {\mathbf{y}_{\text{wt},i}}>{\mathbf{y}_{\text{slope},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}>{\mathbf{y}_{\text{slope},i-1}}\\
-\left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{wt},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{wt},i-1}}\right) {γ_{\text{dry}}}+\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{Sat}}}, & {\mathbf{y}_{\text{slope},i}}\geq{}{\mathbf{y}_{\text{wt},i}}\geq{}{\mathbf{y}_{\text{slip},i}}\land{}{\mathbf{y}_{\text{slope},i-1}}\geq{}{\mathbf{y}_{\text{wt},i-1}}\geq{}{\mathbf{y}_{\text{slip},i-1}}\\
+                                                         \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}, & {\mathbf{y}_{\text{wt},i}}>{\mathbf{y}_{\text{slope},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}>{\mathbf{y}_{\text{slope},i-1}}\\
+\left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{wt},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{wt},i-1}}\right) {γ_{\text{dry}}}+\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}, & {\mathbf{y}_{\text{slope},i}}\geq{}{\mathbf{y}_{\text{wt},i}}\geq{}{\mathbf{y}_{\text{slip},i}}\land{}{\mathbf{y}_{\text{slope},i-1}}\geq{}{\mathbf{y}_{\text{wt},i-1}}\geq{}{\mathbf{y}_{\text{slip},i-1}}\\
 \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{dry}}}, & {\mathbf{y}_{\text{wt},i}}<{\mathbf{y}_{\text{slip},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}<{\mathbf{y}_{\text{slip},i-1}}
                                                          \end{cases}
            \end{displaymath}
@@ -1048,12 +1048,12 @@ Description & \begin{symbDescription}
               \item{$\mathbf{b}$ is the base width of slices (m)}
               \item{${\mathbf{y}_{\text{slope}}}$ is the y-coordinates of the slope (m)}
               \item{${\mathbf{y}_{\text{slip}}}$ is the y-coordinates of the slip surface (m)}
-              \item{${γ_{\text{Sat}}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+              \item{${γ_{\text{sat}}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
               \item{${\mathbf{y}_{\text{wt}}}$ is the y-coordinates of the water table (m)}
               \item{${γ_{\text{dry}}}$ is the soil dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation is based on the assumption that the surface and the base of a slice are straight lines (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). The soil dry unit weight ${γ_{\text{dry}}}$ and the soil saturated unit weight ${γ_{\text{Sat}}}$ are not indexed by $i$ because the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}). $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}.
+Notes & This equation is based on the assumption that the surface and the base of a slice are straight lines (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). The soil dry unit weight ${γ_{\text{dry}}}$ and the soil saturated unit weight ${γ_{\text{sat}}}$ are not indexed by $i$ because the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}). $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}.
 \\ \midrule \\
 Source & \cite{fredlund1977}
 \\ \midrule \\
@@ -1065,11 +1065,11 @@ RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[GD:normForcEq]{GD: n
 \label{GD:sliceWghtDeriv}
 For the case where the water table is above the slope surface, the weights come from the weight of the saturated soil. Substituting values for saturated soil into the equation for weight from \hyperref[GD:weight]{GD: weight} yields:
 \begin{displaymath}
-{\mathbf{W}}_{i}={\mathbf{V}_{\text{sat},i}} {γ_{\text{Sat}}}
+{\mathbf{W}}_{i}={\mathbf{V}_{\text{sat},i}} {γ_{\text{sat}}}
 \end{displaymath}
 Due to \hyperref[assumpPSC]{A: Plane-Strain-Conditions}, only two dimensions are considered, so the areas of saturated soil are considered instead of the volumes of saturated soil. Any given slice has a trapezoidal shape. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the interslice edges and the length between them is the width of the slice. Thus, the weights are defined as:
 \begin{displaymath}
-{\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{Sat}}}
+{\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}
 \end{displaymath}
 For the case where the water table is below the slip surface, the weights come from the weight of the dry soil. Substituting values for dry soil into the equation for weight from \hyperref[GD:weight]{GD: weight} yields:
 \begin{displaymath}
@@ -1081,11 +1081,11 @@ For the case where the water table is below the slip surface, the weights come f
 \end{displaymath}
 For the case where the water table is between the slope surface and slip surface, the weights are the sums of the the weights of the dry portions and weights of the saturated portions of the soil. Substituting values for dry and saturated soil into the equation for weight from \hyperref[GD:weight]{GD: weight} and adding them together yields:
 \begin{displaymath}
-{\mathbf{W}}_{i}={\mathbf{V}_{\text{dry},i}} {γ_{\text{dry}}}+{\mathbf{V}_{\text{sat},i}} {γ_{\text{Sat}}}
+{\mathbf{W}}_{i}={\mathbf{V}_{\text{dry},i}} {γ_{\text{dry}}}+{\mathbf{V}_{\text{sat},i}} {γ_{\text{sat}}}
 \end{displaymath}
 \hyperref[assumpPSC]{A: Plane-Strain-Conditions} again allows for two-dimensional analysis so the areas of dry soil and areas of saturated soil are considered instead of the volumes of dry soil and volumes of saturated soil. The water table is assumed to only intersect a slice surface or base at a slice edge (\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge}, \hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge}), so the dry and saturated portions each have trapezoidal shape. For the dry portion, the parallel sides of the trapezoid are the lengths between the slope surface and water table at the slice edges. For the saturated portion, the parallel sides of the trapezoid are the lengths between the water table and slip surface at the slice edges. Thus, the weights are defined as:
 \begin{displaymath}
-{\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left(\left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{wt},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{wt},i-1}}\right) {γ_{\text{dry}}}+\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{Sat}}}\right)
+{\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left(\left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{wt},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{wt},i-1}}\right) {γ_{\text{dry}}}+\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}\right)
 \end{displaymath}
 \par~
 
@@ -1762,7 +1762,7 @@ The Morgenstern-Price method is a vertical slice, limit equilibrium slope stabil
 \\ \midrule \\
 Label & Factor of safety
 \\ \midrule \\
-Input & ${\mathbf{x}_{\text{slope}}}$, ${\mathbf{y}_{\text{slope}}}$, ${\mathbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{Sat}}}$, ${γ_{w}}$, ${\mathbf{x}_{\text{slip}}}$, ${\mathbf{y}_{\text{slip}}}$, $const_f$
+Input & ${\mathbf{x}_{\text{slope}}}$, ${\mathbf{y}_{\text{slope}}}$, ${\mathbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, ${\mathbf{x}_{\text{slip}}}$, ${\mathbf{y}_{\text{slip}}}$, $const_f$
 \\ \midrule \\
 Output & ${F_{\text{S}}}$
 \\ \midrule \\
@@ -2051,7 +2051,7 @@ See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${\mathbf{C}_{\
 \\ \midrule \\
 Label & Interslice normal forces
 \\ \midrule \\
-Input & ${\mathbf{x}_{\text{slope}}}$, ${\mathbf{y}_{\text{slope}}}$, ${\mathbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{Sat}}}$, ${γ_{w}}$, ${\mathbf{x}_{\text{slip}}}$, ${\mathbf{y}_{\text{slip}}}$, $const_f$
+Input & ${\mathbf{x}_{\text{slope}}}$, ${\mathbf{y}_{\text{slope}}}$, ${\mathbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, ${\mathbf{x}_{\text{slip}}}$, ${\mathbf{y}_{\text{slip}}}$, $const_f$
 \\ \midrule \\
 Output & $\mathbf{G}$
 \\ \midrule \\
@@ -2107,7 +2107,7 @@ The cases shown in \hyperref[IM:intsliceFs]{IM: intsliceFs} for when $i=0$, $i=1
 \\ \midrule \\
 Label & Critical slip surface identification
 \\ \midrule \\
-Input & ${\mathbf{x}_{\text{slope}}}$, ${\mathbf{y}_{\text{slope}}}$, ${\mathbf{x}_{\text{wt}}}$, ${\mathbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{Sat}}}$, ${γ_{w}}$, $const_f$
+Input & ${\mathbf{x}_{\text{slope}}}$, ${\mathbf{y}_{\text{slope}}}$, ${\mathbf{x}_{\text{wt}}}$, ${\mathbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, $const_f$
 \\ \midrule \\
 Output & ${{F_{\text{S}}}^{\text{min}}}$
 \\ \midrule \\
@@ -2116,7 +2116,7 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{F_{\text{S}}}^{\text{min}}}=Υ\left({\mathbf{x}_{\text{slope}}},{\mathbf{y}_{\text{slope}}},{\mathbf{x}_{\text{wt}}},{\mathbf{y}_{\text{wt}}},c',φ',{γ_{\text{dry}}},{γ_{\text{Sat}}},{γ_{w}},const_f\right)
+           {{F_{\text{S}}}^{\text{min}}}=Υ\left({\mathbf{x}_{\text{slope}}},{\mathbf{y}_{\text{slope}}},{\mathbf{x}_{\text{wt}}},{\mathbf{y}_{\text{wt}}},c',φ',{γ_{\text{dry}}},{γ_{\text{sat}}},{γ_{w}},const_f\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -2129,7 +2129,7 @@ Description & \begin{symbDescription}
               \item{$c'$ is the effective cohesion (Pa)}
               \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
               \item{${γ_{\text{dry}}}$ is the soil dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \item{${γ_{\text{Sat}}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+              \item{${γ_{\text{sat}}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
               \item{$const_f$ is the decision on f (Unitless)}
               \end{symbDescription}
@@ -2175,7 +2175,7 @@ ${\mathbf{y}_{\text{wt}}}$ & -- & $0.0$ m & 10$\%$
 \\
 ${γ_{\text{dry}}}$ & ${γ_{\text{dry}}}>0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-${γ_{\text{Sat}}}$ & ${γ_{\text{Sat}}}>0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{\text{sat}}}$ & ${γ_{\text{sat}}}>0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
 ${γ_{w}}$ & ${γ_{w}}>0$ & $9.8\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
@@ -2254,7 +2254,7 @@ ${\mathbf{y}_{\text{wt}}}$ & Y-coordinates of the water table & m
 \\
 ${γ_{\text{dry}}}$ & Soil dry unit weight & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-${γ_{\text{Sat}}}$ & Soil saturated unit weight & $\frac{\text{N}}{\text{m}^{3}}$
+${γ_{\text{sat}}}$ & Soil saturated unit weight & $\frac{\text{N}}{\text{m}^{3}}$
 \\
 ${γ_{w}}$ & Unit weight of water & $\frac{\text{N}}{\text{m}^{3}}$
 \\

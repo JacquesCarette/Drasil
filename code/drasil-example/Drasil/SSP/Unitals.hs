@@ -91,48 +91,48 @@ fs, coords :: ConstrConcept
 
 slopeDist = uqc "x_slope,i" (cn "x-coordinates of the slope")
   "x-coordinates of points on the soil slope"
-  (sub (vec lX) (Label "slope")) metre Real [] (dbl 0) defaultUncrt
+  (sub (vec lX) lSlope) metre Real [] (dbl 0) defaultUncrt
 
 slopeHght = uqc "y_slope,i" (cn "y-coordinates of the slope")
   "y-coordinates of points on the soil slope"
-  (sub (vec lY) (Label "slope")) metre Real [] (dbl 0) defaultUncrt
+  (sub (vec lY) lSlope) metre Real [] (dbl 0) defaultUncrt
 
 waterDist = uqc "x_wt,i" (cn "x-coordinates of the water table")
   "x-positions of the water table"
-  (sub (vec lX) (Label "wt")) metre Real [] (dbl 0) defaultUncrt
+  (sub (vec lX) lWatTab) metre Real [] (dbl 0) defaultUncrt
 
 waterHght = uqc "y_wt,i" (cn "y-coordinates of the water table")
   "heights of the water table"
-  (sub (vec lY) (Label "wt")) metre Real [] (dbl 0) defaultUncrt
+  (sub (vec lY) lWatTab) metre Real [] (dbl 0) defaultUncrt
 
 xMaxExtSlip = uqc "x_slip^maxExt" (cn "maximum exit x-coordinate")
   "maximum potential x-coordinate for the exit point of a slip surface"
-  (sup (sub lX (Label "slip")) (Label "maxExt")) metre Real [] (dbl 100) 
+  (sup (sub lX lSlip) lMaxExt) metre Real [] (dbl 100) 
   defaultUncrt
 
 xMaxEtrSlip = uqc "x_slip^maxEtr" (cn "maximum entry x-coordinate")
   "maximum potential x-coordinate for the entry point of a slip surface"
-  (sup (sub lX (Label "slip")) (Label "maxEtr")) metre Real [] (dbl 20)
+  (sup (sub lX lSlip) lMaxEtr) metre Real [] (dbl 20)
   defaultUncrt
   
 xMinExtSlip = uqc "x_slip^minExt" (cn "minimum exit x-coordinate")
   "minimum potential x-coordinate for the exit point of a slip surface"
-  (sup (sub lX (Label "slip")) (Label "minExt")) metre Real [] (dbl 50) 
+  (sup (sub lX lSlip) lMinExt) metre Real [] (dbl 50) 
   defaultUncrt
 
 xMinEtrSlip = uqc "x_slip^minEtr" (cn "minimum exit x-coordinate")
   "minimum potential x-coordinate for the entry point of a slip surface"
-  (sup (sub lX (Label "slip")) (Label "minEtr")) metre Real [] (dbl 0) 
+  (sup (sub lX lSlip) lMinEtr) metre Real [] (dbl 0) 
   defaultUncrt
 
 yMaxSlip = uqc "y_slip^max" (cn "maximum y-coordinate") 
   "maximum potential y-coordinate of a point on a slip surface"
-  (supMax (sub lY (Label "slip"))) metre Real [] (dbl 30) 
+  (supMax (sub lY lSlip)) metre Real [] (dbl 30) 
   defaultUncrt
 
 yMinSlip = uqc "y_slip^min" (cn "minimum y-coordinate") 
   "minimum potential y-coordinate of a point on a slip surface"
-  (supMin (sub lY (Label "slip"))) metre Real [] (dbl 0) 
+  (supMin (sub lY lSlip)) metre Real [] (dbl 0) 
   defaultUncrt
 
 effCohesion = uqc "c'" (cn "effective cohesion")
@@ -147,13 +147,13 @@ fricAngle = uqc "varphi'" (cn "effective angle of friction")
 
 dryWeight = uqc "gamma" (cn "soil dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
-  (sub lGamma (Label "dry")) specificWeight Real [gtZeroConstr]
+  (sub lGamma lDry) specificWeight Real [gtZeroConstr]
   (dbl 20000) defaultUncrt
 
 satWeight = uqc "gamma_sat" (cn "soil saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
-  (sub lGamma (Label "Sat")) specificWeight Real [gtZeroConstr]
+  (sub lGamma lSat) specificWeight Real [gtZeroConstr]
   (dbl 20000) defaultUncrt
 
 waterWeight = uqc "gamma_w" (cn "unit weight of water")
@@ -166,7 +166,7 @@ constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f")
   " or half-sine if false")) (const (Variable "const_f")) Boolean Nothing
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (dqd' fsConcept (const $ sub cF (Label "S")) Real Nothing)
+fs = constrained' (dqd' fsConcept (const $ sub cF lSafety) Real Nothing)
   [gtZeroConstr] (dbl 1)
 
 fsMin :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
@@ -180,7 +180,7 @@ coords = cuc' "(x,y)"
   (cn "cartesian position coordinates" )
   ("y is considered parallel to the direction of the force of " ++
   "gravity and x is considered perpendicular to y")
-  (Label "(x,y)") metre Real [] (dbl 1)
+  lCoords metre Real [] (dbl 1)
 
 ---------------------------
 -- START OF UNITALCHUNKS --
@@ -218,11 +218,11 @@ intNormForce = uc' "G_i" (cn "interslice normal forces")
 
 slipHght = uc' "y_slip,i" (cn "y-coordinates of the slip surface")
   "heights of the slip surface"
-  (sub (vec lY) (Label "slip")) metre
+  (sub (vec lY) lSlip) metre
 
 slipDist = uc' "x_slip,i" (cn "x-coordinates of the slip surface")
   "x-coordinates of points on the slip surface"
-  (sub (vec lX) (Label "slip")) metre
+  (sub (vec lX) lSlip) metre
 
 yi = uc' "y_i" (cn "y-coordinate") "in the Cartesian coordinate system" lY metre
   
@@ -234,8 +234,7 @@ zcoord = uc' "z" (cn "z-coordinate") "in the Cartesian coordinate system" lZ met
 -- They have been removed now, but we need a reasonable notation.
 critCoords = uc' "(xcs,ycs)" (cn "the set of x and y coordinates")
   "describe the vertices of the critical slip surface"
-  (Concat [sub (vec lX) (Label "cs"), Label ",",
-  sub (vec lY) (Label "cs")]) metre
+  (Concat [sub (vec lX) lCSlip, Label ",", sub (vec lY) lCSlip]) metre
 
 mobilizedShear = uc' "mobilizedShear" (cn "mobilized shear force")
   "shear force in the direction of potential motion" cS newton
@@ -285,12 +284,12 @@ intShrForce = uc' "X_i" (cn "interslice shear forces")
 
 baseHydroForce = uc' "U_b,i" (cn "base hydrostatic forces")
   "per meter in the z-direction from water pressure within each slice"
-  (sub (vec cU) (Label "b")) forcePerMeterU
+  (sub (vec cU) lBase) forcePerMeterU
 
 surfHydroForce = uc' "U_t,i" (cn "surface hydrostatic forces")
   ("per meter in the z-direction from water pressure acting into each slice " ++
    "from standing water on the slope surface")
-  (sub (vec cU) (Label "g")) forcePerMeterU
+  (sub (vec cU) lSurface) forcePerMeterU
 
 totNrmForce = uc' "N_i" (cn "normal forces")
   ("total reactive forces per meter in the z-direction for each slice of a " ++
@@ -351,17 +350,17 @@ sliceHght = uc' "h_z,i" (cn "heights of interslice normal forces")
 
 sliceHghtW = uc' "h_z,w,i" (cn "heights of the water table")
   ("the heights in the y-direction from the base of each slice to the water" ++
-  "table") (sub (vec lH) (Label "z,w")) metre
+  "table") (sub (vec lH) lHeights) metre
 
 nrmShearNum = uc' "C_num,i" (cn "proportionality constant numerator")
   ("values for each slice that sum together to form the numerator of the " ++
   "interslice normal to shear force proportionality constant")
-  (sub (vec cC) (Label "num")) newton
+  (sub (vec cC) lNum) newton
   
 nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
   ("values for each slice that sum together to form the denominator of the " ++
   "interslice normal to shear force proportionality constant")
-  (sub (vec cC) (Label "den")) newton
+  (sub (vec cC) lDen) newton
 
 fx = uc' "fx" (cn "x-coordinate of the force") "" (subX cF) newton
 
@@ -369,19 +368,19 @@ fy = uc' "fy" (cn "y-coordinate of the force") "" (subY cF) newton
 
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 
   "for each pair of adjacent interslice boundaries"
-  (sup (subX (vec cF)) (Label "G")) newton
+  (sup (subX (vec cF)) labelG) newton
 
 watForceSum = uc' "F_x^H" (cn "sums of the interslice normal water forces") 
   "for each pair of adjacent interslice boundaries"
-  (sup (subX (vec cF)) (Label "H")) newton
+  (sup (subX (vec cF)) labelH) newton
 
 sliceHghtRight = uc' "h^R" (cn "heights of the right side of slices") 
   "assuming slice surfaces have negative slope"
-  (sup (vec lH) (Label "R")) metre
+  (sup (vec lH) lRight) metre
 
 sliceHghtLeft = uc' "h^L" (cn "heights of the left side of slices") 
   "assuming slice surfaces have negative slope"
-  (sup (vec lH) (Label "L")) metre
+  (sup (vec lH) lLeft) metre
 
 totStress = uc' "sigma" (cn' "total stress")
   "on the soil mass" lSigma pascal
@@ -394,14 +393,14 @@ effNormStress = uc' "sigmaN'" (cn' "effective normal stress")
 
 dryVol = uc' "V_dry" (cn "volumes of dry soil")
   "amount of space occupied by dry soil for each slice"
-  (sub (vec cV) (Label "dry")) m_3
+  (sub (vec cV) lDry) m_3
 
 satVol = uc' "V_sat" (cn "volumes of saturated soil")
   "amount of space occupied by saturated soil for each slice"
-  (sub (vec cV) (Label "sat")) m_3
+  (sub (vec cV) lSat) m_3
 
 rotForce = uc' "F_rot" (cn "force causing rotation") 
-  "a force in the direction of rotation" (sub cF (Label "rot")) newton
+  "a force in the direction of rotation" (sub cF lRot) newton
   
 momntArm = uc' "r" (cn' "length of the moment arm") 
   "distance between a force causing rotation and the axis of rotation"
@@ -421,7 +420,7 @@ earthqkLoadFctr, normToShear, scalFunc, numbSlices,
 earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP "seismic coefficient")
   ("proportionality factor of force that " ++
   "weight pushes outwards; caused by seismic earth movements"))
-  (const $ sub cK (Label "c")) Real Nothing 
+  (const $ sub cK labelC) Real Nothing 
 
 normToShear = dqd' (dcc "lambda"
   (nounPhraseSP "proportionality constant")
@@ -481,3 +480,32 @@ inx e n
 
 sum1toN :: Expr -> Expr
 sum1toN = defsum (eqSymb index) 1 (sy numbSlices)
+
+-- Labels
+
+labelC, labelG, labelH, lBase, lCoords, lCSlip, lDen, lDry, lHeights, lLeft,
+  lMaxEtr, lMaxExt, lMinEtr, lMinExt, lNum, lRight, lRot, lSafety, lSat, lSlip,
+  lSlope, lSurface, lWatTab :: Symbol
+labelC   = Label "c"
+labelG   = Label "G"
+labelH   = Label "H"
+lBase    = Label "b"
+lCoords  = Label "(x,y)"
+lCSlip   = Label "cs"
+lDen     = Label "den"
+lDry     = Label "dry"
+lHeights = Label "z,w"
+lLeft    = Label "L"
+lMaxEtr  = Label "maxEtr"
+lMaxExt  = Label "maxExt"
+lMinEtr  = Label "minEtr"
+lMinExt  = Label "minExt"
+lNum     = Label "num"
+lRight   = Label "R"
+lRot     = Label "rot"
+lSafety  = Label "S"
+lSat     = Label "sat"
+lSlip    = Label "slip"
+lSlope   = Label "slope"
+lSurface = Label "g"
+lWatTab  = Label "wt"

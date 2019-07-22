@@ -472,16 +472,16 @@ genCalcBlock t v st e
 
 genCaseBlock :: (RenderSym repr) => CalcType -> String -> repr (StateType repr) 
   -> Completeness -> [(Expr,Relation)] -> Reader (State repr) (repr (Block repr))
-genCaseBlock _ _ _ _ [] = error "Case expression with no cases encountered " ++
-  "in code generator"
+genCaseBlock _ _ _ _ [] = error $ "Case expression with no cases encountered" ++
+  " in code generator"
 genCaseBlock t v st c cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) calcBody e) ifEs c
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (calcBody e)) (ifEs c)
   els <- elseE c
   return $ block [ifCond ifs els]
   where calcBody e = fmap body $ liftS $ genCalcBlock t v st e
         ifEs Complete = init cs
         ifEs Incomplete = cs
-        elseE Complete = calcBody $ last cs
+        elseE Complete = calcBody $ fst $ last cs
         elseE Incomplete = return $ oneLiner $ throw $  
           "Undefined case encountered in function " ++ v
 

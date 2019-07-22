@@ -285,12 +285,12 @@ intShrForce = uc' "X_i" (cn "interslice shear forces")
 
 baseHydroForce = uc' "U_b,i" (cn "base hydrostatic forces")
   "per meter in the z-direction from water pressure within each slice"
-  (sub (vec cU) lB) forcePerMeterU
+  (sub (vec cU) (Label "b")) forcePerMeterU
 
 surfHydroForce = uc' "U_t,i" (cn "surface hydrostatic forces")
   ("per meter in the z-direction from water pressure acting into each slice " ++
    "from standing water on the slope surface")
-  (sub (vec cU) lT) forcePerMeterU
+  (sub (vec cU) (Label "g")) forcePerMeterU
 
 totNrmForce = uc' "N_i" (cn "normal forces")
   ("total reactive forces per meter in the z-direction for each slice of a " ++
@@ -347,7 +347,7 @@ shrStress = uc' "tau_i" (cn "shear strength") "" lTau pascal
 
 sliceHght = uc' "h_z,i" (cn "heights of interslice normal forces")
   "the heights in the y-direction of the interslice normal forces on each slice"
-  (sub (vec lH) lZ) metre
+  (subZ (vec lH)) metre
 
 sliceHghtW = uc' "h_z,w,i" (cn "heights of the water table")
   ("the heights in the y-direction from the base of each slice to the water" ++
@@ -363,27 +363,25 @@ nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) (Label "den")) newton
 
-fx = uc' "fx" (cn "x-coordinate of the force") ""
-  (sub cF lX) newton
+fx = uc' "fx" (cn "x-coordinate of the force") "" (subX cF) newton
 
-fy = uc' "fy" (cn "y-coordinate of the force") ""
-  (sub cF lY) newton
+fy = uc' "fy" (cn "y-coordinate of the force") "" (subY cF) newton
 
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 
   "for each pair of adjacent interslice boundaries"
-  (sup (subX (vec cF)) cG) newton
+  (sup (subX (vec cF)) (Label "G")) newton
 
 watForceSum = uc' "F_x^H" (cn "sums of the interslice normal water forces") 
   "for each pair of adjacent interslice boundaries"
-  (sup (subX (vec cF)) cH) newton
+  (sup (subX (vec cF)) (Label "H")) newton
 
 sliceHghtRight = uc' "h^R" (cn "heights of the right side of slices") 
   "assuming slice surfaces have negative slope"
-  (sup (vec lH) cR) metre
+  (sup (vec lH) (Label "R")) metre
 
 sliceHghtLeft = uc' "h^L" (cn "heights of the left side of slices") 
   "assuming slice surfaces have negative slope"
-  (sup (vec lH) cL) metre
+  (sup (vec lH) (Label "L")) metre
 
 totStress = uc' "sigma" (cn' "total stress")
   "on the soil mass" lSigma pascal
@@ -423,7 +421,7 @@ earthqkLoadFctr, normToShear, scalFunc, numbSlices,
 earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP "seismic coefficient")
   ("proportionality factor of force that " ++
   "weight pushes outwards; caused by seismic earth movements"))
-  (const $ sub cK lC) Real Nothing 
+  (const $ sub cK (Label "c")) Real Nothing 
 
 normToShear = dqd' (dcc "lambda"
   (nounPhraseSP "proportionality constant")

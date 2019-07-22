@@ -74,27 +74,32 @@ weight               = uc CP.weight cW newton
 xDist = uc CP.xDist (subX lR) metre
 yDist = uc CP.yDist (subY lR) metre
 
-iPos = uc CP.iPos (sup lP lI) metre
+iPos = uc CP.iPos (sup lP initial) metre
 xPos = uc CP.xPos (subX lP) metre
 yPos = uc CP.yPos (subY lP) metre
 
-ixPos = uc CP.ixPos (sup (subX lP) lI) metre
-iyPos = uc CP.iyPos (sup (subY lP) lI) metre
+ixPos = uc CP.ixPos (sup (subX lP) initial) metre
+iyPos = uc CP.iyPos (sup (subY lP) initial) metre
 
-fSpeed = uc CP.fSpeed (sup lV lF) velU
-iSpeed = uc CP.iSpeed (sup lV lI) velU
+fSpeed = uc CP.fSpeed (sup lV final) velU
+iSpeed = uc CP.iSpeed (sup lV initial) velU
 
-fVel = uc CP.fVel (sup (vec lV) lF) velU
-iVel = uc CP.iVel (sup (vec lV) lI) velU
+fVel = uc CP.fVel (sup (vec lV) final) velU
+iVel = uc CP.iVel (sup (vec lV) initial) velU
 xVel = uc CP.xVel (subX lV) velU
 yVel = uc CP.yVel (subY lV) velU
 
-ixVel = uc CP.ixVel (sup (subX lV) lI) velU
-iyVel = uc CP.iyVel (sup (subY lV) lI) velU
+ixVel = uc CP.ixVel (sup (subX lV) initial) velU
+iyVel = uc CP.iyVel (sup (subY lV) initial) velU
 
 xAccel = uc CP.xAccel (subX lA) accelU
 yAccel = uc CP.yAccel (subY lA) accelU
 
-constAccelV = uc CP.constAccelV (sup (vec  lA) lC) accelU
-xConstAccel = uc CP.xConstAccel (sup (subX lA) lC) accelU
-yConstAccel = uc CP.yConstAccel (sup (subY lA) lC) accelU
+constAccelV = uc CP.constAccelV (sup (vec  lA) constant) accelU
+xConstAccel = uc CP.xConstAccel (sup (subX lA) constant) accelU
+yConstAccel = uc CP.yConstAccel (sup (subY lA) constant) accelU
+
+constant, final, initial :: Symbol
+constant = Label "c"
+final    = Label "f"
+initial  = Label "i"

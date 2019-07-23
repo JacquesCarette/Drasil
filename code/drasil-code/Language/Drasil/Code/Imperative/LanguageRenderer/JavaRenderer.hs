@@ -11,17 +11,18 @@ import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..))
+  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..),
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
   NameOpts(NameOpts), packSep)
-import Language.Drasil.Code.Imperative.LanguageRenderer ( 
+import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
   boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
@@ -43,9 +44,10 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
   moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
   setMain, setMainMethod, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
-  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, TypeData(..), 
-  td, ValData(..), vd, VarData(..), vard)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..), 
+  fileD, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, ParamData(..), pd, TypeData(..), td, ValData(..), vd, 
+  VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType)
@@ -83,24 +85,25 @@ instance Monad JavaCode where
   JC x >>= f = f x
 
 instance PackageSym JavaCode where
-  type Package JavaCode = ([ModData], Label)
+  type Package JavaCode = ([FileData], Label)
   packMods n ms = liftPairFst (mapM (liftA2 (packageDocD n) endStatement) mods, n)
-    where mods = filter (not . isEmpty . modDoc . unJC) ms
+    where mods = filter (not . isEmpty . modDoc . fileMod . unJC) ms
 
 instance RenderSym JavaCode where
-  type RenderFile JavaCode = ModData
-  fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (liftA2 emptyIfEmpty (fmap modDoc code) $
-      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+  type RenderFile JavaCode = FileData
+  fileDoc code = liftA2 fileD (fmap (addExt "java" . name) code) (liftA2 
+    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
+    (top code) (fmap modDoc code) bottom) code)
+
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName 
+    (fmap fileMod m)) jExt) m
+
+  commentedMod cmt m = liftA2 updateFileMod (liftA2 updateModDoc
+    (liftA2 commentedItem cmt (fmap (modDoc . fileMod) m)) (fmap fileMod m)) m
+
+instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
-
-  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) jExt) m
-
-  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
-    (liftA2 commentedItem cmt (fmap modDoc m))
-
-  moduleName m = name (unJC m)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -260,12 +263,6 @@ instance ValueSym JavaCode where
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
   enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
   
-  inputFunc = liftA2 mkVal (obj "Scanner") (return $ parens (
-    text "new Scanner(System.in)"))
-  printFunc = liftA2 mkVal void (return $ text "System.out.print")
-  printLnFunc = liftA2 mkVal void (return $ text "System.out.println")
-  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "print") f)
-  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "println") f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
   valueType = fmap valType
@@ -324,6 +321,16 @@ instance ValueExpression JavaCode where
   notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf (var 
     "null" (fmap valType v))))
 
+instance InternalValue JavaCode where
+  inputFunc = liftA2 mkVal (obj "Scanner") (return $ parens (
+    text "new Scanner(System.in)"))
+  printFunc = liftA2 mkVal void (return $ text "System.out.print")
+  printLnFunc = liftA2 mkVal void (return $ text "System.out.println")
+  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "print") f)
+  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "println") f)
+  
+  cast = jCast
+
 instance Selector JavaCode where
   objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
   ($.) = objAccess
@@ -339,20 +346,9 @@ instance Selector JavaCode where
 
   indexOf l v = objAccess l (func "indexOf" int [v])
 
-  cast = jCast
-
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
-
-  listSizeFunc = func "size" int []
-  listAddFunc _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
-  listAppendFunc v = func "add" (listType static_ $ fmap valType v) [v]
-
-  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Java, but Java has no iterators"
-  iterEndFunc _ = error "Attempt to use iterEndFunc in Java, but Java has no iterators"
 
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
@@ -365,14 +361,31 @@ instance FunctionSym JavaCode where
   iterEnd v = v $. iterEndFunc (valueType v)
 
 instance SelectorFunction JavaCode where
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (valueOf $ var l int)
+
+instance InternalFunction JavaCode where
+  getFunc v = func (getterName $ variableName v) (variableType v) []
+  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+
+  listSizeFunc = func "size" int []
+  listAddFunc _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
+  listAppendFunc v = func "add" (listType static_ $ fmap valType v) [v]
+
+  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Java, but Java has no iterators"
+  iterEndFunc _ = error "Attempt to use iterEndFunc in Java, but Java has no iterators"
+  
   listAccessFunc t i = func "get" t [intValue i]
   listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
 
   atFunc t l = listAccessFunc t (valueOf $ var l int)
 
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (valueOf $ var l int)
+instance InternalStatement JavaCode where
+  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
+
+  state = fmap statementDocD
+  loopState = fmap (statementDocD . setEmpty)
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
@@ -398,8 +411,6 @@ instance StatementSym JavaCode where
     [])
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
-
-  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
 
   print v = outDoc False printFunc v Nothing
   printLn v = outDoc True printLnFunc v Nothing
@@ -456,8 +467,6 @@ instance StatementSym JavaCode where
   inOutCall = jInOutCall funcApp
   extInOutCall m = jInOutCall (extFuncApp m)
 
-  state = fmap statementDocD
-  loopState = fmap (statementDocD . setEmpty)
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym JavaCode where
@@ -498,6 +507,7 @@ instance ScopeSym JavaCode where
   private = return privateDocD
   public = return publicDocD
 
+instance InternalScope JavaCode where
   includeScope s = s
 
 instance MethodTypeSym JavaCode where
@@ -592,6 +602,8 @@ instance ModuleSym JavaCode where
   buildModule n _ ms cs = fmap (md n (any (isMainMthd . unJC) ms || 
     any (snd . unJC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
+
+  moduleName m = name (unJC m)
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc

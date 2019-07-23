@@ -4,14 +4,15 @@ module Language.Drasil.Code.Imperative.Symantics (
   -- Types
   Label, Library,
   -- Typeclasses
-  PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), ControlBlockSym(..), BlockSym(..), StateTypeSym(..), 
-  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..)
+  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..), 
+  PermanenceSym(..), BodySym(..), ControlBlockSym(..), BlockSym(..), 
+  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..)
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -24,18 +25,19 @@ class (RenderSym repr) => PackageSym repr where
   type Package repr 
   packMods :: Label -> [repr (RenderFile repr)] -> repr (Package repr)
 
-class (ModuleSym repr, ControlBlockSym repr) => RenderSym repr where
+class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) => 
+  RenderSym repr where 
   type RenderFile repr
   fileDoc :: repr (Module repr) -> repr (RenderFile repr)
-  top :: repr (Module repr) -> repr (Block repr)
-  bottom :: repr (Block repr)
 
   docMod :: String -> repr (RenderFile repr) -> repr (RenderFile repr)
 
   commentedMod :: repr (BlockComment repr) -> repr (RenderFile repr) ->
     repr (RenderFile repr)
 
-  moduleName :: repr (RenderFile repr) -> String
+class (ModuleSym repr) => InternalFile repr where
+  top :: repr (Module repr) -> repr (Block repr)
+  bottom :: repr (Block repr)
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   type Keyword repr
@@ -186,11 +188,6 @@ class (VariableSym repr, StateVarSym repr) => ValueSym repr where
   arg          :: Integer -> repr (Value repr)
   enumElement  :: Label -> Label -> repr (Value repr)
 
-  inputFunc :: repr (Value repr)
-  printFunc       :: repr (Value repr)
-  printLnFunc     :: repr (Value repr)
-  printFileFunc   :: repr (Value repr) -> repr (Value repr)
-  printFileLnFunc :: repr (Value repr) -> repr (Value repr)
   argsList  :: repr (Value repr)
 
   valueType :: repr (Value repr) -> repr (StateType repr)
@@ -279,6 +276,15 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
   exists  :: repr (Value repr) -> repr (Value repr)
   notNull :: repr (Value repr) -> repr (Value repr)
 
+class (ValueExpression repr) => InternalValue repr where
+  inputFunc       :: repr (Value repr)
+  printFunc       :: repr (Value repr)
+  printLnFunc     :: repr (Value repr)
+  printFileFunc   :: repr (Value repr) -> repr (Value repr)
+  printFileLnFunc :: repr (Value repr) -> repr (Value repr)
+
+  cast :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr)
+
 -- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,
 -- but really one might want one of these values as part of an expression, so the
 -- constraint would have to go both ways. I'm not sure what the solution is for
@@ -303,23 +309,10 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
   indexOf :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
-  cast :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr)
-
 class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   type Function repr
   func           :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Function repr)
-  getFunc        :: repr (Variable repr) -> repr (Function repr)
-  setFunc        :: repr (StateType repr) -> repr (Variable repr) -> 
-    repr (Value repr) -> repr (Function repr)
-
-  listSizeFunc       :: repr (Function repr)
-  listAddFunc        :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Value repr) -> repr (Function repr)
-  listAppendFunc         :: repr (Value repr) -> repr (Function repr)
-
-  iterBeginFunc :: repr (StateType repr) -> repr (Function repr)
-  iterEndFunc   :: repr (StateType repr) -> repr (Function repr)
 
   get :: repr (Value repr) -> repr (Variable repr) -> repr (Value repr)
   set :: repr (Value repr) -> repr (Variable repr) -> repr (Value repr) -> 
@@ -333,8 +326,26 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   iterBegin :: repr (Value repr) -> repr (Value repr)
   iterEnd   :: repr (Value repr) -> repr (Value repr)
 
-class (ValueSym repr, FunctionSym repr, Selector repr) => 
+class (ValueSym repr, InternalValue repr, FunctionSym repr, Selector repr) => 
   SelectorFunction repr where
+  listAccess :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
+  listSet    :: repr (Value repr) -> repr (Value repr) -> 
+    repr (Value repr) -> repr (Value repr)
+  at         :: repr (Value repr) -> Label -> repr (Value repr)
+
+class (ValueSym repr, InternalValue repr) => InternalFunction repr where
+  getFunc        :: repr (Variable repr) -> repr (Function repr)
+  setFunc        :: repr (StateType repr) -> repr (Variable repr) -> 
+    repr (Value repr) -> repr (Function repr)
+
+  listSizeFunc       :: repr (Function repr)
+  listAddFunc        :: repr (Value repr) -> repr (Value repr) -> 
+    repr (Value repr) -> repr (Function repr)
+  listAppendFunc         :: repr (Value repr) -> repr (Function repr)
+
+  iterBeginFunc :: repr (StateType repr) -> repr (Function repr)
+  iterEndFunc   :: repr (StateType repr) -> repr (Function repr)
+
   listAccessFunc :: repr (StateType repr) -> repr (Value repr) -> 
     repr (Function repr)
   listSetFunc    :: repr (Value repr) -> repr (Value repr) -> 
@@ -342,13 +353,16 @@ class (ValueSym repr, FunctionSym repr, Selector repr) =>
 
   atFunc :: repr (StateType repr) -> Label -> repr (Function repr)
 
-  listAccess :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
-  listSet    :: repr (Value repr) -> repr (Value repr) -> 
-    repr (Value repr) -> repr (Value repr)
-  at         :: repr (Value repr) -> Label -> repr (Value repr)
+class (Selector repr) => InternalStatement repr where
+  -- newLn, printFunc, value to print, maybe a file to print to 
+  printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> 
+    Maybe (repr (Value repr)) -> repr (Statement repr)
 
-class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr) 
-  => StatementSym repr where
+  state     :: repr (Statement repr) -> repr (Statement repr)
+  loopState :: repr (Statement repr) -> repr (Statement repr)
+
+class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
+  InternalFunction repr, InternalStatement repr) => StatementSym repr where
   type Statement repr
   (&=)   :: repr (Variable repr) -> repr (Value repr) -> repr (Statement repr)
   infixr 1 &=
@@ -384,10 +398,6 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   extObjDecNewVoid :: Library -> repr (Variable repr) -> repr (Statement repr)
   constDecDef      :: repr (Variable repr) -> repr (Value repr) -> 
     repr (Statement repr)
-
-  -- newLn, printFunc, value to print, maybe a file to print to 
-  printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> 
-    Maybe (repr (Value repr)) -> repr (Statement repr)
 
   print      :: repr (Value repr) -> repr (Statement repr)
   printLn    :: repr (Value repr) -> repr (Statement repr)
@@ -453,8 +463,6 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr)
   extInOutCall :: Library -> Label -> [repr (Value repr)] ->
     [repr (Variable repr)] -> repr (Statement repr)
 
-  state     :: repr (Statement repr) -> repr (Statement repr)
-  loopState :: repr (Statement repr) -> repr (Statement repr)
   multi     :: [repr (Statement repr)] -> repr (Statement repr)
 
 class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
@@ -492,6 +500,7 @@ class ScopeSym repr where
   private :: repr (Scope repr)
   public  :: repr (Scope repr)
 
+class (ScopeSym repr) => InternalScope repr where
   includeScope :: repr (Scope repr) -> repr (Scope repr)
 
 class MethodTypeSym repr where
@@ -546,8 +555,8 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
 
   parameters :: repr (Method repr) -> [repr (Parameter repr)]
 
-class (ScopeSym repr, PermanenceSym repr, StateTypeSym repr) => 
-  StateVarSym repr where
+class (ScopeSym repr, InternalScope repr, PermanenceSym repr, StateTypeSym repr)
+   => StateVarSym repr where
   type StateVar repr
   stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr) -> repr (StateVar repr)
@@ -576,6 +585,8 @@ class (ClassSym repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Library] -> [repr (Method repr)] -> 
     [repr (Class repr)] -> repr (Module repr)
+    
+  moduleName :: repr (Module repr) -> String
     
 class BlockCommentSym repr where
   type BlockComment repr

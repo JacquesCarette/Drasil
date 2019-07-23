@@ -11,15 +11,16 @@ import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), ValueSym(..), 
-  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (
+  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, printDoc, outDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD, 
@@ -43,9 +44,10 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
   docFuncRepr, valList, surroundBody, getterName, setterName, setMain, 
   setMainMethod,setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..),  
-  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, updateParamDoc, 
-  TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..), 
+  fileD, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, ParamData(..), pd, updateParamDoc, TypeData(..), td,
+  ValData(..), vd, updateValDoc, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
   liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
   getInnerType, convType)
@@ -78,24 +80,25 @@ instance Monad CSharpCode where
   CSC x >>= f = f x
 
 instance PackageSym CSharpCode where
-  type Package CSharpCode = ([ModData], Label)
+  type Package CSharpCode = ([FileData], Label)
   packMods n ms = liftPairFst (sequence mods, n)
-    where mods = filter (not . isEmpty . modDoc . unCSC) ms
+    where mods = filter (not . isEmpty . modDoc . fileMod . unCSC) ms
 
 instance RenderSym CSharpCode where
-  type RenderFile CSharpCode = ModData
-  fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (liftA2 emptyIfEmpty (fmap modDoc code) $
-      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+  type RenderFile CSharpCode = FileData
+  fileDoc code = liftA2 fileD (fmap (addExt "cs" . name) code) (liftA2 
+    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
+    (top code) (fmap modDoc code) bottom) code)
+
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName 
+    (fmap fileMod m)) csExt) m
+
+  commentedMod cmt m = liftA2 updateFileMod (liftA2 updateModDoc
+    (liftA2 commentedItem cmt (fmap (modDoc . fileMod) m)) (fmap fileMod m)) m
+
+instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
-
-  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) csExt) m
-
-  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
-    (liftA2 commentedItem cmt (fmap modDoc m))
-    
-  moduleName m = name (unCSC m)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
@@ -256,11 +259,6 @@ instance ValueSym CSharpCode where
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
   enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
   
-  inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")
-  printFunc = liftA2 mkVal void (return $ text "Console.Write")
-  printLnFunc = liftA2 mkVal void (return $ text "Console.WriteLine")
-  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "Write") f)
-  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "WriteLine") f)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
   valueType = fmap valType
@@ -319,6 +317,15 @@ instance ValueExpression CSharpCode where
   notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf (var
     "null" (fmap valType v))))
 
+instance InternalValue CSharpCode where
+  inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")
+  printFunc = liftA2 mkVal void (return $ text "Console.Write")
+  printLnFunc = liftA2 mkVal void (return $ text "Console.WriteLine")
+  printFileFunc f = liftA2 mkVal void (fmap (printFileDocD "Write") f)
+  printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "WriteLine") f)
+  
+  cast = csCast
+
 instance Selector CSharpCode where
   objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
   ($.) = objAccess
@@ -334,20 +341,9 @@ instance Selector CSharpCode where
 
   indexOf l v = objAccess l (func "IndexOf" int [v])
 
-  cast = csCast
-
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
-
-  listSizeFunc = liftA2 fd int (fmap funcDocD (valueOf (var "Count" int)))
-  listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
-  listAppendFunc v = func "Add" (fmap valType v) [v]
-
-  iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
-  iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
 
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
@@ -360,15 +356,32 @@ instance FunctionSym CSharpCode where
   iterEnd v = v $. iterEndFunc (valueType v)
 
 instance SelectorFunction CSharpCode where
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (valueOf $ var l int)
+
+instance InternalFunction CSharpCode where
+  getFunc v = func (getterName $ variableName v) (variableType v) []
+  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+
+  listSizeFunc = liftA2 fd int (fmap funcDocD (valueOf (var "Count" int)))
+  listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
+  listAppendFunc v = func "Add" (fmap valType v) [v]
+
+  iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
+  iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
+
   listAccessFunc t v = liftA2 fd t (listAccessFuncDocD <$> intValue v)
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD (intValue i) toVal)
 
   atFunc t l = listAccessFunc t (valueOf $ var l int)
 
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (valueOf $ var l int)
+instance InternalStatement CSharpCode where
+  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
+  
+  state = fmap statementDocD
+  loopState = fmap (statementDocD . setEmpty)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
@@ -393,8 +406,6 @@ instance StatementSym CSharpCode where
     [])
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
-
-  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
 
   print v = outDoc False printFunc v Nothing
   printLn v = outDoc True printLnFunc v Nothing
@@ -449,8 +460,6 @@ instance StatementSym CSharpCode where
   inOutCall = csInOutCall funcApp
   extInOutCall m = csInOutCall (extFuncApp m)
 
-  state = fmap statementDocD
-  loopState = fmap (statementDocD . setEmpty)
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym CSharpCode where
@@ -492,6 +501,7 @@ instance ScopeSym CSharpCode where
   private = return privateDocD
   public = return publicDocD
 
+instance InternalScope CSharpCode where
   includeScope s = s
 
 instance MethodTypeSym CSharpCode where
@@ -577,6 +587,8 @@ instance ModuleSym CSharpCode where
   buildModule n _ ms cs = fmap (md n (any (isMainMthd . unCSC) ms || 
     any (snd . unCSC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
+    
+  moduleName m = name (unCSC m)
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc

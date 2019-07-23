@@ -505,7 +505,7 @@ nrmShrFDenRel = inxi nrmShearDen $= incompleteCase [
     inxiM1 scalFunc  * inxiM1 intNormForce),
     2 $<= sy index $<= (sy numbSlices - 1)),
   (indxn baseWthX * idx (sy intNormForce) (sy numbSlices - 1) *
-    idx (sy scalFunc) (sy numbSlices - 1), sy index $= 1)
+    idx (sy scalFunc) (sy numbSlices - 1), sy index $= sy numbSlices)
   ]
 
 nrmShrFDenDeriv :: Derivation

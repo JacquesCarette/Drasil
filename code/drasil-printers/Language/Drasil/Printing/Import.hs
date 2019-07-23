@@ -313,35 +313,6 @@ renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums i)
 renderCitInfo (Page     [x]) = sParen (S "pg." +:+ S (show x))
 renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums i)
 
--- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and 13")
-foldNums :: [Int] -> Sentence
-foldNums x = foldlList Comma List $ map S (numbers x)
-
--- | Helper for foldNums
-numbers :: [Int] -> [String]
-numbers []  = error "Empty list when making reference with additional information"
-numbers [x] = [show x]
-numbers [x, y]
-  | y == x + 1 = [hyp x y]
-  | otherwise  = map show [x, y]
-numbers (x:y:xs)
-  | y == x + 1 = range x y xs
-  | otherwise  = show x : numbers (y:xs)
-
--- | Helper for foldNums
-range :: Int -> Int -> [Int] -> [String]
-range a b []   = [hyp a b]
-range a b [x]
-  | x == b + 1 = [hyp a x]
-  | otherwise  = [hyp a b, show x]
-range a b (x:xs)
-  | x == b + 1 = range a x xs
-  | otherwise  = hyp a b : numbers (x:xs)
-
--- | Helper for foldNums
-hyp :: Int -> Int -> String
-hyp a b = show a ++ "-" ++ show b
-
 -- | Translates from Document to the Printing representation of Document
 makeDocument :: PrintingInformation -> Document -> T.Document
 makeDocument sm (Document titleLb authorName sections) =

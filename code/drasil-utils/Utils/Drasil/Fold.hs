@@ -1,7 +1,7 @@
 {-# Language TypeFamilies #-}
-module Utils.Drasil.Fold (EnumType(..), WrapType(..), SepType(..),
-  FoldType(..), foldConstraints, foldlEnumList, foldlList, foldlSP,
-  foldlSP_, foldlSPCol, foldlSent, foldlSent_, foldlSentCol, foldlsC) where
+module Utils.Drasil.Fold (EnumType(..), WrapType(..), SepType(..), FoldType(..),
+  foldConstraints, foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol,
+  foldlSent, foldlSent_, foldlSentCol, foldlsC, foldNums, numList) where
 
 import Language.Drasil
 import Utils.Drasil.Sentence (sAnd, sOr)
@@ -66,9 +66,9 @@ data FoldType = List   | Options
 
 -- | creates an list of elements with "enumerators" in "wrappers" using foldlList
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
-foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (numList e w $ length lst) lst
+foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (enumList e w $ length lst) lst
   where
-    numList enum wt len = map (wrap wt . S) (take len (chList enum))
+    enumList enum wt len = map (wrap wt . S) (take len (chList enum))
     chList Numb  = map show ([1..] :: [Integer])
     chList Upper = map show ['A'..'Z']
     chList Lower = map show ['a'..'z']
@@ -89,3 +89,30 @@ end Options = sOr
 sep :: SepType -> (Sentence -> Sentence -> Sentence)
 sep Comma   = sC
 sep SemiCol = \a b -> a :+: S ";" +:+ b
+
+-- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and 13")
+foldNums :: [Int] -> Sentence
+foldNums x = foldlList Comma List $ map S (numList x)
+
+-- | Parses a list of integers into a list of strings (ie. ["1", "4-7", "13"])
+numList :: [Int] -> [String]
+numList []  = error "Empty list used with foldNums"
+numList [y] = [show y]
+numList [y, z]
+  | z == y + 1 = [hyp y z]
+  | otherwise  = map show [y, z]
+numList (y:z:xs)
+  | z == y + 1 = range y z xs
+  | otherwise  = show y : numList (z:xs)
+  where
+    range a b []   = [hyp a b]
+    range a b [n]
+      | n == b + 1 = [hyp a n]
+      | otherwise  = [hyp a b, show n]
+    range a b (n:ns)
+      | n == b + 1 = range a n ns
+      | otherwise  = hyp a b : numList (n:ns)
+
+-- | Helper for numList that hypenates
+hyp :: Int -> Int -> String
+hyp p q = show p ++ "-" ++ show q

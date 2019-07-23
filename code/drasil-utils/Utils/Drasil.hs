@@ -6,7 +6,7 @@ module Utils.Drasil (
   -- Fold
   EnumType(..), WrapType(..), SepType(..), FoldType(..), foldConstraints,
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
-  foldlSent_,foldlSentCol, foldlsC,
+  foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
   -- Misc
   addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart,
   displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple, enumSimpleU,

@@ -12,7 +12,8 @@ import qualified Language.Drasil as L (
   RenderSpecial(..), People, rendPersLFM,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document, special, USymb(US))
--- import Utils.Drasil (checkValidStr)
+import Utils.Drasil (foldNums)
+--import Utils.Drasil (checkValidStr, foldNums)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -505,7 +506,7 @@ showBibTeX  _ (Month        m) = showField "month" (bibTeXMonth m)
 showBibTeX  _ (Note         n) = showField "note" n
 showBibTeX  _ (Number       n) = showField "number" (wrapS n)
 showBibTeX  _ (Organization o) = showField "organization" o
-showBibTeX  _ (Pages        p) = showField "pages" (pages p)
+showBibTeX sm (Pages        p) = showField "pages" (I.spec sm $ foldNums p)
 showBibTeX  _ (Publisher    p) = showField "publisher" p
 showBibTeX  _ (School       s) = showField "school" s
 showBibTeX  _ (Series       s) = showField "series" s
@@ -546,9 +547,3 @@ bibTeXMonth L.Dec = S "dec"
 
 wrapS :: Show a => a -> Spec
 wrapS = S . show
-
-pages :: [Int] -> Spec
-pages []  = error "Empty list of pages"
-pages [x] = wrapS x
-pages [x,x2] = wrapS $ show x ++ "-" ++ show x2
-pages xs = error $ "Too many pages given in reference. Received: " ++ show xs

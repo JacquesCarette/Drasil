@@ -5,6 +5,7 @@ import Data.List (intercalate, partition, sortBy)
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 import Control.Arrow (second)
+import Utils.Drasil (numList)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
@@ -403,8 +404,7 @@ bookMLA (Year      y) = dot $ text $ show y
 bookMLA (BookTitle s) = dot $ em $ pSpec s
 bookMLA (Journal   s) = comm $ em $ pSpec s
 bookMLA (Pages   [n]) = dot $ text $ "p. " ++ show n
-bookMLA (Pages [a,b]) = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
-bookMLA (Pages     _) = error "Page range specified is empty or has more than two items"
+bookMLA (Pages     n) = dot $ (text "pp. ") <> pages n
 bookMLA (Note      s) = pSpec s
 bookMLA (Number    n) = comm $ text ("no. " ++ show n)
 bookMLA (School    s) = comm $ pSpec s
@@ -420,20 +420,24 @@ bookMLA (Organization i)  = comm $ pSpec i
 bookMLA (Month m)         = comm $ text $ show m
 bookMLA (Type t)          = comm $ pSpec t
 
+pages :: [Int] -> Doc
+pages = pSpec . foldlList . (map S) . (map (concatMap repl)) . numList
+  where
+    repl '-' = "&ndash;"
+    repl  x  = [x]
+
 bookAPA :: CiteField -> Doc --FIXME: year needs to come after author in L.APA
 bookAPA (Author   p) = pSpec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
 bookAPA (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the year
 --bookAPA (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
 --bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
-bookAPA (Pages     [n])  = dot $ text $ show n
-bookAPA (Pages [a,b])    = dot $ text $ show a ++ "&ndash;" ++ show b
-bookAPA (Pages _) = error "Page range specified is empty or has more than two items"
-bookAPA (Editor   p)  = dot $ pSpec (foldlList $ map (S . L.nameStr) p) <> text " (Ed.)"
+bookAPA (Pages    p) = dot $ pages p
+bookAPA (Editor   p) = dot $ pSpec (foldlList $ map (S . L.nameStr) p) <> text " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as L.MLA
 
 bookChicago :: CiteField -> Doc
 bookChicago (Author   p) = pSpec (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
-bookChicago p@(Pages  _) = bookAPA p
+bookChicago (Pages    p) = dot $ pages p
 bookChicago (Editor   p) = dot $ pSpec (foldlList $ map (S . L.nameStr) p) <> text (toPlural p " ed")
 bookChicago i = bookMLA i --Most items are rendered the same as L.MLA
 

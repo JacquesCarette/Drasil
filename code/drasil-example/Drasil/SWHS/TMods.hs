@@ -95,7 +95,7 @@ sensHtESrc = makeURI "sensHtESrc"
 sensHtEEqn :: PhaseChange -> Relation
 sensHtEEqn pChange = sy sensHeat $= case pChange of
   Liquid -> liquidFormula
-  AllPhases -> case_ [(sy htCapS * sy mass * sy deltaT,
+  AllPhases -> incompleteCase [(sy htCapS * sy mass * sy deltaT,
       sy temp $< sy meltPt), (liquidFormula, sy meltPt $< sy temp $<
       sy boilPt), (sy htCapV * sy mass *
       sy deltaT, sy boilPt $< sy temp)]

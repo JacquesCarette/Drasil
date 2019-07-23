@@ -36,11 +36,8 @@ string func_s(InputParameters &inParams, double d_offset) {
     else if ((d_offset < 0)) {
         return "The projectile fell short.";
     }
-    else if ((d_offset > 0)) {
-        return "The projectile went long.";
-    }
     else {
-        throw("Undefined case encountered in function func_s");
+        return "The projectile went long.";
     }
 }
 

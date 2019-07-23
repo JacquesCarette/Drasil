@@ -12,7 +12,7 @@ using std::ofstream;
 class InputParameters {
     public:
         double v_launch;
-        double angle;
+        double theta;
         double p_target;
         
         ~InputParameters();

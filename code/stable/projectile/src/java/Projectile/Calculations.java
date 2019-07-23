@@ -16,14 +16,14 @@ public class Calculations {
         \param inParams No description given
     */
     public static double func_t_flight(InputParameters inParams) throws Exception {
-        return ((2 * (inParams.v_launch * Math.sin(inParams.angle))) / 9.8);
+        return ((2 * (inParams.v_launch * Math.sin(inParams.theta))) / 9.8);
     }
     
     /** \brief Calculates landing position
         \param inParams No description given
     */
     public static double func_p_land(InputParameters inParams) throws Exception {
-        return ((2 * (Math.pow(inParams.v_launch, 2) * (Math.sin(inParams.angle) * Math.cos(inParams.angle)))) / 9.8);
+        return ((2 * (Math.pow(inParams.v_launch, 2) * (Math.sin(inParams.theta) * Math.cos(inParams.theta)))) / 9.8);
     }
     
     /** \brief Calculates distance between the target position and the landing position

@@ -18,11 +18,11 @@ using std::ofstream;
 #include "InputParameters.hpp"
 
 double func_t_flight(InputParameters &inParams) {
-    return ((2 * (inParams.v_launch * sin(inParams.angle))) / 9.8);
+    return ((2 * (inParams.v_launch * sin(inParams.theta))) / 9.8);
 }
 
 double func_p_land(InputParameters &inParams) {
-    return ((2 * (pow(inParams.v_launch, 2) * (sin(inParams.angle) * cos(inParams.angle)))) / 9.8);
+    return ((2 * (pow(inParams.v_launch, 2) * (sin(inParams.theta) * cos(inParams.theta)))) / 9.8);
 }
 
 double func_d_offset(InputParameters &inParams, double p_land) {

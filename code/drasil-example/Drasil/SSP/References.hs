@@ -41,6 +41,6 @@ huston2008 = cBookA [rHuston, hJosephs] "Practical stress analysis in engineerin
   "CRC Press" 2008 [edition 3] "huston2008"
 
 morgenstern1965 = cArticle [nrMorgenstern, vePrice]
-  ("The analysis of the stability of general slip surfaces")
+  "The analysis of the stability of general slip surfaces"
   "Géotechnique" 1965 [month Jan, pages [79..93], number 15]
   "morgenstern1965"

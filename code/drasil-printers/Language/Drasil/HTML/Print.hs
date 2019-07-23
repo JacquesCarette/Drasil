@@ -403,25 +403,24 @@ bookMLA (Year      y) = dot $ text $ show y
 --bookMLA (URLdate d m y) = "Web. " ++ bookMLA (Date d m y) sm
 bookMLA (BookTitle s) = dot $ em $ pSpec s
 bookMLA (Journal   s) = comm $ em $ pSpec s
-bookMLA (Pages   [n]) = dot $ text $ "p. " ++ show n
-bookMLA (Pages     n) = dot $ (text "pp. ") <> pages n
+bookMLA (Pages     p) = dot $ text "pp. " <> pages p
 bookMLA (Note      s) = pSpec s
 bookMLA (Number    n) = comm $ text ("no. " ++ show n)
 bookMLA (School    s) = comm $ pSpec s
 --bookMLA (Thesis     t)  = comm $ show t
 --bookMLA (URL        s)  = dot $ pSpec s
-bookMLA (HowPublished (Verb s)) = comm $ pSpec s
-bookMLA (HowPublished (URL l@(S s))) = dot $ pSpec $ Ref External s l
-bookMLA (HowPublished (URL s))       = dot $ pSpec s
-bookMLA  (Editor     p)    = comm $ text "Edited by " <> pSpec (foldlList (map (S . L.nameStr) p))
-bookMLA (Chapter _)       = text ""
-bookMLA (Institution i)   = comm $ pSpec i
-bookMLA (Organization i)  = comm $ pSpec i
-bookMLA (Month m)         = comm $ text $ show m
-bookMLA (Type t)          = comm $ pSpec t
+bookMLA (HowPublished (Verb s))      = comm $ pSpec s
+bookMLA (HowPublished (URL l@(S s))) = dot  $ pSpec $ Ref External s l
+bookMLA (HowPublished (URL s))       = dot  $ pSpec s
+bookMLA (Editor       p) = comm $ text "Edited by " <> pSpec (foldlList (map (S . L.nameStr) p))
+bookMLA (Chapter      _) = text ""
+bookMLA (Institution  i) = comm $ pSpec i
+bookMLA (Organization i) = comm $ pSpec i
+bookMLA (Month        m) = comm $ text $ show m
+bookMLA (Type         t) = comm $ pSpec t
 
 pages :: [Int] -> Doc
-pages = pSpec . foldlList . (map S) . (map (concatMap repl)) . numList
+pages = pSpec . foldlList . map (S . concatMap repl) . numList
   where
     repl '-' = "&ndash;"
     repl  x  = [x]

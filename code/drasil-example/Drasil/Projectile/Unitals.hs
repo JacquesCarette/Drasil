@@ -69,15 +69,15 @@ offsetUnc    = uq offset    defaultUncrt
 targPosUnc   = uq targPos   defaultUncrt
 
 flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
-flightDur = constrainedNRV' (dqd' flightDurConcept (unitHelper lT "flight") Real (Just second)) [gtZeroConstr]
-landPos   = constrainedNRV' (dqd' landPosConcept   (unitHelper lP "land"  ) Real (Just metre))  [gtZeroConstr]
-launAngle = constrained'    (dqd' launAngleConcept (staged lTheta (Atomic "angle")) Real (Just radian)) [physc $ Bounded (Exc, 0) (Exc, sy pi_ / 2)] (sy pi_ / 4)
-launSpeed = constrained'    (dqd' launSpeedConcept (unitHelper lV "launch") Real (Just velU))   [gtZeroConstr] (int 100)
-offset    = constrainedNRV' (dqd' offsetConcept    (unitHelper lD "offset") Real (Just metre))  [physc $ UpFrom (Exc, negate $ sy landPos) ]
-targPos   = constrained'    (dqd' targPosConcept   (unitHelper lP "target") Real (Just metre))  [gtZeroConstr] (int 1000)
+flightDur = constrainedNRV' (dqd  flightDurConcept (unitHelper lT "flight") Real second)  [gtZeroConstr]
+landPos   = constrainedNRV' (dqd  landPosConcept   (unitHelper lP "land"  ) Real metre)   [gtZeroConstr]
+launAngle = constrained'    (dqd' launAngleConcept (autoStage lTheta) Real (Just radian)) [physc $ Bounded (Exc, 0) (Exc, sy pi_ / 2)] (sy pi_ / 4)
+launSpeed = constrained'    (dqd  launSpeedConcept (unitHelper lV "launch") Real velU)    [gtZeroConstr] (int 100)
+offset    = constrainedNRV' (dqd  offsetConcept    (unitHelper lD "offset") Real metre)   [physc $ UpFrom (Exc, negate $ sy landPos) ]
+targPos   = constrained'    (dqd  targPosConcept   (unitHelper lP "target") Real metre)   [gtZeroConstr] (int 1000)
 
-unitHelper :: Symbol -> String -> (Stage -> Symbol)
-unitHelper sym substr = const $ sub sym $ Atomic substr
+unitHelper :: Symbol -> String -> Symbol
+unitHelper sym substr = sub sym $ Atomic substr
 
 landPosConcept :: ConceptChunk
 landPosConcept = cc' landingPos

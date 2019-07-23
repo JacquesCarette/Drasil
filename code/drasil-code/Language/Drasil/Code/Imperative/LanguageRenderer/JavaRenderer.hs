@@ -49,8 +49,8 @@ import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..),
   MethodData(..), mthd, ParamData(..), pd, TypeData(..), td, ValData(..), vd, 
   VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
-  liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, 
-  liftPairFst, getInnerType, convType)
+  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
+  liftPair, liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -481,8 +481,8 @@ instance ControlStatementSym JavaCode where
     (loopState sInit) vGuard (loopState sUpdate) b
   forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
     (valueOf (var i int) ?< finalv) (var i int &+= stepv)
-  forEach l v b = mkStNoEnd <$> liftA6 (forEachDocD l) blockStart blockEnd
-    iterForEachLabel iterInLabel v b
+  forEach l v b = mkStNoEnd <$> liftA7 (forEachDocD l) blockStart blockEnd
+    iterForEachLabel iterInLabel (listInnerType $ valueType v) v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 jTryCatch tb cb

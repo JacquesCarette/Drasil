@@ -18,6 +18,7 @@ import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
   torqueU, velU)
 
 import Control.Lens((^.))
+import Data.Drasil.Constraints (gtZeroConstr)
 
 defSymbols :: [DefinedQuantityDict]
 defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints ++
@@ -298,12 +299,12 @@ outputConstraints :: [UncertQ]
 outputConstraints = map (`uq` defaultUncrt) 
   [posCons, veloCons, orientCons, angVeloCons]
 
-nonNegativeConstraint :: Constraint -- should be pulled out and put somewhere for generic constraints
-nonNegativeConstraint = physc $ UpFrom (Inc,0)
+-- nonNegativeConstraint :: Constraint -- should be pulled out and put somewhere for generic constraints
+-- nonNegativeConstraint = physc $ UpFrom (Inc,0)
 
-lengthCons     = constrained' QPP.len               [nonNegativeConstraint] (dbl 44.2)
-massCons       = constrained' QPP.mass              [nonNegativeConstraint] (dbl 56.2)
-mmntOfInCons   = constrained' QP.momentOfInertia    [nonNegativeConstraint] (dbl 74.5)
+lengthCons     = constrained' QPP.len               [gtZeroConstr] (dbl 44.2)
+massCons       = constrained' QPP.mass              [gtZeroConstr] (dbl 56.2)
+mmntOfInCons   = constrained' QP.momentOfInertia    [gtZeroConstr] (dbl 74.5)
 gravAccelCons  = constrained' QP.gravitationalConst [] (dbl 9.8)
 posCons        = constrained' QP.position           [] (dbl 0.412) --FIXME: should be (0.412, 0.502) vector
 veloCons       = constrained' QP.velocity           [] (dbl 2.51)

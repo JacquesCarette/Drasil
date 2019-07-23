@@ -7,20 +7,17 @@ module Language.Drasil.Code.CodeGeneration (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.Symantics
-import Language.Drasil.Code.Imperative.Data (ModData(..))
+import Language.Drasil.Code.Imperative.Data (FileData(..), ModData(modDoc))
 
 import Text.PrettyPrint.HughesPJ (Doc,render)
+import System.Directory (createDirectoryIfMissing)
+import System.FilePath.Posix (takeDirectory)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 
--- | Takes code and extensions
-makeCode :: [[ModData]] -> [Label] -> Code
-makeCode files exts = Code
-  [(nm, contents) | (MD nm _ contents) <- concat [map (applyExt ext) files' 
-    | (files', ext) <- zip files exts]]
-
-applyExt :: Label -> ModData -> ModData
-applyExt ext (MD n b d) = MD (n ++ ext) b d
+-- | Takes code
+makeCode :: [[FileData]] -> Code
+makeCode files = Code $ zip (map filePath $ concat files) 
+  (map (modDoc . fileMod) $ concat files)
 
 ------------------
 -- IO Functions --
@@ -33,6 +30,7 @@ createCodeFiles (Code cs) = mapM_ createCodeFile cs
 
 createCodeFile :: (FilePath, Doc) -> IO ()
 createCodeFile (path, code) = do
+  createDirectoryIfMissing True (takeDirectory path)
   h <- openFile path WriteMode
   hPutStrLn h (render code)
   hClose h

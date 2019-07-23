@@ -21,7 +21,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (
+import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDoc,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
   listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
@@ -44,8 +44,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
   setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
-  ScopeTag (..), FuncData(..), fd, ModData(..), md, ParamData(..), pd, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), vard)
+  ScopeTag (..), FileData(..), fileD, updateFileMod, FuncData(..), fd,
+  ModData(..), md, updateModDoc, ParamData(..), pd, StateVarData(..), svd, 
+  TypeData(..), td, ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
@@ -80,19 +81,17 @@ unHdr :: CppCode CppSrcCode CppHdrCode a -> a
 unHdr (CPPC _ (CPPHC a)) = a
 
 instance (Pair p) => PackageSym (p CppSrcCode CppHdrCode) where
-  type Package (p CppSrcCode CppHdrCode) = ([ModData], Label)
+  type Package (p CppSrcCode CppHdrCode) = ([FileData], Label)
   packMods n ms = pair (packMods n (map pfst ms)) (packMods n (map psnd ms))
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
-  type RenderFile (p CppSrcCode CppHdrCode) = ModData
+  type RenderFile (p CppSrcCode CppHdrCode) = FileData
   fileDoc code = pair (fileDoc $ pfst code) (fileDoc $ psnd code)
 
   docMod d m = pair (docMod d $ pfst m) (docMod d $ psnd m)
 
   commentedMod cmt m = pair (commentedMod (pfst cmt) (pfst m)) 
     (commentedMod (psnd cmt) (psnd m))
-
-  moduleName m = moduleName $ pfst m
 
 instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
@@ -604,6 +603,8 @@ instance (Pair p) => ModuleSym (p CppSrcCode CppHdrCode) where
   buildModule n l ms cs = pair (buildModule n l (map pfst ms) (map pfst cs)) 
     (buildModule n l (map psnd ms) (map psnd cs))
 
+  moduleName m = moduleName $ pfst m
+
 instance (Pair p) => BlockCommentSym (p CppSrcCode CppHdrCode) where
   type BlockComment (p CppSrcCode CppHdrCode) = Doc
   blockComment lns = pair (blockComment lns) (blockComment lns)
@@ -627,22 +628,22 @@ instance Monad CppSrcCode where
   CPPSC x >>= f = f x
 
 instance PackageSym CppSrcCode where
-  type Package CppSrcCode = ([ModData], Label)
+  type Package CppSrcCode = ([FileData], Label)
   packMods n ms = liftPairFst (sequence mods, n)
-    where mods = filter (not . isEmpty . modDoc . unCPPSC) ms
+    where mods = filter (not . isEmpty . modDoc . fileMod . unCPPSC) ms
   
 instance RenderSym CppSrcCode where
-  type RenderFile CppSrcCode = ModData
-  fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code)
-    (liftA2 emptyIfEmpty (fmap modDoc code) $
-      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+  type RenderFile CppSrcCode = FileData
+  fileDoc code = liftA2 fileD (fmap (addExt "cpp" . name) code) (liftA2 
+    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
+    (top code) (fmap modDoc code) bottom) code)
 
-  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) cppSrcExt) m
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName 
+    (fmap fileMod m)) cppSrcExt) m
 
-  commentedMod cmt m = if isMainMod (unCPPSC m) then liftA3 md (fmap name m) 
-    (fmap isMainMod m) (liftA2 commentedItem cmt (fmap modDoc m)) else m 
-    
-  moduleName m = name (unCPPSC m)
+  commentedMod cmt m = if (isMainMod . fileMod . unCPPSC) m then liftA2 
+    updateFileMod (liftA2 updateModDoc (liftA2 commentedItem cmt (fmap (modDoc 
+    . fileMod) m)) (fmap fileMod m)) m else m 
 
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
@@ -1172,6 +1173,8 @@ instance ModuleSym CppSrcCode where
     || (all (isEmpty . fst . unCPPSC) cs && not (null l))) && 
     any (not . isEmpty . mthdDoc . unCPPSC) ms then return blank else 
     return empty) (liftList vibcat (map (fmap fst) cs)))
+    
+  moduleName m = name (unCPPSC m)
 
 instance BlockCommentSym CppSrcCode where
   type BlockComment CppSrcCode = Doc
@@ -1196,23 +1199,22 @@ instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
 instance PackageSym CppHdrCode where
-  type Package CppHdrCode = ([ModData], Label)
+  type Package CppHdrCode = ([FileData], Label)
   packMods n ms = liftPairFst (sequence mods, n)
-    where mods = filter (not . isEmpty . modDoc . unCPPHC) ms
+    where mods = filter (not . isEmpty . modDoc . fileMod . unCPPHC) ms
 
 instance RenderSym CppHdrCode where
-  type RenderFile CppHdrCode = ModData
-  fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (liftA2 emptyIfEmpty (fmap modDoc code) $
-      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+  type RenderFile CppHdrCode = FileData
+  fileDoc code = liftA2 fileD (fmap (addExt "hpp" . name) code) (liftA2 
+    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
+    (top code) (fmap modDoc code) bottom) code)
   
-  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) cppHdrExt) m
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName 
+    (fmap fileMod m)) cppHdrExt) m
 
-  commentedMod cmt m = if isMainMod (unCPPHC m) then m else 
-    liftA3 md (fmap name m) (fmap isMainMod m) 
-    (liftA2 commentedItem cmt (fmap modDoc m))
-    
-  moduleName m = name (unCPPHC m)
+  commentedMod cmt m = if (isMainMod . fileMod . unCPPHC) m then m else liftA2 
+    updateFileMod (liftA2 updateModDoc (liftA2 commentedItem cmt (fmap (modDoc 
+    . fileMod) m)) (fmap fileMod m)) m
 
 instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
@@ -1662,6 +1664,8 @@ instance ModuleSym CppHdrCode where
     (not . isEmpty . mthdDoc . unCPPHC) ms then return blank else return empty)
     (liftList vibcat (map (fmap fst) cs)))
     where methods = map (fmap mthdDoc) ms
+      
+  moduleName m = name (unCPPHC m)
 
 instance BlockCommentSym CppHdrCode where
   type BlockComment CppHdrCode = Doc

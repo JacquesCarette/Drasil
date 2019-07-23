@@ -38,8 +38,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
   getterName, setterName)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, ParamData(..), TypeData(..), td, 
-  ValData(..), VarData(..), vard)
+  updateModDoc, MethodData(..), mthd, PackData(..), packD, ParamData(..), 
+  TypeData(..), td, ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
@@ -72,8 +72,8 @@ instance Monad PythonCode where
   PC x >>= f = f x
 
 instance PackageSym PythonCode where
-  type Package PythonCode = ([FileData], Label)
-  packMods n ms = liftPairFst (sequence mods, n)
+  type Package PythonCode = PackData
+  package n ms = lift2Lists (packD n) mods
     where mods = filter (not . isEmpty . modDoc . fileMod . unPC) ms
 
 instance RenderSym PythonCode where

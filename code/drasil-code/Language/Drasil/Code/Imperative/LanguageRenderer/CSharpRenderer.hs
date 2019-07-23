@@ -46,12 +46,13 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   setMain, setMainMethod,setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, ParamData(..), pd, updateParamDoc, 
-  TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard)
+  updateModDoc, MethodData(..), mthd, PackData(..), packD, ParamData(..), pd, 
+  updateParamDoc, TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), 
+  vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
-  liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
-  getInnerType, convType)
+  liftA6, liftList, lift1List, lift2Lists, lift3Pair, lift4Pair, liftPair, 
+  liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Data.List (nub)
@@ -81,8 +82,8 @@ instance Monad CSharpCode where
   CSC x >>= f = f x
 
 instance PackageSym CSharpCode where
-  type Package CSharpCode = ([FileData], Label)
-  packMods n ms = liftPairFst (sequence mods, n)
+  type Package CSharpCode = PackData
+  package n ms = lift2Lists (packD n) mods
     where mods = filter (not . isEmpty . modDoc . fileMod . unCSC) ms
 
 instance RenderSym CSharpCode where

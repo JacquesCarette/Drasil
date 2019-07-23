@@ -45,8 +45,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   surroundBody, getterName, setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
   ScopeTag (..), AuxData(..), ad, FileData(..), fileD, updateFileMod, 
-  FuncData(..), fd, ModData(..), md, updateModDoc, ParamData(..), pd, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), vard)
+  FuncData(..), fd, ModData(..), md, updateModDoc, PackData(..), packD, 
+  ParamData(..), pd, StateVarData(..), svd, TypeData(..), td, ValData(..), 
+  VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
@@ -82,8 +83,8 @@ unHdr :: CppCode CppSrcCode CppHdrCode a -> a
 unHdr (CPPC _ (CPPHC a)) = a
 
 instance (Pair p) => PackageSym (p CppSrcCode CppHdrCode) where
-  type Package (p CppSrcCode CppHdrCode) = ([FileData], Label)
-  packMods n ms = pair (packMods n (map pfst ms)) (packMods n (map psnd ms))
+  type Package (p CppSrcCode CppHdrCode) = PackData
+  package n ms aux = pair (package n (map pfst ms) (map pfst aux)) (package n (map psnd ms) (map psnd aux))
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = FileData
@@ -635,8 +636,8 @@ instance Monad CppSrcCode where
   CPPSC x >>= f = f x
 
 instance PackageSym CppSrcCode where
-  type Package CppSrcCode = ([FileData], Label)
-  packMods n ms = liftPairFst (sequence mods, n)
+  type Package CppSrcCode = PackData
+  package n ms = lift2Lists (packD n) mods
     where mods = filter (not . isEmpty . modDoc . fileMod . unCPPSC) ms
   
 instance RenderSym CppSrcCode where
@@ -1213,8 +1214,8 @@ instance Monad CppHdrCode where
   CPPHC x >>= f = f x
 
 instance PackageSym CppHdrCode where
-  type Package CppHdrCode = ([FileData], Label)
-  packMods n ms = liftPairFst (sequence mods, n)
+  type Package CppHdrCode = PackData
+  package n ms = lift2Lists (packD n) mods
     where mods = filter (not . isEmpty . modDoc . fileMod . unCPPHC) ms
 
 instance RenderSym CppHdrCode where

@@ -1,8 +1,9 @@
 module Language.Drasil.Code.Imperative.Data (Pair(..), pairList,
   Terminator (..), ScopeTag(..), AuxData(..), ad, FileData(..), fileD, 
   updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, ParamData(..), pd, updateParamDoc, StateVarData(..), 
-  svd, TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard
+  MethodData(..), mthd, PackData(..), packD, ParamData(..), pd, updateParamDoc, 
+  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, 
+  VarData(..), vard
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -55,6 +56,12 @@ data MethodData = MthD {isMainMthd :: Bool, mthdParams :: [ParamData],
 
 mthd :: Bool -> [ParamData] -> Doc -> MethodData
 mthd = MthD 
+
+data PackData = PackD {packName :: String, packMods :: [FileData], 
+  packAux :: [AuxData]}
+
+packD :: String -> [FileData] -> [AuxData] -> PackData
+packD = PackD
 
 data ParamData = PD {paramName :: String, paramType :: TypeData, 
   paramDoc :: Doc} deriving Eq

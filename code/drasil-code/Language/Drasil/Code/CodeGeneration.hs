@@ -7,7 +7,8 @@ module Language.Drasil.Code.CodeGeneration (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.Data (FileData(..), ModData(modDoc))
+import Language.Drasil.Code.Imperative.Data (AuxData(..), FileData(..), 
+  ModData(modDoc))
 
 import Text.PrettyPrint.HughesPJ (Doc,render)
 import System.Directory (createDirectoryIfMissing)
@@ -15,9 +16,10 @@ import System.FilePath.Posix (takeDirectory)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 
 -- | Takes code
-makeCode :: [[FileData]] -> Code
-makeCode files = Code $ zip (map filePath $ concat files) 
-  (map (modDoc . fileMod) $ concat files)
+makeCode :: [[FileData]] -> [[AuxData]] -> Code
+makeCode files aux = Code $ zip 
+  (map filePath (concat files) ++ map auxFilePath (concat aux))
+  (map (modDoc . fileMod) (concat files) ++ map auxDoc (concat aux))
 
 ------------------
 -- IO Functions --

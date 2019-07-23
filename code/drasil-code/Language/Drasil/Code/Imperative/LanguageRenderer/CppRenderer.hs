@@ -11,8 +11,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
 import Utils.Drasil (indent, indentList)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..), 
+import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+  RenderSym(..), InternalFile(..), AuxiliarySym(..), KeywordSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
   StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -39,14 +39,15 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   litStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfDocD, funcAppDocD,
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
-  setterName, setEmpty, intValue)
+  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
+  surroundBody, getterName, setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
-  ScopeTag (..), FileData(..), fileD, updateFileMod, FuncData(..), fd,
-  ModData(..), md, updateModDoc, ParamData(..), pd, StateVarData(..), svd, 
-  TypeData(..), td, ValData(..), VarData(..), vard)
+  ScopeTag (..), AuxData(..), ad, FileData(..), fileD, updateFileMod, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, ParamData(..), pd, 
+  StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), vard)
+import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
@@ -97,6 +98,12 @@ instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
 
+instance (Pair p) => AuxiliarySym (p CppSrcCode CppHdrCode) where
+  type Auxiliary (p CppSrcCode CppHdrCode) = AuxData
+  doxConfig p fs = pair (doxConfig p $ map pfst fs) (doxConfig p $ map psnd fs)
+
+  optimizeDox = pair optimizeDox optimizeDox
+
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
   endStatement = pair endStatement endStatement
@@ -122,8 +129,6 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   blockCommentEnd = pair blockCommentEnd blockCommentEnd
   docCommentStart = pair docCommentStart docCommentStart
   docCommentEnd = pair docCommentEnd docCommentEnd
-
-  optimizeDox = pair optimizeDox optimizeDox
 
 instance (Pair p) => PermanenceSym (p CppSrcCode CppHdrCode) where
   type Permanence (p CppSrcCode CppHdrCode) = Doc
@@ -650,6 +655,13 @@ instance RenderSym CppSrcCode where
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
+
+instance AuxiliarySym CppSrcCode where
+  type Auxiliary CppSrcCode = AuxData
+  doxConfig prog fs = fmap (ad doxConfigName) (lift1List (makeDoxConfig prog)
+    optimizeDox (map (fmap filePath) fs))
+
+  optimizeDox = return $ text "NO"
   
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -676,8 +688,6 @@ instance KeywordSym CppSrcCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
-  
-  optimizeDox = return $ text "NO"
 
 instance PermanenceSym CppSrcCode where
   type Permanence CppSrcCode = Doc
@@ -1224,6 +1234,13 @@ instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
 
+instance AuxiliarySym CppHdrCode where
+  type Auxiliary CppHdrCode = AuxData
+  doxConfig prog fs = fmap (ad doxConfigName) (lift1List (makeDoxConfig prog)
+    optimizeDox (map (fmap filePath) fs))
+
+  optimizeDox = return $ text "NO"
+
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
   endStatement = return semi
@@ -1249,9 +1266,6 @@ instance KeywordSym CppHdrCode where
   blockCommentEnd = return blockCmtEnd
   docCommentStart = return docCmtStart
   docCommentEnd = blockCommentEnd
-
-  
-  optimizeDox = return empty
 
 instance PermanenceSym CppHdrCode where
   type Permanence CppHdrCode = Doc

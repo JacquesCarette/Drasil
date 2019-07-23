@@ -2,19 +2,16 @@ module Language.Drasil.Code.Imperative.Doxygen.Import (
   makeDoxConfig
 ) where
 
-import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.Helpers (blank)
-import Language.Drasil.CodeSpec (Comments)
 
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), text, hcat, vcat)
 
-makeDoxConfig :: String -> Code -> Doc -> [Comments] -> Code
-makeDoxConfig prog (Code c) opt cms = Code 
-  [("doxConfig", genDoxConfig prog (map fst c) opt) | not (null cms)]
+type OptimizeChoice = Doc
+type ProjName = String
 
-genDoxConfig :: String -> [FilePath] -> Doc -> Doc
-genDoxConfig prog fs opt = vcat [
+makeDoxConfig :: ProjName -> OptimizeChoice -> [FilePath] -> Doc
+makeDoxConfig prog opt fs = vcat [
   text "# Doxyfile 1.8.15",
   blank,
   text "# This file describes the settings to be used by the documentation system",

@@ -7,7 +7,7 @@ import Utils.Drasil (stringList)
 import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
-import Language.Drasil.Code.Code as C (CodeType(List))
+import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
@@ -20,7 +20,6 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Data (FileData(..))
-import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (convType, getStr)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
   (cppExts)
@@ -51,7 +50,6 @@ import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.), view)
 import qualified Prelude as P ((<>))
-import Text.PrettyPrint.HughesPJ (Doc)
 
 -- Private State, used to push these options around the generator
 data State repr = State {
@@ -146,8 +144,8 @@ publicClass desc n l vs ms = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-generateCode :: (PackageSym repr, KeywordSym repr) => Lang -> 
-  [repr (Package repr) -> ([ModData], Label)] -> State repr -> IO ()
+generateCode :: (PackageSym repr) => Lang -> 
+  [repr (Package repr) -> ([FileData], Label)] -> State repr -> IO ()
 generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)

@@ -58,4 +58,4 @@ buildRunTarget fn Standalone = makeS "./" <> fn
 buildRunTarget fn (Interpreter i) = i +:+ fn
 
 makeBuild :: ([FileData], Label) -> Maybe BuildConfig -> Runnable -> [String] -> Code -> Code
-makeBuild m b r e code = Code ("Makefile", genMake [Ch b r e m code])
+makeBuild m b r e code = Code [("Makefile", genMake [Ch b r e m code])]

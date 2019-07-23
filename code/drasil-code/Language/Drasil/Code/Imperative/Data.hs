@@ -1,8 +1,8 @@
 module Language.Drasil.Code.Imperative.Data (Pair(..), pairList,
-  Terminator (..), ScopeTag(..), FileData(..), fileD, updateFileMod, 
-  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  ParamData(..), pd, updateParamDoc, StateVarData(..), svd, TypeData(..), td,
-  ValData(..), vd, updateValDoc, VarData(..), vard
+  Terminator (..), ScopeTag(..), AuxData(..), ad, FileData(..), fileD, 
+  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, ParamData(..), pd, updateParamDoc, StateVarData(..), 
+  svd, TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -23,6 +23,11 @@ pairList (x:xs) (y:ys) = pair x y : pairList xs ys
 data Terminator = Semi | Empty
 
 data ScopeTag = Pub | Priv deriving Eq
+
+data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}
+
+ad :: String -> Doc -> AuxData
+ad = AD
 
 data FileData = FileD {filePath :: String, fileMod :: ModData}
 

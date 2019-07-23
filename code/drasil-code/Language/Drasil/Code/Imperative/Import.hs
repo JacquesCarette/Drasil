@@ -7,7 +7,7 @@ import Utils.Drasil (stringList)
 import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
-import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
+import Language.Drasil.Code.Code as C (CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label,
   PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   StateTypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
@@ -19,7 +19,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Data (ModData(..))
+import Language.Drasil.Code.Imperative.Data (FileData(..))
 import Language.Drasil.Code.Imperative.Helpers (convType, getStr)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
   (cppExts)
@@ -46,7 +46,7 @@ import Data.Map (member)
 import qualified Data.Map as Map (lookup, elems)
 import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes, mapMaybe)
 import Control.Applicative ((<$>))
-import Control.Monad (when,liftM2,liftM3)
+import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.), view)
 import qualified Prelude as P ((<>))
@@ -145,15 +145,13 @@ publicClass desc n l vs ms = do
     else pubClass n l vs ms
 
 generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
-  ([ModData], Label)] -> State repr -> IO ()
+  ([FileData], Label)] -> State repr -> IO ()
 generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
-     when (l == Java) $ createDirectoryIfMissing False prog
-     createCodeFiles $ makeBuild (last unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l) $ C.Code $
-            map (if l == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
-            C.unCode $ makeCode (map (fst . ($ pckg)) unRepr) (getExt l)
+     createCodeFiles $ makeBuild (last unRepr pckg) (getBuildConfig l)   
+       (getRunnable l) (getExt l) $ makeCode (map (fst . ($ pckg)) unRepr)
      setCurrentDirectory workingDir
   where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         pckg = runReader (genPackage prog) g

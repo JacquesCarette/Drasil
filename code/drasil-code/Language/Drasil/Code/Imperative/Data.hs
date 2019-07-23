@@ -1,7 +1,8 @@
 module Language.Drasil.Code.Imperative.Data (Pair(..), pairList,
-  Terminator (..), ScopeTag(..), FuncData(..), fd, ModData(..), md, 
-  MethodData(..), mthd, ParamData(..), pd, updateParamDoc, StateVarData(..), 
-  svd, TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard
+  Terminator (..), ScopeTag(..), FileData(..), fileD, updateFileMod, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  ParamData(..), pd, updateParamDoc, StateVarData(..), svd, TypeData(..), td,
+  ValData(..), vd, updateValDoc, VarData(..), vard
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -23,6 +24,14 @@ data Terminator = Semi | Empty
 
 data ScopeTag = Pub | Priv deriving Eq
 
+data FileData = FileD {filePath :: String, fileMod :: ModData}
+
+fileD :: String -> ModData -> FileData
+fileD = FileD
+
+updateFileMod :: ModData -> FileData -> FileData
+updateFileMod m f = fileD (filePath f) m
+
 data FuncData = FD {funcType :: TypeData, funcDoc :: Doc}
 
 fd :: TypeData -> Doc -> FuncData
@@ -32,6 +41,9 @@ data ModData = MD {name :: String, isMainMod :: Bool, modDoc :: Doc}
 
 md :: String -> Bool -> Doc -> ModData
 md = MD
+
+updateModDoc :: Doc -> ModData -> ModData
+updateModDoc d m = md (name m) (isMainMod m) d
 
 data MethodData = MthD {isMainMthd :: Bool, mthdParams :: [ParamData], 
   mthdDoc :: Doc}

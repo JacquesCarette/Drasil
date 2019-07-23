@@ -16,7 +16,7 @@ public class InputFormat {
         infile.ReadLine();
         inParams.v_launch = Double.Parse(infile.ReadLine());
         infile.ReadLine();
-        inParams.angle = Double.Parse(infile.ReadLine());
+        inParams.theta = Double.Parse(infile.ReadLine());
         infile.ReadLine();
         inParams.p_target = Double.Parse(infile.ReadLine());
         infile.Close();

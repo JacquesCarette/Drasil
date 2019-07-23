@@ -19,7 +19,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc', 
+import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
@@ -36,9 +36,10 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc',
   classDec, dot, forLabel, observerListName, commentedItem, addCommentsDocD, 
   classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
   setterName)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
-  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), TypeData(..), td, 
-  ValData(..), VarData(..), vard)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..), 
+  fileD, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, ParamData(..), TypeData(..), td, ValData(..), 
+  VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType)
@@ -70,22 +71,21 @@ instance Monad PythonCode where
   PC x >>= f = f x
 
 instance PackageSym PythonCode where
-  type Package PythonCode = ([ModData], Label)
+  type Package PythonCode = ([FileData], Label)
   packMods n ms = liftPairFst (sequence mods, n)
-    where mods = filter (not . isEmpty . modDoc . unPC) ms
+    where mods = filter (not . isEmpty . modDoc . fileMod . unPC) ms
 
 instance RenderSym PythonCode where
-  type RenderFile PythonCode = ModData
-  fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (liftA2 emptyIfEmpty (fmap modDoc code) $
-      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+  type RenderFile PythonCode = FileData
+  fileDoc code = liftA2 fileD (fmap (addExt "py" . name) code) (liftA2 
+    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
+    (top code) (fmap modDoc code) bottom) code)
 
-  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) pyExt) m
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName 
+    (fmap fileMod m)) pyExt) m
 
-  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
-    (liftA2 commentedItem cmt (fmap modDoc m))
-
-  moduleName m = name (unPC m)
+  commentedMod cmt m = liftA2 updateFileMod (liftA2 updateModDoc
+    (liftA2 commentedItem cmt (fmap (modDoc . fileMod) m)) (fmap fileMod m)) m
 
 instance InternalFile PythonCode where
   top _ = return pytop
@@ -560,6 +560,9 @@ instance ModuleSym PythonCode where
     liftA3 pyModule (liftList pyModuleImportList (map include ls)) 
     (liftList methodListDocD (map (fmap mthdDoc) fs)) (liftList 
     pyModuleClassList cs))
+
+  moduleName m = name (unPC m)
+    
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc

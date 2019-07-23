@@ -22,7 +22,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
   NameOpts(NameOpts), packSep)
-import Language.Drasil.Code.Imperative.LanguageRenderer ( 
+import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
   boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
@@ -44,9 +44,10 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
   moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
   setMain, setMainMethod, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
-  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, TypeData(..), 
-  td, ValData(..), vd, VarData(..), vard)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..), 
+  fileD, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, ParamData(..), pd, TypeData(..), td, ValData(..), vd, 
+  VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType)
@@ -84,22 +85,21 @@ instance Monad JavaCode where
   JC x >>= f = f x
 
 instance PackageSym JavaCode where
-  type Package JavaCode = ([ModData], Label)
+  type Package JavaCode = ([FileData], Label)
   packMods n ms = liftPairFst (mapM (liftA2 (packageDocD n) endStatement) mods, n)
-    where mods = filter (not . isEmpty . modDoc . unJC) ms
+    where mods = filter (not . isEmpty . modDoc . fileMod . unJC) ms
 
 instance RenderSym JavaCode where
-  type RenderFile JavaCode = ModData
-  fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (liftA2 emptyIfEmpty (fmap modDoc code) $
-      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+  type RenderFile JavaCode = FileData
+  fileDoc code = liftA2 fileD (fmap (addExt "java" . name) code) (liftA2 
+    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
+    (top code) (fmap modDoc code) bottom) code)
 
-  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) jExt) m
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName 
+    (fmap fileMod m)) jExt) m
 
-  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
-    (liftA2 commentedItem cmt (fmap modDoc m))
-
-  moduleName m = name (unJC m)
+  commentedMod cmt m = liftA2 updateFileMod (liftA2 updateModDoc
+    (liftA2 commentedItem cmt (fmap (modDoc . fileMod) m)) (fmap fileMod m)) m
 
 instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
@@ -600,6 +600,8 @@ instance ModuleSym JavaCode where
   buildModule n _ ms cs = fmap (md n (any (isMainMthd . unJC) ms || 
     any (snd . unJC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
+
+  moduleName m = name (unJC m)
 
 instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc

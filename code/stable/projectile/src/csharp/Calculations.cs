@@ -11,14 +11,14 @@ public class Calculations {
         \param inParams No description given
     */
     public static double func_t_flight(InputParameters inParams) {
-        return ((2 * (inParams.v_launch * Math.Sin(inParams.angle))) / 9.8);
+        return ((2 * (inParams.v_launch * Math.Sin(inParams.theta))) / 9.8);
     }
     
     /** \brief Calculates landing position
         \param inParams No description given
     */
     public static double func_p_land(InputParameters inParams) {
-        return ((2 * (Math.Pow(inParams.v_launch, 2) * (Math.Sin(inParams.angle) * Math.Cos(inParams.angle)))) / 9.8);
+        return ((2 * (Math.Pow(inParams.v_launch, 2) * (Math.Sin(inParams.theta) * Math.Cos(inParams.theta)))) / 9.8);
     }
     
     /** \brief Calculates distance between the target position and the landing position

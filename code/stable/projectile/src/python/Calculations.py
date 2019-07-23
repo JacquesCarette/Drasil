@@ -8,12 +8,12 @@ import InputParameters
 ## \brief Calculates flight duration
 # \param inParams No description given
 def func_t_flight(inParams):
-    return ((2 * (inParams.v_launch * math.sin(inParams.angle))) / 9.8)
+    return ((2 * (inParams.v_launch * math.sin(inParams.theta))) / 9.8)
 
 ## \brief Calculates landing position
 # \param inParams No description given
 def func_p_land(inParams):
-    return ((2 * ((inParams.v_launch ** 2) * (math.sin(inParams.angle) * math.cos(inParams.angle)))) / 9.8)
+    return ((2 * ((inParams.v_launch ** 2) * (math.sin(inParams.theta) * math.cos(inParams.theta)))) / 9.8)
 
 ## \brief Calculates distance between the target position and the landing position
 # \param inParams No description given

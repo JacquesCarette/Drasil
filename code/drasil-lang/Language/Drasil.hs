@@ -63,22 +63,22 @@ module Language.Drasil (
   , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
   , cnstrw, cnstrw'
   -- Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat, ec
+  , QDefinition, fromEqn, fromEqn', equat, ec
   -- Chunk.Quantity
-  , QuantityDict, qw, mkQuant
+  , QuantityDict, qw, mkQuant, mkQuant'
   , codeVC, implVar , dcc, dcc', dccWDS, dccWDS', vc, vc'', vcUnit, ccs, cc, cc', cic
   -- Chunk.UncertainQuantity
   , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
   , uncrtnw
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS
-  , uc, uc', ucs, ucs', ucs'', ucsWS
+  , uc, uc', ucs, ucs', ucsWS
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary, unitary', unit_symb
   -- Chunk.Relation
   , RelationConcept, makeRC
   --Chunk.DefinedQuantity
-  , dqd, dqd', DefinedQuantityDict, dqdWr, dqdQd
+  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
   -- Derivation
@@ -125,7 +125,8 @@ module Language.Drasil (
   , Space(..)
   , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD)
   -- Symbol
-  , Decoration(..), Symbol(..), compsy, hat, prime, staged, sub, sup, vec
+  , Decoration(..), Symbol(..), autoStage, compsy, hat, prime, staged, sub, sup
+  , upperLeft, vec
   -- Misc
   , mkTable
   -- People
@@ -230,14 +231,13 @@ import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
-  fromEqnSt', equat, ec)
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', equat, ec)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc',
-  ucs, ucs', ucs'', ucsWS)
+  ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- for Printing
@@ -259,7 +259,8 @@ import Language.Drasil.Sentence (Sentence(..), sParen, sDash, sC, (+:+), (+:+.),
   , SentenceStyle(..))
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS)
-import Language.Drasil.Symbol (Decoration(..), Symbol(..), compsy, hat, prime, staged, sub, sup, vec)
+import Language.Drasil.Symbol (Decoration(..), Symbol(..), autoStage, compsy,
+  hat, prime, staged, sub, sup, upperLeft, vec)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc -- all of it

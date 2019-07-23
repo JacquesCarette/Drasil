@@ -284,7 +284,7 @@ pcmSA = uqc "pcmSA"
 -- Constraint 5
 pcmDensity = uq (cuc'' "pcmDensity" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
-  (staged (sub (eqSymb density) lPCM) (sub (Variable "rho") lPCM)) densityU Rational
+  (autoStage $ sub (eqSymb density) lPCM) densityU Rational
   [gtZeroConstr, sfwrc $ Bounded (Exc, sy pcmDensityMin) (Exc, sy pcmDensityMax)]
   (dbl 1007)) defaultUncrt
 
@@ -342,8 +342,7 @@ tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
 
 -- Constraint 12
 wDensity = uq (cuc'' "wDensity" (density `of_` water)
-  "Mass per unit volume of water"
-  (staged (sub (eqSymb density) lWater) (sub (Variable "rho") lWater)) densityU Rational
+  "Mass per unit volume of water" (autoStage $ sub (eqSymb density) lWater) densityU Rational
   [gtZeroConstr, sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)]
   (dbl 1000)) defaultUncrt
 
@@ -477,13 +476,11 @@ fracMinAux    = mkQuantDef fracMin $ dbl 1.0e-6
 -- Used in Constraint 5
 pcmDensityMin = mkQuantDef (unitary' "pcmDensityMin"
   (nounPhraseSP "minimum density of PCM")
-  (staged (supMin (eqSymb pcmDensity)) (supMin (codeSymb pcmDensity)))
-  densityU Rational) 500
+  (autoStage $ supMin (eqSymb pcmDensity)) densityU Rational) 500
 
 pcmDensityMax = mkQuantDef (unitary' "pcmDensityMax"
   (nounPhraseSP "maximum density of PCM")
-  (staged (supMax (eqSymb pcmDensity)) (supMax (codeSymb pcmDensity)))
-  densityU Rational) 20000
+  (autoStage $ supMax (eqSymb pcmDensity)) densityU Rational) 20000
 
 -- Used in Constraint 7
 htCapSPMin = mkQuantDef (unitary "htCapSPMin"
@@ -520,13 +517,11 @@ coilSAMax = mkQuantDef (unitary "coilSAMax"
 -- Used in Constraint 12
 wDensityMin = mkQuantDef (unitary' "wDensityMin"
   (nounPhraseSP "minimum density of water")
-  (staged (supMin (eqSymb wDensity)) (supMin (codeSymb wDensity)))
-  densityU Rational) 950
+  (autoStage $ supMin (eqSymb wDensity)) densityU Rational) 950
 
 wDensityMax = mkQuantDef (unitary' "wDensityMax"
   (nounPhraseSP "maximum density of water")
-  (staged (supMax (eqSymb wDensity)) (supMax (codeSymb wDensity)))
-  densityU Rational) 1000
+  (autoStage $ supMax (eqSymb wDensity)) densityU Rational) 1000
   
 -- Used in Constraint 13
 htCapWMin = mkQuantDef (unitary "htCapWMin"

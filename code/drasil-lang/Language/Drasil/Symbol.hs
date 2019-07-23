@@ -2,13 +2,15 @@
 -- gets rendered as a (unique) symbol.  This is actually NOT based on
 -- semantics at all, but just a description of how things look.
 
-module Language.Drasil.Symbol (Decoration(..), Symbol(..), compsy, hat, prime,
-  staged, sub, sup, upperLeft, vec) where
+module Language.Drasil.Symbol (Decoration(..), Symbol(..), autoStage, compsy,
+  hat, prime, staged, sub, sup, upperLeft, vec) where
 
 import Language.Drasil.Unicode(Special)
 import Language.Drasil.Stages (Stage(..))
 
-import Data.Char (toLower)
+import Data.Char (isLatin1, toLower)
+import Data.Char.Properties.Names (getCharacterName)
+import Data.List.Split (splitOn)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
 -- (bolding/etc)
@@ -150,3 +152,28 @@ prime = Atop Prime
 staged :: Symbol -> Symbol -> Stage -> Symbol
 staged eqS _ Equational = eqS
 staged _ impS Implementation = impS 
+
+-- | Helper for creating a symbol with Unicode in it.
+autoStage :: Symbol -> (Stage -> Symbol)
+autoStage s = staged s (unicodeConv s)
+
+-- | Helper for autoStage that apples unicodeString to all Symbols with Strings
+unicodeConv :: Symbol -> Symbol
+unicodeConv (Variable st) = Variable $ unicodeString st
+unicodeConv (Label    st) = Label    $ unicodeString st
+unicodeConv (Atop    d s) = Atop d   $ unicodeConv s
+unicodeConv (Corners a b c d s) =
+  Corners (map unicodeConv a) (map unicodeConv b) (map unicodeConv c) (map unicodeConv d) (unicodeConv s)
+unicodeConv (Concat ss) = Concat $ map unicodeConv ss
+unicodeConv x = x
+
+-- | Helper for unicodeConv that converts each Unicode character to text equivalent
+-- If a character is Latin, it it just returned.
+-- If a character is Unicode and Greek, just the name of the symbol is returned (eg. theta).
+-- Otherwise, an error is thrown.
+unicodeString :: String -> String
+unicodeString = concatMap (\x -> if isLatin1 x then [x] else getName $ nameList x)
+  where
+    nameList = splitOn " " . map toLower . getCharacterName
+    getName ("greek":_:_:name) = unwords name
+    getName _ = error "unicodeString not fully implemented"

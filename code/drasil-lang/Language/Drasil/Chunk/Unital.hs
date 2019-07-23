@@ -1,11 +1,11 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Unital 
-  ( UnitalChunk(..) , makeUCWDS , uc , uc' , ucs , ucs' , ucs'' , ucsWS) where
+  ( UnitalChunk(..) , makeUCWDS , uc , uc' , ucs , ucs', ucsWS) where
 
 import Control.Lens (makeLenses, view, (^.))
 
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd)
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
@@ -15,7 +15,6 @@ import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence)
-import Language.Drasil.Stages (Stage)
 
 -- | UnitalChunks are Unitary DefinedQuantityDict
 data UnitalChunk = UC { _defq' :: DefinedQuantityDict
@@ -58,11 +57,6 @@ ucs :: (IsUnit u) => String -> NP ->
   String -> Symbol -> Space -> u -> UnitalChunk
 ucs nam trm desc sym space un = UC (dqd (dcc nam trm desc) sym space uu) uu
   where uu = unitWrapper un
-
--- | For when the symbol changes depending on the stage
-ucs'' :: String -> NP -> String -> (Stage -> Symbol) -> Space -> UnitDefn ->
-  UnitalChunk
-ucs'' nam trm desc sym space un = UC (dqd' (dcc nam trm desc) sym space (Just un)) un
 
 -- ucs With a Sentence for desc
 ucsWS :: (IsUnit u) => String -> NP ->

@@ -2,7 +2,7 @@ module Main where
 
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
---   Structure(..))
+--   Structure(..), InputModule(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -20,12 +20,13 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 --   comments         = CommentNone,
 --   onSfwrConstraint = Warning,
 --   onPhysConstraint = Warning,
---   inputStructure   = Unbundled
+--   inputStructure   = Unbundled,
+--   inputModule      = Combined
 -- }       
        
 main :: IO ()
 main = do
-  gen (DocSpec SRS "Chipmunk_SRS") srs  printSetting
-  gen (DocSpec Website "Chipmunk_SRS") srs printSetting
-  -- When ready to generate code from GamePhys, uncomment this file
+  gen (DocSpec SRS "GamePhysics_SRS") srs  printSetting
+  gen (DocSpec Website "GamePhysics_SRS") srs printSetting
+  -- When ready to generate code from GamePhysics, uncomment this file
   -- genCode choices code

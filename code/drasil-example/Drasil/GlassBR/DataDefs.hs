@@ -63,7 +63,7 @@ risk = dd riskQD
 --DD2--
 
 hFromtEq :: Relation
-hFromtEq = (1/1000) * case_ (zipWith hFromtHelper 
+hFromtEq = (1/1000) * incompleteCase (zipWith hFromtHelper 
   actualThicknesses nominalThicknesses)
 
 hFromtHelper :: Double -> Double -> (Expr, Relation)
@@ -117,7 +117,7 @@ nonFL = dd nonFLQD [makeCite astm2009] Nothing "nFL"
 --DD6--
 
 glaTyFacEq :: Expr
-glaTyFacEq = case_ (zipWith glaTyFacHelper glassTypeFactors $ map (getAccStr . snd) glassType)
+glaTyFacEq = incompleteCase (zipWith glaTyFacHelper glassTypeFactors $ map (getAccStr . snd) glassType)
 
 glaTyFacHelper :: Integer -> String -> (Expr, Relation)
 glaTyFacHelper result condition = (int result, sy glassTypeCon $= str condition)

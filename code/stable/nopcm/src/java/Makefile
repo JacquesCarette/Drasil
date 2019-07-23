@@ -1,6 +1,6 @@
 build: SWHS/Control.class
 
-SWHS/Control.class: SWHS/Control.java SWHS/InputParameters.java SWHS/InputFormat.java SWHS/OutputFormat.java
+SWHS/Control.class: SWHS/Control.java SWHS/InputParameters.java SWHS/OutputFormat.java
 	javac SWHS/Control.java
 
 run: build

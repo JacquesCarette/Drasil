@@ -1,0 +1,9 @@
+srs: HGHC_SRS.pdf
+
+HGHC_SRS.pdf: HGHC_SRS.tex
+	lualatex $(TEXFLAGS) HGHC_SRS
+	-bibtex $(BIBTEXFLAGS) HGHC_SRS
+	lualatex $(TEXFLAGS) HGHC_SRS
+	lualatex $(TEXFLAGS) HGHC_SRS
+
+.PHONY: srs

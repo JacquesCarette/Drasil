@@ -48,7 +48,7 @@ getSrc repoRoot source = (repoRoot ++ source, lang $ takeBaseName source)
 mkExamples :: String -> FilePath -> FilePath -> IO [Example]
 mkExamples repoRoot path srsDir = do
 
-  -- names will be a sorted list of example names (Chipmunk, GlassBR, etc.) of type FilePath
+  -- names will be a sorted list of example names (GamePhysics, GlassBR, etc.) of type FilePath
   names <- sort <$> (listDirectory path >>= filterM (\x -> doesDirectoryExist $ path ++ x))
 
   -- a list of lists of sources based on existence and contents of src file for each example.

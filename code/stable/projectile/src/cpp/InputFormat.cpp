@@ -24,7 +24,7 @@ void get_input(string filename, InputParameters &inParams) {
     infile >> inParams.v_launch;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    infile >> inParams.angle;
+    infile >> inParams.theta;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     infile >> inParams.p_target;

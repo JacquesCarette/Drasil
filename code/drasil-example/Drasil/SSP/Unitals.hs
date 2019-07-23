@@ -368,11 +368,11 @@ fy = uc' "fy" (cn "y-coordinate of the force") "" (subY cF) newton
 
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 
   "for each pair of adjacent interslice boundaries"
-  (sup (subX (vec cF)) labelG) newton
+  (sup (subX (vec cF)) lNorm) newton
 
 watForceSum = uc' "F_x^H" (cn "sums of the interslice normal water forces") 
   "for each pair of adjacent interslice boundaries"
-  (sup (subX (vec cF)) labelH) newton
+  (sup (subX (vec cF)) lNormWat) newton
 
 sliceHghtRight = uc' "h^R" (cn "heights of the right side of slices") 
   "assuming slice surfaces have negative slope"
@@ -420,7 +420,7 @@ earthqkLoadFctr, normToShear, scalFunc, numbSlices,
 earthqkLoadFctr = dqd' (dcc "K_c" (nounPhraseSP "seismic coefficient")
   ("proportionality factor of force that " ++
   "weight pushes outwards; caused by seismic earth movements"))
-  (const $ sub cK labelC) Real Nothing 
+  (const $ sub cK lCoeff) Real Nothing 
 
 normToShear = dqd' (dcc "lambda"
   (nounPhraseSP "proportionality constant")
@@ -483,13 +483,11 @@ sum1toN = defsum (eqSymb index) 1 (sy numbSlices)
 
 -- Labels
 
-labelC, labelG, labelH, lBase, lCoords, lCSlip, lDen, lDry, lHeights, lLeft,
-  lMaxEtr, lMaxExt, lMinEtr, lMinExt, lNum, lRight, lRot, lSafety, lSat, lSlip,
+lBase, lCoeff, lCoords, lCSlip, lDen, lDry, lHeights, lLeft, lMaxEtr, lMaxExt,
+  lMinEtr, lMinExt, lNorm, lNormWat, lNum, lRight, lRot, lSafety, lSat, lSlip,
   lSlope, lSurface, lWatTab :: Symbol
-labelC   = Label "c"
-labelG   = Label "G"
-labelH   = Label "H"
 lBase    = Label "b"
+lCoeff   = Label "c"
 lCoords  = Label "(x,y)"
 lCSlip   = Label "cs"
 lDen     = Label "den"
@@ -500,6 +498,8 @@ lMaxEtr  = Label "maxEtr"
 lMaxExt  = Label "maxExt"
 lMinEtr  = Label "minEtr"
 lMinExt  = Label "minExt"
+lNorm    = Label "G"
+lNormWat = Label "H"
 lNum     = Label "num"
 lRight   = Label "R"
 lRot     = Label "rot"

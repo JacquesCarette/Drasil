@@ -35,8 +35,6 @@ class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) =>
   commentedMod :: repr (BlockComment repr) -> repr (RenderFile repr) ->
     repr (RenderFile repr)
 
-  moduleName :: repr (RenderFile repr) -> String
-
 class (ModuleSym repr) => InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
@@ -585,6 +583,8 @@ class (ClassSym repr) => ModuleSym repr where
   type Module repr
   buildModule :: Label -> [Library] -> [repr (Method repr)] -> 
     [repr (Class repr)] -> repr (Module repr)
+    
+  moduleName :: repr (Module repr) -> String
     
 class BlockCommentSym repr where
   type BlockComment repr

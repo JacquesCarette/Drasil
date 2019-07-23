@@ -133,7 +133,7 @@ messageIM = imNoDerivNoRefs messageRC [qw offset, qw targPos]
 
 messageRC :: RelationConcept
 messageRC = makeRC "messageRC" (nounPhraseSP "output message") 
-  EmptyS $ sy message $= case_ [case1, case2, case3]
+  EmptyS $ sy message $= completeCase [case1, case2, case3]
   where case1 = (Str "The target was hit.",        abs (sy offset / sy targPos) $< sy tol)
         case2 = (Str "The projectile fell short.", sy offset $< 0)
         case3 = (Str "The projectile went long.",  sy offset $> 0)

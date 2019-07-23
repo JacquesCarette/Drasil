@@ -4,8 +4,8 @@ module Language.Drasil.Expr.Math where
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..), 
-  ArithOper(..), UFunc(..))
+import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..),
+  ArithOper(..), UFunc(..), Completeness(..))
 import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 
@@ -118,9 +118,13 @@ sum' = foldr1 (+)
 cross :: Expr -> Expr -> Expr
 cross = BinaryOp Cross
 
--- | Smart constructor for case statement (underscore as case is reserved)
-case_ :: [(Expr,Relation)] -> Expr
-case_ = Case
+-- | Smart constructor for case statement with complete set of cases
+completeCase :: [(Expr,Relation)] -> Expr
+completeCase = Case Complete
+
+-- | Smart constructor for case statement with incomplete set of cases
+incompleteCase :: [(Expr,Relation)] -> Expr
+incompleteCase = Case Incomplete
 
 square :: Expr -> Expr
 square x = x $^ 2

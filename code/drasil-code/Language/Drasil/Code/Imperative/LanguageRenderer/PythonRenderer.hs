@@ -10,14 +10,15 @@ import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..))
+  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
+  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
@@ -78,8 +79,6 @@ instance RenderSym PythonCode where
   fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
     (liftA2 emptyIfEmpty (fmap modDoc code) $
       liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
-  top _ = return pytop
-  bottom = return empty
 
   docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) pyExt) m
 
@@ -87,6 +86,10 @@ instance RenderSym PythonCode where
     (liftA2 commentedItem cmt (fmap modDoc m))
 
   moduleName m = name (unPC m)
+
+instance InternalFile PythonCode where
+  top _ = return pytop
+  bottom = return empty
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
@@ -233,12 +236,6 @@ instance ValueSym PythonCode where
   valueOf v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n + 1)) argsList)
   enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
-
-  inputFunc = liftA2 mkVal string (return $ text "input()")  -- raw_input() for < Python 3.0
-  printFunc = liftA2 mkVal void (return $ text "print")
-  printLnFunc = liftA2 mkVal void (return empty)
-  printFileFunc _ = liftA2 mkVal void (return empty)
-  printFileLnFunc _ = liftA2 mkVal void (return empty)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "sys.argv")
 
   valueType = fmap valType
@@ -297,6 +294,15 @@ instance ValueExpression PythonCode where
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
 
+instance InternalValue PythonCode where
+  inputFunc = liftA2 mkVal string (return $ text "input()")  -- raw_input() for < Python 3.0
+  printFunc = liftA2 mkVal void (return $ text "print")
+  printLnFunc = liftA2 mkVal void (return empty)
+  printFileFunc _ = liftA2 mkVal void (return empty)
+  printFileLnFunc _ = liftA2 mkVal void (return empty)
+  
+  cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
+
 instance Selector PythonCode where
   objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
   ($.) = objAccess 
@@ -311,20 +317,9 @@ instance Selector PythonCode where
   
   indexOf l v = objAccess l (func "index" int [v])
 
-  cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
-
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
-
-  listSizeFunc = liftA2 fd int (return $ text "len")
-  listAddFunc _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
-  listAppendFunc v = func "append" (listType static_ $ fmap valType v) [v]
-
-  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
-  iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
 
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
@@ -338,15 +333,33 @@ instance FunctionSym PythonCode where
   iterEnd v = v $. iterEndFunc (valueType v)
 
 instance SelectorFunction PythonCode where
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (valueOf $ var l int)
+
+instance InternalFunction PythonCode where
+  getFunc v = func (getterName $ variableName v) (variableType v) []
+  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+
+  listSizeFunc = liftA2 fd int (return $ text "len")
+  listAddFunc _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
+  listAppendFunc v = func "append" (listType static_ $ fmap valType v) [v]
+
+  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
+  iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
+
   listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD i toVal)
 
   atFunc t l = listAccessFunc t (valueOf $ var l int)
 
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (valueOf $ var l int)
+instance InternalStatement PythonCode where
+  printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
+    (fromMaybe (liftA2 mkVal void (return empty)) f)
+
+  state = fmap statementDocD
+  loopState = fmap statementDocD 
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
@@ -370,9 +383,6 @@ instance StatementSym PythonCode where
   objDecNewVoid v = varDecDef v (stateObj (variableType v) [])
   extObjDecNewVoid lib v = varDecDef v (extStateObj lib (variableType v) [])
   constDecDef = varDecDef
-
-  printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
-    (fromMaybe (liftA2 mkVal void (return empty)) f)
 
   print v = pyOut False printFunc v Nothing
   printLn v = pyOut True printFunc v Nothing
@@ -429,8 +439,6 @@ instance StatementSym PythonCode where
   inOutCall = pyInOutCall funcApp
   extInOutCall m = pyInOutCall (extFuncApp m)
 
-  state = fmap statementDocD
-  loopState = fmap statementDocD 
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym PythonCode where
@@ -469,6 +477,7 @@ instance ScopeSym PythonCode where
   private = return empty
   public = return empty
 
+instance InternalScope PythonCode where
   includeScope s = s
 
 instance MethodTypeSym PythonCode where

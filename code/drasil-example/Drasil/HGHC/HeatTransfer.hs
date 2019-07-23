@@ -66,7 +66,7 @@ htTransCladFuelEq = (2 * sy cladCond * sy gapFilmCond) / (2 * sy cladCond
 ---
 
 hghc :: CommonConcept
-hghc = dcc' "hghc" (cn "tiny") "HGHC program" "HGHC"
+hghc = dcc' "hghc" (cn "HGHC") "HGHC program" "HGHC"
 
 nuclearPhys, fp :: NamedChunk
 nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")

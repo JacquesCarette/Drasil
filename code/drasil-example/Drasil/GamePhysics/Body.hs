@@ -41,7 +41,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GamePhysics.Concepts (chipmunk, acronyms, threeD, twoD)
+import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs)
 import qualified Drasil.GamePhysics.DataDefs as GP (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
@@ -63,7 +63,7 @@ resourcePath = "../../../datafiles/GamePhysics/"
 
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
-  IntroSec $ IntroProg para1_introduction_intro (short chipmunk)
+  IntroSec $ IntroProg para1_introduction_intro (short gamePhysics)
   [IPurpose para1_purpose_of_document_intro,
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
@@ -95,13 +95,13 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     UCsSec,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
     TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-    AuxConstntSec $ AuxConsProg chipmunk [],
+    AuxConstntSec $ AuxConsProg gamePhysics [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: SystemInformation
 si = SI {
-  _sys = chipmunk,
+  _sys = gamePhysics,
   _kind = Doc.srs,
   _authors = [alex, luthfi],
   -- FIXME: The _quants field should be filled in with all the symbols, however
@@ -186,7 +186,7 @@ detailsAndGoal :: [CI]
 detailsAndGoal = [thModel, goalStmt]
 
 para1_purpose_of_document_intro :: Sentence
-para1_purpose_of_document_intro = para1_purpose_of_document_param chipmunk 
+para1_purpose_of_document_intro = para1_purpose_of_document_param gamePhysics 
   document programDescription (plural game) (map plural detailsAndGoal)
 
 programDescription :: Sentence
@@ -243,7 +243,7 @@ sysCtxIntro = foldlSP
   [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short chipmunk) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (short gamePhysics) +:+. EmptyS,
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
 
@@ -281,7 +281,7 @@ sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short chipmunk +:+ S "Responsibilities"]
+  short gamePhysics +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -293,7 +293,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
-  [S "The", phrase endUser `sOf` short chipmunk,
+  [S "The", phrase endUser `sOf` short gamePhysics,
   S "should have an understanding of", phrase frstYr, S "programming",
   plural concept `sAnd` S "an understanding of", phrase highSchoolPhysics]
 

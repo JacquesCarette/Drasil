@@ -214,7 +214,7 @@
                   <td>&deg;C</td>
                 </tr>
                 <tr>
-                  <td><em>T<sub>i</sub></em></td>
+                  <td><em>T<sub>init</sub></em></td>
                   <td>Initial temperature</td>
                   <td>&deg;C</td>
                 </tr>
@@ -1079,7 +1079,7 @@
                       <th>Input Constraints</th>
                       <td>
                         <div class="equation">
-                          <em>T<sub>i</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>
+                          <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>
                         </div>
                       </td>
                     </tr>
@@ -1246,7 +1246,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>E<sub>W</sub>(t) = C<sub>W</sub>&#8239;m<sub>W</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>i</sub>)</em>
+                          <em>E<sub>W</sub>(t) = C<sub>W</sub>&#8239;m<sub>W</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>init</sub>)</em>
                         </div>
                       </td>
                     </tr>
@@ -1265,7 +1265,9 @@
                           <li>
                             <em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
                           </li>
-                          <li><em>T<sub>i</sub></em> is the initial temperature (&deg;C)</li>
+                          <li>
+                            <em>T<sub>init</sub></em> is the initial temperature (&deg;C)
+                          </li>
                         </ul>
                       </td>
                     </tr>
@@ -1273,7 +1275,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>i</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>i</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
+                          The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
                         </p>
                       </td>
                     </tr>
@@ -1366,9 +1368,9 @@
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
-                      <td><em>T<sub>i</sub></em></td>
+                      <td><em>T<sub>init</sub></em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;T<sub>i</sub>&thinsp;&lt;&thinsp;100</em>
+                        <em>0&thinsp;&lt;&thinsp;T<sub>init</sub>&thinsp;&lt;&thinsp;100</em>
                       </td>
                       <td>--</td>
                       <td><em>40.0</em> &deg;C</td>
@@ -1421,7 +1423,7 @@
                     <tr>
                       <td><em>T<sub>W</sub></em></td>
                       <td>
-                        <em>T<sub>i</sub>&thinsp;&le;&thinsp;T<sub>W</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>
+                        <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>W</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>
                       </td>
                     </tr>
                     <tr>
@@ -1538,7 +1540,7 @@
                   <td>&deg;C</td>
                 </tr>
                 <tr>
-                  <td><em>T<sub>i</sub></em></td>
+                  <td><em>T<sub>init</sub></em></td>
                   <td>Initial temperature</td>
                   <td>&deg;C</td>
                 </tr>

@@ -10,7 +10,7 @@ public class Control {
         double A_C;
         double C_W;
         double h_C;
-        double T_i;
+        double T_init;
         double t_final;
         double L;
         double T_C;
@@ -21,8 +21,8 @@ public class Control {
         double R_tol;
         double T_W;
         double E_W;
-        InputParameters.get_input(filename, out A_C, out C_W, out h_C, out T_i, out t_final, out L, out T_C, out t_step, out rho_W, out D, out A_tol, out R_tol, out T_W, out E_W);
-        InputParameters.input_constraints(A_C, C_W, h_C, T_i, t_final, L, T_C, t_step, rho_W, D, T_W, E_W);
+        InputParameters.get_input(filename, out A_C, out C_W, out h_C, out T_init, out t_final, out L, out T_C, out t_step, out rho_W, out D, out A_tol, out R_tol, out T_W, out E_W);
+        InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W);
         OutputFormat.write_output(T_W, E_W);
     }
 }

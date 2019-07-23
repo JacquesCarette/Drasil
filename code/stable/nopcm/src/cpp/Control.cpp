@@ -21,7 +21,7 @@ int main(int argc, const char *argv[]) {
     double A_C;
     double C_W;
     double h_C;
-    double T_i;
+    double T_init;
     double t_final;
     double L;
     double T_C;
@@ -32,8 +32,8 @@ int main(int argc, const char *argv[]) {
     double R_tol;
     double T_W;
     double E_W;
-    get_input(filename, A_C, C_W, h_C, T_i, t_final, L, T_C, t_step, rho_W, D, A_tol, R_tol, T_W, E_W);
-    input_constraints(A_C, C_W, h_C, T_i, t_final, L, T_C, t_step, rho_W, D, T_W, E_W);
+    get_input(filename, A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, A_tol, R_tol, T_W, E_W);
+    input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W);
     write_output(T_W, E_W);
     
     return 0;

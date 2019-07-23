@@ -11,7 +11,7 @@ def get_input(filename):
     infile.readline()
     h_C = float(infile.readline())
     infile.readline()
-    T_i = float(infile.readline())
+    T_init = float(infile.readline())
     infile.readline()
     t_final = float(infile.readline())
     infile.readline()
@@ -34,9 +34,9 @@ def get_input(filename):
     E_W = float(infile.readline())
     infile.close()
     
-    return A_C, C_W, h_C, T_i, t_final, L, T_C, t_step, rho_W, D, A_tol, R_tol, T_W, E_W
+    return A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, A_tol, R_tol, T_W, E_W
 
-def input_constraints(A_C, C_W, h_C, T_i, t_final, L, T_C, t_step, rho_W, D, T_W, E_W):
+def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W):
     if (not((A_C <= 100000))) :
         print("Warning: constraint violated")
     if (not(((4170 < C_W) and (C_W < 4210)))) :
@@ -56,7 +56,7 @@ def input_constraints(A_C, C_W, h_C, T_i, t_final, L, T_C, t_step, rho_W, D, T_W
         print("Warning: constraint violated")
     if (not((h_C > 0))) :
         print("Warning: constraint violated")
-    if (not(((0 < T_i) and (T_i < 100)))) :
+    if (not(((0 < T_init) and (T_init < 100)))) :
         print("Warning: constraint violated")
     if (not((t_final > 0))) :
         print("Warning: constraint violated")
@@ -70,7 +70,7 @@ def input_constraints(A_C, C_W, h_C, T_i, t_final, L, T_C, t_step, rho_W, D, T_W
         print("Warning: constraint violated")
     if (not((D > 0))) :
         print("Warning: constraint violated")
-    if (not(((T_i <= T_W) and (T_W <= T_C)))) :
+    if (not(((T_init <= T_W) and (T_W <= T_C)))) :
         print("Warning: constraint violated")
     if (not((E_W >= 0))) :
         print("Warning: constraint violated")

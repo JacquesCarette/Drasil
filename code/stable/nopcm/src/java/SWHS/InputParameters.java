@@ -14,7 +14,7 @@ public class InputParameters {
         double A_C;
         double C_W;
         double h_C;
-        double T_i;
+        double T_init;
         double t_final;
         double L;
         double T_C;
@@ -35,7 +35,7 @@ public class InputParameters {
         infile.nextLine();
         h_C = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        T_i = Double.parseDouble(infile.nextLine());
+        T_init = Double.parseDouble(infile.nextLine());
         infile.nextLine();
         t_final = Double.parseDouble(infile.nextLine());
         infile.nextLine();
@@ -62,7 +62,7 @@ public class InputParameters {
         outputs[0] = A_C;
         outputs[1] = C_W;
         outputs[2] = h_C;
-        outputs[3] = T_i;
+        outputs[3] = T_init;
         outputs[4] = t_final;
         outputs[5] = L;
         outputs[6] = T_C;
@@ -76,7 +76,7 @@ public class InputParameters {
         return outputs;
     }
     
-    public static void input_constraints(double A_C, double C_W, double h_C, double T_i, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) throws Exception {
+    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) throws Exception {
         if (!((A_C <= 100000))) {
             System.out.println("Warning: constraint violated");
         }
@@ -105,7 +105,7 @@ public class InputParameters {
         if (!((h_C > 0))) {
             System.out.println("Warning: constraint violated");
         }
-        if (!(((0 < T_i) && (T_i < 100)))) {
+        if (!(((0 < T_init) && (T_init < 100)))) {
             System.out.println("Warning: constraint violated");
         }
         if (!((t_final > 0))) {
@@ -126,7 +126,7 @@ public class InputParameters {
         if (!((D > 0))) {
             System.out.println("Warning: constraint violated");
         }
-        if (!(((T_i <= T_W) && (T_W <= T_C)))) {
+        if (!(((T_init <= T_W) && (T_W <= T_C)))) {
             System.out.println("Warning: constraint violated");
         }
         if (!((E_W >= 0))) {

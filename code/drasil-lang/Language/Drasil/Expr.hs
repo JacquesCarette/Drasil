@@ -35,7 +35,7 @@ data UFunc = Norm | Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
   | Arccos | Arctan | Exp | Sqrt | Not | Neg | Dim
 
 -- | For case expressions
-data Completeness = Complete | Incomplete
+data Completeness = Complete | Incomplete deriving (Eq)
 
 -- | Drasil Expressions
 data Expr where
@@ -119,7 +119,7 @@ instance Eq Expr where
   Deriv t1 a b   == Deriv t2 c d   =  t1 == t2 && a == c && b == d
   C a            == C b            =   a == b
   FCall a b      == FCall c d      =   a == c && b == d
-  Case _ a       == Case _ b       =   a == b
+  Case a b       == Case c d       =   a == c && b == d 
   IsIn  a b      == IsIn  c d      =   a == c && b == d
   BinaryOp o a b == BinaryOp p c d =   o == p && a == c && b == d
   _              == _              =   False

@@ -406,7 +406,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{r}$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
+Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the An empirical physical constant, used to show the force between two objects caused by gravity ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
 \\ \midrule \\
 Source & --
 \\ \midrule \\
@@ -1218,13 +1218,13 @@ ${C_{R}}$ & $0\leq{}{C_{R}}\leq{}1$ & $0.8$ & 10$\%$
 \\
 $\mathbf{F}$ & -- & $98.1$ N & 10$\%$
 \\
-$G$ & -- & $9.8$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10$\%$
+$G$ & -- & $66.743\cdot{}10^{-12}$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10$\%$
 \\
-$\mathbf{I}$ & $\mathbf{I}\geq{}0$ & $74.5$ kg$\text{m}^{2}$ & 10$\%$
+$\mathbf{I}$ & $\mathbf{I}>0$ & $74.5$ kg$\text{m}^{2}$ & 10$\%$
 \\
-$L$ & $L\geq{}0$ & $44.2$ m & 10$\%$
+$L$ & $L>0$ & $44.2$ m & 10$\%$
 \\
-$m$ & $m\geq{}0$ & $56.2$ kg & 10$\%$
+$m$ & $m>0$ & $56.2$ kg & 10$\%$
 \\
 $\mathbf{p}$ & -- & $0.412$ m & 10$\%$
 \\
@@ -1234,7 +1234,7 @@ $τ$ & -- & $200.0$ Nm & 10$\%$
 \\
 $ω$ & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10$\%$
 \\
-$ϕ$ & -- & $\frac{π}{2}$ rad & 10$\%$
+$ϕ$ & $0\leq{}ϕ\leq{}2 π$ & $\frac{π}{2}$ rad & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -1243,19 +1243,19 @@ $ϕ$ & -- & $\frac{π}{2}$ rad & 10$\%$
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
 \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
-\begin{longtable}{l}
+\begin{longtable}{l l}
 \toprule
-\textbf{Var}
+\textbf{Var} & \textbf{Physical Constraints}
 \\
 \midrule
 \endhead
-$\mathbf{p}$
+$\mathbf{p}$ & --
 \\
-$\mathbf{v}$
+$\mathbf{v}$ & --
 \\
-$ϕ$
+$ϕ$ & $0\leq{}ϕ\leq{}2 π$
 \\
-$ω$
+$ω$ & --
 \\
 \bottomrule
 \caption{Output Data Constraints}

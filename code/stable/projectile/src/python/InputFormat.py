@@ -13,7 +13,7 @@ def get_input(filename, inParams):
     infile.readline()
     inParams.v_launch = float(infile.readline())
     infile.readline()
-    inParams.angle = float(infile.readline())
+    inParams.theta = float(infile.readline())
     infile.readline()
     inParams.p_target = float(infile.readline())
     infile.close()

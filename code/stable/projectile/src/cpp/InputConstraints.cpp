@@ -21,7 +21,7 @@ void input_constraints(InputParameters &inParams) {
     if (!((inParams.v_launch > 0))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
-    if (!(((0 < inParams.angle) && (inParams.angle < (3.14159265 / 2))))) {
+    if (!(((0 < inParams.theta) && (inParams.theta < (3.14159265 / 2))))) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
     if (!((inParams.p_target > 0))) {

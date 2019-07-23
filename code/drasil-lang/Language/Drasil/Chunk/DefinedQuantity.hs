@@ -1,8 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.DefinedQuantity
-  ( dqd, dqd', DefinedQuantityDict, dqdWr
-  , dqdQd) where
-import Control.Lens ((^.), makeLenses, view)
+module Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqdNoUnit, dqd',
+  dqdQd, dqdWr) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept,
@@ -14,6 +12,8 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
+
+import Control.Lens ((^.), makeLenses, view)
 
 -- | DefinedQuantity = Concept + Quantity
 data DefinedQuantityDict = DQD { _con :: ConceptChunk
@@ -38,6 +38,9 @@ instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 -- For when the symbol is constant through stages
 dqd :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
 dqd c s sp = DQD c (const s) sp . Just . unitWrapper
+
+dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
+dqdNoUnit c s sp = DQD c (const s) sp Nothing
 
 -- For when the symbol changes depending on the stage
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict

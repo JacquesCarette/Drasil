@@ -9,7 +9,7 @@ import Language.Drasil hiding (int, ($.), log, ln, exp,
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
-  RenderSym(..), AuxiliarySym(..), PermanenceSym(..), BodySym(..), BlockSym(..),
+  RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..),
   StateTypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
@@ -161,17 +161,9 @@ genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
 genPackage = do
   g <- ask
   ms <- genModules
-  aux <- genDoxConfig ms
-  return $ package (case codeSpec g of CodeSpec {program = p} -> programName p) 
-    ms aux
-
-genDoxConfig :: (AuxiliarySym repr) => [repr (RenderFile repr)] -> 
-  Reader (State repr) [repr (Auxiliary repr)]
-genDoxConfig ms = do
-  g <- ask
-  return $ if null (commented g) then [] 
-  else [doxConfig (case codeSpec g of CodeSpec {program = p} -> programName p)
-    ms]
+  let n = case codeSpec g of CodeSpec {program = p} -> programName p
+      cms = commented g
+  return $ if null cms then package n ms [] else packDox n ms
 
 genModules :: (RenderSym repr) => Reader (State repr) [repr (RenderFile repr)]
 genModules = do

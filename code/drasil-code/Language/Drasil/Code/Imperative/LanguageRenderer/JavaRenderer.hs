@@ -90,6 +90,10 @@ instance PackageSym JavaCode where
   package n ms = lift2Lists (packD n) (map (liftA2 (packageDocD n) endStatement) mods)
     where mods = filter (not . isEmpty . modDoc . fileMod . unJC) ms
 
+  packDox n ms = lift2Lists (packD n) pMods [doxConfig n pMods]
+    where pMods = map (liftA2 (packageDocD n) endStatement) mods
+          mods = filter (not . isEmpty . modDoc . fileMod . unJC) ms
+
 instance RenderSym JavaCode where
   type RenderFile JavaCode = FileData
   fileDoc code = liftA2 fileD (fmap (addExt "java" . name) code) (liftA2 

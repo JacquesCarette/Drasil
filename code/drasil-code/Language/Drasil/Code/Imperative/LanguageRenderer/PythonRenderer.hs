@@ -76,6 +76,8 @@ instance PackageSym PythonCode where
   package n ms = lift2Lists (packD n) mods
     where mods = filter (not . isEmpty . modDoc . fileMod . unPC) ms
 
+  packDox n ms = package n ms [doxConfig n ms]
+
 instance RenderSym PythonCode where
   type RenderFile PythonCode = FileData
   fileDoc code = liftA2 fileD (fmap (addExt "py" . name) code) (liftA2 

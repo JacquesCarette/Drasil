@@ -86,6 +86,8 @@ instance (Pair p) => PackageSym (p CppSrcCode CppHdrCode) where
   type Package (p CppSrcCode CppHdrCode) = PackData
   package n ms aux = pair (package n (map pfst ms) (map pfst aux)) (package n (map psnd ms) (map psnd aux))
 
+  packDox n ms = pair (packDox n $ map pfst ms) (packDox n $ map psnd ms)
+
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = FileData
   fileDoc code = pair (fileDoc $ pfst code) (fileDoc $ psnd code)
@@ -639,6 +641,8 @@ instance PackageSym CppSrcCode where
   type Package CppSrcCode = PackData
   package n ms = lift2Lists (packD n) mods
     where mods = filter (not . isEmpty . modDoc . fileMod . unCPPSC) ms
+
+  packDox n ms = package n ms [doxConfig n ms]
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
@@ -1217,6 +1221,8 @@ instance PackageSym CppHdrCode where
   type Package CppHdrCode = PackData
   package n ms = lift2Lists (packD n) mods
     where mods = filter (not . isEmpty . modDoc . fileMod . unCPPHC) ms
+
+  packDox n ms = package n ms [doxConfig n ms]
 
 instance RenderSym CppHdrCode where
   type RenderFile CppHdrCode = FileData

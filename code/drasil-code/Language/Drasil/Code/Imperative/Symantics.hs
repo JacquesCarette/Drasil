@@ -26,6 +26,8 @@ class (RenderSym repr, AuxiliarySym repr) => PackageSym repr where
   package :: Label -> [repr (RenderFile repr)] -> [repr (Auxiliary repr)] -> 
     repr (Package repr)
 
+  packDox :: Label -> [repr (RenderFile repr)] -> repr (Package repr)
+
 class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) => 
   RenderSym repr where 
   type RenderFile repr

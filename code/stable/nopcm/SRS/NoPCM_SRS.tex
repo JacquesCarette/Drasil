@@ -186,11 +186,11 @@ Uncert. & Typical Uncertainty
 \end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
-Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems provide a novel way of storing energy.
+Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems provide a novel way of storing energy.
 The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The main purpose of this document is to describe the modelling of solar water heating system. The goals and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
+The main purpose of this document is to describe the modelling of solar water heating system. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
@@ -201,7 +201,7 @@ Reviewers of this documentation should have an understanding of heat transfer th
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{dParnas1972} and \cite{parnasClements1984}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
-The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}). The instance model to be solved is referred to as \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
+The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}). The instance model to be solved is referred to as \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}. The instance model provides the Ordinary Differential Equation (ODE) that models the solar water heating system. SWHS solves this ODE.
 \section{General System Description}
 \label{Sec:GenSysDesc}
 This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
@@ -382,7 +382,9 @@ Description & \begin{symbDescription}
               \item{$ΔT$ is the change in temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (\hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
+Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings.
+        $h$ is assumed to be independent of $T$ (from \hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant}).
+        $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object.
 \\ \midrule \\
 Source & \cite[(pg. 8)]{incroperaEtAl2007}
 \\ \midrule \\
@@ -417,8 +419,6 @@ Description & \begin{symbDescription}
               \item{$V$ is the volume ($\text{m}^{3}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
-\\ \midrule \\
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
@@ -435,15 +435,15 @@ Applying Gauss's Divergence Theorem to the first term over the surface $S$ of th
 \begin{displaymath}
 -\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
-We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
+We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
 \begin{displaymath}
 {q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
-Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume}, and \hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
+Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$, and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume}, and \hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
 \begin{displaymath}
 ρ C V \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{displaymath}
-Using the fact that $ρ$=$m$/$V$, (2) can be written as:
+Using the fact that $ρ$=$m$/$V$, Equation (2) can be written as:
 \begin{displaymath}
 m C \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{displaymath}
@@ -536,15 +536,15 @@ To find the rate of change of ${T_{W}}$, we look at the energy balance on water.
 \begin{displaymath}
 {m_{W}} {C_{W}} \frac{\,d{T_{W}}}{\,dt}={q_{C}} {A_{C}}
 \end{displaymath}
-Using \hyperref[DD:htFluxC]{DD: htFluxC} , this can be written as:
+Using \hyperref[DD:htFluxC]{DD: htFluxC} for ${q_{C}}$, this can be written as:
 \begin{displaymath}
 {m_{W}} {C_{W}} \frac{\,d{T_{W}}}{\,dt}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)
 \end{displaymath}
-Dividing (3) by ${m_{W}} {C_{W}}$, we obtain:
+Dividing Equation (3) by ${m_{W}} {C_{W}}$, we obtain:
 \begin{displaymath}
 \frac{\,d{T_{W}}}{\,dt}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)
 \end{displaymath}
-Setting ${τ_{W}}$ = ${m_{W}}$ ${C_{W}}$ / ${h_{C}}$ ${A_{C}}$ , Equation (4) can be written in its final form as:
+Setting ${τ_{W}}$ = ${m_{W}}$ ${C_{W}}$ / ${h_{C}}$ ${A_{C}}$, Equation (4) can be written in its final form as:
 \begin{displaymath}
 \frac{\,d{T_{W}}}{\,dt}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)
 \end{displaymath}

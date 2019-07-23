@@ -44,7 +44,7 @@ Simply run: `make argument` to build the corresponding example, where argument i
 
 Argument | Example
 -------- | -------
-gamephys_diff | Chipmunk2D
+gamephysics_diff | 2D Rigid Body Physics Library
 swhs_diff | Solar Water Heating System with PCM
 glassbr_diff | Glass-BR
 tiny_diff | HGHC toy example
@@ -61,7 +61,7 @@ After building, you can run the examples by using `stack exec NAME` where NAME i
 
 NAME | Example
 ------|-------
-chipmunkdocs | Chipmunk2D
+gamephysics | 2D Rigid Body Physics Library
 swhs | Solar Water Heating System with PCM (SWHS)
 glassbr | Glass-BR
 tiny | HGHC toy example

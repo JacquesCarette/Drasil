@@ -25,7 +25,8 @@ data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
 -- - empty! (this is to give this a monoid-like flavour)
 data Symbol =
     Variable String
-  | Label    String 
+  | Label    String
+  | Integ    Int
   | Special  Special
   | Atop     Decoration Symbol
   | Corners  [Symbol] [Symbol] [Symbol] [Symbol] Symbol
@@ -104,17 +105,20 @@ compsy (Atop _ b) a =
     EQ -> GT
     other -> other
 compsy (Special a)  (Special b)  = compare a b
-compsy (Special _)  _            = LT
-compsy _            (Special _)  = GT
+compsy (Integ    x) (Integ    y) = compare x y
 compsy (Variable x) (Variable y) = compsyLower x y
 compsy (Variable x) (Label y)    = compsyLower x y
 compsy (Label x)    (Variable y) = compsyLower x y
 compsy (Label x)    (Label y)    = compsyLower x y
+compsy (Special _)  _ = LT
+compsy _ (Special _)  = GT
+compsy (Integ _) _    = LT
+compsy _ (Integ _)    = GT
 compsy (Variable _) _ = LT
 compsy _ (Variable _) = GT
-compsy (Label _) _ = LT
-compsy _ (Label _) = GT
-compsy Empty Empty = EQ
+compsy (Label _) _    = LT
+compsy _ (Label _)    = GT
+compsy Empty Empty    = EQ
 
 compsyLower :: String -> String -> Ordering
 compsyLower x y = case compare (map toLower x) (map toLower y) of

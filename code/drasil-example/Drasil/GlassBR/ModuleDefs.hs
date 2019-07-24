@@ -34,8 +34,8 @@ readTable = funcData "read_table"
 -----
 
 one, two :: Symbol
-one = Label "1"
-two = Label "2"
+one = Integ 1
+two = Integ 2
 
 -- No need to be too verbose
 var :: String -> Symbol -> Space -> QuantityDict

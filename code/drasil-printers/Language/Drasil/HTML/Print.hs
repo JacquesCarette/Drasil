@@ -108,9 +108,10 @@ pSpec (Quote q)          = doubleQuotes $ pSpec q
 -- | Renders symbols for HTML document
 symbol :: L.Symbol -> String
 symbol (L.Variable s) = s
-symbol (L.Label s)    = s
-symbol (L.Special s)  = unPH $ L.special s
-symbol (L.Concat sl)  = concatMap symbol sl
+symbol (L.Label    s) = s
+symbol (L.Integ    n) = show n
+symbol (L.Special  s) = unPH $ L.special s
+symbol (L.Concat  sl) = concatMap symbol sl
 --symbol (Greek g)      = unPH $ greek g
 -- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = symbol s ++ (render . sup . text) (symbol x)

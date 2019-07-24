@@ -263,9 +263,9 @@ time_1     = timeParam "1" "first"  label1
 time_2     = timeParam "2" "second" label2
 
 label0, label1, label2, lBodyA, lBodyB, lCMass, lColl, lOrigin, lPoint :: Symbol
-label0  = Label "0"
-label1  = Label "1"
-label2  = Label "2"
+label0  = Integ 0
+label1  = Integ 1
+label2  = Integ 2
 lBodyA  = Label "A"
 lBodyB  = Label "B"
 lCMass  = Label "CM"

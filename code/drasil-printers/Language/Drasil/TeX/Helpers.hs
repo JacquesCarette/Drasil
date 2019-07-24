@@ -189,7 +189,7 @@ superscript a b = a <> pure H.hat    <> br b
 
 -- Macro / Command def'n --
 --TeX--
-bullet, counter, ddefnum, ddref, colAw, colBw, arrayS, modcounter, modnum, newline :: D
+bullet, counter, ddefnum, ddref, colAw, colBw, arrayS, modcounter, modnum :: D
 
 counter    = count "datadefnum"
 modcounter = count "modnum"
@@ -203,7 +203,9 @@ modnum  = comm "mthemodnum"      "M\\themodnum"      Nothing
 
 arrayS  = renewcomm "arraystretch" "1.2"
 
-newline = pure $ text ""
+-- add newline
+newline :: D -> D
+newline s = s $+$ pure (text "")
 
 fraction :: D -> D -> D
 fraction n d = command0 "frac" <> br n <> br d

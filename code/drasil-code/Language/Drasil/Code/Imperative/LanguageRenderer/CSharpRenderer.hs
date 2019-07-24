@@ -45,7 +45,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
   setMain, setMainMethod,setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
-  FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  FileData(..), srcFile, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, PackData(..), packD, ParamData(..), pd, 
   updateParamDoc, TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), 
   vard)
@@ -91,7 +91,7 @@ instance PackageSym CSharpCode where
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = FileData
-  fileDoc code = liftA2 fileD (fmap (addExt "cs" . name) code) (liftA2 
+  fileDoc code = liftA2 srcFile (fmap (addExt "cs" . name) code) (liftA2 
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 

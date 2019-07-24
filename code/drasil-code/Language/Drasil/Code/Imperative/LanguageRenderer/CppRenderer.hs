@@ -44,7 +44,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
   surroundBody, getterName, setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
-  ScopeTag (..), AuxData(..), ad, FileData(..), fileD, updateFileMod, 
+  ScopeTag (..), AuxData(..), ad, FileData(..), srcFile, hdrFile, updateFileMod,
   FuncData(..), fd, ModData(..), md, updateModDoc, PackData(..), packD, 
   ParamData(..), pd, StateVarData(..), svd, TypeData(..), td, ValData(..), 
   VarData(..), vard)
@@ -651,7 +651,7 @@ instance PackageSym CppSrcCode where
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
-  fileDoc code = liftA2 fileD (fmap (addExt "cpp" . name) code) (liftA2 
+  fileDoc code = liftA2 srcFile (fmap (addExt "cpp" . name) code) (liftA2 
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 
@@ -1231,7 +1231,7 @@ instance PackageSym CppHdrCode where
 
 instance RenderSym CppHdrCode where
   type RenderFile CppHdrCode = FileData
-  fileDoc code = liftA2 fileD (fmap (addExt "hpp" . name) code) (liftA2 
+  fileDoc code = liftA2 hdrFile (fmap (addExt "hpp" . name) code) (liftA2 
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
   

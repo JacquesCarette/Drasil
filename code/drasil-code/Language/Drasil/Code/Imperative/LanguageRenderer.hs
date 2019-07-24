@@ -88,8 +88,8 @@ addExt ext nm = nm ++ "." ++ ext
 ----------------------------------
 
 packageDocD :: Label -> Doc -> FileData -> FileData
-packageDocD n end f = fileD (n ++ "/" ++ filePath f) (updateModDoc (vibcat [
-  text "package" <+> text n <> end, modDoc (fileMod f)]) (fileMod f))
+packageDocD n end f = fileD (fileType f) (n ++ "/" ++ filePath f) (updateModDoc 
+  (vibcat [text "package" <+> text n <> end, modDoc (fileMod f)]) (fileMod f))
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat [

@@ -54,7 +54,7 @@ renderExt _ (OtherExt e) = e
 
 getMainModule :: [FileData] -> Label
 getMainModule c = mainName $ filter (isMainMod . fileMod) c
-  where mainName [FileD _ m] = name m
+  where mainName [FileD _ _ m] = name m
         mainName _ = error "Expected a single main module."
 
 getCompilerInput :: BuildDependencies -> [String] -> PackData -> [MakeString]

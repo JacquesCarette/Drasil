@@ -37,7 +37,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
   addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
   getterName, setterName)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
-  FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  FileData(..), srcFile, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, PackData(..), packD, ParamData(..), 
   TypeData(..), td, ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
@@ -81,7 +81,7 @@ instance PackageSym PythonCode where
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = FileData
-  fileDoc code = liftA2 fileD (fmap (addExt "py" . name) code) (liftA2 
+  fileDoc code = liftA2 srcFile (fmap (addExt "py" . name) code) (liftA2 
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 

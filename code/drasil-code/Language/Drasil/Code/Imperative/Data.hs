@@ -1,13 +1,14 @@
 module Language.Drasil.Code.Imperative.Data (Pair(..), pairList,
   Terminator(..), ScopeTag(..), FileType(..), AuxData(..), ad, FileData(..), 
-  fileD, srcFile, hdrFile, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, PackData(..), packD, ParamData(..), pd, 
-  updateParamDoc, StateVarData(..), svd, TypeData(..), td, ValData(..), vd, 
-  updateValDoc, VarData(..), vard
+  fileD, file, srcFile, hdrFile, isSource, isHeader, updateFileMod, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  PackData(..), packD, ParamData(..), pd, updateParamDoc, StateVarData(..), svd,
+  TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
 
+import Control.Applicative (liftA2)
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -25,7 +26,7 @@ data Terminator = Semi | Empty
 
 data ScopeTag = Pub | Priv deriving Eq
 
-data FileType = Source | Header
+data FileType = Combined | Source | Header deriving Eq
 
 data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}
 
@@ -41,11 +42,20 @@ instance Eq FileData where
 fileD :: FileType -> String -> ModData -> FileData
 fileD = FileD
 
+file :: String -> ModData -> FileData
+file = FileD Combined
+
 srcFile :: String -> ModData -> FileData
 srcFile = FileD Source
 
 hdrFile :: String -> ModData -> FileData
 hdrFile = FileD Header
+
+isSource :: FileData -> Bool
+isSource = liftA2 (||) (Source ==) (Combined ==) . fileType
+
+isHeader :: FileData -> Bool
+isHeader = liftA2 (||) (Header ==) (Combined ==) . fileType
 
 updateFileMod :: ModData -> FileData -> FileData
 updateFileMod m f = fileD (fileType f) (filePath f) m

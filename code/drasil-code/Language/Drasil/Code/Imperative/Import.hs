@@ -21,14 +21,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Data (PackData(..))
 import Language.Drasil.Code.Imperative.Helpers (convType, getStr)
-import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
-  (cppExts)
-import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer 
-  (csExts)
-import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer 
-  (jExts, jNameOpts)
-import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer 
-  (pyExts)
+import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (jNameOpts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
   codeType, codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup,
@@ -155,7 +148,7 @@ generateCode l unRepr g =
   where pckg = runReader genPackage g
         code = makeCode (packMods $ unRepr pckg) (packAux $ unRepr pckg)
         makefile = makeBuild (unRepr pckg) (getBuildConfig l) 
-          (getRunnable l) (getExt l) (commented g)
+          (getRunnable l) (commented g)
 
 genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
 genPackage = do
@@ -181,12 +174,6 @@ getDir Cpp = "cpp"
 getDir CSharp = "csharp"
 getDir Java = "java"
 getDir Python = "python"
-
-getExt :: Lang -> [Label]
-getExt Java = jExts
-getExt Python = pyExts
-getExt CSharp = csExts
-getExt Cpp = cppExts
 
 getRunnable :: Lang -> Runnable
 getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) 

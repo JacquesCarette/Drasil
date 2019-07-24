@@ -45,7 +45,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
   getterName, setterName, setMain, setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
-  FileData(..), srcFile, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, ParamData(..), pd, PackData(..), packD, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
@@ -96,7 +96,7 @@ instance PackageSym JavaCode where
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = FileData
-  fileDoc code = liftA2 srcFile (fmap (addExt "java" . name) code) (liftA2 
+  fileDoc code = liftA2 file (fmap (addExt "java" . name) code) (liftA2 
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 

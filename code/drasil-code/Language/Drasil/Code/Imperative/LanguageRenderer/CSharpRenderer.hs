@@ -42,8 +42,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doxConfigName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
-  setMain, setMainMethod,setEmpty, intValue)
+  moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
+  setterName, setMain, setMainMethod,setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, PackData(..), packD, ParamData(..), pd, 
@@ -553,13 +553,13 @@ instance MethodSym CSharpCode where
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v) 
+  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins outs b = function n s p (mState void) (map (\v -> 
-    if v `elem` outs then fmap (updateParamDoc csRef) (stateParam v) else 
-    stateParam v) ins ++ map (fmap (updateParamDoc csOut) . stateParam) 
-    (filter (`notElem` ins) outs)) b
+  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) 
+    (map stateParam $ v : ins) (liftA2 appendToBody b (returnState $ valueOf v))
+  inOutFunc n s p ins outs both b = function n s p (mState void) (map (fmap 
+    (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ map (fmap (updateParamDoc csOut) . stateParam) outs) b
 
   docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
 

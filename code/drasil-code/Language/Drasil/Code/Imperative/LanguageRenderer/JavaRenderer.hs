@@ -42,8 +42,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
   doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
-  getterName, setterName, setMain, setMainMethod, setEmpty, intValue)
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody,
+  surroundBody, getterName, setterName, setMain, setMainMethod, setEmpty, 
+  intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, ParamData(..), pd, PackData(..), packD, 
@@ -560,13 +561,16 @@ instance MethodSym JavaCode where
   docFunc = docFuncRepr
 
   inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
-  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v) 
+  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins outs b = function n s p jArrayType
-    (map stateParam ins) (liftA3 surroundBody decls b (multi (varDecDef outputs
-        (valueOf (var ("new Object[" ++ show (length outs) ++ "]") jArrayType))
-      : assignArray 0 (map valueOf outs)
+  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) (map 
+    stateParam $ v : ins) (liftA2 appendToBody b (returnState $ valueOf v))
+  inOutFunc n s p ins outs both b = function n s p jArrayType
+    (map stateParam $ both ++ ins) (liftA3 surroundBody decls b (multi 
+      (varDecDef outputs (valueOf (var 
+        ("new Object[" ++ show (length $ both ++ outs) ++ "]") jArrayType))
+      : assignArray 0 (map valueOf $ both ++ outs)
       ++ [returnState (valueOf outputs)])))
       where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
               [JavaCode (Statement JavaCode)]

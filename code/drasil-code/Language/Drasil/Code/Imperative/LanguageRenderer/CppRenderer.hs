@@ -573,9 +573,9 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   docFunc desc pComms f = pair (docFunc desc pComms $ pfst f) (docFunc desc 
     pComms $ psnd f)
 
-  inOutFunc n s p ins outs b = pair (inOutFunc n (pfst s) (pfst p) (map pfst 
-    ins) (map pfst outs) (pfst b)) (inOutFunc n (psnd s) (psnd p) (map psnd ins)
-    (map psnd outs) (psnd b))
+  inOutFunc n s p ins outs both b = pair (inOutFunc n (pfst s) (pfst p) (map
+    pfst ins) (map pfst outs) (map pfst both) (pfst b)) (inOutFunc n (psnd s) 
+    (psnd p) (map psnd ins) (map psnd outs) (map psnd both) (psnd b))
 
   docInOutFunc desc iComms oComms f = pair (docInOutFunc desc iComms oComms $ 
     pfst f) (docInOutFunc desc iComms oComms $ psnd f)
@@ -1144,12 +1144,14 @@ instance MethodSym CppSrcCode where
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v)
+  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v)
     (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
-    if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
-    map pointerParam outs) b
+  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v)
+    (map (fmap getParam) $ v : ins) (liftA3 appendToBody b (returnState $ 
+    valueOf v))
+  inOutFunc n s p ins outs both b = function n s p (mState void) (map
+    pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
   docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
 
@@ -1643,11 +1645,12 @@ instance MethodSym CppHdrCode where
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v) 
+  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map (fmap getParam) ins) b
-  inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
-    if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
-    map pointerParam outs) b
+  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) 
+    (map (fmap getParam) $ v : ins) b
+  inOutFunc n s p ins outs both b = function n s p (mState void) (map 
+    pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
   docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
 

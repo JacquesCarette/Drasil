@@ -248,7 +248,7 @@ Uncert. & Typical Uncertainty
 \end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
-Due to the increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use a renewable energy source and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
+Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use a renewable energy source and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
 The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
@@ -496,7 +496,9 @@ Description & \begin{symbDescription}
               \item{$ΔT$ is the change in temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (\hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
+Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings.
+        $h$ is assumed to be independent of $T$ (from \hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant}).
+        $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object.
 \\ \midrule \\
 Source & \cite[(pg. 8)]{incroperaEtAl2007}
 \\ \midrule \\
@@ -532,8 +534,6 @@ Description & \begin{symbDescription}
               \item{$V$ is the volume ($\text{m}^{3}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
-\\ \midrule \\
 Source & --
 \\ \midrule \\
 RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
@@ -550,15 +550,15 @@ Applying Gauss's Divergence Theorem to the first term over the surface $S$ of th
 \begin{displaymath}
 -\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
-We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
+We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
 \begin{displaymath}
 {q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
-Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. The integral over the surface could be simplified because the thermal flux is assumed constant over ${A_{in}}$ and ${A_{out}}$ and $0$ on all other surfaces. Outward flux is considered positive. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}, \hyperref[assumpDWPCoV]{A: Density-Water-PCM-Constant-over-Volume}, and \hyperref[assumpSHECov]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
+Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. The integral over the surface could be simplified because the thermal flux is assumed constant over ${A_{in}}$ and ${A_{out}}$ and $0$ on all other surfaces. Outward flux is considered positive. Assuming $ρ$, $C$, and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}, \hyperref[assumpDWPCoV]{A: Density-Water-PCM-Constant-over-Volume}, and \hyperref[assumpSHECov]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
 \begin{displaymath}
 ρ C V \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{displaymath}
-Using the fact that $ρ$=$m$/$V$, (2) can be written as:
+Using the fact that $ρ$=$m$/$V$, Equation (2) can be written as:
 \begin{displaymath}
 m C \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{displaymath}
@@ -818,7 +818,7 @@ RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[out
 \end{minipage}
 \paragraph{Detailed derivation of the energy balance on water:}
 \label{IM:eBalanceOnWtrDeriv}
-To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity, ${C_{W}}$. Heat transfer occurs in the water from the heating coil as ${q_{C}}$ (\hyperref[DD:htFluxC]{DD: htFluxC})  and from the water into the PCM as ${q_{P}}$ (\hyperref[DD:htFluxP]{DD: htFluxP}), over areas ${A_{C}}$ and ${A_{P}}$, respectively. The thermal flux is constant over ${A_{C}}$, since the temperature of the heating coil is assumed to not vary along its length (\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length}), and the thermal flux is constant over ${A_{P}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
+To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity, ${C_{W}}$. Heat transfer occurs in the water from the heating coil as ${q_{C}}$ (\hyperref[DD:htFluxC]{DD: htFluxC}) and from the water into the PCM as ${q_{P}}$ (\hyperref[DD:htFluxP]{DD: htFluxP}), over areas ${A_{C}}$ and ${A_{P}}$, respectively. The thermal flux is constant over ${A_{C}}$, since the temperature of the heating coil is assumed to not vary along its length (\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length}), and the thermal flux is constant over ${A_{P}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 \begin{displaymath}
 {m_{W}} {C_{W}} \frac{\,d{T_{W}}}{\,dt}={q_{C}} {A_{C}}-{q_{P}} {A_{P}}
 \end{displaymath}
@@ -826,7 +826,7 @@ Using \hyperref[DD:htFluxC]{DD: htFluxC} and \hyperref[DD:htFluxP]{DD: htFluxP} 
 \begin{displaymath}
 {m_{W}} {C_{W}} \frac{\,d{T_{W}}}{\,dt}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)-{h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
 \end{displaymath}
-Dividing (3) by ${m_{W}}$${C_{W}}$, we obtain:
+Dividing Equation (3) by ${m_{W}} {C_{W}}$, we obtain:
 \begin{displaymath}
 \frac{\,d{T_{W}}}{\,dt}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)-\frac{{h_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{W}}-{T_{P}}\right)
 \end{displaymath}
@@ -842,7 +842,7 @@ Setting ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:htFusio
 \begin{displaymath}
 \frac{\,d{T_{W}}}{\,dt}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{η}{{τ_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{displaymath}
-Finally, factoring out $\frac{1}{{τ_{W}}}$ , we are left with the governing ODE for (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}):
+Finally, factoring out $\frac{1}{{τ_{W}}}$, we are left with the governing ODE for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}:
 \begin{displaymath}
 \frac{\,d{T_{W}}}{\,dt}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}+η \left({T_{P}}-{T_{W}}\right)\right)
 \end{displaymath}
@@ -910,7 +910,7 @@ Dividing by ${m_{P}}$ ${{C_{P}}^{S}}$ we obtain:
 \begin{displaymath}
 \frac{\,d{T_{P}}}{\,dt}=\frac{{h_{P}} {A_{P}}}{{m_{P}} {{C_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{displaymath}
-Setting ${{τ_{P}}^{S}}$ = ${m_{P}}$ ${{C_{P}}^{S}}$ / ${h_{P}}$ ${A_{P}}$ , this can be written as:
+Setting ${{τ_{P}}^{S}}$ = ${m_{P}}$ ${{C_{P}}^{S}}$ / ${h_{P}}$ ${A_{P}}$, this can be written as:
 \begin{displaymath}
 \frac{\,d{T_{P}}}{\,dt}=\frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{displaymath}
@@ -1016,7 +1016,7 @@ RefBy & \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[findMass]{FR: F
 \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.(*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (\hyperref[assumpPIS]{A: PCM-Initially-Solid}). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{min}}}$, where ${h_{min}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (\hyperref[assumpPIS]{A: PCM-Initially-Solid}). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{min}}}$, where ${h_{min}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
 \begin{longtable}{l l l l l}
 \toprule
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}

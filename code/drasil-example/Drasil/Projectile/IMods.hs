@@ -12,8 +12,8 @@ import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Math (constraint, equation, xAxis)
 
 import Data.Drasil.Quantities.Math (pi_)
-import Data.Drasil.Quantities.Physics (iSpeed, ixPos, ixVel, iyPos, iyVel,
-  time, xConstAccel, xPos, yConstAccel, yPos)
+import Data.Drasil.Quantities.Physics (gravitationalAccelConst, iSpeed, ixPos,
+  ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
 
 import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, launchOrigin,
   posXDirection, targetXAxis, timeStartZero, yAxisGravity)
@@ -21,8 +21,8 @@ import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (posVecGD)
-import Drasil.Projectile.Unitals (flightDur, grav, landPos, launAngle,
-  launSpeed, message, offset, targPos, tol)
+import Drasil.Projectile.Unitals (flightDur, landPos, launAngle, launSpeed,
+  message, offset, targPos, tol)
 
 iMods :: [InstanceModel]
 iMods = [timeIM, landPosIM, offsetIM, messageIM]
@@ -31,11 +31,11 @@ iMods = [timeIM, landPosIM, offsetIM, messageIM]
 timeIM :: InstanceModel
 timeIM = imNoRefs timeRC [qw launSpeed, qw launAngle]
   [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw flightDur) [sy flightDur $> 0]
-  (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravNote, timeConsNote]
+  (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
 timeRC :: RelationConcept
 timeRC = makeRC "timeRC" (nounPhraseSP "calculation of landing time")
-  EmptyS $ sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy grav
+  EmptyS $ sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy gravitationalAccelConst
 
 timeDeriv :: Derivation
 timeDeriv = mkDerivName (phrase flightDur) (weave [timeDerivSents, map E timeDerivEqns])
@@ -47,7 +47,7 @@ timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3,
 timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4, timeDerivSent5 :: Sentence
 timeDerivSent1 = foldlSentCol [S "We know that" +:+.
   foldlList Comma List [eqnWSource (sy iyPos $= 0) launchOrigin,
-  eqnWSource (sy yConstAccel $= - sy grav) accelYGravity],
+  eqnWSource (sy yConstAccel $= - sy gravitationalAccelConst) accelYGravity],
   S "Substituting these", plural value, S "into the y-direction" `sOf`
   makeRef2S posVecGD, S "gives us"]
 timeDerivSent2 = foldlSentCol [S "To find the", phrase time, S "that the",
@@ -66,21 +66,21 @@ timeDerivEqns :: [Expr]
 timeDerivEqns = [timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4, timeDerivEqn5]
 
 timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4, timeDerivEqn5 :: Expr
-timeDerivEqn1 = sy yPos $= sy iyVel * sy time - sy grav * square (sy time) / 2
-timeDerivEqn2 = sy iyVel * sy flightDur - sy grav * square (sy flightDur) / 2 $= 0
-timeDerivEqn3 = sy iyVel - sy grav * sy flightDur / 2 $= 0
-timeDerivEqn4 = sy flightDur $= 2 * sy iyVel / sy grav
-timeDerivEqn5 = sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy grav
+timeDerivEqn1 = sy yPos $= sy iyVel * sy time - sy gravitationalAccelConst * square (sy time) / 2
+timeDerivEqn2 = sy iyVel * sy flightDur - sy gravitationalAccelConst * square (sy flightDur) / 2 $= 0
+timeDerivEqn3 = sy iyVel - sy gravitationalAccelConst * sy flightDur / 2 $= 0
+timeDerivEqn4 = sy flightDur $= 2 * sy iyVel / sy gravitationalAccelConst
+timeDerivEqn5 = sy flightDur $= 2 * sy launSpeed * sin (sy launAngle) / sy gravitationalAccelConst
 
 ---
 landPosIM :: InstanceModel
 landPosIM = imNoRefs landPosRC [qw launSpeed, qw launAngle]
   [sy launSpeed $> 0, 0 $< sy launAngle $< (sy pi_ / 2)] (qw landPos) [sy landPos $> 0]
-  (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravNote, landPosConsNote]
+  (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
 landPosExpr :: Expr
 landPosExpr = sy landPos $= 2 * square (sy launSpeed) * sin (sy launAngle) *
-                                cos (sy launAngle) / sy grav
+                                cos (sy launAngle) / sy gravitationalAccelConst
 
 landPosRC :: RelationConcept
 landPosRC = makeRC "landPosRC" (nounPhraseSP "calculation of landing position")
@@ -112,8 +112,8 @@ landPosDerivEqns = [landPosDerivEqn1, landPosDerivEqn2, landPosDerivEqn3, landPo
 
 landPosDerivEqn1, landPosDerivEqn2, landPosDerivEqn3 :: Expr
 landPosDerivEqn1 = sy xPos $= sy ixVel * sy time
-landPosDerivEqn2 = sy landPos $= sy ixVel * 2 * sy launSpeed * sin (sy launAngle) / sy grav
-landPosDerivEqn3 = sy landPos $= sy launSpeed * cos (sy launAngle) * 2 * sy launSpeed * sin (sy launAngle) / sy grav
+landPosDerivEqn2 = sy landPos $= sy ixVel * 2 * sy launSpeed * sin (sy launAngle) / sy gravitationalAccelConst
+landPosDerivEqn3 = sy landPos $= sy launSpeed * cos (sy launAngle) * 2 * sy launSpeed * sin (sy launAngle) / sy gravitationalAccelConst
 
 ---
 offsetIM :: InstanceModel
@@ -140,7 +140,7 @@ messageRC = makeRC "messageRC" (nounPhraseSP "output message")
 
 --- Notes
 
-angleConstraintNote, gravNote, landAndTargPosConsNote, landPosNote,
+angleConstraintNote, gravitationalAccelConstNote, landAndTargPosConsNote, landPosNote,
   landPosConsNote, offsetNote, offsetConsNote, targPosConsNote,
   timeConsNote, tolNote :: Sentence
 
@@ -149,7 +149,8 @@ angleConstraintNote = foldlSent [S "The", phrase constraint,
   makeRef2S posXDirection `sAnd` makeRef2S yAxisGravity `sC`
   S "and is shown" `sIn` makeRef2S figLaunch]
 
-gravNote = ch grav `sIs` S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
+gravitationalAccelConstNote = ch gravitationalAccelConst `sIs`
+  S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
 
 landAndTargPosConsNote = S "The" +:+ plural constraint +:+
   E (sy landPos $> 0) `sAnd` E (sy targPos $> 0) `sAre` S "from" +:+. makeRef2S posXDirection

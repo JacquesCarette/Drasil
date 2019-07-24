@@ -16,15 +16,15 @@ import Build.Drasil ((+:+), genMake, makeS, MakeString, mkFile, mkRule,
 import Data.List.Utils (endswith)
 import Data.Maybe (maybe, maybeToList)
 
-data CodeHarness = Ch (Maybe BuildConfig) Runnable [String] PackData Code
+data CodeHarness = Ch (Maybe BuildConfig) Runnable [String] PackData
 
 instance RuleTransformer CodeHarness where
-  makeRule (Ch b r e m co@(Code code)) = [
+  makeRule (Ch b r e m) = [
     mkRule buildTarget (map (const $ renderBuildName e m nameOpts nm) $ maybeToList b) []
     ] ++
     maybe [] (\(BuildConfig comp bt) -> [
-    mkFile (renderBuildName e m nameOpts nm) (map (makeS . fst) code) [
-      mkCheckedCommand $ foldr (+:+) mempty $ comp (getCompilerInput bt e m co) $
+    mkFile (renderBuildName e m nameOpts nm) (map (makeS . filePath) (packMods m)) [
+      mkCheckedCommand $ foldr (+:+) mempty $ comp (getCompilerInput bt e m) $
         renderBuildName e m nameOpts nm
       ]
     ]) b ++ [
@@ -50,14 +50,14 @@ getMainModule c = mainName $ filter (isMainMod . fileMod) c
   where mainName [FileD _ m] = name m
         mainName _ = error "Expected a single main module."
 
-getCompilerInput :: BuildDependencies -> [String] -> PackData -> Code -> 
-  [MakeString]
-getCompilerInput BcSource e _ a = map makeS $ filter (endswith $ last e) $ map fst $ unCode a
-getCompilerInput (BcSingle n) e p _ = [renderBuildName e p nameOpts n]
+getCompilerInput :: BuildDependencies -> [String] -> PackData -> [MakeString]
+getCompilerInput BcSource e p = map makeS $ filter (endswith $ last e) $ map 
+  filePath $ packMods p
+getCompilerInput (BcSingle n) e p = [renderBuildName e p nameOpts n]
 
 buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
 buildRunTarget fn (Interpreter i) = i +:+ fn
 
-makeBuild :: PackData -> Maybe BuildConfig -> Runnable -> [String] -> Code -> Code
-makeBuild m b r e code = Code [("Makefile", genMake [Ch b r e m code])]
+makeBuild :: PackData -> Maybe BuildConfig -> Runnable -> [String] -> Code
+makeBuild m b r e = Code [("Makefile", genMake [Ch b r e m])]

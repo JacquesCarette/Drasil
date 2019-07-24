@@ -155,8 +155,8 @@ generateCode l unRepr g =
   where pckg = runReader genPackage g
         code = makeCode (map (packMods . ($ pckg)) unRepr) (map (packAux . ($ pckg)) unRepr)
         makefile = makeBuild (last unRepr pckg) (getBuildConfig l) 
-          (getRunnable l) (getExt l) code
-
+          (getRunnable l) (getExt l)
+          
 genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
 genPackage = do
   g <- ask

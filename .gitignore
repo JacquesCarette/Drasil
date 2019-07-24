@@ -39,3 +39,5 @@ __pycache__
 *.class
 .drasil-min-stack-ver
 */Projectile/output.txt
+*.fls
+*.fdb_latexmk

@@ -18,8 +18,8 @@ Last updated: July 19, 2019
 **swhs**
   - Contains the (currently) expected output for the SWHS example
 
-**tiny**
-  - Contains the (currently) expected output for the Tiny example
+**hghc**
+  - Contains the (currently) expected output for the HGHC example
 
 README.md
   - This file

@@ -1,25 +1,15 @@
-<a href=#></a>|<a href=#></a>|<a href=#twoDMotion>A: twoDMotion</a>|<a href=#cartSyst>A: cartSyst</a>|<a href=#yAxisGravity>A: yAxisGravity</a>|<a href=#launchOrigin>A: launchOrigin</a>|<a href=#targetXAxis>A: targetXAxis</a>|<a href=#posXDirection>A: posXDirection</a>|<a href=#constAccel>A: constAccel</a>|<a href=#accelXZero>A: accelXZero</a>|<a href=#accelYGravity>A: accelYGravity</a>|<a href=#neglectDrag>A: neglectDrag</a>|<a href=#pointMass>A: pointMass</a>|<a href=#freeFlight>A: freeFlight</a>|<a href=#neglectCurv>A: neglectCurv</a>|<a href=#timeStartZero>A: timeStartZero</a>|<a href=#></a>
-:|:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:
-<a href=#vecMag>DD: vecMag</a>|||||||||||||||
-<a href=#speedIX>DD: speedIX</a>|||||||||||||||
-<a href=#speedIY>DD: speedIY</a>|||||||||||||||
-<a href=#acceleration>TM: acceleration</a>|||||||||||||||
-<a href=#velocity>TM: velocity</a>|||||||||||||||
-<a href=#rectVel>GD: rectVel</a>|||||||||||X|||X|
-<a href=#rectPos>GD: rectPos</a>|||||||||||X|||X|
-<a href=#velVec>GD: velVec</a>|X|X|||||X|||||||X|
-<a href=#posVec>GD: posVec</a>|X|X|||||X|||||||X|
-<a href=#calOfLandingTime>IM: calOfLandingTime</a>|||X|X|X|X|||X|||||X|
-<a href=#calOfLandingDist>IM: calOfLandingDist</a>|||X|X||X||X|||||||
-<a href=#offsetIM>IM: offsetIM</a>||||||X|||||||||
-<a href=#messageIM>IM: messageIM</a>||||||X|||||||||
-<a href=#Input-Parameters>FR: Input-Parameters</a>|||||||||||||||
-<a href=#Verify-Parameters>FR: Verify-Parameters</a>|||||||||||||||
-<a href=#Calculate-Values>FR: Calculate-Values</a>|||||||||||||||
-<a href=#Output-Values>FR: Output-Values</a>|||||||||||||||
-<a href=#Correct>NFR: Correct</a>|||||||||||||||
-<a href=#Verifiable>NFR: Verifiable</a>|||||||||||||||
-<a href=#Understandable>NFR: Understandable</a>|||||||||||||||
-<a href=#Reusable>NFR: Reusable</a>|||||||||||||||
-<a href=#Maintainable>NFR: Maintainable</a>|||||||||||||||
-<a href=#Portable>NFR: Portable</a>|||||||||||||||
+<a href=#:></a>|<a href=#<div id="Table:TraceMatRefvsRef"></div>:<div id="Table:TraceMatRefvsRef"></div>><div id="Table:TraceMatRefvsRef"></div></a>|<a href=#DD:vecMag>DD: vecMag</a>|<a href=#DD:speedIX>DD: speedIX</a>|<a href=#DD:speedIY>DD: speedIY</a>|<a href=#TM:acceleration>TM: acceleration</a>|<a href=#TM:velocity>TM: velocity</a>|<a href=#GD:rectVel>GD: rectVel</a>|<a href=#GD:rectPos>GD: rectPos</a>|<a href=#GD:velVec>GD: velVec</a>|<a href=#GD:posVec>GD: posVec</a>|<a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>|<a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>|<a href=#IM:offsetIM>IM: offsetIM</a>|<a href=#IM:messageIM>IM: messageIM</a>|<a href=#:></a>
+:|:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:--- |:
+|<a href=#DD:vecMag>DD: vecMag</a>||||||||||||||
+|<a href=#DD:speedIX>DD: speedIX</a>|X|||||||||||||
+|<a href=#DD:speedIY>DD: speedIY</a>|X|||||||||||||
+|<a href=#TM:acceleration>TM: acceleration</a>||||||||||||||
+|<a href=#TM:velocity>TM: velocity</a>||||||||||||||
+|<a href=#GD:rectVel>GD: rectVel</a>||||X||||||||||
+|<a href=#GD:rectPos>GD: rectPos</a>|||||X|X||||||||
+|<a href=#GD:velVec>GD: velVec</a>||||||X||||||||
+|<a href=#GD:posVec>GD: posVec</a>|||||||X|||||||
+|<a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>|||X||||||X|||||
+|<a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>||X|||||||X|X||||
+|<a href=#IM:offsetIM>IM: offsetIM</a>|||||||||||X|||
+|<a href=#IM:messageIM>IM: messageIM</a>||||||||||||X||

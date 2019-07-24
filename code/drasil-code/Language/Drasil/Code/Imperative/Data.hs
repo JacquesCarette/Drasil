@@ -30,7 +30,10 @@ data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}
 ad :: String -> Doc -> AuxData
 ad = AD
 
-data FileData = FileD {filePath :: String, fileMod :: ModData}
+data FileData = FileD {filePath :: FilePath, fileMod :: ModData}
+
+instance Eq FileData where
+  FileD p1 _ == FileD p2 _ = p1 == p2
 
 fileD :: String -> ModData -> FileData
 fileD = FileD

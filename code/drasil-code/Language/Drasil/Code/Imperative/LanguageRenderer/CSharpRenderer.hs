@@ -86,7 +86,8 @@ instance PackageSym CSharpCode where
   package n ms = lift2Lists (packD n) mods
     where mods = filter (not . isEmpty . modDoc . fileMod . unCSC) ms
 
-  packDox n ms = package n ms [doxConfig n ms]
+  packDox n ms = package n ms [doxConfig n mods]
+    where mods = filter (not . isEmpty . modDoc . fileMod . unCSC) ms
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = FileData

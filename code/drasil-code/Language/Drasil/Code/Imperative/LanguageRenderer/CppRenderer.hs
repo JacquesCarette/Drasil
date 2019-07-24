@@ -5,7 +5,7 @@
 -- | The logic to render C++ code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
   -- * C++ Code Configuration -- defines syntax of all C++ code
-  CppSrcCode(..), CppHdrCode(..), CppCode(..), cppExts, unSrc, unHdr
+  CppSrcCode(..), CppHdrCode(..), CppCode(..), cppExts, unCPPC
 ) where
 
 import Utils.Drasil (indent, indentList)
@@ -56,6 +56,7 @@ import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.List (nub)
+import Data.List.Utils (endswith)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -76,17 +77,20 @@ instance Pair CppCode where
   psnd (CPPC _ yb) = yb
   pair = CPPC
 
-unSrc :: CppCode CppSrcCode CppHdrCode a -> a
-unSrc (CPPC (CPPSC a) _) = a
+unCPPC :: CppCode CppSrcCode CppHdrCode a -> a
+unCPPC (CPPC (CPPSC a) _) = a
 
-unHdr :: CppCode CppSrcCode CppHdrCode a -> a
-unHdr (CPPC _ (CPPHC a)) = a
+hdrToSrc :: CppHdrCode a -> CppSrcCode a
+hdrToSrc (CPPHC a) = CPPSC a
 
 instance (Pair p) => PackageSym (p CppSrcCode CppHdrCode) where
   type Package (p CppSrcCode CppHdrCode) = PackData
   package n ms aux = pair (package n (map pfst ms) (map pfst aux)) (package n (map psnd ms) (map psnd aux))
 
-  packDox n ms = pair (packDox n $ map pfst ms) (packDox n $ map psnd ms)
+  packDox n ms = pair (packDox n (map pfst ms ++ map (hdrToSrc . psnd) ms)) 
+    (return $ packD "" [] [])
+
+  -- packDox n ms = pair (packDox n $ map pfst ms) (packDox n $ map psnd ms)
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = FileData
@@ -642,7 +646,9 @@ instance PackageSym CppSrcCode where
   package n ms = lift2Lists (packD n) mods
     where mods = filter (not . isEmpty . modDoc . fileMod . unCPPSC) ms
 
-  packDox n ms = package n ms [doxConfig n ms]
+  packDox n ms = package n ms [doxConfig n (filter ((\f -> 
+    (isMainMod (fileMod f) || endswith cppHeaderExt (filePath f)) && 
+    not (isEmpty (modDoc (fileMod f))))  . unCPPSC) ms)]
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = FileData

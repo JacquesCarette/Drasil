@@ -35,6 +35,10 @@ quote x = lq <> x <> rq
   lq = pure $ text "``"
   rq = pure $ text "''"
 
+-- 0-argument command
+command0 :: String -> D
+command0 s = pure $ H.bslash TP.<> text s
+
 -- Make 1-argument command
 command :: String -> String -> D
 command s c = pure $ (H.bslash TP.<> text s) TP.<> H.br c
@@ -44,14 +48,19 @@ commandD s c = pure (H.bslash TP.<> text s) <> br c
 
 -- 1-argument command, with optional argument
 command1o :: String -> Maybe String -> String -> D
-command1o s o c = pure $ (H.bslash TP.<> text s) TP.<> maybe TP.empty H.sq o TP.<> H.br c
+command1o s Nothing  = command s
+command1o s (Just o) = command1p s o
 
 command1oD :: String -> Maybe D -> D -> D
-command1oD s o c = pure (H.bslash TP.<> text s) <> maybe empty sq o <> br c
+command1oD s Nothing  = commandD s
+command1oD s (Just o) = command1pD s o
 
--- 0-argument command
-command0 :: String -> D
-command0 s = pure $ H.bslash TP.<> text s
+-- 1-argument command with parameter in square brackets
+command1p :: String -> String -> String -> D
+command1p s p c = pure $ (H.bslash TP.<> text s) TP.<> H.sq p TP.<> H.br c
+
+command1pD :: String -> D -> D -> D
+command1pD s p c = pure (H.bslash TP.<> text s) <> sq p <> br c
 
 -- Make LaTeX symbol
 texSym :: String -> D
@@ -109,10 +118,10 @@ genSec d
 ref, sref, hyperref, externalref, snref :: String -> D -> D
 sref         = if numberedSections then ref else hyperref
 ref      t x = pure (text $ t ++ "~\\ref") <> br x
-hyperref t x = command1oD "hyperref" (Just x) (pure (text (t ++ "~")) <> x)
+hyperref    t x = command1pD "hyperref" x (pure (text (t ++ "~")) <> x)
 externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
   br empty <> br x
-snref    r   = command1oD "hyperref" (Just (pure $ text r))
+snref       r   = command1pD "hyperref" (pure (text r))
 
 href :: String -> String -> D
 href = command2 "href"
@@ -131,10 +140,10 @@ mathbb     = command "mathbb"
 usepackage = command "usepackage"
 
 includegraphics :: MaxWidthPercent -> String -> D
-includegraphics 100 = command1o "includegraphics" 
-  (Just "width=\\textwidth")
-includegraphics wp = command1o "includegraphics" 
-  (Just $ "width=" ++ show (wp / 100) ++ "\\textwidth")
+includegraphics n = command1p "includegraphics" ("width=" ++ per n ++ "\\textwidth")
+  where
+    per 100 = ""
+    per wp  = show (wp / 100)
 
 author, caption, item, label, title, bold :: D -> D
 author  = commandD "author"
@@ -145,7 +154,7 @@ title   = commandD "title"
 bold    = commandD "textbf"
 
 item' :: D -> D -> D
-item' bull = command1oD "item" (Just bull)
+item' = command1pD "item"
 
 maketitle, maketoc, newline, newpage, centering :: D
 maketitle = command0 "maketitle"
@@ -166,9 +175,8 @@ document    = mkEnv "document"
 equation    = mkEnv "displaymath" --displays math
 symbDescription = mkEnv "symbDescription"
 
-docclass, exdoc :: Maybe String -> String -> D
-docclass = command1o "documentclass"
-exdoc = command1o "externaldocument"
+docclass :: String -> String -> D
+docclass = command1p "documentclass"
 
 sec :: Int -> D -> D
 sec d b1 = genSec d <> br b1
@@ -188,16 +196,15 @@ srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS
 srsComms = bullet %% counter %% ddefnum %% ddref %% colAw %% colBw %% arrayS
 lpmComms = pure $ text ""
 
-counter       = count "datadefnum"
-modcounter    = count "modnum"
+counter    = count "datadefnum"
+modcounter = count "modnum"
 
 bullet  = comm "blt"             "- "                Nothing
 ddefnum = comm "ddthedatadefnum" "MG\\thedatadefnum" Nothing
 ddref   = comm "ddref"           "MG\\ref{#1}"       (Just "1")
 colAw   = comm "colAwidth"       "0.2\\textwidth"    Nothing
 colBw   = comm "colBwidth"       "0.73\\textwidth"   Nothing
-
-modnum    = comm "mthemodnum"        "M\\themodnum"        Nothing
+modnum  = comm "mthemodnum"      "M\\themodnum"      Nothing
 
 arrayS  = renewcomm "arraystretch" "1.2"
 

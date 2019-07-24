@@ -5,7 +5,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (JavaCode(.
 import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (PythonCode(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (CSharpCode(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (CppSrcCode(..), CppHdrCode(..))
-import Language.Drasil.Code.Imperative.Data (FileData(..), ModData(..))
+import Language.Drasil.Code.Imperative.Data (FileData(..), ModData(..), 
+  PackData(..))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import System.FilePath.Posix (takeDirectory)
@@ -36,10 +37,11 @@ main = do
   genCode (classes unCPPHC)
   setCurrentDirectory workingDir
     
-genCode :: [([FileData], Label)] -> IO()
-genCode files = createCodeFiles (concatMap (\(ms, l) -> replicate (length ms) l) files) $ makeCode (concatMap fst files)
+genCode :: [PackData] -> IO()
+genCode files = createCodeFiles (concatMap (\p -> replicate (length $ packMods 
+  p) (packName p)) files) $ makeCode (concatMap packMods files)
 
-classes :: (PackageSym repr) => (repr (Package repr) -> ([FileData], Label)) -> [([FileData], Label)]
+classes :: (PackageSym repr) => (repr (Package repr) -> PackData) -> [PackData]
 classes unRepr = map unRepr [helloWorld, patternTest, fileTests]
 
 -- | Takes code

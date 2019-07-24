@@ -55,7 +55,7 @@ buildStd sm (Document t a c) =
 lo :: LayoutObj -> PrintingInformation -> D
 lo (Header d t l)       _  = sec d (spec t) %% label (spec l)
 lo (HDiv _ con _)       sm = print sm con -- FIXME ignoring 2 arguments?
-lo (Paragraph contents) _  = toText $ spec contents
+lo (Paragraph contents) _  = toText $ newline (spec contents)
 lo (EqnBlock contents)  _  = makeEquation contents
 lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)
 lo (Definition _ ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
@@ -328,8 +328,8 @@ makeDefn _  [] _ = error "Empty definition"
 makeDefn sm ps l = beginDefn %% makeDefTable sm ps l %% endDefn
 
 beginDefn :: D
-beginDefn = newline
-  %% pure (text "\\noindent \\begin{minipage}{\\textwidth}")
+beginDefn = commandD "vspace" (command0 "baselineskip") %% command0 "noindent" %%
+  pure (text "\\begin{minipage}{\\textwidth}")
 
 endDefn :: D
 endDefn = pure (text "\\end{minipage}")
@@ -349,13 +349,10 @@ makeDefTable sm ps l = mkEnvArgs "tabular" (col rr colAwidth ++ col (rr ++ "\\ar
 
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
-makeDRows sm [(f,d)]    = dBoilerplate %% pure (text (f ++ " & ")) <>
-  vcat (map (`lo` sm) d)
-makeDRows sm ((f,d):ps) = dBoilerplate %% (pure (text (f ++ " & ")) <>
-  vcat (map (`lo` sm) d))
-                       %% makeDRows sm ps
-dBoilerplate :: D
-dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
+makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d) ls
+  where dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
+--makeDRows sm [(f,d)]    = dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d
+--makeDRows sm ((f,d):ps) = dBoilerplate %% (pure (text (f ++ " & ")) <> print sm d %% makeDRows sm ps
 
 -----------------------------------------------------------------
 ------------------ EQUATION PRINTING------------------------

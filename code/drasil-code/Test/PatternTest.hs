@@ -9,7 +9,7 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer)
 
 patternTest :: (PackageSym repr) => repr (Package repr)
-patternTest = packMods "PatternTest" [fileDoc (buildModule "PatternTest" ["Observer"] [patternTestMainMethod] []), observer]
+patternTest = package "PatternTest" [fileDoc (buildModule "PatternTest" ["Observer"] [patternTestMainMethod] []), observer] []
 
 patternTestMainMethod :: (RenderSym repr) => repr (Method repr)
 patternTestMainMethod = mainMethod "PatternTest" (body [block [

@@ -10,8 +10,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
 import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..),
+import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+  RenderSym(..), InternalFile(..), AuxiliarySym(..), KeywordSym(..),
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
   StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -40,17 +40,18 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
-  setMain, setMainMethod, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..), 
-  fileD, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, ParamData(..), pd, TypeData(..), td, ValData(..), vd, 
-  VarData(..), vard)
+  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
+  getterName, setterName, setMain, setMainMethod, setEmpty, intValue)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
+  FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  updateModDoc, MethodData(..), mthd, ParamData(..), pd, PackData(..), packD, 
+  TypeData(..), td, ValData(..), vd, VarData(..), vard)
+import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
-  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, 
-  liftPair, liftPairFst, getInnerType, convType)
+  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift2Lists, lift3Pair, 
+  lift4Pair, liftPair, liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -85,9 +86,13 @@ instance Monad JavaCode where
   JC x >>= f = f x
 
 instance PackageSym JavaCode where
-  type Package JavaCode = ([FileData], Label)
-  packMods n ms = liftPairFst (mapM (liftA2 (packageDocD n) endStatement) mods, n)
+  type Package JavaCode = PackData
+  package n ms = lift2Lists (packD n) (map (liftA2 (packageDocD n) endStatement) mods)
     where mods = filter (not . isEmpty . modDoc . fileMod . unJC) ms
+
+  packDox n ms = lift2Lists (packD n) pMods [doxConfig n pMods]
+    where pMods = map (liftA2 (packageDocD n) endStatement) mods
+          mods = filter (not . isEmpty . modDoc . fileMod . unJC) ms
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = FileData
@@ -104,6 +109,13 @@ instance RenderSym JavaCode where
 instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
+
+instance AuxiliarySym JavaCode where
+  type Auxiliary JavaCode = AuxData
+  doxConfig prog fs = fmap (ad doxConfigName) (lift1List (makeDoxConfig prog)
+    optimizeDox (map (fmap filePath) fs))
+
+  optimizeDox = return $ text "YES"
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc

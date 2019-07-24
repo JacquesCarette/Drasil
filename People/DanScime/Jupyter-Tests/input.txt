@@ -1,0 +1,25 @@
+||A: twoDMotion|A: cartSyst|A: yAxisGravity|A: launchOrigin|A: targetXAxis|A: posXDirection|A: constAccel|A: accelXZero|A: accelYGravity|A: neglectDrag|A: pointMass|A: freeFlight|A: neglectCurv|A: timeStartZero|
+|--- |--- |--- |--- |--- |--- |--- |--- |--- |--- |--- |--- |--- |--- |--- |
+|DD: vecMag|||||||||||||||
+|DD: speedIX|||||||||||||||
+|DD: speedIY|||||||||||||||
+|TM: acceleration|||||||||||||||
+|TM: velocity|||||||||||||||
+|GD: rectVel|||||||||||X|||X|
+|GD: rectPos|||||||||||X|||X|
+|GD: velVec|X|X|||||X|||||||X|
+|GD: posVec|X|X|||||X|||||||X|
+|IM: calOfLandingTime|||X|X|X|X|||X|||||X|
+|IM: calOfLandingDist|||X|X||X||X|||||||
+|IM: offsetIM||||||X|||||||||
+|IM: messageIM||||||X|||||||||
+|FR: Input-Parameters|||||||||||||||
+|FR: Verify-Parameters|||||||||||||||
+|FR: Calculate-Values|||||||||||||||
+|FR: Output-Values|||||||||||||||
+|NFR: Correct|||||||||||||||
+|NFR: Verifiable|||||||||||||||
+|NFR: Understandable|||||||||||||||
+|NFR: Reusable|||||||||||||||
+|NFR: Maintainable|||||||||||||||
+|NFR: Portable|||||||||||||||

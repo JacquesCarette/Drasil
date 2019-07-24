@@ -4,7 +4,7 @@
 -- | The logic to render C# code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (
   -- * C# Code Configuration -- defines syntax of all C# code
-  CSharpCode(..), csExts
+  CSharpCode(..)
 ) where
 
 import Utils.Drasil (indent)
@@ -62,11 +62,8 @@ import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon, isEmpty)
 
-csExts :: [String]
-csExts = [csExt]
-
 csExt :: String
-csExt = ".cs"
+csExt = "cs"
 
 newtype CSharpCode a = CSC {unCSC :: a} deriving Eq
 
@@ -91,7 +88,7 @@ instance PackageSym CSharpCode where
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = FileData
-  fileDoc code = liftA2 file (fmap (addExt "cs" . name) code) (liftA2 
+  fileDoc code = liftA2 file (fmap (addExt csExt . name) code) (liftA2 
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 

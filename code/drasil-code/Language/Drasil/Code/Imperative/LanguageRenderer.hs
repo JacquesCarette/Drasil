@@ -764,7 +764,7 @@ classDoc :: String -> [String]
 classDoc desc = [doxBrief ++ desc | not (null desc)]
 
 moduleDoc :: String -> String -> String -> [String]
-moduleDoc desc m ext = (doxFile ++ m ++ ext) : 
+moduleDoc desc m ext = (doxFile ++ addExt ext m) : 
   [doxBrief ++ desc | not (null desc)]
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> repr (Method repr) -> 

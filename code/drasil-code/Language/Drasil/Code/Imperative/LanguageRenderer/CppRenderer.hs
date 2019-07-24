@@ -85,12 +85,11 @@ hdrToSrc (CPPHC a) = CPPSC a
 
 instance (Pair p) => PackageSym (p CppSrcCode CppHdrCode) where
   type Package (p CppSrcCode CppHdrCode) = PackData
-  package n ms aux = pair (package n (map pfst ms) (map pfst aux)) (package n (map psnd ms) (map psnd aux))
+  package n ms aux = pair (package n (map (hdrToSrc . psnd) ms ++ map pfst ms) 
+    (map (hdrToSrc . psnd) aux ++ map pfst aux)) (return $ packD "" [] [])
 
-  packDox n ms = pair (packDox n (map pfst ms ++ map (hdrToSrc . psnd) ms)) 
+  packDox n ms = pair (packDox n (map (hdrToSrc . psnd) ms ++ map pfst ms)) 
     (return $ packD "" [] [])
-
-  -- packDox n ms = pair (packDox n $ map pfst ms) (packDox n $ map psnd ms)
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = FileData

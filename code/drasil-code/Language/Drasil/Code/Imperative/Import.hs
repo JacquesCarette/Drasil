@@ -144,7 +144,7 @@ publicClass desc n l vs ms = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> PackData] 
+generateCode :: (PackageSym repr) => Lang -> (repr (Package repr) -> PackData) 
   -> State repr -> IO ()
 generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
@@ -153,10 +153,10 @@ generateCode l unRepr g =
      createCodeFiles $ C.Code $ concatMap C.unCode [code, makefile]
      setCurrentDirectory workingDir
   where pckg = runReader genPackage g
-        code = makeCode (map (packMods . ($ pckg)) unRepr) (map (packAux . ($ pckg)) unRepr)
-        makefile = makeBuild (last unRepr pckg) (getBuildConfig l) 
+        code = makeCode (packMods $ unRepr pckg) (packAux $ unRepr pckg)
+        makefile = makeBuild (unRepr pckg) (getBuildConfig l) 
           (getRunnable l) (getExt l)
-          
+
 genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
 genPackage = do
   g <- ask

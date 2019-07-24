@@ -68,8 +68,8 @@ genCode chs spec = do
   setCurrentDirectory "src"
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
-  where genLangCode Java = genCall Java [unJC]
-        genLangCode Python = genCall Python [unPC]
-        genLangCode CSharp = genCall CSharp [unCSC]
-        genLangCode Cpp = genCall Cpp [unCPPC]
+  where genLangCode Java = genCall Java unJC
+        genLangCode Python = genCall Python unPC
+        genLangCode CSharp = genCall CSharp unCSC
+        genLangCode Cpp = genCall Cpp unCPPC
         genCall lng unRepr = generateCode lng unRepr $ generator chs spec

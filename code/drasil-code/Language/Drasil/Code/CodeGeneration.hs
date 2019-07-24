@@ -16,10 +16,9 @@ import System.FilePath.Posix (takeDirectory)
 import System.IO (hPutStrLn, hClose, openFile, IOMode(WriteMode))
 
 -- | Takes code
-makeCode :: [[FileData]] -> [[AuxData]] -> Code
-makeCode files aux = Code $ zip 
-  (map filePath (concat files) ++ map auxFilePath (concat aux))
-  (map (modDoc . fileMod) (concat files) ++ map auxDoc (concat aux))
+makeCode :: [FileData] -> [AuxData] -> Code
+makeCode files aux = Code $ zip (map filePath files ++ map auxFilePath aux)
+  (map (modDoc . fileMod) files ++ map auxDoc aux)
 
 ------------------
 -- IO Functions --

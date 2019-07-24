@@ -494,46 +494,46 @@ showT L.TechReport    = "@techreport"
 showT L.Unpublished   = "@unpublished"
 
 showBibTeX :: PrintingInformation -> CiteField -> D
-showBibTeX  _ (Address      s) = showFieldBr "address" s
-showBibTeX sm (Author       p) = showFieldBr "author" (rendPeople sm p)
-showBibTeX  _ (BookTitle    b) = showFieldBr "booktitle" b
-showBibTeX  _ (Chapter      c) = showFieldBr "chapter" (wrapS c)
-showBibTeX  _ (Edition      e) = showFieldBr "edition" (wrapS e)
-showBibTeX sm (Editor       e) = showFieldBr "editor" (rendPeople sm e)
-showBibTeX  _ (Institution  i) = showFieldBr "institution" i
-showBibTeX  _ (Journal      j) = showFieldBr "journal" j
-showBibTeX  _ (Month        m) = showField   "month" (bibTeXMonth m)
-showBibTeX  _ (Note         n) = showFieldBr "note" n
-showBibTeX  _ (Number       n) = showFieldBr "number" (wrapS n)
-showBibTeX  _ (Organization o) = showFieldBr "organization" o
-showBibTeX sm (Pages        p) = showFieldBr "pages" (I.spec sm $ foldNums p)
-showBibTeX  _ (Publisher    p) = showFieldBr "publisher" p
-showBibTeX  _ (School       s) = showFieldBr "school" s
-showBibTeX  _ (Series       s) = showFieldBr "series" s
-showBibTeX  _ (Title        t) = showFieldBr "title" t
-showBibTeX  _ (Type         t) = showFieldBr "type" t
-showBibTeX  _ (Volume       v) = showFieldBr "volume" (wrapS v)
-showBibTeX  _ (Year         y) = showFieldBr "year" (wrapS y)
+showBibTeX  _ (Address      s) = showField "address" s
+showBibTeX sm (Author       p) = showField "author" (rendPeople sm p)
+showBibTeX  _ (BookTitle    b) = showField "booktitle" b
+showBibTeX  _ (Chapter      c) = showField "chapter" (wrapS c)
+showBibTeX  _ (Edition      e) = showField "edition" (wrapS e)
+showBibTeX sm (Editor       e) = showField "editor" (rendPeople sm e)
+showBibTeX  _ (Institution  i) = showField "institution" i
+showBibTeX  _ (Journal      j) = showField "journal" j
+showBibTeX  _ (Month        m) = showFieldRaw "month" (bibTeXMonth m)
+showBibTeX  _ (Note         n) = showField "note" n
+showBibTeX  _ (Number       n) = showField "number" (wrapS n)
+showBibTeX  _ (Organization o) = showField "organization" o
+showBibTeX sm (Pages        p) = showField "pages" (I.spec sm $ foldNums p)
+showBibTeX  _ (Publisher    p) = showField "publisher" p
+showBibTeX  _ (School       s) = showField "school" s
+showBibTeX  _ (Series       s) = showField "series" s
+showBibTeX  _ (Title        t) = showField "title" t
+showBibTeX  _ (Type         t) = showField "type" t
+showBibTeX  _ (Volume       v) = showField "volume" (wrapS v)
+showBibTeX  _ (Year         y) = showField "year" (wrapS y)
 showBibTeX  _ (HowPublished (URL  u)) =
-  showFieldBr "howpublished" (S "\\url{" :+: u :+: S "}")
-showBibTeX  _ (HowPublished (Verb v)) = showFieldBr "howpublished" v
+  showField "howpublished" (S "\\url{" :+: u :+: S "}")
+showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
 
---showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showFieldBr "author"
+--showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author"
   -- (LS.spec sm (rendPeople p)) :+: S ",\n" :+:
-  -- showFieldBr "sortkey" (LS.spec sm (rendPeople p))
--- showBibTeX sm (Author    p) = showFieldBr "author" $ LS.spec sm (rendPeople p)
+  -- showField "sortkey" (LS.spec sm (rendPeople p))
+-- showBibTeX sm (Author    p) = showField "author" $ LS.spec sm (rendPeople p)
 
 data FieldWrap = Braces | NoDelimiters
 
 wrapField :: FieldWrap -> String -> Spec -> D
-wrapField Braces       f s = pure (text (f ++ "=")) <> br (spec s)
-wrapField NoDelimiters f s = pure (text (f ++ "=")) <> spec s
+wrapField  fw f s = pure (text (f ++ "=")) <> (resolve fw) (spec s)
+  where
+    resolve Braces       = br
+    resolve NoDelimiters = id
 
-showFieldBr :: String -> Spec -> D
-showFieldBr = wrapField Braces
-
-showField :: String -> Spec -> D
-showField = wrapField NoDelimiters
+showField, showFieldRaw :: String -> Spec -> D
+showField    = wrapField Braces
+showFieldRaw = wrapField NoDelimiters
 
 rendPeople :: PrintingInformation -> L.People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"

@@ -91,6 +91,11 @@ mkEnvArgs nm args d =
   d $+$
   pure (text ("\\end" ++ H.brace nm))
 
+-- Makes minipage environment
+mkMinipage :: D -> D
+mkMinipage d = commandD "vspace" (command0 "baselineskip") $+$
+  command0 "noindent" $+$ mkEnvArgs "minipage" "\\textwidth" d
+
 -- for defining (LaTeX) macros
 comm :: String -> String -> Maybe String -> D
 comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<> 

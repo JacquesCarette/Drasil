@@ -35,8 +35,9 @@ import Language.Drasil.Printing.Helpers hiding (br, paren, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
   cite, command, command0, commandD, command2D, description, document, empty,
   enumerate, externalref, figure, fraction, includegraphics, item, item',
-  itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgs, newline, newpage,
-  parens, quote, sec, snref, superscript, symbDescription, texSym, title, toEqn)
+  itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgs, mkMinipage,
+  newline, newpage, parens, quote, sec, snref, superscript, symbDescription,
+  texSym, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -326,8 +327,7 @@ pUnit (UDiv n d) = toMath $
 
 makeDefn :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefn _  [] _ = error "Empty definition"
-makeDefn sm ps l = commandD "vspace" (command0 "baselineskip") %%
-  command0 "noindent" %% mkEnvArgs "minipage" "\\textwidth" (makeDefTable sm ps l)
+makeDefn sm ps l = mkMinipage (makeDefTable sm ps l)
 
 makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"

@@ -7,9 +7,9 @@ import Utils.Drasil (stringList)
 import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
-import Language.Drasil.Code.Code as C (CodeType(List))
-import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
+import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+  RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..),
   StateTypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
@@ -19,7 +19,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Data (FileData(..))
+import Language.Drasil.Code.Imperative.Data (PackData(..))
 import Language.Drasil.Code.Imperative.Helpers (convType, getStr)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
   (cppExts)
@@ -144,21 +144,26 @@ publicClass desc n l vs ms = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
-  ([FileData], Label)] -> State repr -> IO ()
+generateCode :: (PackageSym repr) => Lang -> (repr (Package repr) -> PackData) 
+  -> State repr -> IO ()
 generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
-     createCodeFiles $ makeBuild (last unRepr pckg) (getBuildConfig l)   
-       (getRunnable l) (getExt l) $ makeCode (map (fst . ($ pckg)) unRepr)
+     createCodeFiles $ C.Code $ concatMap C.unCode [code, makefile]
      setCurrentDirectory workingDir
-  where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
-        pckg = runReader (genPackage prog) g
+  where pckg = runReader genPackage g
+        code = makeCode (packMods $ unRepr pckg) (packAux $ unRepr pckg)
+        makefile = makeBuild (unRepr pckg) (getBuildConfig l) 
+          (getRunnable l) (getExt l)
 
-genPackage :: (PackageSym repr) => String -> Reader (State repr) 
-  (repr (Package repr))
-genPackage n = packMods n <$> genModules
+genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
+genPackage = do
+  g <- ask
+  ms <- genModules
+  let n = case codeSpec g of CodeSpec {program = p} -> programName p
+      cms = commented g
+  return $ if null cms then package n ms [] else packDox n ms
 
 genModules :: (RenderSym repr) => Reader (State repr) [repr (RenderFile repr)]
 genModules = do

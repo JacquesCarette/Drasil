@@ -4,10 +4,10 @@ module Language.Drasil.Code.Imperative.Symantics (
   -- Types
   Label, Library,
   -- Typeclasses
-  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..), 
-  PermanenceSym(..), BodySym(..), ControlBlockSym(..), BlockSym(..), 
-  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  PackageSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
+  KeywordSym(..), PermanenceSym(..), BodySym(..), ControlBlockSym(..), 
+  BlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
@@ -21,9 +21,12 @@ import Text.PrettyPrint.HughesPJ (Doc)
 type Label = String
 type Library = String
 
-class (RenderSym repr) => PackageSym repr where
+class (RenderSym repr, AuxiliarySym repr) => PackageSym repr where
   type Package repr 
-  packMods :: Label -> [repr (RenderFile repr)] -> repr (Package repr)
+  package :: Label -> [repr (RenderFile repr)] -> [repr (Auxiliary repr)] -> 
+    repr (Package repr)
+
+  packDox :: Label -> [repr (RenderFile repr)] -> repr (Package repr)
 
 class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) => 
   RenderSym repr where 
@@ -38,6 +41,12 @@ class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) =>
 class (ModuleSym repr) => InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
+
+class (KeywordSym repr, RenderSym repr) => AuxiliarySym repr where
+  type Auxiliary repr
+  doxConfig :: String -> [repr (RenderFile repr)] -> repr (Auxiliary repr)
+
+  optimizeDox :: repr (Keyword repr)
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   type Keyword repr

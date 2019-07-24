@@ -4,7 +4,8 @@ module Language.Drasil.Code.Imperative.Build.Import (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.Symantics (Label)
-import Language.Drasil.Code.Imperative.Data (FileData(..), ModData(..))
+import Language.Drasil.Code.Imperative.Data (FileData(..), ModData(..), 
+  PackData(..))
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig(BuildConfig),
   BuildDependencies(..), Ext(..), includeExt, NameOpts, nameOpts, packSep,
   Runnable(Runnable), BuildName(..), RunType(..))
@@ -15,15 +16,15 @@ import Build.Drasil ((+:+), genMake, makeS, MakeString, mkFile, mkRule,
 import Data.List.Utils (endswith)
 import Data.Maybe (maybe, maybeToList)
 
-data CodeHarness = Ch (Maybe BuildConfig) Runnable [String] ([FileData], Label) Code
+data CodeHarness = Ch (Maybe BuildConfig) Runnable [String] PackData
 
 instance RuleTransformer CodeHarness where
-  makeRule (Ch b r e m co@(Code code)) = [
+  makeRule (Ch b r e m) = [
     mkRule buildTarget (map (const $ renderBuildName e m nameOpts nm) $ maybeToList b) []
     ] ++
     maybe [] (\(BuildConfig comp bt) -> [
-    mkFile (renderBuildName e m nameOpts nm) (map (makeS . fst) code) [
-      mkCheckedCommand $ foldr (+:+) mempty $ comp (getCompilerInput bt e m co) $
+    mkFile (renderBuildName e m nameOpts nm) (map (makeS . filePath) (packMods m)) [
+      mkCheckedCommand $ foldr (+:+) mempty $ comp (getCompilerInput bt e m) $
         renderBuildName e m nameOpts nm
       ]
     ]) b ++ [
@@ -34,9 +35,9 @@ instance RuleTransformer CodeHarness where
       (Runnable nm no ty) = r
       buildTarget = makeS "build"
 
-renderBuildName :: [String] -> ([FileData], Label) -> NameOpts -> BuildName -> MakeString
-renderBuildName _ (m, _) _ BMain = makeS $ getMainModule m
-renderBuildName _ (_, l) _ BPackName = makeS l
+renderBuildName :: [String] -> PackData -> NameOpts -> BuildName -> MakeString
+renderBuildName _ p _ BMain = makeS $ getMainModule (packMods p)
+renderBuildName _ p _ BPackName = makeS (packName p)
 renderBuildName ext p o (BPack a) = renderBuildName ext p o BPackName <> makeS(packSep o) <> renderBuildName ext p o a
 renderBuildName ext p o (BWithExt a e) = renderBuildName ext p o a <> if includeExt o then renderExt ext e else makeS ""
 
@@ -49,13 +50,14 @@ getMainModule c = mainName $ filter (isMainMod . fileMod) c
   where mainName [FileD _ m] = name m
         mainName _ = error "Expected a single main module."
 
-getCompilerInput :: BuildDependencies -> [String] -> ([FileData], Label) -> Code -> [MakeString]
-getCompilerInput BcSource e _ a = map makeS $ filter (endswith $ last e) $ map fst $ unCode a
-getCompilerInput (BcSingle n) e p _ = [renderBuildName e p nameOpts n]
+getCompilerInput :: BuildDependencies -> [String] -> PackData -> [MakeString]
+getCompilerInput BcSource e p = map makeS $ filter (endswith $ last e) $ map 
+  filePath $ packMods p
+getCompilerInput (BcSingle n) e p = [renderBuildName e p nameOpts n]
 
 buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
 buildRunTarget fn (Interpreter i) = i +:+ fn
 
-makeBuild :: ([FileData], Label) -> Maybe BuildConfig -> Runnable -> [String] -> Code -> Code
-makeBuild m b r e code@(Code c) = Code $ ("Makefile", genMake [Ch b r e m code]) : c
+makeBuild :: PackData -> Maybe BuildConfig -> Runnable -> [String] -> Code
+makeBuild m b r e = Code [("Makefile", genMake [Ch b r e m])]

@@ -7,9 +7,10 @@ import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, angularAccel,
   angularDisplacement, angularVelocity, chgInVelocity, displacement, distance,
-  final, force, gravitationalAccel, gravitationalConst, height, impulseS,
-  impulseV, initial, kEnergy, linearAccel, linearDisplacement, linearVelocity,
-  momentOfInertia, position, potEnergy, restitutionCoef, time, torque, velocity)
+  final, force, gravitationalAccel, gravitationalConst, gravitationalConstValue,
+  height, impulseS, impulseV, initial, kEnergy, linearAccel, linearDisplacement,
+  linearVelocity, momentOfInertia, position, potEnergy, restitutionCoef, time,
+  torque, velocity)
 
 import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, normalVect, 
   orientation, perpVect, pi_, unitVect)
@@ -65,7 +66,6 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
   contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
   QP.chgInVelocity, QP.potEnergy, QP.height, rRot]
-
 
 -----------------------
 -- PARAMETRIZED HACK --
@@ -159,10 +159,6 @@ rOB    = uc' "rOB"
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.displacement) (Concat [lOrigin, lBodyB])) metre
-
-{-r_F    = uc' "r_F" 
-  (nounPhraseSP "position vector of the point where is applied, measured from the axis of rotation")
-  (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre-}
   
 posCM = ucs "p_CM" (nounPhraseSP "Center of Mass")
  --"mass-weighted average position of a rigid " ++
@@ -292,31 +288,34 @@ numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN In
 -----------------------
 
 lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
-  angVeloCons, forceCons, torqueCons, veloCons, restCoefCons :: ConstrConcept
+  angVeloCons, forceCons, torqueCons, veloCons, restCoefCons, veloOutCons,
+  angVeloOutCons, orientOutCons, posOutCons  :: ConstrConcept
 
 inputConstraints :: [UncertQ]
 inputConstraints = map (`uq` defaultUncrt)
-  [lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
-  veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
+  [lengthCons, massCons, mmntOfInCons, gravAccelCons, orientCons,
+  veloCons, angVeloCons, forceCons, torqueCons, restCoefCons, posCons]
 
 outputConstraints :: [UncertQ]
 outputConstraints = map (`uq` defaultUncrt) 
-  [posCons, veloCons, orientCons, angVeloCons]
-
--- nonNegativeConstraint :: Constraint -- should be pulled out and put somewhere for generic constraints
--- nonNegativeConstraint = physc $ UpFrom (Inc,0)
+  [posOutCons, veloOutCons, orientOutCons, angVeloOutCons]
 
 lengthCons     = constrained' QPP.len               [gtZeroConstr] (dbl 44.2)
 massCons       = constrained' QPP.mass              [gtZeroConstr] (dbl 56.2)
 mmntOfInCons   = constrained' QP.momentOfInertia    [gtZeroConstr] (dbl 74.5)
-gravAccelCons  = constrained' QP.gravitationalConst [] (dbl 9.8)
+gravAccelCons  = constrained' QP.gravitationalConst [] (QP.gravitationalConstValue ^. defnExpr)
 posCons        = constrained' QP.position           [] (dbl 0.412) --FIXME: should be (0.412, 0.502) vector
 veloCons       = constrained' QP.velocity           [] (dbl 2.51)
-orientCons     = constrained' QM.orientation        [] (sy QM.pi_ / 2) -- physical constraint not needed space is radians
+orientCons     = constrained' QM.orientation        [physc $ Bounded (Inc, 0) (Inc, 2 * sy QM.pi_)] (sy QM.pi_ / 2) -- physical constraint not needed space is radians
 angVeloCons    = constrained' QP.angularVelocity    [] (dbl 2.1)
 forceCons      = constrained' QP.force              [] (dbl 98.1)
 torqueCons     = constrained' QP.torque             [] (dbl 200)
 restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc,0) (Inc,1)] (dbl 0.8)
+
+posOutCons        = constrained' QP.position           [] (dbl 0.0)
+veloOutCons       = constrained' QP.velocity           [] (dbl 0.0)
+orientOutCons     = constrained' QM.orientation        [physc $ Bounded (Inc, 0) (Inc, 2 * sy QM.pi_)] (dbl 0)
+angVeloOutCons    = constrained' QP.angularVelocity    [] (dbl 0.0)
 
 ---------------------
 -- INSTANCE MODELS --

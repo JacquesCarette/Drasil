@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label,
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (
+import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, printDoc, outDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD, 
@@ -44,12 +44,13 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (
   docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
   docFuncRepr, valList, surroundBody, getterName, setterName, setMain, 
   setMainMethod,setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..),  
-  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), pd, updateParamDoc, 
-  TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..), 
+  fileD, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, ParamData(..), pd, updateParamDoc, TypeData(..), td,
+  ValData(..), vd, updateValDoc, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
-  liftA6, liftList, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
-  getInnerType, convType)
+  liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair, liftPair, 
+  liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Data.List (nub)
@@ -79,22 +80,21 @@ instance Monad CSharpCode where
   CSC x >>= f = f x
 
 instance PackageSym CSharpCode where
-  type Package CSharpCode = ([ModData], Label)
+  type Package CSharpCode = ([FileData], Label)
   packMods n ms = liftPairFst (sequence mods, n)
-    where mods = filter (not . isEmpty . modDoc . unCSC) ms
+    where mods = filter (not . isEmpty . modDoc . fileMod . unCSC) ms
 
 instance RenderSym CSharpCode where
-  type RenderFile CSharpCode = ModData
-  fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (liftA2 emptyIfEmpty (fmap modDoc code) $
-      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+  type RenderFile CSharpCode = FileData
+  fileDoc code = liftA2 fileD (fmap (addExt "cs" . name) code) (liftA2 
+    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
+    (top code) (fmap modDoc code) bottom) code)
 
-  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) csExt) m
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName 
+    (fmap fileMod m)) csExt) m
 
-  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
-    (liftA2 commentedItem cmt (fmap modDoc m))
-    
-  moduleName m = name (unCSC m)
+  commentedMod cmt m = liftA2 updateFileMod (liftA2 updateModDoc
+    (liftA2 commentedItem cmt (fmap (modDoc . fileMod) m)) (fmap fileMod m)) m
 
 instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
@@ -474,8 +474,8 @@ instance ControlStatementSym CSharpCode where
     (loopState sInit) vGuard (loopState sUpdate) b
   forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
     (valueOf (var i int) ?< finalv) (var i int &+= stepv)
-  forEach l v b = mkStNoEnd <$> liftA6 (forEachDocD l) blockStart blockEnd 
-    iterForEachLabel iterInLabel v b
+  forEach l v b = mkStNoEnd <$> liftA7 (forEachDocD l) blockStart blockEnd 
+    iterForEachLabel iterInLabel (listInnerType $ valueType v) v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 csTryCatch tb cb
@@ -585,6 +585,8 @@ instance ModuleSym CSharpCode where
   buildModule n _ ms cs = fmap (md n (any (isMainMthd . unCSC) ms || 
     any (snd . unCSC) cs)) (liftList moduleDocD (if null ms then cs 
     else pubClass n Nothing [] ms : cs))
+    
+  moduleName m = name (unCSC m)
 
 instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc

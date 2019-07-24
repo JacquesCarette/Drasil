@@ -14,6 +14,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
+import Theory.Drasil (mkQuantDef)
 
 restitutionCoef :: DefinedQuantityDict
 restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC (Label "R")) Real
@@ -113,3 +114,12 @@ subY   s = sub s (Label "y")
 subZ   s = sub s (Label "z")
 supMax s = sup s (Label "max")
 supMin s = sup s (Label "min")
+
+---------------Constants-----------------------------
+
+gravitationalConstValue :: QDefinition
+gravitationalConstValue = mkQuantDef gravitationalConst (Dbl 6.6743E-11)
+--(Dbl 6.673 * 10E-11)
+--(Dbl 0.00000000006673)
+gravitationalAccelConst :: QDefinition
+gravitationalAccelConst = mkQuantDef gravitationalAccel (Dbl 9.8)

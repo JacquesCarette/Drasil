@@ -18,4 +18,7 @@ Projectile$(TARGET_EXTENSION): InputParameters.hpp InputFormat.hpp InputConstrai
 run: build
 	./Projectile$(TARGET_EXTENSION) $(RUNARGS)
 
-.PHONY: build run
+doc: doxConfig InputParameters.hpp InputFormat.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp Control.cpp
+	doxygen doxConfig
+
+.PHONY: build run doc

@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (distance, oneD, twoD)
 
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
-  gravitationalAccel, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
+  gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
   position, scalarPos, speed, time, velocity, xAccel, xConstAccel, xPos,
   xVel, yAccel, yConstAccel, yPos, yVel)
 import Data.Drasil.Quantities.Math (pi_, piConst)
@@ -26,8 +26,8 @@ import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset)
 
 symbols :: [QuantityDict]
-symbols = unitalQuants ++ map qw constants ++ map qw [
-  acceleration, constAccel, gravitationalAccel, iPos, iSpeed, iVel, ixPos,
+symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
+  map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
   iyPos, ixVel, iyVel, position, scalarPos, speed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
 
@@ -37,7 +37,7 @@ acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, srs, thModel, typUnc]
 
 constants :: [QDefinition]
-constants = [grav, piConst, tol]
+constants = [gravitationalAccelConst, piConst, tol]
 
 inputs :: [QuantityDict]
 inputs = map qw [launSpeed, launAngle, targPos]
@@ -106,8 +106,5 @@ message :: QuantityDict
 message = vc "message" (nounPhraseSent (S "output message as a string")) lS String
 
 ---
-grav :: QDefinition
-grav = mkQuantDef gravitationalAccel (dbl 9.8)
-
 tol :: QDefinition
 tol = mkQuantDef (vc "tol" (nounPhraseSP "hit tolerance") vEpsilon Rational) (Perc 2 2)

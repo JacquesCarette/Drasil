@@ -119,8 +119,8 @@ genSec d
 
 -- For references
 ref, sref, hyperref, externalref, snref :: String -> D -> D
-sref         = if numberedSections then ref else hyperref
-ref      t x = pure (text $ t ++ "~\\ref") <> br x
+sref        t x = if numberedSections then ref else hyperref
+ref         t x = pure (text $ t ++ "~") <> commandD "ref" x
 hyperref    t x = command1pD "hyperref" x (pure (text (t ++ "~")) <> x)
 externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
   br empty <> br x
@@ -212,13 +212,13 @@ newline :: D -> D
 newline s = s $+$ pure (text "")
 
 fraction :: D -> D -> D
-fraction n d = command0 "frac" <> br n <> br d
+fraction = command2D "frac"
 
 hyperConfig :: D
 hyperConfig = command "hypersetup" hyperSettings
 
 useTikz :: D
-useTikz = usepackage "luatex85" $+$ pure (text "\\def") <>
+useTikz = usepackage "luatex85" $+$ command0 "def" <>
   command "pgfsysdriver" "pgfsys-pdftex.def" $+$
   -- the above is a workaround..  temporary until TeX packages have been fixed
   usepackage "tikz" $+$ command "usetikzlibrary" "arrows.meta" $+$

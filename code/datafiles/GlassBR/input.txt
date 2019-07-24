@@ -1,6 +1,6 @@
-#LENGTH (in mm)
+#LENGTH (in m)
 1.6
-#BREADTH (in mm)
+#BREADTH (in m)
 1.5
 #WEIGHT OF CHARGE (in kg)
 10

@@ -863,7 +863,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, <em>G</em> is the gravitational constant (6.673 * 10E-11) (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
+                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, <em>G</em> is the An empirical physical constant, used to show the force between two objects caused by gravity (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
                         </p>
                       </td>
                     </tr>
@@ -2387,7 +2387,9 @@
                     <tr>
                       <td><em>G</em></td>
                       <td>--</td>
-                      <td><em>9.8</em> m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)</td>
+                      <td>
+                        <em>66.743&sdot;10<sup>-12</sup></em> m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)
+                      </td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -2434,7 +2436,9 @@
                     </tr>
                     <tr>
                       <td><em>ϕ</em></td>
-                      <td>--</td>
+                      <td>
+                        <em>0&thinsp;&le;&thinsp;ϕ&thinsp;&le;&thinsp;2&#8239;π</em>
+                      </td>
                       <td>
                         <em><div class="fraction">
                               <span class="fup">π</span>
@@ -2456,11 +2460,28 @@
                 </p>
                 <div id="Table:OutDataConstraints">
                   <table class="table">
-                    <tr><th>Var</th></tr>
-                    <tr><td><em><b>p</b></em></td></tr>
-                    <tr><td><em><b>v</b></em></td></tr>
-                    <tr><td><em>ϕ</em></td></tr>
-                    <tr><td><em>ω</em></td></tr>
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                    </tr>
+                    <tr>
+                      <td><em><b>p</b></em></td>
+                      <td>--</td>
+                    </tr>
+                    <tr>
+                      <td><em><b>v</b></em></td>
+                      <td>--</td>
+                    </tr>
+                    <tr>
+                      <td><em>ϕ</em></td>
+                      <td>
+                        <em>0&thinsp;&le;&thinsp;ϕ&thinsp;&le;&thinsp;2&#8239;π</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><em>ω</em></td>
+                      <td>--</td>
+                    </tr>
                   </table>
                   <p class="caption">Output Data Constraints</p>
                 </div>

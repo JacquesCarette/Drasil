@@ -13,20 +13,17 @@ import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Documentation as Doc (assumption, content,
-  definition, doccon, doccon', document, goal, information, material_, model,
-  problem, property, purpose, reference, srsDomains)
+import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
+import Data.Drasil.IdeaDicts as Doc (inModel)
 import Data.Drasil.Concepts.Education (educon)
-import Data.Drasil.Concepts.Math (mathcon, mathcon')
+import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon, physicCon')
-import Data.Drasil.Concepts.Software (program, softwarecon)
-import Data.Drasil.Concepts.Thermodynamics (enerSrc, heatCapSpec, htTransTheo,
-  htFlux, phaseChange, thermalAnalysis, thermalConduction, thermocon, temp)
+import Data.Drasil.Concepts.Software (softwarecon)
+import Data.Drasil.Concepts.Thermodynamics (heatCapSpec, htFlux, phaseChange,
+  temp, thermalAnalysis, thermalConduction, thermocon)
 
-import qualified Data.Drasil.Concepts.Math as M (ode, de)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 
@@ -51,9 +48,9 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Body (charReader1, charReader2, dataContMid, orgDocIntro,
-  physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig, systContRespBullets,
-  sysCntxtRespIntro, userChars)
+import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
+  orgDocIntro, physSyst1, physSyst2, purpDoc, sysCntxtDesc, sysCntxtFig,
+  systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.Requirements (nfRequirements)
@@ -120,12 +117,13 @@ mkSRS = [RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
   TAandA],
-  IntroSec $ IntroProg (introStart enerSrc energy progName)
-    (introEnd progName program)
-  [IPurpose $ purpDoc progName,
-  IScope scope,
-  IChar [] (charReader1 htTransTheo ++ charReader2 M.de) [],
-  IOrgSec orgDocIntro inModel (SRS.inModel [] []) $ orgDocEnd inModel M.ode progName],
+  IntroSec $
+    IntroProg (introStart +:+ introStartNoPCM) (introEnd (plural progName) progName)
+    [ IPurpose $ purpDoc (phrase progName) progName
+    , IScope scope
+    , IChar [] charsOfReader []
+    , IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
+    ],
   GSDSec $ GSDProg2 
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
     , UsrChars [userChars progName]
@@ -213,34 +211,12 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
 --Section 2 : INTRODUCTION
 --------------------------
 
-introStart :: ConceptChunk -> UnitalChunk -> CI-> Sentence
-introStart es en pro = foldlSent [S "Due to increasing cost, diminishing",
-  S "availability, and negative environmental impact of",
-  S "fossil fuels, there is a higher demand for renewable",
-  plural es `sAnd` phrase en +:+. S "storage technology", 
-  atStart' pro, S "provide a novel way of storing", phrase en]
-
-introEnd :: CI -> ConceptChunk -> Sentence
-introEnd pro pr = foldlSent_ [EmptyS +:+. plural pro, S "The developed",
-  phrase pr, S "will be referred to as", titleize pro,
-  sParen (short pro)]
+introStartNoPCM :: Sentence
+introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. phrase energy
 
 -----------------------------------
 --Section 2.1 : PURPOSE OF DOCUMENT
 -----------------------------------
-
-purpDoc :: CI -> Sentence
-purpDoc pro = foldlSent [S "The main", phrase purpose, S "of this",
-  phrase document, S "is to describe the modelling of" +:+.
-  phrase pro, S "The", plural Doc.goal `sAnd` plural thModel,
-  S "used in the", short pro, S "code are provided, with an emphasis",
-  S "on explicitly identifying", plural assumption, S "and unambiguous" +:+.
-  plural definition, S "This", phrase document,
-  S "is intended to be used as a", phrase reference,
-  S "to provide ad hoc access to all", phrase information,
-  S "necessary to understand and verify the" +:+. phrase model, S "The",
-  short Doc.srs, S "is abstract because the", plural content, S "say what",
-  phrase problem, S "is being solved, but do not say how to solve it"]
 
 -------------------------------------
 --Section 2.2 : SCOPE OF REQUIREMENTS
@@ -257,12 +233,12 @@ scope = phrase thermalAnalysis `sOf` S "a single" +:+ phrase sWHT
 --Section 2.4: ORGANIZATION OF DOCUMENT
 ---------------------------------------
 
-orgDocEnd :: CI -> CI -> CI -> Sentence
-orgDocEnd im_ od pro = foldlSent_ [S "The", phrase im_,
+orgDocEnd :: Sentence
+orgDocEnd = foldlSent_ [S "The", phrase inModel,
   S "to be solved is referred to as" +:+. makeRef2S eBalanceOnWtr,
-  S "The", phrase im_, S "provides the",
-  titleize od, sParen (short od), S "that model the"
-  +:+. phrase pro, short pro, S "solves this", short od]
+  S "The", phrase inModel, S "provides the", titleize ode,
+  sParen (short ode), S "that models the" +:+. phrase progName,
+  short progName, S "solves this", short ode]
 
 ----------------------------------------
 --Section 3 : GENERAL SYSTEM DESCRIPTION
@@ -314,7 +290,7 @@ physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFlux
 
 goalInputs :: [Sentence]
 goalInputs = [phrase temp `ofThe` phrase coil,
-  S "the initial" +:+ phrase tempW, S "the material" +:+ plural property]
+  S "the initial" +:+ phrase tempW, S "the" +:+ plural materialProprty]
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION

@@ -9,8 +9,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), InternalFile(..), KeywordSym(..), 
+import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+  RenderSym(..), InternalFile(..), AuxiliarySym(..), KeywordSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
   StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -33,13 +33,14 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
   litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
   funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, listAccessFuncDocD,
   objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
-  classDec, dot, forLabel, observerListName, commentedItem, addCommentsDocD, 
-  classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
-  setterName)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..), 
-  fileD, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, ParamData(..), TypeData(..), td, ValData(..), 
-  VarData(..), vard)
+  classDec, dot, forLabel, observerListName, doxConfigName, commentedItem,
+  addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
+  getterName, setterName)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
+  FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  updateModDoc, MethodData(..), mthd, PackData(..), packD, ParamData(..), 
+  TypeData(..), td, ValData(..), VarData(..), vard)
+import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType)
@@ -71,8 +72,11 @@ instance Monad PythonCode where
   PC x >>= f = f x
 
 instance PackageSym PythonCode where
-  type Package PythonCode = ([FileData], Label)
-  packMods n ms = liftPairFst (sequence mods, n)
+  type Package PythonCode = PackData
+  package n ms = lift2Lists (packD n) mods
+    where mods = filter (not . isEmpty . modDoc . fileMod . unPC) ms
+
+  packDox n ms = package n ms [doxConfig n mods]
     where mods = filter (not . isEmpty . modDoc . fileMod . unPC) ms
 
 instance RenderSym PythonCode where
@@ -90,6 +94,13 @@ instance RenderSym PythonCode where
 instance InternalFile PythonCode where
   top _ = return pytop
   bottom = return empty
+
+instance AuxiliarySym PythonCode where
+  type Auxiliary PythonCode = AuxData
+  doxConfig prog fs = fmap (ad doxConfigName) (lift1List (makeDoxConfig prog)
+    optimizeDox (map (fmap filePath) fs))
+
+  optimizeDox = return $ text "YES"
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc

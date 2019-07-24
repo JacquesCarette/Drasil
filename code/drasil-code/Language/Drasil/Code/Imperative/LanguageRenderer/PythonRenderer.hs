@@ -530,10 +530,10 @@ instance MethodSym PythonCode where
   inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
     ins) b
   inOutFunc n s p ins outs both b = function n s p (mState void) (map 
-    stateParam $ both ++ ins) (liftA2 appendToBody b (multiReturn $ map valueOf 
-    both ++ outs))
+    stateParam $ both ++ ins) (liftA2 appendToBody b (multiReturn $
+    map valueOf $ both ++ outs))
 
-  docInOutFunc desc iComms _ = docFuncRepr desc iComms
+  docInOutFunc desc iComms _ bComms = docFuncRepr desc (bComms ++ iComms)
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

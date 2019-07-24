@@ -577,8 +577,8 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     pfst ins) (map pfst outs) (map pfst both) (pfst b)) (inOutFunc n (psnd s) 
     (psnd p) (map psnd ins) (map psnd outs) (map psnd both) (psnd b))
 
-  docInOutFunc desc iComms oComms f = pair (docInOutFunc desc iComms oComms $ 
-    pfst f) (docInOutFunc desc iComms oComms $ psnd f)
+  docInOutFunc desc iComms oComms bComms f = pair (docInOutFunc desc iComms 
+    oComms bComms $ pfst f) (docInOutFunc desc iComms oComms bComms $ psnd f)
 
   commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
     (commentedFunc (psnd cmt) (psnd fn)) 
@@ -1148,12 +1148,13 @@ instance MethodSym CppSrcCode where
     (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
   inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v)
-    (map (fmap getParam) $ v : ins) (liftA3 appendToBody b (returnState $ 
+    (map (fmap getParam) $ v : ins) (liftA2 appendToBody b (returnState $ 
     valueOf v))
   inOutFunc n s p ins outs both b = function n s p (mState void) (map
     pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
-  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
+  docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
+    (bComms ++ iComms ++ oComms)
 
   commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
@@ -1652,7 +1653,8 @@ instance MethodSym CppHdrCode where
   inOutFunc n s p ins outs both b = function n s p (mState void) (map 
     pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
-  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
+  docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
+    (bComms ++ iComms ++ oComms)
 
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)

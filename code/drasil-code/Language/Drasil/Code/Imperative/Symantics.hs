@@ -554,8 +554,8 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
     [repr (Variable repr)] -> [repr (Variable repr)] -> [repr (Variable repr)] 
     -> repr (Body repr) -> repr (Method repr)
   -- Parameters are: brief description, input descriptions, output descriptions, descriptions of parameters that are both input and output, function
-  docInOutFunc :: String -> [String] -> [String] -> repr (Method repr) -> 
-    repr (Method repr)
+  docInOutFunc :: String -> [String] -> [String] -> [String] -> 
+    repr (Method repr) -> repr (Method repr)
 
   commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
     repr (Method repr)

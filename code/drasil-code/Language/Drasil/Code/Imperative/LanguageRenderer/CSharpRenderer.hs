@@ -561,7 +561,8 @@ instance MethodSym CSharpCode where
   inOutFunc n s p ins outs both b = function n s p (mState void) (map (fmap 
     (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ map (fmap (updateParamDoc csOut) . stateParam) outs) b
 
-  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
+  docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
+    (bComms ++ iComms ++ oComms)
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

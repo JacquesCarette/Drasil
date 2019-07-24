@@ -48,12 +48,10 @@ commandD s c = pure (H.bslash TP.<> text s) <> br c
 
 -- 1-argument command, with optional argument
 command1o :: String -> Maybe String -> String -> D
-command1o s Nothing  = command s
-command1o s (Just o) = command1p s o
+command1o s = maybe (command s) (command1p s)
 
 command1oD :: String -> Maybe D -> D -> D
-command1oD s Nothing  = commandD s
-command1oD s (Just o) = command1pD s o
+command1oD s = maybe (commandD s) (command1pD s)
 
 -- 1-argument command with parameter in square brackets
 command1p :: String -> String -> String -> D

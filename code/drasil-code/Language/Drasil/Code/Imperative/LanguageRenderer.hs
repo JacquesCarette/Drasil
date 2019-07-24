@@ -4,7 +4,7 @@
 module Language.Drasil.Code.Imperative.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
-  docCmtStart, observerListName, addExt,
+  docCmtStart, observerListName, doxConfigName, addExt,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
@@ -76,6 +76,9 @@ docCmtStart = text "/**"
 
 observerListName :: Label
 observerListName = "observerList"
+
+doxConfigName :: String
+doxConfigName = "doxConfig"
 
 addExt :: String -> String -> String
 addExt ext nm = nm ++ "." ++ ext

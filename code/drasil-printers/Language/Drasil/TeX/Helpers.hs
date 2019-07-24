@@ -8,7 +8,7 @@ import Language.Drasil (MaxWidthPercent)
 
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
-import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$), (%%))
+import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$))
 
 --import Language.Drasil.Config (numberedSections, hyperSettings)
 --import Language.Drasil.Document (MaxWidthPercent)
@@ -154,10 +154,9 @@ bold    = commandD "textbf"
 item' :: D -> D -> D
 item' bull = command1oD "item" (Just bull)
 
-maketitle, maketoc, newline, newpage, centering :: D
+maketitle, maketoc, newpage, centering :: D
 maketitle = command0 "maketitle"
 maketoc   = command0 "tableofcontents"
-newline   = command0 "par" <> pure (text "~\n")
 newpage   = command0 "newpage"
 centering = command0 "centering"
 
@@ -181,8 +180,8 @@ sec :: Int -> D -> D
 sec d b1 = genSec d <> br b1
 
 subscript, superscript :: D -> D -> D
-subscript a b = a <> pure H.unders <> br b
-superscript a b = a <> pure H.hat <> br b
+subscript   a b = a <> pure H.unders <> br b
+superscript a b = a <> pure H.hat    <> br b
 
 -- grave, acute :: Char -> D
 -- grave c = (pure $ text "\\`{") <> pure (TP.char c) <> (pure $ text "}")
@@ -190,23 +189,23 @@ superscript a b = a <> pure H.hat <> br b
 
 -- Macro / Command def'n --
 --TeX--
-srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS
- , modcounter, modnum :: D
-srsComms = bullet %% counter %% ddefnum %% ddref %% colAw %% colBw %% arrayS
-lpmComms = pure $ text ""
+bullet, counter, ddefnum, ddref, colAw, colBw, arrayS, modcounter, modnum :: D
 
-counter       = count "datadefnum"
-modcounter    = count "modnum"
+counter    = count "datadefnum"
+modcounter = count "modnum"
 
 bullet  = comm "blt"             "- "                Nothing
 ddefnum = comm "ddthedatadefnum" "MG\\thedatadefnum" Nothing
 ddref   = comm "ddref"           "MG\\ref{#1}"       (Just "1")
 colAw   = comm "colAwidth"       "0.2\\textwidth"    Nothing
 colBw   = comm "colBwidth"       "0.73\\textwidth"   Nothing
-
-modnum    = comm "mthemodnum"        "M\\themodnum"        Nothing
+modnum  = comm "mthemodnum"      "M\\themodnum"      Nothing
 
 arrayS  = renewcomm "arraystretch" "1.2"
+
+-- add newline
+newline :: D -> D
+newline s = s $+$ pure (text "")
 
 fraction :: D -> D -> D
 fraction n d = command0 "frac" <> br n <> br d

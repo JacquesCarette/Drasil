@@ -718,9 +718,10 @@ pyModule ls fs cs =
 pyInOutCall :: (Label -> PythonCode (StateType PythonCode) -> 
   [PythonCode (Value PythonCode)] -> PythonCode (Value PythonCode)) -> Label -> 
   [PythonCode (Value PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
-  PythonCode (Statement PythonCode)
-pyInOutCall f n ins [] = valState $ f n void ins
-pyInOutCall f n ins outs = multiAssign outs [f n void ins]
+  [PythonCode (Variable PythonCode)] -> PythonCode (Statement PythonCode)
+pyInOutCall f n ins [] [] = valState $ f n void ins
+pyInOutCall f n ins outs both = multiAssign (both ++ outs) 
+  [f n void (map valueOf both ++ ins)]
 
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns

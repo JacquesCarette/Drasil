@@ -560,7 +560,8 @@ instance MethodSym JavaCode where
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
+  inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
+    ins) b
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
@@ -740,8 +741,10 @@ jAssignFromArray c (v:vs) = (v &= cast (variableType v)
 jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 
   [JavaCode (Value JavaCode)] -> JavaCode (Value JavaCode)) -> Label -> 
   [JavaCode (Value JavaCode)] -> [JavaCode (Variable JavaCode)] -> 
-  JavaCode (Statement JavaCode)
-jInOutCall f n ins [] = valState $ f n void ins
-jInOutCall f n ins [out] = assign out $ f n (variableType out) ins
-jInOutCall f n ins outs = multi $ varDecDef (var "outputs" jArrayType) (f n 
-  jArrayType ins) : jAssignFromArray 0 outs
+  [JavaCode (Variable JavaCode)] -> JavaCode (Statement JavaCode)
+jInOutCall f n ins [] [] = valState $ f n void ins
+jInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
+jInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out 
+  : ins)
+jInOutCall f n ins outs both = multi $ varDecDef (var "outputs" jArrayType) 
+  (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 (both ++ outs)

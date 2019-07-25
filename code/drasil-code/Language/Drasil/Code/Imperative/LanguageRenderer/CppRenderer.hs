@@ -55,7 +55,6 @@ import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
-import Data.List (nub)
 import Data.List.Utils (endswith)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
@@ -484,10 +483,11 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (initObserverList (psnd t) (map psnd vs))
   addObserver o = pair (addObserver $ pfst o) (addObserver $ psnd o)
 
-  inOutCall n ins outs = pair (inOutCall n (map pfst ins) (map pfst outs)) 
-    (inOutCall n (map psnd ins) (map psnd outs))
-  extInOutCall m n ins outs = pair (extInOutCall m n (map pfst ins) (map pfst 
-    outs)) (extInOutCall m n (map psnd ins) (map psnd outs)) 
+  inOutCall n ins outs both = pair (inOutCall n (map pfst ins) (map pfst outs) 
+    (map pfst both)) (inOutCall n (map psnd ins) (map psnd outs) (map psnd both))
+  extInOutCall m n ins outs both = pair (extInOutCall m n (map pfst ins) (map 
+    pfst outs) (map pfst both)) (extInOutCall m n (map psnd ins) (map psnd outs)
+    (map psnd both)) 
 
   multi ss = pair (multi $ map pfst ss) (multi $ map psnd ss)
 
@@ -1579,8 +1579,8 @@ instance StatementSym CppHdrCode where
   initObserverList _ _ = return (mkStNoEnd empty)
   addObserver _ = return (mkStNoEnd empty)
 
-  inOutCall _ _ _ = return (mkStNoEnd empty)
-  extInOutCall _ _ _ _ = return (mkStNoEnd empty)
+  inOutCall _ _ _ _ = return (mkStNoEnd empty)
+  extInOutCall _ _ _ _ _ = return (mkStNoEnd empty)
 
   multi _ = return (mkStNoEnd empty)
 
@@ -1920,6 +1920,9 @@ cppModuleDoc ls blnk1 fs blnk2 cs = vcat [
 cppInOutCall :: (Label -> CppSrcCode (StateType CppSrcCode) -> 
   [CppSrcCode (Value CppSrcCode)] -> CppSrcCode (Value CppSrcCode)) -> Label -> 
   [CppSrcCode (Value CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
-  CppSrcCode (Statement CppSrcCode)
-cppInOutCall f n ins [out] = assign out $ f n (variableType out) ins
-cppInOutCall f n ins outs = valState $ f n void (nub $ ins ++ map valueOf outs)
+  [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Statement CppSrcCode)
+cppInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
+cppInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf 
+  out : ins)
+cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins 
+  ++ map valueOf outs)

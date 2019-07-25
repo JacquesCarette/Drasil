@@ -468,7 +468,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
   inOutCall :: Label -> [repr (Value repr)] -> [repr (Variable repr)] -> 
     [repr (Variable repr)] -> repr (Statement repr)
   extInOutCall :: Library -> Label -> [repr (Value repr)] ->
-    [repr (Variable repr)] -> repr (Statement repr)
+    [repr (Variable repr)] -> [repr (Variable repr)] -> repr (Statement repr)
 
   multi     :: [repr (Statement repr)] -> repr (Statement repr)
 

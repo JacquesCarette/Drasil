@@ -55,7 +55,6 @@ import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5,
   liftPair, liftPairFst, getInnerType, convType)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Data.List (nub)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -674,8 +673,10 @@ csOut p = text "out" <+> p
 csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) -> 
   [CSharpCode (Value CSharpCode)] -> CSharpCode (Value CSharpCode)) -> Label -> 
   [CSharpCode (Value CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
-  CSharpCode (Statement CSharpCode)
-csInOutCall f n ins [out] = assign out $ f n (variableType out) ins
-csInOutCall f n ins outs = valState $ f n void (nub $ map (\v -> 
-  if v `elem` map valueOf outs then fmap (updateValDoc csRef) v else v) ins ++
-  map (fmap (updateValDoc csOut)) (filter (`notElem` ins) (map valueOf outs)))
+  [CSharpCode (Variable CSharpCode)] -> CSharpCode (Statement CSharpCode)
+csInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
+csInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out
+  : ins)
+csInOutCall f n ins outs both = valState $ f n void (map (fmap (updateValDoc 
+  csRef) . valueOf) both ++ ins ++ map (fmap (updateValDoc csOut) . valueOf) 
+  outs)

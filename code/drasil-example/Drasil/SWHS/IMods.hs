@@ -118,15 +118,15 @@ eBalanceOnWtrDerivDesc2 dds = foldlSentCol [S "Using", foldlList Comma List
   (map (\x -> makeRef2S x +:+ S "for" +:+ ch x) dds) `sC` S "this can be written as"]
 
 eBalanceOnWtrDerivDesc3 :: Sentence
-eBalanceOnWtrDerivDesc3 = foldlSentCol [S "Dividing", eqN 3, S "by", E eq1 `sC` S "we obtain"]
+eBalanceOnWtrDerivDesc3 = foldlSentCol [S "Dividing", eqN 2, S "by", E eq1 `sC` S "we obtain"]
 
 eBalanceOnWtrDerivDesc4 :: Sentence
 eBalanceOnWtrDerivDesc4 = foldlSentCol [S "Factoring the negative sign out of",
-  S "second term" `ofThe` short rightSide `sOf` eqN 4 `sAnd`
+  S "second term" `ofThe` short rightSide `sOf` eqN 3 `sAnd`
   S "multiplying it by", ch coilHTC, ch coilSA, S "/", ch coilHTC, ch coilSA, S "yields"]
 
 eBalanceOnWtrDerivDesc5 :: Sentence
-eBalanceOnWtrDerivDesc5 = S "Which simplifies to:"
+eBalanceOnWtrDerivDesc5 = S "Rearraging this" +:+ phrase equation +: S "gives us"
 
 eBalanceOnWtrDerivDesc6 :: Expr -> Expr -> Sentence
 eBalanceOnWtrDerivDesc6 eq33 eq44 = foldlSentCol [S "Setting", E eq33,
@@ -276,7 +276,7 @@ eBalanceOnPCMDerivDesc4 = [S "Setting", ch tauSP, S "=", ch pcmMass, ch htCapSP,
 eBalanceOnPCMDerivDesc5 ::  UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk -> ConceptChunk -> ConceptChunk-> ConceptChunk
   -> ConceptChunk -> ConceptInstance -> [Sentence]
 eBalanceOnPCMDerivDesc5 hsp hlp tsp tlp sur ar melt vo ass17 = 
-  [eqN 6 +:+ S "applies for the solid PCM. In the case where all of the PCM is melted, the same" +:+
+  [eqN 4 +:+ S "applies for the solid PCM. In the case where all of the PCM is melted, the same" +:+
    S "derivation applies, except that" +:+ ch hsp +:+ S "is replaced by" +:+ ch hlp `sC`
    S "and thus" +:+ ch tsp +:+ S "is replaced by" +:+. ch tlp +:+ S "Although a small change in" +:+
    phrase sur +:+ phrase ar +:+ S "would be expected with" +:+ phrase melt `sC` S "this is not included" `sC`

@@ -70,7 +70,7 @@ eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+
 
 eBalanceOnWtrDerivDesc4 :: Sentence
 eBalanceOnWtrDerivDesc4 = foldlSentCol [S "Setting", ch tauW, S "=", ch wMass, ch htCapW,
-  S "/", ch coilHTC, ch coilSA `sC` eqN 4, S "can be written in its final form as"]
+  S "/", ch coilHTC, ch coilSA `sC` eqN 3, S "can be written in its final form as"]
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 

@@ -14,19 +14,19 @@ import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
 import Drasil.SWHS.Assumptions (assumpLCCCW, assumpTHCCoT)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
-import Drasil.SWHS.Unitals (meltFrac, latentEP, htFusion, pcmMass,
-  tempW, tempPCM, htFluxP, pcmHTC, coilHTC, tempC, htFluxC, htCapSP,
-  htCapLP, pcmHTC, pcmSA, tauSP, tauLP, aspectRatio, diam, tankLength)
+import Drasil.SWHS.Unitals (aspectRatio, coilHTC, coilSA, diam, eta, htCapLP,
+  htCapSP, htCapW, htFluxC, htFluxP, htFusion, latentEP, meltFrac, pcmHTC,
+  pcmMass, pcmSA, tankLength, tauLP, tauSP, tauW, tempC, tempPCM, tempW, wMass)
 
 refMDB :: ModelDB
 refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition]
-qDefs = [ddHtFluxCQD, ddHtFluxPQD, ddBalanceSolidPCMQD,
-  ddBalanceLiquidPCMQD, ddHtFusionQD, ddMeltFracQD, aspRatQD]
+qDefs = [ddHtFluxCQD, ddHtFluxPQD, ddBalanceSolidPCMQD, balanceDecayRateQD,
+  balanceDecayTimeQD, ddBalanceLiquidPCMQD, ddHtFusionQD, ddMeltFracQD, aspRatQD]
 
 dataDefs :: [DataDefinition] 
-dataDefs = [ddHtFluxC, ddHtFluxP, ddBalanceSolidPCM,
+dataDefs = [ddHtFluxC, ddHtFluxP, balanceDecayRate, balanceDecayTime, ddBalanceSolidPCM,
   ddBalanceLiquidPCM, ddHtFusion, ddMeltFrac, aspRat]
 
 -- FIXME? This section looks strange. Some data defs are created using
@@ -55,6 +55,30 @@ htFluxPEqn = sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
 ddHtFluxP :: DataDefinition
 ddHtFluxP = dd ddHtFluxPQD [makeCite koothoor2013]
   Nothing "htFluxP" [makeRef2S assumpLCCCW]
+
+----
+
+balanceDecayRateQD :: QDefinition
+balanceDecayRateQD = mkQuantDef tauW balanceDecayRateEqn
+
+balanceDecayRateEqn :: Expr
+balanceDecayRateEqn = sy wMass * sy htCapW / (sy coilHTC * sy coilSA)
+
+balanceDecayRate :: DataDefinition
+balanceDecayRate = dd balanceDecayRateQD [makeCite koothoor2013]
+  Nothing "balanceDecayRate" []
+
+----
+
+balanceDecayTimeQD :: QDefinition
+balanceDecayTimeQD = mkQuantDef eta balanceDecayTimeEqn
+
+balanceDecayTimeEqn :: Expr
+balanceDecayTimeEqn = sy pcmHTC * sy pcmSA / (sy coilHTC * sy coilSA)
+
+balanceDecayTime :: DataDefinition
+balanceDecayTime = dd balanceDecayTimeQD [makeCite koothoor2013]
+  Nothing "balanceDecayTime" []
 
 ----
 

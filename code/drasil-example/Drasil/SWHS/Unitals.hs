@@ -185,7 +185,7 @@ tauSP = uc' "tauSP" (nounPhraseSP "ODE parameter for solid PCM")
     "change of temperature of phase change material")
   (sup (sub lTau cP) cS) second
 
-tauW = uc' "tauW" (nounPhraseSP "ODE parameter for water")
+tauW = uc' "tauW" (nounPhraseSP "ODE parameter for water related to decay time")
   "Derived parameter based on rate of change of temperature of water"
   (sub lTau cW) second
 
@@ -208,7 +208,7 @@ unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, fracMin, consTo
 eta, meltFrac, fracMin, consTol, aspectRatio, aspectRatioMin, aspectRatioMax :: DefinedQuantityDict
 
 -- FIXME: should this have units?
-eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
+eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter related to decay rate")
   "Derived parameter based on rate of change of temperature of water")
   (const lEta) Real Nothing
 

@@ -10,6 +10,7 @@ public class InputFormat {
     
     /** \brief Reads input from a file with the given file name
         \param filename No description given
+        \param inParams No description given
     */
     public static void get_input(string filename, InputParameters inParams) {
         StreamWriter outfile;

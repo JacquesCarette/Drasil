@@ -17,25 +17,25 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
 # Current list of examples
 SRC_EXAMPLES = glassbr nopcm projectile
-EXAMPLES = $(SRC_EXAMPLES) tiny swhs ssp gamephys template
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template
 
 # where they live
-TINY_DIR  = Tiny
+HGHC_DIR  = HGHC
 GLASSBR_DIR = GlassBR
 NOPCM_DIR = NoPCM
 SWHS_DIR  = SWHS
 SSP_DIR   = SSP
-GAMEPHYS_DIR  = Chipmunk
+GAMEPHYSICS_DIR  = GamePhysics
 PROJECTILE_DIR = Projectile
 TEMPLATE_DIR = Template
 
 # and the name of their executables
-TINY_EXE  = tiny
+HGHC_EXE  = hghc
 GLASSBR_EXE = glassbr
 NOPCM_EXE = nopcm
 SWHS_EXE  = swhs
 SSP_EXE   = ssp
-GAMEPHYS_EXE  = chipmunkdocs
+GAMEPHYSICS_EXE  = gamephysics
 PROJECTILE_EXE = projectile
 TEMPLATE_EXE = template
 

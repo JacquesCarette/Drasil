@@ -12,7 +12,7 @@ import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec),
   DocType(SRS, MG, MIS, Website), Filename, makeCSS, genHTML,
   genTeX, PrintingInformation)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec,
-  Lang(..), unJC, unPC, unCSC, unSrc, unHdr)
+  Lang(..), unJC, unPC, unCSC, unCPPC)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -68,8 +68,8 @@ genCode chs spec = do
   setCurrentDirectory "src"
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
-  where genLangCode Java = genCall Java [unJC]
-        genLangCode Python = genCall Python [unPC]
-        genLangCode CSharp = genCall CSharp [unCSC]
-        genLangCode Cpp = genCall Cpp [unHdr, unSrc]
+  where genLangCode Java = genCall Java unJC
+        genLangCode Python = genCall Python unPC
+        genLangCode CSharp = genCall CSharp unCSC
+        genLangCode Cpp = genCall Cpp unCPPC
         genCall lng unRepr = generateCode lng unRepr $ generator chs spec

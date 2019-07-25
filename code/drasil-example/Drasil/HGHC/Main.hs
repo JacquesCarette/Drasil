@@ -27,7 +27,7 @@ thisChoices = Choices {
   
 main :: IO ()            
 main = do
-  gen (DocSpec Website "Tiny_SRS") srs printSetting
-  gen (DocSpec SRS "Tiny_SRS")     srs printSetting
+  gen (DocSpec Website "HGHC_SRS") srs printSetting
+  gen (DocSpec SRS "HGHC_SRS")     srs printSetting
   -- When ready to generate code, uncomment this file
   --genCode thisChoices thisCode

@@ -1,7 +1,7 @@
 package GlassBR;
 
 /** \file InputParameters.java
-    \brief Provides the structure for holding input parameters
+    \brief Provides the structure for holding input values
 */
 import java.util.Arrays;
 import java.util.BitSet;
@@ -11,7 +11,7 @@ import java.io.FileWriter;
 import java.io.File;
 import java.util.ArrayList;
 
-/** \brief Structure for holding the input parameters and derived values
+/** \brief Structure for holding the input values and derived values
 */
 public class InputParameters {
     public double a;

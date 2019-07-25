@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" type="text/css" href="Chipmunk_SRS.css">
-    <title>Software Requirements Specification for Chipmunk2D</title>
+    <link rel="stylesheet" type="text/css" href="GamePhysics_SRS.css">
+    <title>Software Requirements Specification for Game Physics</title>
     <meta charset="utf-8">
     <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
   </head>
   <body>
     <div class="title">
-      <h1>Software Requirements Specification for Chipmunk2D</h1>
+      <h1>Software Requirements Specification for Game Physics</h1>
     </div>
     <div class="author">
       <h2>Alex Halliwushka and Luthfi Mawarid</h2>
@@ -420,10 +420,6 @@
                   <td>Centre of Mass</td>
                 </tr>
                 <tr>
-                  <td>Chipmunk2D</td>
-                  <td>Chipmunk2D game physics library</td>
-                </tr>
-                <tr>
                   <td>DD</td>
                   <td>Data Definition</td>
                 </tr>
@@ -434,6 +430,10 @@
                 <tr>
                   <td>GS</td>
                   <td>Goal Statement</td>
+                </tr>
+                <tr>
+                  <td>Game Physics</td>
+                  <td>game physics library</td>
                 </tr>
                 <tr>
                   <td>IM</td>
@@ -480,13 +480,13 @@
           Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (SRS) for Game Physics. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              This document describes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
+              This document describes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Game Physics are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
             </p>
             <p class="paragraph">
               This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
@@ -505,7 +505,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Game Physics can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -532,7 +532,7 @@
           <div class="subsection">
             <h2>System Context</h2>
             <p class="paragraph">
-              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Chipmunk2D). Arrows are used to show the data flow between the system and its environment.
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Game Physics). Arrows are used to show the data flow between the system and its environment.
             </p>
             <div id="Figure:sysCtxDiag">
               <figure>
@@ -559,7 +559,7 @@
                 </ul>
               </li>
               <li>
-                Chipmunk2D Responsibilities
+                Game Physics Responsibilities
                 <ul class="list">
                   <li>
                     Determine if the inputs and simulation state satisfy the required physical and system constraints (FIXME REF).
@@ -579,7 +579,7 @@
           <div class="subsection">
             <h2>User Characteristics</h2>
             <p class="paragraph">
-              The end user of Chipmunk2D should have an understanding of first year programming concepts and an understanding of high school physics.
+              The end user of Game Physics should have an understanding of first year programming concepts and an understanding of high school physics.
             </p>
           </div>
         </div>
@@ -654,7 +654,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern Chipmunk2D are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern Game Physics are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -705,7 +705,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that Chipmunk2D is based on.
+                  This section focuses on the general equations and laws that Game Physics is based on.
                 </p>
                 <div id="TM:NewtonSecLawMot">
                   <table class="tdefn">
@@ -863,7 +863,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, <em>G</em> is the gravitational constant (6.673 * 10E-11) (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
+                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, <em>G</em> is the An empirical physical constant, used to show the force between two objects caused by gravity (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
                         </p>
                       </td>
                     </tr>
@@ -2387,24 +2387,26 @@
                     <tr>
                       <td><em>G</em></td>
                       <td>--</td>
-                      <td><em>9.8</em> m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)</td>
+                      <td>
+                        <em>66.743&sdot;10<sup>-12</sup></em> m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)
+                      </td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em><b>I</b></em></td>
-                      <td><em><b>I</b>&thinsp;&ge;&thinsp;0</em></td>
+                      <td><em><b>I</b>&thinsp;&gt;&thinsp;0</em></td>
                       <td><em>74.5</em> kg&sdot;m<sup>2</sup></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>L</em></td>
-                      <td><em>L&thinsp;&ge;&thinsp;0</em></td>
+                      <td><em>L&thinsp;&gt;&thinsp;0</em></td>
                       <td><em>44.2</em> m</td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>m</em></td>
-                      <td><em>m&thinsp;&ge;&thinsp;0</em></td>
+                      <td><em>m&thinsp;&gt;&thinsp;0</em></td>
                       <td><em>56.2</em> kg</td>
                       <td>10<em>%</em></td>
                     </tr>
@@ -2434,7 +2436,9 @@
                     </tr>
                     <tr>
                       <td><em>ϕ</em></td>
-                      <td>--</td>
+                      <td>
+                        <em>0&thinsp;&le;&thinsp;ϕ&thinsp;&le;&thinsp;2&#8239;π</em>
+                      </td>
                       <td>
                         <em><div class="fraction">
                               <span class="fup">π</span>
@@ -2456,11 +2460,28 @@
                 </p>
                 <div id="Table:OutDataConstraints">
                   <table class="table">
-                    <tr><th>Var</th></tr>
-                    <tr><td><em><b>p</b></em></td></tr>
-                    <tr><td><em><b>v</b></em></td></tr>
-                    <tr><td><em>ϕ</em></td></tr>
-                    <tr><td><em>ω</em></td></tr>
+                    <tr>
+                      <th>Var</th>
+                      <th>Physical Constraints</th>
+                    </tr>
+                    <tr>
+                      <td><em><b>p</b></em></td>
+                      <td>--</td>
+                    </tr>
+                    <tr>
+                      <td><em><b>v</b></em></td>
+                      <td>--</td>
+                    </tr>
+                    <tr>
+                      <td><em>ϕ</em></td>
+                      <td>
+                        <em>0&thinsp;&le;&thinsp;ϕ&thinsp;&le;&thinsp;2&#8239;π</em>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><em>ω</em></td>
+                      <td>--</td>
+                    </tr>
                   </table>
                   <p class="caption">Output Data Constraints</p>
                 </div>
@@ -4652,7 +4673,7 @@
           </li>
           <li>
             <div id="parnas1978">
-              [4]: Parnas, David L. "Designing Software for Ease of Extension and Contraction.." <em>ICSE '78: Proceedings of the 3rd international conference on Software engineering</em>. 1978. pp. 264&ndash;277.
+              [4]: Parnas, David L. "Designing Software for Ease of Extension and Contraction." <em>ICSE '78: Proceedings of the 3rd international conference on Software engineering</em>. 1978. pp. 264&ndash;277.
             </div>
           </li>
           <li>

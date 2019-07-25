@@ -79,8 +79,12 @@ copy_examples() {
 }
 
 copy_images() {
+  if [ -d "$CUR_DIR"deploy/images ]; then
+    rm -r "$CUR_DIR"deploy/images
+  fi
   mkdir -p "$CUR_DIR"deploy/images
-  cp -r "$CUR_DIR"website/images/ "$CUR_DIR"deploy/images
+  cp -r "$CUR_DIR"website/images/* "$CUR_DIR"deploy/images
+  
 }
 
 build_website() {

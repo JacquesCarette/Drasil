@@ -41,7 +41,7 @@ intersliceWtrFQD :: QDefinition
 intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
-intersliceWtrFEqn = case_ [case1,case2,case3]
+intersliceWtrFEqn = completeCase [case1,case2,case3]
   where case1 = ((inxi slopeHght - inxi slipHght) $^ 2 / 2  *
           sy waterWeight + (inxi waterHght - inxi slopeHght) $^ 2 *
           sy waterWeight, inxi waterHght $>= inxi slopeHght)
@@ -177,7 +177,7 @@ ratioVarQD :: QDefinition
 ratioVarQD = mkQuantDef scalFunc ratioVarEqn
 
 ratioVarEqn :: Expr
-ratioVarEqn = case_ [case1, case2]
+ratioVarEqn = completeCase [case1, case2]
   where case1 = (1, sy constF)
 
         case2 = (sin (sy QM.pi_ * ((inxi slipDist - idx (sy slipDist) 0) /

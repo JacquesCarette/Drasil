@@ -389,7 +389,7 @@ heatEInPCMRC = makeRC "heatEInPCMRC" (nounPhraseSP "Heat energy in the PCM")
   (pcmE ^. defn) htPCMRel
 
 htPCMRel :: Relation
-htPCMRel = sy pcmE $= completeCase [case1, case2, case3, case4]
+htPCMRel = sy pcmE $= completeCase [case1, case2, case3]
   where case1 = (sy htCapSP * sy pcmMass * (apply1 tempPCM time -
           sy tempInit), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
 
@@ -398,10 +398,7 @@ htPCMRel = sy pcmE $= completeCase [case1, case2, case3, case4]
           sy tempMeltP)), realInterval tempPCM (UpFrom (Exc, sy tempMeltP)))
 
         case3 = (sy pcmInitMltE + apply1 latentEP time,
-          sy tempPCM $= sy tempMeltP)
-
-        case4 = (sy pcmInitMltE + apply1 latentEP time,
-          realInterval meltFrac (Bounded (Exc,0) (Exc,1)))
+          sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc,0) (Exc,1)))
 
 htPCMNotes :: [Sentence]
 htPCMNotes = map foldlSent [

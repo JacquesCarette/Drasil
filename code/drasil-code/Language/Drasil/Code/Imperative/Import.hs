@@ -281,7 +281,7 @@ inputClassDesc = do
       inPs _ = "input values"
       dVs Nothing = ""
       dVs _ = "derived values"
-  return $ inClassD $ inputs $ codeSpec g
+  return $ inClassD $ inputs $ csi $ codeSpec g
 
 inFmtFuncDesc :: Reader (State repr) String
 inFmtFuncDesc = do
@@ -355,7 +355,7 @@ genInputClass :: (RenderSym repr) => Reader (State repr) (Maybe (repr (Class
   repr)))
 genInputClass = do
   g <- ask
-  let ins       = inputs $ codeSpec g
+  let ins       = inputs $ csi $ codeSpec g
       genClass :: (RenderSym repr) => [String] -> Reader (State repr) (Maybe 
         (repr (Class repr)))
       genClass [] = return Nothing 
@@ -378,7 +378,8 @@ genInputConstraints = do
       genConstraints (Just _) = do
         h <- ask
         parms <- getConstraintParams
-        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec h)
+        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ 
+              codeSpec h)
             sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
             physCs   = concatMap (renderC . physLookup cm) varsList
         sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
@@ -640,7 +641,7 @@ getInputDecl = do
         return $ Just $ multi $ map varDec vars
       getDecl Bundled _ = return $ Just $ extObjDecNewVoid "InputParameters"
         v_params 
-  getDecl (inStruct g) (inputs $ codeSpec g)
+  getDecl (inStruct g) (inputs $ csi $ codeSpec g)
 
 getFuncCall :: (RenderSym repr) => String -> repr (StateType repr) -> 
   Reader (State repr) [repr (Parameter repr)] -> 
@@ -736,7 +737,7 @@ getConstraintParams = do
   let cm = cMap $ csi $ codeSpec g
       mem = eMap $ codeSpec g
       db = sysinfodb $ csi $ codeSpec g
-      varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
+      varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ codeSpec g)
       reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v db 
         mem) (getConstraints cm varsList)
   getParams reqdVals
@@ -784,7 +785,7 @@ variable :: (RenderSym repr) => String -> repr (StateType repr) ->
   Reader (State repr) (repr (Variable repr))
 variable s t = do
   g <- ask
-  let cs = codeSpec g
+  let cs = csi $ codeSpec g
   return $ if s `elem` map codeName (inputs cs) 
     then inputVariable (inStruct g) s t
     else var s t
@@ -811,7 +812,7 @@ getParams :: (RenderSym repr) => [CodeChunk] -> Reader (State repr)
   [repr (Parameter repr)]
 getParams cs = do
   g <- ask
-  let ins = inputs $ codeSpec g
+  let ins = inputs $ csi $ codeSpec g
       consts = map codevar $ constants $ csi $ codeSpec g
       inpParams = filter (`elem` ins) cs
       inPs = getInputParams (inStruct g) inpParams

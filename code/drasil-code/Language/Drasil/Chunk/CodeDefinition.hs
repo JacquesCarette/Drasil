@@ -4,11 +4,11 @@ module Language.Drasil.Chunk.CodeDefinition (
 ) where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName), codevar, 
-  codefunc)
+import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk), 
+  codevar, codefunc)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 
-import Control.Lens (Lens', (^.), makeLenses, view)
+import Control.Lens ((^.), makeLenses, view)
 
 data CodeDefinition = CD { _cchunk :: CodeChunk
                          , _def :: Expr
@@ -20,7 +20,9 @@ instance NamedIdea    CodeDefinition where term = cchunk . term
 instance Idea         CodeDefinition where getA = getA . view cchunk
 instance HasCodeType  CodeDefinition where ctyp = cchunk . ctyp
 instance HasSymbol    CodeDefinition where symbol c = symbol (c ^. cchunk)
-instance CodeIdea     CodeDefinition where codeName = codeName . view cchunk
+instance CodeIdea     CodeDefinition where 
+  codeName = codeName . view cchunk
+  codeChunk = view cchunk
 instance Eq           CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit  CodeDefinition where getUnit = getUnit . view cchunk
 instance DefiningExpr CodeDefinition where defnExpr = def

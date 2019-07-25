@@ -19,6 +19,7 @@ import qualified Data.Map as Map
 -- not using lenses for now
 class CodeIdea c where
   codeName      :: c -> String
+  codeChunk     :: c -> CodeChunk
 
 programName :: CommonIdea c => c -> String
 programName = toCodeName . abrv
@@ -76,6 +77,7 @@ instance HasSymbol   CodeChunk where symbol c = symbol (c ^. qc)
 instance CodeIdea    CodeChunk where
   codeName (CodeC c Var) = symbToCodeName (codeSymb c)
   codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
+  codeChunk = id
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc
 

@@ -731,7 +731,8 @@ Description & \begin{symbDescription}
 Source & \cite{koothoor2013}
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -768,7 +769,8 @@ Description & \begin{symbDescription}
 Source & \cite{koothoor2013}
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -805,7 +807,7 @@ Description & \begin{symbDescription}
 Source & \cite{lightstone2012}
          
 \\ \midrule \\
-RefBy & \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
+RefBy & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
         
 \\ \bottomrule
 \end{tabular}
@@ -843,7 +845,7 @@ Description & \begin{symbDescription}
 Source & \cite{lightstone2012}
          
 \\ \midrule \\
-RefBy & \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
+RefBy & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
         
 \\ \bottomrule
 \end{tabular}
@@ -882,7 +884,7 @@ Notes & The specific latent heat of fusion (also known as the enthalpy of fusion
 Source & \cite[(pg. 282)]{bueche1986}
          
 \\ \midrule \\
-RefBy & \hyperref[DD:meltFrac]{DD: meltFrac}, \hyperref[TM:latentHtE]{TM: latentHtE}, \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
+RefBy & \hyperref[DD:meltFrac]{DD: meltFrac}, \hyperref[TM:latentHtE]{TM: latentHtE}, and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}
         
 \\ \bottomrule
 \end{tabular}
@@ -924,7 +926,7 @@ Notes & The value of $ϕ$ is constrained to $0\leq{}ϕ\leq{}1$.
 Source & \cite{koothoor2013}
          
 \\ \midrule \\
-RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
+RefBy & \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}
         
 \\ \bottomrule
 \end{tabular}
@@ -1009,13 +1011,13 @@ Description & \begin{symbDescription}
               \item{${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${τ_{W}}$, ${t_{final}}$, ${T_{C}}$, ${T_{P}}$ from (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}). The input is constrained so that ${T_{init}}\leq{}{T_{C}}$. (\hyperref[assumpCTNOD]{A: Charging-Tank-No-Temp-Discharge}) ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (\hyperref[DD:htFusion]{DD: htFusion}) (s). $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+Notes & ${t_{final}}$, ${T_{C}}$, ${T_{P}}$ from (\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}). The input is constrained so that ${T_{init}}\leq{}{T_{C}}$. (\hyperref[assumpCTNOD]{A: Charging-Tank-No-Temp-Discharge}) ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}$ is from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}. $η$ is from \hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}. The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
         
 \\ \midrule \\
 Source & \cite{koothoor2013}
          
 \\ \midrule \\
-RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}, \hyperref[findMass]{FR: Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, and \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}
+RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[findMass]{FR: Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, and \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}
         
 \\ \bottomrule
 \end{tabular}
@@ -1047,7 +1049,7 @@ Which simplifies to:
 \begin{displaymath}
 \frac{\,d{T_{W}}}{\,dt}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}} \frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{displaymath}
-Setting ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:htFusion]{DD: htFusion}) and $η=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ (\hyperref[DD:meltFrac]{DD: meltFrac}), Equation (5) can be written as:
+By substituting ${τ_{W}}$ (from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}) and $η$ (from \hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}), this can be written as:
 
 \begin{displaymath}
 \frac{\,d{T_{W}}}{\,dt}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{η}{{τ_{W}}} \left({T_{P}}-{T_{W}}\right)
@@ -1101,13 +1103,13 @@ Description & \begin{symbDescription}
               \item{$ϕ$ is the melt fraction (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ from (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (\hyperref[assumpPIS]{A: PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:meltFrac]{DD: meltFrac}) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}). ${{τ_{P}}^{S}}=\frac{{m_{P}} {{C_{P}}^{S}}}{{h_{P}} {A_{P}}}$ is a constant (s) (\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}). ${{τ_{P}}^{L}}=\frac{{m_{P}} {{C_{P}}^{L}}}{{h_{P}} {A_{P}}}$ is a constant (s) (\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}).
+Notes & ${{T_{melt}}^{P}}$, ${t_{final}}$, ${T_{init}}$, ${h_{P}}$, ${m_{P}}$, ${{C_{P}}^{S}}$, ${{C_{P}}^{S}}$ from (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}). The input is constrained so that ${T_{init}}<{{T_{melt}}^{P}}$ (\hyperref[assumpPIS]{A: PCM-Initially-Solid}) ${T_{P}}$, $0<t<{t_{final}}$, with initial conditions, ${T_{W}}={T_{P}}={T_{init}}$, FIXME t\_w(0) = t\_p(0), \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}, and ${T_{W}}$ from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, such that the following governing ODE is satisfied. The temperature remains constant at ${{T_{melt}}^{P}}$, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$ (from \hyperref[DD:meltFrac]{DD: meltFrac}) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}). ${{τ_{P}}^{S}}$ is from \hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}. ${{τ_{P}}^{L}}$ is from \hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}.
         
 \\ \midrule \\
 Source & \cite{koothoor2013}
          
 \\ \midrule \\
-RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}, \hyperref[findMass]{FR: Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time}, \hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time}, and \hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time}
+RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[findMass]{FR: Find-Mass}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time}, \hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time}, and \hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time}
         
 \\ \bottomrule
 \end{tabular}
@@ -1129,7 +1131,7 @@ Dividing by ${m_{P}}$ ${{C_{P}}^{S}}$ we obtain:
 \begin{displaymath}
 \frac{\,d{T_{P}}}{\,dt}=\frac{{h_{P}} {A_{P}}}{{m_{P}} {{C_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{displaymath}
-Setting ${{τ_{P}}^{S}}$ = ${m_{P}}$ ${{C_{P}}^{S}}$ / ${h_{P}}$ ${A_{P}}$, this can be written as:
+By substituting ${{τ_{P}}^{S}}$ (from \hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}), this can be written as:
 
 \begin{displaymath}
 \frac{\,d{T_{P}}}{\,dt}=\frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
@@ -1345,7 +1347,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]Input the following quantities described in \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the tank parameters, material properties and initial conditions.
 \item[Find-Mass:\phantomsection\label{findMass}]Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM: heatEInPCM}, using ${m_{W}}={V_{W}} {ρ_{W}}=\left({V_{tank}}-{V_{P}}\right) {ρ_{W}}=\left(π \left(\frac{D}{2}\right)^{2} L-{V_{P}}\right) {ρ_{W}}$, ${m_{P}}={V_{P}} {ρ_{P}}$, and \hyperref[assumpVCN]{A: Volume-Coil-Negligible}, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank.
 \item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]Verify that the inputs satisfy the required physical constraints shown in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.
-\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the masses from \hyperref[findMass]{FR: Find-Mass}, ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}), $η$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}), ${{τ_{P}}^{S}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}), and ${{τ_{P}}^{L}}$ (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
+\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the masses from \hyperref[findMass]{FR: Find-Mass}, ${τ_{W}}$ (from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}), $η$ (from \hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}), ${{τ_{P}}^{S}}$ (from \hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}), and ${{τ_{P}}^{L}}$ (from \hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}).
 \item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).
 \item[Calculate-Temperature-PCM-Over-Time:\phantomsection\label{calcTempPCMOverTime}]Calculate and output the temperature of the phase change material (${T_{P}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}).
 \item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).
@@ -1570,7 +1572,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  & 
 \\
-\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & X & X &  &  &  &  & X & X &  &  &  &  &  & X & X & X &  & 
+\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & X & X & X & X &  &  &  &  &  &  &  &  &  & X & X & X &  & 
 \\
 \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM} &  & X &  &  & X & X &  & X &  &  &  &  &  & X & X &  &  & X
 \\
@@ -1602,7 +1604,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

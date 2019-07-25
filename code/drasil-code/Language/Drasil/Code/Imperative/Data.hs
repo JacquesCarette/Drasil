@@ -67,7 +67,10 @@ packD :: String -> [FileData] -> [AuxData] -> PackData
 packD = PackD
 
 data ParamData = PD {paramName :: String, paramType :: TypeData, 
-  paramDoc :: Doc} deriving Eq
+  paramDoc :: Doc}
+
+instance Eq ParamData where
+  PD n1 _ _ == PD n2 _ _ = n1 == n2
 
 pd :: String -> TypeData -> Doc -> ParamData
 pd = PD 
@@ -87,7 +90,6 @@ td :: CodeType -> Doc -> TypeData
 td = TD
 
 data ValData = VD {valType :: TypeData, valDoc :: Doc}
-  deriving Eq
 
 vd :: TypeData -> Doc -> ValData
 vd = VD

@@ -10,11 +10,12 @@ import Database.Drasil(ChunkDB, SystemInformation(SI), symbLookup, symbolTable,
 import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
-import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, 
-  ConstraintMap, codevar, codefunc, codeEquat, funcPrefix, codeName, 
-  spaceToCodeType, toCodeName, constraintMap, qtov, qtoc)
+import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea, ConstraintMap, codevar, 
+  codefunc, funcPrefix, codeName, toCodeName, constraintMap)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
+  codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
-import Language.Drasil.Code.Code (CodeType)
+import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 
 import Control.Lens ((^.))

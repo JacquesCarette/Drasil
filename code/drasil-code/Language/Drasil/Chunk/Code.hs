@@ -1,10 +1,8 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
-    CodeIdea(..), CodeChunk(..), CodeDefinition(..),
-    codeType, codevar, codefunc, qtoc, qtov, codeEquat,
+    CodeIdea(..), CodeChunk(..), codeType, codevar, codefunc,
     ConstraintMap, constraintMap, physLookup, sfwrLookup,
-    programName, symbToCodeName, --CodeType(..), - not defined here
-    spaceToCodeType, toCodeName, funcPrefix
+    programName, symbToCodeName, toCodeName, funcPrefix
   ) where
 
 import Control.Lens ((^.),makeLenses,view)
@@ -89,31 +87,6 @@ codevar c = CodeC (cqw c) Var
 
 codefunc :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
 codefunc c = CodeC (cqw c) Func
-
-data CodeDefinition = CD { _quant :: QuantityDict
-                         , _ci :: String
-                         , _def :: Expr
-                         }
-makeLenses ''CodeDefinition
-
-instance HasUID        CodeDefinition where uid = quant . uid
-instance NamedIdea     CodeDefinition where term = quant . term
-instance Idea          CodeDefinition where getA = getA . view quant
-instance HasSpace      CodeDefinition where typ = quant . typ
-instance HasSymbol     CodeDefinition where symbol c = symbol (c ^. quant)
-instance Quantity      CodeDefinition where 
-instance CodeIdea      CodeDefinition where codeName = (^. ci)
-instance Eq            CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance MayHaveUnit   CodeDefinition where getUnit = getUnit . view quant
-
-qtoc :: (Quantity q, DefiningExpr q, MayHaveUnit q) => q -> CodeDefinition
-qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. defnExpr)
-
-qtov :: QDefinition -> CodeDefinition
-qtov q = CD (qw q) (symbToCodeName (codeSymb q)) (q ^. defnExpr)
-
-codeEquat :: CodeDefinition -> Expr
-codeEquat cd = cd ^. def
 
 type ConstraintMap = Map.Map UID [Constraint]
 

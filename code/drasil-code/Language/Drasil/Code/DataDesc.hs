@@ -19,8 +19,8 @@ data Data = Singleton DataItem
 data LinePattern = Straight [DataItem] -- line of data with no pattern
                  | Repeat [DataItem]   -- line of data with repeated pattern       
 
-singleton :: (Quantity c, MayHaveUnit c) => c -> Data
-singleton = Singleton . codevar
+singleton :: CodeChunk -> Data
+singleton = Singleton
 
 junkLine :: Data
 junkLine = JunkData

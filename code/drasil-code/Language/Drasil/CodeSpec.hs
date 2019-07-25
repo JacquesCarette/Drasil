@@ -13,7 +13,7 @@ import Theory.Drasil (DataDefinition, qdFromDD)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), 
   ConstraintMap, codevar, codefunc, funcPrefix, codeName, toCodeName, 
   constraintMap)
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition(..), qtov, qtoc, 
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
@@ -222,7 +222,7 @@ fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
 asVC :: Func -> QuantityDict
 asVC (FDef (FuncDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
 asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
-asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
+asVC (FCD _) = error "Can't make QuantityDict from FCD function" -- codeVC cd (codeSymb cd) (cd ^. typ)
 
 asExpr :: Func -> Expr
 asExpr f = sy $ asVC f
@@ -235,7 +235,7 @@ asExpr' f = sy $ asVC' f
 asVC' :: Func -> QuantityDict
 asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
-asVC' (FCD cd) = vc'' cd (codeSymb cd) (cd ^. typ)
+asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
 
 -- name of variable/function maps to module name

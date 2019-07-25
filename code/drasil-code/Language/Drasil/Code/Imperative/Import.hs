@@ -30,9 +30,10 @@ import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer
 import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer 
   (pyExts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
-import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
-  codeType, codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup,
-  programName)
+import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk),
+  codeType, codevar, codefunc, funcPrefix, physLookup, sfwrLookup, programName)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
+import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
@@ -718,7 +719,8 @@ getInputFormatOuts = do
       getOuts Bundled = []
   return $ getOuts (inStruct g)
   
-toVariables :: (RenderSym repr) => [CodeChunk] -> [repr (Variable repr)]
+toVariables :: (RenderSym repr, HasCodeType c, CodeIdea c) => [c] -> 
+  [repr (Variable repr)]
 toVariables = map (\c -> var (codeName c) ((convType . codeType) c))
 
 getDerivedParams :: (RenderSym repr) => 
@@ -808,12 +810,13 @@ fAppInOut m n ins outs = do
   return $ if m /= currentModule g then extInOutCall m n ins outs 
     else inOutCall n ins outs
 
-getParams :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
+getParams :: (RenderSym repr, CodeIdea c) => [c] -> Reader (State repr) 
   [repr (Parameter repr)]
-getParams cs = do
+getParams cs' = do
   g <- ask
-  let ins = inputs $ csi $ codeSpec g
-      consts = map codevar $ constants $ csi $ codeSpec g
+  let cs = map codeChunk cs'
+      ins = inputs $ csi $ codeSpec g
+      consts = map codeChunk $ constants $ csi $ codeSpec g
       inpParams = filter (`elem` ins) cs
       inPs = getInputParams (inStruct g) inpParams
       conParams = filter (`elem` consts) cs
@@ -822,15 +825,15 @@ getParams cs = do
       ps = map mkParam csSubIns
   return $ inPs ++ conPs ++ ps
 
-mkParam :: (RenderSym repr) => CodeChunk -> repr (Parameter repr)
+mkParam :: (RenderSym repr, HasCodeType c, CodeIdea c) => c -> repr (Parameter repr)
 mkParam p = paramFunc (codeType p) $ var pName pType
   where paramFunc (C.List _) = pointerParam
         paramFunc _ = stateParam
         pName = codeName p
         pType = convType $ codeType p
 
-getInputParams :: (RenderSym repr) => Structure -> [CodeChunk] ->
-  [repr (Parameter repr)]
+getInputParams :: (RenderSym repr, HasCodeType c, CodeIdea c) => Structure -> 
+  [c] -> [repr (Parameter repr)]
 getInputParams _ [] = []
 getInputParams Unbundled cs = map mkParam cs
 getInputParams Bundled _ = [pointerParam $ var pName pType]

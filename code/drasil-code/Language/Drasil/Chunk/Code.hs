@@ -9,7 +9,7 @@ import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil
 
-import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
+import Language.Drasil.Code.Code (CodeType)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp), CodeQuantityDict, 
   cqw)
 
@@ -81,8 +81,8 @@ instance CodeIdea    CodeChunk where
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc
 
-codeType :: HasSpace c => c -> CodeType
-codeType c = spaceToCodeType $ c ^. typ
+codeType :: HasCodeType c => c -> CodeType
+codeType c = c ^. ctyp
 
 codevar :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
 codevar c = CodeC (cqw c) Var
@@ -95,12 +95,12 @@ type ConstraintMap = Map.Map UID [Constraint]
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> (x ^. uid, x ^. constraints))
 
-physLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
+physLookup :: (HasUID q) => ConstraintMap -> q -> (q,[Constraint])
 physLookup m q = constraintLookup' q m (filter isPhysC)
 
-sfwrLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
+sfwrLookup :: (HasUID q) => ConstraintMap -> q -> (q,[Constraint])
 sfwrLookup m q = constraintLookup' q m (filter isSfwrC)
 
-constraintLookup' :: (Quantity q) => q -> ConstraintMap
+constraintLookup' :: (HasUID q) => q -> ConstraintMap
                       -> ([Constraint] -> [Constraint]) -> (q , [Constraint])
 constraintLookup' q m filt = (q, maybe [] filt (Map.lookup (q^.uid) m))

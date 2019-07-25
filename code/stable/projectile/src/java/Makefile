@@ -6,4 +6,7 @@ Projectile/Control.class: Projectile/Control.java Projectile/InputParameters.jav
 run: build
 	java Projectile.Control $(RUNARGS)
 
-.PHONY: build run
+doc: doxConfig Projectile/Control.java Projectile/InputParameters.java Projectile/InputFormat.java Projectile/InputConstraints.java Projectile/OutputFormat.java Projectile/Calculations.java
+	doxygen doxConfig
+
+.PHONY: build run doc

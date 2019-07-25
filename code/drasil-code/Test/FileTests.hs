@@ -7,7 +7,7 @@ import Language.Drasil.Code (PackageSym(..), RenderSym(..), PermanenceSym(..),
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 fileTests :: (PackageSym repr) => repr (Package repr)
-fileTests = packMods "FileTests" [fileDoc (buildModule "FileTests" [] [fileTestMethod] [])]
+fileTests = package "FileTests" [fileDoc (buildModule "FileTests" [] [fileTestMethod] [])] []
 
 fileTestMethod :: (RenderSym repr) => repr (Method repr)
 fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory], 

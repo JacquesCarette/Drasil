@@ -22,12 +22,12 @@ refMDB :: ModelDB
 refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition]
-qDefs = [ddHtFluxCQD, ddHtFluxPQD, ddBalanceSolidPCMQD, balanceDecayRateQD,
-  balanceDecayTimeQD, ddBalanceLiquidPCMQD, ddHtFusionQD, ddMeltFracQD, aspRatQD]
+qDefs = [ddHtFluxCQD, ddHtFluxPQD, balanceDecayRateQD, balanceDecayTimeQD,
+  balanceSolidPCMQD, balanceLiquidPCMQD, ddHtFusionQD, ddMeltFracQD, aspRatQD]
 
 dataDefs :: [DataDefinition] 
-dataDefs = [ddHtFluxC, ddHtFluxP, balanceDecayRate, balanceDecayTime, ddBalanceSolidPCM,
-  ddBalanceLiquidPCM, ddHtFusion, ddMeltFrac, aspRat]
+dataDefs = [ddHtFluxC, ddHtFluxP, balanceDecayRate, balanceDecayTime,
+  balanceSolidPCM, balanceLiquidPCM, ddHtFusion, ddMeltFrac, aspRat]
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
@@ -82,28 +82,28 @@ balanceDecayTime = dd balanceDecayTimeQD [makeCite koothoor2013]
 
 ----
 
-ddBalanceSolidPCMQD :: QDefinition
-ddBalanceSolidPCMQD = mkQuantDef tauSP balanceSolidPCMEqn
+balanceSolidPCMQD :: QDefinition
+balanceSolidPCMQD = mkQuantDef tauSP balanceSolidPCMEqn
 
 balanceSolidPCMEqn :: Expr
 balanceSolidPCMEqn = (sy pcmMass * sy htCapSP) /
   (sy pcmHTC * sy pcmSA)
 
-ddBalanceSolidPCM :: DataDefinition
-ddBalanceSolidPCM = dd ddBalanceSolidPCMQD [makeCite lightstone2012]
+balanceSolidPCM :: DataDefinition
+balanceSolidPCM = dd balanceSolidPCMQD [makeCite lightstone2012]
   Nothing "balanceSolidPCM" []
 
 ----
 
-ddBalanceLiquidPCMQD :: QDefinition
-ddBalanceLiquidPCMQD = mkQuantDef tauLP balanceLiquidPCMEqn
+balanceLiquidPCMQD :: QDefinition
+balanceLiquidPCMQD = mkQuantDef tauLP balanceLiquidPCMEqn
 
 balanceLiquidPCMEqn :: Expr
 balanceLiquidPCMEqn = (sy pcmMass * sy htCapLP) /
   (sy pcmHTC * sy pcmSA)
 
-ddBalanceLiquidPCM :: DataDefinition
-ddBalanceLiquidPCM = dd ddBalanceLiquidPCMQD [makeCite lightstone2012]
+balanceLiquidPCM :: DataDefinition
+balanceLiquidPCM = dd balanceLiquidPCMQD [makeCite lightstone2012]
   Nothing "balanceLiquidPCM" []
 
 ----

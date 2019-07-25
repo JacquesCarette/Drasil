@@ -18,7 +18,7 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpCWTAT, assumpTPCAV)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, ddHtFusion, ddMeltFrac,
-  ddBalanceSolidPCM, ddBalanceLiquidPCM)
+  balanceSolidPCM, balanceLiquidPCM)
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
@@ -231,11 +231,11 @@ balPCMDesc = foldlSent [(E $ sy tempW) `isThe` phrase tempW +:+.
   E $ sy tauSP $= (sy pcmMass * sy htCapSP) /
   (sy pcmHTC * sy pcmSA), S "is a constant",
   sParen (unwrap $ getUnit tauSP) +:+.
-  sParen (makeRef2S ddBalanceSolidPCM),
+  sParen (makeRef2S balanceSolidPCM),
   E $ sy tauLP $= (sy pcmMass * sy htCapLP) /
   (sy pcmHTC * sy pcmSA), S "is a constant",
   sParen (unwrap $ getUnit tauSP),
-  sParen (makeRef2S ddBalanceLiquidPCM)]
+  sParen (makeRef2S balanceLiquidPCM)]
 
 balPCMDescNote :: Sentence
 balPCMDescNote = foldlSent [
@@ -261,12 +261,12 @@ balPCMDescNote = foldlSent [
   E $ sy tauSP $= (sy pcmMass * sy htCapSP) /
   (sy pcmHTC * sy pcmSA), S "is a constant",
   sParen (unwrap $ getUnit tauSP) +:+.
-  sParen (makeRef2S ddBalanceSolidPCM),
+  sParen (makeRef2S balanceSolidPCM),
   
   E $ sy tauLP $= (sy pcmMass * sy htCapLP) /
   (sy pcmHTC * sy pcmSA), S "is a constant",
   sParen (unwrap $ getUnit tauLP),
-  sParen (makeRef2S ddBalanceLiquidPCM)]
+  sParen (makeRef2S balanceLiquidPCM)]
 
  ----------------------------------------------
 --    Derivation of eBalanceOnPCM          --

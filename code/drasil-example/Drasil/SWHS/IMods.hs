@@ -140,11 +140,11 @@ eBalanceOnWtrDerivDesc2 dd1 dd2 = [S "Using", makeRef2S dd1 `sAnd` makeRef2S dd2
 
 eBalanceOnWtrDerivDesc3 ::  UnitalChunk -> UncertQ -> [Sentence]
 eBalanceOnWtrDerivDesc3 wm hcw = 
-  [S "Dividing (3) by", ch wm :+: ch hcw `sC` S "we obtain"]
+  [S "Dividing", eqN 3, S "by", ch wm :+: ch hcw `sC` S "we obtain"]
 
 eBalanceOnWtrDerivDesc4 :: [Sentence] -> [Sentence]
 eBalanceOnWtrDerivDesc4 eq22 = [S "Factoring", S "negative sign out" `ofThe` S "second", phrase term_,
-  S "of the RHS of Equation (4) and multiplying it by"] ++ eq22 ++ [S "yields"]
+  S "of the RHS" `sOf` eqN 4 `sAnd` S "multiplying it by"] ++ eq22 ++ [S "yields"]
 
 eBalanceOnWtrDerivDesc5 ::[Sentence]
 eBalanceOnWtrDerivDesc5 = [S "Which simplifies to"]
@@ -152,11 +152,11 @@ eBalanceOnWtrDerivDesc5 = [S "Which simplifies to"]
 eBalanceOnWtrDerivDesc6 :: Expr -> Expr -> [Sentence]
 eBalanceOnWtrDerivDesc6 eq33 eq44 = 
   [S "Setting", E eq33, sParen (makeRef2S ddHtFusion) `sAnd` E eq44,
-  sParen (makeRef2S ddMeltFrac) `sC` S "Equation (5) can be written as"]
+  sParen (makeRef2S ddMeltFrac) `sC` eqN 5, S "can be written as"]
 
 eBalanceOnWtrDerivDesc7 :: Expr -> [Sentence]
 eBalanceOnWtrDerivDesc7 eq55 = 
-  [S "Finally" `sC` S "factoring out", E eq55, S ", we are left with the governing",
+  [S "Finally" `sC` S "factoring out", E eq55 `sC` S "we are left with the governing",
   getAcc ode, S "for", sParen (makeRef2S eBalanceOnWtr)]
 
 eq2 :: [Sentence]
@@ -306,8 +306,8 @@ eBalanceOnPCMDerivDesc4 eq77 =
 
 eBalanceOnPCMDerivDesc5 ::  UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk -> ConceptChunk -> ConceptChunk-> ConceptChunk
   -> ConceptChunk -> ConceptInstance -> [Sentence]
-eBalanceOnPCMDerivDesc5 hsp hlp tsp tlp sur ar melt vo ass17= 
-  [S "Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same" +:+
+eBalanceOnPCMDerivDesc5 hsp hlp tsp tlp sur ar melt vo ass17 = 
+  [eqN 6 +:+ S "applies for the solid PCM. In the case where all of the PCM is melted, the same" +:+
    S "derivation applies, except that" +:+ (E $ sy hsp) +:+ S "is replaced by" +:+ (E $ sy hlp) `sC`
    S "and thus" +:+ (E $ sy tsp) +:+ S "is replaced by" +:+. (E $ sy tlp) +:+ S "Although a small change in" +:+
    phrase sur +:+ phrase ar +:+ S "would be expected with" +:+ phrase melt `sC` S "this is not included" `sC`

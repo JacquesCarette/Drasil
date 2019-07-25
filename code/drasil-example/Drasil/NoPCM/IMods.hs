@@ -75,11 +75,11 @@ eBalanceOnWtrDerivDesc2 dd =
   [S "Using", makeRef2S dd, S ", this can be written as"]
 
 eBalanceOnWtrDerivDesc3 :: Expr -> [Sentence]
-eBalanceOnWtrDerivDesc3 eq = [S "Dividing (3) by", E eq `sC` S "we obtain"]
+eBalanceOnWtrDerivDesc3 eq = [S "Dividing", eqN 3, S"by", E eq `sC` S "we obtain"]
 
 eBalanceOnWtrDerivDesc4 :: [Sentence]-> [Sentence]
 eBalanceOnWtrDerivDesc4 eq = 
-  [S "Setting"] ++ eq ++ [S ", Equation (4) can be written in its final form as"]
+  [S "Setting"] ++ eq ++ [EmptyS `sC` eqN 4, S "can be written in its final form as"]
 
 eq1:: Expr
 eq1 = sy wMass * sy htCapW

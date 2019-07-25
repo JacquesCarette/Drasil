@@ -2,12 +2,14 @@
 {-# LANGUAGE Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
+import Utils.Drasil (stringList)
+
 import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
-import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+  RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..),
   StateTypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), FunctionSym(..), 
   SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
@@ -17,8 +19,8 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Data (ModData(..))
-import Language.Drasil.Code.Imperative.Helpers (convType, getStr, stringList)
+import Language.Drasil.Code.Imperative.Data (PackData(..))
+import Language.Drasil.Code.Imperative.Helpers (convType, getStr)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
   (cppExts)
 import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer 
@@ -44,7 +46,7 @@ import Data.Map (member)
 import qualified Data.Map as Map (lookup, elems)
 import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes, mapMaybe)
 import Control.Applicative ((<$>))
-import Control.Monad (when,liftM2,liftM3)
+import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.), view)
 import qualified Prelude as P ((<>))
@@ -142,23 +144,26 @@ publicClass desc n l vs ms = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-generateCode :: (PackageSym repr) => Lang -> [repr (Package repr) -> 
-  ([ModData], Label)] -> State repr -> IO ()
+generateCode :: (PackageSym repr) => Lang -> (repr (Package repr) -> PackData) 
+  -> State repr -> IO ()
 generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
-     when (l == Java) $ createDirectoryIfMissing False prog
-     createCodeFiles $ makeBuild (last unRepr pckg) (getBuildConfig l) (getRunnable l) (getExt l) $ C.Code $
-            map (if l == Java then \(c,d) -> (prog ++ "/" ++ c, d) else id) $
-            C.unCode $ makeCode (map (fst . ($ pckg)) unRepr) (getExt l)
+     createCodeFiles $ C.Code $ concatMap C.unCode [code, makefile]
      setCurrentDirectory workingDir
-  where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
-        pckg = runReader (genPackage prog) g
+  where pckg = runReader genPackage g
+        code = makeCode (packMods $ unRepr pckg) (packAux $ unRepr pckg)
+        makefile = makeBuild (unRepr pckg) (getBuildConfig l) 
+          (getRunnable l) (getExt l) (commented g)
 
-genPackage :: (PackageSym repr) => String -> Reader (State repr) 
-  (repr (Package repr))
-genPackage n = packMods n <$> genModules
+genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
+genPackage = do
+  g <- ask
+  ms <- genModules
+  let n = case codeSpec g of CodeSpec {program = p} -> programName p
+      cms = commented g
+  return $ if null cms then package n ms [] else packDox n ms
 
 genModules :: (RenderSym repr) => Reader (State repr) [repr (RenderFile repr)]
 genModules = do
@@ -464,19 +469,26 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 
 genCalcBlock :: (RenderSym repr) => CalcType -> String -> 
   repr (StateType repr) -> Expr -> Reader (State repr) (repr (Block repr))
-genCalcBlock t v st (Case e) = genCaseBlock t v st e
+genCalcBlock t v st (Case c e) = genCaseBlock t v st c e
 genCalcBlock t v st e
     | t == CalcAssign  = fmap block $ liftS $ do { vv <- variable v st; ee <-
       convExpr e; l <- maybeLog vv; return $ multi $ assign vv ee : l}
     | otherwise        = block <$> liftS (returnState <$> convExpr e)
 
 genCaseBlock :: (RenderSym repr) => CalcType -> String -> repr (StateType repr) 
-  -> [(Expr,Relation)] -> Reader (State repr) (repr (Block repr))
-genCaseBlock t v st cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (fmap body $ liftS $
-    genCalcBlock t v st e)) cs
-  return $ block [ifCond ifs (oneLiner $ throw $ 
-    "Undefined case encountered in function " ++ v)]
+  -> Completeness -> [(Expr,Relation)] -> Reader (State repr) (repr (Block repr))
+genCaseBlock _ _ _ _ [] = error $ "Case expression with no cases encountered" ++
+  " in code generator"
+genCaseBlock t v st c cs = do
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (calcBody e)) (ifEs c)
+  els <- elseE c
+  return $ block [ifCond ifs els]
+  where calcBody e = fmap body $ liftS $ genCalcBlock t v st e
+        ifEs Complete = init cs
+        ifEs Incomplete = cs
+        elseE Complete = calcBody $ fst $ last cs
+        elseE Incomplete = return $ oneLiner $ throw $  
+          "Undefined case encountered in function " ++ v
 
 ----- OUTPUT -------
 
@@ -860,12 +872,12 @@ convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division
 convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
-convExpr (Case l)      = doit l -- FIXME this is sub-optimal
+convExpr (Case c l)      = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen"
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 inlineIf (convExpr cond) (convExpr e) 
-      (convExpr (Case xs))
+      (convExpr (Case c xs))
 convExpr Matrix{}    = error "convExpr: Matrix"
 convExpr Operator{} = error "convExpr: Operator"
 convExpr IsIn{}    = error "convExpr: IsIn"

@@ -13,8 +13,8 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
 helloWorld :: (PackageSym repr) => repr (Package repr)
-helloWorld = packMods "HelloWorld" [docMod description $ 
-  fileDoc (buildModule "HelloWorld" ["Helper"] [helloWorldMain] []), helper]
+helloWorld = package "HelloWorld" [docMod description $ 
+  fileDoc (buildModule "HelloWorld" ["Helper"] [helloWorldMain] []), helper] []
 
 description :: String
 description = "Tests various GOOL functions. It should run without errors."

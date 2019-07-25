@@ -172,9 +172,9 @@ impulseS   = dcc "impulseS" (cn "impulse (scalar)") "A force acting briefly on a
 
 gravity = dcc "gravity" (cn "gravity") "The force that attracts one physical body with mass to another."
 gravitationalAccel = dcc "gravitationalAccel" 
-  (cn "gravitational acceleration") "An expression used in physics to indicate the intensity of a gravitational field"
+  (cn "gravitational acceleration") "The approximate acceleration due to gravity on Earth at sea level"
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant" )
-  "gravitational constant (6.673 * 10E-11)"
+  "An empirical physical constant, used to show the force between two objects caused by gravity"
 
 time   = dcc "time"   (cn' "time") 
   "The indefinite continued progress of existence and events in the past, present, and future regarded as a whole"
@@ -204,3 +204,4 @@ isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
 
 chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity") (S "The" +:+ phrase chgInVelocity +:+
  S "of a" +:+ phrase rigidBody)
+

@@ -18,4 +18,7 @@ GlassBR$(TARGET_EXTENSION): InputParameters.hpp InputFormat.hpp DerivedValues.hp
 run: build
 	./GlassBR$(TARGET_EXTENSION) $(RUNARGS)
 
-.PHONY: build run
+doc: doxConfig InputParameters.hpp InputFormat.hpp DerivedValues.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp ReadTable.hpp Interpolation.hpp Control.cpp
+	doxygen doxConfig
+
+.PHONY: build run doc

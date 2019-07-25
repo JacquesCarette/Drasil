@@ -1,9 +1,9 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 26, 2018
+Last updated: July 19, 2019
 --------------------------------------------------
 
-**gamephys**
+**gamephysics**
   - Contains the (currently) expected output for the GamePhysics example
 
 **glassbr**
@@ -18,8 +18,8 @@ Last updated: July 26, 2018
 **swhs**
   - Contains the (currently) expected output for the SWHS example
 
-**tiny**
-  - Contains the (currently) expected output for the Tiny example
+**hghc**
+  - Contains the (currently) expected output for the HGHC example
 
 README.md
   - This file

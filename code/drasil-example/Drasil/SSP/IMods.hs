@@ -461,7 +461,7 @@ nrmShrForNumRC = makeRC "nrmShrForNumRC" (nounPhraseSP "normal and shear force p
   nrmShrFNumDesc nrmShrFNumRel 
 
 nrmShrFNumRel :: Relation
-nrmShrFNumRel = inxi nrmShearNum $= case_ [case1,case2,case3]
+nrmShrFNumRel = inxi nrmShearNum $= incompleteCase [case1,case2,case3]
   where case1 = (indx1 baseWthX * (indx1 intNormForce + indx1 watrForce) *
           tan (indx1 baseAngle), sy index $= 1)
         case2 = (inxi baseWthX *
@@ -499,13 +499,13 @@ nrmShrForDenRC = makeRC "nrmShrForDenRC" (nounPhraseSP "normal and shear force p
   nrmShrFDenDesc nrmShrFDenRel 
 
 nrmShrFDenRel :: Relation
-nrmShrFDenRel = inxi nrmShearDen $= case_ [
+nrmShrFDenRel = inxi nrmShearDen $= incompleteCase [
   (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, sy index $= 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
     inxiM1 scalFunc  * inxiM1 intNormForce),
     2 $<= sy index $<= (sy numbSlices - 1)),
   (indxn baseWthX * idx (sy intNormForce) (sy numbSlices - 1) *
-    idx (sy scalFunc) (sy numbSlices - 1), sy index $= 1)
+    idx (sy scalFunc) (sy numbSlices - 1), sy index $= sy numbSlices)
   ]
 
 nrmShrFDenDeriv :: Derivation
@@ -529,7 +529,7 @@ intsliceFsRC = makeRC "intsliceFsRC" (nounPhraseSP "interslice normal forces")
   sliceFsDesc sliceFsRel -- inslideFxL
 
 sliceFsRel :: Relation
-sliceFsRel = inxi intNormForce $= case_ [
+sliceFsRel = inxi intNormForce $= incompleteCase [
   ((sy fs * indx1 shearFNoIntsl - indx1 shearRNoIntsl) / indx1 shrResC,
     sy index $= 1),
   ((inxiM1 mobShrC * inxiM1 intNormForce +

@@ -111,7 +111,7 @@ expr (C c)            sm = symbol $ lookupC (sm ^. ckdb) c
 expr (FCall f [x])    sm = P.Row [expr f sm, parens $ expr x sm]
 expr (FCall f l)      sm = P.Row [expr f sm,
   parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) l]
-expr (Case ps)        sm = if length ps < 2 then
+expr (Case _ ps)      sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)         sm = P.Mtx $ map (map (`expr` sm)) a

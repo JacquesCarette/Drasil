@@ -12,7 +12,8 @@ import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, CodeIdea, 
   ConstraintMap, codevar, codefunc, codeEquat, funcPrefix, codeName, 
-  spaceToCodeType, toCodeName, constraintMap, qtov, qtoc, codeType)
+  spaceToCodeType, toCodeName, constraintMap, qtov, qtoc)
+import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 import Language.Drasil.Code.Code (CodeType)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 
@@ -67,7 +68,7 @@ assocToMap :: CodeIdea a => [a] -> Map.Map String a
 assocToMap = Map.fromList . map (\x -> (codeName x, x))
         
 varType :: String -> VarMap -> CodeType
-varType cname m = maybe (error "Variable not found") codeType (Map.lookup cname m)
+varType cname m = maybe (error "Variable not found") (^. ctyp) (Map.lookup cname m)
 
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys

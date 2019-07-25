@@ -11,7 +11,9 @@ import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil
 
-import qualified Language.Drasil.Code.Code as G
+import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
+import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp), CodeQuantityDict, 
+  cqw)
 
 import Data.String.Utils (replace)
 import qualified Data.Map as Map
@@ -63,7 +65,7 @@ funcPrefix :: String
 funcPrefix = "func_"
  
 data VarOrFunc = Var | Func
-data CodeChunk = CodeC { _qc :: QuantityDict
+data CodeChunk = CodeC { _qc :: CodeQuantityDict
                        , kind :: VarOrFunc
                        }
 makeLenses ''CodeChunk
@@ -71,37 +73,22 @@ makeLenses ''CodeChunk
 instance HasUID      CodeChunk where uid = qc . uid
 instance NamedIdea   CodeChunk where term = qc . term
 instance Idea        CodeChunk where getA = getA . view qc
-instance HasSpace    CodeChunk where typ = qc . typ
+instance HasCodeType CodeChunk where ctyp = qc . ctyp
 instance HasSymbol   CodeChunk where symbol c = symbol (c ^. qc)
-instance Quantity    CodeChunk where 
 instance CodeIdea    CodeChunk where
   codeName (CodeC c Var) = symbToCodeName (codeSymb c)
   codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc
 
-spaceToCodeType :: Space -> G.CodeType
-spaceToCodeType Integer       = G.Integer
-spaceToCodeType Natural       = G.Integer
-spaceToCodeType Radians       = G.Float
-spaceToCodeType Real          = G.Float
-spaceToCodeType Rational      = G.Float
-spaceToCodeType Boolean       = G.Boolean
-spaceToCodeType Char          = G.Char
-spaceToCodeType String        = G.String
-spaceToCodeType (Vect s)      = G.List (spaceToCodeType s)
-spaceToCodeType (DiscreteI _) = G.List (spaceToCodeType Integer)
-spaceToCodeType (DiscreteD _) = G.List (spaceToCodeType Rational)
-spaceToCodeType (DiscreteS _) = G.List (spaceToCodeType String)
-
-codeType :: HasSpace c => c -> G.CodeType
+codeType :: HasSpace c => c -> CodeType
 codeType c = spaceToCodeType $ c ^. typ
 
 codevar :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
-codevar c = CodeC (qw c) Var
+codevar c = CodeC (cqw c) Var
 
 codefunc :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
-codefunc c = CodeC (qw c) Func
+codefunc c = CodeC (cqw c) Func
 
 data CodeDefinition = CD { _quant :: QuantityDict
                          , _ci :: String

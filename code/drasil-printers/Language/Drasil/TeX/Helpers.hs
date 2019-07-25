@@ -119,7 +119,7 @@ genSec d
 
 -- For references
 ref, sref, hyperref, externalref, snref :: String -> D -> D
-sref        t x = if numberedSections then ref else hyperref
+sref            = if numberedSections then ref else hyperref
 ref         t x = pure (text $ t ++ "~") <> commandD "ref" x
 hyperref    t x = command1pD "hyperref" x (pure (text (t ++ "~")) <> x)
 externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>

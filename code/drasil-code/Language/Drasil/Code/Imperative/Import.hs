@@ -131,7 +131,7 @@ publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label -> String
 publicMethod = genMethodCall public static_
 
 publicInOutFunc :: (RenderSym repr) => Label -> String -> [repr (Variable repr)]
-  -> [repr (Variable repr)] -> [repr (Block repr)] 
+  -> [repr (Variable repr)] -> [repr (Variable repr)] -> [repr (Block repr)] 
   -> Reader (State repr) (repr (Method repr))
 publicInOutFunc = genInOutFunc public static_
 
@@ -429,7 +429,7 @@ genInputFormat = do
         outs <- getInputFormatOuts
         bod <- readData dd
         desc <- inFmtFuncDesc
-        mthd <- publicInOutFunc "get_input" desc ins outs bod
+        mthd <- publicInOutFunc "get_input" desc ins outs [] bod
         return $ Just mthd
   genInFormat $ Map.lookup "get_input" (eMap $ codeSpec g)
 
@@ -549,8 +549,9 @@ genMethodCall s pr t n desc p b = do
 
 genInOutFunc :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) 
   -> Label -> String -> [repr (Variable repr)] -> [repr (Variable repr)] 
-  -> [repr (Block repr)] -> Reader (State repr) (repr (Method repr))
-genInOutFunc s pr n desc ins outs b = do
+  -> [repr (Variable repr)] -> [repr (Block repr)] 
+  -> Reader (State repr) (repr (Method repr))
+genInOutFunc s pr n desc ins outs both b = do
   g <- ask
   let doLog = logKind g
       loggedBody LogFunc = loggedMethod (logName g) n ins b
@@ -559,11 +560,13 @@ genInOutFunc s pr n desc ins outs b = do
       bod = body $ loggedBody doLog
       pNames = map variableName ins
       oNames = map variableName outs
-      fn = inOutFunc n s pr ins outs bod
+      bNames = map variableName both
+      fn = inOutFunc n s pr ins outs both bod
   pComms <- paramComments pNames
   oComms <- paramComments oNames
+  bComms <- paramComments bNames
   return $ if CommentFunc `elem` commented g 
-    then docInOutFunc desc pComms oComms fn else fn
+    then docInOutFunc desc pComms oComms bComms fn else fn
 
 paramComments :: [Label] -> Reader (State repr) [String]
 paramComments = mapM varTerm
@@ -658,20 +661,23 @@ getFuncCall n t funcPs = do
 getInOutCall :: (RenderSym repr) => String -> 
   Reader (State repr) [repr (Variable repr)] ->
   Reader (State repr) [repr (Variable repr)] -> 
+  Reader (State repr) [repr (Variable repr)] -> 
   Reader (State repr) (Maybe (repr (Statement repr)))
-getInOutCall n inFunc outFunc = do
+getInOutCall n inFunc outFunc bothFunc = do
   g <- ask
   let getCall Nothing = return Nothing
       getCall (Just m) = do
         ins <- inFunc
         outs <- outFunc
-        stmt <- fAppInOut m n (map valueOf ins) outs 
+        both <- bothFunc
+        stmt <- fAppInOut m n (map valueOf ins) outs both
         return $ Just stmt
   getCall $ Map.lookup n (eMap $ codeSpec g)
 
 getInputCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
-getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
+getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts 
+  (return [])
 
 getDerivedCall :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Statement repr)))
@@ -801,11 +807,12 @@ fApp m s t vl = do
   return $ if m /= currentModule g then extFuncApp m s t vl else funcApp s t vl
 
 fAppInOut :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
-  [repr (Variable repr)] -> Reader (State repr) (repr (Statement repr))
-fAppInOut m n ins outs = do
+  [repr (Variable repr)] -> [repr (Variable repr)] -> 
+  Reader (State repr) (repr (Statement repr))
+fAppInOut m n ins outs both = do
   g <- ask
-  return $ if m /= currentModule g then extInOutCall m n ins outs 
-    else inOutCall n ins outs
+  return $ if m /= currentModule g then extInOutCall m n ins outs both
+    else inOutCall n ins outs both
 
 getParams :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
   [repr (Parameter repr)]

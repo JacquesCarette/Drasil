@@ -1,7 +1,7 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition, InstanceModel, im)
+import Theory.Drasil (InstanceModel, im)
 import Utils.Drasil
 import Control.Lens ((^.))
 
@@ -14,8 +14,8 @@ import Data.Drasil.Quantities.Physics (energy, time)
 
 import Drasil.SWHS.Concepts (water)
 import Drasil.SWHS.DataDefs (ddHtFluxC)
-import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc3,
- heatEInWtr)
+import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc2,
+  eBalanceOnWtrDerivDesc3, heatEInWtr)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.Unitals (tempW, tempC, tauW, wMass, htCapW, coilHTC, 
   coilSA, tempInit, timeFinal, htFluxC)
@@ -65,17 +65,11 @@ eBalanceOnWtrDeriv = mkDerivName (S "the" +:+ phrase energy +:+ S "balance on wa
   (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns])
 
 eBalanceOnWtrDerivSentences :: [Sentence]
-eBalanceOnWtrDerivSentences = map foldlSentCol [
-  eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ (E $ sy coilSA)) EmptyS assumpNIHGBW,
-  eBalanceOnWtrDerivDesc2 ddHtFluxC,
-  eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4]
+eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ ch coilSA) EmptyS assumpNIHGBW,
+  eBalanceOnWtrDerivDesc2 [ddHtFluxC], eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4]
 
-eBalanceOnWtrDerivDesc2 :: DataDefinition -> [Sentence]
-eBalanceOnWtrDerivDesc2 dd = [S "Using", makeRef2S dd, S "for", ch dd `sC`
-  S "this can be written as"]
-
-eBalanceOnWtrDerivDesc4 :: [Sentence]
-eBalanceOnWtrDerivDesc4 = [S "Setting", ch tauW, S "=", ch wMass, ch htCapW,
+eBalanceOnWtrDerivDesc4 :: Sentence
+eBalanceOnWtrDerivDesc4 = foldlSentCol [S "Setting", ch tauW, S "=", ch wMass, ch htCapW,
   S "/", ch coilHTC, ch coilSA `sC` eqN 4, S "can be written in its final form as"]
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr

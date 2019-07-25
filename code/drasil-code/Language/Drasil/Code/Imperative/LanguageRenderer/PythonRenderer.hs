@@ -43,7 +43,7 @@ import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad,
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
-  liftPairFst, getInnerType, convType)
+  liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -506,8 +506,8 @@ instance ParameterSym PythonCode where
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
-  method n l _ _ _ ps b = liftA2 (mthd False) (sequence ps) (liftA3 (pyMethod n)
-    (self l) (liftList paramListDocD ps) b)
+  method n l _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
+    (liftA3 (pyMethod n) (self l) (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
@@ -522,8 +522,8 @@ instance MethodSym PythonCode where
 
   docMain = mainMethod
 
-  function n _ _ _ ps b = liftA2 (mthd False) (sequence ps) (liftA2 
-    (pyFunction n) (liftList paramListDocD ps) b)
+  function n _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
+    (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
 
   docFunc = docFuncRepr
 

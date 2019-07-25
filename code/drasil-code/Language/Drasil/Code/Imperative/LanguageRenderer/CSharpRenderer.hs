@@ -52,7 +52,7 @@ import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad,
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
   liftA6, liftA7, liftList, lift1List, lift2Lists, lift3Pair, lift4Pair,
-  liftPair, liftPairFst, getInnerType, convType)
+  liftPair, liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -528,7 +528,7 @@ instance ParameterSym CSharpCode where
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
-  method n _ s p t ps b = liftA2 (mthd False) (sequence ps) 
+  method n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
     (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] getBody

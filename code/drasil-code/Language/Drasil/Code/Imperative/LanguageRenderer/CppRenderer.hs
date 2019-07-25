@@ -52,7 +52,7 @@ import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
-  getInnerType, convType)
+  getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.List.Utils (endswith)
@@ -1107,9 +1107,9 @@ instance ParameterSym CppSrcCode where
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
-  method n c s _ t ps b = liftA3 (mthd False) (fmap snd s) (sequence ps) 
-    (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b blockStart 
-    blockEnd)
+  method n c s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n <$> 
+    sequence ps) (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b 
+    blockStart blockEnd)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
@@ -1138,9 +1138,9 @@ instance MethodSym CppSrcCode where
     [("argc", "Number of command-line arguments"),
     ("argv", "List of command-line arguments")]) (mainMethod c b)
 
-  function n s _ t ps b = liftA3 (mthd False) (fmap snd s) (sequence ps) 
-    (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b blockStart 
-    blockEnd)
+  function n s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n <$> 
+    sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
+    blockStart blockEnd)
 
   docFunc = docFuncRepr
 
@@ -1628,8 +1628,9 @@ instance ParameterSym CppHdrCode where
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
-  method n _ s _ t ps _ = liftA3 (mthd False) (fmap snd s) (sequence ps)
-    (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement)
+  method n _ s _ t ps _ = liftA3 (mthd False) (fmap snd s) (checkParams n <$>
+    sequence ps) (liftA3 (cpphMethod n) t (liftList paramListDocD ps) 
+    endStatement)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] (return empty)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ 

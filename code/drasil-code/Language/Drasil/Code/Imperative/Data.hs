@@ -84,7 +84,10 @@ data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc,
 svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
 
-data TypeData = TD {cType :: CodeType, typeDoc :: Doc} deriving Eq
+data TypeData = TD {cType :: CodeType, typeDoc :: Doc}
+
+instance Eq TypeData where
+  TD t1 _ == TD t2 _ = t1 == t2
 
 td :: CodeType -> Doc -> TypeData
 td = TD

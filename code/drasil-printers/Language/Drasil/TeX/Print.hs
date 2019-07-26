@@ -265,7 +265,7 @@ spec a@(s :+: t) = s' <> t'
 spec (E ex) = toMath $ pExpr ex
 spec (S s)  = pure $ text (concatMap escapeChars s)
 {-spec (S s)  = either error (pure . text . (concatMap escapeChars)) $ checkValidStr s invalid
-  where invalid = ['&', '#', '$', '%', '&', '~', '^', '\\', '{', '}'] -}
+  where invalid = ['&', '#', '$', '%', '&', '~', '^', '\\', '{'] -}
 spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
@@ -457,9 +457,9 @@ makeGraph ps w h c l =
 ---------------------------
 -- **THE MAIN FUNCTION** --
 makeBib :: PrintingInformation -> BibRef -> D
-makeBib sm bib = mkEnvArgBr "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bib) %% bibLines
-  where bibLines = command "nocite" "*" %% command "bibstyle" bibStyleT %%
-                   command0 "printbibliography" <> sq (pure $ text "heading=none")
+makeBib sm bib = mkEnvArgBr "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bib) %%
+  command "nocite" "*" %% command "bibstyle" bibStyleT %%
+  command0 "printbibliography" <> sq (pure $ text "heading=none")
 
 mkBibRef :: PrintingInformation -> BibRef -> D
 mkBibRef sm = mconcat . map (renderF sm)
@@ -504,8 +504,7 @@ showBibTeX  _ (Title        t) = showField "title" t
 showBibTeX  _ (Type         t) = showField "type" t
 showBibTeX  _ (Volume       v) = showField "volume" (wrapS v)
 showBibTeX  _ (Year         y) = showField "year" (wrapS y)
-showBibTeX  _ (HowPublished (URL  u)) =
-  showField "howpublished" (S "\\url{" :+: u :+: S "}")
+showBibTeX  _ (HowPublished (URL  u)) = showFieldCom "url" "howpublished" u
 showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
 
 --showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author"
@@ -513,17 +512,21 @@ showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
   -- showField "sortkey" (LS.spec sm (rendPeople p))
 -- showBibTeX sm (Author    p) = showField "author" $ LS.spec sm (rendPeople p)
 
-data FieldWrap = Braces | NoDelimiters
+data FieldWrap = Braces | NoDelimiters | Command String
 
 wrapField :: FieldWrap -> String -> Spec -> D
-wrapField  fw f s = pure (text (f ++ "=")) <> (resolve fw) (spec s)
+wrapField fw f s = pure (text (f ++ "=")) <> (resolve fw) (spec s)
   where
     resolve Braces       = br
     resolve NoDelimiters = id
+    resolve (Command st) = br . commandD st
 
 showField, showFieldRaw :: String -> Spec -> D
 showField    = wrapField Braces
 showFieldRaw = wrapField NoDelimiters
+
+showFieldCom   :: String -> String -> Spec -> D
+showFieldCom s = wrapField (Command s)
 
 rendPeople :: PrintingInformation -> L.People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"

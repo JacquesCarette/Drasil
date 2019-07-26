@@ -1,5 +1,5 @@
 module Drasil.GamePhysics.TMods (tMods, t2NewtonTL_new, 
-t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, tModsNew) where
+t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, tModsNew, t6CollisionDet) where
 
 import Language.Drasil
 import Prelude hiding (id)
@@ -21,11 +21,11 @@ import qualified Data.Drasil.Theories.Physics as TP (newtonSL, newtonSLRC)
 ----- Theoretical Models -----
 
 tMods :: [RelationConcept]
-tMods = [TP.newtonSLRC, newtonTL, newtonLUG, chaslesThm, newtonSLR]
+tMods = [TP.newtonSLRC, newtonTL, newtonLUG, chaslesThm, newtonSLR, collisionDet]
 
 tModsNew :: [TheoryModel]
 tModsNew = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new, 
-  t4ChaslesThm_new, t5NewtonSLR_new]
+  t4ChaslesThm_new, t5NewtonSLR_new, t6CollisionDet]
 
 -- T1 : Newton's second law of motion --
 
@@ -167,4 +167,31 @@ newtonSLRDesc = foldlSent [S "The net", phrase QP.torque,
   plural CP.rigidBody, S "involved are two-dimensional",
   makeRef2S assumpOD]
 
-  
+  -------------------Collision Detection--------------------------------
+
+t6CollisionDet :: TheoryModel
+t6CollisionDet = tmNoRefs (cw collisionDet)
+ [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
+  ([] :: [ConceptChunk]) [] [sy QP.torque $= sy QP.momentOfInertia
+  * sy QP.angularAccel] [] "CollisionDet" [collisionDetDesc]
+
+collisionDet :: RelationConcept
+collisionDet = makeRC "CollisionDet" 
+  (nounPhraseSP "Collision Detection of 2D Rigid bodies") collisionDetDesc collisionDetRel
+
+collisionDetRel :: Relation
+collisionDetRel = sy QP.torque 
+
+
+collisionDetDesc :: Sentence
+collisionDetDesc = foldlSent [S "The net", phrase QP.torque,
+  ch QP.torque,
+  sParen $ Sy $ unit_symb QP.torque, S "on a", phrase CP.rigidBody,
+  S "is proportional to its", phrase QP.angularAccel,
+  ch QP.angularAccel +:+. sParen (Sy $ unit_symb QP.angularAccel),
+  S "Here" `sC` ch QP.momentOfInertia,
+  sParen $ Sy $ unit_symb QP.momentOfInertia,
+  S "denotes the", phrase QP.momentOfInertia, S "of the" +:+.
+  phrase CP.rigidBody, S "We also assume that all",
+  plural CP.rigidBody, S "involved are two-dimensional",
+  makeRef2S assumpOD]

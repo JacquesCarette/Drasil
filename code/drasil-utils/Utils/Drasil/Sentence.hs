@@ -33,5 +33,5 @@ capSent :: Sentence -> Sentence
 capSent (S (s:ss)) = S (toUpper s : ss)
 --capSent (phrase x) = atStart x
 --capSent (plural x) = atStart' x
-capSent (a :+: b)  = (capSent a) :+: b
+capSent (a :+: b)  = capSent a :+: b
 capSent x          = x

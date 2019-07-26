@@ -36,10 +36,10 @@ heatTrans          = dcc "heatTrans"      (cn' "heat transfer")
                       ("The generation, use, conversion, and exchange of thermal " ++
                       "energy and heat between physical systems")
 heatCapSpec       = dcc "heatCapSpec"   (cnIES "specific heat capacity")
-                      ("The amount of energy required to raise the temperature " ++
+                      ("the amount of energy required to raise the temperature " ++
                       "of the unit mass of a given substance by a given amount")
 htFlux             = dcc "htFlux"         (cn'' "heat flux") 
-                      ("The rate of thermal energy transfer through a given " ++
+                      ("the rate of thermal energy transfer through a given " ++
                       "surface per unit time")
 latentHeat         = dcc "latentHeat"     (cn' "latent heat")
                       ("The heat required to convert a solid into a liquid or " ++
@@ -67,7 +67,7 @@ thermalAnalysis    = dcc "thermalAnalysis"
                       "The study of material properties as they change with temperature"
 thermalConduction  = dcc "thermalConduction"
                       (nounPhraseSP "thermal conduction")
-                      "The transfer of heat energy through a substance"
+                      "the transfer of heat energy through a substance"
 thermalConductor   = dcc "thermalConductor"
                       (cn' "thermal conductor")
                       "An object through which thermal energy can be transferred easily"

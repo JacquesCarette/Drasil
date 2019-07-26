@@ -28,9 +28,9 @@ angle        = dcc "angle"        (cn' "angle")                   ("The amount o
                                                                   "coincidence with another")
 area         = dcc "area"         (cn' "area")                    "A part of an object or surface"
 calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
-cartesian    = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "A coordinate system that specifies each point uniquely in a plane by a set" `sOf`
+cartesian    = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coordinate system that specifies each point uniquely in a plane by a set" `sOf`
                                                                   S "numerical coordinates, which are the signed distances to the point from" +:+
-                                                                  S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+.
+                                                                  S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+
                                                                   sParen (S "from" +:+ makeRef2S cartesianWiki)
 centre       = dcc "centre"       (cn' "centre")                  "the middle point of an object"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
@@ -54,7 +54,7 @@ perp         = dcc "perp"         (cn' "perpendicular")           "At right angl
 pi_          = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "The ratio of a circle's circumference to its diameter"
 probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"
-rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen."
+rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "a coordinate system where the positive z-axis comes out of the screen"
 shape        = dcc "shape"        (cn' "shape")                   "The outline of an area or figure"
 surface      = dcc "surface"      (cn' "surface")                 "The outer or topmost boundary of an object"
 unit_        = dcc "unit"         (cn' "unit")                    "Identity element"

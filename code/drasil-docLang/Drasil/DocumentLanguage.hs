@@ -134,7 +134,7 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
           --actually care about the chunks themselves in LFunc.
         lf (DefnExcept cs) = \x -> if (x ^. uid) `elem` map (^.uid) cs then
           atStart x else x ^. defn
-        lf TAD = \tDef -> titleize tDef :+: S ":" +:+ (tDef ^. defn)
+        lf TAD = \tDef -> titleize tDef +: EmptyS +:+. capSent (tDef ^. defn)
 
 -- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab

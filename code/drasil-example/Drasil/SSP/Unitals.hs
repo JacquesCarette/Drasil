@@ -2,18 +2,21 @@ module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
 import Language.Drasil.ShortHands
+import Utils.Drasil
 
 import Drasil.SSP.Defs (fsConcept)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (degree, metre, m_3, newton, pascal, specificWeight)
 
+import Data.Drasil.Concepts.Physics (gravity)
+
 import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
 import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight,
   vol)
-import Data.Drasil.Quantities.Physics (acceleration, displacement, force, 
+import Data.Drasil.Quantities.Physics (acceleration, displacement, force,
   gravitationalAccel, height, pressure, torque, weight)
 
 
@@ -81,9 +84,6 @@ slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip,
   xMinExtSlip, xMinEtrSlip, yMaxSlip, yMinSlip, effCohesion, fricAngle, 
   dryWeight, satWeight, waterWeight :: UncertQ
 
-constF :: DefinedQuantityDict
-  
-fs, coords :: ConstrConcept
 
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
@@ -140,47 +140,47 @@ effCohesion = uqc "c'" (cn "effective cohesion")
   (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10000) defaultUncrt
 
 fricAngle = uqc "varphi'" (cn "effective angle of friction")
-  ("The angle of inclination with respect to the horizontal axis of " ++
+  ("the angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
   (prime vPhi) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
   (dbl 25) defaultUncrt
 
 dryWeight = uqc "gamma" (cn "soil dry unit weight")
-  "The weight of a dry soil/ground layer divided by the volume of the layer."
+  "the weight of a dry soil/ground layer divided by the volume of the layer"
   (sub lGamma (Atomic "dry")) specificWeight Real [gtZeroConstr]
   (dbl 20000) defaultUncrt
 
 satWeight = uqc "gamma_sat" (cn "soil saturated unit weight")
-  ("The weight of saturated soil/ground " ++
-  "layer divided by the volume of the layer.")
+  "the weight of saturated soil/ground layer divided by the volume of the layer"
   (sub lGamma (Atomic "Sat")) specificWeight Real [gtZeroConstr]
   (dbl 20000) defaultUncrt
 
 waterWeight = uqc "gamma_w" (cn "unit weight of water")
-  "The weight of one cubic meter of water."
+  "the weight of one cubic meter of water"
   (sub lGamma lW) specificWeight Real [gtZeroConstr]
   (dbl 9800) defaultUncrt
 
+constF :: DefinedQuantityDict
 constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f") 
   ("boolean decision on which form of f the user desires: constant if true," ++
   " or half-sine if false")) (const (Atomic "const_f")) Boolean Nothing
 
 {-Output Variables-} --FIXME: See if there should be typical values
+fs, coords  :: ConstrConcept
 fs = constrained' (dqd' fsConcept (const $ sub cF (Atomic "S")) Real Nothing)
   [gtZeroConstr] (dbl 1)
 
 fsMin :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
 fsMin = dqd' (dcc "fsMin" (cn "minimum factor of safety") 
-  "The minimum factor of safety associated with the critical slip surface")
+  "the minimum factor of safety associated with the critical slip surface")
   (const $ sup (eqSymb fs) (Atomic "min")) Real Nothing 
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
 
-coords = cuc' "(x,y)"
-  (cn "cartesian position coordinates" )
-  ("y is considered parallel to the direction of the force of " ++
-  "gravity and x is considered perpendicular to y")
-  (Atomic "(x,y)") metre Real [] (dbl 1)
+coords = constrainedNRV' (dqd' (dccWDS "(x,y)" (cn "cartesian position coordinates")
+  (P lY +:+ S "is considered parallel to the direction of the force of" +:+
+   phrase gravity `sAnd` P lX +:+ S "is considered perpendicular to" +:+ P lY))
+  (const $ Atomic "(x,y)") Real (Just metre)) []
 
 ---------------------------
 -- START OF UNITALCHUNKS --

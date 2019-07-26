@@ -53,7 +53,7 @@ coil = dcc "coil" (cn' "heating coil")
 discharging = dcc "discharging" (nounPhraseSP "discharging")
   "discharging of the tank"
 
-transient = dcc "transient" (nounPhraseSP "transient") "Changing with time"
+transient = dcc "transient" (nounPhraseSP "transient") "changing with time"
 
 gaussDiv = dcc "gaussDiv" (nounPhraseSP "gauss's divergence theorem")
   ("A result that relates the flow of a vector field through a surface" ++

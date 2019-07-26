@@ -1,7 +1,9 @@
-module Utils.Drasil.Sentence (andIts, andThe, isExpctdToHv, isThe, ofGiv,
+module Utils.Drasil.Sentence (andIts, andThe, capSent, isExpctdToHv, isThe, ofGiv,
   ofGiv', ofThe, ofThe', sOf, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe) where
 
 import Language.Drasil
+
+import Data.Char (toUpper)
 
 sentHelper :: String -> Sentence -> Sentence -> Sentence
 sentHelper inStr a b = a +:+ S inStr +:+ b
@@ -26,3 +28,9 @@ ofGiv        a b = S "the" +:+ sentHelper "of a given"          a b
 ofGiv'       a b = S "The" +:+ sentHelper "of a given"          a b
 ofThe        a b = S "the" +:+ sentHelper "of the"              a b
 ofThe'       a b = S "The" +:+ sentHelper "of the"              a b
+
+capSent :: Sentence -> Sentence
+capSent (S (s:ss)) = S (toUpper s : ss)
+-- FIXME: Add Ch case
+capSent (a :+: b)  = (capSent a) :+: b
+capSent x          = x

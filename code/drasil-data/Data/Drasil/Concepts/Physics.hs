@@ -40,17 +40,14 @@ oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics,
 twoD   = commonIdeaWithDict "twoD"   (cn "two-dimensional")   "2D" [mathematics, physics]
 threeD = commonIdeaWithDict "threeD" (cn "three-dimensional") "3D" [mathematics, physics]
 
-rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
-  "A solid body in which deformation is neglected."
+rigidBody    = dcc "rigidBody" (cnIES "rigid body") "a solid body in which deformation is neglected"
 velocity     = dccWDS "velocity" (cnIES "velocity")
   (S "The rate of change of a body's" +:+ phrase position)
 speed        = dccWDS "speed" (cn' "speed")
   (S "The magnitude of the" +:+ phrase velocity +:+ S "vector")
 friction     = dcc "friction" (cn' "friction")
   "The force resisting the relative motion of two surfaces."
-elasticity   = dcc "elasticity" (cnIES "elasticity") 
-  ("Ratio of the relative velocities " ++
-  "of two colliding objects after and before a collision.")
+elasticity   = dcc "elasticity" (cnIES "elasticity") "the ratio of the relative velocities of two colliding objects after and before a collision"
 energy       = dcc "energy" (cn "energy")
   "Power derived from the utilization of physical or chemical resources."
 mechEnergy  = dcc "mechEnergy" (cn "mechanical energy")
@@ -61,8 +58,7 @@ collision    = dcc "collision" (cn' "collision")
 space        = dcc "space" (cn' "space") 
   ("A two-dimensional extent where objects and " ++
   "events have relative positions and directions.")
-rectilinear  = dcc "rectilinear" (cn "rectilinear")
-  "Occuring in one dimension."
+rectilinear  = dcc "rectilinear" (cn "rectilinear") "occuring in one dimension"
   
 joint        = dcc "joint"    (cn' "joint") ("a connection between two rigid " ++ 
   "bodies which allows movement with one or more degrees of freedom")
@@ -70,7 +66,7 @@ kEnergy  = dccWDS "kEnergy" (cn "kinetic energy")
   (S "The measure of the" +:+ phrase energy +:+ 
    S "a body possess due to its motion.")
 position     = dcc "position" (cn' "position")
-  "An object's location relative to a reference point"
+  "an object's location relative to a reference point"
 scalarPos  = dccWDS "scalarPos" (cn' "scalar position")
   (S "The magnitude of the " +:+ phrase position +:+ S "vector")
 acceleration = dccWDS "acceleration" (cn' "acceleration")
@@ -84,10 +80,10 @@ force        = dcc "force" (cn' "force")
 distance     = dcc "distance" (cn' "distance")
   "The interval measured along a path connecting two locations"
 stress       = dccWDS "stress" (cn''' "stress")
-  (atStart' force +:+ S "that are exerted between planes internal to" +:+
-  S "a larger body subject to external loading.")            --definition used in SSP, can be made clearer
+  (plural force +:+ S "that are exerted between planes internal to" +:+
+  S "a larger body subject to external loading")            --definition used in SSP, can be made clearer
 strain       = dccWDS "strain" (cn' "strain")
-  (S "A measure of deformation of a body or plane under" +:+. phrase stress) --definition used in SSP, can be made clearer
+  (S "a measure of deformation of a body or plane under" +:+ phrase stress) --definition used in SSP, can be made clearer
 tension      = dccWDS "tension" (cn' "tension")
   (S "A" +:+ phrase stress +:+
   S "that causes displacement of the body away from its center.")
@@ -97,7 +93,7 @@ compression  = dccWDS "compression" (cn' "compression")
 pressure     = dccWDS "pressure" (cn' "pressure")
   (S "A" +:+ phrase force +:+ S "exerted over an area")
 height       = dccWDS "height" (cn' "height") (S "The" +:+ phrase distance +:+ 
-  S "above a reference point for a point of interest.")
+  S "above a reference point for a point of interest")
 
 -- Some variants of distance, speed, velocity, and scalar acceleration
 -- FIXME: Complete all variants?
@@ -170,7 +166,7 @@ impulseV   = dcc "impulseV" (cn "impulse (vector)")
    "A force acting briefly on a body and producing a finite change of momentum in a given direction" 
 impulseS   = dcc "impulseS" (cn "impulse (scalar)") "A force acting briefly on a body and producing a finite change of momentum" 
 
-gravity = dcc "gravity" (cn "gravity") "The force that attracts one physical body with mass to another."
+gravity = dcc "gravity" (cn "gravity") "the force that attracts one physical body with mass to another"
 gravitationalAccel = dcc "gravitationalAccel" 
   (cn "gravitational acceleration") "The approximate acceleration due to gravity on Earth at sea level"
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant" )
@@ -195,12 +191,12 @@ angular = dcc "angular" (cn' "angular")
 damping = dcc "damping" (cn' "damping")
   "An effect that tends to reduce the amplitude of vibrations"
 
-cohesion = dccWDS "cohesion" (cn "cohesion") (S "An attractive" +:+ 
-  phrase force +:+. S "between adjacent particles that holds the matter together")
+cohesion = dccWDS "cohesion" (cn "cohesion") (S "an attractive" +:+ 
+  phrase force +:+ S "between adjacent particles that holds the matter together")
 
-isotropy = dccWDS "isotropy" (cn "isotropy") (S "A condition where the" +:+
+isotropy = dccWDS "isotropy" (cn "isotropy") (S "a condition where the" +:+
   phrase value `sOf` S "a" +:+ phrase property +:+ S "is independent of" +:+
-  S "the direction in which it is measured.")
+  S "the direction in which it is measured")
 
 chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity") (S "The" +:+ phrase chgInVelocity +:+
  S "of a" +:+ phrase rigidBody)

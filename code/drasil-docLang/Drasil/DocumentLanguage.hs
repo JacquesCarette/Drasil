@@ -128,12 +128,12 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
     (lf f)] 
     []
   where lf Term = atStart
-        lf Defn = (^. defn)
+        lf Defn = capSent . (^. defn)
         lf (TermExcept cs) = \x -> if (x ^. uid) `elem` map (^. uid) cs then
           capSent (x ^. defn) else atStart x --Compare chunk uids, since we don't
           --actually care about the chunks themselves in LFunc.
         lf (DefnExcept cs) = \x -> if (x ^. uid) `elem` map (^.uid) cs then
-          atStart x else x ^. defn
+          atStart x else capSent (x ^. defn)
         lf TAD = \tDef -> titleize tDef +: EmptyS +:+. capSent (tDef ^. defn)
 
 -- | table of symbols constructor

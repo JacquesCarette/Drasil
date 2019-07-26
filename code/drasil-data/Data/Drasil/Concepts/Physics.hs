@@ -91,7 +91,7 @@ mechEnergy = dcc "mechEnergy" (cn "mechanical energy")
 position = dcc "position" (cn' "position")
   "an object's location relative to a reference point"
 potEnergy = dccWDS "potEnergy" (cn "potential energy")
-  (S "The measure of the" +:+ phrase energy +:+ S "held by an object because of its" +:+ phrase position)
+  (S "the measure of the" +:+ phrase energy +:+ S "held by an object because of its" +:+ phrase position)
 pressure = dccWDS "pressure" (cn' "pressure")
   (S "a" +:+ phrase force +:+ S "exerted over an area")
 rectilinear = dcc "rectilinear" (cn "rectilinear")
@@ -110,7 +110,7 @@ strain = dccWDS "strain" (cn' "strain")
   (S "a measure of deformation of a body or plane under" +:+ phrase stress)
   --definition of strain used in SSP, can be made clearer
 stress = dccWDS "stress" (cn''' "stress")
-  (plural force +:+ S "that are exerted between planes internal to a larger body subject to external loading")
+  (S"the" +:+ plural force +:+ S "that are exerted between planes internal to a larger body subject to external loading")
   --definition of stress used in SSP, can be made clearer
 tension = dccWDS "tension" (cn' "tension")
   (S "a" +:+ phrase stress +:+ S "that causes displacement of the body away from its center")
@@ -180,7 +180,7 @@ momentOfInertia = dcc "momentOfInertia" (cn "moment of inertia")
   "a quantity expressing a body's tendency to resist angular acceleration"
 
 --FIXME: These two should be built off "impulse"
-impulseV   = dcc "impulseV" (cn "impulse (vector)")
+impulseV = dcc "impulseV" (cn "impulse (vector)")
   "a force acting briefly on a body and producing a finite change of momentum in a given direction" 
-impulseS   = dcc "impulseS" (cn "impulse (scalar)")
+impulseS = dcc "impulseS" (cn "impulse (scalar)")
   "a force acting briefly on a body and producing a finite change of momentum" 

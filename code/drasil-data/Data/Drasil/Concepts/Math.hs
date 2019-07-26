@@ -24,42 +24,40 @@ angle, area, calculation, cartesian, centre, change, constraint, diameter,
   rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp, 
   xDir, yAxis, yComp, yDir, zAxis, zComp, zDir :: ConceptChunk
 
-angle        = dcc "angle"        (cn' "angle")                   ("The amount of rotation needed to bring one line or plane into" ++
-                                                                  "coincidence with another")
-area         = dcc "area"         (cn' "area")                    "A part of an object or surface"
-calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
-cartesian    = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coordinate system that specifies each point uniquely in a plane by a set" `sOf`
+angle       = dcc "angle"        (cn' "angle")                   "the amount of rotation needed to bring one line or plane into coincidence with another"
+area        = dcc "area"         (cn' "area")                    "a part of an object or surface"
+calculation = dcc "calculation"  (cn' "calculation")             "a mathematical determination of the size or number of something"
+cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coordinate system that specifies each point uniquely in a plane by a set" `sOf`
                                                                   S "numerical coordinates, which are the signed distances to the point from" +:+
                                                                   S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+
                                                                   sParen (S "from" +:+ makeRef2S cartesianWiki)
-centre       = dcc "centre"       (cn' "centre")                  "the middle point of an object"
-change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
-constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
-diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the centre of the circle" ++
-                                                                  "and whose endpoints lie on the circle.")
-equation     = dcc "equation"     (cn' "equation")                "A statement that the values of two mathematical expressions are equal "
-euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the system of geometry corresponding to the geometry of ordinary" ++
-                                                                  "experience")
-gradient     = dcc "gradient"     (cn' "gradient")                "degree of steepness of a graph at any point"
-graph        = dcc "graph"        (cn' "graph")                   "A diagram showing the relation between variable quantities"
-law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
-matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
+centre      = dcc "centre"       (cn' "centre")                  "the middle point of an object"
+change      = dcc "change"       (cn' "change")                  "the difference between relative start and end states of an object"
+constraint  = dcc "constraint"   (cn' "constraint")              "a condition that the solution must satisfy"
+diameter    = dcc "diameter"     (cn' "diameter")                ("any straight line segment that passes through the centre of the circle" ++
+                                                                  "and whose endpoints lie on the circle")
+equation    = dcc "equation"     (cn' "equation")                "a statement that the values of two mathematical expressions are equal "
+euclidSpace = dcc "euclidSpace"  (cn' "Euclidean")               "denoting the system of geometry corresponding to the geometry of ordinary experience"
+gradient    = dcc "gradient"     (cn' "gradient")                "the degree of steepness of a graph at any point"
+graph       = dcc "graph"        (cn' "graph")                   "a diagram showing the relation between variable quantities"
+law         = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
+matrix      = dcc "matrix"       (cnICES "matrix")               ("a rectangular array of quantities or expressions in rows and columns that" ++
                                                                   "is treated as a single entity and manipulated according to particular rules")
-norm         = dcc "norm"         (cn' "norm")                    "Positive length or size of a vector"
-normal       = dcc "normal"       (cn' "normal" )                 "Object that is perpendicular to a given object"
-number       = dcc "number"       (cn' "number")                  "A mathematical object used to count, measure, and label"
-parameter    = dcc "parameter"    (cn' "parameter")               "A quantity whose value is selected depending on particular circumstances"
+norm        = dcc "norm"         (cn' "norm")                    "the Spositive length or size of a vector"
+normal      = dcc "normal"       (cn' "normal" )                 "an object that is perpendicular to a given object"
+number      = dcc "number"       (cn' "number")                  "a mathematical object used to count, measure, and label"
+orient      = dcc "orientation"  (cn' "orientation")             "the relative physical position or direction of something"
+parameter   = dcc "parameter"    (cn' "parameter")               "a quantity whose value is selected depending on particular circumstances"
 --FIXME: Should "parameter" be in math?
-perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
-pi_          = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "The ratio of a circle's circumference to its diameter"
-probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
-rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"
-rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "a coordinate system where the positive z-axis comes out of the screen"
-shape        = dcc "shape"        (cn' "shape")                   "The outline of an area or figure"
-surface      = dcc "surface"      (cn' "surface")                 "The outer or topmost boundary of an object"
-unit_        = dcc "unit"         (cn' "unit")                    "Identity element"
-vector       = dcc "vector"       (cn' "vector")                  "Object with magnitude and direction"
-orient       = dcc "orientation"  (cn' "orientation")             "The relative physical position or direction of something"
+perp        = dcc "perp"         (cn' "perpendicular")           "at right angles"
+pi_         = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "the ratio of a circle's circumference to its diameter"
+probability = dcc "probability"  (cnIES "probability")           "the likelihood of an event to occur"
+rate        = dcc "rate"         (cn' "rate")                    "a ratio that compares two quantities having different units of measure"
+rightHand   = dcc "rightHand"    (cn' "right-handed coordinate system") "a coordinate system where the positive z-axis comes out of the screen"
+shape       = dcc "shape"        (cn' "shape")                   "the outline of an area or figure"
+surface     = dcc "surface"      (cn' "surface")                 "the outer or topmost boundary of an object"
+unit_       = dcc "unit"         (cn' "unit")                    "the identity element"
+vector      = dcc "vector"       (cn' "vector")                  "an object with magnitude and direction"
 
 xAxis = dcc "xAxis" (nounPhraseSent $ P lX :+: S "-axis") "the primary axis of a system of coordinates"
 yAxis = dcc "yAxis" (nounPhraseSent $ P lY :+: S "-axis") "the secondary axis of a system of coordinates"
@@ -80,17 +78,9 @@ ode = commonIdeaWithDict "ode" (cn' "Ordinary Differential Equation") "ODE" [mat
 pde = commonIdeaWithDict "pde" (cn' "partial differential equation")  "PDE" [mathematics]
 
 --FIXME: COMBINATION HACK (all below)
-euclidN      = dcc "euclidNorm"     (compoundPhrase' (euclidSpace ^. term)
-                (norm ^. term)) "Euclidean norm"
-normalV      = dcc "normal vector"  (compoundPhrase' (normal ^. term)
-                (vector ^. term))
-                "Unit outward normal vector for a surface"
-perpV        = dcc "perp_vect"      (compoundPhrase' (perp ^. term)
-                (vector ^. term))
-                "Vector perpendicular or 90 degrees to another vector"
-rOfChng      = dcc "rOfChng"        (rate `of_` change)
-                "Ratio between a change in one variable relative to a corresponding change in another"
-surArea      = dcc "surArea"        (compoundPhrase' (surface ^. term) (area ^. term))
-                "A measure of the total area that the surface of the object occupies"
-unitV        = dcc "unit_vect"      (compoundPhrase' (unit_ ^. term)
-                (vector ^. term)) "A vector that has a magnitude of one" 
+euclidN = dcc "euclidNorm"    (compoundPhrase' (euclidSpace ^. term) (norm ^. term)) "euclidean norm"
+normalV = dcc "normal vector" (compoundPhrase' (normal ^. term) (vector ^. term)) "unit outward normal vector for a surface"
+perpV   = dcc "perp_vect"     (compoundPhrase' (perp ^. term) (vector ^. term)) "vector perpendicular or 90 degrees to another vector"
+rOfChng = dcc "rOfChng"       (rate `of_` change) "ratio between a change in one variable relative to a corresponding change in another"
+surArea = dcc "surArea"       (compoundPhrase' (surface ^. term) (area ^. term)) "a measure of the total area that the surface of the object occupies"
+unitV   = dcc "unit_vect"     (compoundPhrase' (unit_ ^. term) (vector ^. term)) "a vector that has a magnitude of one" 

@@ -60,7 +60,7 @@ consThermEdesc = foldlSent [
   ch volHtGen `isThe` phrase volHtGen +:+ sParen (Sy (unit_symb volHtGen)),
   ch temp `isThe` phrase temp +:+ sParen (Sy (unit_symb temp)),
   ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
-  S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
+  S "is" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
   S "other forms of", phrase energy `sC` S "such as", phrase mechEnergy `sC`
   S "are assumed to be negligible in the", phrase system, sParen (makeRef2S assumpTEO)]
 

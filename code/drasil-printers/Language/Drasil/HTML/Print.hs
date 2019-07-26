@@ -5,7 +5,7 @@ import Data.List (intercalate, partition, sortBy)
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 import Control.Arrow (second)
-import Utils.Drasil (numList)
+import Utils.Drasil (checkValidStr, numList)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
@@ -93,20 +93,24 @@ titleSpec s         = pSpec s
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 pSpec :: Spec -> Doc
-pSpec (E e)             = em $ pExpr e
-pSpec (a :+: b)         = pSpec a <> pSpec b
-pSpec (S s)             = text s
-pSpec (Sy s)            = text $ uSymb s
-pSpec (Sp s)            = text $ unPH $ L.special s
-pSpec HARDNL            = text "<br />"
+pSpec (E e)     = em $ pExpr e
+pSpec (a :+: b) = pSpec a <> pSpec b
+pSpec (S s)     = either error (text . (concatMap escapeChars)) $ checkValidStr s invalid
+  where
+    invalid = ['<', '>']
+    escapeChars '&' = "\\&"
+    escapeChars c = [c]
+pSpec (Sy s)    = text $ uSymb s
+pSpec (Sp s)    = text $ unPH $ L.special s
+pSpec HARDNL    = text "<br />"
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
 pSpec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
 pSpec (Ref Cite2    r a)      = reflinkInfo r (text r) (pSpec a) -- no difference for citations?
 pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
-pSpec EmptyS             = text "" -- Expected in the output
-pSpec (Quote q)          = doubleQuotes $ pSpec q
--- pSpec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
--- pSpec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
+pSpec EmptyS    = text "" -- Expected in the output
+pSpec (Quote q) = doubleQuotes $ pSpec q
+--pSpec (Acc Grave c) = text $ '&' : c : "grave;" --Only works on vowels.
+--pSpec (Acc Acute c) = text $ '&' : c : "acute;" --Only works on vowels.
 
 -- | Renders symbols for HTML document
 symbol :: L.Symbol -> String
@@ -323,12 +327,12 @@ makeBib = ul ["hide-list-style"] . vcat .
 
 --for when we add other things to reference like website, newspaper
 renderCite :: Citation -> (Doc, Doc)
-renderCite (Cite e L.Book cfs) = (text e, renderF cfs useStyleBk <> text " Print.")
-renderCite (Cite e L.Article cfs) = (text e, renderF cfs useStyleArtcl <> text " Print.")
-renderCite (Cite e L.MThesis cfs) = (text e, renderF cfs useStyleBk <> text " Print.")
-renderCite (Cite e L.PhDThesis cfs) = (text e, renderF cfs useStyleBk <> text " Print.")
-renderCite (Cite e L.Misc cfs) = (text e, renderF cfs useStyleBk)
-renderCite (Cite e _ cfs) = (text e, renderF cfs useStyleArtcl) --FIXME: Properly render these later.
+renderCite (Cite e L.Book cfs)      = (text e, renderF cfs useStyleBk    <> text " Print.")
+renderCite (Cite e L.Article cfs)   = (text e, renderF cfs useStyleArtcl <> text " Print.")
+renderCite (Cite e L.MThesis cfs)   = (text e, renderF cfs useStyleBk    <> text " Print.")
+renderCite (Cite e L.PhDThesis cfs) = (text e, renderF cfs useStyleBk    <> text " Print.")
+renderCite (Cite e L.Misc cfs)      = (text e, renderF cfs useStyleBk)
+renderCite (Cite e _ cfs)           = (text e, renderF cfs useStyleArtcl) --FIXME: Properly render these later.
 
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> Doc)) -> Doc
 renderF fields styl = hsep $ map (styl bibStyleH) (sortBy compCiteField fields)
@@ -420,10 +424,7 @@ bookMLA (Month        m) = comm $ text $ show m
 bookMLA (Type         t) = comm $ pSpec t
 
 pages :: [Int] -> Doc
-pages = pSpec . foldlList . map (S . concatMap repl) . numList
-  where
-    repl '-' = "&ndash;"
-    repl  x  = [x]
+pages = pSpec . foldlList . map S . numList
 
 bookAPA :: CiteField -> Doc --FIXME: year needs to come after author in L.APA
 bookAPA (Author   p) = pSpec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name

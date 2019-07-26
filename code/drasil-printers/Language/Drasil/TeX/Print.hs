@@ -12,8 +12,7 @@ import qualified Language.Drasil as L (
   RenderSpecial(..), People, rendPersLFM,
   CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document, special, USymb(US))
-import Utils.Drasil (foldNums)
---import Utils.Drasil (checkValidStr, foldNums)
+import Utils.Drasil (checkValidStr, foldNums)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -263,9 +262,12 @@ spec a@(s :+: t) = s' <> t'
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
 spec (E ex) = toMath $ pExpr ex
-spec (S s)  = pure $ text (concatMap escapeChars s)
-{-spec (S s)  = either error (pure . text . (concatMap escapeChars)) $ checkValidStr s invalid
-  where invalid = ['&', '#', '$', '%', '&', '~', '^', '\\', '{'] -}
+spec (S s)  = either error (pure . text . (concatMap escapeChars)) $ checkValidStr s invalid
+  where
+    invalid = ['&', '#', '$', '%', '&', '~', '^', '\\', '{', '}']
+    escapeChars '_' = "\\_"
+    escapeChars '&' = "\\&"
+    escapeChars c = [c]
 spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
@@ -277,10 +279,6 @@ spec (Ref Cite2    r i)  = cite r (info i)
 spec (Ref External r sn) = externalref r (spec sn)
 spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q
-
-escapeChars :: Char -> String
-escapeChars '_' = "\\_"
-escapeChars c = [c]
 
 symbolNeeds :: L.Symbol -> MathContext
 symbolNeeds (L.Atomic _)     = Text

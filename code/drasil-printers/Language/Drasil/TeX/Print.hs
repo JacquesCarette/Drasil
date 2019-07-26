@@ -262,7 +262,7 @@ spec a@(s :+: t) = s' <> t'
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
 spec (E ex) = toMath $ pExpr ex
-spec (S s)  = either error (pure . text . (concatMap escapeChars)) $ checkValidStr s invalid
+spec (S s)  = either error (pure . text . concatMap escapeChars) $ checkValidStr s invalid
   where
     invalid = ['&', '#', '$', '%', '&', '~', '^', '\\', '{', '}']
     escapeChars '_' = "\\_"
@@ -438,16 +438,16 @@ makeGraph ps w h c l =
   mkEnv "figure" $ centering %%
   mkEnvArgBr "adjustbox" "max width=\\textwidth" (
   mkEnvArgSq "tikzpicture" ">=latex,line join=bevel" (
-  vcat $ [command "tikzstyle" "n" <> pure (text " = ") <> sq (
-            pure (text "draw, shape=rectangle, ") <> w <> h <>
-            pure (text "font=\\Large, align=center]")),
-          mkEnvArgSq "dot2tex" "dot, codeonly, options=-t raw" (
-          pure (text "digraph G ") <> br ( vcat (
-           (pure (text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];")) :
-           (pure (text "node [style = \"n\"];")) :
-           map (\(a,b) -> q a <> pure (text " -> ") <> q b <> pure (text ";")) ps)
-          ))
-         ])) %% caption c %% label l
+  vcat [command "tikzstyle" "n" <> pure (text " = ") <> sq (
+          pure (text "draw, shape=rectangle, ") <> w <> h <>
+          pure (text "font=\\Large, align=center]")),
+        mkEnvArgSq "dot2tex" "dot, codeonly, options=-t raw" (
+        pure (text "digraph G ") <> br ( vcat (
+         pure (text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];") :
+         pure (text "node [style = \"n\"];") :
+         map (\(a,b) -> q a <> pure (text " -> ") <> q b <> pure (text ";")) ps)
+        ))
+       ])) %% caption c %% label l
   where q x = pure (text "\"") <> x <> pure (text "\"")
 
 ---------------------------
@@ -513,7 +513,7 @@ showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
 data FieldWrap = Braces | NoDelimiters | Command String
 
 wrapField :: FieldWrap -> String -> Spec -> D
-wrapField fw f s = pure (text (f ++ "=")) <> (resolve fw) (spec s)
+wrapField fw f s = pure (text (f ++ "=")) <> resolve fw (spec s)
   where
     resolve Braces       = br
     resolve NoDelimiters = id

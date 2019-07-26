@@ -95,7 +95,7 @@ titleSpec s         = pSpec s
 pSpec :: Spec -> Doc
 pSpec (E e)     = em $ pExpr e
 pSpec (a :+: b) = pSpec a <> pSpec b
-pSpec (S s)     = either error (text . (concatMap escapeChars)) $ checkValidStr s invalid
+pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
     invalid = ['<', '>']
     escapeChars '&' = "\\&"

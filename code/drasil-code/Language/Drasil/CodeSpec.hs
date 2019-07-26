@@ -108,7 +108,7 @@ codeSpec SI {_sys = sys
         program = sys,
         relations = rels,
         fMap = assocToMap rels,
-        vMap = assocToMap (map quantvar q ++ getAdditionalVars chs),
+        vMap = assocToMap (map quantvar q ++ getAdditionalVars chs (mods csi')),
         eMap = mem,
         constMap = assocToMap const',
         dMap = modDepMap csi' mem chs,
@@ -189,8 +189,8 @@ funcData :: Name -> String -> DataDesc -> Func
 funcData n desc d = FData $ FuncData (toCodeName n) desc d
 
 funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> Space -> [FuncStmt] -> Func  
-funcDef s desc i t fs  = FDef $ FuncDef (toCodeName s) desc (map quantvar i) (spaceToCodeType t) fs 
-     
+funcDef s desc i t fs = FDef $ FuncDef (toCodeName s) desc (map quantvar i) (spaceToCodeType t) fs 
+
 data FuncData where
   FuncData :: Name -> String -> DataDesc -> FuncData
   
@@ -238,10 +238,17 @@ asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
-getAdditionalVars :: Choices -> [CodeChunk]
-getAdditionalVars chs = map codevar (inFileName : inParamsVar (inputStructure chs))
+getAdditionalVars :: Choices -> [Mod] -> [CodeChunk]
+getAdditionalVars chs ms = map codevar (inFileName : inParamsVar 
+  (inputStructure chs)) ++ concatMap funcParams ms
   where inParamsVar Bundled = [inParams]
         inParamsVar Unbundled = []
+        funcParams (Mod _ _ fs) = concatMap getFuncParams fs
+
+getFuncParams :: Func -> [CodeChunk]
+getFuncParams (FDef (FuncDef _ _ ps _ _)) = ps
+getFuncParams (FData (FuncData _ _ d)) = getInputs d
+getFuncParams (FCD _) = []
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String

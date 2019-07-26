@@ -17,7 +17,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc,
   codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
-import Language.Drasil.Code.CodeQuantityDicts (inFileName)
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 
 import Control.Lens ((^.))
@@ -239,7 +239,9 @@ asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
 getAdditionalVars :: Choices -> [CodeChunk]
-getAdditionalVars _ = [codevar inFileName]
+getAdditionalVars chs = map codevar (inFileName : inParamsVar (inputStructure chs))
+  where inParamsVar Bundled = [inParams]
+        inParamsVar Unbundled = []
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String

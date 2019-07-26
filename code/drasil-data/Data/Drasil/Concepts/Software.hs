@@ -15,48 +15,51 @@ c, errMsg, physLib, program :: ConceptChunk
 c       = dcc "c" (pn "C") 
   "C programming language"
 physLib = dcc "physLib" (cnIES "physics library") 
-  "A programming library which provides functions for modelling physical phenomenon."
+  "a programming library which provides functions for modelling physical phenomenon."
 program = dcc "program" (cn' "program")
-  ("A series of coded software instructions to control the operation of a " ++
+  ("a series of coded software instructions to control the operation of a " ++
   "computer or other machine.")
-errMsg  = dcc "errMsg" (cn' "error message") ("a message that indicates an incorrect instruction" ++
-  " has been given, or that there is an error resulting from faulty software")
+errMsg  = dcc "errMsg" (cn' "error message") 
+  "a message that indicates an incorrect instruction has been given, or that there is an error resulting from faulty software"
 
 -- Non-functional requirements  
 
-accuracy, correctness, maintainability, performance, performanceSpd, portability, reliability,
-  reusability, understandability, verifiability :: ConceptChunk
+accuracy, correctness, maintainability, performance, performanceSpd, portability,
+  reliability, reusability, understandability, verifiability :: ConceptChunk
+
+qualOfBeing :: String -> String
+qualOfBeing s = "the quality or state of being" ++ s
   
 accuracy          = dcc "accuracy"          (nounPhraseSP "accuracy")
-  "The quality or state of being correct or precise"
+  $ qualOfBeing "correct or precise"
 
 correctness       = dcc "correctness"       (nounPhraseSP "correctness")
-  "The quality or state of being free from error"
+  $ qualOfBeing "free from error"
   
 maintainability   = dcc "maintainability"   (nounPhraseSP "maintainability")
-  "The probability of performing a successful repair action within a given time"
+  "the probability of performing a successful repair action within a given time"
 
 performance       = dcc "performance"       (nounPhraseSP "performance")
-  "The action or process of carrying out or accomplishing an action, task, or function"
+  "the action or process of carrying out or accomplishing an action, task, or function"
   
 performanceSpd    = dcc (performance ^. uid) (nounPhrase'' (phrase performance) (S "speed") CapFirst CapWords)
-  "The action or process of carrying out or accomplishing an action, task, or function quickly"
+  "the action or process of carrying out or accomplishing an action, task, or function quickly"
  
 portability       = dcc "portability"       (nounPhraseSP "portability")
-  "The ability of software to be transferred from one machine or system to another"
+  "the ability of software to be transferred from one machine or system to another"
 
 reliability       = dcc "reliability"       (nounPhraseSP "reliability")
-  ("The degree to which the result of a measurement, calculation," ++
+  ("the degree to which the result of a measurement, calculation," ++
   "or specification can be depended on to be accurate")
 
 reusability       = dcc "reusability"       (nounPhraseSP "reusability")
-  "The use of existing assets in some form within the software product development process"
+  "the use of existing assets in some form within the software product development process"
 
 understandability = dcc "understandability" (nounPhraseSP "understandability")
-  "The property of being understandable"
+  $ qualOfBeing "understandable"
 
 verifiability     = dcc "verifiability"     (nounPhraseSP "verifiability")
-  "the quality or state of being capable of being verified , confirmed , or substantiated"
+  $ qualOfBeing "capable of being verified, confirmed, or substantiated"
   
 -- MODULES Concepts (Maybe move to D.D.C.Software.Modules ?)
 
@@ -69,9 +72,8 @@ hwHiding = dcc "hwHiding" (cn "hardware hiding") (
 modBehavHiding :: ConceptChunk
 modBehavHiding = dccWDS "modBehavHiding" (cn "behaviour hiding") (foldlSent
   [S "Includes programs that provide externally visible behaviour of the", 
-  S "system as specified in the", phrase srs,
-  sParen $ short srs, S "documents. This module",
-  S "serves as a communication layer between the hardware-hiding module",
+  S "system as specified in the", phrase srs, sParen $ short srs +:+. S "documents",
+  S "This module serves as a communication layer between the hardware-hiding module",
   S "and the software decision module. The programs in this module will need",
   S "to change if there are changes in the", short srs])
 

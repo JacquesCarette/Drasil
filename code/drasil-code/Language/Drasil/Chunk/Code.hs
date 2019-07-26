@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
-    CodeIdea(..), CodeChunk(..), codeType, codevar, codefunc,
-    ConstraintMap, constraintMap, physLookup, sfwrLookup,
+    CodeIdea(..), CodeChunk(..), codeType, codevar, codefunc, quantvar, 
+    quantfunc, ConstraintMap, constraintMap, physLookup, sfwrLookup,
     programName, symbToCodeName, toCodeName, funcPrefix
   ) where
 
@@ -84,11 +84,17 @@ instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc
 codeType :: HasCodeType c => c -> CodeType
 codeType c = c ^. ctyp
 
-codevar :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
-codevar c = CodeC (cqw c) Var
+codevar :: CodeQuantityDict -> CodeChunk
+codevar c = CodeC c Var
 
-codefunc :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
-codefunc c = CodeC (cqw c) Func
+codefunc :: CodeQuantityDict -> CodeChunk
+codefunc c = CodeC c Func
+
+quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
+quantvar c = CodeC (cqw c) Var
+
+quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeChunk
+quantfunc c = CodeC (cqw c) Func
 
 type ConstraintMap = Map.Map UID [Constraint]
 

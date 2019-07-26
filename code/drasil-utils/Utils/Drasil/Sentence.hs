@@ -31,6 +31,7 @@ ofThe'       a b = S "The" +:+ sentHelper "of the"              a b
 
 capSent :: Sentence -> Sentence
 capSent (S (s:ss)) = S (toUpper s : ss)
--- FIXME: Add Ch case
+--capSent (phrase x) = atStart x
+--capSent (plural x) = atStart' x
 capSent (a :+: b)  = (capSent a) :+: b
 capSent x          = x

@@ -11,12 +11,13 @@ import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), 
-  ConstraintMap, quantvar, quantfunc, funcPrefix, codeName, toCodeName, 
+  ConstraintMap, codevar, quantvar, quantfunc, funcPrefix, codeName, toCodeName,
   constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
+import Language.Drasil.Code.CodeQuantityDicts (inFileName)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 
 import Control.Lens ((^.))
@@ -107,7 +108,7 @@ codeSpec SI {_sys = sys
         program = sys,
         relations = rels,
         fMap = assocToMap rels,
-        vMap = assocToMap (map quantvar q),
+        vMap = assocToMap (map quantvar q ++ getAdditionalVars chs),
         eMap = mem,
         constMap = assocToMap const',
         dMap = modDepMap csi' mem chs,
@@ -237,6 +238,8 @@ asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
+getAdditionalVars :: Choices -> [CodeChunk]
+getAdditionalVars _ = [codevar inFileName]
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String

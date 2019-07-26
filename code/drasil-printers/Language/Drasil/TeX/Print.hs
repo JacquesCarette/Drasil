@@ -37,9 +37,9 @@ import Language.Drasil.Printing.Helpers hiding (br, paren, sq, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
   cite, command, command0, commandD, command2D, description, document, empty,
   enumerate, externalref, figure, fraction, includegraphics, item, item',
-  itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgs, mkMinipage,
-  newline, newpage, parens, quote, sec, snref, sq, superscript, symbDescription,
-  texSym, title, toEqn)
+  itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgBr, mkEnvArgSq,
+  mkMinipage, newline, newpage, parens, quote, sec, snref, sq, superscript,
+  symbDescription, texSym, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -57,16 +57,16 @@ buildStd sm (Document t a c) =
 
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: LayoutObj -> PrintingInformation -> D
-lo (Header d t l)       _  = sec d (spec t) %% label (spec l)
-lo (HDiv _ con _)       sm = print sm con -- FIXME ignoring 2 arguments?
-lo (Paragraph contents) _  = toText $ newline (spec contents)
-lo (EqnBlock contents)  _  = makeEquation contents
-lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)
-lo (Definition _ ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
-lo (List l)               _  = toText $ makeList l
-lo (Figure r c f wp)      _  = toText $ makeFigure (spec r) (spec c) f wp
-lo (Bib bib)            sm = toText $ makeBib sm bib
-lo (Graph ps w h c l)   _  = toText $ makeGraph
+lo (Header d t l)         _ = sec d (spec t) %% label (spec l)
+lo (HDiv _ con _)        sm = print sm con -- FIXME ignoring 2 arguments?
+lo (Paragraph contents)   _ = toText $ newline (spec contents)
+lo (EqnBlock contents)    _ = makeEquation contents
+lo (Table _ rows r bl t)  _ = toText $ makeTable rows (spec r) bl (spec t)
+lo (Definition _ ssPs l) sm = toText $ makeDefn sm ssPs $ spec l
+lo (List l)               _ = toText $ makeList l
+lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (spec c) f wp
+lo (Bib bib)             sm = toText $ makeBib sm bib
+lo (Graph ps w h c l)    _  = toText $ makeGraph
   (map (\(a,b) -> (spec a, spec b)) ps)
   (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
@@ -197,7 +197,7 @@ cases (p:ps) = cases [p] <> pure (text "\\\\\n") <> cases ps
 -----------------------------------------------------------------
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
-makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
+makeTable lls r bool t = mkEnvArgBr ltab (unwords $ anyBig lls) $
   command0 "toprule"
   %% makeHeaders (head lls)
   %% command0 "midrule"
@@ -335,7 +335,7 @@ makeDefn sm ps l = mkMinipage (makeDefTable sm ps l)
 
 makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
-makeDefTable sm ps l = mkEnvArgs "tabular" (col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth) $ vcat [
+makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth) $ vcat [
   command0 "toprule " <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l, --shortname instead of refname?
   command0 "phantomsection ", label l,
   makeDRows sm ps,
@@ -437,25 +437,19 @@ makeFigure r c f wp =
 
 makeGraph :: [(D,D)] -> D -> D -> D -> D -> D
 makeGraph ps w h c l =
-  mkEnv "figure" $
-  vcat $ [ centering,
-           pure $ text "\\begin{adjustbox}{max width=\\textwidth}",
-           pure $ text "\\begin{tikzpicture}[>=latex,line join=bevel]",
-           pure (text "\\tikzstyle{n} = [draw, shape=rectangle, ") <>
-             w <> h <> pure (text "font=\\Large, align=center]"),
-           pure $ text "\\begin{dot2tex}[dot, codeonly, options=-t raw]",
-           pure $ text "digraph G {",
-           pure $ text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];",
-           pure $ text "node [style = \"n\"];"
-         ]
-     ++  map (\(a,b) -> q a <> pure (text " -> ") <> q b <> pure (text ";")) ps
-     ++  [ pure $ text "}",
-           command "end" "dot2tex",
-           command "end" "tikzpicture",
-           command "end" "adjustbox",
-           caption c,
-           label l
-         ]
+  mkEnv "figure" $ centering %%
+  mkEnvArgBr "adjustbox" "max width=\\textwidth" (
+  mkEnvArgSq "tikzpicture" ">=latex,line join=bevel" (
+  vcat $ [command "tikzstyle" "n" <> pure (text " = ") <> sq (
+            pure (text "draw, shape=rectangle, ") <> w <> h <>
+            pure (text "font=\\Large, align=center]")),
+          mkEnvArgSq "dot2tex" "dot, codeonly, options=-t raw" (
+          pure (text "digraph G ") <> br ( vcat (
+           (pure (text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];")) :
+           (pure (text "node [style = \"n\"];")) :
+           map (\(a,b) -> q a <> pure (text " -> ") <> q b <> pure (text ";")) ps)
+          ))
+         ])) %% caption c %% label l
   where q x = pure (text "\"") <> x <> pure (text "\"")
 
 ---------------------------
@@ -463,7 +457,7 @@ makeGraph ps w h c l =
 ---------------------------
 -- **THE MAIN FUNCTION** --
 makeBib :: PrintingInformation -> BibRef -> D
-makeBib sm bib = mkEnvArgs "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bib) %% bibLines
+makeBib sm bib = mkEnvArgBr "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bib) %% bibLines
   where bibLines = command "nocite" "*" %% command "bibstyle" bibStyleT %%
                    command0 "printbibliography" <> sq (pure $ text "heading=none")
 

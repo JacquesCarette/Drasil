@@ -4,6 +4,7 @@ import Language.Drasil
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (material_, property)
+import Data.Drasil.Concepts.Math (centre)
 
 physicalcon :: [ConceptChunk]
 physicalcon = [gaseous, liquid, solid, ctrOfMass, density, specWeight, mass,
@@ -15,8 +16,7 @@ gaseous, liquid, solid, ctrOfMass, density, specWeight, mass, len, dimension,
 gaseous    = dcc "gaseous"    (cn''' "gas"          ) "gaseous state"
 liquid     = dcc "liquid"     (cn' "liquid"         ) "liquid state"
 solid      = dcc "solid"      (cn' "solid"          ) "solid state"
-ctrOfMass  = dcc "ctrOfMass"  (cn "centre of mass"  ) --FIXME: Plural?
-  "The mean location of the distribution of mass of the object."
+ctrOfMass  = dcc "ctrOfMass"  (centre `of_''` mass  ) "The mean location of the distribution of mass of the object."
 dimension  = dcc "dimension"  (cn' "dimension"      ) 
   "any of a set of basic kinds of quantity, as mass, length, and time"
 density    = dcc "density"    (cnIES "density"      ) "mass per unit volume"
@@ -29,7 +29,6 @@ mass       = dcc "mass"       (cn''' "mass"         )
   "the quantity of matter in a body"
 vol        = dcc "volume"     (cn' "volume"         )
   "the amount of space that a substance or object occupies."
-
 
 materialProprty :: NamedChunk
 materialProprty = compoundNC material_ property

@@ -9,22 +9,20 @@ import Utils.Drasil
 import Control.Lens ((^.))
 
 mathcon :: [ConceptChunk]
-mathcon = [angle, area, calculation, cartesian, change, constraint, diameter,
-  equation, euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal,
-  normalV, number, orient, parameter, perp, perpV, pi_, probability, rOfChng,
-  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp,
-  xDir, yAxis, yComp, yDir, zAxis, zComp, zDir]
+mathcon = [angle, area, calculation, cartesian, centre, change, constraint,
+  diameter, equation, euclidN, euclidSpace, gradient, graph, law, matrix, norm,
+  normal, normalV, number, orient, parameter, perp, perpV, pi_, probability,
+  rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis,
+  xComp, xDir, yAxis, yComp, yDir, zAxis, zComp, zDir]
 
 mathcon' :: [CI]
 mathcon' = [pde, ode, de]
 
-angle, area, calculation, cartesian, change, constraint, diameter, equation,
-  euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal, normalV,
-  number, orient, parameter, perp, perpV, pi_, probability, rOfChng, rate,
-  rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp, xDir,
-  yAxis, yComp, yDir, zAxis, zComp, zDir :: ConceptChunk
-
-pde, ode, de :: CI
+angle, area, calculation, cartesian, centre, change, constraint, diameter,
+  equation, euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal,
+  normalV, number, orient, parameter, perp, perpV, pi_, probability, rOfChng,
+  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp, 
+  xDir, yAxis, yComp, yDir, zAxis, zComp, zDir :: ConceptChunk
 
 angle        = dcc "angle"        (cn' "angle")                   ("The amount of rotation needed to bring one line or plane into" ++
                                                                   "coincidence with another")
@@ -34,9 +32,10 @@ cartesian    = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "A coo
                                                                   S "numerical coordinates, which are the signed distances to the point from" +:+
                                                                   S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+.
                                                                   sParen (S "from" +:+ makeRef2S cartesianWiki)
+centre       = dcc "centre"       (cn' "centre")                  "the middle point of an object"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
 constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
-diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
+diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the centre of the circle" ++
                                                                   "and whose endpoints lie on the circle.")
 equation     = dcc "equation"     (cn' "equation")                "A statement that the values of two mathematical expressions are equal "
 euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the system of geometry corresponding to the geometry of ordinary" ++
@@ -75,9 +74,10 @@ yDir = dcc "yDir" (nounPhraseSent $ P lY :+: S "-direction") "the direction alig
 zDir = dcc "zDir" (nounPhraseSent $ P lZ :+: S "-direction") "the direction aligned with the z-axis"
 
 --FIXME: use nounphrase instead of cn'
-de           = commonIdeaWithDict "de"     (cn' "differential equation")          "DE"   [mathematics]
-ode          = commonIdeaWithDict "ode"    (cn' "Ordinary Differential Equation") "ODE"  [mathematics]
-pde          = commonIdeaWithDict "pde"    (cn' "partial differential equation")  "PDE"  [mathematics]
+pde, ode, de :: CI
+de  = commonIdeaWithDict "de"  (cn' "differential equation")          "DE"  [mathematics]
+ode = commonIdeaWithDict "ode" (cn' "Ordinary Differential Equation") "ODE" [mathematics]
+pde = commonIdeaWithDict "pde" (cn' "partial differential equation")  "PDE" [mathematics]
 
 --FIXME: COMBINATION HACK (all below)
 euclidN      = dcc "euclidNorm"     (compoundPhrase' (euclidSpace ^. term)

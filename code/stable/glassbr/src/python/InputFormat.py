@@ -7,8 +7,8 @@ import math
 import InputParameters
 
 ## \brief Reads input from a file with the given file name
-# \param filename No description given
-# \param inParams No description given
+# \param filename name of file with x y and z data
+# \param inParams structure holding the input values
 def get_input(filename, inParams):
     outfile = open("log.txt", "a")
     print("function get_input called with inputs: {", file=outfile)

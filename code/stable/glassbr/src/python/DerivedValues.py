@@ -7,7 +7,7 @@ import math
 import InputParameters
 
 ## \brief Calculates values that can be immediately derived from the inputs
-# \param inParams No description given
+# \param inParams structure holding the input values
 def derived_values(inParams):
     outfile = open("log.txt", "a")
     print("function derived_values called with inputs: {", file=outfile)

@@ -15,7 +15,8 @@ using std::ofstream;
 #include "InputParameters.hpp"
 
 /** \brief Reads input from a file with the given file name
-    \param filename No description given
+    \param filename name of file with x y and z data
+    \param inParams structure holding the input values
 */
 void get_input(string filename, InputParameters &inParams);
 

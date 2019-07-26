@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class DerivedValues {
     
     /** \brief Calculates values that can be immediately derived from the inputs
-        \param inParams No description given
+        \param inParams structure holding the input values
     */
     public static void derived_values(InputParameters inParams) throws Exception {
         PrintWriter outfile;

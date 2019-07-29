@@ -10,7 +10,7 @@ import Data.Drasil.IdeaDicts
 
 algorithm :: ConceptChunk
 algorithm = dcc "algorithm" (cn' "algorithm")
-  "a mseries of steps to be followed in calculations and problem-solving operations"
+  "a series of steps to be followed in calculations and problem-solving operations"
 
 modCalcDesc :: Sentence -> ConceptChunk
 modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")

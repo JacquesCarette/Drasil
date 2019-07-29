@@ -44,8 +44,8 @@ acceleration = dccWDS "acceleration" (cn' "acceleration")
   (S "the rate of change of a body's" +:+ phrase velocity)
 angular = dcc "angular" (cn' "angular")
   "denoting physical properties or quantities measured with reference to or by means of an angle"
-chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity") (S "The" +:+ phrase chgInVelocity +:+
- S "of a" +:+ phrase rigidBody)
+chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity")
+  (S "the" +:+ phrase chgInVelocity `sOf` S "a" +:+ phrase rigidBody)
 collision = dcc "collision" (cn' "collision")
   "an encounter between particles resulting in an exchange or transformation of energy"
 cohesion = dccWDS "cohesion" (cn "cohesion")
@@ -78,12 +78,12 @@ gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant")
 height = dccWDS "height" (cn' "height")
   (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
 isotropy = dccWDS "isotropy" (cn "isotropy")
-  (S "a condition where the" +:+ phrase value `sOf` S "a" +:+ phrase property +:+
-   S "is independent of the direction in which it is measured")
+  (S "a condition where the" +:+ phrase value `sOf` S "a" +:+ phrase property `sIs`
+   S "independent of the direction in which it is measured")
 joint = dcc "joint"    (cn' "joint")
   "a connection between two rigid bodies which allows movement with one or more degrees of freedom"
 kEnergy = dccWDS "kEnergy" (cn "kinetic energy")
-  (S "the measure of the" +:+ phrase energy +:+ S "a body possess due to its motion")
+  (S "measure" `ofThe` phrase energy +:+ S "a body possess due to its motion")
 linear = dcc "linear"  (cn' "linear" )
   "arranged in or extending along a straight or nearly straight line"
 mechEnergy = dcc "mechEnergy" (cn "mechanical energy")
@@ -91,7 +91,7 @@ mechEnergy = dcc "mechEnergy" (cn "mechanical energy")
 position = dcc "position" (cn' "position")
   "an object's location relative to a reference point"
 potEnergy = dccWDS "potEnergy" (cn "potential energy")
-  (S "the measure of the" +:+ phrase energy +:+ S "held by an object because of its" +:+ phrase position)
+  (S "measure" `ofThe` phrase energy +:+ S "held by an object because of its" +:+ phrase position)
 pressure = dccWDS "pressure" (cn' "pressure")
   (S "a" +:+ phrase force +:+ S "exerted over an area")
 rectilinear = dcc "rectilinear" (cn "rectilinear")

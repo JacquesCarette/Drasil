@@ -24,12 +24,10 @@ normForce  = dccWDS "normForce" (cn' "normal force")
   (S "a" +:+ phrase force +:+ S "applied perpendicular to the plane of the material")
   
 nrmStrss   = dccWDS "nrmStrss" (cn "normal stress") 
-  (S "the" +:+ phrase stress +:+ 
-  S "exerted perpendicular to the plane of the object")
+  (S "the" +:+ phrase stress +:+  S "exerted perpendicular to the plane of the object")
   
 poissnsR   = dccWDS "poissnsR" (nounPhraseSP "Poisson's ratio") 
-  (S "the ratio of perpendicular" +:+ phrase strain +:+ 
-  S "to parallel" +:+ phrase strain)
+  (S "the ratio of perpendicular" +:+ phrase strain +:+ S "to parallel" +:+ phrase strain)
   
 shearRes   = dccWDS "shearRes" (cn "resistive shear force") 
   (S "the" +:+ phrase shearForce +:+ S "in the direction opposite to the direction" +:+

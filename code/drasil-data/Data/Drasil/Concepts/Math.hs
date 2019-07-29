@@ -74,7 +74,7 @@ zDir = dcc "zDir" (nounPhraseSent $ P lZ :+: S "-direction") "the direction alig
 --FIXME: use nounphrase instead of cn'
 pde, ode, de :: CI
 de  = commonIdeaWithDict "de"  (cn' "differential equation")          "DE"  [mathematics]
-ode = commonIdeaWithDict "ode" (cn' "Ordinary Differential Equation") "ODE" [mathematics]
+ode = commonIdeaWithDict "ode" (cn' "ordinary differential equation") "ODE" [mathematics]
 pde = commonIdeaWithDict "pde" (cn' "partial differential equation")  "PDE" [mathematics]
 
 --FIXME: COMBINATION HACK (all below)

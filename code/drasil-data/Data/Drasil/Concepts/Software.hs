@@ -13,12 +13,11 @@ softwarecon = [correctness, verifiability, physLib,
 c, errMsg, physLib, program :: ConceptChunk
 
 c       = dcc "c" (pn "C") 
-  "C programming language"
+  "the C programming language"
 physLib = dcc "physLib" (cnIES "physics library") 
-  "a programming library which provides functions for modelling physical phenomenon."
+  "a programming library which provides functions for modelling physical phenomenon"
 program = dcc "program" (cn' "program")
-  ("a series of coded software instructions to control the operation of a " ++
-  "computer or other machine.")
+  "a series of coded software instructions to control the operation of a computer or other machine"
 errMsg  = dcc "errMsg" (cn' "error message") 
   "a message that indicates an incorrect instruction has been given, or that there is an error resulting from faulty software"
 

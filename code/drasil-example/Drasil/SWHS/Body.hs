@@ -289,7 +289,7 @@ orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [S "The", plural inModel, 
   S "to be solved are referred to as" +:+. 
   foldlList Comma List (map makeRef2S iMods), S "The", plural inModel,
-  S "provide the", phrase ode, sParen (short ode :+: S "s") `sAnd` 
+  S "provide the", plural ode, sParen (short ode :+: S "s") `sAnd` 
   S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
   phrase swhsPCM, short progName, S "solves these", short ode :+: S "s"]
 

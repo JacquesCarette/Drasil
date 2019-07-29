@@ -127,7 +127,8 @@ data Choices = Choices {
   onSfwrConstraint :: ConstraintBehaviour,
   onPhysConstraint :: ConstraintBehaviour,
   inputStructure :: Structure,
-  inputModule :: InputModule
+  inputModule :: InputModule,
+  auxFiles :: [AuxFile]
 }
 
 data ImplementationType = Library
@@ -150,6 +151,8 @@ data Structure = Unbundled
 
 data InputModule = Combined
                  | Separated
+
+data AuxFile = SampleInput deriving Eq
              
 data Visibility = Show
                 | Hide
@@ -165,7 +168,8 @@ defaultChoices = Choices {
   onSfwrConstraint = Exception,
   onPhysConstraint = Warning,
   inputStructure = Bundled,
-  inputModule = Combined
+  inputModule = Combined,
+  auxFiles = [SampleInput]
 }
 
 type Name = String

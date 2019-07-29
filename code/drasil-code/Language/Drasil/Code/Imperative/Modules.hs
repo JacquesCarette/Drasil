@@ -290,10 +290,12 @@ genDataDesc = do
     intersperse junkLine (map singleton (extInputs $ csi $ codeSpec g))
 
 genSampleInput :: (AuxiliarySym repr) => 
-  Reader (State repr) (repr (Auxiliary repr))
+  Reader (State repr) [repr (Auxiliary repr)]
 genSampleInput = do
   g <- ask
-  sampleInput (sysinfodb $ csi $ codeSpec g) dd <$> genDataDesc
+  dd <- genDataDesc
+  return [sampleInput (sysinfodb $ csi $ codeSpec g) dd | SampleInput `elem` 
+    auxiliaries g]
 
 ----- OUTPUT -------
 

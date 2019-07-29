@@ -14,6 +14,7 @@ data State = State {
   logName :: String,
   logKind :: Logging,
   commented :: [Comments],
+  auxiliaries :: [AuxFile],
   currentModule :: String,
 
   onSfwrC :: ConstraintBehaviour,

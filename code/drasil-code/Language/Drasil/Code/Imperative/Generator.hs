@@ -27,6 +27,7 @@ generator dt chs spec = State {
   inMod = inputModule chs,
   logKind  = logging chs,
   commented = comments chs,
+  auxiliaries = auxFiles chs,
   -- state
   currentModule = "",
 

@@ -32,7 +32,7 @@ import qualified Data.Map as Map (elems)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table, symbTableRef)
-import Drasil.Sections.TableOfUnits (tOfUnitSIName, unitTableRef)
+import Drasil.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
   stakeholder, thModel, tOfSymb, tOfUnit, userChar, offShelfSol)
@@ -97,9 +97,9 @@ mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
   (map (mkSubRef si) l) (makeSecRef "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
-    mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI
-    mkSubRef SI {_sysinfodb = db} (TUnits' con) =
-        SRS.tOfUnit [tuIntro con, LlC $ tOfUnitSIName (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
+    mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
+    mkSubRef SI {_sysinfodb = db} (TUnits' con f) =
+        SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
     -- FIXME: _quants = v should be removed from this binding and symbols should
     -- be acquired solely through document traversal, however #1658. If we do
     -- just the doc traversal here, then we lose some symbols which only appear
@@ -118,6 +118,11 @@ mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
     mkSubRef SI {_usedinfodb = db} TAandA =
       tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
+
+-- | table of units constructors
+tunit, tunit' :: [TUIntro] -> RefTab
+tunit  t = TUnits' t tOfUnitSIName
+tunit' t = TUnits' t tOfUnitDesc
 
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>

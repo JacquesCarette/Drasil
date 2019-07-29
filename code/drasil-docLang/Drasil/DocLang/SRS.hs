@@ -44,7 +44,7 @@ doc' sys = Document (Doc.srs `forTT'` sys)
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
-  genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb,
+  genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb, tOfUnit,
   appendix, reference, offShelfSol, valsOfAuxCons, unlikeChg :: [Contents] -> [Section] -> Section
 
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"

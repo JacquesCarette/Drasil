@@ -53,8 +53,12 @@ build fn (Document t a c) =
   text "<!DOCTYPE html>" $$
   html (headTag (linkCSS fn $$ title (titleSpec t) $$
   text "<meta charset=\"utf-8\">" $$
-  text ("<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
-          "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>")) $$
+  text ("<script type=\"text/x-mathjax-config\">" ++
+    "MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['$$','$$']]});" ++
+    "</script>") $$
+  text ("<script type=\"text/javascript\" async " ++
+  "src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML\">" ++
+  "</script>")) $$
   body (articleTitle (pSpec t) $$ author (pSpec a)
   $$ print c
   ))

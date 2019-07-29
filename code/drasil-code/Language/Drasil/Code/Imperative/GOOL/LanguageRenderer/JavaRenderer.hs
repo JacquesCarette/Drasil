@@ -115,7 +115,7 @@ instance AuxiliarySym JavaCode where
   type Auxiliary JavaCode = AuxData
   doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
     optimizeDox p)
-  sampleInput d = return $ ad sampleInputName (makeInputFile d)
+  sampleInput db d = return $ ad sampleInputName (makeInputFile db d)
 
   optimizeDox = return $ text "YES"
 

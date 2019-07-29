@@ -109,7 +109,7 @@ instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
 instance (Pair p) => AuxiliarySym (p CppSrcCode CppHdrCode) where
   type Auxiliary (p CppSrcCode CppHdrCode) = AuxData
   doxConfig pName p = pair (doxConfig pName $ pfst p) (return emptyAux)
-  sampleInput d = pair (sampleInput d) (return emptyAux)
+  sampleInput db d = pair (sampleInput db d) (return emptyAux)
 
   optimizeDox = pair optimizeDox (return empty)
 
@@ -675,7 +675,7 @@ instance AuxiliarySym CppSrcCode where
   type Auxiliary CppSrcCode = AuxData
   doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
     optimizeDox p)
-  sampleInput d = return $ ad sampleInputName (makeInputFile d)
+  sampleInput db d = return $ ad sampleInputName (makeInputFile db d)
 
   optimizeDox = return $ text "NO"
   

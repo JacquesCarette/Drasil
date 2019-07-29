@@ -1,5 +1,5 @@
 module Language.Drasil.Code.Imperative.Modules (
-  genMain, chooseInModule, genOutputMod
+  genMain, chooseInModule, genOutputMod, genSampleInput
 ) where
 
 import Language.Drasil
@@ -270,9 +270,8 @@ genInputFormat :: (RenderSym repr) => Reader State
   (Maybe (repr (Method repr)))
 genInputFormat = do
   g <- ask
-  let dd = junkLine : intersperse junkLine (map singleton (extInputs $ csi $
-        codeSpec g))
-      genInFormat :: (RenderSym repr) => Maybe String -> Reader State 
+  dd <- genDataDesc
+  let genInFormat :: (RenderSym repr) => Maybe String -> Reader State 
         (Maybe (repr (Method repr)))
       genInFormat Nothing = return Nothing
       genInFormat (Just _) = do
@@ -283,6 +282,18 @@ genInputFormat = do
         mthd <- publicInOutFunc "get_input" desc ins outs [] bod
         return $ Just mthd
   genInFormat $ Map.lookup "get_input" (eMap $ codeSpec g)
+
+genDataDesc :: Reader State DataDesc
+genDataDesc = do
+  g <- ask
+  return $ junkLine : 
+    intersperse junkLine (map singleton (extInputs $ csi $ codeSpec g))
+
+genSampleInput :: (AuxiliarySym repr) => 
+  Reader (State repr) (repr (Auxiliary repr))
+genSampleInput = do
+  g <- ask
+  sampleInput (sysinfodb $ csi $ codeSpec g) dd <$> genDataDesc
 
 ----- OUTPUT -------
 

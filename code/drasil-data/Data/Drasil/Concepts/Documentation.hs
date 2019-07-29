@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Documentation where
 import Language.Drasil hiding (organization, year)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Math (graph)
+import Data.Drasil.Concepts.Math (graph, unit_)
 import Data.Drasil.IdeaDicts (dataDefn, documentc, genDefn, inModel, softEng, thModel)
 
 import Control.Lens ((^.))
@@ -26,7 +26,7 @@ doccon = [abbreviation, analysis, appendix, aspect, body, characteristic, class_
   terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
   useCase, validation, value, variable, video, verification, year,
   orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
-  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol,
+  termAndDef, tOfSymb, tOfUnit, traceyMandG, corSol, charOfIR, propOfCorSol,
   vav, designDoc, fullForm, generalSystemDescription, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
@@ -214,7 +214,7 @@ scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- tempora
 
 
 orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
-  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol,
+  termAndDef, tOfSymb, tOfUnit, traceyMandG, corSol, charOfIR, propOfCorSol,
   vav :: NamedChunk
 
 corSol       = nc "corSol"       (cn' "correct solution")
@@ -226,6 +226,7 @@ refmat       = nc "refmat"       (cn' "reference material")
 scpOfReq     = nc "scpOfReq"     (scope `of_'` requirement)
 termAndDef   = nc "termAndDef"   (terminology `and_'` definition)
 tOfSymb      = nc "tOfSymb"      (table_ `of_'` symbol_)
+tOfUnit      = nc "tOfUnit"      (table_ `of_'` unit_)
 traceyMandG  = nc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 vav          = nc "vav"          (verification `and_` validation)
 consVals     = nc "consVals"     (cn "values of auxiliary constants")

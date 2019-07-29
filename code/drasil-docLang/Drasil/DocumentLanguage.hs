@@ -32,10 +32,10 @@ import qualified Data.Map as Map (elems)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table, symbTableRef)
-import Drasil.Sections.TableOfUnits (tableOfUnits, unitTableRef)
+import Drasil.Sections.TableOfUnits (tOfUnitSIName, unitTableRef)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
-  stakeholder, thModel, tOfSymb, userChar, offShelfSol)
+  stakeholder, thModel, tOfSymb, tOfUnit, userChar, offShelfSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -99,7 +99,7 @@ mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI
     mkSubRef SI {_sysinfodb = db} (TUnits' con) =
-        tableOfUnits (nub $ sortBy compUnitDefn $ extractUnits dd db) (tuIntro con)
+        SRS.tOfUnit [tuIntro con, LlC $ tOfUnitSIName (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
     -- FIXME: _quants = v should be removed from this binding and symbols should
     -- be acquired solely through document traversal, however #1658. If we do
     -- just the doc traversal here, then we lose some symbols which only appear

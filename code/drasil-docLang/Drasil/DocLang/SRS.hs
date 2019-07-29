@@ -7,7 +7,7 @@ module Drasil.DocLang.SRS
   physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
   inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
   indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel,
-  tOfSymb, solCharSpecLabel) where
+  tOfSymb, tOfUnit, solCharSpecLabel) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -23,7 +23,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   prodUCTable, problemDescription, propOfCorSol, prpsOfDoc, reference, requirement,
   scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription, srs,
   stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
-  tOfSymb, userCharacteristic)
+  tOfSymb, tOfUnit, userCharacteristic)
 import qualified Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
 
 -- Local function to keep things looking clean, not exported.
@@ -96,7 +96,8 @@ appendix    cs ss   = section' (titleize Doc.appendix)          cs ss "Appendix"
 reference   cs ss = section (titleize' Doc.reference)        cs ss referenceLabel
 offShelfSol cs ss = section' (titleize' Doc.offShelfSolution) cs ss "offShelfSolns"
 
-tOfSymb cs ss = section (titleize Doc.tOfSymb) cs ss tOfSymbLabel
+tOfSymb cs ss = section  (titleize Doc.tOfSymb) cs ss tOfSymbLabel
+tOfUnit cs ss = section' (titleize Doc.tOfUnit) cs ss "ToU"
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> String -> Section

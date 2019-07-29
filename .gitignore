@@ -41,3 +41,4 @@ __pycache__
 */Projectile/output.txt
 *.fls
 *.fdb_latexmk
+stack.yaml.lock

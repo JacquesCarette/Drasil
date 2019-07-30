@@ -25,7 +25,7 @@ public class DerivedValues {
         outfile.println("  }");
         outfile.close();
         
-        inParams.h = 1.0 / 1000.0 * ((inParams.t == 2.5) ? 2.16 : ((inParams.t == 2.7) ? 2.59 : ((inParams.t == 3.0) ? 2.92 : ((inParams.t == 4.0) ? 3.78 : ((inParams.t == 5.0) ? 4.57 : ((inParams.t == 6.0) ? 5.56 : ((inParams.t == 8.0) ? 7.42 : ((inParams.t == 10.0) ? 9.02 : ((inParams.t == 12.0) ? 11.91 : ((inParams.t == 16.0) ? 15.09 : ((inParams.t == 19.0) ? 18.26 : 21.44)))))))))));
+        inParams.h = 1.0 / 1000.0 * (inParams.t == 2.5 ? 2.16 : inParams.t == 2.7 ? 2.59 : inParams.t == 3.0 ? 2.92 : inParams.t == 4.0 ? 3.78 : inParams.t == 5.0 ? 4.57 : inParams.t == 6.0 ? 5.56 : inParams.t == 8.0 ? 7.42 : inParams.t == 10.0 ? 9.02 : inParams.t == 12.0 ? 11.91 : inParams.t == 16.0 ? 15.09 : inParams.t == 19.0 ? 18.26 : 21.44);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'inParams.h' assigned to ");
         outfile.print(inParams.h);

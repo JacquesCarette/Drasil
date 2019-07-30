@@ -188,7 +188,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return 1 - Math.exp(-(B));
+        return 1 - Math.exp(-B);
     }
     
     /** \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability

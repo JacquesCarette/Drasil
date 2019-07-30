@@ -156,7 +156,7 @@ double func_P_b(double B) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 1 - exp(-(B));
+    return 1 - exp(-B);
 }
 
 bool func_is_safePb(InputParameters &inParams, double P_b) {

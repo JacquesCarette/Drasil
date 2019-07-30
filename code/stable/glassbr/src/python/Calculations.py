@@ -153,7 +153,7 @@ def func_P_b(B):
     print("  }", file=outfile)
     outfile.close()
     
-    return 1 - math.exp(-(B))
+    return 1 - math.exp(-B)
 
 ## \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability
 # \param inParams No description given

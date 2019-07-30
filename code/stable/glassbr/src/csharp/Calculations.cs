@@ -183,7 +183,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 1 - Math.Exp(-(B));
+        return 1 - Math.Exp(-B);
     }
     
     /** \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability

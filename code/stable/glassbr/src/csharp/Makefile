@@ -21,4 +21,7 @@ GlassBR$(TARGET_EXTENSION): Control.cs InputParameters.cs InputFormat.cs Derived
 run: build
 	./GlassBR$(TARGET_EXTENSION) $(RUNARGS)
 
-.PHONY: build run
+doc: doxConfig Control.cs InputParameters.cs InputFormat.cs DerivedValues.cs InputConstraints.cs OutputFormat.cs Calculations.cs ReadTable.cs Interpolation.cs
+	doxygen doxConfig
+
+.PHONY: build run doc

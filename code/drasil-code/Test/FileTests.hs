@@ -2,12 +2,12 @@ module Test.FileTests (fileTests) where
 
 import Language.Drasil.Code (PackageSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), StateTypeSym(..), StatementSym(..), 
-  ControlStatementSym(..), VariableSym(..), ValueSym(..), Selector(..),
-  MethodSym(..), ModuleSym(..))
+  ControlStatementSym(..), VariableSym(..), ValueSym(..), MethodSym(..), 
+  ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 
 fileTests :: (PackageSym repr) => repr (Package repr)
-fileTests = packMods "FileTests" [fileDoc (buildModule "FileTests" [] [fileTestMethod] [])]
+fileTests = package "FileTests" [fileDoc (buildModule "FileTests" [] [fileTestMethod] [])] []
 
 fileTestMethod :: (RenderSym repr) => repr (Method repr)
 fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory], 
@@ -15,9 +15,6 @@ fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory],
 
 writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [
-  varDecDef (var "e" int) (litInt 5),
-  varDec $ var "f" float,
-  var "f" float &= cast float (valueOf $ var "e" int),
   varDec $ var "fileToWrite" outfile,
 
   openFileW (var "fileToWrite" outfile) (litString "testText.txt"),

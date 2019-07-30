@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class InputParameters {
     public double v_launch;
-    public double angle;
+    public double theta;
     public double p_target;
     
 }

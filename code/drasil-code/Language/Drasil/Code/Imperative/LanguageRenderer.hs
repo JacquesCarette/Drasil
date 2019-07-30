@@ -4,7 +4,7 @@
 module Language.Drasil.Code.Imperative.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
-  docCmtStart, observerListName,
+  docCmtStart, observerListName, doxConfigName, addExt,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
@@ -44,12 +44,13 @@ import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library,
   RenderSym(..), BodySym(..), StateTypeSym(getType, listInnerType), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  Selector(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ParameterSym(..), MethodSym(..), BlockCommentSym(..))
+  InternalValue(..), FunctionSym(..), SelectorFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ParameterSym(..), MethodSym(..), BlockCommentSym(..))
 import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
-import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
-  ModData(..), md, MethodData(..), OpData(..), od, ParamData(..), pd,
-  TypeData(..), td, ValData(..), vd, VarData(..))
+import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..), 
+  fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
+  od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, VarData(..))
 import Language.Drasil.Code.Imperative.Helpers (angles,blank, doubleQuotedText,
   hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
@@ -77,13 +78,19 @@ docCmtStart = text "/**"
 observerListName :: Label
 observerListName = "observerList"
 
+doxConfigName :: String
+doxConfigName = "doxConfig"
+
+addExt :: String -> String -> String
+addExt ext nm = nm ++ "." ++ ext
+
 ----------------------------------
 -- Functions for rendering code --
 ----------------------------------
 
-packageDocD :: Label -> Doc -> ModData -> ModData
-packageDocD n end (MD l b m) = md l b (vibcat [text "package" <+> text n <> end,
-  m])
+packageDocD :: Label -> Doc -> FileData -> FileData
+packageDocD n end f = fileD (n ++ "/" ++ filePath f) (updateModDoc (vibcat [
+  text "package" <+> text n <> end, modDoc (fileMod f)]) (fileMod f))
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat [
@@ -314,10 +321,11 @@ forDocD bStart bEnd sInit vGuard sUpdate b = vcat [
   indent b,
   bEnd]
 
-forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> ValData -> Doc -> Doc
-forEachDocD l bStart bEnd forEachLabel inLabel v b =
-  vcat [forEachLabel <+> parens (typeDoc (valType v) <+> text l <+> inLabel <+> 
-    valDoc v) <+> bStart,
+forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> TypeData -> ValData -> Doc 
+  -> Doc
+forEachDocD l bStart bEnd forEachLabel inLabel t v b =
+  vcat [forEachLabel <+> parens (typeDoc t <+> text l <+> inLabel <+> valDoc v) 
+    <+> bStart,
   indent b,
   bEnd]
 

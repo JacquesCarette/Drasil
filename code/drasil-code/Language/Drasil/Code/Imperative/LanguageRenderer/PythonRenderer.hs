@@ -39,7 +39,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
-  ParamData(..), TypeData(..), td, ValData(..), VarData(..), vard)
+  ParamData(..), TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
@@ -293,7 +293,7 @@ instance BooleanExpression PythonCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
 
 instance ValueExpression PythonCode where
-  inlineIf b v1 v2 = liftA2 mkVal (fmap valType v1) (liftA3 pyInlineIf b v1 v2)
+  inlineIf = liftA3 pyInlineIf
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
@@ -607,10 +607,9 @@ pyStateObj t vs = typeDoc t <> parens vs
 pyExtStateObj :: Label -> TypeData -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs
 
-pyInlineIf :: ValData -> ValData -> 
-  ValData -> Doc
-pyInlineIf c v1 v2 = parens $ valDoc v1 <+> text "if" <+> valDoc c <+> 
-  text "else" <+> valDoc v2
+pyInlineIf :: ValData -> ValData -> ValData -> ValData
+pyInlineIf c v1 v2 = vd (valPrec c) (valType v1) (valDoc v1 <+> text "if" <+> 
+  valDoc c <+> text "else" <+> valDoc v2)
 
 pyListSize :: ValData -> FuncData -> Doc
 pyListSize v f = funcDoc f <> parens (valDoc v)

@@ -27,7 +27,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, 
   orOpDocD, binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, 
   litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
-  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
+  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfD, 
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
@@ -681,10 +681,9 @@ enumElemDocD en e = text en <> dot <> text e
 objVarDocD :: VarData -> VarData ->  Doc
 objVarDocD n1 n2 = varDoc n1 <> dot <> varDoc n2
 
-inlineIfDocD :: ValData -> ValData -> 
-  ValData -> Doc
-inlineIfDocD c v1 v2 = parens 
-  (parens (valDoc c) <+> text "?" <+> valDoc v1 <+> text ":" <+> valDoc v2)
+inlineIfD :: ValData -> ValData -> ValData -> ValData
+inlineIfD c v1 v2 = vd (valPrec c) (valType v1) (valDoc c <+> text "?" <+> 
+  valDoc v1 <+> text ":" <+> valDoc v2)
 
 funcAppDocD :: Label -> [ValData] -> Doc
 funcAppDocD n vs = text n <> parens (valList vs)

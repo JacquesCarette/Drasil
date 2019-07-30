@@ -36,7 +36,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
   typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
-  litStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfDocD, funcAppDocD,
+  litStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfD, funcAppDocD,
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
@@ -873,8 +873,7 @@ instance BooleanExpression CppSrcCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
    
 instance ValueExpression CppSrcCode where
-  inlineIf b v1 v2 = liftA2 mkVal (fmap valType v1) (liftA3 inlineIfDocD b v1 
-    v2)
+  inlineIf = liftA3 inlineIfD
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp _ = funcApp

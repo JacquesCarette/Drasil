@@ -38,7 +38,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
   moduleDoc, docFuncRepr, valList, appendToBody, getterName, setterName)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), od, PackData(..), packD, 
+  updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), TypeData(..), td, ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 

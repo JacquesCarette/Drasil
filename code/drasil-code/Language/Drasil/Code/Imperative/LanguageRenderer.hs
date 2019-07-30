@@ -530,15 +530,13 @@ atanOpDocD' :: OpData
 atanOpDocD' = unOpPrec "math.atan"
 
 unOpDocD :: Doc -> Doc -> Doc
-unOpDocD op v = op <> v
+unOpDocD op v = op <> parens v
 
 unExpr :: OpData -> ValData -> ValData
-unExpr u v = mkExpr (opPrec u) (valType v) (unOpDocD (opDoc u) (exprParens u v 
-  $ valDoc v))
+unExpr u v = mkExpr (opPrec u) (valType v) (unOpDocD (opDoc u) (valDoc v))
 
 typeUnExpr :: OpData -> TypeData -> ValData -> ValData
-typeUnExpr u t v = mkExpr (opPrec u) t (unOpDocD (opDoc u) (exprParens u v $ 
-  valDoc v))
+typeUnExpr u t v = mkExpr (opPrec u) t (unOpDocD (opDoc u) (valDoc v))
 
 -- Binary Operators --
 

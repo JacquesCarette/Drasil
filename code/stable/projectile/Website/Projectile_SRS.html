@@ -368,7 +368,7 @@
                 <div class="list">
                   <p>PS1: The launcher.</p>
                   <p>
-                    PS2: The projectile (with initial velocity <em><b>v</b><sup>i</sup></em> and launch angle <em>θ</em>).
+                    PS2: The projectile (with initial velocity ${\mathbf{v}^{i}}$ and launch angle $θ$).
                   </p>
                   <p>PS3: The target.</p>
                 </div>
@@ -422,7 +422,7 @@
                   </p>
                   <p>
                     <div id="yAxisGravity">
-                      yAxisGravity: The direction of the <em>y</em>-axis is directed opposite to gravity. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>, and <a href=#accelYGravity>A: accelYGravity</a>.)
+                      yAxisGravity: The direction of the $y$-axis is directed opposite to gravity. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>, and <a href=#accelYGravity>A: accelYGravity</a>.)
                     </div>
                   </p>
                   <p>
@@ -432,12 +432,12 @@
                   </p>
                   <p>
                     <div id="targetXAxis">
-                      targetXAxis: The target lies on the <em>x</em>-axis (from <a href=#neglectCurv>A: neglectCurv</a>). (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>.)
+                      targetXAxis: The target lies on the $x$-axis (from <a href=#neglectCurv>A: neglectCurv</a>). (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="posXDirection">
-                      posXDirection: The positive <em>x</em>-direction is from the launcher to the target. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#IM:offsetIM>IM: offsetIM</a>, <a href=#IM:messageIM>IM: messageIM</a>, and <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.)
+                      posXDirection: The positive $x$-direction is from the launcher to the target. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#IM:offsetIM>IM: offsetIM</a>, <a href=#IM:messageIM>IM: messageIM</a>, and <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.)
                     </div>
                   </p>
                   <p>
@@ -447,12 +447,12 @@
                   </p>
                   <p>
                     <div id="accelXZero">
-                      accelXZero: The acceleration in the <em>x</em>-direction is zero. (RefBy: <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> and <a href=#constAccel>A: constAccel</a>.)
+                      accelXZero: The acceleration in the $x$-direction is zero. (RefBy: <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a> and <a href=#constAccel>A: constAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="accelYGravity">
-                      accelYGravity: The acceleration in the <em>y</em>-direction is the acceleration due to gravity (from <a href=#yAxisGravity>A: yAxisGravity</a>). (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> and <a href=#constAccel>A: constAccel</a>.)
+                      accelYGravity: The acceleration in the $y$-direction is the acceleration due to gravity (from <a href=#yAxisGravity>A: yAxisGravity</a>). (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> and <a href=#constAccel>A: constAccel</a>.)
                     </div>
                   </p>
                   <p>
@@ -501,22 +501,17 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em><b>a</b> = <div class="fraction">
-                                           <span class="fup">&#8239;d<b>v</b></span>
-                                           <span class="fdn">&#8239;dt</span>
-                                         </div></em>
-                        </div>
-                      </td>
+                      <td>$$\mathbf{a}=\frac{\,d\mathbf{v}}{\,dt}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)</li>
-                          <li><em>t</em> is the time (s)</li>
-                          <li><em><b>v</b></em> is the velocity (m/s)</li>
+                          <li>
+                            $\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)
+                          </li>
+                          <li>$t$ is the time ($\text{s}$)</li>
+                          <li>$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)</li>
                         </ul>
                       </td>
                     </tr>
@@ -548,22 +543,15 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em><b>v</b> = <div class="fraction">
-                                           <span class="fup">&#8239;d<b>p</b></span>
-                                           <span class="fdn">&#8239;dt</span>
-                                         </div></em>
-                        </div>
-                      </td>
+                      <td>$$\mathbf{v}=\frac{\,d\mathbf{p}}{\,dt}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>v</b></em> is the velocity (m/s)</li>
-                          <li><em>t</em> is the time (s)</li>
-                          <li><em><b>p</b></em> is the position (m)</li>
+                          <li>$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)</li>
+                          <li>$t$ is the time ($\text{s}$)</li>
+                          <li>$\mathbf{p}$ is the position ($\text{m}$)</li>
                         </ul>
                       </td>
                     </tr>
@@ -607,26 +595,24 @@
                     </tr>
                     <tr>
                       <th>Units</th>
-                      <td><p class="paragraph">m/s</p></td>
+                      <td><p class="paragraph">$\frac{\text{m}}{\text{s}}$</p></td>
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>v = v<sup>i</sup>&plus;a<sup>c</sup>&#8239;t</em>
-                        </div>
-                      </td>
+                      <td>$$v={v^{i}}+{a^{c}} t$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em>v</em> is the speed (m/s)</li>
-                          <li><em>v<sup>i</sup></em> is the initial speed (m/s)</li>
+                          <li>$v$ is the speed ($\frac{\text{m}}{\text{s}}$)</li>
                           <li>
-                            <em>a<sup>c</sup></em> is the constant acceleration (m/s<sup>2</sup>)
+                            ${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)
                           </li>
-                          <li><em>t</em> is the time (s)</li>
+                          <li>
+                            ${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)
+                          </li>
+                          <li>$t$ is the time ($\text{s}$)</li>
                         </ul>
                       </td>
                     </tr>
@@ -652,24 +638,15 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of rectilinear velocity:</h4>
                     <p class="paragraph">
-                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The velocity is <em>v</em> and the acceleration is <em>a</em>. The motion in <a href=#TM:acceleration>TM: acceleration</a> is now one-dimensional with a constant acceleration, represented by <em>a<sup>c</sup></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em>v<sup>i</sup></em>. From <a href=#TM:acceleration>TM: acceleration</a>, using the above symbols we have:
+                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in <a href=#TM:acceleration>TM: acceleration</a> is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by ${v^{i}}$. From <a href=#TM:acceleration>TM: acceleration</a>, using the above symbols we have:
                     </p>
-                    <div class="equation">
-                      <em>a<sup>c</sup> = <div class="fraction">
-                                            <span class="fup">&#8239;dv</span>
-                                            <span class="fdn">&#8239;dt</span>
-                                          </div></em>
-                    </div>
+                    $${a^{c}}=\frac{\,dv}{\,dt}$$
                     <p class="paragraph">Rearranging and integrating, we have:</p>
-                    <div class="equation">
-                      <em>&int;<sub>v<sup>i</sup></sub><sup>v</sup>1&#8239;dv = &int;<sub>0</sub><sup>t</sup>a<sup>c</sup>&#8239;dt</em>
-                    </div>
+                    $$\int_{{v^{i}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt$$
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
-                    <div class="equation">
-                      <em>v = v<sup>i</sup>&plus;a<sup>c</sup>&#8239;t</em>
-                    </div>
+                    $$v={v^{i}}+{a^{c}} t$$
                   </div>
                 </div>
                 <div id="GD:rectPos">
@@ -688,33 +665,24 @@
                     </tr>
                     <tr>
                       <th>Units</th>
-                      <td><p class="paragraph">m</p></td>
+                      <td><p class="paragraph">$\text{m}$</p></td>
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>p = p<sup>i</sup>&plus;v<sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                                  <span class="fup">
-                                                                                    a<sup>c</sup>&#8239;t<sup>2</sup>
-                                                                                  </span>
-                                                                                  <span class="fdn">
-                                                                                    2
-                                                                                  </span>
-                                                                                </div></em>
-                        </div>
-                      </td>
+                      <td>$$p={p^{i}}+{v^{i}} t+\frac{{a^{c}} t^{2}}{2}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em>p</em> is the scalar position (m)</li>
-                          <li><em>p<sup>i</sup></em> is the initial position (m)</li>
-                          <li><em>v<sup>i</sup></em> is the initial speed (m/s)</li>
-                          <li><em>t</em> is the time (s)</li>
+                          <li>$p$ is the scalar position ($\text{m}$)</li>
+                          <li>${p^{i}}$ is the initial position ($\text{m}$)</li>
                           <li>
-                            <em>a<sup>c</sup></em> is the constant acceleration (m/s<sup>2</sup>)
+                            ${v^{i}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)
+                          </li>
+                          <li>$t$ is the time ($\text{s}$)</li>
+                          <li>
+                            ${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)
                           </li>
                         </ul>
                       </td>
@@ -737,37 +705,19 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of rectilinear position:</h4>
                     <p class="paragraph">
-                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The position is <em>p</em> and the velocity is <em>v</em>. The motion in <a href=#TM:velocity>TM: velocity</a> is now one-dimensional. The initial position (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em>p<sup>i</sup></em>. From <a href=#TM:velocity>TM: velocity</a>, using the above symbols we have:
+                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in <a href=#TM:velocity>TM: velocity</a> is now one-dimensional. The initial position (at $t=0$, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by ${p^{i}}$. From <a href=#TM:velocity>TM: velocity</a>, using the above symbols we have:
                     </p>
-                    <div class="equation">
-                      <em>v = <div class="fraction">
-                                <span class="fup">&#8239;dp</span>
-                                <span class="fdn">&#8239;dt</span>
-                              </div></em>
-                    </div>
+                    $$v=\frac{\,dp}{\,dt}$$
                     <p class="paragraph">Rearranging and integrating, we have:</p>
-                    <div class="equation">
-                      <em>&int;<sub>p<sup>i</sup></sub><sup>p</sup>1&#8239;dp = &int;<sub>0</sub><sup>t</sup>v&#8239;dt</em>
-                    </div>
+                    $$\int_{{p^{i}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt$$
                     <p class="paragraph">
-                      From <a href=#GD:rectVel>GD: rectVel</a> we can replace <em>v</em>:
+                      From <a href=#GD:rectVel>GD: rectVel</a> we can replace $v$:
                     </p>
-                    <div class="equation">
-                      <em>&int;<sub>p<sup>i</sup></sub><sup>p</sup>1&#8239;dp = &int;<sub>0</sub><sup>t</sup>v<sup>i</sup>&plus;a<sup>c</sup>&#8239;t&#8239;dt</em>
-                    </div>
+                    $$\int_{{p^{i}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{i}}+{a^{c}} t}\,dt$$
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
-                    <div class="equation">
-                      <em>p = p<sup>i</sup>&plus;v<sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                              <span class="fup">
-                                                                                a<sup>c</sup>&#8239;t<sup>2</sup>
-                                                                              </span>
-                                                                              <span class="fdn">
-                                                                                2
-                                                                              </span>
-                                                                            </div></em>
-                    </div>
+                    $$p={p^{i}}+{v^{i}} t+\frac{{a^{c}} t^{2}}{2}$$
                   </div>
                 </div>
                 <div id="GD:velVec">

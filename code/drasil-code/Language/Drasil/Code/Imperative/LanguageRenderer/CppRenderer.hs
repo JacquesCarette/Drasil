@@ -1806,8 +1806,10 @@ cppListDecDefDoc :: VarData -> Doc -> Doc
 cppListDecDefDoc v vs = typeDoc (varType v) <+> varDoc v <> braces vs
 
 cppPrint :: Bool -> ValData -> ValData -> Doc
-cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> valDoc v <+> end
-  where end = if newLn then text "<<" <+> text "std::endl" else empty
+cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> val (valDoc v) <+> 
+  end
+  where val = if maybe False (< 9) (valPrec v) then parens else id
+        end = if newLn then text "<<" <+> text "std::endl" else empty
 
 cppThrowDoc :: ValData -> Doc
 cppThrowDoc errMsg = text "throw" <> parens (valDoc errMsg)

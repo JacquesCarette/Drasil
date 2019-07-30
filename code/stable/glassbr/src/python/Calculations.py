@@ -17,7 +17,7 @@ def func_J_tol(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return math.log((math.log((1 / (1 - inParams.P_btol))) * (((inParams.a * inParams.b) ** (7.0 - 1)) / (2.86e-53 * (((7.17e10 * (inParams.h ** 2)) ** 7.0) * inParams.LDF)))))
+    return math.log(math.log(1 / (1 - inParams.P_btol)) * ((inParams.a * inParams.b) ** (7.0 - 1) / (2.86e-53 * (7.17e10 * inParams.h ** 2) ** 7.0 * inParams.LDF)))
 
 ## \brief Calculates applied load (demand)
 # \param inParams No description given
@@ -45,7 +45,7 @@ def func_q_hat(inParams, q):
     print("  }", file=outfile)
     outfile.close()
     
-    return ((q * ((inParams.a * inParams.b) ** 2)) / (7.17e10 * ((inParams.h ** 4) * inParams.GTF)))
+    return q * (inParams.a * inParams.b) ** 2 / (7.17e10 * inParams.h ** 4 * inParams.GTF)
 
 ## \brief Calculates tolerable load
 # \param inParams No description given
@@ -93,7 +93,7 @@ def func_NFL(inParams, q_hat_tol):
     print("  }", file=outfile)
     outfile.close()
     
-    return ((q_hat_tol * (7.17e10 * (inParams.h ** 4))) / ((inParams.a * inParams.b) ** 2))
+    return q_hat_tol * 7.17e10 * inParams.h ** 4 / (inParams.a * inParams.b) ** 2
 
 ## \brief Calculates risk of failure
 # \param inParams No description given
@@ -109,7 +109,7 @@ def func_B(inParams, J):
     print("  }", file=outfile)
     outfile.close()
     
-    return ((2.86e-53 / ((inParams.a * inParams.b) ** (7.0 - 1))) * (((7.17e10 * (inParams.h ** 2)) ** 7.0) * (inParams.LDF * math.exp(J))))
+    return 2.86e-53 / (inParams.a * inParams.b) ** (7.0 - 1) * (7.17e10 * inParams.h ** 2) ** 7.0 * inParams.LDF * math.exp(J)
 
 ## \brief Calculates load resistance
 # \param inParams No description given
@@ -125,7 +125,7 @@ def func_LR(inParams, NFL):
     print("  }", file=outfile)
     outfile.close()
     
-    return (NFL * (inParams.GTF * 1))
+    return NFL * inParams.GTF * 1
 
 ## \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
 # \param LR load resistance
@@ -141,7 +141,7 @@ def func_is_safeLR(LR, q):
     print("  }", file=outfile)
     outfile.close()
     
-    return (LR > q)
+    return LR > q
 
 ## \brief Calculates probability of breakage
 # \param B risk of failure
@@ -153,7 +153,7 @@ def func_P_b(B):
     print("  }", file=outfile)
     outfile.close()
     
-    return (1 - math.exp(-(B)))
+    return 1 - math.exp(-(B))
 
 ## \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability
 # \param inParams No description given
@@ -169,6 +169,6 @@ def func_is_safePb(inParams, P_b):
     print("  }", file=outfile)
     outfile.close()
     
-    return (P_b < inParams.P_btol)
+    return P_b < inParams.P_btol
 
 

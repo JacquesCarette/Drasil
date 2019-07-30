@@ -32,7 +32,7 @@ def func_lin_interp(x_1, y_1, x_2, y_2, x):
     print("  }", file=outfile)
     outfile.close()
     
-    return ((((y_2 - y_1) / (x_2 - x_1)) * (x - x_1)) + y_1)
+    return (y_2 - y_1) / (x_2 - x_1) * (x - x_1) + y_1
 
 ## \brief Finds the array index for a value closest to the given value
 # \param arr No description given
@@ -48,8 +48,8 @@ def func_find(arr, v):
     print("  }", file=outfile)
     outfile.close()
     
-    for i in range(0, (len(arr) - 1), 1):
-        if (((arr[i] <= v) and (v <= arr[(i + 1)]))) :
+    for i in range(0, len(arr) - 1, 1):
+        if (arr[i] <= v and v <= arr[i + 1]) :
             return i
     raise Exception("Bound error")
 
@@ -112,13 +112,13 @@ def func_interpY(filename, x, z):
     print(y_z_1, end='', file=outfile)
     print(" in module Interpolation", file=outfile)
     outfile.close()
-    x_z_2 = func_extractColumn(x_matrix, (i + 1))
+    x_z_2 = func_extractColumn(x_matrix, i + 1)
     outfile = open("log.txt", "a")
     print("var 'x_z_2' assigned to ", end='', file=outfile)
     print(x_z_2, end='', file=outfile)
     print(" in module Interpolation", file=outfile)
     outfile.close()
-    y_z_2 = func_extractColumn(y_matrix, (i + 1))
+    y_z_2 = func_extractColumn(y_matrix, i + 1)
     outfile = open("log.txt", "a")
     print("var 'y_z_2' assigned to ", end='', file=outfile)
     print(y_z_2, end='', file=outfile)
@@ -139,19 +139,19 @@ def func_interpY(filename, x, z):
         outfile.close()
     except Exception as exc :
         raise Exception("Interpolation of y failed")
-    y_1 = func_lin_interp(x_z_1[j], y_z_1[j], x_z_1[(j + 1)], y_z_1[(j + 1)], x)
+    y_1 = func_lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x)
     outfile = open("log.txt", "a")
     print("var 'y_1' assigned to ", end='', file=outfile)
     print(y_1, end='', file=outfile)
     print(" in module Interpolation", file=outfile)
     outfile.close()
-    y_2 = func_lin_interp(x_z_2[k_2], y_z_2[k_2], x_z_2[(k_2 + 1)], y_z_2[(k_2 + 1)], x)
+    y_2 = func_lin_interp(x_z_2[k_2], y_z_2[k_2], x_z_2[k_2 + 1], y_z_2[k_2 + 1], x)
     outfile = open("log.txt", "a")
     print("var 'y_2' assigned to ", end='', file=outfile)
     print(y_2, end='', file=outfile)
     print(" in module Interpolation", file=outfile)
     outfile.close()
-    return func_lin_interp(z_vector[i], y_1, z_vector[(i + 1)], y_2, z)
+    return func_lin_interp(z_vector[i], y_1, z_vector[i + 1], y_2, z)
 
 ## \brief Linearly interpolates a z value at given x and y values
 # \param filename No description given
@@ -175,7 +175,7 @@ def func_interpZ(filename, x, y):
     y_matrix = []
     z_vector = []
     ReadTable.func_read_table(filename, z_vector, x_matrix, y_matrix)
-    for i in range(0, (len(z_vector) - 1), 1):
+    for i in range(0, len(z_vector) - 1, 1):
         x_z_1 = func_extractColumn(x_matrix, i)
         outfile = open("log.txt", "a")
         print("var 'x_z_1' assigned to ", end='', file=outfile)
@@ -188,13 +188,13 @@ def func_interpZ(filename, x, y):
         print(y_z_1, end='', file=outfile)
         print(" in module Interpolation", file=outfile)
         outfile.close()
-        x_z_2 = func_extractColumn(x_matrix, (i + 1))
+        x_z_2 = func_extractColumn(x_matrix, i + 1)
         outfile = open("log.txt", "a")
         print("var 'x_z_2' assigned to ", end='', file=outfile)
         print(x_z_2, end='', file=outfile)
         print(" in module Interpolation", file=outfile)
         outfile.close()
-        y_z_2 = func_extractColumn(y_matrix, (i + 1))
+        y_z_2 = func_extractColumn(y_matrix, i + 1)
         outfile = open("log.txt", "a")
         print("var 'y_z_2' assigned to ", end='', file=outfile)
         print(y_z_2, end='', file=outfile)
@@ -215,20 +215,20 @@ def func_interpZ(filename, x, y):
             outfile.close()
         except Exception as exc :
             continue
-        y_1 = func_lin_interp(x_z_1[j], y_z_1[j], x_z_1[(j + 1)], y_z_1[(j + 1)], x)
+        y_1 = func_lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x)
         outfile = open("log.txt", "a")
         print("var 'y_1' assigned to ", end='', file=outfile)
         print(y_1, end='', file=outfile)
         print(" in module Interpolation", file=outfile)
         outfile.close()
-        y_2 = func_lin_interp(x_z_2[k_2], y_z_2[k_2], x_z_2[(k_2 + 1)], y_z_2[(k_2 + 1)], x)
+        y_2 = func_lin_interp(x_z_2[k_2], y_z_2[k_2], x_z_2[k_2 + 1], y_z_2[k_2 + 1], x)
         outfile = open("log.txt", "a")
         print("var 'y_2' assigned to ", end='', file=outfile)
         print(y_2, end='', file=outfile)
         print(" in module Interpolation", file=outfile)
         outfile.close()
-        if (((y_1 <= y) and (y <= y_2))) :
-            return func_lin_interp(y_1, z_vector[i], y_2, z_vector[(i + 1)], y)
+        if (y_1 <= y and y <= y_2) :
+            return func_lin_interp(y_1, z_vector[i], y_2, z_vector[i + 1], y)
     raise Exception("Interpolation of z failed")
 
 

@@ -16,13 +16,13 @@ public class InputConstraints {
         \param inParams No description given
     */
     public static void input_constraints(InputParameters inParams) throws Exception {
-        if (!((inParams.v_launch > 0))) {
+        if (!(inParams.v_launch > 0)) {
             System.out.println("Warning: constraint violated");
         }
-        if (!(((0 < inParams.theta) && (inParams.theta < (3.14159265 / 2))))) {
+        if (!(0 < inParams.theta && inParams.theta < 3.14159265 / 2)) {
             System.out.println("Warning: constraint violated");
         }
-        if (!((inParams.p_target > 0))) {
+        if (!(inParams.p_target > 0)) {
             System.out.println("Warning: constraint violated");
         }
     }

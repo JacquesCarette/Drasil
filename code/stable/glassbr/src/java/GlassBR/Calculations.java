@@ -25,7 +25,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return Math.log((Math.log((1 / (1 - inParams.P_btol))) * (Math.pow((inParams.a * inParams.b), (7.0 - 1)) / (2.86e-53 * (Math.pow((7.17e10 * Math.pow(inParams.h, 2)), 7.0) * inParams.LDF)))));
+        return Math.log(Math.log(1 / (1 - inParams.P_btol)) * (Math.pow(inParams.a * inParams.b, 7.0 - 1) / (2.86e-53 * Math.pow(7.17e10 * Math.pow(inParams.h, 2), 7.0) * inParams.LDF)));
     }
     
     /** \brief Calculates applied load (demand)
@@ -59,7 +59,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return ((q * Math.pow((inParams.a * inParams.b), 2)) / (7.17e10 * (Math.pow(inParams.h, 4) * inParams.GTF)));
+        return q * Math.pow(inParams.a * inParams.b, 2) / (7.17e10 * Math.pow(inParams.h, 4) * inParams.GTF);
     }
     
     /** \brief Calculates tolerable load
@@ -116,7 +116,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return ((q_hat_tol * (7.17e10 * Math.pow(inParams.h, 4))) / Math.pow((inParams.a * inParams.b), 2));
+        return q_hat_tol * 7.17e10 * Math.pow(inParams.h, 4) / Math.pow(inParams.a * inParams.b, 2);
     }
     
     /** \brief Calculates risk of failure
@@ -135,7 +135,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return ((2.86e-53 / Math.pow((inParams.a * inParams.b), (7.0 - 1))) * (Math.pow((7.17e10 * Math.pow(inParams.h, 2)), 7.0) * (inParams.LDF * Math.exp(J))));
+        return 2.86e-53 / Math.pow(inParams.a * inParams.b, 7.0 - 1) * Math.pow(7.17e10 * Math.pow(inParams.h, 2), 7.0) * inParams.LDF * Math.exp(J);
     }
     
     /** \brief Calculates load resistance
@@ -154,7 +154,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return (NFL * (inParams.GTF * 1));
+        return NFL * inParams.GTF * 1;
     }
     
     /** \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
@@ -173,7 +173,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return (LR > q);
+        return LR > q;
     }
     
     /** \brief Calculates probability of breakage
@@ -188,7 +188,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return (1 - Math.exp(-(B)));
+        return 1 - Math.exp(-(B));
     }
     
     /** \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability
@@ -207,7 +207,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return (P_b < inParams.P_btol);
+        return P_b < inParams.P_btol;
     }
 }
 

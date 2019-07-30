@@ -37,17 +37,17 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
   litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
   objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
-  listStateObjDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
-  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD,
-  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
-  getterName, setterName, setMain, setMainMethod, setEmpty, intValue)
+  listStateObjDocD, notNullDocD, funcDocD, castDocD, listSetFuncDocD, 
+  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
+  blockCmtEnd, docCmtStart, observerListName, doxConfigName, doubleSlash, 
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
+  moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
+  setMain, setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), od, PackData(..), packD, 
-  ParamData(..), pd, updateParamDoc, TypeData(..), td, ValData(..), vd, 
+  updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
+  ParamData(..), pd, updateParamDoc, TypeData(..), td, ValData(..), 
   updateValDoc, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
@@ -345,8 +345,7 @@ instance Selector CSharpCode where
 
   selfAccess l = objAccess (valueOf $ self l)
 
-  listIndexExists l i = liftA2 mkVal bool (liftA3 listIndexExistsDocD greaterOp
-    l i)
+  listIndexExists l i = listSize l ?> i
   argExists i = listAccess argsList (litInt $ fromIntegral i)
 
   indexOf l v = objAccess l (func "IndexOf" int [v])

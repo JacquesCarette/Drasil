@@ -47,8 +47,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), od, ParamData(..), pd, 
-  PackData(..), packD, TypeData(..), td, ValData(..), vd, VarData(..), vard)
+  updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
+  PackData(..), packD, TypeData(..), td, ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift2Lists, lift3Pair, 
@@ -351,8 +351,8 @@ instance Selector JavaCode where
 
   selfAccess l = objAccess (valueOf $ self l)
 
-  listIndexExists l i = liftA2 mkVal bool (liftA3 jListIndexExists greaterOp l 
-    i)
+  listIndexExists l i = listSize l ?> i 
+
   argExists i = listAccess argsList (litInt $ fromIntegral i)
 
   indexOf l v = objAccess l (func "indexOf" int [v])
@@ -722,10 +722,6 @@ jMethod n s p t ps b = vcat [
     lbrace,
   indent b,
   rbrace]
-
-jListIndexExists :: OpData -> ValData -> ValData -> Doc
-jListIndexExists greater lst index = parens (valDoc lst <> text ".length" <+> 
-  opDoc greater <+> valDoc index)
 
 jAssignFromArray :: Int -> [JavaCode (Variable JavaCode)] -> 
   [JavaCode (Statement JavaCode)]

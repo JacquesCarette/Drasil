@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Drasil.SWHS.Concepts (water)
-import Drasil.SWHS.DataDefs (ddHtFluxC)
+import Drasil.SWHS.DataDefs (ddHtFluxC, balanceDecayRate)
 import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc2,
   eBalanceOnWtrDerivDesc3, heatEInWtr)
 import Drasil.SWHS.References (koothoor2013)
@@ -69,8 +69,7 @@ eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+
   eBalanceOnWtrDerivDesc2 [ddHtFluxC], eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4]
 
 eBalanceOnWtrDerivDesc4 :: Sentence
-eBalanceOnWtrDerivDesc4 = foldlSentCol [S "Setting", ch tauW, S "=", ch wMass, ch htCapW,
-  S "/", ch coilHTC, ch coilSA `sC` eqN 3, S "can be written in its final form as"]
+eBalanceOnWtrDerivDesc4 = foldlSentCol [substitute [balanceDecayRate]]
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 

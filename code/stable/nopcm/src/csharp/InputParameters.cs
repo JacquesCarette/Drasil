@@ -58,6 +58,9 @@ public class InputParameters {
         if (!(((950 < rho_W) && (rho_W <= 1000)))) {
             Console.WriteLine("Warning: constraint violated");
         }
+        if (!(((1.0e-2 <= D) && (D <= 100)))) {
+            Console.WriteLine("Warning: constraint violated");
+        }
         
         if (!((A_C > 0))) {
             Console.WriteLine("Warning: constraint violated");

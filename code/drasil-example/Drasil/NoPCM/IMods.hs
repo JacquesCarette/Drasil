@@ -69,7 +69,7 @@ eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+
   eBalanceOnWtrDerivDesc2 [ddHtFluxC], eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4]
 
 eBalanceOnWtrDerivDesc4 :: Sentence
-eBalanceOnWtrDerivDesc4 = foldlSentCol [substitute [balanceDecayRate]]
+eBalanceOnWtrDerivDesc4 = substitute [balanceDecayRate]
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 

@@ -48,7 +48,7 @@ fromReplace src c = S "From" +:+ makeRef2S src +:+ S "we can replace" +: ch c
 
 -- | takes a referable and a HasSymbol and outputs as a Sentence "By substituting "
 substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
-substitute s = S "By substituting" +:+ foldlList Comma List l `sC` S "this can be written as"
+substitute s = S "By substituting" +: (foldlList Comma List l `sC` S "this can be written as")
   where l = map (\x -> ch x +:+ sParen (S "from" +:+ makeRef2S x)) s
 
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype

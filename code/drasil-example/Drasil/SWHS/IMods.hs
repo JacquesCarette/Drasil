@@ -9,7 +9,7 @@ import Control.Lens((^.))
 
 import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,
   goal, input_, solution, output_)
-import Data.Drasil.Concepts.Math (area, change, equation, ode, rOfChng, surface)
+import Data.Drasil.Concepts.Math (change, equation, ode, rOfChng, surArea)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec, 
   heatTrans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp)
@@ -131,7 +131,7 @@ eBalanceOnWtrDerivDesc5 :: Sentence
 eBalanceOnWtrDerivDesc5 = S "Rearraging this" +:+ phrase equation +: S "gives us"
 
 eBalanceOnWtrDerivDesc6 :: Sentence
-eBalanceOnWtrDerivDesc6 = foldlSentCol [substitute [balanceDecayRate, balanceDecayTime]]
+eBalanceOnWtrDerivDesc6 = substitute [balanceDecayRate, balanceDecayTime]
 
 eBalanceOnWtrDerivDesc7 :: Expr -> Sentence
 eBalanceOnWtrDerivDesc7 eq22 = foldlSentCol [S "Finally, factoring out", E eq22 `sC`
@@ -179,8 +179,8 @@ eBalanceOnWtrDerivEqn7 = deriv (sy tempW) time $=
 
 eBalanceOnWtrDerivEqnsIM1 :: [Expr]
 eBalanceOnWtrDerivEqnsIM1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
- eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4, eBalanceOnWtrDerivEqn5, eBalanceOnWtrDerivEqn6,
- eBalanceOnWtrDerivEqn7]
+ eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4, eBalanceOnWtrDerivEqn5,
+ eBalanceOnWtrDerivEqn6, eBalanceOnWtrDerivEqn7]
 
 ---------
 -- IM2 --
@@ -228,80 +228,70 @@ eBalanceOnPCMDeriv :: Derivation
 eBalanceOnPCMDeriv = mkDerivName (S "the" +:+ phrase energy +:+
   S "balance on the PCM during sensible heating phase")
   (weave [eBalanceOnPCMDerivSentences, map E eBalanceOnPCMDerivEqnsIM2]
-  ++ eBalanceOnPCMDerivDesc5 htCapSP htCapLP tauSP tauLP surface area melting vol assumpVCMPN
-  ++ eBalanceOnPCMDerivDesc6 tempPCM
-  ++ eBalanceOnPCMDerivDesc7 boiling solid liquid assumpNGSP)
+  ++ [eBalanceOnPCMDerivDesc5, eBalanceOnPCMDerivDesc6, eBalanceOnPCMDerivDesc7])
 
 eBalanceOnPCMDerivSentences :: [Sentence]
-eBalanceOnPCMDerivSentences = map foldlSentCol [
-  eBalanceOnPCMDerivDesc1 rOfChng tempPCM energy water vol pcmVol pcmMass heatCapSpec
-  htCapSP htFlux htFluxP phaseChange pcmSA heat assumpNIHGBWP volHtGen,
-  eBalanceOnPCMDerivDesc2 ddHtFluxP htFluxP,
+eBalanceOnPCMDerivSentences = [eBalanceOnPCMDerivDesc1, eBalanceOnPCMDerivDesc2,
   eBalanceOnPCMDerivDesc3, eBalanceOnPCMDerivDesc4]
 
-eBalanceOnPCMDerivDesc1 :: ConceptChunk -> ConstrConcept -> UnitalChunk -> ConceptChunk -> 
-  ConceptChunk-> UncertQ -> UnitalChunk -> ConceptChunk -> UncertQ -> 
-  ConceptChunk -> UnitalChunk -> ConceptChunk -> UncertQ ->  ConceptChunk ->
-  ConceptInstance -> UnitalChunk -> [Sentence]
-eBalanceOnPCMDerivDesc1 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass16 vhg=
-  [S "To find the", phrase roc `sOf` ch tempP `sC` S "we look at the",
-   phrase en, S "balance on the" +:+. S "PCM", S "The", phrase vo, S "being considered" 
-   `isThe` (phrase vo `sOf` S "PCM,") +:+. ch pcmvo, S "The derivation that follows is" +:+. 
-   S "initially for the solid PCM", S "The mass of phase change material is", ch pm `andThe`
-   phrase hcs `sOf` S "PCM as a solid is" +:+. ch hsp, S "The", phrase hf,
-   S "into the PCM from", phrase wt `sIs` ch hfp, sParen (makeRef2S ddHtFluxP),
-   S "over", phrase pc, S "material surface area" +:+. ch ps,
-   S "The thermal flux" `sIs` S "constant over", ch pcmSA `sC` S "since",
-   phrase temp `ofThe` getAcc phsChgMtrl `isThe` S "same throughout its", phrase vol,
-   sParen (makeRef2S assumpTPCAV) `andThe` phrase water `sIs` S "fully mixed" +:+.
-   sParen (makeRef2S assumpCWTAT), S "There is no", phrase hf, phrase output_,
-   S "from the" +:+. getAcc phsChgMtrl, S "Assuming no volumetric", phrase ht,
-   S "generation per unit", phrase vo, sParen (makeRef2S ass16) `sC` (E $ sy vhg $= 0) `sC`
-   S "the equation for", makeRef2S rocTempSimp, S "can be written as"]
+eBalanceOnPCMDerivDesc1 :: Sentence
+eBalanceOnPCMDerivDesc1 = foldlSentCol [
+  S "To find the", phrase rOfChng `sOf` ch tempPCM `sC` S "we look at the",
+  phrase energy, S "balance on the" +:+. getAcc phsChgMtrl, S "The", phrase vol,
+  S "being considered" `isThe` phrase pcmVol +:+. sParen (ch pcmVol),
+  S "The derivation that follows is initially for the solid" +:+. getAcc phsChgMtrl,
+  S "The" +:+. (phrase pcmMass `sIs` ch pcmMass `andThe` phrase htCapSP `sIs` ch htCapSP),
+  S "The", phrase htFluxP `sIs` ch htFluxP, sParen (makeRef2S ddHtFluxP),
+  S "over", phrase pcmSA +:+. ch pcmSA, S "The thermal flux is constant over",
+  ch pcmSA `sC` S "since", phrase temp `ofThe` getAcc phsChgMtrl `isThe`
+  S "same throughout its", phrase vol, sParen (makeRef2S assumpTPCAV) `andThe`
+  phrase water `sIs` S "fully mixed" +:+. sParen (makeRef2S assumpCWTAT),
+  S "There is no", phrase htFlux, phrase output_, S "from the" +:+. getAcc phsChgMtrl,
+  S "Assuming no volumetric", phrase heat, S "generation per unit", phrase vol,
+  sParen (makeRef2S assumpNIHGBWP) `sC` (E $ sy volHtGen $= 0) `sC` 
+  S "the equation for", makeRef2S rocTempSimp, S "can be written as"]
 
-eBalanceOnPCMDerivDesc2 :: DataDefinition -> UnitalChunk -> [Sentence]
-eBalanceOnPCMDerivDesc2 dd hfp = [S "Using", makeRef2S dd, S "for", ch hfp `sC` 
-  S "this", phrase equation, S "can be written as"]
+eBalanceOnPCMDerivDesc2 :: Sentence
+eBalanceOnPCMDerivDesc2 = foldlSentCol [S "Using", makeRef2S ddHtFluxP, S "for",
+  ch htFluxP `sC` S "this", phrase equation, S "can be written as"]
 
-eBalanceOnPCMDerivDesc3 :: [Sentence]
-eBalanceOnPCMDerivDesc3 = [S "Dividing by"] ++ eq6 ++ [S "we obtain"]
+eBalanceOnPCMDerivDesc3 :: Sentence
+eBalanceOnPCMDerivDesc3 = foldlSentCol [S "Dividing by", ch pcmMass, ch htCapSP, S "we obtain"]
 
-eBalanceOnPCMDerivDesc4 :: [Sentence]
-eBalanceOnPCMDerivDesc4 = [substitute [balanceSolidPCM]]
+eBalanceOnPCMDerivDesc4 :: Sentence
+eBalanceOnPCMDerivDesc4 = substitute [balanceSolidPCM]
 
-eBalanceOnPCMDerivDesc5 ::  UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk -> ConceptChunk -> ConceptChunk-> ConceptChunk
-  -> ConceptChunk -> ConceptInstance -> [Sentence]
-eBalanceOnPCMDerivDesc5 hsp hlp tsp tlp sur ar melt vo ass17 = 
-  [eqN 4 +:+ S "applies for the solid PCM. In the case where all of the PCM is melted, the same" +:+
-   S "derivation applies, except that" +:+ ch hsp +:+ S "is replaced by" +:+ ch hlp `sC`
-   S "and thus" +:+ ch tsp +:+ S "is replaced by" +:+. ch tlp +:+ S "Although a small change in" +:+
-   phrase sur +:+ phrase ar +:+ S "would be expected with" +:+ phrase melt `sC` S "this is not included" `sC`
-   S "since the" +:+ phrase vo +:+ S "change of the PCM with" +:+ phrase melting +:+ S "is assumed to be negligible" +:+.
-   sParen (makeRef2S ass17)]
+eBalanceOnPCMDerivDesc5 :: Sentence
+eBalanceOnPCMDerivDesc5 = foldlSent [
+  eqN 4, S "applies for the", phrase solid +:+. getAcc phsChgMtrl, S "In the case where all of the",
+  getAcc phsChgMtrl `sIs` S "melted" `sC` S "the same derivation applies" `sC` S "except that",
+  htCapSP `isReplacedBy` htCapLP `sC` S "and thus" +:+. (tauSP `isReplacedBy` tauLP),
+  S "Although a small change in", phrase surArea, S "would be expected with", phrase melting `sC`
+  S "this is not included" `sC` S "since the", phrase vol, S "change of the", getAcc phsChgMtrl,
+  S "with", phrase melting, S "is assumed to be negligible", sParen (makeRef2S assumpVCMPN)]
+  where isReplacedBy a b = ch a `sIs` S "replaced by" +:+ ch b
 
-eBalanceOnPCMDerivDesc6 :: NamedIdea a => a -> [Sentence]
-eBalanceOnPCMDerivDesc6 tp =
-    [S "In the case where" +:+ E eq6_1 +:+ S "and not all of the PCM is melted" `sC`
-   S "the" +:+ phrase tp +:+. S "does not change" +:+ S "Therefore" `sC` 
-   S "in this case" +:+ foldlSent eq6_2]
+eBalanceOnPCMDerivDesc6 :: Sentence
+eBalanceOnPCMDerivDesc6 = foldlSent [
+  S "In the case where", E eq6_1 `sAnd` S "not all of the", getAcc phsChgMtrl `sIs`
+  S "melted" `sC` S "the", phrase tempPCM +:+. S "does not change", S "Therefore" `sC` eq6_2]
 
-eBalanceOnPCMDerivDesc7 :: ConceptChunk -> ConceptChunk -> ConceptChunk -> ConceptInstance -> [Sentence]
-eBalanceOnPCMDerivDesc7 boil sld lqd assp18 =
-   [S "This derivation does not consider the" +:+
-   phrase boil +:+ S "of the PCM" `sC` S "as the PCM is assumed to either be in a" +:+ phrase sld +:+ S "state or a" +:+
-   phrase lqd +:+ S "state" +:+. sParen (makeRef2S assp18)]
---(E $ ((deriv (sy temp_PCm) time) $= 0)
-eq6:: [Sentence]
-eq6 = [ch pcmMass, ch htCapSP]
+eBalanceOnPCMDerivDesc7 :: Sentence
+eBalanceOnPCMDerivDesc7 = foldlSent [
+  S "This derivation does not consider", phrase boiling `ofThe` getAcc phsChgMtrl `sC`
+  S "as the PCM is assumed to either be in a", phrase solid, S "state or a",
+  phrase liquid, S "state", sParen (makeRef2S assumpNGSP)]
 
 eq6_1 :: Expr
 eq6_1 = sy tempPCM $= sy tempMeltP
-eq6_2 :: [Sentence]
-eq6_2 = [S "d" +:+ ch tempPCM +:+ S "/ d" +:+ ch time +:+ S "= 0"]
+eq6_2 :: Sentence
+eq6_2 = foldlSent_ [S "d", ch tempPCM, S "/ d", ch time, S "= 0"]
+{-
+eq6_2 :: Expr
+eq6_2 = (deriv (sy tempPCM) time) $= 0
+-}
 
-
-eBalanceOnPCMEqn1, eBalanceOnPCMEqn2, eBalanceOnPCMEqn3,
- eBalanceOnPCMEqn4 :: Expr
+eBalanceOnPCMEqn1, eBalanceOnPCMEqn2, eBalanceOnPCMEqn3, eBalanceOnPCMEqn4 :: Expr
 
 eBalanceOnPCMEqn1 = sy pcmMass * sy htCapSP * deriv (sy tempPCM) time $= 
   sy htFluxP * sy pcmSA

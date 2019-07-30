@@ -529,13 +529,15 @@ atanOpDocD' :: OpData
 atanOpDocD' = unOpPrec "math.atan"
 
 unOpDocD :: Doc -> Doc -> Doc
-unOpDocD op v = op <> parens v
+unOpDocD op v = op <> v
 
-unExpr :: Doc -> ValData -> ValData
-unExpr u v = mkVal (valType v) (unOpDocD u (valDoc v))
+unExpr :: OpData -> ValData -> ValData
+unExpr u v = mkExpr (opPrec u) (valType v) (unOpDocD (opDoc u) (exprParens u v 
+  $ valDoc v))
 
-typeUnExpr :: Doc -> TypeData -> ValData -> ValData
-typeUnExpr u t v = mkVal t (unOpDocD u (valDoc v))
+typeUnExpr :: OpData -> TypeData -> ValData -> ValData
+typeUnExpr u t v = mkExpr (opPrec u) t (unOpDocD (opDoc u) (exprParens u v $ 
+  valDoc v))
 
 -- Binary Operators --
 
@@ -603,18 +605,19 @@ orOpDocD :: OpData
 orOpDocD = orPrec "||"
 
 binOpDocD :: Doc -> Doc -> Doc -> Doc
-binOpDocD op v1 v2 = parens (v1 <+> op <+> v2)
+binOpDocD op v1 v2 = v1 <+> op <+> v2
 
 binOpDocD' :: Doc -> Doc -> Doc -> Doc
 binOpDocD' op v1 v2 = op <> parens (v1 <> comma <+> v2)
   
-binExpr :: Doc -> ValData -> ValData -> ValData
-binExpr b v1 v2 = mkVal (numType (valType v1) (valType v2)) 
-  (binOpDocD b (valDoc v1) (valDoc v2))
+binExpr :: OpData -> ValData -> ValData -> ValData
+binExpr b v1 v2 = mkExpr (opPrec b) (numType (valType v1) (valType v2)) 
+  (binOpDocD (opDoc b) (exprParens b v1 $ valDoc v1) (exprParens b v2 $ 
+  valDoc v2))
 
-binExpr' :: Doc -> ValData -> ValData -> ValData
-binExpr' b v1 v2 = mkVal (numType (valType v1) (valType v2)) 
-  (binOpDocD' b (valDoc v1) (valDoc v2))
+binExpr' :: OpData -> ValData -> ValData -> ValData
+binExpr' b v1 v2 = mkExpr (opPrec b) (numType (valType v1) (valType v2)) 
+  (binOpDocD' (opDoc b) (valDoc v1) (valDoc v2))
 
 numType :: TypeData -> TypeData -> TypeData
 numType t1 t2 = numericType (cType t1) (cType t2)
@@ -623,12 +626,15 @@ numType t1 t2 = numericType (cType t1) (cType t2)
         numericType _ Float = t2
         numericType _ _ = error "Numeric types required for numeric expression"
 
-
-typeBinExpr :: Doc -> TypeData -> ValData -> ValData -> ValData
-typeBinExpr b t v1 v2 = mkVal t (binOpDocD b (valDoc v1) (valDoc v2))
+typeBinExpr :: OpData -> TypeData -> ValData -> ValData -> ValData
+typeBinExpr b t v1 v2 = mkExpr (opPrec b) t (binOpDocD (opDoc b) (exprParens b 
+  v1 $ valDoc v1) (exprParens b v2 $ valDoc v2))
 
 mkVal :: TypeData -> Doc -> ValData
-mkVal = vd
+mkVal = vd Nothing
+
+mkExpr :: Int -> TypeData -> Doc -> ValData
+mkExpr p = vd (Just p)
 
 -- Literals --
 
@@ -831,12 +837,14 @@ setMainMethod (MthD _ ps d) = MthD True ps d
 setEmpty :: (Doc, Terminator) -> (Doc, Terminator)
 setEmpty (d, _) = (d, Empty)
 
+exprParens :: OpData -> ValData -> (Doc -> Doc)
+exprParens o v = if maybe False (< opPrec o) (valPrec v) then parens else id
+
 intValue :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
 intValue i = intValue' (getType $ valueType i)
   where intValue' Integer = i
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
-
 
 doxCommand, doxBrief, doxParam, doxFile :: String
 doxCommand = "\\"

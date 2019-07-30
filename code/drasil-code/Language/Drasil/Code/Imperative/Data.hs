@@ -91,14 +91,14 @@ data TypeData = TD {cType :: CodeType, typeDoc :: Doc} deriving Eq
 td :: CodeType -> Doc -> TypeData
 td = TD
 
-data ValData = VD {valType :: TypeData, valDoc :: Doc}
+data ValData = VD {valPrec :: Maybe Int, valType :: TypeData, valDoc :: Doc}
   deriving Eq
 
-vd :: TypeData -> Doc -> ValData
+vd :: Maybe Int -> TypeData -> Doc -> ValData
 vd = VD
 
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
-updateValDoc f v = vd (valType v) ((f . valDoc) v)
+updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)
 
 data VarData = VarD {varName :: String, varType :: TypeData, varDoc :: Doc}
 

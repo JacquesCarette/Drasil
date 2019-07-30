@@ -49,7 +49,7 @@ balWtrRel = deriv (sy tempW) time $= 1 / sy tauW *
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
-  [E (sy tauW) `sIs` S "calculated from", S "FIXME: Missing DD Issue 1484"],
+  [ch tauW `sIs` S "calculated from", makeRef2S balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
    S "is in", phrase liquid, S "form" `sC` E (0 $< sy tempW $< 100),
    sParen (unwrap $ getUnit tempW), S "where", E 0,

@@ -57,8 +57,8 @@ balWtrDesc = map foldlSent [
   [E (sy tempPCM) `sIs` S "defined by", makeRef2S eBalanceOnPCM],
   [S "The", phrase input_, phrase constraint, E $ sy tempInit $<= sy tempC,
    S "comes from", makeRef2S assumpCTNOD],
-  [ch tauW `sIs` S "calculated from", S "FIXME: Missing DD Issue 1484"],
-  [ch eta  `sIs` S "calculated from", S "FIXME: Missing DD Issue 1484"],
+  [ch tauW `sIs` S "calculated from", makeRef2S balanceDecayRate],
+  [ch eta  `sIs` S "calculated from", makeRef2S balanceDecayTime],
   [S "The initial", plural condition, S "for the", getAcc ode `sAre` 
    E (apply (sy tempW) [Int 0] $= apply (sy tempPCM) [Int 0] $= sy tempInit) `follows` assumpSITWP],
   [S "The", getAcc ode, S "applies as long as the", phrase water `sIs` EmptyS `sIn`

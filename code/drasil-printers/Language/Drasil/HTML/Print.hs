@@ -41,7 +41,7 @@ import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Ta
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
-import Language.Drasil.TeX.Print as TeX (pExpr)
+import Language.Drasil.TeX.Print as TeX (pExpr, pUnit)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math))
 
 data OpenClose = Open | Close
@@ -101,10 +101,11 @@ titleSpec s         = pSpec s
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 pSpec :: Spec -> Doc
 -- pSpec (E e)             = em $ pExpr e
+-- Latex based math for expressions and units
 pSpec (E e)             = text "$" <> runPrint (TeX.pExpr e) Math <> text "$"
+pSpec (Sy s)            = text "$" <> runPrint (TeX.pUnit s) Math <> text "$"
 pSpec (a :+: b)         = pSpec a <> pSpec b
 pSpec (S s)             = text s
-pSpec (Sy s)            = text $ uSymb s
 pSpec (Sp s)            = text $ unPH $ L.special s
 pSpec HARDNL            = text "<br />"
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a

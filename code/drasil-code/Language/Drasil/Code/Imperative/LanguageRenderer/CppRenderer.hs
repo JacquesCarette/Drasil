@@ -1321,38 +1321,38 @@ instance ControlBlockSym CppHdrCode where
 
 instance UnaryOpSym CppHdrCode where
   type UnaryOp CppHdrCode = OpData
-  notOp = return $ (od 0) empty
-  negateOp = return $ (od 0) empty
-  sqrtOp = return $ (od 0) empty
-  absOp = return $ (od 0) empty
-  logOp = return $ (od 0) empty
-  lnOp = return $ (od 0) empty
-  expOp = return $ (od 0) empty
-  sinOp = return $ (od 0) empty
-  cosOp = return $ (od 0) empty
-  tanOp = return $ (od 0) empty
-  asinOp = return $ (od 0) empty
-  acosOp = return $ (od 0) empty
-  atanOp = return $ (od 0) empty
-  floorOp = return $ (od 0) empty
-  ceilOp = return $ (od 0) empty
+  notOp = return $ od 0 empty
+  negateOp = return $ od 0 empty
+  sqrtOp = return $ od 0 empty
+  absOp = return $ od 0 empty
+  logOp = return $ od 0 empty
+  lnOp = return $ od 0 empty
+  expOp = return $ od 0 empty
+  sinOp = return $ od 0 empty
+  cosOp = return $ od 0 empty
+  tanOp = return $ od 0 empty
+  asinOp = return $ od 0 empty
+  acosOp = return $ od 0 empty
+  atanOp = return $ od 0 empty
+  floorOp = return $ od 0 empty
+  ceilOp = return $ od 0 empty
 
 instance BinaryOpSym CppHdrCode where
   type BinaryOp CppHdrCode = OpData
-  equalOp = return $ (od 0) empty
-  notEqualOp = return $ (od 0) empty
-  greaterOp = return $ (od 0) empty
-  greaterEqualOp = return $ (od 0) empty
-  lessOp = return $ (od 0) empty
-  lessEqualOp = return $ (od 0) empty
-  plusOp = return $ (od 0) empty
-  minusOp = return $ (od 0) empty
-  multOp = return $ (od 0) empty
-  divideOp = return $ (od 0) empty
-  powerOp = return $ (od 0) empty
-  moduloOp = return $ (od 0) empty
-  andOp = return $ (od 0) empty
-  orOp = return $ (od 0) empty
+  equalOp = return $ od 0 empty
+  notEqualOp = return $ od 0 empty
+  greaterOp = return $ od 0 empty
+  greaterEqualOp = return $ od 0 empty
+  lessOp = return $ od 0 empty
+  lessEqualOp = return $ od 0 empty
+  plusOp = return $ od 0 empty
+  minusOp = return $ od 0 empty
+  multOp = return $ od 0 empty
+  divideOp = return $ od 0 empty
+  powerOp = return $ od 0 empty
+  moduloOp = return $ od 0 empty
+  andOp = return $ od 0 empty
+  orOp = return $ od 0 empty
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData

@@ -4,17 +4,27 @@ module Language.Drasil.Code.Imperative.Input (
 
 import Database.Drasil (ChunkDB)
 import Language.Drasil
-import Language.Drasil.Code.DataDesc (DataDesc, Data(..))
-import Language.Drasil.Code.Imperative.Helpers (getStr)
+import Language.Drasil.Code.DataDesc (DataDesc, Data(..), LinePattern(..))
+import Language.Drasil.Code.Imperative.Helpers (blank, getStr)
 
 import Control.Lens ((^.), view)
-import Text.PrettyPrint.HughesPJ (Doc, (<+>), empty, parens, text, vcat)
+import Data.List (intersperse)
+import Text.PrettyPrint.HughesPJ (Doc, (<+>), char, empty, hcat, parens, text, 
+  vcat)
 
 makeInputFile :: ChunkDB -> DataDesc -> Doc
 makeInputFile db dd = vcat (convDataDesc dd)
-  where convDataDesc (JunkData : Singleton d : ds) = [
-          text "#" <+> text (getStr db $ phraseNP $ d ^. term) <+> 
-          maybe empty (parens . text . getStr db . phraseNP . view term) 
-          (getUnit d), text "placeholder"] 
-          ++ convDataDesc ds
+  where convDataDesc (JunkData : dds@(Singleton d : _)) = text "#" <+> 
+          text (getStr db $ phraseNP $ d ^. term) <+> maybe empty 
+          (parens . text . getStr db . phraseNP . view term) (getUnit d) 
+          : convDataDesc dds
+        convDataDesc (Singleton _ : ds) = text "placeholder" : convDataDesc ds
+        convDataDesc (Line lp d : ds) = convLinePatt lp d : convDataDesc ds
+        convDataDesc (Lines lp Nothing d : ds) = convLinePatt lp d : 
+          convDataDesc ds
+        convDataDesc (Lines lp (Just n) d : ds) = convLinePatt lp d : 
+          convDataDesc (if n == 1 then ds else Lines lp (Just (n-1)) d : ds)
+        convDataDesc (JunkData : ds) = blank : convDataDesc ds
         convDataDesc _ = []
+        convLinePatt (Straight ds) d = hcat $ intersperse (char d) $ map (const $ text "placeholder") ds
+        convLinePatt (Repeat ds) d = hcat $ intersperse (char d) $ map (const $ text "placeholder") ds

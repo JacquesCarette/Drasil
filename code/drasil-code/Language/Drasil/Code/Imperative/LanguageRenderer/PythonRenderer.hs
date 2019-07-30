@@ -27,15 +27,15 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
   mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD', 
   negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
   tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, typeUnExpr, 
-  powerPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD,
-  litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
-  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, 
-  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
-  doxConfigName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
-  docFuncRepr, valList, appendToBody, getterName, setterName)
+  powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD, 
+  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
+  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, 
+  mkVal, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD,
+  enumElemDocD, objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, 
+  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, classDec, dot, forLabel, 
+  observerListName, doxConfigName, commentedItem, addCommentsDocD, classDoc, 
+  moduleDoc, docFuncRepr, valList, appendToBody, getterName, setterName)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), od, PackData(..), packD, 
@@ -260,7 +260,7 @@ instance NumericExpression PythonCode where
   (#-) = liftA3 binExpr minusOp
   (#*) = liftA3 binExpr multOp
   (#/) v1 v2 = pyDivision (getType $ valueType v1) (getType $ valueType v2) 
-    where pyDivision Integer Integer = liftA2 (binExpr (text "//")) v1 v2
+    where pyDivision Integer Integer = liftA2 (binExpr (multPrec "//")) v1 v2
           pyDivision _ _ = liftA3 binExpr divideOp v1 v2
   (#%) = liftA3 binExpr moduloOp
   (#^) = liftA3 binExpr powerOp

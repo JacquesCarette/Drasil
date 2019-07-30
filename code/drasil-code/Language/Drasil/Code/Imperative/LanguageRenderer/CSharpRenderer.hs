@@ -31,19 +31,19 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
   constDecDefDocD, statementDocD, returnDocD, mkSt, mkStNoEnd, stringListVals',
   stringListLists', commentDocD, unOpPrec, notOpDocD, negateOpDocD, unExpr, 
-  typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
-  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
-  divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
-  typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
-  litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
-  inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetFuncDocD, 
-  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
-  blockCmtEnd, docCmtStart, observerListName, doxConfigName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
-  setMain, setMainMethod, setEmpty, intValue)
+  typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
+  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
+  litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
+  objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
+  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD,
+  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
+  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
+  getterName, setterName, setMain, setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), od, PackData(..), packD, 
@@ -644,7 +644,7 @@ csDiscardInput :: ValData -> Doc
 csDiscardInput = valDoc
 
 csInput :: TypeData -> ValData -> ValData
-csInput t inFn = vd t $ text (csInput' (cType t)) <> 
+csInput t inFn = mkVal t $ text (csInput' (cType t)) <> 
   parens (valDoc inFn)
   where csInput' Integer = "Int32.Parse"
         csInput' Float = "Double.Parse"
@@ -654,14 +654,14 @@ csInput t inFn = vd t $ text (csInput' (cType t)) <>
         csInput' _ = error "Attempt to read value of unreadable type"
 
 csFileInput :: ValData -> ValData
-csFileInput f = vd (valType f) (valDoc f <> dot <> text "ReadLine()")
+csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
 
 csOpenFileR :: ValData -> TypeData -> ValData
-csOpenFileR n r = vd r $ new <+> typeDoc r <> 
+csOpenFileR n r = mkVal r $ new <+> typeDoc r <> 
   parens (valDoc n)
 
 csOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
-csOpenFileWorA n w a = vd w $ new <+> typeDoc w <> 
+csOpenFileWorA n w a = mkVal w $ new <+> typeDoc w <> 
   parens (valDoc n <> comma <+> valDoc a)
 
 csRef :: Doc -> Doc

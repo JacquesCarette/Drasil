@@ -22,7 +22,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD',
   cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', 
   acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, unExpr, 
-  typeUnExpr, powerPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD, 
+  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
   greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
   minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, 
   orOpDocD, binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, 
@@ -360,15 +360,16 @@ multiAssignDoc vrs vls = varList vrs <+> equals <+> valList vls
 plusEqualsDocD :: VarData -> ValData -> Doc
 plusEqualsDocD vr vl = varDoc vr <+> text "+=" <+> valDoc vl
 
-plusEqualsDocD' :: VarData -> Doc -> ValData -> Doc
+plusEqualsDocD' :: VarData -> OpData -> ValData -> Doc
 plusEqualsDocD' vr plusOp vl = varDoc vr <+> equals <+> varDoc vr <+> 
-  plusOp <+> valDoc vl
+  opDoc plusOp <+> valDoc vl
 
 plusPlusDocD :: VarData -> Doc
 plusPlusDocD v = varDoc v <> text "++"
 
-plusPlusDocD' :: VarData -> Doc -> Doc
-plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> plusOp <+> int 1
+plusPlusDocD' :: VarData -> OpData -> Doc
+plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> opDoc plusOp <+>
+  int 1
 
 varDecDocD :: VarData -> Doc
 varDecDocD v = typeDoc (varType v) <+> varDoc v
@@ -693,12 +694,12 @@ stateObjDocD st vs = new <+> typeDoc st <> parens vs
 listStateObjDocD :: Doc -> TypeData -> Doc -> Doc
 listStateObjDocD lstObj st vs = lstObj <+> typeDoc st <> parens vs
 
-notNullDocD :: Doc -> ValData -> ValData -> Doc
-notNullDocD op v1 v2 = binOpDocD op (valDoc v1) (valDoc v2)
+notNullDocD :: OpData -> ValData -> ValData -> Doc
+notNullDocD op v1 v2 = binOpDocD (opDoc op) (valDoc v1) (valDoc v2)
 
-listIndexExistsDocD :: Doc -> ValData -> ValData -> Doc
+listIndexExistsDocD :: OpData -> ValData -> ValData -> Doc
 listIndexExistsDocD greater lst index = parens (valDoc lst <> 
-  text ".Length" <+> greater <+> valDoc index) 
+  text ".Length" <+> opDoc greater <+> valDoc index) 
 
 -- Functions --
 

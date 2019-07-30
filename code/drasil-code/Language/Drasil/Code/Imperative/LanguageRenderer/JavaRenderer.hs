@@ -693,7 +693,7 @@ jDiscardInput :: ValData -> Doc
 jDiscardInput inFn = valDoc inFn <> dot <> text "next()"
 
 jInput :: TypeData -> ValData -> ValData
-jInput t inFn = vd t $ jInput' (cType t) 
+jInput t inFn = mkVal t $ jInput' (cType t) 
   where jInput' Integer = text "Integer.parseInt" <> parens (valDoc inFn <> 
           dot <> text "nextLine()")
         jInput' Float = text "Double.parseDouble" <> parens (valDoc inFn <> 
@@ -704,11 +704,11 @@ jInput t inFn = vd t $ jInput' (cType t)
         jInput' _ = error "Attempt to read value of unreadable type"
 
 jOpenFileR :: ValData -> TypeData -> ValData
-jOpenFileR n t = vd t $ new <+> text "Scanner" <> parens 
+jOpenFileR n t = mkVal t $ new <+> text "Scanner" <> parens 
   (new <+> text "File" <> parens (valDoc n))
 
 jOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
-jOpenFileWorA n t wa = vd t $ new <+> text "PrintWriter" <> 
+jOpenFileWorA n t wa = mkVal t $ new <+> text "PrintWriter" <> 
   parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> 
   parens (valDoc n) <> comma <+> valDoc wa))
 
@@ -723,9 +723,9 @@ jMethod n s p t ps b = vcat [
   indent b,
   rbrace]
 
-jListIndexExists :: Doc -> ValData -> ValData -> Doc
+jListIndexExists :: OpData -> ValData -> ValData -> Doc
 jListIndexExists greater lst index = parens (valDoc lst <> text ".length" <+> 
-  greater <+> valDoc index)
+  opDoc greater <+> valDoc index)
 
 jAssignFromArray :: Int -> [JavaCode (Variable JavaCode)] -> 
   [JavaCode (Statement JavaCode)]

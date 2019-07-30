@@ -31,7 +31,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   statementDocD, returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, 
   stringListVals', stringListLists', unOpPrec, notOpDocD, 
   negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, 
-  tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, typeUnExpr, 
+  tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, unExpr', typeUnExpr, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
@@ -835,7 +835,7 @@ instance ValueSym CppSrcCode where
   valueDoc = valDoc . unCPPSC
 
 instance NumericExpression CppSrcCode where
-  (#~) = liftA2 unExpr negateOp
+  (#~) = liftA2 unExpr' negateOp
   (#/^) = liftA2 unExpr sqrtOp
   (#|) = liftA2 unExpr absOp
   (#+) = liftA3 binExpr plusOp

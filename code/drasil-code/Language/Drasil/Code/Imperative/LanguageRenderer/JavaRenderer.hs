@@ -31,16 +31,16 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
   plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, 
   statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, stringListVals', 
-  stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, typeUnExpr, 
-  powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
-  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
-  divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
-  typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
-  litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
-  inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, 
-  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
-  forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName, 
+  stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr',
+  typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
+  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
+  litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
+  objVarDocD, inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
+  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
+  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
   doxConfigName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
   surroundBody, getterName, setterName, setMain, setMainMethod, setEmpty, 
@@ -280,7 +280,7 @@ instance ValueSym JavaCode where
   valueDoc = valDoc . unJC
 
 instance NumericExpression JavaCode where
-  (#~) = liftA2 unExpr negateOp
+  (#~) = liftA2 unExpr' negateOp
   (#/^) = liftA2 unExpr sqrtOp
   (#|) = liftA2 unExpr absOp
   (#+) = liftA3 binExpr plusOp

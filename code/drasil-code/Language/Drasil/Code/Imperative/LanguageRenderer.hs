@@ -21,7 +21,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, 
   logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD',
   cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', 
-  acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, unExpr, 
+  acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, unExpr, unExpr',
   typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
   greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
   minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, 
@@ -532,8 +532,14 @@ atanOpDocD' = unOpPrec "math.atan"
 unOpDocD :: Doc -> Doc -> Doc
 unOpDocD op v = op <> parens v
 
+unOpDocD' :: Doc -> Doc -> Doc
+unOpDocD' op v = op <> v
+
 unExpr :: OpData -> ValData -> ValData
 unExpr u v = mkExpr (opPrec u) (valType v) (unOpDocD (opDoc u) (valDoc v))
+
+unExpr' :: OpData -> ValData -> ValData
+unExpr' u v = mkExpr (opPrec u) (valType v) (unOpDocD' (opDoc u) (valDoc v))
 
 typeUnExpr :: OpData -> TypeData -> ValData -> ValData
 typeUnExpr u t v = mkExpr (opPrec u) t (unOpDocD (opDoc u) (valDoc v))

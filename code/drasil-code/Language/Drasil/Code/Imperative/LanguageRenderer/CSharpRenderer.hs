@@ -31,7 +31,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
   constDecDefDocD, statementDocD, returnDocD, mkSt, mkStNoEnd, stringListVals',
   stringListLists', commentDocD, unOpPrec, notOpDocD, negateOpDocD, unExpr, 
-  typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  unExpr', typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
   binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
@@ -275,7 +275,7 @@ instance ValueSym CSharpCode where
   valueDoc = valDoc . unCSC
 
 instance NumericExpression CSharpCode where
-  (#~) = liftA2 unExpr negateOp
+  (#~) = liftA2 unExpr' negateOp
   (#/^) = liftA2 unExpr sqrtOp
   (#|) = liftA2 unExpr absOp
   (#+) = liftA3 binExpr plusOp

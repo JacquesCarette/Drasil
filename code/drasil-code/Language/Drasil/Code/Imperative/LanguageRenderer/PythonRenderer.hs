@@ -26,8 +26,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
   mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD', 
   negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
-  tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, typeUnExpr, 
-  powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD, 
+  tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, unExpr',
+  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
   greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
   minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, 
   mkVal, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD,
@@ -253,7 +253,7 @@ instance ValueSym PythonCode where
   valueDoc = valDoc . unPC
 
 instance NumericExpression PythonCode where
-  (#~) = liftA2 unExpr negateOp
+  (#~) = liftA2 unExpr' negateOp
   (#/^) = liftA2 unExpr sqrtOp
   (#|) = liftA2 unExpr absOp
   (#+) = liftA3 binExpr plusOp

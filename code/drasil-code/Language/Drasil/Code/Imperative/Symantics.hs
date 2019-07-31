@@ -464,11 +464,11 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
     repr (Statement repr)
   addObserver      :: repr (Value repr) -> repr (Statement repr)
 
-  -- The two lists are inputs and outputs, respectively
+  -- The three lists are inputs, outputs, and both, respectively
   inOutCall :: Label -> [repr (Value repr)] -> [repr (Variable repr)] -> 
-    repr (Statement repr)
-  extInOutCall :: Library -> Label -> [repr (Value repr)] ->
     [repr (Variable repr)] -> repr (Statement repr)
+  extInOutCall :: Library -> Label -> [repr (Value repr)] ->
+    [repr (Variable repr)] -> [repr (Variable repr)] -> repr (Statement repr)
 
   multi     :: [repr (Statement repr)] -> repr (Statement repr)
 
@@ -549,13 +549,13 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
     repr (Method repr) 
   docFunc :: String -> [String] -> repr (Method repr) -> repr (Method repr) 
 
-  -- The two lists are inputs and outputs, respectively
+  -- The three lists are inputs, outputs, and both, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    [repr (Variable repr)] -> [repr (Variable repr)] -> 
-    repr (Body repr) -> repr (Method repr)
-  -- Parameters are: brief description, input descriptions, output descriptions, function
-  docInOutFunc :: String -> [String] -> [String] -> repr (Method repr) -> 
-    repr (Method repr)
+    [repr (Variable repr)] -> [repr (Variable repr)] -> [repr (Variable repr)] 
+    -> repr (Body repr) -> repr (Method repr)
+  -- Parameters are: brief description, input descriptions, output descriptions, descriptions of parameters that are both input and output, function
+  docInOutFunc :: String -> [String] -> [String] -> [String] -> 
+    repr (Method repr) -> repr (Method repr)
 
   commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
     repr (Method repr)

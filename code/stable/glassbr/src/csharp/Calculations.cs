@@ -20,7 +20,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return Math.Log((Math.Log((1 / (1 - inParams.P_btol))) * (Math.Pow((inParams.a * inParams.b), (7.0 - 1)) / (2.86e-53 * (Math.Pow((7.17e10 * Math.Pow(inParams.h, 2)), 7.0) * inParams.LDF)))));
+        return Math.Log(Math.Log(1 / (1 - inParams.P_btol)) * (Math.Pow(inParams.a * inParams.b, 7.0 - 1) / (2.86e-53 * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2), 7.0) * inParams.LDF)));
     }
     
     /** \brief Calculates applied load (demand)
@@ -54,7 +54,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return ((q * Math.Pow((inParams.a * inParams.b), 2)) / (7.17e10 * (Math.Pow(inParams.h, 4) * inParams.GTF)));
+        return q * Math.Pow(inParams.a * inParams.b, 2) / (7.17e10 * Math.Pow(inParams.h, 4) * inParams.GTF);
     }
     
     /** \brief Calculates tolerable load
@@ -111,7 +111,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return ((q_hat_tol * (7.17e10 * Math.Pow(inParams.h, 4))) / Math.Pow((inParams.a * inParams.b), 2));
+        return q_hat_tol * 7.17e10 * Math.Pow(inParams.h, 4) / Math.Pow(inParams.a * inParams.b, 2);
     }
     
     /** \brief Calculates risk of failure
@@ -130,7 +130,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return ((2.86e-53 / Math.Pow((inParams.a * inParams.b), (7.0 - 1))) * (Math.Pow((7.17e10 * Math.Pow(inParams.h, 2)), 7.0) * (inParams.LDF * Math.Exp(J))));
+        return 2.86e-53 / Math.Pow(inParams.a * inParams.b, 7.0 - 1) * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2), 7.0) * inParams.LDF * Math.Exp(J);
     }
     
     /** \brief Calculates load resistance
@@ -149,7 +149,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return (NFL * (inParams.GTF * 1));
+        return NFL * inParams.GTF * 1;
     }
     
     /** \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
@@ -168,7 +168,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return (LR > q);
+        return LR > q;
     }
     
     /** \brief Calculates probability of breakage
@@ -183,7 +183,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return (1 - Math.Exp(-(B)));
+        return 1 - Math.Exp(-B);
     }
     
     /** \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability
@@ -202,7 +202,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return (P_b < inParams.P_btol);
+        return P_b < inParams.P_btol;
     }
 }
 

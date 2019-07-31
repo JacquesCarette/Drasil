@@ -1,0 +1,28 @@
+Macbook already had Tex
+
+Installed Stack
+> curl -sSL https://get.haskellstack.org/ | sh
+
+
+Installed Homebrew
+> /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+
+For Graphs
+> brew install graphviz
+
+Cloned Repo
+> git clone https://github.com/JacquesCarette/Drasil
+
+> cd Drasil/code
+
+> make
+
+SUCCESS
+
+
+
+Installing Haskell
+> curl https://get-ghcup.haskell.org -sSf | sh
+
+Added line to .bash_profile
+> export PATH=~/.cabal/bin:$PATH

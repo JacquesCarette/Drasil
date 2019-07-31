@@ -89,8 +89,8 @@ addExt ext nm = nm ++ "." ++ ext
 ----------------------------------
 
 packageDocD :: Label -> Doc -> FileData -> FileData
-packageDocD n end f = fileD (n ++ "/" ++ filePath f) (updateModDoc (vibcat [
-  text "package" <+> text n <> end, modDoc (fileMod f)]) (fileMod f))
+packageDocD n end f = fileD (fileType f) (n ++ "/" ++ filePath f) (updateModDoc 
+  (vibcat [text "package" <+> text n <> end, modDoc (fileMod f)]) (fileMod f))
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat [
@@ -799,7 +799,7 @@ classDoc :: String -> [String]
 classDoc desc = [doxBrief ++ desc | not (null desc)]
 
 moduleDoc :: String -> String -> String -> [String]
-moduleDoc desc m ext = (doxFile ++ m ++ ext) : 
+moduleDoc desc m ext = (doxFile ++ addExt ext m) : 
   [doxBrief ++ desc | not (null desc)]
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> repr (Method repr) -> 

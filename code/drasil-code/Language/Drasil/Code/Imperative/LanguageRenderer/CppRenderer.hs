@@ -5,7 +5,7 @@
 -- | The logic to render C++ code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
   -- * C++ Code Configuration -- defines syntax of all C++ code
-  CppSrcCode(..), CppHdrCode(..), CppCode(..), cppExts, unCPPC
+  CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC
 ) where
 
 import Utils.Drasil (indent, indentList)
@@ -44,10 +44,10 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
   surroundBody, getterName, setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
-  ScopeTag (..), AuxData(..), ad, FileData(..), fileD, updateFileMod, 
-  FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), od, PackData(..),
-  packD, ParamData(..), pd, StateVarData(..), svd, TypeData(..), td, 
-  ValData(..), VarData(..), vard)
+  ScopeTag (..), AuxData(..), ad, FileData(..), srcFile, hdrFile, isHeader, 
+  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), 
+  od, PackData(..), packD, ParamData(..), pd, StateVarData(..), svd, 
+  TypeData(..), td, ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
@@ -56,19 +56,15 @@ import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Data.List (nub)
-import Data.List.Utils (endswith)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
 
-cppExts :: [String]
-cppExts = [cppHdrExt, cppSrcExt]
-
 cppHdrExt, cppSrcExt :: String
-cppHdrExt = ".hpp"
-cppSrcExt = ".cpp"
+cppHdrExt = "hpp"
+cppSrcExt = "cpp"
 
 data CppCode x y a = CPPC {src :: x a, hdr :: y a}
 
@@ -646,12 +642,12 @@ instance PackageSym CppSrcCode where
     where mods = filter (not . isEmpty . modDoc . fileMod . unCPPSC) ms
 
   packDox n ms = package n ms [doxConfig n (filter ((\f -> 
-    (isMainMod (fileMod f) || endswith cppHeaderExt (filePath f)) && 
+    (isMainMod (fileMod f) || isHeader f) && 
     not (isEmpty (modDoc (fileMod f))))  . unCPPSC) ms)]
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
-  fileDoc code = liftA2 fileD (fmap (addExt "cpp" . name) code) (liftA2 
+  fileDoc code = liftA2 srcFile (fmap (addExt cppSrcExt . name) code) (liftA2 
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 
@@ -678,7 +674,7 @@ instance KeywordSym CppSrcCode where
   endStatement = return semi
   endStatementLoop = return empty
 
-  include n = return $ text "#include" <+> doubleQuotedText (n ++ cppHeaderExt)
+  include n = return $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
   inherit = return colon
 
   list _ = return $ text "vector"
@@ -1230,7 +1226,7 @@ instance PackageSym CppHdrCode where
 
 instance RenderSym CppHdrCode where
   type RenderFile CppHdrCode = FileData
-  fileDoc code = liftA2 fileD (fmap (addExt "hpp" . name) code) (liftA2 
+  fileDoc code = liftA2 hdrFile (fmap (addExt cppHdrExt . name) code) (liftA2 
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
   
@@ -1257,7 +1253,7 @@ instance KeywordSym CppHdrCode where
   endStatement = return semi
   endStatementLoop = return empty
 
-  include n = return $ text "#include" <+> doubleQuotedText (n ++ cppHeaderExt)
+  include n = return $ text "#include" <+> doubleQuotedText (addExt cppHdrExt n)
   inherit = return colon
 
   list _ = return $ text "vector"
@@ -1728,12 +1724,9 @@ setMainMethod (MthD _ s ps d) = MthD True s ps d
 enumsEqualInts :: Bool
 enumsEqualInts = False
 
-cppHeaderExt :: Label
-cppHeaderExt = ".hpp"
-
 cppstop :: ModData -> Doc -> Doc -> Doc
 cppstop (MD n b _) lst end = vcat [
-  if b then empty else inc <+> doubleQuotedText (n ++ cppHeaderExt),
+  if b then empty else inc <+> doubleQuotedText (addExt cppHdrExt n),
   if b then empty else blank,
   inc <+> angles (text "algorithm"),
   inc <+> angles (text "iostream"),

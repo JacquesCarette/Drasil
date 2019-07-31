@@ -74,7 +74,7 @@ addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitems
 
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let (pkgs, defs) = parseDoc los
-  in docclass (Just $ show fontSize ++ "pt") "article" %%
+  in docclass (show fontSize ++ "pt") "article" %%
      vcat (map addPackage pkgs) %% vcat (map addDef defs)
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])

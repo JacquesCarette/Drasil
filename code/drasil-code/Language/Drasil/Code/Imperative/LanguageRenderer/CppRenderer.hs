@@ -29,14 +29,14 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   switchDocD, forDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
   plusPlusDocD, varDecDocD, varDecDefDocD, objDecDefDocD, constDecDefDocD, 
   statementDocD, returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, 
-  stringListVals', stringListLists', notOpDocD, 
+  stringListVals', stringListLists', unOpPrec, notOpDocD, 
   negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, 
-  tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, typeUnExpr, 
+  tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, unExpr', typeUnExpr, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
   typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
-  litStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfDocD, funcAppDocD,
+  litStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfD, funcAppDocD,
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
@@ -45,9 +45,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   surroundBody, getterName, setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
   ScopeTag (..), AuxData(..), ad, FileData(..), srcFile, hdrFile, isHeader, 
-  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, PackData(..), 
-  packD, ParamData(..), pd, StateVarData(..), svd, TypeData(..), td, 
-  ValData(..), VarData(..), vard)
+  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), 
+  od, PackData(..), packD, ParamData(..), pd, StateVarData(..), svd, 
+  TypeData(..), td, ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
@@ -179,7 +179,7 @@ instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
     (psnd vold) (fmap psnd b) (fmap psnd e) (fmap psnd s))
 
 instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
-  type UnaryOp (p CppSrcCode CppHdrCode) = Doc
+  type UnaryOp (p CppSrcCode CppHdrCode) = OpData
   notOp = pair notOp notOp
   negateOp = pair negateOp negateOp
   sqrtOp = pair sqrtOp sqrtOp
@@ -197,7 +197,7 @@ instance (Pair p) => UnaryOpSym (p CppSrcCode CppHdrCode) where
   ceilOp = pair ceilOp ceilOp
 
 instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
-  type BinaryOp (p CppSrcCode CppHdrCode) = Doc
+  type BinaryOp (p CppSrcCode CppHdrCode) = OpData
   equalOp = pair equalOp equalOp
   notEqualOp = pair notEqualOp notEqualOp
   greaterOp = pair greaterOp greaterOp
@@ -756,13 +756,13 @@ instance ControlBlockSym CppSrcCode where
         vnew &= v_temp]
 
 instance UnaryOpSym CppSrcCode where
-  type UnaryOp CppSrcCode = Doc
+  type UnaryOp CppSrcCode = OpData
   notOp = return notOpDocD
   negateOp = return negateOpDocD
   sqrtOp = return sqrtOpDocD
   absOp = return absOpDocD
-  logOp = return $ text "log10"
-  lnOp = return $ text "log"
+  logOp = return $ unOpPrec "log10"
+  lnOp = return $ unOpPrec "log"
   expOp = return expOpDocD
   sinOp = return sinOpDocD
   cosOp = return cosOpDocD
@@ -770,11 +770,11 @@ instance UnaryOpSym CppSrcCode where
   asinOp = return asinOpDocD
   acosOp = return acosOpDocD
   atanOp = return atanOpDocD
-  floorOp = return $ text "floor"
-  ceilOp = return $ text "ceil"
+  floorOp = return $ unOpPrec "floor"
+  ceilOp = return $ unOpPrec "ceil"
 
 instance BinaryOpSym CppSrcCode where
-  type BinaryOp CppSrcCode = Doc
+  type BinaryOp CppSrcCode = OpData
   equalOp = return equalOpDocD
   notEqualOp = return notEqualOpDocD
   greaterOp = return greaterOpDocD
@@ -831,7 +831,7 @@ instance ValueSym CppSrcCode where
   valueDoc = valDoc . unCPPSC
 
 instance NumericExpression CppSrcCode where
-  (#~) = liftA2 unExpr negateOp
+  (#~) = liftA2 unExpr' negateOp
   (#/^) = liftA2 unExpr sqrtOp
   (#|) = liftA2 unExpr absOp
   (#+) = liftA3 binExpr plusOp
@@ -869,8 +869,7 @@ instance BooleanExpression CppSrcCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
    
 instance ValueExpression CppSrcCode where
-  inlineIf b v1 v2 = liftA2 mkVal (fmap valType v1) (liftA3 inlineIfDocD b v1 
-    v2)
+  inlineIf = liftA3 inlineIfD
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp _ = funcApp
@@ -1316,39 +1315,39 @@ instance ControlBlockSym CppHdrCode where
   listSlice _ _ _ _ _ = return empty
 
 instance UnaryOpSym CppHdrCode where
-  type UnaryOp CppHdrCode = Doc
-  notOp = return empty
-  negateOp = return empty
-  sqrtOp = return empty
-  absOp = return empty
-  logOp = return empty
-  lnOp = return empty
-  expOp = return empty
-  sinOp = return empty
-  cosOp = return empty
-  tanOp = return empty
-  asinOp = return empty
-  acosOp = return empty
-  atanOp = return empty
-  floorOp = return empty
-  ceilOp = return empty
+  type UnaryOp CppHdrCode = OpData
+  notOp = return $ od 0 empty
+  negateOp = return $ od 0 empty
+  sqrtOp = return $ od 0 empty
+  absOp = return $ od 0 empty
+  logOp = return $ od 0 empty
+  lnOp = return $ od 0 empty
+  expOp = return $ od 0 empty
+  sinOp = return $ od 0 empty
+  cosOp = return $ od 0 empty
+  tanOp = return $ od 0 empty
+  asinOp = return $ od 0 empty
+  acosOp = return $ od 0 empty
+  atanOp = return $ od 0 empty
+  floorOp = return $ od 0 empty
+  ceilOp = return $ od 0 empty
 
 instance BinaryOpSym CppHdrCode where
-  type BinaryOp CppHdrCode = Doc
-  equalOp = return empty
-  notEqualOp = return empty
-  greaterOp = return empty
-  greaterEqualOp = return empty
-  lessOp = return empty
-  lessEqualOp = return empty
-  plusOp = return empty
-  minusOp = return empty
-  multOp = return empty
-  divideOp = return empty
-  powerOp = return empty
-  moduloOp = return empty
-  andOp = return empty
-  orOp = return empty
+  type BinaryOp CppHdrCode = OpData
+  equalOp = return $ od 0 empty
+  notEqualOp = return $ od 0 empty
+  greaterOp = return $ od 0 empty
+  greaterEqualOp = return $ od 0 empty
+  lessOp = return $ od 0 empty
+  lessEqualOp = return $ od 0 empty
+  plusOp = return $ od 0 empty
+  minusOp = return $ od 0 empty
+  multOp = return $ od 0 empty
+  divideOp = return $ od 0 empty
+  powerOp = return $ od 0 empty
+  moduloOp = return $ od 0 empty
+  andOp = return $ od 0 empty
+  orOp = return $ od 0 empty
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
@@ -1799,8 +1798,10 @@ cppListDecDefDoc :: VarData -> Doc -> Doc
 cppListDecDefDoc v vs = typeDoc (varType v) <+> varDoc v <> braces vs
 
 cppPrint :: Bool -> ValData -> ValData -> Doc
-cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> valDoc v <+> end
-  where end = if newLn then text "<<" <+> text "std::endl" else empty
+cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> val (valDoc v) <+> 
+  end
+  where val = if maybe False (< 9) (valPrec v) then parens else id
+        end = if newLn then text "<<" <+> text "std::endl" else empty
 
 cppThrowDoc :: ValData -> Doc
 cppThrowDoc errMsg = text "throw" <> parens (valDoc errMsg)

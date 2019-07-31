@@ -24,22 +24,22 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
-  mkStNoEnd, stringListVals', stringListLists', notOpDocD', negateOpDocD, 
-  sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', 
-  asinOpDocD', acosOpDocD', atanOpDocD', unExpr, typeUnExpr, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD, litFloatD, litIntD,
-  litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
-  funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, listAccessFuncDocD,
-  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
-  classDec, dot, forLabel, observerListName, doxConfigName, commentedItem,
-  addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  getterName, setterName)
+  mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD', 
+  negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
+  tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, unExpr',
+  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
+  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
+  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, 
+  mkVal, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD,
+  enumElemDocD, objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, 
+  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, classDec, dot, forLabel, 
+  observerListName, doxConfigName, commentedItem, addCommentsDocD, classDoc, 
+  moduleDoc, docFuncRepr, valList, appendToBody, getterName, setterName)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, PackData(..), packD, ParamData(..), 
-  TypeData(..), td, ValData(..), VarData(..), vard)
+  updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
+  ParamData(..), TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
@@ -175,7 +175,7 @@ instance ControlBlockSym PythonCode where
     where getVal = fromMaybe (liftA2 mkVal void (return empty))
 
 instance UnaryOpSym PythonCode where
-  type UnaryOp PythonCode = Doc
+  type UnaryOp PythonCode = OpData
   notOp = return notOpDocD'
   negateOp = return negateOpDocD
   sqrtOp = return sqrtOpDocD'
@@ -189,11 +189,11 @@ instance UnaryOpSym PythonCode where
   asinOp = return asinOpDocD'
   acosOp = return acosOpDocD'
   atanOp = return atanOpDocD'
-  floorOp = return $ text "math.floor"
-  ceilOp = return $ text "math.ceil"
+  floorOp = return $ unOpPrec "math.floor"
+  ceilOp = return $ unOpPrec "math.ceil"
 
 instance BinaryOpSym PythonCode where
-  type BinaryOp PythonCode = Doc
+  type BinaryOp PythonCode = OpData
   equalOp = return equalOpDocD
   notEqualOp = return notEqualOpDocD
   greaterOp = return greaterOpDocD
@@ -204,10 +204,10 @@ instance BinaryOpSym PythonCode where
   minusOp = return minusOpDocD
   multOp = return multOpDocD
   divideOp = return divideOpDocD
-  powerOp = return $ text "**"
+  powerOp = return $ powerPrec "**"
   moduloOp = return moduloOpDocD
-  andOp = return $ text "and"
-  orOp = return $ text "or"
+  andOp = return $ andPrec "and"
+  orOp = return $ orPrec "or"
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
@@ -250,14 +250,14 @@ instance ValueSym PythonCode where
   valueDoc = valDoc . unPC
 
 instance NumericExpression PythonCode where
-  (#~) = liftA2 unExpr negateOp
+  (#~) = liftA2 unExpr' negateOp
   (#/^) = liftA2 unExpr sqrtOp
   (#|) = liftA2 unExpr absOp
   (#+) = liftA3 binExpr plusOp
   (#-) = liftA3 binExpr minusOp
   (#*) = liftA3 binExpr multOp
   (#/) v1 v2 = pyDivision (getType $ valueType v1) (getType $ valueType v2) 
-    where pyDivision Integer Integer = liftA2 (binExpr (text "//")) v1 v2
+    where pyDivision Integer Integer = liftA2 (binExpr (multPrec "//")) v1 v2
           pyDivision _ _ = liftA3 binExpr divideOp v1 v2
   (#%) = liftA3 binExpr moduloOp
   (#^) = liftA3 binExpr powerOp
@@ -290,7 +290,7 @@ instance BooleanExpression PythonCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
 
 instance ValueExpression PythonCode where
-  inlineIf b v1 v2 = liftA2 mkVal (fmap valType v1) (liftA3 pyInlineIf b v1 v2)
+  inlineIf = liftA3 pyInlineIf
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
@@ -592,11 +592,11 @@ pytop = vcat [   -- There are also imports from the libraries supplied by module
 pyInclude :: Label -> Doc
 pyInclude n = text imp <+> text n
 
-pyLogOp :: Doc
-pyLogOp = text "math.log10"
+pyLogOp :: OpData
+pyLogOp = unOpPrec "math.log10"
 
-pyLnOp :: Doc
-pyLnOp = text "math.log"
+pyLnOp :: OpData
+pyLnOp = unOpPrec "math.log"
 
 pyStateObj :: TypeData -> Doc -> Doc
 pyStateObj t vs = typeDoc t <> parens vs
@@ -604,10 +604,9 @@ pyStateObj t vs = typeDoc t <> parens vs
 pyExtStateObj :: Label -> TypeData -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs
 
-pyInlineIf :: ValData -> ValData -> 
-  ValData -> Doc
-pyInlineIf c v1 v2 = parens $ valDoc v1 <+> text "if" <+> valDoc c <+> 
-  text "else" <+> valDoc v2
+pyInlineIf :: ValData -> ValData -> ValData -> ValData
+pyInlineIf c v1 v2 = vd (valPrec c) (valType v1) (valDoc v1 <+> text "if" <+> 
+  valDoc c <+> text "else" <+> valDoc v2)
 
 pyListSize :: ValData -> FuncData -> Doc
 pyListSize v f = funcDoc f <> parens (valDoc v)

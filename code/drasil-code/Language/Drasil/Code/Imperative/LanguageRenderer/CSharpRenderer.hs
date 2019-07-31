@@ -30,25 +30,25 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
   constDecDefDocD, statementDocD, returnDocD, mkSt, mkStNoEnd, stringListVals',
-  stringListLists', commentDocD, notOpDocD, negateOpDocD, unExpr, typeUnExpr, 
-  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr,
-  mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
-  varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, 
-  inlineIfDocD, funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, 
-  notNullDocD, listIndexExistsDocD, funcDocD, castDocD, listSetFuncDocD, 
+  stringListLists', commentDocD, unOpPrec, notOpDocD, negateOpDocD, unExpr, 
+  unExpr', typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
+  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
+  litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, notNullDocD, funcDocD, castDocD, listSetFuncDocD, 
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doxConfigName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
   moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
-  setMain, setMainMethod,setEmpty, intValue)
+  setMain, setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, PackData(..), packD, ParamData(..), pd, 
-  updateParamDoc, TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), 
-  vard)
+  updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
+  ParamData(..), pd, updateParamDoc, TypeData(..), td, ValData(..),
+  updateValDoc, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
   liftA6, liftA7, liftList, lift1List, lift2Lists, lift3Pair, lift4Pair,
@@ -196,25 +196,25 @@ instance ControlBlockSym CSharpCode where
         vnew &= v_temp]
 
 instance UnaryOpSym CSharpCode where
-  type UnaryOp CSharpCode = Doc
+  type UnaryOp CSharpCode = OpData
   notOp = return notOpDocD
   negateOp = return negateOpDocD
-  sqrtOp = return $ text "Math.Sqrt"
-  absOp = return $ text "Math.Abs"
-  logOp = return $ text "Math.Log10"
-  lnOp = return $ text "Math.Log"
-  expOp = return $ text "Math.Exp"
-  sinOp = return $ text "Math.Sin"
-  cosOp = return $ text "Math.Cos"
-  tanOp = return $ text "Math.Tan"
-  asinOp = return $ text "Math.Asin"
-  acosOp = return $ text "Math.Acos"
-  atanOp = return $ text "Math.Atan"
-  floorOp = return $ text "Math.Floor"
-  ceilOp = return $ text "Math.Ceiling"
+  sqrtOp = return $ unOpPrec "Math.Sqrt"
+  absOp = return $ unOpPrec "Math.Abs"
+  logOp = return $ unOpPrec "Math.Log10"
+  lnOp = return $ unOpPrec "Math.Log"
+  expOp = return $ unOpPrec "Math.Exp"
+  sinOp = return $ unOpPrec "Math.Sin"
+  cosOp = return $ unOpPrec "Math.Cos"
+  tanOp = return $ unOpPrec "Math.Tan"
+  asinOp = return $ unOpPrec "Math.Asin"
+  acosOp = return $ unOpPrec "Math.Acos"
+  atanOp = return $ unOpPrec "Math.Atan"
+  floorOp = return $ unOpPrec "Math.Floor"
+  ceilOp = return $ unOpPrec "Math.Ceiling"
 
 instance BinaryOpSym CSharpCode where
-  type BinaryOp CSharpCode = Doc
+  type BinaryOp CSharpCode = OpData
   equalOp = return equalOpDocD
   notEqualOp = return notEqualOpDocD
   greaterOp = return greaterOpDocD
@@ -225,7 +225,7 @@ instance BinaryOpSym CSharpCode where
   minusOp = return minusOpDocD
   multOp = return multOpDocD
   divideOp = return divideOpDocD
-  powerOp = return $ text "Math.Pow"
+  powerOp = return $ powerPrec "Math.Pow"
   moduloOp = return moduloOpDocD
   andOp = return andOpDocD
   orOp = return orOpDocD
@@ -272,7 +272,7 @@ instance ValueSym CSharpCode where
   valueDoc = valDoc . unCSC
 
 instance NumericExpression CSharpCode where
-  (#~) = liftA2 unExpr negateOp
+  (#~) = liftA2 unExpr' negateOp
   (#/^) = liftA2 unExpr sqrtOp
   (#|) = liftA2 unExpr absOp
   (#+) = liftA3 binExpr plusOp
@@ -310,8 +310,7 @@ instance BooleanExpression CSharpCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
   
 instance ValueExpression CSharpCode where
-  inlineIf b v1 v2 = liftA2 mkVal (fmap valType v1) (liftA3 inlineIfDocD b v1 
-    v2)
+  inlineIf = liftA3 inlineIfD
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
@@ -342,8 +341,7 @@ instance Selector CSharpCode where
 
   selfAccess l = objAccess (valueOf $ self l)
 
-  listIndexExists l i = liftA2 mkVal bool (liftA3 listIndexExistsDocD greaterOp
-    l i)
+  listIndexExists l i = listSize l ?> i
   argExists i = listAccess argsList (litInt $ fromIntegral i)
 
   indexOf l v = objAccess l (func "IndexOf" int [v])
@@ -641,7 +639,7 @@ csDiscardInput :: ValData -> Doc
 csDiscardInput = valDoc
 
 csInput :: TypeData -> ValData -> ValData
-csInput t inFn = vd t $ text (csInput' (cType t)) <> 
+csInput t inFn = mkVal t $ text (csInput' (cType t)) <> 
   parens (valDoc inFn)
   where csInput' Integer = "Int32.Parse"
         csInput' Float = "Double.Parse"
@@ -651,14 +649,14 @@ csInput t inFn = vd t $ text (csInput' (cType t)) <>
         csInput' _ = error "Attempt to read value of unreadable type"
 
 csFileInput :: ValData -> ValData
-csFileInput f = vd (valType f) (valDoc f <> dot <> text "ReadLine()")
+csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
 
 csOpenFileR :: ValData -> TypeData -> ValData
-csOpenFileR n r = vd r $ new <+> typeDoc r <> 
+csOpenFileR n r = mkVal r $ new <+> typeDoc r <> 
   parens (valDoc n)
 
 csOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
-csOpenFileWorA n w a = vd w $ new <+> typeDoc w <> 
+csOpenFileWorA n w a = mkVal w $ new <+> typeDoc w <> 
   parens (valDoc n <> comma <+> valDoc a)
 
 csRef :: Doc -> Doc

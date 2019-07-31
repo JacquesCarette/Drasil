@@ -2,8 +2,9 @@ module Language.Drasil.Code.Imperative.Data (Pair(..), pairList,
   Terminator(..), ScopeTag(..), FileType(..), AuxData(..), ad, FileData(..), 
   fileD, file, srcFile, hdrFile, isSource, isHeader, updateFileMod, 
   FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  PackData(..), packD, ParamData(..), pd, updateParamDoc, StateVarData(..), svd,
-  TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard
+  OpData(..), od, PackData(..), packD, ParamData(..), pd, updateParamDoc, 
+  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, 
+  VarData(..), vard
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -79,6 +80,11 @@ data MethodData = MthD {isMainMthd :: Bool, mthdParams :: [ParamData],
 mthd :: Bool -> [ParamData] -> Doc -> MethodData
 mthd = MthD 
 
+data OpData = OD {opPrec :: Int, opDoc :: Doc}
+
+od :: Int -> Doc -> OpData
+od = OD
+
 data PackData = PackD {packName :: String, packMods :: [FileData], 
   packAux :: [AuxData]}
 
@@ -105,14 +111,14 @@ data TypeData = TD {cType :: CodeType, typeDoc :: Doc} deriving Eq
 td :: CodeType -> Doc -> TypeData
 td = TD
 
-data ValData = VD {valType :: TypeData, valDoc :: Doc}
+data ValData = VD {valPrec :: Maybe Int, valType :: TypeData, valDoc :: Doc}
   deriving Eq
 
-vd :: TypeData -> Doc -> ValData
+vd :: Maybe Int -> TypeData -> Doc -> ValData
 vd = VD
 
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
-updateValDoc f v = vd (valType v) ((f . valDoc) v)
+updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)
 
 data VarData = VarD {varName :: String, varType :: TypeData, varDoc :: Doc}
 

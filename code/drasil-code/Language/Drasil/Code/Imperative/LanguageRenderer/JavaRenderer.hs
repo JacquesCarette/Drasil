@@ -31,24 +31,24 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
   plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, 
   statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, stringListVals', 
-  stringListLists', notOpDocD, negateOpDocD, unExpr, typeUnExpr, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
-  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
-  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
-  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
-  funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody,
-  surroundBody, getterName, setterName, setMain, setMainMethod, setEmpty, 
-  intValue)
+  stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr',
+  typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
+  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
+  litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
+  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
+  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
+  doxConfigName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
+  appendToBody, surroundBody, getterName, setterName, setMain, setMainMethod, 
+  setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, ParamData(..), pd, PackData(..), packD, 
-  TypeData(..), td, ValData(..), vd, VarData(..), vard)
+  updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
+  PackData(..), packD, TypeData(..), td, ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift2Lists, lift3Pair, 
@@ -202,25 +202,25 @@ instance ControlBlockSym JavaCode where
         vnew &= v_temp]
 
 instance UnaryOpSym JavaCode where
-  type UnaryOp JavaCode = Doc
+  type UnaryOp JavaCode = OpData
   notOp = return notOpDocD
   negateOp = return negateOpDocD
-  sqrtOp = return $ text "Math.sqrt"
-  absOp = return $ text "Math.abs"
-  logOp = return $ text "Math.log10"
-  lnOp = return $ text "Math.log"
-  expOp = return $ text "Math.exp"
-  sinOp = return $ text "Math.sin"
-  cosOp = return $ text "Math.cos"
-  tanOp = return $ text "Math.tan"
-  asinOp = return $ text "Math.asin"
-  acosOp = return $ text "Math.acos"
-  atanOp = return $ text "Math.atan"
-  floorOp = return $ text "Math.floor"
-  ceilOp = return $ text "Math.ceil"
+  sqrtOp = return $ unOpPrec "Math.sqrt"
+  absOp = return $ unOpPrec "Math.abs"
+  logOp = return $ unOpPrec "Math.log10"
+  lnOp = return $ unOpPrec "Math.log"
+  expOp = return $ unOpPrec "Math.exp"
+  sinOp = return $ unOpPrec "Math.sin"
+  cosOp = return $ unOpPrec "Math.cos"
+  tanOp = return $ unOpPrec "Math.tan"
+  asinOp = return $ unOpPrec "Math.asin"
+  acosOp = return $ unOpPrec "Math.acos"
+  atanOp = return $ unOpPrec "Math.atan"
+  floorOp = return $ unOpPrec "Math.floor"
+  ceilOp = return $ unOpPrec "Math.ceil"
 
 instance BinaryOpSym JavaCode where
-  type BinaryOp JavaCode = Doc
+  type BinaryOp JavaCode = OpData
   equalOp = return equalOpDocD
   notEqualOp = return notEqualOpDocD
   greaterOp = return greaterOpDocD
@@ -231,7 +231,7 @@ instance BinaryOpSym JavaCode where
   minusOp = return minusOpDocD
   multOp = return multOpDocD
   divideOp = return divideOpDocD
-  powerOp = return $ text "Math.pow"
+  powerOp = return $ powerPrec "Math.pow"
   moduloOp = return moduloOpDocD
   andOp = return andOpDocD
   orOp = return orOpDocD
@@ -277,7 +277,7 @@ instance ValueSym JavaCode where
   valueDoc = valDoc . unJC
 
 instance NumericExpression JavaCode where
-  (#~) = liftA2 unExpr negateOp
+  (#~) = liftA2 unExpr' negateOp
   (#/^) = liftA2 unExpr sqrtOp
   (#|) = liftA2 unExpr absOp
   (#+) = liftA3 binExpr plusOp
@@ -315,8 +315,7 @@ instance BooleanExpression JavaCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
   
 instance ValueExpression JavaCode where
-  inlineIf b v1 v2 = liftA2 mkVal (fmap valType v1) (liftA3 inlineIfDocD b v1 
-    v2)
+  inlineIf = liftA3 inlineIfD
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
@@ -348,8 +347,8 @@ instance Selector JavaCode where
 
   selfAccess l = objAccess (valueOf $ self l)
 
-  listIndexExists l i = liftA2 mkVal bool (liftA3 jListIndexExists greaterOp l 
-    i)
+  listIndexExists l i = listSize l ?> i 
+
   argExists i = listAccess argsList (litInt $ fromIntegral i)
 
   indexOf l v = objAccess l (func "indexOf" int [v])
@@ -694,7 +693,7 @@ jDiscardInput :: ValData -> Doc
 jDiscardInput inFn = valDoc inFn <> dot <> text "next()"
 
 jInput :: TypeData -> ValData -> ValData
-jInput t inFn = vd t $ jInput' (cType t) 
+jInput t inFn = mkVal t $ jInput' (cType t) 
   where jInput' Integer = text "Integer.parseInt" <> parens (valDoc inFn <> 
           dot <> text "nextLine()")
         jInput' Float = text "Double.parseDouble" <> parens (valDoc inFn <> 
@@ -705,11 +704,11 @@ jInput t inFn = vd t $ jInput' (cType t)
         jInput' _ = error "Attempt to read value of unreadable type"
 
 jOpenFileR :: ValData -> TypeData -> ValData
-jOpenFileR n t = vd t $ new <+> text "Scanner" <> parens 
+jOpenFileR n t = mkVal t $ new <+> text "Scanner" <> parens 
   (new <+> text "File" <> parens (valDoc n))
 
 jOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
-jOpenFileWorA n t wa = vd t $ new <+> text "PrintWriter" <> 
+jOpenFileWorA n t wa = mkVal t $ new <+> text "PrintWriter" <> 
   parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> 
   parens (valDoc n) <> comma <+> valDoc wa))
 
@@ -723,10 +722,6 @@ jMethod n s p t ps b = vcat [
     lbrace,
   indent b,
   rbrace]
-
-jListIndexExists :: Doc -> ValData -> ValData -> Doc
-jListIndexExists greater lst index = parens (valDoc lst <> text ".length" <+> 
-  greater <+> valDoc index)
 
 jAssignFromArray :: Int -> [JavaCode (Variable JavaCode)] -> 
   [JavaCode (Statement JavaCode)]

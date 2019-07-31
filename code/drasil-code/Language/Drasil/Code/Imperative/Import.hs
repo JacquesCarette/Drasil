@@ -846,10 +846,10 @@ convExpr (Dbl d) = return $ litFloat d
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
 convExpr (Perc a b) = return $ litFloat $ fromIntegral a / (10 ** fromIntegral b)
-convExpr (AssocA Add l) = foldr1 (#+)  <$> mapM convExpr l
-convExpr (AssocA Mul l) = foldr1 (#*)  <$> mapM convExpr l
-convExpr (AssocB And l) = foldr1 (?&&) <$> mapM convExpr l
-convExpr (AssocB Or l)  = foldr1 (?||) <$> mapM convExpr l
+convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
+convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
+convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
+convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
 convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)   = do
   g <- ask

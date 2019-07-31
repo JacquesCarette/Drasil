@@ -98,7 +98,7 @@ pSpec (a :+: b) = pSpec a <> pSpec b
 pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
     invalid = ['<', '>']
-    --escapeChars '&' = "\\&"
+    escapeChars '&' = "\\&"
     escapeChars c = [c]
 pSpec (Sy s)    = text $ uSymb s
 pSpec (Sp s)    = text $ unPH $ L.special s
@@ -417,7 +417,7 @@ bookMLA (School    s) = comm $ pSpec s
 bookMLA (HowPublished (Verb s))      = comm $ pSpec s
 bookMLA (HowPublished (URL l@(S s))) = dot  $ pSpec $ Ref External s l
 bookMLA (HowPublished (URL s))       = dot  $ pSpec s
-bookMLA (Editor       p) = comm $ text "Edited by " <> pSpec (foldlList (map (S . L.nameStr) p))
+bookMLA (Editor       p) = comm $ text $ "Edited by " ++ foldlList (map L.nameStr p)
 bookMLA (Chapter      _) = text ""
 bookMLA (Institution  i) = comm $ pSpec i
 bookMLA (Organization i) = comm $ pSpec i
@@ -425,7 +425,7 @@ bookMLA (Month        m) = comm $ text $ show m
 bookMLA (Type         t) = comm $ pSpec t
 
 pages :: [Int] -> Doc
-pages = pSpec . foldlList . map S . numList "&ndash;"
+pages = text . foldlList . numList "&ndash;"
 
 bookAPA :: CiteField -> Doc --FIXME: year needs to come after author in L.APA
 bookAPA (Author   p) = pSpec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
@@ -433,13 +433,13 @@ bookAPA (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the 
 --bookAPA (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
 --bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
 bookAPA (Pages    p) = dot $ pages p
-bookAPA (Editor   p) = dot $ pSpec (foldlList $ map (S . L.nameStr) p) <> text " (Ed.)"
+bookAPA (Editor   p) = dot $ text (foldlList $ map L.nameStr p) <> text " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as L.MLA
 
 bookChicago :: CiteField -> Doc
 bookChicago (Author   p) = pSpec (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
 bookChicago (Pages    p) = dot $ pages p
-bookChicago (Editor   p) = dot $ pSpec (foldlList $ map (S . L.nameStr) p) <> text (toPlural p " ed")
+bookChicago (Editor   p) = dot $ text (foldlList $ map L.nameStr p) <> text (toPlural p " ed")
 bookChicago i = bookMLA i --Most items are rendered the same as L.MLA
 
 -- for article renderings
@@ -464,16 +464,16 @@ artclChicago i = bookChicago i
 -- PEOPLE RENDERING --
 rendPeople :: (L.Person -> String) -> L.People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
-rendPeople f people = foldlList $ map (S . f) people --foldlList is in drasil-utils
+rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-utils
 
 rendPeople' :: L.People -> Spec
 rendPeople' []  = S "N.a." -- "No authors given"
-rendPeople' people = foldlList $ map (S . rendPers) (init people) ++  [S (rendPersL $ last people)]
+rendPeople' people = S . foldlList $ map rendPers (init people) ++  [rendPersL (last people)]
 
-foldlList :: [Spec] -> Spec
-foldlList []    = EmptyS
-foldlList [a,b] = a :+: S " and " :+: b
-foldlList lst   = foldle1 (\a b -> a :+: S ", " :+: b) (\a b -> a :+: S ", and " :+: b) lst
+foldlList :: [String] -> String
+foldlList []    = ""
+foldlList [a,b] = a ++ " and " ++ b
+foldlList lst   = foldle1 (\a b -> a ++ ", " ++ b) (\a b -> a ++ ", and " ++ b) lst
 
 foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
 foldle1 _ _ []       = error "foldle1 cannot be used with empty list"

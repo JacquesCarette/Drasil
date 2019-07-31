@@ -24,7 +24,7 @@ import Language.Drasil.Code.Imperative.Helpers (convType, getStr)
 import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (jNameOpts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk),
-  codeType, codevar, codefunc, funcPrefix, physLookup, sfwrLookup, programName)
+  codeType, quantvar, quantfunc, funcPrefix, physLookup, sfwrLookup, programName)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
@@ -846,13 +846,13 @@ convExpr (AssocB Or l)  = foldr1 (?||) <$> mapM convExpr l
 convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)   = do
   g <- ask
-  let v = codevar (symbLookup c (symbolTable $ sysinfodb $ csi $ codeSpec g))
+  let v = quantvar (symbLookup c (symbolTable $ sysinfodb $ csi $ codeSpec g))
   value (codeName v) (convType $ codeType v)
 convExpr (FCall (C c) x) = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
       mem = eMap $ codeSpec g
-      funcCd = codefunc (symbLookup c (symbolTable info))
+      funcCd = quantfunc (symbLookup c (symbolTable info))
       funcNm = codeName funcCd
       funcTp = convType $ codeType funcCd
   args <- mapM convExpr x

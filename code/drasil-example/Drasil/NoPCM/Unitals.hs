@@ -11,7 +11,10 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, diam, htCapW, tankLength,
   coilHTCMin, coilHTCMax, timeFinalMax, consTolAux)
 
 inputs :: [QuantityDict]
-inputs = map qw constrained ++ map qw [absTol, relTol]
+inputs = map qw constrained ++ map qw unconstrained
+
+unconstrained :: [UncertainChunk]
+unconstrained = [absTol, relTol]
 
 constrained :: [UncertQ]
 constrained =  [coilSA, htCapW, coilHTC, tempInit,

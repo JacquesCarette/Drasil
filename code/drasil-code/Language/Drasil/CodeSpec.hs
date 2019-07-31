@@ -11,12 +11,13 @@ import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), 
-  ConstraintMap, codevar, codefunc, funcPrefix, codeName, toCodeName, 
+  ConstraintMap, codevar, quantvar, quantfunc, funcPrefix, codeName, toCodeName,
   constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 
 import Control.Lens ((^.))
@@ -82,14 +83,14 @@ codeSpec SI {_sys = sys
               , _constraints = cs
               , _constants = consts
               , _sysinfodb = db} chs ms = 
-  let inputs' = map codevar ins
+  let inputs' = map quantvar ins
       const' = map qtov consts
       derived = getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc ((defs' ++ map qdFromDD ddefs) \\ derived)
       mem   = modExportMap csi' chs
-      outs' = map codevar outs
-      allInputs = nub $ inputs' ++ map codevar derived
-      exOrder = getExecOrder rels (allInputs ++ map codevar consts) outs' db
+      outs' = map quantvar outs
+      allInputs = nub $ inputs' ++ map quantvar derived
+      exOrder = getExecOrder rels (allInputs ++ map quantvar consts) outs' db
       csi' = CSI {
         inputs = allInputs,
         extInputs = inputs',
@@ -107,7 +108,7 @@ codeSpec SI {_sys = sys
         program = sys,
         relations = rels,
         fMap = assocToMap rels,
-        vMap = assocToMap (map codevar q),
+        vMap = assocToMap (map quantvar q ++ getAdditionalVars chs (mods csi')),
         eMap = mem,
         constMap = assocToMap const',
         dMap = modDepMap csi' mem chs,
@@ -188,8 +189,8 @@ funcData :: Name -> String -> DataDesc -> Func
 funcData n desc d = FData $ FuncData (toCodeName n) desc d
 
 funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> Space -> [FuncStmt] -> Func  
-funcDef s desc i t fs  = FDef $ FuncDef (toCodeName s) desc (map codevar i) (spaceToCodeType t) fs 
-     
+funcDef s desc i t fs = FDef $ FuncDef (toCodeName s) desc (map quantvar i) (spaceToCodeType t) fs 
+
 data FuncData where
   FuncData :: Name -> String -> DataDesc -> FuncData
   
@@ -211,13 +212,13 @@ data FuncStmt where
   FAppend :: Expr -> Expr -> FuncStmt
   
 ($:=) :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
-v $:= e = FAsg (codevar v) e
+v $:= e = FAsg (quantvar v) e
 
 ffor :: (Quantity c, MayHaveUnit c) => c -> Expr -> [FuncStmt] -> FuncStmt
-ffor v = FFor (codevar  v)
+ffor v = FFor (quantvar  v)
 
 fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
-fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
+fdec v  = FDec (quantvar  v) (spaceToCodeType $ v ^. typ)
 
 asVC :: Func -> QuantityDict
 asVC (FDef (FuncDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
@@ -237,6 +238,17 @@ asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
+getAdditionalVars :: Choices -> [Mod] -> [CodeChunk]
+getAdditionalVars chs ms = map codevar (inFileName : inParamsVar 
+  (inputStructure chs)) ++ concatMap funcParams ms
+  where inParamsVar Bundled = [inParams]
+        inParamsVar Unbundled = []
+        funcParams (Mod _ _ fs) = concatMap getFuncParams fs
+
+getFuncParams :: Func -> [CodeChunk]
+getFuncParams (FDef (FuncDef _ _ ps _ _)) = ps
+getFuncParams (FData (FuncData _ _ d)) = getInputs d
+getFuncParams (FCD _) = []
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
@@ -283,7 +295,7 @@ fstdep sm (FRet e)  = codevars  e sm
 fstdep sm (FTry tfs cfs) = concatMap (fstdep sm ) tfs ++ concatMap (fstdep sm ) cfs
 fstdep _  (FThrow _) = [] -- is this right?
 fstdep _  FContinue = []
-fstdep sm (FProcCall f l)  = codefunc (asVC f) : concatMap (`codevars` sm) l
+fstdep sm (FProcCall f l)  = quantfunc (asVC f) : concatMap (`codevars` sm) l
 fstdep sm (FAppend a b)  = nub (codevars  a sm ++ codevars  b sm)
 
 fstdecl :: ChunkDB -> [FuncStmt] -> [CodeChunk]
@@ -434,24 +446,24 @@ getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 -- | Get a list of CodeChunks from an equation
 codevars :: Expr -> ChunkDB -> [CodeChunk]
 codevars e m = map resolve $ dep e
-  where resolve x = codevar (symbLookup x $ symbolTable m)
+  where resolve x = quantvar (symbLookup x $ symbolTable m)
 
 -- | Get a list of CodeChunks from an equation (no functions)
 codevars' :: Expr -> ChunkDB -> [CodeChunk]
 codevars' e m = map resolve $ nub $ names' e
-  where  resolve x = codevar (symbLookup x (symbolTable m))
+  where  resolve x = quantvar (symbLookup x (symbolTable m))
 
 -- | Get a list of CodeChunks from an equation, where the CodeChunks are correctly parameterized by either Var or Func
 codevarsandfuncs :: Expr -> ChunkDB -> ModExportMap -> [CodeChunk]
 codevarsandfuncs e m mem = map resolve $ dep e
   where resolve x 
-          | Map.member (funcPrefix ++ x) mem = codefunc (symbLookup x $ symbolTable m)
-          | otherwise = codevar (symbLookup x $ symbolTable m)
+          | Map.member (funcPrefix ++ x) mem = quantfunc (symbLookup x $ symbolTable m)
+          | otherwise = quantvar (symbLookup x $ symbolTable m)
 
 -- | Get a list of CodeChunks from a constraint, where the CodeChunks are correctly parameterized by either Var or Func
 constraintvarsandfuncs :: Constraint -> ChunkDB -> ModExportMap ->  [CodeChunk]
 constraintvarsandfuncs (Range _ ri) m mem = map resolve $ nub $ namesRI ri
   where resolve x 
-          | Map.member (funcPrefix ++ x) mem = codefunc (symbLookup x $ symbolTable m)
-          | otherwise = codevar (symbLookup x $ symbolTable m)
+          | Map.member (funcPrefix ++ x) mem = quantfunc (symbLookup x $ symbolTable m)
+          | otherwise = quantvar (symbLookup x $ symbolTable m)
 constraintvarsandfuncs _ _ _ = []

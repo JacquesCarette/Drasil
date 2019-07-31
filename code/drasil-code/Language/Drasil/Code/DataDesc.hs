@@ -1,7 +1,7 @@
 module Language.Drasil.Code.DataDesc where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeChunk, codevar)
+import Language.Drasil.Chunk.Code (CodeChunk, quantvar)
 
 import Data.List (nub)
 
@@ -35,10 +35,10 @@ multiLine' :: LinePattern -> Integer -> Delim -> Data
 multiLine' l i = Lines l (Just i)
 
 straight :: (Quantity c, MayHaveUnit c) => [c] -> LinePattern
-straight = Straight . map codevar
+straight = Straight . map quantvar
 
 repeated :: (Quantity c, MayHaveUnit c) => [c] -> LinePattern
-repeated = Repeat . map codevar
+repeated = Repeat . map quantvar
 
 isLine :: Data -> Bool
 isLine Line{} = True

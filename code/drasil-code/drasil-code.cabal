@@ -13,6 +13,7 @@ library
     , Language.Drasil.Chunk.CodeDefinition
     , Language.Drasil.Chunk.CodeQuantity
     , Language.Drasil.Code.Code
+    , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.Imperative.Symantics
     , Language.Drasil.Code.Imperative.Build.AST
@@ -62,6 +63,7 @@ executable codegenTest
     , Language.Drasil.Chunk.CodeQuantity
     , Language.Drasil.Code
     , Language.Drasil.Code.Code
+    , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.Imperative.Symantics
     , Language.Drasil.Code.Imperative.Build.AST

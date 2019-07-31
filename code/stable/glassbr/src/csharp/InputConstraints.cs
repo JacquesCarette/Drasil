@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class InputConstraints {
     
     /** \brief Verifies that input values satisfy the physical constraints and software constraints
-        \param inParams No description given
+        \param inParams structure holding the input values
     */
     public static void input_constraints(InputParameters inParams) {
         StreamWriter outfile;

@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.CodeDefinition (
 
 import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk), 
-  codevar, codefunc)
+  quantvar, quantfunc)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 
 import Control.Lens ((^.), makeLenses, view)
@@ -28,10 +28,10 @@ instance MayHaveUnit  CodeDefinition where getUnit = getUnit . view cchunk
 instance DefiningExpr CodeDefinition where defnExpr = def
 
 qtoc :: (Quantity q, DefiningExpr q, MayHaveUnit q) => q -> CodeDefinition
-qtoc q = CD (codefunc q) (q ^. defnExpr)
+qtoc q = CD (quantfunc q) (q ^. defnExpr)
 
 qtov :: QDefinition -> CodeDefinition
-qtov q = CD (codevar q) (q ^. defnExpr)
+qtov q = CD (quantvar q) (q ^. defnExpr)
 
 codeEquat :: CodeDefinition -> Expr
 codeEquat cd = cd ^. def

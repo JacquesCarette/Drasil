@@ -344,8 +344,8 @@ This subsection provides a list of terms that are used in the subsequent section
 The physical system of GlassBR, as shown in \hyperref[Figure:physSystImage]{Fig:physSystImage}, includes the following elements:
 
 \begin{itemize}
-\item[PS1:]The glass slab.
-\item[PS2:]The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
+\item[PS1:]{The glass slab.}
+\item[PS2:]{The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.}
 \end{itemize}
 \begin{figure}
 \begin{center}
@@ -359,7 +359,7 @@ The physical system of GlassBR, as shown in \hyperref[Figure:physSystImage]{Fig:
 Given the dimensions of the glass plane, the glass type, the characteristics of the explosion, and the tolerable probability of breakage, the goal statements are:
 
 \begin{itemize}
-\item[Predict-Glass-Withstands-Explosion:\phantomsection\label{willBreakGS}]Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
+\item[Predict-Glass-Withstands-Explosion:\phantomsection\label{willBreakGS}]{Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.}
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -370,14 +370,14 @@ The instance models that govern GlassBR are presented in \hyperref[Sec:IMs]{Sect
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{itemize}
-\item[glassType:\phantomsection\label{assumpGT}]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.
-\item[glassCondition:\phantomsection\label{assumpGC}]Following \cite[(pg. 1)]{astm2009}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass}.)
-\item[explainScenario:\phantomsection\label{assumpES}]This system only considers the external explosion scenario for its calculations. (RefBy: \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk}.)
-\item[standardValues:\phantomsection\label{assumpSV}]The values provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E}, \hyperref[DD:sdfTol]{DD: sdfTol}, \hyperref[DD:nFL]{DD: nFL}, \hyperref[DD:loadDurFactor]{DD: loadDurFactor}, \hyperref[DD:dimlessLoad]{DD: dimlessLoad}, and \hyperref[assumpLDFC]{A: ldfConstant}.)
-\item[glassLite:\phantomsection\label{assumpGL}]Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[DD:calofCapacity]{DD: calofCapacity}, \hyperref[DD:dimlessLoad]{DD: dimlessLoad}, and \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}.)
-\item[boundaryConditions:\phantomsection\label{assumpBC}]Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions}.)
-\item[responseType:\phantomsection\label{assumpRT}]The response type considered in GlassBR is flexural. (RefBy: \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass}.)
-\item[ldfConstant:\phantomsection\label{assumpLDFC}]With reference to \hyperref[assumpSV]{A: standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR. (RefBy: \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} and \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.)
+\item[glassType:\phantomsection\label{assumpGT}]{The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.}
+\item[glassCondition:\phantomsection\label{assumpGC}]{Following \cite[(pg. 1)]{astm2009}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass}.)}
+\item[explainScenario:\phantomsection\label{assumpES}]{This system only considers the external explosion scenario for its calculations. (RefBy: \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk}.)}
+\item[standardValues:\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E}, \hyperref[DD:sdfTol]{DD: sdfTol}, \hyperref[DD:nFL]{DD: nFL}, \hyperref[DD:loadDurFactor]{DD: loadDurFactor}, \hyperref[DD:dimlessLoad]{DD: dimlessLoad}, and \hyperref[assumpLDFC]{A: ldfConstant}.)}
+\item[glassLite:\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[DD:calofCapacity]{DD: calofCapacity}, \hyperref[DD:dimlessLoad]{DD: dimlessLoad}, and \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}.)}
+\item[boundaryConditions:\phantomsection\label{assumpBC}]{Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions}.)}
+\item[responseType:\phantomsection\label{assumpRT}]{The response type considered in GlassBR is flexural. (RefBy: \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass}.)}
+\item[ldfConstant:\phantomsection\label{assumpLDFC}]{With reference to \hyperref[assumpSV]{A: standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR. (RefBy: \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} and \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -1273,12 +1273,12 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
 \begin{itemize}
-\item[Input-Glass-Props:\phantomsection\label{inputGlassProps}]Input the quantities from \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.
-\item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]The system shall set the known values as described in \hyperref[Table:ReqAssignments]{Table:ReqAssignments}.
-\item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
-\item[Output-Values-and-Known-Quantities:\phantomsection\label{outputValsAndKnownQuants}]Output the input quantities from \hyperref[inputGlassProps]{FR: Input-Glass-Props} and the known quantities from \hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}.
-\item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]If $is-safePb\land{}is-safeLR$ (from \hyperref[TM:isSafeProb]{TM: isSafeProb} and \hyperref[TM:isSafeLoad]{TM: isSafeLoad}), output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''
-\item[Output-Quantities:\phantomsection\label{outputQuants}]Output the quantities from \hyperref[Table:ReqOutputs]{Table:ReqOutputs}.
+\item[Input-Glass-Props:\phantomsection\label{inputGlassProps}]{Input the quantities from \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.}
+\item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]{The system shall set the known values as described in \hyperref[Table:ReqAssignments]{Table:ReqAssignments}.}
+\item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]{The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.}
+\item[Output-Values-and-Known-Quantities:\phantomsection\label{outputValsAndKnownQuants}]{Output the input quantities from \hyperref[inputGlassProps]{FR: Input-Glass-Props} and the known quantities from \hyperref[sysSetValsFollowingAssumps]{FR: System-Set-Values-Following-Assumptions}.}
+\item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]{If $is-safePb\land{}is-safeLR$ (from \hyperref[TM:isSafeProb]{TM: isSafeProb} and \hyperref[TM:isSafeLoad]{TM: isSafeLoad}), output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''}
+\item[Output-Quantities:\phantomsection\label{outputQuants}]{Output the quantities from \hyperref[Table:ReqOutputs]{Table:ReqOutputs}.}
 \end{itemize}
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -1377,31 +1377,31 @@ ${\hat{q}_{tol}}$ & Tolerable load & \hyperref[DD:tolLoad]{DD: tolLoad} & --
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
 \begin{itemize}
-\item[Correct:\phantomsection\label{correct}]The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
-\item[Verifiable:\phantomsection\label{verifiable}]The code is tested with complete verification and validation plan.
-\item[Understandable:\phantomsection\label{understandable}]The code is modularized with complete module guide and module interface specification.
-\item[Reusable:\phantomsection\label{reusable}]The code is modularized.
-\item[Maintainable:\phantomsection\label{maintainable}]The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
-\item[Portable:\phantomsection\label{portable}]The code is able to be run in different environments.
+\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.}
+\item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
+\item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
+\item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
+\item[Maintainable:\phantomsection\label{maintainable}]{The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.}
+\item[Portable:\phantomsection\label{portable}]{The code is able to be run in different environments.}
 \end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}
 This section lists the likely changes to be made to the software.
 
 \begin{itemize}
-\item[Calculate-Internal-Blask-Risk:\phantomsection\label{calcInternalBlastRisk}]\hyperref[assumpES]{A: explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
-\item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]\hyperref[assumpSV]{A: standardValues}, \hyperref[assumpLDFC]{A: ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
-\item[Accomodate-More-than-Single-Lite:\phantomsection\label{accMoreThanSingleLite}]\hyperref[assumpGL]{A: glassLite} - The software may be changed to accommodate more than a single lite.
-\item[Accomodate-More-Boundary-Conditions:\phantomsection\label{accMoreBoundaryConditions}]\hyperref[assumpBC]{A: boundaryConditions} - The software may be changed to accommodate more boundary conditions than 4-sided support.
-\item[Consider-More-than-Flexure-Glass:\phantomsection\label{considerMoreThanFlexGlass}]\hyperref[assumpRT]{A: responseType} - The software may be changed to consider more than just flexure of the glass.
+\item[Calculate-Internal-Blask-Risk:\phantomsection\label{calcInternalBlastRisk}]{\hyperref[assumpES]{A: explainScenario} - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.}
+\item[Variable-Values-of-m,k,E:\phantomsection\label{varValsOfmkE}]{\hyperref[assumpSV]{A: standardValues}, \hyperref[assumpLDFC]{A: ldfConstant} - Currently, the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.}
+\item[Accomodate-More-than-Single-Lite:\phantomsection\label{accMoreThanSingleLite}]{\hyperref[assumpGL]{A: glassLite} - The software may be changed to accommodate more than a single lite.}
+\item[Accomodate-More-Boundary-Conditions:\phantomsection\label{accMoreBoundaryConditions}]{\hyperref[assumpBC]{A: boundaryConditions} - The software may be changed to accommodate more boundary conditions than 4-sided support.}
+\item[Consider-More-than-Flexure-Glass:\phantomsection\label{considerMoreThanFlexGlass}]{\hyperref[assumpRT]{A: responseType} - The software may be changed to consider more than just flexure of the glass.}
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
 This section lists the unlikely changes to be made to the software.
 
 \begin{itemize}
-\item[Predict-Withstanding-of-Certain-Degree:\phantomsection\label{predictWithstandOfCertDeg}]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
-\item[Accommodate-Altered-Glass:\phantomsection\label{accAlteredGlass}]\hyperref[assumpGC]{A: glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
+\item[Predict-Withstanding-of-Certain-Degree:\phantomsection\label{predictWithstandOfCertDeg}]{The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.}
+\item[Accommodate-Altered-Glass:\phantomsection\label{accAlteredGlass}]{\hyperref[assumpGC]{A: glassCondition} requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.}
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

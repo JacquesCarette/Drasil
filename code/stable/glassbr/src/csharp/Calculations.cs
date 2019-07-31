@@ -9,7 +9,7 @@ using System.Collections.Generic;
 public class Calculations {
     
     /** \brief Calculates stress distribution factor (Function) based on Pbtol
-        \param inParams No description given
+        \param inParams structure holding the input values
     */
     public static double func_J_tol(InputParameters inParams) {
         StreamWriter outfile;
@@ -24,7 +24,7 @@ public class Calculations {
     }
     
     /** \brief Calculates applied load (demand)
-        \param inParams No description given
+        \param inParams structure holding the input values
     */
     public static double func_q(InputParameters inParams) {
         StreamWriter outfile;
@@ -39,7 +39,7 @@ public class Calculations {
     }
     
     /** \brief Calculates dimensionless load
-        \param inParams No description given
+        \param inParams structure holding the input values
         \param q applied load (demand)
     */
     public static double func_q_hat(InputParameters inParams, double q) {
@@ -58,7 +58,7 @@ public class Calculations {
     }
     
     /** \brief Calculates tolerable load
-        \param inParams No description given
+        \param inParams structure holding the input values
         \param J_tol stress distribution factor (Function) based on Pbtol
     */
     public static double func_q_hat_tol(InputParameters inParams, double J_tol) {
@@ -77,7 +77,7 @@ public class Calculations {
     }
     
     /** \brief Calculates stress distribution factor (Function)
-        \param inParams No description given
+        \param inParams structure holding the input values
         \param q_hat dimensionless load
     */
     public static double func_J(InputParameters inParams, double q_hat) {
@@ -96,7 +96,7 @@ public class Calculations {
     }
     
     /** \brief Calculates non-factored load
-        \param inParams No description given
+        \param inParams structure holding the input values
         \param q_hat_tol tolerable load
     */
     public static double func_NFL(InputParameters inParams, double q_hat_tol) {
@@ -115,7 +115,7 @@ public class Calculations {
     }
     
     /** \brief Calculates risk of failure
-        \param inParams No description given
+        \param inParams structure holding the input values
         \param J stress distribution factor (Function)
     */
     public static double func_B(InputParameters inParams, double J) {
@@ -134,7 +134,7 @@ public class Calculations {
     }
     
     /** \brief Calculates load resistance
-        \param inParams No description given
+        \param inParams structure holding the input values
         \param NFL non-factored load
     */
     public static double func_LR(InputParameters inParams, double NFL) {
@@ -187,7 +187,7 @@ public class Calculations {
     }
     
     /** \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability
-        \param inParams No description given
+        \param inParams structure holding the input values
         \param P_b probability of breakage
     */
     public static Boolean func_is_safePb(InputParameters inParams, double P_b) {

@@ -21,18 +21,12 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Data (PackData(..))
 import Language.Drasil.Code.Imperative.Helpers (convType, getStr)
-import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
-  (cppExts)
-import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer 
-  (csExts)
-import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer 
-  (jExts, jNameOpts)
-import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer 
-  (pyExts)
+import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (jNameOpts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
-import Language.Drasil.Chunk.Code (CodeChunk, CodeDefinition, codeName,
-  codeType, codevar, codefunc, codeEquat, funcPrefix, physLookup, sfwrLookup,
-  programName)
+import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk),
+  codeType, quantvar, quantfunc, funcPrefix, physLookup, sfwrLookup, programName)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
+import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
@@ -155,7 +149,7 @@ generateCode l unRepr g =
   where pckg = runReader genPackage g
         code = makeCode (packMods $ unRepr pckg) (packAux $ unRepr pckg)
         makefile = makeBuild (unRepr pckg) (getBuildConfig l) 
-          (getRunnable l) (getExt l) (commented g)
+          (getRunnable l) (commented g)
 
 genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
 genPackage = do
@@ -181,12 +175,6 @@ getDir Cpp = "cpp"
 getDir CSharp = "csharp"
 getDir Java = "java"
 getDir Python = "python"
-
-getExt :: Lang -> [Label]
-getExt Java = jExts
-getExt Python = pyExts
-getExt CSharp = csExts
-getExt Cpp = cppExts
 
 getRunnable :: Lang -> Runnable
 getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) 
@@ -281,7 +269,7 @@ inputClassDesc = do
       inPs _ = "input values"
       dVs Nothing = ""
       dVs _ = "derived values"
-  return $ inClassD $ inputs $ codeSpec g
+  return $ inClassD $ inputs $ csi $ codeSpec g
 
 inFmtFuncDesc :: Reader (State repr) String
 inFmtFuncDesc = do
@@ -355,7 +343,7 @@ genInputClass :: (RenderSym repr) => Reader (State repr) (Maybe (repr (Class
   repr)))
 genInputClass = do
   g <- ask
-  let ins       = inputs $ codeSpec g
+  let ins       = inputs $ csi $ codeSpec g
       genClass :: (RenderSym repr) => [String] -> Reader (State repr) (Maybe 
         (repr (Class repr)))
       genClass [] = return Nothing 
@@ -378,7 +366,8 @@ genInputConstraints = do
       genConstraints (Just _) = do
         h <- ask
         parms <- getConstraintParams
-        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec h)
+        let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ 
+              codeSpec h)
             sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
             physCs   = concatMap (renderC . physLookup cm) varsList
         sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
@@ -640,7 +629,7 @@ getInputDecl = do
         return $ Just $ multi $ map varDec vars
       getDecl Bundled _ = return $ Just $ extObjDecNewVoid "InputParameters"
         v_params 
-  getDecl (inStruct g) (inputs $ codeSpec g)
+  getDecl (inStruct g) (inputs $ csi $ codeSpec g)
 
 getFuncCall :: (RenderSym repr) => String -> repr (StateType repr) -> 
   Reader (State repr) [repr (Parameter repr)] -> 
@@ -717,7 +706,8 @@ getInputFormatOuts = do
       getOuts Bundled = []
   return $ getOuts (inStruct g)
   
-toVariables :: (RenderSym repr) => [CodeChunk] -> [repr (Variable repr)]
+toVariables :: (RenderSym repr, HasCodeType c, CodeIdea c) => [c] -> 
+  [repr (Variable repr)]
 toVariables = map (\c -> var (codeName c) ((convType . codeType) c))
 
 getDerivedParams :: (RenderSym repr) => 
@@ -736,7 +726,7 @@ getConstraintParams = do
   let cm = cMap $ csi $ codeSpec g
       mem = eMap $ codeSpec g
       db = sysinfodb $ csi $ codeSpec g
-      varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
+      varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ codeSpec g)
       reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v db 
         mem) (getConstraints cm varsList)
   getParams reqdVals
@@ -784,7 +774,7 @@ variable :: (RenderSym repr) => String -> repr (StateType repr) ->
   Reader (State repr) (repr (Variable repr))
 variable s t = do
   g <- ask
-  let cs = codeSpec g
+  let cs = csi $ codeSpec g
   return $ if s `elem` map codeName (inputs cs) 
     then inputVariable (inStruct g) s t
     else var s t
@@ -807,12 +797,13 @@ fAppInOut m n ins outs = do
   return $ if m /= currentModule g then extInOutCall m n ins outs 
     else inOutCall n ins outs
 
-getParams :: (RenderSym repr) => [CodeChunk] -> Reader (State repr) 
+getParams :: (RenderSym repr, CodeIdea c) => [c] -> Reader (State repr) 
   [repr (Parameter repr)]
-getParams cs = do
+getParams cs' = do
   g <- ask
-  let ins = inputs $ codeSpec g
-      consts = map codevar $ constants $ csi $ codeSpec g
+  let cs = map codeChunk cs'
+      ins = inputs $ csi $ codeSpec g
+      consts = map codeChunk $ constants $ csi $ codeSpec g
       inpParams = filter (`elem` ins) cs
       inPs = getInputParams (inStruct g) inpParams
       conParams = filter (`elem` consts) cs
@@ -821,15 +812,15 @@ getParams cs = do
       ps = map mkParam csSubIns
   return $ inPs ++ conPs ++ ps
 
-mkParam :: (RenderSym repr) => CodeChunk -> repr (Parameter repr)
+mkParam :: (RenderSym repr, HasCodeType c, CodeIdea c) => c -> repr (Parameter repr)
 mkParam p = paramFunc (codeType p) $ var pName pType
   where paramFunc (C.List _) = pointerParam
         paramFunc _ = stateParam
         pName = codeName p
         pType = convType $ codeType p
 
-getInputParams :: (RenderSym repr) => Structure -> [CodeChunk] ->
-  [repr (Parameter repr)]
+getInputParams :: (RenderSym repr, HasCodeType c, CodeIdea c) => Structure -> 
+  [c] -> [repr (Parameter repr)]
 getInputParams _ [] = []
 getInputParams Unbundled cs = map mkParam cs
 getInputParams Bundled _ = [pointerParam $ var pName pType]
@@ -855,13 +846,13 @@ convExpr (AssocB Or l)  = foldr1 (?||) <$> mapM convExpr l
 convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)   = do
   g <- ask
-  let v = codevar (symbLookup c (symbolTable $ sysinfodb $ csi $ codeSpec g))
+  let v = quantvar (symbLookup c (symbolTable $ sysinfodb $ csi $ codeSpec g))
   value (codeName v) (convType $ codeType v)
 convExpr (FCall (C c) x) = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
       mem = eMap $ codeSpec g
-      funcCd = codefunc (symbLookup c (symbolTable info))
+      funcCd = quantfunc (symbLookup c (symbolTable info))
       funcNm = codeName funcCd
       funcTp = convType $ codeType funcCd
   args <- mapM convExpr x

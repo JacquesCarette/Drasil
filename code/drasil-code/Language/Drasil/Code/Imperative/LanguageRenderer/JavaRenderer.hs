@@ -4,7 +4,7 @@
 -- | The logic to render Java code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code
-  JavaCode(..), jExts, jNameOpts
+  JavaCode(..), jNameOpts
 ) where
 
 import Utils.Drasil (indent)
@@ -45,7 +45,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
   getterName, setterName, setMain, setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
-  FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, ParamData(..), pd, PackData(..), packD, 
   TypeData(..), td, ValData(..), vd, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
@@ -60,11 +60,8 @@ import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
   semi, vcat, lbrace, rbrace, render, colon, comma, isEmpty, render)
 
-jExts :: [String]
-jExts = [jExt]
-
 jExt :: String
-jExt = ".java"
+jExt = "java"
 
 jNameOpts :: NameOpts
 jNameOpts = NameOpts {
@@ -96,7 +93,7 @@ instance PackageSym JavaCode where
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = FileData
-  fileDoc code = liftA2 fileD (fmap (addExt "java" . name) code) (liftA2 
+  fileDoc code = liftA2 file (fmap (addExt jExt . name) code) (liftA2 
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 

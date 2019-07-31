@@ -442,8 +442,8 @@ Label & Sensible heat energy
 Equation & \begin{displaymath}
            E=\begin{cases}
              {C^{S}} m ΔT, & T<{T_{melt}}\\
-{C^{L}} m ΔT, & {T_{melt}}<T<{T_{boil}}\\
-{C^{V}} m ΔT, & {T_{boil}}<T
+             {C^{L}} m ΔT, & {T_{melt}}<T<{T_{boil}}\\
+             {C^{V}} m ΔT, & {T_{boil}}<T
              \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -971,9 +971,9 @@ Output Constraints & \begin{displaymath}
 Equation & \begin{displaymath}
            \frac{\,d{T_{P}}}{\,dt}=\begin{cases}
                                    \frac{1}{{{τ_{P}}^{S}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}<{{T_{melt}}^{P}}\\
-\frac{1}{{{τ_{P}}^{L}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}>{{T_{melt}}^{P}}\\
-0, & {T_{P}}={{T_{melt}}^{P}}\\
-0, & 0<ϕ<1
+                                   \frac{1}{{{τ_{P}}^{L}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}>{{T_{melt}}^{P}}\\
+                                   0, & {T_{P}}={{T_{melt}}^{P}}\\
+                                   0, & 0<ϕ<1
                                    \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1102,9 +1102,9 @@ Output Constraints & \begin{displaymath}
 Equation & \begin{displaymath}
            {E_{P}}=\begin{cases}
                    {{C_{P}}^{S}} {m_{P}} \left({T_{P}}\left(t\right)-{T_{init}}\right), & {T_{P}}<{{T_{melt}}^{P}}\\
-{{{E_{P}}_{melt}}^{init}}+{H_{f}} {m_{P}}+{{C_{P}}^{L}} {m_{P}} \left({T_{P}}\left(t\right)-{{T_{melt}}^{P}}\right), & {T_{P}}>{{T_{melt}}^{P}}\\
-{{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & {T_{P}}={{T_{melt}}^{P}}\\
-{{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & 0<ϕ<1
+                   {{{E_{P}}_{melt}}^{init}}+{H_{f}} {m_{P}}+{{C_{P}}^{L}} {m_{P}} \left({T_{P}}\left(t\right)-{{T_{melt}}^{P}}\right), & {T_{P}}>{{T_{melt}}^{P}}\\
+                   {{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & {T_{P}}={{T_{melt}}^{P}}\\
+                   {{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & 0<ϕ<1
                    \end{cases}
            \end{displaymath}
 \\ \midrule \\

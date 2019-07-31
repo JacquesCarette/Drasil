@@ -176,14 +176,12 @@ fence _ Norm      = pure $ text "||"
 -- | For printing Matrix
 pMatrix :: [[Expr]] -> D
 pMatrix e = vpunctuate dbs (map pIn e)
-
-pIn :: [Expr] -> D
-pIn e = hpunctuate (text " & ") (map pExpr e)
+  where pIn x = hpunctuate (text " & ") (map pExpr x)
 
 cases :: [(Expr,Expr)] -> D
-cases []     = error "Attempt to create case expression without cases"
-cases [p]    = pExpr (fst p) <> pure (text ", & ") <> pExpr (snd p)
-cases (p:ps) = cases [p] <> pure (text "\\\\\n") <> cases ps
+cases [] = error "Attempt to create case expression without cases"
+cases e  = vpunctuate dbs (map _case e)
+  where _case (x, y) = hpunctuate (text ", & ") (map pExpr [x, y])
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------

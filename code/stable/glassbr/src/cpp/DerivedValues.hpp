@@ -15,7 +15,7 @@ using std::ofstream;
 #include "InputParameters.hpp"
 
 /** \brief Calculates values that can be immediately derived from the inputs
-    \param inParams No description given
+    \param inParams structure holding the input values
 */
 void derived_values(InputParameters &inParams);
 

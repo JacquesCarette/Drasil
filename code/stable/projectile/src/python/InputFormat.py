@@ -6,8 +6,8 @@ import math
 import InputParameters
 
 ## \brief Reads input from a file with the given file name
-# \param filename No description given
-# \param inParams No description given
+# \param filename name of the input file
+# \param inParams structure holding the input values
 def get_input(filename, inParams):
     infile = open(filename, "r")
     infile.readline()

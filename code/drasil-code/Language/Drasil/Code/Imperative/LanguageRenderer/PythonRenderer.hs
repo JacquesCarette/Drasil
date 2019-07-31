@@ -3,7 +3,7 @@
 -- | The logic to render Python code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
-  PythonCode(..), pyExts
+  PythonCode(..)
 ) where
 
 import Utils.Drasil (indent)
@@ -37,7 +37,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
   addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
   getterName, setterName)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
-  FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, PackData(..), packD, ParamData(..), 
   TypeData(..), td, ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
@@ -52,11 +52,8 @@ import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
   equals, vcat, colon, brackets, isEmpty)
 
-pyExts :: [String]
-pyExts = [pyExt]
-
 pyExt :: String
-pyExt = ".py"
+pyExt = "py"
 
 newtype PythonCode a = PC {unPC :: a}
 
@@ -81,7 +78,7 @@ instance PackageSym PythonCode where
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = FileData
-  fileDoc code = liftA2 fileD (fmap (addExt "py" . name) code) (liftA2 
+  fileDoc code = liftA2 file (fmap (addExt pyExt . name) code) (liftA2 
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 

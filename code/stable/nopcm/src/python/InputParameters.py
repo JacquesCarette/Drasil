@@ -49,7 +49,7 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print("Warning: constraint violated")
     if (not(950 < rho_W and rho_W <= 1000)) :
         print("Warning: constraint violated")
-    if (not(((1.0e-2 <= D) and (D <= 100)))) :
+    if (not(1.0e-2 <= D and D <= 100)) :
         print("Warning: constraint violated")
     
     if (not(A_C > 0)) :

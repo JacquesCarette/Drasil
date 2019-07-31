@@ -736,36 +736,34 @@
                     </tr>
                     <tr>
                       <th>Units</th>
-                      <td><p class="paragraph">m/s</p></td>
+                      <td><p class="paragraph">$\frac{\text{m}}{\text{s}}$</p></td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b> = <table class="matrix">
-<tr><td>v<sub>x</sub><sup>i</sup>&plus;a<sub>x</sub><sup>c</sup>&#8239;t</td></tr>
-<tr><td>v<sub>y</sub><sup>i</sup>&plus;a<sub>y</sub><sup>c</sup>&#8239;t</td></tr>
-</table></em>
-                        </div>
+                        $$\mathbf{v}=\begin{bmatrix}
+                                     {{v_{x}}^{i}}+{{a_{x}}^{c}} t\\
+{{v_{y}}^{i}}+{{a_{y}}^{c}} t
+                                     \end{bmatrix}$$
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>v</b></em> is the velocity (m/s)</li>
+                          <li>$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)</li>
                           <li>
-                            <em>v<sub>x</sub><sup>i</sup></em> is the <em>x</em>-component of initial velocity (m/s)
+                            ${{v_{x}}^{i}}$ is the $x$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)
                           </li>
                           <li>
-                            <em>a<sub>x</sub><sup>c</sup></em> is the <em>x</em>-component of constant acceleration (m/s<sup>2</sup>)
+                            ${{a_{x}}^{c}}$ is the $x$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)
                           </li>
-                          <li><em>t</em> is the time (s)</li>
+                          <li>$t$ is the time ($\text{s}$)</li>
                           <li>
-                            <em>v<sub>y</sub><sup>i</sup></em> is the <em>y</em>-component of initial velocity (m/s)
+                            ${{v_{y}}^{i}}$ is the $y$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)
                           </li>
                           <li>
-                            <em>a<sub>y</sub><sup>c</sup></em> is the <em>y</em>-component of constant acceleration (m/s<sup>2</sup>)
+                            ${{a_{y}}^{c}}$ is the $y$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)
                           </li>
                         </ul>
                       </td>
@@ -784,26 +782,24 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of velocity vector:</h4>
                     <p class="paragraph">
-                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMotion</a> and <a href=#cartSyst>A: cartSyst</a>), we can represent the velocity vector as <em><b>v</b> = <table class="matrix">
-<tr><td>v<sub>x</sub></td></tr>
-<tr><td>v<sub>y</sub></td></tr>
-</table></em> and the acceleration vector as <em><b>a</b> = <table class="matrix">
-<tr><td>a<sub>x</sub></td></tr>
-<tr><td>a<sub>y</sub></td></tr>
-</table></em>. The acceleration is assumed to be constant (<a href=#constAccel>A: constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = <table class="matrix">
-<tr><td>a<sub>x</sub><sup>c</sup></td></tr>
-<tr><td>a<sub>y</sub><sup>c</sup></td></tr>
-</table></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = <table class="matrix">
-<tr><td>v<sub>x</sub><sup>i</sup></td></tr>
-<tr><td>v<sub>y</sub><sup>i</sup></td></tr>
-</table></em>. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD: rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
+                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMotion</a> and <a href=#cartSyst>A: cartSyst</a>), we can represent the velocity vector as $\mathbf{v}=\begin{bmatrix}
+                                                                                                                                                                                                           {v_{x}}\\
+{v_{y}}
+                                                                                                                                                                                                           \end{bmatrix}$ and the acceleration vector as $\mathbf{a}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                     {a_{x}}\\
+{a_{y}}
+                                                                                                                                                                                                                                                                     \end{bmatrix}$. The acceleration is assumed to be constant (<a href=#constAccel>A: constAccel</a>) and the constant acceleration vector is represented as ${\mathbf{a}^{c}}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                 {{a_{x}}^{c}}\\
+{{a_{y}}^{c}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                 \end{bmatrix}$. The initial velocity (at $t=0$, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       {{v_{x}}^{i}}\\
+{{v_{y}}^{i}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       \end{bmatrix}$. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD: rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
                     </p>
-                    <div class="equation">
-                      <em><b>v</b> = <table class="matrix">
-<tr><td>v<sub>x</sub><sup>i</sup>&plus;a<sub>x</sub><sup>c</sup>&#8239;t</td></tr>
-<tr><td>v<sub>y</sub><sup>i</sup>&plus;a<sub>y</sub><sup>c</sup>&#8239;t</td></tr>
-</table></em>
-                    </div>
+                    $$\mathbf{v}=\begin{bmatrix}
+                                 {{v_{x}}^{i}}+{{a_{x}}^{c}} t\\
+{{v_{y}}^{i}}+{{a_{y}}^{c}} t
+                                 \end{bmatrix}$$
                   </div>
                 </div>
                 <div id="GD:posVec">
@@ -822,56 +818,40 @@
                     </tr>
                     <tr>
                       <th>Units</th>
-                      <td><p class="paragraph">m</p></td>
+                      <td><p class="paragraph">$\text{m}$</p></td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>p</b> = <table class="matrix">
-<tr><td>p<sub>x</sub><sup>i</sup>&plus;v<sub>x</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                                                                                                <span class="fup">
-                                                                                                                                                  a<sub>x</sub><sup>c</sup>&#8239;t<sup>2</sup>
-                                                                                                                                                </span>
-                                                                                                                                                <span class="fdn">
-                                                                                                                                                  2
-                                                                                                                                                </span>
-                                                                                                                                              </div></td></tr>
-<tr><td>p<sub>y</sub><sup>i</sup>&plus;v<sub>y</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                                                                                                                                                                                               <span class="fup">
-                                                                                                                                                                                                                                                 a<sub>y</sub><sup>c</sup>&#8239;t<sup>2</sup>
-                                                                                                                                                                                                                                               </span>
-                                                                                                                                                                                                                                               <span class="fdn">
-                                                                                                                                                                                                                                                 2
-                                                                                                                                                                                                                                               </span>
-                                                                                                                                                                                                                                             </div></td></tr>
-</table></em>
-                        </div>
+                        $$\mathbf{p}=\begin{bmatrix}
+                                     {{p_{x}}^{i}}+{{v_{x}}^{i}} t+\frac{{{a_{x}}^{c}} t^{2}}{2}\\
+{{p_{y}}^{i}}+{{v_{y}}^{i}} t+\frac{{{a_{y}}^{c}} t^{2}}{2}
+                                     \end{bmatrix}$$
                       </td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em><b>p</b></em> is the position (m)</li>
+                          <li>$\mathbf{p}$ is the position ($\text{m}$)</li>
                           <li>
-                            <em>p<sub>x</sub><sup>i</sup></em> is the <em>x</em>-component of initial position (m)
+                            ${{p_{x}}^{i}}$ is the $x$-component of initial position ($\text{m}$)
                           </li>
                           <li>
-                            <em>v<sub>x</sub><sup>i</sup></em> is the <em>x</em>-component of initial velocity (m/s)
+                            ${{v_{x}}^{i}}$ is the $x$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)
                           </li>
-                          <li><em>t</em> is the time (s)</li>
+                          <li>$t$ is the time ($\text{s}$)</li>
                           <li>
-                            <em>a<sub>x</sub><sup>c</sup></em> is the <em>x</em>-component of constant acceleration (m/s<sup>2</sup>)
-                          </li>
-                          <li>
-                            <em>p<sub>y</sub><sup>i</sup></em> is the <em>y</em>-component of initial position (m)
+                            ${{a_{x}}^{c}}$ is the $x$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)
                           </li>
                           <li>
-                            <em>v<sub>y</sub><sup>i</sup></em> is the <em>y</em>-component of initial velocity (m/s)
+                            ${{p_{y}}^{i}}$ is the $y$-component of initial position ($\text{m}$)
                           </li>
                           <li>
-                            <em>a<sub>y</sub><sup>c</sup></em> is the <em>y</em>-component of constant acceleration (m/s<sup>2</sup>)
+                            ${{v_{y}}^{i}}$ is the $y$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)
+                          </li>
+                          <li>
+                            ${{a_{y}}^{c}}$ is the $y$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)
                           </li>
                         </ul>
                       </td>
@@ -894,43 +874,27 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of position vector:</h4>
                     <p class="paragraph">
-                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMotion</a> and <a href=#cartSyst>A: cartSyst</a>), we can represent the position vector as <em><b>p</b> = <table class="matrix">
-<tr><td>p<sub>x</sub></td></tr>
-<tr><td>p<sub>y</sub></td></tr>
-</table></em>, the velocity vector as <em><b>v</b> = <table class="matrix">
-<tr><td>v<sub>x</sub></td></tr>
-<tr><td>v<sub>y</sub></td></tr>
-</table></em>, and the acceleration vector as <em><b>a</b> = <table class="matrix">
-<tr><td>a<sub>x</sub></td></tr>
-<tr><td>a<sub>y</sub></td></tr>
-</table></em>. The acceleration is assumed to be constant (<a href=#constAccel>A: constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = <table class="matrix">
-<tr><td>a<sub>x</sub><sup>c</sup></td></tr>
-<tr><td>a<sub>y</sub><sup>c</sup></td></tr>
-</table></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = <table class="matrix">
-<tr><td>v<sub>x</sub><sup>i</sup></td></tr>
-<tr><td>v<sub>y</sub><sup>i</sup></td></tr>
-</table></em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD: rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
+                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMotion</a> and <a href=#cartSyst>A: cartSyst</a>), we can represent the position vector as $\mathbf{p}=\begin{bmatrix}
+                                                                                                                                                                                                           {p_{x}}\\
+{p_{y}}
+                                                                                                                                                                                                           \end{bmatrix}$, the velocity vector as $\mathbf{v}=\begin{bmatrix}
+                                                                                                                                                                                                                                                              {v_{x}}\\
+{v_{y}}
+                                                                                                                                                                                                                                                              \end{bmatrix}$, and the acceleration vector as $\mathbf{a}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                         {a_{x}}\\
+{a_{y}}
+                                                                                                                                                                                                                                                                                                                         \end{bmatrix}$. The acceleration is assumed to be constant (<a href=#constAccel>A: constAccel</a>) and the constant acceleration vector is represented as ${\mathbf{a}^{c}}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     {{a_{x}}^{c}}\\
+{{a_{y}}^{c}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     \end{bmatrix}$. The initial velocity (at $t=0$, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           {{v_{x}}^{i}}\\
+{{v_{y}}^{i}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \end{bmatrix}$. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD: rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
                     </p>
-                    <div class="equation">
-                      <em><b>p</b> = <table class="matrix">
-<tr><td>p<sub>x</sub><sup>i</sup>&plus;v<sub>x</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                                                                                            <span class="fup">
-                                                                                                                                              a<sub>x</sub><sup>c</sup>&#8239;t<sup>2</sup>
-                                                                                                                                            </span>
-                                                                                                                                            <span class="fdn">
-                                                                                                                                              2
-                                                                                                                                            </span>
-                                                                                                                                          </div></td></tr>
-<tr><td>p<sub>y</sub><sup>i</sup>&plus;v<sub>y</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                                                                                                                                                                                           <span class="fup">
-                                                                                                                                                                                                                                             a<sub>y</sub><sup>c</sup>&#8239;t<sup>2</sup>
-                                                                                                                                                                                                                                           </span>
-                                                                                                                                                                                                                                           <span class="fdn">
-                                                                                                                                                                                                                                             2
-                                                                                                                                                                                                                                           </span>
-                                                                                                                                                                                                                                         </div></td></tr>
-</table></em>
-                    </div>
+                    $$\mathbf{p}=\begin{bmatrix}
+                                 {{p_{x}}^{i}}+{{v_{x}}^{i}} t+\frac{{{a_{x}}^{c}} t^{2}}{2}\\
+{{p_{y}}^{i}}+{{v_{y}}^{i}} t+\frac{{{a_{y}}^{c}} t^{2}}{2}
+                                 \end{bmatrix}$$
                   </div>
                 </div>
               </div>

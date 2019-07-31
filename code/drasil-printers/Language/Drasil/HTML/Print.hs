@@ -38,11 +38,11 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
-import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
+import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac, dollarDoc)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import Language.Drasil.TeX.Print as TeX (pExpr, pUnit)
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Math))
+import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D)
 
 data OpenClose = Open | Close
 
@@ -73,7 +73,7 @@ printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))
 printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
                                  divTag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ pSpec contents
-printLO (EqnBlock contents)    = text "$" <> pSpec contents <> text "$"
+printLO (EqnBlock contents)    = dollarDoc $ pSpec contents
 printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
 printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
@@ -98,12 +98,16 @@ titleSpec (a :+: b) = titleSpec a <> titleSpec b
 titleSpec HARDNL    = empty
 titleSpec s         = pSpec s
 
+-- Helper for pSpec
+printMath :: D -> Doc
+printMath d = runPrint d Math
+
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 pSpec :: Spec -> Doc
 -- pSpec (E e)             = em $ pExpr e
 -- Latex based math for expressions and units
-pSpec (E e)             = text "$" <> runPrint (TeX.pExpr e) Math <> text "$"
-pSpec (Sy s)            = text "$" <> runPrint (TeX.pUnit s) Math <> text "$"
+pSpec (E e)             = dollarDoc $ printMath $ TeX.pExpr e
+pSpec (Sy s)            = dollarDoc $ printMath $ TeX.pUnit s
 pSpec (a :+: b)         = pSpec a <> pSpec b
 pSpec (S s)             = text s
 pSpec (Sp s)            = text $ unPH $ L.special s
@@ -116,6 +120,7 @@ pSpec EmptyS             = text "" -- Expected in the output
 pSpec (Quote q)          = doubleQuotes $ pSpec q
 -- pSpec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
 -- pSpec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
+
 
 -- | Renders symbols for HTML document
 symbol :: L.Symbol -> String

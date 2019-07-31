@@ -92,7 +92,10 @@ packD :: String -> [FileData] -> [AuxData] -> PackData
 packD = PackD
 
 data ParamData = PD {paramName :: String, paramType :: TypeData, 
-  paramDoc :: Doc} deriving Eq
+  paramDoc :: Doc}
+
+instance Eq ParamData where
+  PD n1 _ _ == PD n2 _ _ = n1 == n2
 
 pd :: String -> TypeData -> Doc -> ParamData
 pd = PD 
@@ -106,13 +109,15 @@ data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc,
 svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
 
-data TypeData = TD {cType :: CodeType, typeDoc :: Doc} deriving Eq
+data TypeData = TD {cType :: CodeType, typeDoc :: Doc}
+
+instance Eq TypeData where
+  TD t1 _ == TD t2 _ = t1 == t2
 
 td :: CodeType -> Doc -> TypeData
 td = TD
 
 data ValData = VD {valPrec :: Maybe Int, valType :: TypeData, valDoc :: Doc}
-  deriving Eq
 
 vd :: Maybe Int -> TypeData -> Doc -> ValData
 vd = VD

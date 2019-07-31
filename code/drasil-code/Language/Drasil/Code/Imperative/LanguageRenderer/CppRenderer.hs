@@ -52,10 +52,9 @@ import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
-  getInnerType, convType)
+  getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
-import Data.List (nub)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -480,10 +479,11 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (initObserverList (psnd t) (map psnd vs))
   addObserver o = pair (addObserver $ pfst o) (addObserver $ psnd o)
 
-  inOutCall n ins outs = pair (inOutCall n (map pfst ins) (map pfst outs)) 
-    (inOutCall n (map psnd ins) (map psnd outs))
-  extInOutCall m n ins outs = pair (extInOutCall m n (map pfst ins) (map pfst 
-    outs)) (extInOutCall m n (map psnd ins) (map psnd outs)) 
+  inOutCall n ins outs both = pair (inOutCall n (map pfst ins) (map pfst outs) 
+    (map pfst both)) (inOutCall n (map psnd ins) (map psnd outs) (map psnd both))
+  extInOutCall m n ins outs both = pair (extInOutCall m n (map pfst ins) (map 
+    pfst outs) (map pfst both)) (extInOutCall m n (map psnd ins) (map psnd outs)
+    (map psnd both)) 
 
   multi ss = pair (multi $ map pfst ss) (multi $ map psnd ss)
 
@@ -569,12 +569,12 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   docFunc desc pComms f = pair (docFunc desc pComms $ pfst f) (docFunc desc 
     pComms $ psnd f)
 
-  inOutFunc n s p ins outs b = pair (inOutFunc n (pfst s) (pfst p) (map pfst 
-    ins) (map pfst outs) (pfst b)) (inOutFunc n (psnd s) (psnd p) (map psnd ins)
-    (map psnd outs) (psnd b))
+  inOutFunc n s p ins outs both b = pair (inOutFunc n (pfst s) (pfst p) (map
+    pfst ins) (map pfst outs) (map pfst both) (pfst b)) (inOutFunc n (psnd s) 
+    (psnd p) (map psnd ins) (map psnd outs) (map psnd both) (psnd b))
 
-  docInOutFunc desc iComms oComms f = pair (docInOutFunc desc iComms oComms $ 
-    pfst f) (docInOutFunc desc iComms oComms $ psnd f)
+  docInOutFunc desc iComms oComms bComms f = pair (docInOutFunc desc iComms 
+    oComms bComms $ pfst f) (docInOutFunc desc iComms oComms bComms $ psnd f)
 
   commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
     (commentedFunc (psnd cmt) (psnd fn)) 
@@ -1102,9 +1102,9 @@ instance ParameterSym CppSrcCode where
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
-  method n c s _ t ps b = liftA3 (mthd False) (fmap snd s) (sequence ps) 
-    (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b blockStart 
-    blockEnd)
+  method n c s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n <$> 
+    sequence ps) (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b 
+    blockStart blockEnd)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
@@ -1133,20 +1133,23 @@ instance MethodSym CppSrcCode where
     [("argc", "Number of command-line arguments"),
     ("argv", "List of command-line arguments")]) (mainMethod c b)
 
-  function n s _ t ps b = liftA3 (mthd False) (fmap snd s) (sequence ps) 
-    (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b blockStart 
-    blockEnd)
+  function n s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n <$> 
+    sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
+    blockStart blockEnd)
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v)
+  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v)
     (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
-    if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
-    map pointerParam outs) b
+  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v)
+    (map (fmap getParam) $ v : ins) (liftA2 appendToBody b (returnState $ 
+    valueOf v))
+  inOutFunc n s p ins outs both b = function n s p (mState void) (map
+    pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
-  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
+  docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
+    (bComms ++ iComms ++ oComms)
 
   commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
@@ -1571,8 +1574,8 @@ instance StatementSym CppHdrCode where
   initObserverList _ _ = return (mkStNoEnd empty)
   addObserver _ = return (mkStNoEnd empty)
 
-  inOutCall _ _ _ = return (mkStNoEnd empty)
-  extInOutCall _ _ _ _ = return (mkStNoEnd empty)
+  inOutCall _ _ _ _ = return (mkStNoEnd empty)
+  extInOutCall _ _ _ _ _ = return (mkStNoEnd empty)
 
   multi _ = return (mkStNoEnd empty)
 
@@ -1620,8 +1623,9 @@ instance ParameterSym CppHdrCode where
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
-  method n _ s _ t ps _ = liftA3 (mthd False) (fmap snd s) (sequence ps)
-    (liftA3 (cpphMethod n) t (liftList paramListDocD ps) endStatement)
+  method n _ s _ t ps _ = liftA3 (mthd False) (fmap snd s) (checkParams n <$>
+    sequence ps) (liftA3 (cpphMethod n) t (liftList paramListDocD ps) 
+    endStatement)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] (return empty)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ 
@@ -1638,13 +1642,15 @@ instance MethodSym CppHdrCode where
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v) 
+  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map (fmap getParam) ins) b
-  inOutFunc n s p ins outs b = function n s p (mState void) (nub $ map (\v -> 
-    if v `elem` outs then pointerParam v else fmap getParam v) ins ++ 
-    map pointerParam outs) b
+  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) 
+    (map (fmap getParam) $ v : ins) b
+  inOutFunc n s p ins outs both b = function n s p (mState void) (map 
+    pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
-  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
+  docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
+    (bComms ++ iComms ++ oComms)
 
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
@@ -1909,6 +1915,9 @@ cppModuleDoc ls blnk1 fs blnk2 cs = vcat [
 cppInOutCall :: (Label -> CppSrcCode (StateType CppSrcCode) -> 
   [CppSrcCode (Value CppSrcCode)] -> CppSrcCode (Value CppSrcCode)) -> Label -> 
   [CppSrcCode (Value CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
-  CppSrcCode (Statement CppSrcCode)
-cppInOutCall f n ins [out] = assign out $ f n (variableType out) ins
-cppInOutCall f n ins outs = valState $ f n void (nub $ ins ++ map valueOf outs)
+  [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Statement CppSrcCode)
+cppInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
+cppInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf 
+  out : ins)
+cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins 
+  ++ map valueOf outs)

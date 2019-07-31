@@ -42,8 +42,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doxConfigName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
-  setMain, setMainMethod, setEmpty, intValue)
+  moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
+  setterName, setMain, setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
@@ -52,10 +52,9 @@ import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad,
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
   liftA6, liftA7, liftList, lift1List, lift2Lists, lift3Pair, lift4Pair,
-  liftPair, liftPairFst, getInnerType, convType)
+  liftPair, liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Data.List (nub)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -524,7 +523,7 @@ instance ParameterSym CSharpCode where
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
-  method n _ s p t ps b = liftA2 (mthd False) (sequence ps) 
+  method n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
     (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] getBody
@@ -548,15 +547,16 @@ instance MethodSym CSharpCode where
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v) 
+  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins outs b = function n s p (mState void) (map (\v -> 
-    if v `elem` outs then fmap (updateParamDoc csRef) (stateParam v) else 
-    stateParam v) ins ++ map (fmap (updateParamDoc csOut) . stateParam) 
-    (filter (`notElem` ins) outs)) b
+  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) 
+    (map stateParam $ v : ins) (liftA2 appendToBody b (returnState $ valueOf v))
+  inOutFunc n s p ins outs both b = function n s p (mState void) (map (fmap 
+    (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ map (fmap (updateParamDoc csOut) . stateParam) outs) b
 
-  docInOutFunc desc iComms oComms = docFuncRepr desc (nub $ iComms ++ oComms)
+  docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
+    (bComms ++ iComms ++ oComms)
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
@@ -668,8 +668,10 @@ csOut p = text "out" <+> p
 csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) -> 
   [CSharpCode (Value CSharpCode)] -> CSharpCode (Value CSharpCode)) -> Label -> 
   [CSharpCode (Value CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
-  CSharpCode (Statement CSharpCode)
-csInOutCall f n ins [out] = assign out $ f n (variableType out) ins
-csInOutCall f n ins outs = valState $ f n void (nub $ map (\v -> 
-  if v `elem` map valueOf outs then fmap (updateValDoc csRef) v else v) ins ++
-  map (fmap (updateValDoc csOut)) (filter (`notElem` ins) (map valueOf outs)))
+  [CSharpCode (Variable CSharpCode)] -> CSharpCode (Statement CSharpCode)
+csInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
+csInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out
+  : ins)
+csInOutCall f n ins outs both = valState $ f n void (map (fmap (updateValDoc 
+  csRef) . valueOf) both ++ ins ++ map (fmap (updateValDoc csOut) . valueOf) 
+  outs)

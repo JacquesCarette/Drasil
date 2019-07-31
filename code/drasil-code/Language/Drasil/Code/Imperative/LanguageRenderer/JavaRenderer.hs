@@ -43,8 +43,8 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
   doxConfigName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
-  surroundBody, getterName, setterName, setMain, setMainMethod, setEmpty, 
-  intValue)
+  appendToBody, surroundBody, getterName, setterName, setMain, setMainMethod, 
+  setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
@@ -52,7 +52,7 @@ import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad,
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift2Lists, lift3Pair, 
-  lift4Pair, liftPair, liftPairFst, getInnerType, convType)
+  lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -532,8 +532,8 @@ instance ParameterSym JavaCode where
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
-  method n _ s p t ps b = liftA2 (mthd False) (sequence ps) (liftA5 (jMethod n) 
-    s p t (liftList paramListDocD ps) b)
+  method n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
+    (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
@@ -556,14 +556,18 @@ instance MethodSym JavaCode where
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
-  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v) 
+  inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
+    ins) b
+  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins outs b = function n s p jArrayType
-    (map stateParam ins) (liftA3 surroundBody decls b (multi (varDecDef outputs
-        (valueOf (var ("new Object[" ++ show (length outs) ++ "]") jArrayType))
-      : assignArray 0 (map valueOf outs)
+  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) (map 
+    stateParam $ v : ins) (liftA2 appendToBody b (returnState $ valueOf v))
+  inOutFunc n s p ins outs both b = function n s p jArrayType
+    (map stateParam $ both ++ ins) (liftA3 surroundBody decls b (multi 
+      (varDecDef outputs (valueOf (var 
+        ("new Object[" ++ show (length $ both ++ outs) ++ "]") jArrayType))
+      : assignArray 0 (map valueOf $ both ++ outs)
       ++ [returnState (valueOf outputs)])))
       where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
               [JavaCode (Statement JavaCode)]
@@ -573,7 +577,7 @@ instance MethodSym JavaCode where
             decls = multi $ map varDec outs
             outputs = var "outputs" jArrayType
     
-  docInOutFunc desc iComms _ = docFuncRepr desc iComms
+  docInOutFunc desc iComms _ bComms = docFuncRepr desc (bComms ++ iComms)
             
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
@@ -729,8 +733,10 @@ jAssignFromArray c (v:vs) = (v &= cast (variableType v)
 jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 
   [JavaCode (Value JavaCode)] -> JavaCode (Value JavaCode)) -> Label -> 
   [JavaCode (Value JavaCode)] -> [JavaCode (Variable JavaCode)] -> 
-  JavaCode (Statement JavaCode)
-jInOutCall f n ins [] = valState $ f n void ins
-jInOutCall f n ins [out] = assign out $ f n (variableType out) ins
-jInOutCall f n ins outs = multi $ varDecDef (var "outputs" jArrayType) (f n 
-  jArrayType ins) : jAssignFromArray 0 outs
+  [JavaCode (Variable JavaCode)] -> JavaCode (Statement JavaCode)
+jInOutCall f n ins [] [] = valState $ f n void ins
+jInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
+jInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out 
+  : ins)
+jInOutCall f n ins outs both = multi $ varDecDef (var "outputs" jArrayType) 
+  (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 (both ++ outs)

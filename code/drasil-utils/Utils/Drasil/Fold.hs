@@ -91,28 +91,28 @@ sep Comma   = sC
 sep SemiCol = \a b -> a :+: S ";" +:+ b
 
 -- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and 13")
-foldNums :: [Int] -> Sentence
-foldNums x = foldlList Comma List $ map S (numList x)
+foldNums :: String -> [Int] -> Sentence
+foldNums s x = foldlList Comma List $ map S (numList s x)
 
 -- | Parses a list of integers into a list of strings (ie. ["1", "4-7", "13"])
-numList :: [Int] -> [String]
-numList []  = error "Empty list used with foldNums"
-numList [y] = [show y]
-numList [y, z]
-  | z == y + 1 = [hyp y z]
+numList :: String -> [Int] -> [String]
+numList _ []  = error "Empty list used with foldNums"
+numList _ [y] = [show y]
+numList s [y, z]
+  | z == y + 1 = [rangeSep y z s]
   | otherwise  = map show [y, z]
-numList (y:z:xs)
+numList s (y:z:xs)
   | z == y + 1 = range y z xs
-  | otherwise  = show y : numList (z:xs)
+  | otherwise  = show y : numList s (z:xs)
   where
-    range a b []   = [hyp a b]
+    range a b []   = [rangeSep a b s]
     range a b [n]
-      | n == b + 1 = [hyp a n]
-      | otherwise  = [hyp a b, show n]
-    range a b (n:ns)
+      | n == b + 1 = [rangeSep a n s]
+      | otherwise  = [rangeSep a b s, show n]
+    range a b l@(n:ns)
       | n == b + 1 = range a n ns
-      | otherwise  = hyp a b : numList (n:ns)
+      | otherwise  = rangeSep a b s : numList s l
 
--- | Helper for numList that hypenates
-hyp :: Int -> Int -> String
-hyp p q = show p ++ "-" ++ show q
+-- | Helper for numList that rangeSepenates
+rangeSep :: Int -> Int -> String -> String
+rangeSep p q s = show p ++ s ++ show q

@@ -309,9 +309,9 @@ renderCitInfo :: RefInfo -> Sentence
 renderCitInfo  None          = EmptyS
 renderCitInfo (RefNote   rn) = sParen (S rn)
 renderCitInfo (Equation [x]) = sParen (S "Eq." +:+ S (show x))
-renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums i)
+renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums "-" i)
 renderCitInfo (Page     [x]) = sParen (S "pg." +:+ S (show x))
-renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums i)
+renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums "-" i)
 
 -- | Translates from Document to the Printing representation of Document
 makeDocument :: PrintingInformation -> Document -> T.Document

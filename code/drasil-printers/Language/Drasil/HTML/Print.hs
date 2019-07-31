@@ -98,7 +98,7 @@ pSpec (a :+: b) = pSpec a <> pSpec b
 pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
     invalid = ['<', '>']
-    escapeChars '&' = "\\&"
+    --escapeChars '&' = "\\&"
     escapeChars c = [c]
 pSpec (Sy s)    = text $ uSymb s
 pSpec (Sp s)    = text $ unPH $ L.special s
@@ -407,6 +407,7 @@ bookMLA (Year      y) = dot $ text $ show y
 --bookMLA (URLdate d m y) = "Web. " ++ bookMLA (Date d m y) sm
 bookMLA (BookTitle s) = dot $ em $ pSpec s
 bookMLA (Journal   s) = comm $ em $ pSpec s
+bookMLA (Pages   [p]) = dot $ text $ "pg. " ++ show p
 bookMLA (Pages     p) = dot $ text "pp. " <> pages p
 bookMLA (Note      s) = pSpec s
 bookMLA (Number    n) = comm $ text ("no. " ++ show n)
@@ -424,7 +425,7 @@ bookMLA (Month        m) = comm $ text $ show m
 bookMLA (Type         t) = comm $ pSpec t
 
 pages :: [Int] -> Doc
-pages = pSpec . foldlList . map S . numList
+pages = pSpec . foldlList . map S . numList "&ndash;"
 
 bookAPA :: CiteField -> Doc --FIXME: year needs to come after author in L.APA
 bookAPA (Author   p) = pSpec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
@@ -463,7 +464,7 @@ artclChicago i = bookChicago i
 -- PEOPLE RENDERING --
 rendPeople :: (L.Person -> String) -> L.People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
-rendPeople f people = foldlList $ map (S . f) people --foldlList is in SentenceStructures.hs
+rendPeople f people = foldlList $ map (S . f) people --foldlList is in drasil-utils
 
 rendPeople' :: L.People -> Spec
 rendPeople' []  = S "N.a." -- "No authors given"

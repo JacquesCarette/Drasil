@@ -1,13 +1,14 @@
 module Language.Drasil.Code.Imperative.Data (Pair(..), pairList,
-  Terminator (..), ScopeTag(..), AuxData(..), ad, FileData(..), fileD, 
-  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, PackData(..), packD, ParamData(..), pd, updateParamDoc, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, 
-  VarData(..), vard
+  Terminator(..), ScopeTag(..), FileType(..), AuxData(..), ad, FileData(..), 
+  fileD, file, srcFile, hdrFile, isSource, isHeader, updateFileMod, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  PackData(..), packD, ParamData(..), pd, updateParamDoc, StateVarData(..), svd,
+  TypeData(..), td, ValData(..), vd, updateValDoc, VarData(..), vard
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
 
+import Control.Applicative (liftA2)
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -25,21 +26,39 @@ data Terminator = Semi | Empty
 
 data ScopeTag = Pub | Priv deriving Eq
 
+data FileType = Combined | Source | Header deriving Eq
+
 data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}
 
 ad :: String -> Doc -> AuxData
 ad = AD
 
-data FileData = FileD {filePath :: FilePath, fileMod :: ModData}
+data FileData = FileD {fileType :: FileType, filePath :: FilePath,
+  fileMod :: ModData}
 
 instance Eq FileData where
-  FileD p1 _ == FileD p2 _ = p1 == p2
+  FileD _ p1 _ == FileD _ p2 _ = p1 == p2
 
-fileD :: String -> ModData -> FileData
+fileD :: FileType -> String -> ModData -> FileData
 fileD = FileD
 
+file :: String -> ModData -> FileData
+file = FileD Combined
+
+srcFile :: String -> ModData -> FileData
+srcFile = FileD Source
+
+hdrFile :: String -> ModData -> FileData
+hdrFile = FileD Header
+
+isSource :: FileData -> Bool
+isSource = liftA2 (||) (Source ==) (Combined ==) . fileType
+
+isHeader :: FileData -> Bool
+isHeader = liftA2 (||) (Header ==) (Combined ==) . fileType
+
 updateFileMod :: ModData -> FileData -> FileData
-updateFileMod m f = fileD (filePath f) m
+updateFileMod m f = fileD (fileType f) (filePath f) m
 
 data FuncData = FD {funcType :: TypeData, funcDoc :: Doc}
 

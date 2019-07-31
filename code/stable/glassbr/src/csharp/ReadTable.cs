@@ -9,10 +9,10 @@ using System.Collections.Generic;
 public class ReadTable {
     
     /** \brief Reads glass ASTM data from a file with the given file name
-        \param filename No description given
-        \param z_vector No description given
-        \param x_matrix No description given
-        \param y_matrix No description given
+        \param filename name of file with x y and z data
+        \param z_vector list of z values
+        \param x_matrix lists of x values at different z values
+        \param y_matrix lists of y values at different z values
     */
     public static void func_read_table(string filename, List<double> z_vector, List<List<double>> x_matrix, List<List<double>> y_matrix) {
         StreamWriter outfile;

@@ -7,7 +7,7 @@ import math
 import InputParameters
 
 ## \brief Verifies that input values satisfy the physical constraints and software constraints
-# \param inParams No description given
+# \param inParams structure holding the input values
 def input_constraints(inParams):
     outfile = open("log.txt", "a")
     print("function input_constraints called with inputs: {", file=outfile)

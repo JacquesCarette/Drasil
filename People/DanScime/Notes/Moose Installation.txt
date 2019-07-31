@@ -1,0 +1,46 @@
+Installing Moose on Mac
+based on https://mooseframework.org/getting_started/index.html
+
+> xcode-select --install
+Xcode already installed
+
+Download a headers package
+>open /Library/Developer/CommandLineTools/Packages/macOS_SDK_headers_for_macOS_10.14.pkg
+
+Download Xquartz via https://www.xquartz.org/
+
+Download Moose Package
+
+Run Installer
+
+Click OK to add source to .bash_profile
+I believe this makes it so that on terminal startup, you are in a Moose environment
+
+Clone Moose Repo
+> git clone https://github.com/idaholab/moose
+
+Created a new project called TestMoose
+> ./moose/scripts/stork.sh TestMoose
+> cd test-moose
+
+Not sure if this step was needed
+> ./scripts/install-format-hook.sh
+
+Compile
+> make -j4
+
+Received errors, seem to have to do with a "libmesh" folder
+Going through troubleshooting steps
+https://mooseframework.inl.gov/help/troubleshooting.html
+
+Followed these steps:
+
+Running and trying to build libMesh (takes a long time)
+> cd ../moose/scripts
+> ./update_and_rebuild_libmesh.sh
+
+Run
+> make -j4
+> ./run_tests -j4
+
+1 Test Passed

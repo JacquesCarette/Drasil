@@ -7,11 +7,11 @@ import math
 import ReadTable
 
 ## \brief Performs linear interpolation
-# \param x_1 No description given
-# \param y_1 No description given
-# \param x_2 No description given
-# \param y_2 No description given
-# \param x No description given
+# \param x_1 lower x-coordinate
+# \param y_1 lower y-coordinate
+# \param x_2 upper x-coordinate
+# \param y_2 upper y-coordinate
+# \param x x-coordinate to interpolate at
 def func_lin_interp(x_1, y_1, x_2, y_2, x):
     outfile = open("log.txt", "a")
     print("function func_lin_interp called with inputs: {", file=outfile)
@@ -35,8 +35,8 @@ def func_lin_interp(x_1, y_1, x_2, y_2, x):
     return ((((y_2 - y_1) / (x_2 - x_1)) * (x - x_1)) + y_1)
 
 ## \brief Finds the array index for a value closest to the given value
-# \param arr No description given
-# \param v No description given
+# \param arr array in which value should be found
+# \param v value whose index will be found
 def func_find(arr, v):
     outfile = open("log.txt", "a")
     print("function func_find called with inputs: {", file=outfile)
@@ -54,8 +54,8 @@ def func_find(arr, v):
     raise Exception("Bound error")
 
 ## \brief Extracts a column from a 2D matrix
-# \param mat No description given
-# \param j No description given
+# \param mat matrix from which column will be extracted
+# \param j index
 def func_extractColumn(mat, j):
     outfile = open("log.txt", "a")
     print("function func_extractColumn called with inputs: {", file=outfile)
@@ -73,9 +73,9 @@ def func_extractColumn(mat, j):
     return col
 
 ## \brief Linearly interpolates a y value at given x and z values
-# \param filename No description given
-# \param x No description given
-# \param z No description given
+# \param filename name of file with x y and z data
+# \param x x-coordinate to interpolate at
+# \param z z-coordinate to interpolate at
 def func_interpY(filename, x, z):
     outfile = open("log.txt", "a")
     print("function func_interpY called with inputs: {", file=outfile)
@@ -154,9 +154,9 @@ def func_interpY(filename, x, z):
     return func_lin_interp(z_vector[i], y_1, z_vector[(i + 1)], y_2, z)
 
 ## \brief Linearly interpolates a z value at given x and y values
-# \param filename No description given
-# \param x No description given
-# \param y No description given
+# \param filename name of file with x y and z data
+# \param x x-coordinate to interpolate at
+# \param y y-coordinate to interpolate at
 def func_interpZ(filename, x, y):
     outfile = open("log.txt", "a")
     print("function func_interpZ called with inputs: {", file=outfile)

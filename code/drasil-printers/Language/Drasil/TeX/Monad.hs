@@ -91,6 +91,11 @@ instance Monoid (PrintLaTeX TP.Doc) where
 vcat :: [D] -> D
 vcat l = PL $ \ctx -> TP.vcat $ map (`runPrint` ctx) l
 
+-- vcat . punctuate
+vpunctuate :: TP.Doc -> [D] -> D
+vpunctuate x l = PL $ \ctx -> 
+  TP.vcat $ TP.punctuate x $ map (`runPrint` ctx) l
+
 -- hcat . punctuate
 hpunctuate :: TP.Doc -> [D] -> D
 hpunctuate x l = PL $ \ctx -> 

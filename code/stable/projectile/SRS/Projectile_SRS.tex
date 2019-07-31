@@ -435,7 +435,7 @@ Units & $\frac{\text{m}}{\text{s}}$
 Equation & \begin{displaymath}
            \mathbf{v}=\begin{bmatrix}
                       {{v_{x}}^{i}}+{{a_{x}}^{c}} t\\
-{{v_{y}}^{i}}+{{a_{y}}^{c}} t
+                      {{v_{y}}^{i}}+{{a_{y}}^{c}} t
                       \end{bmatrix}
            \end{displaymath}
 \\ \midrule \\
@@ -459,22 +459,22 @@ RefBy &
 \label{GD:velVecDeriv}
 For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoDMotion} and \hyperref[cartSyst]{A: cartSyst}), we can represent the velocity vector as $\mathbf{v}=\begin{bmatrix}
                                                                                                                                                                                    {v_{x}}\\
-{v_{y}}
+                                                                                                                                                                                   {v_{y}}
                                                                                                                                                                                    \end{bmatrix}$ and the acceleration vector as $\mathbf{a}=\begin{bmatrix}
                                                                                                                                                                                                                                              {a_{x}}\\
-{a_{y}}
+                                                                                                                                                                                                                                             {a_{y}}
                                                                                                                                                                                                                                              \end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration vector is represented as ${\mathbf{a}^{c}}=\begin{bmatrix}
                                                                                                                                                                                                                                                                                                                                                                                                                         {{a_{x}}^{c}}\\
-{{a_{y}}^{c}}
+                                                                                                                                                                                                                                                                                                                                                                                                                        {{a_{y}}^{c}}
                                                                                                                                                                                                                                                                                                                                                                                                                         \end{bmatrix}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              {{v_{x}}^{i}}\\
-{{v_{y}}^{i}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{v_{y}}^{i}}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectVel]{GD: rectVel} can be applied to each coordinate of the velocity vector to yield the required equation:
 
 \begin{displaymath}
 \mathbf{v}=\begin{bmatrix}
            {{v_{x}}^{i}}+{{a_{x}}^{c}} t\\
-{{v_{y}}^{i}}+{{a_{y}}^{c}} t
+           {{v_{y}}^{i}}+{{a_{y}}^{c}} t
            \end{bmatrix}
 \end{displaymath}
 \vspace{\baselineskip}
@@ -494,7 +494,7 @@ Units & m
 Equation & \begin{displaymath}
            \mathbf{p}=\begin{bmatrix}
                       {{p_{x}}^{i}}+{{v_{x}}^{i}} t+\frac{{{a_{x}}^{c}} t^{2}}{2}\\
-{{p_{y}}^{i}}+{{v_{y}}^{i}} t+\frac{{{a_{y}}^{c}} t^{2}}{2}
+                      {{p_{y}}^{i}}+{{v_{y}}^{i}} t+\frac{{{a_{y}}^{c}} t^{2}}{2}
                       \end{bmatrix}
            \end{displaymath}
 \\ \midrule \\
@@ -521,25 +521,25 @@ RefBy & \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[IM:ca
 \label{GD:posVecDeriv}
 For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoDMotion} and \hyperref[cartSyst]{A: cartSyst}), we can represent the position vector as $\mathbf{p}=\begin{bmatrix}
                                                                                                                                                                                    {p_{x}}\\
-{p_{y}}
+                                                                                                                                                                                   {p_{y}}
                                                                                                                                                                                    \end{bmatrix}$, the velocity vector as $\mathbf{v}=\begin{bmatrix}
                                                                                                                                                                                                                                       {v_{x}}\\
-{v_{y}}
+                                                                                                                                                                                                                                      {v_{y}}
                                                                                                                                                                                                                                       \end{bmatrix}$, and the acceleration vector as $\mathbf{a}=\begin{bmatrix}
                                                                                                                                                                                                                                                                                                  {a_{x}}\\
-{a_{y}}
+                                                                                                                                                                                                                                                                                                 {a_{y}}
                                                                                                                                                                                                                                                                                                  \end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration vector is represented as ${\mathbf{a}^{c}}=\begin{bmatrix}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{a_{x}}^{c}}\\
-{{a_{y}}^{c}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{a_{y}}^{c}}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \end{bmatrix}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${\mathbf{v}^{i}}=\begin{bmatrix}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  {{v_{x}}^{i}}\\
-{{v_{y}}^{i}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 {{v_{y}}^{i}}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectPos]{GD: rectPos} can be applied to each coordinate of the position vector to yield the required equation:
 
 \begin{displaymath}
 \mathbf{p}=\begin{bmatrix}
            {{p_{x}}^{i}}+{{v_{x}}^{i}} t+\frac{{{a_{x}}^{c}} t^{2}}{2}\\
-{{p_{y}}^{i}}+{{v_{y}}^{i}} t+\frac{{{a_{y}}^{c}} t^{2}}{2}
+           {{p_{y}}^{i}}+{{v_{y}}^{i}} t+\frac{{{a_{y}}^{c}} t^{2}}{2}
            \end{bmatrix}
 \end{displaymath}
 \subsubsection{Data Definitions}

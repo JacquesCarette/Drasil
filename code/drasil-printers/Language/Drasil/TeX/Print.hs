@@ -8,10 +8,9 @@ import Numeric (showEFloat)
 import Control.Applicative (pure)
 import Control.Arrow (second)
 
-import qualified Language.Drasil as L (
-  RenderSpecial(..), People, rendPersLFM,
-  CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document, special, USymb(US)) 
+import qualified Language.Drasil as L (CitationKind(..), Decoration(Prime, Hat, Vector),
+  Document, MaxWidthPercent, Month(..), People, RenderSpecial(..), Sentence(S),
+  Symbol(..), USymb(US), (+:+), rendPersLFM, special)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -38,8 +37,8 @@ import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgs, mkMinipage,
   newline, newpage, parens, quote, sec, snref, superscript, symbDescription,
   texSym, title, toEqn)
-import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
-  toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
+import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
+  hpunctuate, lub, runPrint, switch, toMath, toText, unPL, vcat, vpunctuate)
 import Language.Drasil.TeX.Preamble (genPreamble)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
@@ -176,14 +175,10 @@ fence _ Norm      = pure $ text "||"
 
 -- | For printing Matrix
 pMatrix :: [[Expr]] -> D
-pMatrix [] = pure (text "")
-pMatrix [x] = pIn x
-pMatrix (x:xs) = pIn x <> pure (text "\\\\\n") <> pMatrix xs
+pMatrix e = vpunctuate dbs (map pIn e)
 
 pIn :: [Expr] -> D
-pIn [] = pure (text "")
-pIn [x] = pExpr x
-pIn (x:xs) = pExpr x <> pure (text " & ") <> pIn xs
+pIn e = hpunctuate (text " & ") (map pExpr e)
 
 cases :: [(Expr,Expr)] -> D
 cases []     = error "Attempt to create case expression without cases"

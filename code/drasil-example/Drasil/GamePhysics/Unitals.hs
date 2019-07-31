@@ -104,7 +104,7 @@ perpParam, rigidParam, velParam, velBodyParam, angParam :: String -> Symbol -> U
 
 velParam n w = ucs'
  (dccWDS ("velocity" ++ n) ( compoundPhrase' (QP.velocity ^. term)
-  (cn $ "at point " ++ n)) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
+  (cn $ "at point " ++ n)) (phrase QP.velocity)) (sup (eqSymb QP.velocity) w) Real velU
 
 velBodyParam n w = ucs'
  (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)

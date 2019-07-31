@@ -12,7 +12,7 @@ module Language.Drasil.Printers (
     -- Helpers
   , toPlainName
     -- Print
-  , sentenceDoc, symbolDoc
+  , Linearity(..), sentenceDoc, exprDoc, symbolDoc, unitDoc
   -- TeX
     -- Print
   , genTeX
@@ -29,7 +29,8 @@ import Language.Drasil.Output.Formats (DocSpec(DocSpec), DocType(SRS, MG, MIS, W
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.Plain.Helpers (toPlainName)
-import Language.Drasil.Plain.Print (sentenceDoc, symbolDoc)
+import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc, 
+  symbolDoc, unitDoc)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
   HasPrintingOptions(..), Notation(Scientific, Engineering), defaultConfiguration)

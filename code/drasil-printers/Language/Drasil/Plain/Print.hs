@@ -1,43 +1,51 @@
 module Language.Drasil.Plain.Print (
-  sentenceDoc, symbolDoc, unitDoc
+  Linearity(..), exprDoc, sentenceDoc, symbolDoc, unitDoc
 ) where
 
-import Database.Drasil(ChunkDB, termTable)
-import Language.Drasil
+import Database.Drasil(ChunkDB)
+import Language.Drasil hiding (Expr(..), Sentence(..), symbol)
+import qualified Language.Drasil as L (Expr, Sentence)
 import Language.Drasil.Plain.Helpers (toPlainName)
+import Language.Drasil.Printing.AST (Expr(..), Spec(..))
+import Language.Drasil.Printing.Import (expr, spec, symbol)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..), 
+  defaultConfiguration)
 
 import Prelude hiding ((<>))
-import Control.Lens (view)
 import Data.List (partition)
-import qualified Data.Map as Map (lookup)
-import Text.PrettyPrint.HughesPJ (Doc, (<>), empty, hsep, integer, parens, text)
+import Text.PrettyPrint.HughesPJ (Doc, (<>), double, doubleQuotes, empty, hsep, 
+  integer, parens, text)
 
-sentenceDoc :: ChunkDB -> Sentence -> Doc
-sentenceDoc _ (S s) = text s
-sentenceDoc _ (P s) = symbolDoc s
-sentenceDoc _ (Sy u) = unitDoc u
-sentenceDoc db ((:+:) s1 s2) = sentenceDoc db s1 <> sentenceDoc db s2
-sentenceDoc db (Ch _ u) = maybe empty (sentenceDoc db . phraseNP . view term . 
-  fst) (Map.lookup u (termTable db))
-sentenceDoc _ _ = error "Term is not a string" 
+data Linearity = Linear | Nonlinear
+
+exprDoc :: ChunkDB -> Linearity -> L.Expr -> Doc
+exprDoc db f e = pExprDoc f (expr e (PI db defaultConfiguration))
+
+sentenceDoc :: ChunkDB -> Linearity -> L.Sentence -> Doc
+sentenceDoc db f s = specDoc f (spec (PI db defaultConfiguration) s)
 
 symbolDoc :: Symbol -> Doc
-symbolDoc (Atomic s) = text $ toPlainName s
-symbolDoc (Special sp) = specialDoc sp
-symbolDoc (Atop d s) = decorate (symbolDoc s) d
-symbolDoc (Corners ul ll ur lr b) =
-  cleft ul <> cleft ll <> symbolDoc b <> cright lr <> cright ur
-  where cleft :: [Symbol] -> Doc
-        cleft [] = empty
-        cleft (s:syms) = symbolDoc s <> text "_" <> cleft syms
-        cright :: [Symbol] -> Doc
-        cright [] = empty
-        cright (s:syms) = text "_" <> symbolDoc s <> cright syms
-symbolDoc (Concat s) = foldl1 (<>) $ map symbolDoc s
-symbolDoc Empty = empty
+symbolDoc s = pExprDoc Linear (symbol s)
 
-unitDoc :: USymb -> Doc
-unitDoc (US us) = formatu t b
+pExprDoc :: Linearity -> Expr -> Doc
+pExprDoc _ (Dbl d) = double d
+pExprDoc _ (Int i) = integer i
+pExprDoc _ (Str s) = text s
+pExprDoc _ (Ident s) = text $ toPlainName s
+pExprDoc _ _ = error "Expr to Doc unimplemented"
+
+specDoc :: Linearity -> Spec -> Doc
+specDoc f (E e) = pExprDoc f e
+specDoc _ (S s) = text s
+specDoc f (Sy u) = unitDoc f u
+specDoc _ (Sp s) = specialDoc s
+specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2
+specDoc _ EmptyS = empty
+specDoc f (Quote s) = doubleQuotes $ specDoc f s
+specDoc _ _ = error "Term is not a string" 
+
+unitDoc :: Linearity -> USymb -> Doc
+unitDoc f (US us) = formatu t b
   where
   (t,b) = partition ((> 0) . snd) us
   formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> Doc
@@ -49,8 +57,8 @@ unitDoc (US us) = formatu t b
   line [x] = pow x
   line l   = parens $ hsep $ map pow l
   pow :: (Symbol,Integer) -> Doc
-  pow (x,1) = symbolDoc x
-  pow (x,p) = symbolDoc x <> text "^" <> integer p
+  pow (x,1) = pExprDoc f $ symbol x
+  pow (x,p) = pExprDoc f (symbol x) <> text "^" <> integer p
 
 decorate :: Doc -> Decoration -> Doc
 decorate s Hat = s <> text "_hat"

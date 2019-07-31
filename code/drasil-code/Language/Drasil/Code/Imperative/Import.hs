@@ -32,7 +32,7 @@ import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs, junkLine, singleton)
-import Language.Drasil.Printers (sentenceDoc)
+import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (nub, intersperse, (\\), stripPrefix)
@@ -201,15 +201,15 @@ funcTerm :: String -> Reader (State repr) String
 funcTerm cname = do
   g <- ask
   let db = sysinfodb $ csi $ codeSpec g
-  return $ (maybe "No description given" (render . sentenceDoc db . phraseNP . 
-    view term) . Map.lookup cname) (fMap $ codeSpec g)
+  return $ (maybe "No description given" (render . sentenceDoc db Linear . 
+    phraseNP . view term) . Map.lookup cname) (fMap $ codeSpec g)
        
 varTerm :: String -> Reader (State repr) String
 varTerm cname = do
   g <- ask
   let db = sysinfodb $ csi $ codeSpec g
-  return $ (maybe "No description given" (render . sentenceDoc db . phraseNP . 
-    view term) . Map.lookup cname) (vMap $ codeSpec g)
+  return $ (maybe "No description given" (render . sentenceDoc db Linear . 
+    phraseNP . view term) . Map.lookup cname) (vMap $ codeSpec g)
 
 ----- Descriptions -----
 

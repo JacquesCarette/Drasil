@@ -13,8 +13,8 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
 
 import Prelude hiding ((<>))
 import Data.List (partition)
-import Text.PrettyPrint.HughesPJ (Doc, (<>), double, doubleQuotes, empty, hsep, 
-  integer, parens, text)
+import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), double, doubleQuotes, empty,
+  hsep, integer, parens, text)
 
 data Linearity = Linear | Nonlinear
 
@@ -39,10 +39,12 @@ specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
 specDoc f (Sy u) = unitDoc f u
 specDoc _ (Sp s) = specialDoc s
+specDoc f (Ref _ r s) = specDoc f s <+> parens (text r)
 specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2
 specDoc _ EmptyS = empty
 specDoc f (Quote s) = doubleQuotes $ specDoc f s
-specDoc _ _ = error "Term is not a string" 
+specDoc Nonlinear HARDNL = text "\n"
+specDoc Linear HARDNL = error "HARDNL encountered in attempt to format linearly"
 
 unitDoc :: Linearity -> USymb -> Doc
 unitDoc f (US us) = formatu t b

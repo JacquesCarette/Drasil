@@ -9,8 +9,8 @@ using System.Collections.Generic;
 public class InputFormat {
     
     /** \brief Reads input from a file with the given file name
-        \param filename No description given
-        \param inParams No description given
+        \param filename name of file with x y and z data
+        \param inParams structure holding the input values
     */
     public static void get_input(string filename, InputParameters inParams) {
         StreamWriter outfile;

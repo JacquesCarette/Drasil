@@ -10,7 +10,10 @@ library
       Language.Drasil.Code
   other-modules:
       Language.Drasil.Chunk.Code
+    , Language.Drasil.Chunk.CodeDefinition
+    , Language.Drasil.Chunk.CodeQuantity
     , Language.Drasil.Code.Code
+    , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.Imperative.Symantics
     , Language.Drasil.Code.Imperative.Build.AST
@@ -56,8 +59,11 @@ executable codegenTest
     , Test.Observer
     , Test.Helper
     , Language.Drasil.Chunk.Code
+    , Language.Drasil.Chunk.CodeDefinition
+    , Language.Drasil.Chunk.CodeQuantity
     , Language.Drasil.Code
     , Language.Drasil.Code.Code
+    , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.Imperative.Symantics
     , Language.Drasil.Code.Imperative.Build.AST

@@ -33,10 +33,11 @@ import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import qualified Language.Drasil.Printing.Import as I
 import Language.Drasil.Printing.Helpers hiding (br, paren, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
-  cite, citeInfo, command, command0, commandD, command2D, description, document,
-  empty, enumerate, externalref, figure, fraction, includegraphics, item, item',
-  itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgs, newline, newpage,
-  parens, quote, sec, snref, superscript, symbDescription, title, toEqn)
+  cite, command, command0, commandD, command2D, description, document, empty,
+  enumerate, externalref, figure, fraction, includegraphics, item, item',
+  itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgs, mkMinipage,
+  newline, newpage, parens, quote, sec, snref, superscript, symbDescription,
+  texSym, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
   toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -73,24 +74,24 @@ print :: PrintingInformation -> [LayoutObj] -> D
 print sm = foldr (($+$) . (`lo` sm)) empty
 
 ------------------ Symbol ----------------------------
-symbol :: L.Symbol -> String
-symbol (L.Atomic s)  = s
-symbol (L.Special s) = unPL $ L.special s
-symbol (L.Concat sl) = concatMap symbol sl
+symbol :: L.Symbol -> D
+symbol (L.Atomic s)  = pure $ text s
+symbol (L.Special s) = pure $ text $ unPL (L.special s)
+symbol (L.Concat sl) = foldl (<>) empty $ map symbol sl
 --
 -- handle the special cases first, then general case
-symbol (L.Corners [] [] [x] [] s) = brace $ symbol s ++ "^" ++ brace (symbol x)
-symbol (L.Corners [] [] [] [x] s) = brace $ symbol s ++ "_" ++ brace (symbol x)
+symbol (L.Corners [] [] [x] [] s) = br $ symbol s <> pure hat <> br (symbol x)
+symbol (L.Corners [] [] [] [x] s) = br $ symbol s <> pure unders <> br (symbol x)
 symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol L.Corners{}                = error "rendering of Corners (general)"
 symbol (L.Atop f s)               = sFormat f s
-symbol L.Empty                    = ""
+symbol L.Empty                    = empty
 
-sFormat :: L.Decoration -> L.Symbol -> String
-sFormat L.Hat    s = "\\hat{" ++ symbol s ++ "}"
-sFormat L.Vector s = "\\mathbf{" ++ symbol s ++ "}"
-sFormat L.Prime  s = symbol s ++ "'"
+sFormat :: L.Decoration -> L.Symbol -> D
+sFormat L.Hat    s = commandD "hat" (symbol s)
+sFormat L.Vector s = commandD "mathbf" (symbol s)
+sFormat L.Prime  s = symbol s <> pure (text "'")
 
 data OpenClose = Open | Close
 
@@ -129,22 +130,22 @@ pOps Natural  = mathbb "N"
 pOps Boolean  = mathbb "B"
 pOps Comma    = pure $ text ","
 pOps Prime    = pure $ text "'"
-pOps Log      = command0 "log"
-pOps Ln       = command0 "ln"
-pOps Sin      = command0 "sin"
-pOps Cos      = command0 "cos"
-pOps Tan      = command0 "tan"
-pOps Sec      = command0 "sec"
-pOps Csc      = command0 "csc"
-pOps Cot      = command0 "cot"
-pOps Arcsin   = command0 "arcsin"
-pOps Arccos   = command0 "arccos"
-pOps Arctan   = command0 "arctan"
+pOps Log      = texSym "log"
+pOps Ln       = texSym "ln"
+pOps Sin      = texSym "sin"
+pOps Cos      = texSym "cos"
+pOps Tan      = texSym "tan"
+pOps Sec      = texSym "sec"
+pOps Csc      = texSym "csc"
+pOps Cot      = texSym "cot"
+pOps Arcsin   = texSym "arcsin"
+pOps Arccos   = texSym "arccos"
+pOps Arctan   = texSym "arctan"
 pOps Not      = commandD "neg" empty
 pOps Dim      = command "mathsf" "dim"
 pOps Exp      = pure $ text "e"
 pOps Neg      = pure hyph
-pOps Cross    = command0 "times"
+pOps Cross    = texSym "times"
 pOps Dot      = commandD "cdot" empty
 pOps Eq       = pure assign
 pOps NEq      = commandD "neq" empty
@@ -161,17 +162,17 @@ pOps Add      = pure pls
 pOps Mul      = pure $ text " "
 pOps Summ     = command0 "displaystyle" <> command0 "sum"
 pOps Prod     = command0 "displaystyle" <> command0 "prod"
-pOps Inte     = command0 "int"
+pOps Inte     = texSym "int"
 pOps Point    = pure $ text "."
-pOps Perc     = command0 "%"
+pOps Perc     = texSym "%"
 
 fence :: OpenClose -> Fence -> D
-fence Open Paren  = pure . text $ "\\left("
-fence Close Paren = pure . text $ "\\right)"
-fence Open Curly  = pure . text $ "\\{"
-fence Close Curly = pure . text $ "\\}"
-fence _ Abs       = pure . text $ "|"
-fence _ Norm      = pure . text $ "||"
+fence Open Paren  = texSym "left("
+fence Close Paren = texSym "right)"
+fence Open Curly  = texSym "{"
+fence Close Curly = texSym "}"
+fence _ Abs       = pure $ text "|"
+fence _ Norm      = pure $ text "||"
 
 -- | For printing Matrix
 pMatrix :: [[Expr]] -> D
@@ -204,10 +205,8 @@ makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
   %% (if bool then caption t else caption empty)
   %% label r
   where ltab = tabType $ anyLong lls
-        tabType True  = ltabu
-        tabType False = ltable
-        ltabu  = "longtabu" --Only needed if "X[l]" is used
-        ltable = "longtable"
+        tabType True  = "longtabu" --Only needed if "X[l]" is used
+        tabType False = "longtable"
         descr True  = "X[l]"
         descr False = "l"
   --returns "X[l]" for columns with long fields
@@ -217,12 +216,17 @@ makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
 
 -- | determines the length of a Spec
 specLength :: Spec -> Int
-specLength (S x)     = length x
-specLength (E x)     = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
-specLength (Sy _)    = 1
-specLength (a :+: b) = specLength a + specLength b
-specLength EmptyS    = 0
-specLength _         = 0
+specLength (E x)       = length $ filter (`notElem` dontCount) $ TP.render $ runPrint (pExpr x) Curr
+specLength (S x)       = length x
+specLength (a :+: b)   = specLength a + specLength b
+specLength (Sy _)      = 1
+specLength (Sp _)      = 1
+specLength (Ref Internal r _) = length r
+specLength (Ref Cite2    r i) = length r + specLength i
+specLength (Ref External _ t) = specLength t
+specLength EmptyS      = 0
+specLength (Quote q)   = 4 + specLength q
+specLength HARDNL      = 0
 
 dontCount :: String
 dontCount = "\\/[]{}()_^$:"
@@ -240,14 +244,14 @@ makeColumns ls = hpunctuate (text " & ") $ map spec ls
 
 needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
-needs (S _)            = Text
-needs (E _)            = Math
-needs (Sy _)           = Text
-needs (Sp _)           = Math
-needs HARDNL           = Text
-needs Ref{}            = Text
-needs EmptyS           = Text
-needs (Quote _)        = Text
+needs (S _)     = Text
+needs (E _)     = Math
+needs (Sy _)    = Text
+needs (Sp _)    = Math
+needs HARDNL    = Text
+needs Ref{}     = Text
+needs EmptyS    = Text
+needs (Quote _) = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -260,11 +264,13 @@ spec (E ex) = toMath $ pExpr ex
 spec (S s)  = pure $ text (concatMap escapeChars s)
 spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
-spec HARDNL = pure $ text "\\newline"
-spec (Ref Internal r sn) = snref r $ spec sn
-spec (Ref Cite2    r EmptyS) = cite (pure $ text r)
-spec (Ref Cite2    r i)      = citeInfo (pure $ text r) (spec i)
-spec (Ref External r sn) = externalref r $ spec sn
+spec HARDNL = command0 "newline"
+spec (Ref Internal r sn) = snref r (spec sn)
+spec (Ref Cite2    r i)  = cite r (info i)
+  where
+    info EmptyS = Nothing
+    info x      = Just (spec x)
+spec (Ref External r sn) = externalref r (spec sn)
 spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q
 
@@ -273,13 +279,13 @@ escapeChars '_' = "\\_"
 escapeChars c = [c]
 
 symbolNeeds :: L.Symbol -> MathContext
-symbolNeeds (L.Atomic _)          = Text
-symbolNeeds (L.Special _)         = Math
-symbolNeeds (L.Concat [])         = Math
-symbolNeeds (L.Concat (s:_))      = symbolNeeds s
-symbolNeeds L.Corners{}           = Math
-symbolNeeds (L.Atop _ _)          = Math
-symbolNeeds L.Empty               = Curr
+symbolNeeds (L.Atomic _)     = Text
+symbolNeeds (L.Special _)    = Math
+symbolNeeds (L.Concat [])    = Math
+symbolNeeds (L.Concat (s:_)) = symbolNeeds s
+symbolNeeds L.Corners{}      = Math
+symbolNeeds (L.Atop _ _)     = Math
+symbolNeeds L.Empty          = Curr
 
 pUnit :: L.USymb -> D
 pUnit (L.US ls) = formatu t b
@@ -298,7 +304,7 @@ pUnit (L.US ls) = formatu t b
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
     p_symb (L.Concat s) = foldl (<>) empty $ map p_symb s
-    p_symb n = let cn = symbolNeeds n in switch (const cn) $ pure $ text $ symbol n
+    p_symb n = let cn = symbolNeeds n in switch (const cn) $ symbol n
 
 {-
 pUnit :: L.USymb -> D
@@ -321,20 +327,13 @@ pUnit (UDiv n d) = toMath $
 
 makeDefn :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefn _  [] _ = error "Empty definition"
-makeDefn sm ps l = beginDefn %% makeDefTable sm ps l %% endDefn
-
-beginDefn :: D
-beginDefn = commandD "vspace" (command0 "baselineskip") %% command0 "noindent" %%
-  pure (text "\\begin{minipage}{\\textwidth}")
-
-endDefn :: D
-endDefn = pure (text "\\end{minipage}")
+makeDefn sm ps l = mkMinipage (makeDefTable sm ps l)
 
 makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
 makeDefTable sm ps l = mkEnvArgs "tabular" (col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth) $ vcat [
-  pure (text "\\toprule ") <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l, --shortname instead of refname?
-  pure (text "\\phantomsection "), label l,
+  command0 "toprule " <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l, --shortname instead of refname?
+  command0 "phantomsection ", label l,
   makeDRows sm ps,
   pure $ dbs <+> text "\\bottomrule"
   ]
@@ -379,7 +378,7 @@ lspec (S s) = pure $ text s
 lspec r = spec r
 
 mlref :: Maybe Label -> D
-mlref = maybe empty $ (<>) (pure $ text "\\phantomsection") . label . lspec
+mlref = maybe empty $ (<>) (command0 "phantomsection") . label . lspec
 
 pItem :: ItemType -> D
 pItem (Flat s) = item $ spec s
@@ -447,9 +446,9 @@ makeGraph ps w h c l =
          ]
      ++  map (\(a,b) -> q a <> pure (text " -> ") <> q b <> pure (text ";")) ps
      ++  [ pure $ text "}",
-           pure $ text "\\end{dot2tex}",
-           pure $ text "\\end{tikzpicture}",
-           pure $ text "\\end{adjustbox}",
+           command "end" "dot2tex",
+           command "end" "tikzpicture",
+           command "end" "adjustbox",
            caption c,
            label l
          ]

@@ -102,14 +102,14 @@ titleSpec s         = pSpec s
 
 -- Helper for pSpec
 printMath :: D -> Doc
-printMath d = runPrint d Math
+printMath d = runPrint d Text
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 pSpec :: Spec -> Doc
 -- pSpec (E e)             = em $ pExpr e
 -- Latex based math for expressions and units
 pSpec (E e)             = dollarDoc $ printMath $ TeX.pExpr e
-pSpec (Sy s)            = dollarDoc $ printMath $ TeX.pUnit s
+pSpec (Sy s)            = printMath $ TeX.pUnit s
 pSpec (a :+: b)         = pSpec a <> pSpec b
 pSpec (S s)             = text s
 pSpec (Sp s)            = text $ unPH $ L.special s

@@ -1,4 +1,5 @@
 /** \file InputConstraints.hpp
+    \brief Provides the function for checking the physical constraints and software constraints on the input
 */
 #ifndef InputConstraints_h
 #define InputConstraints_h

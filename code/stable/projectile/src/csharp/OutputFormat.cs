@@ -1,4 +1,5 @@
 /** \file OutputFormat.cs
+    \brief Provides the function for writing outputs
 */
 using System;
 using System.IO;

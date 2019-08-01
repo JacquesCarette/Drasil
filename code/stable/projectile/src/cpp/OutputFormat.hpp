@@ -1,4 +1,5 @@
 /** \file OutputFormat.hpp
+    \brief Provides the function for writing outputs
 */
 #ifndef OutputFormat_h
 #define OutputFormat_h

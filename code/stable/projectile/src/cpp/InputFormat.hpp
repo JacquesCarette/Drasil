@@ -1,4 +1,5 @@
 /** \file InputFormat.hpp
+    \brief Provides the function for reading inputs
 */
 #ifndef InputFormat_h
 #define InputFormat_h

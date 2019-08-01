@@ -1,4 +1,5 @@
 /** \file InputFormat.cs
+    \brief Provides the function for reading inputs
 */
 using System;
 using System.IO;

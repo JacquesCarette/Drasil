@@ -206,7 +206,7 @@ introStart = foldlSent [S "Due to", foldlList Comma List (map S
   phrase energy, S "storage technology"]
 
 introStartSWHS :: Sentence
-introStartSWHS = foldlSent [swhsPCM ^. defn, sParen (short phsChgMtrl),
+introStartSWHS = foldlSent [capSent (swhsPCM ^. defn), sParen (short phsChgMtrl),
   S "use a renewable", phrase enerSrc `sAnd` S "provide a novel way of storing" +:+.
   phrase energy, atStart swhsPCM, S "improve over the traditional", plural progName,
   S "because of their smaller size. The smaller size is possible because of the ability" `sOf`

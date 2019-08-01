@@ -1,4 +1,6 @@
 module Utils.Drasil (
+  -- Contents
+  enumBullet, enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR',
   -- Document
   indent, indentList,
   -- English
@@ -9,8 +11,7 @@ module Utils.Drasil (
   foldlSent_,foldlSentCol, foldlsC,
   -- Misc
   addPercent, bulletFlat, bulletNested, chgsStart, displayConstrntsAsSet,
-  enumBullet, enumBulletU, enumSimple, enumSimpleU, eqN, eqUnR, eqUnR',
-  eqnWSource, fromReplace, fmtU, follows, getTandS, itemRefToSent,
+  eqN, eqnWSource, fromReplace, fmtU, follows, getTandS, itemRefToSent,
   makeListRef, makeTMatrix, maybeChanged, maybeExpanded, maybeWOVerb,
   mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain, showingCxnBw,
   sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym, typUncr,
@@ -24,6 +25,7 @@ module Utils.Drasil (
   sVersus, sAnd, sAre, sIn, sIs, toThe
 ) where
 
+import Utils.Drasil.Contents
 import Utils.Drasil.Document
 import Utils.Drasil.English
 import Utils.Drasil.Fold

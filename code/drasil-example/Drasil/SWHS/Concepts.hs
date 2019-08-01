@@ -7,7 +7,7 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
   likelyChg, physSyst, requirement, srs, typUnc, unlikelyChg)
-import Data.Drasil.Concepts.Math (ode, parameter)
+import Data.Drasil.Concepts.Math (ode, parameter, rightSide)
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, materialEng, thModel)
 
 con :: [ConceptChunk]
@@ -17,25 +17,22 @@ con = [charging, coil, discharging, gaussDiv,
 
 ---Acronyms---
 acronyms :: [CI]
-acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode, 
-            progName, physSyst, requirement, srs, thModel, typUnc, unlikelyChg]
+acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
+  progName, physSyst, requirement, srs, thModel, typUnc, unlikelyChg]
 
 acronymsFull :: [CI]
 acronymsFull = acronyms ++ [phsChgMtrl, rightSide]
 
-phsChgMtrl, rightSide, progName :: CI
+phsChgMtrl, progName :: CI
 
 phsChgMtrl  = commonIdeaWithDict "phsChgMtrl" (nounPhrase "phase change material"
   "phase change materials") "PCM" [materialEng]
-
-rightSide   = commonIdeaWithDict "rightSide"  (nounPhrase "right hand side"
-  "right hand sides") "RHS" [materialEng]
 
 progName    = commonIdeaWithDict "swhsName"   (nounPhrase "solar water heating system"
   "solar water heating systems") "SWHS" [materialEng]
 
 full :: NamedChunk
-full    = nc "full" (progName `with` phsChgMtrl)
+full = nc "full" (progName `with` phsChgMtrl)
 -- I want to include SI as an acronym, but I can't find a way for the
 -- description to have accents when using dcc.
 

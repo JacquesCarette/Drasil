@@ -30,7 +30,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   property, purpose, quantity, reference, software, softwareSys, solution,
   srsDomains, sysCont, system, user, value, variable, doccon, doccon')
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
-import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
+import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
@@ -51,7 +51,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
-  phsChgMtrl, progName, rightSide, sWHT, swhsPCM, tank, tankPCM, transient, water)
+  phsChgMtrl, progName, sWHT, swhsPCM, tank, tankPCM, transient, water)
 import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, qDefs)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
 import Drasil.SWHS.GenDefs (genDefs)

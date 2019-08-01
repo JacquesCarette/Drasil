@@ -16,7 +16,7 @@ mathcon = [angle, area, calculation, cartesian, centre, change, constraint,
   xComp, xDir, yAxis, yComp, yDir, zAxis, zComp, zDir]
 
 mathcon' :: [CI]
-mathcon' = [pde, ode, de]
+mathcon' = [de, leftSide, ode, pde, rightSide]
 
 angle, area, calculation, cartesian, centre, change, constraint, diameter,
   equation, euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal,
@@ -71,11 +71,14 @@ xDir = dcc "xDir" (nounPhraseSent $ P lX :+: S "-direction") "the direction alig
 yDir = dcc "yDir" (nounPhraseSent $ P lY :+: S "-direction") "the direction aligned with the y-axis"
 zDir = dcc "zDir" (nounPhraseSent $ P lZ :+: S "-direction") "the direction aligned with the z-axis"
 
+de, leftSide, ode, pde, rightSide :: CI
 --FIXME: use nounphrase instead of cn'
-pde, ode, de :: CI
 de  = commonIdeaWithDict "de"  (cn' "differential equation")          "DE"  [mathematics]
 ode = commonIdeaWithDict "ode" (cn' "ordinary differential equation") "ODE" [mathematics]
 pde = commonIdeaWithDict "pde" (cn' "partial differential equation")  "PDE" [mathematics]
+
+leftSide  = commonIdeaWithDict "leftSide"  (nounPhrase "left hand side"  "left hand sides" ) "LHS" [mathematics]
+rightSide = commonIdeaWithDict "rightSide" (nounPhrase "right hand side" "right hand sides") "RHS" [mathematics]
 
 --FIXME: COMBINATION HACK (all below)
 euclidN = dcc "euclidNorm"    (compoundPhrase' (euclidSpace ^. term) (norm ^. term)) "euclidean norm"

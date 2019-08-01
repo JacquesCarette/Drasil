@@ -6,7 +6,8 @@ import Theory.Drasil (DataDefinition, InstanceModel, im, imNoDeriv)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, goal, solution, output_)
-import Data.Drasil.Concepts.Math (area, change, equation, ode, rOfChng, surface)
+import Data.Drasil.Concepts.Math (area, change, equation, ode, rightSide,
+  rOfChng, surface)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec, 
   heatTrans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp,
@@ -16,7 +17,7 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpTHCCoL,
   assumpCWTAT, assumpTPCAV)
-import Drasil.SWHS.Concepts (coil, phsChgMtrl, rightSide, tank, water)
+import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, ddHtFusion, ddMeltFrac,
   ddBalanceSolidPCM, ddBalanceLiquidPCM)
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)

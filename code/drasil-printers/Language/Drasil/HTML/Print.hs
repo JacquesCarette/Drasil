@@ -408,7 +408,7 @@ bookMLA (Year      y) = dot $ text $ show y
 bookMLA (BookTitle s) = dot $ em $ pSpec s
 bookMLA (Journal   s) = comm $ em $ pSpec s
 bookMLA (Pages   [p]) = dot $ text $ "pg. " ++ show p
-bookMLA (Pages     p) = dot $ text "pp. " <> pages p
+bookMLA (Pages     p) = dot $ text "pp. " <> foldPages p
 bookMLA (Note      s) = pSpec s
 bookMLA (Number    n) = comm $ text ("no. " ++ show n)
 bookMLA (School    s) = comm $ pSpec s
@@ -417,29 +417,26 @@ bookMLA (School    s) = comm $ pSpec s
 bookMLA (HowPublished (Verb s))      = comm $ pSpec s
 bookMLA (HowPublished (URL l@(S s))) = dot  $ pSpec $ Ref External s l
 bookMLA (HowPublished (URL s))       = dot  $ pSpec s
-bookMLA (Editor       p) = comm $ text $ "Edited by " ++ foldlList (map L.nameStr p)
+bookMLA (Editor       p) = comm $ text "Edited by " <> foldPeople p
 bookMLA (Chapter      _) = text ""
 bookMLA (Institution  i) = comm $ pSpec i
 bookMLA (Organization i) = comm $ pSpec i
 bookMLA (Month        m) = comm $ text $ show m
 bookMLA (Type         t) = comm $ pSpec t
 
-pages :: [Int] -> Doc
-pages = text . foldlList . numList "&ndash;"
-
 bookAPA :: CiteField -> Doc --FIXME: year needs to come after author in L.APA
 bookAPA (Author   p) = pSpec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
 bookAPA (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the year
 --bookAPA (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
 --bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
-bookAPA (Pages    p) = dot $ pages p
-bookAPA (Editor   p) = dot $ text (foldlList $ map L.nameStr p) <> text " (Ed.)"
+bookAPA (Pages    p) = dot $ foldPages p
+bookAPA (Editor   p) = dot $ foldPeople p <> text " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as L.MLA
 
 bookChicago :: CiteField -> Doc
 bookChicago (Author   p) = pSpec (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
-bookChicago (Pages    p) = dot $ pages p
-bookChicago (Editor   p) = dot $ text (foldlList $ map L.nameStr p) <> text (toPlural p " ed")
+bookChicago (Pages    p) = dot $ foldPages p
+bookChicago (Editor   p) = dot $ foldPeople p <> text (toPlural p " ed")
 bookChicago i = bookMLA i --Most items are rendered the same as L.MLA
 
 -- for article renderings
@@ -469,6 +466,12 @@ rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-util
 rendPeople' :: L.People -> Spec
 rendPeople' []  = S "N.a." -- "No authors given"
 rendPeople' people = S . foldlList $ map rendPers (init people) ++  [rendPersL (last people)]
+
+foldPages :: [Int] -> Doc
+foldPages = text . foldlList . numList "&ndash;"
+
+foldPeople :: L.People -> Doc
+foldPeople p = text . foldlList $ map L.nameStr p
 
 foldlList :: [String] -> String
 foldlList []    = ""

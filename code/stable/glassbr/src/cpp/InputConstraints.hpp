@@ -15,7 +15,7 @@ using std::ofstream;
 #include "InputParameters.hpp"
 
 /** \brief Verifies that input values satisfy the physical constraints and software constraints
-    \param inParams No description given
+    \param inParams structure holding the input values
 */
 void input_constraints(InputParameters &inParams);
 

@@ -1,4 +1,4 @@
-module Language.Drasil.TeX.Print(genTeX, pExpr, pUnit) where
+module Language.Drasil.TeX.Print(genTeX, pExpr, pUnit, spec) where
 
 import Prelude hiding (print)
 import Data.List (intersperse, transpose, partition)

@@ -41,8 +41,8 @@ import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Ta
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac, dollarDoc)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
-import Language.Drasil.TeX.Print as TeX (pExpr, pUnit)
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Math, Text, Curr), D)
+import Language.Drasil.TeX.Print as TeX (pExpr, pUnit, spec)
+import Language.Drasil.TeX.Monad (runPrint, MathContext(Text), D, toMath)
 
 data OpenClose = Open | Close
 
@@ -66,6 +66,10 @@ build fn (Document t a c) =
   $$ print c
   ))
 
+-- Helper for rendering a D from Latex print
+printMath :: D -> Doc
+printMath = (`runPrint` Text)
+
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
 printLO (HDiv ["equation"] layoutObs EmptyS)  = vcat (map printLO layoutObs)
@@ -73,9 +77,11 @@ printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))
 printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
                                  divTag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ pSpec contents
-printLO (EqnBlock contents)    = dollarDoc $ pSpec contents
+-- Dollar Doc needed to wrap in extra dollar signs.
+-- Latex print sets up a \begin{displaymath} environment instead of this
+printLO (EqnBlock contents)    = dollarDoc $ printMath $ TeX.spec contents
 -- Non-mathjax
--- printLO (EqnBlock contents)    = dollarDoc $ pSpec contents
+-- printLO (EqnBlock contents) = pSpec contents
 printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
 printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
@@ -100,15 +106,11 @@ titleSpec (a :+: b) = titleSpec a <> titleSpec b
 titleSpec HARDNL    = empty
 titleSpec s         = pSpec s
 
--- Helper for pSpec
-printMath :: D -> Doc
-printMath d = runPrint d Text
-
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 pSpec :: Spec -> Doc
 -- pSpec (E e)             = em $ pExpr e
 -- Latex based math for expressions and units
-pSpec (E e)             = dollarDoc $ printMath $ TeX.pExpr e
+pSpec (E e)             = printMath $ toMath $ TeX.pExpr e
 pSpec (Sy s)            = printMath $ TeX.pUnit s
 pSpec (a :+: b)         = pSpec a <> pSpec b
 pSpec (S s)             = text s

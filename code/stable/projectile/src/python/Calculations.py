@@ -18,13 +18,13 @@ def func_p_land(inParams):
 
 ## \brief Calculates distance between the target position and the landing position
 # \param inParams structure holding the input values
-# \param p_land landing position
+# \param p_land landing position (m)
 def func_d_offset(inParams, p_land):
     return p_land - inParams.p_target
 
 ## \brief Calculates output message as a string
 # \param inParams structure holding the input values
-# \param d_offset distance between the target position and the landing position
+# \param d_offset distance between the target position and the landing position (m)
 def func_s(inParams, d_offset):
     if (math.fabs(d_offset / inParams.p_target) < 2.0e-2) :
         return "The target was hit."

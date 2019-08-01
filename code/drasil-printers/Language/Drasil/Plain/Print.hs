@@ -68,7 +68,7 @@ unitDoc f (US us) = formatu t b
   formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> Doc
   formatu [] l = line l
   formatu l [] = hsep $ map pow l
-  formatu nu de = line nu <> text "/" <> line de
+  formatu nu de = line nu <> text "/" <> line (map (\(s,i) -> (s,-i)) de)
   line :: [(Symbol,Integer)] -> Doc
   line []  = empty
   line [x] = pow x
@@ -90,7 +90,7 @@ mtxDoc Nonlinear rs = brackets $ vcat $ map (hsep . map (pExprDoc Nonlinear)) rs
 
 -- TODO: Double check that this is valid in all output languages
 specialDoc :: Special -> Doc
-specialDoc Circle  = text "circ"
+specialDoc Circle  = text "degree"
 specialDoc Partial = text "partial"
 
 opsDoc :: Ops -> Doc

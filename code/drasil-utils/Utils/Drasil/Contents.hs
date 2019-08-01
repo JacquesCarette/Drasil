@@ -1,8 +1,10 @@
 module Utils.Drasil.Contents (enumBullet, enumBulletU, enumSimple,
-  enumSimpleU, eqUnR, eqUnR') where
+  enumSimpleU, eqUnR, eqUnR', mkEnumSimpleD) where
 
 import Language.Drasil
 import Utils.Drasil.Misc (bulletFlat, mkEnumAbbrevList)
+
+import Control.Lens ((^.))
 
 eqUnR :: Expr -> Reference -> LabelledContent
 eqUnR e lbl = llcc lbl $ EqnBlock e
@@ -31,3 +33,19 @@ enumSimpleU s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevL
 -- a ListTuple which can be used with Contents but not directly referable.
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
+
+-- | mkEnumSimpleD is a convenience function for transforming types which are
+-- instances of the constraints Referable, HasShortName, and Definition, into
+-- Simple-type Enumerations.
+mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
+mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
+
+-- | mkEnumSimple is a convenience function for converting lists into
+-- Simple-type Enumerations.
+mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
+mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
+
+-- | Creates a list tuple filling in the title with a ShortName and filling
+-- reference information.
+mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
+mkListTuple f x = (S . getStringSN $ shortname x, f x, Just $ refAdd x)

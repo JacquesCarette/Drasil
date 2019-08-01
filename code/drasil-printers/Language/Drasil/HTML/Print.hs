@@ -42,7 +42,7 @@ import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac, dolla
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import Language.Drasil.TeX.Print as TeX (pExpr, pUnit)
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D)
+import Language.Drasil.TeX.Monad (runPrint, MathContext(Math, Text, Curr), D)
 
 data OpenClose = Open | Close
 
@@ -74,6 +74,8 @@ printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
                                  divTag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ pSpec contents
 printLO (EqnBlock contents)    = dollarDoc $ pSpec contents
+-- Non-mathjax
+-- printLO (EqnBlock contents)    = dollarDoc $ pSpec contents
 printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
 printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME

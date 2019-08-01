@@ -182,10 +182,10 @@ termsAndDescBullets = UlC $ ulcc $ Enumeration$
 
 termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
 
-termsAndDescBulletsGlTySubSec = [Nested (titleize glassTy :+: S ":") $
+termsAndDescBulletsGlTySubSec = [Nested (EmptyS +: titleize glassTy) $
   Bullet $ noRefs $ map tAndDWAcc glassTypes]
 
-termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` (load ^. defn)) $
+termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` EmptyS +:+. capSent (load ^. defn)) $
   Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes)]
@@ -334,9 +334,8 @@ prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict whether a",
 {--Terminology and Definitions--}
 
 termsAndDesc :: Section
-termsAndDesc = termDefnF' (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
-  S "are extracted from" +:+ makeCiteS astm2009 `sIn`
-  makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
+termsAndDesc = termDefnF' (Just (S "All of the" +:+ plural term_ +:+
+  S "are extracted from" +:+ makeCiteS astm2009)) [termsAndDescBullets]
 
 {--Physical System Description--}
 

@@ -9,7 +9,7 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, chgsStart,
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
-import Utils.Drasil.Sentence (sAre, toThe)
+import Utils.Drasil.Sentence (capSent, sAre, toThe)
 
 import Control.Lens ((^.))
 
@@ -184,13 +184,13 @@ maybeExpanded a = likelyFrame a (S "expanded")
 -- | helpful combinators for making Sentences for Terminologies with Definitions
 -- term (acc) - definition
 tAndDWAcc :: Concept s => s -> ItemType
-tAndDWAcc temp = Flat $ atStart temp +:+ (sParen (short temp) `sDash` (temp ^. defn))
+tAndDWAcc temp = Flat $ atStart temp +:+. (sParen (short temp) `sDash` capSent (temp ^. defn))
 -- term (symbol) - definition
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
-tAndDWSym tD sym = Flat $ atStart tD +:+ (sParen (ch sym) `sDash` (tD ^. defn))
+tAndDWSym tD sym = Flat $ atStart tD +:+. (sParen (ch sym) `sDash` capSent (tD ^. defn))
 -- term - definition
 tAndDOnly :: Concept s => s -> ItemType
-tAndDOnly chunk  = Flat $ atStart chunk `sDash` (chunk ^. defn)
+tAndDOnly chunk  = Flat $ atStart chunk `sDash` EmptyS +:+. capSent (chunk ^. defn)
 
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
 preceding `follows` ref = preceding +:+ S "following" +:+ makeRef2S ref

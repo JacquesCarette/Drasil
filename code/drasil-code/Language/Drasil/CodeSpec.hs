@@ -3,7 +3,7 @@ module Language.Drasil.CodeSpec where
 
 import Language.Drasil
 import Database.Drasil(ChunkDB, SystemInformation(SI), symbLookup, symbolTable,
-  _constants,
+  _authors, _constants,
   _constraints, _datadefs,
   _definitions, _inputs, _outputs,
   _quants, _sys, _sysinfodb)
@@ -40,7 +40,8 @@ data Lang = Cpp
           deriving Eq
 
 data CodeSystInfo where
-  CSI :: {
+  CSI :: (HasName a) => {
+  authors :: [a], 
   inputs :: [Input],
   extInputs :: [Input],
   derivedInputs :: [Derived],
@@ -75,6 +76,7 @@ varType cname m = maybe (error "Variable not found") (^. ctyp) (Map.lookup cname
 
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys
+              , _authors = as
               , _quants = q
               , _definitions = defs'
               , _datadefs = ddefs
@@ -92,6 +94,7 @@ codeSpec SI {_sys = sys
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar consts) outs' db
       csi' = CSI {
+        authors = as,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = map qtov derived,

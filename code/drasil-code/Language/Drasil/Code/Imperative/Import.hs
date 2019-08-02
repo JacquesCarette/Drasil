@@ -591,10 +591,12 @@ genModule n desc maybeMs maybeCs = do
   g <- ask
   let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
       updateState = withReader (\s -> s { currentModule = n })
+      as = case csi (codeSpec g) of CSI {authors = a} -> a
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
-  let commMod | CommentMod `elem` commented g                   = docMod desc
-              | CommentFunc `elem` commented g && not (null ms) = docMod ""
+  let commMod | CommentMod `elem` commented g                   = docMod desc 
+                  (map name as)
+              | CommentFunc `elem` commented g && not (null ms) = docMod "" []
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n ls ms cs
 

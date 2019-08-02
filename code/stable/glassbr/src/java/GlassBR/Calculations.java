@@ -45,7 +45,7 @@ public class Calculations {
     
     /** \brief Calculates dimensionless load
         \param inParams structure holding the input values
-        \param q applied load (demand)
+        \param q applied load (demand) (Pa)
     */
     public static double func_q_hat(InputParameters inParams, double q) throws Exception {
         PrintWriter outfile;
@@ -140,7 +140,7 @@ public class Calculations {
     
     /** \brief Calculates load resistance
         \param inParams structure holding the input values
-        \param NFL non-factored load
+        \param NFL non-factored load (Pa)
     */
     public static double func_LR(InputParameters inParams, double NFL) throws Exception {
         PrintWriter outfile;
@@ -158,8 +158,8 @@ public class Calculations {
     }
     
     /** \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
-        \param LR load resistance
-        \param q applied load (demand)
+        \param LR load resistance (Pa)
+        \param q applied load (demand) (Pa)
     */
     public static Boolean func_is_safeLR(double LR, double q) throws Exception {
         PrintWriter outfile;

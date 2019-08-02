@@ -51,9 +51,9 @@ ctrOfMassDD = ddNoRefs ctrOfMass Nothing "ctrOfMass"
 ctrOfMass :: QDefinition
 ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
--- FIXME (Atomic "i") is a horrible hack
+-- FIXME (Variable "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = sumAll (Atomic "i") (sy massI * sy posI) / sy mTot
+ctrOfMassEqn = sumAll (Variable "i") (sy massI * sy posI) / sy mTot
 
 -- DD2 : Linear displacement --
 
@@ -204,7 +204,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 -------------------------DD8 Impulse for Collision-------------------------------
 
 impulseDD :: DataDefinition
-impulseDD = ddNoRefs impulse (Just impulseDeriv) "impulse"
+impulseDD = ddNoRefs impulse Nothing "impulse"
   [makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpAD, makeRef2S assumpCT]
 
 impulse :: QDefinition
@@ -224,38 +224,6 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
   (CP.collision ^. term) +:+ S "response between two" +:+ 
   irregPlur (CP.rigidBody ^. term)
 -}
-impulseDeriv :: Derivation
-impulseDeriv = mkDerivName (phrase QP.impulseS) (weave [impulseDerivSentences, map E impulseDerivEqns])
-
-impulseDerivSentences :: [Sentence]
-impulseDerivSentences = map foldlSentCol [impulseDerivSentence1, 
- impulseDerivSentence2, impulseDerivSentence3]  
-
-impulseDerivSentence1 :: [Sentence]
-impulseDerivSentence1 = [S "Rearranging the equation for the" +:+ phrase QP.restitutionCoef, S "we get"]
-
-impulseDerivSentence2 :: [Sentence]
-impulseDerivSentence2 = [S "Expanding the relative" +:+ phrase QP.velocity, S "on the left "] 
-
-impulseDerivSentence3 :: [Sentence]
-impulseDerivSentence3 = [S "Expanding the left hand side "] 
-
-impulseDerivEqn1 :: Expr
-impulseDerivEqn1 = sy QP.force $= sy QPP.mass * sy QP.acceleration
-                    $= sy QPP.mass * deriv (sy QP.velocity) QP.time
-
-impulseDerivEqn2 :: Expr
-impulseDerivEqn2 = defint (eqSymb timeT) (sy time_1) (sy time_2) (sy QP.force) $=
-                    sy QPP.mass * defint (eqSymb QP.velocity) (sy velo_1) (sy velo_2) 1
-
-
-impulseDerivEqn3 :: Expr
-impulseDerivEqn3 = defint (eqSymb timeT) (sy time_1) (sy time_2) (sy QP.force)
-                    $= (sy QPP.mass * sy velo_2) - (sy QPP.mass * sy velo_1) 
-                    $= sy QPP.mass * sy QP.chgInVelocity
-                                      
-impulseDerivEqns :: [Expr]
-impulseDerivEqns = [impulseDerivEqn1, impulseDerivEqn2, impulseDerivEqn3]
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
 chaslesDD = ddNoRefs chasles Nothing "chalses"
@@ -394,8 +362,8 @@ momentOfInertia :: QDefinition
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
-momentOfInertiaEqn = sumAll (Atomic "i") $ sy massI * (sy rRot $^ 2)
---sumAll (Atomic "i") ((sy massI) * (sy rRot 
+momentOfInertiaEqn = sumAll (Variable "i") $ sy massI * (sy rRot $^ 2)
+
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", phrase QP.momentOfInertia, ch QP.momentOfInertia,
  S "of a body measures how much", phrase QP.torque,

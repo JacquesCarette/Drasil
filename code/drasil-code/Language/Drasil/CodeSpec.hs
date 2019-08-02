@@ -11,7 +11,7 @@ import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), 
-  ConstraintMap, codevar, quantvar, quantfunc, funcPrefix, codeName, toCodeName,
+  ConstraintMap, codevar, quantvar, quantfunc, funcPrefix, codeName,
   constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
@@ -19,6 +19,7 @@ import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
+import Language.Drasil.Printers (toPlainName)
 
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
@@ -174,7 +175,7 @@ convertRel _ _ = error "Conversion failed"
 data Mod = Mod Name String [Func]
 
 packmod :: Name -> String -> [Func] -> Mod
-packmod n = Mod (toCodeName n)
+packmod n = Mod (toPlainName n)
 
 data DMod = DMod [Name] Mod
      
@@ -186,10 +187,10 @@ funcQD :: QDefinition -> Func
 funcQD qd = FCD $ qtoc qd 
 
 funcData :: Name -> String -> DataDesc -> Func
-funcData n desc d = FData $ FuncData (toCodeName n) desc d
+funcData n desc d = FData $ FuncData (toPlainName n) desc d
 
 funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> Space -> [FuncStmt] -> Func  
-funcDef s desc i t fs = FDef $ FuncDef (toCodeName s) desc (map quantvar i) (spaceToCodeType t) fs 
+funcDef s desc i t fs = FDef $ FuncDef (toPlainName s) desc (map quantvar i) (spaceToCodeType t) fs 
 
 data FuncData where
   FuncData :: Name -> String -> DataDesc -> FuncData
@@ -221,8 +222,8 @@ fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
 fdec v  = FDec (quantvar  v) (spaceToCodeType $ v ^. typ)
 
 asVC :: Func -> QuantityDict
-asVC (FDef (FuncDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
-asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
+asVC (FDef (FuncDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
+asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
 asVC (FCD _) = error "Can't make QuantityDict from FCD function" -- codeVC cd (codeSymb cd) (cd ^. typ)
 
 asExpr :: Func -> Expr
@@ -234,8 +235,8 @@ asExpr' f = sy $ asVC' f
 
 -- FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
-asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
-asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
+asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
+asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
 getAdditionalVars :: Choices -> [Mod] -> [CodeChunk]

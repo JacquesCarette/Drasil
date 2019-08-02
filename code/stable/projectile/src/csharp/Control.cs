@@ -1,4 +1,5 @@
 /** \file Control.cs
+    \brief Controls the flow of the program
 */
 using System;
 using System.IO;

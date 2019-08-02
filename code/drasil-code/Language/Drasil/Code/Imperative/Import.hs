@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Data (PackData(..))
-import Language.Drasil.Code.Imperative.Helpers (convType, getStr)
+import Language.Drasil.Code.Imperative.Helpers (convType)
 import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (jNameOpts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk),
@@ -32,6 +32,7 @@ import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs, junkLine, singleton)
+import Language.Drasil.Printers (Linearity(Linear), sentenceDoc, unitDoc)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (nub, intersperse, (\\), stripPrefix)
@@ -44,6 +45,7 @@ import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.), view)
 import qualified Prelude as P ((<>))
+import Text.PrettyPrint.HughesPJ (Doc, (<+>), empty, parens, render, text)
 
 -- Private State, used to push these options around the generator
 data State repr = State {
@@ -199,15 +201,21 @@ funcTerm :: String -> Reader (State repr) String
 funcTerm cname = do
   g <- ask
   let db = sysinfodb $ csi $ codeSpec g
-  return $ (maybe "No description given" (getStr db . phraseNP . view term) 
-    . Map.lookup cname) (fMap $ codeSpec g)
+  return $ (maybe "No description given" (render . sentenceDoc db Linear . 
+    phraseNP . view term) . Map.lookup cname) (fMap $ codeSpec g)
        
-varTerm :: String -> Reader (State repr) String
+varTerm :: String -> Reader (State repr) Doc
 varTerm cname = do
   g <- ask
   let db = sysinfodb $ csi $ codeSpec g
-  return $ (maybe "No description given" (getStr db . phraseNP . view term) 
-    . Map.lookup cname) (vMap $ codeSpec g)
+  return $ (maybe (text "No description given") (sentenceDoc db Linear . 
+    phraseNP . view term) . Map.lookup cname) (vMap $ codeSpec g)
+
+varUnits :: String -> Reader (State repr) Doc
+varUnits cname = do
+  g <- ask
+  return $ maybe empty (parens . unitDoc Linear . usymb) 
+    (Map.lookup cname (vMap $ codeSpec g) >>= getUnit)
 
 ----- Descriptions -----
 
@@ -558,7 +566,10 @@ genInOutFunc s pr n desc ins outs both b = do
     then docInOutFunc desc pComms oComms bComms fn else fn
 
 paramComments :: [Label] -> Reader (State repr) [String]
-paramComments = mapM varTerm
+paramComments ls = do
+  ts <- mapM varTerm ls
+  us <- mapM varUnits ls
+  return $ map render $ zipWith (<+>) ts us
 
 loggedMethod :: (RenderSym repr) => Label -> Label -> [repr (Variable repr)] -> 
   [repr (Block repr)] -> [repr (Block repr)]

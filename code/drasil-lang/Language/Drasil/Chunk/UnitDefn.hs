@@ -18,7 +18,7 @@ import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.NounPhrase (cn,cn',NP)
-import Language.Drasil.Symbol (Symbol(Atomic))
+import Language.Drasil.Symbol (Symbol(Label))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
 import Language.Drasil.UID
@@ -155,7 +155,7 @@ newUnit s = makeDerU (unitCon s)
 
 -- | Smart constructor for a "fundamental" unit
 fund :: String -> String -> String -> UnitDefn
-fund nam desc sym = UD (dcc nam (cn' nam) desc) (BaseSI $ US [(Atomic sym, 1)]) [nam]
+fund nam desc sym = UD (dcc nam (cn' nam) desc) (BaseSI $ US [(Label sym, 1)]) [nam]
 
 -- | Variant of the above, useful for degree
 fund' :: String -> String -> Symbol -> UnitDefn

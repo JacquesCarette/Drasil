@@ -17,7 +17,7 @@ import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU,
 import Theory.Drasil (mkQuantDef)
 
 restitutionCoef :: DefinedQuantityDict
-restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC cR) Real
+restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC (Label "R")) Real
 
 physicscon :: [UnitalChunk]
 physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
@@ -53,9 +53,9 @@ height               = uc CP.height lH metre
 impulseS             = uc CP.impulseS lJ impulseU
 impulseV             = uc CP.impulseV (vec cJ) impulseU
 kEnergy              = uc CP.kEnergy  (Concat [cK, cE]) joule
-linearAccel          = uc CP.linAccel (Concat [vec lA, Atomic "(", lT, Atomic ")"]) accelU
-linearDisplacement   = uc CP.linDisp  (Concat [vec lR, Atomic "(", lT, Atomic ")"]) metre
-linearVelocity       = uc CP.linVelo  (Concat [vec lV, Atomic "(", lT, Atomic ")"]) velU
+linearAccel          = uc CP.linAccel (Concat [vec lA, Label "(", lT, Label ")"]) accelU
+linearDisplacement   = uc CP.linDisp  (Concat [vec lR, Label "(", lT, Label ")"]) metre
+linearVelocity       = uc CP.linVelo  (Concat [vec lV, Label "(", lT, Label ")"]) velU
 momentOfInertia      = uc CP.momentOfInertia (vec cI) momtInertU
 position             = uc CP.position (vec lP) metre
 potEnergy            = uc CP.potEnergy (Concat [cP, cE]) joule
@@ -72,33 +72,48 @@ weight               = uc CP.weight cW newton
 -- FIXME: Add variants of vector forms?
 -- FIXME: Pull out commonalities?
 
-xDist = uc CP.xDist (sub lR lX) metre
-yDist = uc CP.yDist (sub lR lY) metre
+xDist = uc CP.xDist (subX lR) metre
+yDist = uc CP.yDist (subY lR) metre
 
-iPos = uc CP.iPos (sup lP lI) metre
-xPos = uc CP.xPos (sub lP lX) metre
-yPos = uc CP.yPos (sub lP lY) metre
+iPos = uc CP.iPos (sup lP initial) metre
+xPos = uc CP.xPos (subX lP) metre
+yPos = uc CP.yPos (subY lP) metre
 
-ixPos = uc CP.ixPos (sup (sub lP lX) lI) metre
-iyPos = uc CP.iyPos (sup (sub lP lY) lI) metre
+ixPos = uc CP.ixPos (sup (subX lP) initial) metre
+iyPos = uc CP.iyPos (sup (subY lP) initial) metre
 
-fSpeed = uc CP.fSpeed (sup lV lF) velU
-iSpeed = uc CP.iSpeed (sup lV lI) velU
+fSpeed = uc CP.fSpeed (sup lV final) velU
+iSpeed = uc CP.iSpeed (sup lV initial) velU
 
-fVel = uc CP.fVel (sup (vec lV) lF) velU
-iVel = uc CP.iVel (sup (vec lV) lI) velU
-xVel = uc CP.xVel (sub      lV  lX) velU
-yVel = uc CP.yVel (sub      lV  lY) velU
+fVel = uc CP.fVel (sup (vec lV) final) velU
+iVel = uc CP.iVel (sup (vec lV) initial) velU
+xVel = uc CP.xVel (subX lV) velU
+yVel = uc CP.yVel (subY lV) velU
 
-ixVel = uc CP.ixVel (sup (sub lV lX) lI) velU
-iyVel = uc CP.iyVel (sup (sub lV lY) lI) velU
+ixVel = uc CP.ixVel (sup (subX lV) initial) velU
+iyVel = uc CP.iyVel (sup (subY lV) initial) velU
 
-xAccel = uc CP.xAccel (sub lA lX) accelU
-yAccel = uc CP.yAccel (sub lA lY) accelU
+xAccel = uc CP.xAccel (subX lA) accelU
+yAccel = uc CP.yAccel (subY lA) accelU
 
-constAccelV = uc CP.constAccelV (sup (vec lA)    lC) accelU
-xConstAccel = uc CP.xConstAccel (sup (sub lA lX) lC) accelU
-yConstAccel = uc CP.yConstAccel (sup (sub lA lY) lC) accelU
+constAccelV = uc CP.constAccelV (sup (vec  lA) constant) accelU
+xConstAccel = uc CP.xConstAccel (sup (subX lA) constant) accelU
+yConstAccel = uc CP.yConstAccel (sup (subY lA) constant) accelU
+
+constant, final, initial :: Symbol
+constant = Label "c"
+final    = Label "f"
+initial  = Label "i"
+
+-- Helpers for common modifiers
+subMax, subMin, subX, subY, subZ, supMax, supMin :: Symbol -> Symbol
+subMax s = sub s (Label "max")
+subMin s = sub s (Label "min")
+subX   s = sub s (Label "x")
+subY   s = sub s (Label "y")
+subZ   s = sub s (Label "z")
+supMax s = sup s (Label "max")
+supMin s = sup s (Label "min")
 
 ---------------Constants-----------------------------
 

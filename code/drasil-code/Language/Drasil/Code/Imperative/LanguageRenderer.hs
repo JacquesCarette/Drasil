@@ -38,7 +38,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   setEmpty, intValue
 ) where
 
-import Utils.Drasil (capitalize, indent, indentList)
+import Utils.Drasil (capitalize, indent, indentList, stringList)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library,
@@ -420,9 +420,9 @@ mkStNoEnd s = (s, Empty)
 
 stringListVals' :: (RenderSym repr) => [repr (Variable repr)] -> 
   repr (Value repr) -> repr (Statement repr)
-stringListVals' vars sl = multi $ stringList (getType $ valueType sl)
-    where stringList (List String) = assignVals vars 0
-          stringList _ = error 
+stringListVals' vars sl = multi $ checkList (getType $ valueType sl)
+    where checkList (List String) = assignVals vars 0
+          checkList _ = error 
             "Value passed to stringListVals must be a list of strings"
           assignVals [] _ = []
           assignVals (v:vs) n = assign v (cast (variableType v) 
@@ -430,9 +430,9 @@ stringListVals' vars sl = multi $ stringList (getType $ valueType sl)
 
 stringListLists' :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr)
   -> repr (Statement repr)
-stringListLists' lsts sl = stringList (getType $ valueType sl)
-  where stringList (List String) = listVals (map (getType . variableType) lsts)
-        stringList _ = error 
+stringListLists' lsts sl = checkList (getType $ valueType sl)
+  where checkList (List String) = listVals (map (getType . variableType) lsts)
+        checkList _ = error 
           "Value passed to stringListLists must be a list of strings"
         listVals [] = loop
         listVals (List _:vs) = listVals vs
@@ -798,8 +798,9 @@ functionDoc desc params = [doxBrief ++ desc | not (null desc)]
 classDoc :: String -> [String]
 classDoc desc = [doxBrief ++ desc | not (null desc)]
 
-moduleDoc :: String -> String -> String -> [String]
-moduleDoc desc m ext = (doxFile ++ addExt ext m) : 
+moduleDoc :: String -> [String] -> String -> [String]
+moduleDoc desc as m = (doxFile ++ m) : 
+  [doxAuthor ++ stringList as | not (null as)] ++
   [doxBrief ++ desc | not (null desc)]
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> repr (Method repr) -> 
@@ -853,8 +854,9 @@ intValue i = intValue' (getType $ valueType i)
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
 
-doxCommand, doxBrief, doxParam, doxFile :: String
+doxCommand, doxBrief, doxParam, doxFile, doxAuthor :: String
 doxCommand = "\\"
 doxBrief = doxCommand ++ "brief "
 doxParam = doxCommand ++ "param "
 doxFile = doxCommand  ++ "file "
+doxAuthor = doxCommand ++ "author "

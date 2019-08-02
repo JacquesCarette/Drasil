@@ -8,10 +8,9 @@ import Numeric (showEFloat)
 import Control.Applicative (pure)
 import Control.Arrow (second)
 
-import qualified Language.Drasil as L (
-  RenderSpecial(..), People, rendPersLFM,
-  CitationKind(..), Month(..), Symbol(..), Sentence(S), (+:+), MaxWidthPercent,
-  Decoration(Prime, Hat, Vector), Document, special, USymb(US))
+import qualified Language.Drasil as L (CitationKind(..), Decoration(Prime, Hat, Vector),
+  Document, MaxWidthPercent, Month(..), People, RenderSpecial(..), Sentence(S),
+  Symbol(..), USymb(US), (+:+), rendPersLFM, special)
 import Utils.Drasil (checkValidStr, foldNums)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
@@ -38,8 +37,8 @@ import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering
   itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgBr, mkEnvArgSq,
   mkMinipage, newline, newpage, parens, quote, sec, snref, sq, superscript,
   symbDescription, texSym, title, toEqn)
-import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), vcat, (%%),
-  toMath, switch, unPL, lub, hpunctuate, toText, ($+$), runPrint)
+import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
+  hpunctuate, lub, runPrint, switch, toMath, toText, unPL, vcat, vpunctuate)
 import Language.Drasil.TeX.Preamble (genPreamble)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
@@ -179,19 +178,13 @@ fence _ Norm      = pure $ text "||"
 
 -- | For printing Matrix
 pMatrix :: [[Expr]] -> D
-pMatrix [] = pure (text "")
-pMatrix [x] = pIn x
-pMatrix (x:xs) = pIn x <> pure (text "\\\\\n") <> pMatrix xs
-
-pIn :: [Expr] -> D
-pIn [] = pure (text "")
-pIn [x] = pExpr x
-pIn (x:xs) = pExpr x <> pure (text " & ") <> pIn xs
+pMatrix e = vpunctuate dbs (map pIn e)
+  where pIn x = hpunctuate (text " & ") (map pExpr x)
 
 cases :: [(Expr,Expr)] -> D
-cases []     = error "Attempt to create case expression without cases"
-cases [p]    = pExpr (fst p) <> pure (text ", & ") <> pExpr (snd p)
-cases (p:ps) = cases [p] <> pure (text "\\\\\n") <> cases ps
+cases [] = error "Attempt to create case expression without cases"
+cases e  = vpunctuate dbs (map _case e)
+  where _case (x, y) = hpunctuate (text ", & ") (map pExpr [x, y])
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------

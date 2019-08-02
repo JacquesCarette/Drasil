@@ -442,8 +442,8 @@ Label & Sensible heat energy
 Equation & \begin{displaymath}
            E=\begin{cases}
              {C^{\text{S}}} m ΔT, & T<{T_{\text{melt}}}\\
-{C^{\text{L}}} m ΔT, & {T_{\text{melt}}}<T<{T_{\text{boil}}}\\
-{C^{\text{V}}} m ΔT, & {T_{\text{boil}}}<T
+             {C^{\text{L}}} m ΔT, & {T_{\text{melt}}}<T<{T_{\text{boil}}}\\
+             {C^{\text{V}}} m ΔT, & {T_{\text{boil}}}<T
              \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -971,9 +971,9 @@ Output Constraints & \begin{displaymath}
 Equation & \begin{displaymath}
            \frac{\,d{T_{\text{P}}}}{\,dt}=\begin{cases}
                                           \frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}<{{T_{\text{melt}}}^{\text{P}}}\\
-\frac{1}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}>{{T_{\text{melt}}}^{\text{P}}}\\
-0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\\
-0, & 0<ϕ<1
+                                          \frac{1}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}>{{T_{\text{melt}}}^{\text{P}}}\\
+                                          0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\\
+                                          0, & 0<ϕ<1
                                           \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1102,9 +1102,9 @@ Output Constraints & \begin{displaymath}
 Equation & \begin{displaymath}
            {E_{\text{P}}}=\begin{cases}
                           {{C_{\text{P}}}^{\text{S}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}<{{T_{\text{melt}}}^{\text{P}}}\\
-{{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{H_{\text{f}}} {m_{\text{P}}}+{{C_{\text{P}}}^{\text{L}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{{T_{\text{melt}}}^{\text{P}}}\right), & {T_{\text{P}}}>{{T_{\text{melt}}}^{\text{P}}}\\
-{{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\\
-{{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & 0<ϕ<1
+                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{H_{\text{f}}} {m_{\text{P}}}+{{C_{\text{P}}}^{\text{L}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{{T_{\text{melt}}}^{\text{P}}}\right), & {T_{\text{P}}}>{{T_{\text{melt}}}^{\text{P}}}\\
+                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\\
+                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & 0<ϕ<1
                           \end{cases}
            \end{displaymath}
 \\ \midrule \\

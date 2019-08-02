@@ -1,6 +1,7 @@
 package Projectile;
 
 /** \file OutputFormat.java
+    \brief Provides the function for writing outputs
 */
 import java.util.Arrays;
 import java.util.BitSet;

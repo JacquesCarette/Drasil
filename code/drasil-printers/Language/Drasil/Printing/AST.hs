@@ -22,6 +22,7 @@ data Expr = Dbl   Double
           | Mtx   [[Expr]]
           | Row   [Expr]
           | Ident String
+          | Label String
           | Spec  Special
           
           | Sub   Expr

@@ -1,8 +1,8 @@
 {-# Language TypeFamilies #-}
-module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, chgsStart,
-  displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple, enumSimpleU,
-  eqN, eqUnR, eqUnR', eqnWSource, fromReplace, fmtU, follows, getTandS,
-  itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
+module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
+  chgsStart, displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple,
+  enumSimpleU, eqN, eqUnR, eqUnR', eqnWSource, fromReplace, fmtU, follows,
+  getTandS, itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc,
   tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
@@ -206,3 +206,10 @@ displayConstrntsAsSet sym listOfVals = E $ sy sym `isin` DiscreteS listOfVals
 --Produces a common beginning of a likely change of the form "reference - sentence"
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
 chgsStart = sDash . makeRef2S
+
+--An either type - Left with error message if invalid char in string, else Right with string
+checkValidStr :: String -> String -> Either String String
+checkValidStr s [] = Right s
+checkValidStr s (x:xs)
+  | x `elem` s = Left $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']
+  | otherwise  = checkValidStr s xs

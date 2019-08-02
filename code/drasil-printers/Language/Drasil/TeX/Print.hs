@@ -1,7 +1,7 @@
 module Language.Drasil.TeX.Print(genTeX) where
 
 import Prelude hiding (print)
-import Data.List (intersperse, transpose, partition)
+import Data.List (transpose, partition)
 import Text.PrettyPrint (integer, text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Numeric (showEFloat)
@@ -11,6 +11,7 @@ import Control.Arrow (second)
 import qualified Language.Drasil as L (CitationKind(..), Decoration(Prime, Hat, Vector),
   Document, MaxWidthPercent, Month(..), People, RenderSpecial(..), Sentence(S),
   Symbol(..), USymb(US), (+:+), rendPersLFM, special)
+import Utils.Drasil (checkValidStr, foldNums)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
@@ -21,8 +22,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat),
   NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Arctan, Arccos, Arcsin,
   Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
   Rational, Integer, IsIn, Point, Perc), Spacing(Thin), Fonts(Emph, Bold), 
-  Expr(Spc, Sqrt, Font, Fenced, MO, Over, Sup, Sub, Ident, Spec, Row, 
-  Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat), Label,
+  Expr(..), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
@@ -30,13 +30,13 @@ import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished,
   Author, Address), Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import qualified Language.Drasil.Printing.Import as I
-import Language.Drasil.Printing.Helpers hiding (br, paren, sqbrac)
+import Language.Drasil.Printing.Helpers hiding (br, paren, sq, sqbrac)
 import Language.Drasil.TeX.Helpers (author, bold, br, caption, center, centering,
   cite, command, command0, commandD, command2D, description, document, empty,
   enumerate, externalref, figure, fraction, includegraphics, item, item',
-  itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgs, mkMinipage,
-  newline, newpage, parens, quote, sec, snref, superscript, symbDescription,
-  texSym, title, toEqn)
+  itemize, label, maketitle, maketoc, mathbb, mkEnv, mkEnvArgBr, mkEnvArgSq,
+  mkMinipage, newline, newpage, parens, quote, sec, snref, sq, superscript,
+  symbDescription, texSym, title, toEqn)
 import Language.Drasil.TeX.Monad (D, MathContext(Curr, Math, Text), (%%), ($+$),
   hpunctuate, lub, runPrint, switch, toMath, toText, unPL, vcat, vpunctuate)
 import Language.Drasil.TeX.Preamble (genPreamble)
@@ -54,16 +54,16 @@ buildStd sm (Document t a c) =
 
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: LayoutObj -> PrintingInformation -> D
-lo (Header d t l)       _  = sec d (spec t) %% label (spec l)
-lo (HDiv _ con _)       sm = print sm con -- FIXME ignoring 2 arguments?
-lo (Paragraph contents) _  = toText $ newline (spec contents)
-lo (EqnBlock contents)  _  = makeEquation contents
-lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)
-lo (Definition _ ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
-lo (List l)               _  = toText $ makeList l
-lo (Figure r c f wp)      _  = toText $ makeFigure (spec r) (spec c) f wp
-lo (Bib bib)            sm = toText $ makeBib sm bib
-lo (Graph ps w h c l)   _  = toText $ makeGraph
+lo (Header d t l)         _ = sec d (spec t) %% label (spec l)
+lo (HDiv _ con _)        sm = print sm con -- FIXME ignoring 2 arguments?
+lo (Paragraph contents)   _ = toText $ newline (spec contents)
+lo (EqnBlock contents)    _ = makeEquation contents
+lo (Table _ rows r bl t)  _ = toText $ makeTable rows (spec r) bl (spec t)
+lo (Definition _ ssPs l) sm = toText $ makeDefn sm ssPs $ spec l
+lo (List l)               _ = toText $ makeList l
+lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (spec c) f wp
+lo (Bib bib)             sm = toText $ makeBib sm bib
+lo (Graph ps w h c l)    _  = toText $ makeGraph
   (map (\(a,b) -> (spec a, spec b)) ps)
   (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
@@ -74,9 +74,11 @@ print sm = foldr (($+$) . (`lo` sm)) empty
 
 ------------------ Symbol ----------------------------
 symbol :: L.Symbol -> D
-symbol (L.Atomic s)  = pure $ text s
-symbol (L.Special s) = pure $ text $ unPL (L.special s)
-symbol (L.Concat sl) = foldl (<>) empty $ map symbol sl
+symbol (L.Variable s) = pure $ text s
+symbol (L.Label    s) = pure $ text s
+symbol (L.Integ    n) = pure $ text $ show n
+symbol (L.Special  s) = pure $ text $ unPL $ L.special s
+symbol (L.Concat  sl) = foldl (<>) empty $ map symbol sl
 --
 -- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = br $ symbol s <> pure hat <> br (symbol x)
@@ -108,6 +110,7 @@ pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
 pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Ident s)      = pure . text $ s
+pExpr (Label s)      = command "text" s
 pExpr (Spec s)       = pure . text $ unPL $ L.special s
 --pExpr (Gr g)         = unPL $ greek g
 pExpr (Sub e)        = pure unders <> br (pExpr e)
@@ -188,7 +191,7 @@ cases e  = vpunctuate dbs (map _case e)
 -----------------------------------------------------------------
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
-makeTable lls r bool t = mkEnvArgs ltab (unwords $ anyBig lls) $
+makeTable lls r bool t = mkEnvArgBr ltab (unwords $ anyBig lls) $
   command0 "toprule"
   %% makeHeaders (head lls)
   %% command0 "midrule"
@@ -228,7 +231,7 @@ makeHeaders :: [Spec] -> D
 makeHeaders ls = hpunctuate (text " & ") (map (bold . spec) ls) %% pure dbs
 
 makeRows :: [[Spec]] -> D
-makeRows = foldr (\c -> (%%) (makeColumns c %% pure dbs)) empty
+makeRows = mconcat . map (\c -> makeColumns c %% pure dbs)
 
 makeColumns :: [Spec] -> D
 makeColumns ls = hpunctuate (text " & ") $ map spec ls
@@ -254,7 +257,12 @@ spec a@(s :+: t) = s' <> t'
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
 spec (E ex) = toMath $ pExpr ex
-spec (S s)  = pure $ text (concatMap escapeChars s)
+spec (S s)  = either error (pure . text . concatMap escapeChars) $ checkValidStr s invalid
+  where
+    invalid = ['&', '#', '$', '%', '&', '~', '^', '\\', '{', '}']
+    escapeChars '_' = "\\_"
+    escapeChars '&' = "\\&"
+    escapeChars c = [c]
 spec (Sy s) = pUnit s
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
@@ -267,17 +275,15 @@ spec (Ref External r sn) = externalref r (spec sn)
 spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q
 
-escapeChars :: Char -> String
-escapeChars '_' = "\\_"
-escapeChars c = [c]
-
 symbolNeeds :: L.Symbol -> MathContext
-symbolNeeds (L.Atomic _)     = Text
-symbolNeeds (L.Special _)    = Math
-symbolNeeds (L.Concat [])    = Math
+symbolNeeds (L.Variable   _) = Text
+symbolNeeds (L.Label      _) = Text
+symbolNeeds (L.Integ      _) = Math
+symbolNeeds (L.Special    _) = Math
+symbolNeeds (L.Concat    []) = Math
 symbolNeeds (L.Concat (s:_)) = symbolNeeds s
 symbolNeeds L.Corners{}      = Math
-symbolNeeds (L.Atop _ _)     = Math
+symbolNeeds (L.Atop     _ _) = Math
 symbolNeeds L.Empty          = Curr
 
 pUnit :: L.USymb -> D
@@ -324,7 +330,7 @@ makeDefn sm ps l = mkMinipage (makeDefTable sm ps l)
 
 makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
 makeDefTable _ [] _ = error "Trying to make empty Data Defn"
-makeDefTable sm ps l = mkEnvArgs "tabular" (col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth) $ vcat [
+makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth) $ vcat [
   command0 "toprule " <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l, --shortname instead of refname?
   command0 "phantomsection ", label l,
   makeDRows sm ps,
@@ -426,25 +432,19 @@ makeFigure r c f wp =
 
 makeGraph :: [(D,D)] -> D -> D -> D -> D -> D
 makeGraph ps w h c l =
-  mkEnv "figure" $
-  vcat $ [ centering,
-           pure $ text "\\begin{adjustbox}{max width=\\textwidth}",
-           pure $ text "\\begin{tikzpicture}[>=latex,line join=bevel]",
-           pure (text "\\tikzstyle{n} = [draw, shape=rectangle, ") <>
-             w <> h <> pure (text "font=\\Large, align=center]"),
-           pure $ text "\\begin{dot2tex}[dot, codeonly, options=-t raw]",
-           pure $ text "digraph G {",
-           pure $ text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];",
-           pure $ text "node [style = \"n\"];"
-         ]
-     ++  map (\(a,b) -> q a <> pure (text " -> ") <> q b <> pure (text ";")) ps
-     ++  [ pure $ text "}",
-           command "end" "dot2tex",
-           command "end" "tikzpicture",
-           command "end" "adjustbox",
-           caption c,
-           label l
-         ]
+  mkEnv "figure" $ centering %%
+  mkEnvArgBr "adjustbox" "max width=\\textwidth" (
+  mkEnvArgSq "tikzpicture" ">=latex,line join=bevel" (
+  vcat [command "tikzstyle" "n" <> pure (text " = ") <> sq (
+          pure (text "draw, shape=rectangle, ") <> w <> h <>
+          pure (text "font=\\Large, align=center]")),
+        mkEnvArgSq "dot2tex" "dot, codeonly, options=-t raw" (
+        pure (text "digraph G ") <> br ( vcat (
+         pure (text "graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];") :
+         pure (text "node [style = \"n\"];") :
+         map (\(a,b) -> q a <> pure (text " -> ") <> q b <> pure (text ";")) ps)
+        ))
+       ])) %% caption c %% label l
   where q x = pure (text "\"") <> x <> pure (text "\"")
 
 ---------------------------
@@ -452,25 +452,16 @@ makeGraph ps w h c l =
 ---------------------------
 -- **THE MAIN FUNCTION** --
 makeBib :: PrintingInformation -> BibRef -> D
-makeBib sm bib = spec $
-  S ("\\begin{filecontents*}{"++bibFname++".bib}\n") :+:
-  mkBibRef sm bib :+:
-  S "\n\\end{filecontents*}\n" :+:
-  S bibLines
+makeBib sm bib = mkEnvArgBr "filecontents*" (bibFname ++ ".bib") (mkBibRef sm bib) %%
+  command "nocite" "*" %% command "bibstyle" bibStyleT %%
+  command0 "printbibliography" <> sq (pure $ text "heading=none")
 
-bibLines :: String
-bibLines =
-  "\\nocite{*}\n" ++
-  "\\bibstyle{" ++ bibStyleT ++ "}\n" ++
-  "\\printbibliography[heading=none]"
+mkBibRef :: PrintingInformation -> BibRef -> D
+mkBibRef sm = mconcat . map (renderF sm)
 
-mkBibRef :: PrintingInformation -> BibRef -> Spec
-mkBibRef sm = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map (renderF sm)
-
-renderF :: PrintingInformation -> Citation -> Spec
-renderF sm (Cite cid refType fields) =
-  S (showT refType) :+: S ("{" ++ cid ++ ",\n") :+:
-  (foldl1 (:+:) . intersperse (S ",\n") . map (showBibTeX sm)) fields :+: S "}"
+renderF :: PrintingInformation -> Citation -> D
+renderF sm (Cite cid refType fields) = pure (text (showT refType)) <>
+  br (hpunctuate (text ",\n") $ pure (text cid) : map (showBibTeX sm) fields)
 
 showT :: L.CitationKind -> String
 showT L.Article       = "@article"
@@ -487,7 +478,7 @@ showT L.Proceedings   = "@proceedings"
 showT L.TechReport    = "@techreport"
 showT L.Unpublished   = "@unpublished"
 
-showBibTeX :: PrintingInformation -> CiteField -> Spec
+showBibTeX :: PrintingInformation -> CiteField -> D
 showBibTeX  _ (Address      s) = showField "address" s
 showBibTeX sm (Author       p) = showField "author" (rendPeople sm p)
 showBibTeX  _ (BookTitle    b) = showField "booktitle" b
@@ -496,11 +487,11 @@ showBibTeX  _ (Edition      e) = showField "edition" (wrapS e)
 showBibTeX sm (Editor       e) = showField "editor" (rendPeople sm e)
 showBibTeX  _ (Institution  i) = showField "institution" i
 showBibTeX  _ (Journal      j) = showField "journal" j
-showBibTeX  _ (Month        m) = S "month=" :+: bibTeXMonth m
+showBibTeX  _ (Month        m) = showFieldRaw "month" (bibTeXMonth m)
 showBibTeX  _ (Note         n) = showField "note" n
 showBibTeX  _ (Number       n) = showField "number" (wrapS n)
 showBibTeX  _ (Organization o) = showField "organization" o
-showBibTeX  _ (Pages        p) = showField "pages" (pages p)
+showBibTeX sm (Pages        p) = showField "pages" (I.spec sm $ foldNums "--" p)
 showBibTeX  _ (Publisher    p) = showField "publisher" p
 showBibTeX  _ (School       s) = showField "school" s
 showBibTeX  _ (Series       s) = showField "series" s
@@ -508,8 +499,7 @@ showBibTeX  _ (Title        t) = showField "title" t
 showBibTeX  _ (Type         t) = showField "type" t
 showBibTeX  _ (Volume       v) = showField "volume" (wrapS v)
 showBibTeX  _ (Year         y) = showField "year" (wrapS y)
-showBibTeX  _ (HowPublished (URL  u)) =
-  showField "howpublished" (S "\\url{" :+: u :+: S "}")
+showBibTeX  _ (HowPublished (URL  u)) = showFieldCom "url" "howpublished" u
 showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
 
 --showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author"
@@ -517,8 +507,21 @@ showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
   -- showField "sortkey" (LS.spec sm (rendPeople p))
 -- showBibTeX sm (Author    p) = showField "author" $ LS.spec sm (rendPeople p)
 
-showField :: String -> Spec -> Spec
-showField f s = S f :+: S "={" :+: s :+: S "}"
+data FieldWrap = Braces | NoDelimiters | Command String
+
+wrapField :: FieldWrap -> String -> Spec -> D
+wrapField fw f s = pure (text (f ++ "=")) <> resolve fw (spec s)
+  where
+    resolve Braces       = br
+    resolve NoDelimiters = id
+    resolve (Command st) = br . commandD st
+
+showField, showFieldRaw :: String -> Spec -> D
+showField    = wrapField Braces
+showFieldRaw = wrapField NoDelimiters
+
+showFieldCom   :: String -> String -> Spec -> D
+showFieldCom s = wrapField (Command s)
 
 rendPeople :: PrintingInformation -> L.People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
@@ -541,9 +544,3 @@ bibTeXMonth L.Dec = S "dec"
 
 wrapS :: Show a => a -> Spec
 wrapS = S . show
-
-pages :: [Int] -> Spec
-pages []  = error "Empty list of pages"
-pages [x] = wrapS x
-pages [x,x2] = wrapS $ show x ++ "-" ++ show x2
-pages xs = error $ "Too many pages given in reference. Received: " ++ show xs

@@ -1,4 +1,5 @@
 /** \file Calculations.hpp
+    \brief Provides functions for calculating the outputs
 */
 #ifndef Calculations_h
 #define Calculations_h

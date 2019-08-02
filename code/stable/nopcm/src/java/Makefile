@@ -6,4 +6,7 @@ SWHS/Control.class: SWHS/Control.java SWHS/InputParameters.java SWHS/OutputForma
 run: build
 	java SWHS.Control $(RUNARGS)
 
-.PHONY: build run
+doc: doxConfig SWHS/Control.java SWHS/InputParameters.java SWHS/OutputFormat.java
+	doxygen doxConfig
+
+.PHONY: build run doc

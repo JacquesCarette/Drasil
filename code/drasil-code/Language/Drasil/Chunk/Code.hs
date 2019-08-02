@@ -25,9 +25,11 @@ programName :: CommonIdea c => c -> String
 programName = toCodeName . abrv
 
 symbToCodeName :: Symbol -> String
-symbToCodeName (Atomic s) = toCodeName s
+symbToCodeName (Variable s) = toCodeName s
+symbToCodeName (Label    s) = toCodeName s
+symbToCodeName (Integ    n) = show n
 symbToCodeName (Special sp) = specialToCodeName sp
---symbToCodeName (Greek g) = greekToCodeName g
+--symbToCodeName (Greek    g) = greekToCodeName g
 symbToCodeName (Atop d s) = decorate (symbToCodeName s) d
 symbToCodeName (Corners ul ll ur lr b) =
   cleft ul ++ cleft ll ++ symbToCodeName b
@@ -48,8 +50,8 @@ decorate s Prime = s ++ "'"
 
 -- TODO: Double check that this is valid in all output languages
 specialToCodeName :: Special -> String
-specialToCodeName Circle        = "circ"
-specialToCodeName Partial       = "partial"
+specialToCodeName Circle  = "circ"
+specialToCodeName Partial = "partial"
 
 toCodeName :: String -> String
 toCodeName s =

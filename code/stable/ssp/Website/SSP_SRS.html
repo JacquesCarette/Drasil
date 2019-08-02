@@ -379,7 +379,7 @@
                   <td>N/m</td>
                 </tr>
                 <tr>
-                  <td><em><b>U</b><sub>t</sub></em></td>
+                  <td><em><b>U</b><sub>g</sub></em></td>
                   <td>
                     Surface Hydrostatic Forces: per meter in the z-direction from water pressure acting into each slice from standing water on the slope surface
                   </td>
@@ -570,7 +570,7 @@
                   <td>N/m<sup>3</sup></td>
                 </tr>
                 <tr>
-                  <td><em>γ<sub>Sat</sub></em></td>
+                  <td><em>γ<sub>sat</sub></em></td>
                   <td>
                     Soil Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer.
                   </td>
@@ -1380,7 +1380,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em><b>N</b><sub>i</sub> = (<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)</em>
+                          <em><b>N</b><sub>i</sub> = (<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)</em>
                         </div>
                       </td>
                     </tr>
@@ -1393,7 +1393,7 @@
                           <li><em><b>W</b></em> is the weights (N/m)</li>
                           <li><em><b>X</b></em> is the interslice shear forces (N/m)</li>
                           <li>
-                            <em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
+                            <em><b>U</b><sub>g</sub></em> is the surface hydrostatic forces (N/m)
                           </li>
                           <li><em><b>β</b></em> is the surface angles (&deg;)</li>
                           <li><em><b>Q</b></em> is the external forces (N/m)</li>
@@ -1413,7 +1413,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the normal direction. <em><b>W</b></em> is defined in <a href=#GD:sliceWght>GD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
+                          This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the normal direction. <em><b>W</b></em> is defined in <a href=#GD:sliceWght>GD: sliceWght</a>, <em><b>U</b><sub>g</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
                         </p>
                       </td>
                     </tr>
@@ -1455,7 +1455,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em><b>S</b><sub>i</sub> = (<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)</em>
+                          <em><b>S</b><sub>i</sub> = (<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)</em>
                         </div>
                       </td>
                     </tr>
@@ -1468,7 +1468,7 @@
                           <li><em><b>W</b></em> is the weights (N/m)</li>
                           <li><em><b>X</b></em> is the interslice shear forces (N/m)</li>
                           <li>
-                            <em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
+                            <em><b>U</b><sub>g</sub></em> is the surface hydrostatic forces (N/m)
                           </li>
                           <li><em><b>β</b></em> is the surface angles (&deg;)</li>
                           <li><em><b>Q</b></em> is the external forces (N/m)</li>
@@ -1488,7 +1488,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the shear direction. <em><b>W</b></em> is defined in <a href=#GD:sliceWght>GD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
+                          This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> in the shear direction. <em><b>W</b></em> is defined in <a href=#GD:sliceWght>GD: sliceWght</a>, <em><b>U</b><sub>g</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, and <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>.
                         </p>
                       </td>
                     </tr>
@@ -1745,7 +1745,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em><b>R</b><sub>i</sub> = ((<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;<b>ℓ</b><sub>b,i</sub></em>
+                          <em><b>R</b><sub>i</sub> = ((<b>W</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;<b>ℓ</b><sub>b,i</sub></em>
                         </div>
                       </td>
                     </tr>
@@ -1759,7 +1759,7 @@
                           <li><em>i</em> is the index (Unitless)</li>
                           <li><em><b>W</b></em> is the weights (N/m)</li>
                           <li>
-                            <em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
+                            <em><b>U</b><sub>g</sub></em> is the surface hydrostatic forces (N/m)
                           </li>
                           <li><em><b>β</b></em> is the surface angles (&deg;)</li>
                           <li><em><b>α</b></em> is the base angles (&deg;)</li>
@@ -1783,7 +1783,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em><b>W</b></em> is defined in <a href=#GD:sliceWght>GD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>U</b><sub>b</sub></em> is defined in <a href=#GD:baseWtrF>GD: baseWtrF</a>, and <em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
+                          <em><b>W</b></em> is defined in <a href=#GD:sliceWght>GD: sliceWght</a>, <em><b>U</b><sub>g</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>U</b><sub>b</sub></em> is defined in <a href=#GD:baseWtrF>GD: baseWtrF</a>, and <em><b>ℓ</b><sub>b</sub></em> is defined in <a href=#DD:lengthLb>DD: lengthLb</a>.
                         </p>
                       </td>
                     </tr>
@@ -1828,7 +1828,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em><b>T</b><sub>i</sub> = (<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)</em>
+                          <em><b>T</b><sub>i</sub> = (<b>W</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)</em>
                         </div>
                       </td>
                     </tr>
@@ -1842,7 +1842,7 @@
                           <li><em>i</em> is the index (Unitless)</li>
                           <li><em><b>W</b></em> is the weights (N/m)</li>
                           <li>
-                            <em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
+                            <em><b>U</b><sub>g</sub></em> is the surface hydrostatic forces (N/m)
                           </li>
                           <li><em><b>β</b></em> is the surface angles (&deg;)</li>
                           <li><em><b>α</b></em> is the base angles (&deg;)</li>
@@ -1856,7 +1856,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em><b>W</b></em> is defined in <a href=#GD:sliceWght>GD: sliceWght</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, and <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>.
+                          <em><b>W</b></em> is defined in <a href=#GD:sliceWght>GD: sliceWght</a>, <em><b>U</b><sub>g</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, and <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>.
                         </p>
                       </td>
                     </tr>
@@ -2015,7 +2015,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <span class="fdn">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              2
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         </div>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         </div>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
                         </div>
                       </td>
                     </tr>
@@ -2043,7 +2043,7 @@
                           <li><em><b>W</b></em> is the weights (N/m)</li>
                           <li><em><b>h</b></em> is the y-direction heights of slices (m)</li>
                           <li>
-                            <em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
+                            <em><b>U</b><sub>g</sub></em> is the surface hydrostatic forces (N/m)
                           </li>
                           <li><em><b>β</b></em> is the surface angles (&deg;)</li>
                           <li><em><b>Q</b></em> is the external forces (N/m)</li>
@@ -2055,7 +2055,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> for the net moment. <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>W</b></em> is defined in <a href=#GD:sliceWght>GD: sliceWght</a>, <em><b>h</b></em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
+                          This equation satisfies <a href=#TM:equilibrium>TM: equilibrium</a> for the net moment. <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>W</b></em> is defined in <a href=#GD:sliceWght>GD: sliceWght</a>, <em><b>h</b></em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em><b>U</b><sub>g</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
                         </p>
                       </td>
                     </tr>
@@ -2194,7 +2194,7 @@
                       The surface hydrostatic force acts into the midpoint of the surface of the slice (<a href=#assumpHFSM>A: Hydrostatic-Force-Slice-Midpoint</a>). Thus, the vertical component of the force acts directly towards the point of rotation, and has a moment of zero. The horizontal component of the force tends to rotate in a clockwise direction and the length of the moment arm is the entire height of the slice. Thus, the moment is:
                     </p>
                     <div class="equation">
-                      <em><b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
+                      <em><b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
                     </div>
                     <p class="paragraph">
                       The external force again acts into the midpoint of the slice surface, so the vertical component does not contribute to the moment, and the length of the moment arm is again the entire height of the slice. The moment is:
@@ -2262,7 +2262,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <span class="fdn">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          2
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </div>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     </div>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
                     </div>
                   </div>
                 </div>
@@ -2368,12 +2368,12 @@
                                                                                              </span>
                                                                                              <div class="cases">
                                                                                                <span>
-                                                                                                 (<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+                                                                                                 (<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>sat</sub> , <span class="case">
                                                                                                                                                                                                                                                                         <b>y</b><sub>wt,i</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slope,i</sub> &or; <b>y</b><sub>wt,i&minus;1</sub>&thinsp;&gt;&thinsp;<b>y</b><sub>slope,i&minus;1</sub>
                                                                                                                                                                                                                                                                       </span>
                                                                                                </span>
                                                                                                <span>
-                                                                                                 (<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>wt,i</sub>&plus;<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>wt,i&minus;1</sub>)&#8239;γ<sub>dry</sub>&plus;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>Sat</sub> , <span class="case">
+                                                                                                 (<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>wt,i</sub>&plus;<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>wt,i&minus;1</sub>)&#8239;γ<sub>dry</sub>&plus;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>sat</sub> , <span class="case">
                                                                                                                                                                                                                                                                                                                                                                                                                                       <b>y</b><sub>slope,i</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>wt,i</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>slip,i</sub> &and; <b>y</b><sub>slope,i&minus;1</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>wt,i&minus;1</sub>&thinsp;&ge;&thinsp;<b>y</b><sub>slip,i&minus;1</sub>
                                                                                                                                                                                                                                                                                                                                                                                                                                     </span>
                                                                                                </span>
@@ -2400,7 +2400,7 @@
                             <em><b>y</b><sub>slip</sub></em> is the y-coordinates of the slip surface (m)
                           </li>
                           <li>
-                            <em>γ<sub>Sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
+                            <em>γ<sub>sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
                           </li>
                           <li>
                             <em><b>y</b><sub>wt</sub></em> is the y-coordinates of the water table (m)
@@ -2415,7 +2415,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). The soil dry unit weight <em>γ<sub>dry</sub></em> and the soil saturated unit weight <em>γ<sub>Sat</sub></em> are not indexed by <em>i</em> because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>). <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
+                          This equation is based on the assumption that the surface and the base of a slice are straight lines (<a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>). The soil dry unit weight <em>γ<sub>dry</sub></em> and the soil saturated unit weight <em>γ<sub>sat</sub></em> are not indexed by <em>i</em> because the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>). <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>.
                         </p>
                       </td>
                     </tr>
@@ -2442,7 +2442,7 @@
                       For the case where the water table is above the slope surface, the weights come from the weight of the saturated soil. Substituting values for saturated soil into the equation for weight from <a href=#GD:weight>GD: weight</a> yields:
                     </p>
                     <div class="equation">
-                      <em><b>W</b><sub>i</sub> = <b>V</b><sub>sat,i</sub>&#8239;γ<sub>Sat</sub></em>
+                      <em><b>W</b><sub>i</sub> = <b>V</b><sub>sat,i</sub>&#8239;γ<sub>sat</sub></em>
                     </div>
                     <p class="paragraph">
                       Due to <a href=#assumpPSC>A: Plane-Strain-Conditions</a>, only two dimensions are considered, so the areas of saturated soil are considered instead of the volumes of saturated soil. Any given slice has a trapezoidal shape. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the interslice edges and the length between them is the width of the slice. Thus, the weights are defined as:
@@ -2455,7 +2455,7 @@
                                                                               <span class="fdn">
                                                                                 2
                                                                               </span>
-                                                                            </div>&#8239;(<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>Sat</sub></em>
+                                                                            </div>&#8239;(<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>sat</sub></em>
                     </div>
                     <p class="paragraph">
                       For the case where the water table is below the slip surface, the weights come from the weight of the dry soil. Substituting values for dry soil into the equation for weight from <a href=#GD:weight>GD: weight</a> yields:
@@ -2480,7 +2480,7 @@
                       For the case where the water table is between the slope surface and slip surface, the weights are the sums of the the weights of the dry portions and weights of the saturated portions of the soil. Substituting values for dry and saturated soil into the equation for weight from <a href=#GD:weight>GD: weight</a> and adding them together yields:
                     </p>
                     <div class="equation">
-                      <em><b>W</b><sub>i</sub> = <b>V</b><sub>dry,i</sub>&#8239;γ<sub>dry</sub>&plus;<b>V</b><sub>sat,i</sub>&#8239;γ<sub>Sat</sub></em>
+                      <em><b>W</b><sub>i</sub> = <b>V</b><sub>dry,i</sub>&#8239;γ<sub>dry</sub>&plus;<b>V</b><sub>sat,i</sub>&#8239;γ<sub>sat</sub></em>
                     </div>
                     <p class="paragraph">
                       <a href=#assumpPSC>A: Plane-Strain-Conditions</a> again allows for two-dimensional analysis so the areas of dry soil and areas of saturated soil are considered instead of the volumes of dry soil and volumes of saturated soil. The water table is assumed to only intersect a slice surface or base at a slice edge (<a href=#assumpWISE>A: Water-Intersects-Surface-Edge</a>, <a href=#assumpWIBE>A: Water-Intersects-Base-Edge</a>), so the dry and saturated portions each have trapezoidal shape. For the dry portion, the parallel sides of the trapezoid are the lengths between the slope surface and water table at the slice edges. For the saturated portion, the parallel sides of the trapezoid are the lengths between the water table and slip surface at the slice edges. Thus, the weights are defined as:
@@ -2493,7 +2493,7 @@
                                                                               <span class="fdn">
                                                                                 2
                                                                               </span>
-                                                                            </div>&#8239;((<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>wt,i</sub>&plus;<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>wt,i&minus;1</sub>)&#8239;γ<sub>dry</sub>&plus;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>Sat</sub>)</em>
+                                                                            </div>&#8239;((<b>y</b><sub>slope,i</sub>&minus;<b>y</b><sub>wt,i</sub>&plus;<b>y</b><sub>slope,i&minus;1</sub>&minus;<b>y</b><sub>wt,i&minus;1</sub>)&#8239;γ<sub>dry</sub>&plus;(<b>y</b><sub>wt,i</sub>&minus;<b>y</b><sub>slip,i</sub>&plus;<b>y</b><sub>wt,i&minus;1</sub>&minus;<b>y</b><sub>slip,i&minus;1</sub>)&#8239;γ<sub>sat</sub>)</em>
                     </div>
                   </div>
                 </div>
@@ -2694,7 +2694,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em><b>U</b><sub>t,i</sub> = <b>ℓ</b><sub>s,i</sub>&#8239;γ<sub>w</sub>&#8239;<div class="fraction">
+                          <em><b>U</b><sub>g,i</sub> = <b>ℓ</b><sub>s,i</sub>&#8239;γ<sub>w</sub>&#8239;<div class="fraction">
                                                                                                           <span class="fup">
                                                                                                             1
                                                                                                           </span>
@@ -2724,7 +2724,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
+                            <em><b>U</b><sub>g</sub></em> is the surface hydrostatic forces (N/m)
                           </li>
                           <li><em>i</em> is the index (Unitless)</li>
                           <li>
@@ -2786,7 +2786,7 @@
                       Due to <a href=#assumpPSC>A: Plane-Strain-Conditions</a>, only two dimensions are considered, so the surface hydrostatic forces are expressed as forces per meter. The pressures acting on the slices can thus be converted to surface hydrostatic forces by multiplying by the corresponding length of the slice surface <em><b>ℓ</b><sub>s,i</sub></em>, assuming the water table does not intersect a slice surface except at a slice edge (<a href=#assumpWISE>A: Water-Intersects-Surface-Edge</a>). Thus, in the case where the height of the water table is above the height of the slope surface, the surface hydrostatic forces are defined as:
                     </p>
                     <div class="equation">
-                      <em><b>U</b><sub>t,i</sub> = <b>ℓ</b><sub>s,i</sub>&#8239;γ<sub>w</sub>&#8239;<div class="fraction">
+                      <em><b>U</b><sub>g,i</sub> = <b>ℓ</b><sub>s,i</sub>&#8239;γ<sub>w</sub>&#8239;<div class="fraction">
                                                                                                       <span class="fup">
                                                                                                         1
                                                                                                       </span>
@@ -3913,7 +3913,7 @@
                       <th>Input</th>
                       <td>
                         <p class="paragraph">
-                          <em><b>x</b><sub>slope</sub></em>, <em><b>y</b><sub>slope</sub></em>, <em><b>y</b><sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ<sub>dry</sub></em>, <em>γ<sub>Sat</sub></em>, <em>γ<sub>w</sub></em>, <em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>, <em>const_f</em>
+                          <em><b>x</b><sub>slope</sub></em>, <em><b>y</b><sub>slope</sub></em>, <em><b>y</b><sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ<sub>dry</sub></em>, <em>γ<sub>sat</sub></em>, <em>γ<sub>w</sub></em>, <em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>, <em>const_f</em>
                         </p>
                       </td>
                     </tr>
@@ -3997,7 +3997,7 @@
                       The mobilized shear force defined in <a href=#GD:bsShrFEq>GD: bsShrFEq</a> can be substituted into the definition of mobilized shear force based on the factor of safety, from <a href=#GD:mobShr>GD: mobShr</a> yielding Equation (1) below:
                     </p>
                     <div class="equation">
-                      <em>(<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>) = <div class="fraction">
+                      <em>(<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>) = <div class="fraction">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <span class="fup">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   <b>N&prime;</b><sub>i</sub>&#8239;tan(φ&prime;)&plus;c&prime;&#8239;<b>ℓ</b><sub>b,i</sub>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </span>
@@ -4010,15 +4010,15 @@
                       An expression for the effective normal forces, <em><b>N&prime;</b></em>, can be derived by substituting the normal forces equilibrium from <a href=#GD:normForcEq>GD: normForcEq</a> into the definition for effective normal forces from <a href=#GD:resShearWO>GD: resShearWO</a>. This results in Equation (2):
                     </p>
                     <div class="equation">
-                      <em><b>N&prime;</b><sub>i</sub> = (<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub></em>
+                      <em><b>N&prime;</b><sub>i</sub> = (<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub></em>
                     </div>
                     <p class="paragraph">
                       Substituting Equation (2) into Equation (1) gives:
                     </p>
                     <div class="equation">
-                      <em>(<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>) = <div class="fraction">
+                      <em>(<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>) = <div class="fraction">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ((<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;<b>ℓ</b><sub>b,i</sub>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  ((<b>W</b><sub>i</sub>&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;<b>ℓ</b><sub>b,i</sub>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </span>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <span class="fdn">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   F<sub>S</sub>
@@ -4029,9 +4029,9 @@
                       Since the interslice shear forces <em><b>X</b></em> and interslice normal forces <em><b>G</b></em> are unknown, they are separated from the other terms as follows:
                     </p>
                     <div class="equation">
-                      <em>(<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&minus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;sin(<b>α</b><sub>i</sub>) = <div class="fraction">
+                      <em>(<b>W</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&minus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;sin(<b>α</b><sub>i</sub>) = <div class="fraction">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ((<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;<b>ℓ</b><sub>b,i</sub>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ((<b>W</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;cos(<b>ω</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;<b>W</b><sub>i</sub>&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;<b>ℓ</b><sub>b,i</sub>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </span>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  <span class="fdn">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    F<sub>S</sub>
@@ -4042,9 +4042,9 @@
                       Applying assumptions <a href=#assumpSF>A: Seismic-Force</a> and <a href=#assumpSL>A: Surface-Load</a>, which state that the seismic coefficient and the external forces, respectively, are zero, allows for further simplification as shown below:
                     </p>
                     <div class="equation">
-                      <em>(<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&minus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;sin(<b>α</b><sub>i</sub>) = <div class="fraction">
+                      <em>(<b>W</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&minus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&minus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;sin(<b>α</b><sub>i</sub>) = <div class="fraction">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ((<b>W</b><sub>i</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;<b>ℓ</b><sub>b,i</sub>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ((<b>W</b><sub>i</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;cos(<b>β</b><sub>i</sub>))&#8239;cos(<b>α</b><sub>i</sub>)&plus;(&minus;<b>H</b><sub>i</sub>&plus;<b>H</b><sub>i&minus;1</sub>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>))&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>G</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>)&#8239;sin(<b>α</b><sub>i</sub>)&plus;(&minus;<b>X</b><sub>i&minus;1</sub>&plus;<b>X</b><sub>i</sub>)&#8239;cos(<b>α</b><sub>i</sub>)&minus;<b>U</b><sub>b,i</sub>)&#8239;tan(φ&prime;)&plus;c&prime;&#8239;<b>ℓ</b><sub>b,i</sub>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               </span>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <span class="fdn">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 F<sub>S</sub>
@@ -4338,7 +4338,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              <span class="fdn">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                2
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </div>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </div>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub></em>
                     </div>
                     <p class="paragraph">
                       Rearranging the equation in terms of <em>λ</em> leads to Equation (15):
@@ -4395,7 +4395,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 <span class="fdn">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   2
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div>&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div>&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>&plus;<b>Q</b><sub>i</sub>&#8239;sin(<b>ω</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>
                                 </span>
                                 <span class="fdn">
                                   &minus;<div class="fraction">
@@ -4453,7 +4453,7 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <span class="fdn">
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      2
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 </div>&#8239;tan(<b>α</b><sub>i</sub>))&plus;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)&#8239;<b>h</b><sub>i</sub>
                                 </span>
                                 <span class="fdn">
                                   &minus;<div class="fraction">
@@ -4469,7 +4469,7 @@
                     <div class="equation">
                       <em>λ = <div class="fraction">
                                 <span class="fup">
-                                  &sum;<sub>i = 1</sub><sup>n</sup><b>b</b><sub>i</sub>&#8239;(<b>F</b><sub>x</sub><sup>G</sup>&plus;<b>F</b><sub>x</sub><sup>H</sup>)&#8239;tan(<b>α</b><sub>i</sub>)&plus;<b>h</b><sub>i</sub>&#8239;&minus;2&#8239;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)
+                                  &sum;<sub>i = 1</sub><sup>n</sup><b>b</b><sub>i</sub>&#8239;(<b>F</b><sub>x</sub><sup>G</sup>&plus;<b>F</b><sub>x</sub><sup>H</sup>)&#8239;tan(<b>α</b><sub>i</sub>)&plus;<b>h</b><sub>i</sub>&#8239;&minus;2&#8239;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>)
                                 </span>
                                 <span class="fdn">
                                   &sum;<sub>i = 1</sub><sup>n</sup><b>b</b><sub>i</sub>&#8239;(<b>G</b><sub>i</sub>&#8239;<b>f</b><sub>i</sub>&plus;<b>G</b><sub>i&minus;1</sub>&#8239;<b>f</b><sub>i&minus;1</sub>)
@@ -4527,7 +4527,7 @@
                                                                                                                                                                            </span>
                                                            </span>
                                                            <span>
-                                                             <b>b</b><sub>i</sub>&#8239;(<b>F</b><sub>x</sub><sup>G</sup>&plus;<b>F</b><sub>x</sub><sup>H</sup>)&#8239;tan(<b>α</b><sub>i</sub>)&plus;<b>h</b>&#8239;&minus;2&#8239;<b>U</b><sub>t,i</sub>&#8239;sin(<b>β</b><sub>i</sub>) , <span class="case">
+                                                             <b>b</b><sub>i</sub>&#8239;(<b>F</b><sub>x</sub><sup>G</sup>&plus;<b>F</b><sub>x</sub><sup>H</sup>)&#8239;tan(<b>α</b><sub>i</sub>)&plus;<b>h</b>&#8239;&minus;2&#8239;<b>U</b><sub>g,i</sub>&#8239;sin(<b>β</b><sub>i</sub>) , <span class="case">
                                                                                                                                                                                                                                                                                                2&thinsp;&le;&thinsp;i&thinsp;&le;&thinsp;n&minus;1
                                                                                                                                                                                                                                                                                              </span>
                                                            </span>
@@ -4562,7 +4562,7 @@
                           </li>
                           <li><em><b>h</b></em> is the y-direction heights of slices (m)</li>
                           <li>
-                            <em><b>U</b><sub>t</sub></em> is the surface hydrostatic forces (N/m)
+                            <em><b>U</b><sub>g</sub></em> is the surface hydrostatic forces (N/m)
                           </li>
                           <li><em><b>β</b></em> is the surface angles (&deg;)</li>
                           <li><em>n</em> is the number of slices (Unitless)</li>
@@ -4573,7 +4573,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>h</b></em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em><b>U</b><sub>t</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
+                          <em><b>b</b></em> is defined in <a href=#DD:lengthB>DD: lengthB</a>, <em><b>H</b></em> is defined in <a href=#DD:intersliceWtrF>DD: intersliceWtrF</a>, <em><b>α</b></em> is defined in <a href=#DD:angleA>DD: angleA</a>, <em><b>h</b></em> is defined in <a href=#DD:slcHeight>DD: slcHeight</a>, <em><b>U</b><sub>g</sub></em> is defined in <a href=#GD:srfWtrF>GD: srfWtrF</a>, and <em><b>β</b></em> is defined in <a href=#DD:angleB>DD: angleB</a>.
                         </p>
                       </td>
                     </tr>
@@ -4723,7 +4723,7 @@
                       <th>Input</th>
                       <td>
                         <p class="paragraph">
-                          <em><b>x</b><sub>slope</sub></em>, <em><b>y</b><sub>slope</sub></em>, <em><b>y</b><sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ<sub>dry</sub></em>, <em>γ<sub>Sat</sub></em>, <em>γ<sub>w</sub></em>, <em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>, <em>const_f</em>
+                          <em><b>x</b><sub>slope</sub></em>, <em><b>y</b><sub>slope</sub></em>, <em><b>y</b><sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ<sub>dry</sub></em>, <em>γ<sub>sat</sub></em>, <em>γ<sub>w</sub></em>, <em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>, <em>const_f</em>
                         </p>
                       </td>
                     </tr>
@@ -4862,7 +4862,7 @@
                       <th>Input</th>
                       <td>
                         <p class="paragraph">
-                          <em><b>x</b><sub>slope</sub></em>, <em><b>y</b><sub>slope</sub></em>, <em><b>x</b><sub>wt</sub></em>, <em><b>y</b><sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ<sub>dry</sub></em>, <em>γ<sub>Sat</sub></em>, <em>γ<sub>w</sub></em>, <em>const_f</em>
+                          <em><b>x</b><sub>slope</sub></em>, <em><b>y</b><sub>slope</sub></em>, <em><b>x</b><sub>wt</sub></em>, <em><b>y</b><sub>wt</sub></em>, <em>c&prime;</em>, <em>φ&prime;</em>, <em>γ<sub>dry</sub></em>, <em>γ<sub>sat</sub></em>, <em>γ<sub>w</sub></em>, <em>const_f</em>
                         </p>
                       </td>
                     </tr>
@@ -4884,7 +4884,7 @@
                       <th>Equation</th>
                       <td>
                         <div class="equation">
-                          <em>F<sub>S</sub><sup>min</sup> = Υ(<b>x</b><sub>slope</sub>,<b>y</b><sub>slope</sub>,<b>x</b><sub>wt</sub>,<b>y</b><sub>wt</sub>,c&prime;,φ&prime;,γ<sub>dry</sub>,γ<sub>Sat</sub>,γ<sub>w</sub>,const_f)</em>
+                          <em>F<sub>S</sub><sup>min</sup> = Υ(<b>x</b><sub>slope</sub>,<b>y</b><sub>slope</sub>,<b>x</b><sub>wt</sub>,<b>y</b><sub>wt</sub>,c&prime;,φ&prime;,γ<sub>dry</sub>,γ<sub>sat</sub>,γ<sub>w</sub>,const_f)</em>
                         </div>
                       </td>
                     </tr>
@@ -4916,7 +4916,7 @@
                             <em>γ<sub>dry</sub></em> is the soil dry unit weight (N/m<sup>3</sup>)
                           </li>
                           <li>
-                            <em>γ<sub>Sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
+                            <em>γ<sub>sat</sub></em> is the soil saturated unit weight (N/m<sup>3</sup>)
                           </li>
                           <li>
                             <em>γ<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
@@ -5037,8 +5037,8 @@
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
-                      <td><em>γ<sub>Sat</sub></em></td>
-                      <td><em>γ<sub>Sat</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td><em>γ<sub>sat</sub></em></td>
+                      <td><em>γ<sub>sat</sub>&thinsp;&gt;&thinsp;0</em></td>
                       <td><em>20.0&sdot;10<sup>3</sup></em> N/m<sup>3</sup></td>
                       <td>10<em>%</em></td>
                     </tr>
@@ -5232,7 +5232,7 @@
                   <td>N/m<sup>3</sup></td>
                 </tr>
                 <tr>
-                  <td><em>γ<sub>Sat</sub></em></td>
+                  <td><em>γ<sub>sat</sub></em></td>
                   <td>Soil saturated unit weight</td>
                   <td>N/m<sup>3</sup></td>
                 </tr>

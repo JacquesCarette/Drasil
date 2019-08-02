@@ -22,8 +22,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat),
   NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Arctan, Arccos, Arcsin,
   Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
   Rational, Integer, IsIn, Point, Perc), Spacing(Thin), Fonts(Emph, Bold), 
-  Expr(Spc, Sqrt, Font, Fenced, MO, Over, Sup, Sub, Ident, Spec, Row, 
-  Mtx, Div, Case, Str, Int, Dbl), OverSymb(Hat), Label,
+  Expr(..), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
   Year, Volume, Type, Title, Series, School, Publisher, Organization, Pages,
@@ -75,9 +74,11 @@ print sm = foldr (($+$) . (`lo` sm)) empty
 
 ------------------ Symbol ----------------------------
 symbol :: L.Symbol -> D
-symbol (L.Atomic s)  = pure $ text s
-symbol (L.Special s) = pure $ text $ unPL (L.special s)
-symbol (L.Concat sl) = foldl (<>) empty $ map symbol sl
+symbol (L.Variable s) = pure $ text s
+symbol (L.Label    s) = pure $ text s
+symbol (L.Integ    n) = pure $ text $ show n
+symbol (L.Special  s) = pure $ text $ unPL $ L.special s
+symbol (L.Concat  sl) = foldl (<>) empty $ map symbol sl
 --
 -- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = br $ symbol s <> pure hat <> br (symbol x)
@@ -109,6 +110,7 @@ pExpr (Mtx a)        = mkEnv "bmatrix" (pMatrix a)
 pExpr (Row [x])      = br $ pExpr x -- FIXME: Hack needed for symbols with multiple subscripts, etc.
 pExpr (Row l)        = foldl1 (<>) (map pExpr l)
 pExpr (Ident s)      = pure . text $ s
+pExpr (Label s)      = command "text" s
 pExpr (Spec s)       = pure . text $ unPL $ L.special s
 --pExpr (Gr g)         = unPL $ greek g
 pExpr (Sub e)        = pure unders <> br (pExpr e)
@@ -279,12 +281,14 @@ escapeChars '_' = "\\_"
 escapeChars c = [c]
 
 symbolNeeds :: L.Symbol -> MathContext
-symbolNeeds (L.Atomic _)     = Text
-symbolNeeds (L.Special _)    = Math
-symbolNeeds (L.Concat [])    = Math
+symbolNeeds (L.Variable   _) = Text
+symbolNeeds (L.Label      _) = Text
+symbolNeeds (L.Integ      _) = Math
+symbolNeeds (L.Special    _) = Math
+symbolNeeds (L.Concat    []) = Math
 symbolNeeds (L.Concat (s:_)) = symbolNeeds s
 symbolNeeds L.Corners{}      = Math
-symbolNeeds (L.Atop _ _)     = Math
+symbolNeeds (L.Atop     _ _) = Math
 symbolNeeds L.Empty          = Curr
 
 pUnit :: L.USymb -> D

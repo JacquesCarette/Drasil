@@ -7,9 +7,9 @@ import Language.Drasil.Code.Code (CodeType(..))
 inFileName :: CodeQuantityDict
 inFileName = implCQD "inFileName" 
   (nounPhrase "name of the input file" "names of the input files") 
-  Nothing String (Atomic "filename") Nothing
+  Nothing String (Label "filename") Nothing
 
 inParams :: CodeQuantityDict
 inParams = implCQD "inParams" (nounPhrase 
   "structure holding the input values" "structures holding the input values")
-  Nothing (Object "InputParameters") (Atomic "inParams") Nothing
+  Nothing (Object "InputParameters") (Label "inParams") Nothing

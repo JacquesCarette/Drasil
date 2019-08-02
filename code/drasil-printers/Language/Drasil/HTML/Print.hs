@@ -8,8 +8,7 @@ import Control.Arrow (second)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
-  Symbol(Corners, Concat, Special, Atomic, Empty, Atop),
-  DType(Data, Theory, Instance, General), MaxWidthPercent,
+  Symbol(..), DType(Data, Theory, Instance, General), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
@@ -29,8 +28,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),
   Dot, Cross, Neg, Exp, Not, Dim, Arctan, Arccos, Arcsin, Cot, Csc, Sec, Tan, 
   Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
   Real, Rational, Natural, Integer, IsIn, Point, Perc), 
-  Expr(Sub, Sup, Over, Sqrt, Spc, Font, MO, Fenced, Spec, Ident, Row, Mtx, Case, Div, Str, 
-  Int, Dbl), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
+  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, Sy, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
@@ -109,10 +107,12 @@ pSpec (Quote q)          = doubleQuotes $ pSpec q
 
 -- | Renders symbols for HTML document
 symbol :: L.Symbol -> String
-symbol (L.Atomic s)  = s
-symbol (L.Special s) = unPH $ L.special s
-symbol (L.Concat sl) = concatMap symbol sl
---symbol (Greek g)   = unPH $ greek g
+symbol (L.Variable s) = s
+symbol (L.Label    s) = s
+symbol (L.Integ    n) = show n
+symbol (L.Special  s) = unPH $ L.special s
+symbol (L.Concat  sl) = concatMap symbol sl
+--symbol (Greek g)      = unPH $ greek g
 -- handle the special cases first, then general case
 symbol (L.Corners [] [] [x] [] s) = symbol s ++ (render . sup . text) (symbol x)
 symbol (L.Corners [] [] [] [x] s) = symbol s ++ (render . sub . text) (symbol x)
@@ -154,6 +154,7 @@ pExpr (Case ps)      = cases ps pExpr
 pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "</table>"
 pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
+pExpr (Label s)      = text s
 pExpr (Spec s)       = text $ unPH $ L.special s
 --pExpr (Gr g)         = unPH $ greek g
 pExpr (Sub e)        = sub $ pExpr e

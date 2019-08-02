@@ -17,6 +17,7 @@ module Language.Drasil.Code.Imperative.Symantics (
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
+import Language.Drasil.CodeSpec (Comments)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
@@ -50,6 +51,8 @@ class (KeywordSym repr, RenderSym repr) => AuxiliarySym repr where
   doxConfig :: String -> repr (Program repr) -> repr (Auxiliary repr)
 
   optimizeDox :: repr (Keyword repr)
+
+  makefile :: [Comments] -> repr (Program repr) -> repr (Auxiliary repr)
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   type Keyword repr

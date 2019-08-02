@@ -20,8 +20,6 @@ import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
-  NameOpts(NameOpts), packSep)
 import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
@@ -41,16 +39,20 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
   dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
-  doxConfigName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
-  appendToBody, surroundBody, getterName, setterName, setMain, setMainMethod, 
-  setEmpty, intValue)
+  doxConfigName, makefileName, doubleSlash, blockCmtDoc, docCmtDoc, 
+  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
+  valList, appendToBody, surroundBody, getterName, setterName, setMain, 
+  setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   PackData(..), packD, ProgData(..), progD, TypeData(..), td, ValData(..), 
   VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
+  NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
+  interp, mainModule, mainModuleFile, packSep, withExt)
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -113,6 +115,8 @@ instance AuxiliarySym JavaCode where
     optimizeDox p)
 
   optimizeDox = return $ text "YES"
+
+  makefile cms = fmap (ad makefileName . makeBuild cms jBuildConfig jRunnable)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -739,3 +743,11 @@ jInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out
   : ins)
 jInOutCall f n ins outs both = multi $ varDecDef (var "outputs" jArrayType) 
   (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 (both ++ outs)
+
+jBuildConfig :: Maybe BuildConfig
+jBuildConfig = buildSingle (\i _ -> asFragment "javac" : i) $
+  inCodePackage mainModuleFile
+
+jRunnable :: Runnable
+jRunnable = interp (flip withExt ".class" $ inCodePackage mainModule) 
+  jNameOpts "java"

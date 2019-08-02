@@ -1,5 +1,8 @@
 package SWHS;
 
+/** \file OutputFormat.java
+    \brief Provides the function for writing outputs
+*/
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
@@ -10,6 +13,10 @@ import java.util.ArrayList;
 
 public class OutputFormat {
     
+    /** \brief Writes the output values to output.txt
+        \param T_W temperature of the water
+        \param E_W change in heat energy in the water
+    */
     public static void write_output(double T_W, double E_W) throws Exception {
         PrintWriter outputfile;
         outputfile = new PrintWriter(new FileWriter(new File("output.txt"), false));

@@ -1,7 +1,11 @@
+## \file InputParameters.py
+# \brief Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input
 from __future__ import print_function
 import sys
 import math
 
+## \brief Reads input from a file with the given file name
+# \param filename name of the input file
 def get_input(filename):
     infile = open(filename, "r")
     infile.readline()
@@ -36,6 +40,19 @@ def get_input(filename):
     
     return A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, A_tol, R_tol, T_W, E_W
 
+## \brief Verifies that input values satisfy the physical constraints and software constraints
+# \param A_C heating coil surface area
+# \param C_W specific heat capacity of water
+# \param h_C convective heat transfer coefficient between coil and water
+# \param T_init initial temperature
+# \param t_final final time
+# \param L length of tank
+# \param T_C temperature of the heating coil
+# \param t_step time step for simulation
+# \param rho_W density of water
+# \param D diameter of tank
+# \param T_W temperature of the water
+# \param E_W change in heat energy in the water
 def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W):
     if (not(A_C <= 100000)) :
         print("Warning: constraint violated")

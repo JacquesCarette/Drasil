@@ -1,4 +1,5 @@
 /** \file Control.cpp
+    \brief Controls the flow of the program
 */
 #include <algorithm>
 #include <iostream>

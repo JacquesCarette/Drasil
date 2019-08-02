@@ -24,7 +24,7 @@ public class Calculations {
     
     /** \brief Calculates distance between the target position and the landing position
         \param inParams structure holding the input values
-        \param p_land landing position
+        \param p_land landing position (m)
     */
     public static double func_d_offset(InputParameters inParams, double p_land) {
         return p_land - inParams.p_target;
@@ -32,7 +32,7 @@ public class Calculations {
     
     /** \brief Calculates output message as a string
         \param inParams structure holding the input values
-        \param d_offset distance between the target position and the landing position
+        \param d_offset distance between the target position and the landing position (m)
     */
     public static string func_s(InputParameters inParams, double d_offset) {
         if (Math.Abs(d_offset / inParams.p_target) < 2.0e-2) {

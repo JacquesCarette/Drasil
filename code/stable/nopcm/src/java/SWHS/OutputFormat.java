@@ -14,8 +14,8 @@ import java.util.ArrayList;
 public class OutputFormat {
     
     /** \brief Writes the output values to output.txt
-        \param T_W temperature of the water
-        \param E_W change in heat energy in the water
+        \param T_W temperature of the water (degreeC)
+        \param E_W change in heat energy in the water (J)
     */
     public static void write_output(double T_W, double E_W) throws Exception {
         PrintWriter outputfile;

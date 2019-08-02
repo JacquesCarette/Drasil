@@ -1,4 +1,5 @@
 /** \file Calculations.cs
+    \brief Provides functions for calculating the outputs
 */
 using System;
 using System.IO;

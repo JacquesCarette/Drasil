@@ -103,7 +103,7 @@ tOfUnit cs ss = section' (titleize Doc.tOfUnit) cs ss "ToU"
 section' :: Sentence -> [Contents] -> [Section] -> String -> Section
 section' a b c d = section a b c (makeSecRef d (toString a))
   where
-    toString :: Sentence -> String --FIXME: same as getStr hack, import instead? 
+    toString :: Sentence -> String --FIXME: same as sentenceDoc, import instead? 
     toString (S x) = x
     toString ((:+:) s1 s2) = toString s1 ++ toString s2
     toString _ = error "Term is not a string"

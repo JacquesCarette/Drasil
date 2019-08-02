@@ -35,8 +35,8 @@ readTable = funcData "read_table"
 -----
 
 one, two :: Symbol
-one = Atomic "1"
-two = Atomic "2"
+one = Integ 1
+two = Integ 2
 
 var :: String -> String -> Symbol -> Space -> QuantityDict
 var nam np = implVar nam (nounPhraseSP np)
@@ -50,26 +50,21 @@ x    = var "x"  "x-coordinate to interpolate at" lX           Real -- = params.w
 
 v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
   i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename :: QuantityDict
-v       = var "v"       "value whose index will be found" 
-  lV                         Real
-i       = var "i"       "index"                           
-  lI                         Natural
-j       = var "j"       "index"                           
-  lJ                         Natural
-k       = var "k"       "index"                           
-  (sub lK two)               Natural                    
-y       = var "y"       "y-coordinate to interpolate at"
-  lY                         Real
-z       = var "z"       "z-coordinate to interpolate at"   
-  lZ                         Real
+i = var "i" "index" lI           Natural
+j = var "j" "index" lJ           Natural
+k = var "k" "index" (sub lK two) Natural     
+v = var "v" "value whose index will be found" lV Real
+y = var "y" "y-coordinate to interpolate at"  lY Real
+z = var "z" "z-coordinate to interpolate at"  lZ Real
+
 zVector = var "zVector" "list of z values" 
-  (sub lZ (Atomic "vector")) (Vect Real)               
+  (sub lZ (Label "vector")) (Vect Real)               
 yMatrix = var "yMatrix" "lists of y values at different z values" 
-  (sub lY (Atomic "matrix")) (Vect $ Vect Real)        
+  (sub lY (Label "matrix")) (Vect $ Vect Real)        
 xMatrix = var "xMatrix" "lists of x values at different z values" 
-  (sub lX (Atomic "matrix")) (Vect $ Vect Real)        
+  (sub lX (Label "matrix")) (Vect $ Vect Real)        
 arr     = var "arr"     "array in which value should be found" 
-  (Atomic "arr")             (Vect Real)  --FIXME: temporary variable for findCT?
+  (Label "arr")             (Vect Real)  --FIXME: temporary variable for findCT?
 x_z_1   = var "x_z_1"   "list of x values at a specific z value"    
   (sub lX (sub lZ one))      (Vect Real)
 y_z_1   = var "y_z_1"   "list of y values at a specific z value"    
@@ -79,11 +74,11 @@ x_z_2   = var "x_z_2"   "list of x values at a specific z value"
 y_z_2   = var "y_z_2"   "list of y values at a specific z value"   
   (sub lY (sub lZ two))      (Vect Real)
 mat     = var "mat"     "matrix from which column will be extracted"     
-  (Atomic "mat")             (Vect $ Vect Real)
+  (Label "mat")             (Vect $ Vect Real)
 col     = var "col"     "extracted column"    
-  (Atomic "col")             (Vect Real)               
+  (Label "col")             (Vect Real)               
 filename = var "filename" "name of file with x y and z data" 
-  (Atomic "filename")        String
+  (Label "filename")        String
 
 ------------------------------------------------------------------------------------------
 --

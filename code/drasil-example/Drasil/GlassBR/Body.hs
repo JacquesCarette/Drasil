@@ -1,7 +1,7 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-import Language.Drasil hiding (organization, section)
+import Language.Drasil hiding (Symbol(..), organization, section)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),

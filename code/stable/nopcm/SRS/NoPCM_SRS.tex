@@ -67,51 +67,51 @@ The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: To
 \\
 \midrule
 \endhead
-${A_{C}}$ & Heating coil surface area & $\text{m}^{2}$
+${A_{\text{C}}}$ & Heating coil surface area & $\text{m}^{2}$
 \\
-${A_{in}}$ & Surface area over which heat is transferred in & $\text{m}^{2}$
+${A_{\text{in}}}$ & Surface area over which heat is transferred in & $\text{m}^{2}$
 \\
-${A_{out}}$ & Surface area over which heat is transferred out & $\text{m}^{2}$
+${A_{\text{out}}}$ & Surface area over which heat is transferred out & $\text{m}^{2}$
 \\
-${A_{tol}}$ & Absolute tolerance & --
+${A_{\text{tol}}}$ & Absolute tolerance & --
 \\
 $C$ & Specific heat capacity & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${C^{L}}$ & Specific heat capacity of a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+${C^{\text{L}}}$ & Specific heat capacity of a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+${C_{\text{W}}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 $D$ & Diameter of tank & m
 \\
 $E$ & Sensible heat & J
 \\
-${E_{W}}$ & Change in heat energy in the water & J
+${E_{\text{W}}}$ & Change in heat energy in the water & J
 \\
 $g$ & Volumetric heat generation per unit volume & $\frac{\text{W}}{\text{m}^{3}}$
 \\
 $h$ & Convective heat transfer coefficient & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
-${h_{C}}$ & Convective heat transfer coefficient between coil and water & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+${h_{\text{C}}}$ & Convective heat transfer coefficient between coil and water & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
 $L$ & Length of tank & m
 \\
 $m$ & Mass & kg
 \\
-${m_{W}}$ & Mass of water & kg
+${m_{\text{W}}}$ & Mass of water & kg
 \\
 $\mathbf{\hat{n}}$ & Normal Vector & --
 \\
 $q$ & Heat flux & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
+${q_{\text{C}}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-${q_{in}}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
+${q_{\text{in}}}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-${q_{out}}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
+${q_{\text{out}}}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 $\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-${R_{tol}}$ & Relative tolerance & --
+${R_{\text{tol}}}$ & Relative tolerance & --
 \\
 $S$ & Surface & $\text{m}^{2}$
 \\
@@ -119,31 +119,31 @@ $T$ & Temperature & ${}^{\circ}$C
 \\
 $ΔT$ & Change in temperature & ${}^{\circ}$C
 \\
-${T_{C}}$ & Temperature of the heating coil & ${}^{\circ}$C
+${T_{\text{C}}}$ & Temperature of the heating coil & ${}^{\circ}$C
 \\
-${T_{env}}$ & Temperature of the environment & ${}^{\circ}$C
+${T_{\text{env}}}$ & Temperature of the environment & ${}^{\circ}$C
 \\
-${T_{init}}$ & Initial temperature & ${}^{\circ}$C
+${T_{\text{init}}}$ & Initial temperature & ${}^{\circ}$C
 \\
-${T_{W}}$ & Temperature of the water & ${}^{\circ}$C
+${T_{\text{W}}}$ & Temperature of the water & ${}^{\circ}$C
 \\
 $t$ & Time & s
 \\
-${t_{final}}$ & Final time & s
+${t_{\text{final}}}$ & Final time & s
 \\
-${t_{step}}$ & Time step for simulation & s
+${t_{\text{step}}}$ & Time step for simulation & s
 \\
 $V$ & Volume & $\text{m}^{3}$
 \\
-${V_{W}}$ & Volume of water & $\text{m}^{3}$
+${V_{\text{W}}}$ & Volume of water & $\text{m}^{3}$
 \\
 $π$ & Ratio of circumference to diameter for any circle & --
 \\
 $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${τ_{W}}$ & ODE parameter for water & s
+${τ_{\text{W}}}$ & ODE parameter for water & s
 \\
 $∇$ & Gradient & --
 \\
@@ -279,12 +279,12 @@ The physical system of SWHS, as shown in \hyperref[Figure:Tank]{Fig:Tank}, inclu
 
 \begin{itemize}
 \item[PS1:]{Tank containing water.}
-\item[PS2:]{Heating coil at bottom of tank. (${q_{C}}$ represents the heat flux into the water from the coil.)}
+\item[PS2:]{Heating coil at bottom of tank. (${q_{\text{C}}}$ represents the heat flux into the water from the coil.)}
 \end{itemize}
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/NoPCM/TankWaterOnly.png}
-\caption{Solar water heating tank, with heat flux from heating coil of ${q_{C}}$}
+\caption{Solar water heating tank, with heat flux from heating coil of ${q_{\text{C}}}$}
 \label{Figure:Tank}
 \end{center}
 \end{figure}
@@ -371,12 +371,12 @@ Label & Sensible heat energy (no state change)
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           E={C^{L}} m ΔT
+           E={C^{\text{L}}} m ΔT
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$E$ is the sensible heat (J)}
-              \item{${C^{L}}$ is the specific heat capacity of a liquid ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
+              \item{${C^{\text{L}}}$ is the specific heat capacity of a liquid ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
               \item{$m$ is the mass (kg)}
               \item{$ΔT$ is the change in temperature (${}^{\circ}$C)}
               \end{symbDescription}
@@ -425,7 +425,7 @@ Notes & Newton's law of cooling describes convective cooling from a surface. The
         
         $h$ is assumed to be independent of $T$ (from \hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant}).
         
-        $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object.
+        $ΔT\left(t\right)=T\left(t\right)-{T_{\text{env}}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object.
         
 \\ \midrule \\
 Source & \cite[(pg. 8)]{incroperaEtAl2007}
@@ -448,7 +448,7 @@ Label & Simplified rate of change of temperature
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           m C \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+           m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -456,10 +456,10 @@ Description & \begin{symbDescription}
               \item{$C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
               \item{$t$ is the time (s)}
               \item{$T$ is the temperature (${}^{\circ}$C)}
-              \item{${q_{in}}$ is the heat flux input ($\frac{\text{W}}{\text{m}^{2}}$)}
-              \item{${A_{in}}$ is the surface area over which heat is transferred in ($\text{m}^{2}$)}
-              \item{${q_{out}}$ is the heat flux output ($\frac{\text{W}}{\text{m}^{2}}$)}
-              \item{${A_{out}}$ is the surface area over which heat is transferred out ($\text{m}^{2}$)}
+              \item{${q_{\text{in}}}$ is the heat flux input ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{${A_{\text{in}}}$ is the surface area over which heat is transferred in ($\text{m}^{2}$)}
+              \item{${q_{\text{out}}}$ is the heat flux output ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{${A_{\text{out}}}$ is the surface area over which heat is transferred out ($\text{m}^{2}$)}
               \item{$g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$)}
               \item{$V$ is the volume ($\text{m}^{3}$)}
               \end{symbDescription}
@@ -487,17 +487,17 @@ Applying Gauss's Divergence Theorem to the first term over the surface $S$ of th
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
 
 \begin{displaymath}
-{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
+{q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
-Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$, and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume}, and \hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
+Where ${q_{\text{in}}}$, ${q_{\text{out}}}$, ${A_{\text{in}}}$, and ${A_{\text{out}}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$, and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume}, and \hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
 
 \begin{displaymath}
-ρ C V \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V
 \end{displaymath}
 Using the fact that $ρ$=$m$/$V$, Equation (2) can be written as:
 
 \begin{displaymath}
-m C \frac{\,dT}{\,dt}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V
 \end{displaymath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -514,21 +514,21 @@ This section collects and defines all the data needed to build the instance mode
 Label & Heat flux into the water from the coil
         
 \\ \midrule \\
-Symbol & ${q_{C}}$
+Symbol & ${q_{\text{C}}}$
          
 \\ \midrule \\
 Units & $\frac{\text{W}}{\text{m}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {q_{C}}={h_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
+           {q_{\text{C}}}={h_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${q_{C}}$ is the heat flux into the water from the coil ($\frac{\text{W}}{\text{m}^{2}}$)}
-              \item{${h_{C}}$ is the convective heat transfer coefficient between coil and water ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)}
-              \item{${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)}
-              \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
+              \item{${q_{\text{C}}}$ is the heat flux into the water from the coil ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{${h_{\text{C}}}$ is the convective heat transfer coefficient between coil and water ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)}
+              \item{${T_{\text{C}}}$ is the temperature of the heating coil (${}^{\circ}$C)}
+              \item{${T_{\text{W}}}$ is the temperature of the water (${}^{\circ}$C)}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
@@ -563,32 +563,32 @@ The goal \hyperref[waterTempGS]{GS: Predict-Water-Temperature} is met by \hyperr
 Label & Energy balance on water to find the temperature of the water
         
 \\ \midrule \\
-Input & ${T_{C}}$, ${T_{init}}$, ${t_{final}}$, ${A_{C}}$, ${h_{C}}$, ${C_{W}}$, ${m_{W}}$
+Input & ${T_{\text{C}}}$, ${T_{\text{init}}}$, ${t_{\text{final}}}$, ${A_{\text{C}}}$, ${h_{\text{C}}}$, ${C_{\text{W}}}$, ${m_{\text{W}}}$
         
 \\ \midrule \\
-Output & ${T_{W}}$
+Output & ${T_{\text{W}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {T_{init}}\leq{}{T_{C}}
+                    {T_{\text{init}}}\leq{}{T_{\text{C}}}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     0<t<{t_{final}}
+                     0<t<{t_{\text{final}}}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \frac{\,d{T_{W}}}{\,dt}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
+           \frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
-              \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
-              \item{${τ_{W}}$ is the ODE parameter for water (s)}
-              \item{${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)}
+              \item{${T_{\text{W}}}$ is the temperature of the water (${}^{\circ}$C)}
+              \item{${τ_{\text{W}}}$ is the ODE parameter for water (s)}
+              \item{${T_{\text{C}}}$ is the temperature of the heating coil (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}).
+Notes & ${T_{\text{W}}}$ is the temperature of the water (${}^{\circ}$C). ${T_{\text{C}}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{\text{W}}}=\frac{{m_{\text{W}}} {C_{\text{W}}}}{{h_{\text{C}}} {A_{\text{C}}}}$ is a constant (s). The above equation applies as long as the water is in liquid form, $0<{T_{\text{W}}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}).
         
 \\ \midrule \\
 Source & \cite[(with PCM removed)]{koothoor2013}
@@ -601,25 +601,25 @@ RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[out
 \end{minipage}
 \paragraph{Detailed derivation of the energy balance on water:}
 \label{IM:eBalanceOnWtrDeriv}
-To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity, ${C_{W}}$. Heat transfer occurs in the water from the heating coil as ${q_{C}}$ (\hyperref[DD:htFluxC]{DD: htFluxC}), over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
+To find the rate of change of ${T_{\text{W}}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{\text{W}}}$, which has mass ${m_{\text{W}}}$ and specific heat capacity, ${C_{\text{W}}}$. Heat transfer occurs in the water from the heating coil as ${q_{\text{C}}}$ (\hyperref[DD:htFluxC]{DD: htFluxC}), over area ${A_{\text{C}}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 
 \begin{displaymath}
-{m_{W}} {C_{W}} \frac{\,d{T_{W}}}{\,dt}={q_{C}} {A_{C}}
+{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}
 \end{displaymath}
-Using \hyperref[DD:htFluxC]{DD: htFluxC} for ${q_{C}}$, this can be written as:
+Using \hyperref[DD:htFluxC]{DD: htFluxC} for ${q_{\text{C}}}$, this can be written as:
 
 \begin{displaymath}
-{m_{W}} {C_{W}} \frac{\,d{T_{W}}}{\,dt}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)
+{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)
 \end{displaymath}
-Dividing Equation (3) by ${m_{W}} {C_{W}}$, we obtain:
+Dividing Equation (3) by ${m_{\text{W}}} {C_{\text{W}}}$, we obtain:
 
 \begin{displaymath}
-\frac{\,d{T_{W}}}{\,dt}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)
+\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)
 \end{displaymath}
-Setting ${τ_{W}}$ = ${m_{W}}$ ${C_{W}}$ / ${h_{C}}$ ${A_{C}}$, Equation (4) can be written in its final form as:
+Setting ${τ_{\text{W}}}$ = ${m_{\text{W}}}$ ${C_{\text{W}}}$ / ${h_{\text{C}}}$ ${A_{\text{C}}}$, Equation (4) can be written in its final form as:
 
 \begin{displaymath}
-\frac{\,d{T_{W}}}{\,dt}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)
+\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -632,32 +632,32 @@ Setting ${τ_{W}}$ = ${m_{W}}$ ${C_{W}}$ / ${h_{C}}$ ${A_{C}}$, Equation (4) can
 Label & Heat energy in the water
         
 \\ \midrule \\
-Input & ${T_{init}}$, ${m_{W}}$, ${C_{W}}$, ${m_{W}}$
+Input & ${T_{\text{init}}}$, ${m_{\text{W}}}$, ${C_{\text{W}}}$, ${m_{\text{W}}}$
         
 \\ \midrule \\
-Output & ${E_{W}}$
+Output & ${E_{\text{W}}}$
          
 \\ \midrule \\
 Input Constraints & 
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     0<t<{t_{final}}
+                     0<t<{t_{\text{final}}}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {E_{W}}\left(t\right)={C_{W}} {m_{W}} \left({T_{W}}\left(t\right)-{T_{init}}\right)
+           {E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${E_{W}}$ is the change in heat energy in the water (J)}
+              \item{${E_{\text{W}}}$ is the change in heat energy in the water (J)}
               \item{$t$ is the time (s)}
-              \item{${C_{W}}$ is the specific heat capacity of water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
-              \item{${m_{W}}$ is the mass of water (kg)}
-              \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
-              \item{${T_{init}}$ is the initial temperature (${}^{\circ}$C)}
+              \item{${C_{\text{W}}}$ is the specific heat capacity of water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
+              \item{${m_{\text{W}}}$ is the mass of water (kg)}
+              \item{${T_{\text{W}}}$ is the temperature of the water (${}^{\circ}$C)}
+              \item{${T_{\text{init}}}$ is the initial temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}. ${E_{\text{W}}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{\text{init}}}$) (J). ${C_{\text{W}}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{\text{W}}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{\text{W}}}$ and the initial temperature, ${T_{\text{init}}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{\text{W}}}<100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
         
 \\ \midrule \\
 Source & \cite{koothoor2013}
@@ -679,25 +679,25 @@ RefBy & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energ
 \\
 \midrule
 \endhead
-${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $0.12$ $\text{m}^{2}$ & 10$\%$
+${A_{\text{C}}}$ & ${A_{\text{C}}}>0$ & ${A_{\text{C}}}\leq{}{{A_{\text{C}}}^{\text{max}}}$ & $0.12$ $\text{m}^{2}$ & 10$\%$
 \\
-${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
+${C_{\text{W}}}$ & ${C_{\text{W}}}>0$ & ${{C_{\text{W}}}^{\text{min}}}<{C_{\text{W}}}<{{C_{\text{W}}}^{\text{max}}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
 \\
 $D$ & $D>0$ & -- & $0.412$ m & 10$\%$
 \\
-${h_{C}}$ & ${h_{C}}>0$ & ${{h_{C}}^{min}}\leq{}{h_{C}}\leq{}{{h_{C}}^{max}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10$\%$
+${h_{\text{C}}}$ & ${h_{\text{C}}}>0$ & ${{h_{\text{C}}}^{\text{min}}}\leq{}{h_{\text{C}}}\leq{}{{h_{\text{C}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10$\%$
 \\
-$L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 10$\%$
+$L$ & $L>0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ m & 10$\%$
 \\
-${T_{C}}$ & $0<{T_{C}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10$\%$
+${T_{\text{C}}}$ & $0<{T_{\text{C}}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10$\%$
 \\
-${T_{init}}$ & $0<{T_{init}}<100$ & -- & $40.0$ ${}^{\circ}$C & 10$\%$
+${T_{\text{init}}}$ & $0<{T_{\text{init}}}<100$ & -- & $40.0$ ${}^{\circ}$C & 10$\%$
 \\
-${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50.0\cdot{}10^{3}$ s & 10$\%$
+${t_{\text{final}}}$ & ${t_{\text{final}}}>0$ & ${t_{\text{final}}}<{{t_{\text{final}}}^{\text{max}}}$ & $50.0\cdot{}10^{3}$ s & 10$\%$
 \\
-${t_{step}}$ & $0<{t_{step}}<{t_{final}}$ & -- & $0.01$ s & 10$\%$
+${t_{\text{step}}}$ & $0<{t_{\text{step}}}<{t_{\text{final}}}$ & -- & $0.01$ s & 10$\%$
 \\
-${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}>0$ & ${{ρ_{\text{W}}}^{\text{min}}}<{ρ_{\text{W}}}\leq{}{{ρ_{\text{W}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -713,9 +713,9 @@ ${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & 
 \\
 \midrule
 \endhead
-${T_{W}}$ & ${T_{init}}\leq{}{T_{W}}\leq{}{T_{C}}$
+${T_{\text{W}}}$ & ${T_{\text{init}}}\leq{}{T_{\text{W}}}\leq{}{T_{\text{C}}}$
 \\
-${E_{W}}$ & ${E_{W}}\geq{}0$
+${E_{\text{W}}}$ & ${E_{\text{W}}}\geq{}0$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -731,11 +731,11 @@ This section provides the functional requirements, the tasks and behaviours that
 
 \begin{itemize}
 \item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]{Input the following quantities described in \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the tank parameters, material properties and initial conditions.}
-\item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, using ${m_{W}}={V_{W}} {ρ_{W}}=π \left(\frac{D}{2}\right)^{2} L {ρ_{W}}$, where ${V_{W}}$ is the volume of water.}
+\item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, using ${m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}=π \left(\frac{D}{2}\right)^{2} L {ρ_{\text{W}}}$, where ${V_{\text{W}}}$ is the volume of water.}
 \item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]{Verify that the inputs satisfy the required physical constraints shown in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.}
-\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]{Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the mass from \hyperref[findMass]{FR: Find-Mass}, and ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).}
-\item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]{Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).}
-\item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]{Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).}
+\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]{Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the mass from \hyperref[findMass]{FR: Find-Mass}, and ${τ_{\text{W}}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).}
+\item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]{Calculate and output the temperature of the water (${T_{\text{W}}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).}
+\item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]{Calculate and output the change in heat energy in the water (${E_{\text{W}}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).}
 \end{itemize}
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -743,29 +743,29 @@ This section provides the functional requirements, the tasks and behaviours that
 \\
 \midrule
 \endhead
-${A_{C}}$ & Heating coil surface area & $\text{m}^{2}$
+${A_{\text{C}}}$ & Heating coil surface area & $\text{m}^{2}$
 \\
-${A_{tol}}$ & Absolute tolerance & --
+${A_{\text{tol}}}$ & Absolute tolerance & --
 \\
-${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+${C_{\text{W}}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 $D$ & Diameter of tank & m
 \\
-${h_{C}}$ & Convective heat transfer coefficient between coil and water & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+${h_{\text{C}}}$ & Convective heat transfer coefficient between coil and water & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
 $L$ & Length of tank & m
 \\
-${R_{tol}}$ & Relative tolerance & --
+${R_{\text{tol}}}$ & Relative tolerance & --
 \\
-${T_{C}}$ & Temperature of the heating coil & ${}^{\circ}$C
+${T_{\text{C}}}$ & Temperature of the heating coil & ${}^{\circ}$C
 \\
-${T_{init}}$ & Initial temperature & ${}^{\circ}$C
+${T_{\text{init}}}$ & Initial temperature & ${}^{\circ}$C
 \\
-${t_{final}}$ & Final time & s
+${t_{\text{final}}}$ & Final time & s
 \\
-${t_{step}}$ & Time step for simulation & s
+${t_{\text{step}}}$ & Time step for simulation & s
 \\
-${ρ_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 \bottomrule
 \caption{Required Inputs following \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}}
@@ -932,27 +932,27 @@ This section contains the standard values that are used for calculations in SWHS
 \\
 \midrule
 \endhead
-${{A_{C}}^{max}}$ & maximum surface area of coil & $100000$ & $\text{m}^{2}$
+${{A_{\text{C}}}^{\text{max}}}$ & maximum surface area of coil & $100000$ & $\text{m}^{2}$
 \\
-${C_{tol}}$ & relative tolerance for conservation of energy & $0.001\%$ & --
+${C_{\text{tol}}}$ & relative tolerance for conservation of energy & $0.001\%$ & --
 \\
-${{C_{W}}^{max}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+${{C_{\text{W}}}^{\text{max}}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${{C_{W}}^{min}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+${{C_{\text{W}}}^{\text{min}}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${{h_{C}}^{max}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+${{h_{\text{C}}}^{\text{max}}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
-${{h_{C}}^{min}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+${{h_{\text{C}}}^{\text{min}}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
-${L_{max}}$ & maximum length of tank & $50$ & m
+${L_{\text{max}}}$ & maximum length of tank & $50$ & m
 \\
-${L_{min}}$ & minimum length of tank & $0.1$ & m
+${L_{\text{min}}}$ & minimum length of tank & $0.1$ & m
 \\
-${{t_{final}}^{max}}$ & maximum final time & $86400$ & s
+${{t_{\text{final}}}^{\text{max}}}$ & maximum final time & $86400$ & s
 \\
-${{ρ_{W}}^{max}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{\text{W}}}^{\text{max}}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${{ρ_{W}}^{min}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{\text{W}}}^{\text{min}}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 \bottomrule
 \caption{Auxiliary Constants}
@@ -968,20 +968,17 @@ publisher={John Wiley and Sons},
 year={2007},
 edition={6},
 address={Hoboken, New Jersey}}
-
 @mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
 title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
-
 @misc{lightstone2012,
 author={Lightstone, Marilyn},
 title={Derivation of tank/pcm model},
 year={2012},
 note={From Marilyn Lightstone's Personal Notes}}
-
 @article{parnasClements1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
@@ -990,9 +987,8 @@ year={1986},
 month=feb,
 volume={12},
 number={2},
-pages={"251-257"},
+pages={251--257},
 address={Washington, USA}}
-
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
@@ -1000,7 +996,7 @@ booktitle={Proceedings of the First International Workshop on Situational Requir
 year={2005},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},
-pages={"107-121"},
+pages={107--121},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
 \end{filecontents*}
 \nocite{*}

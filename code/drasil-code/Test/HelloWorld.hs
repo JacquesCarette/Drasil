@@ -13,7 +13,7 @@ import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
 helloWorld :: (PackageSym repr) => repr (Package repr)
-helloWorld = package "HelloWorld" [docMod description $ 
+helloWorld = package "HelloWorld" [docMod description ["Brooks MacLachlan"] $ 
   fileDoc (buildModule "HelloWorld" ["Helper"] [helloWorldMain] []), helper] []
 
 description :: String

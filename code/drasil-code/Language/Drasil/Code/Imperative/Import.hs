@@ -167,7 +167,7 @@ genDoxConfig :: (AuxiliarySym repr) => String -> repr (Program repr) ->
 genDoxConfig n p = do
   g <- ask
   let cms = commented g
-  return $ if null cms then [] else [doxConfig n p]
+  return [doxConfig n p | not (null cms)]
 
 genProgram :: (ProgramSym repr) => Reader (State repr) (repr (Program repr))
 genProgram = do

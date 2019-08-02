@@ -1,4 +1,5 @@
 ## \file InputParameters.py
+# \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides the structure for holding input values
 from __future__ import print_function
 import sys

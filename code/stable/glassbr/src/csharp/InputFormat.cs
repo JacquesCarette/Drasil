@@ -1,4 +1,5 @@
 /** \file InputFormat.cs
+    \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides the function for reading inputs
 */
 using System;

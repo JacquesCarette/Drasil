@@ -1,4 +1,5 @@
 /** \file InputFormat.hpp
+    \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
     \brief Provides the function for reading inputs
 */
 #ifndef InputFormat_h

@@ -1,4 +1,5 @@
 /** \file OutputFormat.cs
+    \author Thulasi Jegatheesan
     \brief Provides the function for writing outputs
 */
 using System;

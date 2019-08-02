@@ -1,4 +1,5 @@
 /** \file Calculations.cs
+    \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
     \brief Provides functions for calculating the outputs
 */
 using System;

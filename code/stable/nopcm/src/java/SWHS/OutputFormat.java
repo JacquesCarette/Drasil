@@ -1,6 +1,7 @@
 package SWHS;
 
 /** \file OutputFormat.java
+    \author Thulasi Jegatheesan
     \brief Provides the function for writing outputs
 */
 import java.util.Arrays;

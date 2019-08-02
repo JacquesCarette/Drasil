@@ -1,4 +1,5 @@
 ## \file OutputFormat.py
+# \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
 # \brief Provides the function for writing outputs
 from __future__ import print_function
 import sys

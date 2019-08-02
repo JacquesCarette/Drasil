@@ -146,21 +146,20 @@ generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
-     createCodeFiles $ C.Code $ concatMap C.unCode [code, makefile]
+     createCodeFiles code
      setCurrentDirectory workingDir
   where pckg = runReader genPackage g
         code = makeCode (progMods $ packProg $ unRepr pckg) (packAux $ unRepr 
           pckg)
-        makefile = makeBuild (packProg $ unRepr pckg) (getBuildConfig l) 
-          (getRunnable l) (commented g)
 
 genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
 genPackage = do
   g <- ask
   p <- genProgram
   let n = case codeSpec g of CodeSpec {program = pr} -> programName pr
-  a <- genDoxConfig n p
-  return $ package p a
+      m = makefile (commented g) p
+  d <- genDoxConfig n p
+  return $ package p (m:d)
 
 genDoxConfig :: (AuxiliarySym repr) => String -> repr (Program repr) ->
   Reader (State repr) [repr (Auxiliary repr)]

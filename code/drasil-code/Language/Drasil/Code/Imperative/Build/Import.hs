@@ -3,7 +3,6 @@ module Language.Drasil.Code.Imperative.Build.Import (
 ) where
 
 import Language.Drasil.CodeSpec (Comments)
-import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.Data (FileData(..), isSource, isHeader, 
   ModData(..), ProgData(..))
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig(BuildConfig),
@@ -17,6 +16,7 @@ import Build.Drasil ((+:+), genMake, makeS, MakeString, mkFile, mkRule,
 import Control.Applicative (liftA2)
 import Data.Maybe (maybe, maybeToList)
 import System.FilePath.Posix (takeExtension, takeBaseName)
+import Text.PrettyPrint.HughesPJ (Doc)
 
 data CodeHarness = Ch (Maybe BuildConfig) Runnable ProgData [Comments]
 
@@ -72,5 +72,5 @@ buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
 buildRunTarget fn (Interpreter i) = i +:+ fn
 
-makeBuild :: ProgData -> Maybe BuildConfig -> Runnable -> [Comments] -> Code
-makeBuild m b r cms = Code [("Makefile", genMake [Ch b r m cms])]
+makeBuild :: [Comments] -> Maybe BuildConfig -> Runnable -> ProgData -> Doc
+makeBuild cms b r m = genMake [Ch b r m cms]

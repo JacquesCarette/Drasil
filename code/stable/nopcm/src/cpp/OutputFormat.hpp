@@ -1,3 +1,6 @@
+/** \file OutputFormat.hpp
+    \brief Provides the function for writing outputs
+*/
 #ifndef OutputFormat_h
 #define OutputFormat_h
 
@@ -9,6 +12,10 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
+/** \brief Writes the output values to output.txt
+    \param T_W temperature of the water
+    \param E_W change in heat energy in the water
+*/
 void write_output(double T_W, double E_W);
 
 #endif

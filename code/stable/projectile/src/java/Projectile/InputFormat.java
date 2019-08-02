@@ -1,6 +1,7 @@
 package Projectile;
 
 /** \file InputFormat.java
+    \brief Provides the function for reading inputs
 */
 import java.util.Arrays;
 import java.util.BitSet;

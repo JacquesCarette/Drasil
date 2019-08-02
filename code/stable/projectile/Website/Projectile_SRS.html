@@ -1463,32 +1463,22 @@
                       <th>Uncert.</th>
                     </tr>
                     <tr>
-                      <td><em>p<sub>target</sub></em></td>
-                      <td><em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em></td>
-                      <td><em>1000</em> m</td>
-                      <td>10<em>%</em></td>
+                      <td>${p_{target}}$</td>
+                      <td>${p_{target}}>0$</td>
+                      <td>$1000$ m</td>
+                      <td>10$\%$</td>
                     </tr>
                     <tr>
-                      <td><em>v<sub>launch</sub></em></td>
-                      <td><em>v<sub>launch</sub>&thinsp;&gt;&thinsp;0</em></td>
-                      <td><em>100</em> m/s</td>
-                      <td>10<em>%</em></td>
+                      <td>${v_{launch}}$</td>
+                      <td>${v_{launch}}>0$</td>
+                      <td>$100$ $\frac{\text{m}}{\text{s}}$</td>
+                      <td>10$\%$</td>
                     </tr>
                     <tr>
-                      <td><em>θ</em></td>
-                      <td>
-                        <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
-                                                                        <span class="fup">π</span>
-                                                                        <span class="fdn">2</span>
-                                                                      </div></em>
-                      </td>
-                      <td>
-                        <em><div class="fraction">
-                              <span class="fup">π</span>
-                              <span class="fdn">4</span>
-                            </div></em> rad
-                      </td>
-                      <td>10<em>%</em></td>
+                      <td>$θ$</td>
+                      <td>$0<θ<\frac{π}{2}$</td>
+                      <td>$\frac{π}{4}$ rad</td>
+                      <td>10$\%$</td>
                     </tr>
                   </table>
                   <p class="caption">Input Data Constraints</p>
@@ -1508,14 +1498,12 @@
                       <th>Physical Constraints</th>
                     </tr>
                     <tr>
-                      <td><em>p<sub>land</sub></em></td>
-                      <td><em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em></td>
+                      <td>${p_{land}}$</td>
+                      <td>${p_{land}}>0$</td>
                     </tr>
                     <tr>
-                      <td><em>d<sub>offset</sub></em></td>
-                      <td>
-                        <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;&minus;p<sub>land</sub></em>
-                      </td>
+                      <td>${d_{offset}}$</td>
+                      <td>${d_{offset}}>-{p_{land}}$</td>
                     </tr>
                   </table>
                   <p class="caption">Output Data Constraints</p>
@@ -1551,12 +1539,12 @@
               </p>
               <p>
                 <div id="calcValues">
-                  Calculate-Values: Calculate the following quantities: <em>t<sub>flight</sub></em> (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>), <em>p<sub>land</sub></em> (from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>), <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>), and <em>s</em> (from <a href=#IM:messageIM>IM: messageIM</a>).
+                  Calculate-Values: Calculate the following quantities: ${t_{flight}}$ (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>), ${p_{land}}$ (from <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>), ${d_{offset}}$ (from <a href=#IM:offsetIM>IM: offsetIM</a>), and $s$ (from <a href=#IM:messageIM>IM: messageIM</a>).
                 </div>
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: Output <em>s</em> (from <a href=#IM:messageIM>IM: messageIM</a>) and <em>d<sub>offset</sub></em> (from <a href=#IM:offsetIM>IM: offsetIM</a>).
+                  Output-Values: Output $s$ (from <a href=#IM:messageIM>IM: messageIM</a>) and ${d_{offset}}$ (from <a href=#IM:offsetIM>IM: offsetIM</a>).
                 </div>
               </p>
             </div>
@@ -1568,17 +1556,17 @@
                   <th>Units</th>
                 </tr>
                 <tr>
-                  <td><em>p<sub>target</sub></em></td>
+                  <td>${p_{target}}$</td>
                   <td>Target position</td>
                   <td>m</td>
                 </tr>
                 <tr>
-                  <td><em>v<sub>launch</sub></em></td>
+                  <td>${v_{launch}}$</td>
                   <td>Launch speed</td>
-                  <td>m/s</td>
+                  <td>$\frac{\text{m}}{\text{s}}$</td>
                 </tr>
                 <tr>
-                  <td><em>θ</em></td>
+                  <td>$θ$</td>
                   <td>Launch angle</td>
                   <td>rad</td>
                 </tr>
@@ -2615,21 +2603,21 @@
               <th>Unit</th>
             </tr>
             <tr>
-              <td><em>g</em></td>
+              <td>$g$</td>
               <td>gravitational acceleration</td>
-              <td><em>9.8</em></td>
-              <td>m/s<sup>2</sup></td>
+              <td>$9.8$</td>
+              <td>$\frac{\text{m}}{\text{s}^{2}}$</td>
             </tr>
             <tr>
-              <td><em>ε</em></td>
+              <td>$ε$</td>
               <td>hit tolerance</td>
-              <td><em>2.0%</em></td>
+              <td>$2.0\%$</td>
               <td>--</td>
             </tr>
             <tr>
-              <td><em>π</em></td>
+              <td>$π$</td>
               <td>ratio of circumference to diameter for any circle</td>
-              <td><em>3.14159265</em></td>
+              <td>$3.14159265$</td>
               <td>--</td>
             </tr>
           </table>

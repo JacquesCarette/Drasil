@@ -5,6 +5,7 @@ import Data.List (intercalate, partition, sortBy)
 import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 import Control.Arrow (second)
+import Utils.Drasil (checkValidStr, numList)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
@@ -90,20 +91,24 @@ titleSpec s         = pSpec s
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 pSpec :: Spec -> Doc
-pSpec (E e)             = em $ pExpr e
-pSpec (a :+: b)         = pSpec a <> pSpec b
-pSpec (S s)             = text s
-pSpec (Sy s)            = text $ uSymb s
-pSpec (Sp s)            = text $ unPH $ L.special s
-pSpec HARDNL            = text "<br />"
+pSpec (E e)     = em $ pExpr e
+pSpec (a :+: b) = pSpec a <> pSpec b
+pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
+  where
+    invalid = ['<', '>']
+    escapeChars '&' = "\\&"
+    escapeChars c = [c]
+pSpec (Sy s)    = text $ uSymb s
+pSpec (Sp s)    = text $ unPH $ L.special s
+pSpec HARDNL    = text "<br />"
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
 pSpec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
 pSpec (Ref Cite2    r a)      = reflinkInfo r (text r) (pSpec a) -- no difference for citations?
 pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
-pSpec EmptyS             = text "" -- Expected in the output
-pSpec (Quote q)          = doubleQuotes $ pSpec q
--- pSpec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
--- pSpec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
+pSpec EmptyS    = text "" -- Expected in the output
+pSpec (Quote q) = doubleQuotes $ pSpec q
+--pSpec (Acc Grave c) = text $ '&' : c : "grave;" --Only works on vowels.
+--pSpec (Acc Acute c) = text $ '&' : c : "acute;" --Only works on vowels.
 
 -- | Renders symbols for HTML document
 symbol :: L.Symbol -> String
@@ -323,12 +328,12 @@ makeBib = ul ["hide-list-style"] . vcat .
 
 --for when we add other things to reference like website, newspaper
 renderCite :: Citation -> (Doc, Doc)
-renderCite (Cite e L.Book cfs) = (text e, renderF cfs useStyleBk <> text " Print.")
-renderCite (Cite e L.Article cfs) = (text e, renderF cfs useStyleArtcl <> text " Print.")
-renderCite (Cite e L.MThesis cfs) = (text e, renderF cfs useStyleBk <> text " Print.")
-renderCite (Cite e L.PhDThesis cfs) = (text e, renderF cfs useStyleBk <> text " Print.")
-renderCite (Cite e L.Misc cfs) = (text e, renderF cfs useStyleBk)
-renderCite (Cite e _ cfs) = (text e, renderF cfs useStyleArtcl) --FIXME: Properly render these later.
+renderCite (Cite e L.Book cfs)      = (text e, renderF cfs useStyleBk    <> text " Print.")
+renderCite (Cite e L.Article cfs)   = (text e, renderF cfs useStyleArtcl <> text " Print.")
+renderCite (Cite e L.MThesis cfs)   = (text e, renderF cfs useStyleBk    <> text " Print.")
+renderCite (Cite e L.PhDThesis cfs) = (text e, renderF cfs useStyleBk    <> text " Print.")
+renderCite (Cite e L.Misc cfs)      = (text e, renderF cfs useStyleBk)
+renderCite (Cite e _ cfs)           = (text e, renderF cfs useStyleArtcl) --FIXME: Properly render these later.
 
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> Doc)) -> Doc
 renderF fields styl = hsep $ map (styl bibStyleH) (sortBy compCiteField fields)
@@ -403,39 +408,36 @@ bookMLA (Year      y) = dot $ text $ show y
 --bookMLA (URLdate d m y) = "Web. " ++ bookMLA (Date d m y) sm
 bookMLA (BookTitle s) = dot $ em $ pSpec s
 bookMLA (Journal   s) = comm $ em $ pSpec s
-bookMLA (Pages   [n]) = dot $ text $ "p. " ++ show n
-bookMLA (Pages [a,b]) = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
-bookMLA (Pages     _) = error "Page range specified is empty or has more than two items"
+bookMLA (Pages   [p]) = dot $ text $ "pg. " ++ show p
+bookMLA (Pages     p) = dot $ text "pp. " <> foldPages p
 bookMLA (Note      s) = pSpec s
 bookMLA (Number    n) = comm $ text ("no. " ++ show n)
 bookMLA (School    s) = comm $ pSpec s
 --bookMLA (Thesis     t)  = comm $ show t
 --bookMLA (URL        s)  = dot $ pSpec s
-bookMLA (HowPublished (Verb s)) = comm $ pSpec s
-bookMLA (HowPublished (URL l@(S s))) = dot $ pSpec $ Ref External s l
-bookMLA (HowPublished (URL s))       = dot $ pSpec s
-bookMLA  (Editor     p)    = comm $ text "Edited by " <> pSpec (foldlList (map (S . L.nameStr) p))
-bookMLA (Chapter _)       = text ""
-bookMLA (Institution i)   = comm $ pSpec i
-bookMLA (Organization i)  = comm $ pSpec i
-bookMLA (Month m)         = comm $ text $ show m
-bookMLA (Type t)          = comm $ pSpec t
+bookMLA (HowPublished (Verb s))      = comm $ pSpec s
+bookMLA (HowPublished (URL l@(S s))) = dot  $ pSpec $ Ref External s l
+bookMLA (HowPublished (URL s))       = dot  $ pSpec s
+bookMLA (Editor       p) = comm $ text "Edited by " <> foldPeople p
+bookMLA (Chapter      _) = text ""
+bookMLA (Institution  i) = comm $ pSpec i
+bookMLA (Organization i) = comm $ pSpec i
+bookMLA (Month        m) = comm $ text $ show m
+bookMLA (Type         t) = comm $ pSpec t
 
 bookAPA :: CiteField -> Doc --FIXME: year needs to come after author in L.APA
 bookAPA (Author   p) = pSpec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
 bookAPA (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the year
 --bookAPA (Date _ _ y) = bookAPA (Year y) --L.APA doesn't care about the day or month
 --bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
-bookAPA (Pages     [n])  = dot $ text $ show n
-bookAPA (Pages [a,b])    = dot $ text $ show a ++ "&ndash;" ++ show b
-bookAPA (Pages _) = error "Page range specified is empty or has more than two items"
-bookAPA (Editor   p)  = dot $ pSpec (foldlList $ map (S . L.nameStr) p) <> text " (Ed.)"
+bookAPA (Pages    p) = dot $ foldPages p
+bookAPA (Editor   p) = dot $ foldPeople p <> text " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as L.MLA
 
 bookChicago :: CiteField -> Doc
 bookChicago (Author   p) = pSpec (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
-bookChicago p@(Pages  _) = bookAPA p
-bookChicago (Editor   p) = dot $ pSpec (foldlList $ map (S . L.nameStr) p) <> text (toPlural p " ed")
+bookChicago (Pages    p) = dot $ foldPages p
+bookChicago (Editor   p) = dot $ foldPeople p <> text (toPlural p " ed")
 bookChicago i = bookMLA i --Most items are rendered the same as L.MLA
 
 -- for article renderings
@@ -460,16 +462,22 @@ artclChicago i = bookChicago i
 -- PEOPLE RENDERING --
 rendPeople :: (L.Person -> String) -> L.People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
-rendPeople f people = foldlList $ map (S . f) people --foldlList is in SentenceStructures.hs
+rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-utils
 
 rendPeople' :: L.People -> Spec
 rendPeople' []  = S "N.a." -- "No authors given"
-rendPeople' people = foldlList $ map (S . rendPers) (init people) ++  [S (rendPersL $ last people)]
+rendPeople' people = S . foldlList $ map rendPers (init people) ++  [rendPersL (last people)]
 
-foldlList :: [Spec] -> Spec
-foldlList []    = EmptyS
-foldlList [a,b] = a :+: S " and " :+: b
-foldlList lst   = foldle1 (\a b -> a :+: S ", " :+: b) (\a b -> a :+: S ", and " :+: b) lst
+foldPages :: [Int] -> Doc
+foldPages = text . foldlList . numList "&ndash;"
+
+foldPeople :: L.People -> Doc
+foldPeople p = text . foldlList $ map L.nameStr p
+
+foldlList :: [String] -> String
+foldlList []    = ""
+foldlList [a,b] = a ++ " and " ++ b
+foldlList lst   = foldle1 (\a b -> a ++ ", " ++ b) (\a b -> a ++ ", and " ++ b) lst
 
 foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
 foldle1 _ _ []       = error "foldle1 cannot be used with empty list"

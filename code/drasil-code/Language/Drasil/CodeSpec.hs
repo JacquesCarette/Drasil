@@ -224,8 +224,8 @@ fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
 fdec v  = FDec (quantvar  v) (spaceToCodeType $ v ^. typ)
 
 asVC :: Func -> QuantityDict
-asVC (FDef (FuncDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
-asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
+asVC (FDef (FuncDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
+asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
 asVC (FCD _) = error "Can't make QuantityDict from FCD function" -- codeVC cd (codeSymb cd) (cd ^. typ)
 
 asExpr :: Func -> Expr
@@ -237,8 +237,8 @@ asExpr' f = sy $ asVC' f
 
 -- FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
-asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
-asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Atomic n) Real
+asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
+asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
 getAdditionalVars :: Choices -> [Mod] -> [CodeChunk]

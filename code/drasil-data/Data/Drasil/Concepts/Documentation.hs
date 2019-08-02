@@ -3,39 +3,36 @@ module Data.Drasil.Concepts.Documentation where
 import Language.Drasil hiding (organization, year)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Math (graph)
+import Data.Drasil.Concepts.Math (graph, unit_)
 import Data.Drasil.IdeaDicts (dataDefn, documentc, genDefn, inModel, softEng, thModel)
 
 import Control.Lens ((^.))
 
 doccon :: [NamedChunk]
-doccon = [abbreviation, analysis, appendix, aspect, body, characteristic, class_, client, 
-  code, column, company, component, concept, condition, connection, constant,
-  constraint, consumer, content, context, coordinate, customer, datum, decision, 
-  definition, dependency, description, design, document, documentation, effect, 
-  element, emphasis, endUser, environment, failure, figure, first, form, full, 
-  functional, game, general, goal, guide, implementation, individual, information, 
-  interest, interface, input_, instance_, intReader, introduction, issue, item, 
-  loss, label, library, limitation, literacy, material_, message, method_, module_,
-  model, name_, nonfunctional, object, offShelf, open, organization, output_,
-  physics, physical, plan, practice, priority, problem, product_, project,
-  property, purpose, quantity, realtime, reference, requirement_, response, 
-  result, reviewer, safety, scope, second_, section_, scenario, source,
-  simulation, software, solution, specific, specification, stakeholder,
-  standard, statement, symbol_, system, table_, task, template, term_,
-  terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
-  useCase, validation, value, variable, video, verification, year,
-  orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
-  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol,
-  vav, designDoc, fullForm, generalSystemDescription, indPRCase,
-  physicalConstraint, physicalSystem, problemDescription, prodUCTable,
-  specificsystemdescription, systemdescription, systemConstraint, sysCont,
-  userCharacteristic, datumConstraint, functionalRequirement,
-  nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
-  softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
-  solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput,
-  scpOfTheProjS]
+doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characteristic,
+  class_, client, code, column, company, component, concept, condition, connection,
+  consVals, constant, constraint, consumer, content, context, coordinate, corSol,
+  customer, datum, datumConstraint, decision, definition, dependency, description,
+  design, designDoc, document, documentation, effect, element, emphasis, endUser,
+  environment, failure, figure, first, form, full, fullForm, functional,
+  functionalRequirement, game, general, generalSystemDescription, goal, guide,
+  implementation, indPRCase, individual, information, input_, instance_, intReader,
+  interest, interface, introduction, issue, item, label, library, limitation,
+  literacy, loss, material_, message, method_, model, module_, name_, nonfunctional,
+  nonfunctionalRequirement, object, offShelf, offShelfSolution, open, orgOfDoc,
+  organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
+  physicalSystem, physics, plan, practice, priority, problem, problemDescription,
+  prodUCTable, productUC, product_, project, propOfCorSol, property, prpsOfDoc,
+  purpose, quantity, realtime, reference, refmat, requirement_, response, result,
+  reviewer, safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
+  section_, simulation, software, softwareConstraint, softwareDoc, softwareReq,
+  softwareSys, softwareVAV, softwareVerif, solution, solutionCharSpec,
+  solutionCharacteristic, source, specific, specification, specificsystemdescription,
+  stakeholder, standard, statement, symbol_, sysCont, system, systemConstraint,
+  systemdescription, tOfSymb, tOfUnit, table_, task, template, termAndDef, term_,
+  terminology, theory, traceyGraph, traceyMandG, traceyMatrix, type_, uncertCol,
+  uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
+  validation, value, variable, vav, vavPlan, verification, video, year]
 
 doccon' :: [CI]
 doccon' = [assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
@@ -213,10 +210,10 @@ year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
-orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
-  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol,
-  vav :: NamedChunk
+charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refmat,
+  scpOfReq, tOfSymb, tOfUnit, termAndDef, traceyMandG, vav :: NamedChunk
 
+consVals     = nc "consVals"     (cn "values of auxiliary constants")
 corSol       = nc "corSol"       (cn' "correct solution")
 charOfIR     = nc "charOfIR"     (characteristic `of__` intReader)
 orgOfDoc     = nc "orgOfDoc"     (organization `of_` document)
@@ -226,9 +223,9 @@ refmat       = nc "refmat"       (cn' "reference material")
 scpOfReq     = nc "scpOfReq"     (scope `of_'` requirement)
 termAndDef   = nc "termAndDef"   (terminology `and_'` definition)
 tOfSymb      = nc "tOfSymb"      (table_ `of_'` symbol_)
+tOfUnit      = nc "tOfUnit"      (table_ `of_'` unit_)
 traceyMandG  = nc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 vav          = nc "vav"          (verification `and_` validation)
-consVals     = nc "consVals"     (cn "values of auxiliary constants")
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
 scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` theCustom oper project) -- reasonable hack?

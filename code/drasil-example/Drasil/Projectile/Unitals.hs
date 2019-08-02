@@ -77,7 +77,7 @@ offset    = constrainedNRV' (dqd  offsetConcept    (unitHelper lD "offset") Real
 targPos   = constrained'    (dqd  targPosConcept   (unitHelper lP "target") Real metre)   [gtZeroConstr] (int 1000)
 
 unitHelper :: Symbol -> String -> Symbol
-unitHelper sym substr = sub sym $ Atomic substr
+unitHelper sym substr = sub sym $ Label substr
 
 landPosConcept :: ConceptChunk
 landPosConcept = cc' landingPos

@@ -67,7 +67,7 @@ The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: To
 \\
 \midrule
 \endhead
-$(x,y)$ & Cartesian Position Coordinates: y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y & m
+$\text{(x,y)}$ & Cartesian Position Coordinates: y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y & m
 \\
 $A$ & Area: A part of an object or surface & $\text{m}^{2}$
 \\
@@ -75,29 +75,29 @@ $\mathbf{a}$ & Acceleration: The rate of change of a body's velocity & $\frac{\t
 \\
 $\mathbf{b}$ & Base Width of Slices: in the x-direction & m
 \\
-${\mathbf{C}_{den}}$ & Proportionality Constant Denominator: values for each slice that sum together to form the denominator of the interslice normal to shear force proportionality constant & N
+${\mathbf{C}_{\text{den}}}$ & Proportionality Constant Denominator: values for each slice that sum together to form the denominator of the interslice normal to shear force proportionality constant & N
 \\
-${\mathbf{C}_{num}}$ & Proportionality Constant Numerator: values for each slice that sum together to form the numerator of the interslice normal to shear force proportionality constant & N
+${\mathbf{C}_{\text{num}}}$ & Proportionality Constant Numerator: values for each slice that sum together to form the numerator of the interslice normal to shear force proportionality constant & N
 \\
 $c'$ & Effective Cohesion: internal pressure that sticks particles of soil together & Pa
 \\
 $const_f$ & Decision on F: boolean decision on which form of f the user desires: constant if true, or half-sine if false & --
 \\
-${F_{rot}}$ & Force Causing Rotation: a force in the direction of rotation & N
+${F_{\text{rot}}}$ & Force Causing Rotation: a force in the direction of rotation & N
 \\
-${F_{S}}$ & Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force. & --
+${F_{\text{S}}}$ & Factor of Safety: The global stability metric of a slip surface of a slope, defined as the ratio of resistive shear force to mobilized shear force. & --
 \\
-${{F_{S}}^{min}}$ & Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface & --
+${{F_{\text{S}}}^{\text{min}}}$ & Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface & --
 \\
-${F_{x}}$ & X-Coordinate of the Force:  & N
+${F_{\text{x}}}$ & X-Coordinate of the Force:  & N
 \\
-${F_{y}}$ & Y-Coordinate of the Force:  & N
+${F_{\text{y}}}$ & Y-Coordinate of the Force:  & N
 \\
 $\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object & N
 \\
-${{\mathbf{F}_{x}}^{G}}$ & Sums of the Interslice Normal Forces: for each pair of adjacent interslice boundaries & N
+${{\mathbf{F}_{\text{x}}}^{\text{G}}}$ & Sums of the Interslice Normal Forces: for each pair of adjacent interslice boundaries & N
 \\
-${{\mathbf{F}_{x}}^{H}}$ & Sums of the Interslice Normal Water Forces: for each pair of adjacent interslice boundaries & N
+${{\mathbf{F}_{\text{x}}}^{\text{H}}}$ & Sums of the Interslice Normal Water Forces: for each pair of adjacent interslice boundaries & N
 \\
 $\mathbf{f}$ & Interslice Normal to Shear Force Ratio Variation Function: function of distance in the x-direction & --
 \\
@@ -111,19 +111,19 @@ $h$ & Height: The distance above a reference point for a point of interest. & m
 \\
 $\mathbf{h}$ & Y-Direction Heights of Slices: heights in the y-direction from the base of each slice to the slope surface, at the x-direction midpoint of the slice & m
 \\
-${\mathbf{h}^{L}}$ & Heights of the Left Side of Slices: assuming slice surfaces have negative slope & m
+${\mathbf{h}^{\text{L}}}$ & Heights of the Left Side of Slices: assuming slice surfaces have negative slope & m
 \\
-${\mathbf{h}^{R}}$ & Heights of the Right Side of Slices: assuming slice surfaces have negative slope & m
+${\mathbf{h}^{\text{R}}}$ & Heights of the Right Side of Slices: assuming slice surfaces have negative slope & m
 \\
-${\mathbf{h}_{z}}$ & Heights of Interslice Normal Forces: the heights in the y-direction of the interslice normal forces on each slice & m
+${\mathbf{h}_{\text{z}}}$ & Heights of Interslice Normal Forces: the heights in the y-direction of the interslice normal forces on each slice & m
 \\
-${\mathbf{h}_{z,w}}$ & Heights of the Water Table: the heights in the y-direction from the base of each slice to the watertable & m
+${\mathbf{h}_{\text{z,w}}}$ & Heights of the Water Table: the heights in the y-direction from the base of each slice to the watertable & m
 \\
 $i$ & Index: representing a single slice & --
 \\
 $\mathbf{\hat{j}}$ & Unit Vector: A vector that has a magnitude of one & --
 \\
-${K_{c}}$ & Seismic Coefficient: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & --
+${K_{\text{c}}}$ & Seismic Coefficient: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & --
 \\
 $M$ & Moment: a measure of the tendency of a body to rotate about a specific point or axis & Nm
 \\
@@ -155,17 +155,17 @@ $\mathbf{S}$ & Mobilized Shear Forces: per meter in the z-direction for each sli
 \\
 $\mathbf{T}$ & Mobilized Shear Forces Without the Influence of Interslice Forces: per meter in the z-direction for each slice & $\frac{\text{N}}{\text{m}}$
 \\
-${\mathbf{U}_{b}}$ & Base Hydrostatic Forces: per meter in the z-direction from water pressure within each slice & $\frac{\text{N}}{\text{m}}$
+${\mathbf{U}_{\text{b}}}$ & Base Hydrostatic Forces: per meter in the z-direction from water pressure within each slice & $\frac{\text{N}}{\text{m}}$
 \\
-${\mathbf{U}_{t}}$ & Surface Hydrostatic Forces: per meter in the z-direction from water pressure acting into each slice from standing water on the slope surface & $\frac{\text{N}}{\text{m}}$
+${\mathbf{U}_{\text{g}}}$ & Surface Hydrostatic Forces: per meter in the z-direction from water pressure acting into each slice from standing water on the slope surface & $\frac{\text{N}}{\text{m}}$
 \\
 $u$ & Pore Pressure: from water within the soil & Pa
 \\
 $V$ & Volume: the amount of space that a substance or object occupies. & $\text{m}^{3}$
 \\
-${\mathbf{V}_{dry}}$ & Volumes of Dry Soil: amount of space occupied by dry soil for each slice & $\text{m}^{3}$
+${\mathbf{V}_{\text{dry}}}$ & Volumes of Dry Soil: amount of space occupied by dry soil for each slice & $\text{m}^{3}$
 \\
-${\mathbf{V}_{sat}}$ & Volumes of Saturated Soil: amount of space occupied by saturated soil for each slice & $\text{m}^{3}$
+${\mathbf{V}_{\text{sat}}}$ & Volumes of Saturated Soil: amount of space occupied by saturated soil for each slice & $\text{m}^{3}$
 \\
 $v$ & Local Index: used as a bound variable index in calculations & --
 \\
@@ -177,33 +177,33 @@ $\mathbf{X}$ & Interslice Shear Forces: per meter in the z-direction exerted bet
 \\
 $x$ & X-Coordinate: in the Cartesian coordinate system & m
 \\
-${{x_{slip}}^{maxEtr}}$ & Maximum Entry X-Coordinate: maximum potential x-coordinate for the entry point of a slip surface & m
+${{x_{\text{slip}}}^{\text{maxEtr}}}$ & Maximum Entry X-Coordinate: maximum potential x-coordinate for the entry point of a slip surface & m
 \\
-${{x_{slip}}^{maxExt}}$ & Maximum Exit X-Coordinate: maximum potential x-coordinate for the exit point of a slip surface & m
+${{x_{\text{slip}}}^{\text{maxExt}}}$ & Maximum Exit X-Coordinate: maximum potential x-coordinate for the exit point of a slip surface & m
 \\
-${{x_{slip}}^{minEtr}}$ & Minimum Exit X-Coordinate: minimum potential x-coordinate for the entry point of a slip surface & m
+${{x_{\text{slip}}}^{\text{minEtr}}}$ & Minimum Exit X-Coordinate: minimum potential x-coordinate for the entry point of a slip surface & m
 \\
-${{x_{slip}}^{minExt}}$ & Minimum Exit X-Coordinate: minimum potential x-coordinate for the exit point of a slip surface & m
+${{x_{\text{slip}}}^{\text{minExt}}}$ & Minimum Exit X-Coordinate: minimum potential x-coordinate for the exit point of a slip surface & m
 \\
-${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
+${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
 \\
-${\mathbf{x}_{slip}}$ & X-Coordinates of the Slip Surface: x-coordinates of points on the slip surface & m
+${\mathbf{x}_{\text{slip}}}$ & X-Coordinates of the Slip Surface: x-coordinates of points on the slip surface & m
 \\
-${\mathbf{x}_{slope}}$ & X-Coordinates of the Slope: x-coordinates of points on the soil slope & m
+${\mathbf{x}_{\text{slope}}}$ & X-Coordinates of the Slope: x-coordinates of points on the soil slope & m
 \\
-${\mathbf{x}_{wt}}$ & X-Coordinates of the Water Table: x-positions of the water table & m
+${\mathbf{x}_{\text{wt}}}$ & X-Coordinates of the Water Table: x-positions of the water table & m
 \\
 $y$ & Y-Coordinate: in the Cartesian coordinate system & m
 \\
-${{y_{slip}}^{max}}$ & Maximum Y-Coordinate: maximum potential y-coordinate of a point on a slip surface & m
+${{y_{\text{slip}}}^{\text{max}}}$ & Maximum Y-Coordinate: maximum potential y-coordinate of a point on a slip surface & m
 \\
-${{y_{slip}}^{min}}$ & Minimum Y-Coordinate: minimum potential y-coordinate of a point on a slip surface & m
+${{y_{\text{slip}}}^{\text{min}}}$ & Minimum Y-Coordinate: minimum potential y-coordinate of a point on a slip surface & m
 \\
-${\mathbf{y}_{slip}}$ & Y-Coordinates of the Slip Surface: heights of the slip surface & m
+${\mathbf{y}_{\text{slip}}}$ & Y-Coordinates of the Slip Surface: heights of the slip surface & m
 \\
-${\mathbf{y}_{slope}}$ & Y-Coordinates of the Slope: y-coordinates of points on the soil slope & m
+${\mathbf{y}_{\text{slope}}}$ & Y-Coordinates of the Slope: y-coordinates of points on the soil slope & m
 \\
-${\mathbf{y}_{wt}}$ & Y-Coordinates of the Water Table: heights of the water table & m
+${\mathbf{y}_{\text{wt}}}$ & Y-Coordinates of the Water Table: heights of the water table & m
 \\
 $z$ & Z-Coordinate: in the Cartesian coordinate system & m
 \\
@@ -213,9 +213,9 @@ $\mathbf{β}$ & Surface Angles: between the surface of each slice and the horizo
 \\
 $γ$ & Specific Weight: weight per unit volume & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-${γ_{dry}}$ & Soil Dry Unit Weight: The weight of a dry soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
+${γ_{\text{dry}}}$ & Soil Dry Unit Weight: The weight of a dry soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-${γ_{Sat}}$ & Soil Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
+${γ_{\text{sat}}}$ & Soil Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
 ${γ_{w}}$ & Unit Weight of Water: The weight of one cubic meter of water. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
@@ -441,7 +441,7 @@ The instance models that govern SSP are presented in \hyperref[Sec:IMs]{Section:
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{itemize}
-\item[Slip-Surface-Concave:\phantomsection\label{assumpSSC}]{The slip surface is concave with respect to the slope surface. The (${\mathbf{x}_{slip}}$, ${\mathbf{y}_{slip}}$) coordinates of a slip surface follow a concave up function. (RefBy: \hyperref[IM:crtSlpId]{IM: crtSlpId}.)}
+\item[Slip-Surface-Concave:\phantomsection\label{assumpSSC}]{The slip surface is concave with respect to the slope surface. The (${\mathbf{x}_{\text{slip}}}$, ${\mathbf{y}_{\text{slip}}}$) coordinates of a slip surface follow a concave up function. (RefBy: \hyperref[IM:crtSlpId]{IM: crtSlpId}.)}
 \item[Factor-of-Safety:\phantomsection\label{assumpFOS}]{The factor of safety is assumed to be constant across the entire slip surface. (RefBy: \hyperref[GD:mobShr]{GD: mobShr}.)}
 \item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]{The soil mass is homogeneous, with consistent soil properties throughout. (RefBy: \hyperref[GD:sliceWght]{GD: sliceWght}, \hyperref[GD:resShr]{GD: resShr}, and \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.)}
 \item[Soil-Properties:\phantomsection\label{assumpSP}]{The soil properties are independent of dry or saturated conditions, with the exception of unit weight. (RefBy: \hyperref[GD:resShr]{GD: resShr}.)}
@@ -474,11 +474,11 @@ Label & Factor of safety
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {F_{S}}=\frac{P}{S}
+           {F_{\text{S}}}=\frac{P}{S}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
+              \item{${F_{\text{S}}}$ is the factor of safety (Unitless)}
               \item{$P$ is the resistive shear force (N)}
               \item{$S$ is the mobilized shear force (N)}
               \end{symbDescription}
@@ -503,16 +503,16 @@ Label & Equilibrium
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \displaystyle\sum{{F_{x}}}=\displaystyle\sum{{F_{y}}}=\displaystyle\sum{M}=0
+           \displaystyle\sum{{F_{\text{x}}}}=\displaystyle\sum{{F_{\text{y}}}}=\displaystyle\sum{M}=0
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${F_{x}}$ is the x-coordinate of the force (N)}
-              \item{${F_{y}}$ is the y-coordinate of the force (N)}
+              \item{${F_{\text{x}}}$ is the x-coordinate of the force (N)}
+              \item{${F_{\text{y}}}$ is the y-coordinate of the force (N)}
               \item{$M$ is the moment (Nm)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & For a body in static equilibrium, the net forces and moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the x-coordinate of the force ${F_{x}}$ and y-coordinate of the force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
+Notes & For a body in static equilibrium, the net forces and moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the x-coordinate of the force ${F_{\text{x}}}$ and y-coordinate of the force ${F_{\text{y}}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
         
 \\ \midrule \\
 Source & \cite{fredlund1977}
@@ -639,7 +639,7 @@ Units & $\frac{\text{N}}{\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{N}}_{i}=\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{c}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)
+           {\mathbf{N}}_{i}=\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -647,17 +647,17 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{W}$ is the weights ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{X}$ is the interslice shear forces ($\frac{\text{N}}{\text{m}}$)}
-              \item{${\mathbf{U}_{t}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
+              \item{${\mathbf{U}_{\text{g}}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{β}$ is the surface angles (${}^{\circ}$)}
               \item{$\mathbf{Q}$ is the external forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{ω}$ is the imposed load angles (${}^{\circ}$)}
               \item{$\mathbf{α}$ is the base angles (${}^{\circ}$)}
-              \item{${K_{c}}$ is the seismic coefficient (Unitless)}
+              \item{${K_{\text{c}}}$ is the seismic coefficient (Unitless)}
               \item{$\mathbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the normal direction. $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, and $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}.
+Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the normal direction. $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\mathbf{U}_{\text{g}}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, and $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}.
         
 \\ \midrule \\
 Source & \cite{chen2005}
@@ -687,7 +687,7 @@ Units & $\frac{\text{N}}{\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{S}}_{i}=\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{c}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)
+           {\mathbf{S}}_{i}=\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -695,17 +695,17 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{W}$ is the weights ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{X}$ is the interslice shear forces ($\frac{\text{N}}{\text{m}}$)}
-              \item{${\mathbf{U}_{t}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
+              \item{${\mathbf{U}_{\text{g}}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{β}$ is the surface angles (${}^{\circ}$)}
               \item{$\mathbf{Q}$ is the external forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{ω}$ is the imposed load angles (${}^{\circ}$)}
               \item{$\mathbf{α}$ is the base angles (${}^{\circ}$)}
-              \item{${K_{c}}$ is the seismic coefficient (Unitless)}
+              \item{${K_{\text{c}}}$ is the seismic coefficient (Unitless)}
               \item{$\mathbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, and $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}.
+Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} in the shear direction. $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\mathbf{U}_{\text{g}}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, and $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}.
         
 \\ \midrule \\
 Source & \cite{chen2005}
@@ -777,14 +777,14 @@ Units & $\frac{\text{N}}{\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{S}}_{i}=\frac{{\mathbf{P}}_{i}}{{F_{S}}}=\frac{{\mathbf{N'}}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} {\mathbf{ℓ}_{b,i}}}{{F_{S}}}
+           {\mathbf{S}}_{i}=\frac{{\mathbf{P}}_{i}}{{F_{\text{S}}}}=\frac{{\mathbf{N'}}_{i} \tan\left({φ'}_{i}\right)+{c'}_{i} {\mathbf{ℓ}_{b,i}}}{{F_{\text{S}}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{S}$ is the mobilized shear force ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{P}$ is the resistive shear forces ($\frac{\text{N}}{\text{m}}$)}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
+              \item{${F_{\text{S}}}$ is the factor of safety (Unitless)}
               \item{$\mathbf{N'}$ is the effective normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
               \item{$c'$ is the effective cohesion (Pa)}
@@ -804,7 +804,7 @@ RefBy & \hyperref[IM:fctSfty]{IM: fctSfty}
 \end{minipage}
 \paragraph{}
 \label{GD:mobShrDeriv}
-Mobilized shear forces is derived by dividing the definition of the $\mathbf{P}$ from \hyperref[GD:resShr]{GD: resShr}. by the definition of the factor of safety from \hyperref[TM:factOfSafety]{TM: factOfSafety}. The factor of safety ${F_{S}}$ is not indexed by $i$ because it is assumed to be constant for the entire slip surface (\hyperref[assumpFOS]{A: Factor-of-Safety}).
+Mobilized shear forces is derived by dividing the definition of the $\mathbf{P}$ from \hyperref[GD:resShr]{GD: resShr}. by the definition of the factor of safety from \hyperref[TM:factOfSafety]{TM: factOfSafety}. The factor of safety ${F_{\text{S}}}$ is not indexed by $i$ because it is assumed to be constant for the entire slip surface (\hyperref[assumpFOS]{A: Factor-of-Safety}).
 
 \vspace{\baselineskip}
 \noindent
@@ -821,17 +821,17 @@ Units & $\frac{\text{N}}{\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{N'}}_{i}={\mathbf{N}}_{i}-{\mathbf{U}_{b,i}}
+           {\mathbf{N'}}_{i}={\mathbf{N}}_{i}-{\mathbf{U}_{\text{b},i}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{N'}$ is the effective normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{N}$ is the normal forces ($\frac{\text{N}}{\text{m}}$)}
-              \item{${\mathbf{U}_{b}}$ is the base hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
+              \item{${\mathbf{U}_{\text{b}}}$ is the base hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${\mathbf{U}_{b}}$ is defined in \hyperref[GD:baseWtrF]{GD: baseWtrF}.
+Notes & ${\mathbf{U}_{\text{b}}}$ is defined in \hyperref[GD:baseWtrF]{GD: baseWtrF}.
         
 \\ \midrule \\
 Source & \cite{chen2005}
@@ -860,24 +860,24 @@ Units & $\frac{\text{N}}{\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{R}}_{i}=\left(\left({\mathbf{W}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{b,i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} {\mathbf{ℓ}_{b,i}}
+           {\mathbf{R}}_{i}=\left(\left({\mathbf{W}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{\text{b},i}}\right) \tan\left({φ'}_{i}\right)+{c'}_{i} {\mathbf{ℓ}_{b,i}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{R}$ is the resistive shear forces without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{W}$ is the weights ($\frac{\text{N}}{\text{m}}$)}
-              \item{${\mathbf{U}_{t}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
+              \item{${\mathbf{U}_{\text{g}}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{β}$ is the surface angles (${}^{\circ}$)}
               \item{$\mathbf{α}$ is the base angles (${}^{\circ}$)}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
-              \item{${\mathbf{U}_{b}}$ is the base hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
+              \item{${\mathbf{U}_{\text{b}}}$ is the base hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
               \item{$c'$ is the effective cohesion (Pa)}
               \item{${\mathbf{ℓ}_{b}}$ is the total base lengths of slices (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, ${\mathbf{U}_{b}}$ is defined in \hyperref[GD:baseWtrF]{GD: baseWtrF}, and ${\mathbf{ℓ}_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
+Notes & $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\mathbf{U}_{\text{g}}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, ${\mathbf{U}_{\text{b}}}$ is defined in \hyperref[GD:baseWtrF]{GD: baseWtrF}, and ${\mathbf{ℓ}_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
         
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
@@ -904,20 +904,20 @@ Units & $\frac{\text{N}}{\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{T}}_{i}=\left({\mathbf{W}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)
+           {\mathbf{T}}_{i}=\left({\mathbf{W}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{T}$ is the mobilized shear forces without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{W}$ is the weights ($\frac{\text{N}}{\text{m}}$)}
-              \item{${\mathbf{U}_{t}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
+              \item{${\mathbf{U}_{\text{g}}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{β}$ is the surface angles (${}^{\circ}$)}
               \item{$\mathbf{α}$ is the base angles (${}^{\circ}$)}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, and $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}.
+Notes & $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, ${\mathbf{U}_{\text{g}}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, and $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}.
         
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
@@ -981,28 +981,28 @@ Units & N
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{X}}_{i}+{\mathbf{X}}_{i-1}\right)+\frac{-{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
+           0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{\text{z},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{\text{z},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{X}}_{i}+{\mathbf{X}}_{i-1}\right)+\frac{-{K_{\text{c}}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
-              \item{${\mathbf{h}_{z}}$ is the heights of interslice normal forces (m)}
+              \item{${\mathbf{h}_{\text{z}}}$ is the heights of interslice normal forces (m)}
               \item{$\mathbf{b}$ is the base width of slices (m)}
               \item{$\mathbf{α}$ is the base angles (${}^{\circ}$)}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
-              \item{${\mathbf{h}_{z,w}}$ is the heights of the water table (m)}
+              \item{${\mathbf{h}_{\text{z,w}}}$ is the heights of the water table (m)}
               \item{$\mathbf{X}$ is the interslice shear forces ($\frac{\text{N}}{\text{m}}$)}
-              \item{${K_{c}}$ is the seismic coefficient (Unitless)}
+              \item{${K_{\text{c}}}$ is the seismic coefficient (Unitless)}
               \item{$\mathbf{W}$ is the weights ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{h}$ is the y-direction heights of slices (m)}
-              \item{${\mathbf{U}_{t}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
+              \item{${\mathbf{U}_{\text{g}}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{β}$ is the surface angles (${}^{\circ}$)}
               \item{$\mathbf{Q}$ is the external forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{ω}$ is the imposed load angles (${}^{\circ}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} for the net moment. $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, $\mathbf{h}$ is defined in \hyperref[DD:slcHeight]{DD: slcHeight}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, and $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}.
+Notes & This equation satisfies \hyperref[TM:equilibrium]{TM: equilibrium} for the net moment. $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{W}$ is defined in \hyperref[GD:sliceWght]{GD: sliceWght}, $\mathbf{h}$ is defined in \hyperref[DD:slcHeight]{DD: slcHeight}, ${\mathbf{U}_{\text{g}}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, and $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}.
         
 \\ \midrule \\
 Source & \cite{chen2005}
@@ -1023,27 +1023,27 @@ Moment is equal to torque, so the equation from \hyperref[DD:torque]{DD: torque}
 Considering one dimension, with moments in the clockwise direction as positive and moments in the counterclockwise direction as negative, and replacing the torque symbol with the moment symbol, the equation simplifies to:
 
 \begin{displaymath}
-M={F_{rot}} r
+M={F_{\text{rot}}} r
 \end{displaymath}
-where ${F_{rot}}$ is the force causing rotation and $r$ is the length of the moment arm, or the distance between the force and the axis about which the rotation acts. To represent the moment equilibrium, the moments from each force acting on a slice must be considered and added together. The forces acting on a slice are all shown in \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram}. The midpoint of the base of a slice is considered as the axis of rotation, from which the length of the moment arm is measured. Considering first the interslice normal force acting on slice interface $i$, the moment is negative because the force tends to rotate the slice in a counterclockwise direction, and the length of the moment arm is the height of the force plus the difference in height between the base at slice interface $i$ and the base at the midpoint of slice $i$. Thus, the moment is expressed as:
+where ${F_{\text{rot}}}$ is the force causing rotation and $r$ is the length of the moment arm, or the distance between the force and the axis about which the rotation acts. To represent the moment equilibrium, the moments from each force acting on a slice must be considered and added together. The forces acting on a slice are all shown in \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram}. The midpoint of the base of a slice is considered as the axis of rotation, from which the length of the moment arm is measured. Considering first the interslice normal force acting on slice interface $i$, the moment is negative because the force tends to rotate the slice in a counterclockwise direction, and the length of the moment arm is the height of the force plus the difference in height between the base at slice interface $i$ and the base at the midpoint of slice $i$. Thus, the moment is expressed as:
 
 \begin{displaymath}
--{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
+-{\mathbf{G}}_{i} \left({\mathbf{h}_{\text{z},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
 \end{displaymath}
 For the $i-1$th slice interface, the moment is similar but in the opposite direction:
 
 \begin{displaymath}
-{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{\text{z},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
 \end{displaymath}
 Next, the interslice normal water force is considered. This force is zero at the height of the water table, then increases linearly towards the base of the slice due to the increasing water pressure. For such a triangular distribution, the resultant force acts at one-third of the height. Thus, for the interslice normal water force acting on slice interface $i$, the moment is:
 
 \begin{displaymath}
--{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
+-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
 \end{displaymath}
 The moment for the interslice normal water force acting on slice interface $i-1$ is:
 
 \begin{displaymath}
-{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i-1}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)
 \end{displaymath}
 The interslice shear force at slice interface $i$ tends to rotate in the clockwise direction, and the length of the moment arm is the length from the slice edge to the slice midpoint, equivalent to half of the width of the slice, so the moment is:
 
@@ -1055,25 +1055,25 @@ The interslice shear force at slice interface $i-1$ also tends to rotate in the 
 \begin{displaymath}
 {\mathbf{X}}_{i-1} \frac{{\mathbf{b}}_{i}}{2}
 \end{displaymath}
-Seismic forces act over the entire height of the slice. For each horizontal segment of the slice, the seismic force is ${K_{c}} {\mathbf{W}}_{i}$ where ${\mathbf{W}}_{i}$ can be expressed as $γ {\mathbf{b}}_{i} y$ using \hyperref[GD:weight]{GD: weight} where $y$ is the height of the segment under consideration. The corresponding length of the moment arm is $y$, the height from the base of the slice to the segment under consideration. In reality, the forces near the surface of the soil mass are slightly different due to the slope of the surface, but this difference is assumed to be negligible (\hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic}). The resultant moment from the forces on all of the segments with an equivalent resultant length of the moment arm is determined by taking the integral over the slice height. The forces tend to rotate in the counterclockwise direction, so the moment is negative:
+Seismic forces act over the entire height of the slice. For each horizontal segment of the slice, the seismic force is ${K_{\text{c}}} {\mathbf{W}}_{i}$ where ${\mathbf{W}}_{i}$ can be expressed as $γ {\mathbf{b}}_{i} y$ using \hyperref[GD:weight]{GD: weight} where $y$ is the height of the segment under consideration. The corresponding length of the moment arm is $y$, the height from the base of the slice to the segment under consideration. In reality, the forces near the surface of the soil mass are slightly different due to the slope of the surface, but this difference is assumed to be negligible (\hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic}). The resultant moment from the forces on all of the segments with an equivalent resultant length of the moment arm is determined by taking the integral over the slice height. The forces tend to rotate in the counterclockwise direction, so the moment is negative:
 
 \begin{displaymath}
--\int_{0}^{{\mathbf{h}}_{i}}{{K_{c}} γ {\mathbf{b}}_{i} y}\,dy
+-\int_{0}^{{\mathbf{h}}_{i}}{{K_{\text{c}}} γ {\mathbf{b}}_{i} y}\,dy
 \end{displaymath}
 Solving the definite integral yields:
 
 \begin{displaymath}
--{K_{c}} γ {\mathbf{b}}_{i} \frac{{\mathbf{h}}_{i}^{2}}{2}
+-{K_{\text{c}}} γ {\mathbf{b}}_{i} \frac{{\mathbf{h}}_{i}^{2}}{2}
 \end{displaymath}
 Using \hyperref[GD:weight]{GD: weight} again to express $γ {\mathbf{b}}_{i} {\mathbf{h}}_{i}$ as ${\mathbf{W}}_{i}$, the moment is:
 
 \begin{displaymath}
--{K_{c}} {\mathbf{W}}_{i} \frac{{\mathbf{h}}_{i}}{2}
+-{K_{\text{c}}} {\mathbf{W}}_{i} \frac{{\mathbf{h}}_{i}}{2}
 \end{displaymath}
 The surface hydrostatic force acts into the midpoint of the surface of the slice (\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}). Thus, the vertical component of the force acts directly towards the point of rotation, and has a moment of zero. The horizontal component of the force tends to rotate in a clockwise direction and the length of the moment arm is the entire height of the slice. Thus, the moment is:
 
 \begin{displaymath}
-{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}
+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}
 \end{displaymath}
 The external force again acts into the midpoint of the slice surface, so the vertical component does not contribute to the moment, and the length of the moment arm is again the entire height of the slice. The moment is:
 
@@ -1083,7 +1083,7 @@ The external force again acts into the midpoint of the slice surface, so the ver
 The base hydrostatic force and slice weight both act in the direction of the point of rotation (\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}), therefore both have moments of zero. Thus, all of the moments have been determined. The moment equilibrium is then represented by the sum of all moments:
 
 \begin{displaymath}
-0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{X}}_{i}+{\mathbf{X}}_{i-1}\right)+\frac{-{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
+0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{\text{z},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{\text{z},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{X}}_{i}+{\mathbf{X}}_{i-1}\right)+\frac{-{K_{\text{c}}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -1158,9 +1158,9 @@ Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \begin{cases}
-                                                         \left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{slope,i-1}}-{\mathbf{y}_{slip,i-1}}\right) {γ_{Sat}}, & {\mathbf{y}_{wt,i}}>{\mathbf{y}_{slope,i}}\lor{}{\mathbf{y}_{wt,i-1}}>{\mathbf{y}_{slope,i-1}}\\
-\left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{wt,i}}+{\mathbf{y}_{slope,i-1}}-{\mathbf{y}_{wt,i-1}}\right) {γ_{dry}}+\left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}\right) {γ_{Sat}}, & {\mathbf{y}_{slope,i}}\geq{}{\mathbf{y}_{wt,i}}\geq{}{\mathbf{y}_{slip,i}}\land{}{\mathbf{y}_{slope,i-1}}\geq{}{\mathbf{y}_{wt,i-1}}\geq{}{\mathbf{y}_{slip,i-1}}\\
-\left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{slope,i-1}}-{\mathbf{y}_{slip,i-1}}\right) {γ_{dry}}, & {\mathbf{y}_{wt,i}}<{\mathbf{y}_{slip,i}}\lor{}{\mathbf{y}_{wt,i-1}}<{\mathbf{y}_{slip,i-1}}
+                                                         \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}, & {\mathbf{y}_{\text{wt},i}}>{\mathbf{y}_{\text{slope},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}>{\mathbf{y}_{\text{slope},i-1}}\\
+\left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{wt},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{wt},i-1}}\right) {γ_{\text{dry}}}+\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}, & {\mathbf{y}_{\text{slope},i}}\geq{}{\mathbf{y}_{\text{wt},i}}\geq{}{\mathbf{y}_{\text{slip},i}}\land{}{\mathbf{y}_{\text{slope},i-1}}\geq{}{\mathbf{y}_{\text{wt},i-1}}\geq{}{\mathbf{y}_{\text{slip},i-1}}\\
+\left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{dry}}}, & {\mathbf{y}_{\text{wt},i}}<{\mathbf{y}_{\text{slip},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}<{\mathbf{y}_{\text{slip},i-1}}
                                                          \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1168,14 +1168,14 @@ Description & \begin{symbDescription}
               \item{$\mathbf{W}$ is the weights ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{b}$ is the base width of slices (m)}
-              \item{${\mathbf{y}_{slope}}$ is the y-coordinates of the slope (m)}
-              \item{${\mathbf{y}_{slip}}$ is the y-coordinates of the slip surface (m)}
-              \item{${γ_{Sat}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \item{${\mathbf{y}_{wt}}$ is the y-coordinates of the water table (m)}
-              \item{${γ_{dry}}$ is the soil dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+              \item{${\mathbf{y}_{\text{slope}}}$ is the y-coordinates of the slope (m)}
+              \item{${\mathbf{y}_{\text{slip}}}$ is the y-coordinates of the slip surface (m)}
+              \item{${γ_{\text{sat}}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+              \item{${\mathbf{y}_{\text{wt}}}$ is the y-coordinates of the water table (m)}
+              \item{${γ_{\text{dry}}}$ is the soil dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This equation is based on the assumption that the surface and the base of a slice are straight lines (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). The soil dry unit weight ${γ_{dry}}$ and the soil saturated unit weight ${γ_{Sat}}$ are not indexed by $i$ because the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}). $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}.
+Notes & This equation is based on the assumption that the surface and the base of a slice are straight lines (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). The soil dry unit weight ${γ_{\text{dry}}}$ and the soil saturated unit weight ${γ_{\text{sat}}}$ are not indexed by $i$ because the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}). $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}.
         
 \\ \midrule \\
 Source & \cite{fredlund1977}
@@ -1191,32 +1191,32 @@ RefBy & \hyperref[GD:resShearWO]{GD: resShearWO}, \hyperref[GD:normForcEq]{GD: n
 For the case where the water table is above the slope surface, the weights come from the weight of the saturated soil. Substituting values for saturated soil into the equation for weight from \hyperref[GD:weight]{GD: weight} yields:
 
 \begin{displaymath}
-{\mathbf{W}}_{i}={\mathbf{V}_{sat,i}} {γ_{Sat}}
+{\mathbf{W}}_{i}={\mathbf{V}_{\text{sat},i}} {γ_{\text{sat}}}
 \end{displaymath}
 Due to \hyperref[assumpPSC]{A: Plane-Strain-Conditions}, only two dimensions are considered, so the areas of saturated soil are considered instead of the volumes of saturated soil. Any given slice has a trapezoidal shape. The area of a trapezoid is the average of the lengths of the parallel sides multiplied by the length between the parallel sides. The parallel sides in this case are the interslice edges and the length between them is the width of the slice. Thus, the weights are defined as:
 
 \begin{displaymath}
-{\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{slope,i-1}}-{\mathbf{y}_{slip,i-1}}\right) {γ_{Sat}}
+{\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}
 \end{displaymath}
 For the case where the water table is below the slip surface, the weights come from the weight of the dry soil. Substituting values for dry soil into the equation for weight from \hyperref[GD:weight]{GD: weight} yields:
 
 \begin{displaymath}
-{\mathbf{W}}_{i}={\mathbf{V}_{dry,i}} {γ_{dry}}
+{\mathbf{W}}_{i}={\mathbf{V}_{\text{dry},i}} {γ_{\text{dry}}}
 \end{displaymath}
 \hyperref[assumpPSC]{A: Plane-Strain-Conditions} again allows for two-dimensional analysis so the areas of dry soil are considered instead of the volumes of dry soil. The trapezoidal slice shape is the same as in the previous case, so the weights are defined as:
 
 \begin{displaymath}
-{\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{slope,i-1}}-{\mathbf{y}_{slip,i-1}}\right) {γ_{dry}}
+{\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{dry}}}
 \end{displaymath}
 For the case where the water table is between the slope surface and slip surface, the weights are the sums of the the weights of the dry portions and weights of the saturated portions of the soil. Substituting values for dry and saturated soil into the equation for weight from \hyperref[GD:weight]{GD: weight} and adding them together yields:
 
 \begin{displaymath}
-{\mathbf{W}}_{i}={\mathbf{V}_{dry,i}} {γ_{dry}}+{\mathbf{V}_{sat,i}} {γ_{Sat}}
+{\mathbf{W}}_{i}={\mathbf{V}_{\text{dry},i}} {γ_{\text{dry}}}+{\mathbf{V}_{\text{sat},i}} {γ_{\text{sat}}}
 \end{displaymath}
 \hyperref[assumpPSC]{A: Plane-Strain-Conditions} again allows for two-dimensional analysis so the areas of dry soil and areas of saturated soil are considered instead of the volumes of dry soil and volumes of saturated soil. The water table is assumed to only intersect a slice surface or base at a slice edge (\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge}, \hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge}), so the dry and saturated portions each have trapezoidal shape. For the dry portion, the parallel sides of the trapezoid are the lengths between the slope surface and water table at the slice edges. For the saturated portion, the parallel sides of the trapezoid are the lengths between the water table and slip surface at the slice edges. Thus, the weights are defined as:
 
 \begin{displaymath}
-{\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left(\left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{wt,i}}+{\mathbf{y}_{slope,i-1}}-{\mathbf{y}_{wt,i-1}}\right) {γ_{dry}}+\left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}\right) {γ_{Sat}}\right)
+{\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left(\left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{wt},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{wt},i-1}}\right) {γ_{\text{dry}}}+\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -1269,19 +1269,19 @@ Units & $\frac{\text{N}}{\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{U}_{b,i}}={\mathbf{ℓ}_{b,i}} {γ_{w}} \frac{1}{2} \begin{cases}
-                                                                     {\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}, & {\mathbf{y}_{wt,i}}>{\mathbf{y}_{slip,i}}\lor{}{\mathbf{y}_{wt,i-1}}>{\mathbf{y}_{slip,i-1}}\\
-0, & {\mathbf{y}_{wt,i}}\leq{}{\mathbf{y}_{slip,i}}\land{}{\mathbf{y}_{wt,i-1}}\leq{}{\mathbf{y}_{slip,i-1}}
-                                                                     \end{cases}
+           {\mathbf{U}_{\text{b},i}}={\mathbf{ℓ}_{b,i}} {γ_{w}} \frac{1}{2} \begin{cases}
+                                                                            {\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}, & {\mathbf{y}_{\text{wt},i}}>{\mathbf{y}_{\text{slip},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}>{\mathbf{y}_{\text{slip},i-1}}\\
+0, & {\mathbf{y}_{\text{wt},i}}\leq{}{\mathbf{y}_{\text{slip},i}}\land{}{\mathbf{y}_{\text{wt},i-1}}\leq{}{\mathbf{y}_{\text{slip},i-1}}
+                                                                            \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\mathbf{U}_{b}}$ is the base hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
+              \item{${\mathbf{U}_{\text{b}}}$ is the base hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \item{${\mathbf{ℓ}_{b}}$ is the total base lengths of slices (m)}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \item{${\mathbf{y}_{wt}}$ is the y-coordinates of the water table (m)}
-              \item{${\mathbf{y}_{slip}}$ is the y-coordinates of the slip surface (m)}
+              \item{${\mathbf{y}_{\text{wt}}}$ is the y-coordinates of the water table (m)}
+              \item{${\mathbf{y}_{\text{slip}}}$ is the y-coordinates of the slip surface (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & This equation is based on the assumption that the base of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). ${\mathbf{ℓ}_{b}}$ is defined in \hyperref[DD:lengthLb]{DD: lengthLb}.
@@ -1305,12 +1305,12 @@ p=γ h
 The specific weight in this case is the unit weight of water ${γ_{w}}$. The height in this case is the height from the slice base to the water table. This height is measured from the midpoint of the slice because the resultant hydrostatic force is assumed to act at the slice midpoint (\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}). The height at the midpoint is the average of the height at slice interface $i$ and the height at slice interface $i-1$:
 
 \begin{displaymath}
-\frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}\right)
+\frac{1}{2} \left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right)
 \end{displaymath}
 Due to \hyperref[assumpPSC]{A: Plane-Strain-Conditions}, only two dimensions are considered, so the base hydrostatic forces are expressed as forces per meter. The pressures acting on the slices can thus be converted to base hydrostatic forces by multiplying by the corresponding length of the slice base ${\mathbf{ℓ}_{b,i}}$, assuming the water table does not intersect a slice base except at a slice edge (\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge}). Thus, in the case where the height of the water table is above the height of the slip surface, the base hydrostatic forces are defined as:
 
 \begin{displaymath}
-{\mathbf{U}_{b,i}}={\mathbf{ℓ}_{b,i}} {γ_{w}} \frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slip,i-1}}\right)
+{\mathbf{U}_{\text{b},i}}={\mathbf{ℓ}_{b,i}} {γ_{w}} \frac{1}{2} \left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right)
 \end{displaymath}
 This equation is the non-zero case of \hyperref[GD:baseWtrF]{GD: baseWtrF}. The zero case is when the height of the water table is below the height of the slip surface, so there is no hydrostatic force.
 
@@ -1329,19 +1329,19 @@ Units & $\frac{\text{N}}{\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{U}_{t,i}}={\mathbf{ℓ}_{s,i}} {γ_{w}} \frac{1}{2} \begin{cases}
-                                                                     {\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}, & {\mathbf{y}_{wt,i}}>{\mathbf{y}_{slope,i}}\lor{}{\mathbf{y}_{wt,i-1}}>{\mathbf{y}_{slope,i-1}}\\
-0, & {\mathbf{y}_{wt,i}}\leq{}{\mathbf{y}_{slope,i}}\land{}{\mathbf{y}_{wt,i-1}}\leq{}{\mathbf{y}_{slope,i-1}}
-                                                                     \end{cases}
+           {\mathbf{U}_{\text{g},i}}={\mathbf{ℓ}_{s,i}} {γ_{w}} \frac{1}{2} \begin{cases}
+                                                                            {\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slope},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slope},i-1}}, & {\mathbf{y}_{\text{wt},i}}>{\mathbf{y}_{\text{slope},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}>{\mathbf{y}_{\text{slope},i-1}}\\
+0, & {\mathbf{y}_{\text{wt},i}}\leq{}{\mathbf{y}_{\text{slope},i}}\land{}{\mathbf{y}_{\text{wt},i-1}}\leq{}{\mathbf{y}_{\text{slope},i-1}}
+                                                                            \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\mathbf{U}_{t}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
+              \item{${\mathbf{U}_{\text{g}}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \item{${\mathbf{ℓ}_{s}}$ is the surface lengths of slices (m)}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \item{${\mathbf{y}_{wt}}$ is the y-coordinates of the water table (m)}
-              \item{${\mathbf{y}_{slope}}$ is the y-coordinates of the slope (m)}
+              \item{${\mathbf{y}_{\text{wt}}}$ is the y-coordinates of the water table (m)}
+              \item{${\mathbf{y}_{\text{slope}}}$ is the y-coordinates of the slope (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & This equation is based on the assumption that the surface of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}). ${\mathbf{ℓ}_{s}}$ is defined in \hyperref[DD:lengthLs]{DD: lengthLs}.
@@ -1365,12 +1365,12 @@ p=γ h
 The specific weight in this case is the unit weight of water ${γ_{w}}$. The height in this case is the height from the slice surface to the water table. This height is measured from the midpoint of the slice because the resultant hydrostatic force is assumed to act at the slice midpoint (\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}). The height at the midpoint is the average of the height at slice interface $i$ and the height at slice interface $i-1$:
 
 \begin{displaymath}
-\frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}\right)
+\frac{1}{2} \left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slope},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slope},i-1}}\right)
 \end{displaymath}
 Due to \hyperref[assumpPSC]{A: Plane-Strain-Conditions}, only two dimensions are considered, so the surface hydrostatic forces are expressed as forces per meter. The pressures acting on the slices can thus be converted to surface hydrostatic forces by multiplying by the corresponding length of the slice surface ${\mathbf{ℓ}_{s,i}}$, assuming the water table does not intersect a slice surface except at a slice edge (\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge}). Thus, in the case where the height of the water table is above the height of the slope surface, the surface hydrostatic forces are defined as:
 
 \begin{displaymath}
-{\mathbf{U}_{t,i}}={\mathbf{ℓ}_{s,i}} {γ_{w}} \frac{1}{2} \left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}+{\mathbf{y}_{wt,i-1}}-{\mathbf{y}_{slope,i-1}}\right)
+{\mathbf{U}_{\text{g},i}}={\mathbf{ℓ}_{s,i}} {γ_{w}} \frac{1}{2} \left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slope},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slope},i-1}}\right)
 \end{displaymath}
 This equation is the non-zero case of \hyperref[GD:srfWtrF]{GD: srfWtrF}. The zero case is when the height of the water table is below the height of the slope surface, so there is no hydrostatic force.
 
@@ -1397,19 +1397,19 @@ Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{H}=\begin{cases}
-                      \frac{\left({\mathbf{y}_{slope,i}}-{\mathbf{y}_{slip,i}}\right)^{2}}{2} {γ_{w}}+\left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slope,i}}\right)^{2} {γ_{w}}, & {\mathbf{y}_{wt,i}}\geq{}{\mathbf{y}_{slope,i}}\\
-\frac{\left({\mathbf{y}_{wt,i}}-{\mathbf{y}_{slip,i}}\right)^{2}}{2} {γ_{w}}, & {\mathbf{y}_{slope,i}}>{\mathbf{y}_{wt,i}}>{\mathbf{y}_{slip,i}}\\
-0, & {\mathbf{y}_{wt,i}}\leq{}{\mathbf{y}_{slip,i}}
+                      \frac{\left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}+\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slope},i}}\right)^{2} {γ_{w}}, & {\mathbf{y}_{\text{wt},i}}\geq{}{\mathbf{y}_{\text{slope},i}}\\
+\frac{\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}, & {\mathbf{y}_{\text{slope},i}}>{\mathbf{y}_{\text{wt},i}}>{\mathbf{y}_{\text{slip},i}}\\
+0, & {\mathbf{y}_{\text{wt},i}}\leq{}{\mathbf{y}_{\text{slip},i}}
                       \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
-              \item{${\mathbf{y}_{slope}}$ is the y-coordinates of the slope (m)}
+              \item{${\mathbf{y}_{\text{slope}}}$ is the y-coordinates of the slope (m)}
               \item{$i$ is the index (Unitless)}
-              \item{${\mathbf{y}_{slip}}$ is the y-coordinates of the slip surface (m)}
+              \item{${\mathbf{y}_{\text{slip}}}$ is the y-coordinates of the slip surface (m)}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \item{${\mathbf{y}_{wt}}$ is the y-coordinates of the water table (m)}
+              \item{${\mathbf{y}_{\text{wt}}}$ is the y-coordinates of the water table (m)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
@@ -1439,14 +1439,14 @@ Units & ${}^{\circ}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{α}=\arctan\left(\frac{{\mathbf{y}_{slip,i}}-{\mathbf{y}_{slip,i-1}}}{{\mathbf{x}_{slip,i}}-{\mathbf{x}_{slip,i-1}}}\right)
+           \mathbf{α}=\arctan\left(\frac{{\mathbf{y}_{\text{slip},i}}-{\mathbf{y}_{\text{slip},i-1}}}{{\mathbf{x}_{\text{slip},i}}-{\mathbf{x}_{\text{slip},i-1}}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{α}$ is the base angles (${}^{\circ}$)}
-              \item{${\mathbf{y}_{slip}}$ is the y-coordinates of the slip surface (m)}
+              \item{${\mathbf{y}_{\text{slip}}}$ is the y-coordinates of the slip surface (m)}
               \item{$i$ is the index (Unitless)}
-              \item{${\mathbf{x}_{slip}}$ is the x-coordinates of the slip surface (m)}
+              \item{${\mathbf{x}_{\text{slip}}}$ is the x-coordinates of the slip surface (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & This equation is based on the assumption that the base of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
@@ -1479,14 +1479,14 @@ Units & ${}^{\circ}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{β}=\arctan\left(\frac{{\mathbf{y}_{slope,i}}-{\mathbf{y}_{slope,i-1}}}{{\mathbf{x}_{slope,i}}-{\mathbf{x}_{slope,i-1}}}\right)
+           \mathbf{β}=\arctan\left(\frac{{\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slope},i-1}}}{{\mathbf{x}_{\text{slope},i}}-{\mathbf{x}_{\text{slope},i-1}}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{β}$ is the surface angles (${}^{\circ}$)}
-              \item{${\mathbf{y}_{slope}}$ is the y-coordinates of the slope (m)}
+              \item{${\mathbf{y}_{\text{slope}}}$ is the y-coordinates of the slope (m)}
               \item{$i$ is the index (Unitless)}
-              \item{${\mathbf{x}_{slope}}$ is the x-coordinates of the slope (m)}
+              \item{${\mathbf{x}_{\text{slope}}}$ is the x-coordinates of the slope (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & This equation is based on the assumption that the surface of a slice is a straight line (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
@@ -1519,12 +1519,12 @@ Units & m
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{b}={\mathbf{x}_{slip,i}}-{\mathbf{x}_{slip,i-1}}
+           \mathbf{b}={\mathbf{x}_{\text{slip},i}}-{\mathbf{x}_{\text{slip},i-1}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{b}$ is the base width of slices (m)}
-              \item{${\mathbf{x}_{slip}}$ is the x-coordinates of the slip surface (m)}
+              \item{${\mathbf{x}_{\text{slip}}}$ is the x-coordinates of the slip surface (m)}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1635,18 +1635,18 @@ Units & m
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{h}=\frac{1}{2} \left({\mathbf{h}^{R}}+{\mathbf{h}^{L}}\right)
+           \mathbf{h}=\frac{1}{2} \left({\mathbf{h}^{\text{R}}}+{\mathbf{h}^{\text{L}}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{h}$ is the y-direction heights of slices (m)}
-              \item{${\mathbf{h}^{R}}$ is the heights of the right side of slices (m)}
-              \item{${\mathbf{h}^{L}}$ is the heights of the left side of slices (m)}
+              \item{${\mathbf{h}^{\text{R}}}$ is the heights of the right side of slices (m)}
+              \item{${\mathbf{h}^{\text{L}}}$ is the heights of the left side of slices (m)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & This equation is based on the assumption that the surface and base of a slice are straight lines (\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}).
         
-        ${\mathbf{h}^{R}}$ and ${\mathbf{h}^{L}}$ are defined in \hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD} and \hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD}, respectively.
+        ${\mathbf{h}^{\text{R}}}$ and ${\mathbf{h}^{\text{L}}}$ are defined in \hyperref[DD:sliceHghtRightDD]{DD: sliceHghtRightDD} and \hyperref[DD:sliceHghtLeftDD]{DD: sliceHghtLeftDD}, respectively.
         
 \\ \midrule \\
 Source & \cite{fredlund1977}
@@ -1753,14 +1753,14 @@ Units & Unitless
 Equation & \begin{displaymath}
            \mathbf{f}=\begin{cases}
                       1, & const_f\\
-\sin\left(π \frac{{\mathbf{x}_{slip,i}}-{\mathbf{x}_{slip,0}}}{{\mathbf{x}_{slip,n}}-{\mathbf{x}_{slip,0}}}\right), & \neg{}const_f
+\sin\left(π \frac{{\mathbf{x}_{\text{slip},i}}-{\mathbf{x}_{\text{slip},0}}}{{\mathbf{x}_{\text{slip},n}}-{\mathbf{x}_{\text{slip},0}}}\right), & \neg{}const_f
                       \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{f}$ is the interslice normal to shear force ratio variation function (Unitless)}
               \item{$π$ is the ratio of circumference to diameter for any circle (Unitless)}
-              \item{${\mathbf{x}_{slip}}$ is the x-coordinates of the slip surface (m)}
+              \item{${\mathbf{x}_{\text{slip}}}$ is the x-coordinates of the slip surface (m)}
               \item{$i$ is the index (Unitless)}
               \item{$n$ is the number of slices (Unitless)}
               \item{$const_f$ is the decision on f (Unitless)}
@@ -1793,7 +1793,7 @@ Units & Unitless
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{Φ}=\left(λ {\mathbf{f}}_{i} \cos\left({\mathbf{α}}_{i}\right)-\sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\mathbf{f}}_{i} \sin\left({\mathbf{α}}_{i}\right)+\cos\left({\mathbf{α}}_{i}\right)\right) {F_{S}}
+           \mathbf{Φ}=\left(λ {\mathbf{f}}_{i} \cos\left({\mathbf{α}}_{i}\right)-\sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\mathbf{f}}_{i} \sin\left({\mathbf{α}}_{i}\right)+\cos\left({\mathbf{α}}_{i}\right)\right) {F_{\text{S}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1803,7 +1803,7 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{α}$ is the base angles (${}^{\circ}$)}
               \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
+              \item{${F_{\text{S}}}$ is the factor of safety (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $\mathbf{f}$ is defined in \hyperref[DD:ratioVariation]{DD: ratioVariation} and $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}.
@@ -1836,7 +1836,7 @@ Units & Unitless
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{Ψ}=\frac{\left(λ {\mathbf{f}}_{i} \cos\left({\mathbf{α}}_{i}\right)-\sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\mathbf{f}}_{i} \sin\left({\mathbf{α}}_{i}\right)+\cos\left({\mathbf{α}}_{i}\right)\right) {F_{S}}}{{\mathbf{Φ}}_{i-1}}
+           \mathbf{Ψ}=\frac{\left(λ {\mathbf{f}}_{i} \cos\left({\mathbf{α}}_{i}\right)-\sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\mathbf{f}}_{i} \sin\left({\mathbf{α}}_{i}\right)+\cos\left({\mathbf{α}}_{i}\right)\right) {F_{\text{S}}}}{{\mathbf{Φ}}_{i-1}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1846,7 +1846,7 @@ Description & \begin{symbDescription}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{α}$ is the base angles (${}^{\circ}$)}
               \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
+              \item{${F_{\text{S}}}$ is the factor of safety (Unitless)}
               \item{$\mathbf{Φ}$ is the first function for incorporating interslice forces into shear force (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1873,18 +1873,18 @@ RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} and \hyperref[IM:fctSfty]{IM: f
 Label & Sums of the interslice normal forces
         
 \\ \midrule \\
-Symbol & ${{\mathbf{F}_{x}}^{G}}$
+Symbol & ${{\mathbf{F}_{\text{x}}}^{\text{G}}}$
          
 \\ \midrule \\
 Units & N
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{\mathbf{F}_{x}}^{G}}={\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}
+           {{\mathbf{F}_{\text{x}}}^{\text{G}}}={\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${{\mathbf{F}_{x}}^{G}}$ is the sums of the interslice normal forces (N)}
+              \item{${{\mathbf{F}_{\text{x}}}^{\text{G}}}$ is the sums of the interslice normal forces (N)}
               \item{$\mathbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
@@ -1908,18 +1908,18 @@ RefBy &
 Label & Sums of the interslice normal water forces
         
 \\ \midrule \\
-Symbol & ${{\mathbf{F}_{x}}^{H}}$
+Symbol & ${{\mathbf{F}_{\text{x}}}^{\text{H}}}$
          
 \\ \midrule \\
 Units & N
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{\mathbf{F}_{x}}^{H}}={\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}
+           {{\mathbf{F}_{\text{x}}}^{\text{H}}}={\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${{\mathbf{F}_{x}}^{H}}$ is the sums of the interslice normal water forces (N)}
+              \item{${{\mathbf{F}_{\text{x}}}^{\text{H}}}$ is the sums of the interslice normal water forces (N)}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \end{symbDescription}
@@ -1943,21 +1943,21 @@ RefBy &
 Label & Heights of the right side of slices
         
 \\ \midrule \\
-Symbol & ${\mathbf{h}^{R}}$
+Symbol & ${\mathbf{h}^{\text{R}}}$
          
 \\ \midrule \\
 Units & m
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{h}^{R}}={\mathbf{y}_{slope,i}}-{\mathbf{y}_{slip,i}}
+           {\mathbf{h}^{\text{R}}}={\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\mathbf{h}^{R}}$ is the heights of the right side of slices (m)}
-              \item{${\mathbf{y}_{slope}}$ is the y-coordinates of the slope (m)}
+              \item{${\mathbf{h}^{\text{R}}}$ is the heights of the right side of slices (m)}
+              \item{${\mathbf{y}_{\text{slope}}}$ is the y-coordinates of the slope (m)}
               \item{$i$ is the index (Unitless)}
-              \item{${\mathbf{y}_{slip}}$ is the y-coordinates of the slip surface (m)}
+              \item{${\mathbf{y}_{\text{slip}}}$ is the y-coordinates of the slip surface (m)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
@@ -1980,21 +1980,21 @@ RefBy & \hyperref[DD:slcHeight]{DD: slcHeight}
 Label & Heights of the left side of slices
         
 \\ \midrule \\
-Symbol & ${\mathbf{h}^{L}}$
+Symbol & ${\mathbf{h}^{\text{L}}}$
          
 \\ \midrule \\
 Units & m
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{h}^{L}}={\mathbf{y}_{slope,i-1}}-{\mathbf{y}_{slip,i-1}}
+           {\mathbf{h}^{\text{L}}}={\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\mathbf{h}^{L}}$ is the heights of the left side of slices (m)}
-              \item{${\mathbf{y}_{slope}}$ is the y-coordinates of the slope (m)}
+              \item{${\mathbf{h}^{\text{L}}}$ is the heights of the left side of slices (m)}
+              \item{${\mathbf{y}_{\text{slope}}}$ is the y-coordinates of the slope (m)}
               \item{$i$ is the index (Unitless)}
-              \item{${\mathbf{y}_{slip}}$ is the y-coordinates of the slip surface (m)}
+              \item{${\mathbf{y}_{\text{slip}}}$ is the y-coordinates of the slip surface (m)}
               \end{symbDescription}
 \\ \midrule \\
 Source & \cite{fredlund1977}
@@ -2025,10 +2025,10 @@ The Morgenstern-Price method is a vertical slice, limit equilibrium slope stabil
 Label & Factor of safety
         
 \\ \midrule \\
-Input & ${\mathbf{x}_{slope}}$, ${\mathbf{y}_{slope}}$, ${\mathbf{y}_{wt}}$, $c'$, $φ'$, ${γ_{dry}}$, ${γ_{Sat}}$, ${γ_{w}}$, ${\mathbf{x}_{slip}}$, ${\mathbf{y}_{slip}}$, $const_f$
+Input & ${\mathbf{x}_{\text{slope}}}$, ${\mathbf{y}_{\text{slope}}}$, ${\mathbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, ${\mathbf{x}_{\text{slip}}}$, ${\mathbf{y}_{\text{slip}}}$, $const_f$
         
 \\ \midrule \\
-Output & ${F_{S}}$
+Output & ${F_{\text{S}}}$
          
 \\ \midrule \\
 Input Constraints & 
@@ -2036,11 +2036,11 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {F_{S}}=\frac{\displaystyle\sum_{i=1}^{n-1}{{\mathbf{R}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\mathbf{Ψ}}_{v}}}+{\mathbf{R}}_{n}}{\displaystyle\sum_{i=1}^{n-1}{{\mathbf{T}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\mathbf{Ψ}}_{v}}}+{\mathbf{T}}_{n}}
+           {F_{\text{S}}}=\frac{\displaystyle\sum_{i=1}^{n-1}{{\mathbf{R}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\mathbf{Ψ}}_{v}}}+{\mathbf{R}}_{n}}{\displaystyle\sum_{i=1}^{n-1}{{\mathbf{T}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\mathbf{Ψ}}_{v}}}+{\mathbf{T}}_{n}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
+              \item{${F_{\text{S}}}$ is the factor of safety (Unitless)}
               \item{$\mathbf{R}$ is the resistive shear forces without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{Ψ}$ is the second function for incorporating interslice forces into shear force (Unitless)}
@@ -2065,116 +2065,116 @@ RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:intsliceFs]{IM: int
 The mobilized shear force defined in \hyperref[GD:bsShrFEq]{GD: bsShrFEq} can be substituted into the definition of mobilized shear force based on the factor of safety, from \hyperref[GD:mobShr]{GD: mobShr} yielding Equation (1) below:
 
 \begin{displaymath}
-\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{c}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{{\mathbf{N'}}_{i} \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{S}}}
+\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{{\mathbf{N'}}_{i} \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{\text{S}}}}
 \end{displaymath}
 An expression for the effective normal forces, $\mathbf{N'}$, can be derived by substituting the normal forces equilibrium from \hyperref[GD:normForcEq]{GD: normForcEq} into the definition for effective normal forces from \hyperref[GD:resShearWO]{GD: resShearWO}. This results in Equation (2):
 
 \begin{displaymath}
-{\mathbf{N'}}_{i}=\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{c}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{b,i}}
+{\mathbf{N'}}_{i}=\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{\text{b},i}}
 \end{displaymath}
 Substituting Equation (2) into Equation (1) gives:
 
 \begin{displaymath}
-\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{c}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{\left(\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{c}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{b,i}}\right) \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{S}}}
+\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{\left(\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{\text{b},i}}\right) \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{\text{S}}}}
 \end{displaymath}
 Since the interslice shear forces $\mathbf{X}$ and interslice normal forces $\mathbf{G}$ are unknown, they are separated from the other terms as follows:
 
 \begin{displaymath}
-\left({\mathbf{W}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{c}} {\mathbf{W}}_{i}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)=\frac{\left(\left({\mathbf{W}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{c}} {\mathbf{W}}_{i}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{b,i}}\right) \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{S}}}
+\left({\mathbf{W}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)=\frac{\left(\left({\mathbf{W}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{\text{b},i}}\right) \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{\text{S}}}}
 \end{displaymath}
 Applying assumptions \hyperref[assumpSF]{A: Seismic-Force} and \hyperref[assumpSL]{A: Surface-Load}, which state that the seismic coefficient and the external forces, respectively, are zero, allows for further simplification as shown below:
 
 \begin{displaymath}
-\left({\mathbf{W}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)=\frac{\left(\left({\mathbf{W}}_{i}+{\mathbf{U}_{t,i}} \cos\left({\mathbf{β}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{b,i}}\right) \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{S}}}
+\left({\mathbf{W}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)=\frac{\left(\left({\mathbf{W}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{\text{b},i}}\right) \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{\text{S}}}}
 \end{displaymath}
 The definitions of \hyperref[GD:resShearWO]{GD: resShearWO} and \hyperref[GD:mobShearWO]{GD: mobShearWO} are present in this equation, and thus can be replaced by ${\mathbf{R}}_{i}$ and ${\mathbf{T}}_{i}$, respectively:
 
 \begin{displaymath}
-{\mathbf{T}}_{i}+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{{\mathbf{R}}_{i}+\left(\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)}{{F_{S}}}
+{\mathbf{T}}_{i}+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{{\mathbf{R}}_{i}+\left(\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)}{{F_{\text{S}}}}
 \end{displaymath}
 The interslice shear forces $\mathbf{X}$ can be expressed in terms of the interslice normal forces $\mathbf{G}$ using \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and \hyperref[GD:normShrR]{GD: normShrR}, resulting in:
 
 \begin{displaymath}
-{\mathbf{T}}_{i}+\left(-λ {\mathbf{f}}_{i-1} {\mathbf{G}}_{i-1}+λ {\mathbf{f}}_{i} {\mathbf{G}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{{\mathbf{R}}_{i}+\left(\left(-λ {\mathbf{f}}_{i-1} {\mathbf{G}}_{i-1}+λ {\mathbf{f}}_{i} {\mathbf{G}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)}{{F_{S}}}
+{\mathbf{T}}_{i}+\left(-λ {\mathbf{f}}_{i-1} {\mathbf{G}}_{i-1}+λ {\mathbf{f}}_{i} {\mathbf{G}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{{\mathbf{R}}_{i}+\left(\left(-λ {\mathbf{f}}_{i-1} {\mathbf{G}}_{i-1}+λ {\mathbf{f}}_{i} {\mathbf{G}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)}{{F_{\text{S}}}}
 \end{displaymath}
 Rearranging yields the following:
 
 \begin{displaymath}
-{\mathbf{G}}_{i} \left(\left(λ {\mathbf{f}}_{i} \cos\left({\mathbf{α}}_{i}\right)-\sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\mathbf{f}}_{i} \sin\left({\mathbf{α}}_{i}\right)+\cos\left({\mathbf{α}}_{i}\right)\right) {F_{S}}\right)={\mathbf{G}}_{i-1} \left(\left(λ {\mathbf{f}}_{i-1} \cos\left({\mathbf{α}}_{i}\right)-\sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\mathbf{f}}_{i-1} \sin\left({\mathbf{α}}_{i}\right)+\cos\left({\mathbf{α}}_{i}\right)\right) {F_{S}}\right)+{F_{S}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}
+{\mathbf{G}}_{i} \left(\left(λ {\mathbf{f}}_{i} \cos\left({\mathbf{α}}_{i}\right)-\sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\mathbf{f}}_{i} \sin\left({\mathbf{α}}_{i}\right)+\cos\left({\mathbf{α}}_{i}\right)\right) {F_{\text{S}}}\right)={\mathbf{G}}_{i-1} \left(\left(λ {\mathbf{f}}_{i-1} \cos\left({\mathbf{α}}_{i}\right)-\sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)-\left(λ {\mathbf{f}}_{i-1} \sin\left({\mathbf{α}}_{i}\right)+\cos\left({\mathbf{α}}_{i}\right)\right) {F_{\text{S}}}\right)+{F_{\text{S}}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}
 \end{displaymath}
 The definitions for $\mathbf{Φ}$ and $\mathbf{Ψ}$ from \hyperref[DD:convertFunc1]{DD: convertFunc1} and \hyperref[DD:convertFunc2]{DD: convertFunc2} simplify the above to Equation (3):
 
 \begin{displaymath}
-{\mathbf{G}}_{i} {\mathbf{Φ}}_{i}={\mathbf{Ψ}}_{i-1} {\mathbf{G}}_{i-1} {\mathbf{Φ}}_{i-1}+{F_{S}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}
+{\mathbf{G}}_{i} {\mathbf{Φ}}_{i}={\mathbf{Ψ}}_{i-1} {\mathbf{G}}_{i-1} {\mathbf{Φ}}_{i-1}+{F_{\text{S}}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}
 \end{displaymath}
 Versions of Equation (3) instantiated for slices 1 to $n$ are shown below:
 
 \begin{displaymath}
-{\mathbf{G}}_{1} {\mathbf{Φ}}_{1}={\mathbf{Ψ}}_{0} {\mathbf{G}}_{0} {\mathbf{Φ}}_{0}+{F_{S}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}
+{\mathbf{G}}_{1} {\mathbf{Φ}}_{1}={\mathbf{Ψ}}_{0} {\mathbf{G}}_{0} {\mathbf{Φ}}_{0}+{F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}
 \end{displaymath}
 \begin{displaymath}
-{\mathbf{G}}_{2} {\mathbf{Φ}}_{2}={\mathbf{Ψ}}_{1} {\mathbf{G}}_{1} {\mathbf{Φ}}_{1}+{F_{S}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}
+{\mathbf{G}}_{2} {\mathbf{Φ}}_{2}={\mathbf{Ψ}}_{1} {\mathbf{G}}_{1} {\mathbf{Φ}}_{1}+{F_{\text{S}}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}
 \end{displaymath}
 \begin{displaymath}
-{\mathbf{G}}_{3} {\mathbf{Φ}}_{3}={\mathbf{Ψ}}_{2} {\mathbf{G}}_{2} {\mathbf{Φ}}_{2}+{F_{S}} {\mathbf{T}}_{3}-{\mathbf{R}}_{3}
+{\mathbf{G}}_{3} {\mathbf{Φ}}_{3}={\mathbf{Ψ}}_{2} {\mathbf{G}}_{2} {\mathbf{Φ}}_{2}+{F_{\text{S}}} {\mathbf{T}}_{3}-{\mathbf{R}}_{3}
 \end{displaymath}
 ...
 
 \begin{displaymath}
-{\mathbf{G}}_{n-2} {\mathbf{Φ}}_{n-2}={\mathbf{Ψ}}_{n-3} {\mathbf{G}}_{n-3} {\mathbf{Φ}}_{n-3}+{F_{S}} {\mathbf{T}}_{n-2}-{\mathbf{R}}_{n-2}
+{\mathbf{G}}_{n-2} {\mathbf{Φ}}_{n-2}={\mathbf{Ψ}}_{n-3} {\mathbf{G}}_{n-3} {\mathbf{Φ}}_{n-3}+{F_{\text{S}}} {\mathbf{T}}_{n-2}-{\mathbf{R}}_{n-2}
 \end{displaymath}
 \begin{displaymath}
-{\mathbf{G}}_{n-1} {\mathbf{Φ}}_{n-1}={\mathbf{Ψ}}_{n-2} {\mathbf{G}}_{n-2} {\mathbf{Φ}}_{n-2}+{F_{S}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}
+{\mathbf{G}}_{n-1} {\mathbf{Φ}}_{n-1}={\mathbf{Ψ}}_{n-2} {\mathbf{G}}_{n-2} {\mathbf{Φ}}_{n-2}+{F_{\text{S}}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}
 \end{displaymath}
 \begin{displaymath}
-{\mathbf{G}}_{n} {\mathbf{Φ}}_{n}={\mathbf{Ψ}}_{n-1} {\mathbf{G}}_{n-1} {\mathbf{Φ}}_{n-1}+{F_{S}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}
+{\mathbf{G}}_{n} {\mathbf{Φ}}_{n}={\mathbf{Ψ}}_{n-1} {\mathbf{G}}_{n-1} {\mathbf{Φ}}_{n-1}+{F_{\text{S}}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}
 \end{displaymath}
 Applying \hyperref[assumpES]{A: Edge-Slices}, which says that ${\mathbf{G}}_{0}$ and ${\mathbf{G}}_{n}$ are zero, results in the following special cases: Equation (8) for the first slice:
 
 \begin{displaymath}
-{\mathbf{G}}_{1} {\mathbf{Φ}}_{1}={F_{S}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}
+{\mathbf{G}}_{1} {\mathbf{Φ}}_{1}={F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}
 \end{displaymath}
 and Equation (9) for the $n$th slice:
 
 \begin{displaymath}
--\left(\frac{{F_{S}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}}{{\mathbf{Ψ}}_{n-1}}\right)={\mathbf{G}}_{n-1} {\mathbf{Φ}}_{n-1}
+-\left(\frac{{F_{\text{S}}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}}{{\mathbf{Ψ}}_{n-1}}\right)={\mathbf{G}}_{n-1} {\mathbf{Φ}}_{n-1}
 \end{displaymath}
 Substituting Equation (8) into Equation (4) yields Equation (10):
 
 \begin{displaymath}
-{\mathbf{G}}_{2} {\mathbf{Φ}}_{2}={\mathbf{Ψ}}_{1} \left({F_{S}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{F_{S}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}
+{\mathbf{G}}_{2} {\mathbf{Φ}}_{2}={\mathbf{Ψ}}_{1} \left({F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{F_{\text{S}}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}
 \end{displaymath}
 which can be substituted into Equation (5) to get Equation (11):
 
 \begin{displaymath}
-{\mathbf{G}}_{3} {\mathbf{Φ}}_{3}={\mathbf{Ψ}}_{2} \left({\mathbf{Ψ}}_{1} \left({F_{S}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{F_{S}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{F_{S}} {\mathbf{T}}_{3}-{\mathbf{R}}_{3}
+{\mathbf{G}}_{3} {\mathbf{Φ}}_{3}={\mathbf{Ψ}}_{2} \left({\mathbf{Ψ}}_{1} \left({F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{F_{\text{S}}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{F_{\text{S}}} {\mathbf{T}}_{3}-{\mathbf{R}}_{3}
 \end{displaymath}
 and so on until Equation (12) is obtained from Equation (7):
 
 \begin{displaymath}
-{\mathbf{G}}_{n-1} {\mathbf{Φ}}_{n-1}={\mathbf{Ψ}}_{n-2} \left({\mathbf{Ψ}}_{n-3} \left({\mathbf{Ψ}}_{1} \left({F_{S}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{F_{S}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{F_{S}} {\mathbf{T}}_{n-2}-{\mathbf{R}}_{n-2}\right)+{F_{S}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}
+{\mathbf{G}}_{n-1} {\mathbf{Φ}}_{n-1}={\mathbf{Ψ}}_{n-2} \left({\mathbf{Ψ}}_{n-3} \left({\mathbf{Ψ}}_{1} \left({F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{F_{\text{S}}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{F_{\text{S}}} {\mathbf{T}}_{n-2}-{\mathbf{R}}_{n-2}\right)+{F_{\text{S}}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}
 \end{displaymath}
 Equation (9) can then be substituted into the left-hand side of Equation (12), resulting in:
 
 \begin{displaymath}
--\left(\frac{{F_{S}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}}{{\mathbf{Ψ}}_{n-1}}\right)={\mathbf{Ψ}}_{n-2} \left({\mathbf{Ψ}}_{n-3} \left({\mathbf{Ψ}}_{1} \left({F_{S}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{F_{S}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{F_{S}} {\mathbf{T}}_{n-2}-{\mathbf{R}}_{n-2}\right)+{F_{S}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}
+-\left(\frac{{F_{\text{S}}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}}{{\mathbf{Ψ}}_{n-1}}\right)={\mathbf{Ψ}}_{n-2} \left({\mathbf{Ψ}}_{n-3} \left({\mathbf{Ψ}}_{1} \left({F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{F_{\text{S}}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{F_{\text{S}}} {\mathbf{T}}_{n-2}-{\mathbf{R}}_{n-2}\right)+{F_{\text{S}}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}
 \end{displaymath}
 This can be rearranged by multiplying boths sides by ${\mathbf{Ψ}}_{n-1}$ and then distributing the multiplication of each $\mathbf{Ψ}$ over addition to obtain:
 
 \begin{displaymath}
--\left({F_{S}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}\right)={\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{1} \left({F_{S}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{2} \left({F_{S}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{\mathbf{Ψ}}_{n-1} \left({F_{S}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}\right)
+-\left({F_{\text{S}}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}\right)={\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{1} \left({F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{2} \left({F_{\text{S}}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{\mathbf{Ψ}}_{n-1} \left({F_{\text{S}}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}\right)
 \end{displaymath}
 The multiplication of the $\mathbf{Ψ}$ terms can be further distributed over the subtractions, resulting in the equation having terms that each either contain an $\mathbf{R}$ or a $\mathbf{T}$. The equation can then be rearranged so terms containing an $\mathbf{R}$ are on one side of the equality, and terms containing a $\mathbf{T}$ are on the other. The multiplication by the factor of safety is common to all of the $\mathbf{T}$ terms, and thus can be factored out, resulting in:
 
 \begin{displaymath}
-{F_{S}} \left({\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{1} {\mathbf{T}}_{1}+{\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{2} {\mathbf{T}}_{2}+{\mathbf{Ψ}}_{n-1} {\mathbf{T}}_{n-1}+{\mathbf{T}}_{n}\right)={\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{1} {\mathbf{R}}_{1}+{\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{2} {\mathbf{R}}_{2}+{\mathbf{Ψ}}_{n-1} {\mathbf{R}}_{n-1}+{\mathbf{R}}_{n}
+{F_{\text{S}}} \left({\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{1} {\mathbf{T}}_{1}+{\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{2} {\mathbf{T}}_{2}+{\mathbf{Ψ}}_{n-1} {\mathbf{T}}_{n-1}+{\mathbf{T}}_{n}\right)={\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{1} {\mathbf{R}}_{1}+{\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{2} {\mathbf{R}}_{2}+{\mathbf{Ψ}}_{n-1} {\mathbf{R}}_{n-1}+{\mathbf{R}}_{n}
 \end{displaymath}
 Isolating the factor of safety on the left-hand side and using compact notation for the products and sums yields Equation (13), which can also be seen in \hyperref[IM:fctSfty]{IM: fctSfty}:
 
 \begin{displaymath}
-{F_{S}}=\frac{\displaystyle\sum_{i=1}^{n-1}{{\mathbf{R}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\mathbf{Ψ}}_{v}}}+{\mathbf{R}}_{n}}{\displaystyle\sum_{i=1}^{n-1}{{\mathbf{T}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\mathbf{Ψ}}_{v}}}+{\mathbf{T}}_{n}}
+{F_{\text{S}}}=\frac{\displaystyle\sum_{i=1}^{n-1}{{\mathbf{R}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\mathbf{Ψ}}_{v}}}+{\mathbf{R}}_{n}}{\displaystyle\sum_{i=1}^{n-1}{{\mathbf{T}}_{i} \displaystyle\prod_{v=i}^{n-1}{{\mathbf{Ψ}}_{v}}}+{\mathbf{T}}_{n}}
 \end{displaymath}
-${F_{S}}$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and $\mathbf{G}$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}).
+${F_{\text{S}}}$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) and $\mathbf{G}$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}).
 
 \vspace{\baselineskip}
 \noindent
@@ -2187,7 +2187,7 @@ ${F_{S}}$ depends on the unknowns $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}) 
 Label & Normal and shear force proportionality constant
         
 \\ \midrule \\
-Input & ${\mathbf{x}_{slope}}$, ${\mathbf{y}_{slope}}$, ${\mathbf{y}_{wt}}$, ${γ_{w}}$, ${\mathbf{x}_{slip}}$, ${\mathbf{y}_{slip}}$, $const_f$
+Input & ${\mathbf{x}_{\text{slope}}}$, ${\mathbf{y}_{\text{slope}}}$, ${\mathbf{y}_{\text{wt}}}$, ${γ_{w}}$, ${\mathbf{x}_{\text{slip}}}$, ${\mathbf{y}_{\text{slip}}}$, $const_f$
         
 \\ \midrule \\
 Output & $λ$
@@ -2198,17 +2198,17 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           λ=\frac{\displaystyle\sum_{i=1}^{n}{{\mathbf{C}_{num,i}}}}{\displaystyle\sum_{i=1}^{n}{{\mathbf{C}_{den,i}}}}
+           λ=\frac{\displaystyle\sum_{i=1}^{n}{{\mathbf{C}_{\text{num},i}}}}{\displaystyle\sum_{i=1}^{n}{{\mathbf{C}_{\text{den},i}}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$λ$ is the proportionality constant (Unitless)}
-              \item{${\mathbf{C}_{num}}$ is the proportionality constant numerator (N)}
+              \item{${\mathbf{C}_{\text{num}}}$ is the proportionality constant numerator (N)}
               \item{$i$ is the index (Unitless)}
-              \item{${\mathbf{C}_{den}}$ is the proportionality constant denominator (N)}
+              \item{${\mathbf{C}_{\text{den}}}$ is the proportionality constant denominator (N)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${\mathbf{C}_{num}}$ is defined in \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} and ${\mathbf{C}_{den}}$ is defined in \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}.
+Notes & ${\mathbf{C}_{\text{num}}}$ is defined in \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum} and ${\mathbf{C}_{\text{den}}}$ is defined in \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}.
         
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
@@ -2224,24 +2224,24 @@ RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:nrmShrForNum]{IM: n
 From the moment equilibrium of \hyperref[GD:momentEql]{GD: momentEql} with the primary assumption for the Morgenstern-Price method of \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and associated definition \hyperref[GD:normShrR]{GD: normShrR}, Equation (14) can be derived:
 
 \begin{displaymath}
-0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+λ \frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)+\frac{-{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
+0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{\text{z},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{\text{z},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+λ \frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)+\frac{-{K_{\text{c}}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
 \end{displaymath}
 Rearranging the equation in terms of $λ$ leads to Equation (15):
 
 \begin{displaymath}
-λ=\frac{-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{-{K_{c}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}}{-\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}
+λ=\frac{-{\mathbf{G}}_{i} \left({\mathbf{h}_{\text{z},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{\text{z},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{-{K_{\text{c}}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}}{-\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}
 \end{displaymath}
 This equation can be simplified by applying assumptions \hyperref[assumpSF]{A: Seismic-Force} and \hyperref[assumpSL]{A: Surface-Load}, which state that the seismic and external forces, respectively, are zero:
 
 \begin{displaymath}
-λ=\frac{-{\mathbf{G}}_{i} \left({\mathbf{h}_{z,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{z,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{z,w,i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{z,w,i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}}{-\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}
+λ=\frac{-{\mathbf{G}}_{i} \left({\mathbf{h}_{\text{z},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{\text{z},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}}{-\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}
 \end{displaymath}
 Taking the summation of all slices, and applying \hyperref[assumpES]{A: Edge-Slices} to set ${\mathbf{G}}_{0}$, ${\mathbf{G}}_{n}$, ${\mathbf{H}}_{0}$, and ${\mathbf{H}}_{n}$ equal to zero, a general equation for the proportionality constant $λ$ is developed in Equation (16), which combines \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:nrmShrForNum]{IM: nrmShrForNum}, and \hyperref[IM:nrmShrForDen]{IM: nrmShrForDen}:
 
 \begin{displaymath}
-λ=\frac{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({{\mathbf{F}_{x}}^{G}}+{{\mathbf{F}_{x}}^{H}}\right) \tan\left({\mathbf{α}}_{i}\right)+{\mathbf{h}}_{i} -2 {\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}}
+λ=\frac{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({{\mathbf{F}_{\text{x}}}^{\text{G}}}+{{\mathbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\mathbf{α}}_{i}\right)+{\mathbf{h}}_{i} -2 {\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)}}{\displaystyle\sum_{i=1}^{n}{{\mathbf{b}}_{i} \left({\mathbf{G}}_{i} {\mathbf{f}}_{i}+{\mathbf{G}}_{i-1} {\mathbf{f}}_{i-1}\right)}}
 \end{displaymath}
-Equation (16) for $λ$ is a function of the unknown interslice normal forces $\mathbf{G}$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}) which itself depends on the unknown factor of safety ${F_{S}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}).
+Equation (16) for $λ$ is a function of the unknown interslice normal forces $\mathbf{G}$ (\hyperref[IM:intsliceFs]{IM: intsliceFs}) which itself depends on the unknown factor of safety ${F_{\text{S}}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}).
 
 \vspace{\baselineskip}
 \noindent
@@ -2254,10 +2254,10 @@ Equation (16) for $λ$ is a function of the unknown interslice normal forces $\m
 Label & Normal and shear force proportionality constant numerator
         
 \\ \midrule \\
-Input & ${\mathbf{x}_{slope}}$, ${\mathbf{y}_{slope}}$, ${\mathbf{y}_{wt}}$, ${γ_{w}}$, ${\mathbf{x}_{slip}}$, ${\mathbf{y}_{slip}}$
+Input & ${\mathbf{x}_{\text{slope}}}$, ${\mathbf{y}_{\text{slope}}}$, ${\mathbf{y}_{\text{wt}}}$, ${γ_{w}}$, ${\mathbf{x}_{\text{slip}}}$, ${\mathbf{y}_{\text{slip}}}$
         
 \\ \midrule \\
-Output & ${\mathbf{C}_{num}}$
+Output & ${\mathbf{C}_{\text{num}}}$
          
 \\ \midrule \\
 Input Constraints & 
@@ -2265,29 +2265,29 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{C}_{num,i}}=\begin{cases}
-                                {\mathbf{b}}_{1} \left({\mathbf{G}}_{1}+{\mathbf{H}}_{1}\right) \tan\left({\mathbf{α}}_{1}\right), & i=1\\
-{\mathbf{b}}_{i} \left({{\mathbf{F}_{x}}^{G}}+{{\mathbf{F}_{x}}^{H}}\right) \tan\left({\mathbf{α}}_{i}\right)+\mathbf{h} -2 {\mathbf{U}_{t,i}} \sin\left({\mathbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
+           {\mathbf{C}_{\text{num},i}}=\begin{cases}
+                                       {\mathbf{b}}_{1} \left({\mathbf{G}}_{1}+{\mathbf{H}}_{1}\right) \tan\left({\mathbf{α}}_{1}\right), & i=1\\
+{\mathbf{b}}_{i} \left({{\mathbf{F}_{\text{x}}}^{\text{G}}}+{{\mathbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\mathbf{α}}_{i}\right)+\mathbf{h} -2 {\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
 {\mathbf{b}}_{n} \left({\mathbf{G}}_{n-1}+{\mathbf{H}}_{n-1}\right) \tan\left({\mathbf{α}}_{n-1}\right), & i=n
-                                \end{cases}
+                                       \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\mathbf{C}_{num}}$ is the proportionality constant numerator (N)}
+              \item{${\mathbf{C}_{\text{num}}}$ is the proportionality constant numerator (N)}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{b}$ is the base width of slices (m)}
               \item{$\mathbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{α}$ is the base angles (${}^{\circ}$)}
-              \item{${{\mathbf{F}_{x}}^{G}}$ is the sums of the interslice normal forces (N)}
-              \item{${{\mathbf{F}_{x}}^{H}}$ is the sums of the interslice normal water forces (N)}
+              \item{${{\mathbf{F}_{\text{x}}}^{\text{G}}}$ is the sums of the interslice normal forces (N)}
+              \item{${{\mathbf{F}_{\text{x}}}^{\text{H}}}$ is the sums of the interslice normal water forces (N)}
               \item{$\mathbf{h}$ is the y-direction heights of slices (m)}
-              \item{${\mathbf{U}_{t}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
+              \item{${\mathbf{U}_{\text{g}}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{β}$ is the surface angles (${}^{\circ}$)}
               \item{$n$ is the number of slices (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{h}$ is defined in \hyperref[DD:slcHeight]{DD: slcHeight}, ${\mathbf{U}_{t}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, and $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}.
+Notes & $\mathbf{b}$ is defined in \hyperref[DD:lengthB]{DD: lengthB}, $\mathbf{H}$ is defined in \hyperref[DD:intersliceWtrF]{DD: intersliceWtrF}, $\mathbf{α}$ is defined in \hyperref[DD:angleA]{DD: angleA}, $\mathbf{h}$ is defined in \hyperref[DD:slcHeight]{DD: slcHeight}, ${\mathbf{U}_{\text{g}}}$ is defined in \hyperref[GD:srfWtrF]{GD: srfWtrF}, and $\mathbf{β}$ is defined in \hyperref[DD:angleB]{DD: angleB}.
         
 \\ \midrule \\
 Source & \cite{chen2005} and \cite{karchewski2012}
@@ -2300,7 +2300,7 @@ RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}
 \end{minipage}
 \paragraph{}
 \label{IM:nrmShrForNumDeriv}
-See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${\mathbf{C}_{num}}$.
+See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${\mathbf{C}_{\text{num}}}$.
 
 \vspace{\baselineskip}
 \noindent
@@ -2313,10 +2313,10 @@ See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${\mathbf{C}_{n
 Label & Normal and shear force proportionality constant denominator
         
 \\ \midrule \\
-Input & ${\mathbf{x}_{slip}}$, $const_f$
+Input & ${\mathbf{x}_{\text{slip}}}$, $const_f$
         
 \\ \midrule \\
-Output & ${\mathbf{C}_{den}}$
+Output & ${\mathbf{C}_{\text{den}}}$
          
 \\ \midrule \\
 Input Constraints & 
@@ -2324,15 +2324,15 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{C}_{den,i}}=\begin{cases}
-                                {\mathbf{b}}_{1} {\mathbf{f}}_{1} {\mathbf{G}}_{1}, & i=1\\
+           {\mathbf{C}_{\text{den},i}}=\begin{cases}
+                                       {\mathbf{b}}_{1} {\mathbf{f}}_{1} {\mathbf{G}}_{1}, & i=1\\
 {\mathbf{b}}_{i} \left({\mathbf{f}}_{i} {\mathbf{G}}_{i}+{\mathbf{f}}_{i-1} {\mathbf{G}}_{i-1}\right), & 2\leq{}i\leq{}n-1\\
 {\mathbf{b}}_{n} {\mathbf{G}}_{n-1} {\mathbf{f}}_{n-1}, & i=n
-                                \end{cases}
+                                       \end{cases}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\mathbf{C}_{den}}$ is the proportionality constant denominator (N)}
+              \item{${\mathbf{C}_{\text{den}}}$ is the proportionality constant denominator (N)}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{b}$ is the base width of slices (m)}
               \item{$\mathbf{f}$ is the interslice normal to shear force ratio variation function (Unitless)}
@@ -2353,7 +2353,7 @@ RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}
 \end{minipage}
 \paragraph{}
 \label{IM:nrmShrForDenDeriv}
-See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${\mathbf{C}_{den}}$.
+See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${\mathbf{C}_{\text{den}}}$.
 
 \vspace{\baselineskip}
 \noindent
@@ -2366,7 +2366,7 @@ See \hyperref[IM:nrmShrFor]{IM: nrmShrFor} for the derivation of ${\mathbf{C}_{d
 Label & Interslice normal forces
         
 \\ \midrule \\
-Input & ${\mathbf{x}_{slope}}$, ${\mathbf{y}_{slope}}$, ${\mathbf{y}_{wt}}$, $c'$, $φ'$, ${γ_{dry}}$, ${γ_{Sat}}$, ${γ_{w}}$, ${\mathbf{x}_{slip}}$, ${\mathbf{y}_{slip}}$, $const_f$
+Input & ${\mathbf{x}_{\text{slope}}}$, ${\mathbf{y}_{\text{slope}}}$, ${\mathbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, ${\mathbf{x}_{\text{slip}}}$, ${\mathbf{y}_{\text{slip}}}$, $const_f$
         
 \\ \midrule \\
 Output & $\mathbf{G}$
@@ -2378,8 +2378,8 @@ Output Constraints &
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{G}}_{i}=\begin{cases}
-                            \frac{{F_{S}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}}{{\mathbf{Φ}}_{1}}, & i=1\\
-\frac{{\mathbf{Ψ}}_{i-1} {\mathbf{G}}_{i-1}+{F_{S}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}}{{\mathbf{Φ}}_{i}}, & 2\leq{}i\leq{}n-1\\
+                            \frac{{F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}}{{\mathbf{Φ}}_{1}}, & i=1\\
+\frac{{\mathbf{Ψ}}_{i-1} {\mathbf{G}}_{i-1}+{F_{\text{S}}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}}{{\mathbf{Φ}}_{i}}, & 2\leq{}i\leq{}n-1\\
 0, & i=0\lor{}i=n
                             \end{cases}
            \end{displaymath}
@@ -2387,7 +2387,7 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{$\mathbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
-              \item{${F_{S}}$ is the factor of safety (Unitless)}
+              \item{${F_{\text{S}}}$ is the factor of safety (Unitless)}
               \item{$\mathbf{T}$ is the mobilized shear forces without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{R}$ is the resistive shear forces without the influence of interslice forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{Φ}$ is the first function for incorporating interslice forces into shear force (Unitless)}
@@ -2411,14 +2411,14 @@ RefBy & \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:intsliceFs]{IM: int
 This derivation is identical to the derivation for \hyperref[IM:fctSfty]{IM: fctSfty} up until Equation (3) shown again below:
 
 \begin{displaymath}
-{\mathbf{G}}_{i} {\mathbf{Φ}}_{i}={\mathbf{Ψ}}_{i-1} {\mathbf{G}}_{i-1} {\mathbf{Φ}}_{i-1}+{F_{S}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}
+{\mathbf{G}}_{i} {\mathbf{Φ}}_{i}={\mathbf{Ψ}}_{i-1} {\mathbf{G}}_{i-1} {\mathbf{Φ}}_{i-1}+{F_{\text{S}}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}
 \end{displaymath}
 A simple rearrangement of Equation (3) leads to Equation (17), also seen in \hyperref[IM:intsliceFs]{IM: intsliceFs}:
 
 \begin{displaymath}
-{\mathbf{G}}_{i}=\frac{{\mathbf{Ψ}}_{i-1} {\mathbf{G}}_{i-1}+{F_{S}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}}{{\mathbf{Φ}}_{i}}
+{\mathbf{G}}_{i}=\frac{{\mathbf{Ψ}}_{i-1} {\mathbf{G}}_{i-1}+{F_{\text{S}}} {\mathbf{T}}_{i}-{\mathbf{R}}_{i}}{{\mathbf{Φ}}_{i}}
 \end{displaymath}
-The cases shown in \hyperref[IM:intsliceFs]{IM: intsliceFs} for when $i=0$, $i=1$, or $i=n$ are derived by applying \hyperref[assumpES]{A: Edge-Slices}, which says that ${\mathbf{G}}_{0}$ and ${\mathbf{G}}_{n}$ are zero, to Equation (17). $\mathbf{G}$ depends on the unknowns ${F_{S}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}) and $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}).
+The cases shown in \hyperref[IM:intsliceFs]{IM: intsliceFs} for when $i=0$, $i=1$, or $i=n$ are derived by applying \hyperref[assumpES]{A: Edge-Slices}, which says that ${\mathbf{G}}_{0}$ and ${\mathbf{G}}_{n}$ are zero, to Equation (17). $\mathbf{G}$ depends on the unknowns ${F_{\text{S}}}$ (\hyperref[IM:fctSfty]{IM: fctSfty}) and $λ$ (\hyperref[IM:nrmShrFor]{IM: nrmShrFor}).
 
 \vspace{\baselineskip}
 \noindent
@@ -2431,10 +2431,10 @@ The cases shown in \hyperref[IM:intsliceFs]{IM: intsliceFs} for when $i=0$, $i=1
 Label & Critical slip surface identification
         
 \\ \midrule \\
-Input & ${\mathbf{x}_{slope}}$, ${\mathbf{y}_{slope}}$, ${\mathbf{x}_{wt}}$, ${\mathbf{y}_{wt}}$, $c'$, $φ'$, ${γ_{dry}}$, ${γ_{Sat}}$, ${γ_{w}}$, $const_f$
+Input & ${\mathbf{x}_{\text{slope}}}$, ${\mathbf{y}_{\text{slope}}}$, ${\mathbf{x}_{\text{wt}}}$, ${\mathbf{y}_{\text{wt}}}$, $c'$, $φ'$, ${γ_{\text{dry}}}$, ${γ_{\text{sat}}}$, ${γ_{w}}$, $const_f$
         
 \\ \midrule \\
-Output & ${{F_{S}}^{min}}$
+Output & ${{F_{\text{S}}}^{\text{min}}}$
          
 \\ \midrule \\
 Input Constraints & 
@@ -2442,25 +2442,25 @@ Input Constraints &
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{F_{S}}^{min}}=Υ\left({\mathbf{x}_{slope}},{\mathbf{y}_{slope}},{\mathbf{x}_{wt}},{\mathbf{y}_{wt}},c',φ',{γ_{dry}},{γ_{Sat}},{γ_{w}},const_f\right)
+           {{F_{\text{S}}}^{\text{min}}}=Υ\left({\mathbf{x}_{\text{slope}}},{\mathbf{y}_{\text{slope}}},{\mathbf{x}_{\text{wt}}},{\mathbf{y}_{\text{wt}}},c',φ',{γ_{\text{dry}}},{γ_{\text{sat}}},{γ_{w}},const_f\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${{F_{S}}^{min}}$ is the minimum factor of safety (Unitless)}
+              \item{${{F_{\text{S}}}^{\text{min}}}$ is the minimum factor of safety (Unitless)}
               \item{$Υ$ is the minimization function (Unitless)}
-              \item{${\mathbf{x}_{slope}}$ is the x-coordinates of the slope (m)}
-              \item{${\mathbf{y}_{slope}}$ is the y-coordinates of the slope (m)}
-              \item{${\mathbf{x}_{wt}}$ is the x-coordinates of the water table (m)}
-              \item{${\mathbf{y}_{wt}}$ is the y-coordinates of the water table (m)}
+              \item{${\mathbf{x}_{\text{slope}}}$ is the x-coordinates of the slope (m)}
+              \item{${\mathbf{y}_{\text{slope}}}$ is the y-coordinates of the slope (m)}
+              \item{${\mathbf{x}_{\text{wt}}}$ is the x-coordinates of the water table (m)}
+              \item{${\mathbf{y}_{\text{wt}}}$ is the y-coordinates of the water table (m)}
               \item{$c'$ is the effective cohesion (Pa)}
               \item{$φ'$ is the effective angle of friction (${}^{\circ}$)}
-              \item{${γ_{dry}}$ is the soil dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
-              \item{${γ_{Sat}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+              \item{${γ_{\text{dry}}}$ is the soil dry unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
+              \item{${γ_{\text{sat}}}$ is the soil saturated unit weight ($\frac{\text{N}}{\text{m}^{3}}$)}
               \item{${γ_{w}}$ is the unit weight of water ($\frac{\text{N}}{\text{m}^{3}}$)}
               \item{$const_f$ is the decision on f (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The minimization function must enforce the constraints on the critical slip surface expressed in \hyperref[assumpSSC]{A: Slip-Surface-Concave} and \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}. The sizes of ${\mathbf{x}_{wt}}$ and ${\mathbf{y}_{wt}}$ must be equal and not 1. The sizes of ${\mathbf{x}_{slope}}$ and ${\mathbf{y}_{slope}}$ must be equal and at least 2. The first and last ${\mathbf{x}_{wt}}$ values must be equal to the first and last ${\mathbf{x}_{slope}}$ values. ${\mathbf{x}_{wt}}$ and ${\mathbf{x}_{slope}}$ values must be monotonically increasing. ${{x_{slip}}^{maxExt}}$, ${{x_{slip}}^{maxEtr}}$, ${{x_{slip}}^{minExt}}$, and ${{x_{slip}}^{minEtr}}$ must be between or equal to the minimum and maximum ${\mathbf{x}_{slope}}$ values. ${{y_{slip}}^{max}}$ cannot be below the minimum ${\mathbf{y}_{slope}}$ value. ${{y_{slip}}^{min}}$ cannot be above the maximum ${\mathbf{y}_{slope}}$ value. All $x$ values of ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must be between ${{x_{slip}}^{minEtr}}$ and ${{x_{slip}}^{maxExt}}$. All $y$ values of ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must not be below ${{y_{slip}}^{min}}$. For any given vertex in ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ the $y$ value must not exceed the ${\mathbf{y}_{slope}}$ value corresponding to the same $x$ value. The first and last vertices in ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must each be equal to one of the vertices formed by ${\mathbf{x}_{slope}}$ and ${\mathbf{y}_{slope}}$. The slope between consecutive vertices must be always increasing as $x$ increases. The internal angle between consecutive vertices in ${\mathbf{x}_{cs}},{\mathbf{y}_{cs}}$ must not be below 110 degrees.
+Notes & The minimization function must enforce the constraints on the critical slip surface expressed in \hyperref[assumpSSC]{A: Slip-Surface-Concave} and \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}. The sizes of ${\mathbf{x}_{\text{wt}}}$ and ${\mathbf{y}_{\text{wt}}}$ must be equal and not 1. The sizes of ${\mathbf{x}_{\text{slope}}}$ and ${\mathbf{y}_{\text{slope}}}$ must be equal and at least 2. The first and last ${\mathbf{x}_{\text{wt}}}$ values must be equal to the first and last ${\mathbf{x}_{\text{slope}}}$ values. ${\mathbf{x}_{\text{wt}}}$ and ${\mathbf{x}_{\text{slope}}}$ values must be monotonically increasing. ${{x_{\text{slip}}}^{\text{maxExt}}}$, ${{x_{\text{slip}}}^{\text{maxEtr}}}$, ${{x_{\text{slip}}}^{\text{minExt}}}$, and ${{x_{\text{slip}}}^{\text{minEtr}}}$ must be between or equal to the minimum and maximum ${\mathbf{x}_{\text{slope}}}$ values. ${{y_{\text{slip}}}^{\text{max}}}$ cannot be below the minimum ${\mathbf{y}_{\text{slope}}}$ value. ${{y_{\text{slip}}}^{\text{min}}}$ cannot be above the maximum ${\mathbf{y}_{\text{slope}}}$ value. All $x$ values of ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must be between ${{x_{\text{slip}}}^{\text{minEtr}}}$ and ${{x_{\text{slip}}}^{\text{maxExt}}}$. All $y$ values of ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must not be below ${{y_{\text{slip}}}^{\text{min}}}$. For any given vertex in ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ the $y$ value must not exceed the ${\mathbf{y}_{\text{slope}}}$ value corresponding to the same $x$ value. The first and last vertices in ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must each be equal to one of the vertices formed by ${\mathbf{x}_{\text{slope}}}$ and ${\mathbf{y}_{\text{slope}}}$. The slope between consecutive vertices must be always increasing as $x$ increases. The internal angle between consecutive vertices in ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must not be below 110 degrees.
         
 \\ \midrule \\
 Source & \cite{li2010}
@@ -2484,29 +2484,29 @@ RefBy & \hyperref[displayGraph]{FR: Display-Graph} and \hyperref[determineCritSl
 \endhead
 $c'$ & $c'>0$ & $10.0\cdot{}10^{3}$ Pa & 10$\%$
 \\
-${{x_{slip}}^{maxEtr}}$ & -- & $20.0$ m & 10$\%$
+${{x_{\text{slip}}}^{\text{maxEtr}}}$ & -- & $20.0$ m & 10$\%$
 \\
-${{x_{slip}}^{maxExt}}$ & -- & $100.0$ m & 10$\%$
+${{x_{\text{slip}}}^{\text{maxExt}}}$ & -- & $100.0$ m & 10$\%$
 \\
-${{x_{slip}}^{minEtr}}$ & -- & $0.0$ m & 10$\%$
+${{x_{\text{slip}}}^{\text{minEtr}}}$ & -- & $0.0$ m & 10$\%$
 \\
-${{x_{slip}}^{minExt}}$ & -- & $50.0$ m & 10$\%$
+${{x_{\text{slip}}}^{\text{minExt}}}$ & -- & $50.0$ m & 10$\%$
 \\
-${\mathbf{x}_{slope}}$ & -- & $0.0$ m & 10$\%$
+${\mathbf{x}_{\text{slope}}}$ & -- & $0.0$ m & 10$\%$
 \\
-${\mathbf{x}_{wt}}$ & -- & $0.0$ m & 10$\%$
+${\mathbf{x}_{\text{wt}}}$ & -- & $0.0$ m & 10$\%$
 \\
-${{y_{slip}}^{max}}$ & -- & $30.0$ m & 10$\%$
+${{y_{\text{slip}}}^{\text{max}}}$ & -- & $30.0$ m & 10$\%$
 \\
-${{y_{slip}}^{min}}$ & -- & $0.0$ m & 10$\%$
+${{y_{\text{slip}}}^{\text{min}}}$ & -- & $0.0$ m & 10$\%$
 \\
-${\mathbf{y}_{slope}}$ & -- & $0.0$ m & 10$\%$
+${\mathbf{y}_{\text{slope}}}$ & -- & $0.0$ m & 10$\%$
 \\
-${\mathbf{y}_{wt}}$ & -- & $0.0$ m & 10$\%$
+${\mathbf{y}_{\text{wt}}}$ & -- & $0.0$ m & 10$\%$
 \\
-${γ_{dry}}$ & ${γ_{dry}}>0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{\text{dry}}}$ & ${γ_{\text{dry}}}>0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-${γ_{Sat}}$ & ${γ_{Sat}}>0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{\text{sat}}}$ & ${γ_{\text{sat}}}>0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
 ${γ_{w}}$ & ${γ_{w}}>0$ & $9.8\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
@@ -2526,9 +2526,9 @@ $φ'$ & $0<φ'<90$ & $25.0$ ${}^{\circ}$ & 10$\%$
 \\
 \midrule
 \endhead
-${F_{S}}$ & ${F_{S}}>0$
+${F_{\text{S}}}$ & ${F_{\text{S}}}>0$
 \\
-$(x,y)$ & --
+$\text{(x,y)}$ & --
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -2560,35 +2560,35 @@ This section provides the functional requirements, the tasks and behaviours that
 \\
 \midrule
 \endhead
-$(x,y)$ & Cartesian position coordinates & m
+$\text{(x,y)}$ & Cartesian position coordinates & m
 \\
 $c'$ & Effective cohesion & Pa
 \\
 $const_f$ & Decision on f & --
 \\
-${{x_{slip}}^{maxEtr}}$ & Maximum entry x-coordinate & m
+${{x_{\text{slip}}}^{\text{maxEtr}}}$ & Maximum entry x-coordinate & m
 \\
-${{x_{slip}}^{maxExt}}$ & Maximum exit x-coordinate & m
+${{x_{\text{slip}}}^{\text{maxExt}}}$ & Maximum exit x-coordinate & m
 \\
-${{x_{slip}}^{minEtr}}$ & Minimum exit x-coordinate & m
+${{x_{\text{slip}}}^{\text{minEtr}}}$ & Minimum exit x-coordinate & m
 \\
-${{x_{slip}}^{minExt}}$ & Minimum exit x-coordinate & m
+${{x_{\text{slip}}}^{\text{minExt}}}$ & Minimum exit x-coordinate & m
 \\
-${\mathbf{x}_{slope}}$ & X-coordinates of the slope & m
+${\mathbf{x}_{\text{slope}}}$ & X-coordinates of the slope & m
 \\
-${\mathbf{x}_{wt}}$ & X-coordinates of the water table & m
+${\mathbf{x}_{\text{wt}}}$ & X-coordinates of the water table & m
 \\
-${{y_{slip}}^{max}}$ & Maximum y-coordinate & m
+${{y_{\text{slip}}}^{\text{max}}}$ & Maximum y-coordinate & m
 \\
-${{y_{slip}}^{min}}$ & Minimum y-coordinate & m
+${{y_{\text{slip}}}^{\text{min}}}$ & Minimum y-coordinate & m
 \\
-${\mathbf{y}_{slope}}$ & Y-coordinates of the slope & m
+${\mathbf{y}_{\text{slope}}}$ & Y-coordinates of the slope & m
 \\
-${\mathbf{y}_{wt}}$ & Y-coordinates of the water table & m
+${\mathbf{y}_{\text{wt}}}$ & Y-coordinates of the water table & m
 \\
-${γ_{dry}}$ & Soil dry unit weight & $\frac{\text{N}}{\text{m}^{3}}$
+${γ_{\text{dry}}}$ & Soil dry unit weight & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-${γ_{Sat}}$ & Soil saturated unit weight & $\frac{\text{N}}{\text{m}^{3}}$
+${γ_{\text{sat}}}$ & Soil saturated unit weight & $\frac{\text{N}}{\text{m}^{3}}$
 \\
 ${γ_{w}}$ & Unit weight of water & $\frac{\text{N}}{\text{m}^{3}}$
 \\
@@ -2606,17 +2606,17 @@ $φ'$ & Effective angle of friction & ${}^{\circ}$
 \endhead
 $const_f$ & decision on f
 \\
-${{x_{slip}}^{maxExt}}$ & maximum exit x-coordinate
+${{x_{\text{slip}}}^{\text{maxExt}}}$ & maximum exit x-coordinate
 \\
-${{x_{slip}}^{maxEtr}}$ & maximum entry x-coordinate
+${{x_{\text{slip}}}^{\text{maxEtr}}}$ & maximum entry x-coordinate
 \\
-${{x_{slip}}^{minExt}}$ & minimum exit x-coordinate
+${{x_{\text{slip}}}^{\text{minExt}}}$ & minimum exit x-coordinate
 \\
-${{x_{slip}}^{minEtr}}$ & minimum exit x-coordinate
+${{x_{\text{slip}}}^{\text{minEtr}}}$ & minimum exit x-coordinate
 \\
-${{y_{slip}}^{max}}$ & maximum y-coordinate
+${{y_{\text{slip}}}^{\text{max}}}$ & maximum y-coordinate
 \\
-${{y_{slip}}^{min}}$ & minimum y-coordinate
+${{y_{\text{slip}}}^{\text{min}}}$ & minimum y-coordinate
 \\
 \bottomrule
 \caption{Inputs to be returned as output}
@@ -2932,17 +2932,15 @@ title={Comparison of slope stability methods of analysis},
 journal={Canadian Geotechnical Journal},
 year={1977},
 month=apr,
-pages={"429-439"},
+pages={429--439},
 volume={14},
 number={3}}
-
 @book{huston2008,
 author={Huston, Ronald and Josephs, Harold},
 title={Practical stress analysis in engineering design},
 publisher={CRC Press},
 year={2008},
 edition={3}}
-
 @inproceedings{karchewski2012,
 author={Karchewski, Brandon and Guo, Peijun and Stolle, Dieter},
 title={Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis},
@@ -2950,23 +2948,20 @@ booktitle={Proceedings of the 65th annual Canadian GeoTechnical Conference},
 year={2012},
 address={Winnipeg, MB, Canada},
 organization={Canadian Geotechnical Society}}
-
 @mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
 title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
-
 @article{morgenstern1965,
 author={Morgenstern, N. R. and Price, P. E.},
 title={The analysis of the stability of general slip surfaces},
 journal={Géotechnique},
 year={1965},
 month=jan,
-pages={"79-93"},
+pages={79--93},
 number={15}}
-
 @article{parnasClements1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
@@ -2975,9 +2970,8 @@ year={1986},
 month=feb,
 volume={12},
 number={2},
-pages={"251-257"},
+pages={251--257},
 address={Washington, USA}}
-
 @article{chen2005,
 author={Qian, Q. H. and Zhu, D. Y. and Lee, C. F. and Chen, G. R.},
 title={A concise algorithm for computing the factor of safety using the morgenstern price method},
@@ -2986,8 +2980,7 @@ year={2005},
 month=feb,
 volume={42},
 number={1},
-pages={"272-278"}}
-
+pages={272--278}}
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
@@ -2995,16 +2988,15 @@ booktitle={Proceedings of the First International Workshop on Situational Requir
 year={2005},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},
-pages={"107-121"},
+pages={107--121},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
-
 @article{li2010,
 author={Yu-Chao, Li and Yun-Min, Chen and Zhan, Tony L. T. and Sao-Sheng, Ling and Cleall, Peter John},
 title={An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm},
 journal={Canadian Geotechnical Journal},
 year={2010},
 month=jun,
-pages={"806-820"},
+pages={806--820},
 volume={47},
 number={7}}
 \end{filecontents*}

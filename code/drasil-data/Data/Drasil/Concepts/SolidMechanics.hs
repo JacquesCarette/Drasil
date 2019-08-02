@@ -40,4 +40,4 @@ shearForce = dccWDS "shearForce" (cn' "shear force")
   (S "A" +:+ phrase force +:+ S "applied parallel to the plane of the material.")
   
 stffness   = dccWDS "stffness" (cn "stiffness") 
-  (S "The extent a body" +:+ S "resists" +:+. phrase strain)
+  (S "The extent a body resists" +:+. phrase strain)

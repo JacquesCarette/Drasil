@@ -51,9 +51,9 @@ ctrOfMassDD = ddNoRefs ctrOfMass Nothing "ctrOfMass"
 ctrOfMass :: QDefinition
 ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
--- FIXME (Atomic "i") is a horrible hack
+-- FIXME (Variable "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = sumAll (Atomic "i") (sy massI * sy posI) / sy mTot
+ctrOfMassEqn = sumAll (Variable "i") (sy massI * sy posI) / sy mTot
 
 -- DD2 : Linear displacement --
 
@@ -362,8 +362,8 @@ momentOfInertia :: QDefinition
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
-momentOfInertiaEqn = sumAll (Atomic "i") $ sy massI * (sy rRot $^ 2)
---sumAll (Atomic "i") ((sy massI) * (sy rRot 
+momentOfInertiaEqn = sumAll (Variable "i") $ sy massI * (sy rRot $^ 2)
+
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", phrase QP.momentOfInertia, ch QP.momentOfInertia,
  S "of a body measures how much", phrase QP.torque,

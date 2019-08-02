@@ -1,6 +1,7 @@
 package Projectile;
 
 /** \file Calculations.java
+    \brief Provides functions for calculating the outputs
 */
 import java.util.Arrays;
 import java.util.BitSet;

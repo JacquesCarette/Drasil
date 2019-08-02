@@ -8,14 +8,14 @@ module Utils.Drasil (
   -- Fold
   EnumType(..), WrapType(..), SepType(..), FoldType(..), foldConstraints,
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
-  foldlSent_,foldlSentCol, foldlsC,
+  foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
   -- Misc
-  addPercent, bulletFlat, bulletNested, chgsStart, displayConstrntsAsSet,
-  eqN, eqnWSource, fromReplace, fmtU, follows, getTandS, itemRefToSent,
-  makeListRef, makeTMatrix, maybeChanged, maybeExpanded, maybeWOVerb,
-  mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain, showingCxnBw,
-  sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym, typUncr,
-  underConsidertn, unwrap, weave, zipSentList,
+  addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart,
+  displayConstrntsAsSet, eqN, eqnWSource, fromReplace, fmtU, follows,
+  getTandS, itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
+  maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
+  showingCxnBw, sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym,
+  typUncr, underConsidertn, unwrap, weave, zipSentList,
   -- Phrase
   and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',
   compoundNCP1, compoundNCPlPh, compoundNCPlPl, for, for', for'', of_, of_',

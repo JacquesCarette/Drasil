@@ -10,6 +10,7 @@ import Prelude hiding (log)
 
 import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
 import Data.Drasil.Constraints (gtZeroConstr)
+import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac, 
@@ -82,12 +83,12 @@ plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
     sfwrc $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
 aspectRatio = uvc "aspectRatio" (aR ^. term)
-  (Atomic "AR") Real
+  (Variable "AR") Real
   [ physc $ UpFrom (Inc, 1), 
     sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5) defaultUncrt
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
-  (sub cP (Atomic "btol")) Real
+  (sub cP (Concat [lBreak, lTol])) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (uncty 0.001 Nothing)
 
 charWeight = uqcND "charWeight" (nounPhraseSP "charge weight") 
@@ -97,11 +98,11 @@ charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
     (dbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
-  (Atomic "TNT") Real
+  (Variable "TNT") Real
   [ gtZeroConstr ] (dbl 1.0) defaultUncrt
 
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
-  (Atomic "SD") metre Real
+  (Variable "SD") metre Real
   [ gtZeroConstr,
     sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)]
   (dbl 45) defaultUncrt
@@ -125,24 +126,22 @@ glassTypeCon  = cvc "glassTypeCon" (nounPhraseSent $ S "glass type" +:+
 {--}
 
 outputs :: [QuantityDict]
-outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr] 
-
-probBr :: ConstrainedChunk
-probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
-  (sub cP lB) Rational
-  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr]
 
 tmSymbols :: [QuantityDict]
 tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad] 
 
-probFail :: ConstrainedChunk
-probFail = cvc "probFail" (nounPhraseSP "probability of failure")
-  (sub cP lF) Rational
+probBr, probFail, pbTolfail :: ConstrainedChunk
+probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
+  (sub cP lBreak) Rational
   [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
 
-pbTolfail :: ConstrainedChunk
+probFail = cvc "probFail" (nounPhraseSP "probability of failure")
+  (sub cP lFail) Rational
+  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+
 pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure") 
-  (sub cP (Atomic "ftol")) Real
+  (sub cP (Concat [lFail, lTol])) Real
   [ physc $ Bounded (Exc, 0) (Exc, 1)] (Just $ dbl 0.008) 
   
 
@@ -159,31 +158,31 @@ dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax,
 
 dimMax     = mkQuantDef (unitary "dimMax"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "max")) metre Real) (dbl 5)
+  (subMax lD) metre Real) (dbl 5)
 
 dimMin     = mkQuantDef (unitary "dimMin"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "min")) metre Real) (dbl 0.1)
+  (subMin lD) metre Real) (dbl 0.1)
 
 arMax     = mkQuantDef (vc "arMax"
   (nounPhraseSP "maximum aspect ratio")
-  (sub (Atomic "AR") (Atomic "max")) Rational) (dbl 5)
+  (subMax (Variable "AR")) Rational) (dbl 5)
 
 cWeightMax = mkQuantDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
-  (sub (eqSymb charWeight) (Atomic "max")) kilogram Rational) (dbl 910)
+  (subMax (eqSymb charWeight)) kilogram Rational) (dbl 910)
 
 cWeightMin = mkQuantDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
-  (sub (eqSymb charWeight) (Atomic "min")) kilogram Rational) (dbl 4.5)
+  (subMin (eqSymb charWeight)) kilogram Rational) (dbl 4.5)
 
 sdMax     = mkQuantDef (unitary "sdMax"
   (nounPhraseSP "maximum stand off distance permissible for input")
-  (sub (eqSymb standOffDist) (Atomic "max")) metre Real) (dbl 130)
+  (subMax (eqSymb standOffDist)) metre Real) (dbl 130)
 
 sdMin     = mkQuantDef (unitary "sdMin"
   (nounPhraseSP "minimum stand off distance permissible for input") 
-  (sub (eqSymb standOffDist) (Atomic "min")) metre Real) (dbl 6)
+  (subMin (eqSymb standOffDist)) metre Real) (dbl 6)
 
 
 {--}
@@ -199,16 +198,16 @@ demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ pascal Rational --correct Space used?
 
 tmDemand      = unitary "tmDemand"      (nounPhraseSP "applied load (demand) or pressure")
-  (Atomic "Load") pascal Rational --correct Space used?
+  (Variable "Load") pascal Rational --correct Space used?
   
 lRe      = unitary "lRe"      (nounPhraseSP "load resistance")
-  (Atomic "LR") pascal Rational --correct Space used?
+  (Variable "LR") pascal Rational --correct Space used?
 
 tmLRe      = unitary "tmLRe"      (nounPhraseSP "capacity or load resistance")
-  (Atomic "capacity") pascal Rational --correct Space used?
+  (Variable "capacity") pascal Rational --correct Space used?
 
 nonFactorL      = unitary "nonFactorL"      (nounPhraseSP "non-factored load")
-  (Atomic "NFL") pascal Rational --correct Space used?
+  (Variable "NFL") pascal Rational --correct Space used?
 
 
 eqTNTWeight = unitary "eqTNTWeight" 
@@ -216,19 +215,19 @@ eqTNTWeight = unitary "eqTNTWeight"
   (sub (eqSymb charWeight) (eqSymb tNT)) kilogram Real
 
 loadDur    = unitary "loadDur"    (nounPhraseSP "duration of load")
-  (sub lT lD) second Real
+  (sub lT lDur) second Real
 
 minThick   = unitary "minThick"   (nounPhraseSP "minimum thickness")
   lH metre Rational
 
 sdx         = unitary "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))
-  (sub (eqSymb standOffDist) lX) metre Real
+  (subX (eqSymb standOffDist)) metre Real
 
 sdy         = unitary "sdy" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase yComp))
-  (sub (eqSymb standOffDist) lY) metre Real
+  (subY (eqSymb standOffDist)) metre Real
 
 sdz         = unitary "sdz" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase zComp))
-  (sub (eqSymb standOffDist) lZ) metre Real
+  (subZ (eqSymb standOffDist)) metre Real
 
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
   lK sFlawPU Real
@@ -249,41 +248,46 @@ riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, sdfTol,
 dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
   (hat lQ) Real
 
-gTF           = vc "gTF"             (glassTypeFac ^. term) (Atomic "GTF") Integer
+gTF           = vc "gTF"             (glassTypeFac ^. term) (Variable "GTF") Integer
 
 isSafePb      = vc "isSafePb"        (nounPhraseSP $ "variable that is assigned true when calculated" ++
   " probability is less than tolerable probability")
-  (Atomic "is-safePb") Boolean
+  (Variable "is-safePb") Boolean
 
 isSafeProb      = vc "isSafeProb"        (nounPhraseSP $ "variable that is assigned true when" ++
   " probability of failure is less than tolerable probability of failure")
-  (Atomic "is-safeProb") Boolean
+  (Variable "is-safeProb") Boolean
 
 isSafeLR      = vc "isSafeLR"        (nounPhraseSP $ "variable that is assigned true when load resistance"
   ++ " (capacity) is greater than load (demand)")
-  (Atomic "is-safeLR") Boolean
+  (Variable "is-safeLR") Boolean
 
 isSafeLoad      = vc "isSafeLoad"        (nounPhraseSP $ "variable that is assigned true when load resistance"
   ++ " (capacity) is greater than applied load (demand)")
-  (Atomic "is-safeLoad") Boolean
+  (Variable "is-safeLoad") Boolean
 
-lDurFac       = vc'' loadDurFactor (Atomic "LDF") Real
+lDurFac       = vc'' loadDurFactor (Variable "LDF") Real
 
-loadSF        = vc'' lShareFac (Atomic "LSF") Natural
+loadSF        = vc'' lShareFac (Variable "LSF") Natural
 
 
 riskFun      = vc "riskFun"    (nounPhraseSP "risk of failure") cB Real
 
 sdfTol       = vc "sdfTol"     (nounPhraseSP $ "stress distribution" ++
   " factor (Function) based on Pbtol") 
-  (sub (eqSymb stressDistFac) (Atomic "tol")) Real
+  (sub (eqSymb stressDistFac) lTol) Real
 
 stressDistFac = vc "stressDistFac" (nounPhraseSP $ "stress distribution" 
   ++ " factor (Function)") cJ Real
 
 tolLoad       = vc "tolLoad"       (nounPhraseSP "tolerable load")
-  (sub (eqSymb dimlessLoad) (Atomic "tol")) Real
+  (sub (eqSymb dimlessLoad) lTol) Real
 
+lBreak, lDur, lFail, lTol :: Symbol
+lBreak = Label "b"
+lDur   = Label "d"
+lFail  = Label "f"
+lTol   = Label "tol"
 
 terms :: [ConceptChunk]
 terms = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,

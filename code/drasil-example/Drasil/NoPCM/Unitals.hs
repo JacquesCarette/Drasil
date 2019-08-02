@@ -8,7 +8,7 @@ import Data.Drasil.Quantities.Thermodynamics (temp)
 import Drasil.SWHS.Unitals (coilHTC, coilSA, diam, htCapW, tankLength, 
   tempC, timeFinal, timeStep, wDensity, absTol, relTol, tankLengthMin, 
   tankLengthMax, wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax, 
-  coilHTCMin, coilHTCMax, timeFinalMax, consTolAux)
+  coilHTCMin, coilHTCMax, timeFinalMax, consTolAux, lInit)
 
 inputs :: [QuantityDict]
 inputs = map qw constrained ++ map qw unconstrained
@@ -24,7 +24,7 @@ constrained =  [coilSA, htCapW, coilHTC, tempInit,
 tempInit :: UncertQ
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
   "The temperature at the beginning of the simulation"
-  (sub (eqSymb temp)(Atomic "init")) centigrade Real
+  (sub (eqSymb temp) lInit) centigrade Real
   [physc $ Bounded (Exc,0) (Exc,100)] (dbl 40) defaultUncrt
 
 specParamValList :: [QDefinition]

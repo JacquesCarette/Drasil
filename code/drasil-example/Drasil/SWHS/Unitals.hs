@@ -183,7 +183,7 @@ tauSP = uc' "tauSP" (nounPhraseSP "ODE parameter for solid PCM")
   "Derived parameter based on rate of change of temperature of phase change material"
   (sup (sub lTau lPCM) lSolid) second
 
-tauW = uc' "tauW" (nounPhraseSP "ODE parameter for water")
+tauW = uc' "tauW" (nounPhraseSP "ODE parameter for water related to decay time")
   "Derived parameter based on rate of change of temperature of water"
   (sub lTau lWater) second
 
@@ -200,12 +200,13 @@ thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM"
 
 -- FIXME: this list should not be hand-constructed
 unitless :: [DefinedQuantityDict]
-unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, fracMin, consTol]
+unitless = [uNormalVect, dqdWr surface, eta, meltFrac, gradient, fracMin, consTol,
+            aspectRatio, aspectRatioMin, aspectRatioMax]
 
-eta, meltFrac, fracMin, consTol :: DefinedQuantityDict
+eta, meltFrac, fracMin, consTol, aspectRatio, aspectRatioMin, aspectRatioMax :: DefinedQuantityDict
 
 -- FIXME: should this have units?
-eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter")
+eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter related to decay rate")
   "Derived parameter based on rate of change of temperature of water")
   (const lEta) Real Nothing
 
@@ -223,6 +224,19 @@ consTol = dqd' (dcc "consTol"
   (nounPhraseSP "relative tolerance for conservation of energy") 
   "relative tolerance for conservation of energy")
   (const $ sub cC lTol) Real Nothing
+
+aspectRatio = dqd' (dcc "aspectRatio" 
+  (nounPhraseSP "aspect ratio")
+  "ratio of tank diameter to tank length")
+   (const $ Variable "AR") Real Nothing
+
+aspectRatioMin = dqd' (dcc "aspectRatioMin" 
+  (nounPhraseSP "minimum aspect ratio") "minimum aspect ratio")
+   (const $ subMin (eqSymb aspectRatio)) Real Nothing
+
+aspectRatioMax = dqd' (dcc "aspectRatioMax" 
+  (nounPhraseSP "maximum aspect ratio") "maximum aspect ratio")
+   (const $ subMax (eqSymb aspectRatio)) Real Nothing
 
 -----------------
 -- Constraints --
@@ -256,7 +270,7 @@ tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
 -- Constraint 2
 diam = uqc "diam" (nounPhraseSP "diameter of tank")
   "The diameter of the tank" cD metre Rational
-  [gtZeroConstr]
+  [gtZeroConstr, sfwrc $ Bounded (Inc, sy arMin) (Inc, sy arMax)]
   (dbl 0.412) defaultUncrt
 
 -- Constraint 3
@@ -447,18 +461,17 @@ relTol = uvc "relTol" (nounPhraseSP "relative tolerance")
 -------------------------
 
 specParamValList :: [QDefinition]
-specParamValList = [tankLengthMin, tankLengthMax,
-  pcmDensityMin, pcmDensityMax, wDensityMin, wDensityMax,
-  htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax, 
-  htFusionMin, htFusionMax, coilSAMax,
-  htCapWMin, htCapWMax, coilHTCMin, coilHTCMax,
-  pcmHTCMin, pcmHTCMax, timeFinalMax, fracMinAux, consTolAux]
+specParamValList = [tankLengthMin, tankLengthMax, pcmDensityMin, pcmDensityMax,
+  wDensityMin, wDensityMax, htCapSPMin, htCapSPMax, htCapLPMin, htCapLPMax,
+  htFusionMin, htFusionMax, coilSAMax, htCapWMin, htCapWMax, coilHTCMin,
+  coilHTCMax, pcmHTCMin, pcmHTCMax, timeFinalMax, fracMinAux, consTolAux,
+  arMin, arMax]
 
 tankLengthMin, tankLengthMax, pcmDensityMin, 
-  pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, 
-  htCapSPMax, htCapLPMin, htCapLPMax, htFusionMin, htFusionMax, coilSAMax,
-  htCapWMin, htCapWMax, coilHTCMin, coilHTCMax, pcmHTCMin,
-  pcmHTCMax, timeFinalMax, fracMinAux, consTolAux :: QDefinition
+  pcmDensityMax, wDensityMin, wDensityMax, htCapSPMin, htCapSPMax, htCapLPMin,
+  htCapLPMax, htFusionMin, htFusionMax, coilSAMax, htCapWMin, htCapWMax,
+  coilHTCMin, coilHTCMax, pcmHTCMin, pcmHTCMax, timeFinalMax, fracMinAux,
+  consTolAux, arMin, arMax :: QDefinition
 
 consTolAux = mkQuantDef consTol $ perc 1 5
 
@@ -471,7 +484,10 @@ tankLengthMax = mkQuantDef (unitary "tankLengthMax"
   (nounPhraseSP "maximum length of tank")
   (subMax (eqSymb tankLength)) metre Rational) 50
 
-fracMinAux    = mkQuantDef fracMin $ dbl 1.0e-6
+fracMinAux = mkQuantDef fracMin $ dbl 1.0e-6
+
+arMin = mkQuantDef aspectRatioMin $ dbl 0.01
+arMax = mkQuantDef aspectRatioMax 100
 
 -- Used in Constraint 5
 pcmDensityMin = mkQuantDef (unitary' "pcmDensityMin"

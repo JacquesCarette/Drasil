@@ -5,10 +5,10 @@ import Language.Drasil
 import Data.Drasil.SI_Units (centigrade)
 import Data.Drasil.Quantities.Thermodynamics (temp)
 
-import Drasil.SWHS.Unitals (coilHTC, coilSA, diam, htCapW, tankLength, 
-  tempC, timeFinal, timeStep, wDensity, absTol, relTol, tankLengthMin, 
-  tankLengthMax, wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax, 
-  coilHTCMin, coilHTCMax, timeFinalMax, consTolAux, lInit)
+import Drasil.SWHS.Unitals (absTol, arMax, arMin, coilHTC, coilHTCMax,
+  coilHTCMin, coilSA, coilSAMax, diam, htCapW, htCapWMax, htCapWMin, lInit,
+  relTol, tankLength, tankLengthMax, tankLengthMin, tempC, timeFinal,
+  timeFinalMax, timeStep, wDensity, wDensityMax, wDensityMin)
 
 inputs :: [QuantityDict]
 inputs = map qw constrained ++ map qw unconstrained
@@ -30,4 +30,4 @@ tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
 specParamValList :: [QDefinition]
 specParamValList = [tankLengthMin, tankLengthMax,
   wDensityMin, wDensityMax, coilSAMax, htCapWMin, htCapWMax, 
-  coilHTCMin, coilHTCMax, timeFinalMax, consTolAux]
+  coilHTCMin, coilHTCMax, timeFinalMax, arMin, arMax]

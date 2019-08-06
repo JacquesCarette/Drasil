@@ -275,7 +275,7 @@
                 </tr>
                 <tr>
                   <td><em>τ<sub>W</sub></em></td>
-                  <td>ODE parameter for water</td>
+                  <td>ODE parameter for water related to decay time</td>
                   <td>s</td>
                 </tr>
                 <tr>
@@ -1046,6 +1046,80 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
+                <div id="DD:balanceDecayRate">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:balanceDecayRate</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          ODE parameter for water related to decay time
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>τ<sub>W</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">s</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        <div class="equation">
+                          <em>τ<sub>W</sub> = <div class="fraction">
+                                                <span class="fup">
+                                                  m<sub>W</sub>&#8239;C<sub>W</sub>
+                                                </span>
+                                                <span class="fdn">
+                                                  h<sub>C</sub>&#8239;A<sub>C</sub>
+                                                </span>
+                                              </div></em>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (s)
+                          </li>
+                          <li><em>m<sub>W</sub></em> is the mass of water (kg)</li>
+                          <li>
+                            <em>C<sub>W</sub></em> is the specific heat capacity of water (J/(kg&sdot;&deg;C))
+                          </li>
+                          <li>
+                            <em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))
+                          </li>
+                          <li>
+                            <em>A<sub>C</sub></em> is the heating coil surface area (m<sup>2</sup>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#koothoor2013>koothoor2013</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a> and <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -1121,7 +1195,9 @@
                           <li>
                             <em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
                           </li>
-                          <li><em>τ<sub>W</sub></em> is the ODE parameter for water (s)</li>
+                          <li>
+                            <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (s)
+                          </li>
                           <li>
                             <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
                           </li>
@@ -1132,14 +1208,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
-                                                                                                                                                                                         <span class="fup">
-                                                                                                                                                                                           m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                                                                                                                                                         </span>
-                                                                                                                                                                                         <span class="fdn">
-                                                                                                                                                                                           h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                                                                                                                         </span>
-                                                                                                                                                                                       </div></em> is a constant (s). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>).
+                          <em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub></em> is from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>. The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>).
                         </p>
                       </td>
                     </tr>
@@ -1155,7 +1224,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a>, <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>, <a href=#findMass>FR: Find-Mass</a>, and <a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>
+                          <a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a>, <a href=#findMass>FR: Find-Mass</a>, and <a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>
                         </p>
                       </td>
                     </tr>
@@ -1203,7 +1272,7 @@
                                    </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
                     </div>
                     <p class="paragraph">
-                      Setting <em>τ<sub>W</sub></em> = <em>m<sub>W</sub></em> <em>C<sub>W</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em>, Equation (4) can be written in its final form as:
+                      By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>), this can be written as:
                     </p>
                     <div class="equation">
                       <em><div class="fraction">
@@ -1342,7 +1411,9 @@
                     <tr>
                       <td><em>D</em></td>
                       <td><em>D&thinsp;&gt;&thinsp;0</em></td>
-                      <td>--</td>
+                      <td>
+                        <em>AR<sub>min</sub>&thinsp;&le;&thinsp;D&thinsp;&le;&thinsp;AR<sub>max</sub></em>
+                      </td>
                       <td><em>0.412</em> m</td>
                       <td>10<em>%</em></td>
                     </tr>
@@ -1484,7 +1555,7 @@
               </p>
               <p>
                 <div id="outputInputDerivQuants">
-                  Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>, the mass from <a href=#findMass>FR: Find-Mass</a>, and <em>τ<sub>W</sub></em> (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>).
+                  Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>, the mass from <a href=#findMass>FR: Find-Mass</a>, and <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>).
                 </div>
               </p>
               <p>
@@ -1706,6 +1777,22 @@
               <td></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2103,6 +2190,7 @@
             <tr>
               <th></th>
               <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
+              <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
               <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
@@ -2112,6 +2200,18 @@
             </tr>
             <tr>
               <td><a href=#DD:htFluxC>DD: htFluxC</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2129,9 +2229,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:sensHtE>TM: sensHtE</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2149,9 +2251,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:rocTempSimp>GD: rocTempSimp</a></td>
+              <td></td>
               <td></td>
               <td>X</td>
               <td></td>
@@ -2163,6 +2267,7 @@
             <tr>
               <td><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></td>
               <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2172,6 +2277,7 @@
             </tr>
             <tr>
               <td><a href=#IM:heatEInWtr>IM: heatEInWtr</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -2190,6 +2296,7 @@
             <tr>
               <th></th>
               <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
+              <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
               <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
@@ -2236,9 +2343,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#waterEnergyGS>GS: Predict-Water-Energy</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2278,9 +2387,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#findMass>FR: Find-Mass</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2322,17 +2433,19 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>
               </td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td>X</td>
               <td>X</td>
@@ -2350,6 +2463,7 @@
               <td>
                 <a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2373,6 +2487,7 @@
               <td>
                 <a href=#calcChgHeatEnergyWtrOverTime>FR: Calculate-Change-Heat_Energy-Water-Over-Time</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2412,9 +2527,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifiable>NFR: Verifiable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2454,6 +2571,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#reusable>NFR: Reusable</a></td>
@@ -2475,9 +2593,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2525,9 +2645,15 @@
               <td>m<sup>2</sup></td>
             </tr>
             <tr>
-              <td><em>C<sub>tol</sub></em></td>
-              <td>relative tolerance for conservation of energy</td>
-              <td><em>0.001%</em></td>
+              <td><em>AR<sub>max</sub></em></td>
+              <td>maximum aspect ratio</td>
+              <td><em>100</em></td>
+              <td>--</td>
+            </tr>
+            <tr>
+              <td><em>AR<sub>min</sub></em></td>
+              <td>minimum aspect ratio</td>
+              <td><em>0.01</em></td>
               <td>--</td>
             </tr>
             <tr>

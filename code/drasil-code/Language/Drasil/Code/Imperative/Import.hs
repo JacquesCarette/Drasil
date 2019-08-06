@@ -7,21 +7,16 @@ import Utils.Drasil (stringList)
 import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
-import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
+import Language.Drasil.Code.Code as C (CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
-  RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..),
-  StateTypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..))
-import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,    
-  BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
-  mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
-import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Data (PackData(..))
+  ProgramSym(..), RenderSym(..), AuxiliarySym(..), PermanenceSym(..), 
+  BodySym(..), BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..),
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import Language.Drasil.Code.Imperative.Data (PackData(..), ProgData(..))
 import Language.Drasil.Code.Imperative.Helpers (convType)
-import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (jNameOpts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk),
   codeType, quantvar, quantfunc, funcPrefix, physLookup, sfwrLookup, programName)
@@ -32,7 +27,7 @@ import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs, junkLine, singleton)
-import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
+import Language.Drasil.Printers (Linearity(Linear), sentenceDoc, unitDoc)
 
 import Prelude hiding (sin, cos, tan, log, exp, const)
 import Data.List (nub, intersperse, (\\), stripPrefix)
@@ -44,8 +39,7 @@ import Control.Applicative ((<$>))
 import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.), view)
-import qualified Prelude as P ((<>))
-import Text.PrettyPrint.HughesPJ (render)
+import Text.PrettyPrint.HughesPJ (Doc, (<+>), empty, parens, render, text)
 
 -- Private State, used to push these options around the generator
 data State repr = State {
@@ -146,21 +140,35 @@ generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
-     createCodeFiles $ C.Code $ concatMap C.unCode [code, makefile]
+     createCodeFiles code
      setCurrentDirectory workingDir
   where pckg = runReader genPackage g
-        code = makeCode (packMods $ unRepr pckg) (packAux $ unRepr pckg)
-        makefile = makeBuild (unRepr pckg) (getBuildConfig l) 
-          (getRunnable l) (commented g)
+        code = makeCode (progMods $ packProg $ unRepr pckg) (packAux $ unRepr 
+          pckg)
 
 genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
 genPackage = do
   g <- ask
+  p <- genProgram
+  let n = case codeSpec g of CodeSpec {program = pr} -> programName pr
+      m = makefile (commented g) p
+  d <- genDoxConfig n p
+  return $ package p (m:d)
+
+genDoxConfig :: (AuxiliarySym repr) => String -> repr (Program repr) ->
+  Reader (State repr) [repr (Auxiliary repr)]
+genDoxConfig n p = do
+  g <- ask
+  let cms = commented g
+  return [doxConfig n p | not (null cms)]
+
+genProgram :: (ProgramSym repr) => Reader (State repr) (repr (Program repr))
+genProgram = do
+  g <- ask
   ms <- genModules
   -- Below line of code cannot be simplified because program has a generic type
   let n = case codeSpec g of CodeSpec {program = p} -> programName p
-      cms = commented g
-  return $ if null cms then package n ms [] else packDox n ms
+  return $ prog n ms
 
 genModules :: (RenderSym repr) => Reader (State repr) [repr (RenderFile repr)]
 genModules = do
@@ -179,22 +187,6 @@ getDir CSharp = "csharp"
 getDir Java = "java"
 getDir Python = "python"
 
-getRunnable :: Lang -> Runnable
-getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) 
-  jNameOpts "java"
-getRunnable Python = interpMM "python"
-getRunnable CSharp = nativeBinary
-getRunnable Cpp = nativeBinary
-
-getBuildConfig :: Lang -> Maybe BuildConfig
-getBuildConfig Java = buildSingle (\i _ -> asFragment "javac" : i) $
-  inCodePackage mainModuleFile
-getBuildConfig Python = Nothing
-getBuildConfig CSharp = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs", 
-  asFragment "-out:" P.<> o] ++ i
-getBuildConfig Cpp = buildAll $ \i o -> cppCompiler : i ++ map asFragment
-  ["--std=c++11", "-o"] ++ [o]
-
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (: [])
 
@@ -205,12 +197,18 @@ funcTerm cname = do
   return $ (maybe "No description given" (render . sentenceDoc db Linear . 
     phraseNP . view term) . Map.lookup cname) (fMap $ codeSpec g)
        
-varTerm :: String -> Reader (State repr) String
+varTerm :: String -> Reader (State repr) Doc
 varTerm cname = do
   g <- ask
   let db = sysinfodb $ csi $ codeSpec g
-  return $ (maybe "No description given" (render . sentenceDoc db Linear . 
+  return $ (maybe (text "No description given") (sentenceDoc db Linear . 
     phraseNP . view term) . Map.lookup cname) (vMap $ codeSpec g)
+
+varUnits :: String -> Reader (State repr) Doc
+varUnits cname = do
+  g <- ask
+  return $ maybe empty (parens . unitDoc Linear . usymb) 
+    (Map.lookup cname (vMap $ codeSpec g) >>= getUnit)
 
 ----- Descriptions -----
 
@@ -561,7 +559,10 @@ genInOutFunc s pr n desc ins outs both b = do
     then docInOutFunc desc pComms oComms bComms fn else fn
 
 paramComments :: [Label] -> Reader (State repr) [String]
-paramComments = mapM varTerm
+paramComments ls = do
+  ts <- mapM varTerm ls
+  us <- mapM varUnits ls
+  return $ map render $ zipWith (<+>) ts us
 
 loggedMethod :: (RenderSym repr) => Label -> Label -> [repr (Variable repr)] -> 
   [repr (Block repr)] -> [repr (Block repr)]

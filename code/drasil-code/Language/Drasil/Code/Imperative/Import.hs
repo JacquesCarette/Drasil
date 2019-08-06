@@ -428,7 +428,7 @@ constrWarn c = do
       cs = snd c
   conds <- mapM (convExpr . renderC q) cs
   msgs <- mapM (constraintViolatedMsg q "suggested") cs
-  return $ zipWith (\cond m -> ifNoElse [(cond, bodyStatements $
+  return $ zipWith (\cond m -> ifNoElse [((?!) cond, bodyStatements $
     printStr "Warning: " : m)]) conds msgs
 
 constrExc :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
@@ -438,7 +438,7 @@ constrExc c = do
       cs = snd c
   conds <- mapM (convExpr . renderC q) cs
   msgs <- mapM (constraintViolatedMsg q "expected") cs
-  return $ zipWith (\cond m -> ifNoElse [(cond, bodyStatements $ 
+  return $ zipWith (\cond m -> ifNoElse [((?!) cond, bodyStatements $ 
     m ++ [throw "InputError"])]) conds msgs
 
 constraintViolatedMsg :: (CodeIdea q, HasCodeType q, RenderSym repr) => q -> 

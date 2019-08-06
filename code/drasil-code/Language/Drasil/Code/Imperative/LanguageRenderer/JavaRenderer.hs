@@ -11,17 +11,15 @@ import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
-  RenderSym(..), InternalFile(..), AuxiliarySym(..), KeywordSym(..),
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
+  KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
-  NameOpts(NameOpts), packSep)
 import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
@@ -41,25 +39,29 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
   dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
-  doxConfigName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
-  appendToBody, surroundBody, getterName, setterName, setMain, setMainMethod, 
-  setEmpty, intValue)
+  doxConfigName, makefileName, doubleSlash, blockCmtDoc, docCmtDoc, 
+  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
+  valList, appendToBody, surroundBody, getterName, setterName, setMain, 
+  setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
-  PackData(..), packD, TypeData(..), td, ValData(..), VarData(..), vard)
+  PackData(..), packD, ProgData(..), progD, TypeData(..), td, ValData(..), 
+  VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
+  NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
+  interp, mainModule, mainModuleFile, packSep, withExt)
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
-  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift2Lists, lift3Pair, 
+  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
-
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-  semi, vcat, lbrace, rbrace, render, colon, comma, isEmpty, render)
+  semi, vcat, lbrace, rbrace, render, colon, comma, render)
 
 jExt :: String
 jExt = "java"
@@ -85,12 +87,11 @@ instance Monad JavaCode where
 
 instance PackageSym JavaCode where
   type Package JavaCode = PackData
-  package n ms = lift2Lists (packD n) (map (liftA2 (packageDocD n) endStatement) mods)
-    where mods = filter (not . isEmpty . modDoc . fileMod . unJC) ms
+  package = lift1List packD
 
-  packDox n ms = lift2Lists (packD n) pMods [doxConfig n pMods]
-    where pMods = map (liftA2 (packageDocD n) endStatement) mods
-          mods = filter (not . isEmpty . modDoc . fileMod . unJC) ms
+instance ProgramSym JavaCode where
+  type Program JavaCode = ProgData
+  prog n ms = liftList (progD n) (map (liftA2 (packageDocD n) endStatement) ms)
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = FileData
@@ -110,10 +111,12 @@ instance InternalFile JavaCode where
 
 instance AuxiliarySym JavaCode where
   type Auxiliary JavaCode = AuxData
-  doxConfig prog fs = fmap (ad doxConfigName) (lift1List (makeDoxConfig prog)
-    optimizeDox (map (fmap filePath) fs))
+  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
+    optimizeDox p)
 
   optimizeDox = return $ text "YES"
+
+  makefile cms = fmap (ad makefileName . makeBuild cms jBuildConfig jRunnable)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -740,3 +743,11 @@ jInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out
   : ins)
 jInOutCall f n ins outs both = multi $ varDecDef (var "outputs" jArrayType) 
   (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 (both ++ outs)
+
+jBuildConfig :: Maybe BuildConfig
+jBuildConfig = buildSingle (\i _ -> asFragment "javac" : i) $
+  inCodePackage mainModuleFile
+
+jRunnable :: Runnable
+jRunnable = interp (flip withExt ".class" $ inCodePackage mainModule) 
+  jNameOpts "java"

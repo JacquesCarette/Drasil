@@ -1,6 +1,6 @@
 module Drasil.Projectile.Body (printSetting, si, srs) where
 
-import Language.Drasil hiding (Vector)
+import Language.Drasil hiding (Symbol(..), Vector)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),

@@ -8,18 +8,17 @@ import qualified Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradi
     normalV, orient, perpV, pi_, surArea, surface, unitV)
 import Data.Drasil.SI_Units (metre, m_2, radian)
 
-gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect, pi_, 
-  uNormalVect :: DefinedQuantityDict
+gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect,
+  pi_, uNormalVect :: DefinedQuantityDict
 
-gradient    = dqd' CM.gradient (const lNabla)          Real Nothing
-normalVect  = dqd' CM.normalV  (const $ vec lN)        Real Nothing
-uNormalVect = dqd' CM.normalV  (const $ vec $ hat lN)  Real Nothing
-unitVect    = dqd' CM.unitV    (const $ vec $ hat lI)  Real Nothing
-unitVectj   = dqd' CM.unitV    (const $ vec $ hat lJ)  Real Nothing
-perpVect    = dqd' CM.perpV    (const $ vec lN)        Real Nothing
-pi_         = dqd' CM.pi_      (const lPi)             Real Nothing
-euclidNorm  = dqd' CM.euclidN  (const $ Concat [Atomic "||", vec lR, Atomic "||"])
-                                                        Real Nothing  
+gradient    = dqdNoUnit CM.gradient lNabla         Real
+normalVect  = dqdNoUnit CM.normalV  (vec lN)       Real
+uNormalVect = dqdNoUnit CM.normalV  (vec $ hat lN) Real
+unitVect    = dqdNoUnit CM.unitV    (vec $ hat lI) Real
+unitVectj   = dqdNoUnit CM.unitV    (vec $ hat lJ) Real
+perpVect    = dqdNoUnit CM.perpV    (vec lN)       Real
+pi_         = dqdNoUnit CM.pi_      lPi            Real
+euclidNorm  = dqdNoUnit CM.euclidN  (Concat [Label "||", vec lR, Label "||"]) Real  
 
 area, diameter, surface, surArea, orientation :: UnitalChunk
 

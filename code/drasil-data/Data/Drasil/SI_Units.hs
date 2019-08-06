@@ -47,91 +47,91 @@ becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber :: UnitDefn
 
 becquerel = derCUC' "becquerel" 
-  "becquerel" "activity" (Atomic "Bq") --of a Radionuclide
+  "becquerel" "activity" (Label "Bq") --of a Radionuclide
   (second ^: (-1))
   
 calorie = derUC "calorie" 
-  "calorie" "energy" (Atomic "cal") (scale 4.184 joule)
+  "calorie" "energy" (Label "cal") (scale 4.184 joule)
 
 centigrade = derUC "centigrade" 
-  "centigrade" "temperature" (Concat [Special Circle, Atomic "C"])
+  "centigrade" "temperature" (Concat [Special Circle, Label "C"])
   (shift 273.15 kelvin)
 
 coulomb = derCUC' "coulomb" 
-  "coulomb" "electric charge" (Atomic "C") (ampere *: second)
+  "coulomb" "electric charge" (Label "C") (ampere *: second)
 
 farad = derCUC' "farad" 
-  "farad" "capacitance" (Atomic "F") (coulomb /: volt)
+  "farad" "capacitance" (Label "F") (coulomb /: volt)
 
 gray = derCUC' "gray" 
-  "gray" "absorbed dose" (Atomic "Gy") (joule /: kilogram)
+  "gray" "absorbed dose" (Label "Gy") (joule /: kilogram)
   
 henry = derCUC'' "henry" 
-  (cnIES "henry") "inductance" (Atomic "H") (weber /: ampere)
+  (cnIES "henry") "inductance" (Label "H") (weber /: ampere)
   
 hertz = derCUC "hertz" 
-  "hertz" "frequency" (Atomic "Hz") (second ^: (-1))
+  "hertz" "frequency" (Label "Hz") (second ^: (-1))
 
 joule = derCUC' "joule" 
-  "joule" "energy" (Atomic "J") 
+  "joule" "energy" (Label "J") 
  (kilogram *$ (m_2 *$ (second ^: (-2))))
 
 katal = derCUC' "katal" 
-  "katal" "catalytic activity" (Atomic "kat") (mole /: second)
+  "katal" "catalytic activity" (Label "kat") (mole /: second)
 
 kilopascal = derUC' "kilopascal" 
   "kilopascal" "pressure"
-  (Concat [Atomic "k", Atomic "Pa"]) (scale 1000 pascal)
+  (Concat [Label "k", Label "Pa"]) (scale 1000 pascal)
 
 kilowatt = derUC' "kilowatt" 
-  "kilowatt" "power" (Concat [Atomic "k", Atomic "W"]) (scale 1000 watt)
+  "kilowatt" "power" (Concat [Label "k", Label "W"]) (scale 1000 watt)
   
 litre = derUC' "litre"
-  "litre" "volume" (Atomic "L") (scale (1/1000) m_3)
+  "litre" "volume" (Label "L") (scale (1/1000) m_3)
 
 lumen = derCUC' "lumen" 
-  "lumen" "luminous flux" (Atomic "lm") (candela *: steradian)
+  "lumen" "luminous flux" (Label "lm") (candela *: steradian)
 
 lux = derCUC "lux" 
-  "lux" "illuminance" (Atomic "lx") (lumen /: m_2)
+  "lux" "illuminance" (Label "lx") (lumen /: m_2)
 
 millimetre = derUC' "millimetre"
-  "millimetre" "length" (Atomic "mm") (scale 0.0001 metre)
+  "millimetre" "length" (Label "mm") (scale 0.0001 metre)
 
 newton = derCUC' "newton"
-  "newton" "force" (Atomic "N") (kilogram *$ (second ^: (-2)))
+  "newton" "force" (Label "N") (kilogram *$ (second ^: (-2)))
   
 ohm = derCUC' "ohm"
   "ohm" "resistance" cOmega (volt /: ampere)
   
 pascal = derCUC' "pascal" 
-  "pascal" "pressure" (Atomic "Pa")
+  "pascal" "pressure" (Label "Pa")
   (kilogram /$ (metre *$ (second ^: 2)))
   
 radian = derCUC' "radian" 
-  "radian" "angle" (Atomic "rad") (metre /: metre)
+  "radian" "angle" (Label "rad") (metre /: metre)
             
 siemens = derCUC "siemens" 
-  "siemens" "conductance" (Atomic "S") (ohm ^: (-1))
+  "siemens" "conductance" (Label "S") (ohm ^: (-1))
   
 sievert = derCUC' "sievert" 
-  "sievert" "dose equivalent" (Atomic "Sv")
+  "sievert" "dose equivalent" (Label "Sv")
   (joule /: kilogram)
             
 steradian = derCUC' "steradian" 
-  "steradian" "solid angle" (Atomic "sr") (m_2 /: m_2 )
+  "steradian" "solid angle" (Label "sr") (m_2 /: m_2 )
   
 tesla = derCUC "tesla"
-  "tesla" "magnetic flux density" (Atomic "T") (weber /: m_2)
+  "tesla" "magnetic flux density" (Label "T") (weber /: m_2)
 
 volt = derCUC' "volt" 
-  "volt" "voltage" (Atomic "V") (watt /: ampere)
+  "volt" "voltage" (Label "V") (watt /: ampere)
 
-watt = derCUC' "watt" "watt" "power" (Atomic "W")
+watt = derCUC' "watt" "watt" "power" (Label "W")
   (kilogram *$ (m_2 *$ (second ^: (-3))))
           
 weber = derCUC' "weber"
-  "weber" "magnetic flux" (Atomic "Wb") (volt *: second)
+  "weber" "magnetic flux" (Label "Wb") (volt *: second)
   
 specificE :: UnitDefn
 specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 

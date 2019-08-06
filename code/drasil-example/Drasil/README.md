@@ -2,17 +2,17 @@ This folder contains our working examples (implementations in Drasil of the prev
 
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 24, 2019
+Last updated: July 19, 2019
 --------------------------------------------------
 
 **GamePhysics**
-  - Contains the current state of the Chipmunk2D case study implemented in Drasil
+  - Contains the current state of the Game Physics case study implemented in Drasil
 
 **GlassBR**
   - Contains the current state of the GlassBR case study implemented in Drasil
   
 **HGHC**
-  - Contains the current state of the tiny (fuel pin) example implemented in Drasil
+  - Contains the current state of the HGHC (fuel pin) example implemented in Drasil
   
 **NoPCM**
   - Contains the current state of the solar water heating system case study implemented in Drasil

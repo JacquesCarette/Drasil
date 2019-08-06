@@ -3,44 +3,51 @@
 -- | The logic to render Python code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
-  PythonCode(..), pyExts
+  PythonCode(..)
 ) where
 
 import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label,
-  PackageSym(..), RenderSym(..), KeywordSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..),
-  UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (fileDoc', 
+import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+  ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
+  KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
   plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
-  mkStNoEnd, stringListVals', stringListLists', notOpDocD', negateOpDocD, 
-  sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', 
-  asinOpDocD', acosOpDocD', atanOpDocD', unExpr, typeUnExpr, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD, litFloatD, litIntD,
-  litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
-  funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, listAccessFuncDocD,
-  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
-  classDec, dot, forLabel, observerListName, commentedItem, addCommentsDocD, 
+  mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD', 
+  negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
+  tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, unExpr',
+  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
+  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
+  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, 
+  mkVal, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD,
+  enumElemDocD, objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, 
+  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, classDec, dot, forLabel, 
+  observerListName, doxConfigName, makefileName, commentedItem, addCommentsDocD,
   classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
   setterName)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), FuncData(..), 
-  fd, ModData(..), md, MethodData(..), mthd, ParamData(..), TypeData(..), td, 
-  ValData(..), VarData(..), vard)
+import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
+  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
+  ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
+  VarData(..), vard)
+import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
+import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
-  liftPairFst, getInnerType, convType)
+  liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -49,11 +56,8 @@ import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
   equals, vcat, colon, brackets, isEmpty)
 
-pyExts :: [String]
-pyExts = [pyExt]
-
 pyExt :: String
-pyExt = ".py"
+pyExt = "py"
 
 newtype PythonCode a = PC {unPC :: a}
 
@@ -69,24 +73,37 @@ instance Monad PythonCode where
   PC x >>= f = f x
 
 instance PackageSym PythonCode where
-  type Package PythonCode = ([ModData], Label)
-  packMods n ms = liftPairFst (sequence mods, n)
-    where mods = filter (not . isEmpty . modDoc . unPC) ms
+  type Package PythonCode = PackData
+  package = lift1List packD
+
+instance ProgramSym PythonCode where
+  type Program PythonCode = ProgData
+  prog n = liftList (progD n)
 
 instance RenderSym PythonCode where
-  type RenderFile PythonCode = ModData
-  fileDoc code = liftA3 md (fmap name code) (fmap isMainMod code) 
-    (liftA2 emptyIfEmpty (fmap modDoc code) $
-      liftA3 fileDoc' (top code) (fmap modDoc code) bottom)
+  type RenderFile PythonCode = FileData
+  fileDoc code = liftA2 file (fmap (addExt pyExt . name) code) (liftA2 
+    updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
+    (top code) (fmap modDoc code) bottom) code)
+
+  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName 
+    (fmap fileMod m)) pyExt) m
+
+  commentedMod cmt m = liftA2 updateFileMod (liftA2 updateModDoc
+    (liftA2 commentedItem cmt (fmap (modDoc . fileMod) m)) (fmap fileMod m)) m
+
+instance InternalFile PythonCode where
   top _ = return pytop
   bottom = return empty
 
-  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName m) pyExt) m
+instance AuxiliarySym PythonCode where
+  type Auxiliary PythonCode = AuxData
+  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
+    optimizeDox p)
 
-  commentedMod cmt m = liftA3 md (fmap name m) (fmap isMainMod m) 
-    (liftA2 commentedItem cmt (fmap modDoc m))
+  optimizeDox = return $ text "YES"
 
-  moduleName m = name (unPC m)
+  makefile cms = fmap (ad makefileName . makeBuild cms Nothing pyRunnable)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
@@ -164,7 +181,7 @@ instance ControlBlockSym PythonCode where
     where getVal = fromMaybe (liftA2 mkVal void (return empty))
 
 instance UnaryOpSym PythonCode where
-  type UnaryOp PythonCode = Doc
+  type UnaryOp PythonCode = OpData
   notOp = return notOpDocD'
   negateOp = return negateOpDocD
   sqrtOp = return sqrtOpDocD'
@@ -178,11 +195,11 @@ instance UnaryOpSym PythonCode where
   asinOp = return asinOpDocD'
   acosOp = return acosOpDocD'
   atanOp = return atanOpDocD'
-  floorOp = return $ text "math.floor"
-  ceilOp = return $ text "math.ceil"
+  floorOp = return $ unOpPrec "math.floor"
+  ceilOp = return $ unOpPrec "math.ceil"
 
 instance BinaryOpSym PythonCode where
-  type BinaryOp PythonCode = Doc
+  type BinaryOp PythonCode = OpData
   equalOp = return equalOpDocD
   notEqualOp = return notEqualOpDocD
   greaterOp = return greaterOpDocD
@@ -193,10 +210,10 @@ instance BinaryOpSym PythonCode where
   minusOp = return minusOpDocD
   multOp = return multOpDocD
   divideOp = return divideOpDocD
-  powerOp = return $ text "**"
+  powerOp = return $ powerPrec "**"
   moduloOp = return moduloOpDocD
-  andOp = return $ text "and"
-  orOp = return $ text "or"
+  andOp = return $ andPrec "and"
+  orOp = return $ orPrec "or"
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
@@ -233,26 +250,20 @@ instance ValueSym PythonCode where
   valueOf v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
   arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n + 1)) argsList)
   enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
-
-  inputFunc = liftA2 mkVal string (return $ text "input()")  -- raw_input() for < Python 3.0
-  printFunc = liftA2 mkVal void (return $ text "print")
-  printLnFunc = liftA2 mkVal void (return empty)
-  printFileFunc _ = liftA2 mkVal void (return empty)
-  printFileLnFunc _ = liftA2 mkVal void (return empty)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "sys.argv")
 
   valueType = fmap valType
   valueDoc = valDoc . unPC
 
 instance NumericExpression PythonCode where
-  (#~) = liftA2 unExpr negateOp
+  (#~) = liftA2 unExpr' negateOp
   (#/^) = liftA2 unExpr sqrtOp
   (#|) = liftA2 unExpr absOp
   (#+) = liftA3 binExpr plusOp
   (#-) = liftA3 binExpr minusOp
   (#*) = liftA3 binExpr multOp
   (#/) v1 v2 = pyDivision (getType $ valueType v1) (getType $ valueType v2) 
-    where pyDivision Integer Integer = liftA2 (binExpr (text "//")) v1 v2
+    where pyDivision Integer Integer = liftA2 (binExpr (multPrec "//")) v1 v2
           pyDivision _ _ = liftA3 binExpr divideOp v1 v2
   (#%) = liftA3 binExpr moduloOp
   (#^) = liftA3 binExpr powerOp
@@ -285,7 +296,7 @@ instance BooleanExpression PythonCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
 
 instance ValueExpression PythonCode where
-  inlineIf b v1 v2 = liftA2 mkVal (fmap valType v1) (liftA3 pyInlineIf b v1 v2)
+  inlineIf = liftA3 pyInlineIf
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
@@ -296,6 +307,15 @@ instance ValueExpression PythonCode where
 
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
+
+instance InternalValue PythonCode where
+  inputFunc = liftA2 mkVal string (return $ text "input()")  -- raw_input() for < Python 3.0
+  printFunc = liftA2 mkVal void (return $ text "print")
+  printLnFunc = liftA2 mkVal void (return empty)
+  printFileFunc _ = liftA2 mkVal void (return empty)
+  printFileLnFunc _ = liftA2 mkVal void (return empty)
+  
+  cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
 
 instance Selector PythonCode where
   objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
@@ -311,20 +331,9 @@ instance Selector PythonCode where
   
   indexOf l v = objAccess l (func "index" int [v])
 
-  cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
-
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
   func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
-  getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
-
-  listSizeFunc = liftA2 fd int (return $ text "len")
-  listAddFunc _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
-  listAppendFunc v = func "append" (listType static_ $ fmap valType v) [v]
-
-  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
-  iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
 
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
@@ -338,15 +347,33 @@ instance FunctionSym PythonCode where
   iterEnd v = v $. iterEndFunc (valueType v)
 
 instance SelectorFunction PythonCode where
+  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
+  listSet v i toVal = v $. listSetFunc v i toVal
+  at v l = listAccess v (valueOf $ var l int)
+
+instance InternalFunction PythonCode where
+  getFunc v = func (getterName $ variableName v) (variableType v) []
+  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+
+  listSizeFunc = liftA2 fd int (return $ text "len")
+  listAddFunc _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
+  listAppendFunc v = func "append" (listType static_ $ fmap valType v) [v]
+
+  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
+  iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
+
   listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD i toVal)
 
   atFunc t l = listAccessFunc t (valueOf $ var l int)
 
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (valueOf $ var l int)
+instance InternalStatement PythonCode where
+  printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
+    (fromMaybe (liftA2 mkVal void (return empty)) f)
+
+  state = fmap statementDocD
+  loopState = fmap statementDocD 
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
@@ -370,9 +397,6 @@ instance StatementSym PythonCode where
   objDecNewVoid v = varDecDef v (stateObj (variableType v) [])
   extObjDecNewVoid lib v = varDecDef v (extStateObj lib (variableType v) [])
   constDecDef = varDecDef
-
-  printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
-    (fromMaybe (liftA2 mkVal void (return empty)) f)
 
   print v = pyOut False printFunc v Nothing
   printLn v = pyOut True printFunc v Nothing
@@ -429,8 +453,6 @@ instance StatementSym PythonCode where
   inOutCall = pyInOutCall funcApp
   extInOutCall m = pyInOutCall (extFuncApp m)
 
-  state = fmap statementDocD
-  loopState = fmap statementDocD 
   multi = lift1List multiStateDocD endStatement
 
 instance ControlStatementSym PythonCode where
@@ -469,6 +491,7 @@ instance ScopeSym PythonCode where
   private = return empty
   public = return empty
 
+instance InternalScope PythonCode where
   includeScope s = s
 
 instance MethodTypeSym PythonCode where
@@ -486,8 +509,8 @@ instance ParameterSym PythonCode where
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
-  method n l _ _ _ ps b = liftA2 (mthd False) (sequence ps) (liftA3 (pyMethod n)
-    (self l) (liftList paramListDocD ps) b)
+  method n l _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
+    (liftA3 (pyMethod n) (self l) (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
@@ -502,16 +525,18 @@ instance MethodSym PythonCode where
 
   docMain = mainMethod
 
-  function n _ _ _ ps b = liftA2 (mthd False) (sequence ps) (liftA2 
-    (pyFunction n) (liftList paramListDocD ps) b)
+  function n _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
+    (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
-  inOutFunc n s p ins outs b = function n s p (mState void) (map stateParam ins)
-    (liftA2 appendToBody b (multiReturn $ map valueOf outs))
+  inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
+    ins) b
+  inOutFunc n s p ins outs both b = function n s p (mState void) (map 
+    stateParam $ both ++ ins) (liftA2 appendToBody b (multiReturn $
+    map valueOf $ both ++ outs))
 
-  docInOutFunc desc iComms _ = docFuncRepr desc iComms
+  docInOutFunc desc iComms _ bComms = docFuncRepr desc (bComms ++ iComms)
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
@@ -552,6 +577,9 @@ instance ModuleSym PythonCode where
     (liftList methodListDocD (map (fmap mthdDoc) fs)) (liftList 
     pyModuleClassList cs))
 
+  moduleName m = name (unPC m)
+    
+
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
   blockComment lns = fmap (pyBlockComment lns) commentStart
@@ -572,11 +600,11 @@ pytop = vcat [   -- There are also imports from the libraries supplied by module
 pyInclude :: Label -> Doc
 pyInclude n = text imp <+> text n
 
-pyLogOp :: Doc
-pyLogOp = text "math.log10"
+pyLogOp :: OpData
+pyLogOp = unOpPrec "math.log10"
 
-pyLnOp :: Doc
-pyLnOp = text "math.log"
+pyLnOp :: OpData
+pyLnOp = unOpPrec "math.log"
 
 pyStateObj :: TypeData -> Doc -> Doc
 pyStateObj t vs = typeDoc t <> parens vs
@@ -584,10 +612,9 @@ pyStateObj t vs = typeDoc t <> parens vs
 pyExtStateObj :: Label -> TypeData -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs
 
-pyInlineIf :: ValData -> ValData -> 
-  ValData -> Doc
-pyInlineIf c v1 v2 = parens $ valDoc v1 <+> text "if" <+> valDoc c <+> 
-  text "else" <+> valDoc v2
+pyInlineIf :: ValData -> ValData -> ValData -> ValData
+pyInlineIf c v1 v2 = vd (valPrec c) (valType v1) (valDoc v1 <+> text "if" <+> 
+  valDoc c <+> text "else" <+> valDoc v2)
 
 pyListSize :: ValData -> FuncData -> Doc
 pyListSize v f = funcDoc f <> parens (valDoc v)
@@ -693,9 +720,10 @@ pyModule ls fs cs =
 pyInOutCall :: (Label -> PythonCode (StateType PythonCode) -> 
   [PythonCode (Value PythonCode)] -> PythonCode (Value PythonCode)) -> Label -> 
   [PythonCode (Value PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
-  PythonCode (Statement PythonCode)
-pyInOutCall f n ins [] = valState $ f n void ins
-pyInOutCall f n ins outs = multiAssign outs [f n void ins]
+  [PythonCode (Variable PythonCode)] -> PythonCode (Statement PythonCode)
+pyInOutCall f n ins [] [] = valState $ f n void ins
+pyInOutCall f n ins outs both = multiAssign (both ++ outs) 
+  [f n void (map valueOf both ++ ins)]
 
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
@@ -703,3 +731,6 @@ pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
 pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
 pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . text) lns
+
+pyRunnable :: Runnable
+pyRunnable = interpMM "python"

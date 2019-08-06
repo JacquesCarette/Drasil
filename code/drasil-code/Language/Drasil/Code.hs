@@ -7,7 +7,7 @@ module Language.Drasil.Code (
   Mod(Mod), Structure(..), InputModule(..),
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
   junkLine, multiLine, repeated, singleLine, singleton,
-  PackageSym(..), RenderSym(..), 
+  PackageSym(..), ProgramSym(..), RenderSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
   StateTypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..),
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -15,7 +15,7 @@ module Language.Drasil.Code (
   MethodSym(..), ModuleSym(..), BlockCommentSym(..),
   ModData(..),
   JavaCode(..), PythonCode(..), CSharpCode(..), CppSrcCode(..), CppHdrCode(..),
-  unSrc, unHdr
+  unCPPC
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -34,12 +34,12 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..),
   packmod, relToQD,
   )
 
-import Language.Drasil.Code.Imperative.Symantics (PackageSym(..), RenderSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  StateTypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..),
-  MethodSym(..), ModuleSym(..), BlockCommentSym(..))
+import Language.Drasil.Code.Imperative.Symantics (PackageSym(..), 
+  ProgramSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+  ControlBlockSym(..), StateTypeSym(..), StatementSym(..), 
+  ControlStatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..),
+  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), MethodSym(..), ModuleSym(..), BlockCommentSym(..))
 
 import Language.Drasil.Code.Imperative.Data (ModData(..))
 
@@ -50,4 +50,4 @@ import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
 import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer 
   (CSharpCode(..))
 import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
-  (CppSrcCode(..), CppHdrCode(..), unSrc, unHdr)
+  (CppSrcCode(..), CppHdrCode(..), unCPPC)

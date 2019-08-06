@@ -4,13 +4,13 @@ module Drasil.DocLang (
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..),
   -- DocumentLanguage
-  mkDoc, tsymb, tsymb'',
+  mkDoc, tsymb, tsymb'', tunit, tunit',
   -- DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt),
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
   RefSec(..), RefTab(..), StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr),
-  TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..),
+  TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
   -- DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
   -- DocumentLanguage.RefHelpers 
@@ -42,13 +42,13 @@ module Drasil.DocLang (
 import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
-import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'')
+import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'', tunit, tunit')
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(GSDProg2),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(StkhldrProg2),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
-  TSIntro(..))
+  TSIntro(..), TUIntro(..))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(Verbose), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)

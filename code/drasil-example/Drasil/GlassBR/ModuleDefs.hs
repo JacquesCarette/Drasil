@@ -6,8 +6,9 @@ module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, asExpr, 
-  fdec, ffor, funcData, funcDef, multiLine, packmod, repeated, singleLine)
+import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
+  asExpr, funcDef, fdec, ffor, funcData, 
+  multiLine, packmod, repeated, singleLine)
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]
@@ -34,39 +35,50 @@ readTable = funcData "read_table"
 -----
 
 one, two :: Symbol
-one = Atomic "1"
-two = Atomic "2"
+one = Integ 1
+two = Integ 2
 
--- No need to be too verbose
-var :: String -> Symbol -> Space -> QuantityDict
-var nam = implVar nam (nounPhraseSP nam)
+var :: String -> String -> Symbol -> Space -> QuantityDict
+var nam np = implVar nam (nounPhraseSP np)
 
 y_2, y_1, x_2, x_1, x :: QuantityDict
-y_1  = var "y1"          (sub lY one) Real
-y_2  = var "y2"          (sub lY two) Real
-x_1  = var "x1"          (sub lX one) Real
-x_2  = var "x2"          (sub lX two) Real
-x    = var "x"            lX          Real -- = params.wtnt from mainFun.py
+y_1  = var "y1" "lower y-coordinate"             (sub lY one) Real
+y_2  = var "y2" "upper y-coordinate"             (sub lY two) Real
+x_1  = var "x1" "lower x-coordinate"             (sub lX one) Real
+x_2  = var "x2" "upper x-coordinate"             (sub lX two) Real
+x    = var "x"  "x-coordinate to interpolate at" lX           Real -- = params.wtnt from mainFun.py
 
 v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
   i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename :: QuantityDict
-v       = var "v"         lV                          Real
-i       = var "i"         lI                          Natural
-j       = var "j"         lJ                          Natural
-k       = var "k"         (sub lK two)                Natural
-y       = var "y"         lY                          Real
-z       = var "z"         lZ                          Real
-zVector = var "zVector" (sub lZ (Atomic "vector")) (Vect Real)
-yMatrix = var "yMatrix" (sub lY (Atomic "matrix")) (Vect $ Vect Real)
-xMatrix = var "xMatrix" (sub lX (Atomic "matrix")) (Vect $ Vect Real)
-arr     = var "arr"       (Atomic "arr")             (Vect Real)--FIXME: temporary variable for findCT?
-x_z_1   = var "x_z_1"     (sub lX (sub lZ one))      (Vect Real)
-y_z_1   = var "y_z_1"     (sub lY (sub lZ one))      (Vect Real)
-x_z_2   = var "x_z_2"     (sub lX (sub lZ two))      (Vect Real)
-y_z_2   = var "y_z_2"     (sub lY (sub lZ two))      (Vect Real)
-mat     = var "mat"       (Atomic "mat")             (Vect $ Vect Real)
-col     = var "col"       (Atomic "col")             (Vect Real)
-filename= var "filename"  (Atomic "filename")         String
+i = var "i" "index" lI           Natural
+j = var "j" "index" lJ           Natural
+k = var "k" "index" (sub lK two) Natural     
+v = var "v" "value whose index will be found" lV Real
+y = var "y" "y-coordinate to interpolate at"  lY Real
+z = var "z" "z-coordinate to interpolate at"  lZ Real
+
+zVector = var "zVector" "list of z values" 
+  (sub lZ (Label "vector")) (Vect Real)               
+yMatrix = var "yMatrix" "lists of y values at different z values" 
+  (sub lY (Label "matrix")) (Vect $ Vect Real)        
+xMatrix = var "xMatrix" "lists of x values at different z values" 
+  (sub lX (Label "matrix")) (Vect $ Vect Real)        
+arr     = var "arr"     "array in which value should be found" 
+  (Label "arr")             (Vect Real)  --FIXME: temporary variable for findCT?
+x_z_1   = var "x_z_1"   "list of x values at a specific z value"    
+  (sub lX (sub lZ one))      (Vect Real)
+y_z_1   = var "y_z_1"   "list of y values at a specific z value"    
+  (sub lY (sub lZ one))      (Vect Real)   
+x_z_2   = var "x_z_2"   "list of x values at a specific z value"    
+  (sub lX (sub lZ two))      (Vect Real)
+y_z_2   = var "y_z_2"   "list of y values at a specific z value"   
+  (sub lY (sub lZ two))      (Vect Real)
+mat     = var "mat"     "matrix from which column will be extracted"     
+  (Label "mat")             (Vect $ Vect Real)
+col     = var "col"     "extracted column"    
+  (Label "col")             (Vect Real)               
+filename = var "filename" "name of file with x y and z data" 
+  (Label "filename")        String
 
 ------------------------------------------------------------------------------------------
 --

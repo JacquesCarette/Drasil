@@ -97,6 +97,11 @@
                   <td>m<sup>2</sup></td>
                 </tr>
                 <tr>
+                  <td><em>A<sub>tol</sub></em></td>
+                  <td>Absolute tolerance</td>
+                  <td>--</td>
+                </tr>
+                <tr>
                   <td><em>C</em></td>
                   <td>Specific heat capacity</td>
                   <td>J/(kg&sdot;&deg;C)</td>
@@ -189,6 +194,11 @@
                   <td>W/m<sup>2</sup></td>
                 </tr>
                 <tr>
+                  <td><em>R<sub>tol</sub></em></td>
+                  <td>Relative tolerance</td>
+                  <td>--</td>
+                </tr>
+                <tr>
                   <td><em>S</em></td>
                   <td>Surface</td>
                   <td>m<sup>2</sup></td>
@@ -265,7 +275,7 @@
                 </tr>
                 <tr>
                   <td><em>τ<sub>W</sub></em></td>
-                  <td>ODE parameter for water</td>
+                  <td>ODE parameter for water related to decay time</td>
                   <td>s</td>
                 </tr>
                 <tr>
@@ -352,7 +362,7 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems provide a novel way of storing energy.
+          Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems provide a novel way of storing energy.
         </p>
         <p class="paragraph">
           The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
@@ -361,7 +371,7 @@
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The main purpose of this document is to describe the modelling of solar water heating system. The goals and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
+              The main purpose of this document is to describe the modelling of solar water heating system. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
             </p>
             <p class="paragraph">
               This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
@@ -391,7 +401,7 @@
               The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#dParnas1972>dParnas1972</a> and <a href=#parnasClements1984>parnasClements1984</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The instance model to be solved is referred to as <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
+              The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The instance model to be solved is referred to as <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>. The instance model provides the Ordinary Differential Equation (ODE) that models the solar water heating system. SWHS solves this ODE.
             </p>
           </div>
         </div>
@@ -797,7 +807,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (<a href=#assumpHTCC>A: Heat-Transfer-Coeffs-Constant</a>) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>ΔT(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
+                          Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings.
+                        </p>
+                        <p class="paragraph">
+                          <em>h</em> is assumed to be independent of <em>T</em> (from <a href=#assumpHTCC>A: Heat-Transfer-Coeffs-Constant</a>).
+                        </p>
+                        <p class="paragraph">
+                          <em>ΔT(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object.
                         </p>
                       </td>
                     </tr>
@@ -869,14 +885,6 @@
                       </td>
                     </tr>
                     <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          The basic equation governing the rate of change of temperature, for a given volume <em>V</em>, with time. <em>m</em> is the mass (kg). <em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C)). <em>T</em> is the temperature (&deg;C) and <em>t</em> is the time (s). <em>q<sub>in</sub></em> and <em>q<sub>out</sub></em> are the in and out heat transfer rates, respectively (W/m<sup>2</sup>). <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> are the surface areas over which the heat is being transferred in and out, respectively (m<sup>2</sup>). <em>g</em> is the volumetric heat generated (W/m<sup>3</sup>). <em>V</em> is the volume (m<sup>3</sup>).
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
                       <th>Source</th>
                       <td><p class="paragraph">--</p></td>
                     </tr>
@@ -922,7 +930,7 @@
                                                                                                                                                             </div>&#8239;dV</em>
                     </div>
                     <p class="paragraph">
-                      We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
+                      We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
                     </p>
                     <div class="equation">
                       <em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
@@ -935,7 +943,7 @@
                                                                                                                                                             </div>&#8239;dV</em>
                     </div>
                     <p class="paragraph">
-                      Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
+                      Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
                     </p>
                     <div class="equation">
                       <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
@@ -944,7 +952,7 @@
                                                   </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
                     </div>
                     <p class="paragraph">
-                      Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, (2) can be written as:
+                      Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, Equation (2) can be written as:
                     </p>
                     <div class="equation">
                       <em>m&#8239;C&#8239;<div class="fraction">
@@ -1038,6 +1046,80 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
+                <div id="DD:balanceDecayRate">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:balanceDecayRate</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          ODE parameter for water related to decay time
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>τ<sub>W</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">s</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        <div class="equation">
+                          <em>τ<sub>W</sub> = <div class="fraction">
+                                                <span class="fup">
+                                                  m<sub>W</sub>&#8239;C<sub>W</sub>
+                                                </span>
+                                                <span class="fdn">
+                                                  h<sub>C</sub>&#8239;A<sub>C</sub>
+                                                </span>
+                                              </div></em>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (s)
+                          </li>
+                          <li><em>m<sub>W</sub></em> is the mass of water (kg)</li>
+                          <li>
+                            <em>C<sub>W</sub></em> is the specific heat capacity of water (J/(kg&sdot;&deg;C))
+                          </li>
+                          <li>
+                            <em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))
+                          </li>
+                          <li>
+                            <em>A<sub>C</sub></em> is the heating coil surface area (m<sup>2</sup>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#koothoor2013>koothoor2013</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a> and <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:IMs">
@@ -1113,7 +1195,9 @@
                           <li>
                             <em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
                           </li>
-                          <li><em>τ<sub>W</sub></em> is the ODE parameter for water (s)</li>
+                          <li>
+                            <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (s)
+                          </li>
                           <li>
                             <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
                           </li>
@@ -1124,14 +1208,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
-                                                                                                                                                                                         <span class="fup">
-                                                                                                                                                                                           m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                                                                                                                                                         </span>
-                                                                                                                                                                                         <span class="fdn">
-                                                                                                                                                                                           h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                                                                                                                         </span>
-                                                                                                                                                                                       </div></em> is a constant (s). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>).
+                          <em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub></em> is from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>. The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>).
                         </p>
                       </td>
                     </tr>
@@ -1147,7 +1224,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a>, <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>, <a href=#findMass>FR: Find-Mass</a>, and <a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>
+                          <a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a>, <a href=#findMass>FR: Find-Mass</a>, and <a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>
                         </p>
                       </td>
                     </tr>
@@ -1170,7 +1247,7 @@
                                                                   </div> = q<sub>C</sub>&#8239;A<sub>C</sub></em>
                     </div>
                     <p class="paragraph">
-                      Using <a href=#DD:htFluxC>DD: htFluxC</a> , this can be written as:
+                      Using <a href=#DD:htFluxC>DD: htFluxC</a> for <em>q<sub>C</sub></em>, this can be written as:
                     </p>
                     <div class="equation">
                       <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
@@ -1183,7 +1260,7 @@
                                                                   </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
                     </div>
                     <p class="paragraph">
-                      Dividing (3) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
+                      Dividing Equation (3) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
                     </p>
                     <div class="equation">
                       <em><div class="fraction">
@@ -1195,7 +1272,7 @@
                                    </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
                     </div>
                     <p class="paragraph">
-                      Setting <em>τ<sub>W</sub></em> = <em>m<sub>W</sub></em> <em>C<sub>W</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> , Equation (4) can be written in its final form as:
+                      By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>), this can be written as:
                     </p>
                     <div class="equation">
                       <em><div class="fraction">
@@ -1334,7 +1411,9 @@
                     <tr>
                       <td><em>D</em></td>
                       <td><em>D&thinsp;&gt;&thinsp;0</em></td>
-                      <td>--</td>
+                      <td>
+                        <em>AR<sub>min</sub>&thinsp;&le;&thinsp;D&thinsp;&le;&thinsp;AR<sub>max</sub></em>
+                      </td>
                       <td><em>0.412</em> m</td>
                       <td>10<em>%</em></td>
                     </tr>
@@ -1476,7 +1555,7 @@
               </p>
               <p>
                 <div id="outputInputDerivQuants">
-                  Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>, the mass from <a href=#findMass>FR: Find-Mass</a>, and <em>τ<sub>W</sub></em> (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>).
+                  Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>, the mass from <a href=#findMass>FR: Find-Mass</a>, and <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>).
                 </div>
               </p>
               <p>
@@ -1698,6 +1777,22 @@
               <td></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2095,6 +2190,7 @@
             <tr>
               <th></th>
               <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
+              <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
               <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
@@ -2104,6 +2200,18 @@
             </tr>
             <tr>
               <td><a href=#DD:htFluxC>DD: htFluxC</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2121,9 +2229,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:sensHtE>TM: sensHtE</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2141,9 +2251,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:rocTempSimp>GD: rocTempSimp</a></td>
+              <td></td>
               <td></td>
               <td>X</td>
               <td></td>
@@ -2155,6 +2267,7 @@
             <tr>
               <td><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></td>
               <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2164,6 +2277,7 @@
             </tr>
             <tr>
               <td><a href=#IM:heatEInWtr>IM: heatEInWtr</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -2182,6 +2296,7 @@
             <tr>
               <th></th>
               <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
+              <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
               <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
@@ -2228,9 +2343,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#waterEnergyGS>GS: Predict-Water-Energy</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2270,9 +2387,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#findMass>FR: Find-Mass</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2314,17 +2433,19 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>
               </td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td>X</td>
               <td>X</td>
@@ -2342,6 +2463,7 @@
               <td>
                 <a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2365,6 +2487,7 @@
               <td>
                 <a href=#calcChgHeatEnergyWtrOverTime>FR: Calculate-Change-Heat_Energy-Water-Over-Time</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2404,9 +2527,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifiable>NFR: Verifiable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2446,6 +2571,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#reusable>NFR: Reusable</a></td>
@@ -2467,9 +2593,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2517,9 +2645,15 @@
               <td>m<sup>2</sup></td>
             </tr>
             <tr>
-              <td><em>C<sub>tol</sub></em></td>
-              <td>relative tolerance for conservation of energy</td>
-              <td><em>0.001%</em></td>
+              <td><em>AR<sub>max</sub></em></td>
+              <td>maximum aspect ratio</td>
+              <td><em>100</em></td>
+              <td>--</td>
+            </tr>
+            <tr>
+              <td><em>AR<sub>min</sub></em></td>
+              <td>minimum aspect ratio</td>
+              <td><em>0.01</em></td>
               <td>--</td>
             </tr>
             <tr>

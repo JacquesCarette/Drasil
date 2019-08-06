@@ -2,10 +2,8 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
-import Database.Drasil(ChunkDB, SystemInformation(SI), symbLookup, symbolTable,
-  _constants,
-  _constraints, _datadefs,
-  _definitions, _inputs, _outputs,
+import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
+  _constants, _constraints, _datadefs, _definitions, _inputs, _outputs,
   _quants, _sys, _sysinfodb)
 import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
@@ -169,7 +167,7 @@ relToQD :: ExprRelat c => ChunkDB -> c -> QDefinition
 relToQD sm r = convertRel sm (r ^. relat)
 
 convertRel :: ChunkDB -> Expr -> QDefinition
-convertRel sm (BinaryOp Eq (C x) r) = ec (symbLookup x $ symbolTable sm) r
+convertRel sm (BinaryOp Eq (C x) r) = ec (symbResolve sm x) r
 convertRel _ _ = error "Conversion failed"
 
 data Mod = Mod Name String [Func]
@@ -446,25 +444,27 @@ getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
 -- | Get a list of CodeChunks from an equation
 codevars :: Expr -> ChunkDB -> [CodeChunk]
-codevars e m = map resolve $ dep e
-  where resolve x = quantvar (symbLookup x $ symbolTable m)
+codevars e m = map (varResolve m) $ dep e
 
 -- | Get a list of CodeChunks from an equation (no functions)
 codevars' :: Expr -> ChunkDB -> [CodeChunk]
-codevars' e m = map resolve $ nub $ names' e
-  where  resolve x = quantvar (symbLookup x (symbolTable m))
+codevars' e m = map (varResolve m) $ nub $ names' e
 
 -- | Get a list of CodeChunks from an equation, where the CodeChunks are correctly parameterized by either Var or Func
 codevarsandfuncs :: Expr -> ChunkDB -> ModExportMap -> [CodeChunk]
 codevarsandfuncs e m mem = map resolve $ dep e
   where resolve x 
-          | Map.member (funcPrefix ++ x) mem = quantfunc (symbLookup x $ symbolTable m)
-          | otherwise = quantvar (symbLookup x $ symbolTable m)
+          | Map.member (funcPrefix ++ x) mem = funcResolve m x
+          | otherwise = varResolve m x
 
 -- | Get a list of CodeChunks from a constraint, where the CodeChunks are correctly parameterized by either Var or Func
 constraintvarsandfuncs :: Constraint -> ChunkDB -> ModExportMap ->  [CodeChunk]
 constraintvarsandfuncs (Range _ ri) m mem = map resolve $ nub $ namesRI ri
   where resolve x 
-          | Map.member (funcPrefix ++ x) mem = quantfunc (symbLookup x $ symbolTable m)
-          | otherwise = quantvar (symbLookup x $ symbolTable m)
+          | Map.member (funcPrefix ++ x) mem = funcResolve m x
+          | otherwise = varResolve m x
 constraintvarsandfuncs _ _ _ = []
+
+funcResolve, varResolve :: ChunkDB -> UID -> CodeChunk
+funcResolve m x = quantfunc $ symbResolve m x
+varResolve  m x = quantvar  $ symbResolve m x

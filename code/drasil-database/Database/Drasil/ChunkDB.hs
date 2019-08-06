@@ -1,7 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Database.Drasil.ChunkDB 
-  ( ChunkDB, cdb
-  , symbolTable, symbLookup, symbResolve
+  ( ChunkDB, cdb, symbResolve
   , termLookup, termTable, termResolve
   , conceptMap, traceMap, defLookup, defResolve, defTable
   , unitLookup , unitTable, collectUnits
@@ -78,17 +77,14 @@ idMap = cdbMap id
 traceMap :: [(UID, [UID])] -> TraceMap
 traceMap = Map.fromList
 
--- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
-symbLookup :: UID -> SymbolMap -> QuantityDict
-symbLookup c m = getS $ Map.lookup c m
-  where getS = maybe (error $ "Symbol: " ++ c ++ " not found in SymbolMap") fst
-
+-- | Looks up an UID in the symbol table from the ChunkDB. If nothing is found, an error is thrown
 symbResolve :: ChunkDB -> UID -> QuantityDict
-symbResolve m x = symbLookup x $ symbolTable m
+symbResolve m x = maybe (error msg) fst $ Map.lookup x $ symbolTable m
+  where msg = "Symbol: " ++ x ++ " not found in SymbolMap"
 
 -- | Gets a unit if it exists, or Nothing.        
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
-getUnitLup m c = getUnit $ symbLookup (c ^. uid) (symbolTable m)
+getUnitLup m c = getUnit $ symbResolve m (c ^. uid)
 
 -- | Looks up a UID in a UMap table. If nothing is found an error is thrown
 uMapLookup :: String -> String -> UID -> UMap a -> a

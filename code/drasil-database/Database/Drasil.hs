@@ -6,7 +6,7 @@ module Database.Drasil (
   , conceptinsTable, dataDefnTable, datadefnLookup, defLookup, defTable
   , gendefLookup, gendefTable, generateRefbyMap, insmodelLookup, insmodelTable
   , labelledconLookup, labelledcontentTable, refbyLookup, refbyTable
-  , sectionLookup, sectionTable, symbLookup, symbolTable, termLookup
+  , sectionLookup, sectionTable, symbResolve, termLookup
   , termTable, theoryModelLookup, theoryModelTable, traceLookup, traceMap
   , traceTable, unitTable
   -- ChunkDB.GetChunk

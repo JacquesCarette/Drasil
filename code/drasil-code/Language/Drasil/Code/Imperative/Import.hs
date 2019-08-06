@@ -1,12 +1,12 @@
 {-# LANGUAGE PostfixOperators #-}
 {-# LANGUAGE Rank2Types #-}
-module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
+module Language.Drasil.Code.Imperative.Import (generator, generateCode) where
 
 import Utils.Drasil (stringList)
 
 import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
-import Database.Drasil(ChunkDB, symbLookup, symbolTable)
+import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Code as C (CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), AuxiliarySym(..), PermanenceSym(..), 
@@ -856,13 +856,13 @@ convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
 convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)   = do
   g <- ask
-  let v = quantvar (symbLookup c (symbolTable $ sysinfodb $ csi $ codeSpec g))
+  let v = quantvar (lookupC g c)
   value (codeName v) (convType $ codeType v)
 convExpr (FCall (C c) x) = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g
       mem = eMap $ codeSpec g
-      funcCd = quantfunc (symbLookup c (symbolTable info))
+      funcCd = quantfunc (symbResolve info c)
       funcNm = codeName funcCd
       funcTp = convType $ codeType funcCd
   args <- mapM convExpr x
@@ -884,14 +884,14 @@ convExpr Operator{} = error "convExpr: Operator"
 convExpr IsIn{}    = error "convExpr: IsIn"
 convExpr (RealI c ri)  = do
   g <- ask
-  convExpr $ renderRealInt (lookupC (sysinfodb $ csi $ codeSpec g) c) ri
+  convExpr $ renderRealInt (lookupC g c) ri
 
 getUpperBound :: Expr -> Expr
 getUpperBound (BinaryOp Lt _ b) = b
 getUpperBound _ = error "Attempt to get upper bound of invalid expression"
 
-lookupC :: ChunkDB -> UID -> QuantityDict
-lookupC sm c = symbLookup c $ symbolTable sm
+lookupC :: State repr -> UID -> QuantityDict
+lookupC g c = symbResolve (sysinfodb $ csi $ codeSpec g) c
 
 renderC :: (HasUID c, HasSymbol c) => (c, [Constraint]) -> [Expr]
 renderC (u, l) = map (renderC' u) l

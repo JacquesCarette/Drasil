@@ -103,10 +103,10 @@ expr (AssocA Mul l)    sm = P.Row $ mulExpr l sm
 expr (Deriv Part a b)  sm =
   P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, expr a sm])
         (P.Row [P.Spc P.Thin, P.Spec Partial,
-                symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb])
+                symbol $ lookupC (sm ^. ckdb) b])
 expr (Deriv Total a b)sm =
   P.Div (P.Row [P.Spc P.Thin, P.Ident "d", expr a sm])
-        (P.Row [P.Spc P.Thin, P.Ident "d", symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb]) 
+        (P.Row [P.Spc P.Thin, P.Ident "d", symbol $ lookupC (sm ^. ckdb) b]) 
 expr (C c)            sm = symbol $ lookupC (sm ^. ckdb) c
 expr (FCall f [x])    sm = P.Row [expr f sm, parens $ expr x sm]
 expr (FCall f l)      sm = P.Row [expr f sm,
@@ -152,7 +152,7 @@ expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space b]
 expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. ckdb) c) ri
 
 lookupC :: ChunkDB -> UID -> Symbol
-lookupC sm c = eqSymb $ symbLookup c $ symbolTable sm
+lookupC m x = eqSymb $ symbResolve m x
 
 lookupT :: ChunkDB -> UID -> Sentence
 lookupT sm c = phraseNP $ termLookup c (termTable sm) ^. term
@@ -196,7 +196,7 @@ indx :: PrintingInformation -> Expr -> Expr -> P.Expr
 indx sm (C c) i = f s
   where
     i' = expr i sm
-    s = eqSymb $ symbLookup c $ symbolTable $ sm ^. ckdb
+    s = lookupC (sm ^. ckdb) c
     f (Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in

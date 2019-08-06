@@ -46,8 +46,9 @@ module Language.Drasil (
   , DefiningExpr(defnExpr)
   , HasUncertainty(unc)
   , Quantity
+  , HasMarker(marker)
   -- Chunk.Concept
-  , cw , ConceptChunk , CommonConcept, ConceptInstance
+  , cw, ConceptChunk, CommonConcept, ConceptInstance
   -- Chunk.Concept.Core
   , sDom
   -- Chunk.CommonIdea
@@ -206,7 +207,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences), HasSpace(typ), Referable(refAdd, renderRef),
+  HasReference(getReferences), HasSpace(typ), Referable(refAdd, renderRef), HasMarker(marker),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))

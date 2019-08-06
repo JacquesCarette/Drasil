@@ -16,7 +16,8 @@ import Language.Drasil hiding (sec)
 import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
   nonFuncReqDom, likeChgDom, unlikeChgDom)
 
-import Control.Lens((^.), Getting)
+import Control.Lens ((^.), (&), (.~), Getting)
+import Data.List (elemIndex)
 
 type SRSDecl = [DocSection]
 
@@ -101,7 +102,7 @@ mkDocDesc cdb = map sec where
   scsSub Assumptions = DL.Assumptions $ fromConcInsDB assumpDom
   scsSub (TMs s f) = DL.TMs s f $ allInDB theoryModelTable
   scsSub (GDs s f dd) = DL.GDs s f (allInDB gendefTable) dd
-  scsSub (DDs s f dd) = DL.DDs s f (allInDB dataDefnTable) dd
+  scsSub (DDs s f dd) = DL.DDs s f (setMarkers $ allInDB dataDefnTable) dd
   scsSub (IMs s f dd) = DL.IMs s f (allInDB insmodelTable) dd
   scsSub (Constraints s c) = DL.Constraints s c
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
@@ -111,3 +112,9 @@ mkDocDesc cdb = map sec where
   allInDB = expandFromDB id
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
   fromConcInsDB c = expandFromDB (filter (\x -> sDom (cdom x) == c ^. uid)) conceptinsTable
+
+setMarkers :: (Eq c, HasMarker c) => [c] -> [c]
+setMarkers l = map setMarker l
+  where
+    setMarker x = x & marker .~ ind x
+    ind i = maybe (error "Marker couldn't be added") (+1) (i `elemIndex` l)

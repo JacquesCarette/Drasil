@@ -6,7 +6,7 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocDecl (SRSDecl, mkDocDesc)
+import Drasil.DocDecl (SRSDecl, mkDocDesc, setMarkers)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), Literature(..),
@@ -26,9 +26,6 @@ import Utils.Drasil
 import Database.Drasil(SystemInformation(SI), citeDB, termTable, ccss, ccss',
   _authors, _kind, _quants, _sys, _usedinfodb, _sysinfodb, collectUnits,
   ChunkDB, traceTable, refbyTable, generateRefbyMap)
-
-import Control.Lens ((^.), over, set)
-import qualified Data.Map as Map (elems)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table, symbTableRef)
@@ -53,8 +50,10 @@ import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF,
 import Data.Drasil.Concepts.Documentation (likelyChg, refmat, section_,
   software, unlikelyChg)
 
+import Control.Lens ((^.), over, set)
 import Data.Function (on)
 import Data.List (nub, sortBy)
+import Data.Map (elems)
 
 -- | Creates a document from a document description and system information
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
@@ -117,7 +116,7 @@ mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
     mkSubRef SI {_sysinfodb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
     mkSubRef SI {_usedinfodb = db} TAandA =
-      tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
+      tableOfAbbAndAcronyms $ nub $ map fst $ elems $ termTable db
 
 -- | table of units constructors
 tunit, tunit' :: [TUIntro] -> RefTab
@@ -276,13 +275,13 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (TMs _ _ [])   = error "There are no Theoretical Models"
     mkSubSCS _ (GDs _ _ [] _) = SSD.genDefnF []
     mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ _ [] _)  = error "There are no Instance Models"
+    mkSubSCS _ (IMs _ _ [] _) = error "There are no Instance Models"
     mkSubSCS si' (TMs intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap (\x -> [LlC $ ddefn fields si' x, derivation x]) dds
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ (concatMap (\x -> [LlC $ ddefn fields si' x, derivation x]) $ setMarkers dds)
     mkSubSCS si' (DDs intro fields dds _) =
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map (LlC . ddefn fields si') dds
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ (map (LlC . ddefn fields si') $ setMarkers dds)
     mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
       SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> [LlC $ gdefn fields si' x, derivation x]) gs'
     mkSubSCS si' (GDs intro fields gs' _) =

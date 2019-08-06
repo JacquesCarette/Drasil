@@ -20,7 +20,7 @@ module Language.Drasil.Classes (
   , HasUncertainty(unc)
   , Concept
   , Referable(refAdd, renderRef)
-
+  , HasMarker(marker)
   -- the unsorted rest
   , IsUnit(udefn, getUnits)
   , UnitEq(uniteq)
@@ -119,11 +119,15 @@ class HasUID s => Referable s where
                             -- Only visible in the source (tex/html).
   renderRef :: s -> LblType -- alternate
 
+-- | A HasMarker is a something that can be referenced that has a number (ie. DD1)
+class (HasUID c, Referable c) => HasMarker c where
+  marker :: Lens' c Int
+
 -----------------------------------------------------
 -- Below are for units only
 -- | Some chunks store a unit symbol
 class HasUnitSymbol u where
-   usymb ::u -> USymb
+   usymb :: u -> USymb
 
 -- | Units are Ideas with a Definition which store a unit symbol.
 -- They must also be explicitly declared to be instances of IsUnit

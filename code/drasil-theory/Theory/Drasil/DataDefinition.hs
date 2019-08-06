@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Theory.Drasil.DataDefinition where
 
-import Control.Lens (makeLenses, (^.), view)
+import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil
 import Data.Drasil.IdeaDicts (dataDefn)
 
@@ -19,6 +19,7 @@ data DataDefinition = DatDef { _qd :: QDefinition
                              , _deri :: Maybe Derivation
                              , lbl :: ShortName
                              , ra :: String
+                             , _mark :: Int
                              , _notes :: [Sentence]
                              }
 makeLenses ''DataDefinition
@@ -39,6 +40,7 @@ instance HasShortName       DataDefinition where shortname = lbl
 instance HasRefAddress      DataDefinition where getRefAdd = ra
 instance ConceptDomain      DataDefinition where cdom _ = cdom dataDefn
 instance CommonIdea         DataDefinition where abrv _ = abrv dataDefn
+instance HasMarker          DataDefinition where marker = mark
 instance Referable          DataDefinition where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
@@ -46,11 +48,11 @@ instance Referable          DataDefinition where
 -- | Smart constructor for data definitions 
 dd :: QDefinition -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 dd q []   _   _  = error $ "Source field of " ++ q ^. uid ++ " is empty"
-dd q refs der sn = DatDef q Global refs der (shortname' sn) (prependAbrv dataDefn sn)
+dd q refs der sn = DatDef q Global refs der (shortname' sn) (prependAbrv dataDefn sn) 0
 
 -- | Smart constructor for data definitions with no references
 ddNoRefs :: QDefinition -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddNoRefs q der sn = DatDef q Global [] der (shortname' sn) (prependAbrv dataDefn sn)
+ddNoRefs q der sn = DatDef q Global [] der (shortname' sn) (prependAbrv dataDefn sn) 0
 
 qdFromDD :: DataDefinition -> QDefinition
 qdFromDD d = d ^. qd

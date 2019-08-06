@@ -56,24 +56,22 @@ traceMReferrers :: ([UID] -> [UID]) -> ChunkDB -> [UID]
 traceMReferrers f = f . nub . concat . Map.elems . (^. refbyTable)
 
 traceMHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [Sentence]
-traceMHeader f c = map (\x -> helpToShortName x c (x `elemIndex` l)) l
+traceMHeader f c = map (\x -> markerHelper x c) l
   where l = f $ _sysinfodb c
 
-helpToShortName :: UID -> SystemInformation -> Maybe Int -> Sentence
-helpToShortName t si (Just i)
-  | t `elem` Map.keys (s ^. dataDefnTable)        = shortRef   (datadefnLookup    t (s ^. dataDefnTable)) i
+markerHelper :: UID -> SystemInformation -> Sentence
+markerHelper t si
+  | t `elem` Map.keys (s ^. dataDefnTable)        = shortRef  $ datadefnLookup    t (s ^. dataDefnTable)
   | t `elem` Map.keys (s ^. insmodelTable)        = makeRef2S $ insmodelLookup    t (s ^. insmodelTable)
   | t `elem` Map.keys (s ^. gendefTable)          = makeRef2S $ gendefLookup      t (s ^. gendefTable)
   | t `elem` Map.keys (s ^. theoryModelTable)     = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
   | t `elem` Map.keys (s ^. conceptinsTable)      = makeRef2S $ conceptinsLookup  t (s ^. conceptinsTable)
   | t `elem` Map.keys (s ^. sectionTable)         = makeRef2S $ sectionLookup     t (s ^. sectionTable)
   | t `elem` Map.keys (s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
-  | t `elem` map (^. uid) r = EmptyS
+  | t `elem` map (^. uid) (citeDB si) = EmptyS
   | otherwise = error $ t ++ "Caught."
   where
     s = _sysinfodb si
-    r = citeDB si
-helpToShortName t _ Nothing = error $ t ++ " not found. (Should never occur.)"
  
 traceMColHeader :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
 traceMColHeader f = traceMHeader (traceMReferees f)

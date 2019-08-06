@@ -10,20 +10,20 @@ public class InputParameters {
     
     /** \brief Reads input from a file with the given file name
         \param filename name of the input file
-        \param A_C heating coil surface area
-        \param C_W specific heat capacity of water
-        \param h_C convective heat transfer coefficient between coil and water
-        \param T_init initial temperature
-        \param t_final final time
-        \param L length of tank
-        \param T_C temperature of the heating coil
-        \param t_step time step for simulation
-        \param rho_W density of water
-        \param D diameter of tank
+        \param A_C heating coil surface area (m^2)
+        \param C_W specific heat capacity of water (J/(kg degreeC))
+        \param h_C convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
+        \param T_init initial temperature (degreeC)
+        \param t_final final time (s)
+        \param L length of tank (m)
+        \param T_C temperature of the heating coil (degreeC)
+        \param t_step time step for simulation (s)
+        \param rho_W density of water (kg/m^3)
+        \param D diameter of tank (m)
         \param A_tol absolute tolerance
         \param R_tol relative tolerance
-        \param T_W temperature of the water
-        \param E_W change in heat energy in the water
+        \param T_W temperature of the water (degreeC)
+        \param E_W change in heat energy in the water (J)
     */
     public static void get_input(string filename, out double A_C, out double C_W, out double h_C, out double T_init, out double t_final, out double L, out double T_C, out double t_step, out double rho_W, out double D, out double A_tol, out double R_tol, out double T_W, out double E_W) {
         StreamReader infile;
@@ -60,18 +60,18 @@ public class InputParameters {
     }
     
     /** \brief Verifies that input values satisfy the physical constraints and software constraints
-        \param A_C heating coil surface area
-        \param C_W specific heat capacity of water
-        \param h_C convective heat transfer coefficient between coil and water
-        \param T_init initial temperature
-        \param t_final final time
-        \param L length of tank
-        \param T_C temperature of the heating coil
-        \param t_step time step for simulation
-        \param rho_W density of water
-        \param D diameter of tank
-        \param T_W temperature of the water
-        \param E_W change in heat energy in the water
+        \param A_C heating coil surface area (m^2)
+        \param C_W specific heat capacity of water (J/(kg degreeC))
+        \param h_C convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
+        \param T_init initial temperature (degreeC)
+        \param t_final final time (s)
+        \param L length of tank (m)
+        \param T_C temperature of the heating coil (degreeC)
+        \param t_step time step for simulation (s)
+        \param rho_W density of water (kg/m^3)
+        \param D diameter of tank (m)
+        \param T_W temperature of the water (degreeC)
+        \param E_W change in heat energy in the water (J)
     */
     public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
         if (!(A_C <= 100000)) {
@@ -90,6 +90,9 @@ public class InputParameters {
             Console.WriteLine("Warning: constraint violated");
         }
         if (!(950 < rho_W && rho_W <= 1000)) {
+            Console.WriteLine("Warning: constraint violated");
+        }
+        if (!(1.0e-2 <= D && D <= 100)) {
             Console.WriteLine("Warning: constraint violated");
         }
         

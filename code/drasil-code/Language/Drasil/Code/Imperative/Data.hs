@@ -1,8 +1,9 @@
 module Language.Drasil.Code.Imperative.Data (Pair(..), pairList,
-  Terminator(..), ScopeTag(..), FileType(..), AuxData(..), ad, FileData(..), 
-  fileD, file, srcFile, hdrFile, isSource, isHeader, updateFileMod, 
-  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  OpData(..), od, PackData(..), packD, ParamData(..), pd, updateParamDoc, 
+  Terminator(..), ScopeTag(..), FileType(..), AuxData(..), ad, emptyAux, 
+  FileData(..), fileD, file, srcFile, hdrFile, isSource, isHeader, 
+  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, OpData(..), od, PackData(..), packD, emptyPack, 
+  ParamData(..), pd, updateParamDoc, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, 
   VarData(..), vard
 ) where
@@ -11,7 +12,7 @@ import Language.Drasil.Code.Code (CodeType)
 
 import Control.Applicative (liftA2)
 import Prelude hiding ((<>))
-import Text.PrettyPrint.HughesPJ (Doc)
+import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty)
 
 class Pair p where
   pfst :: p x y a -> x a
@@ -33,6 +34,9 @@ data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}
 
 ad :: String -> Doc -> AuxData
 ad = AD
+
+emptyAux :: AuxData
+emptyAux = ad "" empty
 
 data FileData = FileD {fileType :: FileType, filePath :: FilePath,
   fileMod :: ModData}
@@ -85,11 +89,13 @@ data OpData = OD {opPrec :: Int, opDoc :: Doc}
 od :: Int -> Doc -> OpData
 od = OD
 
-data PackData = PackD {packName :: String, packMods :: [FileData], 
-  packAux :: [AuxData]}
+data PackData = PackD {packProg :: ProgData, packAux :: [AuxData]}
 
-packD :: String -> [FileData] -> [AuxData] -> PackData
+packD :: ProgData -> [AuxData] -> PackData
 packD = PackD
+
+emptyPack :: PackData
+emptyPack = packD emptyProg []
 
 data ParamData = PD {paramName :: String, paramType :: TypeData, 
   paramDoc :: Doc}
@@ -102,6 +108,14 @@ pd = PD
 
 updateParamDoc :: (Doc -> Doc) -> ParamData -> ParamData
 updateParamDoc f v = pd (paramName v) (paramType v) ((f . paramDoc) v)
+
+data ProgData = ProgD {progName :: String, progMods :: [FileData]}
+
+progD :: String -> [FileData] -> ProgData
+progD n fs = ProgD n (filter (not . isEmpty . modDoc . fileMod) fs)
+
+emptyProg :: ProgData
+emptyProg = progD "" []
 
 data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc, 
   destructSts :: (Doc, Terminator)}

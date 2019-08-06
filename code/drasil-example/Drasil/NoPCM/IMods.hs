@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Drasil.SWHS.Concepts (water)
-import Drasil.SWHS.DataDefs (ddHtFluxC)
+import Drasil.SWHS.DataDefs (ddHtFluxC, balanceDecayRate)
 import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc3,
  heatEInWtr)
 import Drasil.SWHS.References (koothoor2013)
@@ -50,8 +50,7 @@ balWtrDesc :: Sentence
 balWtrDesc = foldlSent [(E $ sy tempW) `isThe` phrase tempW +:+.
   sParen (unwrap $ getUnit tempW), 
   (E $ sy tempC) `isThe` phrase tempC +:+. sParen (unwrap $ getUnit tempC),
-  E $ sy tauW $= (sy wMass * sy htCapW) / (sy coilHTC * sy coilSA),
-  S "is a constant" +:+. sParen (unwrap $ getUnit tauW),
+  ch tauW, S "is from" +:+. makeRef2S balanceDecayRate,
   S "The above", phrase equation, S "applies as long as the", phrase water,
   S "is in", phrase liquid, S "form" `sC` (E $ 0 $< sy tempW $< 100),
   sParen (unwrap $ getUnit tempW), S "where", E 0,
@@ -78,8 +77,7 @@ eBalanceOnWtrDerivDesc2 dd = [S "Using", makeRef2S dd, S "for", ch dd `sC`
   S "this can be written as"]
 
 eBalanceOnWtrDerivDesc4 :: [Sentence]
-eBalanceOnWtrDerivDesc4 = [S "Setting", ch tauW, S "=", ch wMass, ch htCapW,
-  S "/", ch coilHTC, ch coilSA `sC` eqN 4, S "can be written in its final form as"]
+eBalanceOnWtrDerivDesc4 = [substitute [balanceDecayRate]]
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 

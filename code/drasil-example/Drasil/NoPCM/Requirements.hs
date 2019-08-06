@@ -10,9 +10,10 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Drasil.DocLang (mkInputPropsTable)
 
+import Drasil.SWHS.DataDefs (balanceDecayRate)
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
   checkWithPhysConsts, findMassConstruct, iIQConstruct, oIDQConstruct)
-import Drasil.SWHS.Unitals (diam, tankLength, tauW, wDensity, wMass, wVol)
+import Drasil.SWHS.Unitals (diam, tankLength, wDensity, wMass, wVol)
 
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (inputs)
@@ -43,7 +44,7 @@ oIDQQuants :: [Sentence]
 oIDQQuants = map foldlSent_ [
   [S "the", plural quantity, S "from", makeRef2S inputInitQuants],
   [S "the", phrase mass, S "from", makeRef2S findMass],
-  [ch tauW, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)]
+  [ch balanceDecayRate, sParen (S "from" +:+ makeRef2S balanceDecayRate)]
   ]
 
 inputInitQuantsTable :: LabelledContent

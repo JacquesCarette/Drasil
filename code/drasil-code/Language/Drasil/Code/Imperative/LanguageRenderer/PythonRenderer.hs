@@ -10,10 +10,10 @@ import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
-  RenderSym(..), InternalFile(..), AuxiliarySym(..), KeywordSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
+  KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
@@ -34,13 +34,17 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
   enumElemDocD, objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, 
   listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
   continueDocD, staticDocD, dynamicDocD, classDec, dot, forLabel, 
-  observerListName, doxConfigName, commentedItem, addCommentsDocD, classDoc, 
-  moduleDoc, docFuncRepr, valList, appendToBody, getterName, setterName)
+  observerListName, doxConfigName, makefileName, commentedItem, addCommentsDocD,
+  classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
+  setterName)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
-  ParamData(..), TypeData(..), td, ValData(..), vd, VarData(..), vard)
+  ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
+  VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
+import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType, checkParams)
@@ -70,11 +74,11 @@ instance Monad PythonCode where
 
 instance PackageSym PythonCode where
   type Package PythonCode = PackData
-  package n ms = lift2Lists (packD n) mods
-    where mods = filter (not . isEmpty . modDoc . fileMod . unPC) ms
+  package = lift1List packD
 
-  packDox n ms = package n ms [doxConfig n mods]
-    where mods = filter (not . isEmpty . modDoc . fileMod . unPC) ms
+instance ProgramSym PythonCode where
+  type Program PythonCode = ProgData
+  prog n = liftList (progD n)
 
 instance RenderSym PythonCode where
   type RenderFile PythonCode = FileData
@@ -94,10 +98,12 @@ instance InternalFile PythonCode where
 
 instance AuxiliarySym PythonCode where
   type Auxiliary PythonCode = AuxData
-  doxConfig prog fs = fmap (ad doxConfigName) (lift1List (makeDoxConfig prog)
-    optimizeDox (map (fmap filePath) fs))
+  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
+    optimizeDox p)
 
   optimizeDox = return $ text "YES"
+
+  makefile cms = fmap (ad makefileName . makeBuild cms Nothing pyRunnable)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
@@ -725,3 +731,6 @@ pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
 pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
 pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . text) lns
+
+pyRunnable :: Runnable
+pyRunnable = interpMM "python"

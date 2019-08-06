@@ -157,6 +157,7 @@ genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
 genPackage = do
   g <- ask
   ms <- genModules
+  -- Below line of code cannot be simplified because program has a generic type
   let n = case codeSpec g of CodeSpec {program = p} -> programName p
       cms = commented g
   return $ if null cms then package n ms [] else packDox n ms
@@ -593,6 +594,7 @@ genModule n desc maybeMs maybeCs = do
   g <- ask
   let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
       updateState = withReader (\s -> s { currentModule = n })
+      -- Below line of code cannot be simplified because authors has a generic type
       as = case csi (codeSpec g) of CSI {authors = a} -> map name a
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs

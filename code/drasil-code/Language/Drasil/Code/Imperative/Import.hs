@@ -7,7 +7,7 @@ import Utils.Drasil (stringList)
 import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
-import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
+import Language.Drasil.Code.Code as C (CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), AuxiliarySym(..), PermanenceSym(..), 
   BodySym(..), BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..),
@@ -15,13 +15,8 @@ import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..),
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
-import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,    
-  BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
-  mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
-import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Data (PackData(..), ProgData(..))
 import Language.Drasil.Code.Imperative.Helpers (convType)
-import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (jNameOpts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk),
   codeType, quantvar, quantfunc, funcPrefix, physLookup, sfwrLookup, programName)
@@ -44,7 +39,6 @@ import Control.Applicative ((<$>))
 import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.), view)
-import qualified Prelude as P ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), empty, parens, render, text)
 
 -- Private State, used to push these options around the generator
@@ -146,21 +140,20 @@ generateCode l unRepr g =
   do workingDir <- getCurrentDirectory
      createDirectoryIfMissing False (getDir l)
      setCurrentDirectory (getDir l)
-     createCodeFiles $ C.Code $ concatMap C.unCode [code, makefile]
+     createCodeFiles code
      setCurrentDirectory workingDir
   where pckg = runReader genPackage g
         code = makeCode (progMods $ packProg $ unRepr pckg) (packAux $ unRepr 
           pckg)
-        makefile = makeBuild (packProg $ unRepr pckg) (getBuildConfig l) 
-          (getRunnable l) (commented g)
 
 genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
 genPackage = do
   g <- ask
   p <- genProgram
   let n = case codeSpec g of CodeSpec {program = pr} -> programName pr
-  a <- genDoxConfig n p
-  return $ package p a
+      m = makefile (commented g) p
+  d <- genDoxConfig n p
+  return $ package p (m:d)
 
 genDoxConfig :: (AuxiliarySym repr) => String -> repr (Program repr) ->
   Reader (State repr) [repr (Auxiliary repr)]
@@ -192,22 +185,6 @@ getDir Cpp = "cpp"
 getDir CSharp = "csharp"
 getDir Java = "java"
 getDir Python = "python"
-
-getRunnable :: Lang -> Runnable
-getRunnable Java = interp (flip withExt ".class" $ inCodePackage mainModule) 
-  jNameOpts "java"
-getRunnable Python = interpMM "python"
-getRunnable CSharp = nativeBinary
-getRunnable Cpp = nativeBinary
-
-getBuildConfig :: Lang -> Maybe BuildConfig
-getBuildConfig Java = buildSingle (\i _ -> asFragment "javac" : i) $
-  inCodePackage mainModuleFile
-getBuildConfig Python = Nothing
-getBuildConfig CSharp = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs", 
-  asFragment "-out:" P.<> o] ++ i
-getBuildConfig Cpp = buildAll $ \i o -> cppCompiler : i ++ map asFragment
-  ["--std=c++11", "-o"] ++ [o]
 
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (: [])

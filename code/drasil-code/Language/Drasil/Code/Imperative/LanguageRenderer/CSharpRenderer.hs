@@ -40,20 +40,25 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   listStateObjDocD, notNullDocD, funcDocD, castDocD, listSetFuncDocD, 
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
-  blockCmtEnd, docCmtStart, observerListName, doxConfigName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
-  setterName, setMain, setMainMethod, setEmpty, intValue)
+  blockCmtEnd, docCmtStart, observerListName, doxConfigName, makefileName, 
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
+  surroundBody, getterName, setterName, setMain, setMainMethod, setEmpty, 
+  intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
   ValData(..), updateValDoc, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
+  asFragment, buildAll, nativeBinary, osClassDefault)
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
   liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
+import qualified Prelude as P ((<>))
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -106,6 +111,8 @@ instance AuxiliarySym CSharpCode where
     optimizeDox p)
 
   optimizeDox = return $ text "NO"
+
+  makefile cms = fmap (ad makefileName . makeBuild cms csBuildConfig csRunnable)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
@@ -674,3 +681,10 @@ csInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out
 csInOutCall f n ins outs both = valState $ f n void (map (fmap (updateValDoc 
   csRef) . valueOf) both ++ ins ++ map (fmap (updateValDoc csOut) . valueOf) 
   outs)
+
+csBuildConfig :: Maybe BuildConfig
+csBuildConfig = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs", 
+  asFragment "-out:" P.<> o] ++ i
+
+csRunnable :: Runnable
+csRunnable = nativeBinary

@@ -40,9 +40,9 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  surroundBody, getterName, setterName, setEmpty, intValue)
+  makefileName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
+  appendToBody, surroundBody, getterName, setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
   ScopeTag(..), AuxData(..), ad, emptyAux, FileData(..), srcFile, hdrFile, 
   updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), 
@@ -50,6 +50,9 @@ import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
   emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), 
   vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
+  asFragment, buildAll, cppCompiler, nativeBinary)
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
@@ -106,6 +109,8 @@ instance (Pair p) => AuxiliarySym (p CppSrcCode CppHdrCode) where
   doxConfig pName p = pair (doxConfig pName $ pfst p) (return emptyAux)
 
   optimizeDox = pair optimizeDox (return empty)
+
+  makefile cms p = pair (makefile cms $ pfst p) (return emptyAux)
 
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
@@ -670,6 +675,9 @@ instance AuxiliarySym CppSrcCode where
 
   optimizeDox = return $ text "NO"
   
+  makefile cms = fmap (ad makefileName . makeBuild cms cppBuildConfig 
+    cppRunnable)
+
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
   endStatement = return semi
@@ -1908,3 +1916,10 @@ cppInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf
   out : ins)
 cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins 
   ++ map valueOf outs)
+
+cppBuildConfig :: Maybe BuildConfig
+cppBuildConfig = buildAll $ \i o -> cppCompiler : i ++ map asFragment
+  ["--std=c++11", "-o"] ++ [o]
+
+cppRunnable :: Runnable
+cppRunnable = nativeBinary

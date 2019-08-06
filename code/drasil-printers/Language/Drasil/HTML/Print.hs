@@ -107,7 +107,9 @@ titleSpec s         = pSpec s
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 pSpec :: Spec -> Doc
--- pSpec (E e)             = em $ pExpr e
+-- Non-mathjax
+-- pSpec (E e)  = em $ pExpr e
+-- pSpec (Sy s) = text $ uSymb s
 -- Latex based math for expressions and units
 pSpec (E e)     = printMath $ toMath $ TeX.pExpr e
 pSpec (Sy s)    = printMath $ TeX.pUnit s

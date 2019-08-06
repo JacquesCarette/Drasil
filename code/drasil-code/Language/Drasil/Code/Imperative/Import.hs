@@ -437,9 +437,9 @@ constraintViolatedMsg :: (CodeIdea q, HasCodeType q, RenderSym repr) => q ->
   String -> Constraint -> Reader State [repr (Statement repr)]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c 
-  v <- variable (codeName q) (convType $ codeType q)
+  v <- value (codeName q) (convType $ codeType q)
   return $ [printStr $ codeName q ++ " has value ",
-    print $ valueOf v,
+    print v,
     printStr $ " but " ++ s ++ " to be "] ++ pc
 
 printConstraint :: (RenderSym repr) => Constraint -> 
@@ -452,26 +452,27 @@ printConstraint c = do
       printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
-        return [printStr "between ",
-          print lb,
-          printStr $ " (" ++ render (exprDoc db Linear e1) ++ ") and ",
-          print ub,
-          printStr $ " (" ++ render (exprDoc db Linear e2) ++ ")"]
+        return $ [printStr "between ",
+          print lb] ++ printExpr e1 db ++
+          [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
       printConstraint' (Range _ (UpTo (_,e))) = do
         ub <- convExpr e
-        return [printStr "below ",
-          print ub,
-          printStr $ " (" ++ render (exprDoc db Linear e) ++ ")"]
+        return $ [printStr "below ",
+          print ub] ++ printExpr e db ++ [printStrLn "."]
       printConstraint' (Range _ (UpFrom (_,e))) = do
         lb <- convExpr e
-        return [printStr "above ",
-          print lb,
-          printStr $ " (" ++ render (exprDoc db Linear e) ++ ")"]
+        return $ [printStr "above ",
+          print lb] ++ printExpr e db ++ [printStrLn "."]
       printConstraint' (EnumeratedReal _ ds) = return [
-        printStr $ "one of: " ++ intercalate ", " (map show ds)]
+        printStrLn $ "one of: " ++ intercalate ", " (map show ds)]
       printConstraint' (EnumeratedStr _ ss) = return [
-        printStr $ "one of: " ++ intercalate ", " ss]
+        printStrLn $ "one of: " ++ intercalate ", " ss]
   printConstraint' c
+
+printExpr :: (RenderSym repr) => Expr -> ChunkDB -> [repr (Statement repr)]
+printExpr (Dbl _) _ = []
+printExpr (Int _) _ = []
+printExpr e db = [printStr $ " (" ++ render (exprDoc db Linear e) ++ ")"]
 
 genInputFormat :: (RenderSym repr) => Reader State 
   (Maybe (repr (Method repr)))

@@ -1,18 +1,13 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Database.Drasil.ChunkDB 
-  ( ChunkDB, cdb, symbResolve, termTable, termResolve
-  , conceptMap, traceMap, defResolve
-  , unitLookup , unitTable, collectUnits
-  , traceLookup, traceTable, TraceMap, generateRefbyMap, RefbyMap
-  , refbyLookup, refbyTable
-  , datadefnLookup
-  , insmodelLookup, gendefLookup, theoryModelLookup, conceptinsLookup
-  , sectionLookup, labelledconLookup
-  , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
-  , conceptinsTable, sectionTable, labelledcontentTable, asOrderedList, UMap
-  ) where
+module Database.Drasil.ChunkDB (ChunkDB, RefbyMap, TraceMap, UMap,
+  asOrderedList, cdb, collectUnits, conceptMap, conceptinsLookup,
+  conceptinsTable, dataDefnTable, datadefnLookup, defResolve, gendefLookup,
+  gendefTable, generateRefbyMap, insmodelLookup, insmodelTable,
+  labelledconLookup, labelledcontentTable, refbyLookup, refbyTable,
+  sectionLookup, sectionTable, symbResolve, termResolve, termTable,
+  theoryModelLookup, theoryModelTable, traceLookup, traceMap, traceTable) where
 
-import Language.Drasil hiding (sec)
+import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.), makeLenses)
@@ -156,22 +151,22 @@ cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
     [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] ->
     [LabelledContent] -> ChunkDB
-cdb s t c u d ins gd tm ci sec lc = CDB (symbolMap s) (termMap t)
-  (conceptMap c) (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
-  (idMap ci) (idMap sec) (idMap lc)
+cdb s t c u d ins gd tm ci sect lc = CDB (symbolMap s) (termMap t) (conceptMap c)
+  (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
+  (idMap ci) (idMap sect) (idMap lc)
 
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
 collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
  . concatMap getUnits . mapMaybe (getUnitLup m)
 
 traceLookup :: UID -> TraceMap -> [UID]
-traceLookup c = fromMaybe [] .  Map.lookup c
+traceLookup c = fromMaybe [] . Map.lookup c
  
 invert :: (Ord v) => Map.Map k [v] -> Map.Map v [k]
 invert m = Map.fromListWith (++) pairs
     where pairs = [(v, [k]) | (k, vs) <- Map.toList m, v <- vs]
  
-generateRefbyMap :: TraceMap  -> RefbyMap
+generateRefbyMap :: TraceMap -> RefbyMap
 generateRefbyMap = invert
 
 refbyLookup :: UID -> RefbyMap -> [UID]

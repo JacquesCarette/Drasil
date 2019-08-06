@@ -891,7 +891,7 @@ getUpperBound (BinaryOp Lt _ b) = b
 getUpperBound _ = error "Attempt to get upper bound of invalid expression"
 
 lookupC :: State repr -> UID -> QuantityDict
-lookupC g c = symbResolve (sysinfodb $ csi $ codeSpec g) c
+lookupC g = symbResolve (sysinfodb $ csi $ codeSpec g)
 
 renderC :: (HasUID c, HasSymbol c) => (c, [Constraint]) -> [Expr]
 renderC (u, l) = map (renderC' u) l

@@ -34,7 +34,7 @@ import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   getPatternInputs, junkLine, singleton)
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc, unitDoc)
 
-import Prelude hiding (sin, cos, tan, log, exp, const)
+import Prelude hiding (sin, cos, tan, log, exp, const, print)
 import Data.List (nub, intersperse, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
@@ -57,18 +57,30 @@ data State repr = State {
   commented :: [Comments],
   currentModule :: String,
 
-  sfwrCBody :: (RenderSym repr) => Expr -> repr (Body repr),
-  physCBody :: (RenderSym repr) => Expr -> repr (Body repr)
+  onSfwrC :: ConstraintBehaviour,
+  onPhysC :: ConstraintBehaviour
 }
+
+sfwrCBody :: (HasUID q, CodeIdea q, RenderSym repr) => [(q,[Constraint])] -> 
+  Reader (State repr) [repr (Statement repr)]
+sfwrCBody = asks (chooseConstr . onSfwrC)
+
+physCBody :: (HasUID q, CodeIdea q, RenderSym repr) => [(q,[Constraint])] -> 
+  Reader (State repr) [repr (Statement repr)]
+physCBody = asks (chooseConstr . onPhysC)
 
 -- function to choose how to deal with
 -- 1. constraints
 -- 2. how to structure the input "module"
 -- 3. logging assignments
-chooseConstr :: (RenderSym repr) => ConstraintBehaviour -> Expr -> repr
-  (Body repr)
-chooseConstr Warning   = constrWarn
-chooseConstr Exception = constrExc
+chooseConstr :: (HasUID q, CodeIdea q, RenderSym repr) => ConstraintBehaviour 
+  -> [(q,[Constraint])] -> Reader (State repr) [repr (Statement repr)]
+chooseConstr Warning   cs = do
+  checks <- mapM constrWarn cs
+  return $ concat checks
+chooseConstr Exception cs = do
+  checks <- mapM constrExc cs
+  return $ concat checks
 
 chooseInModule :: (RenderSym repr) => InputModule -> Reader (State repr) 
   [repr (RenderFile repr)]
@@ -110,7 +122,7 @@ generator chs spec = State {
 
   -- next depend on chs
   logName = logFile chs,
-  sfwrCBody = chooseConstr $ onSfwrConstraint chs,
+  onSfwrC = onSfwrConstraint chs,
   physCBody = chooseConstr $ onPhysConstraint chs
 }
 
@@ -376,10 +388,9 @@ genInputConstraints = do
         parms <- getConstraintParams
         let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ 
               codeSpec h)
-            sfwrCs   = concatMap (renderC . sfwrLookup cm) varsList
+            sfwrCs   = map (sfwrLookup cm) varsList
             physCs   = concatMap (renderC . physLookup cm) varsList
-        sf <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
-          sfwrCBody h x)]}) sfwrCs
+        sf <- sfwrCBody sfwrCs
         hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
           physCBody h x)]}) physCs
         desc <- inConsFuncDesc
@@ -405,12 +416,65 @@ genInputDerived = do
         return $ Just mthd
   genDerived $ Map.lookup "derived_values" (eMap $ codeSpec g)
 
--- need Expr -> String to print constraint
-constrWarn :: (RenderSym repr) => Expr -> repr (Body repr)
-constrWarn _ = oneLiner $ printStrLn "Warning: constraint violated"
+constrWarn :: (HasUID q, CodeIdea q, RenderSym repr) => (q,[Constraint]) -> 
+  Reader (State repr) [repr (Statement repr)]
+constrWarn c = do
+  g <- ask
+  let q = fst c
+      cs = snd c
+  conds <- mapM (convExpr . renderC q) cs
+  msgs <- mapM (constraintViolatedMsg q) cs
+  return $ zipWith (\c m -> ifNoElse (c ?!) (bodyStatements $
+    printStr "Warning: " : m)) conds msgs
 
-constrExc :: (RenderSym repr) => Expr -> repr (Body repr)
-constrExc _ = oneLiner $ throw "InputError"
+constrExc :: (HasUID q, CodeIdea q, RenderSym repr) => (q,[Constraint]) -> 
+  Reader (State repr) [repr (Statement repr)]
+constrExc c = do
+  g <- ask
+  let q = fst c
+      cs = snd c
+  conds <- mapM (convExpr . renderC q) cs
+  msgs <- mapM (constraintViolatedMsg q) cs
+  return $ zipWith (\c m -> ifNoElse (c ?!) (bodyStatements $ 
+    m ++ [throw "InputError"])) conds msgs
+
+constraintViolatedMsg :: (CodeIdea q, RenderSym repr) => q -> Constraint
+  Reader (State repr) [repr (Statement repr)]
+constraintViolatedMsg q c = do
+  pc <- printConstraint q c 
+  return [printStr $ codeName q ++ " has value ",
+    print $ valueOf $ variable (codeName q) (convType $ codeType q),
+    printStr " but suggested "] ++ pc
+
+printConstraint :: (CodeIdea q, RenderSym repr) => q -> Constraint -> 
+  Reader (State repr) [repr (Statement repr)]
+printConstraint q c = do
+  g <- ask
+  printConstraint' c
+  where t = convType $ codeType q
+        db = sysinfodb $ csi $ codeSpec g
+        printConstraint (Range _ (Bounded (_,e1) (_,e2))) = do
+          lb <- convExpr e1
+          ub <- convExpr e2
+          return [printStr "to be between ",
+            print lb t,
+            printStr $ " (" ++ exprDoc db Linear e1 ++ ") and ",
+            print ub t,
+            printStr $ " (" ++ exprDoc db Linear e2 ++ ")"]
+        printConstraint (Range _ (UpTo e)) = do
+          ub <- convExpr e
+          return [printStr "to be below ",
+            print ub t,
+            printStr $ " (" ++ exprDoc db Linear e ++ ")"]
+        printConstraint (Range _ (UpFrom e)) = do
+          lb <- convExpr e
+          return [printStr "to be above ",
+            print lb t,
+            printStr $ " (" ++ exprDoc db Linear e ++ ")"]
+        printConstraint (EnumeratedReal _ ds) = return [
+          printStr $ "to be one of " ++ intercalate ", " (map show ds)]
+        printConstraint (EnumeratedStr _ ss) = return [
+          printStr $ "to be one of " ++ intercalate ", " ss]
 
 genInputFormat :: (RenderSym repr) => Reader (State repr) 
   (Maybe (repr (Method repr)))
@@ -901,13 +965,10 @@ getUpperBound _ = error "Attempt to get upper bound of invalid expression"
 lookupC :: ChunkDB -> UID -> QuantityDict
 lookupC sm c = symbLookup c $ symbolTable sm
 
-renderC :: (HasUID c, HasSymbol c) => (c, [Constraint]) -> [Expr]
-renderC (u, l) = map (renderC' u) l
-
-renderC' :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
-renderC' s (Range _ rr)          = renderRealInt s rr
-renderC' s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)
-renderC' s (EnumeratedStr _ rr)  = IsIn (sy s) (DiscreteS rr)
+renderC :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
+renderC s (Range _ rr)          = renderRealInt s rr
+renderC s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)
+renderC s (EnumeratedStr _ rr)  = IsIn (sy s) (DiscreteS rr)
 
 renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval Expr Expr -> Expr
 renderRealInt s (Bounded (Inc,a) (Inc,b)) = (a $<= sy s) $&& (sy s $<= b)

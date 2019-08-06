@@ -11,10 +11,10 @@ import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
-  RenderSym(..), InternalFile(..), AuxiliarySym(..), KeywordSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
+  KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
@@ -47,19 +47,18 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
-  ParamData(..), pd, updateParamDoc, TypeData(..), td, ValData(..),
-  updateValDoc, VarData(..), vard)
+  ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
+  ValData(..), updateValDoc, VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
-  liftA6, liftA7, liftList, lift1List, lift2Lists, lift3Pair, lift4Pair,
+  liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
-
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
-  semi, vcat, lbrace, rbrace, colon, isEmpty)
+  semi, vcat, lbrace, rbrace, colon)
 
 csExt :: String
 csExt = "cs"
@@ -79,11 +78,11 @@ instance Monad CSharpCode where
 
 instance PackageSym CSharpCode where
   type Package CSharpCode = PackData
-  package n ms = lift2Lists (packD n) mods
-    where mods = filter (not . isEmpty . modDoc . fileMod . unCSC) ms
+  package = lift1List packD
 
-  packDox n ms = package n ms [doxConfig n mods]
-    where mods = filter (not . isEmpty . modDoc . fileMod . unCSC) ms
+instance ProgramSym CSharpCode where
+  type Program CSharpCode = ProgData
+  prog n = liftList (progD n)
 
 instance RenderSym CSharpCode where
   type RenderFile CSharpCode = FileData
@@ -103,8 +102,8 @@ instance InternalFile CSharpCode where
 
 instance AuxiliarySym CSharpCode where
   type Auxiliary CSharpCode = AuxData
-  doxConfig prog fs = fmap (ad doxConfigName) (lift1List (makeDoxConfig prog)
-    optimizeDox (map (fmap filePath) fs))
+  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
+    optimizeDox p)
 
   optimizeDox = return $ text "NO"
 

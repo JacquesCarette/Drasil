@@ -9,17 +9,17 @@ import Language.Drasil hiding (int, ($.), log, ln, exp,
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
 import Language.Drasil.Code.Code as C (Code(..), CodeType(List))
 import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
-  RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..),
-  StateTypeSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), FunctionSym(..), 
-  SelectorFunction(..), StatementSym(..), ControlStatementSym(..), ScopeSym(..),
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..))
+  ProgramSym(..), RenderSym(..), AuxiliarySym(..), PermanenceSym(..), 
+  BodySym(..), BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..),
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.Code.Imperative.Build.AST (asFragment, buildAll,    
   BuildConfig, buildSingle, cppCompiler, inCodePackage, interp, interpMM, 
   mainModule, mainModuleFile, nativeBinary, osClassDefault, Runnable, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Data (PackData(..))
+import Language.Drasil.Code.Imperative.Data (PackData(..), ProgData(..))
 import Language.Drasil.Code.Imperative.Helpers (convType)
 import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (jNameOpts)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
@@ -149,17 +149,32 @@ generateCode l unRepr g =
      createCodeFiles $ C.Code $ concatMap C.unCode [code, makefile]
      setCurrentDirectory workingDir
   where pckg = runReader genPackage g
-        code = makeCode (packMods $ unRepr pckg) (packAux $ unRepr pckg)
-        makefile = makeBuild (unRepr pckg) (getBuildConfig l) 
+        code = makeCode (progMods $ packProg $ unRepr pckg) (packAux $ unRepr 
+          pckg)
+        makefile = makeBuild (packProg $ unRepr pckg) (getBuildConfig l) 
           (getRunnable l) (commented g)
 
 genPackage :: (PackageSym repr) => Reader (State repr) (repr (Package repr))
 genPackage = do
   g <- ask
+  p <- genProgram
+  let n = case codeSpec g of CodeSpec {program = pr} -> programName pr
+  a <- genDoxConfig n p
+  return $ package p a
+
+genDoxConfig :: (AuxiliarySym repr) => String -> repr (Program repr) ->
+  Reader (State repr) [repr (Auxiliary repr)]
+genDoxConfig n p = do
+  g <- ask
+  let cms = commented g
+  return [doxConfig n p | not (null cms)]
+
+genProgram :: (ProgramSym repr) => Reader (State repr) (repr (Program repr))
+genProgram = do
+  g <- ask
   ms <- genModules
   let n = case codeSpec g of CodeSpec {program = p} -> programName p
-      cms = commented g
-  return $ if null cms then package n ms [] else packDox n ms
+  return $ prog n ms
 
 genModules :: (RenderSym repr) => Reader (State repr) [repr (RenderFile repr)]
 genModules = do

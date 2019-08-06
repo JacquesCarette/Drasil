@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeChunk(..), codeType, codevar, codefunc, quantvar, 
     quantfunc, ConstraintMap, constraintMap, physLookup, sfwrLookup,
-    programName, symbToCodeName, toCodeName, funcPrefix
+    programName, funcPrefix
   ) where
 
 import Control.Lens ((^.),makeLenses,view)
@@ -12,9 +12,10 @@ import Language.Drasil
 import Language.Drasil.Code.Code (CodeType)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp), CodeQuantityDict, 
   cqw)
+import Language.Drasil.Printers (symbolDoc, toPlainName)
 
-import Data.String.Utils (replace)
 import qualified Data.Map as Map
+import Text.PrettyPrint.HughesPJ (render)
 
 -- not using lenses for now
 class CodeIdea c where
@@ -22,43 +23,7 @@ class CodeIdea c where
   codeChunk     :: c -> CodeChunk
 
 programName :: CommonIdea c => c -> String
-programName = toCodeName . abrv
-
-symbToCodeName :: Symbol -> String
-symbToCodeName (Atomic s) = toCodeName s
-symbToCodeName (Special sp) = specialToCodeName sp
---symbToCodeName (Greek g) = greekToCodeName g
-symbToCodeName (Atop d s) = decorate (symbToCodeName s) d
-symbToCodeName (Corners ul ll ur lr b) =
-  cleft ul ++ cleft ll ++ symbToCodeName b
-    ++ cright lr ++ cright ur
-  where cleft :: [Symbol] -> String
-        cleft [] = ""
-        cleft (s:syms) = symbToCodeName s ++ "_" ++ cleft syms
-        cright :: [Symbol] -> String
-        cright [] = ""
-        cright (s:syms) = "_" ++ symbToCodeName s ++ cright syms
-symbToCodeName (Concat s) = concatMap symbToCodeName s
-symbToCodeName Empty = ""
-
-decorate :: String -> Decoration -> String
-decorate s Hat = s ++ "_hat"
-decorate s Vector = s ++ "_vect"
-decorate s Prime = s ++ "'"
-
--- TODO: Double check that this is valid in all output languages
-specialToCodeName :: Special -> String
-specialToCodeName Circle        = "circ"
-specialToCodeName Partial       = "partial"
-
-toCodeName :: String -> String
-toCodeName s =
-    let illegalChars = [
-            ",","~","`","-","=","!","@","#","$","%","^","&","*","(",")","+",
-            "[","]","\\",";","'",".","/","|",":","\"","<",">","?"," "]
-    in foldl varNameReplace s illegalChars
-    where  varNameReplace :: String -> String -> String
-           varNameReplace l old = replace old "_" l
+programName = toPlainName . abrv
 
 funcPrefix :: String
 funcPrefix = "func_"
@@ -75,8 +40,8 @@ instance Idea        CodeChunk where getA = getA . view qc
 instance HasCodeType CodeChunk where ctyp = qc . ctyp
 instance HasSymbol   CodeChunk where symbol c = symbol (c ^. qc)
 instance CodeIdea    CodeChunk where
-  codeName (CodeC c Var) = symbToCodeName (codeSymb c)
-  codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
+  codeName (CodeC c Var) = render $ symbolDoc (codeSymb c)
+  codeName (CodeC c Func) = funcPrefix ++ render (symbolDoc (codeSymb c))
   codeChunk = id
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc

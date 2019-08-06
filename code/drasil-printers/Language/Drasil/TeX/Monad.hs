@@ -88,14 +88,19 @@ instance Monoid (PrintLaTeX TP.Doc) where
 ($+$) :: D -> D -> D
 ($+$) = liftA2 (TP.$+$)
 
+tpRunPrint :: ([TP.Doc] -> TP.Doc) -> [D] -> D
+tpRunPrint f l = PL $ \ctx -> f $ map (`runPrint` ctx) l
+
 vcat :: [D] -> D
-vcat l = PL $ \ctx -> TP.vcat $ map (`runPrint` ctx) l
+vcat = tpRunPrint TP.vcat
+
+-- vcat . punctuate
+vpunctuate :: TP.Doc -> [D] -> D
+vpunctuate x = tpRunPrint (TP.vcat . TP.punctuate x)
 
 -- hcat . punctuate
 hpunctuate :: TP.Doc -> [D] -> D
-hpunctuate x l = PL $ \ctx -> 
-  TP.hcat $ TP.punctuate x $ map (`runPrint` ctx) l
- 
+hpunctuate x = tpRunPrint (TP.hcat . TP.punctuate x)
 --------
 -- MathContext operations
 lub :: MathContext -> MathContext -> MathContext

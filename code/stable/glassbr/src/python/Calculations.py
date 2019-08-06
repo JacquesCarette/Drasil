@@ -33,7 +33,7 @@ def func_q(inParams):
 
 ## \brief Calculates dimensionless load
 # \param inParams structure holding the input values
-# \param q applied load (demand)
+# \param q applied load (demand) (Pa)
 def func_q_hat(inParams, q):
     outfile = open("log.txt", "a")
     print("function func_q_hat called with inputs: {", file=outfile)
@@ -113,7 +113,7 @@ def func_B(inParams, J):
 
 ## \brief Calculates load resistance
 # \param inParams structure holding the input values
-# \param NFL non-factored load
+# \param NFL non-factored load (Pa)
 def func_LR(inParams, NFL):
     outfile = open("log.txt", "a")
     print("function func_LR called with inputs: {", file=outfile)
@@ -128,8 +128,8 @@ def func_LR(inParams, NFL):
     return NFL * inParams.GTF * 1
 
 ## \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
-# \param LR load resistance
-# \param q applied load (demand)
+# \param LR load resistance (Pa)
+# \param q applied load (demand) (Pa)
 def func_is_safeLR(LR, q):
     outfile = open("log.txt", "a")
     print("function func_is_safeLR called with inputs: {", file=outfile)

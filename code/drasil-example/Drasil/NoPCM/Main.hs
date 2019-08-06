@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, 
+import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
   Structure(..), InputModule(..))
 import Language.Drasil.Generate (gen, genCode)
@@ -18,7 +18,7 @@ choices = Choices {
   impType = Program,
   logFile = "log.txt",
   logging = LogNone,
-  comments = [],
+  comments = [CommentFunc, CommentClass, CommentMod],
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
   inputStructure = Unbundled,

@@ -4,7 +4,7 @@
 module Language.Drasil.Code.Imperative.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
-  docCmtStart, observerListName, doxConfigName, addExt,
+  docCmtStart, observerListName, doxConfigName, makefileName, addExt,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
@@ -78,8 +78,9 @@ docCmtStart = text "/**"
 observerListName :: Label
 observerListName = "observerList"
 
-doxConfigName :: String
+doxConfigName, makefileName :: String
 doxConfigName = "doxConfig"
+makefileName = "Makefile"
 
 addExt :: String -> String -> String
 addExt ext nm = nm ++ "." ++ ext
@@ -90,7 +91,8 @@ addExt ext nm = nm ++ "." ++ ext
 
 packageDocD :: Label -> Doc -> FileData -> FileData
 packageDocD n end f = fileD (fileType f) (n ++ "/" ++ filePath f) (updateModDoc 
-  (vibcat [text "package" <+> text n <> end, modDoc (fileMod f)]) (fileMod f))
+  (emptyIfEmpty (modDoc $ fileMod f) (vibcat [text "package" <+> text n <> end, 
+  modDoc (fileMod f)])) (fileMod f))
 
 fileDoc' :: Doc -> Doc -> Doc -> Doc
 fileDoc' t m b = vibcat [

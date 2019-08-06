@@ -12,10 +12,10 @@ import Utils.Drasil (indent, indentList)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
-  RenderSym(..), InternalFile(..), AuxiliarySym(..), KeywordSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
+  KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
@@ -40,15 +40,19 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  surroundBody, getterName, setterName, setEmpty, intValue)
+  makefileName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
+  appendToBody, surroundBody, getterName, setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
-  ScopeTag (..), AuxData(..), ad, FileData(..), srcFile, hdrFile, isHeader, 
+  ScopeTag(..), AuxData(..), ad, emptyAux, FileData(..), srcFile, hdrFile, 
   updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), 
-  od, PackData(..), packD, ParamData(..), pd, StateVarData(..), svd, 
-  TypeData(..), td, ValData(..), VarData(..), vard)
+  od, PackData(..), packD, emptyPack, ParamData(..), pd, ProgData(..), progD, 
+  emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), 
+  vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
+  asFragment, buildAll, cppCompiler, nativeBinary)
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
@@ -80,11 +84,12 @@ hdrToSrc (CPPHC a) = CPPSC a
 
 instance (Pair p) => PackageSym (p CppSrcCode CppHdrCode) where
   type Package (p CppSrcCode CppHdrCode) = PackData
-  package n ms aux = pair (package n (map (hdrToSrc . psnd) ms ++ map pfst ms) 
-    (map (hdrToSrc . psnd) aux ++ map pfst aux)) (return $ packD "" [] [])
+  package p aux = pair (package (pfst p) (map pfst aux)) (return emptyPack)
 
-  packDox n ms = pair (packDox n (map (hdrToSrc . psnd) ms ++ map pfst ms)) 
-    (return $ packD "" [] [])
+instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
+  type Program (p CppSrcCode CppHdrCode) = ProgData
+  prog n ms = pair (prog n $ map (hdrToSrc . psnd) ms ++ map pfst ms) 
+    (return emptyProg)
 
 instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = FileData
@@ -101,9 +106,11 @@ instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => AuxiliarySym (p CppSrcCode CppHdrCode) where
   type Auxiliary (p CppSrcCode CppHdrCode) = AuxData
-  doxConfig p fs = pair (doxConfig p $ map pfst fs) (doxConfig p $ map psnd fs)
+  doxConfig pName p = pair (doxConfig pName $ pfst p) (return emptyAux)
 
-  optimizeDox = pair optimizeDox optimizeDox
+  optimizeDox = pair optimizeDox (return empty)
+
+  makefile cms p = pair (makefile cms $ pfst p) (return emptyAux)
 
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
@@ -638,12 +645,11 @@ instance Monad CppSrcCode where
 
 instance PackageSym CppSrcCode where
   type Package CppSrcCode = PackData
-  package n ms = lift2Lists (packD n) mods
-    where mods = filter (not . isEmpty . modDoc . fileMod . unCPPSC) ms
+  package = lift1List packD
 
-  packDox n ms = package n ms [doxConfig n (filter ((\f -> 
-    (isMainMod (fileMod f) || isHeader f) && 
-    not (isEmpty (modDoc (fileMod f))))  . unCPPSC) ms)]
+instance ProgramSym CppSrcCode where
+  type Program CppSrcCode = ProgData
+  prog n = liftList (progD n)
   
 instance RenderSym CppSrcCode where
   type RenderFile CppSrcCode = FileData
@@ -664,11 +670,14 @@ instance InternalFile CppSrcCode where
 
 instance AuxiliarySym CppSrcCode where
   type Auxiliary CppSrcCode = AuxData
-  doxConfig prog fs = fmap (ad doxConfigName) (lift1List (makeDoxConfig prog)
-    optimizeDox (map (fmap filePath) fs))
+  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
+    optimizeDox p)
 
   optimizeDox = return $ text "NO"
   
+  makefile cms = fmap (ad makefileName . makeBuild cms cppBuildConfig 
+    cppRunnable)
+
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
   endStatement = return semi
@@ -1220,13 +1229,6 @@ instance Monad CppHdrCode where
   return = CPPHC
   CPPHC x >>= f = f x
 
-instance PackageSym CppHdrCode where
-  type Package CppHdrCode = PackData
-  package n ms = lift2Lists (packD n) mods
-    where mods = filter (not . isEmpty . modDoc . fileMod . unCPPHC) ms
-
-  packDox n ms = package n ms [doxConfig n ms]
-
 instance RenderSym CppHdrCode where
   type RenderFile CppHdrCode = FileData
   fileDoc code = liftA2 hdrFile (fmap (addExt cppHdrExt . name) code) (liftA2 
@@ -1243,13 +1245,6 @@ instance RenderSym CppHdrCode where
 instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement
   bottom = return $ text "#endif"
-
-instance AuxiliarySym CppHdrCode where
-  type Auxiliary CppHdrCode = AuxData
-  doxConfig prog fs = fmap (ad doxConfigName) (lift1List (makeDoxConfig prog)
-    optimizeDox (map (fmap filePath) fs))
-
-  optimizeDox = return $ text "NO"
 
 instance KeywordSym CppHdrCode where
   type Keyword CppHdrCode = Doc
@@ -1921,3 +1916,10 @@ cppInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf
   out : ins)
 cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins 
   ++ map valueOf outs)
+
+cppBuildConfig :: Maybe BuildConfig
+cppBuildConfig = buildAll $ \i o -> cppCompiler : i ++ map asFragment
+  ["--std=c++11", "-o"] ++ [o]
+
+cppRunnable :: Runnable
+cppRunnable = nativeBinary

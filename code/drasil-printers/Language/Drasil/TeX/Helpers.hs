@@ -82,17 +82,24 @@ mkEnv nm d =
   d $+$
   pure (text ("\\end" ++ H.brace nm))
 
--- Encapsulate environments with argument
-mkEnvArgs :: String -> String -> D -> D
-mkEnvArgs nm args d =
+-- Encapsulate environments with argument with braces
+mkEnvArgBr :: String -> String -> D -> D
+mkEnvArgBr nm args d =
   pure (text ("\\begin" ++ H.brace nm ++ H.brace args)) $+$ 
+  d $+$
+  pure (text ("\\end" ++ H.brace nm))
+
+-- Encapsulate environments with argument with brackets
+mkEnvArgSq :: String -> String -> D -> D
+mkEnvArgSq nm args d =
+  pure (text ("\\begin" ++ H.brace nm ++ H.sqbrac args)) $+$ 
   d $+$
   pure (text ("\\end" ++ H.brace nm))
 
 -- Makes minipage environment
 mkMinipage :: D -> D
 mkMinipage d = commandD "vspace" (command0 "baselineskip") $+$
-  command0 "noindent" $+$ mkEnvArgs "minipage" "\\textwidth" d
+  command0 "noindent" $+$ mkEnvArgBr "minipage" "\\textwidth" d
 
 -- for defining (LaTeX) macros
 comm :: String -> String -> Maybe String -> D

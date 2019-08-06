@@ -176,13 +176,13 @@ genPackage = do
   return $ package p (m:d)
 
 genDoxConfig :: (AuxiliarySym repr) => String -> repr (Program repr) ->
-  Reader (State repr) [repr (Auxiliary repr)]
+  Reader State [repr (Auxiliary repr)]
 genDoxConfig n p = do
   g <- ask
   let cms = commented g
   return [doxConfig n p | not (null cms)]
 
-genProgram :: (ProgramSym repr) => Reader (State repr) (repr (Program repr))
+genProgram :: (ProgramSym repr) => Reader State (repr (Program repr))
 genProgram = do
   g <- ask
   ms <- genModules

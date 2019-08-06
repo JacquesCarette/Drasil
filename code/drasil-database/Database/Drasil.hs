@@ -6,8 +6,8 @@ module Database.Drasil (
   , conceptinsTable, dataDefnTable, datadefnLookup, defLookup, defTable
   , gendefLookup, gendefTable, generateRefbyMap, insmodelLookup, insmodelTable
   , labelledconLookup, labelledcontentTable, refbyLookup, refbyTable
-  , sectionLookup, sectionTable, symbResolve, termLookup
-  , termTable, theoryModelLookup, theoryModelTable, traceLookup, traceMap
+  , sectionLookup, sectionTable, symbResolve, termResolve, termTable
+  , theoryModelLookup, theoryModelTable, traceLookup, traceMap
   , traceTable, unitTable
   -- ChunkDB.GetChunk
   , ccss, ccss', combine, getIdeaDict, vars

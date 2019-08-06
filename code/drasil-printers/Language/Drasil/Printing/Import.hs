@@ -155,14 +155,14 @@ lookupC :: ChunkDB -> UID -> Symbol
 lookupC m x = eqSymb $ symbResolve m x
 
 lookupT :: ChunkDB -> UID -> Sentence
-lookupT sm c = phraseNP $ termLookup c (termTable sm) ^. term
+lookupT sm c = phraseNP $ (termResolve sm c) ^. term
 
 lookupS :: ChunkDB -> UID -> Sentence
 lookupS sm c = maybe (phraseNP $ l ^. term) S $ getA l
-  where l = termLookup c $ termTable sm
+  where l = (termResolve sm c)
 
 lookupP :: ChunkDB -> UID -> Sentence
-lookupP sm c =  pluralNP $ termLookup c (termTable sm) ^. term
+lookupP sm c = pluralNP $ (termResolve sm c) ^. term
 -- --plural n = NP.plural (n ^. term)
 
 mkCall :: PrintingInformation -> P.Ops -> Expr -> P.Expr

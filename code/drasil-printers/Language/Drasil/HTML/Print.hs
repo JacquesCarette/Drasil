@@ -40,7 +40,7 @@ import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Ta
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac, dollarDoc)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
-import Language.Drasil.TeX.Print as TeX (pExpr, pUnit, spec)
+import qualified Language.Drasil.TeX.Print as TeX (pExpr, pUnit, spec)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Text), D, toMath)
 
 data OpenClose = Open | Close
@@ -72,15 +72,15 @@ printMath = (`runPrint` Text)
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
 printLO (HDiv ["equation"] layoutObs EmptyS)  = vcat (map printLO layoutObs)
+printLO (EqnBlock contents)    = dollarDoc $ printMath $ TeX.spec contents
+-- Non-mathjax
+-- printLO (EqnBlock contents) = pSpec contents
 printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))
 printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
                                  divTag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ pSpec contents
 -- Dollar Doc needed to wrap in extra dollar signs.
 -- Latex print sets up a \begin{displaymath} environment instead of this
-printLO (EqnBlock contents)    = dollarDoc $ printMath $ TeX.spec contents
--- Non-mathjax
--- printLO (EqnBlock contents) = pSpec contents
 printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
 printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
@@ -108,11 +108,11 @@ titleSpec s         = pSpec s
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 pSpec :: Spec -> Doc
 -- Non-mathjax
--- pSpec (E e)  = em $ pExpr e
--- pSpec (Sy s) = text $ uSymb s
+pSpec (E e)  = em $ pExpr e
+pSpec (Sy s) = text $ uSymb s
 -- Latex based math for expressions and units
-pSpec (E e)     = printMath $ toMath $ TeX.pExpr e
-pSpec (Sy s)    = printMath $ TeX.pUnit s
+-- pSpec (E e)     = printMath $ toMath $ TeX.pExpr e
+-- pSpec (Sy s)    = printMath $ TeX.pUnit s
 pSpec (a :+: b) = pSpec a <> pSpec b
 pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
@@ -170,15 +170,12 @@ uSymb (L.US ls) = formatu t b
 ------------------BEGIN EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
 
-{-
+
 -- | Renders expressions in the HTML (called by multiple functions)
 pExpr :: Expr -> Doc
 pExpr (Dbl d)        = text $ showEFloat Nothing d ""
 pExpr (Int i)        = text $ show i
 pExpr (Str s)        = doubleQuotes $ text s
-pExpr (Div a b)      = fraction (pExpr a) (pExpr b)
-pExpr (Case ps)      = cases ps pExpr
-pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "</table>"
 pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
@@ -192,7 +189,15 @@ pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
 pExpr (Font Bold e)  = bold $ pExpr e
 pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- FIXME
 pExpr (Spc Thin)     = text "&#8239;"
+-- Uses TeX for Mathjax for all other exprs
+pExpr e              = printMath $ toMath $ TeX.pExpr e
+-- Non-mathjax
+{-
 pExpr (Sqrt e)       = text "&radic;(" <> pExpr e <> text ")"
+pExpr (Div a b)      = fraction (pExpr a) (pExpr b)
+pExpr (Case ps)      = cases ps pExpr
+pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "</table>"
+-}
 
 pOps :: Ops -> String
 pOps IsIn     = "&thinsp;&isin;&thinsp;"
@@ -256,7 +261,6 @@ pIn :: [Expr] -> Doc
 pIn [] = text ""
 pIn [x] = text "<td>" <> pExpr x <> text "</td>"
 pIn (x:xs) = pIn [x] <> pIn xs
--}
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------

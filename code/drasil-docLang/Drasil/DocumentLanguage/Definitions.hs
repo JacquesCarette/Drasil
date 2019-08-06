@@ -120,11 +120,9 @@ helpToRefField t si
   | t `elem` keys (s ^. conceptinsTable) = makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
   | t `elem` keys (s ^. sectionTable) = makeRef2S $ sectionLookup t (s ^. sectionTable)
   | t `elem` keys (s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
-  | t `elem` map (^. uid) r = EmptyS
+  | t `elem` map  (^. uid) (citeDB si) = EmptyS
   | otherwise = error $ t ++ "Caught."
-  where
-    s = _sysinfodb si
-    r = citeDB si
+  where s = _sysinfodb si
 
 helperSources :: [Reference] -> [Contents]
 helperSources [] = [mkParagraph $ S "--"]

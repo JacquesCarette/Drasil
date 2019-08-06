@@ -1,9 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Database.Drasil.ChunkDB 
   ( ChunkDB, cdb
-  , symbolTable, symbLookup
-  , termLookup, termTable
-  , conceptMap, traceMap, defLookup, defTable
+  , symbolTable, symbLookup, symbResolve
+  , termLookup, termTable, termResolve
+  , conceptMap, traceMap, defLookup, defResolve, defTable
   , unitLookup , unitTable, collectUnits
   , traceLookup, traceTable, TraceMap, generateRefbyMap, RefbyMap
   , refbyLookup, refbyTable
@@ -83,6 +83,9 @@ symbLookup :: UID -> SymbolMap -> QuantityDict
 symbLookup c m = getS $ Map.lookup c m
   where getS = maybe (error $ "Symbol: " ++ c ++ " not found in SymbolMap") fst
 
+symbResolve :: ChunkDB -> UID -> QuantityDict
+symbResolve m x = symbLookup x $ symbolTable m
+
 -- | Gets a unit if it exists, or Nothing.        
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit $ symbLookup (c ^. uid) (symbolTable m)
@@ -96,6 +99,9 @@ uMapLookup tys ms u t = getFM $ Map.lookup u t
 termLookup :: UID -> TermMap -> IdeaDict
 termLookup = uMapLookup "Term" "TermMap"
 
+termResolve :: ChunkDB -> UID -> IdeaDict
+termResolve m x = termLookup x $ termTable m
+
 -- | Looks up an uid in the unit table. If nothing is found, an error is thrown
 unitLookup :: UID -> UnitMap -> UnitDefn
 unitLookup = uMapLookup "Unit" "UnitMap"
@@ -103,6 +109,9 @@ unitLookup = uMapLookup "Unit" "UnitMap"
 -- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
 defLookup :: UID -> ConceptMap -> ConceptChunk
 defLookup = uMapLookup "Concept" "ConceptMap"
+
+defResolve :: ChunkDB -> UID -> ConceptChunk
+defResolve m x = defLookup x $ defTable m
 
 -- | Looks up a uid in the datadefinition table. If nothing is found, an error is thrown.
 datadefnLookup :: UID -> DatadefnMap -> DataDefinition

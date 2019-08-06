@@ -4,22 +4,17 @@ module Language.Drasil.Code.Imperative.Helpers (blank,verticalComma,
   angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
   emptyIfEmpty, emptyIfNull, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, 
   liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 
-  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType, getStr
+  lift4Pair, liftPairFst, getInnerType, getNestDegree, convType, checkParams
 ) where
 
-import Database.Drasil(ChunkDB, termTable)
-
-import Language.Drasil
-import Language.Drasil.Chunk.Code (symbToCodeName)
 import qualified Language.Drasil.Code.Code as C (CodeType(..))
+import Language.Drasil.Code.Imperative.Data (ParamData)
 import qualified Language.Drasil.Code.Imperative.Symantics as S ( 
   RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
 
 import Prelude hiding ((<>))
 import Control.Applicative (liftA2, liftA3)
-import Control.Lens (view)
-import Data.List (intersperse)
-import qualified Data.Map as Map (lookup)
+import Data.List (intersperse, nub)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
   (<>), comma, punctuate, empty, isEmpty)
 
@@ -132,10 +127,6 @@ convType (C.Enum n) = S.enumType n
 convType C.Void = S.void
 convType C.File = error "convType: File ?"
 
-getStr :: ChunkDB -> Sentence -> String
-getStr _ (S s) = s
-getStr _ (P s) = symbToCodeName s
-getStr db ((:+:) s1 s2) = getStr db s1 ++ getStr db s2
-getStr db (Ch _ u) = maybe "" (getStr db . phraseNP . view term . fst)
-  (Map.lookup u (termTable db))
-getStr _ _ = error "Term is not a string" 
+checkParams :: String -> [ParamData] -> [ParamData]
+checkParams n ps = if length ps == length (nub ps) then ps else error 
+  ("Duplicate parameters encountered in function " ++ n ++ ".")

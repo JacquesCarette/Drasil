@@ -4,24 +4,22 @@
 -- | The logic to render Java code is contained in this module
 module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code
-  JavaCode(..), jExts, jNameOpts
+  JavaCode(..), jNameOpts
 ) where
 
 import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
-  RenderSym(..), InternalFile(..), AuxiliarySym(..), KeywordSym(..),
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
+  KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.Build.AST (includeExt, 
-  NameOpts(NameOpts), packSep)
 import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
@@ -31,40 +29,42 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
   plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, 
   statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, stringListVals', 
-  stringListLists', notOpDocD, negateOpDocD, unExpr, typeUnExpr, equalOpDocD, 
-  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
-  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
-  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
-  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfDocD, 
-  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
-  funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
-  getterName, setterName, setMain, setMainMethod, setEmpty, intValue)
+  stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr',
+  typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
+  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
+  litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
+  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
+  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
+  doxConfigName, makefileName, doubleSlash, blockCmtDoc, docCmtDoc, 
+  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
+  valList, appendToBody, surroundBody, getterName, setterName, setMain, 
+  setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
-  FileData(..), fileD, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, ParamData(..), pd, PackData(..), packD, 
-  TypeData(..), td, ValData(..), vd, VarData(..), vard)
+  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
+  PackData(..), packD, ProgData(..), progD, TypeData(..), td, ValData(..), 
+  VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
+import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
+  NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
+  interp, mainModule, mainModuleFile, packSep, withExt)
+import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
-  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift2Lists, lift3Pair, 
-  lift4Pair, liftPair, liftPairFst, getInnerType, convType)
-
+  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
+  lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
-  semi, vcat, lbrace, rbrace, render, colon, comma, isEmpty, render)
-
-jExts :: [String]
-jExts = [jExt]
+  semi, vcat, lbrace, rbrace, render, colon, comma, render)
 
 jExt :: String
-jExt = ".java"
+jExt = "java"
 
 jNameOpts :: NameOpts
 jNameOpts = NameOpts {
@@ -87,16 +87,15 @@ instance Monad JavaCode where
 
 instance PackageSym JavaCode where
   type Package JavaCode = PackData
-  package n ms = lift2Lists (packD n) (map (liftA2 (packageDocD n) endStatement) mods)
-    where mods = filter (not . isEmpty . modDoc . fileMod . unJC) ms
+  package = lift1List packD
 
-  packDox n ms = lift2Lists (packD n) pMods [doxConfig n pMods]
-    where pMods = map (liftA2 (packageDocD n) endStatement) mods
-          mods = filter (not . isEmpty . modDoc . fileMod . unJC) ms
+instance ProgramSym JavaCode where
+  type Program JavaCode = ProgData
+  prog n ms = liftList (progD n) (map (liftA2 (packageDocD n) endStatement) ms)
 
 instance RenderSym JavaCode where
   type RenderFile JavaCode = FileData
-  fileDoc code = liftA2 fileD (fmap (addExt "java" . name) code) (liftA2 
+  fileDoc code = liftA2 file (fmap (addExt jExt . name) code) (liftA2 
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 
@@ -112,10 +111,12 @@ instance InternalFile JavaCode where
 
 instance AuxiliarySym JavaCode where
   type Auxiliary JavaCode = AuxData
-  doxConfig prog fs = fmap (ad doxConfigName) (lift1List (makeDoxConfig prog)
-    optimizeDox (map (fmap filePath) fs))
+  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
+    optimizeDox p)
 
   optimizeDox = return $ text "YES"
+
+  makefile cms = fmap (ad makefileName . makeBuild cms jBuildConfig jRunnable)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -204,25 +205,25 @@ instance ControlBlockSym JavaCode where
         vnew &= v_temp]
 
 instance UnaryOpSym JavaCode where
-  type UnaryOp JavaCode = Doc
+  type UnaryOp JavaCode = OpData
   notOp = return notOpDocD
   negateOp = return negateOpDocD
-  sqrtOp = return $ text "Math.sqrt"
-  absOp = return $ text "Math.abs"
-  logOp = return $ text "Math.log10"
-  lnOp = return $ text "Math.log"
-  expOp = return $ text "Math.exp"
-  sinOp = return $ text "Math.sin"
-  cosOp = return $ text "Math.cos"
-  tanOp = return $ text "Math.tan"
-  asinOp = return $ text "Math.asin"
-  acosOp = return $ text "Math.acos"
-  atanOp = return $ text "Math.atan"
-  floorOp = return $ text "Math.floor"
-  ceilOp = return $ text "Math.ceil"
+  sqrtOp = return $ unOpPrec "Math.sqrt"
+  absOp = return $ unOpPrec "Math.abs"
+  logOp = return $ unOpPrec "Math.log10"
+  lnOp = return $ unOpPrec "Math.log"
+  expOp = return $ unOpPrec "Math.exp"
+  sinOp = return $ unOpPrec "Math.sin"
+  cosOp = return $ unOpPrec "Math.cos"
+  tanOp = return $ unOpPrec "Math.tan"
+  asinOp = return $ unOpPrec "Math.asin"
+  acosOp = return $ unOpPrec "Math.acos"
+  atanOp = return $ unOpPrec "Math.atan"
+  floorOp = return $ unOpPrec "Math.floor"
+  ceilOp = return $ unOpPrec "Math.ceil"
 
 instance BinaryOpSym JavaCode where
-  type BinaryOp JavaCode = Doc
+  type BinaryOp JavaCode = OpData
   equalOp = return equalOpDocD
   notEqualOp = return notEqualOpDocD
   greaterOp = return greaterOpDocD
@@ -233,7 +234,7 @@ instance BinaryOpSym JavaCode where
   minusOp = return minusOpDocD
   multOp = return multOpDocD
   divideOp = return divideOpDocD
-  powerOp = return $ text "Math.pow"
+  powerOp = return $ powerPrec "Math.pow"
   moduloOp = return moduloOpDocD
   andOp = return andOpDocD
   orOp = return orOpDocD
@@ -279,7 +280,7 @@ instance ValueSym JavaCode where
   valueDoc = valDoc . unJC
 
 instance NumericExpression JavaCode where
-  (#~) = liftA2 unExpr negateOp
+  (#~) = liftA2 unExpr' negateOp
   (#/^) = liftA2 unExpr sqrtOp
   (#|) = liftA2 unExpr absOp
   (#+) = liftA3 binExpr plusOp
@@ -317,8 +318,7 @@ instance BooleanExpression JavaCode where
   (?!=) = liftA4 typeBinExpr notEqualOp bool
   
 instance ValueExpression JavaCode where
-  inlineIf b v1 v2 = liftA2 mkVal (fmap valType v1) (liftA3 inlineIfDocD b v1 
-    v2)
+  inlineIf = liftA3 inlineIfD
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
@@ -350,8 +350,8 @@ instance Selector JavaCode where
 
   selfAccess l = objAccess (valueOf $ self l)
 
-  listIndexExists l i = liftA2 mkVal bool (liftA3 jListIndexExists greaterOp l 
-    i)
+  listIndexExists l i = listSize l ?> i 
+
   argExists i = listAccess argsList (litInt $ fromIntegral i)
 
   indexOf l v = objAccess l (func "indexOf" int [v])
@@ -535,8 +535,8 @@ instance ParameterSym JavaCode where
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
-  method n _ s p t ps b = liftA2 (mthd False) (sequence ps) (liftA5 (jMethod n) 
-    s p t (liftList paramListDocD ps) b)
+  method n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
+    (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
@@ -559,14 +559,18 @@ instance MethodSym JavaCode where
 
   docFunc = docFuncRepr
 
-  inOutFunc n s p ins [] b = function n s p (mState void) (map stateParam ins) b
-  inOutFunc n s p ins [v] b = function n s p (mState $ variableType v) 
+  inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
+    ins) b
+  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins outs b = function n s p jArrayType
-    (map stateParam ins) (liftA3 surroundBody decls b (multi (varDecDef outputs
-        (valueOf (var ("new Object[" ++ show (length outs) ++ "]") jArrayType))
-      : assignArray 0 (map valueOf outs)
+  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) (map 
+    stateParam $ v : ins) (liftA2 appendToBody b (returnState $ valueOf v))
+  inOutFunc n s p ins outs both b = function n s p jArrayType
+    (map stateParam $ both ++ ins) (liftA3 surroundBody decls b (multi 
+      (varDecDef outputs (valueOf (var 
+        ("new Object[" ++ show (length $ both ++ outs) ++ "]") jArrayType))
+      : assignArray 0 (map valueOf $ both ++ outs)
       ++ [returnState (valueOf outputs)])))
       where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
               [JavaCode (Statement JavaCode)]
@@ -576,7 +580,7 @@ instance MethodSym JavaCode where
             decls = multi $ map varDec outs
             outputs = var "outputs" jArrayType
     
-  docInOutFunc desc iComms _ = docFuncRepr desc iComms
+  docInOutFunc desc iComms _ bComms = docFuncRepr desc (bComms ++ iComms)
             
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
@@ -692,7 +696,7 @@ jDiscardInput :: ValData -> Doc
 jDiscardInput inFn = valDoc inFn <> dot <> text "next()"
 
 jInput :: TypeData -> ValData -> ValData
-jInput t inFn = vd t $ jInput' (cType t) 
+jInput t inFn = mkVal t $ jInput' (cType t) 
   where jInput' Integer = text "Integer.parseInt" <> parens (valDoc inFn <> 
           dot <> text "nextLine()")
         jInput' Float = text "Double.parseDouble" <> parens (valDoc inFn <> 
@@ -703,11 +707,11 @@ jInput t inFn = vd t $ jInput' (cType t)
         jInput' _ = error "Attempt to read value of unreadable type"
 
 jOpenFileR :: ValData -> TypeData -> ValData
-jOpenFileR n t = vd t $ new <+> text "Scanner" <> parens 
+jOpenFileR n t = mkVal t $ new <+> text "Scanner" <> parens 
   (new <+> text "File" <> parens (valDoc n))
 
 jOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
-jOpenFileWorA n t wa = vd t $ new <+> text "PrintWriter" <> 
+jOpenFileWorA n t wa = mkVal t $ new <+> text "PrintWriter" <> 
   parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> 
   parens (valDoc n) <> comma <+> valDoc wa))
 
@@ -722,10 +726,6 @@ jMethod n s p t ps b = vcat [
   indent b,
   rbrace]
 
-jListIndexExists :: Doc -> ValData -> ValData -> Doc
-jListIndexExists greater lst index = parens (valDoc lst <> text ".length" <+> 
-  greater <+> valDoc index)
-
 jAssignFromArray :: Int -> [JavaCode (Variable JavaCode)] -> 
   [JavaCode (Statement JavaCode)]
 jAssignFromArray _ [] = []
@@ -736,8 +736,18 @@ jAssignFromArray c (v:vs) = (v &= cast (variableType v)
 jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 
   [JavaCode (Value JavaCode)] -> JavaCode (Value JavaCode)) -> Label -> 
   [JavaCode (Value JavaCode)] -> [JavaCode (Variable JavaCode)] -> 
-  JavaCode (Statement JavaCode)
-jInOutCall f n ins [] = valState $ f n void ins
-jInOutCall f n ins [out] = assign out $ f n (variableType out) ins
-jInOutCall f n ins outs = multi $ varDecDef (var "outputs" jArrayType) (f n 
-  jArrayType ins) : jAssignFromArray 0 outs
+  [JavaCode (Variable JavaCode)] -> JavaCode (Statement JavaCode)
+jInOutCall f n ins [] [] = valState $ f n void ins
+jInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
+jInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out 
+  : ins)
+jInOutCall f n ins outs both = multi $ varDecDef (var "outputs" jArrayType) 
+  (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 (both ++ outs)
+
+jBuildConfig :: Maybe BuildConfig
+jBuildConfig = buildSingle (\i _ -> asFragment "javac" : i) $
+  inCodePackage mainModuleFile
+
+jRunnable :: Runnable
+jRunnable = interp (flip withExt ".class" $ inCodePackage mainModule) 
+  jNameOpts "java"

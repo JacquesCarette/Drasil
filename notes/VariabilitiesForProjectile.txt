@@ -1,0 +1,18 @@
+Variabilities for Input Assumptions
+Allowed structure for velocity vector : {polar coordinates, Cartesian coordinates}
+Source of input : {from a file, through the UI, passed in memory}
+Encoding of input : {binary, text}
+Unit system for input : {metric, imperial}
+Labels of axes : {Cartesian, polar}
+
+Variabilities for Calculation
+Check input? : Boolean
+Exceptions generated? : Boolean
+Gravity : {Mercury, Venus, Earth, Moon, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto}
+Account for Air Resistance? : Boolean
+Tolerance for Hit : R
+
+Variabilities for Output
+Destination for output : {file, screen, memory}
+Encoding of output : {binary, text}
+Format of output : {message, offset, message and offset, Boolean}

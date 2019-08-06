@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Database.Drasil.ChunkDB 
   ( ChunkDB, cdb, symbResolve, termTable, termResolve
-  , conceptMap, traceMap, defLookup, defResolve, defTable
+  , conceptMap, traceMap, defResolve
   , unitLookup , unitTable, collectUnits
   , traceLookup, traceTable, TraceMap, generateRefbyMap, RefbyMap
   , refbyLookup, refbyTable
@@ -97,12 +97,9 @@ termResolve m x = uMapLookup "Term" "TermMap" x $ termTable m
 unitLookup :: UID -> UnitMap -> UnitDefn
 unitLookup = uMapLookup "Unit" "UnitMap"
 
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
-defLookup :: UID -> ConceptMap -> ConceptChunk
-defLookup = uMapLookup "Concept" "ConceptMap"
-
+-- | Looks up a UID in the definition table from the ChunkDB. If nothing is found, an error is thrown.
 defResolve :: ChunkDB -> UID -> ConceptChunk
-defResolve m x = defLookup x $ defTable m
+defResolve m x = uMapLookup "Concept" "ConceptMap" x $ defTable m
 
 -- | Looks up a uid in the datadefinition table. If nothing is found, an error is thrown.
 datadefnLookup :: UID -> DatadefnMap -> DataDefinition

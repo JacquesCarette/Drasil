@@ -427,7 +427,7 @@ constrWarn c = do
   let q = fst c
       cs = snd c
   conds <- mapM (convExpr . renderC q) cs
-  msgs <- mapM (constraintViolatedMsg q) cs
+  msgs <- mapM (constraintViolatedMsg q "suggested") cs
   return $ zipWith (\cond m -> ifNoElse [(cond, bodyStatements $
     printStr "Warning: " : m)]) conds msgs
 
@@ -437,18 +437,18 @@ constrExc c = do
   let q = fst c
       cs = snd c
   conds <- mapM (convExpr . renderC q) cs
-  msgs <- mapM (constraintViolatedMsg q) cs
+  msgs <- mapM (constraintViolatedMsg q "expected") cs
   return $ zipWith (\cond m -> ifNoElse [(cond, bodyStatements $ 
     m ++ [throw "InputError"])]) conds msgs
 
 constraintViolatedMsg :: (CodeIdea q, HasCodeType q, RenderSym repr) => q -> 
-  Constraint -> Reader State [repr (Statement repr)]
-constraintViolatedMsg q c = do
+  String -> Constraint -> Reader State [repr (Statement repr)]
+constraintViolatedMsg q s c = do
   pc <- printConstraint c 
   v <- variable (codeName q) (convType $ codeType q)
   return $ [printStr $ codeName q ++ " has value ",
     print $ valueOf v,
-    printStr " but suggested "] ++ pc
+    printStr $ " but " ++ s ++ " "] ++ pc
 
 printConstraint :: (RenderSym repr) => Constraint -> 
   Reader State [repr (Statement repr)]
@@ -476,9 +476,9 @@ printConstraint c = do
           print lb,
           printStr $ " (" ++ render (exprDoc db Linear e) ++ ")"]
       printConstraint' (EnumeratedReal _ ds) = return [
-        printStr $ "to be one of " ++ intercalate ", " (map show ds)]
+        printStr $ "to be one of: " ++ intercalate ", " (map show ds)]
       printConstraint' (EnumeratedStr _ ss) = return [
-        printStr $ "to be one of " ++ intercalate ", " ss]
+        printStr $ "to be one of: " ++ intercalate ", " ss]
   printConstraint' c
 
 genInputFormat :: (RenderSym repr) => Reader State 

@@ -66,12 +66,12 @@ type ConstraintMap = Map.Map UID [Constraint]
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> (x ^. uid, x ^. constraints))
 
-physLookup :: (HasUID q, CodeIdea q) => ConstraintMap -> q -> (q,[Constraint])
+physLookup :: (HasUID q) => ConstraintMap -> q -> (q,[Constraint])
 physLookup m q = constraintLookup' q m (filter isPhysC)
 
-sfwrLookup :: (HasUID q, CodeIdea q) => ConstraintMap -> q -> (q,[Constraint])
+sfwrLookup :: (HasUID q) => ConstraintMap -> q -> (q,[Constraint])
 sfwrLookup m q = constraintLookup' q m (filter isSfwrC)
 
-constraintLookup' :: (HasUID q, CodeIdea q) => q -> ConstraintMap
+constraintLookup' :: (HasUID q) => q -> ConstraintMap
                       -> ([Constraint] -> [Constraint]) -> (q , [Constraint])
 constraintLookup' q m filt = (q, maybe [] filt (Map.lookup (q^.uid) m))

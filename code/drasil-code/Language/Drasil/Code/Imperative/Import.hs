@@ -32,10 +32,11 @@ import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs, junkLine, singleton)
-import Language.Drasil.Printers (Linearity(Linear), sentenceDoc, unitDoc)
+import Language.Drasil.Printers (Linearity(Linear), exprDoc, sentenceDoc, 
+  unitDoc)
 
 import Prelude hiding (sin, cos, tan, log, exp, const, print)
-import Data.List (nub, intersperse, (\\), stripPrefix)
+import Data.List (nub, intersperse, intercalate, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup, elems)
@@ -61,20 +62,27 @@ data State = State {
   onPhysC :: ConstraintBehaviour
 }
 
-sfwrCBody :: (HasUID q, CodeIdea q, RenderSym repr) => [(q,[Constraint])] -> 
-  Reader State [repr (Statement repr)]
-sfwrCBody = asks (chooseConstr . onSfwrC)
+sfwrCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
+  => [(q,[Constraint])] -> Reader State [repr (Statement repr)]
+sfwrCBody cs = do
+  g <- ask
+  let cb = onSfwrC g
+  chooseConstr cb cs
 
-physCBody :: (HasUID q, CodeIdea q, RenderSym repr) => [(q,[Constraint])] -> 
-  Reader State [repr (Statement repr)]
-physCBody = asks (chooseConstr . onPhysC)
+physCBody :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
+  => [(q,[Constraint])] -> Reader State [repr (Statement repr)]
+physCBody cs = do
+  g <- ask
+  let cb = onPhysC g
+  chooseConstr cb cs
 
 -- function to choose how to deal with
 -- 1. constraints
 -- 2. how to structure the input "module"
 -- 3. logging assignments
-chooseConstr :: (HasUID q, CodeIdea q, RenderSym repr) => ConstraintBehaviour 
-  -> [(q,[Constraint])] -> Reader State [repr (Statement repr)]
+chooseConstr :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, 
+  RenderSym repr) => ConstraintBehaviour -> [(q,[Constraint])] -> 
+  Reader State [repr (Statement repr)]
 chooseConstr Warning   cs = do
   checks <- mapM constrWarn cs
   return $ concat checks
@@ -123,7 +131,7 @@ generator chs spec = State {
   -- next depend on chs
   logName = logFile chs,
   onSfwrC = onSfwrConstraint chs,
-  physCBody = chooseConstr $ onPhysConstraint chs
+  onPhysC = onPhysConstraint chs
 }
 
 maybeLog :: (RenderSym repr) => repr (Variable repr) ->
@@ -387,10 +395,9 @@ genInputConstraints = do
         let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ csi $ 
               codeSpec h)
             sfwrCs   = map (sfwrLookup cm) varsList
-            physCs   = concatMap (renderC . physLookup cm) varsList
+            physCs   = map (physLookup cm) varsList
         sf <- sfwrCBody sfwrCs
-        hw <- mapM (\x -> do { e <- convExpr x; return $ ifNoElse [((?!) e, 
-          physCBody h x)]}) physCs
+        hw <- physCBody physCs
         desc <- inConsFuncDesc
         mthd <- publicMethod (mState void) "input_constraints" desc parms 
           [block sf, block hw]
@@ -414,65 +421,65 @@ genInputDerived = do
         return $ Just mthd
   genDerived $ Map.lookup "derived_values" (eMap $ codeSpec g)
 
-constrWarn :: (HasUID q, CodeIdea q, RenderSym repr) => (q,[Constraint]) -> 
-  Reader State [repr (Statement repr)]
+constrWarn :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr)
+  => (q,[Constraint]) -> Reader State [repr (Statement repr)]
 constrWarn c = do
-  g <- ask
   let q = fst c
       cs = snd c
   conds <- mapM (convExpr . renderC q) cs
   msgs <- mapM (constraintViolatedMsg q) cs
-  return $ zipWith (\c m -> ifNoElse (c ?!) (bodyStatements $
-    printStr "Warning: " : m)) conds msgs
+  return $ zipWith (\cond m -> ifNoElse [(cond, bodyStatements $
+    printStr "Warning: " : m)]) conds msgs
 
-constrExc :: (HasUID q, CodeIdea q, RenderSym repr) => (q,[Constraint]) -> 
-  Reader State [repr (Statement repr)]
+constrExc :: (HasUID q, HasSymbol q, CodeIdea q, HasCodeType q, RenderSym repr) 
+  => (q,[Constraint]) -> Reader State [repr (Statement repr)]
 constrExc c = do
-  g <- ask
   let q = fst c
       cs = snd c
   conds <- mapM (convExpr . renderC q) cs
   msgs <- mapM (constraintViolatedMsg q) cs
-  return $ zipWith (\c m -> ifNoElse (c ?!) (bodyStatements $ 
-    m ++ [throw "InputError"])) conds msgs
+  return $ zipWith (\cond m -> ifNoElse [(cond, bodyStatements $ 
+    m ++ [throw "InputError"])]) conds msgs
 
-constraintViolatedMsg :: (CodeIdea q, RenderSym repr) => q -> Constraint
-  Reader State [repr (Statement repr)]
+constraintViolatedMsg :: (CodeIdea q, HasCodeType q, RenderSym repr) => q -> 
+  Constraint -> Reader State [repr (Statement repr)]
 constraintViolatedMsg q c = do
-  pc <- printConstraint q c 
-  return [printStr $ codeName q ++ " has value ",
-    print $ valueOf $ variable (codeName q) (convType $ codeType q),
+  pc <- printConstraint c 
+  v <- variable (codeName q) (convType $ codeType q)
+  return $ [printStr $ codeName q ++ " has value ",
+    print $ valueOf v,
     printStr " but suggested "] ++ pc
 
-printConstraint :: (CodeIdea q, RenderSym repr) => q -> Constraint -> 
+printConstraint :: (RenderSym repr) => Constraint -> 
   Reader State [repr (Statement repr)]
-printConstraint q c = do
+printConstraint c = do
   g <- ask
+  let db = sysinfodb $ csi $ codeSpec g
+      printConstraint' :: (RenderSym repr) => Constraint -> Reader State 
+        [repr (Statement repr)]
+      printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
+        lb <- convExpr e1
+        ub <- convExpr e2
+        return [printStr "to be between ",
+          print lb,
+          printStr $ " (" ++ render (exprDoc db Linear e1) ++ ") and ",
+          print ub,
+          printStr $ " (" ++ render (exprDoc db Linear e2) ++ ")"]
+      printConstraint' (Range _ (UpTo (_,e))) = do
+        ub <- convExpr e
+        return [printStr "to be below ",
+          print ub,
+          printStr $ " (" ++ render (exprDoc db Linear e) ++ ")"]
+      printConstraint' (Range _ (UpFrom (_,e))) = do
+        lb <- convExpr e
+        return [printStr "to be above ",
+          print lb,
+          printStr $ " (" ++ render (exprDoc db Linear e) ++ ")"]
+      printConstraint' (EnumeratedReal _ ds) = return [
+        printStr $ "to be one of " ++ intercalate ", " (map show ds)]
+      printConstraint' (EnumeratedStr _ ss) = return [
+        printStr $ "to be one of " ++ intercalate ", " ss]
   printConstraint' c
-  where t = convType $ codeType q
-        db = sysinfodb $ csi $ codeSpec g
-        printConstraint (Range _ (Bounded (_,e1) (_,e2))) = do
-          lb <- convExpr e1
-          ub <- convExpr e2
-          return [printStr "to be between ",
-            print lb t,
-            printStr $ " (" ++ exprDoc db Linear e1 ++ ") and ",
-            print ub t,
-            printStr $ " (" ++ exprDoc db Linear e2 ++ ")"]
-        printConstraint (Range _ (UpTo e)) = do
-          ub <- convExpr e
-          return [printStr "to be below ",
-            print ub t,
-            printStr $ " (" ++ exprDoc db Linear e ++ ")"]
-        printConstraint (Range _ (UpFrom e)) = do
-          lb <- convExpr e
-          return [printStr "to be above ",
-            print lb t,
-            printStr $ " (" ++ exprDoc db Linear e ++ ")"]
-        printConstraint (EnumeratedReal _ ds) = return [
-          printStr $ "to be one of " ++ intercalate ", " (map show ds)]
-        printConstraint (EnumeratedStr _ ss) = return [
-          printStr $ "to be one of " ++ intercalate ", " ss]
 
 genInputFormat :: (RenderSym repr) => Reader State 
   (Maybe (repr (Method repr)))

@@ -448,7 +448,7 @@ constraintViolatedMsg q s c = do
   v <- variable (codeName q) (convType $ codeType q)
   return $ [printStr $ codeName q ++ " has value ",
     print $ valueOf v,
-    printStr $ " but " ++ s ++ " "] ++ pc
+    printStr $ " but " ++ s ++ " to be "] ++ pc
 
 printConstraint :: (RenderSym repr) => Constraint -> 
   Reader State [repr (Statement repr)]
@@ -460,25 +460,25 @@ printConstraint c = do
       printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
-        return [printStr "to be between ",
+        return [printStr "between ",
           print lb,
           printStr $ " (" ++ render (exprDoc db Linear e1) ++ ") and ",
           print ub,
           printStr $ " (" ++ render (exprDoc db Linear e2) ++ ")"]
       printConstraint' (Range _ (UpTo (_,e))) = do
         ub <- convExpr e
-        return [printStr "to be below ",
+        return [printStr "below ",
           print ub,
           printStr $ " (" ++ render (exprDoc db Linear e) ++ ")"]
       printConstraint' (Range _ (UpFrom (_,e))) = do
         lb <- convExpr e
-        return [printStr "to be above ",
+        return [printStr "above ",
           print lb,
           printStr $ " (" ++ render (exprDoc db Linear e) ++ ")"]
       printConstraint' (EnumeratedReal _ ds) = return [
-        printStr $ "to be one of: " ++ intercalate ", " (map show ds)]
+        printStr $ "one of: " ++ intercalate ", " (map show ds)]
       printConstraint' (EnumeratedStr _ ss) = return [
-        printStr $ "to be one of: " ++ intercalate ", " ss]
+        printStr $ "one of: " ++ intercalate ", " ss]
   printConstraint' c
 
 genInputFormat :: (RenderSym repr) => Reader State 

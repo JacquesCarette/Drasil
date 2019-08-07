@@ -117,7 +117,7 @@ datadefnLookup = uMapLookupMark "DataDefinition" "DatadefnMap"
 
 -- | Looks up a uid in the instance model table. If nothing is found, an error is thrown.
 insmodelLookup :: UID -> InsModelMap -> InstanceModel
-insmodelLookup = uMapLookup "InstanceModel" "InsModelMap"
+insmodelLookup = uMapLookupMark "InstanceModel" "InsModelMap"
 
 -- | Looks up a uid in the general definition table. If nothing is found, an error is thrown.
 gendefLookup :: UID -> GendefMap -> GenDefn

@@ -44,6 +44,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), empty, parens, render, text)
 -- Private State, used to push these options around the generator
 data State repr = State {
   codeSpec :: CodeSpec,
+  date :: String,
   inStruct :: Structure,
   inMod :: InputModule,
   logName :: String,
@@ -91,10 +92,11 @@ varLogFile = var "outfile" outfile
 valLogFile :: (RenderSym repr) => repr (Value repr)
 valLogFile = valueOf varLogFile
 
-generator :: (RenderSym repr) => Choices -> CodeSpec -> State repr
-generator chs spec = State {
+generator :: (RenderSym repr) => String -> Choices -> CodeSpec -> State repr
+generator dt chs spec = State {
   -- constants
   codeSpec = spec,
+  date = dt,
   inStruct = inputStructure chs,
   inMod = inputModule chs,
   logKind  = logging chs,

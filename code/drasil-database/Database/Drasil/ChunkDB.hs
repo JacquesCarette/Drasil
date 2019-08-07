@@ -125,7 +125,7 @@ gendefLookup = uMapLookup "GenDefn" "GenDefnMap"
 
 -- | Looks up a uid in the theory model table. If nothing is found, an error is thrown.
 theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel
-theoryModelLookup = uMapLookup "TheoryModel" "TheoryModelMap"
+theoryModelLookup = uMapLookupMark "TheoryModel" "TheoryModelMap"
 
 -- | Looks up a uid in the concept instance table. If nothing is found, an error is thrown.
 conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance

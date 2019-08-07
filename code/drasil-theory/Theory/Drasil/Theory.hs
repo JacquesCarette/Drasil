@@ -27,17 +27,18 @@ Right now, neither the definition context (vctx) nor the
 spaces (spc) are ever defined.
 -}
 data TheoryModel = TM 
-  { _con :: ConceptChunk
-  , _vctx :: [TheoryModel]
-  , _spc  :: [SpaceDefn]
-  , _quan :: [QuantityDict]
-  , _ops  :: [ConceptChunk]
-  , _defq :: [QDefinition]
-  , _invs :: [Relation]
-  , _dfun :: [QDefinition]
-  , _ref  :: [Reference]
-  ,  lb   :: ShortName
-  ,  ra   :: String
+  { _con   :: ConceptChunk
+  , _vctx  :: [TheoryModel]
+  , _spc   :: [SpaceDefn]
+  , _quan  :: [QuantityDict]
+  , _ops   :: [ConceptChunk]
+  , _defq  :: [QDefinition]
+  , _invs  :: [Relation]
+  , _dfun  :: [QDefinition]
+  , _ref   :: [Reference]
+  ,  lb    :: ShortName
+  ,  ra    :: String
+  , _mark  :: Int
   , _notes :: [Sentence]
   }
 makeLenses ''TheoryModel
@@ -60,7 +61,8 @@ instance Theory             TheoryModel where
 instance HasShortName       TheoryModel where shortname = lb
 instance HasRefAddress      TheoryModel where getRefAdd = ra
 instance CommonIdea         TheoryModel where abrv _ = abrv thModel
-instance Referable TheoryModel where
+instance HasMarker          TheoryModel where marker = mark
+instance Referable          TheoryModel where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
@@ -74,11 +76,11 @@ tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
 tm c _ _ _ _ _ [] _         = error $ "Source field of " ++ c ^. uid ++ " is empty"
 tm c0 q c1 dq inv dfn r lbe = 
   TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r (shortname' lbe)
-      (prependAbrv thModel lbe)
+      (prependAbrv thModel lbe) 0
 
 tmNoRefs :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
     [q] -> [c1] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
     String -> [Sentence] -> TheoryModel
 tmNoRefs c0 q c1 dq inv dfn lbe = 
   TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn [] (shortname' lbe)
-      (prependAbrv thModel lbe)
+      (prependAbrv thModel lbe) 0

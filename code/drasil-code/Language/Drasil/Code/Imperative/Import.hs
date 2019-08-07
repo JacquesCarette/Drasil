@@ -213,15 +213,17 @@ funcTerm :: String -> Reader State String
 funcTerm cname = do
   g <- ask
   let db = sysinfodb $ csi $ codeSpec g
-  return $ (maybe "No description given" (render . sentenceDoc db Linear . 
-    phraseNP . view term) . Map.lookup cname) (fMap $ codeSpec g)
+  return $ (maybe "No description given" (render . sentenceDoc db 
+    Implementation Linear . phraseNP . view term) . Map.lookup cname) 
+    (fMap $ codeSpec g)
        
 varTerm :: String -> Reader State Doc
 varTerm cname = do
   g <- ask
   let db = sysinfodb $ csi $ codeSpec g
-  return $ (maybe (text "No description given") (sentenceDoc db Linear . 
-    phraseNP . view term) . Map.lookup cname) (vMap $ codeSpec g)
+  return $ (maybe (text "No description given") (sentenceDoc db 
+    Implementation Linear . phraseNP . view term) . Map.lookup cname) 
+    (vMap $ codeSpec g)
 
 varUnits :: String -> Reader State Doc
 varUnits cname = do
@@ -472,7 +474,8 @@ printConstraint c = do
 printExpr :: (RenderSym repr) => Expr -> ChunkDB -> [repr (Statement repr)]
 printExpr (Dbl _) _ = []
 printExpr (Int _) _ = []
-printExpr e db = [printStr $ " (" ++ render (exprDoc db Linear e) ++ ")"]
+printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)
+  ++ ")"]
 
 genInputFormat :: (RenderSym repr) => Reader State 
   (Maybe (repr (Method repr)))

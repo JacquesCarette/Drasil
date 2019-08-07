@@ -1,5 +1,5 @@
-module Language.Drasil.Printing.Import(space,expr,symbol,spec,makeDocument) where
-
+module Language.Drasil.Printing.Import (space, expr, symbol, spec,
+  makeDocument) where
 
 import Language.Drasil hiding (sec, symbol)
 import Language.Drasil.Development (precA, precB, eprec)
@@ -201,7 +201,8 @@ indx sm (C c) i = f s
       let e' = symbol e
           b' = symbol b in
       P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
-    f a@(Atomic _) = P.Row [symbol a, P.Sub i']
+    f a@(Variable _) = P.Row [symbol a, P.Sub i']
+    f a@(Label _)    = P.Row [symbol a, P.Sub i']
 --    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
@@ -226,10 +227,12 @@ eop sm Add (BoundedDD v Discrete l h) e =
 eop sm Add (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [expr e sm]]
 
 symbol :: Symbol -> P.Expr
-symbol (Atomic s)  = P.Ident s
-symbol (Special s) = P.Spec s
---symbol (Greek g)   = P.Gr g
-symbol (Concat sl) = P.Row $ map symbol sl
+symbol (Variable s) = P.Ident s
+symbol (Label    s) = P.Label s
+symbol (Integ    n) = P.Int (toInteger n)
+symbol (Special  s) = P.Spec s
+--symbol (Greek g)    = P.Gr g
+symbol (Concat  sl) = P.Row $ map symbol sl
 --
 -- handle the special cases first, then general case
 symbol (Corners [] [] [x] [] s) = P.Row [P.Row [symbol s, P.Sup $ symbol x]]
@@ -257,17 +260,17 @@ pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
 -- | Print a RealInterval
 renderRealInt :: PrintingInformation -> Symbol -> RealInterval Expr Expr -> P.Expr
 renderRealInt st s (Bounded (Inc,a) (Inc,b)) = 
-  P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
+  P.Row [expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
 renderRealInt st s (Bounded (Inc,a) (Exc,b)) =
-  P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.Lt, expr b st]
+  P.Row [expr a st, P.MO P.LEq, symbol s, P.MO P.Lt, expr b st]
 renderRealInt st s (Bounded (Exc,a) (Inc,b)) =
-  P.Row [ expr a st, P.MO P.Lt, symbol s, P.MO P.LEq, expr b st]
+  P.Row [expr a st, P.MO P.Lt, symbol s, P.MO P.LEq, expr b st]
 renderRealInt st s (Bounded (Exc,a) (Exc,b)) =
-  P.Row [ expr a st, P.MO P.Lt, symbol s, P.MO P.Lt, expr b st]
-renderRealInt st s (UpTo (Inc,a))    = P.Row [ symbol s, P.MO P.LEq, expr a st]
-renderRealInt st s (UpTo (Exc,a))    = P.Row [ symbol s, P.MO P.Lt, expr a st]
-renderRealInt st s (UpFrom (Inc,a))  = P.Row [ symbol s, P.MO P.GEq, expr a st]
-renderRealInt st s (UpFrom (Exc,a))  = P.Row [ symbol s, P.MO P.Gt, expr a st]
+  P.Row [expr a st, P.MO P.Lt, symbol s, P.MO P.Lt, expr b st]
+renderRealInt st s (UpTo (Inc,a))   = P.Row [symbol s, P.MO P.LEq, expr a st]
+renderRealInt st s (UpTo (Exc,a))   = P.Row [symbol s, P.MO P.Lt,  expr a st]
+renderRealInt st s (UpFrom (Inc,a)) = P.Row [symbol s, P.MO P.GEq, expr a st]
+renderRealInt st s (UpFrom (Exc,a)) = P.Row [symbol s, P.MO P.Gt,  expr a st]
 
 
 -- | Translates Sentence to the Printing representation of Sentence ('Spec')
@@ -276,7 +279,8 @@ spec :: PrintingInformation -> Sentence -> P.Spec
 spec sm (EmptyS :+: b) = spec sm b
 spec sm (a :+: EmptyS) = spec sm a
 spec sm (a :+: b)      = spec sm a P.:+: spec sm b
-spec _ (S s)           = P.S s
+spec _ (S s)           = either error P.S $ checkValidStr s invalidChars
+  where invalidChars   = ['<', '>', '\"', '&', '#', '$', '%', '&', '~', '^', '\\', '{', '}'] 
 spec _ (Sy s)          = P.Sy s
 spec _ Percent         = P.E $ P.MO P.Perc
 spec _ (P s)           = P.E $ symbol s
@@ -308,38 +312,9 @@ renderCitInfo :: RefInfo -> Sentence
 renderCitInfo  None          = EmptyS
 renderCitInfo (RefNote   rn) = sParen (S rn)
 renderCitInfo (Equation [x]) = sParen (S "Eq." +:+ S (show x))
-renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums i)
+renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums "-" i)
 renderCitInfo (Page     [x]) = sParen (S "pg." +:+ S (show x))
-renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums i)
-
--- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and 13")
-foldNums :: [Int] -> Sentence
-foldNums x = foldlList Comma List $ map S (numbers x)
-
--- | Helper for foldNums
-numbers :: [Int] -> [String]
-numbers []  = error "Empty list when making reference with additional information"
-numbers [x] = [show x]
-numbers [x, y]
-  | y == x + 1 = [hyp x y]
-  | otherwise  = map show [x, y]
-numbers (x:y:xs)
-  | y == x + 1 = range x y xs
-  | otherwise  = show x : numbers (y:xs)
-
--- | Helper for foldNums
-range :: Int -> Int -> [Int] -> [String]
-range a b []   = [hyp a b]
-range a b [x]
-  | x == b + 1 = [hyp a x]
-  | otherwise  = [hyp a b, show x]
-range a b (x:xs)
-  | x == b + 1 = range a x xs
-  | otherwise  = hyp a b : numbers (x:xs)
-
--- | Helper for foldNums
-hyp :: Int -> Int -> String
-hyp a b = show a ++ "-" ++ show b
+renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums "-" i)
 
 -- | Translates from Document to the Printing representation of Document
 makeDocument :: PrintingInformation -> Document -> T.Document

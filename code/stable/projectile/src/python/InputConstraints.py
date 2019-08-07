@@ -1,4 +1,5 @@
 ## \file InputConstraints.py
+# \brief Provides the function for checking the physical constraints and software constraints on the input
 from __future__ import print_function
 import sys
 import math

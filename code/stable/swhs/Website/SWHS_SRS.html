@@ -106,6 +106,11 @@
                   <td>m<sup>2</sup></td>
                 </tr>
                 <tr>
+                  <td><em>AR</em></td>
+                  <td>Aspect ratio</td>
+                  <td>--</td>
+                </tr>
+                <tr>
                   <td><em>C</em></td>
                   <td>Specific heat capacity</td>
                   <td>J/(kg&sdot;&deg;C)</td>
@@ -371,7 +376,7 @@
                 </tr>
                 <tr>
                   <td><em>η</em></td>
-                  <td>ODE parameter</td>
+                  <td>ODE parameter related to decay rate</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -411,7 +416,7 @@
                 </tr>
                 <tr>
                   <td><em>τ<sub>W</sub></em></td>
-                  <td>ODE parameter for water</td>
+                  <td>ODE parameter for water related to decay time</td>
                   <td>s</td>
                 </tr>
                 <tr>
@@ -1417,6 +1422,150 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
+                <div id="DD:balanceDecayRate">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:balanceDecayRate</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">
+                          ODE parameter for water related to decay time
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>τ<sub>W</sub></em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">s</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        <div class="equation">
+                          <em>τ<sub>W</sub> = <div class="fraction">
+                                                <span class="fup">
+                                                  m<sub>W</sub>&#8239;C<sub>W</sub>
+                                                </span>
+                                                <span class="fdn">
+                                                  h<sub>C</sub>&#8239;A<sub>C</sub>
+                                                </span>
+                                              </div></em>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (s)
+                          </li>
+                          <li><em>m<sub>W</sub></em> is the mass of water (kg)</li>
+                          <li>
+                            <em>C<sub>W</sub></em> is the specific heat capacity of water (J/(kg&sdot;&deg;C))
+                          </li>
+                          <li>
+                            <em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))
+                          </li>
+                          <li>
+                            <em>A<sub>C</sub></em> is the heating coil surface area (m<sup>2</sup>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#koothoor2013>koothoor2013</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a> and <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:balanceDecayTime">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:balanceDecayTime</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td>
+                        <p class="paragraph">ODE parameter related to decay rate</p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>η</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">Unitless</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        <div class="equation">
+                          <em>η = <div class="fraction">
+                                    <span class="fup">h<sub>P</sub>&#8239;A<sub>P</sub></span>
+                                    <span class="fdn">h<sub>C</sub>&#8239;A<sub>C</sub></span>
+                                  </div></em>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>η</em> is the ODE parameter related to decay rate (Unitless)
+                          </li>
+                          <li>
+                            <em>h<sub>P</sub></em> is the convective heat transfer coefficient between PCM and water (W/(m<sup>2</sup>&sdot;&deg;C))
+                          </li>
+                          <li>
+                            <em>A<sub>P</sub></em> is the phase change material surface area (m<sup>2</sup>)
+                          </li>
+                          <li>
+                            <em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))
+                          </li>
+                          <li>
+                            <em>A<sub>C</sub></em> is the heating coil surface area (m<sup>2</sup>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph"><a href=#koothoor2013>koothoor2013</a></p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a> and <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>
+                        </p>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
                 <div id="DD:balanceSolidPCM">
                   <table class="ddefn">
                     <tr>
@@ -1484,7 +1633,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
+                          <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a> and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
                         </p>
                       </td>
                     </tr>
@@ -1558,7 +1707,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
+                          <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a> and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
                         </p>
                       </td>
                     </tr>
@@ -1607,6 +1756,14 @@
                       </td>
                     </tr>
                     <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          The specific latent heat of fusion (also known as the enthalpy of fusion) of a substance is the heat energy required (<em>Q</em>) to change the state of a unit of the mass (<em>m</em>) of the substance from solid to liquid, at constant pressure.
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
                       <th>Source</th>
                       <td>
                         <p class="paragraph">
@@ -1618,7 +1775,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:meltFrac>DD: meltFrac</a>, <a href=#TM:latentHtE>TM: latentHtE</a>, <a href=#IM:heatEInPCM>IM: heatEInPCM</a>, and <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>
+                          <a href=#DD:meltFrac>DD: meltFrac</a>, <a href=#TM:latentHtE>TM: latentHtE</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>
                         </p>
                       </td>
                     </tr>
@@ -1690,9 +1847,59 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a> and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
+                          <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
                         </p>
                       </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="DD:aspectRatio">
+                  <table class="ddefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>DD:aspectRatio</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Aspect ratio</p></td>
+                    </tr>
+                    <tr>
+                      <th>Symbol</th>
+                      <td><p class="paragraph"><em>AR</em></p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">Unitless</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        <div class="equation">
+                          <em>AR = <div class="fraction">
+                                     <span class="fup">D</span>
+                                     <span class="fdn">L</span>
+                                   </div></em>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>AR</em> is the aspect ratio (Unitless)</li>
+                          <li><em>D</em> is the diameter of tank (m)</li>
+                          <li><em>L</em> is the length of tank (m)</li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td><p class="paragraph">--</p></td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
                     </tr>
                   </table>
                 </div>
@@ -1772,11 +1979,15 @@
                           <li>
                             <em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
                           </li>
-                          <li><em>τ<sub>W</sub></em> is the ODE parameter for water (s)</li>
+                          <li>
+                            <em>τ<sub>W</sub></em> is the ODE parameter for water related to decay time (s)
+                          </li>
                           <li>
                             <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
                           </li>
-                          <li><em>η</em> is the ODE parameter (Unitless)</li>
+                          <li>
+                            <em>η</em> is the ODE parameter related to decay rate (Unitless)
+                          </li>
                           <li>
                             <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
                           </li>
@@ -1787,21 +1998,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>τ<sub>W</sub></em>, <em>t<sub>final</sub></em>, <em>T<sub>C</sub></em>, <em>T<sub>P</sub></em> from (<a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>). The input is constrained so that <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>. (<a href=#assumpCTNOD>A: Charging-Tank-No-Temp-Discharge</a>) <em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub> = <div class="fraction">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <span class="fdn">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </div></em> is a constant (<a href=#DD:htFusion>DD: htFusion</a>) (s). <em>η = <div class="fraction">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <span class="fdn">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </div></em> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
+                          <em>t<sub>final</sub></em>, <em>T<sub>C</sub></em>, <em>T<sub>P</sub></em> from (<a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>). The input is constrained so that <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>. (<a href=#assumpCTNOD>A: Charging-Tank-No-Temp-Discharge</a>) <em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub></em> is from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>. <em>η</em> is from <a href=#DD:balanceDecayTime>DD: balanceDecayTime</a>. The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
                         </p>
                       </td>
                     </tr>
@@ -1815,7 +2012,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a>, <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>, <a href=#findMass>FR: Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, and <a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>
+                          <a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a>, <a href=#findMass>FR: Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, and <a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>
                         </p>
                       </td>
                     </tr>
@@ -1920,21 +2117,7 @@
                                                                                                       </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
                     </div>
                     <p class="paragraph">
-                      Setting <em>τ<sub>W</sub> = <div class="fraction">
-                                                    <span class="fup">
-                                                      m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                    </span>
-                                                    <span class="fdn">
-                                                      h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                    </span>
-                                                  </div></em> (<a href=#DD:htFusion>DD: htFusion</a>) and <em>η = <div class="fraction">
-                                                                                                                    <span class="fup">
-                                                                                                                      h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                                                    </span>
-                                                                                                                    <span class="fdn">
-                                                                                                                      h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                                                    </span>
-                                                                                                                  </div></em> (<a href=#DD:meltFrac>DD: meltFrac</a>), Equation (5) can be written as:
+                      By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>) and <em>η</em> (from <a href=#DD:balanceDecayTime>DD: balanceDecayTime</a>), this can be written as:
                     </p>
                     <div class="equation">
                       <em><div class="fraction">
@@ -2078,21 +2261,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>T<sub>melt</sub><sup>P</sup></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>h<sub>P</sub></em>, <em>m<sub>P</sub></em>, <em>C<sub>P</sub><sup>S</sup></em>, <em>C<sub>P</sub><sup>S</sup></em> from (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>). The input is constrained so that <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup></em> (<a href=#assumpPIS>A: PCM-Initially-Solid</a>) <em>T<sub>P</sub></em>, <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>, with initial conditions, <em>T<sub>W</sub> = T<sub>P</sub> = T<sub>init</sub></em>, FIXME t_w(0) = t_p(0), <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>, and <em>T<sub>W</sub></em> from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, such that the following governing ODE is satisfied. The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as <em>0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1</em> (from <a href=#DD:meltFrac>DD: meltFrac</a>) is determined as part of the heat energy in the PCM, as given in (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>). <em>τ<sub>P</sub><sup>S</sup> = <div class="fraction">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <span class="fdn">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div></em> is a constant (s) (<a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>). <em>τ<sub>P</sub><sup>L</sup> = <div class="fraction">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 m<sub>P</sub>&#8239;C<sub>P</sub><sup>L</sup>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               <span class="fdn">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             </div></em> is a constant (s) (<a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>).
+                          <em>T<sub>melt</sub><sup>P</sup></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>h<sub>P</sub></em>, <em>m<sub>P</sub></em>, <em>C<sub>P</sub><sup>S</sup></em>, <em>C<sub>P</sub><sup>S</sup></em> from (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>). The input is constrained so that <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup></em> (<a href=#assumpPIS>A: PCM-Initially-Solid</a>) <em>T<sub>P</sub></em>, <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>, with initial conditions, <em>T<sub>W</sub> = T<sub>P</sub> = T<sub>init</sub></em>, FIXME t_w(0) = t_p(0), <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>, and <em>T<sub>W</sub></em> from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, such that the following governing ODE is satisfied. The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as <em>0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1</em> (from <a href=#DD:meltFrac>DD: meltFrac</a>) is determined as part of the heat energy in the PCM, as given in (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>). <em>τ<sub>P</sub><sup>S</sup></em> is from <a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>. <em>τ<sub>P</sub><sup>L</sup></em> is from <a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>.
                         </p>
                       </td>
                     </tr>
@@ -2106,7 +2275,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a>, <a href=#unlikeChgNGS>UC: No-Gaseous-State</a>, <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>, <a href=#findMass>FR: Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#calcTempPCMOverTime>FR: Calculate-Temperature-PCM-Over-Time</a>, <a href=#calcPCMMeltEnd>FR: Calculate-PCM-Melt-End-Time</a>, and <a href=#calcPCMMeltBegin>FR: Calculate-PCM-Melt-Begin-Time</a>
+                          <a href=#unlikeChgNIHG>UC: No-Internal-Heat-Generation</a>, <a href=#unlikeChgNGS>UC: No-Gaseous-State</a>, <a href=#findMass>FR: Find-Mass</a>, <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#calcTempPCMOverTime>FR: Calculate-Temperature-PCM-Over-Time</a>, <a href=#calcPCMMeltEnd>FR: Calculate-PCM-Melt-End-Time</a>, and <a href=#calcPCMMeltBegin>FR: Calculate-PCM-Melt-Begin-Time</a>
                         </p>
                       </td>
                     </tr>
@@ -2158,7 +2327,7 @@
                                    </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
                     </div>
                     <p class="paragraph">
-                      Setting <em>τ<sub>P</sub><sup>S</sup></em> = <em>m<sub>P</sub></em> <em>C<sub>P</sub><sup>S</sup></em> / <em>h<sub>P</sub></em> <em>A<sub>P</sub></em>, this can be written as:
+                      By substituting <em>τ<sub>P</sub><sup>S</sup></em> (from <a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>), this can be written as:
                     </p>
                     <div class="equation">
                       <em><div class="fraction">
@@ -2479,7 +2648,9 @@
                     <tr>
                       <td><em>D</em></td>
                       <td><em>D&thinsp;&gt;&thinsp;0</em></td>
-                      <td>--</td>
+                      <td>
+                        <em>AR<sub>min</sub>&thinsp;&le;&thinsp;D&thinsp;&le;&thinsp;AR<sub>max</sub></em>
+                      </td>
                       <td><em>0.412</em> m</td>
                       <td>10<em>%</em></td>
                     </tr>
@@ -2695,7 +2866,7 @@
               </p>
               <p>
                 <div id="outputInputDerivQuants">
-                  Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>, the masses from <a href=#findMass>FR: Find-Mass</a>, <em>τ<sub>W</sub></em> (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>), <em>η</em> (from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>), <em>τ<sub>P</sub><sup>S</sup></em> (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>), and <em>τ<sub>P</sub><sup>L</sup></em> (from <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>).
+                  Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>, the masses from <a href=#findMass>FR: Find-Mass</a>, <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>), <em>η</em> (from <a href=#DD:balanceDecayTime>DD: balanceDecayTime</a>), <em>τ<sub>P</sub><sup>S</sup></em> (from <a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>), and <em>τ<sub>P</sub><sup>L</sup></em> (from <a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>).
                 </div>
               </p>
               <p>
@@ -3048,6 +3219,52 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:balanceDecayTime>DD: balanceDecayTime</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a></td>
               <td></td>
               <td></td>
@@ -3118,6 +3335,29 @@
             </tr>
             <tr>
               <td><a href=#DD:meltFrac>DD: meltFrac</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:aspectRatio>DD: aspectRatio</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3956,10 +4196,13 @@
               <th></th>
               <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
               <th><a href=#DD:htFluxP>DD: htFluxP</a></th>
+              <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
+              <th><a href=#DD:balanceDecayTime>DD: balanceDecayTime</a></th>
               <th><a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a></th>
               <th><a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a></th>
               <th><a href=#DD:htFusion>DD: htFusion</a></th>
               <th><a href=#DD:meltFrac>DD: meltFrac</a></th>
+              <th><a href=#DD:aspectRatio>DD: aspectRatio</a></th>
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
               <th><a href=#TM:latentHtE>TM: latentHtE</a></th>
@@ -3972,6 +4215,9 @@
             </tr>
             <tr>
               <td><a href=#DD:htFluxC>DD: htFluxC</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4005,9 +4251,57 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:balanceDecayTime>DD: balanceDecayTime</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4041,9 +4335,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:htFusion>DD: htFusion</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4066,7 +4366,31 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#DD:aspectRatio>DD: aspectRatio</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4095,9 +4419,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:sensHtE>TM: sensHtE</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4120,7 +4450,10 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4149,9 +4482,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:rocTempSimp>GD: rocTempSimp</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4172,10 +4511,13 @@
               <td><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></td>
               <td>X</td>
               <td>X</td>
-              <td></td>
-              <td></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4190,10 +4532,13 @@
               <td><a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a></td>
               <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4206,6 +4551,9 @@
             </tr>
             <tr>
               <td><a href=#IM:heatEInWtr>IM: heatEInWtr</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4228,7 +4576,10 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -4251,10 +4602,13 @@
               <th></th>
               <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
               <th><a href=#DD:htFluxP>DD: htFluxP</a></th>
+              <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
+              <th><a href=#DD:balanceDecayTime>DD: balanceDecayTime</a></th>
               <th><a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a></th>
               <th><a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a></th>
               <th><a href=#DD:htFusion>DD: htFusion</a></th>
               <th><a href=#DD:meltFrac>DD: meltFrac</a></th>
+              <th><a href=#DD:aspectRatio>DD: aspectRatio</a></th>
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
               <th><a href=#TM:latentHtE>TM: latentHtE</a></th>
@@ -4332,9 +4686,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#pcmTempGS>GS: Predict-PCM-Temperature</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4400,9 +4760,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#pcmEnergyGS>GS: Predict-PCM-Energy</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4468,9 +4834,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#findMass>FR: Find-Mass</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4538,6 +4910,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
@@ -4545,17 +4920,20 @@
               </td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
               <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
@@ -4579,6 +4957,9 @@
               <td>
                 <a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4615,6 +4996,9 @@
               <td>
                 <a href=#calcTempPCMOverTime>FR: Calculate-Temperature-PCM-Over-Time</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4664,6 +5048,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -4687,6 +5074,9 @@
               <td>
                 <a href=#calcChgHeatEnergyPCMOverTime>FR: Calculate-Change-Heat_Energy-PCM-Over-Time</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4754,11 +5144,17 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#calcPCMMeltBegin>FR: Calculate-PCM-Melt-Begin-Time</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4795,6 +5191,9 @@
               <td>
                 <a href=#calcPCMMeltEnd>FR: Calculate-PCM-Melt-End-Time</a>
               </td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4860,9 +5259,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#verifiable>NFR: Verifiable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4928,9 +5333,15 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#reusable>NFR: Reusable</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4996,6 +5407,9 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
           </table>
           <p class="caption">
@@ -5023,6 +5437,18 @@
               <td>maximum surface area of coil</td>
               <td><em>100000</em></td>
               <td>m<sup>2</sup></td>
+            </tr>
+            <tr>
+              <td><em>AR<sub>max</sub></em></td>
+              <td>maximum aspect ratio</td>
+              <td><em>100</em></td>
+              <td>--</td>
+            </tr>
+            <tr>
+              <td><em>AR<sub>min</sub></em></td>
+              <td>minimum aspect ratio</td>
+              <td><em>0.01</em></td>
+              <td>--</td>
             </tr>
             <tr>
               <td><em>C<sub>tol</sub></em></td>

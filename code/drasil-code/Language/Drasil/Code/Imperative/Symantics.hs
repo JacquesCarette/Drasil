@@ -4,29 +4,33 @@ module Language.Drasil.Code.Imperative.Symantics (
   -- Types
   Label, Library,
   -- Typeclasses
-  PackageSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
-  KeywordSym(..), PermanenceSym(..), BodySym(..), ControlBlockSym(..), 
-  BlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..)
+  PackageSym(..), ProgramSym(..), RenderSym(..), InternalFile(..), 
+  AuxiliarySym(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
+  ControlBlockSym(..), BlockSym(..), StateTypeSym(..), UnaryOpSym(..), 
+  BinaryOpSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
+  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
+  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
+  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
+  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
+  BlockCommentSym(..)
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
+import Language.Drasil.CodeSpec (Comments)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
 type Library = String
 
-class (RenderSym repr, AuxiliarySym repr) => PackageSym repr where
+class (ProgramSym repr, AuxiliarySym repr) => PackageSym repr where
   type Package repr 
-  package :: Label -> [repr (RenderFile repr)] -> [repr (Auxiliary repr)] -> 
+  package :: repr (Program repr) -> [repr (Auxiliary repr)] -> 
     repr (Package repr)
 
-  packDox :: Label -> [repr (RenderFile repr)] -> repr (Package repr)
+class (RenderSym repr) => ProgramSym repr where
+  type Program repr
+  prog :: Label -> [repr (RenderFile repr)] -> repr (Program repr)
 
 class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) => 
   RenderSym repr where 
@@ -44,9 +48,11 @@ class (ModuleSym repr) => InternalFile repr where
 
 class (KeywordSym repr, RenderSym repr) => AuxiliarySym repr where
   type Auxiliary repr
-  doxConfig :: String -> [repr (RenderFile repr)] -> repr (Auxiliary repr)
+  doxConfig :: String -> repr (Program repr) -> repr (Auxiliary repr)
 
   optimizeDox :: repr (Keyword repr)
+
+  makefile :: [Comments] -> repr (Program repr) -> repr (Auxiliary repr)
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   type Keyword repr

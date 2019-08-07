@@ -21,11 +21,13 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.SWHS.Assumptions (assumpVCN)
+import Drasil.SWHS.DataDefs (balanceDecayRate, balanceDecayTime,
+  balanceSolidPCM, balanceLiquidPCM)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
-import Drasil.SWHS.Unitals (inputs, consTol, diam, eta, pcmE, pcmDensity,
-  pcmMass, pcmVol, tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP,
-  tauW, tempPCM, tempW, watE, wDensity, wMass, wVol)
+import Drasil.SWHS.Unitals (inputs, consTol, diam, pcmE, pcmDensity, pcmMass,
+  pcmVol, tFinalMelt, tInitMelt, tankLength, tankVol, tempPCM, tempW, watE,
+  wDensity, wMass, wVol)
 
 ------------------------------
 -- Data Constraint: Table 1 --
@@ -99,10 +101,10 @@ oIDQQuants :: [Sentence]
 oIDQQuants = map foldlSent_ [
   [S "the", plural quantity, S "from", makeRef2S inputInitQuants],
   [S "the", plural mass, S "from", makeRef2S findMass],
-  [ch tauW, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)],
-  [ch eta, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)],
-  [ch tauSP, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)],
-  [ch tauLP, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)]
+  [ch balanceDecayRate, sParen (S "from" +:+ makeRef2S balanceDecayRate)],
+  [ch balanceDecayTime, sParen (S "from" +:+ makeRef2S balanceDecayTime)],
+  [ch balanceSolidPCM,  sParen (S "from" +:+ makeRef2S balanceSolidPCM)],
+  [ch balanceLiquidPCM, sParen (S "from" +:+ makeRef2S balanceLiquidPCM)]
   ]
   
 --

@@ -1,5 +1,8 @@
 package SWHS;
 
+/** \file InputParameters.java
+    \brief Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input
+*/
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
@@ -10,6 +13,9 @@ import java.util.ArrayList;
 
 public class InputParameters {
     
+    /** \brief Reads input from a file with the given file name
+        \param filename name of the input file
+    */
     public static Object[] get_input(String filename) throws Exception {
         double A_C;
         double C_W;
@@ -76,6 +82,20 @@ public class InputParameters {
         return outputs;
     }
     
+    /** \brief Verifies that input values satisfy the physical constraints and software constraints
+        \param A_C heating coil surface area (m^2)
+        \param C_W specific heat capacity of water (J/(kg degreeC))
+        \param h_C convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
+        \param T_init initial temperature (degreeC)
+        \param t_final final time (s)
+        \param L length of tank (m)
+        \param T_C temperature of the heating coil (degreeC)
+        \param t_step time step for simulation (s)
+        \param rho_W density of water (kg/m^3)
+        \param D diameter of tank (m)
+        \param T_W temperature of the water (degreeC)
+        \param E_W change in heat energy in the water (J)
+    */
     public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) throws Exception {
         if (!(A_C <= 100000)) {
             System.out.println("Warning: constraint violated");
@@ -93,6 +113,9 @@ public class InputParameters {
             System.out.println("Warning: constraint violated");
         }
         if (!(950 < rho_W && rho_W <= 1000)) {
+            System.out.println("Warning: constraint violated");
+        }
+        if (!(1.0e-2 <= D && D <= 100)) {
             System.out.println("Warning: constraint violated");
         }
         

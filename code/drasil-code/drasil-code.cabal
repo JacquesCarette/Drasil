@@ -45,7 +45,8 @@ library
     drasil-utils >= 0.1.1,
     drasil-build >= 0.1.1,
     drasil-theory >= 0.1.0,
-    drasil-database >= 0.1.0
+    drasil-database >= 0.1.0,
+    drasil-printers >= 0.1.10
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -94,7 +95,8 @@ executable codegenTest
     drasil-utils >= 0.1.1,
     drasil-build >= 0.1.1,
     drasil-theory >= 0.1.0,
-    drasil-database >= 0.1.0
+    drasil-database >= 0.1.0,
+    drasil-printers >= 0.1.10
   default-language: Haskell2010
   ghc-options:      -Wall -O2 -Wredundant-constraints -main-is Test.Main
 

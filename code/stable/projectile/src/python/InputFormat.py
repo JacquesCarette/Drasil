@@ -1,4 +1,5 @@
 ## \file InputFormat.py
+# \brief Provides the function for reading inputs
 from __future__ import print_function
 import sys
 import math

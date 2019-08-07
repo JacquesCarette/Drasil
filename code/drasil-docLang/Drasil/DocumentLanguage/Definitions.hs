@@ -17,7 +17,7 @@ import Data.Map (keys)
 import Data.List (elem, nub)
 import Control.Lens ((^.))
 
-import Language.Drasil
+import Language.Drasil hiding (Symbol(..))
 import Database.Drasil (SystemInformation, citeDB, conceptinsLookup,
   conceptinsTable, datadefnLookup, dataDefnTable, gendefLookup, gendefTable,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,

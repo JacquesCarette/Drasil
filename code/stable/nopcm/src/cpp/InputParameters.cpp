@@ -82,6 +82,9 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
     if (!(950 < rho_W && rho_W <= 1000)) {
         std::cout << "Warning: constraint violated" << std::endl;
     }
+    if (!(1.0e-2 <= D && D <= 100)) {
+        std::cout << "Warning: constraint violated" << std::endl;
+    }
     
     if (!(A_C > 0)) {
         std::cout << "Warning: constraint violated" << std::endl;

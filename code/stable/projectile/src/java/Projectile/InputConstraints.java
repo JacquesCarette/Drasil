@@ -1,6 +1,7 @@
 package Projectile;
 
 /** \file InputConstraints.java
+    \brief Provides the function for checking the physical constraints and software constraints on the input
 */
 import java.util.Arrays;
 import java.util.BitSet;

@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Documentation where
 import Language.Drasil hiding (organization, year)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Math (graph)
+import Data.Drasil.Concepts.Math (graph, unit_)
 import Data.Drasil.IdeaDicts (dataDefn, documentc, genDefn, inModel, softEng, thModel)
 
 import Control.Lens ((^.))
@@ -18,21 +18,21 @@ doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characterist
   functionalRequirement, game, general, generalSystemDescription, goal, guide,
   implementation, indPRCase, individual, information, input_, instance_, intReader,
   interest, interface, introduction, issue, item, label, library, limitation,
-  literacy, loss, material_, message, method_, model, module_, name_,
-  nonfunctional, nonfunctionalRequirement, object, offShelf, offShelfSolution, open,
-  orgOfDoc, organization, output_, physical, physicalConstraint, physicalProperty,
-  physicalSim, physicalSystem, physics, plan, practice, priority, problem,
-  problemDescription, prodUCTable, productUC, product_, project, propOfCorSol,
-  property, prpsOfDoc, purpose, quantity, realtime, reference, refmat, requirement_,
-  response, result, reviewer, safety, safetyReq, scenario, scope, scpOfReq,
-  scpOfTheProjS, second_, section_, simulation, software, softwareConstraint,
-  softwareDoc, softwareReq, softwareSys, softwareVAV, softwareVerif, solution,
-  solutionCharSpec, solutionCharacteristic, source, specific, specification,
-  specificsystemdescription, stakeholder, standard, statement, symbol_, sysCont,
-  system, systemConstraint, systemdescription, tOfSymb, table_, task, template,
-  termAndDef, term_, terminology, theory, traceyGraph, traceyMandG, traceyMatrix,
-  type_, uncertCol, uncertainty, useCase, useCaseTable, user, userCharacteristic,
-  userInput, validation, value, variable, vav, vavPlan, verification, video, year]
+  literacy, loss, material_, message, method_, model, module_, name_, nonfunctional,
+  nonfunctionalRequirement, object, offShelf, offShelfSolution, open, orgOfDoc,
+  organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
+  physicalSystem, physics, plan, practice, priority, problem, problemDescription,
+  prodUCTable, productUC, product_, project, propOfCorSol, property, prpsOfDoc,
+  purpose, quantity, realtime, reference, refmat, requirement_, response, result,
+  reviewer, safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
+  section_, simulation, software, softwareConstraint, softwareDoc, softwareReq,
+  softwareSys, softwareVAV, softwareVerif, solution, solutionCharSpec,
+  solutionCharacteristic, source, specific, specification, specificsystemdescription,
+  stakeholder, standard, statement, symbol_, sysCont, system, systemConstraint,
+  systemdescription, tOfSymb, tOfUnit, table_, task, template, termAndDef, term_,
+  terminology, theory, traceyGraph, traceyMandG, traceyMatrix, type_, uncertCol,
+  uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
+  validation, value, variable, vav, vavPlan, verification, video, year]
 
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
@@ -209,10 +209,10 @@ year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
-orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
-  termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol,
-  vav :: NamedChunk
+charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refmat,
+  scpOfReq, tOfSymb, tOfUnit, termAndDef, traceyMandG, vav :: NamedChunk
 
+consVals     = nc "consVals"     (cn "values of auxiliary constants")
 corSol       = nc "corSol"       (cn' "correct solution")
 charOfIR     = nc "charOfIR"     (characteristic `of__` intReader)
 orgOfDoc     = nc "orgOfDoc"     (organization `of_` document)
@@ -222,9 +222,9 @@ refmat       = nc "refmat"       (cn' "reference material")
 scpOfReq     = nc "scpOfReq"     (scope `of_'` requirement)
 termAndDef   = nc "termAndDef"   (terminology `and_'` definition)
 tOfSymb      = nc "tOfSymb"      (table_ `of_'` symbol_)
+tOfUnit      = nc "tOfUnit"      (table_ `of_'` unit_)
 traceyMandG  = nc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 vav          = nc "vav"          (verification `and_` validation)
-consVals     = nc "consVals"     (cn "values of auxiliary constants")
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
 scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` theCustom oper project) -- reasonable hack?

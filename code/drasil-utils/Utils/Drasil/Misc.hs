@@ -1,11 +1,11 @@
 {-# Language TypeFamilies #-}
-module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, chgsStart,
-  displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple, enumSimpleU,
-  eqN, eqUnR, eqUnR', eqnWSource, fromReplace, fmtU, follows, getTandS,
-  itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
+module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
+  chgsStart, displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple,
+  enumSimpleU, eqN, eqUnR, eqUnR', eqnWSource, fromReplace, fmtU, follows,
+  getTandS, itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
-  showingCxnBw, sortBySymbol, sortBySymbolTuple, tAndDOnly, tAndDWAcc,
-  tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
+  showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
+  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
@@ -44,7 +44,12 @@ eqnWSource a b = E a +:+ sParen (makeRef2S b)
 
 -- | takes a referable and a HasSymbol and outputs as a Sentence "From source we can replace symbol"
 fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
-fromReplace src c = S "From" +:+ makeRef2S src +:+ S "we can replace" +: E (sy c)
+fromReplace src c = S "From" +:+ makeRef2S src +:+ S "we can replace" +: ch c
+
+-- | takes a referable and a HasSymbol and outputs as a Sentence "By substituting "
+substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
+substitute s = S "By substituting" +:+ foldlList Comma List l `sC` S "this can be written as"
+  where l = map (\x -> ch x +:+ sParen (S "from" +:+ makeRef2S x)) s
 
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
 -- s - the number from which the enumeration should start from
@@ -206,3 +211,10 @@ displayConstrntsAsSet sym listOfVals = E $ sy sym `isin` DiscreteS listOfVals
 --Produces a common beginning of a likely change of the form "reference - sentence"
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
 chgsStart = sDash . makeRef2S
+
+--An either type - Left with error message if invalid char in string, else Right with string
+checkValidStr :: String -> String -> Either String String
+checkValidStr s [] = Right s
+checkValidStr s (x:xs)
+  | x `elem` s = Left $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']
+  | otherwise  = checkValidStr s xs

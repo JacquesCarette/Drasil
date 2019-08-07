@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Math (graph)
 import qualified Drasil.DocLang.SRS as SRS
 
 import Control.Lens ((^.), Getting)
-import Data.List (elemIndex, nub)
+import Data.List (nub)
 import qualified Data.Map as Map
 
 type TraceViewCat = [UID] -> ChunkDB -> [UID]
@@ -56,7 +56,7 @@ traceMReferrers :: ([UID] -> [UID]) -> ChunkDB -> [UID]
 traceMReferrers f = f . nub . concat . Map.elems . (^. refbyTable)
 
 traceMHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [Sentence]
-traceMHeader f c = map (\x -> markerHelper x c) l
+traceMHeader f c = map (`markerHelper` c) l
   where l = f $ _sysinfodb c
 
 markerHelper :: UID -> SystemInformation -> Sentence

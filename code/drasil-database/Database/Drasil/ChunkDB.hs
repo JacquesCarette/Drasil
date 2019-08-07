@@ -17,7 +17,7 @@ module Database.Drasil.ChunkDB
 import Language.Drasil hiding (sec)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
-import Control.Lens ((^.), makeLenses)
+import Control.Lens ((^.), (&), (.~), makeLenses)
 import Data.List (sortOn)
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Map as Map
@@ -30,7 +30,7 @@ type UMap a = Map.Map UID (a, Int)
 
 -- | A bit of a misnomer as it's really a map of all quantities, for retrieving
 -- symbols and their units.
-type SymbolMap  = UMap QuantityDict
+type SymbolMap = UMap QuantityDict
 
 -- | A map of all concepts, normally used for retrieving definitions.
 type ConceptMap = UMap ConceptChunk
@@ -87,10 +87,17 @@ symbLookup c m = getS $ Map.lookup c m
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
 getUnitLup m c = getUnit $ symbLookup (c ^. uid) (symbolTable m)
 
+uMapHelper :: ((a, Int) -> a) -> String -> String -> UID -> UMap a -> a
+uMapHelper f tys ms u t = getFM $ Map.lookup u t
+  where getFM = maybe (error $ tys ++ ": " ++ u ++ " not found in " ++ ms) f
+
 -- | Looks up a UID in a UMap table. If nothing is found an error is thrown
 uMapLookup :: String -> String -> UID -> UMap a -> a
-uMapLookup tys ms u t = getFM $ Map.lookup u t
-  where getFM = maybe (error $ tys ++ ": " ++ u ++ " not found in " ++ ms) fst
+uMapLookup = uMapHelper fst
+
+-- | Looks up a UID of a HasMarker in a UMap table. If nothing is found an error is thrown.
+uMapLookupMark :: HasMarker a => String -> String -> UID -> UMap a -> a
+uMapLookupMark = uMapHelper (\(x, y) -> x & marker .~ y)
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
 termLookup :: UID -> TermMap -> IdeaDict
@@ -106,7 +113,7 @@ defLookup = uMapLookup "Concept" "ConceptMap"
 
 -- | Looks up a uid in the datadefinition table. If nothing is found, an error is thrown.
 datadefnLookup :: UID -> DatadefnMap -> DataDefinition
-datadefnLookup = uMapLookup "DataDefinition" "DatadefnMap"
+datadefnLookup = uMapLookupMark "DataDefinition" "DatadefnMap"
 
 -- | Looks up a uid in the instance model table. If nothing is found, an error is thrown.
 insmodelLookup :: UID -> InsModelMap -> InstanceModel
@@ -138,13 +145,13 @@ asOrderedList = map fst . sortOn snd . map snd . Map.toList
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { symbolTable :: SymbolMap
                    , termTable :: TermMap 
-                   , defTable  :: ConceptMap
+                   , defTable :: ConceptMap
                    , _unitTable :: UnitMap
                    , _traceTable :: TraceMap
                    , _refbyTable :: RefbyMap
-                   , _dataDefnTable  :: DatadefnMap
-                   , _insmodelTable   :: InsModelMap
-                   , _gendefTable   :: GendefMap
+                   , _dataDefnTable :: DatadefnMap
+                   , _insmodelTable :: InsModelMap
+                   , _gendefTable :: GendefMap
                    , _theoryModelTable :: TheoryModelMap
                    , _conceptinsTable :: ConceptInstanceMap
                    , _sectionTable :: SectionMap
@@ -168,7 +175,7 @@ collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
  . concatMap getUnits . mapMaybe (getUnitLup m)
 
 traceLookup :: UID -> TraceMap -> [UID]
-traceLookup c = fromMaybe [] .  Map.lookup c
+traceLookup c = fromMaybe [] . Map.lookup c
  
 invert :: (Ord v) => Map.Map k [v] -> Map.Map v [k]
 invert m = Map.fromListWith (++) pairs

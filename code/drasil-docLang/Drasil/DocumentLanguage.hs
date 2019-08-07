@@ -6,7 +6,7 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import Drasil.DocDecl (SRSDecl, mkDocDesc, setMarkers)
+import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), Literature(..),
@@ -279,9 +279,9 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (TMs intro fields ts) =
       SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
     mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ (concatMap (\x -> [LlC $ ddefn fields si' x, derivation x]) $ setMarkers dds)
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap (\x -> [LlC $ ddefn fields si' x, derivation x]) dds
     mkSubSCS si' (DDs intro fields dds _) =
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ (map (LlC . ddefn fields si') $ setMarkers dds)
+      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map (LlC . ddefn fields si') dds
     mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
       SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> [LlC $ gdefn fields si' x, derivation x]) gs'
     mkSubSCS si' (GDs intro fields gs' _) =

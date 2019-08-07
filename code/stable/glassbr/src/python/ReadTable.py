@@ -1,5 +1,6 @@
 ## \file ReadTable.py
 # \author Nikitha Krithnan and W. Spencer Smith
+# \date 2019-08-07
 # \brief Provides a function for reading glass ASTM data
 from __future__ import print_function
 import sys

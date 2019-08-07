@@ -1,5 +1,6 @@
 /** \file DerivedValues.hpp
     \author Nikitha Krithnan and W. Spencer Smith
+    \date 2019-08-07
     \brief Provides the function for calculating derived values
 */
 #ifndef DerivedValues_h

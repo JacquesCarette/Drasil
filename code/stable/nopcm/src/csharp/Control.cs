@@ -1,5 +1,6 @@
 /** \file Control.cs
     \author Thulasi Jegatheesan
+    \date 2019-08-07
     \brief Controls the flow of the program
 */
 using System;

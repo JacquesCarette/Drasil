@@ -1,5 +1,6 @@
 /** \file InputParameters.hpp
     \author Nikitha Krithnan and W. Spencer Smith
+    \date 2019-08-07
     \brief Provides the structure for holding input values
 */
 #ifndef InputParameters_h

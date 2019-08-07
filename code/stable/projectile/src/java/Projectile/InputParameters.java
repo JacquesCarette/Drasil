@@ -2,6 +2,7 @@ package Projectile;
 
 /** \file InputParameters.java
     \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
+    \date 2019-08-07
     \brief Provides the structure for holding input values
 */
 import java.util.Arrays;

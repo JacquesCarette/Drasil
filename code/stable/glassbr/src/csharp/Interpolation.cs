@@ -1,5 +1,6 @@
 /** \file Interpolation.cs
     \author Nikitha Krithnan and W. Spencer Smith
+    \date 2019-08-07
     \brief Provides functions for linear interpolation on three-dimensional data
 */
 using System;

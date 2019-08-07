@@ -1,5 +1,6 @@
 /** \file Control.cs
     \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
+    \date 2019-08-07
     \brief Controls the flow of the program
 */
 using System;

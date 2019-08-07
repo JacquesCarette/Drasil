@@ -49,7 +49,7 @@ import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tModsNew)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
-import Drasil.Gamephysics.GenDefs (genDefns)
+import Drasil.Gamephysics.GenDefs (generalDefns)
 
 srs :: Document
 srs = mkDoc mkSRS for' si

@@ -13,6 +13,7 @@ data GenDefn = GD { _relC  :: RelationConcept
                   , _ref   :: [Reference]
                   , _sn    :: ShortName
                   , _ra    :: String -- RefAddr
+                  , _mark  :: Int
                   , _notes :: [Sentence]
                   }
 makeLenses ''GenDefn
@@ -30,6 +31,7 @@ instance HasRefAddress      GenDefn where getRefAdd = view ra
 instance HasAdditionalNotes GenDefn where getNotes = notes
 instance MayHaveUnit        GenDefn where getUnit = gdUnit
 instance CommonIdea         GenDefn where abrv _ = abrv genDefn
+instance HasMarker          GenDefn where marker = mark
 instance Referable          GenDefn where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
@@ -38,9 +40,9 @@ gd :: (IsUnit u) => RelationConcept -> Maybe u ->
   Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 gd r _   _     []   _  = error $ "Source field of " ++ r ^. uid ++ " is empty"
 gd r u derivs refs sn_ = 
-  GD r (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv genDefn sn_)
+  GD r (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv genDefn sn_) 0
 
 gdNoRefs :: (IsUnit u) => RelationConcept -> Maybe u ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
 gdNoRefs r u derivs sn_ = 
-  GD r (fmap unitWrapper u) derivs [] (shortname' sn_) (prependAbrv genDefn sn_)
+  GD r (fmap unitWrapper u) derivs [] (shortname' sn_) (prependAbrv genDefn sn_) 0

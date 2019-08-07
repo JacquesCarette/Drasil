@@ -121,7 +121,7 @@ insmodelLookup = uMapLookup "InstanceModel" "InsModelMap"
 
 -- | Looks up a uid in the general definition table. If nothing is found, an error is thrown.
 gendefLookup :: UID -> GendefMap -> GenDefn
-gendefLookup = uMapLookup "GenDefn" "GenDefnMap" 
+gendefLookup = uMapLookupMark "GenDefn" "GenDefnMap" 
 
 -- | Looks up a uid in the theory model table. If nothing is found, an error is thrown.
 theoryModelLookup :: UID -> TheoryModelMap -> TheoryModel

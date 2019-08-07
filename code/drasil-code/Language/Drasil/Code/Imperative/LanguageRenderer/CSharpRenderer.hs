@@ -60,7 +60,7 @@ import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5,
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
 import qualified Data.Map as Map (fromList,lookup)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon)
@@ -551,7 +551,7 @@ instance MethodSym CSharpCode where
 
   function n = method n ""
 
-  docFunc desc pComms = docFuncRepr desc pComms []
+  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 

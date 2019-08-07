@@ -51,7 +51,7 @@ import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty,
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
   equals, vcat, colon, brackets, isEmpty)
@@ -528,7 +528,7 @@ instance MethodSym PythonCode where
   function n _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
     (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
 
-  docFunc desc pComms = docFuncRepr desc pComms []
+  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
   inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
     ins) b

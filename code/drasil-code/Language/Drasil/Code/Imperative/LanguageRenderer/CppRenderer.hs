@@ -60,7 +60,7 @@ import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import qualified Data.Map as Map (fromList,lookup)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
@@ -573,8 +573,8 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
 
-  docFunc desc pComms f = pair (docFunc desc pComms $ pfst f) (docFunc desc 
-    pComms $ psnd f)
+  docFunc desc pComms rComm f = pair (docFunc desc pComms rComm $ pfst f) 
+    (docFunc desc pComms rComm $ psnd f)
 
   inOutFunc n s p ins outs both b = pair (inOutFunc n (pfst s) (pfst p) (map
     pfst ins) (map pfst outs) (map pfst both) (pfst b)) (inOutFunc n (psnd s) 
@@ -1146,7 +1146,7 @@ instance MethodSym CppSrcCode where
     sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
     blockStart blockEnd)
 
-  docFunc desc pComms = docFuncRepr desc pComms []
+  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v)
     (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ 
@@ -1638,7 +1638,7 @@ instance MethodSym CppHdrCode where
 
   function n = method n ""
 
-  docFunc desc pComms = docFuncRepr desc pComms []
+  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map (fmap getParam) ins) b

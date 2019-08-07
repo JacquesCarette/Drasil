@@ -601,8 +601,9 @@ genModule n desc maybeMs maybeCs = do
       as = case csi (codeSpec g) of CSI {authors = a} -> map name a
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
-  let commMod | CommentMod `elem` commented g                   = docMod desc as
-              | CommentFunc `elem` commented g && not (null ms) = docMod "" []
+  let commMod | CommentMod `elem` commented g                   = docMod desc 
+                  as (date g)
+              | CommentFunc `elem` commented g && not (null ms) = docMod "" []      (date g)
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n ls ms cs
 

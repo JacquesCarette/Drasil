@@ -14,7 +14,7 @@ import Test.Helper (helper)
 
 helloWorld :: (PackageSym repr) => repr (Package repr)
 helloWorld = package (prog "HelloWorld" [docMod description 
-  ["Brooks MacLachlan"] $ fileDoc (buildModule "HelloWorld" ["Helper"] 
+  ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" ["Helper"] 
   [helloWorldMain] []), helper]) []
 
 description :: String

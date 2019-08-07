@@ -86,7 +86,8 @@ instance RenderSym PythonCode where
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 
-  docMod d a m = commentedMod (docComment $ moduleDoc d a $ filePath (unPC m)) m
+  docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
+    (unPC m)) m
 
   commentedMod cmt m = liftA2 updateFileMod (liftA2 updateModDoc
     (liftA2 commentedItem cmt (fmap (modDoc . fileMod) m)) (fmap fileMod m)) m

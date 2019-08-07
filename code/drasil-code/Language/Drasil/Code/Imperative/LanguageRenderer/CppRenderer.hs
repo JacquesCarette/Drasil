@@ -1140,13 +1140,13 @@ instance MethodSym CppSrcCode where
   docMain c b = commentedFunc (docComment $ functionDoc 
     "Controls the flow of the program" 
     [("argc", "Number of command-line arguments"),
-    ("argv", "List of command-line arguments")]) (mainMethod c b)
+    ("argv", "List of command-line arguments")] ["exit code"]) (mainMethod c b)
 
   function n s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n <$> 
     sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
     blockStart blockEnd)
 
-  docFunc = docFuncRepr
+  docFunc desc pComms = docFuncRepr desc pComms []
 
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v)
     (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ 
@@ -1157,8 +1157,11 @@ instance MethodSym CppSrcCode where
   inOutFunc n s p ins outs both b = function n s p (mState void) (map
     pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
+  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
+  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms)
+    [bComm]
   docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
-    (bComms ++ iComms ++ oComms)
+    (bComms ++ iComms ++ oComms) []
 
   commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
@@ -1635,7 +1638,7 @@ instance MethodSym CppHdrCode where
 
   function n = method n ""
 
-  docFunc = docFuncRepr
+  docFunc desc pComms = docFuncRepr desc pComms []
 
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map (fmap getParam) ins) b
@@ -1644,8 +1647,11 @@ instance MethodSym CppHdrCode where
   inOutFunc n s p ins outs both b = function n s p (mState void) (map 
     pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
+  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
+  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms)
+    [bComm]
   docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
-    (bComms ++ iComms ++ oComms)
+    (bComms ++ iComms ++ oComms) []
 
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)

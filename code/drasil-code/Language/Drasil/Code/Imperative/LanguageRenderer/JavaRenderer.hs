@@ -553,11 +553,11 @@ instance MethodSym JavaCode where
 
   docMain c b = commentedFunc (docComment $ functionDoc 
     "Controls the flow of the program" 
-    [("args", "List of command-line arguments")]) (mainMethod c b)
+    [("args", "List of command-line arguments")] []) (mainMethod c b)
 
   function n = method n ""
 
-  docFunc = docFuncRepr
+  docFunc desc pComms = docFuncRepr desc pComms []
 
   inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
     ins) b
@@ -580,7 +580,12 @@ instance MethodSym JavaCode where
             decls = multi $ map varDec outs
             outputs = var "outputs" jArrayType
     
-  docInOutFunc desc iComms _ bComms = docFuncRepr desc (bComms ++ iComms)
+  docInOutFunc desc iComms [] [] = docFuncRepr desc iComms []
+  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
+  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms) 
+    [bComm]
+  docInOutFunc desc iComms oComms bComms = docFuncRepr desc (bComms ++ iComms) 
+    ("array containing the following values:" : bComms ++ oComms)
             
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

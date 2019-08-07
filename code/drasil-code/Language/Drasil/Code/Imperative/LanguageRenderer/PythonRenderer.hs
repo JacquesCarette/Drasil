@@ -528,7 +528,7 @@ instance MethodSym PythonCode where
   function n _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
     (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
 
-  docFunc = docFuncRepr
+  docFunc desc pComms = docFuncRepr desc pComms []
 
   inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
     ins) b
@@ -536,7 +536,8 @@ instance MethodSym PythonCode where
     stateParam $ both ++ ins) (liftA2 appendToBody b (multiReturn $
     map valueOf $ both ++ outs))
 
-  docInOutFunc desc iComms _ bComms = docFuncRepr desc (bComms ++ iComms)
+  docInOutFunc desc iComms oComms bComms = docFuncRepr desc (bComms ++ iComms) 
+    (bComms ++ oComms)
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

@@ -197,29 +197,34 @@ sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
 cap (S (s:ss)) CapFirst = S (toUpper s : ss)
-cap (S s)      CapWords = 
-  let w = words s in
-  let l = case w of [] -> [[]]
-                    [x] -> [capFirstWord x]
-                    (x:xs) -> capFirstWord x : map capWords xs in
-  S $ findHyph $ unwords l
-cap (S s1 :+: S s2) r = cap (S (s1 ++ s2)) r
-cap (s1 :+: s2 :+: s3) CapWords = cap s1 CapWords +:+ capTail (s2 +:+ s3)
-cap (s1 :+: s2)        CapWords = cap s1 CapWords :+: capTail s2
-cap (s1 :+: s2)        CapFirst = cap s1 CapFirst :+: s2
+cap (S s)      CapWords = capString s capFirstWord capWords
+cap (S s1 :+: S s2 :+: x) r = cap (S (s1 ++ s2) :+: x) r
+cap (s1 :+: s2) CapWords = cap s1 CapWords +:+ capTail s2
+cap (s1 :+: s2) CapFirst = cap s1 CapFirst :+: s2
 cap a _ = a
 
-{-}
---cap (s1 :+: s2 :+: s3)  CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
-  --could change associativity of :+: instead?
+{-
+-- WIP
+cap (S s1 :+: S s2) r = cap (S (s1 ++ s2)) r
+cap (s1 :+: s2 :+: s3) CapWords = cap s1 CapWords :+: capTail (s2 :+: s3)
+
+-- from master
+cap (s1 :+: s2 :+: s3) CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
+--could change associativity of :+: instead?
 cap (s1 :+: s2)  CapWords = cap s1 CapWords :+: cap s2 CapWords
 -}
 
 -- | Helper for cap for the end of a Sentence (Assumes CapWords).
 capTail :: Sentence -> Sentence
-capTail (S s) = S . findHyph . unwords . (map capWords) $ words s
+capTail (S s) = capString s capWords capWords
 capTail (a :+: b) = capTail a :+: capTail b
 capTail x = x
+
+capString :: String -> (String -> String) -> (String -> String) -> Sentence 
+capString s f g = S . findHyph . unwords $ process (words s)
+  where
+    process (x:xs) = f x : map g xs
+    process []     = []
 
 findHyph :: String -> String
 findHyph "" = ""

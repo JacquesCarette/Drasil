@@ -1,10 +1,9 @@
-module Language.Drasil.NounPhrase.Core (
-  NP(..), CapitalizationRule(..), PluralRule(..), PluralForm
-  ) where
+module Language.Drasil.NounPhrase.Core (CapitalizationRule(..), NP(..),
+  PluralForm, PluralRule(..)) where
 
 import Language.Drasil.Sentence (Sentence)
 
-type PluralForm     = Sentence  -- These might change.
+type PluralForm = Sentence  -- These might change.
 
 -- | Capitalization rules.
 data CapitalizationRule = 

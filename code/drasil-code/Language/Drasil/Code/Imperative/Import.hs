@@ -96,7 +96,7 @@ generator :: (RenderSym repr) => String -> Choices -> CodeSpec -> State repr
 generator dt chs spec = State {
   -- constants
   codeSpec = spec,
-  date = dt,
+  date = showDate $ dates chs,
   inStruct = inputStructure chs,
   inMod = inputModule chs,
   logKind  = logging chs,
@@ -109,6 +109,8 @@ generator dt chs spec = State {
   sfwrCBody = chooseConstr $ onSfwrConstraint chs,
   physCBody = chooseConstr $ onPhysConstraint chs
 }
+  where showDate Show = dt
+        showDate Hide = ""
 
 maybeLog :: (RenderSym repr) => repr (Variable repr) ->
   Reader (State repr) [repr (Statement repr)]

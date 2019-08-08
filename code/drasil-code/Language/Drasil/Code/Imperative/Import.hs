@@ -1020,13 +1020,13 @@ genModDef :: (RenderSym repr) => CS.Mod -> Reader State (repr (RenderFile repr))
 genModDef (CS.Mod n desc fs) = genModule n desc (Just $ mapM genFunc fs) Nothing
 
 genFunc :: (RenderSym repr) => Func -> Reader State (repr (Method repr))
-genFunc (FDef (FuncDef n desc i o s)) = do
+genFunc (FDef (FuncDef n desc i o rd s)) = do
   g <- ask
   parms <- getParams i
   stmts <- mapM convStmt s
   vars <- mapM (\x -> variable (codeName x) (convType $ codeType x)) 
     (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ i)
-  publicMethod (mState $ convType o) n desc parms Nothing [block $ map varDec 
+  publicMethod (mState $ convType o) n desc parms rd [block $ map varDec 
     vars ++ stmts]
 genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 genFunc (FCD cd) = genCalcFunc cd

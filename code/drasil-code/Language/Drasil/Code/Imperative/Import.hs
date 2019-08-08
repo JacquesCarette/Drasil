@@ -716,7 +716,7 @@ getInputDecl = do
   let v_params = var "inParams" (obj "InputParameters")
       getDecl _ [] = return Nothing
       getDecl Unbundled ins = do
-        vars <- mapM (\x -> variable (codeName x) (convType $ codeType x)) ins
+        vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
       getDecl Bundled _ = return $ Just $ extObjDecNewVoid "InputParameters"
         v_params 
@@ -1046,8 +1046,7 @@ genFunc (FDef (FuncDef n desc i o rd s)) = do
   g <- ask
   parms <- getParams i
   stmts <- mapM convStmt s
-  vars <- mapM (\x -> variable (codeName x) (convType $ codeType x)) 
-    (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ i)
+  vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ i)
   publicMethod (mState $ convType o) n desc parms rd [block $ map varDec 
     vars ++ stmts]
 genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
@@ -1056,7 +1055,7 @@ genFunc (FCD cd) = genCalcFunc cd
 convStmt :: (RenderSym repr) => FuncStmt -> Reader State (repr (Statement repr))
 convStmt (FAsg v e) = do
   e' <- convExpr e
-  v' <- variable (codeName v) (convType $ codeType v)
+  v' <- mkVar v
   l <- maybeLog v'
   return $ multi $ assign v' e' : l
 convStmt (FFor v e st) = do
@@ -1122,7 +1121,7 @@ readData ddef = do
     closeFile v_infile ]]
   where inData :: (RenderSym repr) => Data -> Reader State [repr (Statement repr)]
         inData (Singleton v) = do
-            vv <- variable (codeName v) (convType $ codeType v)
+            vv <- mkVar v
             l <- maybeLog vv
             return [multi $ getFileInput v_infile vv : l]
         inData JunkData = return [discardFileLine v_infile]
@@ -1201,9 +1200,8 @@ readData ddef = do
 
 getEntryVars :: (RenderSym repr) => Maybe String -> LinePattern -> 
   Reader State [repr (Variable repr)]
-getEntryVars s lp = mapM (maybe (\v -> variable (codeName v) (convType $ 
-  codeType v)) (\st v -> variable (codeName v ++ st) (listInnerType $
-  convType $ codeType v)) s) (getPatternInputs lp)
+getEntryVars s lp = mapM (maybe mkVar (\st v -> variable (codeName v ++ st) 
+  (listInnerType $ convType $ codeType v)) s) (getPatternInputs lp)
 
 getEntryVarLogs :: (RenderSym repr) => LinePattern -> 
   Reader State [repr (Statement repr)]

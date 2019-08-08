@@ -403,8 +403,7 @@ genInputDerived = do
       genDerived (Just _) = do
         ins <- getDerivedIns
         outs <- getDerivedOuts
-        bod <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (convType $ 
-          codeType x) (codeEquat x)) dvals
+        bod <- mapM (\x -> genCalcBlock CalcAssign x (codeEquat x)) dvals
         desc <- dvFuncDesc
         mthd <- publicInOutFunc "derived_values" desc ins outs [] bod
         return $ Just mthd
@@ -514,7 +513,7 @@ genCalcFunc cdef = do
   parms <- getCalcParams cdef
   let nm = codeName cdef
       tp = convType $ codeType cdef
-  blck <- genCalcBlock CalcReturn nm tp (codeEquat cdef)
+  blck <- genCalcBlock CalcReturn cdef (codeEquat cdef)
   desc <- returnComment nm
   publicMethod
     (mState tp)
@@ -526,28 +525,28 @@ genCalcFunc cdef = do
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
-genCalcBlock :: (RenderSym repr) => CalcType -> String -> 
-  repr (StateType repr) -> Expr -> Reader State (repr (Block repr))
-genCalcBlock t v st (Case c e) = genCaseBlock t v st c e
-genCalcBlock t v st e
-    | t == CalcAssign  = fmap block $ liftS $ do { vv <- variable v st; ee <-
+genCalcBlock :: (RenderSym repr) => CalcType -> CodeDefinition -> Expr ->
+  Reader State (repr (Block repr))
+genCalcBlock t v (Case c e) = genCaseBlock t v c e
+genCalcBlock t v e
+    | t == CalcAssign  = fmap block $ liftS $ do { vv <- mkVar v; ee <-
       convExpr e; l <- maybeLog vv; return $ multi $ assign vv ee : l}
     | otherwise        = block <$> liftS (returnState <$> convExpr e)
 
-genCaseBlock :: (RenderSym repr) => CalcType -> String -> repr (StateType repr) 
-  -> Completeness -> [(Expr,Relation)] -> Reader State (repr (Block repr))
-genCaseBlock _ _ _ _ [] = error $ "Case expression with no cases encountered" ++
+genCaseBlock :: (RenderSym repr) => CalcType -> CodeDefinition -> Completeness 
+  -> [(Expr,Relation)] -> Reader State (repr (Block repr))
+genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
-genCaseBlock t v st c cs = do
+genCaseBlock t v c cs = do
   ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (calcBody e)) (ifEs c)
   els <- elseE c
   return $ block [ifCond ifs els]
-  where calcBody e = fmap body $ liftS $ genCalcBlock t v st e
+  where calcBody e = fmap body $ liftS $ genCalcBlock t v e
         ifEs Complete = init cs
         ifEs Incomplete = cs
         elseE Complete = calcBody $ fst $ last cs
         elseE Incomplete = return $ oneLiner $ throw $  
-          "Undefined case encountered in function " ++ v
+          "Undefined case encountered in function " ++ codeName v
 
 ----- OUTPUT -------
 

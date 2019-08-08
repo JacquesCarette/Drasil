@@ -63,8 +63,8 @@ elasticity = dcc "elasticity" (cnIES "elasticity")
 energy = dcc "energy" (cn "energy")
   "power derived from the utilization of physical or chemical resources"
 fbd = dcc "FBD" (cn' "free body diagram")
-  ("a graphical illustration used to visualize the applied forces, movements, and resulting "
-   ++ "reactions on a body in a steady state condition")
+  ("a graphical illustration used to visualize the applied forces, movements, and resulting " ++
+   "reactions on a body in a steady state condition")
 force = dcc "force" (cn' "force")
   "an interaction that tends to produce change in the motion of an object"
 friction = dcc "friction" (cn' "friction")
@@ -80,11 +80,11 @@ height = dccWDS "height" (cn' "height")
 isotropy = dccWDS "isotropy" (cn "isotropy")
   (S "a condition where the" +:+ phrase value `sOf` S "a" +:+ phrase property `sIs`
    S "independent of the direction in which it is measured")
-joint = dcc "joint"    (cn' "joint")
+joint = dcc "joint" (cn' "joint")
   "a connection between two rigid bodies which allows movement with one or more degrees of freedom"
 kEnergy = dccWDS "kEnergy" (cn "kinetic energy")
   (S "measure" `ofThe` phrase energy +:+ S "a body possess due to its motion")
-linear = dcc "linear"  (cn' "linear" )
+linear = dcc "linear" (cn' "linear")
   "arranged in or extending along a straight or nearly straight line"
 mechEnergy = dcc "mechEnergy" (cn "mechanical energy")
   "the energy that comes from motion and position"
@@ -101,16 +101,17 @@ rigidBody = dcc "rigidBody" (cnIES "rigid body")
 space = dcc "space" (cn' "space")
   "a two-dimensional extent where objects and events have relative positions and directions"
 scalarAccel = dccWDS "scalarAccel" (cn' "scalar acceleration")
-  (S "the magnitude of the " +:+ phrase acceleration +:+ S "vector")
+  (S "magnitude" `ofThe` phrase acceleration +:+ S "vector")
 scalarPos = dccWDS "scalarPos" (cn' "scalar position")
-  (S "the magnitude of the " +:+ phrase position +:+ S "vector")
+  (S "magnitude" `ofThe` phrase position +:+ S "vector")
 speed = dccWDS "speed" (cn' "speed")
-  (S "the magnitude of the" +:+ phrase velocity +:+ S "vector")
+  (S "magnitude" `ofThe` phrase velocity +:+ S "vector")
 strain = dccWDS "strain" (cn' "strain") 
-  (S "a measure of deformation of a body or plane under" +:+ phrase stress)
+  (S "a measure of deformation representing the" +:+ phrase displacement +:+
+   S "between particles in the body relative to a reference length")
   --definition of strain used in SSP, can be made clearer
-stress = dccWDS "stress" (cn''' "stress")
-  (S"the" +:+ plural force +:+ S "that are exerted between planes internal to a larger body subject to external loading")
+stress = dcc "stress" (cn''' "stress")
+  "the ratio of an applied force to a cross-sectional area"
   --definition of stress used in SSP, can be made clearer
 tension = dccWDS "tension" (cn' "tension")
   (S "a" +:+ phrase stress +:+ S "that causes displacement of the body away from its center")

@@ -2,7 +2,6 @@ package SWHS;
 
 /** \file OutputFormat.java
     \author Thulasi Jegatheesan
-    \date 2019-08-07
     \brief Provides the function for writing outputs
 */
 import java.util.Arrays;

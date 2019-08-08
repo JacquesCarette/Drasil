@@ -1,6 +1,5 @@
 ## \file InputFormat.py
 # \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
-# \date 2019-08-07
 # \brief Provides the function for reading inputs
 from __future__ import print_function
 import sys

@@ -2,7 +2,6 @@ package GlassBR;
 
 /** \file Calculations.java
     \author Nikitha Krithnan and W. Spencer Smith
-    \date 2019-08-07
     \brief Provides functions for calculating the outputs
 */
 import java.util.Arrays;

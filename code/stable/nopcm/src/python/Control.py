@@ -1,6 +1,5 @@
 ## \file Control.py
 # \author Thulasi Jegatheesan
-# \date 2019-08-07
 # \brief Controls the flow of the program
 from __future__ import print_function
 import sys

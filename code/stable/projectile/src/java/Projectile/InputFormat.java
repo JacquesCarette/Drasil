@@ -2,7 +2,6 @@ package Projectile;
 
 /** \file InputFormat.java
     \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
-    \date 2019-08-07
     \brief Provides the function for reading inputs
 */
 import java.util.Arrays;

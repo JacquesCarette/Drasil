@@ -2,7 +2,6 @@ package GlassBR;
 
 /** \file InputFormat.java
     \author Nikitha Krithnan and W. Spencer Smith
-    \date 2019-08-07
     \brief Provides the function for reading inputs
 */
 import java.util.Arrays;

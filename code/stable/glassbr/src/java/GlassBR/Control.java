@@ -2,7 +2,6 @@ package GlassBR;
 
 /** \file Control.java
     \author Nikitha Krithnan and W. Spencer Smith
-    \date 2019-08-07
     \brief Controls the flow of the program
 */
 import java.util.Arrays;

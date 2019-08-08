@@ -1084,11 +1084,11 @@ convStmt (FTry t c) = do
   stmt2 <- mapM convStmt c
   return $ tryCatch (bodyStatements stmt1) (bodyStatements stmt2)
 convStmt FContinue = return continue
-convStmt (FDec v (C.List t)) = return $ listDec 0 (var (codeName v)
-  (listType dynamic_ (convType t)))
-convStmt (FDec v t) = do 
-  vari <- variable (codeName v) (convType t)
-  return $ varDec vari
+convStmt (FDec v) = do
+  vari <- mkVar v
+  let convDec (C.List _) = listDec 0 vari
+      convDec _ = varDec vari
+  return $ convDec (codeType v) 
 convStmt (FProcCall n l) = do
   e' <- convExpr (FCall (asExpr n) l)
   return $ valState e'

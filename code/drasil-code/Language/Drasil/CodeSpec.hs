@@ -218,7 +218,7 @@ data FuncStmt where
   FThrow :: String -> FuncStmt
   FTry :: [FuncStmt] -> [FuncStmt] -> FuncStmt
   FContinue :: FuncStmt
-  FDec :: CodeChunk -> CodeType -> FuncStmt
+  FDec :: CodeChunk -> FuncStmt
   FProcCall :: Func -> [Expr] -> FuncStmt
   -- slight hack, for now
   FAppend :: Expr -> Expr -> FuncStmt
@@ -230,7 +230,7 @@ ffor :: (Quantity c, MayHaveUnit c) => c -> Expr -> [FuncStmt] -> FuncStmt
 ffor v = FFor (quantvar  v)
 
 fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
-fdec v  = FDec (quantvar  v) (spaceToCodeType $ v ^. typ)
+fdec v  = FDec (quantvar v)
 
 asVC :: Func -> QuantityDict
 asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
@@ -298,7 +298,7 @@ modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _ _) -> (n, getModDep m))
         sm = sysinfodb cs
 
 fstdep :: ChunkDB -> FuncStmt -> [CodeChunk]
-fstdep _  (FDec cch _) = [cch]
+fstdep _  (FDec cch) = [cch]
 fstdep sm (FAsg cch e) = cch:codevars e sm
 fstdep sm (FFor cch e fs) = delete cch $ nub (codevars  e sm ++ concatMap (fstdep sm ) fs)
 fstdep sm (FWhile e fs) = codevars e sm ++ concatMap (fstdep sm ) fs
@@ -314,7 +314,7 @@ fstdecl :: ChunkDB -> [FuncStmt] -> [CodeChunk]
 fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declared ctx) fsts) 
   where
     fstvars :: ChunkDB -> FuncStmt -> [CodeChunk]
-    fstvars _  (FDec cch _) = [cch]
+    fstvars _  (FDec cch) = [cch]
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FFor cch e fs) = delete cch $ nub (codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
@@ -327,7 +327,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
     fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
 
     declared :: ChunkDB -> FuncStmt -> [CodeChunk]
-    declared _  (FDec cch _) = [cch]
+    declared _  (FDec cch) = [cch]
     declared _  (FAsg _ _) = []
     declared sm (FFor _ _ fs) = concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs

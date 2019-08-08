@@ -434,7 +434,7 @@ constraintViolatedMsg :: (CodeIdea q, HasCodeType q, RenderSym repr) => q ->
   String -> Constraint -> Reader State [repr (Statement repr)]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c 
-  v <- value (codeName q) (convType $ codeType q)
+  v <- mkVal q
   return $ [printStr $ codeName q ++ " has value ",
     print v,
     printStr $ " but " ++ s ++ " to be "] ++ pc
@@ -571,7 +571,7 @@ genOutputFormat = do
             v_outfile = valueOf var_outfile
         parms <- getOutputParams
         outp <- mapM (\x -> do
-          v <- value (codeName x) (convType $ codeType x)
+          v <- mkVal x
           return [ printFileStr v_outfile (codeName x ++ " = "),
                    printFileLn v_outfile v
                  ] ) (outputs $ csi $ codeSpec g)
@@ -917,6 +917,10 @@ mkParam v = paramFunc (getType $ variableType v) v
         paramFunc (C.Object _) = pointerParam
         paramFunc _ = stateParam
 
+mkVal :: (RenderSym repr, HasCodeType c, CodeIdea c) => c -> 
+  Reader State (repr (Value repr))
+mkVal v = value (codeName v) (convType $ codeType v)
+
 mkVar :: (RenderSym repr, HasCodeType c, CodeIdea c) => c -> 
   Reader State (repr (Variable repr))
 mkVar v = variable (codeName v) (convType $ codeType v)
@@ -948,8 +952,7 @@ convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
 convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)   = do
   g <- ask
-  let v = quantvar (symbLookup c (symbolTable $ sysinfodb $ csi $ codeSpec g))
-  value (codeName v) (convType $ codeType v)
+  mkVal $ quantvar (symbLookup c (symbolTable $ sysinfodb $ csi $ codeSpec g))
 convExpr (FCall (C c) x) = do
   g <- ask
   let info = sysinfodb $ csi $ codeSpec g

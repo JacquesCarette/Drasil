@@ -9,7 +9,7 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
-import Utils.Drasil.Sentence (capSent, sAre, toThe)
+import Utils.Drasil.Sentence (sAre, toThe)
 
 import Control.Lens ((^.))
 

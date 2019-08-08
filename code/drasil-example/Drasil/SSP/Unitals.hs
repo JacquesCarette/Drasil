@@ -13,6 +13,8 @@ import Data.Drasil.Concepts.Physics (gravity)
 
 import Data.Drasil.Units.Physics (forcePerMeterU, momentOfForceU)
 
+import Data.Drasil.Concepts.Math (xCoord, yCoord, yDir, zCoord)
+
 import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight, vol)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, force, 
@@ -89,48 +91,48 @@ slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip,
 --FIXME: add (x,y) when we can index or make related unitals
 --FIXME: add constraints to coordinate unitals when that is possible (constraints currently in the Notes section of the crtSlpId IM instead)
 
-slopeDist = uqc "x_slope,i" (cn "x-coordinates of the slope")
+slopeDist = uqc "x_slope,i" (nounPhraseSent $ plural xCoord +:+ S "of the slope")
   "x-coordinates of points on the soil slope"
   (sub (vec lX) lSlope) metre Real [] (dbl 0) defaultUncrt
 
-slopeHght = uqc "y_slope,i" (cn "y-coordinates of the slope")
+slopeHght = uqc "y_slope,i" (nounPhraseSent $ plural yCoord +:+ S "of the slope")
   "y-coordinates of points on the soil slope"
   (sub (vec lY) lSlope) metre Real [] (dbl 0) defaultUncrt
 
-waterDist = uqc "x_wt,i" (cn "x-coordinates of the water table")
+waterDist = uqc "x_wt,i" (nounPhraseSent $ plural xCoord +:+ S "of the water table")
   "x-positions of the water table"
   (sub (vec lX) lWatTab) metre Real [] (dbl 0) defaultUncrt
 
-waterHght = uqc "y_wt,i" (cn "y-coordinates of the water table")
+waterHght = uqc "y_wt,i" (nounPhraseSent $ plural yCoord +:+ S "of the water table")
   "heights of the water table"
   (sub (vec lY) lWatTab) metre Real [] (dbl 0) defaultUncrt
 
-xMaxExtSlip = uqc "x_slip^maxExt" (cn "maximum exit x-coordinate")
+xMaxExtSlip = uqc "x_slip^maxExt" (nounPhraseSent $ S "maximum exit" +:+ phrase xCoord)
   "maximum potential x-coordinate for the exit point of a slip surface"
   (sup (sub lX lSlip) lMaxExt) metre Real [] (dbl 100) 
   defaultUncrt
 
-xMaxEtrSlip = uqc "x_slip^maxEtr" (cn "maximum entry x-coordinate")
+xMaxEtrSlip = uqc "x_slip^maxEtr" (nounPhraseSent $ S "maximum entry" +:+ phrase xCoord)
   "maximum potential x-coordinate for the entry point of a slip surface"
   (sup (sub lX lSlip) lMaxEtr) metre Real [] (dbl 20)
   defaultUncrt
   
-xMinExtSlip = uqc "x_slip^minExt" (cn "minimum exit x-coordinate")
+xMinExtSlip = uqc "x_slip^minExt" (nounPhraseSent $ S "minimum exit" +:+ phrase xCoord)
   "minimum potential x-coordinate for the exit point of a slip surface"
   (sup (sub lX lSlip) lMinExt) metre Real [] (dbl 50) 
   defaultUncrt
 
-xMinEtrSlip = uqc "x_slip^minEtr" (cn "minimum exit x-coordinate")
+xMinEtrSlip = uqc "x_slip^minEtr" (nounPhraseSent $ S "minimum entry" +:+ phrase xCoord)
   "minimum potential x-coordinate for the entry point of a slip surface"
   (sup (sub lX lSlip) lMinEtr) metre Real [] (dbl 0) 
   defaultUncrt
 
-yMaxSlip = uqc "y_slip^max" (cn "maximum y-coordinate") 
+yMaxSlip = uqc "y_slip^max" (nounPhraseSent $ S "maximum" +:+ phrase yCoord)
   "maximum potential y-coordinate of a point on a slip surface"
   (supMax (sub lY lSlip)) metre Real [] (dbl 30) 
   defaultUncrt
 
-yMinSlip = uqc "y_slip^min" (cn "minimum y-coordinate") 
+yMinSlip = uqc "y_slip^min" (nounPhraseSent $ S "minimum" +:+ phrase yCoord)
   "minimum potential y-coordinate of a point on a slip surface"
   (supMin (sub lY lSlip)) metre Real [] (dbl 0) 
   defaultUncrt
@@ -216,23 +218,22 @@ intNormForce = uc' "G_i" (cn "interslice normal forces")
   "per meter in the z-direction exerted between each pair of adjacent slices"
   (vec cG) forcePerMeterU
 
-slipHght = uc' "y_slip,i" (cn "y-coordinates of the slip surface")
+slipHght = uc' "y_slip,i" (nounPhraseSent $ plural yCoord +:+ S "of the slip surface")
   "heights of the slip surface"
   (sub (vec lY) lSlip) metre
 
-slipDist = uc' "x_slip,i" (cn "x-coordinates of the slip surface")
+slipDist = uc' "x_slip,i" (nounPhraseSent $ plural xCoord +:+ S "of the slip surface")
   "x-coordinates of points on the slip surface"
   (sub (vec lX) lSlip) metre
 
-yi = uc' "y_i" (cn "y-coordinate") "in the Cartesian coordinate system" lY metre
-  
-xi = uc' "x_i" (cn "x-coordinate") "in the Cartesian coordinate system" lX metre
-
-zcoord = uc' "z" (cn "z-coordinate") "in the Cartesian coordinate system" lZ metre
+xi     = uc' "x_i" (nounPhraseSent $ phrase xCoord) "in the Cartesian coordinate system" lX metre
+yi     = uc' "y_i" (nounPhraseSent $ phrase yCoord) "in the Cartesian coordinate system" lY metre
+zcoord = uc' "z"   (nounPhraseSent $ phrase zCoord) "in the Cartesian coordinate system" lZ metre
 
 -- FIXME: the 'symbol' for this should not have { and } embedded in it.
 -- They have been removed now, but we need a reasonable notation.
-critCoords = uc' "(xcs,ycs)" (cn "the set of x and y coordinates")
+critCoords = uc' "(xcs,ycs)"
+  (nounPhraseSent $ S "the set of" +:+ plural xCoord +:+ S "and" +:+ plural yCoord)
   "describe the vertices of the critical slip surface"
   (Concat [sub (vec lX) lCSlip, Label ",", sub (vec lY) lCSlip]) metre
 
@@ -330,7 +331,7 @@ surfLngth = uc' "l_s,i" (cn "surface lengths of slices")
   "in the direction parallel to the slope of the surface of each slice"
   (sub (vec lEll) lS) metre
 
-midpntHght = uc' "h_i" (cn "y-direction heights of slices")
+midpntHght = uc' "h_i" (nounPhraseSent $ phrase yDir +:+ S "heights of slices")
   ("heights in the y-direction from the base of each slice to the slope " ++
   "surface, at the x-direction midpoint of the slice")
   (vec lH) metre
@@ -362,9 +363,8 @@ nrmShearDen = uc' "C_den,i" (cn "proportionality constant denominator")
   "interslice normal to shear force proportionality constant")
   (sub (vec cC) lDen) newton
 
-fx = uc' "fx" (cn "x-coordinate of the force") "" (subX cF) newton
-
-fy = uc' "fy" (cn "y-coordinate of the force") "" (subY cF) newton
+fx = uc' "fx" (nounPhraseSent $ phrase xCoord +:+ S "of the force") "" (subX cF) newton
+fy = uc' "fy" (nounPhraseSent $ phrase yCoord +:+ S "of the force") "" (subY cF) newton
 
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 
   "for each pair of adjacent interslice boundaries"

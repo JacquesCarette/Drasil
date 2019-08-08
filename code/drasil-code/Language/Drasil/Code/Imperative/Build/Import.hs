@@ -3,10 +3,8 @@ module Language.Drasil.Code.Imperative.Build.Import (
 ) where
 
 import Language.Drasil.CodeSpec (Comments)
-import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.Symantics (Label)
-import Language.Drasil.Code.Imperative.Data (FileData(..), ModData(..), 
-  PackData(..))
+import Language.Drasil.Code.Imperative.Data (FileData(..), isSource, isHeader, 
+  ModData(..), ProgData(..))
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig(BuildConfig),
   BuildDependencies(..), Ext(..), includeExt, NameOpts, nameOpts, packSep,
   Runnable(Runnable), BuildName(..), RunType(..))
@@ -16,60 +14,63 @@ import Build.Drasil ((+:+), genMake, makeS, MakeString, mkFile, mkRule,
   mkCheckedCommand, mkFreeVar, RuleTransformer(makeRule))
 
 import Control.Applicative (liftA2)
-import Data.List (isInfixOf)
-import Data.List.Utils (endswith)
 import Data.Maybe (maybe, maybeToList)
+import System.FilePath.Posix (takeExtension, takeBaseName)
+import Text.PrettyPrint.HughesPJ (Doc)
 
-data CodeHarness = Ch (Maybe BuildConfig) Runnable [String] PackData [Comments]
+data CodeHarness = Ch (Maybe BuildConfig) Runnable ProgData [Comments]
 
 instance RuleTransformer CodeHarness where
-  makeRule (Ch b r e m cms) = [
-    mkRule buildTarget (map (const $ renderBuildName e m nameOpts nm) $ maybeToList b) []
+  makeRule (Ch b r m cms) = [
+    mkRule buildTarget (map (const $ renderBuildName m nameOpts nm) 
+      $ maybeToList b) []
     ] ++
     maybe [] (\(BuildConfig comp bt) -> [
-    mkFile (renderBuildName e m nameOpts nm) (map (makeS . filePath) (packMods m)) [
-      mkCheckedCommand $ foldr (+:+) mempty $ comp (getCompilerInput bt e m) $
-        renderBuildName e m nameOpts nm
+    mkFile (renderBuildName m nameOpts nm) (map (makeS . filePath) (progMods m))
+      [
+      mkCheckedCommand $ foldr (+:+) mempty $ comp (getCompilerInput bt m) $
+        renderBuildName m nameOpts nm
       ]
     ]) b ++ [
     mkRule (makeS "run") [buildTarget] [
-      mkCheckedCommand $ buildRunTarget (renderBuildName e m no nm) ty +:+ mkFreeVar "RUNARGS"
+      mkCheckedCommand $ buildRunTarget (renderBuildName m no nm) ty +:+ mkFreeVar "RUNARGS"
       ]
     ] ++ [
-    mkRule (makeS "doc") (getCommentedFiles e (packMods m)) 
+    mkRule (makeS "doc") (getCommentedFiles (progMods m))
       [mkCheckedCommand $ makeS $ "doxygen " ++ doxConfigName] | not (null cms)
     ] where
       (Runnable nm no ty) = r
       buildTarget = makeS "build"
 
-renderBuildName :: [String] -> PackData -> NameOpts -> BuildName -> MakeString
-renderBuildName _ p _ BMain = makeS $ getMainModule (packMods p)
-renderBuildName _ p _ BPackName = makeS (packName p)
-renderBuildName ext p o (BPack a) = renderBuildName ext p o BPackName <> makeS(packSep o) <> renderBuildName ext p o a
-renderBuildName ext p o (BWithExt a e) = renderBuildName ext p o a <> if includeExt o then renderExt ext e else makeS ""
+renderBuildName :: ProgData -> NameOpts -> BuildName -> MakeString
+renderBuildName p _ BMain = makeS $ takeBaseName $ getMainModule p
+renderBuildName p _ BPackName = makeS (progName p)
+renderBuildName p o (BPack a) = renderBuildName p o BPackName <> 
+  makeS (packSep o) <> renderBuildName p o a
+renderBuildName p o (BWithExt a e) = renderBuildName p o a <> 
+  if includeExt o then renderExt e (getMainModule p) else makeS ""
 
-renderExt :: [String] -> Ext -> MakeString
-renderExt e CodeExt = makeS $ last e
-renderExt _ (OtherExt e) = e
+renderExt :: Ext -> FilePath -> MakeString
+renderExt CodeExt f = makeS $ takeExtension f
+renderExt (OtherExt e) _ = e
 
-getMainModule :: [FileData] -> Label
-getMainModule c = mainName $ filter (isMainMod . fileMod) c
-  where mainName [FileD _ m] = name m
+getMainModule :: ProgData -> FilePath
+getMainModule p = mainName $ filter (isMainMod . fileMod) (progMods p)
+  where mainName [FileD _ fp _] = fp
         mainName _ = error "Expected a single main module."
 
-getCompilerInput :: BuildDependencies -> [String] -> PackData -> [MakeString]
-getCompilerInput BcSource e p = map makeS $ filter (endswith $ last e) $ map 
-  filePath $ packMods p
-getCompilerInput (BcSingle n) e p = [renderBuildName e p nameOpts n]
+getCompilerInput :: BuildDependencies -> ProgData -> [MakeString]
+getCompilerInput BcSource p = map (makeS . filePath) $ filter isSource $ 
+  progMods p
+getCompilerInput (BcSingle n) p = [renderBuildName p nameOpts n]
 
-getCommentedFiles :: [String] -> [FileData] -> [MakeString]
-getCommentedFiles e fs = map makeS (doxConfigName : filter (liftA2 (||) 
-  (isInfixOf (getMainModule fs)) (endswith (head e))) (map filePath fs))
+getCommentedFiles :: [FileData] -> [MakeString]
+getCommentedFiles fs = map makeS (doxConfigName : map filePath (filter (liftA2 
+  (||) (isMainMod . fileMod) isHeader) fs))
 
 buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
 buildRunTarget fn (Interpreter i) = i +:+ fn
 
-makeBuild :: PackData -> Maybe BuildConfig -> Runnable -> [String] -> 
-  [Comments] -> Code
-makeBuild m b r e cms = Code [("Makefile", genMake [Ch b r e m cms])]
+makeBuild :: [Comments] -> Maybe BuildConfig -> Runnable -> ProgData -> Doc
+makeBuild cms b r m = genMake [Ch b r m cms]

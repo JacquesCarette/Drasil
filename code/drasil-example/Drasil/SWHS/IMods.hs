@@ -18,7 +18,7 @@ import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpCWTAT, assumpTPCAV)
 import Drasil.SWHS.Concepts (coil, phsChgMtrl, rightSide, tank, water)
 import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, ddHtFusion, ddMeltFrac,
-  ddBalanceSolidPCM, ddBalanceLiquidPCM)
+  balanceDecayRate, balanceDecayTime, balanceSolidPCM, balanceLiquidPCM)
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
@@ -52,7 +52,7 @@ balWtrRel = deriv (sy tempW) time $= 1 / sy tauW *
   sy eta * (apply1 tempPCM time - apply1 tempW time))
 
 balWtrDesc :: Sentence
-balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy timeFinal)
+balWtrDesc = foldlSent [(E $ sy timeFinal)
   `sC` (E $ sy tempC) `sC` (E $ sy tempPCM), S "from" +:+.
   sParen (makeRef2S eBalanceOnPCM), S "The input is constrained so that" +:+.
   (E $ sy tempInit $<= sy tempC), sParen (makeRef2S assumpCTNOD),
@@ -60,10 +60,8 @@ balWtrDesc = foldlSent [(E $ sy tauW) `sC` (E $ sy timeFinal)
   sParen (unwrap $ getUnit tempW), (E $ sy tempPCM) `isThe`
   phrase tempPCM +:+. sParen (unwrap $ getUnit tempPCM),
   (E $ sy tempC) `isThe` phrase tempC +:+. sParen (unwrap $ getUnit tempC),
-  E $ sy tauW $= (sy wMass * sy htCapW) / (sy coilHTC * sy coilSA),
-  S "is a constant", sParen (makeRef2S ddHtFusion) +:+. sParen (unwrap $ getUnit tauW),
-  E $ sy eta $= (sy pcmHTC * sy pcmSA) / (sy coilHTC * sy coilSA),
-  S "is a constant" +:+. sParen (S "dimensionless"),
+  ch tauW, S "is from" +:+. makeRef2S balanceDecayRate,
+  ch eta, S "is from" +:+. makeRef2S balanceDecayTime,
   S "The above", phrase equation, S "applies as long as the", phrase water,
   S "is in", phrase liquid, S "form" `sC` (E $ realInterval tempW (Bounded (Exc,0) (Exc,100))),
   sParen (unwrap $ getUnit tempW), S "where", E 0,
@@ -87,8 +85,8 @@ eBalanceOnWtrDerivSentences = map foldlSentCol [
   eBalanceOnWtrDerivDesc3,
   eBalanceOnWtrDerivDesc4 eq2,
   eBalanceOnWtrDerivDesc5,
-  eBalanceOnWtrDerivDesc6 eq3 eq4,
-  eBalanceOnWtrDerivDesc7 eq5]
+  eBalanceOnWtrDerivDesc6,
+  eBalanceOnWtrDerivDesc7 eq3]
 
 eBalanceOnWtrDerivDesc1 :: Sentence -> Sentence-> Sentence -> ConceptInstance -> [Sentence]
 eBalanceOnWtrDerivDesc1 htEnd oa ea htA = [S "To find the", phrase rOfChng `sOf` (E $ sy tempW) `sC`
@@ -134,25 +132,19 @@ eBalanceOnWtrDerivDesc4 eq22 = [S "Factoring the negative sign out of",
 eBalanceOnWtrDerivDesc5 ::[Sentence]
 eBalanceOnWtrDerivDesc5 = [S "Which simplifies to"]
 
-eBalanceOnWtrDerivDesc6 :: Expr -> Expr -> [Sentence]
-eBalanceOnWtrDerivDesc6 eq33 eq44 = 
-  [S "Setting", E eq33, sParen (makeRef2S ddHtFusion) `sAnd` E eq44,
-  sParen (makeRef2S ddMeltFrac) `sC` eqN 5, S "can be written as"]
+eBalanceOnWtrDerivDesc6 :: [Sentence]
+eBalanceOnWtrDerivDesc6 = [substitute [balanceDecayRate, balanceDecayTime]]
 
 eBalanceOnWtrDerivDesc7 :: Expr -> [Sentence]
-eBalanceOnWtrDerivDesc7 eq55 = [S "Finally, factoring out", E eq55 `sC`
+eBalanceOnWtrDerivDesc7 eq33 = [S "Finally, factoring out", E eq33 `sC`
   S "we are left with the governing", short ode, S "for", makeRef2S eBalanceOnWtr]
 
-eq1, eq3, eq4, eq5 :: Expr
+eq1, eq3 :: Expr
 eq1 = sy wMass * sy htCapW
+eq3 = 1 / sy tauW
 
 eq2 :: [Sentence]
 eq2 = [ch coilHTC, ch coilSA, S "/", ch coilHTC, ch coilSA]
-
-eq3 = sy tauW $= (sy wMass * sy htCapW) / (sy coilHTC * sy coilSA)
-eq4 = sy eta $= (sy pcmHTC * sy pcmSA) / 
-  (sy coilHTC * sy coilSA)
-eq5 = 1 / sy tauW
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3,
  eBalanceOnWtrDerivEqn4, eBalanceOnWtrDerivEqn5, eBalanceOnWtrDerivEqn6, eBalanceOnWtrDerivEqn7 :: Expr
@@ -228,14 +220,8 @@ balPCMDesc :: Sentence
 balPCMDesc = foldlSent [(E $ sy tempW) `isThe` phrase tempW +:+.
   sParen (unwrap $ getUnit tempW), (E $ sy tempPCM) `isThe`
   phrase tempPCM +:+. sParen (unwrap $ getUnit tempPCM),
-  E $ sy tauSP $= (sy pcmMass * sy htCapSP) /
-  (sy pcmHTC * sy pcmSA), S "is a constant",
-  sParen (unwrap $ getUnit tauSP) +:+.
-  sParen (makeRef2S ddBalanceSolidPCM),
-  E $ sy tauLP $= (sy pcmMass * sy htCapLP) /
-  (sy pcmHTC * sy pcmSA), S "is a constant",
-  sParen (unwrap $ getUnit tauSP),
-  sParen (makeRef2S ddBalanceLiquidPCM)]
+  ch tauSP, S "is from" +:+. makeRef2S balanceSolidPCM,
+  ch tauLP, S "is from", makeRef2S balanceLiquidPCM]
 
 balPCMDescNote :: Sentence
 balPCMDescNote = foldlSent [
@@ -257,16 +243,8 @@ balPCMDescNote = foldlSent [
   E (0 $< sy meltFrac $< 1), sParen (S "from" +:+ makeRef2S ddMeltFrac),
   S "is determined as part of the heat energy in the PCM, as given in" +:+.
   sParen (makeRef2S heatEInPCM),
-  -- Addition based on smiths manual version.
-  E $ sy tauSP $= (sy pcmMass * sy htCapSP) /
-  (sy pcmHTC * sy pcmSA), S "is a constant",
-  sParen (unwrap $ getUnit tauSP) +:+.
-  sParen (makeRef2S ddBalanceSolidPCM),
-  
-  E $ sy tauLP $= (sy pcmMass * sy htCapLP) /
-  (sy pcmHTC * sy pcmSA), S "is a constant",
-  sParen (unwrap $ getUnit tauLP),
-  sParen (makeRef2S ddBalanceLiquidPCM)]
+  ch tauSP, S "is from" +:+. makeRef2S balanceSolidPCM,
+  ch tauLP, S "is from", makeRef2S balanceLiquidPCM]
 
  ----------------------------------------------
 --    Derivation of eBalanceOnPCM          --
@@ -311,8 +289,7 @@ eBalanceOnPCMDerivDesc3 :: [Sentence]
 eBalanceOnPCMDerivDesc3 = [S "Dividing by"] ++ eq6 ++ [S "we obtain"]
 
 eBalanceOnPCMDerivDesc4 :: [Sentence]
-eBalanceOnPCMDerivDesc4 = [S "Setting", ch tauSP, S "=", ch pcmMass, ch htCapSP,
-  S "/",  ch pcmHTC, ch pcmSA `sC` S "this can be written as"]
+eBalanceOnPCMDerivDesc4 = [substitute [balanceSolidPCM]]
 
 eBalanceOnPCMDerivDesc5 ::  UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk -> ConceptChunk -> ConceptChunk-> ConceptChunk
   -> ConceptChunk -> ConceptInstance -> [Sentence]

@@ -10,7 +10,10 @@ library
       Language.Drasil.Code
   other-modules:
       Language.Drasil.Chunk.Code
+    , Language.Drasil.Chunk.CodeDefinition
+    , Language.Drasil.Chunk.CodeQuantity
     , Language.Drasil.Code.Code
+    , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.Imperative.Symantics
     , Language.Drasil.Code.Imperative.Build.AST
@@ -42,7 +45,8 @@ library
     drasil-utils >= 0.1.1,
     drasil-build >= 0.1.1,
     drasil-theory >= 0.1.0,
-    drasil-database >= 0.1.0
+    drasil-database >= 0.1.0,
+    drasil-printers >= 0.1.10
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -56,8 +60,11 @@ executable codegenTest
     , Test.Observer
     , Test.Helper
     , Language.Drasil.Chunk.Code
+    , Language.Drasil.Chunk.CodeDefinition
+    , Language.Drasil.Chunk.CodeQuantity
     , Language.Drasil.Code
     , Language.Drasil.Code.Code
+    , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
     , Language.Drasil.Code.Imperative.Symantics
     , Language.Drasil.Code.Imperative.Build.AST
@@ -88,7 +95,8 @@ executable codegenTest
     drasil-utils >= 0.1.1,
     drasil-build >= 0.1.1,
     drasil-theory >= 0.1.0,
-    drasil-database >= 0.1.0
+    drasil-database >= 0.1.0,
+    drasil-printers >= 0.1.10
   default-language: Haskell2010
   ghc-options:      -Wall -O2 -Wredundant-constraints -main-is Test.Main
 

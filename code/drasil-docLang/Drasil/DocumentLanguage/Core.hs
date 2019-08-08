@@ -41,7 +41,7 @@ data RefSec = RefProg Contents [RefTab]
 -- | Reference subsections
 data RefTab where
   TUnits :: RefTab
-  TUnits' :: [TUIntro] -> RefTab -- Customized intro
+  TUnits' :: [TUIntro] -> ([UnitDefn] -> LabelledContent) -> RefTab -- Customized intro
   TSymb :: [TSIntro] -> RefTab
   TSymb' :: LFunc -> [TSIntro] -> RefTab
   TAandA :: RefTab

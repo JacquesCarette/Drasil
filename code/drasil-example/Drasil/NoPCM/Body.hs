@@ -1,6 +1,6 @@
 module Drasil.NoPCM.Body where
 
-import Language.Drasil hiding (section, section)
+import Language.Drasil hiding (Symbol(..), section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
@@ -70,7 +70,8 @@ import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
 import Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable)
 import Drasil.NoPCM.References (citations)
-import Drasil.NoPCM.Unitals (inputs, constrained, specParamValList)
+import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained, 
+  specParamValList)
 
 srs :: Document
 srs = mkDoc mkSRS for si
@@ -176,7 +177,7 @@ si = SI {
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but neither tankVol
   -- or tau appear in the document and thus should not be displayed.
-  _quants = map qw symbols \\ map qw [tankVol, tau],
+  _quants = (map qw unconstrained ++ map qw symbols) \\ map qw [tankVol, tau],
   _concepts = symbols,
   _definitions = [],
   _datadefs = NoPCM.dataDefs,

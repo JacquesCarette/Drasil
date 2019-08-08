@@ -1,4 +1,5 @@
 /** \file InputFormat.hpp
+    \brief Provides the function for reading inputs
 */
 #ifndef InputFormat_h
 #define InputFormat_h
@@ -14,7 +15,8 @@ using std::ofstream;
 #include "InputParameters.hpp"
 
 /** \brief Reads input from a file with the given file name
-    \param filename No description given
+    \param filename name of the input file
+    \param inParams structure holding the input values
 */
 void get_input(string filename, InputParameters &inParams);
 

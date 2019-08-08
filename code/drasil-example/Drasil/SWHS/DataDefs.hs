@@ -2,31 +2,32 @@ module Drasil.SWHS.DataDefs where --exports all of it
 
 import Language.Drasil
 import Drasil.DocLang (ModelDB, mdb)
-import Theory.Drasil (DataDefinition, dd, mkQuantDef)
+import Theory.Drasil (DataDefinition, dd, ddNoRefs, mkQuantDef)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (value)
+import Data.Drasil.Concepts.Thermodynamics (heat)
 
-import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.Physics (energy, pressure, time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
 import Drasil.SWHS.Assumptions (assumpLCCCW, assumpTHCCoT)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
-import Drasil.SWHS.Unitals (meltFrac, latentEP, htFusion, pcmMass,
-  tempW, tempPCM, htFluxP, pcmHTC, coilHTC, tempC, htFluxC, htCapSP,
-  htCapLP, pcmHTC, pcmSA, tauSP, tauLP)
+import Drasil.SWHS.Unitals (aspectRatio, coilHTC, coilSA, diam, eta, htCapLP,
+  htCapSP, htCapW, htFluxC, htFluxP, htFusion, latentEP, meltFrac, pcmHTC,
+  pcmMass, pcmSA, tankLength, tauLP, tauSP, tauW, tempC, tempPCM, tempW, wMass)
 
 refMDB :: ModelDB
 refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition]
-qDefs = [ddHtFluxCQD, ddHtFluxPQD, ddBalanceSolidPCMQD,
-  ddBalanceLiquidPCMQD, ddHtFusionQD, ddMeltFracQD]
+qDefs = [ddHtFluxCQD, ddHtFluxPQD, balanceDecayRateQD, balanceDecayTimeQD,
+  balanceSolidPCMQD, balanceLiquidPCMQD, ddHtFusionQD, ddMeltFracQD, aspRatQD]
 
 dataDefs :: [DataDefinition] 
-dataDefs = [ddHtFluxC, ddHtFluxP, ddBalanceSolidPCM,
-  ddBalanceLiquidPCM, ddHtFusion, ddMeltFrac]
+dataDefs = [ddHtFluxC, ddHtFluxP, balanceDecayRate, balanceDecayTime,
+  balanceSolidPCM, balanceLiquidPCM, ddHtFusion, ddMeltFrac, aspRat]
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
@@ -57,28 +58,52 @@ ddHtFluxP = dd ddHtFluxPQD [makeCite koothoor2013]
 
 ----
 
-ddBalanceSolidPCMQD :: QDefinition
-ddBalanceSolidPCMQD = mkQuantDef tauSP balanceSolidPCMEqn
+balanceDecayRateQD :: QDefinition
+balanceDecayRateQD = mkQuantDef tauW balanceDecayRateEqn
+
+balanceDecayRateEqn :: Expr
+balanceDecayRateEqn = sy wMass * sy htCapW / (sy coilHTC * sy coilSA)
+
+balanceDecayRate :: DataDefinition
+balanceDecayRate = dd balanceDecayRateQD [makeCite koothoor2013]
+  Nothing "balanceDecayRate" []
+
+----
+
+balanceDecayTimeQD :: QDefinition
+balanceDecayTimeQD = mkQuantDef eta balanceDecayTimeEqn
+
+balanceDecayTimeEqn :: Expr
+balanceDecayTimeEqn = sy pcmHTC * sy pcmSA / (sy coilHTC * sy coilSA)
+
+balanceDecayTime :: DataDefinition
+balanceDecayTime = dd balanceDecayTimeQD [makeCite koothoor2013]
+  Nothing "balanceDecayTime" []
+
+----
+
+balanceSolidPCMQD :: QDefinition
+balanceSolidPCMQD = mkQuantDef tauSP balanceSolidPCMEqn
 
 balanceSolidPCMEqn :: Expr
 balanceSolidPCMEqn = (sy pcmMass * sy htCapSP) /
   (sy pcmHTC * sy pcmSA)
 
-ddBalanceSolidPCM :: DataDefinition
-ddBalanceSolidPCM = dd ddBalanceSolidPCMQD [makeCite lightstone2012]
+balanceSolidPCM :: DataDefinition
+balanceSolidPCM = dd balanceSolidPCMQD [makeCite lightstone2012]
   Nothing "balanceSolidPCM" []
 
 ----
 
-ddBalanceLiquidPCMQD :: QDefinition
-ddBalanceLiquidPCMQD = mkQuantDef tauLP balanceLiquidPCMEqn
+balanceLiquidPCMQD :: QDefinition
+balanceLiquidPCMQD = mkQuantDef tauLP balanceLiquidPCMEqn
 
 balanceLiquidPCMEqn :: Expr
 balanceLiquidPCMEqn = (sy pcmMass * sy htCapLP) /
   (sy pcmHTC * sy pcmSA)
 
-ddBalanceLiquidPCM :: DataDefinition
-ddBalanceLiquidPCM = dd ddBalanceLiquidPCMQD [makeCite lightstone2012]
+balanceLiquidPCM :: DataDefinition
+balanceLiquidPCM = dd balanceLiquidPCMQD [makeCite lightstone2012]
   Nothing "balanceLiquidPCM" []
 
 ----
@@ -89,10 +114,16 @@ ddHtFusionQD = mkQuantDef htFusion htFusionEqn
 htFusionEqn :: Expr
 htFusionEqn = sy latentHeat / sy mass
 
--- FIXME: need to allow page references in references.
 ddHtFusion :: DataDefinition
 ddHtFusion = dd ddHtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
-  Nothing "htFusion" []
+  Nothing "htFusion" [htFusionNote]
+
+htFusionNote :: Sentence
+htFusionNote = foldlSent [S "The", phrase htFusion,
+  sParen (S "also known as the enthalpy of fusion"), S "of a substance is the",
+  phrase heat, phrase energy, S "required", sParen (ch latentHeat), S "to change the state of a unit of the",
+  phrase mass, sParen (ch mass), S "of the substance from solid to liquid" `sC`
+  S "at constant", phrase pressure]
 
 ----
 
@@ -111,6 +142,17 @@ ddMeltFrac = dd ddMeltFracQD [makeCite koothoor2013]
   Nothing "meltFrac" [meltFracConst, makeRef2S ddHtFusion]
   where meltFracConst = S "The" +:+ phrase value `sOf` E (sy meltFrac) `sIs`
                         S "constrained to" +:+. E (0 $<= sy meltFrac $<= 1)
+
+----
+
+aspRatQD :: QDefinition
+aspRatQD = mkQuantDef aspectRatio aspRatEq
+
+aspRatEq :: Expr
+aspRatEq = sy diam / sy tankLength
+
+aspRat :: DataDefinition
+aspRat = ddNoRefs aspRatQD Nothing "aspectRatio" []
 
 --Need to add units to data definition descriptions
 

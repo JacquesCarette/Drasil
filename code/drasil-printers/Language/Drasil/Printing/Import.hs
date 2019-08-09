@@ -11,7 +11,7 @@ import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
-  PrintingInformation, Notation(Scientific, Engineering), ckdb)
+  PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
 
 import Data.List (intersperse)
 import Data.Maybe (fromMaybe)
@@ -103,11 +103,12 @@ expr (AssocA Mul l)    sm = P.Row $ mulExpr l sm
 expr (Deriv Part a b)  sm =
   P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, expr a sm])
         (P.Row [P.Spc P.Thin, P.Spec Partial,
-                symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb])
+                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
 expr (Deriv Total a b)sm =
   P.Div (P.Row [P.Spc P.Thin, P.Ident "d", expr a sm])
-        (P.Row [P.Spc P.Thin, P.Ident "d", symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb]) 
-expr (C c)            sm = symbol $ lookupC (sm ^. ckdb) c
+        (P.Row [P.Spc P.Thin, P.Ident "d", 
+                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b]) 
+expr (C c)            sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 expr (FCall f [x])    sm = P.Row [expr f sm, parens $ expr x sm]
 expr (FCall f l)      sm = P.Row [expr f sm,
   parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) l]
@@ -149,10 +150,12 @@ expr (BinaryOp Pow a b)   sm = pow sm a b
 expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
 expr (Operator o d e)     sm = eop sm o d e
 expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space b]
-expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. ckdb) c) ri
+expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. stg) 
+  (sm ^. ckdb) c) ri
 
-lookupC :: ChunkDB -> UID -> Symbol
-lookupC sm c = eqSymb $ symbLookup c $ symbolTable sm
+lookupC :: Stage -> ChunkDB -> UID -> Symbol
+lookupC Equational sm c = eqSymb $ symbLookup c $ symbolTable sm
+lookupC Implementation sm c = codeSymb $ symbLookup c $ symbolTable sm
 
 lookupT :: ChunkDB -> UID -> Sentence
 lookupT sm c = phraseNP $ termLookup c (termTable sm) ^. term
@@ -196,7 +199,7 @@ indx :: PrintingInformation -> Expr -> Expr -> P.Expr
 indx sm (C c) i = f s
   where
     i' = expr i sm
-    s = eqSymb $ symbLookup c $ symbolTable $ sm ^. ckdb
+    s = lookupC (sm ^. stg) (sm ^. ckdb) c
     f (Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
@@ -284,7 +287,7 @@ spec _ (S s)           = either error P.S $ checkValidStr s invalidChars
 spec _ (Sy s)          = P.Sy s
 spec _ Percent         = P.E $ P.MO P.Perc
 spec _ (P s)           = P.E $ symbol s
-spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. ckdb) s
+spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
 spec sm (Ch TermStyle s)    = spec sm $ lookupT (sm ^. ckdb) s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s

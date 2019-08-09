@@ -1,6 +1,7 @@
 package GlassBR;
 
 /** \file ReadTable.java
+    \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides a function for reading glass ASTM data
 */
 import java.util.Arrays;

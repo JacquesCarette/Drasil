@@ -1,6 +1,7 @@
 package Projectile;
 
 /** \file OutputFormat.java
+    \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
     \brief Provides the function for writing outputs
 */
 import java.util.Arrays;

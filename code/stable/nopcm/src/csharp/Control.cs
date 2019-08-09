@@ -1,4 +1,5 @@
 /** \file Control.cs
+    \author Thulasi Jegatheesan
     \brief Controls the flow of the program
 */
 using System;

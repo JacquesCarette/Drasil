@@ -1,4 +1,5 @@
 ## \file DerivedValues.py
+# \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides the function for calculating derived values
 from __future__ import print_function
 import sys

@@ -1,4 +1,5 @@
 /** \file OutputFormat.hpp
+    \author Thulasi Jegatheesan
     \brief Provides the function for writing outputs
 */
 #ifndef OutputFormat_h

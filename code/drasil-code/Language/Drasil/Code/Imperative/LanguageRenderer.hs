@@ -38,7 +38,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
   setEmpty, intValue
 ) where
 
-import Utils.Drasil (capitalize, indent, indentList)
+import Utils.Drasil (capitalize, indent, indentList, stringList)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.Symantics (Label, Library,
@@ -54,6 +54,7 @@ import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..),
 import Language.Drasil.Code.Imperative.Helpers (angles,blank, doubleQuotedText,
   hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
+import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
@@ -422,9 +423,9 @@ mkStNoEnd s = (s, Empty)
 
 stringListVals' :: (RenderSym repr) => [repr (Variable repr)] -> 
   repr (Value repr) -> repr (Statement repr)
-stringListVals' vars sl = multi $ stringList (getType $ valueType sl)
-    where stringList (List String) = assignVals vars 0
-          stringList _ = error 
+stringListVals' vars sl = multi $ checkList (getType $ valueType sl)
+    where checkList (List String) = assignVals vars 0
+          checkList _ = error 
             "Value passed to stringListVals must be a list of strings"
           assignVals [] _ = []
           assignVals (v:vs) n = assign v (cast (variableType v) 
@@ -432,9 +433,9 @@ stringListVals' vars sl = multi $ stringList (getType $ valueType sl)
 
 stringListLists' :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr)
   -> repr (Statement repr)
-stringListLists' lsts sl = stringList (getType $ valueType sl)
-  where stringList (List String) = listVals (map (getType . variableType) lsts)
-        stringList _ = error 
+stringListLists' lsts sl = checkList (getType $ valueType sl)
+  where checkList (List String) = listVals (map (getType . variableType) lsts)
+        checkList _ = error 
           "Value passed to stringListLists must be a list of strings"
         listVals [] = loop
         listVals (List _:vs) = listVals vs
@@ -684,8 +685,9 @@ objVarDocD :: VarData -> VarData ->  Doc
 objVarDocD n1 n2 = varDoc n1 <> dot <> varDoc n2
 
 inlineIfD :: ValData -> ValData -> ValData -> ValData
-inlineIfD c v1 v2 = vd (valPrec c) (valType v1) (valDoc c <+> text "?" <+> 
+inlineIfD c v1 v2 = vd prec (valType v1) (valDoc c <+> text "?" <+> 
   valDoc v1 <+> text ":" <+> valDoc v2)
+  where prec = valPrec c <|> Just 0
 
 funcAppDocD :: Label -> [ValData] -> Doc
 funcAppDocD n vs = text n <> parens (valList vs)
@@ -800,8 +802,10 @@ functionDoc desc params = [doxBrief ++ desc | not (null desc)]
 classDoc :: String -> [String]
 classDoc desc = [doxBrief ++ desc | not (null desc)]
 
-moduleDoc :: String -> String -> String -> [String]
-moduleDoc desc m ext = (doxFile ++ addExt ext m) : 
+moduleDoc :: String -> [String] -> String -> String -> [String]
+moduleDoc desc as date m = (doxFile ++ m) : 
+  [doxAuthor ++ stringList as | not (null as)] ++
+  [doxDate ++ date | not (null date)] ++ 
   [doxBrief ++ desc | not (null desc)]
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> repr (Method repr) -> 
@@ -855,8 +859,10 @@ intValue i = intValue' (getType $ valueType i)
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
 
-doxCommand, doxBrief, doxParam, doxFile :: String
+doxCommand, doxBrief, doxParam, doxFile, doxAuthor, doxDate :: String
 doxCommand = "\\"
 doxBrief = doxCommand ++ "brief "
 doxParam = doxCommand ++ "param "
 doxFile = doxCommand  ++ "file "
+doxAuthor = doxCommand ++ "author "
+doxDate = doxCommand ++ "date "

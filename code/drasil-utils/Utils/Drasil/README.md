@@ -1,7 +1,16 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: June 5, 2019
+Last updated: August 1, 2019
 --------------------------------------------------
+
+Contents.hs
+  - Contains functions for building `Contents` (can be labelled)
+
+Document.hs
+  - Contains functions for working with `Doc`s
+
+English.hs
+  - Contains functions for working on `Strings` with English ideas
 
 Fold.hs
   - Contains functions for folding

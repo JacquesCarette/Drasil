@@ -4,7 +4,7 @@ module Language.Drasil.Code (
   generator, generateCode,
   ($:=), Choices(..), CodeSpec, Comments(..), ConstraintBehaviour(..), Func, 
   FuncStmt(..), ImplementationType(..), Lang(..), Logging(LogNone, LogAll), 
-  Mod(Mod), Structure(..), InputModule(..),
+  Mod(Mod), Structure(..), InputModule(..), Visibility(..),
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
   junkLine, multiLine, repeated, singleLine, singleton,
   PackageSym(..), ProgramSym(..), RenderSym(..), 
@@ -29,7 +29,7 @@ import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
 
 import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..), 
   ConstraintBehaviour(..), Func, FuncStmt(..), ImplementationType(..), Lang(..),
-  Logging(..), Mod(Mod), Structure(..), InputModule(..),
+  Logging(..), Mod(Mod), Structure(..), InputModule(..), Visibility(..),
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, 
   packmod, relToQD,
   )

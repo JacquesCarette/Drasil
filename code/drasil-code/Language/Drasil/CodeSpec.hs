@@ -69,8 +69,8 @@ data CodeSpec where
 type FunctionMap = Map.Map String CodeDefinition
 type VarMap      = Map.Map String CodeChunk
 
-assocToMap :: CodeIdea a => [a] -> Map.Map String a
-assocToMap = Map.fromList . map (\x -> (codeName x, x))
+assocToMap :: HasUID a => [a] -> Map.Map UID a
+assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
         
 varType :: String -> VarMap -> CodeType
 varType cname m = maybe (error "Variable not found") (^. ctyp) (Map.lookup cname m)

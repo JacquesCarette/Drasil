@@ -1,6 +1,7 @@
 package GlassBR;
 
 /** \file InputParameters.java
+    \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides the structure for holding input values
 */
 import java.util.Arrays;

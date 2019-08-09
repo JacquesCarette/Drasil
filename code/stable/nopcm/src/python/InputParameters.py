@@ -1,4 +1,5 @@
 ## \file InputParameters.py
+# \author Thulasi Jegatheesan
 # \brief Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input
 from __future__ import print_function
 import sys

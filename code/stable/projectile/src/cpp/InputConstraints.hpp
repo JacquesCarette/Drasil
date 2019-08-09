@@ -1,4 +1,5 @@
 /** \file InputConstraints.hpp
+    \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
     \brief Provides the function for checking the physical constraints and software constraints on the input
 */
 #ifndef InputConstraints_h

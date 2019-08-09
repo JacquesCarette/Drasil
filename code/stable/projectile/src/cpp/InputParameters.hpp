@@ -1,4 +1,5 @@
 /** \file InputParameters.hpp
+    \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
     \brief Provides the structure for holding input values
 */
 #ifndef InputParameters_h

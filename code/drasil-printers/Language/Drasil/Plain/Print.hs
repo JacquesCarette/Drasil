@@ -37,7 +37,7 @@ pExprDoc f (Case cs) = caseDoc f cs
 pExprDoc f (Mtx rs) = mtxDoc f rs
 pExprDoc f (Row es) = hcat $ map (pExprDoc f) es
 pExprDoc _ (Ident s) = text $ toPlainName s
-pExprDoc _ (Label s) = text $ toPlainName s
+pExprDoc _ (Label s) = text s
 pExprDoc _ (Spec s) = specialDoc s
 pExprDoc f (Sub e) = text "_" <> pExprDoc f e
 pExprDoc f (Sup e) = text "^" <> pExprDoc f e
@@ -95,13 +95,13 @@ specialDoc Circle  = text "degree"
 specialDoc Partial = text "partial"
 
 opsDoc :: Ops -> Doc
-opsDoc IsIn = text "is in"
+opsDoc IsIn = text " is in "
 opsDoc Integer = text "integers"
 opsDoc Real = text "real numbers"
 opsDoc Rational = text "rational numbers"
 opsDoc Natural = text "natural numbers"
 opsDoc Boolean = text "booleans"
-opsDoc Comma = comma
+opsDoc Comma = comma <> space
 opsDoc Prime = text "'"
 opsDoc Log = text "log"
 opsDoc Ln = text "ln"
@@ -118,24 +118,24 @@ opsDoc Not = text "!"
 opsDoc Dim = text "dim"
 opsDoc Exp = text "exp"
 opsDoc Neg = text "-"
-opsDoc Cross = text "cross"
-opsDoc Dot = text "dot"
-opsDoc Eq = text "=="
-opsDoc NEq = text "!="
-opsDoc Lt = text "<"
-opsDoc Gt = text ">"
-opsDoc LEq = text "<="
-opsDoc GEq = text ">="
-opsDoc Impl = text "=>"
-opsDoc Iff = text "iff"
-opsDoc Subt = text "-"
-opsDoc And = text "&&"
-opsDoc Or = text "||"
-opsDoc Add = text "+"
-opsDoc Mul = text "*"
-opsDoc Summ = text "sum"
-opsDoc Inte = text "integral"
-opsDoc Prod = text "product"
+opsDoc Cross = text " cross "
+opsDoc Dot = text " dot "
+opsDoc Eq = text " == "
+opsDoc NEq = text " != "
+opsDoc Lt = text " < "
+opsDoc Gt = text " > "
+opsDoc LEq = text " <= "
+opsDoc GEq = text " >= "
+opsDoc Impl = text " => "
+opsDoc Iff = text "iff "
+opsDoc Subt = text " - "
+opsDoc And = text " && "
+opsDoc Or = text " || "
+opsDoc Add = text " + "
+opsDoc Mul = text " * "
+opsDoc Summ = text "sum "
+opsDoc Inte = text "integral "
+opsDoc Prod = text "product "
 opsDoc Point = text "."
 opsDoc Perc = text "%"
 

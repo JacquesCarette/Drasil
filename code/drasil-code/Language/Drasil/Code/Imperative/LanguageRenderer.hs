@@ -54,6 +54,7 @@ import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..),
 import Language.Drasil.Code.Imperative.Helpers (angles,blank, doubleQuotedText,
   hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
+import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
 import Prelude hiding (break,print,return,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
@@ -684,8 +685,9 @@ objVarDocD :: VarData -> VarData ->  Doc
 objVarDocD n1 n2 = varDoc n1 <> dot <> varDoc n2
 
 inlineIfD :: ValData -> ValData -> ValData -> ValData
-inlineIfD c v1 v2 = vd (valPrec c) (valType v1) (valDoc c <+> text "?" <+> 
+inlineIfD c v1 v2 = vd prec (valType v1) (valDoc c <+> text "?" <+> 
   valDoc v1 <+> text ":" <+> valDoc v2)
+  where prec = valPrec c <|> Just 0
 
 funcAppDocD :: Label -> [ValData] -> Doc
 funcAppDocD n vs = text n <> parens (valList vs)

@@ -802,9 +802,10 @@ functionDoc desc params = [doxBrief ++ desc | not (null desc)]
 classDoc :: String -> [String]
 classDoc desc = [doxBrief ++ desc | not (null desc)]
 
-moduleDoc :: String -> [String] -> String -> [String]
-moduleDoc desc as m = (doxFile ++ m) : 
+moduleDoc :: String -> [String] -> String -> String -> [String]
+moduleDoc desc as date m = (doxFile ++ m) : 
   [doxAuthor ++ stringList as | not (null as)] ++
+  [doxDate ++ date | not (null date)] ++ 
   [doxBrief ++ desc | not (null desc)]
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> repr (Method repr) -> 
@@ -858,9 +859,10 @@ intValue i = intValue' (getType $ valueType i)
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
 
-doxCommand, doxBrief, doxParam, doxFile, doxAuthor :: String
+doxCommand, doxBrief, doxParam, doxFile, doxAuthor, doxDate :: String
 doxCommand = "\\"
 doxBrief = doxCommand ++ "brief "
 doxParam = doxCommand ++ "param "
 doxFile = doxCommand  ++ "file "
 doxAuthor = doxCommand ++ "author "
+doxDate = doxCommand ++ "date "

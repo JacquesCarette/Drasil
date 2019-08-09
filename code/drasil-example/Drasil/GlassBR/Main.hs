@@ -2,7 +2,7 @@ module Main (main) where
 
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
-  Structure(..), InputModule(..))
+  Structure(..), InputModule(..), Visibility(..))
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
@@ -19,6 +19,7 @@ choices = Choices {
   logFile = "log.txt",
   logging = LogAll,
   comments = [CommentFunc, CommentClass, CommentMod],
+  dates = Hide,
   onSfwrConstraint = Exception,
   onPhysConstraint = Exception,
   inputStructure = Bundled,

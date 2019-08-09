@@ -1,16 +1,9 @@
--- %%%%%%%%%%%%%%%%%%%%%%%%%%
--- WARNING
--- File not actually used in drasil.cabal for GamePhysics
--- so it is not actually 'plugged in'.  The definitions in here
--- may not type check anymore!
--- %%%%%%%%%%%%%%%%%%%%%%%%%%
-
 module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD) where
 
 import Language.Drasil
 import Utils.Drasil
 --import Data.Drasil.Concepts.Physics as CP (rigidBody, time)
-import Theory.Drasil (GenDefn, gd, gdNoRefs)
+import Theory.Drasil (GenDefn, gdNoRefs)
 --import Data.Drasil.Quantities.PhysicalProperties (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (velocity, acceleration, time)
 
@@ -61,8 +54,8 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
 
 --------------------------Acceleration due to gravity----------------------------
 accelGravityGD :: GenDefn
-accelGravityGD = gd accelGravityRC (getUnit QP.acceleration) Nothing 
-   [] "accelGravity" [{-Notes-}]
+accelGravityGD = gdNoRefs accelGravityRC (getUnit QP.acceleration) Nothing 
+   "accelGravity" [{-Notes-}]
   
 
 accelGravityRC :: RelationConcept

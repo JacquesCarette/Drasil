@@ -73,7 +73,7 @@ srs :: Document
 srs = mkDoc mkSRS for si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
+printSetting = PI symbMap Equational defaultConfiguration
 
 resourcePath :: String
 resourcePath = "../../../datafiles/SWHS/"

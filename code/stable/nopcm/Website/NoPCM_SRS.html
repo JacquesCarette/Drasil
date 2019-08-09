@@ -1208,7 +1208,10 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub></em> is from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>. The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>).
+                          <em>τ<sub>W</sub></em> is calculated from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>.
+                        </p>
+                        <p class="paragraph">
+                          The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>).
                         </p>
                       </td>
                     </tr>
@@ -1260,7 +1263,7 @@
                                                                   </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
                     </div>
                     <p class="paragraph">
-                      Dividing Equation (3) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
+                      Dividing Equation (2) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
                     </p>
                     <div class="equation">
                       <em><div class="fraction">
@@ -1315,7 +1318,7 @@
                       <th>Output Constraints</th>
                       <td>
                         <div class="equation">
-                          <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+                          <em>0&thinsp;&le;&thinsp;t&thinsp;&le;&thinsp;t<sub>final</sub></em>
                         </div>
                       </td>
                     </tr>
@@ -1352,7 +1355,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
+                          The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a>.
+                        </p>
+                        <p class="paragraph">
+                          The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C).
+                        </p>
+                        <p class="paragraph">
+                          This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
                         </p>
                       </td>
                     </tr>

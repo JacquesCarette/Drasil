@@ -1,4 +1,5 @@
 /** \file Calculations.hpp
+    \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides functions for calculating the outputs
 */
 #ifndef Calculations_h

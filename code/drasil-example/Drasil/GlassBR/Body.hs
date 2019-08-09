@@ -69,7 +69,7 @@ srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
+printSetting = PI symbMap Equational defaultConfiguration
 
 si :: SystemInformation
 si = SI {

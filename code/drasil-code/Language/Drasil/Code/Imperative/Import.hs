@@ -22,7 +22,7 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk),
   codeType, codevar, quantvar, quantfunc, funcPrefix, physLookup, sfwrLookup, programName)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
-import Language.Drasil.Code.CodeQuantityDicts (inParams)
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
@@ -692,10 +692,9 @@ genMain = genModule "Control" "Controls the flow of the program"
   (Just $ liftS genMainFunc) Nothing
 
 genMainFunc :: (RenderSym repr) => Reader State (repr (Method repr))
-genMainFunc =
-  let v_filename = var "filename" string
-  in do
+genMainFunc = do
     g <- ask
+    v_filename <- mkVar $ codevar inFileName
     logInFile <- maybeLog v_filename
     ip <- getInputDecl
     gi <- getInputCall
@@ -788,7 +787,8 @@ getInputFormatIns = do
       getIns Unbundled = return []
       getIns Bundled = liftS $ mkVar (codevar inParams)
   ins <- getIns (inStruct g)
-  return $ var "filename" string : ins
+  file <- mkVar $ codevar inFileName
+  return $ file : ins
 
 getInputFormatOuts :: (RenderSym repr) => Reader State [repr (Variable repr)]
 getInputFormatOuts = do
@@ -1105,18 +1105,18 @@ convStmt (FAppend a b) = do
 genDataFunc :: (RenderSym repr) => Name -> String -> DataDesc -> 
   Reader State (repr (Method repr))
 genDataFunc nameTitle desc ddef = do
+  v_filename <- mkVar $ codevar inFileName
   parms <- getParams $ getInputs ddef
   bod <- readData ddef
-  publicMethod (mState void) nameTitle desc (p_filename : parms) Nothing bod
-  where l_filename = "filename"
-        v_filename = var l_filename string
-        p_filename = stateParam v_filename
+  publicMethod (mState void) nameTitle desc (mkParam v_filename : parms) 
+    Nothing bod
 
 -- this is really ugly!!
 readData :: (RenderSym repr) => DataDesc -> Reader State
   [repr (Block repr)]
 readData ddef = do
   inD <- mapM inData ddef
+  v_filename <- mkVal $ codevar inFileName
   return [block $ 
     varDec var_infile :
     (if any (\d -> isLine d || isLines d) ddef then [varDec var_line, listDec 0 var_linetokens] else []) ++
@@ -1181,10 +1181,10 @@ readData ddef = do
           (valueOf $ var (codeName v) (convType $ codeType v)) 
           (valueOf $ var (codeName v ++ sfx) (convType $ codeType v))
         ---------------
-        l_line, l_lines, l_linetokens, l_infile, l_filename, l_i :: Label
+        l_line, l_lines, l_linetokens, l_infile, l_i :: Label
         var_line, var_lines, var_linetokens, var_infile :: 
           (RenderSym repr) => repr (Variable repr)
-        v_line, v_lines, v_linetokens, v_infile, v_filename, v_i ::
+        v_line, v_lines, v_linetokens, v_infile, v_i ::
           (RenderSym repr) => repr (Value repr)
         l_line = "line"
         var_line = var l_line string
@@ -1198,8 +1198,6 @@ readData ddef = do
         l_infile = "infile"
         var_infile = var l_infile infile
         v_infile = valueOf var_infile
-        l_filename = "filename"
-        v_filename = valueOf $ var l_filename string
         l_i = "i"
         v_i = valueOf $ var l_i int
 

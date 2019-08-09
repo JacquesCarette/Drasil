@@ -1,4 +1,5 @@
 /** \file ReadTable.cs
+    \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides a function for reading glass ASTM data
 */
 using System;

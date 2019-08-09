@@ -1,6 +1,7 @@
 package SWHS;
 
 /** \file InputParameters.java
+    \author Thulasi Jegatheesan
     \brief Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input
 */
 import java.util.Arrays;
@@ -98,62 +99,209 @@ public class InputParameters {
     */
     public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) throws Exception {
         if (!(A_C <= 100000)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("A_C has value ");
+            System.out.print(A_C);
+            System.out.print(" but suggested to be ");
+            System.out.print("below ");
+            System.out.print(100000);
+            System.out.print(" (A_C^max)");
+            System.out.println(".");
         }
         if (!(4170 < C_W && C_W < 4210)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("C_W has value ");
+            System.out.print(C_W);
+            System.out.print(" but suggested to be ");
+            System.out.print("between ");
+            System.out.print(4170);
+            System.out.print(" (C_W^min)");
+            System.out.print(" and ");
+            System.out.print(4210);
+            System.out.print(" (C_W^max)");
+            System.out.println(".");
         }
         if (!(10 <= h_C && h_C <= 10000)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("h_C has value ");
+            System.out.print(h_C);
+            System.out.print(" but suggested to be ");
+            System.out.print("between ");
+            System.out.print(10);
+            System.out.print(" (h_C^min)");
+            System.out.print(" and ");
+            System.out.print(10000);
+            System.out.print(" (h_C^max)");
+            System.out.println(".");
         }
         if (!(t_final < 86400)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("t_final has value ");
+            System.out.print(t_final);
+            System.out.print(" but suggested to be ");
+            System.out.print("below ");
+            System.out.print(86400);
+            System.out.print(" (t_final^max)");
+            System.out.println(".");
         }
         if (!(0.1 <= L && L <= 50)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("L has value ");
+            System.out.print(L);
+            System.out.print(" but suggested to be ");
+            System.out.print("between ");
+            System.out.print(0.1);
+            System.out.print(" (L_min)");
+            System.out.print(" and ");
+            System.out.print(50);
+            System.out.print(" (L_max)");
+            System.out.println(".");
         }
         if (!(950 < rho_W && rho_W <= 1000)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("rho_W has value ");
+            System.out.print(rho_W);
+            System.out.print(" but suggested to be ");
+            System.out.print("between ");
+            System.out.print(950);
+            System.out.print(" (rho_W^min)");
+            System.out.print(" and ");
+            System.out.print(1000);
+            System.out.print(" (rho_W^max)");
+            System.out.println(".");
         }
         if (!(1.0e-2 <= D && D <= 100)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("D has value ");
+            System.out.print(D);
+            System.out.print(" but suggested to be ");
+            System.out.print("between ");
+            System.out.print(1.0e-2);
+            System.out.print(" (AR_min)");
+            System.out.print(" and ");
+            System.out.print(100);
+            System.out.print(" (AR_max)");
+            System.out.println(".");
         }
         
         if (!(A_C > 0)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("A_C has value ");
+            System.out.print(A_C);
+            System.out.print(" but suggested to be ");
+            System.out.print("above ");
+            System.out.print(0);
+            System.out.println(".");
         }
         if (!(C_W > 0)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("C_W has value ");
+            System.out.print(C_W);
+            System.out.print(" but suggested to be ");
+            System.out.print("above ");
+            System.out.print(0);
+            System.out.println(".");
         }
         if (!(h_C > 0)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("h_C has value ");
+            System.out.print(h_C);
+            System.out.print(" but suggested to be ");
+            System.out.print("above ");
+            System.out.print(0);
+            System.out.println(".");
         }
         if (!(0 < T_init && T_init < 100)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("T_init has value ");
+            System.out.print(T_init);
+            System.out.print(" but suggested to be ");
+            System.out.print("between ");
+            System.out.print(0);
+            System.out.print(" and ");
+            System.out.print(100);
+            System.out.println(".");
         }
         if (!(t_final > 0)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("t_final has value ");
+            System.out.print(t_final);
+            System.out.print(" but suggested to be ");
+            System.out.print("above ");
+            System.out.print(0);
+            System.out.println(".");
         }
         if (!(L > 0)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("L has value ");
+            System.out.print(L);
+            System.out.print(" but suggested to be ");
+            System.out.print("above ");
+            System.out.print(0);
+            System.out.println(".");
         }
         if (!(0 < T_C && T_C < 100)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("T_C has value ");
+            System.out.print(T_C);
+            System.out.print(" but suggested to be ");
+            System.out.print("between ");
+            System.out.print(0);
+            System.out.print(" and ");
+            System.out.print(100);
+            System.out.println(".");
         }
         if (!(0 < t_step && t_step < t_final)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("t_step has value ");
+            System.out.print(t_step);
+            System.out.print(" but suggested to be ");
+            System.out.print("between ");
+            System.out.print(0);
+            System.out.print(" and ");
+            System.out.print(t_final);
+            System.out.print(" (t_final)");
+            System.out.println(".");
         }
         if (!(rho_W > 0)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("rho_W has value ");
+            System.out.print(rho_W);
+            System.out.print(" but suggested to be ");
+            System.out.print("above ");
+            System.out.print(0);
+            System.out.println(".");
         }
         if (!(D > 0)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("D has value ");
+            System.out.print(D);
+            System.out.print(" but suggested to be ");
+            System.out.print("above ");
+            System.out.print(0);
+            System.out.println(".");
         }
         if (!(T_init <= T_W && T_W <= T_C)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("T_W has value ");
+            System.out.print(T_W);
+            System.out.print(" but suggested to be ");
+            System.out.print("between ");
+            System.out.print(T_init);
+            System.out.print(" (T_init)");
+            System.out.print(" and ");
+            System.out.print(T_C);
+            System.out.print(" (T_C)");
+            System.out.println(".");
         }
         if (!(E_W >= 0)) {
-            System.out.println("Warning: constraint violated");
+            System.out.print("Warning: ");
+            System.out.print("E_W has value ");
+            System.out.print(E_W);
+            System.out.print(" but suggested to be ");
+            System.out.print("above ");
+            System.out.print(0);
+            System.out.println(".");
         }
     }
 }

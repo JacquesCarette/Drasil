@@ -1,4 +1,5 @@
 /** \file ReadTable.hpp
+    \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides a function for reading glass ASTM data
 */
 #ifndef ReadTable_h

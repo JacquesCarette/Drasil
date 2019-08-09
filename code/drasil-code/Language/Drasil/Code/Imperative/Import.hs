@@ -19,9 +19,10 @@ import Language.Drasil.Code.Imperative.Data (PackData(..), ProgData(..))
 import Language.Drasil.Code.Imperative.Helpers (convType)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk),
-  codeType, quantvar, quantfunc, funcPrefix, physLookup, sfwrLookup, programName)
+  codeType, codevar, quantvar, quantfunc, funcPrefix, physLookup, sfwrLookup, programName)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
+import Language.Drasil.Code.CodeQuantityDicts (inParams)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
@@ -712,8 +713,8 @@ getInputDecl :: (RenderSym repr) => Reader State (Maybe (repr (
   Statement repr)))
 getInputDecl = do
   g <- ask
-  let v_params = var "inParams" (obj "InputParameters")
-      getDecl _ [] = return Nothing
+  v_params <- mkVar (codevar inParams)
+  let getDecl _ [] = return Nothing
       getDecl Unbundled ins = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
@@ -782,10 +783,12 @@ getOutputCall = do
 getInputFormatIns :: (RenderSym repr) => Reader State [repr (Variable repr)]
 getInputFormatIns = do
   g <- ask
-  let getIns :: (RenderSym repr) => Structure -> [repr (Variable repr)]
-      getIns Unbundled = []
-      getIns Bundled = [var "inParams" (obj "InputParameters")]
-  return $ var "filename" string : getIns (inStruct g)
+  let getIns :: (RenderSym repr) => Structure -> 
+        Reader State [repr (Variable repr)]
+      getIns Unbundled = return []
+      getIns Bundled = liftS $ mkVar (codevar inParams)
+  ins <- getIns (inStruct g)
+  return $ var "filename" string : ins
 
 getInputFormatOuts :: (RenderSym repr) => Reader State [repr (Variable repr)]
 getInputFormatOuts = do
@@ -866,14 +869,16 @@ variable :: (RenderSym repr) => String -> repr (StateType repr) ->
 variable s t = do
   g <- ask
   let cs = csi $ codeSpec g
-  return $ if s `elem` map codeName (inputs cs) 
+  if s `elem` map codeName (inputs cs) 
     then inputVariable (inStruct g) s t
-    else var s t
+    else return $ var s t
 
 inputVariable :: (RenderSym repr) => Structure -> String -> 
-  repr (StateType repr) -> repr (Variable repr)
-inputVariable Unbundled s t = var s t
-inputVariable Bundled s t = var "inParams" (obj "InputParameters") $-> var s t
+  repr (StateType repr) -> Reader State (repr (Variable repr))
+inputVariable Unbundled s t = return $ var s t
+inputVariable Bundled s t = do
+  ip <- mkVar (codevar inParams)
+  return $ ip $-> var s t
   
 fApp :: (RenderSym repr) => String -> String -> repr (StateType repr) -> 
   [repr (Value repr)] -> Reader State (repr (Value repr))
@@ -928,9 +933,7 @@ getInputVars :: (RenderSym repr, HasCodeType c, CodeIdea c) => Structure ->
   [c] -> Reader State [repr (Variable repr)]
 getInputVars _ [] = return []
 getInputVars Unbundled cs = mapM mkVar cs
-getInputVars Bundled _ = return [var pName pType]
-  where pName = "inParams"
-        pType = obj "InputParameters"
+getInputVars Bundled _ = liftS $ mkVar (codevar inParams)
 
 -- Right now, we always inline constants. In the future, this will be captured by a choice and this function should be updated to read that choice
 getConstVars :: [CodeChunk] -> Reader State [repr (Variable repr)]

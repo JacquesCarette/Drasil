@@ -73,15 +73,15 @@ $A$ & Area: A part of an object or surface. & $\text{m}^{2}$
 \\
 $\mathbf{a}$ & Acceleration: The rate of change of a body's velocity. & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$\mathbf{b}$ & Base Width of Slices: In the x-direction. & m
+$\mathbf{b}$ & Base Width of Slices: The width of each slice in the $x$-direction. & m
 \\
 ${\mathbf{C}_{\text{den}}}$ & Proportionality Constant Denominator: Values for each slice that sum together to form the denominator of the interslice normal to shear force proportionality constant. & N
 \\
 ${\mathbf{C}_{\text{num}}}$ & Proportionality Constant Numerator: Values for each slice that sum together to form the numerator of the interslice normal to shear force proportionality constant. & N
 \\
-$c'$ & Effective Cohesion: Internal pressure that sticks particles of soil together. & Pa
+$c'$ & Effective Cohesion: The internal pressure that sticks particles of soil together. & Pa
 \\
-$const_f$ & Decision on F: Boolean decision on which form of f the user desires: constant if true, or half-sine if false. & --
+$const_f$ & Decision on F: A Boolean decision on which form of f the user desires: constant if true, or half-sine if false. & --
 \\
 ${F_{\text{rot}}}$ & Force Causing Rotation: A force in the direction of rotation. & N
 \\
@@ -89,61 +89,61 @@ ${F_{\text{S}}}$ & Factor of Safety: The global stability metric of a slip surfa
 \\
 ${{F_{\text{S}}}^{\text{min}}}$ & Minimum Factor of Safety: The minimum factor of safety associated with the critical slip surface. & --
 \\
-${F_{\text{x}}}$ & $x$-coordinate of the Force: . & N
+${F_{\text{x}}}$ & $x$-coordinate of the Force: The force acting in the $x$-direction. & N
 \\
-${F_{\text{y}}}$ & $y$-coordinate of the Force: . & N
+${F_{\text{y}}}$ & $y$-coordinate of the Force: The force acting in the $y$-direction. & N
 \\
 $\mathbf{F}$ & Force: An interaction that tends to produce change in the motion of an object. & N
 \\
-${{\mathbf{F}_{\text{x}}}^{\text{G}}}$ & Sums of the Interslice Normal Forces: For each pair of adjacent interslice boundaries. & N
+${{\mathbf{F}_{\text{x}}}^{\text{G}}}$ & Sums of the Interslice Normal Forces: The sum of the forces for each pair of adjacent interslice boundaries. & N
 \\
-${{\mathbf{F}_{\text{x}}}^{\text{H}}}$ & Sums of the Interslice Normal Water Forces: For each pair of adjacent interslice boundaries. & N
+${{\mathbf{F}_{\text{x}}}^{\text{H}}}$ & Sums of the Interslice Normal Water Forces: The sum of the forces for each pair of adjacent interslice boundaries. & N
 \\
-$\mathbf{f}$ & Interslice Normal to Shear Force Ratio Variation Function: Function of distance in the x-direction. & --
+$\mathbf{f}$ & Interslice Normal to Shear Force Ratio Variation Function: A function of distance in the $x$-direction. & --
 \\
-$\mathbf{G}$ & Interslice Normal Forces: Per meter in the z-direction exerted between each pair of adjacent slices. & $\frac{\text{N}}{\text{m}}$
+$\mathbf{G}$ & Interslice Normal Forces: Forces per meter in the $z$-direction exerted between each pair of adjacent slices. & $\frac{\text{N}}{\text{m}}$
 \\
 $g$ & Gravitational Acceleration: The approximate acceleration due to gravity on Earth at sea level. & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$\mathbf{H}$ & Interslice Normal Water Forces: Per meter in the z-direction exerted in the x-coordinate direction between each pair of adjacent slices. & $\frac{\text{N}}{\text{m}}$
+$\mathbf{H}$ & Interslice Normal Water Forces: Forces per meter in the $z$-direction exerted in the $x$-direction between each pair of adjacent slices. & $\frac{\text{N}}{\text{m}}$
 \\
 $h$ & Height: The distance above a reference point for a point of interest. & m
 \\
-$\mathbf{h}$ & $y$-direction Heights of Slices: Heights in the y-direction from the base of each slice to the slope surface, at the x-direction midpoint of the slice. & m
+$\mathbf{h}$ & $y$-direction Heights of Slices: The heights in the $y$-direction from the base of each slice to the slope surface, at the $x$-direction midpoint of the slice. & m
 \\
-${\mathbf{h}^{\text{L}}}$ & Heights of the Left Side of Slices: Assuming slice surfaces have negative slope. & m
+${\mathbf{h}^{\text{L}}}$ & Heights of the Left Side of Slices: The maximum height of a slice, assuming slice surfaces have negative slope. & m
 \\
-${\mathbf{h}^{\text{R}}}$ & Heights of the Right Side of Slices: Assuming slice surfaces have negative slope. & m
+${\mathbf{h}^{\text{R}}}$ & Heights of the Right Side of Slices: The minimum height of a slice, assuming slice surfaces have negative slope. & m
 \\
-${\mathbf{h}_{\text{z}}}$ & Heights of Interslice Normal Forces: The heights in the y-direction of the interslice normal forces on each slice. & m
+${\mathbf{h}_{\text{z}}}$ & Heights of Interslice Normal Forces: The heights in the $y$-direction of the interslice normal forces on each slice. & m
 \\
-${\mathbf{h}_{\text{z,w}}}$ & Heights of the Water Table: The heights in the y-direction from the base of each slice to the watertable. & m
+${\mathbf{h}_{\text{z,w}}}$ & Heights of the Water Table: The heights in the $y$-direction from the base of each slice to the water table. & m
 \\
-$i$ & Index: Representing a single slice. & --
+$i$ & Index: A number representing a single slice. & --
 \\
 $\mathbf{\hat{j}}$ & Unit Vector: A vector that has a magnitude of one. & --
 \\
-${K_{\text{c}}}$ & Seismic Coefficient: Proportionality factor of force that weight pushes outwards; caused by seismic earth movements. & --
+${K_{\text{c}}}$ & Seismic Coefficient: The proportionality factor of force that weight pushes outwards; caused by seismic earth movements. & --
 \\
 $M$ & Moment: A measure of the tendency of a body to rotate about a specific point or axis. & Nm
 \\
 $m$ & Mass: The quantity of matter in a body. & kg
 \\
-$\mathbf{N}$ & Normal Forces: Total reactive forces per meter in the z-direction for each slice of a soil surface subject to a body resting on it. & $\frac{\text{N}}{\text{m}}$
+$\mathbf{N}$ & Normal Forces: Total reactive forces per meter in the $z$-direction for each slice of a soil surface subject to a body resting on it. & $\frac{\text{N}}{\text{m}}$
 \\
-$\mathbf{N'}$ & Effective Normal Forces: Per meter in the z-direction for each slice of a soil surface, subtracting pore water reactive force from total reactive force. & $\frac{\text{N}}{\text{m}}$
+$\mathbf{N'}$ & Effective Normal Forces: Forces per meter in the $z$-direction for each slice of a soil surface, subtracting pore water reactive force from total reactive force. & $\frac{\text{N}}{\text{m}}$
 \\
-$n$ & Number of Slices: The slip mass has been divided into. & --
+$n$ & Number of Slices: How many slices the slip mass has been divided into. & --
 \\
-$P$ & Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force that can be withstood before failure. & N
+$P$ & Resistive Shear Force: The Mohr Coulomb frictional force that describes the limit of mobilized shear force that can be withstood before failure. & N
 \\
-$\mathbf{P}$ & Resistive Shear Forces: Mohr Coulomb frictional forces per meter in the z-direction for each slice that describes the limit of mobilized shear force the slice can withstand before failure. & $\frac{\text{N}}{\text{m}}$
+$\mathbf{P}$ & Resistive Shear Forces: The Mohr Coulomb frictional forces per meter in the $z$-direction for each slice that describe the limit of mobilized shear force the slice can withstand before failure. & $\frac{\text{N}}{\text{m}}$
 \\
 $p$ & Pressure: A force exerted over an area. & Pa
 \\
-$\mathbf{Q}$ & External Forces: Forces per meter in the z-direction acting into the surface from the midpoint of each slice. & $\frac{\text{N}}{\text{m}}$
+$\mathbf{Q}$ & External Forces: Forces per meter in the $z$-direction acting into the surface from the midpoint of each slice. & $\frac{\text{N}}{\text{m}}$
 \\
-$\mathbf{R}$ & Resistive Shear Forces Without the Influence of Interslice Forces: Per meter in the z-direction for each slice. & $\frac{\text{N}}{\text{m}}$
+$\mathbf{R}$ & Resistive Shear Forces Without the Influence of Interslice Forces: The resistive shear forces per meter in the $z$-direction for each slice. & $\frac{\text{N}}{\text{m}}$
 \\
 $r$ & Length of the Moment Arm: Distance between a force causing rotation and the axis of rotation. & m
 \\
@@ -151,15 +151,15 @@ $\mathbf{r}$ & Displacement: The change in an object's location relative to a re
 \\
 $S$ & Mobilized Shear Force: Shear force in the direction of potential motion. & N
 \\
-$\mathbf{S}$ & Mobilized Shear Forces: Per meter in the z-direction for each slice. & $\frac{\text{N}}{\text{m}}$
+$\mathbf{S}$ & Mobilized Shear Forces: The mobilized shear forces per meter in the $z$-direction for each slice. & $\frac{\text{N}}{\text{m}}$
 \\
-$\mathbf{T}$ & Mobilized Shear Forces Without the Influence of Interslice Forces: Per meter in the z-direction for each slice. & $\frac{\text{N}}{\text{m}}$
+$\mathbf{T}$ & Mobilized Shear Forces Without the Influence of Interslice Forces: The mobilized shear forces per meter in the $z$-direction for each slice. & $\frac{\text{N}}{\text{m}}$
 \\
-${\mathbf{U}_{\text{b}}}$ & Base Hydrostatic Forces: Per meter in the z-direction from water pressure within each slice. & $\frac{\text{N}}{\text{m}}$
+${\mathbf{U}_{\text{b}}}$ & Base Hydrostatic Forces: Forces per meter in the $z$-direction from water pressure within each slice. & $\frac{\text{N}}{\text{m}}$
 \\
-${\mathbf{U}_{\text{g}}}$ & Surface Hydrostatic Forces: Per meter in the z-direction from water pressure acting into each slice from standing water on the slope surface. & $\frac{\text{N}}{\text{m}}$
+${\mathbf{U}_{\text{g}}}$ & Surface Hydrostatic Forces: Forces per meter in the $z$-direction from water pressure acting into each slice from standing water on the slope surface. & $\frac{\text{N}}{\text{m}}$
 \\
-$u$ & Pore Pressure: From water within the soil. & Pa
+$u$ & Pore Pressure: The pressure that comes from water within the soil. & Pa
 \\
 $V$ & Volume: The amount of space that a substance or object occupies. & $\text{m}^{3}$
 \\
@@ -171,45 +171,45 @@ $v$ & Local Index: Used as a bound variable index in calculations. & --
 \\
 $W$ & Weight: The gravitational force acting on an object. & N
 \\
-$\mathbf{W}$ & Weights: Downward force per meter in the z-direction on each slice caused by gravity. & $\frac{\text{N}}{\text{m}}$
+$\mathbf{W}$ & Weights: The downward force per meter in the $z$-direction on each slice caused by gravity. & $\frac{\text{N}}{\text{m}}$
 \\
-$\mathbf{X}$ & Interslice Shear Forces: Per meter in the z-direction exerted between adjacent slices. & $\frac{\text{N}}{\text{m}}$
+$\mathbf{X}$ & Interslice Shear Forces: Forces per meter in the $z$-direction exerted between adjacent slices. & $\frac{\text{N}}{\text{m}}$
 \\
-$x$ & $x$-coordinate: In the Cartesian coordinate system. & m
+$x$ & $x$-coordinate: The $x$-coordinate in the Cartesian coordinate system. & m
 \\
-${{x_{\text{slip}}}^{\text{maxEtr}}}$ & Maximum Entry $x$-coordinate: Maximum potential x-coordinate for the entry point of a slip surface. & m
+${{x_{\text{slip}}}^{\text{maxEtr}}}$ & Maximum Entry $x$-coordinate: The maximum potential $x$-coordinate for the entry point of a slip surface. & m
 \\
-${{x_{\text{slip}}}^{\text{maxExt}}}$ & Maximum Exit $x$-coordinate: Maximum potential x-coordinate for the exit point of a slip surface. & m
+${{x_{\text{slip}}}^{\text{maxExt}}}$ & Maximum Exit $x$-coordinate: The maximum potential $x$-coordinate for the exit point of a slip surface. & m
 \\
-${{x_{\text{slip}}}^{\text{minEtr}}}$ & Minimum Entry $x$-coordinate: Minimum potential x-coordinate for the entry point of a slip surface. & m
+${{x_{\text{slip}}}^{\text{minEtr}}}$ & Minimum Entry $x$-coordinate: The minimum potential $x$-coordinate for the entry point of a slip surface. & m
 \\
-${{x_{\text{slip}}}^{\text{minExt}}}$ & Minimum Exit $x$-coordinate: Minimum potential x-coordinate for the exit point of a slip surface. & m
+${{x_{\text{slip}}}^{\text{minExt}}}$ & Minimum Exit $x$-coordinate: The minimum potential $x$-coordinate for the exit point of a slip surface. & m
 \\
 ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ & The Set of $x$-coordinates and $y$-coordinates: Describe the vertices of the critical slip surface. & m
 \\
-${\mathbf{x}_{\text{slip}}}$ & $x$-coordinates of the Slip Surface: X-coordinates of points on the slip surface. & m
+${\mathbf{x}_{\text{slip}}}$ & $x$-coordinates of the Slip Surface: $x$-coordinates of points on the slip surface. & m
 \\
-${\mathbf{x}_{\text{slope}}}$ & $x$-coordinates of the Slope: X-coordinates of points on the soil slope. & m
+${\mathbf{x}_{\text{slope}}}$ & $x$-coordinates of the Slope: $x$-coordinates of points on the soil slope. & m
 \\
 ${\mathbf{x}_{\text{wt}}}$ & $x$-coordinates of the Water Table: X-positions of the water table. & m
 \\
-$y$ & $y$-coordinate: In the Cartesian coordinate system. & m
+$y$ & $y$-coordinate: The $y$-coordinate in the Cartesian coordinate system. & m
 \\
-${{y_{\text{slip}}}^{\text{max}}}$ & Maximum $y$-coordinate: Maximum potential y-coordinate of a point on a slip surface. & m
+${{y_{\text{slip}}}^{\text{max}}}$ & Maximum $y$-coordinate: The maximum potential $y$-coordinate of a point on a slip surface. & m
 \\
-${{y_{\text{slip}}}^{\text{min}}}$ & Minimum $y$-coordinate: Minimum potential y-coordinate of a point on a slip surface. & m
+${{y_{\text{slip}}}^{\text{min}}}$ & Minimum $y$-coordinate: The minimum potential $y$-coordinate of a point on a slip surface. & m
 \\
 ${\mathbf{y}_{\text{slip}}}$ & $y$-coordinates of the Slip Surface: Heights of the slip surface. & m
 \\
-${\mathbf{y}_{\text{slope}}}$ & $y$-coordinates of the Slope: Y-coordinates of points on the soil slope. & m
+${\mathbf{y}_{\text{slope}}}$ & $y$-coordinates of the Slope: $y$-coordinates of points on the soil slope. & m
 \\
 ${\mathbf{y}_{\text{wt}}}$ & $y$-coordinates of the Water Table: Heights of the water table. & m
 \\
-$z$ & $z$-coordinate: In the Cartesian coordinate system. & m
+$z$ & $z$-coordinate: The $z$-coordinate in the Cartesian coordinate system. & m
 \\
-$\mathbf{α}$ & Base Angles: Between the base of each slice and the horizontal. & ${}^{\circ}$
+$\mathbf{α}$ & Base Angles: The angles between the base of each slice and the horizontal. & ${}^{\circ}$
 \\
-$\mathbf{β}$ & Surface Angles: Between the surface of each slice and the horizontal. & ${}^{\circ}$
+$\mathbf{β}$ & Surface Angles: The angles between the surface of each slice and the horizontal. & ${}^{\circ}$
 \\
 $γ$ & Specific Weight: The weight per unit volume. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
@@ -219,19 +219,19 @@ ${γ_{\text{sat}}}$ & Soil Saturated Unit Weight: The weight of saturated soil/g
 \\
 ${γ_{w}}$ & Unit Weight of Water: The weight of one cubic meter of water. & $\frac{\text{N}}{\text{m}^{3}}$
 \\
-$λ$ & Proportionality Constant: For the interslice normal to shear force ratio. & --
+$λ$ & Proportionality Constant: The ratio of the interslice normal to the shear force. & --
 \\
 $π$ & Ratio of Circumference to Diameter for Any Circle: The ratio of a circle's circumference to its diameter. & --
 \\
 $ρ$ & Density: The mass per unit volume. & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-$σ$ & Total Stress: On the soil mass. & Pa
+$σ$ & Total Stress: The total force per area acting on the soil mass. & Pa
 \\
 $σ'$ & Effective Stress: Provided by the soil skeleton. & Pa
 \\
 ${σ_{N}}'$ & Effective Normal Stress: . & Pa
 \\
-$τ$ & Shear Strength: . & Pa
+$τ$ & Shear Strength: The strength of a material against shear failure. & Pa
 \\
 $τ$ & Torque: A twisting force that tends to cause rotation. & Nm
 \\
@@ -243,11 +243,11 @@ $φ'$ & Effective Angle of Friction: The angle of inclination with respect to th
 \\
 $\mathbf{Ψ}$ & Second Function for Incorporating Interslice Forces Into Shear Force: Converts mobile shear without the influence of interslice forces, to a calculation considering the interslice forces. & --
 \\
-$\mathbf{ω}$ & Imposed Load Angles: Between the external force acting into the surface of each slice and the vertical. & ${}^{\circ}$
+$\mathbf{ω}$ & Imposed Load Angles: The angles between the external force acting into the surface of each sliceand the vertical. & ${}^{\circ}$
 \\
-${\mathbf{ℓ}_{b}}$ & Total Base Lengths of Slices: In the direction parallel to the slope of the base of each slice. & m
+${\mathbf{ℓ}_{b}}$ & Total Base Lengths of Slices: The lengths of each slice in the direction parallel to the slope of the base. & m
 \\
-${\mathbf{ℓ}_{s}}$ & Surface Lengths of Slices: In the direction parallel to the slope of the surface of each slice. & m
+${\mathbf{ℓ}_{s}}$ & Surface Lengths of Slices: The lengths of each slice in the direction parallel to the slope of the surface. & m
 \\
 \bottomrule
 \caption{}

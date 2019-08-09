@@ -102,7 +102,9 @@
                 </tr>
                 <tr>
                   <td><em><b>b</b></em></td>
-                  <td>Base Width of Slices: In the x-direction.</td>
+                  <td>
+                    Base Width of Slices: The width of each slice in the <em>x</em>-direction.
+                  </td>
                   <td>m</td>
                 </tr>
                 <tr>
@@ -122,14 +124,14 @@
                 <tr>
                   <td><em>c&prime;</em></td>
                   <td>
-                    Effective Cohesion: Internal pressure that sticks particles of soil together.
+                    Effective Cohesion: The internal pressure that sticks particles of soil together.
                   </td>
                   <td>Pa</td>
                 </tr>
                 <tr>
                   <td><em>const_f</em></td>
                   <td>
-                    Decision on F: Boolean decision on which form of f the user desires: constant if true, or half-sine if false.
+                    Decision on F: A Boolean decision on which form of f the user desires: constant if true, or half-sine if false.
                   </td>
                   <td>--</td>
                 </tr>
@@ -156,12 +158,16 @@
                 </tr>
                 <tr>
                   <td><em>F<sub>x</sub></em></td>
-                  <td><em>x</em>-coordinate of the Force: .</td>
+                  <td>
+                    <em>x</em>-coordinate of the Force: The force acting in the <em>x</em>-direction.
+                  </td>
                   <td>N</td>
                 </tr>
                 <tr>
                   <td><em>F<sub>y</sub></em></td>
-                  <td><em>y</em>-coordinate of the Force: .</td>
+                  <td>
+                    <em>y</em>-coordinate of the Force: The force acting in the <em>y</em>-direction.
+                  </td>
                   <td>N</td>
                 </tr>
                 <tr>
@@ -174,28 +180,28 @@
                 <tr>
                   <td><em><b>F</b><sub>x</sub><sup>G</sup></em></td>
                   <td>
-                    Sums of the Interslice Normal Forces: For each pair of adjacent interslice boundaries.
+                    Sums of the Interslice Normal Forces: The sum of the forces for each pair of adjacent interslice boundaries.
                   </td>
                   <td>N</td>
                 </tr>
                 <tr>
                   <td><em><b>F</b><sub>x</sub><sup>H</sup></em></td>
                   <td>
-                    Sums of the Interslice Normal Water Forces: For each pair of adjacent interslice boundaries.
+                    Sums of the Interslice Normal Water Forces: The sum of the forces for each pair of adjacent interslice boundaries.
                   </td>
                   <td>N</td>
                 </tr>
                 <tr>
                   <td><em><b>f</b></em></td>
                   <td>
-                    Interslice Normal to Shear Force Ratio Variation Function: Function of distance in the x-direction.
+                    Interslice Normal to Shear Force Ratio Variation Function: A function of distance in the <em>x</em>-direction.
                   </td>
                   <td>--</td>
                 </tr>
                 <tr>
                   <td><em><b>G</b></em></td>
                   <td>
-                    Interslice Normal Forces: Per meter in the z-direction exerted between each pair of adjacent slices.
+                    Interslice Normal Forces: Forces per meter in the <em>z</em>-direction exerted between each pair of adjacent slices.
                   </td>
                   <td>N/m</td>
                 </tr>
@@ -209,7 +215,7 @@
                 <tr>
                   <td><em><b>H</b></em></td>
                   <td>
-                    Interslice Normal Water Forces: Per meter in the z-direction exerted in the x-coordinate direction between each pair of adjacent slices.
+                    Interslice Normal Water Forces: Forces per meter in the <em>z</em>-direction exerted in the <em>x</em>-direction between each pair of adjacent slices.
                   </td>
                   <td>N/m</td>
                 </tr>
@@ -223,41 +229,41 @@
                 <tr>
                   <td><em><b>h</b></em></td>
                   <td>
-                    <em>y</em>-direction Heights of Slices: Heights in the y-direction from the base of each slice to the slope surface, at the x-direction midpoint of the slice.
+                    <em>y</em>-direction Heights of Slices: The heights in the <em>y</em>-direction from the base of each slice to the slope surface, at the <em>x</em>-direction midpoint of the slice.
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em><b>h</b><sup>L</sup></em></td>
                   <td>
-                    Heights of the Left Side of Slices: Assuming slice surfaces have negative slope.
+                    Heights of the Left Side of Slices: The maximum height of a slice, assuming slice surfaces have negative slope.
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em><b>h</b><sup>R</sup></em></td>
                   <td>
-                    Heights of the Right Side of Slices: Assuming slice surfaces have negative slope.
+                    Heights of the Right Side of Slices: The minimum height of a slice, assuming slice surfaces have negative slope.
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em><b>h</b><sub>z</sub></em></td>
                   <td>
-                    Heights of Interslice Normal Forces: The heights in the y-direction of the interslice normal forces on each slice.
+                    Heights of Interslice Normal Forces: The heights in the <em>y</em>-direction of the interslice normal forces on each slice.
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em><b>h</b><sub>z,w</sub></em></td>
                   <td>
-                    Heights of the Water Table: The heights in the y-direction from the base of each slice to the watertable.
+                    Heights of the Water Table: The heights in the <em>y</em>-direction from the base of each slice to the water table.
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em>i</em></td>
-                  <td>Index: Representing a single slice.</td>
+                  <td>Index: A number representing a single slice.</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -268,7 +274,7 @@
                 <tr>
                   <td><em>K<sub>c</sub></em></td>
                   <td>
-                    Seismic Coefficient: Proportionality factor of force that weight pushes outwards; caused by seismic earth movements.
+                    Seismic Coefficient: The proportionality factor of force that weight pushes outwards; caused by seismic earth movements.
                   </td>
                   <td>--</td>
                 </tr>
@@ -287,33 +293,35 @@
                 <tr>
                   <td><em><b>N</b></em></td>
                   <td>
-                    Normal Forces: Total reactive forces per meter in the z-direction for each slice of a soil surface subject to a body resting on it.
+                    Normal Forces: Total reactive forces per meter in the <em>z</em>-direction for each slice of a soil surface subject to a body resting on it.
                   </td>
                   <td>N/m</td>
                 </tr>
                 <tr>
                   <td><em><b>N&prime;</b></em></td>
                   <td>
-                    Effective Normal Forces: Per meter in the z-direction for each slice of a soil surface, subtracting pore water reactive force from total reactive force.
+                    Effective Normal Forces: Forces per meter in the <em>z</em>-direction for each slice of a soil surface, subtracting pore water reactive force from total reactive force.
                   </td>
                   <td>N/m</td>
                 </tr>
                 <tr>
                   <td><em>n</em></td>
-                  <td>Number of Slices: The slip mass has been divided into.</td>
+                  <td>
+                    Number of Slices: How many slices the slip mass has been divided into.
+                  </td>
                   <td>--</td>
                 </tr>
                 <tr>
                   <td><em>P</em></td>
                   <td>
-                    Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force that can be withstood before failure.
+                    Resistive Shear Force: The Mohr Coulomb frictional force that describes the limit of mobilized shear force that can be withstood before failure.
                   </td>
                   <td>N</td>
                 </tr>
                 <tr>
                   <td><em><b>P</b></em></td>
                   <td>
-                    Resistive Shear Forces: Mohr Coulomb frictional forces per meter in the z-direction for each slice that describes the limit of mobilized shear force the slice can withstand before failure.
+                    Resistive Shear Forces: The Mohr Coulomb frictional forces per meter in the <em>z</em>-direction for each slice that describe the limit of mobilized shear force the slice can withstand before failure.
                   </td>
                   <td>N/m</td>
                 </tr>
@@ -325,14 +333,14 @@
                 <tr>
                   <td><em><b>Q</b></em></td>
                   <td>
-                    External Forces: Forces per meter in the z-direction acting into the surface from the midpoint of each slice.
+                    External Forces: Forces per meter in the <em>z</em>-direction acting into the surface from the midpoint of each slice.
                   </td>
                   <td>N/m</td>
                 </tr>
                 <tr>
                   <td><em><b>R</b></em></td>
                   <td>
-                    Resistive Shear Forces Without the Influence of Interslice Forces: Per meter in the z-direction for each slice.
+                    Resistive Shear Forces Without the Influence of Interslice Forces: The resistive shear forces per meter in the <em>z</em>-direction for each slice.
                   </td>
                   <td>N/m</td>
                 </tr>
@@ -360,34 +368,36 @@
                 <tr>
                   <td><em><b>S</b></em></td>
                   <td>
-                    Mobilized Shear Forces: Per meter in the z-direction for each slice.
+                    Mobilized Shear Forces: The mobilized shear forces per meter in the <em>z</em>-direction for each slice.
                   </td>
                   <td>N/m</td>
                 </tr>
                 <tr>
                   <td><em><b>T</b></em></td>
                   <td>
-                    Mobilized Shear Forces Without the Influence of Interslice Forces: Per meter in the z-direction for each slice.
+                    Mobilized Shear Forces Without the Influence of Interslice Forces: The mobilized shear forces per meter in the <em>z</em>-direction for each slice.
                   </td>
                   <td>N/m</td>
                 </tr>
                 <tr>
                   <td><em><b>U</b><sub>b</sub></em></td>
                   <td>
-                    Base Hydrostatic Forces: Per meter in the z-direction from water pressure within each slice.
+                    Base Hydrostatic Forces: Forces per meter in the <em>z</em>-direction from water pressure within each slice.
                   </td>
                   <td>N/m</td>
                 </tr>
                 <tr>
                   <td><em><b>U</b><sub>g</sub></em></td>
                   <td>
-                    Surface Hydrostatic Forces: Per meter in the z-direction from water pressure acting into each slice from standing water on the slope surface.
+                    Surface Hydrostatic Forces: Forces per meter in the <em>z</em>-direction from water pressure acting into each slice from standing water on the slope surface.
                   </td>
                   <td>N/m</td>
                 </tr>
                 <tr>
                   <td><em>u</em></td>
-                  <td>Pore Pressure: From water within the soil.</td>
+                  <td>
+                    Pore Pressure: The pressure that comes from water within the soil.
+                  </td>
                   <td>Pa</td>
                 </tr>
                 <tr>
@@ -426,47 +436,49 @@
                 <tr>
                   <td><em><b>W</b></em></td>
                   <td>
-                    Weights: Downward force per meter in the z-direction on each slice caused by gravity.
+                    Weights: The downward force per meter in the <em>z</em>-direction on each slice caused by gravity.
                   </td>
                   <td>N/m</td>
                 </tr>
                 <tr>
                   <td><em><b>X</b></em></td>
                   <td>
-                    Interslice Shear Forces: Per meter in the z-direction exerted between adjacent slices.
+                    Interslice Shear Forces: Forces per meter in the <em>z</em>-direction exerted between adjacent slices.
                   </td>
                   <td>N/m</td>
                 </tr>
                 <tr>
                   <td><em>x</em></td>
-                  <td><em>x</em>-coordinate: In the Cartesian coordinate system.</td>
+                  <td>
+                    <em>x</em>-coordinate: The <em>x</em>-coordinate in the Cartesian coordinate system.
+                  </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em>x<sub>slip</sub><sup>maxEtr</sup></em></td>
                   <td>
-                    Maximum Entry <em>x</em>-coordinate: Maximum potential x-coordinate for the entry point of a slip surface.
+                    Maximum Entry <em>x</em>-coordinate: The maximum potential <em>x</em>-coordinate for the entry point of a slip surface.
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em>x<sub>slip</sub><sup>maxExt</sup></em></td>
                   <td>
-                    Maximum Exit <em>x</em>-coordinate: Maximum potential x-coordinate for the exit point of a slip surface.
+                    Maximum Exit <em>x</em>-coordinate: The maximum potential <em>x</em>-coordinate for the exit point of a slip surface.
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em>x<sub>slip</sub><sup>minEtr</sup></em></td>
                   <td>
-                    Minimum Entry <em>x</em>-coordinate: Minimum potential x-coordinate for the entry point of a slip surface.
+                    Minimum Entry <em>x</em>-coordinate: The minimum potential <em>x</em>-coordinate for the entry point of a slip surface.
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em>x<sub>slip</sub><sup>minExt</sup></em></td>
                   <td>
-                    Minimum Exit <em>x</em>-coordinate: Minimum potential x-coordinate for the exit point of a slip surface.
+                    Minimum Exit <em>x</em>-coordinate: The minimum potential <em>x</em>-coordinate for the exit point of a slip surface.
                   </td>
                   <td>m</td>
                 </tr>
@@ -480,14 +492,14 @@
                 <tr>
                   <td><em><b>x</b><sub>slip</sub></em></td>
                   <td>
-                    <em>x</em>-coordinates of the Slip Surface: X-coordinates of points on the slip surface.
+                    <em>x</em>-coordinates of the Slip Surface: <em>x</em>-coordinates of points on the slip surface.
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em><b>x</b><sub>slope</sub></em></td>
                   <td>
-                    <em>x</em>-coordinates of the Slope: X-coordinates of points on the soil slope.
+                    <em>x</em>-coordinates of the Slope: <em>x</em>-coordinates of points on the soil slope.
                   </td>
                   <td>m</td>
                 </tr>
@@ -500,20 +512,22 @@
                 </tr>
                 <tr>
                   <td><em>y</em></td>
-                  <td><em>y</em>-coordinate: In the Cartesian coordinate system.</td>
+                  <td>
+                    <em>y</em>-coordinate: The <em>y</em>-coordinate in the Cartesian coordinate system.
+                  </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em>y<sub>slip</sub><sup>max</sup></em></td>
                   <td>
-                    Maximum <em>y</em>-coordinate: Maximum potential y-coordinate of a point on a slip surface.
+                    Maximum <em>y</em>-coordinate: The maximum potential <em>y</em>-coordinate of a point on a slip surface.
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em>y<sub>slip</sub><sup>min</sup></em></td>
                   <td>
-                    Minimum <em>y</em>-coordinate: Minimum potential y-coordinate of a point on a slip surface.
+                    Minimum <em>y</em>-coordinate: The minimum potential <em>y</em>-coordinate of a point on a slip surface.
                   </td>
                   <td>m</td>
                 </tr>
@@ -527,7 +541,7 @@
                 <tr>
                   <td><em><b>y</b><sub>slope</sub></em></td>
                   <td>
-                    <em>y</em>-coordinates of the Slope: Y-coordinates of points on the soil slope.
+                    <em>y</em>-coordinates of the Slope: <em>y</em>-coordinates of points on the soil slope.
                   </td>
                   <td>m</td>
                 </tr>
@@ -540,20 +554,22 @@
                 </tr>
                 <tr>
                   <td><em>z</em></td>
-                  <td><em>z</em>-coordinate: In the Cartesian coordinate system.</td>
+                  <td>
+                    <em>z</em>-coordinate: The <em>z</em>-coordinate in the Cartesian coordinate system.
+                  </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em><b>α</b></em></td>
                   <td>
-                    Base Angles: Between the base of each slice and the horizontal.
+                    Base Angles: The angles between the base of each slice and the horizontal.
                   </td>
                   <td>&deg;</td>
                 </tr>
                 <tr>
                   <td><em><b>β</b></em></td>
                   <td>
-                    Surface Angles: Between the surface of each slice and the horizontal.
+                    Surface Angles: The angles between the surface of each slice and the horizontal.
                   </td>
                   <td>&deg;</td>
                 </tr>
@@ -586,7 +602,7 @@
                 <tr>
                   <td><em>λ</em></td>
                   <td>
-                    Proportionality Constant: For the interslice normal to shear force ratio.
+                    Proportionality Constant: The ratio of the interslice normal to the shear force.
                   </td>
                   <td>--</td>
                 </tr>
@@ -604,7 +620,9 @@
                 </tr>
                 <tr>
                   <td><em>σ</em></td>
-                  <td>Total Stress: On the soil mass.</td>
+                  <td>
+                    Total Stress: The total force per area acting on the soil mass.
+                  </td>
                   <td>Pa</td>
                 </tr>
                 <tr>
@@ -619,7 +637,9 @@
                 </tr>
                 <tr>
                   <td><em>τ</em></td>
-                  <td>Shear Strength: .</td>
+                  <td>
+                    Shear Strength: The strength of a material against shear failure.
+                  </td>
                   <td>Pa</td>
                 </tr>
                 <tr>
@@ -658,21 +678,21 @@
                 <tr>
                   <td><em><b>ω</b></em></td>
                   <td>
-                    Imposed Load Angles: Between the external force acting into the surface of each slice and the vertical.
+                    Imposed Load Angles: The angles between the external force acting into the surface of each sliceand the vertical.
                   </td>
                   <td>&deg;</td>
                 </tr>
                 <tr>
                   <td><em><b>ℓ</b><sub>b</sub></em></td>
                   <td>
-                    Total Base Lengths of Slices: In the direction parallel to the slope of the base of each slice.
+                    Total Base Lengths of Slices: The lengths of each slice in the direction parallel to the slope of the base.
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em><b>ℓ</b><sub>s</sub></em></td>
                   <td>
-                    Surface Lengths of Slices: In the direction parallel to the slope of the surface of each slice.
+                    Surface Lengths of Slices: The lengths of each slice in the direction parallel to the slope of the surface.
                   </td>
                   <td>m</td>
                 </tr>

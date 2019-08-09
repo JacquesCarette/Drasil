@@ -19,7 +19,7 @@ import Language.Drasil.Code.Imperative.Data (PackData(..), ProgData(..))
 import Language.Drasil.Code.Imperative.Helpers (convType)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeName, codeChunk),
-  codeType, codevar, quantvar, quantfunc, funcPrefix, physLookup, sfwrLookup, programName)
+  codeType, codevar, quantvar, quantfunc, physLookup, sfwrLookup, programName)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
@@ -32,7 +32,7 @@ import Language.Drasil.Printers (Linearity(Linear), exprDoc, sentenceDoc,
   unitDoc)
 
 import Prelude hiding (sin, cos, tan, log, exp, const, print)
-import Data.List (nub, intersperse, intercalate, (\\), stripPrefix)
+import Data.List (nub, intersperse, intercalate, (\\))
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Data.Map (Map, member)
 import qualified Data.Map as Map (lookup, elems)
@@ -767,8 +767,10 @@ getConstraintCall = do
 getCalcCall :: (RenderSym repr) => CodeDefinition -> Reader State 
   (Maybe (repr (Statement repr)))
 getCalcCall c = do
+  g <- ask
   val <- getFuncCall (codeName c) (convType $ codeType c) (getCalcParams c)
-  v <- variable (nopfx $ codeName c) (convType $ codeType c)
+  v <- maybe (error $ (c ^. uid) ++ " missing from VarMap") mkVar 
+    (Map.lookup (c ^. uid) (vMap $ codeSpec g))
   l <- maybeLog v
   return $ fmap (multi . (: l) . varDecDef v) val
 
@@ -845,9 +847,6 @@ loggedVar v = do
       closeFile valLogFile ]
 
 -- helpers
-
-nopfx :: String -> String
-nopfx s = fromMaybe s (stripPrefix funcPrefix s)
 
 value :: (RenderSym repr) => UID -> String -> repr (StateType repr) -> 
   Reader State (repr (Value repr))

@@ -19,19 +19,19 @@ import Data.Tuple (fst, snd)
 import Numeric (floatToDigits)
 
 -- | Render a Space
-space :: Space -> P.Expr
-space Integer = P.MO P.Integer
-space Rational = P.MO P.Rational
-space Real = P.MO P.Real
-space Natural = P.MO P.Natural
-space Boolean = P.MO P.Boolean
-space Char = P.Ident "Char"
-space String = P.Ident "String"
-space Radians = error "Radians not translated"
-space (Vect _) = error "Vector space not translated"
-space (DiscreteI _) = error "DiscreteI" --ex. let A = {1, 2, 4, 7}
-space (DiscreteD _) = error "DiscreteD" -- [Double]
-space (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Label l --ex. let Meal = {"breakfast", "lunch", "dinner"}
+space :: PrintingInformation -> Space -> P.Expr
+space _ Integer = P.MO P.Integer
+space _ Rational = P.MO P.Rational
+space _ Real = P.MO P.Real
+space _ Natural = P.MO P.Natural
+space _ Boolean = P.MO P.Boolean
+space _ Char = P.Ident "Char"
+space _ String = P.Ident "String"
+space _ Radians = error "Radians not translated"
+space _ (Vect _) = error "Vector space not translated"
+space _ (DiscreteI l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (P.Int . toInteger) l --ex. let A = {1, 2, 4, 7}
+space sm (DiscreteD l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm . dbl) l -- [Double]
+space _ (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Str l --ex. let Meal = {"breakfast", "lunch", "dinner"}
 
 {-
 p_space :: Space -> String
@@ -149,7 +149,7 @@ expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b)   sm = pow sm a b
 expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
 expr (Operator o d e)     sm = eop sm o d e
-expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space b]
+expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
 expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. stg) 
   (sm ^. ckdb) c) ri
 

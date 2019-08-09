@@ -3,7 +3,7 @@ module Language.Drasil.Plain.Print (
 ) where
 
 import Database.Drasil(ChunkDB)
-import Language.Drasil (Sentence, Special(..), Symbol, USymb(..))
+import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (Expr)
 import Language.Drasil.Plain.Helpers (toPlainName)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
@@ -20,11 +20,11 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
 
 data Linearity = Linear | Nonlinear
 
-exprDoc :: ChunkDB -> Linearity -> L.Expr -> Doc
-exprDoc db f e = pExprDoc f (expr e (PI db defaultConfiguration))
+exprDoc :: ChunkDB -> Stage -> Linearity -> L.Expr -> Doc
+exprDoc db st f e = pExprDoc f (expr e (PI db st defaultConfiguration))
 
-sentenceDoc :: ChunkDB -> Linearity -> Sentence -> Doc
-sentenceDoc db f s = specDoc f (spec (PI db defaultConfiguration) s)
+sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
+sentenceDoc db st f s = specDoc f (spec (PI db st defaultConfiguration) s)
 
 symbolDoc :: Symbol -> Doc
 symbolDoc s = pExprDoc Linear (symbol s)

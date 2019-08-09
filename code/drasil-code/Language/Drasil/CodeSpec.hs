@@ -125,6 +125,7 @@ data Choices = Choices {
   logFile :: String,
   logging :: Logging,
   comments :: [Comments],
+  dates :: Visibility,
   onSfwrConstraint :: ConstraintBehaviour,
   onPhysConstraint :: ConstraintBehaviour,
   inputStructure :: Structure,
@@ -152,6 +153,9 @@ data Structure = Unbundled
 data InputModule = Combined
                  | Separated
              
+data Visibility = Show
+                | Hide
+
 defaultChoices :: Choices
 defaultChoices = Choices {
   lang = [Python],
@@ -159,6 +163,7 @@ defaultChoices = Choices {
   logFile = "log.txt",
   logging = LogNone,
   comments = [],
+  dates = Hide,
   onSfwrConstraint = Exception,
   onPhysConstraint = Warning,
   inputStructure = Bundled,

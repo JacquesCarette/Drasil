@@ -45,6 +45,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), empty, parens, render, text)
 -- Private State, used to push these options around the generator
 data State = State {
   codeSpec :: CodeSpec,
+  date :: String,
   inStruct :: Structure,
   inMod :: InputModule,
   logName :: String,
@@ -111,10 +112,11 @@ varLogFile = var "outfile" outfile
 valLogFile :: (RenderSym repr) => repr (Value repr)
 valLogFile = valueOf varLogFile
 
-generator :: Choices -> CodeSpec -> State
-generator chs spec = State {
+generator :: String -> Choices -> CodeSpec -> State
+generator dt chs spec = State {
   -- constants
   codeSpec = spec,
+  date = showDate $ dates chs,
   inStruct = inputStructure chs,
   inMod = inputModule chs,
   logKind  = logging chs,
@@ -127,6 +129,8 @@ generator chs spec = State {
   onSfwrC = onSfwrConstraint chs,
   onPhysC = onPhysConstraint chs
 }
+  where showDate Show = dt
+        showDate Hide = ""
 
 maybeLog :: (RenderSym repr) => repr (Variable repr) ->
   Reader State [repr (Statement repr)]
@@ -671,8 +675,9 @@ genModule n desc maybeMs maybeCs = do
       as = case csi (codeSpec g) of CSI {authors = a} -> map name a
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
-  let commMod | CommentMod `elem` commented g                   = docMod desc as
-              | CommentFunc `elem` commented g && not (null ms) = docMod "" []
+  let commMod | CommentMod `elem` commented g                   = docMod desc 
+                  as (date g)
+              | CommentFunc `elem` commented g && not (null ms) = docMod "" []      (date g)
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n ls ms cs
 

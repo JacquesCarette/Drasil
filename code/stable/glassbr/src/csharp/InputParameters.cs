@@ -1,4 +1,5 @@
 /** \file InputParameters.cs
+    \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides the structure for holding input values
 */
 using System;

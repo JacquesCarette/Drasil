@@ -1,4 +1,5 @@
 /** \file InputParameters.cs
+    \author Thulasi Jegatheesan
     \brief Provides the function for reading inputs and the function for checking the physical constraints and software constraints on the input
 */
 using System;

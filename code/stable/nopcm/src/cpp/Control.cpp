@@ -1,4 +1,5 @@
 /** \file Control.cpp
+    \author Thulasi Jegatheesan
     \brief Controls the flow of the program
 */
 #include <algorithm>

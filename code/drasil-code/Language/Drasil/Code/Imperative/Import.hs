@@ -166,6 +166,7 @@ genProgram :: (ProgramSym repr) => Reader (State repr) (repr (Program repr))
 genProgram = do
   g <- ask
   ms <- genModules
+  -- Below line of code cannot be simplified because program has a generic type
   let n = case codeSpec g of CodeSpec {program = p} -> programName p
   return $ prog n ms
 
@@ -594,10 +595,12 @@ genModule n desc maybeMs maybeCs = do
   g <- ask
   let ls = fromMaybe [] (Map.lookup n (dMap $ codeSpec g))
       updateState = withReader (\s -> s { currentModule = n })
+      -- Below line of code cannot be simplified because authors has a generic type
+      as = case csi (codeSpec g) of CSI {authors = a} -> map name a
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
-  let commMod | CommentMod `elem` commented g                   = docMod desc
-              | CommentFunc `elem` commented g && not (null ms) = docMod ""
+  let commMod | CommentMod `elem` commented g                   = docMod desc as
+              | CommentFunc `elem` commented g && not (null ms) = docMod "" []
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n ls ms cs
 

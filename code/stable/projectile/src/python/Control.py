@@ -1,4 +1,5 @@
 ## \file Control.py
+# \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
 # \brief Controls the flow of the program
 from __future__ import print_function
 import sys

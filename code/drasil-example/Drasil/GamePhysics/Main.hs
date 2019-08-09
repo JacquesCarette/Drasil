@@ -2,7 +2,7 @@ module Main where
 
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
---   Structure(..), InputModule(..))
+--   Structure(..), InputModule(..), Visibility(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -18,6 +18,7 @@ import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
 --   logFile          = "log.txt",
 --   logging          = LogNone,
 --   comments         = CommentNone,
+--   dates            = Hide,
 --   onSfwrConstraint = Warning,
 --   onPhysConstraint = Warning,
 --   inputStructure   = Unbundled,

@@ -37,7 +37,9 @@ class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) =>
   type RenderFile repr
   fileDoc :: repr (Module repr) -> repr (RenderFile repr)
 
-  docMod :: String -> repr (RenderFile repr) -> repr (RenderFile repr)
+  -- Module description, list of author names, date as a String, file to comment
+  docMod :: String -> [String] -> String -> repr (RenderFile repr) -> 
+    repr (RenderFile repr)
 
   commentedMod :: repr (BlockComment repr) -> repr (RenderFile repr) ->
     repr (RenderFile repr)

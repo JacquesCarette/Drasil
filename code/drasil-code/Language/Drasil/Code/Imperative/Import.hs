@@ -7,7 +7,7 @@ import Utils.Drasil (stringList)
 import Language.Drasil hiding (int, ($.), log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil(ChunkDB, symbLookup, symbolTable)
-import Language.Drasil.Code.Code as C (CodeType(List))
+import Language.Drasil.Code.Code as C (CodeType(List, Object))
 import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), AuxiliarySym(..), PermanenceSym(..), 
   BodySym(..), BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..),
@@ -45,6 +45,7 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), empty, parens, render, text)
 -- Private State, used to push these options around the generator
 data State = State {
   codeSpec :: CodeSpec,
+  date :: String,
   inStruct :: Structure,
   inMod :: InputModule,
   logName :: String,
@@ -111,10 +112,11 @@ varLogFile = var "outfile" outfile
 valLogFile :: (RenderSym repr) => repr (Value repr)
 valLogFile = valueOf varLogFile
 
-generator :: Choices -> CodeSpec -> State
-generator chs spec = State {
+generator :: String -> Choices -> CodeSpec -> State
+generator dt chs spec = State {
   -- constants
   codeSpec = spec,
+  date = showDate $ dates chs,
   inStruct = inputStructure chs,
   inMod = inputModule chs,
   logKind  = logging chs,
@@ -127,6 +129,8 @@ generator chs spec = State {
   onSfwrC = onSfwrConstraint chs,
   onPhysC = onPhysConstraint chs
 }
+  where showDate Show = dt
+        showDate Hide = ""
 
 maybeLog :: (RenderSym repr) => repr (Variable repr) ->
   Reader State [repr (Statement repr)]
@@ -397,12 +401,12 @@ genInputDerived = do
         (Maybe (repr (Method repr)))
       genDerived Nothing = return Nothing
       genDerived (Just _) = do
-        parms <- getDerivedParams
-        inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (convType $ 
+        ins <- getDerivedIns
+        outs <- getDerivedOuts
+        bod <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (convType $ 
           codeType x) (codeEquat x)) dvals
         desc <- dvFuncDesc
-        mthd <- publicMethod (mState void) "derived_values" desc parms Nothing 
-          inps
+        mthd <- publicInOutFunc "derived_values" desc ins outs [] bod
         return $ Just mthd
   genDerived $ Map.lookup "derived_values" (eMap $ codeSpec g)
 
@@ -676,8 +680,9 @@ genModule n desc maybeMs maybeCs = do
       as = case csi (codeSpec g) of CSI {authors = a} -> map name a
   cs <- maybe (return []) updateState maybeCs
   ms <- maybe (return []) updateState maybeMs
-  let commMod | CommentMod `elem` commented g                   = docMod desc as
-              | CommentFunc `elem` commented g && not (null ms) = docMod "" []
+  let commMod | CommentMod `elem` commented g                   = docMod desc 
+                  as (date g)
+              | CommentFunc `elem` commented g && not (null ms) = docMod "" []      (date g)
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n ls ms cs
 
@@ -752,9 +757,8 @@ getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
 
 getDerivedCall :: (RenderSym repr) => Reader State 
   (Maybe (repr (Statement repr)))
-getDerivedCall = do
-  val <- getFuncCall "derived_values" void getDerivedParams
-  return $ fmap valState val
+getDerivedCall = getInOutCall "derived_values" getDerivedIns getDerivedOuts 
+  (return [])
 
 getConstraintCall :: (RenderSym repr) => Reader State 
   (Maybe (repr (Statement repr)))
@@ -787,22 +791,28 @@ getInputFormatIns = do
 getInputFormatOuts :: (RenderSym repr) => Reader State [repr (Variable repr)]
 getInputFormatOuts = do
   g <- ask
-  let getOuts :: (RenderSym repr) => Structure -> [repr (Variable repr)]
-      getOuts Unbundled = toVariables $ extInputs $ csi $ codeSpec g
-      getOuts Bundled = []
-  return $ getOuts (inStruct g)
-  
-toVariables :: (RenderSym repr, HasCodeType c, CodeIdea c) => [c] -> 
-  [repr (Variable repr)]
-toVariables = map (\c -> var (codeName c) ((convType . codeType) c))
+  let getOuts :: (RenderSym repr) => Structure -> 
+        Reader State [repr (Variable repr)]
+      getOuts Unbundled = mapM mkVar $ extInputs $ csi $ codeSpec g
+      getOuts Bundled = return []
+  getOuts (inStruct g)
 
-getDerivedParams :: (RenderSym repr) => Reader State [repr (Parameter repr)]
-getDerivedParams = do
+getDerivedIns :: (RenderSym repr) => Reader State [repr (Variable repr)]
+getDerivedIns = do
   g <- ask
   let s = csi $ codeSpec g
       dvals = derivedInputs s
       reqdVals = concatMap (flip codevars (sysinfodb s) . codeEquat) dvals
-  getParams reqdVals
+  getVars reqdVals
+
+getDerivedOuts :: (RenderSym repr) => Reader State [repr (Variable repr)]
+getDerivedOuts = do
+  g <- ask
+  let getOuts :: (RenderSym repr) => Structure -> 
+        Reader State [repr (Variable repr)]
+      getOuts Unbundled = mapM mkVar $ derivedInputs $ csi $ codeSpec g
+      getOuts Bundled = return []
+  getOuts (inStruct g)
 
 getConstraintParams :: (RenderSym repr) => Reader State [repr (Parameter repr)]
 getConstraintParams = do 
@@ -880,39 +890,48 @@ fAppInOut m n ins outs both = do
   return $ if m /= currentModule g then extInOutCall m n ins outs both
     else inOutCall n ins outs both
 
-getParams :: (RenderSym repr, CodeIdea c) => [c] -> Reader State 
-  [repr (Parameter repr)]
-getParams cs' = do
+getVars :: (RenderSym repr, CodeIdea c) => [c] -> 
+  Reader State [repr (Variable repr)]
+getVars cs' = do
   g <- ask
   let cs = map codeChunk cs'
       ins = inputs $ csi $ codeSpec g
       consts = map codeChunk $ constants $ csi $ codeSpec g
-      inpParams = filter (`elem` ins) cs
-      inPs = getInputParams (inStruct g) inpParams
-      conParams = filter (`elem` consts) cs
-      conPs = getConstParams conParams
+      inpVars = filter (`elem` ins) cs
+      conVars = filter (`elem` consts) cs
       csSubIns = cs \\ (ins ++ consts)
-      ps = map mkParam csSubIns
-  return $ inPs ++ conPs ++ ps
+  inVs <- getInputVars (inStruct g) inpVars
+  conVs <- getConstVars conVars
+  vs <- mapM mkVar csSubIns
+  return $ inVs ++ conVs ++ vs
 
-mkParam :: (RenderSym repr, HasCodeType c, CodeIdea c) => c -> repr (Parameter repr)
-mkParam p = paramFunc (codeType p) $ var pName pType
+getParams :: (RenderSym repr, CodeIdea c) => [c] -> Reader State 
+  [repr (Parameter repr)]
+getParams cs = do
+  vs <- getVars cs
+  return $ map mkParam vs 
+
+mkParam :: (RenderSym repr) => repr (Variable repr) -> repr (Parameter repr)
+mkParam v = paramFunc (getType $ variableType v) v
   where paramFunc (C.List _) = pointerParam
+        paramFunc (C.Object _) = pointerParam
         paramFunc _ = stateParam
-        pName = codeName p
-        pType = convType $ codeType p
 
-getInputParams :: (RenderSym repr, HasCodeType c, CodeIdea c) => Structure -> 
-  [c] -> [repr (Parameter repr)]
-getInputParams _ [] = []
-getInputParams Unbundled cs = map mkParam cs
-getInputParams Bundled _ = [pointerParam $ var pName pType]
+mkVar :: (RenderSym repr, HasCodeType c, CodeIdea c) => c -> 
+  Reader State (repr (Variable repr))
+mkVar v = variable (codeName v) (convType $ codeType v)
+
+getInputVars :: (RenderSym repr, HasCodeType c, CodeIdea c) => Structure -> 
+  [c] -> Reader State [repr (Variable repr)]
+getInputVars _ [] = return []
+getInputVars Unbundled cs = mapM mkVar cs
+getInputVars Bundled _ = return [var pName pType]
   where pName = "inParams"
         pType = obj "InputParameters"
 
 -- Right now, we always inline constants. In the future, this will be captured by a choice and this function should be updated to read that choice
-getConstParams :: [CodeChunk] -> [repr (Parameter repr)]
-getConstParams _ = []
+getConstVars :: [CodeChunk] -> Reader State [repr (Variable repr)]
+getConstVars _ = return []
 
 getArgs :: (RenderSym repr) => [repr (Parameter repr)] -> [repr (Value repr)]
 getArgs = map (\p -> valueOf (var (parameterName p) (parameterType p)))

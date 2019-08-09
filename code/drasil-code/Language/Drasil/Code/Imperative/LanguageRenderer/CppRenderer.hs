@@ -95,7 +95,7 @@ instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
   type RenderFile (p CppSrcCode CppHdrCode) = FileData
   fileDoc code = pair (fileDoc $ pfst code) (fileDoc $ psnd code)
 
-  docMod d a m = pair (docMod d a $ pfst m) (docMod d a $ psnd m)
+  docMod d a dt m = pair (docMod d a dt $ pfst m) (docMod d a dt $ psnd m)
 
   commentedMod cmt m = pair (commentedMod (pfst cmt) (pfst m)) 
     (commentedMod (psnd cmt) (psnd m))
@@ -657,7 +657,7 @@ instance RenderSym CppSrcCode where
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 
-  docMod d a m = commentedMod (docComment $ moduleDoc d a $ filePath 
+  docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
     (unCPPSC m)) m
 
   commentedMod cmt m = if (isMainMod . fileMod . unCPPSC) m then liftA2 
@@ -1238,7 +1238,7 @@ instance RenderSym CppHdrCode where
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
   
-  docMod d a m = commentedMod (docComment $ moduleDoc d a $ filePath 
+  docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
     (unCPPHC m)) m
 
   commentedMod cmt m = if (isMainMod . fileMod . unCPPHC) m then m else liftA2 

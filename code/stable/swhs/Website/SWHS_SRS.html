@@ -744,12 +744,12 @@
                   </p>
                   <p>
                     <div id="assumpCWTAT">
-                      Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: <a href=#GD:rocTempSimp>GD: rocTempSimp</a> and <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.)
+                      Constant-Water-Temp-Across-Tank: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: <a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpTPCAV">
-                      Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. (RefBy: <a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a>, and <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.)
+                      Temp-PCM-Constant-Across-Volume: The temperature of the phase change material is the same throughout the volume of PCM. (RefBy: <a href=#GD:rocTempSimp>GD: rocTempSimp</a>, <a href=#likeChgUTP>LC: Uniform-Temperature-PCM</a>, <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.)
                     </div>
                   </p>
                   <p>
@@ -789,7 +789,7 @@
                   </p>
                   <p>
                     <div id="assumpSITWP">
-                      Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same. (RefBy: <a href=#likeChgDITPW>LC: Different-Initial-Temps-PCM-Water</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, and <a href=#assumpCTNOD>A: Charging-Tank-No-Temp-Discharge</a>.)
+                      Same-Initial-Temp-Water-PCM: The initial temperature of the water and the PCM is the same. (RefBy: <a href=#likeChgDITPW>LC: Different-Initial-Temps-PCM-Water</a>, <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, and <a href=#assumpCTNOD>A: Charging-Tank-No-Temp-Discharge</a>.)
                     </div>
                   </p>
                   <p>
@@ -1953,7 +1953,7 @@
                       <th>Output Constraints</th>
                       <td>
                         <div class="equation">
-                          <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+                          <em>0&thinsp;&le;&thinsp;t&thinsp;&le;&thinsp;t<sub>final</sub></em>
                         </div>
                       </td>
                     </tr>
@@ -1998,7 +1998,22 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>t<sub>final</sub></em>, <em>T<sub>C</sub></em>, <em>T<sub>P</sub></em> from (<a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>). The input is constrained so that <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>. (<a href=#assumpCTNOD>A: Charging-Tank-No-Temp-Discharge</a>) <em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>τ<sub>W</sub></em> is from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>. <em>η</em> is from <a href=#DD:balanceDecayTime>DD: balanceDecayTime</a>. The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
+                          <em>T<sub>P</sub></em> is defined by <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>.
+                        </p>
+                        <p class="paragraph">
+                          The input constraint <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em> comes from <a href=#assumpCTNOD>A: Charging-Tank-No-Temp-Discharge</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>τ<sub>W</sub></em> is calculated from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>η</em> is calculated from <a href=#DD:balanceDecayTime>DD: balanceDecayTime</a>.
+                        </p>
+                        <p class="paragraph">
+                          The initial conditions for the ODE are <em>T<sub>W</sub>(0) = T<sub>P</sub>(0) = T<sub>init</sub></em> following <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>.
+                        </p>
+                        <p class="paragraph">
+                          The ODE applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (from <a href=#assumpWAL>A: Water-Always-Liquid</a> and <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
                         </p>
                       </td>
                     </tr>
@@ -2035,7 +2050,7 @@
                                                                   </div> = q<sub>C</sub>&#8239;A<sub>C</sub>&minus;q<sub>P</sub>&#8239;A<sub>P</sub></em>
                     </div>
                     <p class="paragraph">
-                      Using <a href=#DD:htFluxC>DD: htFluxC</a> and <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>C</sub></em> and <em>q<sub>P</sub></em> respectively, this can be written as:
+                      Using <a href=#DD:htFluxC>DD: htFluxC</a> for <em>q<sub>C</sub></em> and <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>P</sub></em>, this can be written as:
                     </p>
                     <div class="equation">
                       <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
@@ -2048,7 +2063,7 @@
                                                                   </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&minus;h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
                     </div>
                     <p class="paragraph">
-                      Dividing Equation (3) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
+                      Dividing Equation (2) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
                     </p>
                     <div class="equation">
                       <em><div class="fraction">
@@ -2067,7 +2082,7 @@
                                                                                           </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
                     </div>
                     <p class="paragraph">
-                      Factoring the negative sign out of the second term of the RHS of Equation (4) and multiplying it by <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> yields:
+                      Factoring the negative sign out of the second term of the RHS of Equation (3) and multiplying it by <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> yields:
                     </p>
                     <div class="equation">
                       <em><div class="fraction">
@@ -2092,7 +2107,7 @@
                                                                                                         </span>
                                                                                                       </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
                     </div>
-                    <p class="paragraph">Which simplifies to:</p>
+                    <p class="paragraph">Rearraging this equation gives us:</p>
                     <div class="equation">
                       <em><div class="fraction">
                             <span class="fup">&#8239;dT<sub>W</sub></span>
@@ -2190,7 +2205,7 @@
                       <th>Output Constraints</th>
                       <td>
                         <div class="equation">
-                          <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+                          <em>0&thinsp;&le;&thinsp;t&thinsp;&le;&thinsp;t<sub>final</sub></em>
                         </div>
                       </td>
                     </tr>
@@ -2221,12 +2236,7 @@
                                          </span>
                                          <span>
                                            0 , <span class="case">
-                                                 T<sub>P</sub> = T<sub>melt</sub><sup>P</sup>
-                                               </span>
-                                         </span>
-                                         <span>
-                                           0 , <span class="case">
-                                                 0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1
+                                                 T<sub>P</sub> = T<sub>melt</sub><sup>P</sup> &and; 0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1
                                                </span>
                                          </span>
                                        </div></em>
@@ -2261,7 +2271,22 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>T<sub>melt</sub><sup>P</sup></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>h<sub>P</sub></em>, <em>m<sub>P</sub></em>, <em>C<sub>P</sub><sup>S</sup></em>, <em>C<sub>P</sub><sup>S</sup></em> from (<a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>). The input is constrained so that <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup></em> (<a href=#assumpPIS>A: PCM-Initially-Solid</a>) <em>T<sub>P</sub></em>, <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>, with initial conditions, <em>T<sub>W</sub> = T<sub>P</sub> = T<sub>init</sub></em>, FIXME t_w(0) = t_p(0), <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>, and <em>T<sub>W</sub></em> from <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, such that the following governing ODE is satisfied. The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as <em>0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1</em> (from <a href=#DD:meltFrac>DD: meltFrac</a>) is determined as part of the heat energy in the PCM, as given in (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>). <em>τ<sub>P</sub><sup>S</sup></em> is from <a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>. <em>τ<sub>P</sub><sup>L</sup></em> is from <a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>.
+                          <em>T<sub>W</sub></em> is defined by <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>.
+                        </p>
+                        <p class="paragraph">
+                          The input constraint <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>melt</sub><sup>P</sup></em> comes from <a href=#assumpPIS>A: PCM-Initially-Solid</a>.
+                        </p>
+                        <p class="paragraph">
+                          The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as <em>0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1</em>. <em>ϕ</em> (from <a href=#DD:meltFrac>DD: meltFrac</a>) is determined as part of the heat energy in the PCM, as given in (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>).
+                        </p>
+                        <p class="paragraph">
+                          <em>τ<sub>P</sub><sup>S</sup></em> is calculated in <a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>τ<sub>P</sub><sup>L</sup></em> is calculated in <a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>.
+                        </p>
+                        <p class="paragraph">
+                          The initial conditions for the ODE are <em>T<sub>W</sub>(0) = T<sub>P</sub>(0) = T<sub>init</sub></em> following <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>.
                         </p>
                       </td>
                     </tr>
@@ -2287,7 +2312,7 @@
                       Detailed derivation of the energy balance on the PCM during sensible heating phase:
                     </h4>
                     <p class="paragraph">
-                      To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> over phase change material surface area <em>A<sub>P</sub></em>. There is no heat flux output. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+                      To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (<em>V<sub>P</sub></em>). The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> (<a href=#DD:htFluxP>DD: htFluxP</a>) over phase change material surface area <em>A<sub>P</sub></em>. The thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
                     </p>
                     <div class="equation">
                       <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
@@ -2339,10 +2364,10 @@
                                    </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
                     </div>
                     <p class="paragraph">
-                      Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>τ<sub>P</sub><sup>S</sup></em> is replaced by <em>τ<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#assumpVCMPN>A: Volume-Change-Melting-PCM-Negligible</a>).
+                      Equation (4) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>τ<sub>P</sub><sup>S</sup></em> is replaced by <em>τ<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#assumpVCMPN>A: Volume-Change-Melting-PCM-Negligible</a>).
                     </p>
                     <p class="paragraph">
-                      In the case where <em>T<sub>P</sub> = T<sub>melt</sub><sup>P</sup></em> and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d <em>T<sub>P</sub></em> / d <em>t</em> = 0.
+                      In the case where <em>T<sub>P</sub> = T<sub>melt</sub><sup>P</sup></em> and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, d <em>T<sub>P</sub></em> / d <em>t</em> = 0.
                     </p>
                     <p class="paragraph">
                       This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (<a href=#assumpNGSP>A: No-Gaseous-State-PCM</a>).
@@ -2379,7 +2404,7 @@
                       <th>Output Constraints</th>
                       <td>
                         <div class="equation">
-                          <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+                          <em>0&thinsp;&le;&thinsp;t&thinsp;&le;&thinsp;t<sub>final</sub></em>
                         </div>
                       </td>
                     </tr>
@@ -2416,7 +2441,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a>. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
+                          The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a>.
+                        </p>
+                        <p class="paragraph">
+                          The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C).
+                        </p>
+                        <p class="paragraph">
+                          This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
                         </p>
                       </td>
                     </tr>
@@ -2471,7 +2502,7 @@
                       <th>Output Constraints</th>
                       <td>
                         <div class="equation">
-                          <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+                          <em>0&thinsp;&le;&thinsp;t&thinsp;&le;&thinsp;t<sub>final</sub></em>
                         </div>
                       </td>
                     </tr>
@@ -2493,12 +2524,7 @@
                                                 </span>
                                                 <span>
                                                   E<sub>P</sub><sub>melt</sub><sup>init</sup>&plus;Q<sub>P</sub>(t) , <span class="case">
-                                                                                                                        T<sub>P</sub> = T<sub>melt</sub><sup>P</sup>
-                                                                                                                      </span>
-                                                </span>
-                                                <span>
-                                                  E<sub>P</sub><sub>melt</sub><sup>init</sup>&plus;Q<sub>P</sub>(t) , <span class="case">
-                                                                                                                        0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1
+                                                                                                                        T<sub>P</sub> = T<sub>melt</sub><sup>P</sup> &and; 0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1
                                                                                                                       </span>
                                                 </span>
                                               </div></em>
@@ -2548,7 +2574,25 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a> and <a href=#TM:latentHtE>TM: latentHtE</a>. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using <a href=#TM:sensHtE>TM: sensHtE</a> for sensible heating, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using <a href=#TM:sensHtE>TM: sensHtE</a> for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM. The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (<a href=#DD:htFusion>DD: htFusion</a>). The specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#assumpNGSP>A: No-Gaseous-State-PCM</a>) (<a href=#assumpPIS>A: PCM-Initially-Solid</a>).
+                          The above equation is derived using <a href=#TM:sensHtE>TM: sensHtE</a> and <a href=#TM:latentHtE>TM: latentHtE</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>E<sub>P</sub></em> for the solid PCM is found using <a href=#TM:sensHtE>TM: sensHtE</a> for sensible heating, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C).
+                        </p>
+                        <p class="paragraph">
+                          <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using <a href=#TM:sensHtE>TM: sensHtE</a> for sensible heat of the liquid PCM plus the energy when melting starts, plus the energy required to melt all of the PCM.
+                        </p>
+                        <p class="paragraph">
+                          The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (from <a href=#DD:htFusion>DD: htFusion</a>).
+                        </p>
+                        <p class="paragraph">
+                          The change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C).
+                        </p>
+                        <p class="paragraph">
+                          <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s).
+                        </p>
+                        <p class="paragraph">
+                          The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#assumpNGSP>A: No-Gaseous-State-PCM</a>) (<a href=#assumpPIS>A: PCM-Initially-Solid</a>).
                         </p>
                       </td>
                     </tr>
@@ -3507,7 +3551,7 @@
               <td>X</td>
               <td></td>
               <td>X</td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td>X</td>
               <td>X</td>
@@ -3521,8 +3565,8 @@
               <td><a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

@@ -18,31 +18,29 @@ acronyms = [twoD, threeD, assumption, dataDefn, genDefn, goalStmt, inModel, like
   physSyst, requirement, srs, ssp, thModel, typUnc, unlikelyChg]
 
 ssp :: CI
-ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability analysis Program") "SSP"   [civilEng]
+ssp = commonIdeaWithDict "ssp" (pn' "Slope Stability Analysis Program") "SSP" [civilEng]
 
 defs :: [NamedChunk]
 defs = [factor, soil, material, intrslce, layer, slip, slope, slice, morPrice,
-  soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
-  stabAnalysis, ssa]
+  soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, stabAnalysis, ssa]
 
 defs' :: [ConceptChunk]
 defs' = [slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable]
 
 ----Other Common Phrases----
-soil, layer, material, intrslce, slip, slope, slice, stability,
-  morPrice :: NamedChunk
-intrslce = nc "interslice" (cn' "interslice")
-layer    = nc "layer"      (cn' "layer")
-material = nc "material"   (cn' "material")
-slice    = nc "slice"      (cn' "slice")
-slip     = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from (a means of restraint))/noun 
+soil, layer, material, intrslce, slip, slope, slice, stability, morPrice :: NamedChunk
+intrslce  = nc "interslice" (cn' "interslice")
+layer     = nc "layer"      (cn' "layer")
+material  = nc "material"   (cn' "material")
+slice     = nc "slice"      (cn' "slice")
+slip      = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from (a means of restraint))/noun 
                                         --       (an act of sliding unintentionally for a short distance)?
                                         --       (related to issue #129)
-slope    = nc "slope"      (cn' "slope")
-soil     = nc "soil"       (cn  "soil")
-stability = nc "stability" (cn "stability")
+slope     = nc "slope"      (cn' "slope")
+soil      = nc "soil"       (cn  "soil")
+stability = nc "stability"  (cn  "stability")
 
-morPrice = nc "morPrice"   (pn  "Morgenstern-Price")
+morPrice  = nc "morPrice"   (pn  "Morgenstern-Price")
 
 soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr, soilMechanics, 
   stabAnalysis, ssa :: NamedChunk

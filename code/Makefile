@@ -86,7 +86,7 @@ PROFEXEC = +RTS -xc -P
 #  GHC build options
 GHCTHREADS += 2
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
-override stackArgs += --ghc-options="$(GHCFLAGS)"
+override stackArgs += -j3 --ghc-options="$(GHCFLAGS)" --dump-logs --interleaved-output
 
 #  Output amount control
 NOISY=no
@@ -110,7 +110,7 @@ packages: $(BUILD_PACKAGES)
 
 # Actually build all the packages
 $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
-	stack install -j3 $(stackArgs) "drasil-$*" --dump-logs --interleaved-output
+	stack install $(stackArgs) "drasil-$*"
 
 %$(GEN_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(GEN_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)

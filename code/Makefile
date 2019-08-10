@@ -101,10 +101,10 @@ debug: test
 
 # sanity check -- are we using the right stack version?
 check_stack:
-	 @MIN_STACK_VER=$(MIN_STACK_VER) CACHED_MSV_FILE=$(CACHED_MSV_FILE) "$(SHELL)" $(SCRIPT_FOLDER)check_stack.sh
+	 @MIN_STACK_VER="$(MIN_STACK_VER)" CACHED_MSV_FILE="$(CACHED_MSV_FILE)" "$(SHELL)" "$(SCRIPT_FOLDER)"check_stack.sh
 
 check_dot:
-	@BIN=dot DOWNLOAD_LOCATION=https://www.graphviz.org/download/ "$(SHELL)" $(SCRIPT_FOLDER)check_binary.sh
+	@BIN=dot DOWNLOAD_LOCATION=https://www.graphviz.org/download/ "$(SHELL)" "$(SCRIPT_FOLDER)"check_binary.sh
 
 packages: $(BUILD_PACKAGES)
 
@@ -116,21 +116,21 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 %$(GEN_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 %$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_SUFFIX)
-	@mkdir -p $(BUILD_FOLDER)$(EDIR)
-	cd $(BUILD_FOLDER)$(EDIR) && stack exec -- $(EEXE) $(EXECARGS)
+	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
+	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
 
 %$(TEST_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEST_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): %$(GEN_E_SUFFIX)
-	@mkdir -p $(LOG_FOLDER)
-	- $(DIFF) "stable/$*/" $(BUILD_FOLDER)$(EDIR)/ > $(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX) 2>&1
+	@mkdir -p "$(LOG_FOLDER)"
+	- $(DIFF) "stable/$*/" "$(BUILD_FOLDER)$(EDIR)"/ > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)" 2>&1
 
 # actually run the tests
 test: $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------
-	@LOG_FOLDER=$(LOG_FOLDER) LOG_SUFFIX=$(LOG_SUFFIX) NOISY=$(NOISY) "$(SHELL)" $(SCRIPT_FOLDER)log_check.sh
+	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)"log_check.sh
 
 # generate pretty dot graphs too
 graphmod: check_stack
@@ -138,7 +138,7 @@ graphmod: check_stack
 
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack check_dot graphmod
 	@mkdir -p $(GRAPH_FOLDER)
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > $(GRAPH_FOLDER)drasil-"$*".pdf
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*".pdf
 
 graphs: $(GRAPH_PACKAGES)
 ###
@@ -152,14 +152,14 @@ docs: $(DOC_PACKAGES)
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(GEN_E_SUFFIX)
-	EDIR=$(EDIR) BUILD_FOLDER=$(BUILD_FOLDER) SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" "$(SHELL)" $(SCRIPT_FOLDER)tex_build.sh
+	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
 
 tex: $(TEX_EXAMPLES)
 
 %$(CODE_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFIX)
-	@EDIR=$(EDIR) BUILD_FOLDER=$(BUILD_FOLDER) EXAMPLE_CODE_SUBFOLDER=$(EXAMPLE_CODE_SUBFOLDER) MAKE="$(MAKE)" "$(SHELL)" $(SCRIPT_FOLDER)code_build.sh
+	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
 
 code: $(CODE_EXAMPLES)
 
@@ -172,9 +172,9 @@ $(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
 deploy_code_path: $(DCP_EXAMPLES)
 
 deploy_lite:
-	@mkdir -p $(DEPLOY_FOLDER)
-	@BUILD_FOLDER=$(BUILD_FOLDER) DEPLOY_FOLDER=$(DEPLOY_FOLDER) GRAPH_FOLDER=$(GRAPH_FOLDER) \
-	DEPLOY_CODE_PATH_KV_SEP=$(DEPLOY_CODE_PATH_KV_SEP) MAKE=$(MAKE) "$(SHELL)" $(SCRIPT_FOLDER)deploy_stage.sh
+	@mkdir -p "$(DEPLOY_FOLDER)"
+	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
+	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
 
 # This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
 # dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX
@@ -182,7 +182,7 @@ deploy_lite:
 # everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
 # what `deploy.bash` calls. 
 deploy: graphs docs tex
-	$(MAKE) deploy_lite
+	"$(MAKE)" deploy_lite
 
 
 # follow two are for cleaning things out
@@ -191,6 +191,6 @@ $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
 
 clean: $(CLEAN_FOLDERS)
 	- stack clean
-	- rm $(CACHED_MSV_FILE)
+	- rm "$(CACHED_MSV_FILE)"
 
 .PHONY: clean code tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(ALL_EXPANDED_TARGETS)

@@ -197,14 +197,17 @@ funcQD qd = FCD $ qtoc qd
 funcData :: Name -> String -> DataDesc -> Func
 funcData n desc d = FData $ FuncData (toPlainName n) desc d
 
-funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> Space -> [FuncStmt] -> Func  
-funcDef s desc i t fs = FDef $ FuncDef (toPlainName s) desc (map quantvar i) (spaceToCodeType t) fs 
+funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> Space -> 
+  Maybe String -> [FuncStmt] -> Func  
+funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc 
+  (map quantvar i) (spaceToCodeType t) returnDesc fs 
 
 data FuncData where
   FuncData :: Name -> String -> DataDesc -> FuncData
   
 data FuncDef where
-  FuncDef :: Name -> String -> [CodeChunk] -> CodeType -> [FuncStmt] -> FuncDef
+  FuncDef :: Name -> String -> [CodeChunk] -> CodeType -> Maybe String -> 
+    [FuncStmt] -> FuncDef
  
 data FuncStmt where
   FAsg :: CodeChunk -> Expr -> FuncStmt
@@ -230,7 +233,7 @@ fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
 fdec v  = FDec (quantvar  v) (spaceToCodeType $ v ^. typ)
 
 asVC :: Func -> QuantityDict
-asVC (FDef (FuncDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
+asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
 asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
 asVC (FCD _) = error "Can't make QuantityDict from FCD function" -- codeVC cd (codeSymb cd) (cd ^. typ)
 
@@ -243,7 +246,7 @@ asExpr' f = sy $ asVC' f
 
 -- FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
-asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
+asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
@@ -255,7 +258,7 @@ getAdditionalVars chs ms = map codevar (inFileName : inParamsVar
         funcParams (Mod _ _ fs) = concatMap getFuncParams fs
 
 getFuncParams :: Func -> [CodeChunk]
-getFuncParams (FDef (FuncDef _ _ ps _ _)) = ps
+getFuncParams (FDef (FuncDef _ _ ps _ _ _)) = ps
 getFuncParams (FData (FuncData _ _ d)) = getInputs d
 getFuncParams (FCD _) = []
 
@@ -290,7 +293,7 @@ modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _ _) -> (n, getModDep m))
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)
         fdep (FCD cd) = codeName cd:map codeName (codevarsandfuncs (codeEquat cd) sm mem)
-        fdep (FDef (FuncDef _ _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
+        fdep (FDef (FuncDef _ _ i _ _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
         fdep (FData (FuncData _ _ d)) = map codeName $ getInputs d
         sm = sysinfodb cs
 
@@ -338,7 +341,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
        
 fname :: Func -> Name       
 fname (FCD cd) = codeName cd
-fname (FDef (FuncDef n _ _ _ _)) = n
+fname (FDef (FuncDef n _ _ _ _ _)) = n
 fname (FData (FuncData n _ _)) = n 
 
 prefixFunctions :: [Mod] -> [Mod]
@@ -346,8 +349,8 @@ prefixFunctions = map (\(Mod nm desc fs) -> Mod nm desc $ map pfunc fs)
   where pfunc f@(FCD _) = f
         pfunc (FData (FuncData n desc d)) = FData (FuncData (funcPrefix ++ n) 
           desc d)
-        pfunc (FDef (FuncDef n desc a t f)) = FDef (FuncDef (funcPrefix ++ n)
-          desc a t f)
+        pfunc (FDef (FuncDef n desc a t rd f)) = FDef (FuncDef (funcPrefix ++ n)
+          desc a t rd f)
 
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]

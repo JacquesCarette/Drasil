@@ -13,6 +13,7 @@ import ReadTable
 # \param x_2 upper x-coordinate
 # \param y_2 upper y-coordinate
 # \param x x-coordinate to interpolate at
+# \return y value interpolated at given x value
 def func_lin_interp(x_1, y_1, x_2, y_2, x):
     outfile = open("log.txt", "a")
     print("function func_lin_interp called with inputs: {", file=outfile)
@@ -38,6 +39,7 @@ def func_lin_interp(x_1, y_1, x_2, y_2, x):
 ## \brief Finds the array index for a value closest to the given value
 # \param arr array in which value should be found
 # \param v value whose index will be found
+# \return index of given value in given array
 def func_find(arr, v):
     outfile = open("log.txt", "a")
     print("function func_find called with inputs: {", file=outfile)
@@ -57,6 +59,7 @@ def func_find(arr, v):
 ## \brief Extracts a column from a 2D matrix
 # \param mat matrix from which column will be extracted
 # \param j index
+# \return column of the given matrix at the given index
 def func_extractColumn(mat, j):
     outfile = open("log.txt", "a")
     print("function func_extractColumn called with inputs: {", file=outfile)
@@ -77,6 +80,7 @@ def func_extractColumn(mat, j):
 # \param filename name of file with x y and z data
 # \param x x-coordinate to interpolate at
 # \param z z-coordinate to interpolate at
+# \return y value interpolated at given x and z values
 def func_interpY(filename, x, z):
     outfile = open("log.txt", "a")
     print("function func_interpY called with inputs: {", file=outfile)
@@ -158,6 +162,7 @@ def func_interpY(filename, x, z):
 # \param filename name of file with x y and z data
 # \param x x-coordinate to interpolate at
 # \param y y-coordinate to interpolate at
+# \return z value interpolated at given x and y values
 def func_interpZ(filename, x, y):
     outfile = open("log.txt", "a")
     print("function func_interpZ called with inputs: {", file=outfile)

@@ -33,7 +33,7 @@ import Language.Drasil.Printers (Linearity(Linear), exprDoc, sentenceDoc,
 import Prelude hiding (sin, cos, tan, log, exp, const, print)
 import Data.List (nub, intersperse, intercalate, (\\), stripPrefix)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
-import Data.Map (member)
+import Data.Map (Map, member)
 import qualified Data.Map as Map (lookup, elems)
 import Data.Maybe (fromMaybe, maybe, maybeToList, catMaybes, mapMaybe)
 import Control.Applicative ((<$>))
@@ -140,7 +140,7 @@ maybeLog v = do
   return $ maybeToList l
 
 publicMethod :: (RenderSym repr) => repr (MethodType repr) -> Label -> String
-  -> [repr (Parameter repr)] -> [repr (Block repr)] 
+  -> [repr (Parameter repr)] -> Maybe String -> [repr (Block repr)] 
   -> Reader State (repr (Method repr))
 publicMethod = genMethodCall public static_
 
@@ -214,27 +214,16 @@ getDir Python = "python"
 liftS :: Reader a b -> Reader a [b]
 liftS = fmap (: [])
 
-funcTerm :: String -> Reader State String
-funcTerm cname = do
-  g <- ask
-  let db = sysinfodb $ csi $ codeSpec g
-  return $ (maybe "No description given" (render . sentenceDoc db 
-    Implementation Linear . phraseNP . view term) . Map.lookup cname) 
-    (fMap $ codeSpec g)
-       
-varTerm :: String -> Reader State Doc
-varTerm cname = do
+getTermDoc :: (NamedIdea c) => String -> Map String c -> Reader State Doc
+getTermDoc cname m = do
   g <- ask
   let db = sysinfodb $ csi $ codeSpec g
   return $ (maybe (text "No description given") (sentenceDoc db 
-    Implementation Linear . phraseNP . view term) . Map.lookup cname) 
-    (vMap $ codeSpec g)
+    Implementation Linear . phraseNP . view term) . Map.lookup cname) m
 
-varUnits :: String -> Reader State Doc
-varUnits cname = do
-  g <- ask
-  return $ maybe empty (parens . unitDoc Linear . usymb) 
-    (Map.lookup cname (vMap $ codeSpec g) >>= getUnit)
+getUnitsDoc :: (MayHaveUnit c) => String -> Map String c -> Doc
+getUnitsDoc cname m = maybe empty (parens . unitDoc Linear . usymb) 
+  (Map.lookup cname m >>= getUnit)
 
 ----- Descriptions -----
 
@@ -399,7 +388,7 @@ genInputConstraints = do
         hw <- physCBody physCs
         desc <- inConsFuncDesc
         mthd <- publicMethod (mState void) "input_constraints" desc parms 
-          [block sf, block hw]
+          Nothing [block sf, block hw]
         return $ Just mthd
   genConstraints $ Map.lookup "input_constraints" (eMap $ codeSpec g)
 
@@ -523,14 +512,16 @@ genCalcFunc :: (RenderSym repr) => CodeDefinition -> Reader State (repr
   (Method repr))
 genCalcFunc cdef = do
   parms <- getCalcParams cdef
-  blck <- genCalcBlock CalcReturn (codeName cdef) (convType $ codeType cdef) 
-    (codeEquat cdef)
-  desc <- funcTerm (codeName cdef)
+  let nm = codeName cdef
+      tp = convType $ codeType cdef
+  blck <- genCalcBlock CalcReturn nm tp (codeEquat cdef)
+  desc <- returnComment nm
   publicMethod
-    (mState $ convType (codeType cdef))
-    (codeName cdef)
+    (mState tp)
+    nm
     ("Calculates " ++ desc)
     parms
+    (Just desc)
     [blck]
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
@@ -585,7 +576,8 @@ genOutputFormat = do
                    printFileLn v_outfile v
                  ] ) (outputs $ csi $ codeSpec g)
         desc <- woFuncDesc
-        mthd <- publicMethod (mState void) "write_output" desc parms [block $ [
+        mthd <- publicMethod (mState void) "write_output" desc parms Nothing 
+          [block $ [
           varDec var_outfile,
           openFileW var_outfile (litString "output.txt") ] ++
           concat outp ++ [ closeFile v_outfile ]]
@@ -596,9 +588,9 @@ genOutputFormat = do
 
 genMethodCall :: (RenderSym repr) => repr (Scope repr) -> 
   repr (Permanence repr) -> repr (MethodType repr) -> Label -> String -> 
-  [repr (Parameter repr)] -> [repr (Block repr)] -> 
+  [repr (Parameter repr)] -> Maybe String -> [repr (Block repr)] -> 
   Reader State (repr (Method repr))
-genMethodCall s pr t n desc p b = do
+genMethodCall s pr t n desc p r b = do
   g <- ask
   let doLog = logKind g
       loggedBody LogFunc = loggedMethod (logName g) n vars b
@@ -609,9 +601,9 @@ genMethodCall s pr t n desc p b = do
       pNames = map parameterName p
       vars = zipWith var pNames pTypes
       fn = function n s pr t p bod
-  pComms <- paramComments pNames
+  pComms <- mapM paramComment pNames
   return $ if CommentFunc `elem` commented g
-    then docFunc desc pComms fn else fn
+    then docFunc desc pComms r fn else fn
 
 genInOutFunc :: (RenderSym repr) => repr (Scope repr) -> repr (Permanence repr) 
   -> Label -> String -> [repr (Variable repr)] -> [repr (Variable repr)] 
@@ -628,17 +620,30 @@ genInOutFunc s pr n desc ins outs both b = do
       oNames = map variableName outs
       bNames = map variableName both
       fn = inOutFunc n s pr ins outs both bod
-  pComms <- paramComments pNames
-  oComms <- paramComments oNames
-  bComms <- paramComments bNames
+  pComms <- mapM paramComment pNames
+  oComms <- mapM paramComment oNames
+  bComms <- mapM paramComment bNames
   return $ if CommentFunc `elem` commented g 
     then docInOutFunc desc pComms oComms bComms fn else fn
 
-paramComments :: [Label] -> Reader State [String]
-paramComments ls = do
-  ts <- mapM varTerm ls
-  us <- mapM varUnits ls
-  return $ map render $ zipWith (<+>) ts us
+getComment :: (NamedIdea c, MayHaveUnit c) => Label -> Map String c -> 
+  Reader State String
+getComment l m = do
+  t <- getTermDoc l m
+  let u = getUnitsDoc l m
+  return $ render $ t <+> u
+
+paramComment :: Label -> Reader State String
+paramComment l = do
+  g <- ask
+  let m = vMap $ codeSpec g
+  getComment l m
+
+returnComment :: Label -> Reader State String
+returnComment l = do
+  g <- ask
+  let m = fMap $ codeSpec g
+  getComment l m
 
 loggedMethod :: (RenderSym repr) => Label -> Label -> [repr (Variable repr)] -> 
   [repr (Block repr)] -> [repr (Block repr)]
@@ -1037,14 +1042,14 @@ genModDef :: (RenderSym repr) => CS.Mod -> Reader State (repr (RenderFile repr))
 genModDef (CS.Mod n desc fs) = genModule n desc (Just $ mapM genFunc fs) Nothing
 
 genFunc :: (RenderSym repr) => Func -> Reader State (repr (Method repr))
-genFunc (FDef (FuncDef n desc i o s)) = do
+genFunc (FDef (FuncDef n desc i o rd s)) = do
   g <- ask
   parms <- getParams i
   stmts <- mapM convStmt s
   vars <- mapM (\x -> variable (codeName x) (convType $ codeType x)) 
     (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ i)
-  publicMethod (mState $ convType o) n desc parms [block $ map varDec vars ++ 
-    stmts]
+  publicMethod (mState $ convType o) n desc parms rd [block $ map varDec 
+    vars ++ stmts]
 genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 genFunc (FCD cd) = genCalcFunc cd
 
@@ -1098,7 +1103,7 @@ genDataFunc :: (RenderSym repr) => Name -> String -> DataDesc ->
 genDataFunc nameTitle desc ddef = do
   parms <- getParams $ getInputs ddef
   bod <- readData ddef
-  publicMethod (mState void) nameTitle desc (p_filename : parms)  bod
+  publicMethod (mState void) nameTitle desc (p_filename : parms) Nothing bod
   where l_filename = "filename"
         v_filename = var l_filename string
         p_filename = stateParam v_filename

@@ -154,19 +154,19 @@ expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
 
 lookupC :: Stage -> ChunkDB -> UID -> Symbol
-lookupC Equational sm c = eqSymb $ symbLookup c $ symbolTable sm
-lookupC Implementation sm c = codeSymb $ symbLookup c $ symbolTable sm
+lookupC Equational     sm c = eqSymb   $ symbResolve sm c
+lookupC Implementation sm c = codeSymb $ symbResolve sm c
 
 lookupT :: ChunkDB -> UID -> Sentence
-lookupT sm c = phraseNP $ termLookup c (termTable sm) ^. term
+lookupT sm c = phraseNP $ termResolve sm c ^. term
 
 lookupS :: ChunkDB -> UID -> Sentence
 lookupS sm c = maybe (phraseNP $ l ^. term) S $ getA l
-  where l = termLookup c $ termTable sm
+  where l = termResolve sm c
 
 lookupP :: ChunkDB -> UID -> Sentence
-lookupP sm c =  pluralNP $ termLookup c (termTable sm) ^. term
--- --plural n = NP.plural (n ^. term)
+lookupP sm c = pluralNP $ termResolve sm c ^. term
+-- plural n = NP.plural (n ^. term)
 
 mkCall :: PrintingInformation -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, parens $ expr e s]
@@ -303,7 +303,7 @@ spec sm (E e)          = P.E $ expr e sm
 
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
 renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $
-  getA . defLookup u $ defTable ctx
+  getA $ defResolve ctx u
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn

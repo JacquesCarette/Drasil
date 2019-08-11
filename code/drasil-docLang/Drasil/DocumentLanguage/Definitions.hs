@@ -1,28 +1,19 @@
 {-# Language GADTs #-}
 
-module Drasil.DocumentLanguage.Definitions (
-    Fields
-  , Field(..)
-  , Verbosity(..)
-  , tmodel
-  , ddefn
-  , gdefn, derivation
-  , instanceModel
-  , InclUnits(..)
-  , helperRefs
-  , helpToRefField
-) where
+module Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(..),
+  Verbosity(..), ddefn, derivation, gdefn, helperRefs, helpToRefField,
+  instanceModel, tmodel) where
 
 import Data.Map (keys)
 import Data.List (elem, nub)
 import Control.Lens ((^.))
 
-import Language.Drasil
-import Database.Drasil (SystemInformation, citeDB, conceptinsLookup,
-  conceptinsTable, datadefnLookup, dataDefnTable, gendefLookup, gendefTable,
+import Language.Drasil hiding (Symbol(..))
+import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
+  conceptinsTable, dataDefnTable, datadefnLookup, gendefLookup, gendefTable,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
-  theoryModelTable, vars, _sysinfodb)
+  theoryModelTable, vars)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
   TheoryModel, inCons, outCons, imOutput, imInputs)
 import Utils.Drasil
@@ -76,14 +67,15 @@ instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
-derivation :: HasDerivation c => c -> [Contents]
-derivation g = map makeDerivationContents (g ^. derivations)
+derivation :: (HasDerivation c, HasShortName c, Referable c) => c -> Contents
+derivation c = maybe (mkParagraph EmptyS)
+  (\(Derivation h d) -> LlC $ llcc (makeRef2 c) $ DerivBlock h $ map makeDerivCons d) $ c ^. derivations
 
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
-makeDerivationContents :: Sentence -> Contents
-makeDerivationContents (E e) = UlC $ ulcc $ EqnBlock e
-makeDerivationContents s     = UlC $ ulcc $ Paragraph s
+makeDerivCons :: Sentence -> RawContent
+makeDerivCons (E e) = EqnBlock e
+makeDerivCons s     = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String, [Contents])]
@@ -108,22 +100,21 @@ mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
 helperRefs :: HasUID t => t -> SystemInformation -> Sentence
-helperRefs t s = foldlList Comma List $ map (`helpToRefField` s) $ nub $ refbyLookup (t ^. uid) (_sysinfodb s ^. refbyTable)
+helperRefs t s = foldlList Comma List $ map (`helpToRefField` s) $ nub $
+  refbyLookup (t ^. uid) (_sysinfodb s ^. refbyTable)
 
 helpToRefField :: UID -> SystemInformation -> Sentence
 helpToRefField t si
-  | t `elem` keys (s ^. dataDefnTable) = makeRef2S $ datadefnLookup t (s ^. dataDefnTable)
-  | t `elem` keys (s ^. insmodelTable) = makeRef2S $ insmodelLookup t (s ^. insmodelTable)
-  | t `elem` keys (s ^. gendefTable) = makeRef2S $ gendefLookup t (s ^. gendefTable)
-  | t `elem` keys (s ^. theoryModelTable) = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
-  | t `elem` keys (s ^. conceptinsTable) = makeRef2S $ conceptinsLookup t (s ^. conceptinsTable)
-  | t `elem` keys (s ^. sectionTable) = makeRef2S $ sectionLookup t (s ^. sectionTable)
+  | t `elem` keys (s ^. dataDefnTable)        = makeRef2S $ datadefnLookup    t (s ^. dataDefnTable)
+  | t `elem` keys (s ^. insmodelTable)        = makeRef2S $ insmodelLookup    t (s ^. insmodelTable)
+  | t `elem` keys (s ^. gendefTable)          = makeRef2S $ gendefLookup      t (s ^. gendefTable)
+  | t `elem` keys (s ^. theoryModelTable)     = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
+  | t `elem` keys (s ^. conceptinsTable)      = makeRef2S $ conceptinsLookup  t (s ^. conceptinsTable)
+  | t `elem` keys (s ^. sectionTable)         = makeRef2S $ sectionLookup     t (s ^. sectionTable)
   | t `elem` keys (s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
-  | t `elem` map (^. uid) r = EmptyS
+  | t `elem` map  (^. uid) (citeDB si) = EmptyS
   | otherwise = error $ t ++ "Caught."
-  where
-    s = _sysinfodb si
-    r = citeDB si
+  where s = _sysinfodb si
 
 helperSources :: [Reference] -> [Contents]
 helperSources [] = [mkParagraph $ S "--"]
@@ -135,8 +126,7 @@ mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
 mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb d]) : fs
 mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless d]) : fs
 mkDDField d _ l@DefiningEquation fs = (show l, [eqUnR' $ sy d $= d ^. defnExpr]) : fs 
-mkDDField d m l@(Description v u) fs =
-  (show l, buildDDescription' v u d m) : fs
+mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getReferences) : fs
 mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)

@@ -20,7 +20,7 @@ import Data.Drasil.Quantities.Thermodynamics (temp, heatCapSpec,
 import Data.Drasil.SI_Units (joule)
 import Drasil.SWHS.Assumptions (assumpTEO)
 import Drasil.SWHS.Concepts (transient)
-import Drasil.SWHS.DataDefs (dd3HtFusion)
+import Drasil.SWHS.DataDefs (ddHtFusion)
 import Drasil.SWHS.Unitals (meltFrac, tau, deltaT, htCapV, htCapS,
   htCapL, volHtGen, thFluxVect)
 
@@ -95,7 +95,7 @@ sensHtESrc = makeURI "sensHtESrc"
 sensHtEEqn :: PhaseChange -> Relation
 sensHtEEqn pChange = sy sensHeat $= case pChange of
   Liquid -> liquidFormula
-  AllPhases -> case_ [(sy htCapS * sy mass * sy deltaT,
+  AllPhases -> incompleteCase [(sy htCapS * sy mass * sy deltaT,
       sy temp $< sy meltPt), (liquidFormula, sy meltPt $< sy temp $<
       sy boilPt), (sy htCapV * sy mass *
       sy deltaT, sy boilPt $< sy temp)]
@@ -171,7 +171,7 @@ latentHtEdesc = foldlSent [
   phrase phaseChange, S "is not complete. The status of",
   S "the", phrase phaseChange,
   S "depends on the", phrase meltFrac `sC`
-  makeRef2S dd3HtFusion :+: S ".",
+  makeRef2S ddHtFusion :+: S ".",
   ch meltPt `sAnd` ch boilPt, S "are the",
   phrase meltPt `sAnd` phrase boilPt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),

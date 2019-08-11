@@ -1,20 +1,22 @@
 module Utils.Drasil (
+  -- Contents
+  enumBullet, enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', mkEnumSimpleD,
   -- Document
   indent, indentList,
   -- English
-  capitalize,
+  capitalize, stringList,
   -- Fold
   EnumType(..), WrapType(..), SepType(..), FoldType(..), foldConstraints,
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
-  foldlSent_,foldlSentCol, foldlsC,
+  foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
   -- Misc
-  addPercent, bulletFlat, bulletNested, chgsStart, displayConstrntsAsSet,
-  enumBullet, enumBulletU, enumSimple, enumSimpleU, eqN, eqUnR, eqUnR',
-  fmtU, follows, getTandS, itemRefToSent, makeListRef, makeTMatrix,
-  maybeChanged, maybeExpanded, maybeWOVerb, mkEnumAbbrevList,
-  mkTableFromColumns, noRefs, refineChain, showingCxnBw, sortBySymbol,
-  sortBySymbolTuple, tAndDOnly, tAndDWAcc, tAndDWSym, typUncr,
-  underConsidertn, unwrap, weave, zipSentList,
+  addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart,
+  displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, eqnWSource, 
+  fromReplace, fmtU, follows, getTandS, itemRefToSent, makeListRef, 
+  makeTMatrix, maybeChanged, maybeExpanded,
+  maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
+  showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
+  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList,
   -- Phrase
   and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',
   compoundNCP1, compoundNCPlPh, compoundNCPlPl, for, for', for'', of_, of_',
@@ -24,6 +26,7 @@ module Utils.Drasil (
   sVersus, sAnd, sAre, sIn, sIs, toThe
 ) where
 
+import Utils.Drasil.Contents
 import Utils.Drasil.Document
 import Utils.Drasil.English
 import Utils.Drasil.Fold

@@ -6,9 +6,9 @@ module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Language.Drasil.Code (($:=), Func, FuncStmt(..), Ind(..), Mod, asExpr, 
-  fdec, ffor, funcData, funcDef, junk, listEntry, multiLine, packmod, repeated, 
-  singleLine)
+import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
+  asExpr, funcDef, fdec, ffor, funcData, 
+  multiLine, packmod, repeated, singleLine)
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]
@@ -22,51 +22,63 @@ implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 --from TSD.txt:
 
 readTableMod :: Mod
-readTableMod = packmod "ReadTable" [readTable]
+readTableMod = packmod "ReadTable"
+  "Provides a function for reading glass ASTM data" [readTable]
 
 readTable :: Func
 readTable = funcData "read_table"
-  [ singleLine (repeated [junk, listEntry [WithPattern] zVector]) ',',
-    multiLine (repeated [listEntry [WithLine, WithPattern] xMatrix,
-                         listEntry [WithLine, WithPattern] yMatrix]) ','
+  "Reads glass ASTM data from a file with the given file name"
+  [ singleLine (repeated [zVector]) ',',
+    multiLine (repeated [xMatrix, yMatrix]) ','
   ]
 
 -----
 
 one, two :: Symbol
-one = Atomic "1"
-two = Atomic "2"
+one = Integ 1
+two = Integ 2
 
--- No need to be too verbose
-var :: String -> Symbol -> Space -> QuantityDict
-var nam = implVar nam (nounPhraseSP nam)
+var :: String -> String -> Symbol -> Space -> QuantityDict
+var nam np = implVar nam (nounPhraseSP np)
 
 y_2, y_1, x_2, x_1, x :: QuantityDict
-y_1  = var "y1"          (sub lY one) Real
-y_2  = var "y2"          (sub lY two) Real
-x_1  = var "x1"          (sub lX one) Real
-x_2  = var "x2"          (sub lX two) Real
-x    = var "x"            lX          Real -- = params.wtnt from mainFun.py
+y_1  = var "y1" "lower y-coordinate"             (sub lY one) Real
+y_2  = var "y2" "upper y-coordinate"             (sub lY two) Real
+x_1  = var "x1" "lower x-coordinate"             (sub lX one) Real
+x_2  = var "x2" "upper x-coordinate"             (sub lX two) Real
+x    = var "x"  "x-coordinate to interpolate at" lX           Real -- = params.wtnt from mainFun.py
 
 v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
   i, j, k, z, zVector, yMatrix, xMatrix, y, arr, filename :: QuantityDict
-v       = var "v"         lV                          Real
-i       = var "i"         lI                          Natural
-j       = var "j"         lJ                          Natural
-k       = var "k"         (sub lK two)                Natural
-y       = var "y"         lY                          Real
-z       = var "z"         lZ                          Real
-zVector = var "zVector" (sub lZ (Atomic "vector")) (Vect Real)
-yMatrix = var "yMatrix" (sub lY (Atomic "matrix")) (Vect $ Vect Real)
-xMatrix = var "xMatrix" (sub lX (Atomic "matrix")) (Vect $ Vect Real)
-arr     = var "arr"       (Atomic "arr")             (Vect Real)--FIXME: temporary variable for findCT?
-x_z_1   = var "x_z_1"     (sub lX (sub lZ one))      (Vect Real)
-y_z_1   = var "y_z_1"     (sub lY (sub lZ one))      (Vect Real)
-x_z_2   = var "x_z_2"     (sub lX (sub lZ two))      (Vect Real)
-y_z_2   = var "y_z_2"     (sub lY (sub lZ two))      (Vect Real)
-mat     = var "mat"       (Atomic "mat")             (Vect $ Vect Real)
-col     = var "col"       (Atomic "col")             (Vect Real)
-filename= var "filename"  (Atomic "filename")         String
+i = var "i" "index" lI           Natural
+j = var "j" "index" lJ           Natural
+k = var "k" "index" (sub lK two) Natural     
+v = var "v" "value whose index will be found" lV Real
+y = var "y" "y-coordinate to interpolate at"  lY Real
+z = var "z" "z-coordinate to interpolate at"  lZ Real
+
+zVector = var "zVector" "list of z values" 
+  (sub lZ (Label "vector")) (Vect Real)               
+yMatrix = var "yMatrix" "lists of y values at different z values" 
+  (sub lY (Label "matrix")) (Vect $ Vect Real)        
+xMatrix = var "xMatrix" "lists of x values at different z values" 
+  (sub lX (Label "matrix")) (Vect $ Vect Real)        
+arr     = var "arr"     "array in which value should be found" 
+  (Label "arr")             (Vect Real)  --FIXME: temporary variable for findCT?
+x_z_1   = var "x_z_1"   "list of x values at a specific z value"    
+  (sub lX (sub lZ one))      (Vect Real)
+y_z_1   = var "y_z_1"   "list of y values at a specific z value"    
+  (sub lY (sub lZ one))      (Vect Real)   
+x_z_2   = var "x_z_2"   "list of x values at a specific z value"    
+  (sub lX (sub lZ two))      (Vect Real)
+y_z_2   = var "y_z_2"   "list of y values at a specific z value"   
+  (sub lY (sub lZ two))      (Vect Real)
+mat     = var "mat"     "matrix from which column will be extracted"     
+  (Label "mat")             (Vect $ Vect Real)
+col     = var "col"     "extracted column"    
+  (Label "col")             (Vect Real)               
+filename = var "filename" "name of file with x y and z data" 
+  (Label "filename")        String
 
 ------------------------------------------------------------------------------------------
 --
@@ -118,11 +130,14 @@ interpOver ptx pty ind vv =
 -- Note how this one uses a semantic function in its body
 -- But it is also 'wrong' in the sense that it assumes x_1 <= x <= x_2
 linInterpCT :: Func
-linInterpCT = funcDef "lin_interp" [x_1, y_1, x_2, y_2, x] Real
+linInterpCT = funcDef "lin_interp" "Performs linear interpolation" 
+  [x_1, y_1, x_2, y_2, x] Real (Just "y value interpolated at given x value")
   [ FRet $ onLine (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
 
 findCT :: Func
-findCT = funcDef "find" [arr, v] Natural
+findCT = funcDef "find" 
+  "Finds the array index for a value closest to the given value" 
+  [arr, v] Natural (Just "index of given value in given array")
   [
     ffor i (sy i $< (dim (sy arr) - 1))
       [ FCond ((vLook arr i 0 $<= sy v) $&& (sy v $<= vLook arr i 1))
@@ -131,7 +146,8 @@ findCT = funcDef "find" [arr, v] Natural
   ]
 
 extractColumnCT :: Func
-extractColumnCT = funcDef "extractColumn" [mat, j] (Vect Real)
+extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
+  [mat, j] (Vect Real) (Just "column of the given matrix at the given index")
   [
     fdec col,
     --
@@ -141,7 +157,9 @@ extractColumnCT = funcDef "extractColumn" [mat, j] (Vect Real)
   ]
 
 interpY :: Func
-interpY = funcDef "interpY" [filename, x, z] Real
+interpY = funcDef "interpY" 
+  "Linearly interpolates a y value at given x and z values" 
+  [filename, x, z] Real (Just "y value interpolated at given x and z values")
   [
   -- hack
   fdec xMatrix,
@@ -165,7 +183,9 @@ interpY = funcDef "interpY" [filename, x, z] Real
   ]
 
 interpZ :: Func
-interpZ = funcDef "interpZ" [filename, x, y] Real
+interpZ = funcDef "interpZ" 
+  "Linearly interpolates a z value at given x and y values" 
+  [filename, x, y] Real (Just "z value interpolated at given x and y values")
   [
     -- hack
   fdec xMatrix,
@@ -194,4 +214,6 @@ interpZ = funcDef "interpZ" [filename, x, y] Real
   ]
 
 interpMod :: Mod
-interpMod = packmod "Interpolation" [linInterpCT, findCT, extractColumnCT, interpY, interpZ]
+interpMod = packmod "Interpolation" 
+  "Provides functions for linear interpolation on three-dimensional data" 
+  [linInterpCT, findCT, extractColumnCT, interpY, interpZ]

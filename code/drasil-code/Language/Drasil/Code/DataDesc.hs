@@ -1,20 +1,12 @@
 module Language.Drasil.Code.DataDesc where
 
 import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeChunk, codevar)
+import Language.Drasil.Chunk.Code (CodeChunk, quantvar)
 
 import Data.List (nub)
 
 type DataDesc = [Data]
 type DataItem = CodeChunk
-
-data Entry = Entry DataItem             -- regular entry (float, int, bool, etc)
-           | ListEntry [Ind] DataItem   -- index to insert into list
-           | JunkEntry                  -- junk should be skipped in input file
-
-data Ind = Explicit Integer   -- explicit index
-         | WithPattern    -- use current repetition number in repeated pattern
-         | WithLine       -- use current line number in multi-line data
            
 type Delim = Char  -- delimiter
   
@@ -24,21 +16,11 @@ data Data = Singleton DataItem
           | Lines LinePattern (Maybe Integer) Delim -- multi-line data
                                                 -- (Maybe Int) = number of lines, Nothing = unknown so go to end of file  
           
-data LinePattern = Straight [Entry]             -- line of data with no pattern
-                 | Repeat [Entry] (Maybe Integer)   -- line of data with repeated pattern
-                                                -- (Maybe Int) = number of repetitions, Nothing = unknown so go to end of line          
+data LinePattern = Straight [DataItem] -- line of data with no pattern
+                 | Repeat [DataItem]   -- line of data with repeated pattern       
 
-entry :: (Quantity c, MayHaveUnit c) => c -> Entry
-entry = Entry . codevar
-
-listEntry :: (Quantity c, MayHaveUnit c) => [Ind] -> c -> Entry
-listEntry i c = ListEntry i $ codevar c
-
-junk :: Entry
-junk = JunkEntry
-
-singleton :: (Quantity c, MayHaveUnit c) => c -> Data
-singleton = Singleton . codevar
+singleton :: CodeChunk -> Data
+singleton = Singleton
 
 junkLine :: Data
 junkLine = JunkData
@@ -52,23 +34,29 @@ multiLine l = Lines l Nothing
 multiLine' :: LinePattern -> Integer -> Delim -> Data
 multiLine' l i = Lines l (Just i)
 
-straight :: [Entry] -> LinePattern
-straight = Straight
+straight :: (Quantity c, MayHaveUnit c) => [c] -> LinePattern
+straight = Straight . map quantvar
 
-repeated :: [Entry] -> LinePattern
-repeated e = Repeat e Nothing
+repeated :: (Quantity c, MayHaveUnit c) => [c] -> LinePattern
+repeated = Repeat . map quantvar
 
-repeated' :: [Entry] -> Integer -> LinePattern
-repeated' e i = Repeat e (Just i)
+isLine :: Data -> Bool
+isLine Line{} = True
+isLine _ = False
+
+isLines :: Data -> Bool
+isLines Lines{} = True
+isLines _ = False
 
 getInputs :: DataDesc -> [CodeChunk]
 getInputs d = nub $ concatMap getDataInputs d
-  where getDataInputs (Singleton v) = [v]
-        getDataInputs (Line lp _) = getPatternInputs lp
-        getDataInputs (Lines lp _ _) = getPatternInputs lp
-        getDataInputs JunkData = []
-        getPatternInputs (Straight e) = concatMap getEntryInputs e
-        getPatternInputs (Repeat e _) = concatMap getEntryInputs e
-        getEntryInputs (Entry v) = [v]
-        getEntryInputs (ListEntry _ v) = [v]
-        getEntryInputs JunkEntry = []        
+
+getDataInputs :: Data -> [CodeChunk]
+getDataInputs (Singleton v) = [v]
+getDataInputs (Line lp _) = getPatternInputs lp
+getDataInputs (Lines lp _ _) = getPatternInputs lp
+getDataInputs JunkData = []
+
+getPatternInputs :: LinePattern -> [CodeChunk]
+getPatternInputs (Straight vs) = vs
+getPatternInputs (Repeat vs) = vs

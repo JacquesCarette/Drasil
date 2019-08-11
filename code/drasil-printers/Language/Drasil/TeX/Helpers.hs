@@ -8,7 +8,7 @@ import Language.Drasil (MaxWidthPercent)
 
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
-import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$), (%%))
+import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$))
 
 --import Language.Drasil.Config (numberedSections, hyperSettings)
 --import Language.Drasil.Document (MaxWidthPercent)
@@ -35,28 +35,41 @@ quote x = lq <> x <> rq
   lq = pure $ text "``"
   rq = pure $ text "''"
 
--- Make 1-argument command
-command :: String -> (String -> D)
-command s c = pure $ (H.bslash TP.<> text s) TP.<> H.br c
-
-commandD :: String -> (D -> D)
-commandD s c = pure (H.bslash TP.<> text s) <> br c
-
--- 1-argument command, with optional argument
-command1o :: String -> Maybe String -> String -> D
-command1o s o c = pure $ (H.bslash TP.<> text s) TP.<> maybe TP.empty H.sq o TP.<> H.br c
-
--- no braces!
-command1oD :: String -> Maybe D -> D -> D
-command1oD s o c = pure (H.bslash TP.<> text s) <> maybe empty sq o <> c
-
 -- 0-argument command
 command0 :: String -> D
 command0 s = pure $ H.bslash TP.<> text s
 
+-- Make 1-argument command
+command :: String -> String -> D
+command s c = pure $ (H.bslash TP.<> text s) TP.<> H.br c
+
+commandD :: String -> D -> D
+commandD s c = pure (H.bslash TP.<> text s) <> br c
+
+-- 1-argument command, with optional argument
+command1o :: String -> Maybe String -> String -> D
+command1o s = maybe (command s) (command1p s)
+
+command1oD :: String -> Maybe D -> D -> D
+command1oD s = maybe (commandD s) (command1pD s)
+
+-- 1-argument command with parameter in square brackets
+command1p :: String -> String -> String -> D
+command1p s p c = pure $ (H.bslash TP.<> text s) TP.<> H.sq p TP.<> H.br c
+
+command1pD :: String -> D -> D -> D
+command1pD s p c = pure (H.bslash TP.<> text s) <> sq p <> br c
+
+-- Make LaTeX symbol
+texSym :: String -> D
+texSym s = pure $ H.bslash TP.<> text s
+
 -- 2-argument command
 command2 :: String -> String -> String -> D
 command2 s a0 a1 = pure $ (H.bslash TP.<> text s) TP.<> H.br a0 TP.<> H.br a1
+
+command2D :: String -> D -> D -> D
+command2D s a0 a1 = pure (H.bslash TP.<> text s) <> br a0 <> br a1
 
 -- 3-argument command
 command3 :: String -> String -> String -> String -> D
@@ -69,6 +82,25 @@ mkEnv nm d =
   d $+$
   pure (text ("\\end" ++ H.brace nm))
 
+-- Encapsulate environments with argument with braces
+mkEnvArgBr :: String -> String -> D -> D
+mkEnvArgBr nm args d =
+  pure (text ("\\begin" ++ H.brace nm ++ H.brace args)) $+$ 
+  d $+$
+  pure (text ("\\end" ++ H.brace nm))
+
+-- Encapsulate environments with argument with brackets
+mkEnvArgSq :: String -> String -> D -> D
+mkEnvArgSq nm args d =
+  pure (text ("\\begin" ++ H.brace nm ++ H.sqbrac args)) $+$ 
+  d $+$
+  pure (text ("\\end" ++ H.brace nm))
+
+-- Makes minipage environment
+mkMinipage :: D -> D
+mkMinipage d = commandD "vspace" (command0 "baselineskip") $+$
+  command0 "noindent" $+$ mkEnvArgBr "minipage" "\\textwidth" d
+
 -- for defining (LaTeX) macros
 comm :: String -> String -> Maybe String -> D
 comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<> 
@@ -76,7 +108,7 @@ comm b1 b2 s1 = command0 "newcommand" <> pure (H.br ("\\" ++ b1) TP.<>
 
 -- this one is special enough, let this sub-optimal implementation stand
 renewcomm :: String -> String -> D
-renewcomm b1 b2 = pure $ text "\\renewcommand" TP.<> H.br ("\\" ++ b1) TP.<> H.br b2
+renewcomm b1 = command2 "renewcommand" ("\\" ++ b1)
 
 -- Useful to have empty 
 empty :: D
@@ -94,56 +126,49 @@ genSec d
 
 -- For references
 ref, sref, hyperref, externalref, snref :: String -> D -> D
-sref         = if numberedSections then ref else hyperref
-ref      t   = custRef (t ++ "~\\ref")
-hyperref t x = command0 "hyperref" <> sq x <> br (pure (text (t ++ "~")) <> x)
+sref            = if numberedSections then ref else hyperref
+ref         t x = pure (text $ t ++ "~") <> commandD "ref" x
+hyperref    t x = command1pD "hyperref" x (pure (text (t ++ "~")) <> x)
 externalref t x = command0 "hyperref" <> br (pure $ text t) <> br empty <>
   br empty <> br x
-snref    r t = command0 "hyperref" <> sq (pure $ text r) <> br t
+snref       r   = command1pD "hyperref" (pure (text r))
 
 href :: String -> String -> D
 href = command2 "href"
 
-custRef :: String -> D -> D
-custRef t x = pure (text t) <> br x
+cite :: String -> Maybe D -> D
+cite c i = command1oD "cite" i (pure $ text c)
 
-custRef' :: String -> D -> D -> D
-custRef' t x i = pure (text t) <> sq i <> br x
-
-cite :: D -> D
-cite = custRef "\\cite"
-
-citeInfo :: D -> D -> D
-citeInfo = custRef' "\\cite"
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
-usepackage, count :: String -> D
-usepackage      = command "usepackage"
+count, mathbb, usepackage :: String -> D
+count      = command "newcounter"
 -- changed to command "newcounter" from command "count" (I assume this was
 -- what was intended?)
-count           = command "newcounter"
+mathbb     = command "mathbb"
+usepackage = command "usepackage"
 
 includegraphics :: MaxWidthPercent -> String -> D
-includegraphics 100 = command1o "includegraphics" 
-  (Just "width=\\textwidth")
-includegraphics wp = command1o "includegraphics" 
-  (Just $ "width=" ++ show (wp / 100) ++ "\\textwidth")
+includegraphics n = command1p "includegraphics" ("width=" ++ per n ++ "\\textwidth")
+  where
+    per 100 = ""
+    per wp  = show (wp / 100)
 
-author, caption, item, label, title :: D -> D
-author          = commandD "author"
-caption         = commandD "caption"
-item            = commandD "item"
-label           = commandD "label"
-title           = commandD "title"
+author, caption, item, label, title, bold :: D -> D
+author  = commandD "author"
+caption = commandD "caption"
+item    = commandD "item"
+label   = commandD "label"
+title   = commandD "title"
+bold    = commandD "textbf"
 
 item' :: D -> D -> D
-item' bull = command1oD "item" (Just bull)
+item' = command1pD "item"
 
-maketitle, maketoc, newline, newpage, centering :: D
+maketitle, maketoc, newpage, centering :: D
 maketitle = command0 "maketitle"
 maketoc   = command0 "tableofcontents"
-newline   = command0 "par" <> pure (text "~\n")
 newpage   = command0 "newpage"
 centering = command0 "centering"
 
@@ -159,16 +184,15 @@ document    = mkEnv "document"
 equation    = mkEnv "displaymath" --displays math
 symbDescription = mkEnv "symbDescription"
 
-docclass, exdoc :: Maybe String -> String -> D
-docclass = command1o "documentclass"
-exdoc = command1o "externaldocument"
+docclass :: String -> String -> D
+docclass = command1p "documentclass"
 
 sec :: Int -> D -> D
 sec d b1 = genSec d <> br b1
 
 subscript, superscript :: D -> D -> D
-subscript a b = a <> pure H.unders <> br b
-superscript a b = a <> pure H.hat <> br b
+subscript   a b = a <> pure H.unders <> br b
+superscript a b = a <> pure H.hat    <> br b
 
 -- grave, acute :: Char -> D
 -- grave c = (pure $ text "\\`{") <> pure (TP.char c) <> (pure $ text "}")
@@ -176,32 +200,32 @@ superscript a b = a <> pure H.hat <> br b
 
 -- Macro / Command def'n --
 --TeX--
-srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS
- , modcounter, modnum :: D
-srsComms = bullet %% counter %% ddefnum %% ddref %% colAw %% colBw %% arrayS
-lpmComms = pure $ text ""
+bullet, counter, ddefnum, ddref, colAw, colBw, arrayS, modcounter, modnum :: D
 
-counter       = count "datadefnum"
-modcounter    = count "modnum"
+counter    = count "datadefnum"
+modcounter = count "modnum"
 
 bullet  = comm "blt"             "- "                Nothing
 ddefnum = comm "ddthedatadefnum" "MG\\thedatadefnum" Nothing
 ddref   = comm "ddref"           "MG\\ref{#1}"       (Just "1")
 colAw   = comm "colAwidth"       "0.2\\textwidth"    Nothing
 colBw   = comm "colBwidth"       "0.73\\textwidth"   Nothing
-
-modnum    = comm "mthemodnum"        "M\\themodnum"        Nothing
+modnum  = comm "mthemodnum"      "M\\themodnum"      Nothing
 
 arrayS  = renewcomm "arraystretch" "1.2"
 
+-- add newline
+newline :: D -> D
+newline s = s $+$ pure (text "")
+
 fraction :: D -> D -> D
-fraction n d = command0 "frac" <> br n <> br d
+fraction = command2D "frac"
 
 hyperConfig :: D
 hyperConfig = command "hypersetup" hyperSettings
 
 useTikz :: D
-useTikz = usepackage "luatex85" $+$ pure (text "\\def") <>
+useTikz = usepackage "luatex85" $+$ command0 "def" <>
   command "pgfsysdriver" "pgfsys-pdftex.def" $+$
   -- the above is a workaround..  temporary until TeX packages have been fixed
   usepackage "tikz" $+$ command "usetikzlibrary" "arrows.meta" $+$

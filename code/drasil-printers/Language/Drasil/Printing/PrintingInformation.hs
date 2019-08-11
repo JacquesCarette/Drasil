@@ -6,6 +6,8 @@ import Control.Lens (makeLenses, Lens')
 
 import Database.Drasil (ChunkDB)
 
+import Language.Drasil (Stage(..))
+
 data Notation = Scientific
               | Engineering
 
@@ -20,6 +22,7 @@ instance HasPrintingOptions  PrintingConfiguration where getSetting = notation
 
 data PrintingInformation = PI
                          { _ckdb :: ChunkDB
+                         , _stg :: Stage
                          , _configuration :: PrintingConfiguration
                          }
 makeLenses ''PrintingInformation

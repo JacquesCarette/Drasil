@@ -2,7 +2,7 @@ module Main (main) where
 
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
---   Structure(..))
+--   Structure(..), InputModule(..), Visibility(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -17,10 +17,12 @@ import Drasil.SSP.Body (srs, printSetting) -- si
 --   impType = Program,
 --   logFile = "log.txt",
 --   logging = LogNone,         -- LogNone, LogFunc
---   comments = CommentNone,    -- CommentNone, CommentFunc
+--   comments = [],    -- CommentFunc, CommentClass, CommentMod
+--   dates = Hide,      -- Show, Hide
 --   onSfwrConstraint = Warning,  -- Warning, Exception
 --   onPhysConstraint = Warning,  -- Warning, Exception
---   inputStructure = Loose    -- Loose, AsClass
+--   inputStructure = Unbundled,    -- Unbundled, Bundled
+--   inputModule = Combined    -- Combined, Separated
 -- }
        
 main :: IO ()            

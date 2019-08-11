@@ -5,6 +5,8 @@ import Text.PrettyPrint.HughesPJ (Doc, render)
 import Prelude hiding (id)
 import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
   setCurrentDirectory)
+import Data.Time.Clock (getCurrentTime, utctDay)
+import Data.Time.Calendar (showGregorian)
 
 import Build.Drasil (genMake)
 import Language.Drasil
@@ -12,7 +14,7 @@ import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec),
   DocType(SRS, MG, MIS, Website), Filename, makeCSS, genHTML,
   genTeX, PrintingInformation)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec,
-  Lang(..), unJC, unPC, unCSC, unSrc, unHdr)
+  Lang(..), unJC, unPC, unCSC, unCPPC)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -64,12 +66,14 @@ writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 genCode :: Choices -> CodeSpec -> IO ()
 genCode chs spec = do 
   workingDir <- getCurrentDirectory
+  time <- getCurrentTime
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
+  let genLangCode Java = genCall Java unJC
+      genLangCode Python = genCall Python unPC
+      genLangCode CSharp = genCall CSharp unCSC
+      genLangCode Cpp = genCall Cpp unCPPC
+      genCall lng unRepr = generateCode lng unRepr $ generator (showGregorian 
+        $ utctDay time) chs spec
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir
-  where genLangCode Java = genCall Java [unJC]
-        genLangCode Python = genCall Python [unPC]
-        genLangCode CSharp = genCall CSharp [unCSC]
-        genLangCode Cpp = genCall Cpp [unHdr, unSrc]
-        genCall lng unRepr = generateCode lng unRepr $ generator chs spec

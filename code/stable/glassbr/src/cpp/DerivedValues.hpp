@@ -1,3 +1,7 @@
+/** \file DerivedValues.hpp
+    \author Nikitha Krithnan and W. Spencer Smith
+    \brief Provides the function for calculating derived values
+*/
 #ifndef DerivedValues_h
 #define DerivedValues_h
 
@@ -11,6 +15,9 @@ using std::ofstream;
 
 #include "InputParameters.hpp"
 
+/** \brief Calculates values that can be immediately derived from the inputs
+    \param inParams structure holding the input values
+*/
 void derived_values(InputParameters &inParams);
 
 #endif

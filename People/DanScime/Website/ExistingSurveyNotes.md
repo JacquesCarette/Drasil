@@ -1,0 +1,152 @@
+# Notes On Existing Open Source Projects
+
+## Grass GIS
+
+- Introdutory blurb
+- Downloads for different systems
+- Links to:
+  - About
+  - Documentation
+  - Tutorials
+  - Learn More
+  - Source Code
+- CI button that displays that the build is passing, links to Travis CI
+- Screen Shots
+- Events
+- News
+- Search
+- Header Bar:
+  - Home
+    - Imprint
+    - About Us
+    - Contact Us
+    - History
+    - Credits
+    - Press Realeases
+    - Privacy Policy
+  - Download
+    - Software
+    - Add ons
+    - Sample Data
+    - Logos
+    - Citing Grass GIS
+  - Documentation
+    - General Overview
+    - First time users
+    - Manuals Applications
+    - Tutorials
+    - Youtube Videos
+    - Books
+    - Wiki
+    - FAQ (on wiki)
+    - Grass at a glance
+    - search engine
+  - Gallery which contains various screenshots of different features
+  - Support
+    - Community
+    - Mailing List / Forums
+    - Bug tracking
+    - Support / Training
+    - Sponsors
+  - Donations
+  - Development
+    - Fork on Github
+    - How to start
+    - Compiling Grass
+    - Bug tracking
+    - translations
+    - Programmer manual
+    - code submission
+    - commit mailing list
+  - Get Involved
+- Footer:
+    - Contact Us
+    - Terms of Use
+    - Privacy Statement
+
+## Moose
+
+- Overview
+- link to github
+- Search
+- Getting Started
+- Search
+- Documentation
+  - Application use
+    - examples
+    - command line options
+    - troubleshooting
+  - Application development
+    - source pages
+    - preconditions
+    - C++ utilities
+    - Modules Doxygen
+  - MOOSE Docs
+    - Markdown specification
+    - Documenting Moose
+    - Software quality
+  - Physics and syntax
+    - modules
+    - syntax
+    - old wiki
+  - framework development
+    - contributing
+    - Code standards
+    - Moose Doxygen
+    - libMesh Doxygen
+  - Infrastructure
+    - python
+    - build system
+    - test system
+    - benchmarking
+    - test timing
+- Help
+  - FAQ
+  - mailing list
+  - contact us
+  - A to Z index
+  - git
+  - developer tools
+  - Finite element concepts
+  - C++ fundamentals
+  - INL HPC Conectivity
+- News
+- Citing Moose
+
+## The LLVM Compiler Infrastructure
+
+- Latest release
+- upcoming releases
+- awards
+- github
+- developer meetings
+- overview
+- subprojects that use LLVM
+- features
+- documentation
+- command guide
+- faq
+- publications
+- users
+- blog
+- LLVM Foundation
+- Downloads and liscense
+- search
+- mailing lists
+  - bugs
+  - announcements
+  - for developers
+  - branch commits
+  - test results
+- IRC Channel
+- Developer resources
+  - doygen
+  - github
+  - blug
+  - bugzilla
+  - buildbot
+  - green dragon
+  - LNT
+  - Coverage
+  - scan build
+- developer policy

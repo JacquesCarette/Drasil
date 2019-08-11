@@ -1,5 +1,9 @@
 package SWHS;
 
+/** \file Control.java
+    \author Thulasi Jegatheesan
+    \brief Controls the flow of the program
+*/
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
@@ -10,23 +14,26 @@ import java.util.ArrayList;
 
 public class Control {
     
+    /** \brief Controls the flow of the program
+        \param args List of command-line arguments
+    */
     public static void main(String[] args) throws Exception {
         String filename = args[0];
-        double inParams.A_C;
-        double inParams.C_W;
-        double inParams.h_C;
-        double inParams.T_init;
-        double inParams.t_final;
-        double inParams.L;
-        double inParams.T_C;
-        double inParams.t_step;
-        double inParams.rho_W;
-        double inParams.D;
-        double inParams.A_tol;
-        double inParams.R_tol;
-        double inParams.T_W;
-        double inParams.E_W;
-        Object[] outputs = InputFormat.get_input(filename);
+        double A_C;
+        double C_W;
+        double h_C;
+        double T_init;
+        double t_final;
+        double L;
+        double T_C;
+        double t_step;
+        double rho_W;
+        double D;
+        double A_tol;
+        double R_tol;
+        double T_W;
+        double E_W;
+        Object[] outputs = InputParameters.get_input(filename);
         A_C = (double)(outputs[0]);
         C_W = (double)(outputs[1]);
         h_C = (double)(outputs[2]);

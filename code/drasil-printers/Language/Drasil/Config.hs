@@ -35,8 +35,8 @@ numberedSections = True
 -- | TeX Only - column width for data definitions 
 -- (fraction of LaTeX textwidth)
 colAwidth, colBwidth :: Double
-colAwidth = 0.2
-colBwidth = 0.73
+colAwidth = 0.13
+colBwidth = 0.82
 
 -- | TeX Only - Settings for hyperref
 hyperSettings :: String

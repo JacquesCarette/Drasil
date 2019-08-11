@@ -2,8 +2,7 @@ module Language.Drasil.TeX.Preamble (genPreamble) where
 
 import Data.List (nub)
 
-import Language.Drasil.Printing.LayoutObj (LayoutObj(Paragraph, Header, Bib, Graph, 
-  List, EqnBlock, Figure, Table, Definition, HDiv))
+import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
 import Language.Drasil.TeX.Monad (D, vcat, (%%))
 import Language.Drasil.TeX.Helpers (docclass, command, command0, command1o, command3, 
   usepackage)
@@ -75,7 +74,7 @@ addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitems
 
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let (pkgs, defs) = parseDoc los
-  in docclass (Just $ show fontSize ++ "pt") "article" %%
+  in docclass (show fontSize ++ "pt") "article" %%
      vcat (map addPackage pkgs) %% vcat (map addDef defs)
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])
@@ -97,10 +96,10 @@ parseDoc los' =
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in
       (Tabu:LongTable:BookTabs:pp,SymbDescriptionP1:SymbDescriptionP2:TabuLine:dd)
-    parseDoc' Figure{}       = ([Graphics,Caption],[])
-    parseDoc' Graph{}        = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
-    parseDoc' Bib{}          = ([FileContents,BibLaTeX,URL],[Bibliography])
-    parseDoc' Header{}       = ([], [])
-    parseDoc' Paragraph{}    = ([], [])
-    parseDoc' List{}         = ([EnumItem], [])
-    parseDoc' EqnBlock{}    = ([], [])
+    parseDoc' Figure{}     = ([Graphics,Caption],[])
+    parseDoc' Graph{}      = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
+    parseDoc' Bib{}        = ([FileContents,BibLaTeX,URL],[Bibliography])
+    parseDoc' Header{}     = ([], [])
+    parseDoc' Paragraph{}  = ([], [])
+    parseDoc' List{}       = ([EnumItem], [])
+    parseDoc' EqnBlock{}   = ([], [])

@@ -12,10 +12,13 @@ endif
 
 build: SWHS$(TARGET_EXTENSION)
 
-SWHS$(TARGET_EXTENSION): InputParameters.hpp InputFormat.hpp OutputFormat.hpp Control.cpp InputParameters.cpp InputFormat.cpp OutputFormat.cpp
-	"$(CXX)" Control.cpp InputParameters.cpp InputFormat.cpp OutputFormat.cpp --std=c++11 -o SWHS$(TARGET_EXTENSION)
+SWHS$(TARGET_EXTENSION): InputParameters.hpp OutputFormat.hpp Control.cpp InputParameters.cpp OutputFormat.cpp
+	"$(CXX)" Control.cpp InputParameters.cpp OutputFormat.cpp --std=c++11 -o SWHS$(TARGET_EXTENSION)
 
 run: build
 	./SWHS$(TARGET_EXTENSION) $(RUNARGS)
 
-.PHONY: build run
+doc: doxConfig InputParameters.hpp OutputFormat.hpp Control.cpp
+	doxygen doxConfig
+
+.PHONY: build run doc

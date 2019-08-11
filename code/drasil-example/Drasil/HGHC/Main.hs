@@ -2,11 +2,11 @@ module Main (main) where
 
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
---   Structure(..))
+--   Structure(..), InputModule(..), Visibility(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.HGHC.HGHC (srsBody, printSetting) --thisSI
+import Drasil.HGHC.Body (srs, printSetting) --thisSI
 
 -- thisCode :: CodeSpec
 -- thisCode = codeSpec thisSI choices []
@@ -18,15 +18,17 @@ thisChoices = Choices {
   impType          = Program,
   logFile          = "log.txt",
   logging          = LogNone,
-  comments         = CommentNone, 
+  comments         = [], 
+  dates            = Hide,
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
-  inputStructure   = AsClass
+  inputStructure   = Bundled,
+  inputModule = Combined 
 } -}
   
 main :: IO ()            
 main = do
-  gen (DocSpec Website "Tiny_SRS") srsBody printSetting
-  gen (DocSpec SRS "Tiny_SRS")     srsBody printSetting
+  gen (DocSpec Website "HGHC_SRS") srs printSetting
+  gen (DocSpec SRS "HGHC_SRS")     srs printSetting
   -- When ready to generate code, uncomment this file
   --genCode thisChoices thisCode

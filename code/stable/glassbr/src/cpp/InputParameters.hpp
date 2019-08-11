@@ -1,3 +1,7 @@
+/** \file InputParameters.hpp
+    \author Nikitha Krithnan and W. Spencer Smith
+    \brief Provides the structure for holding input values
+*/
 #ifndef InputParameters_h
 #define InputParameters_h
 
@@ -9,6 +13,8 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
+/** \brief Structure for holding the input values and derived values
+*/
 class InputParameters {
     public:
         double a;

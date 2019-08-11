@@ -1,19 +1,18 @@
 module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition)
 import Utils.Drasil
 
-import Drasil.DocLang (inDataConstTbl, mkInputPropsTable)
-import Drasil.DocLang.SRS (propCorSol) 
+import Drasil.DocLang (mkInputPropsTable)
+import Drasil.DocLang.SRS (datCon, propCorSol) 
 
-import Data.Drasil.Concepts.Documentation (assumption, code, condition, corSol,
+import Data.Drasil.Concepts.Documentation (assumption, code, condition,
   funcReqDom, input_, likelyChg, mg, mis, module_, nonFuncReqDom, output_,
-  physicalConstraint, property, quantity, requirement, simulation, solution,
-  srs, traceyMatrix, unlikelyChg, vavPlan)
-import Data.Drasil.Concepts.Math (equation, parameter, surface)
+  physicalConstraint, property, quantity, requirement, simulation, srs,
+  traceyMatrix, unlikelyChg, vavPlan)
+import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
-import Data.Drasil.Concepts.Thermodynamics as CT (heatTrans, lawConsEnergy, melting)
+import Data.Drasil.Concepts.Thermodynamics as CT (lawConsEnergy, melting)
 
 import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -22,21 +21,17 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.SWHS.Assumptions (assumpVCN)
-import Drasil.SWHS.Concepts (coil, phsChgMtrl, progName, rightSide, tank, water)
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
+import Drasil.SWHS.DataDefs (balanceDecayRate, balanceDecayTime,
+  balanceSolidPCM, balanceLiquidPCM)
+import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
-import Drasil.SWHS.Unitals (inputs, inputConstraints, coilHTC, coilSA, consTol,
-  diam, eta, pcmE, pcmHTC, pcmSA, pcmDensity, pcmMass, pcmVol, simTime,
-  tFinalMelt, tInitMelt, tankLength, tankVol, tauLP, tauSP, tauW, tempC,
-  tempPCM, tempW, watE, wDensity, wMass, wVol)
+import Drasil.SWHS.Unitals (inputs, consTol, diam, pcmE, pcmDensity, pcmMass,
+  pcmVol, tFinalMelt, tInitMelt, tankLength, tankVol, tempPCM, tempW, watE,
+  wDensity, wMass, wVol)
 
 ------------------------------
 -- Data Constraint: Table 1 --
 ------------------------------
-
--- FIXME: This probably shouldn't be here.
-dataConTable1 :: LabelledContent
-dataConTable1 = inDataConstTbl inputConstraints
 
 ------------------------------
 -- Section 5 : REQUIREMENTS --
@@ -91,7 +86,7 @@ findMassEqn = sy pcmMass $= sy pcmVol * sy pcmDensity -- FIXME: Ref Hack
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
-  plural physicalConstraint , S "shown in", makeRef2S dataConTable1] )
+  plural physicalConstraint, S "shown in", makeRef2S (datCon ([]::[Contents]) ([]::[Section]))])
   "Check-Input-with-Physical_Constraints" funcReqDom
 --
 outputInputDerivQuants = oIDQConstruct oIDQQuants
@@ -106,10 +101,10 @@ oIDQQuants :: [Sentence]
 oIDQQuants = map foldlSent_ [
   [S "the", plural quantity, S "from", makeRef2S inputInitQuants],
   [S "the", plural mass, S "from", makeRef2S findMass],
-  [ch tauW, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)],
-  [ch eta, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)],
-  [ch tauSP, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)],
-  [ch tauLP, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)]
+  [ch balanceDecayRate, sParen (S "from" +:+ makeRef2S balanceDecayRate)],
+  [ch balanceDecayTime, sParen (S "from" +:+ makeRef2S balanceDecayTime)],
+  [ch balanceSolidPCM,  sParen (S "from" +:+ makeRef2S balanceSolidPCM)],
+  [ch balanceLiquidPCM, sParen (S "from" +:+ makeRef2S balanceLiquidPCM)]
   ]
   
 --
@@ -141,7 +136,7 @@ verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (ch watE :+: sParen (ch time) `sAnd` ch pcmE :+:
   sParen (ch time)), S "follow the", phrase CT.lawConsEnergy `sC`
-  S "as outlined in", makeRef2S (propCorSol propsDeriv []) `sC`
+  S "as outlined in", makeRef2S (propCorSol [] []) `sC`
   S "with relative error no greater than", ch consTol])
   "Verify-Energy-Output-Follow-Conservation-of-Energy" funcReqDom
 --
@@ -172,7 +167,7 @@ nfRequirements = [correct, verifiable, understandable, reusable, maintainable]
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   plural output_ `ofThe'` phrase code, S "have the",
-  plural property, S "described in", makeRef2S (propCorSol propsDeriv [])
+  plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance
@@ -195,82 +190,6 @@ maintainable = cic "maintainable" (foldlSent [
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
   plural traceyMatrix, S "in the", getAcc srs `sAnd` phrase mg]) "Maintainable" nonFuncReqDom
-
-{-Properties of a Correct Solution-}
-
-propsDeriv :: [Contents]
-propsDeriv =
-  [propCorSolDeriv1 CT.lawConsEnergy watE energy coil phsChgMtrl dd1HtFluxC
-    dd2HtFluxP surface CT.heatTrans,
-  propCorSolDeriv2,
-  propCorSolDeriv3 pcmE energy phsChgMtrl water,
-  propCorSolDeriv4,
-  propCorSolDeriv5 equation progName rightSide]
-
--- Remember to insert references in above derivation when available
-
-propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk -> ConceptChunk ->
-  CI -> DataDefinition -> DataDefinition -> h -> ConceptChunk -> Contents
-propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
-  foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
-  phrase lce, S "This means that the", phrase ewat,
-  S "should equal the difference between the total", phrase en,
-  phrase input_, S "from the", phrase co `sAnd` S "the",
-  phrase en, phrase output_, S "to the" +:+. short pcmat,
-  S "This can be shown as an", phrase equation, S "by taking",
-  makeRef2S d1hfc `sAnd` makeRef2S d2hfp `sC`
-  S "multiplying each by their respective", phrase su,
-  S "area of", phrase ht `sC` S "and integrating each",
-  S "over the", phrase simTime `sC` S "as follows"]
-
-propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = eqUnR'
-  (sy watE $= defint (eqSymb time) 0 (sy time)
-  (sy coilHTC * sy coilSA * (sy tempC - apply1 tempW time))
-  - defint (eqSymb time) 0 (sy time)
-  (sy pcmHTC * sy pcmSA * (apply1 tempW time -
-  apply1 tempPCM time)))
-
-propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
-propCorSolDeriv3 epcm en pcmat wa =
-  foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
-  phrase en, phrase input_, S "to the", short pcmat,
-  S "from the" +:+. phrase wa, S "This can be expressed as"]
-
-propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = eqUnR'
-  (sy pcmE $= defint (eqSymb time) 0 (sy time)
-  (sy pcmHTC * sy pcmSA * (apply1 tempW time - 
-  apply1 tempPCM time)))
-
-propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
-propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
-  `sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
-  S "checks to gain confidence in any", phrase solution,
-  S "computed by" +:+. short pro, S "The relative",
-  S "error between the results computed by", short pro `sAnd`
-  S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than", ch consTol, makeRef2S verifyEnergyOutput]
-
--- Above section only occurs in this example (although maybe it SHOULD be in
--- the others).
-
--- Remember to insert references in above derivation when available
-
-{-NoPCM specific-}
--- Defined in this file since there isn't a NoPCM Requirements.hs file
-
-noPCMNFRequirements :: [ConceptInstance]
-noPCMNFRequirements = [correctNoPCM, verifiable, understandable, reusable, maintainable]
-
-propsDerivNoPCM :: [Contents]
-propsDerivNoPCM = [foldlSP [S "FIXME"]]
-
-correctNoPCM :: ConceptInstance
-correctNoPCM = cic "correct" (foldlSent [
-  plural output_ `ofThe'` phrase code, S "have the",
-  plural property, S "described in", makeRef2S (propCorSol propsDerivNoPCM [])
-  ]) "Correct" nonFuncReqDom
 
 -- The second sentence of the above paragraph is repeated in all examples (not
 -- exactly, but the general idea is). The first sentence is not always

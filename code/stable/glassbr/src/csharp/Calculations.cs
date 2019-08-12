@@ -1,4 +1,5 @@
 /** \file Calculations.cs
+    \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides functions for calculating the outputs
 */
 using System;
@@ -10,6 +11,7 @@ public class Calculations {
     
     /** \brief Calculates stress distribution factor (Function) based on Pbtol
         \param inParams structure holding the input values
+        \return stress distribution factor (Function) based on Pbtol
     */
     public static double func_J_tol(InputParameters inParams) {
         StreamWriter outfile;
@@ -23,8 +25,9 @@ public class Calculations {
         return Math.Log(Math.Log(1 / (1 - inParams.P_btol)) * (Math.Pow(inParams.a * inParams.b, 7.0 - 1) / (2.86e-53 * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2), 7.0) * inParams.LDF)));
     }
     
-    /** \brief Calculates applied load (demand)
+    /** \brief Calculates applied load (demand) (Pa)
         \param inParams structure holding the input values
+        \return applied load (demand) (Pa)
     */
     public static double func_q(InputParameters inParams) {
         StreamWriter outfile;
@@ -41,6 +44,7 @@ public class Calculations {
     /** \brief Calculates dimensionless load
         \param inParams structure holding the input values
         \param q applied load (demand) (Pa)
+        \return dimensionless load
     */
     public static double func_q_hat(InputParameters inParams, double q) {
         StreamWriter outfile;
@@ -60,6 +64,7 @@ public class Calculations {
     /** \brief Calculates tolerable load
         \param inParams structure holding the input values
         \param J_tol stress distribution factor (Function) based on Pbtol
+        \return tolerable load
     */
     public static double func_q_hat_tol(InputParameters inParams, double J_tol) {
         StreamWriter outfile;
@@ -79,6 +84,7 @@ public class Calculations {
     /** \brief Calculates stress distribution factor (Function)
         \param inParams structure holding the input values
         \param q_hat dimensionless load
+        \return stress distribution factor (Function)
     */
     public static double func_J(InputParameters inParams, double q_hat) {
         StreamWriter outfile;
@@ -95,9 +101,10 @@ public class Calculations {
         return Interpolation.func_interpZ("SDF.txt", inParams.AR, q_hat);
     }
     
-    /** \brief Calculates non-factored load
+    /** \brief Calculates non-factored load (Pa)
         \param inParams structure holding the input values
         \param q_hat_tol tolerable load
+        \return non-factored load (Pa)
     */
     public static double func_NFL(InputParameters inParams, double q_hat_tol) {
         StreamWriter outfile;
@@ -117,6 +124,7 @@ public class Calculations {
     /** \brief Calculates risk of failure
         \param inParams structure holding the input values
         \param J stress distribution factor (Function)
+        \return risk of failure
     */
     public static double func_B(InputParameters inParams, double J) {
         StreamWriter outfile;
@@ -133,9 +141,10 @@ public class Calculations {
         return 2.86e-53 / Math.Pow(inParams.a * inParams.b, 7.0 - 1) * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2), 7.0) * inParams.LDF * Math.Exp(J);
     }
     
-    /** \brief Calculates load resistance
+    /** \brief Calculates load resistance (Pa)
         \param inParams structure holding the input values
         \param NFL non-factored load (Pa)
+        \return load resistance (Pa)
     */
     public static double func_LR(InputParameters inParams, double NFL) {
         StreamWriter outfile;
@@ -155,6 +164,7 @@ public class Calculations {
     /** \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
         \param LR load resistance (Pa)
         \param q applied load (demand) (Pa)
+        \return variable that is assigned true when load resistance (capacity) is greater than load (demand)
     */
     public static Boolean func_is_safeLR(double LR, double q) {
         StreamWriter outfile;
@@ -173,6 +183,7 @@ public class Calculations {
     
     /** \brief Calculates probability of breakage
         \param B risk of failure
+        \return probability of breakage
     */
     public static double func_P_b(double B) {
         StreamWriter outfile;
@@ -189,6 +200,7 @@ public class Calculations {
     /** \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability
         \param inParams structure holding the input values
         \param P_b probability of breakage
+        \return variable that is assigned true when calculated probability is less than tolerable probability
     */
     public static Boolean func_is_safePb(InputParameters inParams, double P_b) {
         StreamWriter outfile;

@@ -11,7 +11,7 @@ import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
-  PrintingInformation, Notation(Scientific, Engineering), ckdb)
+  PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
 
 import Data.List (intersperse)
 import Data.Maybe (fromMaybe)
@@ -19,19 +19,19 @@ import Data.Tuple (fst, snd)
 import Numeric (floatToDigits)
 
 -- | Render a Space
-space :: Space -> P.Expr
-space Integer = P.MO P.Integer
-space Rational = P.MO P.Rational
-space Real = P.MO P.Real
-space Natural = P.MO P.Natural
-space Boolean = P.MO P.Boolean
-space Char = P.Ident "Char"
-space String = P.Ident "String"
-space Radians = error "Radians not translated"
-space (Vect _) = error "Vector space not translated"
-space (DiscreteI _) = error "DiscreteI" --ex. let A = {1, 2, 4, 7}
-space (DiscreteD _) = error "DiscreteD" -- [Double]
-space (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Ident l --ex. let Meal = {"breakfast", "lunch", "dinner"}
+space :: PrintingInformation -> Space -> P.Expr
+space _ Integer = P.MO P.Integer
+space _ Rational = P.MO P.Rational
+space _ Real = P.MO P.Real
+space _ Natural = P.MO P.Natural
+space _ Boolean = P.MO P.Boolean
+space _ Char = P.Ident "Char"
+space _ String = P.Ident "String"
+space _ Radians = error "Radians not translated"
+space _ (Vect _) = error "Vector space not translated"
+space _ (DiscreteI l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (P.Int . toInteger) l --ex. let A = {1, 2, 4, 7}
+space sm (DiscreteD l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm . dbl) l -- [Double]
+space _ (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Str l --ex. let Meal = {"breakfast", "lunch", "dinner"}
 
 {-
 p_space :: Space -> String
@@ -103,11 +103,12 @@ expr (AssocA Mul l)    sm = P.Row $ mulExpr l sm
 expr (Deriv Part a b)  sm =
   P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, expr a sm])
         (P.Row [P.Spc P.Thin, P.Spec Partial,
-                symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb])
+                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
 expr (Deriv Total a b)sm =
   P.Div (P.Row [P.Spc P.Thin, P.Ident "d", expr a sm])
-        (P.Row [P.Spc P.Thin, P.Ident "d", symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb]) 
-expr (C c)            sm = symbol $ lookupC (sm ^. ckdb) c
+        (P.Row [P.Spc P.Thin, P.Ident "d", 
+                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b]) 
+expr (C c)            sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 expr (FCall f [x])    sm = P.Row [expr f sm, parens $ expr x sm]
 expr (FCall f l)      sm = P.Row [expr f sm,
   parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) l]
@@ -148,22 +149,24 @@ expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b)   sm = pow sm a b
 expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
 expr (Operator o d e)     sm = eop sm o d e
-expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space b]
-expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. ckdb) c) ri
+expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
+expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. stg) 
+  (sm ^. ckdb) c) ri
 
-lookupC :: ChunkDB -> UID -> Symbol
-lookupC sm c = eqSymb $ symbLookup c $ symbolTable sm
+lookupC :: Stage -> ChunkDB -> UID -> Symbol
+lookupC Equational     sm c = eqSymb   $ symbResolve sm c
+lookupC Implementation sm c = codeSymb $ symbResolve sm c
 
 lookupT :: ChunkDB -> UID -> Sentence
-lookupT sm c = phraseNP $ termLookup c (termTable sm) ^. term
+lookupT sm c = phraseNP $ termResolve sm c ^. term
 
 lookupS :: ChunkDB -> UID -> Sentence
 lookupS sm c = maybe (phraseNP $ l ^. term) S $ getA l
-  where l = termLookup c $ termTable sm
+  where l = termResolve sm c
 
 lookupP :: ChunkDB -> UID -> Sentence
-lookupP sm c =  pluralNP $ termLookup c (termTable sm) ^. term
--- --plural n = NP.plural (n ^. term)
+lookupP sm c = pluralNP $ termResolve sm c ^. term
+-- plural n = NP.plural (n ^. term)
 
 mkCall :: PrintingInformation -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, parens $ expr e s]
@@ -196,7 +199,7 @@ indx :: PrintingInformation -> Expr -> Expr -> P.Expr
 indx sm (C c) i = f s
   where
     i' = expr i sm
-    s = eqSymb $ symbLookup c $ symbolTable $ sm ^. ckdb
+    s = lookupC (sm ^. stg) (sm ^. ckdb) c
     f (Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
@@ -284,7 +287,7 @@ spec _ (S s)           = either error P.S $ checkValidStr s invalidChars
 spec _ (Sy s)          = P.Sy s
 spec _ Percent         = P.E $ P.MO P.Perc
 spec _ (P s)           = P.E $ symbol s
-spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. ckdb) s
+spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
 spec sm (Ch TermStyle s)    = spec sm $ lookupT (sm ^. ckdb) s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
@@ -300,7 +303,7 @@ spec sm (E e)          = P.E $ expr e sm
 
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
 renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $
-  getA . defLookup u $ defTable ctx
+  getA $ defResolve ctx u
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn

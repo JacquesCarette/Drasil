@@ -19,6 +19,7 @@ library
     split >= 0.2.3.1,
     MissingH >= 1.4.0.1,
     parsec >= 3.1.9,
+    time >= 1.8.0.2,
     drasil-lang >= 0.1.59,
     drasil-build >= 0.1.0,
     drasil-code >= 0.1.7,

@@ -2,11 +2,9 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
-import Database.Drasil(ChunkDB, SystemInformation(SI), symbLookup, symbolTable,
-  _constants,
-  _constraints, _datadefs,
-  _definitions, _inputs, _outputs,
-  _quants, _sys, _sysinfodb)
+import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
+  _authors, _constants, _constraints, _datadefs, _definitions, _inputs,
+  _outputs, _quants, _sys, _sysinfodb)
 import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
@@ -41,7 +39,8 @@ data Lang = Cpp
           deriving Eq
 
 data CodeSystInfo where
-  CSI :: {
+  CSI :: (HasName a) => {
+  authors :: [a], 
   inputs :: [Input],
   extInputs :: [Input],
   derivedInputs :: [Derived],
@@ -76,6 +75,7 @@ varType cname m = maybe (error "Variable not found") (^. ctyp) (Map.lookup cname
 
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys
+              , _authors = as
               , _quants = q
               , _definitions = defs'
               , _datadefs = ddefs
@@ -93,6 +93,7 @@ codeSpec SI {_sys = sys
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar consts) outs' db
       csi' = CSI {
+        authors = as,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = map qtov derived,
@@ -122,6 +123,7 @@ data Choices = Choices {
   logFile :: String,
   logging :: Logging,
   comments :: [Comments],
+  dates :: Visibility,
   onSfwrConstraint :: ConstraintBehaviour,
   onPhysConstraint :: ConstraintBehaviour,
   inputStructure :: Structure,
@@ -149,6 +151,9 @@ data Structure = Unbundled
 data InputModule = Combined
                  | Separated
              
+data Visibility = Show
+                | Hide
+
 defaultChoices :: Choices
 defaultChoices = Choices {
   lang = [Python],
@@ -156,6 +161,7 @@ defaultChoices = Choices {
   logFile = "log.txt",
   logging = LogNone,
   comments = [],
+  dates = Hide,
   onSfwrConstraint = Exception,
   onPhysConstraint = Warning,
   inputStructure = Bundled,
@@ -169,7 +175,7 @@ relToQD :: ExprRelat c => ChunkDB -> c -> QDefinition
 relToQD sm r = convertRel sm (r ^. relat)
 
 convertRel :: ChunkDB -> Expr -> QDefinition
-convertRel sm (BinaryOp Eq (C x) r) = ec (symbLookup x $ symbolTable sm) r
+convertRel sm (BinaryOp Eq (C x) r) = ec (symbResolve sm x) r
 convertRel _ _ = error "Conversion failed"
 
 data Mod = Mod Name String [Func]
@@ -189,14 +195,17 @@ funcQD qd = FCD $ qtoc qd
 funcData :: Name -> String -> DataDesc -> Func
 funcData n desc d = FData $ FuncData (toPlainName n) desc d
 
-funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> Space -> [FuncStmt] -> Func  
-funcDef s desc i t fs = FDef $ FuncDef (toPlainName s) desc (map quantvar i) (spaceToCodeType t) fs 
+funcDef :: (Quantity c, MayHaveUnit c) => Name -> String -> [c] -> Space -> 
+  Maybe String -> [FuncStmt] -> Func  
+funcDef s desc i t returnDesc fs = FDef $ FuncDef (toPlainName s) desc 
+  (map quantvar i) (spaceToCodeType t) returnDesc fs 
 
 data FuncData where
   FuncData :: Name -> String -> DataDesc -> FuncData
   
 data FuncDef where
-  FuncDef :: Name -> String -> [CodeChunk] -> CodeType -> [FuncStmt] -> FuncDef
+  FuncDef :: Name -> String -> [CodeChunk] -> CodeType -> Maybe String -> 
+    [FuncStmt] -> FuncDef
  
 data FuncStmt where
   FAsg :: CodeChunk -> Expr -> FuncStmt
@@ -222,7 +231,7 @@ fdec :: (Quantity c, MayHaveUnit c) => c -> FuncStmt
 fdec v  = FDec (quantvar  v) (spaceToCodeType $ v ^. typ)
 
 asVC :: Func -> QuantityDict
-asVC (FDef (FuncDef n _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
+asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
 asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) (Variable n) Real
 asVC (FCD _) = error "Can't make QuantityDict from FCD function" -- codeVC cd (codeSymb cd) (cd ^. typ)
 
@@ -235,7 +244,7 @@ asExpr' f = sy $ asVC' f
 
 -- FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
-asVC' (FDef (FuncDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
+asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
@@ -247,7 +256,7 @@ getAdditionalVars chs ms = map codevar (inFileName : inParamsVar
         funcParams (Mod _ _ fs) = concatMap getFuncParams fs
 
 getFuncParams :: Func -> [CodeChunk]
-getFuncParams (FDef (FuncDef _ _ ps _ _)) = ps
+getFuncParams (FDef (FuncDef _ _ ps _ _ _)) = ps
 getFuncParams (FData (FuncData _ _ d)) = getInputs d
 getFuncParams (FCD _) = []
 
@@ -282,7 +291,7 @@ modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _ _) -> (n, getModDep m))
           delete name' $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybeToList (Map.lookup n mem)
         fdep (FCD cd) = codeName cd:map codeName (codevarsandfuncs (codeEquat cd) sm mem)
-        fdep (FDef (FuncDef _ _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
+        fdep (FDef (FuncDef _ _ i _ _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
         fdep (FData (FuncData _ _ d)) = map codeName $ getInputs d
         sm = sysinfodb cs
 
@@ -330,7 +339,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
        
 fname :: Func -> Name       
 fname (FCD cd) = codeName cd
-fname (FDef (FuncDef n _ _ _ _)) = n
+fname (FDef (FuncDef n _ _ _ _ _)) = n
 fname (FData (FuncData n _ _)) = n 
 
 prefixFunctions :: [Mod] -> [Mod]
@@ -338,8 +347,8 @@ prefixFunctions = map (\(Mod nm desc fs) -> Mod nm desc $ map pfunc fs)
   where pfunc f@(FCD _) = f
         pfunc (FData (FuncData n desc d)) = FData (FuncData (funcPrefix ++ n) 
           desc d)
-        pfunc (FDef (FuncDef n desc a t f)) = FDef (FuncDef (funcPrefix ++ n)
-          desc a t f)
+        pfunc (FDef (FuncDef n desc a t rd f)) = FDef (FuncDef (funcPrefix ++ n)
+          desc a t rd f)
 
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
@@ -446,25 +455,27 @@ getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
 -- | Get a list of CodeChunks from an equation
 codevars :: Expr -> ChunkDB -> [CodeChunk]
-codevars e m = map resolve $ dep e
-  where resolve x = quantvar (symbLookup x $ symbolTable m)
+codevars e m = map (varResolve m) $ dep e
 
 -- | Get a list of CodeChunks from an equation (no functions)
 codevars' :: Expr -> ChunkDB -> [CodeChunk]
-codevars' e m = map resolve $ nub $ names' e
-  where  resolve x = quantvar (symbLookup x (symbolTable m))
+codevars' e m = map (varResolve m) $ nub $ names' e
 
 -- | Get a list of CodeChunks from an equation, where the CodeChunks are correctly parameterized by either Var or Func
 codevarsandfuncs :: Expr -> ChunkDB -> ModExportMap -> [CodeChunk]
 codevarsandfuncs e m mem = map resolve $ dep e
   where resolve x 
-          | Map.member (funcPrefix ++ x) mem = quantfunc (symbLookup x $ symbolTable m)
-          | otherwise = quantvar (symbLookup x $ symbolTable m)
+          | Map.member (funcPrefix ++ x) mem = funcResolve m x
+          | otherwise = varResolve m x
 
 -- | Get a list of CodeChunks from a constraint, where the CodeChunks are correctly parameterized by either Var or Func
 constraintvarsandfuncs :: Constraint -> ChunkDB -> ModExportMap ->  [CodeChunk]
 constraintvarsandfuncs (Range _ ri) m mem = map resolve $ nub $ namesRI ri
   where resolve x 
-          | Map.member (funcPrefix ++ x) mem = quantfunc (symbLookup x $ symbolTable m)
-          | otherwise = quantvar (symbLookup x $ symbolTable m)
+          | Map.member (funcPrefix ++ x) mem = funcResolve m x
+          | otherwise = varResolve m x
 constraintvarsandfuncs _ _ _ = []
+
+funcResolve, varResolve :: ChunkDB -> UID -> CodeChunk
+funcResolve m x = quantfunc $ symbResolve m x
+varResolve  m x = quantvar  $ symbResolve m x

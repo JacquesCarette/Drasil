@@ -37,7 +37,9 @@ class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) =>
   type RenderFile repr
   fileDoc :: repr (Module repr) -> repr (RenderFile repr)
 
-  docMod :: String -> repr (RenderFile repr) -> repr (RenderFile repr)
+  -- Module description, list of author names, date as a String, file to comment
+  docMod :: String -> [String] -> String -> repr (RenderFile repr) -> 
+    repr (RenderFile repr)
 
   commentedMod :: repr (BlockComment repr) -> repr (RenderFile repr) ->
     repr (RenderFile repr)
@@ -553,7 +555,9 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr) 
-  docFunc :: String -> [String] -> repr (Method repr) -> repr (Method repr) 
+  -- Parameters are: function description, parameter descriptions, 
+  --   return value description if applicable, function
+  docFunc :: String -> [String] -> Maybe String -> repr (Method repr) -> repr (Method repr) 
 
   -- The three lists are inputs, outputs, and both, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 

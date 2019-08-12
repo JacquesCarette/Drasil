@@ -1,6 +1,7 @@
 package GlassBR;
 
 /** \file DerivedValues.java
+    \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides the function for calculating derived values
 */
 import java.util.Arrays;

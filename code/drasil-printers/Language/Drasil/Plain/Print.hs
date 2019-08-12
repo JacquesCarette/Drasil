@@ -3,7 +3,7 @@ module Language.Drasil.Plain.Print (
 ) where
 
 import Database.Drasil(ChunkDB)
-import Language.Drasil (Sentence, Special(..), Symbol, USymb(..))
+import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (Expr)
 import Language.Drasil.Plain.Helpers (toPlainName)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
@@ -20,11 +20,11 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
 
 data Linearity = Linear | Nonlinear
 
-exprDoc :: ChunkDB -> Linearity -> L.Expr -> Doc
-exprDoc db f e = pExprDoc f (expr e (PI db defaultConfiguration))
+exprDoc :: ChunkDB -> Stage -> Linearity -> L.Expr -> Doc
+exprDoc db st f e = pExprDoc f (expr e (PI db st defaultConfiguration))
 
-sentenceDoc :: ChunkDB -> Linearity -> Sentence -> Doc
-sentenceDoc db f s = specDoc f (spec (PI db defaultConfiguration) s)
+sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
+sentenceDoc db st f s = specDoc f (spec (PI db st defaultConfiguration) s)
 
 symbolDoc :: Symbol -> Doc
 symbolDoc s = pExprDoc Linear (symbol s)
@@ -95,13 +95,13 @@ specialDoc Circle  = text "degree"
 specialDoc Partial = text "partial"
 
 opsDoc :: Ops -> Doc
-opsDoc IsIn = text "is in"
+opsDoc IsIn = text " is in "
 opsDoc Integer = text "integers"
 opsDoc Real = text "real numbers"
 opsDoc Rational = text "rational numbers"
 opsDoc Natural = text "natural numbers"
 opsDoc Boolean = text "booleans"
-opsDoc Comma = comma
+opsDoc Comma = comma <> space
 opsDoc Prime = text "'"
 opsDoc Log = text "log"
 opsDoc Ln = text "ln"
@@ -118,24 +118,24 @@ opsDoc Not = text "!"
 opsDoc Dim = text "dim"
 opsDoc Exp = text "exp"
 opsDoc Neg = text "-"
-opsDoc Cross = text "cross"
-opsDoc Dot = text "dot"
-opsDoc Eq = text "=="
-opsDoc NEq = text "!="
-opsDoc Lt = text "<"
-opsDoc Gt = text ">"
-opsDoc LEq = text "<="
-opsDoc GEq = text ">="
-opsDoc Impl = text "=>"
-opsDoc Iff = text "iff"
-opsDoc Subt = text "-"
-opsDoc And = text "&&"
-opsDoc Or = text "||"
-opsDoc Add = text "+"
-opsDoc Mul = text "*"
-opsDoc Summ = text "sum"
-opsDoc Inte = text "integral"
-opsDoc Prod = text "product"
+opsDoc Cross = text " cross "
+opsDoc Dot = text " dot "
+opsDoc Eq = text " == "
+opsDoc NEq = text " != "
+opsDoc Lt = text " < "
+opsDoc Gt = text " > "
+opsDoc LEq = text " <= "
+opsDoc GEq = text " >= "
+opsDoc Impl = text " => "
+opsDoc Iff = text "iff "
+opsDoc Subt = text " - "
+opsDoc And = text " && "
+opsDoc Or = text " || "
+opsDoc Add = text " + "
+opsDoc Mul = text " * "
+opsDoc Summ = text "sum "
+opsDoc Inte = text "integral "
+opsDoc Prod = text "product "
 opsDoc Point = text "."
 opsDoc Perc = text "%"
 

@@ -408,8 +408,7 @@ effectiveStress = uc' "sigma'" (cn' "effective stress")
 
 effNormStress = uc' "sigmaN'" (cn' "effective normal stress")
   ("the normal stress in a soil mass that is effective in causing volume " ++
-   "changes and mobilizes the shear strength arising from friction; " ++ 
-   "represents the average stress carried by the soil skeleton")
+   "changes; represents the average stress carried by the soil skeleton")
   (prime $ sub lSigma cN) pascal
 
 dryVol = uc' "V_dry" (cn "volumes of dry soil")

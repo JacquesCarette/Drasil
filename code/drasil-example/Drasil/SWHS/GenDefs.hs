@@ -8,17 +8,18 @@ import Utils.Drasil
 import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
+import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)
 
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
 import Data.Drasil.Quantities.Physics as QP (time)
 import Data.Drasil.Quantities.Thermodynamics as QT (heatCapSpec, temp)
 
-import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpTPCAV,
-  assumpDWPCoV, assumpSHECoV, assumpTHCCoT)
-import Drasil.SWHS.Concepts (gaussDiv)
+import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpLCCWP,
+  assumpTPCAV, assumpDWPCoV, assumpSHECoV, assumpTHCCoT)
+import Drasil.SWHS.Concepts (coil, gaussDiv, phaseChangeMaterial)
 import Drasil.SWHS.References (koothoor2013)
-import Drasil.SWHS.TMods (consThermE)
+import Drasil.SWHS.TMods (consThermE, nwtnCooling)
 import Drasil.SWHS.Unitals (coilHTC, htFluxC, htFluxIn, htFluxOut, htFluxP,
   inSA, outSA, pcmHTC, tempC, tempPCM, tempW, thFluxVect, volHtGen)
 
@@ -53,7 +54,7 @@ rocTempSimpRel = sy QPP.mass * sy QT.heatCapSpec *
 htFluxWaterFromCoil :: GenDefn
 htFluxWaterFromCoil = gd htFluxWaterFromCoilRC (getUnit htFluxC) Nothing
   [makeCite koothoor2013] "htFluxWaterFromCoil"
-  [makeRef2S assumpLCCCW, makeRef2S assumpTHCCoT]
+  [newtonLawNote htFluxC assumpLCCCW coil, makeRef2S assumpTHCCoT]
 
 htFluxWaterFromCoilRC :: RelationConcept
 htFluxWaterFromCoilRC = makeRC "htFluxWaterFromCoilRC" (htFluxC ^. term)
@@ -67,7 +68,8 @@ htFluxWaterFromCoilRel = sy htFluxC $= sy coilHTC * (sy tempC - apply1 tempW tim
 
 htFluxPCMFromWater :: GenDefn
 htFluxPCMFromWater = gd htFluxPCMFromWaterRC (getUnit htFluxP) Nothing
-  [makeCite koothoor2013] "htFluxPCMFromWater" [makeRef2S assumpLCCCW]
+  [makeCite koothoor2013] "htFluxPCMFromWater"
+  [newtonLawNote htFluxP assumpLCCWP phaseChangeMaterial]
 
 htFluxPCMFromWaterRC :: RelationConcept
 htFluxPCMFromWaterRC = makeRC "htFluxPCMFromWaterRC" (htFluxP ^. term)
@@ -75,6 +77,12 @@ htFluxPCMFromWaterRC = makeRC "htFluxPCMFromWaterRC" (htFluxP ^. term)
 
 htFluxPCMFromWaterRel :: Relation
 htFluxPCMFromWaterRel = sy htFluxP $= sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
+
+newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
+newtonLawNote u a c = foldlSent [ch u `sIs` S "found by assuming that",
+  phrase lawConvCooling, S "applies" +:+. sParen (makeRef2S a), S "This law",
+  sParen (S "defined" `sIn` makeRef2S nwtnCooling) `sIs` S "used on",
+  phrase surface `ofThe` phrase c]
 
 --------------------------------------
 --  General Definitions Derivation  --

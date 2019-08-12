@@ -764,7 +764,7 @@
                   </p>
                   <p>
                     <div id="assumpLCCCW">
-                      Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. (RefBy: <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a> and <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>.)
+                      Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. (RefBy: <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>.)
                     </div>
                   </p>
                   <p>
@@ -779,7 +779,7 @@
                   </p>
                   <p>
                     <div id="assumpLCCWP">
-                      Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM.
+                      Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM. (RefBy: <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>.)
                     </div>
                   </p>
                   <p>
@@ -1135,7 +1135,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a> and <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -1325,7 +1329,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#assumpLCCCW>A: Newton-Law-Convective-Cooling-Coil-Water</a>
+                          <em>q<sub>C</sub></em> is found by assuming that Newton's law of cooling applies (<a href=#assumpLCCCW>A: Newton-Law-Convective-Cooling-Coil-Water</a>). This law (defined in <a href=#TM:nwtnCooling>TM: nwtnCooling</a>) is used on the surface of the heating coil.
                         </p>
                         <p class="paragraph">
                           <a href=#assumpTHCCoT>A: Temp-Heating-Coil-Constant-over-Time</a>
@@ -1395,7 +1399,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#assumpLCCCW>A: Newton-Law-Convective-Cooling-Coil-Water</a>
+                          <em>q<sub>P</sub></em> is found by assuming that Newton's law of cooling applies (<a href=#assumpLCCWP>A: Law-Convective-Cooling-Water-PCM</a>). This law (defined in <a href=#TM:nwtnCooling>TM: nwtnCooling</a>) is used on the surface of the phase change material.
                         </p>
                       </td>
                     </tr>
@@ -3527,10 +3531,10 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4529,7 +4533,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -4550,7 +4554,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

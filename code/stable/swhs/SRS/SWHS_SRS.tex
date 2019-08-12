@@ -375,10 +375,10 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Temp-PCM-Constant-Across-Volume:\phantomsection\label{assumpTPCAV}]{The temperature of the phase change material is the same throughout the volume of PCM. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}, \hyperref[likeChgUTP]{LC: Uniform-Temperature-PCM}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)}
 \item[Density-Water-PCM-Constant-over-Volume:\phantomsection\label{assumpDWPCoV}]{The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)}
 \item[Specific-Heat-Energy-Constant-over-Volume:\phantomsection\label{assumpSHECov}]{The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)}
-\item[Newton-Law-Convective-Cooling-Coil-Water:\phantomsection\label{assumpLCCCW}]{Newton's law of convective cooling applies between the heating coil and the water. (RefBy: \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} and \hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater}.)}
+\item[Newton-Law-Convective-Cooling-Coil-Water:\phantomsection\label{assumpLCCCW}]{Newton's law of convective cooling applies between the heating coil and the water. (RefBy: \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}.)}
 \item[Temp-Heating-Coil-Constant-over-Time:\phantomsection\label{assumpTHCCoT}]{The temperature of the heating coil is constant over time. (RefBy: \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} and \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}.)}
 \item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]{The temperature of the heating coil does not vary along its length. (RefBy: \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
-\item[Law-Convective-Cooling-Water-PCM:\phantomsection\label{assumpLCCWP}]{Newton's law of convective cooling applies between the water and the PCM.}
+\item[Law-Convective-Cooling-Water-PCM:\phantomsection\label{assumpLCCWP}]{Newton's law of convective cooling applies between the water and the PCM. (RefBy: \hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater}.)}
 \item[Charging-Tank-No-Temp-Discharge:\phantomsection\label{assumpCTNOD}]{The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM} is less than (or equal) to the temperature of the heating coil. (RefBy: \hyperref[likeChgDT]{LC: Discharging-Tank} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
 \item[Same-Initial-Temp-Water-PCM:\phantomsection\label{assumpSITWP}]{The initial temperature of the water and the PCM is the same. (RefBy: \hyperref[likeChgDITPW]{LC: Different-Initial-Temps-PCM-Water}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}, and \hyperref[assumpCTNOD]{A: Charging-Tank-No-Temp-Discharge}.)}
 \item[PCM-Initially-Solid:\phantomsection\label{assumpPIS}]{The simulation will start with the PCM in a solid state. (RefBy: \hyperref[IM:heatEInPCM]{IM: heatEInPCM} and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)}
@@ -546,7 +546,8 @@ Notes & Newton's law of cooling describes convective cooling from a surface. The
 Source & \cite[(pg. 8)]{incroperaEtAl2007}
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} and \hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -643,7 +644,7 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}
+Notes & ${q_{\text{C}}}$ is found by assuming that Newton's law of cooling applies (\hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}). This law (defined in \hyperref[TM:nwtnCooling]{TM: nwtnCooling}) is used on the surface of the heating coil.
         
         \hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time}
         
@@ -683,7 +684,7 @@ Description & \begin{symbDescription}
               \item{${T_{\text{P}}}$ is the temperature of the phase change material (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}
+Notes & ${q_{\text{P}}}$ is found by assuming that Newton's law of cooling applies (\hyperref[assumpLCCWP]{A: Law-Convective-Cooling-Water-PCM}). This law (defined in \hyperref[TM:nwtnCooling]{TM: nwtnCooling}) is used on the surface of the phase change material.
         
 \\ \midrule \\
 Source & \cite{koothoor2013}
@@ -1508,7 +1509,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} &  &  & X & X &  &  &  &  & X &  & X & X &  & X & X & X &  &  & X & 
 \\
@@ -1602,9 +1603,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  &  &  & 
 \\
-\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
 \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & X & X &  &  &  &  &  &  &  &  &  & X & X & X & X & X &  & 
 \\

@@ -1118,13 +1118,13 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        $${v_{\text{launch}}}>0$$
-                        $$0<θ<\frac{π}{2}$$
+                        $${v_{\text{launch}}}\gt{}0$$
+                        $$0\lt{}θ\lt{}\frac{π}{2}$$
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>$${t_{\text{flight}}}>0$$</td>
+                      <td>$${t_{\text{flight}}}\gt{}0$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
@@ -1221,13 +1221,13 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        $${v_{\text{launch}}}>0$$
-                        $$0<θ<\frac{π}{2}$$
+                        $${v_{\text{launch}}}\gt{}0$$
+                        $$0\lt{}θ\lt{}\frac{π}{2}$$
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>$${p_{\text{land}}}>0$$</td>
+                      <td>$${p_{\text{land}}}\gt{}0$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
@@ -1322,8 +1322,8 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        $${p_{\text{land}}}>0$$
-                        $${p_{\text{target}}}>0$$
+                        $${p_{\text{land}}}\gt{}0$$
+                        $${p_{\text{target}}}\gt{}0$$
                       </td>
                     </tr>
                     <tr>
@@ -1399,8 +1399,8 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        $${p_{\text{target}}}>0$$
-                        $${d_{\text{offset}}}>-{p_{\text{land}}}$$
+                        $${p_{\text{target}}}\gt{}0$$
+                        $${d_{\text{offset}}}\gt{}-{p_{\text{land}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1411,9 +1411,9 @@
                       <th>Equation</th>
                       <td>
                         $$s=\begin{cases}
-                            \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|<ε\\
-                            \text{``The projectile fell short.''}, & {d_{\text{offset}}}<0\\
-                            \text{``The projectile went long.''}, & {d_{\text{offset}}}>0
+                            \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
+                            \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
+                            \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
                             \end{cases}$$
                       </td>
                     </tr>

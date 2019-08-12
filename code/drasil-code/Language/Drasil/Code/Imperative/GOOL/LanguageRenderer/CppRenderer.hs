@@ -3,7 +3,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render C++ code is contained in this module
-module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
   -- * C++ Code Configuration -- defines syntax of all C++ code
   CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC
 ) where

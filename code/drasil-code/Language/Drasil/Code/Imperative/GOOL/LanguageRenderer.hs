@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The structure for a class of renderers is defined here.
-module Language.Drasil.Code.Imperative.LanguageRenderer (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
   docCmtStart, observerListName, doxConfigName, makefileName, addExt,

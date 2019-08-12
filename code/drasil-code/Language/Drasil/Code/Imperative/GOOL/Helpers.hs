@@ -1,6 +1,6 @@
 {-# LANGUAGE TupleSections #-}
 
-module Language.Drasil.Code.Imperative.Helpers (blank,verticalComma,
+module Language.Drasil.Code.Imperative.GOOL.Helpers (blank,verticalComma,
   angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
   emptyIfEmpty, emptyIfNull, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, 
   liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 

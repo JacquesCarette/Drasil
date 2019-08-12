@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 
 -- | The logic to render Python code is contained in this module
-module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
   PythonCode(..)
 ) where

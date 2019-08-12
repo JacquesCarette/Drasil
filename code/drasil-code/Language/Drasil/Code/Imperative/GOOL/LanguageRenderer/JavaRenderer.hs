@@ -2,7 +2,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render Java code is contained in this module
-module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code
   JavaCode(..), jNameOpts
 ) where

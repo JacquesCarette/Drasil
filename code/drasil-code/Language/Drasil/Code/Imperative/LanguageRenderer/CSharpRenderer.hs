@@ -60,7 +60,7 @@ import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5,
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
 import qualified Data.Map as Map (fromList,lookup)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon)
@@ -547,11 +547,11 @@ instance MethodSym CSharpCode where
 
   docMain c b = commentedFunc (docComment $ functionDoc 
     "Controls the flow of the program" 
-    [("args", "List of command-line arguments")]) (mainMethod c b)
+    [("args", "List of command-line arguments")] []) (mainMethod c b)
 
   function n = method n ""
 
-  docFunc = docFuncRepr
+  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
@@ -559,10 +559,14 @@ instance MethodSym CSharpCode where
   inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) 
     (map stateParam $ v : ins) (liftA2 appendToBody b (returnState $ valueOf v))
   inOutFunc n s p ins outs both b = function n s p (mState void) (map (fmap 
-    (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ map (fmap (updateParamDoc csOut) . stateParam) outs) b
+    (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ 
+    map (fmap (updateParamDoc csOut) . stateParam) outs) b
 
+  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
+  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms)
+    [bComm]
   docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
-    (bComms ++ iComms ++ oComms)
+    (bComms ++ iComms ++ oComms) []
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

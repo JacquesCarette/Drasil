@@ -795,9 +795,10 @@ endCommentDelimit c = commentDelimit (endCommentLabel ++ " " ++ c)
 dashes :: String -> Int -> String
 dashes s l = replicate (l - length s) '-'
 
-functionDoc :: String -> [(String, String)] -> [String]
-functionDoc desc params = [doxBrief ++ desc | not (null desc)]
+functionDoc :: String -> [(String, String)] -> [String] -> [String]
+functionDoc desc params returns = [doxBrief ++ desc | not (null desc)]
   ++ map (\(v, vDesc) -> doxParam ++ v ++ " " ++ vDesc) params
+  ++ map (doxReturn ++) returns
 
 classDoc :: String -> [String]
 classDoc desc = [doxBrief ++ desc | not (null desc)]
@@ -808,10 +809,10 @@ moduleDoc desc as date m = (doxFile ++ m) :
   [doxDate ++ date | not (null date)] ++ 
   [doxBrief ++ desc | not (null desc)]
 
-docFuncRepr :: (MethodSym repr) => String -> [String] -> repr (Method repr) -> 
-  repr (Method repr)
-docFuncRepr desc pComms f = commentedFunc (docComment $ functionDoc desc
-  (zip (map parameterName (parameters f)) pComms)) f
+docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
+  repr (Method repr) -> repr (Method repr)
+docFuncRepr desc pComms rComms f = commentedFunc (docComment $ functionDoc desc
+  (zip (map parameterName (parameters f)) pComms) rComms) f
 
 -- Helper Functions --
 
@@ -859,10 +860,11 @@ intValue i = intValue' (getType $ valueType i)
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
 
-doxCommand, doxBrief, doxParam, doxFile, doxAuthor, doxDate :: String
+doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String
 doxCommand = "\\"
 doxBrief = doxCommand ++ "brief "
 doxParam = doxCommand ++ "param "
+doxReturn = doxCommand ++ "return "
 doxFile = doxCommand  ++ "file "
 doxAuthor = doxCommand ++ "author "
 doxDate = doxCommand ++ "date "

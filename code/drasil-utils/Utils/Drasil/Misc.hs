@@ -1,7 +1,8 @@
 {-# Language TypeFamilies #-}
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
-  chgsStart, displayConstrntsAsSet, eqN, eqnWSource, fromReplace, fmtU, follows,
-  getTandS, itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
+  chgsStart, displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, 
+  eqnWSource, fromReplace, fmtU, follows, getTandS, itemRefToSent, makeListRef, 
+  makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
   tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
@@ -176,8 +177,11 @@ getTandS :: (Quantity a) => a -> Sentence
 getTandS a = phrase a +:+ ch a
 
 --Produces a sentence that displays the constraints in a {}.
-displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
-displayConstrntsAsSet sym listOfVals = E $ sy sym `isin` DiscreteS listOfVals
+displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
+displayStrConstrntsAsSet sym listOfVals = E $ sy sym `isin` DiscreteS listOfVals
+
+displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
+displayDblConstrntsAsSet sym listOfVals = E $ sy sym `isin` DiscreteD listOfVals
 
 --Produces a common beginning of a likely change of the form "reference - sentence"
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

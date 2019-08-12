@@ -7,6 +7,20 @@ import math
 
 ## \brief Reads input from a file with the given file name
 # \param filename name of the input file
+# \return heating coil surface area (m^2)
+# \return specific heat capacity of water (J/(kg degreeC))
+# \return convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
+# \return initial temperature (degreeC)
+# \return final time (s)
+# \return length of tank (m)
+# \return temperature of the heating coil (degreeC)
+# \return time step for simulation (s)
+# \return density of water (kg/m^3)
+# \return diameter of tank (m)
+# \return absolute tolerance
+# \return relative tolerance
+# \return temperature of the water (degreeC)
+# \return change in heat energy in the water (J)
 def get_input(filename):
     infile = open(filename, "r")
     infile.readline()

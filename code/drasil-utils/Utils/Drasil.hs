@@ -11,8 +11,9 @@ module Utils.Drasil (
   foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
   -- Misc
   addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart,
-  displayConstrntsAsSet, eqN, eqnWSource, fromReplace, fmtU, follows,
-  getTandS, itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
+  displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, eqnWSource, 
+  fromReplace, fmtU, follows, getTandS, itemRefToSent, makeListRef, 
+  makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
   tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList,

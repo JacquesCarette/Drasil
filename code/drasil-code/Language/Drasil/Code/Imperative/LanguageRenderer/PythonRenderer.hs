@@ -51,7 +51,7 @@ import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty,
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
   equals, vcat, colon, brackets, isEmpty)
@@ -528,7 +528,7 @@ instance MethodSym PythonCode where
   function n _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
     (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
 
-  docFunc = docFuncRepr
+  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
   inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
     ins) b
@@ -536,7 +536,8 @@ instance MethodSym PythonCode where
     stateParam $ both ++ ins) (liftA2 appendToBody b (multiReturn $
     map valueOf $ both ++ outs))
 
-  docInOutFunc desc iComms _ bComms = docFuncRepr desc (bComms ++ iComms)
+  docInOutFunc desc iComms oComms bComms = docFuncRepr desc (bComms ++ iComms) 
+    (bComms ++ oComms)
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

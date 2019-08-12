@@ -161,10 +161,10 @@ public class Calculations {
         return NFL * inParams.GTF * 1;
     }
     
-    /** \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
+    /** \brief Calculates load resistance safety requirement
         \param LR load resistance (Pa)
         \param q applied load (demand) (Pa)
-        \return variable that is assigned true when load resistance (capacity) is greater than load (demand)
+        \return load resistance safety requirement
     */
     public static Boolean func_is_safeLR(double LR, double q) {
         StreamWriter outfile;
@@ -197,10 +197,10 @@ public class Calculations {
         return 1 - Math.Exp(-B);
     }
     
-    /** \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability
+    /** \brief Calculates probability of breakage safety requirement
         \param inParams structure holding the input values
         \param P_b probability of breakage
-        \return variable that is assigned true when calculated probability is less than tolerable probability
+        \return probability of breakage safety requirement
     */
     public static Boolean func_is_safePb(InputParameters inParams, double P_b) {
         StreamWriter outfile;

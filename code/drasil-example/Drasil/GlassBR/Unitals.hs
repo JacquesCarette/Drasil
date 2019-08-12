@@ -244,43 +244,26 @@ unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, 
 riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, sdfTol,
   dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
 
+dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
 
-dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
-  (hat lQ) Real
+gTF = vc "gTF" (glassTypeFac ^. term) (Variable "GTF") Integer
 
-gTF           = vc "gTF"             (glassTypeFac ^. term) (Variable "GTF") Integer
+isSafePb   = vc "isSafePb"   (nounPhraseSP $ "probability of breakage safety requirement") (Variable "is-safePb")   Boolean
+isSafeProb = vc "isSafeProb" (nounPhraseSP $ "probability of failure safety requirement")  (Variable "is-safeProb") Boolean
+isSafeLR   = vc "isSafeLR"   (nounPhraseSP $ "load resistance safety requirement")         (Variable "is-safeLR")   Boolean
+isSafeLoad = vc "isSafeLoad" (nounPhraseSP $ "load resistance safety requirement")         (Variable "is-safeLoad") Boolean
 
-isSafePb      = vc "isSafePb"        (nounPhraseSP $ "variable that is assigned true when calculated" ++
-  " probability is less than tolerable probability")
-  (Variable "is-safePb") Boolean
+lDurFac = vc'' loadDurFactor (Variable "LDF") Real
+loadSF  = vc'' lShareFac     (Variable "LSF") Natural
 
-isSafeProb      = vc "isSafeProb"        (nounPhraseSP $ "variable that is assigned true when" ++
-  " probability of failure is less than tolerable probability of failure")
-  (Variable "is-safeProb") Boolean
+riskFun = vc "riskFun" (nounPhraseSP "risk of failure") cB Real
 
-isSafeLR      = vc "isSafeLR"        (nounPhraseSP $ "variable that is assigned true when load resistance"
-  ++ " (capacity) is greater than load (demand)")
-  (Variable "is-safeLR") Boolean
-
-isSafeLoad      = vc "isSafeLoad"        (nounPhraseSP $ "variable that is assigned true when load resistance"
-  ++ " (capacity) is greater than applied load (demand)")
-  (Variable "is-safeLoad") Boolean
-
-lDurFac       = vc'' loadDurFactor (Variable "LDF") Real
-
-loadSF        = vc'' lShareFac (Variable "LSF") Natural
-
-
-riskFun      = vc "riskFun"    (nounPhraseSP "risk of failure") cB Real
-
-sdfTol       = vc "sdfTol"     (nounPhraseSP $ "stress distribution" ++
-  " factor (Function) based on Pbtol") 
+sdfTol = vc "sdfTol" (nounPhraseSP $ "stress distribution factor (Function) based on Pbtol") 
   (sub (eqSymb stressDistFac) lTol) Real
 
-stressDistFac = vc "stressDistFac" (nounPhraseSP $ "stress distribution" 
-  ++ " factor (Function)") cJ Real
+stressDistFac = vc "stressDistFac" (nounPhraseSP $ "stress distribution factor (Function)") cJ Real
 
-tolLoad       = vc "tolLoad"       (nounPhraseSP "tolerable load")
+tolLoad = vc "tolLoad" (nounPhraseSP "tolerable load")
   (sub (eqSymb dimlessLoad) lTol) Real
 
 lBreak, lDur, lFail, lTol :: Symbol

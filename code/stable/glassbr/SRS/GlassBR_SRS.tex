@@ -93,13 +93,13 @@ $interpY$ & InterpY & --
 \\
 $interpZ$ & InterpZ & --
 \\
-$is-safeLoad$ & Variable that is assigned true when load resistance (capacity) is greater than applied load (demand) & --
+$is-safeLoad$ & Load resistance safety requirement & --
 \\
-$is-safeLR$ & Variable that is assigned true when load resistance (capacity) is greater than load (demand) & --
+$is-safeLR$ & Load resistance safety requirement & --
 \\
-$is-safePb$ & Variable that is assigned true when calculated probability is less than tolerable probability & --
+$is-safePb$ & Probability of breakage safety requirement & --
 \\
-$is-safeProb$ & Variable that is assigned true when probability of failure is less than tolerable probability of failure & --
+$is-safeProb$ & Probability of failure safety requirement & --
 \\
 $J$ & Stress distribution factor (Function) & --
 \\
@@ -399,7 +399,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is-safeProb$ is the variable that is assigned true when probability of failure is less than tolerable probability of failure (Unitless)}
+              \item{$is-safeProb$ is the probability of failure safety requirement (Unitless)}
               \item{${P_{\text{f}}}$ is the probability of failure (Unitless)}
               \item{${P_{\text{f}\text{tol}}}$ is the tolerable probability of failure (Unitless)}
               \end{symbDescription}
@@ -431,7 +431,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is-safeLoad$ is the variable that is assigned true when load resistance (capacity) is greater than applied load (demand) (Unitless)}
+              \item{$is-safeLoad$ is the load resistance safety requirement (Unitless)}
               \item{$capacity$ is the capacity or load resistance (Pa)}
               \item{$Load$ is the applied load (demand) or pressure (Pa)}
               \end{symbDescription}
@@ -1157,7 +1157,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is-safePb$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
+              \item{$is-safePb$ is the probability of breakage safety requirement (Unitless)}
               \item{${P_{\text{b}}}$ is the probability of breakage (Unitless)}
               \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
@@ -1204,7 +1204,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is-safeLR$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
+              \item{$is-safeLR$ is the load resistance safety requirement (Unitless)}
               \item{$LR$ is the load resistance (Pa)}
               \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}

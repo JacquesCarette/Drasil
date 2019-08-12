@@ -3,7 +3,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render C++ code is contained in this module
-module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
   -- * C++ Code Configuration -- defines syntax of all C++ code
   CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC
 ) where
@@ -11,7 +11,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
 import Utils.Drasil (indent, indentList)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -21,7 +21,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDoc,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
   listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
@@ -43,7 +43,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   makefileName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
   appendToBody, surroundBody, getterName, setterName, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
+import Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList, Terminator(..),
   ScopeTag(..), AuxData(..), ad, emptyAux, FileData(..), srcFile, hdrFile, 
   updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), 
   od, PackData(..), packD, emptyPack, ParamData(..), pd, ProgData(..), progD, 
@@ -53,7 +53,7 @@ import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, cppCompiler, nativeBinary)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
+import Language.Drasil.Code.Imperative.GOOL.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
   getInnerType, convType, checkParams)

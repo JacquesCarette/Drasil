@@ -1,6 +1,6 @@
 module Test.Helper (helper) where
 
-import Language.Drasil.Code.Imperative.Symantics (
+import Language.Drasil.Code.Imperative.GOOL.Symantics (
   RenderSym(..), PermanenceSym(..), BodySym(..), StateTypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 

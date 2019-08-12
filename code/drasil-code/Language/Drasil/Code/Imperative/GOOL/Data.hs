@@ -1,4 +1,4 @@
-module Language.Drasil.Code.Imperative.Data (Pair(..), pairList,
+module Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList,
   Terminator(..), ScopeTag(..), FileType(..), AuxData(..), ad, emptyAux, 
   FileData(..), fileD, file, srcFile, hdrFile, isSource, isHeader, 
   updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 

@@ -401,12 +401,14 @@ totStress = uc' "sigma" (cn' "total stress")
   "the total force per area acting on the soil mass" lSigma pascal
 
 effectiveStress = uc' "sigma'" (cn' "effective stress")
-  ("the stress in a soil mass that is effective in causing volume changes; " ++
-   "represents the average stress carried by the soil skeleton")
+  ("the stress in a soil mass that is effective in causing volume changes " ++
+   "and mobilizes the shear strength arising from friction; represents the " ++
+   "average stress carried by the soil skeleton")
   (prime lSigma) pascal
 
 effNormStress = uc' "sigmaN'" (cn' "effective normal stress")
-  ("the normal stress in a soil mass that is effective in causing volume changes; " ++
+  ("the normal stress in a soil mass that is effective in causing volume " ++
+   "changes and mobilizes the shear strength arising from friction; " ++ 
    "represents the average stress carried by the soil skeleton")
   (prime $ sub lSigma cN) pascal
 

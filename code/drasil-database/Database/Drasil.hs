@@ -1,19 +1,16 @@
 {- re-export many things to simplify external use -}
 module Database.Drasil (
   -- ChunkDB
-  ChunkDB, RefbyMap, TraceMap, UMap
-  , asOrderedList, cdb, collectUnits, conceptMap, conceptinsLookup
-  , conceptinsTable, dataDefnTable, datadefnLookup, defLookup, defTable
+  ChunkDB, RefbyMap, TraceMap, UMap, asOrderedList, cdb, collectUnits, conceptMap
+  , conceptinsLookup, conceptinsTable, dataDefnTable, datadefnLookup, defResolve
   , gendefLookup, gendefTable, generateRefbyMap, insmodelLookup, insmodelTable
   , labelledconLookup, labelledcontentTable, refbyLookup, refbyTable
-  , sectionLookup, sectionTable, symbLookup, symbolTable, termLookup
-  , termTable, theoryModelLookup, theoryModelTable, traceLookup, traceMap
-  , traceTable, unitTable
+  , sectionLookup, sectionTable, symbResolve, termResolve, termTable
+  , theoryModelLookup, theoryModelTable, traceLookup, traceMap, traceTable
   -- ChunkDB.GetChunk
   , ccss, ccss', combine, getIdeaDict, vars
   -- SystemInformation
-  , Block(Parallel), RefMap, ReferenceDB, SystemInformation(..)
-  , citeDB, rdb, simpleMap
+  , Block(Parallel), RefMap, ReferenceDB, SystemInformation(..), citeDB, rdb, simpleMap
 ) where
 
 import Database.Drasil.ChunkDB

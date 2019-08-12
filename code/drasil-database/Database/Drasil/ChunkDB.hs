@@ -1,20 +1,13 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Database.Drasil.ChunkDB 
-  ( ChunkDB, cdb
-  , symbolTable, symbLookup
-  , termLookup, termTable
-  , conceptMap, traceMap, defLookup, defTable
-  , unitLookup , unitTable, collectUnits
-  , traceLookup, traceTable, TraceMap, generateRefbyMap, RefbyMap
-  , refbyLookup, refbyTable
-  , datadefnLookup
-  , insmodelLookup, gendefLookup, theoryModelLookup, conceptinsLookup
-  , sectionLookup, labelledconLookup
-  , dataDefnTable, insmodelTable, gendefTable, theoryModelTable
-  , conceptinsTable, sectionTable, labelledcontentTable, asOrderedList, UMap
-  ) where
+module Database.Drasil.ChunkDB (ChunkDB, RefbyMap, TraceMap, UMap,
+  asOrderedList, cdb, collectUnits, conceptMap, conceptinsLookup,
+  conceptinsTable, dataDefnTable, datadefnLookup, defResolve, gendefLookup,
+  gendefTable, generateRefbyMap, insmodelLookup, insmodelTable,
+  labelledconLookup, labelledcontentTable, refbyLookup, refbyTable,
+  sectionLookup, sectionTable, symbResolve, termResolve, termTable,
+  theoryModelLookup, theoryModelTable, traceLookup, traceMap, traceTable) where
 
-import Language.Drasil hiding (sec)
+import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.), makeLenses)
@@ -78,31 +71,30 @@ idMap = cdbMap id
 traceMap :: [(UID, [UID])] -> TraceMap
 traceMap = Map.fromList
 
--- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
-symbLookup :: UID -> SymbolMap -> QuantityDict
-symbLookup c m = getS $ Map.lookup c m
-  where getS = maybe (error $ "Symbol: " ++ c ++ " not found in SymbolMap") fst
-
 -- | Gets a unit if it exists, or Nothing.        
 getUnitLup :: HasUID c => ChunkDB -> c -> Maybe UnitDefn
-getUnitLup m c = getUnit $ symbLookup (c ^. uid) (symbolTable m)
+getUnitLup m c = getUnit $ symbResolve m (c ^. uid)
 
 -- | Looks up a UID in a UMap table. If nothing is found an error is thrown
 uMapLookup :: String -> String -> UID -> UMap a -> a
 uMapLookup tys ms u t = getFM $ Map.lookup u t
   where getFM = maybe (error $ tys ++ ": " ++ u ++ " not found in " ++ ms) fst
 
--- | Looks up an uid in the term table. If nothing is found, an error is thrown
-termLookup :: UID -> TermMap -> IdeaDict
-termLookup = uMapLookup "Term" "TermMap"
+-- | Looks up a UID in the symbol table from the ChunkDB. If nothing is found, an error is thrown.
+symbResolve :: ChunkDB -> UID -> QuantityDict
+symbResolve m x = uMapLookup "Symbol" "SymbolMap" x $ symbolTable m
 
--- | Looks up an uid in the unit table. If nothing is found, an error is thrown
+-- | Looks up a UID in the term table from the ChunkDB. If nothing is found, an error is thrown.
+termResolve :: ChunkDB -> UID -> IdeaDict
+termResolve m x = uMapLookup "Term" "TermMap" x $ termTable m
+
+-- | Looks up a UID in the unit table. If nothing is found, an error is thrown.
 unitLookup :: UID -> UnitMap -> UnitDefn
 unitLookup = uMapLookup "Unit" "UnitMap"
 
--- | Looks up a uid in the definition table. If nothing is found, an error is thrown.
-defLookup :: UID -> ConceptMap -> ConceptChunk
-defLookup = uMapLookup "Concept" "ConceptMap"
+-- | Looks up a UID in the definition table from the ChunkDB. If nothing is found, an error is thrown.
+defResolve :: ChunkDB -> UID -> ConceptChunk
+defResolve m x = uMapLookup "Concept" "ConceptMap" x $ defTable m
 
 -- | Looks up a uid in the datadefinition table. If nothing is found, an error is thrown.
 datadefnLookup :: UID -> DatadefnMap -> DataDefinition
@@ -159,22 +151,22 @@ cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
     [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] ->
     [LabelledContent] -> ChunkDB
-cdb s t c u d ins gd tm ci sec lc = CDB (symbolMap s) (termMap t)
-  (conceptMap c) (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
-  (idMap ci) (idMap sec) (idMap lc)
+cdb s t c u d ins gd tm ci sect lc = CDB (symbolMap s) (termMap t) (conceptMap c)
+  (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
+  (idMap ci) (idMap sect) (idMap lc)
 
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
 collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))
  . concatMap getUnits . mapMaybe (getUnitLup m)
 
 traceLookup :: UID -> TraceMap -> [UID]
-traceLookup c = fromMaybe [] .  Map.lookup c
+traceLookup c = fromMaybe [] . Map.lookup c
  
 invert :: (Ord v) => Map.Map k [v] -> Map.Map v [k]
 invert m = Map.fromListWith (++) pairs
     where pairs = [(v, [k]) | (k, vs) <- Map.toList m, v <- vs]
  
-generateRefbyMap :: TraceMap  -> RefbyMap
+generateRefbyMap :: TraceMap -> RefbyMap
 generateRefbyMap = invert
 
 refbyLookup :: UID -> RefbyMap -> [UID]

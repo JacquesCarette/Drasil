@@ -151,8 +151,11 @@ pOps Cross    = texSym "times"
 pOps Dot      = commandD "cdot" empty
 pOps Eq       = pure assign
 pOps NEq      = commandD "neq" empty
-pOps Lt       = pure lt
-pOps Gt       = pure gt
+-- Old way of doing less than and greater than
+-- pOps Lt       = pure lt
+-- pOps Gt       = pure gt
+pOps Lt       = commandD "lt" empty
+pOps Gt       = commandD "gt" empty
 pOps GEq      = commandD "geq" empty
 pOps LEq      = commandD "leq" empty
 pOps Impl     = commandD "implies" empty

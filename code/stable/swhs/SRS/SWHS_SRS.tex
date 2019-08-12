@@ -370,7 +370,7 @@ This section simplifies the original problem and helps in developing the theoret
 
 \begin{itemize}
 \item[Thermal-Energy-Only:\phantomsection\label{assumpTEO}]{The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (RefBy: \hyperref[TM:consThermE]{TM: consThermE}.)}
-\item[Heat-Transfer-Coeffs-Constant:\phantomsection\label{assumpHTCC}]{All heat transfer coefficients are constant over time. (RefBy: \hyperref[GD:nwtnCooling]{GD: nwtnCooling}.)}
+\item[Heat-Transfer-Coeffs-Constant:\phantomsection\label{assumpHTCC}]{All heat transfer coefficients are constant over time. (RefBy: \hyperref[TM:nwtnCooling]{TM: nwtnCooling}.)}
 \item[Constant-Water-Temp-Across-Tank:\phantomsection\label{assumpCWTAT}]{The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)}
 \item[Temp-PCM-Constant-Across-Volume:\phantomsection\label{assumpTPCAV}]{The temperature of the phase change material is the same throughout the volume of PCM. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}, \hyperref[likeChgUTP]{LC: Uniform-Temperature-PCM}, \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, and \hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}.)}
 \item[Density-Water-PCM-Constant-over-Volume:\phantomsection\label{assumpDWPCoV}]{The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)}
@@ -514,22 +514,15 @@ RefBy & \hyperref[TM:sensHtE]{TM: sensHtE} and \hyperref[IM:heatEInPCM]{IM: heat
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\subsubsection{General Definitions}
-\label{Sec:GDs}
-This section collects the laws and equations that will be used to build the instance models.
-
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:nwtnCooling}
+\toprule \textbf{Refname} & \textbf{TM:nwtnCooling}
 \phantomsection 
-\label{GD:nwtnCooling}
+\label{TM:nwtnCooling}
 \\ \midrule \\
 Label & Newton's law of cooling
-        
-\\ \midrule \\
-Units & $\frac{\text{W}}{\text{m}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -557,6 +550,9 @@ RefBy &
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\subsubsection{General Definitions}
+\label{Sec:GDs}
+This section collects the laws and equations that will be used to build the instance models.
 
 \vspace{\baselineskip}
 \noindent
@@ -1516,7 +1512,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:latentHtE]{TM: latentHtE} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:nwtnCooling]{GD: nwtnCooling} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:nwtnCooling]{TM: nwtnCooling} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1584,7 +1580,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:htFluxC]{DD: htFluxC}} & \textbf{\hyperref[DD:htFluxP]{DD: htFluxP}} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD: htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD: meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD: aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM: latentHtE}} & \textbf{\hyperref[GD:nwtnCooling]{GD: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM: heatEInPCM}}
+\textbf{} & \textbf{\hyperref[DD:htFluxC]{DD: htFluxC}} & \textbf{\hyperref[DD:htFluxP]{DD: htFluxP}} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD: htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD: meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD: aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM: latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM: heatEInPCM}}
 \\
 \midrule
 \endhead
@@ -1612,7 +1608,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:latentHtE]{TM: latentHtE} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:nwtnCooling]{GD: nwtnCooling} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:nwtnCooling]{TM: nwtnCooling} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  & 
 \\
@@ -1630,7 +1626,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:htFluxC]{DD: htFluxC}} & \textbf{\hyperref[DD:htFluxP]{DD: htFluxP}} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD: htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD: meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD: aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM: latentHtE}} & \textbf{\hyperref[GD:nwtnCooling]{GD: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM: heatEInPCM}} & \textbf{\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}} & \textbf{\hyperref[findMass]{FR: Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}} & \textbf{\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}} & \textbf{\hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time}} & \textbf{\hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy}} & \textbf{\hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time}} & \textbf{\hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
+\textbf{} & \textbf{\hyperref[DD:htFluxC]{DD: htFluxC}} & \textbf{\hyperref[DD:htFluxP]{DD: htFluxP}} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}} & \textbf{\hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}} & \textbf{\hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}} & \textbf{\hyperref[DD:htFusion]{DD: htFusion}} & \textbf{\hyperref[DD:meltFrac]{DD: meltFrac}} & \textbf{\hyperref[DD:aspectRatio]{DD: aspectRatio}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:latentHtE]{TM: latentHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:eBalanceOnPCM]{IM: eBalanceOnPCM}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[IM:heatEInPCM]{IM: heatEInPCM}} & \textbf{\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}} & \textbf{\hyperref[findMass]{FR: Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}} & \textbf{\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}} & \textbf{\hyperref[calcTempPCMOverTime]{FR: Calculate-Temperature-PCM-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyPCMOverTime]{FR: Calculate-Change-Heat\_Energy-PCM-Over-Time}} & \textbf{\hyperref[verifyEnergyOutput]{FR: Verify-Energy-Output-Follow-Conservation-of-Energy}} & \textbf{\hyperref[calcPCMMeltBegin]{FR: Calculate-PCM-Melt-Begin-Time}} & \textbf{\hyperref[calcPCMMeltEnd]{FR: Calculate-PCM-Melt-End-Time}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
 \\
 \midrule
 \endhead

@@ -1,4 +1,5 @@
-module Drasil.SWHS.TMods (tMods, consThermE, sensHtE, sensHtETemplate, latentHtE, PhaseChange(Liquid)) where
+module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
+  nwtnCooling, sensHtE, sensHtETemplate, tMods) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -6,25 +7,26 @@ import Theory.Drasil (TheoryModel, tm)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (system)
-import Data.Drasil.Concepts.Math (equation, rOfChng)
+import Data.Drasil.Concepts.Math (equation, rate, rOfChng)
 import Data.Drasil.Concepts.Physics (mechEnergy)
-import Data.Drasil.Concepts.Thermodynamics (phaseChange, thermalEnergy,
-  heatTrans, lawConsEnergy)
+import Data.Drasil.Concepts.Thermodynamics (heatTrans, lawConsEnergy,
+  lawConvCooling, phaseChange, thermalEnergy)
 
 import Data.Drasil.Quantities.Math (gradient)
-import Data.Drasil.Quantities.PhysicalProperties (mass, density)
+import Data.Drasil.Quantities.PhysicalProperties (density, mass)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Quantities.Thermodynamics (temp, heatCapSpec,
-  latentHeat, meltPt, boilPt, sensHeat, heatCapSpec)
+import Data.Drasil.Quantities.Thermodynamics (boilPt, heatCapSpec,
+  htFlux, latentHeat, meltPt, sensHeat, temp)
 
-import Drasil.SWHS.Assumptions (assumpTEO)
+import Drasil.SWHS.Assumptions (assumpHTCC, assumpTEO)
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (ddMeltFrac)
-import Drasil.SWHS.Unitals (meltFrac, tau, deltaT, htCapV, htCapS,
-  htCapL, volHtGen, thFluxVect)
+import Drasil.SWHS.References (incroperaEtAl2007)
+import Drasil.SWHS.Unitals (deltaT, htCapL, htCapS, htCapV, htTransCoeff,
+  meltFrac, tau, tempEnv, thFluxVect, volHtGen)
 
 tMods :: [TheoryModel]
-tMods = [consThermE, sensHtE, latentHtE]
+tMods = [consThermE, sensHtE, latentHtE, nwtnCooling]
 
 -------------------------
 -- Theoretical Model 1 --
@@ -60,7 +62,6 @@ consThermENotes = map foldlSent [
 -------------------------
 -- Theoretical Model 2 --
 -------------------------
-
 sensHtE :: TheoryModel
 sensHtE = sensHtETemplate AllPhases sensHtEdesc
 
@@ -146,3 +147,29 @@ latentHtENotes = map foldlSent [
   [S "status" `ofThe'` phrase phaseChange, S "depends on the",
    phrase meltFrac, sParen (S "from" +:+ makeRef2S ddMeltFrac)],
   [atStart latentHeat :+: S "ing stops when all material has changed to the new phase"]]
+
+-------------------------
+-- Theoretical Model 4 --
+-------------------------
+nwtnCooling :: TheoryModel
+nwtnCooling = tm nwtnCoolingRC
+  [qw latentHeat, qw time, qw htTransCoeff, qw deltaT] ([] :: [ConceptChunk])
+  [] [nwtnCoolingEqn] [] [makeCiteInfo incroperaEtAl2007 $ Page [8]]
+  "nwtnCooling" nwtnCoolingNotes
+
+nwtnCoolingRC :: RelationConcept
+nwtnCoolingRC = makeRC "nwtnCoolingRC" (nounPhraseSP "Newton's law of cooling") 
+  EmptyS nwtnCoolingEqn -- nwtnCoolingL
+
+nwtnCoolingEqn :: Relation
+nwtnCoolingEqn = apply1 htFlux time $= sy htTransCoeff * apply1 deltaT time
+
+nwtnCoolingNotes :: [Sentence]
+nwtnCoolingNotes = map foldlSent [
+  [atStart lawConvCooling +:+. S "describes convective cooling from a surface" +:
+   S "The law is stated as", S "the", phrase rate `sOf` S "heat loss from a body" `sIs`
+   S "proportional to the difference in", plural temp, S "between the body and its surroundings"],
+  [ch htTransCoeff, S "is assumed to be independent" `sOf` ch temp,
+   sParen (S "from" +:+ makeRef2S assumpHTCC)],
+  [E (apply1 deltaT time $= apply1 temp time - apply1 tempEnv time) `isThe`
+   S "time-dependant thermal gradient between the environment and the object"]]

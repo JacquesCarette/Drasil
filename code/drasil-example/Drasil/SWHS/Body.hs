@@ -6,7 +6,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
   _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel)
+import Theory.Drasil (DataDefinition, InstanceModel)
 import Utils.Drasil
 
 import Control.Lens ((^.))
@@ -61,7 +61,7 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
 import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
 import Drasil.SWHS.Requirements (funcReqs, inputInitQuantsTable, nfRequirements,
   verifyEnergyOutput)
-import Drasil.SWHS.TMods (consThermE, latentHtE, sensHtE)
+import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
   relTol, simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
@@ -111,7 +111,7 @@ symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs theory concIns section labCon
+  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
@@ -169,9 +169,6 @@ tSymbIntro = [TSPurpose, SymbConvention
 
 insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
-
-theory :: [TheoryModel]
-theory = [consThermE, sensHtE, latentHtE]
 
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs

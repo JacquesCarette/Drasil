@@ -1,6 +1,49 @@
 module Language.Drasil.Code.Imperative.Modules (
-  genMain, genInput, genCalcFunc, genOutputMod
+  genMain, chooseInModule, genOutputMod
 ) where
+
+import Language.Drasil
+import Database.Drasil (ChunkDB)
+import Language.Drasil.Code.Imperative.Descriptions (derivedValuesDesc, 
+  dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc, 
+  inputConstraintsDesc, inputFormatDesc, inputParametersDesc, modDesc, 
+  outputFormatDesc, woFuncDesc)
+import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
+  getConstraintCall, getDerivedCall, getInputCall, getOutputCall)
+import Language.Drasil.Code.Imperative.GenerateGOOL (genModule, publicClass)
+import Language.Drasil.Code.Imperative.Helpers (liftS)
+import Language.Drasil.Code.Imperative.Import (CalcType(CalcAssign), convExpr,
+  genCalcBlock, mkVal, mkVar, publicInOutFunc, publicMethod, readData, renderC)
+import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
+import Language.Drasil.Code.Imperative.Parameters (getConstraintParams, 
+  getDerivedIns, getDerivedOuts, getInputFormatIns, getInputFormatOuts, 
+  getOutputParams)
+import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.Code.Imperative.GOOL.Symantics (RenderSym(..),
+  BodySym(..), BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..),
+  BooleanExpression(..), StatementSym(..), ControlStatementSym(..), 
+  MethodTypeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..))
+import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType, codevar, 
+  physLookup, sfwrLookup)
+import Language.Drasil.Chunk.CodeDefinition (codeEquat)
+import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
+import Language.Drasil.Code.DataDesc (junkLine, singleton)
+import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..),
+  Comments(CommentFunc), ConstraintBehaviour(..), InputModule(..), Logging(..), 
+  Structure(..))
+import Language.Drasil.Printers (Linearity(Linear), exprDoc)
+
+import Prelude hiding (print)
+import Data.List (intersperse, intercalate)
+import Data.Map (member)
+import qualified Data.Map as Map (lookup)
+import Data.Maybe (maybeToList, catMaybes, mapMaybe)
+import Control.Applicative ((<$>))
+import Control.Monad.Reader (Reader, ask)
+import Control.Lens ((^.))
+import Text.PrettyPrint.HughesPJ (render)
 
 ---- MAIN ---
 
@@ -240,49 +283,6 @@ genInputFormat = do
         mthd <- publicInOutFunc "get_input" desc ins outs [] bod
         return $ Just mthd
   genInFormat $ Map.lookup "get_input" (eMap $ codeSpec g)
-
-------- CALC ----------
-
-genCalcFunc :: (RenderSym repr) => CodeDefinition -> Reader State (repr
-  (Method repr))
-genCalcFunc cdef = do
-  parms <- getCalcParams cdef
-  let nm = codeName cdef
-      tp = convType $ codeType cdef
-  blck <- genCalcBlock CalcReturn cdef (codeEquat cdef)
-  desc <- returnComment $ cdef ^. uid
-  publicMethod
-    (mState tp)
-    nm
-    ("Calculates " ++ desc)
-    parms
-    (Just desc)
-    [blck]
-
-data CalcType = CalcAssign | CalcReturn deriving Eq
-
-genCalcBlock :: (RenderSym repr) => CalcType -> CodeDefinition -> Expr ->
-  Reader State (repr (Block repr))
-genCalcBlock t v (Case c e) = genCaseBlock t v c e
-genCalcBlock t v e
-    | t == CalcAssign  = fmap block $ liftS $ do { vv <- mkVar v; ee <-
-      convExpr e; l <- maybeLog vv; return $ multi $ assign vv ee : l}
-    | otherwise        = block <$> liftS (returnState <$> convExpr e)
-
-genCaseBlock :: (RenderSym repr) => CalcType -> CodeDefinition -> Completeness 
-  -> [(Expr,Relation)] -> Reader State (repr (Block repr))
-genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
-  " in code generator"
-genCaseBlock t v c cs = do
-  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr r) (calcBody e)) (ifEs c)
-  els <- elseE c
-  return $ block [ifCond ifs els]
-  where calcBody e = fmap body $ liftS $ genCalcBlock t v e
-        ifEs Complete = init cs
-        ifEs Incomplete = cs
-        elseE Complete = calcBody $ fst $ last cs
-        elseE Incomplete = return $ oneLiner $ throw $  
-          "Undefined case encountered in function " ++ codeName v
 
 ----- OUTPUT -------
 

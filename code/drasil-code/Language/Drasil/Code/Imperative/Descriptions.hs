@@ -1,8 +1,18 @@
 module Language.Drasil.Code.Imperative.Descriptions (
-  inputParametersDesc, inputFormatDesc, derivedValuesDesc, inputConstraintsDesc,
-  outputFormatDesc, inputClassDesc, inFmtFuncDesc, inConsFuncDesc, dvFuncDesc,
-  woFuncDesc
+  modDesc, inputParametersDesc, inputFormatDesc, derivedValuesDesc, 
+  inputConstraintsDesc, outputFormatDesc, inputClassDesc, inFmtFuncDesc,
+  inConsFuncDesc, dvFuncDesc, woFuncDesc
 ) where
+
+import Utils.Drasil (stringList)
+
+import Language.Drasil
+import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), 
+  InputModule(..), Structure(..))
+
+import qualified Data.Map as Map (lookup, elems)
+import Control.Monad.Reader (Reader, ask)
 
 modDesc :: Reader State [String] -> Reader State String
 modDesc = fmap ((++) "Provides " . stringList)

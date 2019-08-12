@@ -1,6 +1,16 @@
 module Language.Drasil.Code.Imperative.Logging (
-  maybeLog
+  maybeLog, loggedMethod, varLogFile
 ) where
+
+import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, RenderSym(..),
+  BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..),
+  StatementSym(..))
+import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
+
+import Data.Maybe (maybeToList)
+import Control.Applicative ((<$>))
+import Control.Monad.Reader (Reader, ask)
 
 maybeLog :: (RenderSym repr) => repr (Variable repr) ->
   Reader State [repr (Statement repr)]

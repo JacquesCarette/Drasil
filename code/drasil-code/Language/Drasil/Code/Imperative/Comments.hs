@@ -2,6 +2,19 @@ module Language.Drasil.Code.Imperative.Comments (
   paramComment, returnComment
 ) where
 
+import Language.Drasil
+import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..))
+import Language.Drasil.Printers (Linearity(Linear), sentenceDoc, 
+  unitDoc)
+
+import Data.Map (Map)
+import qualified Data.Map as Map (lookup)
+import Data.Maybe (maybe)
+import Control.Monad.Reader (Reader, ask)
+import Control.Lens (view)
+import Text.PrettyPrint.HughesPJ (Doc, (<+>), empty, parens, render, text)
+
 getTermDoc :: (NamedIdea c) => UID -> Map UID c -> Reader State Doc
 getTermDoc cname m = do
   g <- ask

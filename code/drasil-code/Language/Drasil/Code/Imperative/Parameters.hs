@@ -3,6 +3,19 @@ module Language.Drasil.Code.Imperative.Parameters(
   getConstraintParams, getCalcParams, getOutputParams
 ) where
 
+import Language.Drasil 
+import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), codevar)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
+import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Structure(..), 
+  codevars, codevars', constraintvarsandfuncs, getConstraints)
+
+import Data.List (nub, (\\))
+import Data.Map (member)
+import Control.Monad.Reader (Reader, ask)
+import Control.Lens ((^.))
+
 getInputFormatIns :: Reader State [CodeChunk]
 getInputFormatIns = do
   g <- ask

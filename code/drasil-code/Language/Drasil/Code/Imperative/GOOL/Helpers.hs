@@ -8,8 +8,8 @@ module Language.Drasil.Code.Imperative.GOOL.Helpers (blank,verticalComma,
 ) where
 
 import qualified Language.Drasil.Code.Code as C (CodeType(..))
-import Language.Drasil.Code.Imperative.Data (ParamData)
-import qualified Language.Drasil.Code.Imperative.Symantics as S ( 
+import Language.Drasil.Code.Imperative.GOOL.Data (ParamData)
+import qualified Language.Drasil.Code.Imperative.GOOL.Symantics as S ( 
   RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
 
 import Prelude hiding ((<>))

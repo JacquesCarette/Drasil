@@ -2,6 +2,27 @@ module Language.Drasil.Code.Imperative.FunctionCalls (
   getInputCall, getDerivedCall, getConstraintCall, getCalcCall, getOutputCall
 ) where
 
+import Language.Drasil
+import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, fAppInOut)
+import Language.Drasil.Code.Imperative.Import (mkVal, mkVar)
+import Language.Drasil.Code.Imperative.Logging (maybeLog)
+import Language.Drasil.Code.Imperative.Parameters (getCalcParams, 
+  getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
+  getInputFormatOuts, getOutputParams)
+import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.Code.Imperative.GOOL.Symantics (RenderSym(..),
+  StateTypeSym(..), ValueSym(..), StatementSym(..))
+import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
+import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
+import Language.Drasil.CodeSpec (CodeSpec(..))
+
+import qualified Data.Map as Map (lookup)
+import Data.Maybe (maybe)
+import Control.Monad.Reader (Reader, ask)
+import Control.Lens ((^.))
+
 getInputCall :: (RenderSym repr) => Reader State (Maybe (repr (Statement repr)))
 getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts 
   (return [])

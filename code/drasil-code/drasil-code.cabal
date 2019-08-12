@@ -33,14 +33,10 @@ library
     , Language.Drasil.Code.Imperative.Generator
     , Language.Drasil.Code.Imperative.Helpers
     , Language.Drasil.Code.Imperative.Import
-    , Language.Drasil.Code.Imperative.LanguageRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
     , Language.Drasil.Code.Imperative.Logging
     , Language.Drasil.Code.Imperative.Modules
     , Language.Drasil.Code.Imperative.Parameters
+    , Language.Drasil.Code.Imperative.State
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.CodeSpec
 
@@ -101,6 +97,7 @@ executable codegenTest
     , Language.Drasil.Code.Imperative.Logging
     , Language.Drasil.Code.Imperative.Modules
     , Language.Drasil.Code.Imperative.Parameters
+    , Language.Drasil.Code.Imperative.State
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.CodeSpec
   Build-Depends:

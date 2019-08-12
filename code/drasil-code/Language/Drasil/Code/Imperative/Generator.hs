@@ -2,20 +2,21 @@ module Language.Drasil.Code.Imperative.Generator (
   State(..), generator, generateCode
 ) where
 
--- Private State, used to push these options around the generator
-data State = State {
-  codeSpec :: CodeSpec,
-  date :: String,
-  inStruct :: Structure,
-  inMod :: InputModule,
-  logName :: String,
-  logKind :: Logging,
-  commented :: [Comments],
-  currentModule :: String,
+import Language.Drasil.Code.Imperative.GenerateGOOL (genDoxConfig)
+import Language.Drasil.Code.Imperative.Import (genModDef)
+import Language.Drasil.Code.Imperative.Modules (chooseInModule, genMain, 
+  genOutputMod)
+import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
+  ProgramSym(..), RenderSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ProgData(..))
+import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Chunk.Code (programName)
+import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
+  Lang(..), Visibility(..))
 
-  onSfwrC :: ConstraintBehaviour,
-  onPhysC :: ConstraintBehaviour
-}
+import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
+import Control.Monad.Reader (Reader, ask, runReader)
 
 generator :: String -> Choices -> CodeSpec -> State
 generator dt chs spec = State {

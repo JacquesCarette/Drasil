@@ -18,7 +18,7 @@ import Text.ParserCombinators.Parsec.Language (caseSensitive, reservedNames, res
   opLetter, opStart, identLetter, identStart, nestedComments, commentLine, commentStart, 
   commentEnd, LanguageDef, emptyDef)
 
-import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (Options(..))
 
 -- | Data type that defines a configuration for generating code
 -- Parameters: Language, optional parameters

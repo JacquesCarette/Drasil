@@ -1,8 +1,11 @@
-module Drasil.SWHS.GenDefs (genDefs, rocTempSimp, rocTempSimpDeriv, rocTempSimpRC) where
+module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
+  rocTempSimp, rocTempSimpDeriv, rocTempSimpRC) where
 
 import Language.Drasil
-import Theory.Drasil (GenDefn, gdNoRefs)
+import Theory.Drasil (GenDefn, gd, gdNoRefs)
 import Utils.Drasil
+
+import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 
@@ -11,10 +14,13 @@ import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
 import Data.Drasil.Quantities.Physics as QP (time)
 import Data.Drasil.Quantities.Thermodynamics as QT (heatCapSpec, temp)
 
-import Drasil.SWHS.Assumptions (assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV)
+import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpTPCAV,
+  assumpDWPCoV, assumpSHECoV, assumpTHCCoT)
 import Drasil.SWHS.Concepts (gaussDiv)
+import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (consThermE)
-import Drasil.SWHS.Unitals (htFluxIn, htFluxOut, inSA, outSA, thFluxVect, volHtGen)
+import Drasil.SWHS.Unitals (coilHTC, htFluxC, htFluxIn, htFluxOut, htFluxP,
+  inSA, outSA, pcmHTC, tempC, tempPCM, tempW, thFluxVect, volHtGen)
 
 ---------------------------
 --  General Definitions  --
@@ -25,21 +31,50 @@ import Drasil.SWHS.Unitals (htFluxIn, htFluxOut, inSA, outSA, thFluxVect, volHtG
 --stabilized yet (since RelationConcept isn't an instance of --
 --the Referable class.                                       --
 genDefs :: [GenDefn]
-genDefs = [rocTempSimp] 
+genDefs = [rocTempSimp, htFluxWaterFromCoil, htFluxPCMFromWater] 
 
 rocTempSimp :: GenDefn
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn)
-  (Just $ rocTempSimpDeriv rocTempDerivConsFlxSWHS [assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV])
+  (Just $ rocTempSimpDeriv rocTempDerivConsFlxSWHS
+   [assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV])
   "rocTempSimp" [{-Notes-}]
 
 rocTempSimpRC :: RelationConcept
-rocTempSimpRC = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") EmptyS rocTempSimpRel -- rocTempSimpL
+rocTempSimpRC = makeRC "rocTempSimpRC" (nounPhraseSP $ "Simplified rate " ++
+  "of change of temperature") EmptyS rocTempSimpRel
 
 rocTempSimpRel :: Relation
 rocTempSimpRel = sy QPP.mass * sy QT.heatCapSpec *
   deriv (sy QT.temp) QP.time $= sy htFluxIn * sy inSA -
   sy htFluxOut * sy outSA + sy volHtGen * sy QPP.vol
+
+----
+
+htFluxWaterFromCoil :: GenDefn
+htFluxWaterFromCoil = gd htFluxWaterFromCoilRC (getUnit htFluxC) Nothing
+  [makeCite koothoor2013] "htFluxWaterFromCoil"
+  [makeRef2S assumpLCCCW, makeRef2S assumpTHCCoT]
+
+htFluxWaterFromCoilRC :: RelationConcept
+htFluxWaterFromCoilRC = makeRC "htFluxWaterFromCoilRC" (htFluxC ^. term)
+  EmptyS htFluxWaterFromCoilRel
+
+htFluxWaterFromCoilRel :: Relation
+htFluxWaterFromCoilRel = sy htFluxC $= sy coilHTC * (sy tempC - apply1 tempW time)
+
+--Can't include info in description beyond definition of variables?
+----
+
+htFluxPCMFromWater :: GenDefn
+htFluxPCMFromWater = gd htFluxPCMFromWaterRC (getUnit htFluxP) Nothing
+  [makeCite koothoor2013] "htFluxPCMFromWater" [makeRef2S assumpLCCCW]
+
+htFluxPCMFromWaterRC :: RelationConcept
+htFluxPCMFromWaterRC = makeRC "htFluxPCMFromWaterRC" (htFluxP ^. term)
+  EmptyS htFluxPCMFromWaterRel
+
+htFluxPCMFromWaterRel :: Relation
+htFluxPCMFromWaterRel = sy htFluxP $= sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
 
 --------------------------------------
 --  General Definitions Derivation  --

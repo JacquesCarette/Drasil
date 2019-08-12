@@ -589,12 +589,12 @@
                   </p>
                   <p>
                     <div id="assumpLCCCW">
-                      Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. (RefBy: <a href=#DD:htFluxC>DD: htFluxC</a>.)
+                      Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. (RefBy: <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpTHCCoT">
-                      Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. (RefBy: <a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a> and <a href=#DD:htFluxC>DD: htFluxC</a>.)
+                      Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. (RefBy: <a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a> and <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>.)
                     </div>
                   </p>
                   <p>
@@ -960,29 +960,17 @@
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div id="Sec:DDs">
-              <div class="subsubsection">
-                <h3>Data Definitions</h3>
-                <p class="paragraph">
-                  This section collects and defines all the data needed to build the instance models.
-                </p>
-                <div id="DD:htFluxC">
-                  <table class="ddefn">
+                <div id="GD:htFluxWaterFromCoil">
+                  <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>DD:htFluxC</b></td>
+                      <td><b>GD:htFluxWaterFromCoil</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
                         <p class="paragraph">Heat flux into the water from the coil</p>
                       </td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>q<sub>C</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1044,6 +1032,14 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
+              </div>
+            </div>
+            <div id="Sec:DDs">
+              <div class="subsubsection">
+                <h3>Data Definitions</h3>
+                <p class="paragraph">
+                  This section collects and defines all the data needed to build the instance models.
+                </p>
                 <div id="DD:balanceDecayRate">
                   <table class="ddefn">
                     <tr>
@@ -1235,7 +1231,7 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of the energy balance on water:</h4>
                     <p class="paragraph">
-                      To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#DD:htFluxC>DD: htFluxC</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+                      To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
                     </p>
                     <div class="equation">
                       <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
@@ -1248,7 +1244,7 @@
                                                                   </div> = q<sub>C</sub>&#8239;A<sub>C</sub></em>
                     </div>
                     <p class="paragraph">
-                      Using <a href=#DD:htFluxC>DD: htFluxC</a> for <em>q<sub>C</sub></em>, this can be written as:
+                      Using <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a> for <em>q<sub>C</sub></em>, this can be written as:
                     </p>
                     <div class="equation">
                       <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
@@ -1776,22 +1772,6 @@
               <th><a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a></th>
             </tr>
             <tr>
-              <td><a href=#DD:htFluxC>DD: htFluxC</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
               <td></td>
               <td></td>
@@ -1864,6 +1844,24 @@
               <td>X</td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2196,25 +2194,16 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
               <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
               <th><a href=#TM:nwtnCooling>TM: nwtnCooling</a></th>
               <th><a href=#GD:rocTempSimp>GD: rocTempSimp</a></th>
+              <th>
+                <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>
+              </th>
               <th><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></th>
               <th><a href=#IM:heatEInWtr>IM: heatEInWtr</a></th>
-            </tr>
-            <tr>
-              <td><a href=#DD:htFluxC>DD: htFluxC</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
@@ -2263,21 +2252,34 @@
             <tr>
               <td><a href=#GD:rocTempSimp>GD: rocTempSimp</a></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
             <tr>
               <td><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
@@ -2286,8 +2288,8 @@
               <td><a href=#IM:heatEInWtr>IM: heatEInWtr</a></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2302,12 +2304,14 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
               <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
               <th><a href=#TM:nwtnCooling>TM: nwtnCooling</a></th>
               <th><a href=#GD:rocTempSimp>GD: rocTempSimp</a></th>
+              <th>
+                <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>
+              </th>
               <th><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></th>
               <th><a href=#IM:heatEInWtr>IM: heatEInWtr</a></th>
               <th><a href=#inputInitQuants>FR: Input-Initial-Quantities</a></th>
@@ -2446,8 +2450,8 @@
               <td>
                 <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>
               </td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

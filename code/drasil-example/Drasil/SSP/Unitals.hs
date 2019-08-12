@@ -457,13 +457,13 @@ minFunction = dqd' (dcc "Upsilon" (nounPhraseSP "minimization function")
   (const cUpsilon) Real Nothing
 
 mobShrC = dqd' (dcc "Psi"
-  (nounPhraseSP $ "second function for incorporating interslice forces into shear force")
+  (nounPhraseSP "second function for incorporating interslice forces into shear force")
   ("the function for converting mobile shear " ++ wiif ++
    ", to a calculation considering the interslice forces"))
   (const (vec cPsi)) Real Nothing
 
 shrResC = dqd' (dcc "Phi"
-  (nounPhraseSP $ "first function for incorporating interslice forces into shear force")
+  (nounPhraseSP "first function for incorporating interslice forces into shear force")
   ("the function for converting resistive shear " ++ wiif ++
    ", to a calculation considering the interslice forces"))
   (const (vec cPhi)) Real Nothing
@@ -477,7 +477,8 @@ varblV = dqd' (dcc "varblV" (nounPhraseSP "local index")
   (const lV) Natural Nothing
 
 index = dqd' (dcc "index" (nounPhraseSP "index")
-  "a number representing a single slice") (const lI) Natural Nothing 
+  "a number representing a single slice")
+  (const lI) Natural Nothing 
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr

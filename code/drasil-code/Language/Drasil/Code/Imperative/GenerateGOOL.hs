@@ -1,6 +1,6 @@
 module Language.Drasil.Code.Imperative.GenerateGOOL (
   genModule, genDoxConfig, publicClass, publicMethod, publicInOutFunc, fApp, 
-  fAppInOut, value, variable
+  fAppInOut, value, variable, mkParam
 ) where
 
 genModule :: (RenderSym repr) => Name -> String
@@ -124,3 +124,9 @@ inputVariable Unbundled s t = return $ var s t
 inputVariable Bundled s t = do
   ip <- mkVar (codevar inParams)
   return $ ip $-> var s t
+
+mkParam :: (RenderSym repr) => repr (Variable repr) -> repr (Parameter repr)
+mkParam v = paramFunc (getType $ variableType v) v
+  where paramFunc (C.List _) = pointerParam
+        paramFunc (C.Object _) = pointerParam
+        paramFunc _ = stateParam

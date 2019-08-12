@@ -43,34 +43,6 @@ import Control.Monad.Reader (Reader, ask, runReader, withReader)
 import Control.Lens ((^.), view)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), empty, parens, render, text)
 
-liftS :: Reader a b -> Reader a [b]
-liftS = fmap (: [])
-
--- helpers
-
-mkParam :: (RenderSym repr) => repr (Variable repr) -> repr (Parameter repr)
-mkParam v = paramFunc (getType $ variableType v) v
-  where paramFunc (C.List _) = pointerParam
-        paramFunc (C.Object _) = pointerParam
-        paramFunc _ = stateParam
-
-mkVal :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => c -> 
-  Reader State (repr (Value repr))
-mkVal v = value (v ^. uid) (codeName v) (convType $ codeType v)
-
-mkVar :: (RenderSym repr, HasCodeType c, CodeIdea c) => c -> 
-  Reader State (repr (Variable repr))
-mkVar v = variable (codeName v) (convType $ codeType v)
-
-getInputVars :: Structure -> [CodeChunk] -> [CodeChunk]
-getInputVars _ [] = []
-getInputVars Unbundled cs = cs
-getInputVars Bundled _ = [codevar inParams]
-
--- Right now, we always inline constants. In the future, this will be captured by a choice and this function should be updated to read that choice
-getConstVars :: [CodeChunk] -> [CodeChunk]
-getConstVars _ = []
-
 convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr))
 convExpr (Dbl d) = return $ litFloat d
 convExpr (Int i) = return $ litInt i
@@ -112,13 +84,6 @@ convExpr IsIn{}    = error "convExpr: IsIn"
 convExpr (RealI c ri)  = do
   g <- ask
   convExpr $ renderRealInt (lookupC g c) ri
-
-getUpperBound :: Expr -> Expr
-getUpperBound (BinaryOp Lt _ b) = b
-getUpperBound _ = error "Attempt to get upper bound of invalid expression"
-
-lookupC :: State -> UID -> QuantityDict
-lookupC g = symbResolve (sysinfodb $ csi $ codeSpec g)
 
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
 renderC s (Range _ rr)          = renderRealInt s rr

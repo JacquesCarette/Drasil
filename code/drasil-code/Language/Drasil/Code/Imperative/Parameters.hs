@@ -68,3 +68,12 @@ getParams cs' = do
       inVs = getInputVars (inStruct g) inpVars
       conVs = getConstVars conVars
   return $ inVs ++ conVs ++ csSubIns
+
+getInputVars :: Structure -> [CodeChunk] -> [CodeChunk]
+getInputVars _ [] = []
+getInputVars Unbundled cs = cs
+getInputVars Bundled _ = [codevar inParams]
+
+-- Right now, we always inline constants. In the future, this will be captured by a choice and this function should be updated to read that choice
+getConstVars :: [CodeChunk] -> [CodeChunk]
+getConstVars _ = []

@@ -86,26 +86,6 @@ genInOutFunc s pr n desc ins outs both b = do
   return $ if CommentFunc `elem` commented g 
     then docInOutFunc desc pComms oComms bComms fn else fn
 
-loggedMethod :: (RenderSym repr) => Label -> Label -> [repr (Variable repr)] -> 
-  [repr (Block repr)] -> [repr (Block repr)]
-loggedMethod lName n vars b = block [
-      varDec varLogFile,
-      openFileA varLogFile (litString lName),
-      printFileStrLn valLogFile ("function " ++ n ++ " called with inputs: {"),
-      multi $ printInputs vars,
-      printFileStrLn valLogFile "  }",
-      closeFile valLogFile ]
-      : b
-  where
-    printInputs [] = []
-    printInputs [v] = [
-      printFileStr valLogFile ("  " ++ variableName v ++ " = "), 
-      printFileLn valLogFile (valueOf v)]
-    printInputs (v:vs) = [
-      printFileStr valLogFile ("  " ++ variableName v ++ " = "), 
-      printFile valLogFile (valueOf v), 
-      printFileStrLn valLogFile ", "] ++ printInputs vs
-
 fApp :: (RenderSym repr) => String -> String -> repr (StateType repr) -> 
   [repr (Value repr)] -> Reader State (repr (Value repr))
 fApp m s t vl = do

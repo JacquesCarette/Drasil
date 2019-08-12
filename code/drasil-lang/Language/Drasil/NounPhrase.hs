@@ -1,11 +1,8 @@
-module Language.Drasil.NounPhrase 
-  ( NounPhrase(..)
-  , NP
-  , pn, pn', pn'', pn''', pnIrr
-  , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS, cnUM
-  , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent
-  , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
-  , atStartNP, atStartNP', titleizeNP, titleizeNP'
+module Language.Drasil.NounPhrase (NounPhrase(..), NP, atStartNP, atStartNP',
+  cn, cn', cn'', cn''', cnICES, cnIES, cnIP, cnIS, cnIrr, cnUM, compoundPhrase,
+  compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1,
+  nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent, pn, pn',
+  pn'', pn''', pnIrr, titleizeNP, titleizeNP'
   -- re-export these
   , CapitalizationRule(..), PluralRule(..)
   ) where
@@ -202,17 +199,6 @@ cap (S s1 :+: S s2 :+: x) r = cap (S (s1 ++ s2) :+: x) r
 cap (s1 :+: s2) CapWords = cap s1 CapWords +:+ capTail s2
 cap (s1 :+: s2) CapFirst = cap s1 CapFirst :+: s2
 cap a _ = a
-
-{-
--- WIP
-cap (S s1 :+: S s2) r = cap (S (s1 ++ s2)) r
-cap (s1 :+: s2 :+: s3) CapWords = cap s1 CapWords :+: capTail (s2 :+: s3)
-
--- from master
-cap (s1 :+: s2 :+: s3) CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
---could change associativity of :+: instead?
-cap (s1 :+: s2)  CapWords = cap s1 CapWords :+: cap s2 CapWords
--}
 
 -- | Helper for cap for the end of a Sentence (Assumes CapWords).
 capTail :: Sentence -> Sentence

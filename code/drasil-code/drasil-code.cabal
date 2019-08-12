@@ -30,6 +30,7 @@ library
     , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
     , Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer
     , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
+    , Language.Drasil.Code.Imperative.Parameters
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.CodeSpec
 
@@ -84,6 +85,7 @@ executable codegenTest
     , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
     , Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer
     , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
+    , Language.Drasil.Code.Imperative.Parameters
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.CodeSpec
   Build-Depends:

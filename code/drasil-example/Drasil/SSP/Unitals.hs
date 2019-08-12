@@ -246,7 +246,7 @@ critCoords = makeUCWDS "(xcs,ycs)" (cn "critical slip surface coordinates")
   (Concat [sub (vec lX) lCSlip, Label ",", sub (vec lY) lCSlip]) metre
 
 mobilizedShear = uc' "mobilizedShear" (cn' "mobilized shear force")
-  "shear force in the direction of potential motion" cS newton
+  "the shear force in the direction of potential motion" cS newton
 
 resistiveShear = makeUCWDS "resistiveShear" (cn' "resistive shear force")
   (S "the Mohr Coulomb frictional force that describes the limit" `sOf`
@@ -304,7 +304,7 @@ surfHydroForce = makeUCWDS "U_t,i" (cn "surface hydrostatic forces")
   (sub (vec cU) lSurface) forcePerMeterU
 
 totNrmForce = makeUCWDS "N_i" (cn "normal forces")
-  (S "total reactive forces per meter" `inThe` phrase zDir +:+
+  (S "the total reactive forces per meter" `inThe` phrase zDir +:+
    S "for each slice of a soil surface subject to a body resting on it")
   (vec cN) forcePerMeterU
 
@@ -327,8 +327,7 @@ surfAngle = uc' "beta_i" (cn "surface angles")
   (vec lBeta) degree
 
 impLoadAngle = uc' "omega_i" (cn "imposed load angles")
-  ("the angles between the external force acting into the surface of each slice" ++
-   "and the vertical")
+  "the angles between the external force acting into the surface of each slice and the vertical"
   (vec lOmega) degree
 
 baseWthX = makeUCWDS "b_i" (cn "base width of slices")

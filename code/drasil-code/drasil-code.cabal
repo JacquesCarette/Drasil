@@ -20,6 +20,7 @@ library
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.Doxygen.Import
     , Language.Drasil.Code.Imperative.Helpers
+    , Language.Drasil.Code.Imperative.Comments
     , Language.Drasil.Code.Imperative.Data
     , Language.Drasil.Code.Imperative.Descriptions
     , Language.Drasil.Code.Imperative.FunctionCalls
@@ -78,6 +79,7 @@ executable codegenTest
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.Doxygen.Import
     , Language.Drasil.Code.Imperative.Helpers
+    , Language.Drasil.Code.Imperative.Comments
     , Language.Drasil.Code.Imperative.Data
     , Language.Drasil.Code.Imperative.Descriptions
     , Language.Drasil.Code.Imperative.FunctionCalls

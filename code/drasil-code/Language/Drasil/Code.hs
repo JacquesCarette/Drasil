@@ -20,7 +20,7 @@ module Language.Drasil.Code (
 
 import Prelude hiding (break, print, return, log, exp)
 
-import Language.Drasil.Code.Imperative.Import (generator, generateCode)
+import Language.Drasil.Code.Imperative.Generator (generator, generateCode)
 
 import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
 

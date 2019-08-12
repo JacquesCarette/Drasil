@@ -401,10 +401,14 @@ totStress = uc' "sigma" (cn' "total stress")
   "the total force per area acting on the soil mass" lSigma pascal
 
 effectiveStress = uc' "sigma'" (cn' "effective stress")
-  "provided by the soil skeleton" (prime lSigma) pascal
+  ("the stress in a soil mass that is effective in causing volume changes; " ++
+   "represents the average stress carried by the soil skeleton")
+  (prime lSigma) pascal
 
 effNormStress = uc' "sigmaN'" (cn' "effective normal stress")
-  "" (prime $ sub lSigma cN) pascal
+  ("the normal stress in a soil mass that is effective in causing volume changes; " ++
+   "represents the average stress carried by the soil skeleton")
+  (prime $ sub lSigma cN) pascal
 
 dryVol = uc' "V_dry" (cn "volumes of dry soil")
   "the amount of space occupied by dry soil for each slice"

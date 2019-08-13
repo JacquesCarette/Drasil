@@ -202,10 +202,10 @@ public class Calculations {
         return 1 - Math.exp(-B);
     }
     
-    /** \brief Calculates probability of breakage safety requirement
+    /** \brief Calculates probability of glass breakage safety requirement
         \param inParams structure holding the input values
         \param P_b probability of breakage
-        \return probability of breakage safety requirement
+        \return probability of glass breakage safety requirement
     */
     public static Boolean func_is_safePb(InputParameters inParams, double P_b) throws Exception {
         PrintWriter outfile;

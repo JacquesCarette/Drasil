@@ -10,7 +10,7 @@ using System.Collections.Generic;
 public class OutputFormat {
     
     /** \brief Writes the output values to output.txt
-        \param is_safePb probability of breakage safety requirement
+        \param is_safePb probability of glass breakage safety requirement
         \param is_safeLR load resistance safety requirement
         \param P_b probability of breakage
     */

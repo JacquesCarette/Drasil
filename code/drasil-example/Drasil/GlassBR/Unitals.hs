@@ -248,10 +248,14 @@ dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
 
 gTF = vc "gTF" (glassTypeFac ^. term) (Variable "GTF") Integer
 
-isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of breakage safety requirement") (Variable "is-safePb")   Boolean
-isSafeProb = vc "isSafeProb" (nounPhraseSP "probability of failure safety requirement")  (Variable "is-safeProb") Boolean
-isSafeLR   = vc "isSafeLR"   (nounPhraseSP "load resistance safety requirement")         (Variable "is-safeLR")   Boolean
-isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")         (Variable "is-safeLoad") Boolean
+isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of glass breakage safety requirement")
+  (Variable "is-safePb")   Boolean
+isSafeProb = vc "isSafeProb" (nounPhraseSP "probability of failure safety requirement")
+  (Variable "is-safeProb") Boolean
+isSafeLR   = vc "isSafeLR"   (nounPhraseSP "load resistance safety requirement")
+  (Variable "is-safeLR")   Boolean
+isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
+  (Variable "is-safeLoad") Boolean
 
 lDurFac = vc'' loadDurFactor (Variable "LDF") Real
 loadSF  = vc'' lShareFac     (Variable "LSF") Natural
@@ -383,9 +387,6 @@ specA         = dcc "specA"       (nounPhraseSP "specifying authority")
 specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
   ("The magnitude in Pa (psf), type (for example, wind or snow) and " ++
     "duration of the load given by the specifying authority.")
-
-{--}
-
 
 {--}
 

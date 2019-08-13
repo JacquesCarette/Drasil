@@ -1,5 +1,5 @@
 module Drasil.GamePhysics.TMods (tMods, t2NewtonTL_new, 
-t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, tModsNew) where
+  t3NewtonLUG_new, t5NewtonSLR_new) where
 
 import Language.Drasil
 import Prelude hiding (id)
@@ -7,25 +7,19 @@ import Control.Lens ((^.))
 import Theory.Drasil (TheoryModel, tmNoRefs)
 import Utils.Drasil
 
-import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD)
+import Drasil.GamePhysics.Assumptions (assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
-  mass_1, mass_2, rOB, sqrDist, velB, velO)
+  mass_1, mass_2, sqrDist)
 
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
-  angularVelocity, displacement, force, gravitationalConst, 
-  momentOfInertia, torque, velocity)
-import qualified Data.Drasil.Theories.Physics as TP (newtonSL, newtonSLRC)
+  displacement, force, gravitationalConst, momentOfInertia, torque)
+import qualified Data.Drasil.Theories.Physics as TP (newtonSL)
 
 ----- Theoretical Models -----
-
-tMods :: [RelationConcept]
-tMods = [TP.newtonSLRC, newtonTL, newtonLUG, chaslesThm, newtonSLR]
-
-tModsNew :: [TheoryModel]
-tModsNew = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new, 
-  t4ChaslesThm_new, t5NewtonSLR_new]
+tMods :: [TheoryModel]
+tMods = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new, t5NewtonSLR_new]
 
 -- T1 : Newton's second law of motion --
 
@@ -105,37 +99,6 @@ newtonLUGDesc = foldlSent [S "Two", plural CP.rigidBody, S "in the universe",
   S "is the", QP.gravitationalConst ^. defn, 
   sParen $ Sy $ unit_symb QP.gravitationalConst]
 
--- T4 : Chasles' theorem --
-
-t4ChaslesThm_new :: TheoryModel
-t4ChaslesThm_new = tmNoRefs (cw chaslesThm)
-  [qw velB, qw velO, qw QP.angularVelocity, qw rOB] 
-  ([] :: [ConceptChunk]) [] [sy velB $= sy velO + cross 
-  (sy  QP.angularVelocity) (sy rOB)] [] "ChaslesThm" [chaslesThmDesc]
-
-chaslesThm :: RelationConcept
-chaslesThm = makeRC "chaslesThm" (nounPhraseSP "Chasles' theorem")
-  chaslesThmDesc chaslesThmRel
-
--- Need the cross product symbol - third term should be a cross product.
-chaslesThmRel :: Relation
-chaslesThmRel = sy velB $= sy velO + cross (sy  QP.angularVelocity) (sy rOB)
-
--- B should ideally be italicized in 'point B' (line 202).
-chaslesThmDesc :: Sentence
-chaslesThmDesc = foldlSent [S "The linear", phrase QP.velocity,
-  ch velB, sParen $ Sy $ unit_symb velB, S "of any point B in a",
-  phrase CP.rigidBody, makeRef2S assumpOT, S "is the sum of the linear",
-  phrase QP.velocity, ch velO,
-  sParen $ Sy $ unit_symb velO, S "of the", phrase CP.rigidBody,
-  S "at the origin (axis of rotation) and the",
-  S "resultant vector from the cross product of the",
-  phrase CP.rigidBody :+: S "'s", phrase QP.angularVelocity,
-  ch QP.angularVelocity,
-  sParen $ Sy $ unit_symb QP.angularVelocity, S "and the",
-  phrase rOB `sC` ch rOB,
-  sParen $ Sy $ unit_symb rOB]
-
 -- T5 : Newton's second law for rotational motion --
 
 t5NewtonSLR_new :: TheoryModel
@@ -166,5 +129,3 @@ newtonSLRDesc = foldlSent [S "The net", phrase QP.torque,
   phrase CP.rigidBody, S "We also assume that all",
   plural CP.rigidBody, S "involved are two-dimensional",
   makeRef2S assumpOD]
-
-  

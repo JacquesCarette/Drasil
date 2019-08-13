@@ -54,6 +54,8 @@ addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 addPackage Tabu      = usepackage "tabu"
 addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
+-- Discussed in issue #1819
+-- Because we are using LuaLatex, we use fontspec here instead of fontenc
 addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
 addPackage EnumItem  = usepackage "enumitem"

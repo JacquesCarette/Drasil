@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 
 -- | The logic to render Python code is contained in this module
-module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
   PythonCode(..)
 ) where
@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -19,7 +19,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc', 
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
@@ -37,7 +37,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
   observerListName, doxConfigName, makefileName, commentedItem, addCommentsDocD,
   classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
   setterName)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
+import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
@@ -45,7 +45,7 @@ import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad,
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
+import Language.Drasil.Code.Imperative.GOOL.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType, checkParams)
 

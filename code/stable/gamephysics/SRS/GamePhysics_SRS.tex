@@ -339,11 +339,11 @@ This section simplifies the original problem and helps in developing the theoret
 
 \begin{itemize}
 \item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[DD:chaslesThm]{DD: chaslesThm}, \hyperref[DD:reVeInColl]{DD: reVeInColl}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[DD:momentOfInertia]{DD: momentOfInertia}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulseV]{DD: impulseV}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
-\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[DD:chaslesThm]{DD: chaslesThm}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
+\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]{The library uses a Cartesian coordinate system.}
 \item[axesDefined:\phantomsection\label{assumpAD}]{The axes are defined using right-handed coordinate system. (RefBy: \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:impulse]{DD: impulse}, and \hyperref[IM:col2D]{IM: col2D}.)}
 \item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[lcEC]{LC: Expanded-Collisions}, \hyperref[DD:impulse]{DD: impulse}, and \hyperref[IM:col2D]{IM: col2D}.)}
-\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[DD:chaslesThm]{DD: chaslesThm}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[lcID]{LC: Include-Dampening}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
+\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[lcID]{LC: Include-Dampening}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
 \item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]{There are no constraints and joints involved throughout the simulation. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[lcIJC]{LC: Include-Joints-Constraints}, and \hyperref[IM:col2D]{IM: col2D}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
@@ -866,13 +866,7 @@ Description & \begin{symbDescription}
               \item{${\mathbf{r}_{\text{O}\text{B}}}$ is the displacement vector between the origin and point B (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The linear velocity ${\mathbf{v}_{\text{B}}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{\text{O}}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{\text{O}\text{B}}}$ (m).
-        
-        \hyperref[assumpOT]{A: objectTy}
-        
-        \hyperref[assumpOD]{A: objectDimension}
-        
-        \hyperref[assumpDI]{A: dampingInvolvement}
+Notes & The linear velocity ${\mathbf{v}_{\text{B}}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body (from \hyperref[assumpOT]{A: objectTy}) is the sum of the linear velocity ${\mathbf{v}_{\text{O}}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{\text{O}\text{B}}}$ (m).
         
 \\ \midrule \\
 Source & \cite{chaslesWiki}
@@ -1516,7 +1510,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:impulse]{DD: impulse} & X & X &  & X & X &  & 
 \\
-\hyperref[DD:chaslesThm]{DD: chaslesThm} & X & X &  &  &  & X & 
+\hyperref[DD:chaslesThm]{DD: chaslesThm} & X &  &  &  &  &  & 
 \\
 \hyperref[DD:torque]{DD: torque} &  &  &  &  &  &  & 
 \\

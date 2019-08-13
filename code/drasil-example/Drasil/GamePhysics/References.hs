@@ -33,3 +33,4 @@ jfBeucheIntro = cMisc
   , publisher "Mcgraw-Hill College" --FIXME: not sure if this is publisher of 4th edition
   , year 1986
   ] "jfBeucheIntro"
+

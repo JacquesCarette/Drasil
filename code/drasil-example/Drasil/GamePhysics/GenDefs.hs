@@ -3,11 +3,10 @@ module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD) where
 import Language.Drasil
 import Utils.Drasil
 --import Data.Drasil.Concepts.Physics as CP (rigidBody, time)
-import Theory.Drasil (GenDefn, gdNoRefs)
-import Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import qualified Data.Drasil.Quantities.Physics as QP (velocity, acceleration,
- time, gravitationalAccel, force, gravitationalConst)
-
+import Theory.Drasil (GenDefn, gd)
+import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
+ gravitationalAccel, gravitationalConst)
+import Drasil.GamePhysics.Unitals (mLargest, dispNorm, dispUnit)
 
 ----- General Models -----
 
@@ -55,8 +54,8 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
 
 --------------------------Acceleration due to gravity----------------------------
 accelGravityGD :: GenDefn
-accelGravityGD = gdNoRefs accelGravityRC (getUnit QP.acceleration) Nothing 
-   "accelGravity" [{-Notes-}]
+accelGravityGD = gd accelGravityRC (getUnit QP.acceleration) Nothing 
+   [accelGravitySrc] "accelGravity" [{-Notes-}]
   
 
 accelGravityRC :: RelationConcept
@@ -64,7 +63,12 @@ accelGravityRC = makeRC "accelGravityRC" (nounPhraseSP "Acceleration due to grav
   accelGravityDesc accelGravityRel
 
 accelGravityRel :: Relation
-accelGravityRel = sy QP.gravitationalAccel $=  sy QP.gravitationalConst 
+accelGravityRel = sy QP.gravitationalAccel $=  sy QP.gravitationalConst * sy mLargest/
+                  (sy dispNorm $^ 2) * sy dispUnit
+
+accelGravitySrc :: Reference
+accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
+  shortname' "Definition of Gravitational Acceleration"
 
 accelGravityDesc :: Sentence
 accelGravityDesc = foldlSent [S "This equation satisfies"]

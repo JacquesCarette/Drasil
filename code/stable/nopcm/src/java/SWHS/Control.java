@@ -1,6 +1,7 @@
 package SWHS;
 
 /** \file Control.java
+    \author Thulasi Jegatheesan
     \brief Controls the flow of the program
 */
 import java.util.Arrays;

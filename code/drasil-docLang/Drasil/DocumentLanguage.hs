@@ -192,22 +192,6 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
 tuIntro :: [TUIntro] -> Contents
 tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
 
--- | mkEnumSimple is a convenience function for converting lists into
--- Simple-type Enumerations.
-mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
-mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
-
--- | mkEnumSimpleD is a convenience function for transforming types which are
--- instances of the constraints Referable, HasShortName, and Definition, into
--- Simple-type Enumerations.
-mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
-mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
-
--- | Creates a list tuple filling in the title with a ShortName and filling
--- reference information.
-mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
-mkListTuple f x = (S . getStringSN $ shortname x, f x, Just $ refAdd x)
-
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
 tuI System  = 

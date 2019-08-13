@@ -1,7 +1,6 @@
 {-# Language TypeFamilies #-}
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
-  chgsStart, displayConstrntsAsSet, enumBullet, enumBulletU, enumSimple,
-  enumSimpleU, eqN, eqUnR, eqUnR', eqnWSource, fromReplace, fmtU, follows,
+  chgsStart, displayConstrntsAsSet, eqN, eqnWSource, fromReplace, fmtU, follows,
   getTandS, itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
@@ -27,12 +26,6 @@ sortBySymbolTuple = sortBy (compareBySymbol `on` fst)
 compareBySymbol :: HasSymbol a => a -> a -> Ordering
 compareBySymbol a b = compsy (symbol a Equational) (symbol b Equational)
 
-eqUnR :: Expr -> Reference -> LabelledContent
-eqUnR e lbl = llcc lbl $ EqnBlock e
-
-eqUnR' :: Expr -> Contents
-eqUnR' e = UlC $ ulcc $ EqnBlock e
-
 --Ideally this would create a reference to the equation too
 --Doesn't use equation concept so utils doesn't depend on data
 eqN :: Int -> Sentence
@@ -48,7 +41,7 @@ fromReplace src c = S "From" +:+ makeRef2S src +:+ S "we can replace" +: ch c
 
 -- | takes a referable and a HasSymbol and outputs as a Sentence "By substituting "
 substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
-substitute s = S "By substituting" +:+ foldlList Comma List l `sC` S "this can be written as"
+substitute s = S "By substituting" +: (foldlList Comma List l `sC` S "this can be written as")
   where l = map (\x -> ch x +:+ sParen (S "from" +:+ makeRef2S x)) s
 
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
@@ -121,23 +114,6 @@ bulletFlat = Bullet . noRefs . map Flat
 bulletNested :: [Sentence] -> [ListType] -> ListType
 bulletNested t l = Bullet . map (\(h,c) -> (Nested h c, Nothing)) $ zip t l
 
--- | enumBullet apply Enumeration, Bullet and Flat to a list
-enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
-enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
-
-enumBulletU :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
-enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
-
--- | enumSimple enumerates a list and applies simple and enumeration to it
--- s - start index for the enumeration
--- t - title of the list
--- l - list to be enumerated
-enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
-enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
-
-enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
-enumSimpleU s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
-
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]
 weave = concat . transpose
@@ -151,11 +127,6 @@ unwrap Nothing  = EmptyS
 -- in Contents but not directly referable.
 noRefs :: [ItemType] -> [(ItemType, Maybe String)]
 noRefs a = zip a $ repeat Nothing
-
--- | noRefsLT converts lists of tuples containing a title and ItemType into
--- a ListTuple which can be used with Contents but not directly referable.
-noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
-noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
 --Doesn't use connection phrase so utils doesn't depend on data
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence

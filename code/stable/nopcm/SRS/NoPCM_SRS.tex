@@ -626,7 +626,9 @@ Description & \begin{symbDescription}
               \item{${T_{\text{C}}}$ is the temperature of the heating coil (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${T_{\text{W}}}$ is the temperature of the water (${}^{\circ}$C). ${T_{\text{C}}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{\text{W}}}$ is from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}. The above equation applies as long as the water is in liquid form, $0<{T_{\text{W}}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}).
+Notes & ${τ_{\text{W}}}$ is calculated from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}.
+        
+        The above equation applies as long as the water is in liquid form, $0<{T_{\text{W}}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}).
         
 \\ \midrule \\
 Source & \cite[(with PCM removed)]{koothoor2013}
@@ -649,7 +651,7 @@ Using \hyperref[DD:htFluxC]{DD: htFluxC} for ${q_{\text{C}}}$, this can be writt
 \begin{displaymath}
 {m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)
 \end{displaymath}
-Dividing Equation (3) by ${m_{\text{W}}} {C_{\text{W}}}$, we obtain:
+Dividing Equation (2) by ${m_{\text{W}}} {C_{\text{W}}}$, we obtain:
 
 \begin{displaymath}
 \frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)
@@ -679,7 +681,7 @@ Output & ${E_{\text{W}}}$
 Input Constraints & 
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     0<t<{t_{\text{final}}}
+                     0\leq{}t\leq{}{t_{\text{final}}}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -695,7 +697,11 @@ Description & \begin{symbDescription}
               \item{${T_{\text{init}}}$ is the initial temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}. ${E_{\text{W}}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{\text{init}}}$) (J). ${C_{\text{W}}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{\text{W}}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{\text{W}}}$ and the initial temperature, ${T_{\text{init}}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{\text{W}}}<100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}.
+        
+        The change in temperature is the difference between the temperature at time $t$ (s), ${T_{\text{W}}}$ and the initial temperature, ${T_{\text{init}}}$ (${}^{\circ}$C).
+        
+        This equation applies as long as $0<{T_{\text{W}}}<100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
         
 \\ \midrule \\
 Source & \cite{koothoor2013}

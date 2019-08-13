@@ -123,7 +123,7 @@ rocTempDerivDens = [S "Using the fact that", ch density :+: S "=" :+: ch mass :+
 rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq,
   rocTempDerivConsFlxEq, rocTempDerivDensEq :: Expr
 
-rocTempDerivIntegEq = negate (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) + 
+rocTempDerivIntegEq = negate (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) +
   intAll (eqSymb vol) (sy volHtGen) $=
   intAll (eqSymb vol) (sy density
   * sy QT.heatCapSpec * pderiv (sy QT.temp) time)

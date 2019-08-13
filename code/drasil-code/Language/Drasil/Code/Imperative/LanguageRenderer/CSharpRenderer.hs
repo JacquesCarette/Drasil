@@ -95,8 +95,8 @@ instance RenderSym CSharpCode where
     updateModDoc (liftA2 emptyIfEmpty (fmap modDoc code) $ liftA3 fileDoc' 
     (top code) (fmap modDoc code) bottom) code)
 
-  docMod d m = commentedMod (docComment $ moduleDoc d (moduleName 
-    (fmap fileMod m)) csExt) m
+  docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
+    (unCSC m)) m
 
   commentedMod cmt m = liftA2 updateFileMod (liftA2 updateModDoc
     (liftA2 commentedItem cmt (fmap (modDoc . fileMod) m)) (fmap fileMod m)) m

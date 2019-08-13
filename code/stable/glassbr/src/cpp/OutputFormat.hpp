@@ -1,4 +1,5 @@
 /** \file OutputFormat.hpp
+    \author Nikitha Krithnan and W. Spencer Smith
     \brief Provides the function for writing outputs
 */
 #ifndef OutputFormat_h

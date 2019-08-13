@@ -2,7 +2,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render Java code is contained in this module
-module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code
   JavaCode(..), jNameOpts
 ) where
@@ -10,7 +10,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
 import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
   boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
@@ -43,7 +43,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
   valList, appendToBody, surroundBody, getterName, setterName, setMain, 
   setMainMethod, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
+import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   PackData(..), packD, ProgData(..), progD, TypeData(..), td, ValData(..), 
@@ -53,7 +53,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
   NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
   interp, mainModule, mainModuleFile, packSep, withExt)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Helpers (angles, emptyIfEmpty, 
+import Language.Drasil.Code.Imperative.GOOL.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))

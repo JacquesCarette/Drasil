@@ -20,7 +20,7 @@ module Language.Drasil.Code (
 
 import Prelude hiding (break, print, return, log, exp)
 
-import Language.Drasil.Code.Imperative.Import (generator, generateCode)
+import Language.Drasil.Code.Imperative.Generator (generator, generateCode)
 
 import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
 
@@ -34,20 +34,20 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..),
   packmod, relToQD,
   )
 
-import Language.Drasil.Code.Imperative.Symantics (PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   ProgramSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), StatementSym(..), 
   ControlStatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..),
   BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), MethodSym(..), ModuleSym(..), BlockCommentSym(..))
 
-import Language.Drasil.Code.Imperative.Data (ModData(..))
+import Language.Drasil.Code.Imperative.GOOL.Data (ModData(..))
 
-import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer 
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer 
   (JavaCode (..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer 
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer 
   (PythonCode(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer 
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer 
   (CSharpCode(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer 
   (CppSrcCode(..), CppHdrCode(..), unCPPC)

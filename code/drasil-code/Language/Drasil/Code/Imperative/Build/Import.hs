@@ -3,12 +3,12 @@ module Language.Drasil.Code.Imperative.Build.Import (
 ) where
 
 import Language.Drasil.CodeSpec (Comments)
-import Language.Drasil.Code.Imperative.Data (FileData(..), isSource, isHeader, 
+import Language.Drasil.Code.Imperative.GOOL.Data (FileData(..), isSource, isHeader, 
   ModData(..), ProgData(..))
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig(BuildConfig),
   BuildDependencies(..), Ext(..), includeExt, NameOpts, nameOpts, packSep,
   Runnable(Runnable), BuildName(..), RunType(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (doxConfigName)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName)
 
 import Build.Drasil ((+:+), genMake, makeS, MakeString, mkFile, mkRule,
   mkCheckedCommand, mkFreeVar, RuleTransformer(makeRule))

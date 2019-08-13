@@ -1,5 +1,4 @@
-module Drasil.GamePhysics.TMods (tMods, t2NewtonTL_new, 
-  t3NewtonLUG_new, t5NewtonSLR_new) where
+module Drasil.GamePhysics.TMods (tMods) where
 
 import Language.Drasil
 import Prelude hiding (id)
@@ -19,20 +18,20 @@ import qualified Data.Drasil.Theories.Physics as TP (newtonSL)
 
 ----- Theoretical Models -----
 tMods :: [TheoryModel]
-tMods = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new, t5NewtonSLR_new]
+tMods = [TP.newtonSL, newtonTL, newtonLUG, newtonSLR]
 
 -- T1 : Newton's second law of motion --
 
 -- T2 : Newton's third law of motion --
 
-t2NewtonTL_new :: TheoryModel
-t2NewtonTL_new = tmNoRefs (cw newtonTL)
+newtonTL :: TheoryModel
+newtonTL = tmNoRefs (cw newtonTL_RC)
   [qw force_1, qw force_2] ([] :: [ConceptChunk])
   [] [sy force_1 $= negate (sy force_2)] []
   "NewtonThirdLawMot" [newtonTLDesc]
 
-newtonTL :: RelationConcept
-newtonTL = makeRC "newtonTL" (nounPhraseSP "Newton's third law of motion")
+newtonTL_RC :: RelationConcept
+newtonTL_RC = makeRC "newtonTL_RC" (nounPhraseSP "Newton's third law of motion")
   newtonTLDesc newtonTLRel
 
 newtonTLRel :: Relation
@@ -49,8 +48,8 @@ newtonTLDesc = foldlSent [S "Every action has an equal and opposite reaction. In
 
 -- T3 : Newton's law of universal gravitation --
 
-t3NewtonLUG_new :: TheoryModel
-t3NewtonLUG_new = tmNoRefs (cw newtonLUG)
+newtonLUG :: TheoryModel
+newtonLUG = tmNoRefs (cw newtonLUG_RC)
   [qw QP.force, qw QP.gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [ConceptChunk])
   [] [sy QP.force $= sy QP.gravitationalConst * (sy mass_1 * 
@@ -59,8 +58,8 @@ t3NewtonLUG_new = tmNoRefs (cw newtonLUG)
   $^ 2)) * (sy QP.displacement / sy dispNorm)] []
   "UniversalGravLaw" [newtonLUGDesc]
 
-newtonLUG :: RelationConcept
-newtonLUG = makeRC "newtonLUG" 
+newtonLUG_RC :: RelationConcept
+newtonLUG_RC = makeRC "newtonLUG_RC" 
   (nounPhraseSP "Newton's law of universal gravitation") newtonLUGDesc newtonLUGRel
 
 newtonLUGRel :: Relation
@@ -101,14 +100,14 @@ newtonLUGDesc = foldlSent [S "Two", plural CP.rigidBody, S "in the universe",
 
 -- T5 : Newton's second law for rotational motion --
 
-t5NewtonSLR_new :: TheoryModel
-t5NewtonSLR_new = tmNoRefs (cw newtonSLR)
+newtonSLR :: TheoryModel
+newtonSLR = tmNoRefs (cw newtonSLR_RC)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [] [sy QP.torque $= sy QP.momentOfInertia
   * sy QP.angularAccel] [] "NewtonSecLawRotMot" [newtonSLRDesc]
 
-newtonSLR :: RelationConcept
-newtonSLR = makeRC "newtonSLR" 
+newtonSLR_RC :: RelationConcept
+newtonSLR_RC = makeRC "newtonSLR_RC" 
   (nounPhraseSP "Newton's second law for rotational motion") newtonSLRDesc newtonSLRRel
 
 newtonSLRRel :: Relation

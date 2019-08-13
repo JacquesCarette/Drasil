@@ -24,13 +24,13 @@ tMods = [TP.newtonSL, newtonTL, newtonLUG, newtonSLR]
 -- T2 : Newton's third law of motion --
 
 newtonTL :: TheoryModel
-newtonTL = tmNoRefs (cw newtonTL_RC)
+newtonTL = tmNoRefs (cw newtonTLRC)
   [qw force_1, qw force_2] ([] :: [ConceptChunk])
   [] [sy force_1 $= negate (sy force_2)] []
   "NewtonThirdLawMot" [newtonTLDesc]
 
-newtonTL_RC :: RelationConcept
-newtonTL_RC = makeRC "newtonTL_RC" (nounPhraseSP "Newton's third law of motion")
+newtonTLRC :: RelationConcept
+newtonTLRC = makeRC "newtonTLRC" (nounPhraseSP "Newton's third law of motion")
   newtonTLDesc newtonTLRel
 
 newtonTLRel :: Relation
@@ -48,7 +48,7 @@ newtonTLDesc = foldlSent [S "Every action has an equal and opposite reaction. In
 -- T3 : Newton's law of universal gravitation --
 
 newtonLUG :: TheoryModel
-newtonLUG = tmNoRefs (cw newtonLUG_RC)
+newtonLUG = tmNoRefs (cw newtonLUGRC)
   [qw QP.force, qw QP.gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [ConceptChunk])
   [] [sy QP.force $= sy QP.gravitationalConst * (sy mass_1 * 
@@ -57,8 +57,8 @@ newtonLUG = tmNoRefs (cw newtonLUG_RC)
   $^ 2)) * (sy QP.displacement / sy dispNorm)] []
   "UniversalGravLaw" [newtonLUGDesc]
 
-newtonLUG_RC :: RelationConcept
-newtonLUG_RC = makeRC "newtonLUG_RC" 
+newtonLUGRC :: RelationConcept
+newtonLUGRC = makeRC "newtonLUGRC" 
   (nounPhraseSP "Newton's law of universal gravitation") newtonLUGDesc newtonLUGRel
 
 newtonLUGRel :: Relation
@@ -100,13 +100,13 @@ newtonLUGDesc = foldlSent [S "Two", plural CP.rigidBody, S "in the universe",
 -- T4 : Newton's second law for rotational motion --
 
 newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs (cw newtonSLR_RC)
+newtonSLR = tmNoRefs (cw newtonSLRRC)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [] [sy QP.torque $= sy QP.momentOfInertia
   * sy QP.angularAccel] [] "NewtonSecLawRotMot" [newtonSLRDesc]
 
-newtonSLR_RC :: RelationConcept
-newtonSLR_RC = makeRC "newtonSLR_RC" 
+newtonSLRRC :: RelationConcept
+newtonSLRRC = makeRC "newtonSLRRC" 
   (nounPhraseSP "Newton's second law for rotational motion") newtonSLRDesc newtonSLRRel
 
 newtonSLRRel :: Relation

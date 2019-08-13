@@ -248,20 +248,20 @@ dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
 
 gTF = vc "gTF" (glassTypeFac ^. term) (Variable "GTF") Integer
 
-isSafePb   = vc "isSafePb"   (nounPhraseSP $ "probability of breakage safety requirement") (Variable "is-safePb")   Boolean
-isSafeProb = vc "isSafeProb" (nounPhraseSP $ "probability of failure safety requirement")  (Variable "is-safeProb") Boolean
-isSafeLR   = vc "isSafeLR"   (nounPhraseSP $ "load resistance safety requirement")         (Variable "is-safeLR")   Boolean
-isSafeLoad = vc "isSafeLoad" (nounPhraseSP $ "load resistance safety requirement")         (Variable "is-safeLoad") Boolean
+isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of breakage safety requirement") (Variable "is-safePb")   Boolean
+isSafeProb = vc "isSafeProb" (nounPhraseSP "probability of failure safety requirement")  (Variable "is-safeProb") Boolean
+isSafeLR   = vc "isSafeLR"   (nounPhraseSP "load resistance safety requirement")         (Variable "is-safeLR")   Boolean
+isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")         (Variable "is-safeLoad") Boolean
 
 lDurFac = vc'' loadDurFactor (Variable "LDF") Real
 loadSF  = vc'' lShareFac     (Variable "LSF") Natural
 
 riskFun = vc "riskFun" (nounPhraseSP "risk of failure") cB Real
 
-sdfTol = vc "sdfTol" (nounPhraseSP $ "stress distribution factor (Function) based on Pbtol") 
+sdfTol = vc "sdfTol" (nounPhraseSP "stress distribution factor (Function) based on Pbtol") 
   (sub (eqSymb stressDistFac) lTol) Real
 
-stressDistFac = vc "stressDistFac" (nounPhraseSP $ "stress distribution factor (Function)") cJ Real
+stressDistFac = vc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") cJ Real
 
 tolLoad = vc "tolLoad" (nounPhraseSP "tolerable load")
   (sub (eqSymb dimlessLoad) lTol) Real

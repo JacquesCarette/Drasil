@@ -15,36 +15,36 @@ using std::ofstream;
 
 /** \brief Reads input from a file with the given file name
     \param filename name of the input file
-    \param A_C heating coil surface area (m^2)
-    \param C_W specific heat capacity of water (J/(kg degreeC))
-    \param h_C convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
-    \param T_init initial temperature (degreeC)
-    \param t_final final time (s)
-    \param L length of tank (m)
-    \param T_C temperature of the heating coil (degreeC)
-    \param t_step time step for simulation (s)
-    \param rho_W density of water (kg/m^3)
-    \param D diameter of tank (m)
+    \param A_C heating coil surface area: Area covered by the outermost layer of the coil (m^2)
+    \param C_W specific heat capacity of water: The amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC))
+    \param h_C convective heat transfer coefficient between coil and water: The convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC))
+    \param T_init initial temperature: The temperature at the beginning of the simulation (degreeC)
+    \param t_final final time: The amount of time elapsed from the beginning of the simulation to its conclusion (s)
+    \param L length of tank: The length of the tank (m)
+    \param T_C temperature of the heating coil: The average kinetic energy of the particles within the coil (degreeC)
+    \param t_step time step for simulation: The finite discretization of time used in the numerical method for solving the computational model (s)
+    \param rho_W density of water: Mass per unit volume of water (kg/m^3)
+    \param D diameter of tank: The diameter of the tank (m)
     \param A_tol absolute tolerance
     \param R_tol relative tolerance
-    \param T_W temperature of the water (degreeC)
-    \param E_W change in heat energy in the water (J)
+    \param T_W temperature of the water: The average kinetic energy of the particles within the water (degreeC)
+    \param E_W change in heat energy in the water: Change in thermal energy within the water (J)
 */
 void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T_init, double &t_final, double &L, double &T_C, double &t_step, double &rho_W, double &D, double &A_tol, double &R_tol, double &T_W, double &E_W);
 
 /** \brief Verifies that input values satisfy the physical constraints and software constraints
-    \param A_C heating coil surface area (m^2)
-    \param C_W specific heat capacity of water (J/(kg degreeC))
-    \param h_C convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
-    \param T_init initial temperature (degreeC)
-    \param t_final final time (s)
-    \param L length of tank (m)
-    \param T_C temperature of the heating coil (degreeC)
-    \param t_step time step for simulation (s)
-    \param rho_W density of water (kg/m^3)
-    \param D diameter of tank (m)
-    \param T_W temperature of the water (degreeC)
-    \param E_W change in heat energy in the water (J)
+    \param A_C heating coil surface area: Area covered by the outermost layer of the coil (m^2)
+    \param C_W specific heat capacity of water: The amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC))
+    \param h_C convective heat transfer coefficient between coil and water: The convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC))
+    \param T_init initial temperature: The temperature at the beginning of the simulation (degreeC)
+    \param t_final final time: The amount of time elapsed from the beginning of the simulation to its conclusion (s)
+    \param L length of tank: The length of the tank (m)
+    \param T_C temperature of the heating coil: The average kinetic energy of the particles within the coil (degreeC)
+    \param t_step time step for simulation: The finite discretization of time used in the numerical method for solving the computational model (s)
+    \param rho_W density of water: Mass per unit volume of water (kg/m^3)
+    \param D diameter of tank: The diameter of the tank (m)
+    \param T_W temperature of the water: The average kinetic energy of the particles within the water (degreeC)
+    \param E_W change in heat energy in the water: Change in thermal energy within the water (J)
 */
 void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W);
 

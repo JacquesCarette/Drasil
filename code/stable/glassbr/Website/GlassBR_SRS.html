@@ -101,7 +101,7 @@
                 </tr>
                 <tr>
                   <td><em>capacity</em></td>
-                  <td>Capacity or load resistance</td>
+                  <td>Capacity</td>
                   <td>Pa</td>
                 </tr>
                 <tr>
@@ -121,9 +121,7 @@
                 </tr>
                 <tr>
                   <td><em>g</em></td>
-                  <td>
-                    Glass type <em>g&thinsp;&isin;&thinsp;{"AN","FT","HS"}</em>
-                  </td>
+                  <td>Glass type</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -196,7 +194,7 @@
                 </tr>
                 <tr>
                   <td><em>Load</em></td>
-                  <td>Applied load (demand) or pressure</td>
+                  <td>Load</td>
                   <td>Pa</td>
                 </tr>
                 <tr>
@@ -241,7 +239,7 @@
                 </tr>
                 <tr>
                   <td><em>q</em></td>
-                  <td>Applied load (demand)</td>
+                  <td>Demand</td>
                   <td>Pa</td>
                 </tr>
                 <tr>
@@ -318,7 +316,7 @@
                 </tr>
                 <tr>
                   <td><em>w<sub>TNT</sub></em></td>
-                  <td>Explosive mass in equivalent weight of TNT</td>
+                  <td>Equivalent TNT charge mass</td>
                   <td>kg</td>
                 </tr>
               </table>
@@ -385,6 +383,10 @@
                 <tr>
                   <td>LR</td>
                   <td>Load Resistance</td>
+                </tr>
+                <tr>
+                  <td>LSF</td>
+                  <td>Load Share Factor</td>
                 </tr>
                 <tr>
                   <td>N/A</td>
@@ -840,10 +842,8 @@
                           <li>
                             <em>is-safeLoad</em> is the variable that is assigned true when load resistance (capacity) is greater than applied load (demand) (Unitless)
                           </li>
-                          <li><em>capacity</em> is the capacity or load resistance (Pa)</li>
-                          <li>
-                            <em>Load</em> is the applied load (demand) or pressure (Pa)
-                          </li>
+                          <li><em>capacity</em> is the capacity (Pa)</li>
+                          <li><em>Load</em> is the load (Pa)</li>
                         </ul>
                       </td>
                     </tr>
@@ -1317,9 +1317,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li><em>GTF</em> is the glass type factor (Unitless)</li>
-                          <li>
-                            <em>g</em> is the glass type <em>g&thinsp;&isin;&thinsp;{"AN","FT","HS"}</em> (Unitless)
-                          </li>
+                          <li><em>g</em> is the glass type (Unitless)</li>
                         </ul>
                       </td>
                     </tr>
@@ -1380,7 +1378,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li><em>q&#770;</em> is the dimensionless load (Unitless)</li>
-                          <li><em>q</em> is the applied load (demand) (Pa)</li>
+                          <li><em>q</em> is the demand (Pa)</li>
                           <li><em>a</em> is the plate length (long dimension) (m)</li>
                           <li><em>b</em> is the plate width (short dimension) (m)</li>
                           <li><em>E</em> is the modulus of elasticity of glass (Pa)</li>
@@ -1717,9 +1715,7 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td>
-                        <p class="paragraph">Explosive mass in equivalent weight of TNT</p>
-                      </td>
+                      <td><p class="paragraph">Equivalent TNT charge mass</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -1740,7 +1736,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+                            <em>w<sub>TNT</sub></em> is the equivalent TNT charge mass (kg)
                           </li>
                           <li><em>w</em> is the charge weight (kg)</li>
                           <li><em>TNT</em> is the TNT equivalent factor (Unitless)</li>
@@ -1891,7 +1887,7 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Applied load (demand)</p></td>
+                      <td><p class="paragraph">Demand</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -1913,11 +1909,11 @@
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
-                          <li><em>q</em> is the applied load (demand) (Pa)</li>
+                          <li><em>q</em> is the demand (Pa)</li>
                           <li><em>interpY</em> is the interpY (Unitless)</li>
                           <li><em>SD</em> is the stand off distance (m)</li>
                           <li>
-                            <em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+                            <em>w<sub>TNT</sub></em> is the equivalent TNT charge mass (kg)
                           </li>
                         </ul>
                       </td>
@@ -2086,7 +2082,7 @@
                             <em>is-safeLR</em> is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)
                           </li>
                           <li><em>LR</em> is the load resistance (Pa)</li>
-                          <li><em>q</em> is the applied load (demand) (Pa)</li>
+                          <li><em>q</em> is the demand (Pa)</li>
                         </ul>
                       </td>
                     </tr>
@@ -2283,9 +2279,7 @@
                 </tr>
                 <tr>
                   <td><em>g</em></td>
-                  <td>
-                    Glass type <em>g&thinsp;&isin;&thinsp;{"AN","FT","HS"}</em>
-                  </td>
+                  <td>Glass type</td>
                   <td>--</td>
                 </tr>
                 <tr>

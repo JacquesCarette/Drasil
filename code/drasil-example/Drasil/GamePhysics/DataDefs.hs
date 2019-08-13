@@ -236,15 +236,14 @@ chaslesEqn :: Expr
 chaslesEqn = sy velO + cross (sy  QP.angularVelocity) (sy rOB)
 
 chaslesThmDesc :: Sentence
-chaslesThmDesc = foldlSent [S "The linear", phrase QP.velocity,
-  ch velB, sParen $ Sy $ unit_symb velB, S "of any point B in a",
-  phrase CP.rigidBody, sParen (S "from" +:+ makeRef2S assumpOT) `sIs`
-  S "the sum of the linear", phrase QP.velocity, ch velO, sParen $ Sy $ unit_symb velO,
-  S "of the", phrase CP.rigidBody, S "at the origin (axis of rotation)" `andThe`
-  S "resultant vector from the cross product of the",
-  phrase CP.rigidBody :+: S "'s", phrase QP.angularVelocity, 
-  ch QP.angularVelocity, sParen (Sy $ unit_symb QP.angularVelocity) `andThe`
-  phrase rOB `sC` ch rOB, sParen $ Sy $ unit_symb rOB]
+chaslesThmDesc = foldlSent [S "The", phrase QP.linearVelocity,
+  ch velB `sOf` S "any point B in a", phrase CP.rigidBody,
+  sParen (S "from" +:+ makeRef2S assumpOT) `isThe` S "sum" `sOf`
+  ((phrase QP.linearVelocity +:+ ch velO) `ofThe` phrase CP.rigidBody),
+  S "at the origin (axis of rotation)" `sAnd`
+  (S "resultant vector from the cross product" `ofThe`
+  phrasePoss CP.rigidBody), getTandS QP.angularVelocity `andThe`
+  getTandS rOB]
 
 ---------------DD10 Impulse(Vector)-----------------------------------------------------------------------
 impulseVDD :: DataDefinition

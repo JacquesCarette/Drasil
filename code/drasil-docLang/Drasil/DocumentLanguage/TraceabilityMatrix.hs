@@ -1,12 +1,11 @@
 module Drasil.DocumentLanguage.TraceabilityMatrix where
 
 import Language.Drasil
-import Database.Drasil (ChunkDB, SystemInformation, UMap, asOrderedList,
-  citeDB, conceptinsLookup, conceptinsTable, datadefnLookup, dataDefnTable,
-  defTable, defLookup, gendefLookup, gendefTable, insmodelLookup, insmodelTable,
-  labelledconLookup, labelledcontentTable, refbyTable,
-  sectionLookup, sectionTable, theoryModelLookup, theoryModelTable,
-  traceTable, traceLookup, _sysinfodb)
+import Database.Drasil (ChunkDB, SystemInformation, UMap, _sysinfodb,
+  asOrderedList, citeDB, conceptinsLookup, conceptinsTable, datadefnLookup,
+  dataDefnTable, defResolve, gendefLookup, gendefTable, insmodelLookup,
+  insmodelTable, labelledconLookup, labelledcontentTable, refbyTable, sectionLookup,
+  sectionTable, theoryModelLookup, theoryModelTable, traceTable, traceLookup)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
@@ -118,4 +117,4 @@ traceViewCC dom u c = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom) conc
       | not $ null $ getDom curr = isDomUnder filtDom (sDom $ getDom curr)
       | otherwise = False
     getDom :: UID -> [UID]
-    getDom curr = cdom $ defLookup curr $ defTable c
+    getDom curr = cdom $ defResolve c curr

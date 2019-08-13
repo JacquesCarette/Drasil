@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The structure for a class of renderers is defined here.
-module Language.Drasil.Code.Imperative.LanguageRenderer (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
   docCmtStart, observerListName, doxConfigName, makefileName, addExt,
@@ -41,17 +41,17 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
 import Utils.Drasil (capitalize, indent, indentList, stringList)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label, Library,
+import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, Library,
   RenderSym(..), BodySym(..), StateTypeSym(getType, listInnerType), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ParameterSym(..), MethodSym(..), BlockCommentSym(..))
-import qualified Language.Drasil.Code.Imperative.Symantics as S (StateTypeSym(int))
-import Language.Drasil.Code.Imperative.Data (Terminator(..), FileData(..), 
+import qualified Language.Drasil.Code.Imperative.GOOL.Symantics as S (StateTypeSym(int))
+import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), FileData(..), 
   fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
   od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, VarData(..))
-import Language.Drasil.Code.Imperative.Helpers (angles,blank, doubleQuotedText,
+import Language.Drasil.Code.Imperative.GOOL.Helpers (angles,blank, doubleQuotedText,
   hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
 import Control.Applicative ((<|>))
@@ -795,9 +795,10 @@ endCommentDelimit c = commentDelimit (endCommentLabel ++ " " ++ c)
 dashes :: String -> Int -> String
 dashes s l = replicate (l - length s) '-'
 
-functionDoc :: String -> [(String, String)] -> [String]
-functionDoc desc params = [doxBrief ++ desc | not (null desc)]
+functionDoc :: String -> [(String, String)] -> [String] -> [String]
+functionDoc desc params returns = [doxBrief ++ desc | not (null desc)]
   ++ map (\(v, vDesc) -> doxParam ++ v ++ " " ++ vDesc) params
+  ++ map (doxReturn ++) returns
 
 classDoc :: String -> [String]
 classDoc desc = [doxBrief ++ desc | not (null desc)]
@@ -808,10 +809,10 @@ moduleDoc desc as date m = (doxFile ++ m) :
   [doxDate ++ date | not (null date)] ++ 
   [doxBrief ++ desc | not (null desc)]
 
-docFuncRepr :: (MethodSym repr) => String -> [String] -> repr (Method repr) -> 
-  repr (Method repr)
-docFuncRepr desc pComms f = commentedFunc (docComment $ functionDoc desc
-  (zip (map parameterName (parameters f)) pComms)) f
+docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
+  repr (Method repr) -> repr (Method repr)
+docFuncRepr desc pComms rComms f = commentedFunc (docComment $ functionDoc desc
+  (zip (map parameterName (parameters f)) pComms) rComms) f
 
 -- Helper Functions --
 
@@ -859,10 +860,11 @@ intValue i = intValue' (getType $ valueType i)
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
 
-doxCommand, doxBrief, doxParam, doxFile, doxAuthor, doxDate :: String
+doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String
 doxCommand = "\\"
 doxBrief = doxCommand ++ "brief "
 doxParam = doxCommand ++ "param "
+doxReturn = doxCommand ++ "return "
 doxFile = doxCommand  ++ "file "
 doxAuthor = doxCommand ++ "author "
 doxDate = doxCommand ++ "date "

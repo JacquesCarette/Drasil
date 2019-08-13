@@ -109,8 +109,8 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
 --FIXME: ^ incorporate definition in here?
 
 nomThick = cuc "nomThick" 
-  (nounPhraseSent $ S "nominal thickness" +:+ displayConstrntsAsSet 
-    nomThick (map show nominalThicknesses))
+  (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
+    nomThick nominalThicknesses)
   lT millimetre {-DiscreteD nominalThicknesses-} Rational 
   [enumc nominalThicknesses] 8
 
@@ -119,7 +119,7 @@ nomThick = cuc "nomThick"
 -- constructor `Ch` of generating the sentence. So for the sentence
 -- only "S" can be capitalized 
 glassTypeCon  = cvc "glassTypeCon" (nounPhraseSent $ S "glass type" +:+ 
-    displayConstrntsAsSet glassTypeCon (map (getAccStr . snd) glassType))
+    displayStrConstrntsAsSet glassTypeCon (map (getAccStr . snd) glassType))
   lG {-DiscreteS (map (getAccStr . snd) glassType)-} String
   [EnumeratedStr Software $ map (getAccStr . snd) glassType] Nothing
 

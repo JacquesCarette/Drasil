@@ -15,7 +15,7 @@ import java.util.ArrayList;
 public class InputFormat {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of file with x y and z data
+        \param filename name of the input file
         \param inParams structure holding the input values
     */
     public static void get_input(String filename, InputParameters inParams) throws Exception {

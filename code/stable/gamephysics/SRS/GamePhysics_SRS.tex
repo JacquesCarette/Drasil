@@ -103,7 +103,7 @@ $KE$ & Kinetic energy & J
 \\
 $L$ & Length & m
 \\
-$M$ & Total Mass of the Rigid Body & kg
+$M$ & Mass of the Largest Rigid Body & kg
 \\
 $m$ & Mass & kg
 \\
@@ -116,6 +116,8 @@ ${m_{\text{A}}}$ & Mass Of Rigid Body A & kg
 ${m_{\text{B}}}$ & Mass Of Rigid Body B & kg
 \\
 ${m_{j}}$ & Mass Of the J-Th Particle & kg
+\\
+${m_{T}}$ & Total Mass of the Rigid Body & kg
 \\
 $\mathbf{n}$ & Collision Normal Vector & m
 \\
@@ -559,16 +561,18 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{a}=\frac{\,d\mathbf{v}}{\,dt}
+           g=\frac{G M}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{$t$ is the time (s)}
-              \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$)}
+              \item{$M$ is the mass of the largest rigid body (kg)}
+              \item{$\text{||}\mathbf{r}\text{||}$ is the Euclidean norm of the displacement (m)}
+              \item{$\mathbf{\hat{r}}$ is the displacement unit vector (m)}
               \end{symbDescription}
 \\ \midrule \\
-Source & --
+Source & \hyperref{https://en.wikipedia.org/wiki/Gravitational_acceleration}{}{}{Definition of Gravitational Acceleration}
          
 \\ \midrule \\
 RefBy & 
@@ -598,14 +602,14 @@ Units & m
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{p}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{M}
+           {\mathbf{p}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{{m_{T}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${\mathbf{p}_{\text{CM}}}$ is the Center of Mass (m)}
               \item{${m_{j}}$ is the mass of the j-th particle (kg)}
               \item{${\mathbf{p}_{j}}$ is the position vector of the j-th particle (m)}
-              \item{$M$ is the total mass of the rigid body (kg)}
+              \item{${m_{T}}$ is the total mass of the rigid body (kg)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpOT]{A: objectTy}

@@ -69,8 +69,8 @@ data Def = Bibliography
 
 addDef :: Def -> D
 addDef Bibliography  = command "bibliography" bibFname
-addDef GreaterThan   = command2 "newcommand" "\\gt" ">"
-addDef LessThan      = command2 "newcommand" "\\lt" "<"
+addDef GreaterThan   = command2 "newcommand" "\\gt" "\\ensuremath >"
+addDef LessThan      = command2 "newcommand" "\\lt" "\\ensuremath <"
 addDef TabuLine      = command0 "global\\tabulinesep=1mm"
 addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1"

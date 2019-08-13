@@ -1,13 +1,8 @@
 {-# Language TypeFamilies #-}
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
-<<<<<<< HEAD
-  chgsStart, displayConstrntsAsSet, eqN, eqnWSource, fromReplace, fmtU, follows,
-  getTandS, itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
-=======
   chgsStart, displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, 
   eqnWSource, fromReplace, fmtU, follows, getTandS, itemRefToSent, makeListRef, 
   makeTMatrix, maybeChanged, maybeExpanded,
->>>>>>> master
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
   tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where

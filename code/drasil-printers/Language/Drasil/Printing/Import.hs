@@ -149,22 +149,13 @@ expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b)   sm = pow sm a b
 expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
 expr (Operator o d e)     sm = eop sm o d e
-<<<<<<< HEAD
-expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space b]
-=======
 expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
->>>>>>> master
 expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. stg) 
   (sm ^. ckdb) c) ri
 
 lookupC :: Stage -> ChunkDB -> UID -> Symbol
-<<<<<<< HEAD
-lookupC Equational sm c = eqSymb $ symbLookup c $ symbolTable sm
-lookupC Implementation sm c = codeSymb $ symbLookup c $ symbolTable sm
-=======
 lookupC Equational     sm c = eqSymb   $ symbResolve sm c
 lookupC Implementation sm c = codeSymb $ symbResolve sm c
->>>>>>> master
 
 lookupT :: ChunkDB -> UID -> Sentence
 lookupT sm c = phraseNP $ termResolve sm c ^. term

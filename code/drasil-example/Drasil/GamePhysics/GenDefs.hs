@@ -4,8 +4,9 @@ import Language.Drasil
 import Utils.Drasil
 --import Data.Drasil.Concepts.Physics as CP (rigidBody, time)
 import Theory.Drasil (GenDefn, gdNoRefs)
---import Data.Drasil.Quantities.PhysicalProperties (mass)
-import qualified Data.Drasil.Quantities.Physics as QP (velocity, acceleration, time)
+import Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+import qualified Data.Drasil.Quantities.Physics as QP (velocity, acceleration,
+ time, gravitationalAccel, force, gravitationalConst)
 
 
 ----- General Models -----
@@ -63,7 +64,7 @@ accelGravityRC = makeRC "accelGravityRC" (nounPhraseSP "Acceleration due to grav
   accelGravityDesc accelGravityRel
 
 accelGravityRel :: Relation
-accelGravityRel = sy QP.acceleration $= deriv (sy QP.velocity) QP.time
+accelGravityRel = sy QP.gravitationalAccel $=  sy QP.gravitationalConst 
 
 accelGravityDesc :: Sentence
 accelGravityDesc = foldlSent [S "This equation satisfies"]

@@ -186,8 +186,9 @@ torqueI = ucs' (dccWDS "torqueI"
                (cn "torque applied to the i-th body")
                (phrase QP.torque)) (sub (eqSymb QP.torque) lI) Real torqueU
 
-mTot = ucs' (dccWDS "M" (compoundPhrase' (cn "total mass of the") 
-                 (CP.rigidBody ^. term)) (phrase QPP.mass)) cM Real kilogram
+mTot = ucs' (dccWDS "M_T" (compoundPhrase' (cn "total mass of the") 
+                 (CP.rigidBody ^. term)) (phrase QPP.mass))
+                 (sub (eqSymb QPP.mass) cT) Real kilogram
 
 timeC = ucs' (dccWDS "timeC" (cn "denotes the time at collision") 
                 (phrase QP.time)) (sub (eqSymb QP.time) lColl) Real second

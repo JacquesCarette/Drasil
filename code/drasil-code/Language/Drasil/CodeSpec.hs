@@ -2,17 +2,9 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
-<<<<<<< HEAD
-import Database.Drasil(ChunkDB, SystemInformation(SI), symbLookup, symbolTable,
-  _authors, _constants,
-  _constraints, _datadefs,
-  _definitions, _inputs, _outputs,
-  _quants, _sys, _sysinfodb)
-=======
 import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
   _authors, _constants, _constraints, _datadefs, _definitions, _inputs,
   _outputs, _quants, _sys, _sysinfodb)
->>>>>>> master
 import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 

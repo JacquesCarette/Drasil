@@ -860,11 +860,7 @@ intValue i = intValue' (getType $ valueType i)
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
 
-<<<<<<< HEAD:code/drasil-code/Language/Drasil/Code/Imperative/LanguageRenderer.hs
-doxCommand, doxBrief, doxParam, doxFile, doxAuthor, doxDate :: String
-=======
 doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String
->>>>>>> master:code/drasil-code/Language/Drasil/Code/Imperative/GOOL/LanguageRenderer.hs
 doxCommand = "\\"
 doxBrief = doxCommand ++ "brief "
 doxParam = doxCommand ++ "param "

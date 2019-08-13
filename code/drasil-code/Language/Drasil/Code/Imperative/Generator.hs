@@ -59,7 +59,7 @@ genPackage = do
       m = makefile (commented g) p
   i <- genSampleInput
   d <- genDoxConfig n p
-  return $ package p (m:i:d)
+  return $ package p (m:i++d)
 
 genProgram :: (ProgramSym repr) => Reader State (repr (Program repr))
 genProgram = do

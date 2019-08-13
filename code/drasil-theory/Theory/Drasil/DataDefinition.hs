@@ -60,3 +60,10 @@ mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 mkQuantDef cncpt equation = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqnSt  (cncpt ^. uid) (cncpt ^. term) EmptyS (symbol cncpt) Real a equation
         datadef Nothing  = fromEqnSt' (cncpt ^. uid) (cncpt ^. term) EmptyS (symbol cncpt) Real equation
+
+-- Used to help make Qdefinitions when uid and symbol come from the same source, with the term is separate
+mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> Expr -> QDefinition
+mkQuantDef' cncpt term equation = datadef $ getUnit cncpt
+  where datadef (Just a) = fromEqnSt  (cncpt ^. uid) term EmptyS (symbol cncpt) Real a equation
+        datadef Nothing  = fromEqnSt' (cncpt ^. uid) term EmptyS (symbol cncpt) Real equation
+

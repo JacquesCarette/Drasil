@@ -1,7 +1,7 @@
 {- re-export many things to simplify external use -}
 module Theory.Drasil (
   -- DataDefinition
-  DataDefinition, mkQuantDef, dd, ddNoRefs, qdFromDD
+  DataDefinition, mkQuantDef, mkQuantDef', dd, ddNoRefs, qdFromDD
   -- GenDefn
   , GenDefn, gd, gdNoRefs
   -- InstanceModel
@@ -12,7 +12,7 @@ module Theory.Drasil (
   , Theory(..), TheoryModel, tm, tmNoRefs
 ) where
 
-import Theory.Drasil.DataDefinition (DataDefinition, mkQuantDef,
+import Theory.Drasil.DataDefinition (DataDefinition, mkQuantDef, mkQuantDef',
   dd, ddNoRefs, qdFromDD)
 import Theory.Drasil.GenDefn
 import Theory.Drasil.InstanceModel

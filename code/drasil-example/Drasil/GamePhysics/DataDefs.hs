@@ -6,7 +6,7 @@ module Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefs,
 
 import Language.Drasil
 import Database.Drasil (Block(Parallel))
-import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
+import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef, mkQuantDef')
 import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
@@ -226,11 +226,11 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
 -}
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
-chaslesDD = ddNoRefs chasles Nothing "chalses"
+chaslesDD = ddNoRefs chasles Nothing "chaslesThm"
   [chaslesThmDesc, makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 chasles :: QDefinition
-chasles = mkQuantDef velB chaslesEqn
+chasles = mkQuantDef' velB (nounPhraseSP "Chasles' theorem") chaslesEqn
 
 -- The last two terms in the denominator should be cross products.
 chaslesEqn :: Expr

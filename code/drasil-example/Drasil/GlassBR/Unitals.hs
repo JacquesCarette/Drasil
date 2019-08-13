@@ -9,7 +9,7 @@ import Control.Lens ((^.))
 import Prelude hiding (log)
 
 import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
-import Data.Drasil.Constraints (gtZeroConstr)
+import Data.Drasil.Constraints (gtZeroConstr, probConstr)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
@@ -89,7 +89,7 @@ aspectRatio = uvc "aspectRatio" (aR ^. term)
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Concat [lBreak, lTol])) Real
-  [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (uncty 0.001 Nothing)
+  [probConstr] (dbl 0.008) (uncty 0.001 Nothing)
 
 charWeight = uqcND "charWeight" (nounPhraseSP "charge weight") 
   lW kilogram Real
@@ -134,15 +134,15 @@ tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]
 probBr, probFail, pbTolfail :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   (sub cP lBreak) Rational
-  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+  [probConstr] (Just $ dbl 0.4)
 
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
   (sub cP lFail) Rational
-  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+  [probConstr] (Just $ dbl 0.4)
 
 pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure") 
   (sub cP (Concat [lFail, lTol])) Real
-  [ physc $ Bounded (Exc, 0) (Exc, 1)] (Just $ dbl 0.008) 
+  [probConstr] (Just $ dbl 0.008) 
   
 
   --FIXME: no typical value!

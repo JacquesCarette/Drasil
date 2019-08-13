@@ -4,14 +4,11 @@ import Language.Drasil
 import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
 import Database.Drasil (cdb)
 import Theory.Drasil (TheoryModel, tm)
-import Utils.Drasil
 
-import Control.Lens ((^.))
-
-import Drasil.GlassBR.Concepts (lResistance)
 import Drasil.GlassBR.IMods (symb)
 import Drasil.GlassBR.References (astm2009)
-import Drasil.GlassBR.Unitals (tmDemand, demandq, isSafeProb, isSafeLoad, tmLRe, pbTolfail, probFail)
+import Drasil.GlassBR.Unitals (isSafeLoad, isSafeProb, pbTolfail, probFail,
+  tmDemand, tmLRe)
 import Drasil.GlassBR.Symbols (thisSymbols)
 
 {--}

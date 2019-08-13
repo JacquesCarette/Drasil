@@ -404,13 +404,13 @@ Description & \begin{symbDescription}
               \item{${P_{\text{f}\text{tol}}}$ is the tolerable probability of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeProb$, the glass is considered safe. $is-safeProb$ and $is-safeLoad$ (from \hyperref[TM:isSafeLoad]{TM: isSafeLoad}) are either both True or both False. ${P_{\text{f}}}$ is the probability of failure, ${P_{\text{f}\text{tol}}}$ is the tolerable probability of failure.
+Notes & If $is-safeProb$, the structure is considered safe.
         
 \\ \midrule \\
 Source & \cite{astm2009}
          
 \\ \midrule \\
-RefBy & \hyperref[TM:isSafeLoad]{TM: isSafeLoad} and \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
+RefBy & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
         
 \\ \bottomrule
 \end{tabular}
@@ -436,13 +436,13 @@ Description & \begin{symbDescription}
               \item{$Load$ is the applied load (demand) or pressure (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeLoad$, the glass is considered safe. $is-safeProb$ (from \hyperref[TM:isSafeProb]{TM: isSafeProb}) and $is-safeLoad$ are either both True or both False. LR is the load resistance (also called capacity), $Load$ (also referred as the Demand) is the 3 second duration equivalent pressure.
+Notes & If $is-safeLoad$, the structure is considered safe.
         
 \\ \midrule \\
 Source & \cite{astm2009}
          
 \\ \midrule \\
-RefBy & \hyperref[TM:isSafeProb]{TM: isSafeProb} and \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
+RefBy & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
         
 \\ \bottomrule
 \end{tabular}
@@ -1236,7 +1236,7 @@ $AR$ & $AR\geq{}1$ & $AR\leq{}{AR_{\text{max}}}$ & $1.5$ & 10$\%$
 \\
 $b$ & $0<b\leq{}a$ & ${d_{\text{min}}}\leq{}b\leq{}{d_{\text{max}}}$ & $1.2$ m & 10$\%$
 \\
-${P_{\text{b}\text{tol}}}$ & $0<{P_{\text{b}\text{tol}}}<1$ & -- & $0.008$ & 0.1$\%$
+${P_{\text{b}\text{tol}}}$ & $0\leq{}{P_{\text{b}\text{tol}}}\leq{}1$ & -- & $0.008$ & 0.1$\%$
 \\
 $SD$ & $SD>0$ & ${SD_{\text{min}}}\leq{}SD\leq{}{SD_{\text{max}}}$ & $45.0$ m & 10$\%$
 \\
@@ -1258,7 +1258,7 @@ $w$ & $w>0$ & ${w_{\text{min}}}\leq{}w\leq{}{w_{\text{max}}}$ & $42.0$ kg & 10$\
 \\
 \midrule
 \endhead
-${P_{\text{b}}}$ & $0<{P_{\text{b}}}<1$
+${P_{\text{b}}}$ & $0\leq{}{P_{\text{b}}}\leq{}1$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -1529,9 +1529,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:calofDemand]{DD: calofDemand} &  &  &  &  &  &  &  &  &  & X &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[TM:isSafeProb]{TM: isSafeProb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\hyperref[TM:isSafeProb]{TM: isSafeProb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:isSafeLoad]{TM: isSafeLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+\hyperref[TM:isSafeLoad]{TM: isSafeLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[IM:isSafePb]{IM: isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & X
 \\

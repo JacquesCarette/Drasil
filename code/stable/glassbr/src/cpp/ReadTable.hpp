@@ -14,7 +14,7 @@ using std::ifstream;
 using std::ofstream;
 
 /** \brief Reads glass ASTM data from a file with the given file name
-    \param filename name of file with x y and z data
+    \param filename name of the input file
     \param z_vector list of z values
     \param x_matrix lists of x values at different z values
     \param y_matrix lists of y values at different z values

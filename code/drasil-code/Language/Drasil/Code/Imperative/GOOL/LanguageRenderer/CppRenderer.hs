@@ -3,7 +3,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render C++ code is contained in this module
-module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
   -- * C++ Code Configuration -- defines syntax of all C++ code
   CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC
 ) where
@@ -11,7 +11,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
 import Utils.Drasil (indent, indentList)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -21,7 +21,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDoc,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
   listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
@@ -43,7 +43,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   makefileName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
   appendToBody, surroundBody, getterName, setterName, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.Data (Pair(..), pairList, Terminator(..),
+import Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList, Terminator(..),
   ScopeTag(..), AuxData(..), ad, emptyAux, FileData(..), srcFile, hdrFile, 
   updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), 
   od, PackData(..), packD, emptyPack, ParamData(..), pd, ProgData(..), progD, 
@@ -53,14 +53,14 @@ import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, cppCompiler, nativeBinary)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Helpers (angles, blank, doubleQuotedText,
+import Language.Drasil.Code.Imperative.GOOL.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
   getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import qualified Data.Map as Map (fromList,lookup)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
   empty, equals, semi, vcat, lbrace, rbrace, quotes, render, colon, isEmpty)
@@ -573,8 +573,8 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
 
-  docFunc desc pComms f = pair (docFunc desc pComms $ pfst f) (docFunc desc 
-    pComms $ psnd f)
+  docFunc desc pComms rComm f = pair (docFunc desc pComms rComm $ pfst f) 
+    (docFunc desc pComms rComm $ psnd f)
 
   inOutFunc n s p ins outs both b = pair (inOutFunc n (pfst s) (pfst p) (map
     pfst ins) (map pfst outs) (map pfst both) (pfst b)) (inOutFunc n (psnd s) 
@@ -1140,13 +1140,13 @@ instance MethodSym CppSrcCode where
   docMain c b = commentedFunc (docComment $ functionDoc 
     "Controls the flow of the program" 
     [("argc", "Number of command-line arguments"),
-    ("argv", "List of command-line arguments")]) (mainMethod c b)
+    ("argv", "List of command-line arguments")] ["exit code"]) (mainMethod c b)
 
   function n s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n <$> 
     sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
     blockStart blockEnd)
 
-  docFunc = docFuncRepr
+  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v)
     (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ 
@@ -1157,8 +1157,11 @@ instance MethodSym CppSrcCode where
   inOutFunc n s p ins outs both b = function n s p (mState void) (map
     pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
+  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
+  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms)
+    [bComm]
   docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
-    (bComms ++ iComms ++ oComms)
+    (bComms ++ iComms ++ oComms) []
 
   commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
@@ -1635,7 +1638,7 @@ instance MethodSym CppHdrCode where
 
   function n = method n ""
 
-  docFunc = docFuncRepr
+  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map (fmap getParam) ins) b
@@ -1644,8 +1647,11 @@ instance MethodSym CppHdrCode where
   inOutFunc n s p ins outs both b = function n s p (mState void) (map 
     pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
+  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
+  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms)
+    [bComm]
   docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
-    (bComms ++ iComms ++ oComms)
+    (bComms ++ iComms ++ oComms) []
 
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)

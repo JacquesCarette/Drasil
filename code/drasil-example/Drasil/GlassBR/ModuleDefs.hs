@@ -131,13 +131,13 @@ interpOver ptx pty ind vv =
 -- But it is also 'wrong' in the sense that it assumes x_1 <= x <= x_2
 linInterpCT :: Func
 linInterpCT = funcDef "lin_interp" "Performs linear interpolation" 
-  [x_1, y_1, x_2, y_2, x] Real
+  [x_1, y_1, x_2, y_2, x] Real (Just "y value interpolated at given x value")
   [ FRet $ onLine (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
 
 findCT :: Func
 findCT = funcDef "find" 
   "Finds the array index for a value closest to the given value" 
-  [arr, v] Natural
+  [arr, v] Natural (Just "index of given value in given array")
   [
     ffor i (sy i $< (dim (sy arr) - 1))
       [ FCond ((vLook arr i 0 $<= sy v) $&& (sy v $<= vLook arr i 1))
@@ -147,7 +147,7 @@ findCT = funcDef "find"
 
 extractColumnCT :: Func
 extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
-  [mat, j] (Vect Real)
+  [mat, j] (Vect Real) (Just "column of the given matrix at the given index")
   [
     fdec col,
     --
@@ -159,7 +159,7 @@ extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix"
 interpY :: Func
 interpY = funcDef "interpY" 
   "Linearly interpolates a y value at given x and z values" 
-  [filename, x, z] Real
+  [filename, x, z] Real (Just "y value interpolated at given x and z values")
   [
   -- hack
   fdec xMatrix,
@@ -185,7 +185,7 @@ interpY = funcDef "interpY"
 interpZ :: Func
 interpZ = funcDef "interpZ" 
   "Linearly interpolates a z value at given x and y values" 
-  [filename, x, y] Real
+  [filename, x, y] Real (Just "z value interpolated at given x and y values")
   [
     -- hack
   fdec xMatrix,

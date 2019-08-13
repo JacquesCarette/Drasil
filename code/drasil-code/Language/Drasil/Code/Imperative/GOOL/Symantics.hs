@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Language.Drasil.Code.Imperative.Symantics (
+module Language.Drasil.Code.Imperative.GOOL.Symantics (
   -- Types
   Label, Library,
   -- Typeclasses
@@ -555,7 +555,9 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr) 
-  docFunc :: String -> [String] -> repr (Method repr) -> repr (Method repr) 
+  -- Parameters are: function description, parameter descriptions, 
+  --   return value description if applicable, function
+  docFunc :: String -> [String] -> Maybe String -> repr (Method repr) -> repr (Method repr) 
 
   -- The three lists are inputs, outputs, and both, respectively
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 

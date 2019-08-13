@@ -2,7 +2,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render C# code is contained in this module
-module Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
   -- * C# Code Configuration -- defines syntax of all C# code
   CSharpCode(..)
 ) where
@@ -10,7 +10,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (
 import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   fileDoc', moduleDocD, classDocD, enumDocD,
   enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, printDoc, outDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD, 
@@ -45,7 +45,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt,
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
   surroundBody, getterName, setterName, setMain, setMainMethod, setEmpty, 
   intValue)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
+import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
@@ -54,13 +54,13 @@ import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, nativeBinary, osClassDefault)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Helpers (emptyIfEmpty, liftA4, liftA5, 
+import Language.Drasil.Code.Imperative.GOOL.Helpers (emptyIfEmpty, liftA4, liftA5, 
   liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
 import qualified Data.Map as Map (fromList,lookup)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
   semi, vcat, lbrace, rbrace, colon)
@@ -547,11 +547,11 @@ instance MethodSym CSharpCode where
 
   docMain c b = commentedFunc (docComment $ functionDoc 
     "Controls the flow of the program" 
-    [("args", "List of command-line arguments")]) (mainMethod c b)
+    [("args", "List of command-line arguments")] []) (mainMethod c b)
 
   function n = method n ""
 
-  docFunc = docFuncRepr
+  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
@@ -559,10 +559,14 @@ instance MethodSym CSharpCode where
   inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) 
     (map stateParam $ v : ins) (liftA2 appendToBody b (returnState $ valueOf v))
   inOutFunc n s p ins outs both b = function n s p (mState void) (map (fmap 
-    (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ map (fmap (updateParamDoc csOut) . stateParam) outs) b
+    (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ 
+    map (fmap (updateParamDoc csOut) . stateParam) outs) b
 
+  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
+  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms)
+    [bComm]
   docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
-    (bComms ++ iComms ++ oComms)
+    (bComms ++ iComms ++ oComms) []
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

@@ -72,6 +72,8 @@ printMath = (`runPrint` Text)
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
 printLO (HDiv ["equation"] layoutObs EmptyS)  = vcat (map printLO layoutObs)
+-- Dollar Doc needed to wrap in extra dollar signs.
+-- Latex print sets up a \begin{displaymath} environment instead of this
 printLO (EqnBlock contents)    = dollarDoc $ printMath $ TeX.spec contents
 -- Non-mathjax
 -- printLO (EqnBlock contents) = pSpec contents
@@ -79,8 +81,6 @@ printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))
 printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
                                  divTag ts (vcat (map printLO layoutObs))
 printLO (Paragraph contents)   = paragraph $ pSpec contents
--- Dollar Doc needed to wrap in extra dollar signs.
--- Latex print sets up a \begin{displaymath} environment instead of this
 printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
 printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
 printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME

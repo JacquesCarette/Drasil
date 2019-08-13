@@ -1,7 +1,6 @@
 module Drasil.GamePhysics.TMods (tMods) where
 
 import Language.Drasil
-import Prelude hiding (id)
 import Control.Lens ((^.))
 import Theory.Drasil (TheoryModel, tmNoRefs)
 import Utils.Drasil
@@ -98,7 +97,7 @@ newtonLUGDesc = foldlSent [S "Two", plural CP.rigidBody, S "in the universe",
   S "is the", QP.gravitationalConst ^. defn, 
   sParen $ Sy $ unit_symb QP.gravitationalConst]
 
--- T5 : Newton's second law for rotational motion --
+-- T4 : Newton's second law for rotational motion --
 
 newtonSLR :: TheoryModel
 newtonSLR = tmNoRefs (cw newtonSLR_RC)

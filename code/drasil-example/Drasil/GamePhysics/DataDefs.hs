@@ -6,27 +6,26 @@ module Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefs,
 
 import Language.Drasil
 import Database.Drasil (Block(Parallel))
-import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef, mkQuantDef')
+import Theory.Drasil (DataDefinition, dd, ddNoRefs, mkQuantDef, mkQuantDef')
 import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
-
+import Drasil.GamePhysics.References (chaslesWiki)
 import Drasil.GamePhysics.Unitals (initRelVel, massA, massB, massI,
   momtInertA, momtInertB, mTot, normalLen, normalVect,
   perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP, rRot,
   velo_1, velo_2, timeT, time_1, time_2)
 
-import qualified Data.Drasil.Quantities.Math as QM (orientation)
-
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 
+import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
   force, torque, kEnergy, energy, impulseV, chgInVelocity, acceleration, potEnergy,
   height, gravitationalAccel, momentOfInertia)
-
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+
 import Data.Drasil.Theories.Physics (torque, torqueDD)
 ----- Data Definitions -----
 
@@ -226,7 +225,7 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
 -}
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
-chaslesDD = ddNoRefs chasles Nothing "chaslesThm"
+chaslesDD = dd chasles [makeCite chaslesWiki] Nothing "chaslesThm" 
   [chaslesThmDesc, makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
 
 chasles :: QDefinition

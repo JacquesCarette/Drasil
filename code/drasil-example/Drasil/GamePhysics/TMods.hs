@@ -1,36 +1,34 @@
-module Drasil.GamePhysics.TMods (tMods, newtonTL, 
-newtonLUG, chaslesThm, newtonSLR) where
+module Drasil.GamePhysics.TMods (tMods) where
 
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tmNoRefs)
 import Utils.Drasil
 
-import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD)
+import Drasil.GamePhysics.Assumptions (assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
-  mass_1, mass_2, rOB, sqrDist, velB, velO)
+  mass_1, mass_2, sqrDist)
 
-import Data.Drasil.Concepts.Physics (rigidBody)
+import Data.Drasil.Concepts.Physics (rigidBody, twoD)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.Physics (angularAccel, angularVelocity,
-  displacement, force, gravitationalConst, linearVelocity, momentOfInertia,
-  torque)
+import Data.Drasil.Quantities.Physics (angularAccel, displacement,
+  force, gravitationalConst, momentOfInertia, torque)
 import Data.Drasil.Theories.Physics (newtonSL)
 
 ----- Theoretical Models -----
 
 tMods :: [TheoryModel]
-tMods = [newtonSL, newtonTL, newtonLUG, chaslesThm, newtonSLR]
+tMods = [newtonSL, newtonTL, newtonLUG, newtonSLR]
 
 -- T1 : Newton's second law of motion --
 
 -- T2 : Newton's third law of motion --
 
 newtonTL :: TheoryModel
-newtonTL = tmNoRefs (cw newtonTL_RC) [qw force_1, qw force_2] ([] :: [ConceptChunk])
-  [] [newtonTLRel] [] "NewtonThirdLawMot" [newtonTLNote]
+newtonTL = tmNoRefs (cw newtonTLRC) [qw force_1, qw force_2]
+  ([] :: [ConceptChunk]) [] [newtonTLRel] [] "NewtonThirdLawMot" [newtonTLNote]
 
-newtonTL_RC :: RelationConcept
-newtonTL_RC = makeRC "newtonTL_RC" (nounPhraseSP "Newton's third law of motion")
+newtonTLRC :: RelationConcept
+newtonTLRC = makeRC "newtonTLRC" (nounPhraseSP "Newton's third law of motion")
   EmptyS newtonTLRel
 
 newtonTLRel :: Relation
@@ -45,13 +43,13 @@ newtonTLNote = foldlSent [S "Every action has an equal and opposite reaction.",
 -- T3 : Newton's law of universal gravitation --
 
 newtonLUG :: TheoryModel
-newtonLUG = tmNoRefs (cw newtonLUG_RC)
+newtonLUG = tmNoRefs (cw newtonLUGRC)
   [qw force, qw gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dispUnit, qw displacement] ([] :: [ConceptChunk])
   [] [newtonLUGRel] [] "UniversalGravLaw" newtonLUGNotes
 
-newtonLUG_RC :: RelationConcept
-newtonLUG_RC = makeRC "newtonLUG_RC" 
+newtonLUGRC :: RelationConcept
+newtonLUGRC = makeRC "newtonLUGRC" 
   (nounPhraseSP "Newton's law of universal gravitation") EmptyS newtonLUGRel
 
 newtonLUGRel :: Relation
@@ -77,46 +75,25 @@ newtonLUGNotes = map foldlSent [
   [ch dispUnit `sIs` S "equivalent" `toThe` phrase displacement,
    S "divided by the", phrase dispNorm `sC` S "as shown above"]]
 
--- T4 : Chasles' theorem --
-
-chaslesThm :: TheoryModel
-chaslesThm = tmNoRefs (cw chaslesThm_RC)
-  [qw velB, qw velO, qw angularVelocity, qw rOB] 
-  ([] :: [ConceptChunk]) [] [chaslesThmRel] [] "ChaslesThm" chaslesThmNotes
-
-chaslesThm_RC :: RelationConcept
-chaslesThm_RC = makeRC "chaslesThm_RC" (nounPhraseSP "Chasles' theorem")
-  EmptyS chaslesThmRel
-
-chaslesThmRel :: Relation
-chaslesThmRel = sy velB $= sy velO + cross (sy angularVelocity) (sy rOB)
-
--- B should ideally be italicized in 'point B' (line 202).
-chaslesThmNotes :: [Sentence]
-chaslesThmNotes = [
-  foldlSent [S "The", phrase linearVelocity, ch velB `sOf` S "any point B in a",
-    phrase rigidBody `isThe` S "sum" `sOf` (phrase linearVelocity +:+ ch velO) `ofThe`
-    phrase rigidBody, S "at the origin (axis of rotation)" `andThe`
-    S "resultant vector from", S "cross product" `ofThe` phrasePoss rigidBody,
-    getTandS angularVelocity `andThe` getTandS rOB],
-  makeRef2S assumpOT]
-
--- T5 : Newton's second law for rotational motion --
+-- T4 : Newton's second law for rotational motion --
 
 newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs (cw newtonSLR_RC)
+newtonSLR = tmNoRefs (cw newtonSLRRC)
   [qw torque, qw momentOfInertia, qw angularAccel] 
   ([] :: [ConceptChunk]) [] [newtonSLRRel] [] "NewtonSecLawRotMot" newtonSLRNotes
 
-newtonSLR_RC :: RelationConcept
-newtonSLR_RC = makeRC "newtonSLR_RC" 
+newtonSLRRC :: RelationConcept
+newtonSLRRC = makeRC "newtonSLRRC" 
   (nounPhraseSP "Newton's second law for rotational motion") EmptyS newtonSLRRel
 
 newtonSLRRel :: Relation
 newtonSLRRel = sy torque $= sy momentOfInertia * sy angularAccel
 
 newtonSLRNotes :: [Sentence]
-newtonSLRNotes = [
-  foldlSent [S "The net", getTandS torque, S "on a", phrase rigidBody `sIs`
+newtonSLRNotes = map foldlSent [
+  [S "The net", getTandS torque, S "on a", phrase rigidBody `sIs`
    S "proportional to its", getTandS angularAccel],
-  makeRef2S assumpOD]
+  [S "Here" `sC` ch momentOfInertia, S "denotes", phrase momentOfInertia `ofThe`
+   phrase rigidBody],
+  [S "We also assume that all", plural rigidBody, S "involved are", phrase twoD,
+   sParen (S "from" +:+ makeRef2S assumpOD)]]

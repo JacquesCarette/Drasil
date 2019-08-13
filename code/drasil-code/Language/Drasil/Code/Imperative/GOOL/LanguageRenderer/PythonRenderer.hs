@@ -1,7 +1,7 @@
 {-# LANGUAGE TypeFamilies #-}
 
 -- | The logic to render Python code is contained in this module
-module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
   PythonCode(..)
 ) where
@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (indent)
 
 import Language.Drasil.Code.Code (CodeType(..))
-import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -19,7 +19,7 @@ import Language.Drasil.Code.Imperative.Symantics (Label, PackageSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc', 
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
   methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
@@ -37,7 +37,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (addExt, fileDoc',
   observerListName, doxConfigName, makefileName, commentedItem, addCommentsDocD,
   classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
   setterName)
-import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad, 
+import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), ad, 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
@@ -45,13 +45,13 @@ import Language.Drasil.Code.Imperative.Data (Terminator(..), AuxData(..), ad,
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.Helpers (blank, vibcat, emptyIfEmpty, 
+import Language.Drasil.Code.Imperative.GOOL.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
   equals, vcat, colon, brackets, isEmpty)
@@ -528,7 +528,7 @@ instance MethodSym PythonCode where
   function n _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
     (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
 
-  docFunc = docFuncRepr
+  docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
   inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
     ins) b
@@ -536,7 +536,8 @@ instance MethodSym PythonCode where
     stateParam $ both ++ ins) (liftA2 appendToBody b (multiReturn $
     map valueOf $ both ++ outs))
 
-  docInOutFunc desc iComms _ bComms = docFuncRepr desc (bComms ++ iComms)
+  docInOutFunc desc iComms oComms bComms = docFuncRepr desc (bComms ++ iComms) 
+    (bComms ++ oComms)
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

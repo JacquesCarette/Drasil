@@ -6,27 +6,26 @@ module Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefs,
 
 import Language.Drasil
 import Database.Drasil (Block(Parallel))
-import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
+import Theory.Drasil (DataDefinition, dd, ddNoRefs, mkQuantDef, mkQuantDef')
 import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
-
+import Drasil.GamePhysics.References (chaslesWiki)
 import Drasil.GamePhysics.Unitals (initRelVel, massA, massB, massI,
   momtInertA, momtInertB, mTot, normalLen, normalVect,
   perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP, rRot,
   velo_1, velo_2, timeT, time_1, time_2)
 
-import qualified Data.Drasil.Quantities.Math as QM (orientation)
-
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 
+import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
   angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
   force, torque, kEnergy, energy, impulseV, chgInVelocity, acceleration, potEnergy,
   height, gravitationalAccel, momentOfInertia)
-
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+
 import Data.Drasil.Theories.Physics (torque, torqueDD)
 ----- Data Definitions -----
 
@@ -226,26 +225,24 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
 -}
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
-chaslesDD = ddNoRefs chasles Nothing "chalses"
-  [chaslesThmDesc, makeRef2S assumpOT, makeRef2S assumpOD, makeRef2S assumpDI]
+chaslesDD = dd chasles [makeCite chaslesWiki] Nothing "chaslesThm" 
+  [chaslesThmNote]
 
 chasles :: QDefinition
-chasles = mkQuantDef velB chaslesEqn
+chasles = mkQuantDef' velB (nounPhraseSP "Chasles' theorem") chaslesEqn
 
 -- The last two terms in the denominator should be cross products.
 chaslesEqn :: Expr
 chaslesEqn = sy velO + cross (sy  QP.angularVelocity) (sy rOB)
 
-chaslesThmDesc :: Sentence
-chaslesThmDesc = foldlSent [S "The linear", phrase QP.velocity,
-  ch velB, sParen $ Sy $ unit_symb velB, S "of any point B in a",
-  phrase CP.rigidBody, makeRef2S assumpOT, S "is the sum of the linear",
-  phrase QP.velocity, ch velO, sParen $ Sy $ unit_symb velO,
-  S "of the", phrase CP.rigidBody, S "at the origin (axis of rotation)" `andThe`
-  S "resultant vector from the cross product of the",
-  phrase CP.rigidBody :+: S "'s", phrase QP.angularVelocity, 
-  ch QP.angularVelocity, sParen (Sy $ unit_symb QP.angularVelocity) `andThe`
-  phrase rOB `sC` ch rOB, sParen $ Sy $ unit_symb rOB]
+chaslesThmNote :: Sentence
+chaslesThmNote = foldlSent [S "The", phrase QP.linearVelocity,
+  ch velB `sOf` S "any point B in a", phrase CP.rigidBody,
+  sParen (S "from" +:+ makeRef2S assumpOT) `isThe` S "sum" `sOf`
+  ((phrase QP.linearVelocity +:+ ch velO) `ofThe` phrase CP.rigidBody),
+  S "at the origin (axis of rotation)" `andThe` S "resultant vector from",
+  (S "cross product" `ofThe` phrasePoss CP.rigidBody),
+  getTandS QP.angularVelocity `andThe`getTandS rOB]
 
 ---------------DD10 Impulse(Vector)-----------------------------------------------------------------------
 impulseVDD :: DataDefinition

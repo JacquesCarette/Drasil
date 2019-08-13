@@ -10,6 +10,7 @@ import Interpolation
 
 ## \brief Calculates stress distribution factor (Function) based on Pbtol
 # \param inParams structure holding the input values
+# \return stress distribution factor (Function) based on Pbtol
 def func_J_tol(inParams):
     outfile = open("log.txt", "a")
     print("function func_J_tol called with inputs: {", file=outfile)
@@ -20,8 +21,9 @@ def func_J_tol(inParams):
     
     return math.log(math.log(1 / (1 - inParams.P_btol)) * ((inParams.a * inParams.b) ** (7.0 - 1) / (2.86e-53 * (7.17e10 * inParams.h ** 2) ** 7.0 * inParams.LDF)))
 
-## \brief Calculates applied load (demand)
+## \brief Calculates applied load (demand) (Pa)
 # \param inParams structure holding the input values
+# \return applied load (demand) (Pa)
 def func_q(inParams):
     outfile = open("log.txt", "a")
     print("function func_q called with inputs: {", file=outfile)
@@ -35,6 +37,7 @@ def func_q(inParams):
 ## \brief Calculates dimensionless load
 # \param inParams structure holding the input values
 # \param q applied load (demand) (Pa)
+# \return dimensionless load
 def func_q_hat(inParams, q):
     outfile = open("log.txt", "a")
     print("function func_q_hat called with inputs: {", file=outfile)
@@ -51,6 +54,7 @@ def func_q_hat(inParams, q):
 ## \brief Calculates tolerable load
 # \param inParams structure holding the input values
 # \param J_tol stress distribution factor (Function) based on Pbtol
+# \return tolerable load
 def func_q_hat_tol(inParams, J_tol):
     outfile = open("log.txt", "a")
     print("function func_q_hat_tol called with inputs: {", file=outfile)
@@ -67,6 +71,7 @@ def func_q_hat_tol(inParams, J_tol):
 ## \brief Calculates stress distribution factor (Function)
 # \param inParams structure holding the input values
 # \param q_hat dimensionless load
+# \return stress distribution factor (Function)
 def func_J(inParams, q_hat):
     outfile = open("log.txt", "a")
     print("function func_J called with inputs: {", file=outfile)
@@ -80,9 +85,10 @@ def func_J(inParams, q_hat):
     
     return Interpolation.func_interpZ("SDF.txt", inParams.AR, q_hat)
 
-## \brief Calculates non-factored load
+## \brief Calculates non-factored load (Pa)
 # \param inParams structure holding the input values
 # \param q_hat_tol tolerable load
+# \return non-factored load (Pa)
 def func_NFL(inParams, q_hat_tol):
     outfile = open("log.txt", "a")
     print("function func_NFL called with inputs: {", file=outfile)
@@ -99,6 +105,7 @@ def func_NFL(inParams, q_hat_tol):
 ## \brief Calculates risk of failure
 # \param inParams structure holding the input values
 # \param J stress distribution factor (Function)
+# \return risk of failure
 def func_B(inParams, J):
     outfile = open("log.txt", "a")
     print("function func_B called with inputs: {", file=outfile)
@@ -112,9 +119,10 @@ def func_B(inParams, J):
     
     return 2.86e-53 / (inParams.a * inParams.b) ** (7.0 - 1) * (7.17e10 * inParams.h ** 2) ** 7.0 * inParams.LDF * math.exp(J)
 
-## \brief Calculates load resistance
+## \brief Calculates load resistance (Pa)
 # \param inParams structure holding the input values
 # \param NFL non-factored load (Pa)
+# \return load resistance (Pa)
 def func_LR(inParams, NFL):
     outfile = open("log.txt", "a")
     print("function func_LR called with inputs: {", file=outfile)
@@ -131,6 +139,7 @@ def func_LR(inParams, NFL):
 ## \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
 # \param LR load resistance (Pa)
 # \param q applied load (demand) (Pa)
+# \return variable that is assigned true when load resistance (capacity) is greater than load (demand)
 def func_is_safeLR(LR, q):
     outfile = open("log.txt", "a")
     print("function func_is_safeLR called with inputs: {", file=outfile)
@@ -146,6 +155,7 @@ def func_is_safeLR(LR, q):
 
 ## \brief Calculates probability of breakage
 # \param B risk of failure
+# \return probability of breakage
 def func_P_b(B):
     outfile = open("log.txt", "a")
     print("function func_P_b called with inputs: {", file=outfile)
@@ -159,6 +169,7 @@ def func_P_b(B):
 ## \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability
 # \param inParams structure holding the input values
 # \param P_b probability of breakage
+# \return variable that is assigned true when calculated probability is less than tolerable probability
 def func_is_safePb(inParams, P_b):
     outfile = open("log.txt", "a")
     print("function func_is_safePb called with inputs: {", file=outfile)

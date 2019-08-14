@@ -6,7 +6,7 @@ import Utils.Drasil
 import Theory.Drasil (GenDefn, gd)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst)
-import Drasil.GamePhysics.Unitals (mLargest, dispNorm, dispUnit)
+import Drasil.GamePhysics.Unitals (mLarger, dispNorm, dispUnit)
 
 ----- General Models -----
 
@@ -63,7 +63,7 @@ accelGravityRC = makeRC "accelGravityRC" (nounPhraseSP "Acceleration due to grav
   accelGravityDesc accelGravityRel
 
 accelGravityRel :: Relation
-accelGravityRel = sy QP.gravitationalAccel $=  sy QP.gravitationalConst * sy mLargest/
+accelGravityRel = sy QP.gravitationalAccel $=  sy QP.gravitationalConst * sy mLarger/
                   (sy dispNorm $^ 2) * sy dispUnit
 
 accelGravitySrc :: Reference
@@ -71,7 +71,7 @@ accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravi
   shortname' "Definition of Gravitational Acceleration"
 
 accelGravityDesc :: Sentence
-accelGravityDesc = foldlSent [S "This equation satisfies"]
+accelGravityDesc = foldlSent [S "Acceleration due to gravity"]
 
 -- [gravitationalAccel, mass, gravitationalConst]
 

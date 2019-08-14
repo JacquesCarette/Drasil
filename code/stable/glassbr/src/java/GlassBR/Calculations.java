@@ -30,9 +30,9 @@ public class Calculations {
         return Math.log(Math.log(1 / (1 - inParams.P_btol)) * (Math.pow(inParams.a * inParams.b, 7.0 - 1) / (2.86e-53 * Math.pow(7.17e10 * Math.pow(inParams.h, 2), 7.0) * inParams.LDF)));
     }
     
-    /** \brief Calculates demand: 3 second duration equivalent pressure (Pa)
+    /** \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
         \param inParams structure holding the input values
-        \return demand: 3 second duration equivalent pressure (Pa)
+        \return applied load (demand): 3 second duration equivalent pressure (Pa)
     */
     public static double func_q(InputParameters inParams) throws Exception {
         PrintWriter outfile;
@@ -48,7 +48,7 @@ public class Calculations {
     
     /** \brief Calculates dimensionless load
         \param inParams structure holding the input values
-        \param q demand: 3 second duration equivalent pressure (Pa)
+        \param q applied load (demand): 3 second duration equivalent pressure (Pa)
         \return dimensionless load
     */
     public static double func_q_hat(InputParameters inParams, double q) throws Exception {
@@ -168,7 +168,7 @@ public class Calculations {
     
     /** \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
         \param LR load resistance: The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009. (Pa)
-        \param q demand: 3 second duration equivalent pressure (Pa)
+        \param q applied load (demand): 3 second duration equivalent pressure (Pa)
         \return variable that is assigned true when load resistance (capacity) is greater than load (demand)
     */
     public static Boolean func_is_safeLR(double LR, double q) throws Exception {

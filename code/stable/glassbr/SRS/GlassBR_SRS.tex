@@ -75,7 +75,7 @@ $B$ & Risk of failure & --
 \\
 $b$ & Plate width (short dimension) & m
 \\
-$capacity$ & Capacity & Pa
+$capacity$ & Capacity or load resistance & Pa
 \\
 ${d_{\text{max}}}$ & Maximum value for one of the dimensions of the glass plate & m
 \\
@@ -109,7 +109,7 @@ $k$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
 $LDF$ & Load duration factor & --
 \\
-$Load$ & Load & Pa
+$Load$ & Applied load (demand) or pressure & Pa
 \\
 $LR$ & Load resistance & Pa
 \\
@@ -127,7 +127,7 @@ ${P_{\text{f}}}$ & Probability of failure & --
 \\
 ${P_{\text{f}\text{tol}}}$ & Tolerable probability of failure & --
 \\
-$q$ & Demand & Pa
+$q$ & Applied load (demand) & Pa
 \\
 $\hat{q}$ & Dimensionless load & --
 \\
@@ -326,7 +326,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Fully tempered (FT) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in \cite{astm2012}.}
 \item{Heat strengthened (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in \cite{astm2012}.}
 \end{itemize}
-\item{Load - A uniformly distributed lateral pressure.}
+\item{Applied load (demand) or pressure - A uniformly distributed lateral pressure.}
 \begin{itemize}
 \item{Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in \cite[(pp. 1 and 53)]{astm2009}.}
 \item{Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.}
@@ -434,11 +434,11 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$is-safeLoad$ is the variable that is assigned true when load resistance (capacity) is greater than applied load (demand) (Unitless)}
-              \item{$capacity$ is the capacity (Pa)}
-              \item{$Load$ is the load (Pa)}
+              \item{$capacity$ is the capacity or load resistance (Pa)}
+              \item{$Load$ is the applied load (demand) or pressure (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeLoad$, the glass is considered safe. $is-safeProb$ (from \hyperref[TM:isSafeProb]{TM: isSafeProb}) and $is-safeLoad$ are either both True or both False. LR is the load resistance (also called capacity), $Load$ (also referred as the Demand) is the 3 second duration equivalent pressure.
+Notes & If $is-safeLoad$, the glass is considered safe. $is-safeProb$ (from \hyperref[TM:isSafeProb]{TM: isSafeProb}) and $is-safeLoad$ are either both True or both False. LR is the load resistance (also called capacity), $Load$ (also referred as the Applied Load (demand)) is the 3 second duration equivalent pressure.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -761,7 +761,7 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\hat{q}$ is the dimensionless load (Unitless)}
-              \item{$q$ is the demand (Pa)}
+              \item{$q$ is the applied load (demand) (Pa)}
               \item{$a$ is the plate length (long dimension) (m)}
               \item{$b$ is the plate width (short dimension) (m)}
               \item{$E$ is the modulus of elasticity of glass (Pa)}
@@ -1090,7 +1090,7 @@ RefBy & \hyperref[IM:isSafeLR]{IM: isSafeLR}
 \phantomsection 
 \label{DD:calofDemand}
 \\ \midrule \\
-Label & Demand
+Label & Applied load (demand)
         
 \\ \midrule \\
 Symbol & $q$
@@ -1104,13 +1104,13 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$q$ is the demand (Pa)}
+              \item{$q$ is the applied load (demand) (Pa)}
               \item{$interpY$ is the interpY (Unitless)}
               \item{$SD$ is the stand off distance (m)}
               \item{${w_{TNT}}$ is the equivalent TNT charge mass (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $q$, or demand, is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
+Notes & $q$, or applied load (demand), is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1208,10 +1208,10 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{$is-safeLR$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
               \item{$LR$ is the load resistance (Pa)}
-              \item{$q$ is the demand (Pa)}
+              \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofDemand]{DD: calofDemand}.
+Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Applied Load (demand)) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofDemand]{DD: calofDemand}.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1699,7 +1699,7 @@ This appendix holds the graphs (\hyperref[Figure:demandVSsod]{Fig:demandVSsod} a
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png}
-\caption{Non dimensional lateral load ($\hat{q}$) versus Aspect Ratio (AR) versus Stress distribution factor (Function) ($J$)}
+\caption{Non dimensional lateral applied load (demand) or pressure ($\hat{q}$) versus Aspect Ratio (AR) versus Stress distribution factor (Function) ($J$)}
 \label{Figure:dimlessloadVSaspect}
 \end{center}
 \end{figure}

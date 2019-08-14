@@ -306,9 +306,9 @@ blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")
     "equivalent factor, and stand off distance from the point of explosion.")
 bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled " ++
   "with a destructive substance designed to exlode on impact or via detonation")
-capacity      = dcc "capacity"    (nounPhraseSP "capacity")
+capacity      = dcc "capacity"    (nounPhraseSP "capacity or load resistance")
   "load resistance calculated"
-demandq       = dcc "demandq"     (nounPhraseSP "demand") 
+demandq       = dcc "demandq"     (nounPhraseSP "applied load (demand)") 
   "3 second duration equivalent pressure"
 eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
   ("Mass of TNT placed on the ground in a hemisphere that represents the " ++
@@ -344,7 +344,7 @@ lateral       = dcc "lateral"     (nounPhraseSP "lateral")
 lite          = dcc "lite"        (cn' "lite")
   ("Pieces of glass that are cut, prepared, and used to create the window " ++
     "or door.")
-load          = dcc "load"        (nounPhraseSP "load") 
+load          = dcc "load"  (nounPhraseSP "applied load (demand) or pressure") 
   "A uniformly distributed lateral pressure."
 loadResis     = cc' lResistance
   (foldlSent [S "The uniform lateral load that a glass construction can sustain",

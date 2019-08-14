@@ -21,9 +21,9 @@ def func_J_tol(inParams):
     
     return math.log(math.log(1 / (1 - inParams.P_btol)) * ((inParams.a * inParams.b) ** (7.0 - 1) / (2.86e-53 * (7.17e10 * inParams.h ** 2) ** 7.0 * inParams.LDF)))
 
-## \brief Calculates demand: 3 second duration equivalent pressure (Pa)
+## \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
 # \param inParams structure holding the input values
-# \return demand: 3 second duration equivalent pressure (Pa)
+# \return applied load (demand): 3 second duration equivalent pressure (Pa)
 def func_q(inParams):
     outfile = open("log.txt", "a")
     print("function func_q called with inputs: {", file=outfile)
@@ -36,7 +36,7 @@ def func_q(inParams):
 
 ## \brief Calculates dimensionless load
 # \param inParams structure holding the input values
-# \param q demand: 3 second duration equivalent pressure (Pa)
+# \param q applied load (demand): 3 second duration equivalent pressure (Pa)
 # \return dimensionless load
 def func_q_hat(inParams, q):
     outfile = open("log.txt", "a")
@@ -138,7 +138,7 @@ def func_LR(inParams, NFL):
 
 ## \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
 # \param LR load resistance: The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009. (Pa)
-# \param q demand: 3 second duration equivalent pressure (Pa)
+# \param q applied load (demand): 3 second duration equivalent pressure (Pa)
 # \return variable that is assigned true when load resistance (capacity) is greater than load (demand)
 def func_is_safeLR(LR, q):
     outfile = open("log.txt", "a")

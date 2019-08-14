@@ -22,15 +22,15 @@ using std::ofstream;
 */
 double func_J_tol(InputParameters &inParams);
 
-/** \brief Calculates demand: 3 second duration equivalent pressure (Pa)
+/** \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
     \param inParams structure holding the input values
-    \return demand: 3 second duration equivalent pressure (Pa)
+    \return applied load (demand): 3 second duration equivalent pressure (Pa)
 */
 double func_q(InputParameters &inParams);
 
 /** \brief Calculates dimensionless load
     \param inParams structure holding the input values
-    \param q demand: 3 second duration equivalent pressure (Pa)
+    \param q applied load (demand): 3 second duration equivalent pressure (Pa)
     \return dimensionless load
 */
 double func_q_hat(InputParameters &inParams, double q);
@@ -72,7 +72,7 @@ double func_LR(InputParameters &inParams, double NFL);
 
 /** \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
     \param LR load resistance: The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009. (Pa)
-    \param q demand: 3 second duration equivalent pressure (Pa)
+    \param q applied load (demand): 3 second duration equivalent pressure (Pa)
     \return variable that is assigned true when load resistance (capacity) is greater than load (demand)
 */
 bool func_is_safeLR(double LR, double q);

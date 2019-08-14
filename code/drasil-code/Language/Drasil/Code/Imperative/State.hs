@@ -2,6 +2,7 @@ module Language.Drasil.Code.Imperative.State (
   State(..)
 ) where
 
+import Language.Drasil
 import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Comments, 
   ConstraintBehaviour, InputModule, Logging, Structure)
 
@@ -15,6 +16,7 @@ data State = State {
   logKind :: Logging,
   commented :: [Comments],
   auxiliaries :: [AuxFile],
+  sampleData :: [Expr],
   currentModule :: String,
 
   onSfwrC :: ConstraintBehaviour,

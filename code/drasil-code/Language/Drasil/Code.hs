@@ -2,9 +2,11 @@
 module Language.Drasil.Code (
   makeCode, createCodeFiles, 
   generator, generateCode,
-  ($:=), Choices(..), CodeSpec, Comments(..), ConstraintBehaviour(..), Func, 
-  FuncStmt(..), ImplementationType(..), Lang(..), Logging(LogNone, LogAll), 
-  Mod(Mod), Structure(..), InputModule(..), AuxFile(..), Visibility(..),
+  readWithDataDesc, sampleInputDD,
+  ($:=), Choices(..), CodeSpec(..), CodeSystInfo(..), Comments(..), 
+  ConstraintBehaviour(..), Func, FuncStmt(..), ImplementationType(..), Lang(..),
+  Logging(LogNone, LogAll), Mod(Mod), Structure(..), InputModule(..), 
+  AuxFile(..), Visibility(..),
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
   junkLine, multiLine, repeated, singleLine, singleton,
   PackageSym(..), ProgramSym(..), RenderSym(..), 
@@ -23,15 +25,17 @@ import Prelude hiding (break, print, return, log, exp)
 
 import Language.Drasil.Code.Imperative.Generator (generator, generateCode)
 
+import Language.Drasil.Code.Imperative.Input (readWithDataDesc, sampleInputDD)
+
 import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
 
 import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
   singleton)
 
-import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..), 
-  ConstraintBehaviour(..), Func, FuncStmt(..), ImplementationType(..), Lang(..),
-  Logging(..), Mod(Mod), Structure(..), InputModule(..), AuxFile(..), 
-  Visibility(..),
+import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec(..), 
+  CodeSystInfo(..), Comments(..), ConstraintBehaviour(..), Func, FuncStmt(..),
+  ImplementationType(..), Lang(..), Logging(..), Mod(Mod), Structure(..), 
+  InputModule(..), AuxFile(..), Visibility(..),
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, 
   packmod, relToQD,
   )

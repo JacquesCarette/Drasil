@@ -2,6 +2,7 @@ module Language.Drasil.Code.Imperative.Generator (
   State(..), generator, generateCode
 ) where
 
+import Language.Drasil
 import Language.Drasil.Code.Imperative.GenerateGOOL (genDoxConfig)
 import Language.Drasil.Code.Imperative.Import (genModDef)
 import Language.Drasil.Code.Imperative.Modules (chooseInModule, genMain, 
@@ -18,8 +19,8 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..),
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Control.Monad.Reader (Reader, ask, runReader)
 
-generator :: String -> Choices -> CodeSpec -> State
-generator dt chs spec = State {
+generator :: String -> [Expr] -> Choices -> CodeSpec -> State
+generator dt sd chs spec = State {
   -- constants
   codeSpec = spec,
   date = showDate $ dates chs,
@@ -28,6 +29,7 @@ generator dt chs spec = State {
   logKind  = logging chs,
   commented = comments chs,
   auxiliaries = auxFiles chs,
+  sampleData = sd,
   -- state
   currentModule = "",
 

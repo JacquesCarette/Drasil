@@ -5,10 +5,10 @@ module Language.Drasil.Code.Imperative.Input (
 import Database.Drasil (ChunkDB)
 import Language.Drasil
 import qualified Language.Drasil.Code.Code as C (CodeType(..))
-import Language.Drasil.Code.DataDesc (DataDesc, Data(..), LinePattern(..), 
-  isJunk, junkLine, repeated, singleton, singleLine)
+import Language.Drasil.Code.DataDesc (DataDesc, Data(..), DataItem, Delim,
+  LinePattern(..), isJunk, junkLine, repeated, singleton, singleLine)
 import Language.Drasil.Code.Imperative.GOOL.Helpers (blank)
-import Language.Drasil.Chunk.Code (CodeChunk, codeType)
+import Language.Drasil.Chunk.Code (codeType)
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
 import Control.Lens ((^.), view)
@@ -46,20 +46,20 @@ readWithDataDesc dd = do
       readDD (Line (Straight dis) dl : ds) (l:ls) = zipWith strAsExpr (map 
         codeType dis) (wordsBy (==dl) l) ++ readDD ds ls
       readDD (Line (Repeat dis) dl : ds) (l:ls) = strListsAsExprs dis 
-        (groupLists (length dis) (wordsBy (==dl) l)) ++ readDD ds ls
+        (groupLists dis dl l) ++ readDD ds ls
       readDD (Lines (Straight dis) (Just n) dl : ds) ls = strListsAsExprs dis 
         (transpose (map (wordsBy (==dl)) (take (fromIntegral n) ls))) 
         ++ readDD ds (drop (fromIntegral n) ls)
       readDD (Lines (Straight dis) Nothing dl : _) ls = strListsAsExprs dis 
         (transpose (map (wordsBy (==dl)) ls))
       readDD (Lines (Repeat dis) (Just n) dl : ds) ls = strLists2DAsExprs dis 
-        (map (groupLists (length dis) . wordsBy (==dl)) (take (fromIntegral n) 
-        ls)) ++ readDD ds (drop (fromIntegral n) ls)
+        (map (groupLists dis dl) (take (fromIntegral n) ls)) 
+        ++ readDD ds (drop (fromIntegral n) ls)
       readDD (Lines (Repeat dis) Nothing dl : _) ls = strLists2DAsExprs dis 
-        (map (groupLists (length dis) . wordsBy (==dl)) ls)
+        (map (groupLists dis dl) ls)
   return $ readDD dd (lines ins)
 
-sampleInputDD :: [CodeChunk] -> DataDesc
+sampleInputDD :: [DataItem] -> DataDesc
 sampleInputDD cs = junkLine : intersperse junkLine (map dataDesc cs)
   where dataDesc c = toDataDesc (codeType c) c
         toDataDesc (C.List _) c = singleLine (repeated [c]) ','
@@ -73,18 +73,19 @@ strAsExpr C.Float s = dbl (read s :: Double)
 strAsExpr C.String s = str s
 strAsExpr _ _ = error "strAsExpr should only be called on integers, floats, or strings"
 
-strListsAsExprs :: [CodeChunk] -> [[String]] -> [Expr]
+strListsAsExprs :: [DataItem] -> [[String]] -> [Expr]
 strListsAsExprs cs = zipWith ($) (map (strListAsExpr . codeType) cs)
   where strListAsExpr (C.List t) ss = Matrix [map (strAsExpr t) ss]
         strListAsExpr _ _ = error "strListsAsExpr called on non-list type"
 
-strLists2DAsExprs :: [CodeChunk] -> [[[String]]] -> [Expr]
+strLists2DAsExprs :: [DataItem] -> [[[String]]] -> [Expr]
 strLists2DAsExprs cs = zipWith ($) (map (strList2DAsExpr . codeType) cs)
   where strList2DAsExpr (C.List (C.List t)) sss = Matrix $ 
           map (map (strAsExpr t)) sss
         strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-list type"
 
-groupLists :: Int -> [a] -> [[a]]
-groupLists n l = transpose $ groupAdjacent l
+groupLists :: [DataItem] -> Delim ->  String -> [[String]]
+groupLists ds dl l = transpose $ groupAdjacent (wordsBy (==dl) l)
   where groupAdjacent [] = []
         groupAdjacent es = take n es : groupAdjacent (drop n es)
+        n = length ds

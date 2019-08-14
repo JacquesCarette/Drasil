@@ -95,5 +95,5 @@ newtonSLRNotes = map foldlSent [
    S "proportional to its", getTandS angularAccel],
   [S "Here" `sC` ch momentOfInertia, S "denotes", phrase momentOfInertia `ofThe`
    phrase rigidBody],
-  [S "We also assume that all", plural rigidBody, S "involved are", phrase twoD,
-   sParen (S "from" +:+ makeRef2S assumpOD)]]
+  [S "We also assume that all", plural rigidBody, S "involved" `sAre`
+   phrase twoD, fromSource assumpOD]]

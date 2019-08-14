@@ -519,9 +519,7 @@ Description & \begin{symbDescription}
               \item{$M$ is the total mass of the rigid body (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpOT]{A: objectTy}
-        
-        \hyperref[assumpOD]{A: objectDimension}
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
 \\ \midrule \\
 Source & --
@@ -560,11 +558,9 @@ Description & \begin{symbDescription}
               \item{$\mathbf{p}$ is the position (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpOT]{A: objectTy}
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        \hyperref[assumpOD]{A: objectDimension}
-        
-        \hyperref[assumpDI]{A: dampingInvolvement}
+        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
         
 \\ \midrule \\
 Source & --
@@ -603,11 +599,9 @@ Description & \begin{symbDescription}
               \item{$\mathbf{r}$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpOT]{A: objectTy}
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        \hyperref[assumpOD]{A: objectDimension}
-        
-        \hyperref[assumpDI]{A: dampingInvolvement}
+        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
         
 \\ \midrule \\
 Source & --
@@ -646,11 +640,9 @@ Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpOT]{A: objectTy}
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        \hyperref[assumpOD]{A: objectDimension}
-        
-        \hyperref[assumpDI]{A: dampingInvolvement}
+        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
         
 \\ \midrule \\
 Source & --
@@ -689,11 +681,9 @@ Description & \begin{symbDescription}
               \item{$ϕ$ is the orientation (rad)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpOT]{A: objectTy}
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        \hyperref[assumpOD]{A: objectDimension}
-        
-        \hyperref[assumpDI]{A: dampingInvolvement}
+        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
         
 \\ \midrule \\
 Source & --
@@ -732,11 +722,9 @@ Description & \begin{symbDescription}
               \item{$θ$ is the angular displacement (rad)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpOT]{A: objectTy}
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        \hyperref[assumpOD]{A: objectDimension}
-        
-        \hyperref[assumpDI]{A: dampingInvolvement}
+        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
         
 \\ \midrule \\
 Source & --
@@ -775,11 +763,9 @@ Description & \begin{symbDescription}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpOT]{A: objectTy}
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        \hyperref[assumpOD]{A: objectDimension}
-        
-        \hyperref[assumpDI]{A: dampingInvolvement}
+        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
         
 \\ \midrule \\
 Source & --
@@ -826,13 +812,11 @@ Description & \begin{symbDescription}
               \item{${\mathbf{I}_{\text{B}}}$ is the moment of inertia of rigid body B (kg$\text{m}^{2}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpOT]{A: objectTy}
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        \hyperref[assumpOD]{A: objectDimension}
+        A right-handed coordinate system is used (from \hyperref[assumpAD]{A: axesDefined}).
         
-        \hyperref[assumpAD]{A: axesDefined}
-        
-        \hyperref[assumpCT]{A: collisionType}
+        All collisions are vertex-to-edge (from \hyperref[assumpCT]{A: collisionType}).
         
 \\ \midrule \\
 Source & --
@@ -872,7 +856,9 @@ Description & \begin{symbDescription}
               \item{${\mathbf{r}_{\text{O}\text{B}}}$ is the displacement vector between the origin and point B (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The linear velocity ${\mathbf{v}_{\text{B}}}$ of any point B in a rigid body (from \hyperref[assumpOT]{A: objectTy}) is the sum of the linear velocity ${\mathbf{v}_{\text{O}}}$ of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ and the displacement vector between the origin and point B ${\mathbf{r}_{\text{O}\text{B}}}$.
+Notes & The linear velocity ${\mathbf{v}_{\text{B}}}$ of any point B in a rigid body is the sum of the linear velocity ${\mathbf{v}_{\text{O}}}$ of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ and the displacement vector between the origin and point B ${\mathbf{r}_{\text{O}\text{B}}}$.
+        
+        All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}).
         
 \\ \midrule \\
 Source & \cite{chaslesWiki}
@@ -948,13 +934,11 @@ Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The kinetic energy of an object is the energy it possess due to its motion.
+Notes & Kinetic energy is The measure of the energy a body possess due to its motion..
         
-        \hyperref[assumpOT]{A: objectTy}
+        All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        \hyperref[assumpOD]{A: objectDimension}
-        
-        \hyperref[assumpDI]{A: dampingInvolvement}
+        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
         
 \\ \midrule \\
 Source & --
@@ -993,7 +977,7 @@ Description & \begin{symbDescription}
               \item{${{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The coefficient of restitution ${C_{\text{R}}}$ is a unitless, dimensionless quantity that determines the elasticity of a collision between two rigid bodies. ${C_{\text{R}}}=1$ results in an elastic collision, while ${C_{\text{R}}}<1$ results in an inelastic collision, and ${C_{\text{R}}}=0$ results in a totally inelastic collision.
+Notes & The coefficient of restitution ${C_{\text{R}}}$ determines the elasticity of a collision between two rigid bodies. ${C_{\text{R}}}=1$ results in an elastic collision, ${C_{\text{R}}}<1$ results in an inelastic collision, and ${C_{\text{R}}}=0$ results in a totally inelastic collision.
         
 \\ \midrule \\
 Source & --
@@ -1031,7 +1015,9 @@ Description & \begin{symbDescription}
               \item{${\mathbf{v}^{\text{B}\text{P}}}$ is the velocity of the point of collision P in body B ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & In a collision, the velocity of a rigid body \hyperref[assumpOT]{A: objectTy} A colliding with another rigid body B relative to that body ${{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ is the difference between the velocities of A and B at point P.
+Notes & In a collision, the velocity of a rigid body A colliding with another rigid body B relative to that body ${{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ is the difference between the velocities of A and B at point P.
+        
+        All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}).
         
 \\ \midrule \\
 Source & --
@@ -1071,7 +1057,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & An impulse (vector) $\mathbf{J}$ occurs when a force $\mathbf{F}$ acts over a body over an interval of time.
         
-        \hyperref[assumpOT]{A: objectTy}
+        All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}).
         
 \\ \midrule \\
 Source & --
@@ -1128,11 +1114,9 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The potential energy of an object is the energy held by an object because of its position to other objects.
         
-        \hyperref[assumpOT]{A: objectTy}
+        All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        \hyperref[assumpOD]{A: objectDimension}
-        
-        \hyperref[assumpDI]{A: dampingInvolvement}
+        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
         
 \\ \midrule \\
 Source & --
@@ -1172,7 +1156,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & The moment of inertia $\mathbf{I}$ of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.
         
-        \hyperref[assumpOT]{A: objectTy}
+        All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}).
         
 \\ \midrule \\
 Source & --

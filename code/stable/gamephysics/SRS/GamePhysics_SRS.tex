@@ -340,13 +340,8 @@ The instance models that govern Game Physics are presented in \hyperref[Sec:IMs]
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{itemize}
-<<<<<<< HEAD
-\item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[DD:chalses]{DD: chalses}, \hyperref[DD:reVeInColl]{DD: reVeInColl}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[DD:momentOfInertia]{DD: momentOfInertia}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulseV]{DD: impulseV}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[TM:ChaslesThm]{TM: ChaslesThm}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
-\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[DD:chalses]{DD: chalses}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, \hyperref[DD:angAccel]{DD: angAccel}, and \hyperref[TM:CollisionDet]{TM: CollisionDet}.)}
-=======
 \item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[DD:chaslesThm]{DD: chaslesThm}, \hyperref[DD:reVeInColl]{DD: reVeInColl}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[DD:momentOfInertia]{DD: momentOfInertia}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulseV]{DD: impulseV}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
 \item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
->>>>>>> master
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]{The library uses a Cartesian coordinate system.}
 \item[axesDefined:\phantomsection\label{assumpAD}]{The axes are defined using right-handed coordinate system. (RefBy: \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:impulse]{DD: impulse}, and \hyperref[IM:col2D]{IM: col2D}.)}
 \item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[lcEC]{LC: Expanded-Collisions}, \hyperref[DD:impulse]{DD: impulse}, and \hyperref[IM:col2D]{IM: col2D}.)}
@@ -462,37 +457,6 @@ RefBy &
 \label{TM:NewtonSecLawRotMot}
 \\ \midrule \\
 Label & Newton's second law for rotational motion
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           τ=\mathbf{I} α
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{$τ$ is the torque (Nm)}
-              \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
-              \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & The net torque $τ$ (Nm) on a rigid body is proportional to its angular acceleration $α$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional \hyperref[assumpOD]{A: objectDimension}.
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & 
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{TM:CollisionDet}
-\phantomsection 
-\label{TM:CollisionDet}
-\\ \midrule \\
-Label & Collision Detection of 2D Rigid bodies
         
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -1622,8 +1586,6 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  & X &  &  &  &  & 
 \\
-\hyperref[TM:CollisionDet]{TM: CollisionDet} &  & X &  &  &  &  & 
-\\
 \hyperref[GD:accelGravity]{GD: accelGravity} &  &  &  &  &  &  & 
 \\
 \hyperref[IM:transMot]{IM: transMot} & X & X &  &  &  & X & X
@@ -1682,203 +1644,103 @@ The purpose of the traceability matrices is to provide easy references on what h
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Table:TraceMatAvsAll}
 \end{longtable}
-<<<<<<< HEAD
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chalses]{DD: chalses}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:ChaslesThm]{TM: ChaslesThm}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[TM:CollisionDet]{TM: CollisionDet}} & \textbf{\hyperref[GD:accelGravity]{GD: accelGravity}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}}
+\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chaslesThm]{DD: chaslesThm}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD: accelGravity}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}}
 \\
 \midrule
 \endhead
-\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:linVel]{DD: linVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:linVel]{DD: linVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angDisp]{DD: angDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angDisp]{DD: angDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angVel]{DD: angVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angVel]{DD: angVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:angAccel]{DD: angAccel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:angAccel]{DD: angAccel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:impulse]{DD: impulse} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:impulse]{DD: impulse} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:chalses]{DD: chalses} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:chaslesThm]{DD: chaslesThm} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:torque]{DD: torque} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:torque]{DD: torque} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:kEnergy]{DD: kEnergy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:kEnergy]{DD: kEnergy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:coeffRestitution]{DD: coeffRestitution} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:coeffRestitution]{DD: coeffRestitution} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:reVeInColl]{DD: reVeInColl} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:reVeInColl]{DD: reVeInColl} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:impulseV]{DD: impulseV} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:impulseV]{DD: impulseV} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:potEnergy]{DD: potEnergy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:potEnergy]{DD: potEnergy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:momentOfInertia]{DD: momentOfInertia} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:momentOfInertia]{DD: momentOfInertia} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:ChaslesThm]{TM: ChaslesThm} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelGravity]{GD: accelGravity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:CollisionDet]{TM: CollisionDet} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:transMot]{IM: transMot} & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelGravity]{GD: accelGravity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:rotMot]{IM: rotMot} &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:transMot]{IM: transMot} & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[IM:rotMot]{IM: rotMot} &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[IM:col2D]{IM: col2D} & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-=======
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
-\toprule
-\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chaslesThm]{DD: chaslesThm}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}}
-\\
-\midrule
-\endhead
-\hyperref[DD:ctrOfMass]{DD: ctrOfMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:linDisp]{DD: linDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:linVel]{DD: linVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:linAcc]{DD: linAcc} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:angDisp]{DD: angDisp} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:angVel]{DD: angVel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:angAccel]{DD: angAccel} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:impulse]{DD: impulse} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:chaslesThm]{DD: chaslesThm} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:torque]{DD: torque} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:kEnergy]{DD: kEnergy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:coeffRestitution]{DD: coeffRestitution} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:reVeInColl]{DD: reVeInColl} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:impulseV]{DD: impulseV} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:potEnergy]{DD: potEnergy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[DD:momentOfInertia]{DD: momentOfInertia} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[IM:transMot]{IM: transMot} & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[IM:rotMot]{IM: rotMot} &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[IM:col2D]{IM: col2D} & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
->>>>>>> master
+\hyperref[IM:col2D]{IM: col2D} & X &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TraceMatRefvsRef}
 \end{longtable}
-<<<<<<< HEAD
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chalses]{DD: chalses}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:ChaslesThm]{TM: ChaslesThm}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[TM:CollisionDet]{TM: CollisionDet}} & \textbf{\hyperref[GD:accelGravity]{GD: accelGravity}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}} & \textbf{\hyperref[simSpace]{FR: Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR: Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR: Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[highPerformance]{NFR: High-Performance}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[portable]{NFR: Portable}} & \textbf{\hyperref[reliable]{NFR: Reliable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
+\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chaslesThm]{DD: chaslesThm}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD: accelGravity}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}} & \textbf{\hyperref[simSpace]{FR: Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR: Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR: Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[highPerformance]{NFR: High-Performance}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[portable]{NFR: Portable}} & \textbf{\hyperref[reliable]{NFR: Reliable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
 \\
 \midrule
 \endhead
-\hyperref[linearGS]{GS: Determine-Linear-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[linearGS]{GS: Determine-Linear-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[angularGS]{GS: Determine-Angular-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[angularGS]{GS: Determine-Angular-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[simSpace]{FR: Simulation-Space} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[simSpace]{FR: Simulation-Space} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputInitialConds]{FR: Input-Initial-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputInitialConds]{FR: Input-Initial-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[deterColls]{FR: Determine-Collisions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[deterColls]{FR: Determine-Collisions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[highPerformance]{NFR: High-Performance} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[highPerformance]{NFR: High-Performance} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[reliable]{NFR: Reliable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[reliable]{NFR: Reliable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-=======
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
-\toprule
-\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chaslesThm]{DD: chaslesThm}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}} & \textbf{\hyperref[simSpace]{FR: Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR: Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR: Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[highPerformance]{NFR: High-Performance}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[portable]{NFR: Portable}} & \textbf{\hyperref[reliable]{NFR: Reliable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
-\\
-\midrule
-\endhead
-\hyperref[linearGS]{GS: Determine-Linear-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[angularGS]{GS: Determine-Angular-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[simSpace]{FR: Simulation-Space} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[inputInitialConds]{FR: Input-Initial-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[deterColls]{FR: Determine-Collisions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[highPerformance]{NFR: High-Performance} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[reliable]{NFR: Reliable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
->>>>>>> master
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}

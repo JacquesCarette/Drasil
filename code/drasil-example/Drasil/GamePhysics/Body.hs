@@ -46,7 +46,7 @@ import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
-import Drasil.GamePhysics.TMods (tModsNew)
+import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 
@@ -147,7 +147,7 @@ symbMap = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units GP.dataDefs
-  iModelsNew [] tModsNew concIns section []
+  iModelsNew [] tMods concIns section []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)

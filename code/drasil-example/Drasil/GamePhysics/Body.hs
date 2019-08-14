@@ -43,7 +43,7 @@ import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs)
 import qualified Drasil.GamePhysics.DataDefs as GP (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
-import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
+import Drasil.GamePhysics.IMods (iMods, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tMods)
@@ -107,7 +107,7 @@ si = SI {
   -- should be removed) symbols. But that's for another time. This is "fine"
   -- because _quants are only used relative to #1658 and in code gen. And
   -- Gamephysics is not in a place to be able to do codegen.
-  _quants =  [] :: [QuantityDict], -- map qw iModelsNew ++ map qw symbolsAll,
+  _quants =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
   _datadefs = GP.dataDefs,
@@ -141,13 +141,13 @@ units :: [UnitDefn] -- FIXME
 units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
-  ++ map nw acronyms ++ map nw prodtcon ++ map nw iModelsNew
+symbMap = cdb (map qw iMods ++ map qw symbolsAll) (map nw symbolsAll
+  ++ map nw acronyms ++ map nw prodtcon ++ map nw iMods
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units GP.dataDefs
-  iModelsNew [] tMods concIns section []
+  (map cw defSymbols ++ srsDomains ++ map cw iMods) units GP.dataDefs
+  iMods [] tMods concIns section []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)

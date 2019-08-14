@@ -377,7 +377,8 @@ Notes & The net force $\mathbf{F}$ (N) on a body is proportional to the accelera
 Source & --
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[IM:transMot]{IM: transMot}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -1221,7 +1222,11 @@ Description & \begin{symbDescription}
               \item{${m_{j}}$ is the mass of the j-th particle (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation expresses the total acceleration of the rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD: linDisp} \hyperref[DD:linVel]{DD: linVel} \hyperref[DD:linAcc]{DD: linAcc}.  It is currently assumed that there is no damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} involved. \hyperref[DD:ctrOfMass]{DD: ctrOfMass}.
+Notes & The above equation expresses the total acceleration of the rigid body $i$ as the sum of gravitational acceleration (GD3) and acceleration due to applied force ${\mathbf{F}_{i}}\left(t\right)$ (from \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linVel]{DD: linVel}, and \hyperref[DD:linAcc]{DD: linAcc}. \hyperref[DD:ctrOfMass]{DD: ctrOfMass}.
+        
+        All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
+        
+        It is currently assumed that there is no damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}) and that no constraints are involved (from \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement}).
         
 \\ \midrule \\
 Source & --
@@ -1626,7 +1631,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:transMot]{IM: transMot} & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:transMot]{IM: transMot} & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
 \hyperref[IM:rotMot]{IM: rotMot} &  &  &  &  & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

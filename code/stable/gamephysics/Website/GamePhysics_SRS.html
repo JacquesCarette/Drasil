@@ -747,7 +747,9 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph"><a href=#IM:transMot>IM: transMot</a></p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -2129,7 +2131,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation expresses the total acceleration of the rigid body <a href=#assumpOT>A: objectTy</a> <a href=#assumpOD>A: objectDimension</a> i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linAcc>DD: linAcc</a>.  It is currently assumed that there is no damping <a href=#assumpDI>A: dampingInvolvement</a> or constraints <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a> involved. <a href=#DD:ctrOfMass>DD: ctrOfMass</a>.
+                          The above equation expresses the total acceleration of the rigid body <em>i</em> as the sum of gravitational acceleration (GD3) and acceleration due to applied force <em><b>F</b><sub>i</sub>(t)</em> (from <a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>). The resultant outputs are then obtained from this equation using <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linVel>DD: linVel</a>, and <a href=#DD:linAcc>DD: linAcc</a>. <a href=#DD:ctrOfMass>DD: ctrOfMass</a>.
+                        </p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
+                        </p>
+                        <p class="paragraph">
+                          It is currently assumed that there is no damping occurs during the simulation (from <a href=#assumpDI>A: dampingInvolvement</a>) and that no constraints are involved (from <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a>).
                         </p>
                       </td>
                     </tr>
@@ -3708,7 +3716,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

@@ -33,7 +33,7 @@ unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP,
-  velBP, time_1, time_2, velo_1, velo_2, rRot]
+  velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger]
 
 ----------------------
 -- TABLE OF SYMBOLS --
@@ -65,7 +65,7 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
   contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
-  QP.chgInVelocity, QP.potEnergy, QP.height, rRot]
+  QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger]
 
 -----------------------
 -- PARAMETRIZED HACK --
@@ -134,7 +134,7 @@ iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit,
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
-  velAP, velBP, time_1, time_2, velo_1, velo_2, rRot :: UnitalChunk
+  velAP, velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
@@ -186,7 +186,11 @@ torqueI = ucs' (dccWDS "torqueI"
                (cn "torque applied to the i-th body")
                (phrase QP.torque)) (sub (eqSymb QP.torque) lI) Real torqueU
 
-mTot = ucs' (dccWDS "M" (compoundPhrase' (cn "total mass of the") 
+mTot = ucs' (dccWDS "M_T" (compoundPhrase' (cn "total mass of the") 
+                 (CP.rigidBody ^. term)) (phrase QPP.mass))
+                 (sub (eqSymb QPP.mass) cT) Real kilogram
+
+mLarger = ucs' (dccWDS "mLarger" (compoundPhrase' (cn "mass of the larger") 
                  (CP.rigidBody ^. term)) (phrase QPP.mass)) cM Real kilogram
 
 timeC = ucs' (dccWDS "timeC" (cn "denotes the time at collision") 

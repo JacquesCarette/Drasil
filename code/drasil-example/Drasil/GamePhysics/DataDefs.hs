@@ -24,6 +24,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularAccel,
   linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
   force, torque, kEnergy, energy, impulseV, chgInVelocity, acceleration, potEnergy,
   height, gravitationalAccel, momentOfInertia)
+
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 
 import Data.Drasil.Theories.Physics (torqueDD)
@@ -196,7 +197,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 -------------------------DD8 Impulse for Collision-------------------------------
 
 impulseDD :: DataDefinition
-impulseDD = ddNoRefs impulse Nothing "impulse"
+impulseDD = ddNoRefs impulse (Just impulseDeriv) "impulse"
   [rigidTwoDAssump, rightHandAssump, collisionAssump]
 
 impulse :: QDefinition
@@ -216,6 +217,40 @@ dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
   (collision ^. term) +:+ S "response between two" +:+ 
   irregPlur (rigidBody ^. term)
 -}
+
+impulseDeriv :: Derivation
+impulseDeriv = mkDerivName (phrase QP.impulseS) (weave [impulseDerivSentences, map E impulseDerivEqns])
+
+impulseDerivSentences :: [Sentence]
+impulseDerivSentences = map foldlSentCol [impulseDerivSentence1, 
+ impulseDerivSentence2, impulseDerivSentence3]  
+
+impulseDerivSentence1 :: [Sentence]
+impulseDerivSentence1 = [S "Newton's second law of motion states"]
+
+impulseDerivSentence2 :: [Sentence]
+impulseDerivSentence2 = [S "Rearranging "] 
+
+impulseDerivSentence3 :: [Sentence]
+impulseDerivSentence3 = [S "Integrating the right hand side "] 
+
+impulseDerivEqn1 :: Expr
+impulseDerivEqn1 = sy QP.force $= sy QPP.mass * sy QP.acceleration
+                    $= sy QPP.mass * deriv (sy QP.velocity) QP.time
+
+impulseDerivEqn2 :: Expr
+impulseDerivEqn2 = defint (eqSymb timeT) (sy time_1) (sy time_2) (sy QP.force) $=
+                    sy QPP.mass * defint (eqSymb QP.velocity) (sy velo_1) (sy velo_2) 1
+
+
+impulseDerivEqn3 :: Expr
+impulseDerivEqn3 = defint (eqSymb timeT) (sy time_1) (sy time_2) (sy QP.force)
+                    $= (sy QPP.mass * sy velo_2) - (sy QPP.mass * sy velo_1) 
+                    $= sy QPP.mass * sy QP.chgInVelocity
+                                      
+impulseDerivEqns :: [Expr]
+impulseDerivEqns = [impulseDerivEqn1, impulseDerivEqn2, impulseDerivEqn3]
+
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
 chaslesDD = dd chasles [makeCite chaslesWiki] Nothing "chaslesThm" 

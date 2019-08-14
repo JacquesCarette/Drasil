@@ -28,7 +28,7 @@ import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
-import Data.Drasil.People (alex, luthfi)
+import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
@@ -50,6 +50,7 @@ import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
 import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
+import Drasil.GamePhysics.GenDefs (generalDefns)
 
 srs :: Document
 srs = mkDoc mkSRS for' si
@@ -79,7 +80,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
+        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints (S "FIXME") inputConstraints
@@ -102,7 +103,7 @@ si :: SystemInformation
 si = SI {
   _sys = gamePhysics,
   _kind = Doc.srs,
-  _authors = [alex, luthfi],
+  _authors = [alex, luthfi, olu],
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
@@ -144,12 +145,12 @@ units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [new
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw iMods ++ map qw symbolsAll) (map nw symbolsAll
-  ++ map nw acronyms ++ map nw prodtcon ++ map nw iMods
+  ++ map nw acronyms ++ map nw prodtcon ++ map nw generalDefns ++ map nw iMods
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
-  iMods [] tMods concIns section []
+  iMods generalDefns tMods concIns section []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)

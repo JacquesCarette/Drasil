@@ -9,6 +9,7 @@ import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, a
   assumpCAJI)
 import Drasil.GamePhysics.DataDefs (ctrOfMassDD, linDispDD, linVelDD, linAccDD,
   angDispDD, angVelDD, angAccelDD, impulseDD, rigidTwoDAssump)
+import Drasil.GamePhysics.GenDefs (accelGravityGD)
 import Drasil.GamePhysics.Goals (linearGS, angularGS)
 import Drasil.GamePhysics.TMods (newtonSL)
 import Drasil.GamePhysics.Unitals (accI, forceI, massA, massI, normalVect,
@@ -43,7 +44,7 @@ transMotRel = sy accI $= deriv (apply1 velI time) time
 transMotDesc, transMotAssumps :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses",
   (S "total" +:+ phrase acceleration) `ofThe` phrase rigidBody, P lI,
-  S "as the sum" `sOf` phrase gravitationalAccel, S "(GD3)" `sAnd`
+  S "as the sum" `sOf` phrase gravitationalAccel, fromSource accelGravityGD `sAnd`
   phrase acceleration, S "due to applied", phrase force, E (apply1 forceI time) +:+.
   fromSource newtonSL, S "The resultant outputs are then obtained from this",
   phrase equation, S "using" +:+. (foldlList Comma List $ map makeRef2S [linDispDD,

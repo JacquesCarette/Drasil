@@ -1,11 +1,9 @@
-module Drasil.GamePhysics.DataDefs (qDefs, blockQDefs, dataDefs,
-  ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
-  angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD, 
-  coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD
-  ) where
+module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD, linDispDD, linVelDD,
+  linAccDD, angDispDD, angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD,
+  coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD,
+  rigidTwoDAssump) where
 
 import Language.Drasil
-import Database.Drasil (Block(Parallel))
 import Theory.Drasil (DataDefinition, dd, ddNoRefs, mkQuantDef, mkQuantDef')
 import Utils.Drasil
 import Control.Lens ((^.))
@@ -28,7 +26,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularAccel,
   height, gravitationalAccel, momentOfInertia)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 
-import Data.Drasil.Theories.Physics (torque, torqueDD)
+import Data.Drasil.Theories.Physics (torqueDD)
 ----- Data Definitions -----
 
 dataDefs :: [DataDefinition]
@@ -36,18 +34,11 @@ dataDefs = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
  angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD,
  coeffRestitutionDD, reVelInCollDD, impulseVDD, potEnergyDD, momentOfInertiaDD]
 
-qDefs :: [QDefinition]
-qDefs = [ctrOfMass, linDisp, linVel, linAcc, angDisp,
-  angVel, angAccel, impulse, chasles, torque, kEnergy,
-  coeffRestitution, potEnergy, momentOfInertia]
-
-blockQDefs :: [Block QDefinition]
-blockQDefs = map (\x -> Parallel x []) qDefs
 -- DD1 : Centre of mass --
 
 ctrOfMassDD :: DataDefinition
 ctrOfMassDD = ddNoRefs ctrOfMass Nothing "ctrOfMass" 
-  [rigidRToDAssump]
+  [rigidTwoDAssump]
 
 ctrOfMass :: QDefinition
 ctrOfMass = mkQuantDef posCM ctrOfMassEqn
@@ -76,7 +67,7 @@ linDispQDef = foldl (+:+) (EmptyS) def
 
 linDispDD :: DataDefinition
 linDispDD = ddNoRefs linDisp Nothing "linDisp" 
-  [rigidRToDAssump, noDampingAssump]
+  [rigidTwoDAssump, noDampingAssump]
 
 linDisp :: QDefinition
 linDisp = mkQuantDef QP.linearDisplacement dispEqn
@@ -106,7 +97,7 @@ linVelQDef = foldl (+:+) (EmptyS) def
 
 linVelDD :: DataDefinition
 linVelDD = ddNoRefs linVel Nothing "linVel"
-  [rigidRToDAssump, noDampingAssump]
+  [rigidTwoDAssump, noDampingAssump]
 
 linVel :: QDefinition
 linVel = mkQuantDef QP.linearVelocity velEqn
@@ -125,7 +116,7 @@ dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
 
 linAccDD :: DataDefinition
 linAccDD = ddNoRefs linAcc Nothing "linAcc"
-  [rigidRToDAssump, noDampingAssump]
+  [rigidTwoDAssump, noDampingAssump]
 
 linAcc :: QDefinition
 linAcc = mkQuantDef QP.linearAccel accelEqn
@@ -144,7 +135,7 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 
 angDispDD :: DataDefinition
 angDispDD = ddNoRefs angDisp Nothing "angDisp"
-  [rigidRToDAssump, noDampingAssump]
+  [rigidTwoDAssump, noDampingAssump]
 
 angDisp :: QDefinition
 angDisp = mkQuantDef QP.angularDisplacement angDispEqn
@@ -163,7 +154,7 @@ dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
 
 angVelDD :: DataDefinition
 angVelDD = ddNoRefs angVel Nothing "angVel"
-  [rigidRToDAssump, noDampingAssump]
+  [rigidTwoDAssump, noDampingAssump]
 
 angVel :: QDefinition
 angVel = mkQuantDef QP.angularVelocity angVelEqn
@@ -182,7 +173,7 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
 -----------------------------------DD8 Angular Acceleration-------------------
 angAccelDD :: DataDefinition
 angAccelDD = ddNoRefs angAccel Nothing "angAccel"
-  [rigidRToDAssump, noDampingAssump]
+  [rigidTwoDAssump, noDampingAssump]
 
 angAccel :: QDefinition
 angAccel = mkQuantDef QP.angularAccel angAccelEqn
@@ -206,7 +197,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 
 impulseDD :: DataDefinition
 impulseDD = ddNoRefs impulse Nothing "impulse"
-  [rigidRToDAssump, rightHandAssump, collisionAssump]
+  [rigidTwoDAssump, rightHandAssump, collisionAssump]
 
 impulse :: QDefinition
 impulse = mkQuantDef QP.impulseS impulseEqn
@@ -336,7 +327,7 @@ coeffRestitutionDesc = foldlSent [S "The", getTandS QP.restitutionCoef,
 -----------------------DD15 Kinetic Energy--------------------------------  
 kEnergyDD :: DataDefinition
 kEnergyDD = ddNoRefs kEnergy Nothing "kEnergy"
- [kEnergyDesc, rigidRToDAssump, noDampingAssump] 
+ [kEnergyDesc, rigidTwoDAssump, noDampingAssump] 
 
 kEnergy :: QDefinition
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
@@ -367,7 +358,7 @@ momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,
 
 potEnergyDD :: DataDefinition
 potEnergyDD = ddNoRefs potEnergy Nothing "potEnergy"
- [potEnergyDesc, rigidRToDAssump, noDampingAssump] 
+ [potEnergyDesc, rigidTwoDAssump, noDampingAssump] 
 
 potEnergy :: QDefinition
 potEnergy = mkQuantDef QP.potEnergy potEnergyEqn
@@ -382,10 +373,10 @@ potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy `sOf`
 
 ---
 
-collisionAssump, noDampingAssump, rightHandAssump, rigidBodyAssump, rigidRToDAssump :: Sentence
+collisionAssump, noDampingAssump, rightHandAssump, rigidBodyAssump, rigidTwoDAssump :: Sentence
 collisionAssump = S "All collisions are vertex-to-edge" +:+. fromSource assumpCT
 noDampingAssump = S "No damping occurs during the simulation" +:+. fromSource assumpDI
 rightHandAssump = S "A" +:+ phrase rightHand `sIs` S "used" +:+. fromSource assumpAD
 rigidBodyAssump = S "All bodies are assumed to be rigid" +:+. fromSource assumpOT
-rigidRToDAssump = foldlSent [S "All bodies are assumed to be rigid",
+rigidTwoDAssump = foldlSent [S "All bodies are assumed to be rigid",
   fromSource assumpOT `sAnd` phrase twoD, fromSource assumpOD]

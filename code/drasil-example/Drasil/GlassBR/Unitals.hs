@@ -8,7 +8,7 @@ import Utils.Drasil
 import Prelude hiding (log)
 
 import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
-import Data.Drasil.Constraints (gtZeroConstr)
+import Data.Drasil.Constraints (gtZeroConstr, probConstr)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
 
@@ -88,7 +88,7 @@ aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (Variable "AR") Real)
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Concat [lBreak, lTol])) Real
-  [ physc $ Bounded (Exc, 0) (Exc, 1)] (dbl 0.008) (uncty 0.001 Nothing)
+  [probConstr] (dbl 0.008) (uncty 0.001 Nothing)
 
 charWeight = uqcND "charWeight" (nounPhraseSP "charge weight") 
   lW kilogram Real
@@ -124,15 +124,15 @@ tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]
 probBr, probFail, pbTolfail :: ConstrainedChunk
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   (sub cP lBreak) Rational
-  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+  [probConstr] (Just $ dbl 0.4)
 
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
   (sub cP lFail) Rational
-  [ physc $ Bounded (Exc,0) (Exc,1)] (Just $ dbl 0.4)
+  [probConstr] (Just $ dbl 0.4)
 
 pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure") 
   (sub cP (Concat [lFail, lTol])) Real
-  [ physc $ Bounded (Exc, 0) (Exc, 1)] (Just $ dbl 0.008) 
+  [probConstr] (Just $ dbl 0.008) 
   
 
   --FIXME: no typical value!
@@ -230,41 +230,30 @@ riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, sdfTol,
 
 gTF, loadSF :: DefinedQuantityDict
 
-dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
-  (hat lQ) Real
+dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
 
 gTF           = dqdNoUnit glTyFac (Variable "GTF") Integer
 
-isSafePb      = vc "isSafePb"        (nounPhraseSP $ "variable that is assigned true when calculated" ++
-  " probability is less than tolerable probability")
-  (Variable "is-safePb") Boolean
-
-isSafeProb      = vc "isSafeProb"        (nounPhraseSP $ "variable that is assigned true when" ++
-  " probability of failure is less than tolerable probability of failure")
+isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of glass breakage safety requirement")
+  (Variable "is-safePb")   Boolean
+isSafeProb = vc "isSafeProb" (nounPhraseSP "probability of failure safety requirement")
   (Variable "is-safeProb") Boolean
-
-isSafeLR      = vc "isSafeLR"        (nounPhraseSP $ "variable that is assigned true when load resistance"
-  ++ " (capacity) is greater than load (demand)")
-  (Variable "is-safeLR") Boolean
-
-isSafeLoad      = vc "isSafeLoad"        (nounPhraseSP $ "variable that is assigned true when load resistance"
-  ++ " (capacity) is greater than applied load (demand)")
+isSafeLR   = vc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance safety requirement")
+  (Variable "is-safeLR")   Boolean
+isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
   (Variable "is-safeLoad") Boolean
 
 lDurFac       = vc'' loadDurFactor (Variable "LDF") Real
-
 loadSF        = dqdNoUnit loadShareFac (Variable "LSF") Natural
 
-riskFun      = vc "riskFun"    (nounPhraseSP "risk of failure") cB Real
+riskFun = vc "riskFun" (nounPhraseSP "risk of failure") cB Real
 
-sdfTol       = vc "sdfTol"     (nounPhraseSP $ "stress distribution" ++
-  " factor (Function) based on Pbtol") 
+sdfTol = vc "sdfTol" (nounPhraseSP "stress distribution factor (Function) based on Pbtol") 
   (sub (eqSymb stressDistFac) lTol) Real
 
-stressDistFac = vc "stressDistFac" (nounPhraseSP $ "stress distribution" 
-  ++ " factor (Function)") cJ Real
+stressDistFac = vc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") cJ Real
 
-tolLoad       = vc "tolLoad"       (nounPhraseSP "tolerable load")
+tolLoad = vc "tolLoad" (nounPhraseSP "tolerable load")
   (sub (eqSymb dimlessLoad) lTol) Real
 
 lBreak, lDur, lFail, lTol :: Symbol
@@ -384,9 +373,6 @@ specA         = dcc "specA"       (nounPhraseSP "specifying authority")
 specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
   ("The magnitude in Pa (psf), type (for example, wind or snow) and " ++
     "duration of the load given by the specifying authority.")
-
-{--}
-
 
 {--}
 

@@ -70,10 +70,10 @@ double func_B(InputParameters &inParams, double J);
 */
 double func_LR(InputParameters &inParams, double NFL);
 
-/** \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
+/** \brief Calculates 3 second load equivalent resistance safety requirement
     \param LR load resistance: The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009. (Pa)
     \param q applied load (demand): 3 second duration equivalent pressure (Pa)
-    \return variable that is assigned true when load resistance (capacity) is greater than load (demand)
+    \return 3 second load equivalent resistance safety requirement
 */
 bool func_is_safeLR(double LR, double q);
 
@@ -83,10 +83,10 @@ bool func_is_safeLR(double LR, double q);
 */
 double func_P_b(double B);
 
-/** \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability
+/** \brief Calculates probability of glass breakage safety requirement
     \param inParams structure holding the input values
     \param P_b probability of breakage: The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016).
-    \return variable that is assigned true when calculated probability is less than tolerable probability
+    \return probability of glass breakage safety requirement
 */
 bool func_is_safePb(InputParameters &inParams, double P_b);
 

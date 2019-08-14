@@ -74,7 +74,7 @@ module Language.Drasil (
   , UnitalChunk(..), makeUCWDS
   , uc, uc', ucs, ucs', ucsWS
   -- Chunk.Unitary
-  , Unitary(..), UnitaryChunk, unitary, unitary', unit_symb
+  , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
   -- Chunk.Relation
   , RelationConcept, makeRC
   --Chunk.DefinedQuantity

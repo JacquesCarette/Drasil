@@ -127,7 +127,7 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
   (nw projectileTitle : nw mass : nw inParam : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
-    map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : srsDomains)
+    map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
   (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] []
 
 usedDB :: ChunkDB

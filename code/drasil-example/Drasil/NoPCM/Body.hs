@@ -54,7 +54,7 @@ import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.Requirements (nfRequirements)
-import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
+import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn, 
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempEnv, 
   tempW, thFluxVect, volHtGen, watE, wMass, wVol, unitalChuncks, absTol, relTol)
@@ -202,7 +202,7 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans]
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  theoreticalModels concIns section labCon
+  tMods concIns section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
@@ -297,8 +297,8 @@ goalInputs = [phrase temp `ofThe` phrase coil,
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
 
-theoreticalModels :: [TheoryModel]
-theoreticalModels = [consThermE, sensHtE]
+tMods :: [TheoryModel]
+tMods = [consThermE, sensHtE, nwtnCooling]
 
 sensHtE :: TheoryModel
 sensHtE = sensHtETemplate Liquid sensHtEdesc

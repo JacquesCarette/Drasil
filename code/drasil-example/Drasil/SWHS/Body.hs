@@ -6,7 +6,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
   _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (DataDefinition, InstanceModel, TheoryModel)
+import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil
 
 import Control.Lens ((^.))
@@ -52,16 +52,16 @@ import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
   phsChgMtrl, progName, rightSide, sWHT, swhsPCM, tank, tankPCM, transient, water)
-import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, qDefs)
+import Drasil.SWHS.DataDefs (qDefs)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
-import Drasil.SWHS.GenDefs (genDefs)
+import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
 import Drasil.SWHS.Requirements (funcReqs, inputInitQuantsTable, nfRequirements,
   verifyEnergyOutput)
-import Drasil.SWHS.TMods (consThermE, latentHtE, sensHtE)
+import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
   relTol, simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
@@ -111,7 +111,7 @@ symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs theory concIns section labCon
+  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
@@ -169,9 +169,6 @@ tSymbIntro = [TSPurpose, SymbConvention
 
 insModel :: [InstanceModel]
 insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
-
-theory :: [TheoryModel]
-theory = [consThermE, sensHtE, latentHtE]
 
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
@@ -540,22 +537,22 @@ outputConstraints = [tempW, tempPCM, watE, pcmE] --FIXME: add "(by A11)" in Phys
 propsDeriv :: [Contents]
 propsDeriv = [
   propCorSolDeriv1 lawConsEnergy watE energy coil phsChgMtrl
-                   ddHtFluxC ddHtFluxP surface heatTrans,
+                   htFluxWaterFromCoil htFluxPCMFromWater surface heatTrans,
   propCorSolDeriv2,
   propCorSolDeriv3 pcmE energy phsChgMtrl water,
   propCorSolDeriv4,
   propCorSolDeriv5 equation progName rightSide]
 
-propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk -> ConceptChunk ->
-  CI -> DataDefinition -> DataDefinition -> h -> ConceptChunk -> Contents
-propCorSolDeriv1 lce ewat en co pcmat d1hfc d2hfp su ht  =
+propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk ->
+  ConceptChunk -> CI -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
+propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
   foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
   phrase lce, S "This means that the", phrase ewat,
   S "should equal the difference between the total", phrase en,
   phrase input_, S "from the", phrase co `sAnd` S "the",
   phrase en, phrase output_, S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  makeRef2S d1hfc `sAnd` makeRef2S d2hfp `sC`
+  makeRef2S g1hfc `sAnd` makeRef2S g2hfp `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase simTime `sC` S "as follows"]

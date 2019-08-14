@@ -1,30 +1,27 @@
-module Drasil.SWHS.GenDefs (genDefs, nwtnCooling, rocTempSimp,
-  rocTempSimpDeriv, nwtnCoolingDesc, rocTempSimpRC) where
-
-import Prelude hiding (sin, cos, tan)
+module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
+  rocTempSimp, rocTempSimpDeriv, rocTempSimpRC) where
 
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, gdNoRefs)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Math (rate, rOfChng, unit_)
+import Control.Lens ((^.))
+
+import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)
 
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
 import Data.Drasil.Quantities.Physics as QP (time)
-import Data.Drasil.Quantities.Thermodynamics as QT (htFlux, heatCapSpec,
-  temp)
+import Data.Drasil.Quantities.Thermodynamics as QT (heatCapSpec, temp)
 
-import Data.Drasil.Units.Thermodynamics (thermalFlux)
-
-import Drasil.SWHS.Assumptions (assumpHTCC, assumpCWTAT, assumpTPCAV,
-  assumpDWPCoV, assumpSHECoV)
-import Drasil.SWHS.Concepts (gaussDiv)
-import Drasil.SWHS.References (incroperaEtAl2007)
-import Drasil.SWHS.TMods (consThermE)
-import Drasil.SWHS.Unitals (deltaT, htFluxIn, htFluxOut, htTransCoeff, inSA,
-  outSA, tempEnv, thFluxVect, volHtGen)
+import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpLCCWP,
+  assumpTPCAV, assumpDWPCoV, assumpSHECoV, assumpTHCCoT)
+import Drasil.SWHS.Concepts (coil, gaussDiv, phaseChangeMaterial)
+import Drasil.SWHS.References (koothoor2013)
+import Drasil.SWHS.TMods (consThermE, nwtnCooling)
+import Drasil.SWHS.Unitals (coilHTC, htFluxC, htFluxIn, htFluxOut, htFluxP,
+  inSA, outSA, pcmHTC, tempC, tempPCM, tempW, thFluxVect, volHtGen)
 
 ---------------------------
 --  General Definitions  --
@@ -35,49 +32,61 @@ import Drasil.SWHS.Unitals (deltaT, htFluxIn, htFluxOut, htTransCoeff, inSA,
 --stabilized yet (since RelationConcept isn't an instance of --
 --the Referable class.                                       --
 genDefs :: [GenDefn]
-genDefs = [nwtnCooling, rocTempSimp] 
+genDefs = [rocTempSimp, htFluxWaterFromCoil, htFluxPCMFromWater] 
 
-nwtnCooling, rocTempSimp :: GenDefn
-nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) Nothing
-  [makeCiteInfo incroperaEtAl2007 $ Page [8]] "nwtnCooling" nwtnCoolingDesc
-
+rocTempSimp :: GenDefn
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn)
-  (Just $ rocTempSimpDeriv rocTempDerivConsFlxSWHS [assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV])
+  (Just $ rocTempSimpDeriv rocTempDerivConsFlxSWHS
+   [assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV])
   "rocTempSimp" [{-Notes-}]
 
---
-
-nwtnCoolingRC :: RelationConcept
-nwtnCoolingRC = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
-  EmptyS nwtnCoolingRel -- nwtnCoolingL
-
-nwtnCoolingRel :: Relation
-nwtnCoolingRel = apply1 htFlux QP.time $= sy htTransCoeff *
-  apply1 deltaT QP.time
-
-nwtnCoolingDesc :: [Sentence]
-nwtnCoolingDesc = map foldlSent [
-  [atStart lawConvCooling +:+. S "describes convective cooling from a surface" +:
-   S "The law is stated as", S "the", phrase rate `sOf` S "heat loss from a body" `sIs`
-   S "proportional to the difference in", plural temp, S "between the body and its surroundings"],
-  [ch htTransCoeff, S "is assumed to be independent" `sOf` ch QT.temp,
-   sParen (S "from" +:+ makeRef2S assumpHTCC)],
-  [E (apply1 deltaT QP.time $= apply1 temp QP.time - apply1 tempEnv QP.time) `isThe`
-   S "time-dependant thermal gradient between the environment and the object"]]
-
---
 rocTempSimpRC :: RelationConcept
-rocTempSimpRC = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") EmptyS rocTempSimpRel -- rocTempSimpL
+rocTempSimpRC = makeRC "rocTempSimpRC" (nounPhraseSP $ "Simplified rate " ++
+  "of change of temperature") EmptyS rocTempSimpRel
 
 rocTempSimpRel :: Relation
 rocTempSimpRel = sy QPP.mass * sy QT.heatCapSpec *
   deriv (sy QT.temp) QP.time $= sy htFluxIn * sy inSA -
   sy htFluxOut * sy outSA + sy volHtGen * sy QPP.vol
 
----------------------------------------
---  General Definitions  Derivation  --
----------------------------------------
+----
+
+htFluxWaterFromCoil :: GenDefn
+htFluxWaterFromCoil = gd htFluxWaterFromCoilRC (getUnit htFluxC) Nothing
+  [makeCite koothoor2013] "htFluxWaterFromCoil"
+  [newtonLawNote htFluxC assumpLCCCW coil, makeRef2S assumpTHCCoT]
+
+htFluxWaterFromCoilRC :: RelationConcept
+htFluxWaterFromCoilRC = makeRC "htFluxWaterFromCoilRC" (htFluxC ^. term)
+  EmptyS htFluxWaterFromCoilRel
+
+htFluxWaterFromCoilRel :: Relation
+htFluxWaterFromCoilRel = sy htFluxC $= sy coilHTC * (sy tempC - apply1 tempW time)
+
+--Can't include info in description beyond definition of variables?
+----
+
+htFluxPCMFromWater :: GenDefn
+htFluxPCMFromWater = gd htFluxPCMFromWaterRC (getUnit htFluxP) Nothing
+  [makeCite koothoor2013] "htFluxPCMFromWater"
+  [newtonLawNote htFluxP assumpLCCWP phaseChangeMaterial]
+
+htFluxPCMFromWaterRC :: RelationConcept
+htFluxPCMFromWaterRC = makeRC "htFluxPCMFromWaterRC" (htFluxP ^. term)
+  EmptyS htFluxPCMFromWaterRel
+
+htFluxPCMFromWaterRel :: Relation
+htFluxPCMFromWaterRel = sy htFluxP $= sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
+
+newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
+newtonLawNote u a c = foldlSent [ch u `sIs` S "found by assuming that",
+  phrase lawConvCooling, S "applies" +:+. sParen (makeRef2S a), S "This law",
+  sParen (S "defined" `sIn` makeRef2S nwtnCooling) `sIs` S "used on",
+  phrase surface `ofThe` phrase c]
+
+--------------------------------------
+--  General Definitions Derivation  --
+--------------------------------------
 
 rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
 rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phrase rOfChng `sOf` phrase temp)

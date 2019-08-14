@@ -5,10 +5,10 @@ import Theory.Drasil (GenDefn, gdNoRefs)
 
 import Drasil.NoPCM.Assumptions (assumpDWCoW, assumpSHECoW)
 import Drasil.SWHS.Assumptions (assumpCWTAT)
-import Drasil.SWHS.GenDefs (nwtnCooling, rocTempSimpRC, rocTempSimpDeriv)
+import Drasil.SWHS.GenDefs (htFluxWaterFromCoil, rocTempSimpRC, rocTempSimpDeriv)
 
 genDefs :: [GenDefn]
-genDefs = [nwtnCooling, rocTempSimp] 
+genDefs = [rocTempSimp, htFluxWaterFromCoil] 
 
 rocTempSimp :: GenDefn
 rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn)

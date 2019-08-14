@@ -7,6 +7,7 @@ import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
   assumpCAJI)
+import Drasil.GamePhysics.Concepts (centreMass)
 import Drasil.GamePhysics.DataDefs (ctrOfMassDD, linDispDD, linVelDD, linAccDD,
   angDispDD, angVelDD, angAccelDD, impulseDD, rigidTwoDAssump)
 import Drasil.GamePhysics.GenDefs (accelGravityGD)
@@ -15,11 +16,13 @@ import Drasil.GamePhysics.TMods (newtonSL)
 import Drasil.GamePhysics.Unitals (accI, forceI, massA, massI, normalVect,
   timeC, torqueI, velA, velI)
 
-import Data.Drasil.Concepts.Documentation (goal)
-import Data.Drasil.Concepts.Math (equation)
+import Data.Drasil.IdeaDicts (inModel)
+
+import Data.Drasil.Concepts.Documentation (condition, goal, output_)
+import Data.Drasil.Concepts.Math (equation, ode)
 import Data.Drasil.Concepts.Physics (rigidBody)
 import Data.Drasil.Quantities.Physics (acceleration, angularAccel, angularVelocity,
-  force, gravitationalAccel, impulseS, momentOfInertia, time)
+  force, gravitationalAccel, impulseS, momentOfInertia, position, time, velocity)
 
 iMods :: [InstanceModel]
 iMods = [transMot, rotMot, col2D]
@@ -28,7 +31,7 @@ iMods = [transMot, rotMot, col2D]
 transMot :: InstanceModel
 transMot = imNoDerivNoRefs transMotRC [qw velI, qw time, qw gravitationalAccel, qw forceI, qw massI] 
   [sy velI $> 0, sy time $> 0, sy gravitationalAccel $> 0, sy forceI $> 0, sy massI $> 0 ]
-  (qw accI) [] "transMot" [transMotDesc, rigidTwoDAssump, transMotAssumps]
+  (qw accI) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, transMotAssumps]
 
 transMotRC :: RelationConcept
 transMotRC = makeRC "transMotRC" transMotNP EmptyS transMotRel
@@ -40,15 +43,21 @@ transMotRel :: Relation -- FIXME: add proper equation
 transMotRel = sy accI $= deriv (apply1 velI time) time
   $= sy gravitationalAccel + (apply1 forceI time / sy massI)
 
---fixme: need referencing
-transMotDesc, transMotAssumps :: Sentence
+transMotDesc, transMotOutputs, transMotAssumps :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses",
   (S "total" +:+ phrase acceleration) `ofThe` phrase rigidBody, P lI,
   S "as the sum" `sOf` phrase gravitationalAccel, fromSource accelGravityGD `sAnd`
   phrase acceleration, S "due to applied", phrase force, E (apply1 forceI time) +:+.
-  fromSource newtonSL, S "The resultant outputs are then obtained from this",
-  phrase equation, S "using" +:+. foldlList Comma List (map makeRef2S [linDispDD,
-   linVelDD, linAccDD]), makeRef2S ctrOfMassDD]
+  fromSource newtonSL, S "The resultant", plural output_ `sAre`
+  S "then obtained from this", phrase equation, S "using",
+  foldlList Comma List (map makeRef2S [linDispDD, linVelDD, linAccDD])]
+transMotOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
+ S "will be the functions" `sOf` phrase position `sAnd` phrase velocity,
+ S "over time that satisfy the", getAcc ode, S "for the", phrase acceleration `sC`
+ S "with the given initial", plural condition, S "for" +:+. (phrase position `sAnd`
+ phrase velocity), S "The motion is translational" `sC` S "so the",
+ phrase position `sAnd` phrase velocity, S "functions are for the",
+ phrase centreMass, fromSource ctrOfMassDD]
 transMotAssumps = foldlSent [S "It is currently assumed that there is no damping",
   S "occurs during the simulation", fromSource assumpDI `sAnd` S "that no", 
   S "constraints are involved", fromSource assumpCAJI]

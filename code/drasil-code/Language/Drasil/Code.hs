@@ -15,7 +15,8 @@ module Language.Drasil.Code (
   MethodSym(..), ModuleSym(..), BlockCommentSym(..),
   ModData(..),
   JavaCode(..), PythonCode(..), CSharpCode(..), CppSrcCode(..), CppHdrCode(..),
-  unCPPC
+  unCPPC,
+  quantvar
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -52,3 +53,6 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer
   (CSharpCode(..))
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer 
   (CppSrcCode(..), CppHdrCode(..), unCPPC)
+
+import Language.Drasil.Chunk.Code (quantvar)
+

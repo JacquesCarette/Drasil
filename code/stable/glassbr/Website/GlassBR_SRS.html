@@ -121,9 +121,7 @@
                 </tr>
                 <tr>
                   <td><em>g</em></td>
-                  <td>
-                    Glass type <em>g&thinsp;&isin;&thinsp;{"AN","FT","HS"}</em>
-                  </td>
+                  <td>Glass type</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -310,7 +308,7 @@
                 </tr>
                 <tr>
                   <td><em>w<sub>TNT</sub></em></td>
-                  <td>Explosive mass in equivalent weight of TNT</td>
+                  <td>Equivalent TNT charge mass</td>
                   <td>kg</td>
                 </tr>
               </table>
@@ -377,6 +375,10 @@
                 <tr>
                   <td>LR</td>
                   <td>Load Resistance</td>
+                </tr>
+                <tr>
+                  <td>LSF</td>
+                  <td>Load Share Factor</td>
                 </tr>
                 <tr>
                   <td>N/A</td>
@@ -614,7 +616,7 @@
                     </ul>
                   </li>
                   <li>
-                    Load - A uniformly distributed lateral pressure.
+                    Applied load (demand) or pressure - A uniformly distributed lateral pressure.
                     <ul class="list">
                       <li>
                         Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in <a href=#astm2009>astm2009</a> (pp. 1 and 53).
@@ -1309,9 +1311,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li><em>GTF</em> is the glass type factor (Unitless)</li>
-                          <li>
-                            <em>g</em> is the glass type <em>g&thinsp;&isin;&thinsp;{"AN","FT","HS"}</em> (Unitless)
-                          </li>
+                          <li><em>g</em> is the glass type (Unitless)</li>
                         </ul>
                       </td>
                     </tr>
@@ -1709,9 +1709,7 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td>
-                        <p class="paragraph">Explosive mass in equivalent weight of TNT</p>
-                      </td>
+                      <td><p class="paragraph">Equivalent TNT charge mass</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -1732,7 +1730,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+                            <em>w<sub>TNT</sub></em> is the equivalent TNT charge mass (kg)
                           </li>
                           <li><em>w</em> is the charge weight (kg)</li>
                           <li><em>TNT</em> is the TNT equivalent factor (Unitless)</li>
@@ -1909,7 +1907,7 @@
                           <li><em>interpY</em> is the interpY (Unitless)</li>
                           <li><em>SD</em> is the stand off distance (m)</li>
                           <li>
-                            <em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+                            <em>w<sub>TNT</sub></em> is the equivalent TNT charge mass (kg)
                           </li>
                         </ul>
                       </td>
@@ -1918,7 +1916,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>q</em>, or demand, is the 3 second duration equivalent pressure obtained from <a href=#Figure:demandVSsod>Fig:demandVSsod</a> by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined in <a href=#DD:eqTNTW>DD: eqTNTW</a>. <em>SD</em> is the stand off distance as defined in <a href=#DD:standOffDist>DD: standOffDist</a>.
+                          <em>q</em>, or applied load (demand), is the 3 second duration equivalent pressure obtained from <a href=#Figure:demandVSsod>Fig:demandVSsod</a> by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined in <a href=#DD:eqTNTW>DD: eqTNTW</a>. <em>SD</em> is the stand off distance as defined in <a href=#DD:standOffDist>DD: standOffDist</a>.
                         </p>
                       </td>
                     </tr>
@@ -2086,7 +2084,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is-safeLR</em>, the glass is considered safe. <em>is-safePb</em> (from <a href=#IM:isSafePb>IM: isSafePb</a>) and <em>is-safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#DD:calofDemand>DD: calofDemand</a>.
+                          If <em>is-safeLR</em>, the glass is considered safe. <em>is-safePb</em> (from <a href=#IM:isSafePb>IM: isSafePb</a>) and <em>is-safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>. <em>q</em> (also referred as the Applied Load (demand)) is the 3 second duration equivalent pressure, as defined in <a href=#DD:calofDemand>DD: calofDemand</a>.
                         </p>
                       </td>
                     </tr>
@@ -2275,9 +2273,7 @@
                 </tr>
                 <tr>
                   <td><em>g</em></td>
-                  <td>
-                    Glass type <em>g&thinsp;&isin;&thinsp;{"AN","FT","HS"}</em>
-                  </td>
+                  <td>Glass type</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -4132,9 +4128,9 @@
         </div>
         <div id="Figure:dimlessloadVSaspect">
           <figure>
-            <img src="../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png" alt="Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)" >
+            <img src="../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png" alt="Non dimensional lateral applied load (demand) or pressure (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)" >
             <figcaption>
-              Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)
+              Non dimensional lateral applied load (demand) or pressure (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)
             </figcaption>
           </figure>
         </div>

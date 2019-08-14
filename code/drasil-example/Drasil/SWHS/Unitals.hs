@@ -402,7 +402,7 @@ timeFinal = uqc "timeFinal" (nounPhraseSP "final time")
   sfwrc $ UpTo (Exc, sy timeFinalMax)] (dbl 50000) defaultUncrt
 
 timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
-  ("The finite discretization of time used in the numerical method" ++
+  ("The finite discretization of time used in the numerical method " ++
     "for solving the computational model")
   (sub (eqSymb time) lStep) second Rational
   [physc $ Bounded (Exc,0) (Exc, sy timeFinal)]

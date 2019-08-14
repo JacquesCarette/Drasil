@@ -111,7 +111,7 @@ def input_constraints(inParams):
         print(0, end='')
         print(".")
         raise Exception("InputError")
-    if (not(0 < inParams.P_btol and inParams.P_btol < 1)) :
+    if (not(0 <= inParams.P_btol and inParams.P_btol <= 1)) :
         print("P_btol has value ", end='')
         print(inParams.P_btol, end='')
         print(" but expected to be ", end='')

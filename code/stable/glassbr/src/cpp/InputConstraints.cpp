@@ -129,7 +129,7 @@ void input_constraints(InputParameters &inParams) {
         std::cout << "." << std::endl;
         throw("InputError");
     }
-    if (!(0 < inParams.P_btol && inParams.P_btol < 1)) {
+    if (!(0 <= inParams.P_btol && inParams.P_btol <= 1)) {
         std::cout << "P_btol has value ";
         std::cout << inParams.P_btol;
         std::cout << " but expected to be ";

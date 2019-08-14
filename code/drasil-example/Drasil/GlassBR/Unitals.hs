@@ -5,7 +5,6 @@ import Language.Drasil.ShortHands
 import Theory.Drasil (mkQuantDef)
 import Utils.Drasil
 
-import Control.Lens ((^.))
 import Prelude hiding (log)
 
 import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
@@ -36,9 +35,10 @@ constrained :: [ConstrainedChunk]
 constrained = map cnstrw inputDataConstraints ++ 
   [cnstrw probBr, cnstrw probFail] 
 
-plateLen, plateWidth, charWeight, standOffDist :: UncertQ
-aspectRatio, pbTol, tNT :: UncertainChunk
-glassTypeCon, nomThick :: ConstrainedChunk
+plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
+pbTol, tNT :: UncertainChunk
+nomThick :: ConstrainedChunk
+glassTypeCon :: ConstrConcept
 
 {--}
 
@@ -59,12 +59,12 @@ inputsWUncrtn :: [UncertainChunk]
 inputsWUncrtn = [pbTol, tNT]
 
 --derived inputs with uncertainties and no units
-derivedInsWUncrtn :: [UncertainChunk]
+derivedInsWUncrtn :: [UncertQ]
 derivedInsWUncrtn = [aspectRatio]
 
 --inputs with no uncertainties
 inputsNoUncrtn :: [ConstrainedChunk]
-inputsNoUncrtn = [glassTypeCon, nomThick]
+inputsNoUncrtn = [cnstrw glassTypeCon, nomThick]
 
 inputDataConstraints :: [UncertainChunk]
 inputDataConstraints = map uncrtnw inputsWUnitsUncrtn ++ 
@@ -82,10 +82,9 @@ plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
   [ physc $ Bounded (Exc, 0) (Inc, sy plateLen),
     sfwrc $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
-aspectRatio = uvc "aspectRatio" (aR ^. term)
-  (Variable "AR") Real
+aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (Variable "AR") Real)
   [ physc $ UpFrom (Inc, 1), 
-    sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5) defaultUncrt
+    sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Concat [lBreak, lTol])) Real
@@ -101,12 +100,9 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Variable "TNT") Real
   [ gtZeroConstr ] (dbl 1.0) defaultUncrt
 
-standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
-  (Variable "SD") metre Real
+standOffDist = uq (constrained' (dqd sD (Variable "SD") Real metre)
   [ gtZeroConstr,
-    sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)]
-  (dbl 45) defaultUncrt
---FIXME: ^ incorporate definition in here?
+    sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (dbl 45)) defaultUncrt
 
 nomThick = cuc "nomThick" 
   (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
@@ -114,14 +110,8 @@ nomThick = cuc "nomThick"
   lT millimetre {-DiscreteD nominalThicknesses-} Rational 
   [enumc nominalThicknesses] 8
 
--- the S "glass type" is supposed to be using "phrase glassTy"
--- but the problem is still the Capitalization issue with new 
--- constructor `Ch` of generating the sentence. So for the sentence
--- only "S" can be capitalized 
-glassTypeCon  = cvc "glassTypeCon" (nounPhraseSent $ S "glass type" +:+ 
-    displayStrConstrntsAsSet glassTypeCon (map (getAccStr . snd) glassType))
-  lG {-DiscreteS (map (getAccStr . snd) glassType)-} String
-  [EnumeratedStr Software $ map (getAccStr . snd) glassType] Nothing
+glassTypeCon  = constrainedNRV' (dqdNoUnit glassTy lG String) 
+  [EnumeratedStr Software $ map (getAccStr . snd) glassType]
 
 {--}
 
@@ -188,31 +178,25 @@ sdMin     = mkQuantDef (unitary "sdMin"
 {--}
 
 symbols :: [UnitaryChunk]
-symbols = [minThick, sflawParamK, sflawParamM, demand, tmDemand, lRe, tmLRe, nonFactorL, loadDur,
-  eqTNTWeight]
+symbols = [minThick, sflawParamK, sflawParamM, loadDur] ++ 
+  map mkUnitary [demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight]
 
-minThick, sflawParamK, sflawParamM, demand, tmDemand, sdx, sdy, sdz, lRe, tmLRe, nonFactorL, loadDur,
-  eqTNTWeight :: UnitaryChunk
+minThick, sflawParamK, sflawParamM, sdx, sdy, sdz, loadDur :: UnitaryChunk
 
-demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
-  lQ pascal Rational --correct Space used?
+demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight :: UnitalChunk
 
-tmDemand      = unitary "tmDemand"      (nounPhraseSP "applied load (demand) or pressure")
-  (Variable "Load") pascal Rational --correct Space used?
+demand      = ucs' demandq lQ Rational pascal --correct Space used?
+
+tmDemand      = ucs' load (Variable "Load") Rational pascal --correct Space used?
   
-lRe      = unitary "lRe"      (nounPhraseSP "load resistance")
-  (Variable "LR") pascal Rational --correct Space used?
+lRe      = ucs' loadResis (Variable "LR") Rational pascal --correct Space used?
 
-tmLRe      = unitary "tmLRe"      (nounPhraseSP "capacity or load resistance")
-  (Variable "capacity") pascal Rational --correct Space used?
+tmLRe      = ucs' capacity (Variable "capacity") Rational pascal --correct Space used?
 
-nonFactorL      = unitary "nonFactorL"      (nounPhraseSP "non-factored load")
-  (Variable "NFL") pascal Rational --correct Space used?
+nonFactorL      = ucs' nonFactoredL (Variable "NFL") Rational pascal --correct Space used?
 
-
-eqTNTWeight = unitary "eqTNTWeight" 
-  (nounPhraseSP "explosive mass in equivalent weight of TNT")
-  (sub (eqSymb charWeight) (eqSymb tNT)) kilogram Real
+eqTNTWeight = ucs' eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real 
+  kilogram
 
 loadDur    = unitary "loadDur"    (nounPhraseSP "duration of load")
   (sub lT lDur) second Real
@@ -238,15 +222,17 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 unitless :: [QuantityDict]
-unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, sdfTol,
-  dimlessLoad, tolLoad, loadSF, gTF, lDurFac]
+unitless = [riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, 
+  sdfTol, dimlessLoad, tolLoad, lDurFac] ++ map qw [gTF, loadSF]
 
 riskFun, isSafePb, isSafeProb, isSafeLR, isSafeLoad, stressDistFac, sdfTol,
-  dimlessLoad, tolLoad, loadSF, gTF, lDurFac :: QuantityDict
+  dimlessLoad, tolLoad, lDurFac :: QuantityDict
+
+gTF, loadSF :: DefinedQuantityDict
 
 dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
 
-gTF = vc "gTF" (glassTypeFac ^. term) (Variable "GTF") Integer
+gTF           = dqdNoUnit glTyFac (Variable "GTF") Integer
 
 isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of glass breakage safety requirement")
   (Variable "is-safePb")   Boolean
@@ -257,8 +243,8 @@ isSafeLR   = vc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance 
 isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
   (Variable "is-safeLoad") Boolean
 
-lDurFac = vc'' loadDurFactor (Variable "LDF") Real
-loadSF  = vc'' lShareFac     (Variable "LSF") Natural
+lDurFac       = vc'' loadDurFactor (Variable "LDF") Real
+loadSF        = dqdNoUnit loadShareFac (Variable "LSF") Natural
 
 riskFun = vc "riskFun" (nounPhraseSP "risk of failure") cB Real
 
@@ -309,9 +295,9 @@ blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")
     "equivalent factor, and stand off distance from the point of explosion.")
 bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled " ++
   "with a destructive substance designed to exlode on impact or via detonation")
-capacity      = dcc "capacity"    (nounPhraseSP "capacity")
+capacity      = dcc "capacity"    (nounPhraseSP "capacity or load resistance")
   "load resistance calculated"
-demandq       = dcc "demandq"     (nounPhraseSP "demand") 
+demandq       = dcc "demandq"     (nounPhraseSP "applied load (demand)") 
   "3 second duration equivalent pressure"
 eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
   ("Mass of TNT placed on the ground in a hemisphere that represents the " ++
@@ -347,7 +333,7 @@ lateral       = dcc "lateral"     (nounPhraseSP "lateral")
 lite          = dcc "lite"        (cn' "lite")
   ("Pieces of glass that are cut, prepared, and used to create the window " ++
     "or door.")
-load          = dcc "load"        (nounPhraseSP "load") 
+load          = dcc "load"  (nounPhraseSP "applied load (demand) or pressure") 
   "A uniformly distributed lateral pressure."
 loadResis     = cc' lResistance
   (foldlSent [S "The uniform lateral load that a glass construction can sustain",

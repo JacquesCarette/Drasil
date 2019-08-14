@@ -8,7 +8,7 @@ import math
 ## \brief Writes the output values to output.txt
 # \param is_safePb probability of glass breakage safety requirement
 # \param is_safeLR 3 second load equivalent resistance safety requirement
-# \param P_b probability of breakage
+# \param P_b probability of breakage: The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016).
 def write_output(is_safePb, is_safeLR, P_b):
     outfile = open("log.txt", "a")
     print("function write_output called with inputs: {", file=outfile)

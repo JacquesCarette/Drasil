@@ -83,7 +83,7 @@ ${d_{\text{min}}}$ & Minimum value for one of the dimensions of the glass plate 
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
-$g$ & Glass type $g\in{}\{\text{``AN''},\text{``FT''},\text{``HS''}\}$ & --
+$g$ & Glass type & --
 \\
 $GTF$ & Glass type factor & --
 \\
@@ -157,7 +157,7 @@ ${w_{\text{max}}}$ & Maximum permissible input charge weight & kg
 \\
 ${w_{\text{min}}}$ & Minimum permissible input charge weight & kg
 \\
-${w_{TNT}}$ & Explosive mass in equivalent weight of TNT & kg
+${w_{TNT}}$ & Equivalent TNT charge mass & kg
 \\
 \bottomrule
 \caption{}
@@ -196,6 +196,8 @@ LC & Likely Change
 LG & Laminated Glass
 \\
 LR & Load Resistance
+\\
+LSF & Load Share Factor
 \\
 N/A & Not Applicable
 \\
@@ -324,7 +326,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Fully tempered (FT) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in \cite{astm2012}.}
 \item{Heat strengthened (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in \cite{astm2012}.}
 \end{itemize}
-\item{Load - A uniformly distributed lateral pressure.}
+\item{Applied load (demand) or pressure - A uniformly distributed lateral pressure.}
 \begin{itemize}
 \item{Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in \cite[(pp. 1 and 53)]{astm2009}.}
 \item{Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.}
@@ -717,7 +719,7 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$GTF$ is the glass type factor (Unitless)}
-              \item{$g$ is the glass type $g\in{}\{\text{``AN''},\text{``FT''},\text{``HS''}\}$ (Unitless)}
+              \item{$g$ is the glass type (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & AN is annealed glass.
@@ -968,7 +970,7 @@ RefBy & \hyperref[DD:tolLoad]{DD: tolLoad} and \hyperref[DD:stressDistFac]{DD: s
 \phantomsection 
 \label{DD:eqTNTW}
 \\ \midrule \\
-Label & Explosive mass in equivalent weight of TNT
+Label & Equivalent TNT charge mass
         
 \\ \midrule \\
 Symbol & ${w_{TNT}}$
@@ -982,7 +984,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+              \item{${w_{TNT}}$ is the equivalent TNT charge mass (kg)}
               \item{$w$ is the charge weight (kg)}
               \item{$TNT$ is the TNT equivalent factor (Unitless)}
               \end{symbDescription}
@@ -1105,10 +1107,10 @@ Description & \begin{symbDescription}
               \item{$q$ is the applied load (demand) (Pa)}
               \item{$interpY$ is the interpY (Unitless)}
               \item{$SD$ is the stand off distance (m)}
-              \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+              \item{${w_{TNT}}$ is the equivalent TNT charge mass (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $q$, or demand, is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
+Notes & $q$, or applied load (demand), is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1209,7 +1211,7 @@ Description & \begin{symbDescription}
               \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofDemand]{DD: calofDemand}.
+Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Applied Load (demand)) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofDemand]{DD: calofDemand}.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1290,7 +1292,7 @@ $a$ & Plate length (long dimension) & m
 \\
 $b$ & Plate width (short dimension) & m
 \\
-$g$ & Glass type $g\in{}\{\text{``AN''},\text{``FT''},\text{``HS''}\}$ & --
+$g$ & Glass type & --
 \\
 ${P_{\text{b}\text{tol}}}$ & Tolerable probability of breakage & --
 \\
@@ -1697,7 +1699,7 @@ This appendix holds the graphs (\hyperref[Figure:demandVSsod]{Fig:demandVSsod} a
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png}
-\caption{Non dimensional lateral load ($\hat{q}$) versus Aspect Ratio (AR) versus Stress distribution factor (Function) ($J$)}
+\caption{Non dimensional lateral applied load (demand) or pressure ($\hat{q}$) versus Aspect Ratio (AR) versus Stress distribution factor (Function) ($J$)}
 \label{Figure:dimlessloadVSaspect}
 \end{center}
 \end{figure}

@@ -176,7 +176,7 @@ fromSource :: (Referable r, HasShortName r) => r -> Sentence
 fromSource ref = sParen (S "from" +:+ makeRef2S ref)
 
 fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
-fromSources refs = sParen (S "from" +:+ (foldlList Comma List $ map makeRef2S refs))
+fromSources refs = sParen (S "from" +:+ foldlList Comma List (map makeRef2S refs))
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a) => a -> Sentence

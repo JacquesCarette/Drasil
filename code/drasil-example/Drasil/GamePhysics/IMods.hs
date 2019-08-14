@@ -47,7 +47,7 @@ transMotDesc = foldlSent [S "The above", phrase equation, S "expresses",
   S "as the sum" `sOf` phrase gravitationalAccel, fromSource accelGravityGD `sAnd`
   phrase acceleration, S "due to applied", phrase force, E (apply1 forceI time) +:+.
   fromSource newtonSL, S "The resultant outputs are then obtained from this",
-  phrase equation, S "using" +:+. (foldlList Comma List $ map makeRef2S [linDispDD,
+  phrase equation, S "using" +:+. foldlList Comma List (map makeRef2S [linDispDD,
    linVelDD, linAccDD]), makeRef2S ctrOfMassDD]
 transMotAssumps = foldlSent [S "It is currently assumed that there is no damping",
   S "occurs during the simulation", fromSource assumpDI `sAnd` S "that no", 

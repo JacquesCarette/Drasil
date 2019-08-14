@@ -268,7 +268,7 @@ chaslesThmNote = foldlSent [S "The", phrase QP.linearVelocity,
   ch velB `sOf` S "any point B in a", phrase rigidBody `isThe` S "sum" `sOf`
   ((phrase QP.linearVelocity +:+ ch velO) `ofThe` phrase rigidBody),
   S "at the origin (axis of rotation)" `andThe` S "resultant vector from",
-  (S "cross product" `ofThe` phrasePoss rigidBody),
+  S "cross product" `ofThe` phrasePoss rigidBody,
   getTandS QP.angularVelocity `andThe` getTandS rOB]
 
 ---------------DD10 Impulse(Vector)-----------------------------------------------------------------------
@@ -355,7 +355,7 @@ coeffRestitutionEqn = - sy finRelVel $.
 coeffRestitutionDesc :: Sentence
 coeffRestitutionDesc = foldlSent [S "The", getTandS QP.restitutionCoef,
   S "determines the elasticity of a collision between two" +:+. plural rigidBody,
-  foldlList Comma List $ [
+  foldlList Comma List [
   (E $ sy QP.restitutionCoef $= 1) +:+ S "results in an elastic collision",
   (E $ sy QP.restitutionCoef $< 1) +:+ S "results in an inelastic collision",
   (E $ sy QP.restitutionCoef $= 0) +:+ S "results in a totally inelastic collision"]]

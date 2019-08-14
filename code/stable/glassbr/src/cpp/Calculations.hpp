@@ -70,10 +70,10 @@ double func_B(InputParameters &inParams, double J);
 */
 double func_LR(InputParameters &inParams, double NFL);
 
-/** \brief Calculates load resistance safety requirement
+/** \brief Calculates 3 second load equivalent resistance safety requirement
     \param LR load resistance (Pa)
     \param q applied load (demand) (Pa)
-    \return load resistance safety requirement
+    \return 3 second load equivalent resistance safety requirement
 */
 bool func_is_safeLR(double LR, double q);
 

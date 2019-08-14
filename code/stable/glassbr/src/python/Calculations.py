@@ -136,10 +136,10 @@ def func_LR(inParams, NFL):
     
     return NFL * inParams.GTF * 1
 
-## \brief Calculates load resistance safety requirement
+## \brief Calculates 3 second load equivalent resistance safety requirement
 # \param LR load resistance (Pa)
 # \param q applied load (demand) (Pa)
-# \return load resistance safety requirement
+# \return 3 second load equivalent resistance safety requirement
 def func_is_safeLR(LR, q):
     outfile = open("log.txt", "a")
     print("function func_is_safeLR called with inputs: {", file=outfile)

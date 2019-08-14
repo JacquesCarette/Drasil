@@ -7,7 +7,7 @@ import math
 
 ## \brief Writes the output values to output.txt
 # \param is_safePb probability of glass breakage safety requirement
-# \param is_safeLR load resistance safety requirement
+# \param is_safeLR 3 second load equivalent resistance safety requirement
 # \param P_b probability of breakage
 def write_output(is_safePb, is_safeLR, P_b):
     outfile = open("log.txt", "a")

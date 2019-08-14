@@ -166,10 +166,10 @@ public class Calculations {
         return NFL * inParams.GTF * 1;
     }
     
-    /** \brief Calculates load resistance safety requirement
+    /** \brief Calculates 3 second load equivalent resistance safety requirement
         \param LR load resistance (Pa)
         \param q applied load (demand) (Pa)
-        \return load resistance safety requirement
+        \return 3 second load equivalent resistance safety requirement
     */
     public static Boolean func_is_safeLR(double LR, double q) throws Exception {
         PrintWriter outfile;

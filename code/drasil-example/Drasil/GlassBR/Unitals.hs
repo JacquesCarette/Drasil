@@ -252,7 +252,7 @@ isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of glass breakage safety
   (Variable "is-safePb")   Boolean
 isSafeProb = vc "isSafeProb" (nounPhraseSP "probability of failure safety requirement")
   (Variable "is-safeProb") Boolean
-isSafeLR   = vc "isSafeLR"   (nounPhraseSP "load resistance safety requirement")
+isSafeLR   = vc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance safety requirement")
   (Variable "is-safeLR")   Boolean
 isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
   (Variable "is-safeLoad") Boolean

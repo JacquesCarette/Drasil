@@ -124,7 +124,7 @@ public class InputConstraints {
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        if (!(0 < inParams.P_btol && inParams.P_btol < 1)) {
+        if (!(0 <= inParams.P_btol && inParams.P_btol <= 1)) {
             Console.Write("P_btol has value ");
             Console.Write(inParams.P_btol);
             Console.Write(" but expected to be ");

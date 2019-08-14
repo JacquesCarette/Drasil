@@ -34,9 +34,9 @@ makeInputFile db dd = vcat (convDataDesc dd)
         convLinePatt (Straight ds) d = hcat $ intersperse (char d) $ map (const $ text "placeholder") ds
         convLinePatt (Repeat ds) d = hcat $ intersperse (char d) $ map (const $ text "placeholder") ds
 
-readWithDataDesc :: DataDesc -> IO [Expr]
-readWithDataDesc dd = do 
-  ins <- readFile "sampleInput.txt"
+readWithDataDesc :: FilePath -> DataDesc -> IO [Expr]
+readWithDataDesc fp dd = do 
+  ins <- readFile fp
   let readDD :: DataDesc -> [String] -> [Expr]
       readDD [] (_:_) = error "extra lines encountered in sample input file"
       readDD ds [] = if all isJunk ds then [] 

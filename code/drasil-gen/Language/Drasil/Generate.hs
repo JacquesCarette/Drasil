@@ -68,7 +68,7 @@ genCode :: Choices -> CodeSpec -> IO ()
 genCode chs spec = do 
   workingDir <- getCurrentDirectory
   time <- getCurrentTime
-  sampData <- readWithDataDesc $ sampleInputDD (extInputs $ csi spec)
+  sampData <- readWithDataDesc (smplData $ csi spec) $ sampleInputDD (extInputs $ csi spec)
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
   let genLangCode Java = genCall Java unJC

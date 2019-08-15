@@ -8,6 +8,7 @@ import Drasil.GamePhysics.Assumptions (assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
   mass_1, mass_2, sqrDist)
 
+import Data.Drasil.Concepts.Documentation (constant)
 import Data.Drasil.Concepts.Physics (rigidBody, twoD)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (angularAccel, displacement,
@@ -92,8 +93,8 @@ newtonSLRRel = sy torque $= sy momentOfInertia * sy angularAccel
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [
   [S "The net", getTandS torque, S "on a", phrase rigidBody `sIs`
-   S "proportional to its", getTandS angularAccel],
-  [S "Here" `sC` ch momentOfInertia, S "denotes", phrase momentOfInertia `ofThe`
-   phrase rigidBody],
+   S "proportional to its", getTandS angularAccel `sC` S "where",
+   ch momentOfInertia, S "denotes", phrase momentOfInertia `ofThe`
+   phrase rigidBody, S "as the", phrase constant `sOf` S "proportionality"],
   [S "We also assume that all", plural rigidBody, S "involved" `sAre`
    phrase twoD, fromSource assumpOD]]

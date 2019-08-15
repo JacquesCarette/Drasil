@@ -21,4 +21,7 @@ SWHS$(TARGET_EXTENSION): Control.cs InputParameters.cs OutputFormat.cs
 run: build
 	./SWHS$(TARGET_EXTENSION) $(RUNARGS)
 
-.PHONY: build run
+doc: doxConfig Control.cs InputParameters.cs OutputFormat.cs
+	doxygen doxConfig
+
+.PHONY: build run doc

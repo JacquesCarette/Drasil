@@ -4,9 +4,8 @@ module Language.Drasil.Chunk.UncertainQuantity
   ( UncertQ, UncertainChunk(..) , uq, uqc
   , uqcND, uncrtnChunk, uvc, uncrtnw) where
  
-import Language.Drasil.Chunk.DefinedQuantity (dqd')
+import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk, cuc', cnstrw, cvc)
-import Language.Drasil.Chunk.Concept(cw) 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
@@ -76,7 +75,7 @@ instance MayHaveUnit    UncertQ where getUnit = getUnit . view coco
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
 uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) =>
   c -> Uncertainty -> UncertQ
-uq q = UQ (ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) (q ^. constraints) (q ^. reasVal))
+uq q = UQ (ConstrConcept (dqdWr q) (q ^. constraints) (q ^. reasVal))
 
 --FIXME: this is kind of crazy and probably shouldn't be used!
 uqc :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> Space

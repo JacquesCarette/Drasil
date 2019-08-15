@@ -4,10 +4,10 @@ module Language.Drasil.Code (
   generator, generateCode,
   ($:=), Choices(..), CodeSpec, Comments(..), ConstraintBehaviour(..), Func, 
   FuncStmt(..), ImplementationType(..), Lang(..), Logging(LogNone, LogAll), 
-  Mod(Mod), Structure(..), InputModule(..),
+  Mod(Mod), Structure(..), InputModule(..), Visibility(..),
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, packmod, relToQD,
   junkLine, multiLine, repeated, singleLine, singleton,
-  PackageSym(..), RenderSym(..), 
+  PackageSym(..), ProgramSym(..), RenderSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
   StateTypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..),
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -15,12 +15,12 @@ module Language.Drasil.Code (
   MethodSym(..), ModuleSym(..), BlockCommentSym(..),
   ModData(..),
   JavaCode(..), PythonCode(..), CSharpCode(..), CppSrcCode(..), CppHdrCode(..),
-  unSrc, unHdr
+  unCPPC
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
 
-import Language.Drasil.Code.Imperative.Import (generator, generateCode)
+import Language.Drasil.Code.Imperative.Generator (generator, generateCode)
 
 import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
 
@@ -29,25 +29,25 @@ import Language.Drasil.Code.DataDesc (junkLine, multiLine, repeated, singleLine,
 
 import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec, Comments(..), 
   ConstraintBehaviour(..), Func, FuncStmt(..), ImplementationType(..), Lang(..),
-  Logging(..), Mod(Mod), Structure(..), InputModule(..),
+  Logging(..), Mod(Mod), Structure(..), InputModule(..), Visibility(..),
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, 
   packmod, relToQD,
   )
 
-import Language.Drasil.Code.Imperative.Symantics (PackageSym(..), RenderSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  StateTypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..), 
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..),
-  MethodSym(..), ModuleSym(..), BlockCommentSym(..))
+import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
+  ProgramSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
+  ControlBlockSym(..), StateTypeSym(..), StatementSym(..), 
+  ControlStatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..),
+  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), MethodSym(..), ModuleSym(..), BlockCommentSym(..))
 
-import Language.Drasil.Code.Imperative.Data (ModData(..))
+import Language.Drasil.Code.Imperative.GOOL.Data (ModData(..))
 
-import Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer 
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer 
   (JavaCode (..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer 
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer 
   (PythonCode(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer 
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer 
   (CSharpCode(..))
-import Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer 
-  (CppSrcCode(..), CppHdrCode(..), unSrc, unHdr)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer 
+  (CppSrcCode(..), CppHdrCode(..), unCPPC)

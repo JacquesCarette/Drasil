@@ -33,7 +33,7 @@ if [ "$SUMMARIZE_TEX" = "yes" ]; then
     BIBERRS=$(cat "$EDIR$GEN_NAME_SUFFIX".blg | grep -E "Error" | wc -l)
     if [ "$BIBERRS" -gt 0 ]; then
       # This conditional is due to the current way TeX makefiles are generated.
-      # BibTeX return value is ignored (specifically with Tiny having no
+      # BibTeX return value is ignored (specifically with HGHC having no
       # references). 
       RET=1
     fi

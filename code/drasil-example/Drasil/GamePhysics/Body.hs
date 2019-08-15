@@ -1,12 +1,11 @@
 module Drasil.GamePhysics.Body where
 
-import Language.Drasil hiding (Vector, organization, section)
+import Language.Drasil hiding (Symbol(..), Vector, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI), cdb, rdb,
   refdb, _authors, _concepts, _constants, _constraints, _datadefs, _definitions,
   _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
-
 import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), IntroSub(..),
   RefSec(..), RefTab(..), SCSSub(..), SRSDecl, SSDSec(SSDProg), SSDSub(..),
@@ -14,7 +13,6 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel)
-
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
@@ -28,7 +26,7 @@ import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
-import Data.Drasil.People (alex, luthfi)
+import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
@@ -41,29 +39,30 @@ import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
-import Drasil.GamePhysics.Concepts (chipmunk, acronyms, threeD, twoD)
+import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
 import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs)
 import qualified Drasil.GamePhysics.DataDefs as GP (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
 import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
-import Drasil.GamePhysics.TMods (tModsNew)
+import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
+import Drasil.GamePhysics.GenDefs (generalDefns)
 
 srs :: Document
 srs = mkDoc mkSRS for' si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
+printSetting = PI symbMap Equational defaultConfiguration
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
 
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
-  IntroSec $ IntroProg para1_introduction_intro (short chipmunk)
+  IntroSec $ IntroProg para1_introduction_intro (short gamePhysics)
   [IPurpose para1_purpose_of_document_intro,
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
@@ -80,7 +79,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
+        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints (S "FIXME") inputConstraints
@@ -95,15 +94,15 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
     UCsSec,
     OffShelfSolnsSec $ OffShelfSolnsProg offShelfSols,
     TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
-    AuxConstntSec $ AuxConsProg chipmunk [],
+    AuxConstntSec $ AuxConsProg gamePhysics [],
     Bibliography]
       where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder, VectorUnits]
 
 si :: SystemInformation
 si = SI {
-  _sys = chipmunk,
+  _sys = gamePhysics,
   _kind = Doc.srs,
-  _authors = [alex, luthfi],
+  _authors = [alex, luthfi, olu],
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
@@ -144,12 +143,12 @@ units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [new
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
-  ++ map nw acronyms ++ map nw prodtcon ++ map nw iModelsNew
+  ++ map nw acronyms ++ map nw prodtcon ++ map nw generalDefns ++ map nw iModelsNew
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
   (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units GP.dataDefs
-  iModelsNew [] tModsNew concIns section []
+  iModelsNew generalDefns tMods concIns section []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
@@ -186,7 +185,7 @@ detailsAndGoal :: [CI]
 detailsAndGoal = [thModel, goalStmt]
 
 para1_purpose_of_document_intro :: Sentence
-para1_purpose_of_document_intro = para1_purpose_of_document_param chipmunk 
+para1_purpose_of_document_intro = para1_purpose_of_document_param gamePhysics 
   document programDescription (plural game) (map plural detailsAndGoal)
 
 programDescription :: Sentence
@@ -243,7 +242,7 @@ sysCtxIntro = foldlSP
   [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short chipmunk) +:+. EmptyS,
+   phrase softwareSys, S "itself", sParen (short gamePhysics) +:+. EmptyS,
    S "Arrows are used to show the data flow between the" +:+ phrase system,
    S "and its" +:+ phrase environment]
 
@@ -281,7 +280,7 @@ sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+
 
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
-  short chipmunk +:+ S "Responsibilities"]
+  short gamePhysics +:+ S "Responsibilities"]
 
 sysCtxList :: Contents
 sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
@@ -293,7 +292,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
-  [S "The", phrase endUser `sOf` short chipmunk,
+  [S "The", phrase endUser `sOf` short gamePhysics,
   S "should have an understanding of", phrase frstYr, S "programming",
   plural concept `sAnd` S "an understanding of", phrase highSchoolPhysics]
 

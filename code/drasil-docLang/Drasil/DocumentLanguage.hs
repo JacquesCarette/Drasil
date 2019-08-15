@@ -32,10 +32,10 @@ import qualified Data.Map as Map (elems)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table, symbTableRef)
-import Drasil.Sections.TableOfUnits (tableOfUnits, unitTableRef)
+import Drasil.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
-  stakeholder, thModel, tOfSymb, userChar, offShelfSol)
+  stakeholder, thModel, tOfSymb, tOfUnit, userChar, offShelfSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -97,9 +97,9 @@ mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
   (map (mkSubRef si) l) (makeSecRef "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
-    mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI
-    mkSubRef SI {_sysinfodb = db} (TUnits' con) =
-        tableOfUnits (nub $ sortBy compUnitDefn $ extractUnits dd db) (tuIntro con)
+    mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
+    mkSubRef SI {_sysinfodb = db} (TUnits' con f) =
+        SRS.tOfUnit [tuIntro con, LlC $ f (nub $ sortBy compUnitDefn $ extractUnits dd db)] []
     -- FIXME: _quants = v should be removed from this binding and symbols should
     -- be acquired solely through document traversal, however #1658. If we do
     -- just the doc traversal here, then we lose some symbols which only appear
@@ -119,6 +119,11 @@ mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
     mkSubRef SI {_usedinfodb = db} TAandA =
       tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
 
+-- | table of units constructors
+tunit, tunit' :: [TUIntro] -> RefTab
+tunit  t = TUnits' t tOfUnitSIName
+tunit' t = TUnits' t tOfUnitDesc
+
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
   [e] -> LFunc -> [TSIntro] -> Section
@@ -128,13 +133,13 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
     (lf f)] 
     []
   where lf Term = atStart
-        lf Defn = (^. defn)
+        lf Defn = capSent . (^. defn)
         lf (TermExcept cs) = \x -> if (x ^. uid) `elem` map (^. uid) cs then
-          x ^. defn else atStart x --Compare chunk uids, since we don't
+          capSent (x ^. defn) else atStart x --Compare chunk uids, since we don't
           --actually care about the chunks themselves in LFunc.
         lf (DefnExcept cs) = \x -> if (x ^. uid) `elem` map (^.uid) cs then
-          atStart x else x ^. defn
-        lf TAD = \tDef -> titleize tDef :+: S ":" +:+ (tDef ^. defn)
+          atStart x else capSent (x ^. defn)
+        lf TAD = \tDef -> titleize tDef +: EmptyS +:+. capSent (tDef ^. defn)
 
 -- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab

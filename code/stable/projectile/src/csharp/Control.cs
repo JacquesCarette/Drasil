@@ -1,4 +1,6 @@
 /** \file Control.cs
+    \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
+    \brief Controls the flow of the program
 */
 using System;
 using System.IO;

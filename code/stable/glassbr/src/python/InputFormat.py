@@ -1,4 +1,5 @@
 ## \file InputFormat.py
+# \author Nikitha Krithnan and W. Spencer Smith
 # \brief Provides the function for reading inputs
 from __future__ import print_function
 import sys
@@ -7,8 +8,8 @@ import math
 import InputParameters
 
 ## \brief Reads input from a file with the given file name
-# \param filename No description given
-# \param inParams No description given
+# \param filename name of the input file
+# \param inParams structure holding the input values
 def get_input(filename, inParams):
     outfile = open("log.txt", "a")
     print("function get_input called with inputs: {", file=outfile)

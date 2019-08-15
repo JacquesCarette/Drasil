@@ -1,3 +1,7 @@
+/** \file InputParameters.hpp
+    \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
+    \brief Provides the structure for holding input values
+*/
 #ifndef InputParameters_h
 #define InputParameters_h
 
@@ -9,10 +13,12 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
+/** \brief Structure for holding the input values
+*/
 class InputParameters {
     public:
         double v_launch;
-        double angle;
+        double theta;
         double p_target;
         
         ~InputParameters();

@@ -1,6 +1,6 @@
 module Drasil.Projectile.Body (printSetting, si, srs) where
 
-import Language.Drasil hiding (Vector)
+import Language.Drasil hiding (Symbol(..), Vector)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
@@ -53,7 +53,7 @@ srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
+printSetting = PI symbMap Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [
@@ -127,7 +127,7 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
   (nw projectileTitle : nw mass : nw inValue : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
-    map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : srsDomains)
+    map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
   (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] []
 
 usedDB :: ChunkDB

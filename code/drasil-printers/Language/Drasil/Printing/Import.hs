@@ -1,5 +1,5 @@
-module Language.Drasil.Printing.Import(space,expr,symbol,spec,makeDocument) where
-
+module Language.Drasil.Printing.Import (space, expr, symbol, spec,
+  makeDocument) where
 
 import Language.Drasil hiding (sec, symbol)
 import Language.Drasil.Development (precA, precB, eprec)
@@ -11,7 +11,7 @@ import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
-  PrintingInformation, Notation(Scientific, Engineering), ckdb)
+  PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
 
 import Data.List (intersperse)
 import Data.Maybe (fromMaybe)
@@ -19,19 +19,19 @@ import Data.Tuple (fst, snd)
 import Numeric (floatToDigits)
 
 -- | Render a Space
-space :: Space -> P.Expr
-space Integer = P.MO P.Integer
-space Rational = P.MO P.Rational
-space Real = P.MO P.Real
-space Natural = P.MO P.Natural
-space Boolean = P.MO P.Boolean
-space Char = P.Ident "Char"
-space String = P.Ident "String"
-space Radians = error "Radians not translated"
-space (Vect _) = error "Vector space not translated"
-space (DiscreteI _) = error "DiscreteI" --ex. let A = {1, 2, 4, 7}
-space (DiscreteD _) = error "DiscreteD" -- [Double]
-space (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Ident l --ex. let Meal = {"breakfast", "lunch", "dinner"}
+space :: PrintingInformation -> Space -> P.Expr
+space _ Integer = P.MO P.Integer
+space _ Rational = P.MO P.Rational
+space _ Real = P.MO P.Real
+space _ Natural = P.MO P.Natural
+space _ Boolean = P.MO P.Boolean
+space _ Char = P.Ident "Char"
+space _ String = P.Ident "String"
+space _ Radians = error "Radians not translated"
+space _ (Vect _) = error "Vector space not translated"
+space _ (DiscreteI l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (P.Int . toInteger) l --ex. let A = {1, 2, 4, 7}
+space sm (DiscreteD l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm . dbl) l -- [Double]
+space _ (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Str l --ex. let Meal = {"breakfast", "lunch", "dinner"}
 
 {-
 p_space :: Space -> String
@@ -103,15 +103,16 @@ expr (AssocA Mul l)    sm = P.Row $ mulExpr l sm
 expr (Deriv Part a b)  sm =
   P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, expr a sm])
         (P.Row [P.Spc P.Thin, P.Spec Partial,
-                symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb])
+                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
 expr (Deriv Total a b)sm =
   P.Div (P.Row [P.Spc P.Thin, P.Ident "d", expr a sm])
-        (P.Row [P.Spc P.Thin, P.Ident "d", symbol $ eqSymb $ symbLookup b $ symbolTable $ sm ^. ckdb]) 
-expr (C c)            sm = symbol $ lookupC (sm ^. ckdb) c
+        (P.Row [P.Spc P.Thin, P.Ident "d", 
+                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b]) 
+expr (C c)            sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 expr (FCall f [x])    sm = P.Row [expr f sm, parens $ expr x sm]
 expr (FCall f l)      sm = P.Row [expr f sm,
   parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) l]
-expr (Case ps)        sm = if length ps < 2 then
+expr (Case _ ps)      sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)         sm = P.Mtx $ map (map (`expr` sm)) a
@@ -148,22 +149,24 @@ expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b)   sm = pow sm a b
 expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
 expr (Operator o d e)     sm = eop sm o d e
-expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space b]
-expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. ckdb) c) ri
+expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
+expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. stg) 
+  (sm ^. ckdb) c) ri
 
-lookupC :: ChunkDB -> UID -> Symbol
-lookupC sm c = eqSymb $ symbLookup c $ symbolTable sm
+lookupC :: Stage -> ChunkDB -> UID -> Symbol
+lookupC Equational     sm c = eqSymb   $ symbResolve sm c
+lookupC Implementation sm c = codeSymb $ symbResolve sm c
 
 lookupT :: ChunkDB -> UID -> Sentence
-lookupT sm c = phraseNP $ termLookup c (termTable sm) ^. term
+lookupT sm c = phraseNP $ termResolve sm c ^. term
 
 lookupS :: ChunkDB -> UID -> Sentence
 lookupS sm c = maybe (phraseNP $ l ^. term) S $ getA l
-  where l = termLookup c $ termTable sm
+  where l = termResolve sm c
 
 lookupP :: ChunkDB -> UID -> Sentence
-lookupP sm c =  pluralNP $ termLookup c (termTable sm) ^. term
--- --plural n = NP.plural (n ^. term)
+lookupP sm c = pluralNP $ termResolve sm c ^. term
+-- plural n = NP.plural (n ^. term)
 
 mkCall :: PrintingInformation -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, parens $ expr e s]
@@ -196,12 +199,13 @@ indx :: PrintingInformation -> Expr -> Expr -> P.Expr
 indx sm (C c) i = f s
   where
     i' = expr i sm
-    s = eqSymb $ symbLookup c $ symbolTable $ sm ^. ckdb
+    s = lookupC (sm ^. stg) (sm ^. ckdb) c
     f (Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
       P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
-    f a@(Atomic _) = P.Row [symbol a, P.Sub i']
+    f a@(Variable _) = P.Row [symbol a, P.Sub i']
+    f a@(Label _)    = P.Row [symbol a, P.Sub i']
 --    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
@@ -226,10 +230,12 @@ eop sm Add (BoundedDD v Discrete l h) e =
 eop sm Add (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [expr e sm]]
 
 symbol :: Symbol -> P.Expr
-symbol (Atomic s)  = P.Ident s
-symbol (Special s) = P.Spec s
---symbol (Greek g)   = P.Gr g
-symbol (Concat sl) = P.Row $ map symbol sl
+symbol (Variable s) = P.Ident s
+symbol (Label    s) = P.Label s
+symbol (Integ    n) = P.Int (toInteger n)
+symbol (Special  s) = P.Spec s
+--symbol (Greek g)    = P.Gr g
+symbol (Concat  sl) = P.Row $ map symbol sl
 --
 -- handle the special cases first, then general case
 symbol (Corners [] [] [x] [] s) = P.Row [P.Row [symbol s, P.Sup $ symbol x]]
@@ -257,17 +263,17 @@ pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
 -- | Print a RealInterval
 renderRealInt :: PrintingInformation -> Symbol -> RealInterval Expr Expr -> P.Expr
 renderRealInt st s (Bounded (Inc,a) (Inc,b)) = 
-  P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
+  P.Row [expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
 renderRealInt st s (Bounded (Inc,a) (Exc,b)) =
-  P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.Lt, expr b st]
+  P.Row [expr a st, P.MO P.LEq, symbol s, P.MO P.Lt, expr b st]
 renderRealInt st s (Bounded (Exc,a) (Inc,b)) =
-  P.Row [ expr a st, P.MO P.Lt, symbol s, P.MO P.LEq, expr b st]
+  P.Row [expr a st, P.MO P.Lt, symbol s, P.MO P.LEq, expr b st]
 renderRealInt st s (Bounded (Exc,a) (Exc,b)) =
-  P.Row [ expr a st, P.MO P.Lt, symbol s, P.MO P.Lt, expr b st]
-renderRealInt st s (UpTo (Inc,a))    = P.Row [ symbol s, P.MO P.LEq, expr a st]
-renderRealInt st s (UpTo (Exc,a))    = P.Row [ symbol s, P.MO P.Lt, expr a st]
-renderRealInt st s (UpFrom (Inc,a))  = P.Row [ symbol s, P.MO P.GEq, expr a st]
-renderRealInt st s (UpFrom (Exc,a))  = P.Row [ symbol s, P.MO P.Gt, expr a st]
+  P.Row [expr a st, P.MO P.Lt, symbol s, P.MO P.Lt, expr b st]
+renderRealInt st s (UpTo (Inc,a))   = P.Row [symbol s, P.MO P.LEq, expr a st]
+renderRealInt st s (UpTo (Exc,a))   = P.Row [symbol s, P.MO P.Lt,  expr a st]
+renderRealInt st s (UpFrom (Inc,a)) = P.Row [symbol s, P.MO P.GEq, expr a st]
+renderRealInt st s (UpFrom (Exc,a)) = P.Row [symbol s, P.MO P.Gt,  expr a st]
 
 
 -- | Translates Sentence to the Printing representation of Sentence ('Spec')
@@ -276,11 +282,12 @@ spec :: PrintingInformation -> Sentence -> P.Spec
 spec sm (EmptyS :+: b) = spec sm b
 spec sm (a :+: EmptyS) = spec sm a
 spec sm (a :+: b)      = spec sm a P.:+: spec sm b
-spec _ (S s)           = P.S s
+spec _ (S s)           = either error P.S $ checkValidStr s invalidChars
+  where invalidChars   = ['<', '>', '\"', '&', '#', '$', '%', '&', '~', '^', '\\', '{', '}'] 
 spec _ (Sy s)          = P.Sy s
 spec _ Percent         = P.E $ P.MO P.Perc
 spec _ (P s)           = P.E $ symbol s
-spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. ckdb) s
+spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
 spec sm (Ch TermStyle s)    = spec sm $ lookupT (sm ^. ckdb) s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
@@ -296,7 +303,7 @@ spec sm (E e)          = P.E $ expr e sm
 
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
 renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $
-  getA . defLookup u $ defTable ctx
+  getA $ defResolve ctx u
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn
@@ -308,38 +315,9 @@ renderCitInfo :: RefInfo -> Sentence
 renderCitInfo  None          = EmptyS
 renderCitInfo (RefNote   rn) = sParen (S rn)
 renderCitInfo (Equation [x]) = sParen (S "Eq." +:+ S (show x))
-renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums i)
+renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums "-" i)
 renderCitInfo (Page     [x]) = sParen (S "pg." +:+ S (show x))
-renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums i)
-
--- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and 13")
-foldNums :: [Int] -> Sentence
-foldNums x = foldlList Comma List $ map S (numbers x)
-
--- | Helper for foldNums
-numbers :: [Int] -> [String]
-numbers []  = error "Empty list when making reference with additional information"
-numbers [x] = [show x]
-numbers [x, y]
-  | y == x + 1 = [hyp x y]
-  | otherwise  = map show [x, y]
-numbers (x:y:xs)
-  | y == x + 1 = range x y xs
-  | otherwise  = show x : numbers (y:xs)
-
--- | Helper for foldNums
-range :: Int -> Int -> [Int] -> [String]
-range a b []   = [hyp a b]
-range a b [x]
-  | x == b + 1 = [hyp a x]
-  | otherwise  = [hyp a b, show x]
-range a b (x:xs)
-  | x == b + 1 = range a x xs
-  | otherwise  = hyp a b : numbers (x:xs)
-
--- | Helper for foldNums
-hyp :: Int -> Int -> String
-hyp a b = show a ++ "-" ++ show b
+renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums "-" i)
 
 -- | Translates from Document to the Printing representation of Document
 makeDocument :: PrintingInformation -> Document -> T.Document

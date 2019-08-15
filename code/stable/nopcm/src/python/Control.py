@@ -1,3 +1,6 @@
+## \file Control.py
+# \author Thulasi Jegatheesan
+# \brief Controls the flow of the program
 from __future__ import print_function
 import sys
 import math

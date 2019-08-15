@@ -1,4 +1,5 @@
 /** \file Control.cpp
+    \author Nikitha Krithnan and W. Spencer Smith
     \brief Controls the flow of the program
 */
 #include <algorithm>
@@ -26,6 +27,7 @@ using std::ofstream;
 /** \brief Controls the flow of the program
     \param argc Number of command-line arguments
     \param argv List of command-line arguments
+    \return exit code
 */
 int main(int argc, const char *argv[]) {
     ofstream outfile;

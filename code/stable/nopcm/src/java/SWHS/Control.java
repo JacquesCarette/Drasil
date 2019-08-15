@@ -1,5 +1,9 @@
 package SWHS;
 
+/** \file Control.java
+    \author Thulasi Jegatheesan
+    \brief Controls the flow of the program
+*/
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.Scanner;
@@ -10,6 +14,9 @@ import java.util.ArrayList;
 
 public class Control {
     
+    /** \brief Controls the flow of the program
+        \param args List of command-line arguments
+    */
     public static void main(String[] args) throws Exception {
         String filename = args[0];
         double A_C;

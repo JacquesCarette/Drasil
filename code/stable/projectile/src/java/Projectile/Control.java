@@ -1,6 +1,8 @@
 package Projectile;
 
 /** \file Control.java
+    \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
+    \brief Controls the flow of the program
 */
 import java.util.Arrays;
 import java.util.BitSet;

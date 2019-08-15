@@ -1,6 +1,6 @@
 module Drasil.HGHC.Body (srs, si, symbMap, printSetting) where
 
-import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
+import Language.Drasil hiding (Manual, Symbol(..)) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), SRSDecl, 
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
@@ -26,7 +26,7 @@ srs :: Document
 srs = mkDoc mkSRS for si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap defaultConfiguration
+printSetting = PI symbMap Equational defaultConfiguration
 
 si :: SystemInformation
 si = SI {

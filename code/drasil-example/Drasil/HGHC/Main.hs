@@ -2,7 +2,7 @@ module Main (main) where
 
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
---   Structure(..), InputModule(..))
+--   Structure(..), InputModule(..), Visibility(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -19,6 +19,7 @@ thisChoices = Choices {
   logFile          = "log.txt",
   logging          = LogNone,
   comments         = [], 
+  dates            = Hide,
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
   inputStructure   = Bundled,
@@ -27,7 +28,7 @@ thisChoices = Choices {
   
 main :: IO ()            
 main = do
-  gen (DocSpec Website "Tiny_SRS") srs printSetting
-  gen (DocSpec SRS "Tiny_SRS")     srs printSetting
+  gen (DocSpec Website "HGHC_SRS") srs printSetting
+  gen (DocSpec SRS "HGHC_SRS")     srs printSetting
   -- When ready to generate code, uncomment this file
   --genCode thisChoices thisCode

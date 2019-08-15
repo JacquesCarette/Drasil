@@ -1,8 +1,8 @@
 module Main (main) where
 
-import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, 
+import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
-  Structure(..), InputModule(..))
+  Structure(..), InputModule(..), Visibility(..))
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -18,7 +18,8 @@ choices = Choices {
   impType = Program,
   logFile = "log.txt",
   logging = LogNone,
-  comments = [],
+  comments = [CommentFunc, CommentClass, CommentMod],
+  dates = Hide,
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
   inputStructure = Unbundled,

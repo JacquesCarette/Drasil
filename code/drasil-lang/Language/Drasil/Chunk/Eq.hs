@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase (NP)
-import Language.Drasil.Space (Space(Real))
+import Language.Drasil.Space (Space)
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
@@ -43,18 +43,17 @@ fromEqn nm desc def symb sp un =
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> Expr -> QDefinition
 fromEqn' nm desc def symb sp = EC (mkQuant nm desc symb sp Nothing Nothing) def
 
--- | For when the symbol changes depending on the stage
---FIXME: Space hack
-fromEqnSt :: (IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) -> u 
-  -> Expr -> QDefinition
-fromEqnSt nm desc def symb un = 
-    EC (mkQuant' nm desc symb Real (Just $ unitWrapper un) Nothing) def
+-- | Same as fromEqn, but symbol depends on stage
+fromEqnSt :: (IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) -> 
+  Space -> u -> Expr -> QDefinition
+fromEqnSt nm desc def symb sp un = 
+  EC (mkQuant' nm desc symb sp (Just $ unitWrapper un) Nothing) def
 
--- | For when the symbol changes depending on the stage
---FIXME: Space hack
-fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Expr -> 
+-- | Same as fromEqn', but symbol depends on stage
+fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> 
   QDefinition
-fromEqnSt' nm desc def symb = EC (mkQuant' nm desc symb Real Nothing Nothing) def
+fromEqnSt' nm desc def symb sp = EC (mkQuant' nm desc symb sp Nothing Nothing) 
+  def
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation. HACK - makes the definition EmptyS !!! FIXME

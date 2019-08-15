@@ -10,19 +10,33 @@ library
       Language.Drasil.Code
   other-modules:
       Language.Drasil.Chunk.Code
+    , Language.Drasil.Chunk.CodeDefinition
+    , Language.Drasil.Chunk.CodeQuantity
     , Language.Drasil.Code.Code
+    , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
-    , Language.Drasil.Code.Imperative.Symantics
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
+    , Language.Drasil.Code.Imperative.Doxygen.Import
+    , Language.Drasil.Code.Imperative.GOOL.Data
+    , Language.Drasil.Code.Imperative.GOOL.Helpers
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer
+    , Language.Drasil.Code.Imperative.GOOL.Symantics
+    , Language.Drasil.Code.Imperative.Comments
+    , Language.Drasil.Code.Imperative.Descriptions
+    , Language.Drasil.Code.Imperative.FunctionCalls
+    , Language.Drasil.Code.Imperative.GenerateGOOL
+    , Language.Drasil.Code.Imperative.Generator
     , Language.Drasil.Code.Imperative.Helpers
-    , Language.Drasil.Code.Imperative.Data
     , Language.Drasil.Code.Imperative.Import
-    , Language.Drasil.Code.Imperative.LanguageRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
+    , Language.Drasil.Code.Imperative.Logging
+    , Language.Drasil.Code.Imperative.Modules
+    , Language.Drasil.Code.Imperative.Parameters
+    , Language.Drasil.Code.Imperative.State
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.CodeSpec
 
@@ -41,7 +55,8 @@ library
     drasil-utils >= 0.1.1,
     drasil-build >= 0.1.1,
     drasil-theory >= 0.1.0,
-    drasil-database >= 0.1.0
+    drasil-database >= 0.1.0,
+    drasil-printers >= 0.1.10
   default-language: Haskell2010
   ghc-options:      -Wall -Wredundant-constraints
 
@@ -55,20 +70,34 @@ executable codegenTest
     , Test.Observer
     , Test.Helper
     , Language.Drasil.Chunk.Code
+    , Language.Drasil.Chunk.CodeDefinition
+    , Language.Drasil.Chunk.CodeQuantity
     , Language.Drasil.Code
     , Language.Drasil.Code.Code
+    , Language.Drasil.Code.CodeQuantityDicts
     , Language.Drasil.Code.DataDesc
-    , Language.Drasil.Code.Imperative.Symantics
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
+    , Language.Drasil.Code.Imperative.Doxygen.Import
+    , Language.Drasil.Code.Imperative.GOOL.Data
+    , Language.Drasil.Code.Imperative.GOOL.Helpers
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer
+    , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer
+    , Language.Drasil.Code.Imperative.GOOL.Symantics
+    , Language.Drasil.Code.Imperative.Comments
+    , Language.Drasil.Code.Imperative.Descriptions
+    , Language.Drasil.Code.Imperative.FunctionCalls
+    , Language.Drasil.Code.Imperative.GenerateGOOL
+    , Language.Drasil.Code.Imperative.Generator
     , Language.Drasil.Code.Imperative.Helpers
-    , Language.Drasil.Code.Imperative.Data
     , Language.Drasil.Code.Imperative.Import
-    , Language.Drasil.Code.Imperative.LanguageRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer
-    , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
+    , Language.Drasil.Code.Imperative.Logging
+    , Language.Drasil.Code.Imperative.Modules
+    , Language.Drasil.Code.Imperative.Parameters
+    , Language.Drasil.Code.Imperative.State
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.CodeSpec
   Build-Depends:
@@ -86,7 +115,8 @@ executable codegenTest
     drasil-utils >= 0.1.1,
     drasil-build >= 0.1.1,
     drasil-theory >= 0.1.0,
-    drasil-database >= 0.1.0
+    drasil-database >= 0.1.0,
+    drasil-printers >= 0.1.10
   default-language: Haskell2010
   ghc-options:      -Wall -O2 -Wredundant-constraints -main-is Test.Main
 

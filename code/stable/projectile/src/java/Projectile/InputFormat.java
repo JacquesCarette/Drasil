@@ -1,6 +1,8 @@
 package Projectile;
 
 /** \file InputFormat.java
+    \author Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith
+    \brief Provides the function for reading inputs
 */
 import java.util.Arrays;
 import java.util.BitSet;
@@ -13,8 +15,8 @@ import java.util.ArrayList;
 public class InputFormat {
     
     /** \brief Reads input from a file with the given file name
-        \param filename No description given
-        \param inParams No description given
+        \param filename name of the input file
+        \param inParams structure holding the input values
     */
     public static void get_input(String filename, InputParameters inParams) throws Exception {
         Scanner infile;
@@ -22,7 +24,7 @@ public class InputFormat {
         infile.nextLine();
         inParams.v_launch = Double.parseDouble(infile.nextLine());
         infile.nextLine();
-        inParams.angle = Double.parseDouble(infile.nextLine());
+        inParams.theta = Double.parseDouble(infile.nextLine());
         infile.nextLine();
         inParams.p_target = Double.parseDouble(infile.nextLine());
         infile.close();

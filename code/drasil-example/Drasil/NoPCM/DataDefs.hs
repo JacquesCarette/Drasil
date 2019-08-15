@@ -3,10 +3,10 @@ module Drasil.NoPCM.DataDefs where --exports all of it
 import Language.Drasil
 import Theory.Drasil (DataDefinition)
 
-import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxCQD)
+import Drasil.SWHS.DataDefs (balanceDecayRate, balanceDecayRateQD)
 
 qDefs :: [QDefinition]
-qDefs = [ddHtFluxCQD]
+qDefs = [balanceDecayRateQD]
 
 dataDefs :: [DataDefinition] 
-dataDefs = [ddHtFluxC]
+dataDefs = [balanceDecayRate]

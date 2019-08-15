@@ -11,7 +11,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints,
   _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
-  _sys, _sysinfodb, _usedinfodb)
+  _sys, _sysinfodb, _usedinfodb, sampleData)
 import Utils.Drasil
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
@@ -44,7 +44,8 @@ si = SI {
   _constants = [],
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
-   refdb = rdb [] [] -- FIXME?
+   refdb = rdb [] [], -- FIXME?
+   sampleData = "../../datafiles/HGHC/sampleInput.txt"
 }
   
 mkSRS :: SRSDecl

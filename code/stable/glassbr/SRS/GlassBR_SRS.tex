@@ -17,6 +17,8 @@
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
 \setmathfont{Latin Modern Math}
+\newcommand{\gt}{\ensuremath >}
+\newcommand{\lt}{\ensuremath <}
 \global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
@@ -397,7 +399,7 @@ Label & Safety Probability
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           is-safeProb={P_{\text{f}}}<{P_{\text{f}\text{tol}}}
+           is-safeProb={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -429,7 +431,7 @@ Label & Safety Load
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           is-safeLoad=capacity>Load
+           is-safeLoad=capacity\gt{}Load
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1146,16 +1148,16 @@ Output & $is-safePb$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {P_{\text{b}}}>0
+                    {P_{\text{b}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {P_{\text{b}\text{tol}}}>0
+                    {P_{\text{b}\text{tol}}}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           is-safePb={P_{\text{b}}}<{P_{\text{b}\text{tol}}}
+           is-safePb={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1193,16 +1195,16 @@ Output & $is-safeLR$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    LR>0
+                    LR\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    q>0
+                    q\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           is-safeLR=LR>q
+           is-safeLR=LR\gt{}q
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1232,19 +1234,19 @@ RefBy & \hyperref[IM:isSafePb]{IM: isSafePb}
 \\
 \midrule
 \endhead
-$a$ & $a>0\land{}a\geq{}b$ & ${d_{\text{min}}}\leq{}a\leq{}{d_{\text{max}}}$ & $1.5$ m & 10$\%$
+$a$ & $a\gt{}0\land{}a\geq{}b$ & ${d_{\text{min}}}\leq{}a\leq{}{d_{\text{max}}}$ & $1.5$ m & 10$\%$
 \\
 $AR$ & $AR\geq{}1$ & $AR\leq{}{AR_{\text{max}}}$ & $1.5$ & 10$\%$
 \\
-$b$ & $0<b\leq{}a$ & ${d_{\text{min}}}\leq{}b\leq{}{d_{\text{max}}}$ & $1.2$ m & 10$\%$
+$b$ & $0\lt{}b\leq{}a$ & ${d_{\text{min}}}\leq{}b\leq{}{d_{\text{max}}}$ & $1.2$ m & 10$\%$
 \\
 ${P_{\text{b}\text{tol}}}$ & $0\leq{}{P_{\text{b}\text{tol}}}\leq{}1$ & -- & $0.008$ & 0.1$\%$
 \\
-$SD$ & $SD>0$ & ${SD_{\text{min}}}\leq{}SD\leq{}{SD_{\text{max}}}$ & $45.0$ m & 10$\%$
+$SD$ & $SD\gt{}0$ & ${SD_{\text{min}}}\leq{}SD\leq{}{SD_{\text{max}}}$ & $45.0$ m & 10$\%$
 \\
-$TNT$ & $TNT>0$ & -- & $1.0$ & 10$\%$
+$TNT$ & $TNT\gt{}0$ & -- & $1.0$ & 10$\%$
 \\
-$w$ & $w>0$ & ${w_{\text{min}}}\leq{}w\leq{}{w_{\text{max}}}$ & $42.0$ kg & 10$\%$
+$w$ & $w\gt{}0$ & ${w_{\text{min}}}\leq{}w\leq{}{w_{\text{max}}}$ & $42.0$ kg & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}

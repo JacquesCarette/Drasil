@@ -6,7 +6,8 @@
       Software Requirements Specification for Solar Water Heating Systems
     </title>
     <meta charset="utf-8">
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['$$','$$']]});</script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
   </head>
   <body>
     <div class="title">
@@ -649,16 +650,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
-                                                                                <span class="fup">
-                                                                                  &#8239;&part;T
-                                                                                </span>
-                                                                                <span class="fdn">
-                                                                                  &#8239;&part;t
-                                                                                </span>
-                                                                              </div></em>
-                        </div>
+                        $$-∇\cdot{}\mathbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}$$
                       </td>
                     </tr>
                     <tr>
@@ -724,11 +716,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>E = C<sup>L</sup>&#8239;m&#8239;ΔT</em>
-                        </div>
-                      </td>
+                      <td>$$E={C^{\text{L}}} m ΔT$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -779,7 +767,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td><div class="equation"><em>q(t) = h&#8239;ΔT(t)</em></div></td>
+                      <td>$$q\left(t\right)=h ΔT\left(t\right)$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -849,12 +837,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>m&#8239;C&#8239;<div class="fraction">
-                                                <span class="fup">&#8239;dT</span>
-                                                <span class="fdn">&#8239;dt</span>
-                                              </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-                        </div>
+                        $$m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V$$
                       </td>
                     </tr>
                     <tr>
@@ -908,60 +891,23 @@
                     <p class="paragraph">
                       Integrating <a href=#TM:consThermE>TM: consThermE</a> over a volume (<em>V</em>), we have:
                     </p>
-                    <div class="equation">
-                      <em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                                 <span class="fup">
-                                                                                                                                                   &#8239;&part;T
-                                                                                                                                                 </span>
-                                                                                                                                                 <span class="fdn">
-                                                                                                                                                   &#8239;&part;t
-                                                                                                                                                 </span>
-                                                                                                                                               </div>&#8239;dV</em>
-                    </div>
+                    $$-\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV$$
                     <p class="paragraph">
                       Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
                     </p>
-                    <div class="equation">
-                      <em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                                              <span class="fup">
-                                                                                                                                                                &#8239;&part;T
-                                                                                                                                                              </span>
-                                                                                                                                                              <span class="fdn">
-                                                                                                                                                                &#8239;&part;t
-                                                                                                                                                              </span>
-                                                                                                                                                            </div>&#8239;dV</em>
-                    </div>
+                    $$-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV$$
                     <p class="paragraph">
                       We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
                     </p>
-                    <div class="equation">
-                      <em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                                              <span class="fup">
-                                                                                                                                                                &#8239;&part;T
-                                                                                                                                                              </span>
-                                                                                                                                                              <span class="fdn">
-                                                                                                                                                                &#8239;&part;t
-                                                                                                                                                              </span>
-                                                                                                                                                            </div>&#8239;dV</em>
-                    </div>
+                    $${q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV$$
                     <p class="paragraph">
                       Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>, and <a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
                     </p>
-                    <div class="equation">
-                      <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
-                                                    <span class="fup">&#8239;dT</span>
-                                                    <span class="fdn">&#8239;dt</span>
-                                                  </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-                    </div>
+                    $$ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V$$
                     <p class="paragraph">
                       Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, Equation (2) can be written as:
                     </p>
-                    <div class="equation">
-                      <em>m&#8239;C&#8239;<div class="fraction">
-                                            <span class="fup">&#8239;dT</span>
-                                            <span class="fdn">&#8239;dt</span>
-                                          </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-                    </div>
+                    $$m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V$$
                   </div>
                 </div>
                 <div id="GD:htFluxWaterFromCoil">
@@ -983,9 +929,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>q<sub>C</sub> = h<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
-                        </div>
+                        $${q_{\text{C}}}={h_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -1069,16 +1013,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>τ<sub>W</sub> = <div class="fraction">
-                                                <span class="fup">
-                                                  m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                </span>
-                                                <span class="fdn">
-                                                  h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                </span>
-                                              </div></em>
-                        </div>
+                        $${τ_{\text{W}}}=\frac{{m_{\text{W}}} {C_{\text{W}}}}{{h_{\text{C}}} {A_{\text{C}}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1157,32 +1092,16 @@
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>
-                        </div>
-                      </td>
+                      <td>$${T_{\text{init}}}\leq{}{T_{\text{C}}}$$</td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-                        </div>
-                      </td>
+                      <td>$$0\lt{}t\lt{}{t_{\text{final}}}$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><div class="fraction">
-                                <span class="fup">&#8239;dT<sub>W</sub></span>
-                                <span class="fdn">&#8239;dt</span>
-                              </div> = <div class="fraction">
-                                         <span class="fup">1</span>
-                                         <span class="fdn">τ<sub>W</sub></span>
-                                       </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
-                        </div>
+                        $$\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -1237,53 +1156,19 @@
                     <p class="paragraph">
                       To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
                     </p>
-                    <div class="equation">
-                      <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-                                                                    <span class="fup">
-                                                                      &#8239;dT<sub>W</sub>
-                                                                    </span>
-                                                                    <span class="fdn">
-                                                                      &#8239;dt
-                                                                    </span>
-                                                                  </div> = q<sub>C</sub>&#8239;A<sub>C</sub></em>
-                    </div>
+                    $${m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}$$
                     <p class="paragraph">
                       Using <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a> for <em>q<sub>C</sub></em>, this can be written as:
                     </p>
-                    <div class="equation">
-                      <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-                                                                    <span class="fup">
-                                                                      &#8239;dT<sub>W</sub>
-                                                                    </span>
-                                                                    <span class="fdn">
-                                                                      &#8239;dt
-                                                                    </span>
-                                                                  </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
-                    </div>
+                    $${m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)$$
                     <p class="paragraph">
                       Dividing Equation (2) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
                     </p>
-                    <div class="equation">
-                      <em><div class="fraction">
-                            <span class="fup">&#8239;dT<sub>W</sub></span>
-                            <span class="fdn">&#8239;dt</span>
-                          </div> = <div class="fraction">
-                                     <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
-                                     <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
-                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
-                    </div>
+                    $$\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)$$
                     <p class="paragraph">
                       By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>), this can be written as:
                     </p>
-                    <div class="equation">
-                      <em><div class="fraction">
-                            <span class="fup">&#8239;dT<sub>W</sub></span>
-                            <span class="fdn">&#8239;dt</span>
-                          </div> = <div class="fraction">
-                                     <span class="fup">1</span>
-                                     <span class="fdn">τ<sub>W</sub></span>
-                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
-                    </div>
+                    $$\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)$$
                   </div>
                 </div>
                 <div id="IM:heatEInWtr">
@@ -1314,18 +1199,12 @@
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>0&thinsp;&le;&thinsp;t&thinsp;&le;&thinsp;t<sub>final</sub></em>
-                        </div>
-                      </td>
+                      <td>$$0\leq{}t\leq{}{t_{\text{final}}}$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>E<sub>W</sub>(t) = C<sub>W</sub>&#8239;m<sub>W</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>init</sub>)</em>
-                        </div>
+                        $${E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -1545,14 +1424,7 @@
               </p>
               <p>
                 <div id="findMass">
-                  Find-Mass: Use the inputs in <a href=#inputInitQuants>FR: Input-Initial-Quantities</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, using <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = π&#8239;(<div class="fraction">
-                                                                                                                                                                                                                                                               <span class="fup">
-                                                                                                                                                                                                                                                                 D
-                                                                                                                                                                                                                                                               </span>
-                                                                                                                                                                                                                                                               <span class="fdn">
-                                                                                                                                                                                                                                                                 2
-                                                                                                                                                                                                                                                               </span>
-                                                                                                                                                                                                                                                             </div>)<sup>2</sup>&#8239;L&#8239;ρ<sub>W</sub></em>, where <em>V<sub>W</sub></em> is the volume of water.
+                  Find-Mass: Use the inputs in <a href=#inputInitQuants>FR: Input-Initial-Quantities</a> to find the mass needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, using <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = π&#8239;($\frac{D}{2}$)<sup>2</sup>&#8239;L&#8239;ρ<sub>W</sub></em>, where <em>V<sub>W</sub></em> is the volume of water.
                 </div>
               </p>
               <p>

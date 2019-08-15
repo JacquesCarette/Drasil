@@ -17,6 +17,8 @@
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
 \setmathfont{Latin Modern Math}
+\newcommand{\gt}{\ensuremath >}
+\newcommand{\lt}{\ensuremath <}
 \global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
@@ -445,9 +447,9 @@ Label & Sensible heat energy
 \\ \midrule \\
 Equation & \begin{displaymath}
            E=\begin{cases}
-             {C^{\text{S}}} m ΔT, & T<{T_{\text{melt}}}\\
-             {C^{\text{L}}} m ΔT, & {T_{\text{melt}}}<T<{T_{\text{boil}}}\\
-             {C^{\text{V}}} m ΔT, & {T_{\text{boil}}}<T
+             {C^{\text{S}}} m ΔT, & T\lt{}{T_{\text{melt}}}\\
+             {C^{\text{L}}} m ΔT, & {T_{\text{melt}}}\lt{}T\lt{}{T_{\text{boil}}}\\
+             {C^{\text{V}}} m ΔT, & {T_{\text{boil}}}\lt{}T
              \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -992,7 +994,7 @@ Output & ${T_{\text{W}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {T_{\text{init}}}<{T_{\text{C}}}
+                    {T_{\text{init}}}\lt{}{T_{\text{C}}}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
@@ -1022,7 +1024,7 @@ Notes & ${T_{\text{P}}}$ is defined by \hyperref[IM:eBalanceOnPCM]{IM: eBalanceO
         
         The initial conditions for the ODE are ${T_{\text{W}}}\left(0\right)={T_{\text{P}}}\left(0\right)={T_{\text{init}}}$ following \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}.
         
-        The ODE applies as long as the water is in liquid form, $0<{T_{\text{W}}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (from \hyperref[assumpWAL]{A: Water-Always-Liquid} and \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+        The ODE applies as long as the water is in liquid form, $0\lt{}{T_{\text{W}}}\lt{}100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (from \hyperref[assumpWAL]{A: Water-Always-Liquid} and \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
         
 \\ \midrule \\
 Source & \cite{koothoor2013}
@@ -1088,7 +1090,7 @@ Output & ${T_{\text{P}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {T_{\text{init}}}<{{T_{\text{melt}}}^{\text{P}}}
+                    {T_{\text{init}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
@@ -1097,9 +1099,9 @@ Output Constraints & \begin{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
            \frac{\,d{T_{\text{P}}}}{\,dt}=\begin{cases}
-                                          \frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}<{{T_{\text{melt}}}^{\text{P}}}\\
-                                          \frac{1}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}>{{T_{\text{melt}}}^{\text{P}}}\\
-                                          0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0<ϕ<1
+                                          \frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                          \frac{1}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                          0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
                                           \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1117,7 +1119,7 @@ Notes & ${T_{\text{W}}}$ is defined by \hyperref[IM:eBalanceOnWtr]{IM: eBalanceO
         
         The input constraint ${T_{\text{init}}}\leq{}{{T_{\text{melt}}}^{\text{P}}}$ comes from \hyperref[assumpPIS]{A: PCM-Initially-Solid}.
         
-        The temperature remains constant at ${{T_{\text{melt}}}^{\text{P}}}$, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as $0<ϕ<1$. $ϕ$ (from \hyperref[DD:meltFrac]{DD: meltFrac}) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
+        The temperature remains constant at ${{T_{\text{melt}}}^{\text{P}}}$, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as $0\lt{}ϕ\lt{}1$. $ϕ$ (from \hyperref[DD:meltFrac]{DD: meltFrac}) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
         
         ${{τ_{\text{P}}}^{\text{S}}}$ is calculated in \hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}.
         
@@ -1202,7 +1204,7 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}.
         
         The change in temperature is the difference between the temperature at time $t$ (s), ${T_{\text{W}}}$ and the initial temperature, ${T_{\text{init}}}$ (${}^{\circ}$C).
         
-        This equation applies as long as $0<{T_{\text{W}}}<100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+        This equation applies as long as $0\lt{}{T_{\text{W}}}\lt{}100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
         
 \\ \midrule \\
 Source & \cite{koothoor2013}
@@ -1232,7 +1234,7 @@ Output & ${E_{\text{P}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {T_{\text{init}}}<{{T_{\text{melt}}}^{\text{P}}}
+                    {T_{\text{init}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
@@ -1241,9 +1243,9 @@ Output Constraints & \begin{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
            {E_{\text{P}}}=\begin{cases}
-                          {{C_{\text{P}}}^{\text{S}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}<{{T_{\text{melt}}}^{\text{P}}}\\
-                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{H_{\text{f}}} {m_{\text{P}}}+{{C_{\text{P}}}^{\text{L}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{{T_{\text{melt}}}^{\text{P}}}\right), & {T_{\text{P}}}>{{T_{\text{melt}}}^{\text{P}}}\\
-                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0<ϕ<1
+                          {{C_{\text{P}}}^{\text{S}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{H_{\text{f}}} {m_{\text{P}}}+{{C_{\text{P}}}^{\text{L}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{{T_{\text{melt}}}^{\text{P}}}\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
                           \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1266,7 +1268,7 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE} a
         
         ${E_{\text{P}}}$ for the solid PCM is found using \hyperref[TM:sensHtE]{TM: sensHtE} for sensible heating, with the specific heat capacity of the solid PCM, ${{C_{\text{P}}}^{\text{S}}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}$C).
         
-        ${E_{\text{P}}}$ for the melted PCM (${T_{\text{P}}}>{{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}$) is found using \hyperref[TM:sensHtE]{TM: sensHtE} for sensible heat of the liquid PCM plus the energy when melting starts, plus the energy required to melt all of the PCM.
+        ${E_{\text{P}}}$ for the melted PCM (${T_{\text{P}}}\gt{}{{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}$) is found using \hyperref[TM:sensHtE]{TM: sensHtE} for sensible heat of the liquid PCM plus the energy when melting starts, plus the energy required to melt all of the PCM.
         
         The energy required to melt all of the PCM is ${H_{\text{f}}} {m_{\text{P}}}$ (J) (from \hyperref[DD:htFusion]{DD: htFusion}).
         
@@ -1290,52 +1292,52 @@ RefBy & \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[findMass]{FR: F
 \label{Sec:DataConstraints}
 \hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (\hyperref[assumpPIS]{A: PCM-Initially-Solid}). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{\text{min}}}}$, where ${h_{\text{min}}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
 
-\begin{longtable}{l l l l l}
+\begin{longtabu}{l l X[l] l l}
 \toprule
 \textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
 \midrule
 \endhead
-${A_{\text{C}}}$ & ${A_{\text{C}}}>0$ & ${A_{\text{C}}}\leq{}{{A_{\text{C}}}^{\text{max}}}$ & $0.12$ $\text{m}^{2}$ & 10$\%$
+${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0$ & ${A_{\text{C}}}\leq{}{{A_{\text{C}}}^{\text{max}}}$ & $0.12$ $\text{m}^{2}$ & 10$\%$
 \\
-${A_{\text{P}}}$ & ${A_{\text{P}}}>0$ & ${V_{\text{P}}}\leq{}{A_{\text{P}}}\leq{}\frac{2}{{h_{\text{min}}}} {V_{\text{tank}}}$ & $1.2$ $\text{m}^{2}$ & 10$\%$
+${A_{\text{P}}}$ & ${A_{\text{P}}}\gt{}0$ & ${V_{\text{P}}}\leq{}{A_{\text{P}}}\leq{}\frac{2}{{h_{\text{min}}}} {V_{\text{tank}}}$ & $1.2$ $\text{m}^{2}$ & 10$\%$
 \\
-${{C_{\text{P}}}^{\text{L}}}$ & ${{C_{\text{P}}}^{\text{L}}}>0$ & ${{{C_{\text{P}}}^{\text{L}}}_{\text{min}}}<{{C_{\text{P}}}^{\text{L}}}<{{{C_{\text{P}}}^{\text{L}}}_{\text{max}}}$ & $2.27\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
+${{C_{\text{P}}}^{\text{L}}}$ & ${{C_{\text{P}}}^{\text{L}}}\gt{}0$ & ${{{C_{\text{P}}}^{\text{L}}}_{\text{min}}}\lt{}{{C_{\text{P}}}^{\text{L}}}\lt{}{{{C_{\text{P}}}^{\text{L}}}_{\text{max}}}$ & $2.27\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
 \\
-${{C_{\text{P}}}^{\text{S}}}$ & ${{C_{\text{P}}}^{\text{S}}}>0$ & ${{{C_{\text{P}}}^{\text{S}}}_{\text{min}}}<{{C_{\text{P}}}^{\text{S}}}<{{{C_{\text{P}}}^{\text{S}}}_{\text{max}}}$ & $1.76\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
+${{C_{\text{P}}}^{\text{S}}}$ & ${{C_{\text{P}}}^{\text{S}}}\gt{}0$ & ${{{C_{\text{P}}}^{\text{S}}}_{\text{min}}}\lt{}{{C_{\text{P}}}^{\text{S}}}\lt{}{{{C_{\text{P}}}^{\text{S}}}_{\text{max}}}$ & $1.76\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
 \\
-${C_{\text{W}}}$ & ${C_{\text{W}}}>0$ & ${{C_{\text{W}}}^{\text{min}}}<{C_{\text{W}}}<{{C_{\text{W}}}^{\text{max}}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
+${C_{\text{W}}}$ & ${C_{\text{W}}}\gt{}0$ & ${{C_{\text{W}}}^{\text{min}}}\lt{}{C_{\text{W}}}\lt{}{{C_{\text{W}}}^{\text{max}}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
 \\
-$D$ & $D>0$ & ${AR_{\text{min}}}\leq{}D\leq{}{AR_{\text{max}}}$ & $0.412$ m & 10$\%$
+$D$ & $D\gt{}0$ & ${AR_{\text{min}}}\leq{}D\leq{}{AR_{\text{max}}}$ & $0.412$ m & 10$\%$
 \\
-${H_{\text{f}}}$ & ${H_{\text{f}}}>0$ & ${{H_{\text{f}}}_{\text{min}}}<{H_{\text{f}}}<{{H_{\text{f}}}_{\text{max}}}$ & $211.6\cdot{}10^{3}$ $\frac{\text{J}}{\text{kg}}$ & 10$\%$
+${H_{\text{f}}}$ & ${H_{\text{f}}}\gt{}0$ & ${{H_{\text{f}}}_{\text{min}}}\lt{}{H_{\text{f}}}\lt{}{{H_{\text{f}}}_{\text{max}}}$ & $211.6\cdot{}10^{3}$ $\frac{\text{J}}{\text{kg}}$ & 10$\%$
 \\
-${h_{\text{C}}}$ & ${h_{\text{C}}}>0$ & ${{h_{\text{C}}}^{\text{min}}}\leq{}{h_{\text{C}}}\leq{}{{h_{\text{C}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10$\%$
+${h_{\text{C}}}$ & ${h_{\text{C}}}\gt{}0$ & ${{h_{\text{C}}}^{\text{min}}}\leq{}{h_{\text{C}}}\leq{}{{h_{\text{C}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10$\%$
 \\
-${h_{\text{P}}}$ & ${h_{\text{P}}}>0$ & ${{h_{\text{P}}}^{\text{min}}}\leq{}{h_{\text{P}}}\leq{}{{h_{\text{P}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10$\%$
+${h_{\text{P}}}$ & ${h_{\text{P}}}\gt{}0$ & ${{h_{\text{P}}}^{\text{min}}}\leq{}{h_{\text{P}}}\leq{}{{h_{\text{P}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10$\%$
 \\
-$L$ & $L>0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ m & 10$\%$
+$L$ & $L\gt{}0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ m & 10$\%$
 \\
-${T_{\text{C}}}$ & $0<{T_{\text{C}}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10$\%$
+${T_{\text{C}}}$ & $0\lt{}{T_{\text{C}}}\lt{}100$ & -- & $50.0$ ${}^{\circ}$C & 10$\%$
 \\
-${T_{\text{init}}}$ & $0<{T_{\text{init}}}<{T_{\text{melt}}}$ & -- & $40.0$ ${}^{\circ}$C & 10$\%$
+${T_{\text{init}}}$ & $0\lt{}{T_{\text{init}}}\lt{}{T_{\text{melt}}}$ & -- & $40.0$ ${}^{\circ}$C & 10$\%$
 \\
-${{T_{\text{melt}}}^{\text{P}}}$ & $0<{{T_{\text{melt}}}^{\text{P}}}<{T_{\text{C}}}$ & -- & $44.2$ ${}^{\circ}$C & 10$\%$
+${{T_{\text{melt}}}^{\text{P}}}$ & $0\lt{}{{T_{\text{melt}}}^{\text{P}}}\lt{}{T_{\text{C}}}$ & -- & $44.2$ ${}^{\circ}$C & 10$\%$
 \\
-${t_{\text{final}}}$ & ${t_{\text{final}}}>0$ & ${t_{\text{final}}}<{{t_{\text{final}}}^{\text{max}}}$ & $50.0\cdot{}10^{3}$ s & 10$\%$
+${t_{\text{final}}}$ & ${t_{\text{final}}}\gt{}0$ & ${t_{\text{final}}}\lt{}{{t_{\text{final}}}^{\text{max}}}$ & $50.0\cdot{}10^{3}$ s & 10$\%$
 \\
-${t_{\text{step}}}$ & $0<{t_{\text{step}}}<{t_{\text{final}}}$ & -- & $0.01$ s & 10$\%$
+${t_{\text{step}}}$ & $0\lt{}{t_{\text{step}}}\lt{}{t_{\text{final}}}$ & -- & $0.01$ s & 10$\%$
 \\
-${V_{\text{P}}}$ & $0<{V_{\text{P}}}<{V_{\text{tank}}}$ & ${V_{\text{P}}}\geq{}MINFRACT {V_{\text{tank}}}$ & $0.05$ $\text{m}^{3}$ & 10$\%$
+${V_{\text{P}}}$ & $0\lt{}{V_{\text{P}}}\lt{}{V_{\text{tank}}}$ & ${V_{\text{P}}}\geq{}MINFRACT {V_{\text{tank}}}$ & $0.05$ $\text{m}^{3}$ & 10$\%$
 \\
-${ρ_{\text{P}}}$ & ${ρ_{\text{P}}}>0$ & ${{ρ_{\text{P}}}^{\text{min}}}<{ρ_{\text{P}}}<{{ρ_{\text{P}}}^{\text{max}}}$ & $1.007\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+${ρ_{\text{P}}}$ & ${ρ_{\text{P}}}\gt{}0$ & ${{ρ_{\text{P}}}^{\text{min}}}\lt{}{ρ_{\text{P}}}\lt{}{{ρ_{\text{P}}}^{\text{max}}}$ & $1.007\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \\
-${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}>0$ & ${{ρ_{\text{W}}}^{\text{min}}}<{ρ_{\text{W}}}\leq{}{{ρ_{\text{W}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0$ & ${{ρ_{\text{W}}}^{\text{min}}}\lt{}{ρ_{\text{W}}}\leq{}{{ρ_{\text{W}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
 \label{Table:InDataConstraints}
-\end{longtable}
+\end{longtabu}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:CorSolProps}
 \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.

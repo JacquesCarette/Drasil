@@ -7,7 +7,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
   _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
+  _sysinfodb, _usedinfodb, sampleData)
 import Theory.Drasil (Theory(defined_fun, defined_quant))
 import Utils.Drasil
 
@@ -89,7 +89,8 @@ si = SI {
   _constants   = constants,
   _sysinfodb   = symbMap,
   _usedinfodb = usedDB,
-   refdb       = refDB
+   refdb       = refDB,
+   sampleData  = "../../datafiles/GlassBR/sampleInput.txt"
 }
   --FIXME: All named ideas, not just acronyms.
 

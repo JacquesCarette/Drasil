@@ -4,7 +4,8 @@
     <link rel="stylesheet" type="text/css" href="GlassBR_SRS.css">
     <title>Software Requirements Specification for GlassBR</title>
     <meta charset="utf-8">
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['$$','$$']]});</script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
   </head>
   <body>
     <div class="title">
@@ -766,9 +767,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>is-safeProb = P<sub>f</sub>&thinsp;&lt;&thinsp;P<sub>ftol</sub></em>
-                        </div>
+                        $$is-safeProb={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -821,11 +820,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>is-safeLoad = capacity&thinsp;&gt;&thinsp;Load</em>
-                        </div>
-                      </td>
+                      <td>$$is-safeLoad=capacity\gt{}Load$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -898,12 +893,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>B = <div class="fraction">
-                                    <span class="fup">k</span>
-                                    <span class="fdn">(a&#8239;b)<sup>m&minus;1</sup></span>
-                                  </div>&#8239;(E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF&#8239;e<sup>J</sup></em>
-                        </div>
+                        $$B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} LDF e^{J}$$
                       </td>
                     </tr>
                     <tr>
@@ -985,50 +975,20 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>h = <div class="fraction">
-                                    <span class="fup">1</span>
-                                    <span class="fdn">1000</span>
-                                  </div>&#8239;<span class="casebr">{</span>
-                                               <div class="cases">
-                                                 <span>
-                                                   2.16 , <span class="case">t = 2.5</span>
-                                                 </span>
-                                                 <span>
-                                                   2.59 , <span class="case">t = 2.7</span>
-                                                 </span>
-                                                 <span>
-                                                   2.92 , <span class="case">t = 3.0</span>
-                                                 </span>
-                                                 <span>
-                                                   3.78 , <span class="case">t = 4.0</span>
-                                                 </span>
-                                                 <span>
-                                                   4.57 , <span class="case">t = 5.0</span>
-                                                 </span>
-                                                 <span>
-                                                   5.56 , <span class="case">t = 6.0</span>
-                                                 </span>
-                                                 <span>
-                                                   7.42 , <span class="case">t = 8.0</span>
-                                                 </span>
-                                                 <span>
-                                                   9.02 , <span class="case">t = 10.0</span>
-                                                 </span>
-                                                 <span>
-                                                   11.91 , <span class="case">t = 12.0</span>
-                                                 </span>
-                                                 <span>
-                                                   15.09 , <span class="case">t = 16.0</span>
-                                                 </span>
-                                                 <span>
-                                                   18.26 , <span class="case">t = 19.0</span>
-                                                 </span>
-                                                 <span>
-                                                   21.44 , <span class="case">t = 22.0</span>
-                                                 </span>
-                                               </div></em>
-                        </div>
+                        $$h=\frac{1}{1000} \begin{cases}
+                                           2.16, & t=2.5\\
+                                           2.59, & t=2.7\\
+                                           2.92, & t=3.0\\
+                                           3.78, & t=4.0\\
+                                           4.57, & t=5.0\\
+                                           5.56, & t=6.0\\
+                                           7.42, & t=8.0\\
+                                           9.02, & t=10.0\\
+                                           11.91, & t=12.0\\
+                                           15.09, & t=16.0\\
+                                           18.26, & t=19.0\\
+                                           21.44, & t=22.0
+                                           \end{cases}$$
                       </td>
                     </tr>
                     <tr>
@@ -1086,15 +1046,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>LDF = (<div class="fraction">
-                                       <span class="fup">t<sub>d</sub></span>
-                                       <span class="fdn">60</span>
-                                     </div>)<sup><div class="fraction">
-                                                   <span class="fup">m</span>
-                                                   <span class="fdn">16</span>
-                                                 </div></sup></em>
-                        </div>
+                        $$LDF=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1153,11 +1105,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>J = interpZ("SDF.txt",AR,q&#770;)</em>
-                        </div>
-                      </td>
+                      <td>$$J=interpZ\left(\text{``SDF.txt''},AR,\hat{q}\right)$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1220,14 +1168,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>NFL = <div class="fraction">
-                                      <span class="fup">
-                                        q&#770;<sub>tol</sub>&#8239;E&#8239;h<sup>4</sup>
-                                      </span>
-                                      <span class="fdn">(a&#8239;b)<sup>2</sup></span>
-                                    </div></em>
-                        </div>
+                        $$NFL=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1296,14 +1237,11 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>GTF = <span class="casebr">{</span>
-                                    <div class="cases">
-                                      <span>1 , <span class="case">g = "AN"</span></span>
-                                      <span>4 , <span class="case">g = "FT"</span></span>
-                                      <span>2 , <span class="case">g = "HS"</span></span>
-                                    </div></em>
-                        </div>
+                        $$GTF=\begin{cases}
+                              1, & g=\text{``AN''}\\
+                              4, & g=\text{``FT''}\\
+                              2, & g=\text{``HS''}
+                              \end{cases}$$
                       </td>
                     </tr>
                     <tr>
@@ -1358,14 +1296,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>q&#770; = <div class="fraction">
-                                          <span class="fup">q&#8239;(a&#8239;b)<sup>2</sup></span>
-                                          <span class="fdn">E&#8239;h<sup>4</sup>&#8239;GTF</span>
-                                        </div></em>
-                        </div>
-                      </td>
+                      <td>$$\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1442,9 +1373,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>q&#770;<sub>tol</sub> = interpY("SDF.txt",AR,J<sub>tol</sub>)</em>
-                        </div>
+                        $${\hat{q}_{\text{tol}}}=interpY\left(\text{``SDF.txt''},AR,{J_{\text{tol}}}\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -1506,21 +1435,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>J<sub>tol</sub> = ln(ln(<div class="fraction">
-                                                        <span class="fup">1</span>
-                                                        <span class="fdn">
-                                                          1&minus;P<sub>btol</sub>
-                                                        </span>
-                                                      </div>)&#8239;<div class="fraction">
-                                                                      <span class="fup">
-                                                                        (a&#8239;b)<sup>m&minus;1</sup>
-                                                                      </span>
-                                                                      <span class="fdn">
-                                                                        k&#8239;(E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF
-                                                                      </span>
-                                                                    </div>)</em>
-                        </div>
+                        $${J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} LDF}\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -1602,9 +1517,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>SD = &radic;(SD<sub>x</sub><sup>2</sup>&plus;SD<sub>y</sub><sup>2</sup>&plus;SD<sub>z</sub><sup>2</sup>)</em>
-                        </div>
+                        $$SD=\sqrt{{SD_{\text{x}}}^{2}+{SD_{\text{y}}}^{2}+{SD_{\text{z}}}^{2}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1659,14 +1572,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>AR = <div class="fraction">
-                                     <span class="fup">a</span>
-                                     <span class="fdn">b</span>
-                                   </div></em>
-                        </div>
-                      </td>
+                      <td>$$AR=\frac{a}{b}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1721,9 +1627,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation"><em>w<sub>TNT</sub> = w&#8239;TNT</em></div>
-                      </td>
+                      <td>$${w_{TNT}}=w TNT$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1772,11 +1676,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>P<sub>b</sub> = 1&minus;e<sup>&minus;B</sup></em>
-                        </div>
-                      </td>
+                      <td>$${P_{\text{b}}}=1-e^{-B}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1834,9 +1734,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation"><em>LR = NFL&#8239;GTF&#8239;LSF</em></div>
-                      </td>
+                      <td>$$LR=NFL GTF LSF$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1893,11 +1791,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>q = interpY("TSD.txt",SD,w<sub>TNT</sub>)</em>
-                        </div>
-                      </td>
+                      <td>$$q=interpY\left(\text{``TSD.txt''},SD,{w_{TNT}}\right)$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1971,12 +1865,8 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation">
-                          <em>P<sub>b</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation">
-                          <em>P<sub>btol</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
+                        $${P_{\text{b}}}\gt{}0$$
+                        $${P_{\text{b}\text{tol}}}\gt{}0$$
                       </td>
                     </tr>
                     <tr>
@@ -1985,11 +1875,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>is-safePb = P<sub>b</sub>&thinsp;&lt;&thinsp;P<sub>btol</sub></em>
-                        </div>
-                      </td>
+                      <td>$$is-safePb={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2052,8 +1938,8 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation"><em>LR&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation"><em>q&thinsp;&gt;&thinsp;0</em></div>
+                        $$LR\gt{}0$$
+                        $$q\gt{}0$$
                       </td>
                     </tr>
                     <tr>
@@ -2062,11 +1948,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>is-safeLR = LR&thinsp;&gt;&thinsp;q</em>
-                        </div>
-                      </td>
+                      <td>$$is-safeLR=LR\gt{}q$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>

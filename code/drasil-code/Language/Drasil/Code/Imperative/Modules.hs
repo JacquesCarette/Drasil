@@ -294,7 +294,7 @@ genSampleInput :: (AuxiliarySym repr) => Reader State [repr (Auxiliary repr)]
 genSampleInput = do
   g <- ask
   dd <- genDataDesc
-  return [sampleInput (sysinfodb $ csi $ codeSpec g) dd | SampleInput `elem` 
+  return [sampleInput (sysinfodb $ csi $ codeSpec g) dd (sampleData g) | SampleInput `elem` 
     auxiliaries g]
 
 ----- OUTPUT -------

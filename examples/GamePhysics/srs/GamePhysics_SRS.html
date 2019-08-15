@@ -4,14 +4,15 @@
     <link rel="stylesheet" type="text/css" href="GamePhysics_SRS.css">
     <title>Software Requirements Specification for Game Physics</title>
     <meta charset="utf-8">
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['$$','$$']]});</script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
   </head>
   <body>
     <div class="title">
       <h1>Software Requirements Specification for Game Physics</h1>
     </div>
     <div class="author">
-      <h2>Alex Halliwushka and Luthfi Mawarid</h2>
+      <h2>Alex Halliwushka, Luthfi Mawarid, and Olu Owojaiye</h2>
     </div>
     <div id="Sec:RefMat">
       <div class="section">
@@ -141,12 +142,12 @@
                 </tr>
                 <tr>
                   <td><em><b>I</b><sub>A</sub></em></td>
-                  <td>Moment of Inertia Of Rigid Body A</td>
+                  <td>Moment of Inertia of Rigid Body A</td>
                   <td>kg&sdot;m<sup>2</sup></td>
                 </tr>
                 <tr>
                   <td><em><b>I</b><sub>B</sub></em></td>
-                  <td>Moment of Inertia Of Rigid Body B</td>
+                  <td>Moment of Inertia of Rigid Body B</td>
                   <td>kg&sdot;m<sup>2</sup></td>
                 </tr>
                 <tr>
@@ -171,7 +172,7 @@
                 </tr>
                 <tr>
                   <td><em>M</em></td>
-                  <td>Total Mass of the Rigid Body</td>
+                  <td>Mass of the Larger Rigid Body</td>
                   <td>kg</td>
                 </tr>
                 <tr>
@@ -191,17 +192,22 @@
                 </tr>
                 <tr>
                   <td><em>m<sub>A</sub></em></td>
-                  <td>Mass Of Rigid Body A</td>
+                  <td>Mass of Rigid Body A</td>
                   <td>kg</td>
                 </tr>
                 <tr>
                   <td><em>m<sub>B</sub></em></td>
-                  <td>Mass Of Rigid Body B</td>
+                  <td>Mass of Rigid Body B</td>
                   <td>kg</td>
                 </tr>
                 <tr>
                   <td><em>m<sub>j</sub></em></td>
-                  <td>Mass Of the J-Th Particle</td>
+                  <td>Mass of the J-Th Particle</td>
+                  <td>kg</td>
+                </tr>
+                <tr>
+                  <td><em>m<sub>T</sub></em></td>
+                  <td>Total Mass of the Rigid Body</td>
                   <td>kg</td>
                 </tr>
                 <tr>
@@ -283,32 +289,32 @@
                 </tr>
                 <tr>
                   <td><em><b>v</b><sup>AP</sup></em></td>
-                  <td>Velocity Of the Point of Collision P in Body A</td>
+                  <td>Velocity of the Point of Collision P in Body A</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
                   <td><em><b>v</b><sup>BP</sup></em></td>
-                  <td>Velocity Of the Point of Collision P in Body B</td>
+                  <td>Velocity of the Point of Collision P in Body B</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>1</sub></em></td>
-                  <td>Velocity Of the First Body</td>
+                  <td>Velocity of the First Body</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>2</sub></em></td>
-                  <td>Velocity Of the Second Body</td>
+                  <td>Velocity of the Second Body</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>A</sub></em></td>
-                  <td>Velocity At Point A</td>
+                  <td>Velocity at Point A</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>B</sub></em></td>
-                  <td>Velocity At Point B</td>
+                  <td>Velocity at Point B</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
@@ -318,7 +324,7 @@
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>i</sub></em></td>
-                  <td>Velocity Of the I-Th Body's Velocity</td>
+                  <td>Velocity of the I-Th Body's Velocity</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
@@ -328,7 +334,7 @@
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>O</sub></em></td>
-                  <td>Velocity At Point Origin</td>
+                  <td>Velocity at Point Origin</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
@@ -344,14 +350,14 @@
                 <tr>
                   <td><em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em></td>
                   <td>
-                    Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body A
+                    Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body A
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em></td>
                   <td>
-                    Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body B
+                    Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body B
                   </td>
                   <td>m</td>
                 </tr>
@@ -614,7 +620,7 @@
                     Rigid body: A solid body in which deformation is neglected.
                   </li>
                   <li>
-                    Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.
+                    Elasticity: The ratio of the relative velocities of two colliding objects after and before a collision.
                   </li>
                   <li>
                     Centre of mass: The mean location of the distribution of mass of the object.
@@ -719,9 +725,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation"><em><b>F</b> = m&#8239;<b>a</b></em></div>
-                      </td>
+                      <td>$$\mathbf{F}=m \mathbf{a}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -763,11 +767,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em><b>F</b><sub>1</sub> = &minus;<b>F</b><sub>2</sub></em>
-                        </div>
-                      </td>
+                      <td>$${\mathbf{F}_{1}}=-{\mathbf{F}_{2}}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -815,28 +815,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>F</b> = G&#8239;<div class="fraction">
-                                                   <span class="fup">
-                                                     m<sub>1</sub>&#8239;m<sub>2</sub>
-                                                   </span>
-                                                   <span class="fdn">||<b>r</b>||<sup>2</sup></span>
-                                                 </div>&#8239;<b>r&#770;</b> = G&#8239;<div class="fraction">
-                                                                                         <span class="fup">
-                                                                                           m<sub>1</sub>&#8239;m<sub>2</sub>
-                                                                                         </span>
-                                                                                         <span class="fdn">
-                                                                                           ||<b>r</b>||<sup>2</sup>
-                                                                                         </span>
-                                                                                       </div>&#8239;<div class="fraction">
-                                                                                                      <span class="fup">
-                                                                                                        <b>r</b>
-                                                                                                      </span>
-                                                                                                      <span class="fdn">
-                                                                                                        ||<b>r</b>||
-                                                                                                      </span>
-                                                                                                    </div></em>
-                        </div>
+                        $$\mathbf{F}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{r}\text{||}^{2}} \frac{\mathbf{r}}{\text{||}\mathbf{r}\text{||}}$$
                       </td>
                     </tr>
                     <tr>
@@ -863,7 +842,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, <em>G</em> is the An empirical physical constant, used to show the force between two objects caused by gravity (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
+                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, <em>G</em> is the empirical physical constant used to show the force between two objects caused by gravity (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
                         </p>
                       </td>
                     </tr>
@@ -891,7 +870,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td><div class="equation"><em>τ = <b>I</b>&#8239;α</em></div></td>
+                      <td>$$τ=\mathbf{I} α$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -928,7 +907,64 @@
             <div id="Sec:GDs">
               <div class="subsubsection">
                 <h3>General Definitions</h3>
-                <p class="paragraph">There are no general definitions.</p>
+                <p class="paragraph">
+                  This section collects the laws and equations that will be used to build the instance models.
+                </p>
+                <div id="GD:accelGravity">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:accelGravity</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Acceleration due to gravity</p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">m/s<sup>2</sup></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        $$g=\frac{G M}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}$$
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+                          </li>
+                          <li>
+                            <em>G</em> is the gravitational constant (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>))
+                          </li>
+                          <li><em>M</em> is the mass of the larger rigid body (kg)</li>
+                          <li>
+                            <em>||<b>r</b>||</em> is the Euclidean norm of the displacement (m)
+                          </li>
+                          <li>
+                            <em><b>r&#770;</b></em> is the displacement unit vector (m)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href="https://en.wikipedia.org/wiki/Gravitational_acceleration">Definition of Gravitational Acceleration</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:DDs">
@@ -958,14 +994,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>p</b><sub>CM</sub> = <div class="fraction">
-                                                        <span class="fup">
-                                                          &sum;m<sub>j</sub>&#8239;<b>p</b><sub>j</sub>
-                                                        </span>
-                                                        <span class="fdn">M</span>
-                                                      </div></em>
-                        </div>
+                        $${\mathbf{p}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{{m_{T}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -979,7 +1008,9 @@
                           <li>
                             <em><b>p</b><sub>j</sub></em> is the position vector of the j-th particle (m)
                           </li>
-                          <li><em>M</em> is the total mass of the rigid body (kg)</li>
+                          <li>
+                            <em>m<sub>T</sub></em> is the total mass of the rigid body (kg)
+                          </li>
                         </ul>
                       </td>
                     </tr>
@@ -1026,12 +1057,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>r</b>(t) = <div class="fraction">
-                                              <span class="fup">&#8239;d<b>p</b>(t)</span>
-                                              <span class="fdn">&#8239;dt</span>
-                                            </div></em>
-                        </div>
+                        $$\mathbf{r}\text{(}t\text{)}=\frac{\,d\mathbf{p}\left(t\right)}{\,dt}$$
                       </td>
                     </tr>
                     <tr>
@@ -1088,12 +1114,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b>(t) = <div class="fraction">
-                                              <span class="fup">&#8239;d<b>r</b>(t)</span>
-                                              <span class="fdn">&#8239;dt</span>
-                                            </div></em>
-                        </div>
+                        $$\mathbf{v}\text{(}t\text{)}=\frac{\,d\mathbf{r}\left(t\right)}{\,dt}$$
                       </td>
                     </tr>
                     <tr>
@@ -1150,12 +1171,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>a</b>(t) = <div class="fraction">
-                                              <span class="fup">&#8239;d<b>v</b>(t)</span>
-                                              <span class="fdn">&#8239;dt</span>
-                                            </div></em>
-                        </div>
+                        $$\mathbf{a}\text{(}t\text{)}=\frac{\,d\mathbf{v}\left(t\right)}{\,dt}$$
                       </td>
                     </tr>
                     <tr>
@@ -1213,14 +1229,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>θ = <div class="fraction">
-                                    <span class="fup">&#8239;dϕ(t)</span>
-                                    <span class="fdn">&#8239;dt</span>
-                                  </div></em>
-                        </div>
-                      </td>
+                      <td>$$θ=\frac{\,dϕ\left(t\right)}{\,dt}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1273,14 +1282,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>ω = <div class="fraction">
-                                    <span class="fup">&#8239;dθ(t)</span>
-                                    <span class="fdn">&#8239;dt</span>
-                                  </div></em>
-                        </div>
-                      </td>
+                      <td>$$ω=\frac{\,dθ\left(t\right)}{\,dt}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1333,14 +1335,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>α = <div class="fraction">
-                                    <span class="fup">&#8239;dω(t)</span>
-                                    <span class="fdn">&#8239;dt</span>
-                                  </div></em>
-                        </div>
-                      </td>
+                      <td>$$α=\frac{\,dω\left(t\right)}{\,dt}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1394,36 +1389,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>j = <div class="fraction">
-                                    <span class="fup">
-                                      &minus;(1&plus;C<sub>R</sub>)&#8239;<b>v</b><sub>i</sub><sup>AB</sup>&sdot;<b>n</b>
-                                    </span>
-                                    <span class="fdn">
-                                      (<div class="fraction">
-                                         <span class="fup">1</span>
-                                         <span class="fdn">m<sub>A</sub></span>
-                                       </div>&plus;<div class="fraction">
-                                                     <span class="fup">1</span>
-                                                     <span class="fdn">m<sub>B</sub></span>
-                                                   </div>)&#8239;||<b>n</b>||<sup>2</sup>&plus;<div class="fraction">
-                                                                                                 <span class="fup">
-                                                                                                   ||<b>r</b><sub>AP</sub>*<b>n</b>||<sup>2</sup>
-                                                                                                 </span>
-                                                                                                 <span class="fdn">
-                                                                                                   <b>I</b><sub>A</sub>
-                                                                                                 </span>
-                                                                                               </div>&plus;<div class="fraction">
-                                                                                                             <span class="fup">
-                                                                                                               ||<b>r</b><sub>BP</sub>*<b>n</b>||<sup>2</sup>
-                                                                                                             </span>
-                                                                                                             <span class="fdn">
-                                                                                                               <b>I</b><sub>B</sub>
-                                                                                                             </span>
-                                                                                                           </div>
-                                    </span>
-                                  </div></em>
-                        </div>
+                        $$j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1477,7 +1443,17 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
+                <div id="DD:impulseDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of impulse (scalar):</h4>
+                    <p class="paragraph">Newton's second law of motion states:</p>
+                    $$\mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}$$
+                    <p class="paragraph">Rearranging :</p>
+                    $$\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)$$
+                    <p class="paragraph">Integrating the right hand side :</p>
+                    $$\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}$$
+                  </div>
+                </div>
                 <div id="DD:chaslesThm">
                   <table class="ddefn">
                     <tr>
@@ -1499,9 +1475,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b><sub>B</sub> = <b>v</b><sub>O</sub>&plus;ω&#10799;<b>r</b><sub>OB</sub></em>
-                        </div>
+                        $${\mathbf{v}_{\text{B}}}={\mathbf{v}_{\text{O}}}+ω\times{\mathbf{r}_{\text{O}\text{B}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1562,9 +1536,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation"><em>τ = <b>r</b>&#10799;<b>F</b></em></div>
-                      </td>
+                      <td>$$τ=\mathbf{r}\times\mathbf{F}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1615,14 +1587,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>KE = <div class="fraction">
-                                     <span class="fup">m&#8239;<b>v</b><sup>2</sup></span>
-                                     <span class="fdn">2</span>
-                                   </div></em>
-                        </div>
-                      </td>
+                      <td>$$KE=\frac{m \mathbf{v}^{2}}{2}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1679,16 +1644,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>C<sub>R</sub> = &minus;(<div class="fraction">
-                                                        <span class="fup">
-                                                          <b>v</b><sub>f</sub><sup>AB</sup>&sdot;<b>n</b>
-                                                        </span>
-                                                        <span class="fdn">
-                                                          <b>v</b><sub>i</sub><sup>AB</sup>&sdot;<b>n</b>
-                                                        </span>
-                                                      </div>)</em>
-                        </div>
+                        $${C_{\text{R}}}=-\left(\frac{{{\mathbf{v}_{\text{f}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{{{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -1754,9 +1710,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b><sub>i</sub><sup>AB</sup> = <b>v</b><sup>AP</sup>&minus;<b>v</b><sup>BP</sup></em>
-                        </div>
+                        $${{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}={\mathbf{v}^{\text{A}\text{P}}}-{\mathbf{v}^{\text{B}\text{P}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1814,9 +1768,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation"><em><b>J</b> = m&#8239;Δ<b>v</b></em></div>
-                      </td>
+                      <td>$$\mathbf{J}=m Δ\mathbf{v}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1851,22 +1803,11 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of impulse (vector):</h4>
                     <p class="paragraph">Newton's second law of motion states:</p>
-                    <div class="equation">
-                      <em><b>F</b> = m&#8239;<b>a</b> = m&#8239;<div class="fraction">
-                                                                  <span class="fup">
-                                                                    &#8239;d<b>v</b>
-                                                                  </span>
-                                                                  <span class="fdn">&#8239;dt</span>
-                                                                </div></em>
-                    </div>
+                    $$\mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}$$
                     <p class="paragraph">Rearranging :</p>
-                    <div class="equation">
-                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;(&int;<sub><b>v</b><sub>1</sub></sub><sup><b>v</b><sub>2</sub></sup>1&#8239;d<b>v</b>)</em>
-                    </div>
+                    $$\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)$$
                     <p class="paragraph">Integrating the right hand side :</p>
-                    <div class="equation">
-                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;<b>v</b><sub>2</sub>&minus;m&#8239;<b>v</b><sub>1</sub> = m&#8239;Δ<b>v</b></em>
-                    </div>
+                    $$\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}$$
                   </div>
                 </div>
                 <div id="DD:potEnergy">
@@ -1889,9 +1830,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation"><em>PE = m&#8239;g&#8239;h</em></div>
-                      </td>
+                      <td>$$PE=m g h$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1950,11 +1889,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em><b>I</b> = &sum;m<sub>j</sub>&#8239;r<sub>j</sub><sup>2</sup></em>
-                        </div>
-                      </td>
+                      <td>$$\mathbf{I}=\displaystyle\sum{{m_{j}} {r_{j}}^{2}}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2032,17 +1967,11 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b><sub>i</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation"><em>t&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation"><em>g&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation">
-                          <em><b>F</b><sub>i</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation">
-                          <em>m<sub>j</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
+                        $${\mathbf{v}_{i}}\gt{}0$$
+                        $$t\gt{}0$$
+                        $$g\gt{}0$$
+                        $${\mathbf{F}_{i}}\gt{}0$$
+                        $${m_{j}}\gt{}0$$
                       </td>
                     </tr>
                     <tr>
@@ -2052,21 +1981,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>a</b><sub>i</sub> = <div class="fraction">
-                                                       <span class="fup">
-                                                         &#8239;d<b>v</b><sub>i</sub>(t)
-                                                       </span>
-                                                       <span class="fdn">&#8239;dt</span>
-                                                     </div> = g&plus;<div class="fraction">
-                                                                       <span class="fup">
-                                                                         <b>F</b><sub>i</sub>(t)
-                                                                       </span>
-                                                                       <span class="fdn">
-                                                                         m<sub>j</sub>
-                                                                       </span>
-                                                                     </div></em>
-                        </div>
+                        $${\mathbf{a}_{i}}=\frac{\,d{\mathbf{v}_{i}}\left(t\right)}{\,dt}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -2140,32 +2055,20 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation"><em>ω&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation"><em>t&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation">
-                          <em>τ<sub>i</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation"><em><b>I</b>&thinsp;&gt;&thinsp;0</em></div>
+                        $$ω\gt{}0$$
+                        $$t\gt{}0$$
+                        $${τ_{i}}\gt{}0$$
+                        $$\mathbf{I}\gt{}0$$
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>
-                        <div class="equation"><em>α&thinsp;&gt;&thinsp;0</em></div>
-                      </td>
+                      <td>$$α\gt{}0$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>α = <div class="fraction">
-                                    <span class="fup">&#8239;dω(t)</span>
-                                    <span class="fdn">&#8239;dt</span>
-                                  </div> = <div class="fraction">
-                                             <span class="fup">τ<sub>i</sub>(t)</span>
-                                             <span class="fdn"><b>I</b></span>
-                                           </div></em>
-                        </div>
+                        $$α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}$$
                       </td>
                     </tr>
                     <tr>
@@ -2228,38 +2131,23 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation"><em>t&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation"><em>j&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation">
-                          <em>m<sub>A</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation"><em><b>n</b>&thinsp;&gt;&thinsp;0</em></div>
+                        $$t\gt{}0$$
+                        $$j\gt{}0$$
+                        $${m_{\text{A}}}\gt{}0$$
+                        $$\mathbf{n}\gt{}0$$
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b><sub>A</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation">
-                          <em>t<sub>c</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
+                        $${\mathbf{v}_{\text{A}}}\gt{}0$$
+                        $${t_{\text{c}}}\gt{}0$$
                       </td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b><sub>A</sub>(t<sub>c</sub>) = <b>v</b><sub>A</sub>(t)&plus;<div class="fraction">
-                                                                                                   <span class="fup">
-                                                                                                     j
-                                                                                                   </span>
-                                                                                                   <span class="fdn">
-                                                                                                     m<sub>A</sub>
-                                                                                                   </span>
-                                                                                                 </div>&#8239;<b>n</b></em>
-                        </div>
+                        $${\mathbf{v}_{\text{A}}}\left({t_{\text{c}}}\right)={\mathbf{v}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}} \mathbf{n}$$
                       </td>
                     </tr>
                     <tr>
@@ -2383,12 +2271,7 @@
                       <td>
                         <em>0&thinsp;&le;&thinsp;ϕ&thinsp;&le;&thinsp;2&#8239;π</em>
                       </td>
-                      <td>
-                        <em><div class="fraction">
-                              <span class="fup">π</span>
-                              <span class="fdn">2</span>
-                            </div></em> rad
-                      </td>
+                      <td><em>$\frac{π}{2}$</em> rad</td>
                       <td>10<em>%</em></td>
                     </tr>
                   </table>
@@ -2833,6 +2716,16 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#GD:accelGravity>GD: accelGravity</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#IM:transMot>IM: transMot</a></td>
               <td>X</td>
               <td>X</td>
@@ -3133,12 +3026,14 @@
               <th><a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a></th>
               <th><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></th>
               <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
+              <th><a href=#GD:accelGravity>GD: accelGravity</a></th>
               <th><a href=#IM:transMot>IM: transMot</a></th>
               <th><a href=#IM:rotMot>IM: rotMot</a></th>
               <th><a href=#IM:col2D>IM: col2D</a></th>
             </tr>
             <tr>
               <td><a href=#DD:ctrOfMass>DD: ctrOfMass</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3188,9 +3083,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:linVel>DD: linVel</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3240,9 +3137,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:angDisp>DD: angDisp</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3292,9 +3191,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:angAccel>DD: angAccel</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3344,9 +3245,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:chaslesThm>DD: chaslesThm</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3396,9 +3299,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:kEnergy>DD: kEnergy</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3448,9 +3353,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:reVeInColl>DD: reVeInColl</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3500,9 +3407,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:potEnergy>DD: potEnergy</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3552,9 +3461,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3604,9 +3515,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3656,6 +3569,34 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:accelGravity>GD: accelGravity</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:transMot>IM: transMot</a></td>
@@ -3663,6 +3604,7 @@
               <td>X</td>
               <td>X</td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3708,6 +3650,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:col2D>IM: col2D</a></td>
@@ -3719,6 +3662,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3764,6 +3708,7 @@
               <th><a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a></th>
               <th><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></th>
               <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
+              <th><a href=#GD:accelGravity>GD: accelGravity</a></th>
               <th><a href=#IM:transMot>IM: transMot</a></th>
               <th><a href=#IM:rotMot>IM: rotMot</a></th>
               <th><a href=#IM:col2D>IM: col2D</a></th>
@@ -3797,6 +3742,7 @@
             </tr>
             <tr>
               <td><a href=#linearGS>GS: Determine-Linear-Properties</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3876,9 +3822,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#simSpace>FR: Simulation-Space</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3960,11 +3908,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#inputSurfaceProps>FR: Input-Surface-Properties</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4046,11 +3996,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#calcTransOverTime>FR: Calculate-Translation-Over-Time</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4132,9 +4084,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#deterColls>FR: Determine-Collisions</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4216,9 +4170,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#highPerformance>NFR: High-Performance</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4298,9 +4254,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#understandable>NFR: Understandable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4380,9 +4338,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#reliable>NFR: Reliable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4462,9 +4422,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

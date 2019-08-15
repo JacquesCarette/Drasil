@@ -9,9 +9,10 @@ import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
   mass_1, mass_2, sqrDist)
 
 import Data.Drasil.Concepts.Documentation (constant)
+import Data.Drasil.Concepts.Math (vector)
 import Data.Drasil.Concepts.Physics (rigidBody, twoD)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.Physics (angularAccel, displacement,
+import Data.Drasil.Quantities.Physics (angularAccel, displacement, distance,
   force, gravitationalConst, momentOfInertia, torque)
 import Data.Drasil.Theories.Physics (newtonSL)
 
@@ -73,6 +74,9 @@ newtonLUGNotes = map foldlSent [
    getTandS force, S "that is directly proportional to the product of their",
    plural mass `sC` ch mass_1 `sAnd` ch mass_2 `sC` EmptyS `sAnd`
    S "inversely proportional" `toThe` getTandS sqrDist, S "between them"],
+  [S "The", phrase vector, ch displacement `isThe` phrase displacement,
+   S "between", S "centres" `ofThe` plural rigidBody `sAnd` ch dispNorm `isThe`
+   S "absolute", phrase distance, S "between the two"],
   [ch dispUnit `sIs` S "equivalent" `toThe` phrase displacement,
    S "divided by the", phrase dispNorm `sC` S "as shown above"]]
 

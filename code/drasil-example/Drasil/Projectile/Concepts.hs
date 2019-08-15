@@ -10,13 +10,10 @@ import Data.Drasil.Concepts.Physics (position, speed)
 
 concepts :: [IdeaDict]
 concepts = map nw [landingPos, launch, launchAngle, launchSpeed, offset, targetPos]
-  ++ map nw defs ++ map nw messages
+  ++ map nw defs
 
 defs :: [ConceptChunk]
 defs = [launcher, projectile, target]
-
-messages :: [ConceptChunk]
-messages = [hitMessage, shortMessage, longMessage]
 
 projectileTitle :: CI
 projectileTitle = commonIdeaWithDict "projectileTitle" (pn "Projectile") "Projectile" [physics]
@@ -33,12 +30,9 @@ launchSpeed = compoundNC launch speed
 targetPos   = compoundNC target position
 
 ---
-hitMessage, launcher, longMessage, projectile, shortMessage, target :: ConceptChunk
-launcher   = dcc "launcher"   (nounPhraseSP "launcher")  ("Where the projectile is launched from " ++
-                                                          "and the device that does the launching.")
-projectile = dcc "projectile" (nounPhraseSP "projectile") "The object to be launched at the target."
-target     = dcc "target"     (nounPhraseSP "target")     "Where the projectile should be launched to."
 
-hitMessage   = dcc "hitMessage"   (nounPhraseSP "hit")   "The target was hit."
-shortMessage = dcc "shortMessage" (nounPhraseSP "short") "The projectile fell short."
-longMessage  = dcc "longMessage"  (nounPhraseSP "long")  "The projectile went long."
+launcher, projectile, target :: ConceptChunk
+launcher   = dcc "launcher"   (nounPhraseSP "launcher")  ("where the projectile is launched from " ++
+                                                          "and the device that does the launching")
+projectile = dcc "projectile" (nounPhraseSP "projectile") "the object to be launched at the target"
+target     = dcc "target"     (nounPhraseSP "target")     "where the projectile should be launched to"

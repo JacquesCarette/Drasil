@@ -80,7 +80,7 @@ newtonLUGDesc = foldlSent [S "Two", plural CP.rigidBody, S "in the universe",
   S "attract each other with a", phrase QP.force, 
   ch QP.force, sParen $ Sy $ unit_symb QP.force,
   S "that is directly proportional to the product of their",
-  plural QPP.mass `sC` ch mass_1, S "and",
+  plural QPP.mass `sC` ch mass_1 `sAnd`
   ch mass_2, sParen (Sy $ unit_symb QPP.mass) `sC` S "and",
   S "inversely proportional to the", phrase sqrDist,
   ch sqrDist, sParen $ Sy $ unit_symb sqrDist,
@@ -93,9 +93,8 @@ newtonLUGDesc = foldlSent [S "Two", plural CP.rigidBody, S "in the universe",
   ch dispUnit, S "denotes the", phrase dispUnit `sC`
   S "equivalent to the", phrase QP.displacement,
   S "divided by the" +:+. (phrase dispNorm `sC`
-  S "as shown above"), S "Finally" `sC` ch QP.gravitationalConst, 
-  S "is the", QP.gravitationalConst ^. defn, 
-  sParen $ Sy $ unit_symb QP.gravitationalConst]
+  S "as shown above"), S "Finally" `sC` ch QP.gravitationalConst `sIs`
+  (QP.gravitationalConst ^. defn), sParen $ Sy $ unit_symb QP.gravitationalConst]
 
 -- T4 : Newton's second law for rotational motion --
 

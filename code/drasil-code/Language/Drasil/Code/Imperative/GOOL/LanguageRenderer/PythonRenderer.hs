@@ -48,7 +48,7 @@ import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.GOOL.Helpers (blank, vibcat, emptyIfEmpty, 
   liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
   liftPairFst, getInnerType, convType, checkParams)
-import Language.Drasil.Code.Imperative.Input (makeInputFile)
+import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)

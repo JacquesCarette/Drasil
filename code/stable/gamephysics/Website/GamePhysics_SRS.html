@@ -11,7 +11,7 @@
       <h1>Software Requirements Specification for Game Physics</h1>
     </div>
     <div class="author">
-      <h2>Alex Halliwushka and Luthfi Mawarid</h2>
+      <h2>Alex Halliwushka, Luthfi Mawarid, and Olu Owojaiye</h2>
     </div>
     <div id="Sec:RefMat">
       <div class="section">
@@ -171,7 +171,7 @@
                 </tr>
                 <tr>
                   <td><em>M</em></td>
-                  <td>Total Mass of the Rigid Body</td>
+                  <td>Mass of the Larger Rigid Body</td>
                   <td>kg</td>
                 </tr>
                 <tr>
@@ -202,6 +202,11 @@
                 <tr>
                   <td><em>m<sub>j</sub></em></td>
                   <td>Mass of the J-Th Particle</td>
+                  <td>kg</td>
+                </tr>
+                <tr>
+                  <td><em>m<sub>T</sub></em></td>
+                  <td>Total Mass of the Rigid Body</td>
                   <td>kg</td>
                 </tr>
                 <tr>
@@ -928,7 +933,69 @@
             <div id="Sec:GDs">
               <div class="subsubsection">
                 <h3>General Definitions</h3>
-                <p class="paragraph">There are no general definitions.</p>
+                <p class="paragraph">
+                  This section collects the laws and equations that will be used to build the instance models.
+                </p>
+                <div id="GD:accelGravity">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:accelGravity</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Acceleration due to gravity</p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">m/s<sup>2</sup></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        <div class="equation">
+                          <em>g = <div class="fraction">
+                                    <span class="fup">G&#8239;M</span>
+                                    <span class="fdn">||<b>r</b>||<sup>2</sup></span>
+                                  </div>&#8239;<b>r&#770;</b></em>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+                          </li>
+                          <li>
+                            <em>G</em> is the gravitational constant (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>))
+                          </li>
+                          <li><em>M</em> is the mass of the larger rigid body (kg)</li>
+                          <li>
+                            <em>||<b>r</b>||</em> is the Euclidean norm of the displacement (m)
+                          </li>
+                          <li>
+                            <em><b>r&#770;</b></em> is the displacement unit vector (m)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href="https://en.wikipedia.org/wiki/Gravitational_acceleration">Definition of Gravitational Acceleration</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:DDs">
@@ -963,7 +1030,7 @@
                                                         <span class="fup">
                                                           &sum;m<sub>j</sub>&#8239;<b>p</b><sub>j</sub>
                                                         </span>
-                                                        <span class="fdn">M</span>
+                                                        <span class="fdn">m<sub>T</sub></span>
                                                       </div></em>
                         </div>
                       </td>
@@ -979,7 +1046,9 @@
                           <li>
                             <em><b>p</b><sub>j</sub></em> is the position vector of the j-th particle (m)
                           </li>
-                          <li><em>M</em> is the total mass of the rigid body (kg)</li>
+                          <li>
+                            <em>m<sub>T</sub></em> is the total mass of the rigid body (kg)
+                          </li>
                         </ul>
                       </td>
                     </tr>
@@ -1477,7 +1546,28 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
+                <div id="DD:impulseDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of impulse (scalar):</h4>
+                    <p class="paragraph">Newton's second law of motion states:</p>
+                    <div class="equation">
+                      <em><b>F</b> = m&#8239;<b>a</b> = m&#8239;<div class="fraction">
+                                                                  <span class="fup">
+                                                                    &#8239;d<b>v</b>
+                                                                  </span>
+                                                                  <span class="fdn">&#8239;dt</span>
+                                                                </div></em>
+                    </div>
+                    <p class="paragraph">Rearranging :</p>
+                    <div class="equation">
+                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;(&int;<sub><b>v</b><sub>1</sub></sub><sup><b>v</b><sub>2</sub></sup>1&#8239;d<b>v</b>)</em>
+                    </div>
+                    <p class="paragraph">Integrating the right hand side :</p>
+                    <div class="equation">
+                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;<b>v</b><sub>2</sub>&minus;m&#8239;<b>v</b><sub>1</sub> = m&#8239;Δ<b>v</b></em>
+                    </div>
+                  </div>
+                </div>
                 <div id="DD:chaslesThm">
                   <table class="ddefn">
                     <tr>
@@ -2833,6 +2923,16 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#GD:accelGravity>GD: accelGravity</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#IM:transMot>IM: transMot</a></td>
               <td>X</td>
               <td>X</td>
@@ -3133,12 +3233,14 @@
               <th><a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a></th>
               <th><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></th>
               <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
+              <th><a href=#GD:accelGravity>GD: accelGravity</a></th>
               <th><a href=#IM:transMot>IM: transMot</a></th>
               <th><a href=#IM:rotMot>IM: rotMot</a></th>
               <th><a href=#IM:col2D>IM: col2D</a></th>
             </tr>
             <tr>
               <td><a href=#DD:ctrOfMass>DD: ctrOfMass</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3188,9 +3290,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:linVel>DD: linVel</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3240,9 +3344,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:angDisp>DD: angDisp</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3292,9 +3398,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:angAccel>DD: angAccel</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3344,9 +3452,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:chaslesThm>DD: chaslesThm</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3396,9 +3506,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:kEnergy>DD: kEnergy</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3448,9 +3560,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:reVeInColl>DD: reVeInColl</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3500,9 +3614,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:potEnergy>DD: potEnergy</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3552,9 +3668,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3604,9 +3722,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3656,6 +3776,34 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:accelGravity>GD: accelGravity</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:transMot>IM: transMot</a></td>
@@ -3663,6 +3811,7 @@
               <td>X</td>
               <td>X</td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3708,6 +3857,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:col2D>IM: col2D</a></td>
@@ -3719,6 +3869,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3764,6 +3915,7 @@
               <th><a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a></th>
               <th><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></th>
               <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
+              <th><a href=#GD:accelGravity>GD: accelGravity</a></th>
               <th><a href=#IM:transMot>IM: transMot</a></th>
               <th><a href=#IM:rotMot>IM: rotMot</a></th>
               <th><a href=#IM:col2D>IM: col2D</a></th>
@@ -3797,6 +3949,7 @@
             </tr>
             <tr>
               <td><a href=#linearGS>GS: Determine-Linear-Properties</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3876,9 +4029,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#simSpace>FR: Simulation-Space</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3960,11 +4115,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#inputSurfaceProps>FR: Input-Surface-Properties</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4046,11 +4203,13 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td>
                 <a href=#calcTransOverTime>FR: Calculate-Translation-Over-Time</a>
               </td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4132,9 +4291,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#deterColls>FR: Determine-Collisions</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4216,9 +4377,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#highPerformance>NFR: High-Performance</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4298,9 +4461,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#understandable>NFR: Understandable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4380,9 +4545,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#reliable>NFR: Reliable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4462,9 +4629,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR: Maintainable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

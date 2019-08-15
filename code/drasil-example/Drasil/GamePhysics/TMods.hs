@@ -16,6 +16,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (angularAccel,
 import qualified Data.Drasil.Theories.Physics as TP (newtonSL)
 
 ----- Theoretical Models -----
+
 tMods :: [TheoryModel]
 tMods = [TP.newtonSL, newtonTL, newtonLUG, newtonSLR]
 
@@ -126,3 +127,4 @@ newtonSLRDesc = foldlSent [S "The net", phrase QP.torque,
   phrase CP.rigidBody, S "We also assume that all",
   plural CP.rigidBody, S "involved are two-dimensional",
   makeRef2S assumpOD]
+

@@ -36,6 +36,10 @@ dot, comm :: Doc -> Doc
 dot  = (<> text ".")
 comm = (<> text ",")
 
+-- For wrapping $ on both sides of a Doc
+dollarDoc :: Doc -> Doc
+dollarDoc x = dlr <> x <> dlr
+
 -- | basic plaintext (String) wrapping
 paren, brace, dollar, sqbrac, angbrac :: String -> String
 paren   x = "(" ++ x ++ ")"

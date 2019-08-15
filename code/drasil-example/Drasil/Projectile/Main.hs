@@ -22,7 +22,8 @@ choices = Choices {
   onSfwrConstraint = Warning,
   onPhysConstraint = Warning,
   inputStructure = Bundled,
-  inputModule = Separated
+  inputModule = Separated,
+  auxFiles = []
 }
 
 main :: IO()

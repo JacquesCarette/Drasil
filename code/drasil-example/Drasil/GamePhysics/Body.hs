@@ -5,7 +5,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
   _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb,
-  _usedinfodb)
+  _usedinfodb, sampleData)
 import Theory.Drasil (qdFromDD)
 import Utils.Drasil
 import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
@@ -120,7 +120,8 @@ si = SI {
   _constants = [],
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
-   refdb = refDB
+   refdb = refDB,
+   sampleData = "../../datafiles/GamePhysics/sampleInput.txt"
 }
   where qDefs = map qdFromDD dataDefs
 

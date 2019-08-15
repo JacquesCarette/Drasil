@@ -9,10 +9,10 @@ import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, a
   assumpCAJI)
 import Drasil.GamePhysics.Concepts (centreMass)
 import Drasil.GamePhysics.DataDefs (ctrOfMassDD, linDispDD, linVelDD, linAccDD,
-  angDispDD, angVelDD, angAccelDD, impulseDD, rigidTwoDAssump)
+  angDispDD, angVelDD, angAccelDD, impulseDD, rightHandAssump, rigidTwoDAssump)
 import Drasil.GamePhysics.GenDefs (accelGravityGD)
 import Drasil.GamePhysics.Goals (linearGS, angularGS)
-import Drasil.GamePhysics.TMods (newtonSL)
+import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
 import Drasil.GamePhysics.Unitals (accI, forceI, massA, massI, normalVect,
   timeC, torqueI, velA, velI)
 
@@ -31,7 +31,7 @@ iMods = [transMot, rotMot, col2D]
 transMot :: InstanceModel
 transMot = imNoDerivNoRefs transMotRC [qw velI, qw time, qw gravitationalAccel, qw forceI, qw massI] 
   [sy velI $> 0, sy time $> 0, sy gravitationalAccel $> 0, sy forceI $> 0, sy massI $> 0 ]
-  (qw accI) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, transMotAssumps]
+  (qw accI) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
 transMotRC :: RelationConcept
 transMotRC = makeRC "transMotRC" transMotNP EmptyS transMotRel
@@ -43,7 +43,7 @@ transMotRel :: Relation -- FIXME: add proper equation
 transMotRel = sy accI $= deriv (apply1 velI time) time
   $= sy gravitationalAccel + (apply1 forceI time / sy massI)
 
-transMotDesc, transMotOutputs, transMotAssumps :: Sentence
+transMotDesc, transMotOutputs :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses",
   (S "total" +:+ phrase acceleration) `ofThe` phrase rigidBody, P lI,
   S "as the sum" `sOf` phrase gravitationalAccel, fromSource accelGravityGD `sAnd`
@@ -58,9 +58,6 @@ transMotOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
  phrase velocity), S "The motion is translational" `sC` S "so the",
  phrase position `sAnd` phrase velocity, S "functions are for the",
  phrase centreMass, fromSource ctrOfMassDD]
-transMotAssumps = foldlSent [S "It is currently assumed that there is no damping",
-  S "occurs during the simulation", fromSource assumpDI `sAnd` S "that no", 
-  S "constraints are involved", fromSource assumpCAJI]
 
 {-- Rotational Motion --}
 
@@ -68,7 +65,7 @@ rotMot :: InstanceModel
 rotMot = imNoDerivNoRefs rotMotRC [qw angularVelocity, qw time, qw torqueI, qw momentOfInertia]
   [sy angularVelocity $> 0, sy time $> 0, sy torqueI $> 0, sy momentOfInertia $> 0] 
     (qw angularAccel) [sy angularAccel $> 0] "rotMot"
-  [rotMotDesc]
+  [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
 rotMotRC :: RelationConcept
 rotMotRC = makeRC "rotMotRC" rotMotNP EmptyS rotMotRel
@@ -81,15 +78,12 @@ rotMotRel = sy angularAccel $= deriv
   (apply1 angularVelocity time) time $= 
      (apply1 torqueI time / sy momentOfInertia)
 
---fixme: need referencing
 rotMotDesc :: Sentence
-rotMotDesc = foldlSent_ [S "The above equation for the total angular acceleration",
-  S "of the rigid body", makeRef2S assumpOT, makeRef2S assumpOD,
-  S "i is derived from T5, and the resultant outputs",
-  S "are then obtained from this equation using", makeRef2S angDispDD,
-  makeRef2S angVelDD +:+. makeRef2S angAccelDD, S "It is",
-  S "currently assumed that there is no damping", makeRef2S assumpDI,
-  S "or constraints", makeRef2S assumpCAJI +:+. S "involved", makeRef2S assumpAD]
+rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
+  (S "total" +:+ phrase angularAccel) `ofThe` phrase rigidBody, P lI `sIs`
+  S "derived from", makeRef2S newtonSLR `sC` EmptyS `andThe` S "resultant",
+  plural output_ `sAre` S "then obtained from this", phrase equation, S "using",
+  foldlList Comma List (map makeRef2S [angDispDD, angVelDD, angAccelDD])]
 
 {-- 2D Collision --}
 
@@ -148,3 +142,9 @@ instModIntro = foldlSent [S "The", phrase goal, makeRef2S linearGS,
   S "is met by" +:+. (makeRef2S transMot `sAnd` makeRef2S col2D),
   S "The", phrase goal, makeRef2S angularGS, S "is met by",
   makeRef2S rotMot `sAnd` makeRef2S col2D]
+
+{- Notes -}
+noDampConsAssumps :: Sentence
+noDampConsAssumps = foldlSent [S "It is currently assumed that there is no damping",
+  S "occurs during the simulation", fromSource assumpDI `sAnd` S "that no", 
+  S "constraints are involved", fromSource assumpCAJI]

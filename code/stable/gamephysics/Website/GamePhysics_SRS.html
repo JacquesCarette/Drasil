@@ -695,12 +695,12 @@
                   </p>
                   <p>
                     <div id="assumpDI">
-                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#lcID>LC: Include-Dampening</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
+                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#lcID>LC: Include-Dampening</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCAJI">
-                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#lcIJC>LC: Include-Joints-Constraints</a>, and <a href=#IM:col2D>IM: col2D</a>.)
+                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#lcIJC>LC: Include-Joints-Constraints</a>, and <a href=#IM:col2D>IM: col2D</a>.)
                     </div>
                   </p>
                 </div>
@@ -935,7 +935,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td><p class="paragraph"><a href=#IM:rotMot>IM: rotMot</a></p></td>
                     </tr>
                   </table>
                 </div>
@@ -2324,7 +2324,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation for the total angular acceleration of the rigid body <a href=#assumpOT>A: objectTy</a> <a href=#assumpOD>A: objectDimension</a> i is derived from T5, and the resultant outputs are then obtained from this equation using <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angAccel>DD: angAccel</a>. It is currently assumed that there is no damping <a href=#assumpDI>A: dampingInvolvement</a> or constraints <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a> involved. <a href=#assumpAD>A: axesDefined</a>
+                          The above equation for the total angular acceleration of the rigid body <em>i</em> is derived from <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>, and the resultant outputs are then obtained from this equation using <a href=#DD:angDisp>DD: angDisp</a>, <a href=#DD:angVel>DD: angVel</a>, and <a href=#DD:angAccel>DD: angAccel</a>.
+                        </p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
+                        </p>
+                        <p class="paragraph">
+                          A right-handed coordinate system is used (from <a href=#assumpAD>A: axesDefined</a>).
                         </p>
                       </td>
                     </tr>
@@ -2995,8 +3001,8 @@
               <td></td>
               <td>X</td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:col2D>IM: col2D</a></td>
@@ -3899,7 +3905,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

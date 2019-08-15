@@ -38,8 +38,7 @@ dataDefs = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
 -- DD1 : Centre of mass --
 
 ctrOfMassDD :: DataDefinition
-ctrOfMassDD = ddNoRefs ctrOfMass Nothing "ctrOfMass" 
-  [rigidTwoDAssump]
+ctrOfMassDD = ddNoRefs ctrOfMass Nothing "ctrOfMass" [rigidBodyAssump]
 
 ctrOfMass :: QDefinition
 ctrOfMass = mkQuantDef posCM ctrOfMassEqn
@@ -67,8 +66,7 @@ linDispQDef = foldl (+:+) (EmptyS) def
 -}
 
 linDispDD :: DataDefinition
-linDispDD = ddNoRefs linDisp Nothing "linDisp" 
-  [rigidTwoDAssump, noDampingAssump]
+linDispDD = ddNoRefs linDisp Nothing "linDisp" [rigidBodyAssump]
 
 linDisp :: QDefinition
 linDisp = mkQuantDef QP.linearDisplacement dispEqn
@@ -97,8 +95,7 @@ linVelQDef = foldl (+:+) (EmptyS) def
 -}
 
 linVelDD :: DataDefinition
-linVelDD = ddNoRefs linVel Nothing "linVel"
-  [rigidTwoDAssump, noDampingAssump]
+linVelDD = ddNoRefs linVel Nothing "linVel" [rigidBodyAssump]
 
 linVel :: QDefinition
 linVel = mkQuantDef QP.linearVelocity velEqn
@@ -116,8 +113,7 @@ dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
 -- DD4 : Linear acceleration --
 
 linAccDD :: DataDefinition
-linAccDD = ddNoRefs linAcc Nothing "linAcc"
-  [rigidTwoDAssump, noDampingAssump]
+linAccDD = ddNoRefs linAcc Nothing "linAcc" [rigidBodyAssump]
 
 linAcc :: QDefinition
 linAcc = mkQuantDef QP.linearAccel accelEqn
@@ -135,8 +131,7 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 -- DD5 : Angular displacement --
 
 angDispDD :: DataDefinition
-angDispDD = ddNoRefs angDisp Nothing "angDisp"
-  [rigidTwoDAssump, noDampingAssump]
+angDispDD = ddNoRefs angDisp Nothing "angDisp" [rigidTwoDAssump]
 
 angDisp :: QDefinition
 angDisp = mkQuantDef QP.angularDisplacement angDispEqn
@@ -154,8 +149,7 @@ dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
 -- DD6 : Angular velocity --
 
 angVelDD :: DataDefinition
-angVelDD = ddNoRefs angVel Nothing "angVel"
-  [rigidTwoDAssump, noDampingAssump]
+angVelDD = ddNoRefs angVel Nothing "angVel" [rigidTwoDAssump]
 
 angVel :: QDefinition
 angVel = mkQuantDef QP.angularVelocity angVelEqn
@@ -173,8 +167,7 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
 -- DD7 : Angular acceleration --
 -----------------------------------DD8 Angular Acceleration-------------------
 angAccelDD :: DataDefinition
-angAccelDD = ddNoRefs angAccel Nothing "angAccel"
-  [rigidTwoDAssump, noDampingAssump]
+angAccelDD = ddNoRefs angAccel Nothing "angAccel" [rigidTwoDAssump]
 
 angAccel :: QDefinition
 angAccel = mkQuantDef QP.angularAccel angAccelEqn

@@ -343,11 +343,11 @@ This section simplifies the original problem and helps in developing the theoret
 
 \begin{itemize}
 \item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[DD:chaslesThm]{DD: chaslesThm}, \hyperref[DD:reVeInColl]{DD: reVeInColl}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[DD:momentOfInertia]{DD: momentOfInertia}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulseV]{DD: impulseV}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
-\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
+\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]{The library uses a Cartesian coordinate system.}
 \item[axesDefined:\phantomsection\label{assumpAD}]{The axes are defined using right-handed coordinate system. (RefBy: \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:impulse]{DD: impulse}, and \hyperref[IM:col2D]{IM: col2D}.)}
 \item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[lcEC]{LC: Expanded-Collisions}, \hyperref[DD:impulse]{DD: impulse}, and \hyperref[IM:col2D]{IM: col2D}.)}
-\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[lcID]{LC: Include-Dampening}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
+\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[lcID]{LC: Include-Dampening}, \hyperref[DD:kEnergy]{DD: kEnergy}, and \hyperref[IM:col2D]{IM: col2D}.)}
 \item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]{There are no constraints and joints involved throughout the simulation. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[lcIJC]{LC: Include-Joints-Constraints}, and \hyperref[IM:col2D]{IM: col2D}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
@@ -560,7 +560,7 @@ Description & \begin{symbDescription}
               \item{${m_{T}}$ is the total mass of the rigid body (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}).
         
 \\ \midrule \\
 Source & --
@@ -599,9 +599,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{p}$ is the position (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
-        
-        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}).
         
 \\ \midrule \\
 Source & --
@@ -640,9 +638,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{r}$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
-        
-        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}).
         
 \\ \midrule \\
 Source & --
@@ -681,9 +677,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
-        
-        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
+Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}).
         
 \\ \midrule \\
 Source & --
@@ -724,8 +718,6 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
-        
 \\ \midrule \\
 Source & --
          
@@ -765,8 +757,6 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
-        
 \\ \midrule \\
 Source & --
          
@@ -805,8 +795,6 @@ Description & \begin{symbDescription}
               \end{symbDescription}
 \\ \midrule \\
 Notes & All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
-        
-        No damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}).
         
 \\ \midrule \\
 Source & --
@@ -1561,19 +1549,19 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \midrule
 \endhead
-\hyperref[DD:ctrOfMass]{DD: ctrOfMass} & X & X &  &  &  &  & 
+\hyperref[DD:ctrOfMass]{DD: ctrOfMass} & X &  &  &  &  &  & 
 \\
-\hyperref[DD:linDisp]{DD: linDisp} & X & X &  &  &  & X & 
+\hyperref[DD:linDisp]{DD: linDisp} & X &  &  &  &  &  & 
 \\
-\hyperref[DD:linVel]{DD: linVel} & X & X &  &  &  & X & 
+\hyperref[DD:linVel]{DD: linVel} & X &  &  &  &  &  & 
 \\
-\hyperref[DD:linAcc]{DD: linAcc} & X & X &  &  &  & X & 
+\hyperref[DD:linAcc]{DD: linAcc} & X &  &  &  &  &  & 
 \\
-\hyperref[DD:angDisp]{DD: angDisp} & X & X &  &  &  & X & 
+\hyperref[DD:angDisp]{DD: angDisp} & X & X &  &  &  &  & 
 \\
-\hyperref[DD:angVel]{DD: angVel} & X & X &  &  &  & X & 
+\hyperref[DD:angVel]{DD: angVel} & X & X &  &  &  &  & 
 \\
-\hyperref[DD:angAccel]{DD: angAccel} & X & X &  &  &  & X & 
+\hyperref[DD:angAccel]{DD: angAccel} & X & X &  &  &  &  & 
 \\
 \hyperref[DD:impulse]{DD: impulse} & X & X &  & X & X &  & 
 \\

@@ -2,14 +2,14 @@ module Data.Drasil.Citations where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
 import Data.Drasil.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem, 
-  pcClements, pjAgerfalk, spencerSmith, mCampidelli, dmWiess)
+  pcClements, pjAgerfalk, spencerSmith, mCampidelli, dmWiess, rodPierce)
 
 ---------------
 -- CITATIONS --
 ---------------
 
 campidelli, cartesianWiki, koothoor2013, parnas1972, parnasClements1984,
-  parnasClements1986, smithLai2005 :: Citation
+  parnasClements1986, smithLai2005, lineSource, pointSource :: Citation
 
 campidelli = cBooklet
   "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading"
@@ -54,6 +54,18 @@ smithLai2005 = cInProceedings [spencerSmith, lLai]
   , pages [107..121], 
   note "In conjunction with 13th IEEE International Requirements Engineering Conference,"] 
   "smithLai2005"
+
+lineSource = cMisc
+  [author [mononym "The Editors of Encyclopaedia Britannica"], title "Line",
+  howPublishedU "https://www.britannica.com/science/line-mathematics",
+  month Jun, year 2019]
+  "lineSource"
+
+pointSource = cMisc
+  [author [rodPierce], title "Point",
+  howPublishedU "https://www.mathsisfun.com/geometry/point.html",
+  month May, year 2017]
+  "pointSource"
 
 ------------------------
 -- COMMON CITE-FIELDS --

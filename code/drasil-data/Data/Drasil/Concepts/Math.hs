@@ -44,7 +44,7 @@ euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the
 gradient     = dcc "gradient"     (cn' "gradient")                "degree of steepness of a graph at any point"
 graph        = dcc "graph"        (cn' "graph")                   "A diagram showing the relation between variable quantities"
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
-line         = dccWDS "line"      (pn' "Line")                    $ S "An interval between two points" +:+.
+line         = dccWDS "line"      (pn' "Line")                    $ S "An interval between two points" +:+
                                                                   sParen (S "from" +:+ makeRef2S lineSource)
 matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                  "is treated as a single entity and manipulated according to particular rules")
@@ -56,7 +56,7 @@ parameter   = dcc "parameter"    (cn' "parameter")               "a quantity who
 --FIXME: Should "parameter" be in math?
 perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
 pi_          = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "The ratio of a circle's circumference to its diameter"
-point        = dccWDS "point"     (pn' "Point")                   $ S "An exact location, it has no size, only position" +:+.
+point        = dccWDS "point"     (pn' "Point")                   $ S "An exact location, it has no size, only position" +:+
                                                                   sParen (S "from" +:+ makeRef2S pointSource)
 probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"

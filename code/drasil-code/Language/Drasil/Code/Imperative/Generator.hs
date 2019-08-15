@@ -2,10 +2,11 @@ module Language.Drasil.Code.Imperative.Generator (
   State(..), generator, generateCode
 ) where
 
+import Language.Drasil
 import Language.Drasil.Code.Imperative.GenerateGOOL (genDoxConfig)
 import Language.Drasil.Code.Imperative.Import (genModDef)
 import Language.Drasil.Code.Imperative.Modules (chooseInModule, genMain, 
-  genOutputMod)
+  genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   ProgramSym(..), RenderSym(..), AuxiliarySym(..))
@@ -18,8 +19,8 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..),
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Control.Monad.Reader (Reader, ask, runReader)
 
-generator :: String -> Choices -> CodeSpec -> State
-generator dt chs spec = State {
+generator :: String -> [Expr] -> Choices -> CodeSpec -> State
+generator dt sd chs spec = State {
   -- constants
   codeSpec = spec,
   date = showDate $ dates chs,
@@ -27,6 +28,8 @@ generator dt chs spec = State {
   inMod = inputModule chs,
   logKind  = logging chs,
   commented = comments chs,
+  auxiliaries = auxFiles chs,
+  sampleData = sd,
   -- state
   currentModule = "",
 
@@ -56,8 +59,9 @@ genPackage = do
   p <- genProgram
   let n = case codeSpec g of CodeSpec {program = pr} -> programName pr
       m = makefile (commented g) p
+  i <- genSampleInput
   d <- genDoxConfig n p
-  return $ package p (m:d)
+  return $ package p (m:i++d)
 
 genProgram :: (ProgramSym repr) => Reader State (repr (Program repr))
 genProgram = do

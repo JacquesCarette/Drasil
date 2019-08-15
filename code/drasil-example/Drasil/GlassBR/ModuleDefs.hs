@@ -7,7 +7,7 @@ module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
-  asExpr, funcDef, fdec, ffor, funcData, 
+  asExpr, funcDef, fdec, ffor, funcData, quantvar, 
   multiLine, packmod, repeated, singleLine)
 
 allMods :: [Mod]
@@ -28,8 +28,8 @@ readTableMod = packmod "ReadTable"
 readTable :: Func
 readTable = funcData "read_table"
   "Reads glass ASTM data from a file with the given file name"
-  [ singleLine (repeated [zVector]) ',',
-    multiLine (repeated [xMatrix, yMatrix]) ','
+  [ singleLine (repeated [quantvar zVector]) ',',
+    multiLine (repeated (map quantvar [xMatrix, yMatrix])) ','
   ]
 
 -----

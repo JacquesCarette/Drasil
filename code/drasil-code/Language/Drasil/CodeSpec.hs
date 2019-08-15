@@ -4,7 +4,7 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil
 import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
   _authors, _constants, _constraints, _datadefs, _definitions, _inputs,
-  _outputs, _quants, _sys, _sysinfodb)
+  _outputs, _quants, _sys, _sysinfodb, sampleData)
 import Language.Drasil.Development (dep, names', namesRI)
 import Theory.Drasil (DataDefinition, qdFromDD)
 
@@ -49,7 +49,8 @@ data CodeSystInfo where
   cMap :: ConstraintMap,
   constants :: [Const],
   mods :: [Mod],  -- medium hack
-  sysinfodb :: ChunkDB
+  sysinfodb :: ChunkDB,
+  smplData :: FilePath
   } -> CodeSystInfo
 
 data CodeSpec where
@@ -83,7 +84,8 @@ codeSpec SI {_sys = sys
               , _outputs = outs
               , _constraints = cs
               , _constants = consts
-              , _sysinfodb = db} chs ms = 
+              , _sysinfodb = db
+              , sampleData = sd} chs ms = 
   let inputs' = map quantvar ins
       const' = map qtov consts
       derived = getDerivedInputs ddefs defs' inputs' const' db
@@ -104,7 +106,8 @@ codeSpec SI {_sys = sys
         mods = prefixFunctions $ packmod "Calculations" 
           "Provides functions for calculating the outputs" 
           (map FCD exOrder) : ms,
-        sysinfodb = db
+        sysinfodb = db,
+        smplData = sd
       }
   in  CodeSpec {
         program = sys,
@@ -127,7 +130,8 @@ data Choices = Choices {
   onSfwrConstraint :: ConstraintBehaviour,
   onPhysConstraint :: ConstraintBehaviour,
   inputStructure :: Structure,
-  inputModule :: InputModule
+  inputModule :: InputModule,
+  auxFiles :: [AuxFile]
 }
 
 data ImplementationType = Library
@@ -150,6 +154,8 @@ data Structure = Unbundled
 
 data InputModule = Combined
                  | Separated
+
+data AuxFile = SampleInput deriving Eq
              
 data Visibility = Show
                 | Hide
@@ -165,7 +171,8 @@ defaultChoices = Choices {
   onSfwrConstraint = Exception,
   onPhysConstraint = Warning,
   inputStructure = Bundled,
-  inputModule = Combined
+  inputModule = Combined,
+  auxFiles = [SampleInput]
 }
 
 type Name = String

@@ -42,19 +42,17 @@ TEMPLATE_EXE = template
 # and the associated per-example information generated
 GEN_E_SUFFIX = _gen
 TEST_E_SUFFIX = _diff
-MOVE_DF_E_SUFFIX = _prog
 TEX_E_SUFFIX = _tex
 CODE_E_SUFFIX = _code
 DCP_E_SUFFIX = _deploy_code_path
 
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
 TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES))
-MOVE_DF_EXAMPLES =  $(addsuffix $(MOVE_DF_E_SUFFIX), $(SRC_EXAMPLES))
 TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(SRC_EXAMPLES))
 DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
 
-EXAMPLE_GEN_TARGET = GEN TEST MOVE_DF TEX CODE DCP
+EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
 GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(DEPLOY_FOLDER_NAME)
 CLEAN_GF_PREFIX = clean_
@@ -128,7 +126,7 @@ $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): %$(GEN_E_SUFFI
 	- $(DIFF) "stable/$*/" $(BUILD_FOLDER)$(EDIR)/ > $(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX) 2>&1
 
 # actually run the tests
-test: $(MOVE_DF_EXAMPLES) $(TEST_EXAMPLES)
+test: $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------
@@ -145,16 +143,6 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack
 graphs: $(GRAPH_PACKAGES)
 ###
 
-%$(MOVE_DF_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(MOVE_DF_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
-$(filter %$(MOVE_DF_E_SUFFIX), $(MOVE_DF_EXAMPLES)): %$(MOVE_DF_E_SUFFIX): %$(GEN_E_SUFFIX)
-	test -d $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)python && cp ./datafiles/$(EDIR)/*.txt $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)python/
-	test -d $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)java && cp ./datafiles/$(EDIR)/*.txt $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)java/
-	test -d $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)csharp && cp ./datafiles/$(EDIR)/*.txt $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)csharp/
-	test -d $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)cpp && cp ./datafiles/$(EDIR)/*.txt $(BUILD_FOLDER)$(EDIR)/$(EXAMPLE_CODE_SUBFOLDER)cpp/
-
-prog: $(MOVE_DF_EXAMPLES)
-
 # use stack to build the documentation too
 $(filter %$(DOC_P_SUFFIX), $(DOC_PACKAGES)): %$(DOC_P_SUFFIX): check_stack
 	stack haddock "drasil-$*" $(haddockArgs)
@@ -170,7 +158,7 @@ tex: $(TEX_EXAMPLES)
 
 %$(CODE_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
-$(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(MOVE_DF_E_SUFFIX)
+$(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFIX)
 	@EDIR=$(EDIR) BUILD_FOLDER=$(BUILD_FOLDER) EXAMPLE_CODE_SUBFOLDER=$(EXAMPLE_CODE_SUBFOLDER) MAKE="$(MAKE)" "$(SHELL)" $(SCRIPT_FOLDER)code_build.sh
 
 code: $(CODE_EXAMPLES)

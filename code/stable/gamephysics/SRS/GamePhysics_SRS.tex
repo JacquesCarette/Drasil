@@ -1282,7 +1282,7 @@ Notes & The above equation expresses the total acceleration of the rigid body $i
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
-        It is currently assumed that there is no damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}) and that no constraints are involved (from \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement}).
+        It is currently assumed that no damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}) and that no constraints are involved (from \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement}).
         
 \\ \midrule \\
 Source & --
@@ -1404,7 +1404,17 @@ Description & \begin{symbDescription}
               \item{$\mathbf{n}$ is the collision normal vector (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & This instance model is based on our assumptions regarding rigid body \hyperref[assumpOT]{A: objectTy} \hyperref[assumpOD]{A: objectDimension} collisions \hyperref[assumpCT]{A: collisionType} Again, this does not take damping \hyperref[assumpDI]{A: dampingInvolvement} or constraints \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} into account. \hyperref[assumpAD]{A: axesDefined}. \hyperref[DD:ctrOfMass]{DD: ctrOfMass} \hyperref[DD:impulse]{DD: impulse}
+Notes & The output of the instance model will be the functions of position, velocity, orientation, and angular acceleration over time that satisfy the equations for the velocity and angular acceleration, with the given initial conditions for position, velocity, orientation, and angular acceleration. The motion is translational, so the position, velocity, orientation, and angular acceleration functions are for the centre of mass (from \hyperref[DD:ctrOfMass]{DD: ctrOfMass}).
+        
+        All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
+        
+        A right-handed coordinate system is used (from \hyperref[assumpAD]{A: axesDefined}).
+        
+        All collisions are vertex-to-edge (from \hyperref[assumpCT]{A: collisionType}).
+        
+        It is currently assumed that no damping occurs during the simulation (from \hyperref[assumpDI]{A: dampingInvolvement}) and that no constraints are involved (from \hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement}).
+        
+        $j$ is defined in \hyperref[DD:impulse]{DD: impulse}.
         
 \\ \midrule \\
 Source & --

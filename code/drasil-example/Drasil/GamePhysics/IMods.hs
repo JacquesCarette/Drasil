@@ -5,11 +5,11 @@ import Language.Drasil.ShortHands (lI)
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs)
 import Utils.Drasil
 
-import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
-  assumpCAJI)
+import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
 import Drasil.GamePhysics.Concepts (centreMass)
 import Drasil.GamePhysics.DataDefs (ctrOfMassDD, linDispDD, linVelDD, linAccDD,
-  angDispDD, angVelDD, angAccelDD, impulseDD, rightHandAssump, rigidTwoDAssump)
+  angDispDD, angVelDD, angAccelDD, impulseDD, collisionAssump, rightHandAssump,
+  rigidTwoDAssump)
 import Drasil.GamePhysics.GenDefs (accelGravityGD)
 import Drasil.GamePhysics.Goals (linearGS, angularGS)
 import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
@@ -21,6 +21,7 @@ import Data.Drasil.IdeaDicts (inModel)
 import Data.Drasil.Concepts.Documentation (condition, goal, output_)
 import Data.Drasil.Concepts.Math (equation, ode)
 import Data.Drasil.Concepts.Physics (rigidBody)
+import Data.Drasil.Quantities.Math (orientation)
 import Data.Drasil.Quantities.Physics (acceleration, angularAccel, angularVelocity,
   force, gravitationalAccel, impulseS, momentOfInertia, position, time, velocity)
 
@@ -91,7 +92,8 @@ col2D :: InstanceModel
 col2D = imNoDerivNoRefs col2DRC [qw time, qw impulseS, qw massA, qw normalVect] 
   [sy time $> 0, sy impulseS $> 0, sy massA $> 0, sy normalVect $> 0]
   (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
-  [col2DDesc]
+  [col2DOutputs, rigidTwoDAssump, rightHandAssump, collisionAssump,
+    noDampConsAssumps, impulseNote]
 
 col2DRC :: RelationConcept
 col2DRC = makeRC "col2DRC" col2DNP EmptyS col2DRel
@@ -114,15 +116,16 @@ col2DRel = apply1 velA timeC $= apply1 velA time +
 --im3Rel4 = (apply1 angVelB timeC) $= (apply1 angVelB time) -
 --  ((sy dispUnit) * ((sy impulseS) * (sy normalVect))) / (sy momentOfInertia)
 
---fixme: need referencing
-col2DDesc :: Sentence
-col2DDesc = foldlSent_ [S "This instance model is based on our assumptions",
-  S "regarding rigid body", makeRef2S assumpOT, makeRef2S assumpOD,
-  S "collisions", makeRef2S assumpCT, S "Again, this does not take",
-  S "damping", makeRef2S assumpDI, S "or constraints",
-  makeRef2S assumpCAJI +:+. S "into account" +:+. makeRef2S assumpAD,
-  makeRef2S ctrOfMassDD, makeRef2S impulseDD]
-
+col2DOutputs, impulseNote :: Sentence
+col2DOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
+  S "will be the functions" `sOf` vals,  S "over time that satisfy the",
+  plural equation, S "for the", phrase velocity `sAnd` phrase angularAccel `sC`
+  S "with the given initial", plural condition, S "for" +:+. vals, S
+  "The motion is translational" `sC` S "so the", vals, S "functions are for the",
+  phrase centreMass, fromSource ctrOfMassDD]
+    where vals = foldlList Comma List (map phrase [position, velocity,
+                                                   orientation, angularAccel])
+impulseNote = ch impulseDD +:+ S "is defined in" +:+. makeRef2S impulseDD
 
 {--S "Ik is the moment of inertia of the k-th rigid body (kg m2)",
   S "t is a point in time, t0 denotes the initial time" `sC` 
@@ -145,6 +148,6 @@ instModIntro = foldlSent [S "The", phrase goal, makeRef2S linearGS,
 
 {- Notes -}
 noDampConsAssumps :: Sentence
-noDampConsAssumps = foldlSent [S "It is currently assumed that there is no damping",
+noDampConsAssumps = foldlSent [S "It is currently assumed that no damping",
   S "occurs during the simulation", fromSource assumpDI `sAnd` S "that no", 
   S "constraints are involved", fromSource assumpCAJI]

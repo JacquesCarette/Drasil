@@ -2232,7 +2232,7 @@
                           All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
                         </p>
                         <p class="paragraph">
-                          It is currently assumed that there is no damping occurs during the simulation (from <a href=#assumpDI>A: dampingInvolvement</a>) and that no constraints are involved (from <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a>).
+                          It is currently assumed that no damping occurs during the simulation (from <a href=#assumpDI>A: dampingInvolvement</a>) and that no constraints are involved (from <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a>).
                         </p>
                       </td>
                     </tr>
@@ -2425,7 +2425,22 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          This instance model is based on our assumptions regarding rigid body <a href=#assumpOT>A: objectTy</a> <a href=#assumpOD>A: objectDimension</a> collisions <a href=#assumpCT>A: collisionType</a> Again, this does not take damping <a href=#assumpDI>A: dampingInvolvement</a> or constraints <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a> into account. <a href=#assumpAD>A: axesDefined</a>. <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:impulse>DD: impulse</a>
+                          The output of the instance model will be the functions of position, velocity, orientation, and angular acceleration over time that satisfy the equations for the velocity and angular acceleration, with the given initial conditions for position, velocity, orientation, and angular acceleration. The motion is translational, so the position, velocity, orientation, and angular acceleration functions are for the centre of mass (from <a href=#DD:ctrOfMass>DD: ctrOfMass</a>).
+                        </p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
+                        </p>
+                        <p class="paragraph">
+                          A right-handed coordinate system is used (from <a href=#assumpAD>A: axesDefined</a>).
+                        </p>
+                        <p class="paragraph">
+                          All collisions are vertex-to-edge (from <a href=#assumpCT>A: collisionType</a>).
+                        </p>
+                        <p class="paragraph">
+                          It is currently assumed that no damping occurs during the simulation (from <a href=#assumpDI>A: dampingInvolvement</a>) and that no constraints are involved (from <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a>).
+                        </p>
+                        <p class="paragraph">
+                          <em>j</em> is defined in <a href=#DD:impulse>DD: impulse</a>.
                         </p>
                       </td>
                     </tr>

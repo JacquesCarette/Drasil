@@ -30,9 +30,9 @@ public class Calculations {
         return Math.log(Math.log(1 / (1 - inParams.P_btol)) * (Math.pow(inParams.a * inParams.b, 7.0 - 1) / (2.86e-53 * Math.pow(7.17e10 * Math.pow(inParams.h, 2), 7.0) * inParams.LDF)));
     }
     
-    /** \brief Calculates applied load (demand) (Pa)
+    /** \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
         \param inParams structure holding the input values
-        \return applied load (demand) (Pa)
+        \return applied load (demand): 3 second duration equivalent pressure (Pa)
     */
     public static double func_q(InputParameters inParams) throws Exception {
         PrintWriter outfile;
@@ -48,7 +48,7 @@ public class Calculations {
     
     /** \brief Calculates dimensionless load
         \param inParams structure holding the input values
-        \param q applied load (demand) (Pa)
+        \param q applied load (demand): 3 second duration equivalent pressure (Pa)
         \return dimensionless load
     */
     public static double func_q_hat(InputParameters inParams, double q) throws Exception {
@@ -106,10 +106,10 @@ public class Calculations {
         return Interpolation.func_interpZ("SDF.txt", inParams.AR, q_hat);
     }
     
-    /** \brief Calculates non-factored load (Pa)
+    /** \brief Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
         \param inParams structure holding the input values
         \param q_hat_tol tolerable load
-        \return non-factored load (Pa)
+        \return non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
     */
     public static double func_NFL(InputParameters inParams, double q_hat_tol) throws Exception {
         PrintWriter outfile;
@@ -146,10 +146,10 @@ public class Calculations {
         return 2.86e-53 / Math.pow(inParams.a * inParams.b, 7.0 - 1) * Math.pow(7.17e10 * Math.pow(inParams.h, 2), 7.0) * inParams.LDF * Math.exp(J);
     }
     
-    /** \brief Calculates load resistance (Pa)
+    /** \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
         \param inParams structure holding the input values
-        \param NFL non-factored load (Pa)
-        \return load resistance (Pa)
+        \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
+        \return load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
     */
     public static double func_LR(InputParameters inParams, double NFL) throws Exception {
         PrintWriter outfile;
@@ -166,10 +166,10 @@ public class Calculations {
         return NFL * inParams.GTF * 1;
     }
     
-    /** \brief Calculates variable that is assigned true when load resistance (capacity) is greater than load (demand)
-        \param LR load resistance (Pa)
-        \param q applied load (demand) (Pa)
-        \return variable that is assigned true when load resistance (capacity) is greater than load (demand)
+    /** \brief Calculates 3 second load equivalent resistance safety requirement
+        \param LR load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
+        \param q applied load (demand): 3 second duration equivalent pressure (Pa)
+        \return 3 second load equivalent resistance safety requirement
     */
     public static Boolean func_is_safeLR(double LR, double q) throws Exception {
         PrintWriter outfile;
@@ -186,9 +186,9 @@ public class Calculations {
         return LR > q;
     }
     
-    /** \brief Calculates probability of breakage
+    /** \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
         \param B risk of failure
-        \return probability of breakage
+        \return probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     */
     public static double func_P_b(double B) throws Exception {
         PrintWriter outfile;
@@ -202,10 +202,10 @@ public class Calculations {
         return 1 - Math.exp(-B);
     }
     
-    /** \brief Calculates variable that is assigned true when calculated probability is less than tolerable probability
+    /** \brief Calculates probability of glass breakage safety requirement
         \param inParams structure holding the input values
-        \param P_b probability of breakage
-        \return variable that is assigned true when calculated probability is less than tolerable probability
+        \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
+        \return probability of glass breakage safety requirement
     */
     public static Boolean func_is_safePb(InputParameters inParams, double P_b) throws Exception {
         PrintWriter outfile;

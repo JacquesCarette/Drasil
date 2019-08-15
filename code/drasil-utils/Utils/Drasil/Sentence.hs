@@ -1,4 +1,4 @@
-module Utils.Drasil.Sentence (andIts, andThe, isExpctdToHv, isThe, ofGiv,
+module Utils.Drasil.Sentence (andIts, andThe, inThe, isExpctdToHv, isThe, ofGiv,
   ofGiv', ofThe, ofThe', sOf, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe) where
 
 import Language.Drasil
@@ -6,11 +6,12 @@ import Language.Drasil
 sentHelper :: String -> Sentence -> Sentence -> Sentence
 sentHelper inStr a b = a +:+ S inStr +:+ b
 
-andIts, andThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, ofThe', sOf, sOr,
-  sVersus, sAnd, sAre, sIn, sIs, toThe :: Sentence -> Sentence -> Sentence
+andIts, andThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, ofThe', sOf,
+  sOr, sVersus, sAnd, sAre, sIn, sIs, toThe :: Sentence -> Sentence -> Sentence
 
 andIts  = sentHelper "and its"
 andThe  = sentHelper "and the"
+inThe   = sentHelper "in the"
 isThe   = sentHelper "is the"
 sAnd    = sentHelper "and"
 sAre    = sentHelper "are"

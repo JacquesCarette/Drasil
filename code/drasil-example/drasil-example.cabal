@@ -201,6 +201,7 @@ executable gamephysics
     , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
+    , Drasil.GamePhysics.GenDefs
     , Drasil.GamePhysics.Goals
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals

@@ -1,44 +1,37 @@
-module Drasil.GamePhysics.TMods (tMods, t2NewtonTL_new, 
-t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, tModsNew) where
+module Drasil.GamePhysics.TMods (tMods) where
 
 import Language.Drasil
-import Prelude hiding (id)
 import Control.Lens ((^.))
 import Theory.Drasil (TheoryModel, tmNoRefs)
 import Utils.Drasil
 
-import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD)
+import Drasil.GamePhysics.Assumptions (assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
-  mass_1, mass_2, rOB, sqrDist, velB, velO)
+  mass_1, mass_2, sqrDist)
 
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
-  angularVelocity, displacement, force, gravitationalConst, 
-  momentOfInertia, torque, velocity)
-import qualified Data.Drasil.Theories.Physics as TP (newtonSL, newtonSLRC)
+  displacement, force, gravitationalConst, momentOfInertia, torque)
+import qualified Data.Drasil.Theories.Physics as TP (newtonSL)
 
 ----- Theoretical Models -----
 
-tMods :: [RelationConcept]
-tMods = [TP.newtonSLRC, newtonTL, newtonLUG, chaslesThm, newtonSLR]
-
-tModsNew :: [TheoryModel]
-tModsNew = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new, 
-  t4ChaslesThm_new, t5NewtonSLR_new]
+tMods :: [TheoryModel]
+tMods = [TP.newtonSL, newtonTL, newtonLUG, newtonSLR]
 
 -- T1 : Newton's second law of motion --
 
 -- T2 : Newton's third law of motion --
 
-t2NewtonTL_new :: TheoryModel
-t2NewtonTL_new = tmNoRefs (cw newtonTL)
+newtonTL :: TheoryModel
+newtonTL = tmNoRefs (cw newtonTLRC)
   [qw force_1, qw force_2] ([] :: [ConceptChunk])
   [] [sy force_1 $= negate (sy force_2)] []
   "NewtonThirdLawMot" [newtonTLDesc]
 
-newtonTL :: RelationConcept
-newtonTL = makeRC "newtonTL" (nounPhraseSP "Newton's third law of motion")
+newtonTLRC :: RelationConcept
+newtonTLRC = makeRC "newtonTLRC" (nounPhraseSP "Newton's third law of motion")
   newtonTLDesc newtonTLRel
 
 newtonTLRel :: Relation
@@ -55,8 +48,8 @@ newtonTLDesc = foldlSent [S "Every action has an equal and opposite reaction. In
 
 -- T3 : Newton's law of universal gravitation --
 
-t3NewtonLUG_new :: TheoryModel
-t3NewtonLUG_new = tmNoRefs (cw newtonLUG)
+newtonLUG :: TheoryModel
+newtonLUG = tmNoRefs (cw newtonLUGRC)
   [qw QP.force, qw QP.gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [ConceptChunk])
   [] [sy QP.force $= sy QP.gravitationalConst * (sy mass_1 * 
@@ -65,8 +58,8 @@ t3NewtonLUG_new = tmNoRefs (cw newtonLUG)
   $^ 2)) * (sy QP.displacement / sy dispNorm)] []
   "UniversalGravLaw" [newtonLUGDesc]
 
-newtonLUG :: RelationConcept
-newtonLUG = makeRC "newtonLUG" 
+newtonLUGRC :: RelationConcept
+newtonLUGRC = makeRC "newtonLUGRC" 
   (nounPhraseSP "Newton's law of universal gravitation") newtonLUGDesc newtonLUGRel
 
 newtonLUGRel :: Relation
@@ -88,7 +81,7 @@ newtonLUGDesc = foldlSent [S "Two", plural CP.rigidBody, S "in the universe",
   S "attract each other with a", phrase QP.force, 
   ch QP.force, sParen $ Sy $ unit_symb QP.force,
   S "that is directly proportional to the product of their",
-  plural QPP.mass `sC` ch mass_1, S "and",
+  plural QPP.mass `sC` ch mass_1 `sAnd`
   ch mass_2, sParen (Sy $ unit_symb QPP.mass) `sC` S "and",
   S "inversely proportional to the", phrase sqrDist,
   ch sqrDist, sParen $ Sy $ unit_symb sqrDist,
@@ -101,51 +94,19 @@ newtonLUGDesc = foldlSent [S "Two", plural CP.rigidBody, S "in the universe",
   ch dispUnit, S "denotes the", phrase dispUnit `sC`
   S "equivalent to the", phrase QP.displacement,
   S "divided by the" +:+. (phrase dispNorm `sC`
-  S "as shown above"), S "Finally" `sC` ch QP.gravitationalConst, 
-  S "is the", QP.gravitationalConst ^. defn, 
-  sParen $ Sy $ unit_symb QP.gravitationalConst]
+  S "as shown above"), S "Finally" `sC` ch QP.gravitationalConst `sIs`
+  (QP.gravitationalConst ^. defn), sParen $ Sy $ unit_symb QP.gravitationalConst]
 
--- T4 : Chasles' theorem --
+-- T4 : Newton's second law for rotational motion --
 
-t4ChaslesThm_new :: TheoryModel
-t4ChaslesThm_new = tmNoRefs (cw chaslesThm)
-  [qw velB, qw velO, qw QP.angularVelocity, qw rOB] 
-  ([] :: [ConceptChunk]) [] [sy velB $= sy velO + cross 
-  (sy  QP.angularVelocity) (sy rOB)] [] "ChaslesThm" [chaslesThmDesc]
-
-chaslesThm :: RelationConcept
-chaslesThm = makeRC "chaslesThm" (nounPhraseSP "Chasles' theorem")
-  chaslesThmDesc chaslesThmRel
-
--- Need the cross product symbol - third term should be a cross product.
-chaslesThmRel :: Relation
-chaslesThmRel = sy velB $= sy velO + cross (sy  QP.angularVelocity) (sy rOB)
-
--- B should ideally be italicized in 'point B' (line 202).
-chaslesThmDesc :: Sentence
-chaslesThmDesc = foldlSent [S "The linear", phrase QP.velocity,
-  ch velB, sParen $ Sy $ unit_symb velB, S "of any point B in a",
-  phrase CP.rigidBody, makeRef2S assumpOT, S "is the sum of the linear",
-  phrase QP.velocity, ch velO,
-  sParen $ Sy $ unit_symb velO, S "of the", phrase CP.rigidBody,
-  S "at the origin (axis of rotation) and the",
-  S "resultant vector from the cross product of the",
-  phrase CP.rigidBody :+: S "'s", phrase QP.angularVelocity,
-  ch QP.angularVelocity,
-  sParen $ Sy $ unit_symb QP.angularVelocity, S "and the",
-  phrase rOB `sC` ch rOB,
-  sParen $ Sy $ unit_symb rOB]
-
--- T5 : Newton's second law for rotational motion --
-
-t5NewtonSLR_new :: TheoryModel
-t5NewtonSLR_new = tmNoRefs (cw newtonSLR)
+newtonSLR :: TheoryModel
+newtonSLR = tmNoRefs (cw newtonSLRRC)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [] [sy QP.torque $= sy QP.momentOfInertia
   * sy QP.angularAccel] [] "NewtonSecLawRotMot" [newtonSLRDesc]
 
-newtonSLR :: RelationConcept
-newtonSLR = makeRC "newtonSLR" 
+newtonSLRRC :: RelationConcept
+newtonSLRRC = makeRC "newtonSLRRC" 
   (nounPhraseSP "Newton's second law for rotational motion") newtonSLRDesc newtonSLRRel
 
 newtonSLRRel :: Relation
@@ -167,4 +128,3 @@ newtonSLRDesc = foldlSent [S "The net", phrase QP.torque,
   plural CP.rigidBody, S "involved are two-dimensional",
   makeRef2S assumpOD]
 
-  

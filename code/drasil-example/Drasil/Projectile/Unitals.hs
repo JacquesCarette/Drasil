@@ -81,25 +81,27 @@ unitHelper sym substr = sub sym $ Label substr
 
 landPosConcept :: ConceptChunk
 landPosConcept = cc' landingPos
-  (foldlSent [S "The", phrase distance, S "from the", phrase launcher, S "to",
+  (foldlSent_ [S "the", phrase distance, S "from the", phrase launcher, S "to",
             (S "final" +:+ phrase position) `ofThe` phrase projectile])
 
 launAngleConcept :: ConceptChunk
 launAngleConcept = cc' launchAngle
-  (foldlSent [S "The", phrase angle, S "between the", phrase launcher `sAnd` S "a straight line",
+  (foldlSent_ [S "the", phrase angle, S "between the", phrase launcher `sAnd` S "a straight line",
              S "from the", phrase launcher `toThe` phrase target])
 
 launSpeedConcept :: ConceptChunk
-launSpeedConcept = cc' launchSpeed (phrase iSpeed `ofThe'` phrase projectile +:+. S "when launched")
+launSpeedConcept = cc' launchSpeed (phrase iSpeed `ofThe` phrase projectile +:+ S "when launched")
 
 offsetConcept :: ConceptChunk
-offsetConcept = cc' C.offset (S "The offset between the" +:+. (phrase targetPos `andThe` phrase landingPos))
+offsetConcept = cc' C.offset (S "the offset between the" +:+ phrase targetPos `andThe` phrase landingPos)
 
 targPosConcept :: ConceptChunk
-targPosConcept = cc' targetPos $ foldlSent [S "The", phrase distance, S "from the", phrase launcher `toThe` phrase target]
+targPosConcept = cc' targetPos
+  (foldlSent_ [S "the", phrase distance, S "from the", phrase launcher `toThe` phrase target])
 
 flightDurConcept :: ConceptChunk
-flightDurConcept = cc' C.flightDur $ foldlSent [S "The", phrase time, S "when the", phrase projectile, S "lands"]
+flightDurConcept = cc' C.flightDur
+  (foldlSent_ [S "the", phrase time, S "when the", phrase projectile, S "lands"])
 
 ---
 message :: QuantityDict

@@ -1,9 +1,9 @@
 {-# LANGUAGE GADTs #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers
-module Language.Drasil.Sentence (Sentence(Ch, Sy, S, E, Quote, (:+:), EmptyS,
-  P, Ref, Percent),sParen, sDash, (+:+), sC, (+:+.), (+:), ch, SentenceStyle(..),
-  sentenceShort, sentenceSymb, sentenceTerm, sentencePlural) where
+module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
+  (+:+.), (+:), capSent, ch, sC, sDash, sentencePlural, sentenceShort,
+  sentenceSymb, sentenceTerm, sParen) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Expr (Expr)
@@ -14,6 +14,8 @@ import Language.Drasil.UID (UID)
 
 import Control.Lens ((^.))
 
+import Data.Char (toUpper)
+
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
 -- - units (their visual representation)
@@ -21,10 +23,10 @@ import Control.Lens ((^.))
 -- - special characters
 -- - accented letters
 -- - References to specific layout objects
-data SentenceStyle = ShortStyle
+data SentenceStyle = PluralTerm
                    | SymbolStyle
                    | TermStyle
-                   | PluralTerm
+                   | ShortStyle
 
 infixr 5 :+:
 data Sentence where
@@ -53,17 +55,11 @@ instance Monoid Sentence where
   mempty = EmptyS
   mappend = (:+:)
 
-sentenceShort :: UID ->Sentence
-sentenceShort = Ch ShortStyle
-
-sentenceSymb :: UID ->Sentence
-sentenceSymb = Ch SymbolStyle
-
-sentenceTerm :: UID ->Sentence
-sentenceTerm = Ch TermStyle
-
-sentencePlural :: UID ->Sentence
+sentencePlural, sentenceShort, sentenceSymb, sentenceTerm :: UID -> Sentence
 sentencePlural = Ch PluralTerm
+sentenceShort  = Ch ShortStyle
+sentenceSymb   = Ch SymbolStyle
+sentenceTerm   = Ch TermStyle
 
 -- | Helper for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
@@ -92,3 +88,11 @@ a +:+. b = a +:+ b :+: S "."
 -- the end.
 (+:) :: Sentence -> Sentence -> Sentence
 a +: b = a +:+ b :+: S ":"
+
+-- | Capitalizes a Sentence.
+capSent :: Sentence -> Sentence
+capSent (S (s:ss)) = S (toUpper s : ss)
+--capSent (phrase x) = atStart x
+--capSent (plural x) = atStart' x
+capSent (a :+: b)  = capSent a :+: b
+capSent x          = x

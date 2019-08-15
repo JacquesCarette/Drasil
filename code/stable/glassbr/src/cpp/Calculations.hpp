@@ -49,10 +49,10 @@ double func_q_hat_tol(InputParameters &inParams, double J_tol);
 */
 double func_J(InputParameters &inParams, double q_hat);
 
-/** \brief Calculates non-factored load: Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass. (Pa)
+/** \brief Calculates non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
     \param inParams structure holding the input values
     \param q_hat_tol tolerable load
-    \return non-factored load: Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass. (Pa)
+    \return non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
 */
 double func_NFL(InputParameters &inParams, double q_hat_tol);
 
@@ -63,29 +63,29 @@ double func_NFL(InputParameters &inParams, double q_hat_tol);
 */
 double func_B(InputParameters &inParams, double J);
 
-/** \brief Calculates load resistance: The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009. (Pa)
+/** \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
     \param inParams structure holding the input values
-    \param NFL non-factored load: Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass. (Pa)
-    \return load resistance: The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009. (Pa)
+    \param NFL non-factored load: three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass (Pa)
+    \return load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
 */
 double func_LR(InputParameters &inParams, double NFL);
 
 /** \brief Calculates 3 second load equivalent resistance safety requirement
-    \param LR load resistance: The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009. (Pa)
+    \param LR load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
     \param q applied load (demand): 3 second duration equivalent pressure (Pa)
     \return 3 second load equivalent resistance safety requirement
 */
 bool func_is_safeLR(double LR, double q);
 
-/** \brief Calculates probability of breakage: The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016).
+/** \brief Calculates probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     \param B risk of failure
-    \return probability of breakage: The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016).
+    \return probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
 */
 double func_P_b(double B);
 
 /** \brief Calculates probability of glass breakage safety requirement
     \param inParams structure holding the input values
-    \param P_b probability of breakage: The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016).
+    \param P_b probability of breakage: the fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000 (Ref: astm2016)
     \return probability of glass breakage safety requirement
 */
 bool func_is_safePb(InputParameters &inParams, double P_b);

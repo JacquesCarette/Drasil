@@ -1,11 +1,8 @@
-module Language.Drasil.NounPhrase 
-  ( NounPhrase(..)
-  , NP
-  , pn, pn', pn'', pn''', pnIrr
-  , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS, cnUM
-  , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent
-  , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
-  , atStartNP, atStartNP', titleizeNP, titleizeNP'
+module Language.Drasil.NounPhrase (NounPhrase(..), NP, atStartNP, atStartNP',
+  cn, cn', cn'', cn''', cnICES, cnIES, cnIP, cnIS, cnIrr, cnUM, compoundPhrase,
+  compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1,
+  nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent, pn, pn',
+  pn'', pn''', pnIrr, titleizeNP, titleizeNP'
   -- re-export these
   , CapitalizationRule(..), PluralRule(..)
   ) where
@@ -129,7 +126,7 @@ nounPhraseSP s = Phrase (S s) (S s) CapFirst CapWords
 
 -- | For Reuirements, Assumptions, LikelyChanges, etc. to allow for referencing.
 nounPhraseSent :: Sentence -> NP
-nounPhraseSent s = Phrase s s CapFirst CapWords
+nounPhraseSent s = Phrase s (sPlur s AddS) CapFirst CapWords
 
 -- | Combine two noun phrases. The singular form becomes 'phrase' from t1 followed
 -- by phrase of t2. The plural becomes phrase of t1 followed by plural of t2.
@@ -185,30 +182,35 @@ titleizeNP' n = titleCase n pluralNP
 -- DO NOT EXPORT --                
 -- | Pluralization helper function.
 sPlur :: Sentence -> PluralRule -> Sentence
-sPlur s@(S _) AddS = s :+: S "s"
-sPlur s@(S _) AddE = s :+: S "e"
+sPlur (S s) AddS = S (s ++ "s")
+sPlur (S s) AddE = S (s ++ "e")
 sPlur s@(S _) AddES = sPlur (sPlur s AddE) AddS
 sPlur s@(S _) SelfPlur = s
 sPlur (S sts) (IrregPlur f) = S $ f sts --Custom pluralization
 sPlur (a :+: b) pt = a :+: sPlur b pt
 sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
---  titleCase n@(Phrase _ _ _ r)      f = cap (f n) r
+
 -- | Capitalization helper function.
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
-cap (S (s:ss))   CapFirst = S (toUpper s : ss)
-cap (S s)        CapWords = 
-  let w = words s in
-  let l = case w of [] -> [[]]
-                    [x] -> [capFirstWord x]
-                    (x:xs) -> capFirstWord x : map capWords xs in
-  S $ findHyph $ unwords l
-cap (S s1 :+: S s2) r = cap (S (s1 ++ s2)) r
-cap (s1 :+: s2 :+: s3)  CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
-  --could change associativity of :+: instead?
-cap (s1 :+: s2)  CapWords = cap s1 CapWords :+: cap s2 CapWords
-cap (s1 :+: s2)  CapFirst = cap s1 CapFirst :+: s2
+cap (S (s:ss)) CapFirst = S (toUpper s : ss)
+cap (S s)      CapWords = capString s capFirstWord capWords
+cap (S s1 :+: S s2 :+: x) r = cap (S (s1 ++ s2) :+: x) r
+cap (s1 :+: s2) CapWords = cap s1 CapWords +:+ capTail s2
+cap (s1 :+: s2) CapFirst = cap s1 CapFirst :+: s2
 cap a _ = a
+
+-- | Helper for cap for the end of a Sentence (Assumes CapWords).
+capTail :: Sentence -> Sentence
+capTail (S s) = capString s capWords capWords
+capTail (a :+: b) = capTail a :+: capTail b
+capTail x = x
+
+capString :: String -> (String -> String) -> (String -> String) -> Sentence 
+capString s f g = S . findHyph . unwords $ process (words s)
+  where
+    process (x:xs) = f x : map g xs
+    process []     = []
 
 findHyph :: String -> String
 findHyph "" = ""
@@ -219,18 +221,18 @@ findHyph (x:y:xs)
 
 capFirstWord :: String -> String
 capFirstWord "" = ""
-capFirstWord (c:cs)
-  | not (isLetter c) = c : cs
-  | not (isLatin1 c) = c : cs
+capFirstWord w@(c:cs)
+  | not (isLetter c) = w
+  | not (isLatin1 c) = w
   | otherwise        = toUpper c : cs
 
 capWords :: String -> String
 capWords "" = ""
-capWords (c:cs)
-  | not (isLetter c)          = c : cs
-  | not (isLatin1 c)          = c : cs
-  | (c : cs) `elem` doNotCaps = toLower c : cs
-  | otherwise                 = toUpper c : cs
+capWords w@(c:cs)
+  | not (isLetter c)   = w
+  | not (isLatin1 c)   = w
+  | w `elem` doNotCaps = toLower c : cs
+  | otherwise          = toUpper c : cs
 
 doNotCaps :: [String]
 doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",

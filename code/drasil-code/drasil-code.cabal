@@ -18,6 +18,7 @@ library
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.Doxygen.Import
+    , Language.Drasil.Code.Imperative.Input
     , Language.Drasil.Code.Imperative.GOOL.Data
     , Language.Drasil.Code.Imperative.GOOL.Helpers
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer
@@ -79,6 +80,7 @@ executable codegenTest
     , Language.Drasil.Code.Imperative.Build.AST
     , Language.Drasil.Code.Imperative.Build.Import
     , Language.Drasil.Code.Imperative.Doxygen.Import
+    , Language.Drasil.Code.Imperative.Input
     , Language.Drasil.Code.Imperative.GOOL.Data
     , Language.Drasil.Code.Imperative.GOOL.Helpers
     , Language.Drasil.Code.Imperative.GOOL.LanguageRenderer

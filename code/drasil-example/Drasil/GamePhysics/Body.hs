@@ -4,7 +4,7 @@ import Language.Drasil hiding (Symbol(..), Vector, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI), cdb, rdb,
   refdb, _authors, _concepts, _constants, _constraints, _datadefs, _definitions,
-  _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+  _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb, sampleData)
 import Utils.Drasil
 import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), IntroSub(..),
@@ -119,7 +119,8 @@ si = SI {
   _constants = [],
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
-   refdb = refDB
+   refdb = refDB,
+   sampleData = "../../datafiles/GamePhysics/sampleInput.txt"
 }
 
 concIns :: [ConceptInstance]

@@ -4,7 +4,8 @@
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
-  docCmtStart, observerListName, doxConfigName, makefileName, addExt,
+  docCmtStart, observerListName, doxConfigName, makefileName, sampleInputName, 
+  addExt,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
@@ -79,9 +80,10 @@ docCmtStart = text "/**"
 observerListName :: Label
 observerListName = "observerList"
 
-doxConfigName, makefileName :: String
+doxConfigName, makefileName, sampleInputName :: String
 doxConfigName = "doxConfig"
 makefileName = "Makefile"
+sampleInputName = "input.txt"
 
 addExt :: String -> String -> String
 addExt ext nm = nm ++ "." ++ ext

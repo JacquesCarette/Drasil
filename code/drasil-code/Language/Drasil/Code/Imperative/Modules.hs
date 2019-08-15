@@ -1,5 +1,5 @@
 module Language.Drasil.Code.Imperative.Modules (
-  genMain, chooseInModule, genOutputMod
+  genMain, chooseInModule, genOutputMod, genSampleInput
 ) where
 
 import Language.Drasil
@@ -20,17 +20,18 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getOutputParams)
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (RenderSym(..),
-  BodySym(..), BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..),
-  BooleanExpression(..), StatementSym(..), ControlStatementSym(..), 
-  MethodTypeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..))
+  AuxiliarySym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
+  VariableSym(..), ValueSym(..), BooleanExpression(..), StatementSym(..), 
+  ControlStatementSym(..), MethodTypeSym(..), MethodSym(..), StateVarSym(..), 
+  ClassSym(..))
 import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType, codevar, 
   physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
-import Language.Drasil.Code.DataDesc (junkLine, singleton)
-import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..),
+import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
+import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
   Comments(CommentFunc), ConstraintBehaviour(..), InputModule(..), Logging(..), 
   Structure(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
@@ -270,9 +271,8 @@ genInputFormat :: (RenderSym repr) => Reader State
   (Maybe (repr (Method repr)))
 genInputFormat = do
   g <- ask
-  let dd = junkLine : intersperse junkLine (map singleton (extInputs $ csi $
-        codeSpec g))
-      genInFormat :: (RenderSym repr) => Maybe String -> Reader State 
+  dd <- genDataDesc
+  let genInFormat :: (RenderSym repr) => Maybe String -> Reader State 
         (Maybe (repr (Method repr)))
       genInFormat Nothing = return Nothing
       genInFormat (Just _) = do
@@ -283,6 +283,19 @@ genInputFormat = do
         mthd <- publicInOutFunc "get_input" desc ins outs [] bod
         return $ Just mthd
   genInFormat $ Map.lookup "get_input" (eMap $ codeSpec g)
+
+genDataDesc :: Reader State DataDesc
+genDataDesc = do
+  g <- ask
+  return $ junkLine : 
+    intersperse junkLine (map singleton (extInputs $ csi $ codeSpec g))
+
+genSampleInput :: (AuxiliarySym repr) => Reader State [repr (Auxiliary repr)]
+genSampleInput = do
+  g <- ask
+  dd <- genDataDesc
+  return [sampleInput (sysinfodb $ csi $ codeSpec g) dd (sampleData g) | SampleInput `elem` 
+    auxiliaries g]
 
 ----- OUTPUT -------
 

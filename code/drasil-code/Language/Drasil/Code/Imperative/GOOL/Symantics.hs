@@ -16,7 +16,10 @@ module Language.Drasil.Code.Imperative.GOOL.Symantics (
   BlockCommentSym(..)
 ) where
 
+import Language.Drasil (Expr)
+import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.Code (CodeType)
+import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.CodeSpec (Comments)
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -51,6 +54,7 @@ class (ModuleSym repr) => InternalFile repr where
 class (KeywordSym repr, RenderSym repr) => AuxiliarySym repr where
   type Auxiliary repr
   doxConfig :: String -> repr (Program repr) -> repr (Auxiliary repr)
+  sampleInput :: ChunkDB -> DataDesc -> [Expr] -> repr (Auxiliary repr)
 
   optimizeDox :: repr (Keyword repr)
 

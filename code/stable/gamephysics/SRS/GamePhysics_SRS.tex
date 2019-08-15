@@ -17,6 +17,8 @@
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
 \setmathfont{Latin Modern Math}
+\newcommand{\gt}{\ensuremath >}
+\newcommand{\lt}{\ensuremath <}
 \global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
@@ -1041,7 +1043,7 @@ Description & \begin{symbDescription}
               \item{${{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The coefficient of restitution ${C_{\text{R}}}$ is a unitless, dimensionless quantity that determines the elasticity of a collision between two rigid bodies. ${C_{\text{R}}}=1$ results in an elastic collision, while ${C_{\text{R}}}<1$ results in an inelastic collision, and ${C_{\text{R}}}=0$ results in a totally inelastic collision.
+Notes & The coefficient of restitution ${C_{\text{R}}}$ is a unitless, dimensionless quantity that determines the elasticity of a collision between two rigid bodies. ${C_{\text{R}}}=1$ results in an elastic collision, while ${C_{\text{R}}}\lt{}1$ results in an inelastic collision, and ${C_{\text{R}}}=0$ results in a totally inelastic collision.
         
 \\ \midrule \\
 Source & --
@@ -1255,19 +1257,19 @@ Output & ${\mathbf{a}_{i}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {\mathbf{v}_{i}}>0
+                    {\mathbf{v}_{i}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    t>0
+                    t\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    g>0
+                    g\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {\mathbf{F}_{i}}>0
+                    {\mathbf{F}_{i}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {m_{j}}>0
+                    {m_{j}}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
@@ -1314,20 +1316,20 @@ Output & $α$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    ω>0
+                    ω\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    t>0
+                    t\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {τ_{i}}>0
+                    {τ_{i}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    \mathbf{I}>0
+                    \mathbf{I}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     α>0
+                     α\gt{}0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -1371,23 +1373,23 @@ Output & ${t_{\text{c}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    t>0
+                    t\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    j>0
+                    j\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {m_{\text{A}}}>0
+                    {m_{\text{A}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    \mathbf{n}>0
+                    \mathbf{n}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {\mathbf{v}_{\text{A}}}>0
+                     {\mathbf{v}_{\text{A}}}\gt{}0
                      \end{displaymath}
                      \begin{displaymath}
-                     {t_{\text{c}}}>0
+                     {t_{\text{c}}}\gt{}0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -1430,11 +1432,11 @@ $\mathbf{F}$ & -- & $98.1$ N & 10$\%$
 \\
 $G$ & -- & $66.743\cdot{}10^{-12}$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 10$\%$
 \\
-$\mathbf{I}$ & $\mathbf{I}>0$ & $74.5$ kg$\text{m}^{2}$ & 10$\%$
+$\mathbf{I}$ & $\mathbf{I}\gt{}0$ & $74.5$ kg$\text{m}^{2}$ & 10$\%$
 \\
-$L$ & $L>0$ & $44.2$ m & 10$\%$
+$L$ & $L\gt{}0$ & $44.2$ m & 10$\%$
 \\
-$m$ & $m>0$ & $56.2$ kg & 10$\%$
+$m$ & $m\gt{}0$ & $56.2$ kg & 10$\%$
 \\
 $\mathbf{p}$ & -- & $0.412$ m & 10$\%$
 \\

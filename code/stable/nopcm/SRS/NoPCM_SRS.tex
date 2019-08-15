@@ -17,6 +17,8 @@
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
 \setmathfont{Latin Modern Math}
+\newcommand{\gt}{\ensuremath >}
+\newcommand{\lt}{\ensuremath <}
 \global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
@@ -608,7 +610,7 @@ Input Constraints & \begin{displaymath}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     0<t<{t_{\text{final}}}
+                     0\lt{}t\lt{}{t_{\text{final}}}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -624,7 +626,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${τ_{\text{W}}}$ is calculated from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}.
         
-        The above equation applies as long as the water is in liquid form, $0<{T_{\text{W}}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}).
+        The above equation applies as long as the water is in liquid form, $0\lt{}{T_{\text{W}}}\lt{}100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}).
         
 \\ \midrule \\
 Source & \cite[(with PCM removed)]{koothoor2013}
@@ -697,7 +699,7 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}.
         
         The change in temperature is the difference between the temperature at time $t$ (s), ${T_{\text{W}}}$ and the initial temperature, ${T_{\text{init}}}$ (${}^{\circ}$C).
         
-        This equation applies as long as $0<{T_{\text{W}}}<100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+        This equation applies as long as $0\lt{}{T_{\text{W}}}\lt{}100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
         
 \\ \midrule \\
 Source & \cite{koothoor2013}
@@ -719,25 +721,25 @@ RefBy & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energ
 \\
 \midrule
 \endhead
-${A_{\text{C}}}$ & ${A_{\text{C}}}>0$ & ${A_{\text{C}}}\leq{}{{A_{\text{C}}}^{\text{max}}}$ & $0.12$ $\text{m}^{2}$ & 10$\%$
+${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0$ & ${A_{\text{C}}}\leq{}{{A_{\text{C}}}^{\text{max}}}$ & $0.12$ $\text{m}^{2}$ & 10$\%$
 \\
-${C_{\text{W}}}$ & ${C_{\text{W}}}>0$ & ${{C_{\text{W}}}^{\text{min}}}<{C_{\text{W}}}<{{C_{\text{W}}}^{\text{max}}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
+${C_{\text{W}}}$ & ${C_{\text{W}}}\gt{}0$ & ${{C_{\text{W}}}^{\text{min}}}\lt{}{C_{\text{W}}}\lt{}{{C_{\text{W}}}^{\text{max}}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
 \\
-$D$ & $D>0$ & ${AR_{\text{min}}}\leq{}D\leq{}{AR_{\text{max}}}$ & $0.412$ m & 10$\%$
+$D$ & $D\gt{}0$ & ${AR_{\text{min}}}\leq{}D\leq{}{AR_{\text{max}}}$ & $0.412$ m & 10$\%$
 \\
-${h_{\text{C}}}$ & ${h_{\text{C}}}>0$ & ${{h_{\text{C}}}^{\text{min}}}\leq{}{h_{\text{C}}}\leq{}{{h_{\text{C}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10$\%$
+${h_{\text{C}}}$ & ${h_{\text{C}}}\gt{}0$ & ${{h_{\text{C}}}^{\text{min}}}\leq{}{h_{\text{C}}}\leq{}{{h_{\text{C}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10$\%$
 \\
-$L$ & $L>0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ m & 10$\%$
+$L$ & $L\gt{}0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ m & 10$\%$
 \\
-${T_{\text{C}}}$ & $0<{T_{\text{C}}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10$\%$
+${T_{\text{C}}}$ & $0\lt{}{T_{\text{C}}}\lt{}100$ & -- & $50.0$ ${}^{\circ}$C & 10$\%$
 \\
-${T_{\text{init}}}$ & $0<{T_{\text{init}}}<100$ & -- & $40.0$ ${}^{\circ}$C & 10$\%$
+${T_{\text{init}}}$ & $0\lt{}{T_{\text{init}}}\lt{}100$ & -- & $40.0$ ${}^{\circ}$C & 10$\%$
 \\
-${t_{\text{final}}}$ & ${t_{\text{final}}}>0$ & ${t_{\text{final}}}<{{t_{\text{final}}}^{\text{max}}}$ & $50.0\cdot{}10^{3}$ s & 10$\%$
+${t_{\text{final}}}$ & ${t_{\text{final}}}\gt{}0$ & ${t_{\text{final}}}\lt{}{{t_{\text{final}}}^{\text{max}}}$ & $50.0\cdot{}10^{3}$ s & 10$\%$
 \\
-${t_{\text{step}}}$ & $0<{t_{\text{step}}}<{t_{\text{final}}}$ & -- & $0.01$ s & 10$\%$
+${t_{\text{step}}}$ & $0\lt{}{t_{\text{step}}}\lt{}{t_{\text{final}}}$ & -- & $0.01$ s & 10$\%$
 \\
-${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}>0$ & ${{ρ_{\text{W}}}^{\text{min}}}<{ρ_{\text{W}}}\leq{}{{ρ_{\text{W}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0$ & ${{ρ_{\text{W}}}^{\text{min}}}\lt{}{ρ_{\text{W}}}\leq{}{{ρ_{\text{W}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}

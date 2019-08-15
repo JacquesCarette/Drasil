@@ -15,7 +15,7 @@ import qualified Language.Drasil as L (People, Person,
 
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
-  caption, cases, divTag, em, fraction, h, headTag, html, image, li, ol, pa,
+  caption, divTag, em, h, headTag, html, image, li, ol, pa,
   paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
   th, title, tr, ul)
 import qualified Language.Drasil.Output.Formats as F
@@ -40,7 +40,7 @@ import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Ta
 import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac, dollarDoc)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
-import qualified Language.Drasil.TeX.Print as TeX (pExpr, pUnit, spec)
+import qualified Language.Drasil.TeX.Print as TeX (pExpr, spec)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Text), D, toMath)
 
 data OpenClose = Open | Close
@@ -252,15 +252,17 @@ fence Close Curly = "}"
 fence _     Abs   = "|"
 fence _     Norm  = "||"
 
-pMatrix :: [[Expr]] -> Doc
-pMatrix [] = text ""
-pMatrix [x] = text "<tr>" <> pIn x <> text "</tr>\n"
-pMatrix (x:xs) = pMatrix [x] <> pMatrix xs
+-- Not used since we use MathJax handles this
+-- pMatrix :: [[Expr]] -> Doc
+-- pMatrix [] = text ""
+-- pMatrix [x] = text "<tr>" <> pIn x <> text "</tr>\n"
+-- pMatrix (x:xs) = pMatrix [x] <> pMatrix xs
 
-pIn :: [Expr] -> Doc
-pIn [] = text ""
-pIn [x] = text "<td>" <> pExpr x <> text "</td>"
-pIn (x:xs) = pIn [x] <> pIn xs
+-- Not used since we use MathJax handles this
+-- pIn :: [Expr] -> Doc
+-- pIn [] = text ""
+-- pIn [x] = text "<td>" <> pExpr x <> text "</td>"
+-- pIn (x:xs) = pIn [x] <> pIn xs
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------

@@ -10,20 +10,20 @@ import Control.Lens ((^.))
 
 mathcon :: [ConceptChunk]
 
-mathcon = [angle, area, calculation, cartesian, change, constraint, diameter,
+mathcon = [angle, area, calculation, cartesian, centre, change, constraint, diameter,
   equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal,
   normalV, number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng,
-  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp,
-  xDir, yAxis, yComp, yDir, zAxis, zComp, zDir]
+  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp,
+  xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir]
 
 mathcon' :: [CI]
 mathcon' = [de, leftSide, ode, pde, rightSide]
 
-angle, area, calculation, cartesian, change, constraint, diameter, equation,
+angle, area, calculation, cartesian, centre, change, constraint, diameter, equation,
   euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal, normalV,
   number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng, rate,
-  rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp, xDir,
-  yAxis, yComp, yDir, zAxis, zComp, zDir :: ConceptChunk
+  rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
+  yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir :: ConceptChunk
 
 
 angle       = dcc "angle"        (cn' "angle")                   "the amount of rotation needed to bring one line or plane into coincidence with another"
@@ -33,6 +33,7 @@ cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coor
                                                                   S "numerical coordinates, which are the signed distances to the point from" +:+
                                                                   S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+
                                                                   sParen (S "from" +:+ makeRef2S cartesianWiki)
+centre       = dcc "centre"       (cn' "centre")                  "the middle point of an object"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
 constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++

@@ -83,7 +83,7 @@ observerListName = "observerList"
 doxConfigName, makefileName, sampleInputName :: String
 doxConfigName = "doxConfig"
 makefileName = "Makefile"
-sampleInputName = "sampleInput.txt"
+sampleInputName = "input.txt"
 
 addExt :: String -> String -> String
 addExt ext nm = nm ++ "." ++ ext

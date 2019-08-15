@@ -17,20 +17,20 @@ public class InputParameters {
     /** \brief Reads input from a file with the given file name
         \param filename name of the input file
         \return array containing the following values:
-        \return heating coil surface area (m^2)
-        \return specific heat capacity of water (J/(kg degreeC))
-        \return convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
-        \return initial temperature (degreeC)
-        \return final time (s)
-        \return length of tank (m)
-        \return temperature of the heating coil (degreeC)
-        \return time step for simulation (s)
-        \return density of water (kg/m^3)
-        \return diameter of tank (m)
+        \return heating coil surface area: area covered by the outermost layer of the coil (m^2)
+        \return specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC))
+        \return convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC))
+        \return initial temperature: the temperature at the beginning of the simulation (degreeC)
+        \return final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
+        \return length of tank: the length of the tank (m)
+        \return temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
+        \return time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
+        \return density of water: nass per unit volume of water (kg/m^3)
+        \return diameter of tank: the diameter of the tank (m)
         \return absolute tolerance
         \return relative tolerance
-        \return temperature of the water (degreeC)
-        \return change in heat energy in the water (J)
+        \return temperature of the water: the average kinetic energy of the particles within the water (degreeC)
+        \return change in heat energy in the water: change in thermal energy within the water (J)
     */
     public static Object[] get_input(String filename) throws Exception {
         double A_C;
@@ -99,18 +99,18 @@ public class InputParameters {
     }
     
     /** \brief Verifies that input values satisfy the physical constraints and software constraints
-        \param A_C heating coil surface area (m^2)
-        \param C_W specific heat capacity of water (J/(kg degreeC))
-        \param h_C convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
-        \param T_init initial temperature (degreeC)
-        \param t_final final time (s)
-        \param L length of tank (m)
-        \param T_C temperature of the heating coil (degreeC)
-        \param t_step time step for simulation (s)
-        \param rho_W density of water (kg/m^3)
-        \param D diameter of tank (m)
-        \param T_W temperature of the water (degreeC)
-        \param E_W change in heat energy in the water (J)
+        \param A_C heating coil surface area: area covered by the outermost layer of the coil (m^2)
+        \param C_W specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC))
+        \param h_C convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC))
+        \param T_init initial temperature: the temperature at the beginning of the simulation (degreeC)
+        \param t_final final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
+        \param L length of tank: the length of the tank (m)
+        \param T_C temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
+        \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
+        \param rho_W density of water: nass per unit volume of water (kg/m^3)
+        \param D diameter of tank: the diameter of the tank (m)
+        \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
+        \param E_W change in heat energy in the water: change in thermal energy within the water (J)
     */
     public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) throws Exception {
         if (!(A_C <= 100000)) {

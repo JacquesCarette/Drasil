@@ -105,6 +105,7 @@ genMethod s pr t n desc p r b = do
 genInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   repr (Scope repr) -> repr (Permanence repr) -> Label -> String -> [c] ->
   [c] -> [c] -> [repr (Block repr)] -> Reader State (repr (Method repr))
+
 genInOutFunc s pr n desc ins outs both b = do
   g <- ask
   inVs <- mapM mkVar ins

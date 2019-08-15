@@ -268,10 +268,10 @@ A system is needed to investigate the heating of water in a solar water heating 
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 
 \begin{itemize}
-\item{Heat flux: The rate of thermal energy transfer through a given surface per unit time}
-\item{Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount}
-\item{Thermal conduction: The transfer of heat energy through a substance}
-\item{Transient: Changing with time}
+\item{Heat flux: The rate of thermal energy transfer through a given surface per unit time.}
+\item{Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount.}
+\item{Thermal conduction: The transfer of heat energy through a substance.}
+\item{Transient: Changing with time.}
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
@@ -306,12 +306,12 @@ This section simplifies the original problem and helps in developing the theoret
 
 \begin{itemize}
 \item[Thermal-Energy-Only:\phantomsection\label{assumpTEO}]{The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (RefBy: \hyperref[TM:consThermE]{TM: consThermE}.)}
-\item[Heat-Transfer-Coeffs-Constant:\phantomsection\label{assumpHTCC}]{All heat transfer coefficients are constant over time. (RefBy: \hyperref[GD:nwtnCooling]{GD: nwtnCooling}.)}
+\item[Heat-Transfer-Coeffs-Constant:\phantomsection\label{assumpHTCC}]{All heat transfer coefficients are constant over time. (RefBy: \hyperref[TM:nwtnCooling]{TM: nwtnCooling}.)}
 \item[Constant-Water-Temp-Across-Tank:\phantomsection\label{assumpCWTAT}]{The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)}
 \item[Density-Water-Constant-over-Volume:\phantomsection\label{assumpDWCoW}]{The density of water has no spatial variation; that is, it is constant over their entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)}
 \item[Specific-Heat-Energy-Constant-over-Volume:\phantomsection\label{assumpSHECoW}]{The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)}
-\item[Newton-Law-Convective-Cooling-Coil-Water:\phantomsection\label{assumpLCCCW}]{Newton's law of convective cooling applies between the heating coil and the water. (RefBy: \hyperref[DD:htFluxC]{DD: htFluxC}.)}
-\item[Temp-Heating-Coil-Constant-over-Time:\phantomsection\label{assumpTHCCoT}]{The temperature of the heating coil is constant over time. (RefBy: \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} and \hyperref[DD:htFluxC]{DD: htFluxC}.)}
+\item[Newton-Law-Convective-Cooling-Coil-Water:\phantomsection\label{assumpLCCCW}]{Newton's law of convective cooling applies between the heating coil and the water. (RefBy: \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}.)}
+\item[Temp-Heating-Coil-Constant-over-Time:\phantomsection\label{assumpTHCCoT}]{The temperature of the heating coil is constant over time. (RefBy: \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} and \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}.)}
 \item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]{The temperature of the heating coil does not vary along its length. (RefBy: \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length}.)}
 \item[Charging-Tank-No-Temp-Discharge:\phantomsection\label{assumpCTNTD}]{The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. (RefBy: \hyperref[likeChgDT]{LC: Discharging-Tank}.)}
 \item[Water-Always-Liquid:\phantomsection\label{assumpWAL}]{The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: \hyperref[unlikeChgWFS]{UC: Water-Fixed-States}, \hyperref[TM:sensHtE]{TM: sensHtE}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
@@ -348,7 +348,9 @@ Description & \begin{symbDescription}
               \item{$T$ is the temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $ρ$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $∇$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (\hyperref[assumpTEO]{A: Thermal-Energy-Only}).
+Notes & The above equation gives the law of conservation of energy for transient heat transfer in a given material.
+        
+        For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (\hyperref[assumpTEO]{A: Thermal-Energy-Only}).
         
 \\ \midrule \\
 Source & \hyperref{http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm}{}{}{Fourier Law of Heat Conduction and Heat Equation}
@@ -392,22 +394,15 @@ RefBy & \hyperref[IM:heatEInWtr]{IM: heatEInWtr}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
-\subsubsection{General Definitions}
-\label{Sec:GDs}
-This section collects the laws and equations that will be used to build the instance models.
-
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:nwtnCooling}
+\toprule \textbf{Refname} & \textbf{TM:nwtnCooling}
 \phantomsection 
-\label{GD:nwtnCooling}
+\label{TM:nwtnCooling}
 \\ \midrule \\
 Label & Newton's law of cooling
-        
-\\ \midrule \\
-Units & $\frac{\text{W}}{\text{m}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -431,10 +426,14 @@ Notes & Newton's law of cooling describes convective cooling from a surface. The
 Source & \cite[(pg. 8)]{incroperaEtAl2007}
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\subsubsection{General Definitions}
+\label{Sec:GDs}
+This section collects the laws and equations that will be used to build the instance models.
 
 \vspace{\baselineskip}
 \noindent
@@ -499,23 +498,16 @@ Using the fact that $ρ$=$m$/$V$, Equation (2) can be written as:
 \begin{displaymath}
 m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V
 \end{displaymath}
-\subsubsection{Data Definitions}
-\label{Sec:DDs}
-This section collects and defines all the data needed to build the instance models.
-
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:htFluxC}
+\toprule \textbf{Refname} & \textbf{GD:htFluxWaterFromCoil}
 \phantomsection 
-\label{DD:htFluxC}
+\label{GD:htFluxWaterFromCoil}
 \\ \midrule \\
 Label & Heat flux into the water from the coil
         
-\\ \midrule \\
-Symbol & ${q_{\text{C}}}$
-         
 \\ \midrule \\
 Units & $\frac{\text{W}}{\text{m}^{2}}$
         
@@ -532,7 +524,7 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}
+Notes & ${q_{\text{C}}}$ is found by assuming that Newton's law of cooling applies (\hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}). This law (defined in \hyperref[TM:nwtnCooling]{TM: nwtnCooling}) is used on the surface of the heating coil.
         
         \hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time}
         
@@ -545,6 +537,10 @@ RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+
+\subsubsection{Data Definitions}
+\label{Sec:DDs}
+This section collects and defines all the data needed to build the instance models.
 
 \vspace{\baselineskip}
 \noindent
@@ -641,12 +637,12 @@ RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[fin
 \end{minipage}
 \paragraph{Detailed derivation of the energy balance on water:}
 \label{IM:eBalanceOnWtrDeriv}
-To find the rate of change of ${T_{\text{W}}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{\text{W}}}$, which has mass ${m_{\text{W}}}$ and specific heat capacity, ${C_{\text{W}}}$. Heat transfer occurs in the water from the heating coil as ${q_{\text{C}}}$ (\hyperref[DD:htFluxC]{DD: htFluxC}), over area ${A_{\text{C}}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
+To find the rate of change of ${T_{\text{W}}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{\text{W}}}$, which has mass ${m_{\text{W}}}$ and specific heat capacity, ${C_{\text{W}}}$. Heat transfer occurs in the water from the heating coil as ${q_{\text{C}}}$ (\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}), over area ${A_{\text{C}}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 
 \begin{displaymath}
 {m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}
 \end{displaymath}
-Using \hyperref[DD:htFluxC]{DD: htFluxC} for ${q_{\text{C}}}$, this can be written as:
+Using \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} for ${q_{\text{C}}}$, this can be written as:
 
 \begin{displaymath}
 {m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)
@@ -854,17 +850,17 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \midrule
 \endhead
-\hyperref[DD:htFluxC]{DD: htFluxC} &  &  &  &  &  & X & X &  &  &  &  &  & 
-\\
 \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[TM:consThermE]{TM: consThermE} & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[TM:sensHtE]{TM: sensHtE} &  &  &  &  &  &  &  &  &  & X &  &  & 
 \\
-\hyperref[GD:nwtnCooling]{GD: nwtnCooling} &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:nwtnCooling]{TM: nwtnCooling} &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  & X & X & X &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\
 \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} &  &  &  &  &  &  &  &  &  & X & X & X & 
 \\
@@ -910,25 +906,25 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:htFluxC]{DD: htFluxC}} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[GD:nwtnCooling]{GD: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}}
+\textbf{} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}}
 \\
 \midrule
 \endhead
-\hyperref[DD:htFluxC]{DD: htFluxC} &  &  &  &  &  &  &  & 
-\\
 \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate} &  &  &  &  &  &  &  & 
 \\
 \hyperref[TM:consThermE]{TM: consThermE} &  &  &  &  &  &  &  & 
 \\
 \hyperref[TM:sensHtE]{TM: sensHtE} &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:nwtnCooling]{GD: nwtnCooling} &  &  &  &  &  &  &  & 
+\hyperref[TM:nwtnCooling]{TM: nwtnCooling} &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  & X &  &  & X &  & 
+\hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  & X &  &  & X &  &  & 
 \\
-\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & X & X &  &  &  & X &  & 
+\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} &  &  &  & X &  &  &  & 
 \\
-\hyperref[IM:heatEInWtr]{IM: heatEInWtr} &  &  &  & X &  &  &  & 
+\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & X &  &  &  & X & X &  & 
+\\
+\hyperref[IM:heatEInWtr]{IM: heatEInWtr} &  &  & X &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
@@ -936,7 +932,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:htFluxC]{DD: htFluxC}} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[GD:nwtnCooling]{GD: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}} & \textbf{\hyperref[findMass]{FR: Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}} & \textbf{\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
+\textbf{} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}} & \textbf{\hyperref[findMass]{FR: Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}} & \textbf{\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
 \\
 \midrule
 \endhead
@@ -950,7 +946,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} &  & X &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & 
+\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} & X &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\

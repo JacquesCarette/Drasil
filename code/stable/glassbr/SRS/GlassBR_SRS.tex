@@ -83,7 +83,7 @@ ${d_{\text{min}}}$ & Minimum value for one of the dimensions of the glass plate 
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
-$g$ & Glass type $g\in{}\{\text{``AN''},\text{``FT''},\text{``HS''}\}$ & --
+$g$ & Glass type & --
 \\
 $GTF$ & Glass type factor & --
 \\
@@ -93,13 +93,13 @@ $interpY$ & InterpY & --
 \\
 $interpZ$ & InterpZ & --
 \\
-$is-safeLoad$ & Variable that is assigned true when load resistance (capacity) is greater than applied load (demand) & --
+$is-safeLoad$ & Load resistance safety requirement & --
 \\
-$is-safeLR$ & Variable that is assigned true when load resistance (capacity) is greater than load (demand) & --
+$is-safeLR$ & 3 second load equivalent resistance safety requirement & --
 \\
-$is-safePb$ & Variable that is assigned true when calculated probability is less than tolerable probability & --
+$is-safePb$ & Probability of glass breakage safety requirement & --
 \\
-$is-safeProb$ & Variable that is assigned true when probability of failure is less than tolerable probability of failure & --
+$is-safeProb$ & Probability of failure safety requirement & --
 \\
 $J$ & Stress distribution factor (Function) & --
 \\
@@ -157,7 +157,7 @@ ${w_{\text{max}}}$ & Maximum permissible input charge weight & kg
 \\
 ${w_{\text{min}}}$ & Minimum permissible input charge weight & kg
 \\
-${w_{TNT}}$ & Explosive mass in equivalent weight of TNT & kg
+${w_{TNT}}$ & Equivalent TNT charge mass & kg
 \\
 \bottomrule
 \caption{}
@@ -196,6 +196,8 @@ LC & Likely Change
 LG & Laminated Glass
 \\
 LR & Load Resistance
+\\
+LSF & Load Share Factor
 \\
 N/A & Not Applicable
 \\
@@ -309,7 +311,7 @@ A system is needed to efficiently and correctly predict whether a glass slab can
 
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from \cite{astm2009} in \hyperref[Sec:References]{Section: References}.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from \cite{astm2009}.
 
 \begin{enumerate}
 \item{Glass breakage - The fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass.}
@@ -324,7 +326,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Fully tempered (FT) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in \cite{astm2012}.}
 \item{Heat strengthened (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in \cite{astm2012}.}
 \end{itemize}
-\item{Load - A uniformly distributed lateral pressure.}
+\item{Applied load (demand) or pressure - A uniformly distributed lateral pressure.}
 \begin{itemize}
 \item{Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in \cite[(pp. 1 and 53)]{astm2009}.}
 \item{Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.}
@@ -399,18 +401,18 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is-safeProb$ is the variable that is assigned true when probability of failure is less than tolerable probability of failure (Unitless)}
+              \item{$is-safeProb$ is the probability of failure safety requirement (Unitless)}
               \item{${P_{\text{f}}}$ is the probability of failure (Unitless)}
               \item{${P_{\text{f}\text{tol}}}$ is the tolerable probability of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeProb$, the glass is considered safe. $is-safeProb$ and $is-safeLoad$ (from \hyperref[TM:isSafeLoad]{TM: isSafeLoad}) are either both True or both False. ${P_{\text{f}}}$ is the probability of failure, ${P_{\text{f}\text{tol}}}$ is the tolerable probability of failure.
+Notes & If $is-safeProb$, the structure is considered safe.
         
 \\ \midrule \\
 Source & \cite{astm2009}
          
 \\ \midrule \\
-RefBy & \hyperref[TM:isSafeLoad]{TM: isSafeLoad} and \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
+RefBy & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
         
 \\ \bottomrule
 \end{tabular}
@@ -431,18 +433,18 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is-safeLoad$ is the variable that is assigned true when load resistance (capacity) is greater than applied load (demand) (Unitless)}
+              \item{$is-safeLoad$ is the load resistance safety requirement (Unitless)}
               \item{$capacity$ is the capacity or load resistance (Pa)}
               \item{$Load$ is the applied load (demand) or pressure (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeLoad$, the glass is considered safe. $is-safeProb$ (from \hyperref[TM:isSafeProb]{TM: isSafeProb}) and $is-safeLoad$ are either both True or both False. LR is the load resistance (also called capacity), $Load$ (also referred as the Demand) is the 3 second duration equivalent pressure.
+Notes & If $is-safeLoad$, the structure is considered safe.
         
 \\ \midrule \\
 Source & \cite{astm2009}
          
 \\ \midrule \\
-RefBy & \hyperref[TM:isSafeProb]{TM: isSafeProb} and \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
+RefBy & \hyperref[checkGlassSafety]{FR: Check-Glass-Safety}
         
 \\ \bottomrule
 \end{tabular}
@@ -717,7 +719,7 @@ Equation & \begin{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$GTF$ is the glass type factor (Unitless)}
-              \item{$g$ is the glass type $g\in{}\{\text{``AN''},\text{``FT''},\text{``HS''}\}$ (Unitless)}
+              \item{$g$ is the glass type (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & AN is annealed glass.
@@ -968,7 +970,7 @@ RefBy & \hyperref[DD:tolLoad]{DD: tolLoad} and \hyperref[DD:stressDistFac]{DD: s
 \phantomsection 
 \label{DD:eqTNTW}
 \\ \midrule \\
-Label & Explosive mass in equivalent weight of TNT
+Label & Equivalent TNT charge mass
         
 \\ \midrule \\
 Symbol & ${w_{TNT}}$
@@ -982,7 +984,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+              \item{${w_{TNT}}$ is the equivalent TNT charge mass (kg)}
               \item{$w$ is the charge weight (kg)}
               \item{$TNT$ is the TNT equivalent factor (Unitless)}
               \end{symbDescription}
@@ -1105,10 +1107,10 @@ Description & \begin{symbDescription}
               \item{$q$ is the applied load (demand) (Pa)}
               \item{$interpY$ is the interpY (Unitless)}
               \item{$SD$ is the stand off distance (m)}
-              \item{${w_{TNT}}$ is the explosive mass in equivalent weight of TNT (kg)}
+              \item{${w_{TNT}}$ is the equivalent TNT charge mass (kg)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $q$, or demand, is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
+Notes & $q$, or applied load (demand), is the 3 second duration equivalent pressure obtained from \hyperref[Figure:demandVSsod]{Fig:demandVSsod} by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined in \hyperref[DD:eqTNTW]{DD: eqTNTW}. $SD$ is the stand off distance as defined in \hyperref[DD:standOffDist]{DD: standOffDist}.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1157,7 +1159,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is-safePb$ is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)}
+              \item{$is-safePb$ is the probability of glass breakage safety requirement (Unitless)}
               \item{${P_{\text{b}}}$ is the probability of breakage (Unitless)}
               \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
@@ -1204,12 +1206,12 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$is-safeLR$ is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)}
+              \item{$is-safeLR$ is the 3 second load equivalent resistance safety requirement (Unitless)}
               \item{$LR$ is the load resistance (Pa)}
               \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofDemand]{DD: calofDemand}.
+Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Applied Load (demand)) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofDemand]{DD: calofDemand}.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1236,7 +1238,7 @@ $AR$ & $AR\geq{}1$ & $AR\leq{}{AR_{\text{max}}}$ & $1.5$ & 10$\%$
 \\
 $b$ & $0<b\leq{}a$ & ${d_{\text{min}}}\leq{}b\leq{}{d_{\text{max}}}$ & $1.2$ m & 10$\%$
 \\
-${P_{\text{b}\text{tol}}}$ & $0<{P_{\text{b}\text{tol}}}<1$ & -- & $0.008$ & 0.1$\%$
+${P_{\text{b}\text{tol}}}$ & $0\leq{}{P_{\text{b}\text{tol}}}\leq{}1$ & -- & $0.008$ & 0.1$\%$
 \\
 $SD$ & $SD>0$ & ${SD_{\text{min}}}\leq{}SD\leq{}{SD_{\text{max}}}$ & $45.0$ m & 10$\%$
 \\
@@ -1258,7 +1260,7 @@ $w$ & $w>0$ & ${w_{\text{min}}}\leq{}w\leq{}{w_{\text{max}}}$ & $42.0$ kg & 10$\
 \\
 \midrule
 \endhead
-${P_{\text{b}}}$ & $0<{P_{\text{b}}}<1$
+${P_{\text{b}}}$ & $0\leq{}{P_{\text{b}}}\leq{}1$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -1290,7 +1292,7 @@ $a$ & Plate length (long dimension) & m
 \\
 $b$ & Plate width (short dimension) & m
 \\
-$g$ & Glass type $g\in{}\{\text{``AN''},\text{``FT''},\text{``HS''}\}$ & --
+$g$ & Glass type & --
 \\
 ${P_{\text{b}\text{tol}}}$ & Tolerable probability of breakage & --
 \\
@@ -1529,9 +1531,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:calofDemand]{DD: calofDemand} &  &  &  &  &  &  &  &  &  & X &  & X &  &  &  &  &  &  & 
 \\
-\hyperref[TM:isSafeProb]{TM: isSafeProb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\hyperref[TM:isSafeProb]{TM: isSafeProb} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:isSafeLoad]{TM: isSafeLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+\hyperref[TM:isSafeLoad]{TM: isSafeLoad} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[IM:isSafePb]{IM: isSafePb} &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & X
 \\
@@ -1697,7 +1699,7 @@ This appendix holds the graphs (\hyperref[Figure:demandVSsod]{Fig:demandVSsod} a
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png}
-\caption{Non dimensional lateral load ($\hat{q}$) versus Aspect Ratio (AR) versus Stress distribution factor (Function) ($J$)}
+\caption{Non dimensional lateral applied load (demand) or pressure ($\hat{q}$) versus Aspect Ratio (AR) versus Stress distribution factor (Function) ($J$)}
 \label{Figure:dimlessloadVSaspect}
 \end{center}
 \end{figure}

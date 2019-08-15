@@ -11,7 +11,7 @@
       <h1>Software Requirements Specification for Game Physics</h1>
     </div>
     <div class="author">
-      <h2>Alex Halliwushka and Luthfi Mawarid</h2>
+      <h2>Alex Halliwushka, Luthfi Mawarid, and Olu Owojaiye</h2>
     </div>
     <div id="Sec:RefMat">
       <div class="section">
@@ -141,12 +141,12 @@
                 </tr>
                 <tr>
                   <td><em><b>I</b><sub>A</sub></em></td>
-                  <td>Moment of Inertia Of Rigid Body A</td>
+                  <td>Moment of Inertia of Rigid Body A</td>
                   <td>kg&sdot;m<sup>2</sup></td>
                 </tr>
                 <tr>
                   <td><em><b>I</b><sub>B</sub></em></td>
-                  <td>Moment of Inertia Of Rigid Body B</td>
+                  <td>Moment of Inertia of Rigid Body B</td>
                   <td>kg&sdot;m<sup>2</sup></td>
                 </tr>
                 <tr>
@@ -171,7 +171,7 @@
                 </tr>
                 <tr>
                   <td><em>M</em></td>
-                  <td>Total Mass of the Rigid Body</td>
+                  <td>Mass of the Larger Rigid Body</td>
                   <td>kg</td>
                 </tr>
                 <tr>
@@ -191,17 +191,22 @@
                 </tr>
                 <tr>
                   <td><em>m<sub>A</sub></em></td>
-                  <td>Mass Of Rigid Body A</td>
+                  <td>Mass of Rigid Body A</td>
                   <td>kg</td>
                 </tr>
                 <tr>
                   <td><em>m<sub>B</sub></em></td>
-                  <td>Mass Of Rigid Body B</td>
+                  <td>Mass of Rigid Body B</td>
                   <td>kg</td>
                 </tr>
                 <tr>
                   <td><em>m<sub>j</sub></em></td>
-                  <td>Mass Of the J-Th Particle</td>
+                  <td>Mass of the J-Th Particle</td>
+                  <td>kg</td>
+                </tr>
+                <tr>
+                  <td><em>m<sub>T</sub></em></td>
+                  <td>Total Mass of the Rigid Body</td>
                   <td>kg</td>
                 </tr>
                 <tr>
@@ -283,32 +288,32 @@
                 </tr>
                 <tr>
                   <td><em><b>v</b><sup>AP</sup></em></td>
-                  <td>Velocity Of the Point of Collision P in Body A</td>
+                  <td>Velocity of the Point of Collision P in Body A</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
                   <td><em><b>v</b><sup>BP</sup></em></td>
-                  <td>Velocity Of the Point of Collision P in Body B</td>
+                  <td>Velocity of the Point of Collision P in Body B</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>1</sub></em></td>
-                  <td>Velocity Of the First Body</td>
+                  <td>Velocity of the First Body</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>2</sub></em></td>
-                  <td>Velocity Of the Second Body</td>
+                  <td>Velocity of the Second Body</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>A</sub></em></td>
-                  <td>Velocity At Point A</td>
+                  <td>Velocity at Point A</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>B</sub></em></td>
-                  <td>Velocity At Point B</td>
+                  <td>Velocity at Point B</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
@@ -318,7 +323,7 @@
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>i</sub></em></td>
-                  <td>Velocity Of the I-Th Body's Velocity</td>
+                  <td>Velocity of the I-Th Body's Velocity</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
@@ -328,7 +333,7 @@
                 </tr>
                 <tr>
                   <td><em><b>v</b><sub>O</sub></em></td>
-                  <td>Velocity At Point Origin</td>
+                  <td>Velocity at Point Origin</td>
                   <td>m/s</td>
                 </tr>
                 <tr>
@@ -344,14 +349,14 @@
                 <tr>
                   <td><em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em></td>
                   <td>
-                    Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body A
+                    Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body A
                   </td>
                   <td>m</td>
                 </tr>
                 <tr>
                   <td><em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em></td>
                   <td>
-                    Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body B
+                    Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body B
                   </td>
                   <td>m</td>
                 </tr>
@@ -614,7 +619,7 @@
                     Rigid body: A solid body in which deformation is neglected.
                   </li>
                   <li>
-                    Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.
+                    Elasticity: The ratio of the relative velocities of two colliding objects after and before a collision.
                   </li>
                   <li>
                     Centre of mass: The mean location of the distribution of mass of the object.
@@ -665,12 +670,12 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chalses>DD: chalses</a>, <a href=#DD:reVeInColl>DD: reVeInColl</a>, <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:ctrOfMass>DD: ctrOfMass</a>, <a href=#DD:momentOfInertia>DD: momentOfInertia</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#DD:impulseV>DD: impulseV</a>, <a href=#DD:impulse>DD: impulse</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#TM:ChaslesThm>TM: ChaslesThm</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
+                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chaslesThm>DD: chaslesThm</a>, <a href=#DD:reVeInColl>DD: reVeInColl</a>, <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:ctrOfMass>DD: ctrOfMass</a>, <a href=#DD:momentOfInertia>DD: momentOfInertia</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#DD:impulseV>DD: impulseV</a>, <a href=#DD:impulse>DD: impulse</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpOD">
-                      objectDimension: All objects are 2D. (RefBy: <a href=#DD:chalses>DD: chalses</a>, <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:ctrOfMass>DD: ctrOfMass</a>, <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#DD:impulse>DD: impulse</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
+                      objectDimension: All objects are 2D. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:ctrOfMass>DD: ctrOfMass</a>, <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#DD:impulse>DD: impulse</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
                     </div>
                   </p>
                   <p>
@@ -690,7 +695,7 @@
                   </p>
                   <p>
                     <div id="assumpDI">
-                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#DD:chalses>DD: chalses</a>, <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#lcID>LC: Include-Dampening</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
+                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#lcID>LC: Include-Dampening</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
                     </div>
                   </p>
                   <p>
@@ -863,60 +868,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, <em>G</em> is the An empirical physical constant, used to show the force between two objects caused by gravity (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="TM:ChaslesThm">
-                  <table class="tdefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>TM:ChaslesThm</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Chasles' theorem</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em><b>v</b><sub>B</sub> = <b>v</b><sub>O</sub>&plus;ω&#10799;<b>r</b><sub>OB</sub></em>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li>
-                            <em><b>v</b><sub>B</sub></em> is the velocity at point B (m/s)
-                          </li>
-                          <li>
-                            <em><b>v</b><sub>O</sub></em> is the velocity at point origin (m/s)
-                          </li>
-                          <li><em>ω</em> is the angular velocity (rad/s)</li>
-                          <li>
-                            <em><b>r</b><sub>OB</sub></em> is the displacement vector between the origin and point B (m)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#assumpOT>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, <em>G</em> is the empirical physical constant used to show the force between two objects caused by gravity (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
                         </p>
                       </td>
                     </tr>
@@ -981,7 +933,69 @@
             <div id="Sec:GDs">
               <div class="subsubsection">
                 <h3>General Definitions</h3>
-                <p class="paragraph">There are no general definitions.</p>
+                <p class="paragraph">
+                  This section collects the laws and equations that will be used to build the instance models.
+                </p>
+                <div id="GD:accelGravity">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:accelGravity</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Acceleration due to gravity</p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">m/s<sup>2</sup></p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        <div class="equation">
+                          <em>g = <div class="fraction">
+                                    <span class="fup">G&#8239;M</span>
+                                    <span class="fdn">||<b>r</b>||<sup>2</sup></span>
+                                  </div>&#8239;<b>r&#770;</b></em>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li>
+                            <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+                          </li>
+                          <li>
+                            <em>G</em> is the gravitational constant (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>))
+                          </li>
+                          <li><em>M</em> is the mass of the larger rigid body (kg)</li>
+                          <li>
+                            <em>||<b>r</b>||</em> is the Euclidean norm of the displacement (m)
+                          </li>
+                          <li>
+                            <em><b>r&#770;</b></em> is the displacement unit vector (m)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href="https://en.wikipedia.org/wiki/Gravitational_acceleration">Definition of Gravitational Acceleration</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"></p></td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
               </div>
             </div>
             <div id="Sec:DDs">
@@ -1016,7 +1030,7 @@
                                                         <span class="fup">
                                                           &sum;m<sub>j</sub>&#8239;<b>p</b><sub>j</sub>
                                                         </span>
-                                                        <span class="fdn">M</span>
+                                                        <span class="fdn">m<sub>T</sub></span>
                                                       </div></em>
                         </div>
                       </td>
@@ -1032,7 +1046,9 @@
                           <li>
                             <em><b>p</b><sub>j</sub></em> is the position vector of the j-th particle (m)
                           </li>
-                          <li><em>M</em> is the total mass of the rigid body (kg)</li>
+                          <li>
+                            <em>m<sub>T</sub></em> is the total mass of the rigid body (kg)
+                          </li>
                         </ul>
                       </td>
                     </tr>
@@ -1530,16 +1546,37 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
-                <div id="DD:chalses">
+                <div id="DD:impulseDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of impulse (scalar):</h4>
+                    <p class="paragraph">Newton's second law of motion states:</p>
+                    <div class="equation">
+                      <em><b>F</b> = m&#8239;<b>a</b> = m&#8239;<div class="fraction">
+                                                                  <span class="fup">
+                                                                    &#8239;d<b>v</b>
+                                                                  </span>
+                                                                  <span class="fdn">&#8239;dt</span>
+                                                                </div></em>
+                    </div>
+                    <p class="paragraph">Rearranging :</p>
+                    <div class="equation">
+                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;(&int;<sub><b>v</b><sub>1</sub></sub><sup><b>v</b><sub>2</sub></sup>1&#8239;d<b>v</b>)</em>
+                    </div>
+                    <p class="paragraph">Integrating the right hand side :</p>
+                    <div class="equation">
+                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;<b>v</b><sub>2</sub>&minus;m&#8239;<b>v</b><sub>1</sub> = m&#8239;Δ<b>v</b></em>
+                    </div>
+                  </div>
+                </div>
+                <div id="DD:chaslesThm">
                   <table class="ddefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>DD:chalses</b></td>
+                      <td><b>DD:chaslesThm</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Velocity At Point B</p></td>
+                      <td><p class="paragraph">Chasles' theorem</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -1578,18 +1615,15 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body <a href=#assumpOT>A: objectTy</a> is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
-                        </p>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
-                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
-                        <p class="paragraph">
-                          <a href=#assumpDI>A: dampingInvolvement</a>
+                          The linear velocity <em><b>v</b><sub>B</sub></em> of any point B in a rigid body (from <a href=#assumpOT>A: objectTy</a>) is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> and the displacement vector between the origin and point B <em><b>r</b><sub>OB</sub></em>.
                         </p>
                       </td>
                     </tr>
                     <tr>
                       <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
+                      <td>
+                        <p class="paragraph"><a href=#chaslesWiki>chaslesWiki</a></p>
+                      </td>
                     </tr>
                     <tr>
                       <th>RefBy</th>
@@ -2769,13 +2803,13 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:chalses>DD: chalses</a></td>
-              <td>X</td>
+              <td><a href=#DD:chaslesThm>DD: chaslesThm</a></td>
               <td>X</td>
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
+              <td></td>
+              <td></td>
               <td></td>
             </tr>
             <tr>
@@ -2879,9 +2913,9 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#TM:ChaslesThm>TM: ChaslesThm</a></td>
-              <td>X</td>
+              <td><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -2889,9 +2923,9 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></td>
+              <td><a href=#GD:accelGravity>GD: accelGravity</a></td>
               <td></td>
-              <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3187,7 +3221,7 @@
               <th><a href=#DD:angVel>DD: angVel</a></th>
               <th><a href=#DD:angAccel>DD: angAccel</a></th>
               <th><a href=#DD:impulse>DD: impulse</a></th>
-              <th><a href=#DD:chalses>DD: chalses</a></th>
+              <th><a href=#DD:chaslesThm>DD: chaslesThm</a></th>
               <th><a href=#DD:torque>DD: torque</a></th>
               <th><a href=#DD:kEnergy>DD: kEnergy</a></th>
               <th><a href=#DD:coeffRestitution>DD: coeffRestitution</a></th>
@@ -3198,8 +3232,8 @@
               <th><a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a></th>
               <th><a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a></th>
               <th><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></th>
-              <th><a href=#TM:ChaslesThm>TM: ChaslesThm</a></th>
               <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
+              <th><a href=#GD:accelGravity>GD: accelGravity</a></th>
               <th><a href=#IM:transMot>IM: transMot</a></th>
               <th><a href=#IM:rotMot>IM: rotMot</a></th>
               <th><a href=#IM:col2D>IM: col2D</a></th>
@@ -3421,7 +3455,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:chalses>DD: chalses</a></td>
+              <td><a href=#DD:chaslesThm>DD: chaslesThm</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3718,7 +3752,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#TM:ChaslesThm>TM: ChaslesThm</a></td>
+              <td><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3745,7 +3779,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></td>
+              <td><a href=#GD:accelGravity>GD: accelGravity</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3869,7 +3903,7 @@
               <th><a href=#DD:angVel>DD: angVel</a></th>
               <th><a href=#DD:angAccel>DD: angAccel</a></th>
               <th><a href=#DD:impulse>DD: impulse</a></th>
-              <th><a href=#DD:chalses>DD: chalses</a></th>
+              <th><a href=#DD:chaslesThm>DD: chaslesThm</a></th>
               <th><a href=#DD:torque>DD: torque</a></th>
               <th><a href=#DD:kEnergy>DD: kEnergy</a></th>
               <th><a href=#DD:coeffRestitution>DD: coeffRestitution</a></th>
@@ -3880,8 +3914,8 @@
               <th><a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a></th>
               <th><a href=#TM:NewtonThirdLawMot>TM: NewtonThirdLawMot</a></th>
               <th><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></th>
-              <th><a href=#TM:ChaslesThm>TM: ChaslesThm</a></th>
               <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
+              <th><a href=#GD:accelGravity>GD: accelGravity</a></th>
               <th><a href=#IM:transMot>IM: transMot</a></th>
               <th><a href=#IM:rotMot>IM: rotMot</a></th>
               <th><a href=#IM:col2D>IM: col2D</a></th>
@@ -4692,13 +4726,18 @@
             </div>
           </li>
           <li>
+            <div id="chaslesWiki">
+              [8]: Wikipedia Contributors. <em>Chasles' theorem (kinematics)</em>. November, 2018. <a href="https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)">https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)</a>.
+            </div>
+          </li>
+          <li>
             <div id="cartesianWiki">
-              [8]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
+              [9]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
             </div>
           </li>
           <li>
             <div id="sciComp2013">
-              [9]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
+              [10]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
             </div>
           </li>
         </ul>

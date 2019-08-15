@@ -8,55 +8,29 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 
-import Data.Drasil.Quantities.Physics (energy, pressure, time)
+import Data.Drasil.Quantities.Physics (energy, pressure)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latentHeat)
 
-import Drasil.SWHS.Assumptions (assumpLCCCW, assumpTHCCoT)
 import Drasil.SWHS.References (bueche1986, koothoor2013, lightstone2012)
 import Drasil.SWHS.Unitals (aspectRatio, coilHTC, coilSA, diam, eta, htCapLP,
-  htCapSP, htCapW, htFluxC, htFluxP, htFusion, latentEP, meltFrac, pcmHTC,
-  pcmMass, pcmSA, tankLength, tauLP, tauSP, tauW, tempC, tempPCM, tempW, wMass)
+  htCapSP, htCapW, htFusion, latentEP, meltFrac, pcmHTC, pcmMass, pcmSA,
+  tankLength, tauLP, tauSP, tauW, wMass)
 
 refMDB :: ModelDB
 refMDB = mdb [] [] dataDefs []
 
 qDefs :: [QDefinition]
-qDefs = [ddHtFluxCQD, ddHtFluxPQD, balanceDecayRateQD, balanceDecayTimeQD,
-  balanceSolidPCMQD, balanceLiquidPCMQD, ddHtFusionQD, ddMeltFracQD, aspRatQD]
+qDefs = [balanceDecayRateQD, balanceDecayTimeQD, balanceSolidPCMQD,
+  balanceLiquidPCMQD, ddHtFusionQD, ddMeltFracQD, aspRatQD]
 
 dataDefs :: [DataDefinition] 
-dataDefs = [ddHtFluxC, ddHtFluxP, balanceDecayRate, balanceDecayTime,
-  balanceSolidPCM, balanceLiquidPCM, ddHtFusion, ddMeltFrac, aspRat]
+dataDefs = [balanceDecayRate, balanceDecayTime, balanceSolidPCM,
+  balanceLiquidPCM, ddHtFusion, ddMeltFrac, aspRat]
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
 --    I think this will need an overhaul after we fix Data Definitions.
-
-ddHtFluxCQD :: QDefinition
-ddHtFluxCQD = mkQuantDef htFluxC htFluxCEqn
-
-htFluxCEqn :: Expr
-htFluxCEqn = sy coilHTC * (sy tempC - apply1 tempW time)
-
-ddHtFluxC :: DataDefinition
-ddHtFluxC = dd ddHtFluxCQD [makeCite koothoor2013]
-  Nothing "htFluxC" [makeRef2S assumpLCCCW, makeRef2S assumpTHCCoT]
-
---Can't include info in description beyond definition of variables?
-----
-
-ddHtFluxPQD :: QDefinition
-ddHtFluxPQD = mkQuantDef htFluxP htFluxPEqn
-
-htFluxPEqn :: Expr
-htFluxPEqn = sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
-
-ddHtFluxP :: DataDefinition
-ddHtFluxP = dd ddHtFluxPQD [makeCite koothoor2013]
-  Nothing "htFluxP" [makeRef2S assumpLCCCW]
-
-----
 
 balanceDecayRateQD :: QDefinition
 balanceDecayRateQD = mkQuantDef tauW balanceDecayRateEqn

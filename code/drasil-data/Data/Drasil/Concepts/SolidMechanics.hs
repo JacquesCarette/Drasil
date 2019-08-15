@@ -13,31 +13,28 @@ elastMod, mobShear, normForce, nrmStrss, poissnsR, shearForce,
   shearRes, stffness :: ConceptChunk
 
 elastMod   = dccWDS "elastMod" (cn "elastic modulus") 
-  (S "The ratio of the" +:+ phrase stress +:+ 
-  S "exerted on a body to the resulting" +:+. phrase strain)
+  (S "the ratio of the" +:+ phrase stress +:+ 
+  S "exerted on a body to the resulting" +:+ phrase strain)
 
 mobShear   = dccWDS "mobShear" (cn "mobilized shear force") 
-  (atStart shearForce +:+ S "in the direction of potential motion" `sC`
-  S "thus encouraging motion along the plane.")
+  (S "the" +:+ phrase shearForce +:+ S "in the direction of potential motion" `sC`
+  S "thus encouraging motion along the plane")
 
 normForce  = dccWDS "normForce" (cn' "normal force")
-  (S "A" +:+ phrase force +:+ S "applied perpendicular" +:+ 
-  S "to the plane of the material.")
+  (S "a" +:+ phrase force +:+ S "applied perpendicular to the plane of the material")
   
 nrmStrss   = dccWDS "nrmStrss" (cn "normal stress") 
-  (S "The" +:+ phrase stress +:+ 
-  S "exerted perpendicular to the plane of the object")
+  (S "the" +:+ phrase stress +:+  S "exerted perpendicular to the plane of the object")
   
 poissnsR   = dccWDS "poissnsR" (nounPhraseSP "Poisson's ratio") 
-  (S "The ratio of perpendicular" +:+ phrase strain +:+ 
-  S "to parallel" +:+. phrase strain)
+  (S "the ratio of perpendicular" +:+ phrase strain +:+ S "to parallel" +:+ phrase strain)
   
 shearRes   = dccWDS "shearRes" (cn "resistive shear force") 
-  (atStart shearForce +:+ S "in the direction opposite to the direction" +:+
-  S "of potential motion, thus hindering motion along the plane.")
+  (S "the" +:+ phrase shearForce +:+ S "in the direction opposite to the direction" +:+
+  S "of potential motion, thus hindering motion along the plane")
   
 shearForce = dccWDS "shearForce" (cn' "shear force")
-  (S "A" +:+ phrase force +:+ S "applied parallel to the plane of the material.")
+  (S "a" +:+ phrase force +:+ S "applied parallel to the plane of the material")
   
 stffness   = dccWDS "stffness" (cn "stiffness") 
-  (S "The extent a body resists" +:+. phrase strain)
+  (S "the extent a body resists" +:+ phrase strain)

@@ -1,15 +1,14 @@
 module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
-  eBalanceOnWtrDerivDesc2, eBalanceOnWtrDerivDesc3, eBalanceOnPCM,
-  heatEInWtr, heatEInPCM, instModIntro) where
+  eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition, InstanceModel, im, imNoDeriv)
+import Theory.Drasil (InstanceModel, im, imNoDeriv)
 import Utils.Drasil
 import Control.Lens((^.))
 
 import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,
   goal, input_, solution, output_)
-import Data.Drasil.Concepts.Math (change, equation, ode, rOfChng, surArea)
+import Data.Drasil.Concepts.Math (change, equation, ode, rightSide, rOfChng, surArea)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec, 
   heatTrans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp)
@@ -18,9 +17,10 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpTHCCoL,
   assumpCWTAT, assumpTPCAV)
-import Drasil.SWHS.Concepts (coil, phsChgMtrl, rightSide, tank, water)
-import Drasil.SWHS.DataDefs (ddHtFluxC, ddHtFluxP, ddHtFusion, ddMeltFrac,
-  balanceDecayRate, balanceDecayTime, balanceSolidPCM, balanceLiquidPCM)
+import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
+import Drasil.SWHS.DataDefs (ddHtFusion, ddMeltFrac, balanceDecayRate,
+  balanceDecayTime, balanceSolidPCM, balanceLiquidPCM)
+import Drasil.SWHS.GenDefs (htFluxWaterFromCoil, htFluxPCMFromWater, rocTempSimp)
 import Drasil.SWHS.Goals (waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS)
 import Drasil.SWHS.References (koothoor2013)
 import Drasil.SWHS.TMods (sensHtE, latentHtE)
@@ -28,7 +28,6 @@ import Drasil.SWHS.Unitals (coilHTC, coilSA, eta, htFluxC, htFluxP, htCapLP,
   htCapSP, htCapW, htFusion, latentEP, meltFrac, pcmE, pcmHTC, pcmInitMltE, 
   pcmMass, pcmSA, pcmVol, tInitMelt, tauLP, tauSP, tauW, tempC, tempInit, 
   tempMeltP, tempPCM, tempW, timeFinal, volHtGen, watE, wMass, wVol) 
-import Drasil.SWHS.GenDefs (rocTempSimp)
 
 iMods :: [InstanceModel]
 iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -78,12 +77,8 @@ eBalanceOnWtrDeriv = mkDerivName (S "the" +:+ phrase energy +:+ S "balance on wa
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 htTransEnd overAreas extraAssumps assumpNIHGBWP,
-  eBalanceOnWtrDerivDesc2 [ddHtFluxC, ddHtFluxP],
-  eBalanceOnWtrDerivDesc3,
-  eBalanceOnWtrDerivDesc4,
-  eBalanceOnWtrDerivDesc5,
-  eBalanceOnWtrDerivDesc6,
-  eBalanceOnWtrDerivDesc7 eq2]
+  eBalanceOnWtrDerivDesc2, eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4,
+  eBalanceOnWtrDerivDesc5, eBalanceOnWtrDerivDesc6, eBalanceOnWtrDerivDesc7 eq2]
 
 eBalanceOnWtrDerivDesc1 :: Sentence -> Sentence-> Sentence -> ConceptInstance -> Sentence
 eBalanceOnWtrDerivDesc1 htEnd oa ea htA = foldlSentCol [
@@ -93,7 +88,7 @@ eBalanceOnWtrDerivDesc1 htEnd oa ea htA = foldlSentCol [
   phrase tank, (E $ sy wVol) `sC` S "which has", phrase mass +:+. ((E $ sy wMass) `sAnd`
   phrase heatCapSpec `sC` (E $ sy htCapW)), atStart heatTrans, S "occurs in the",
   phrase water, S "from the", phrase coil, S "as", E $ sy htFluxC,
-  sParen (makeRef2S ddHtFluxC) +:+ htEnd `sC` EmptyS +:+. oa, ea, S "No", phrase heatTrans, S "occurs to", S "outside" `ofThe`
+  sParen (makeRef2S htFluxWaterFromCoil) +:+ htEnd `sC` EmptyS +:+. oa, ea, S "No", phrase heatTrans, S "occurs to", S "outside" `ofThe`
   phrase tank `sC` S "since it has been assumed to be perfectly insulated" +:+.
   sParen (makeRef2S assumpPIT), S "Since the", phrase assumption,
   S "is made that no internal heat is generated" +:+. (sParen (makeRef2S htA) `sC`
@@ -102,7 +97,7 @@ eBalanceOnWtrDerivDesc1 htEnd oa ea htA = foldlSentCol [
 
 htTransEnd :: Sentence
 htTransEnd = foldlSent_ [S "and from the", phrase water, S "into the",
-  getAcc phsChgMtrl, S "as", ch htFluxP, sParen (makeRef2S ddHtFluxP)]
+  getAcc phsChgMtrl, S "as", ch htFluxP, sParen (makeRef2S htFluxPCMFromWater)]
 
 overAreas :: Sentence
 overAreas = S "over areas" +:+ ch coilSA `sAnd` ch pcmSA `sC` S "respectively"
@@ -115,9 +110,9 @@ extraAssumps = foldlSent [S "The thermal flux is constant over", ch coilSA `sC`
   S "same throughout its", phrase vol, sParen (makeRef2S assumpTPCAV) `andThe`
   phrase water `sIs` S "fully mixed", sParen (makeRef2S assumpCWTAT)]
 
-eBalanceOnWtrDerivDesc2 :: [DataDefinition] -> Sentence
-eBalanceOnWtrDerivDesc2 dds = foldlSentCol [S "Using", foldlList Comma List
-  (map (\x -> makeRef2S x +:+ S "for" +:+ ch x) dds) `sC` S "this can be written as"]
+eBalanceOnWtrDerivDesc2 :: Sentence
+eBalanceOnWtrDerivDesc2 = foldlSentCol [S "Using", makeRef2S htFluxWaterFromCoil, S "for",
+  ch htFluxC `sAnd` makeRef2S htFluxPCMFromWater, S "for", ch htFluxP `sC` S "this can be written as"]
 
 eBalanceOnWtrDerivDesc3 :: Sentence
 eBalanceOnWtrDerivDesc3 = foldlSentCol [S "Dividing", eqN 2, S "by", E eq1 `sC` S "we obtain"]
@@ -241,7 +236,7 @@ eBalanceOnPCMDerivDesc1 = foldlSentCol [
   S "being considered" `isThe` phrase pcmVol +:+. sParen (ch pcmVol),
   S "The derivation that follows is initially for the solid" +:+. getAcc phsChgMtrl,
   S "The" +:+. (phrase pcmMass `sIs` ch pcmMass `andThe` phrase htCapSP `sIs` ch htCapSP),
-  S "The", phrase htFluxP `sIs` ch htFluxP, sParen (makeRef2S ddHtFluxP),
+  S "The", phrase htFluxP `sIs` ch htFluxP, sParen (makeRef2S htFluxPCMFromWater),
   S "over", phrase pcmSA +:+. ch pcmSA, S "The thermal flux is constant over",
   ch pcmSA `sC` S "since", phrase temp `ofThe` getAcc phsChgMtrl `isThe`
   S "same throughout its", phrase vol, sParen (makeRef2S assumpTPCAV) `andThe`
@@ -252,7 +247,7 @@ eBalanceOnPCMDerivDesc1 = foldlSentCol [
   S "the equation for", makeRef2S rocTempSimp, S "can be written as"]
 
 eBalanceOnPCMDerivDesc2 :: Sentence
-eBalanceOnPCMDerivDesc2 = foldlSentCol [S "Using", makeRef2S ddHtFluxP, S "for",
+eBalanceOnPCMDerivDesc2 = foldlSentCol [S "Using", makeRef2S htFluxPCMFromWater, S "for",
   ch htFluxP `sC` S "this", phrase equation, S "can be written as"]
 
 eBalanceOnPCMDerivDesc3 :: Sentence

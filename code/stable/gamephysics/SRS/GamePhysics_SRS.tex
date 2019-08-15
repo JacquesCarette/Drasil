@@ -22,7 +22,7 @@
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
 \bibliography{bibfile}
 \title{Software Requirements Specification for Game Physics}
-\author{Alex Halliwushka and Luthfi Mawarid}
+\author{Alex Halliwushka, Luthfi Mawarid, and Olu Owojaiye}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -91,9 +91,9 @@ $h$ & Height & m
 \\
 $\mathbf{I}$ & Moment of inertia & kg$\text{m}^{2}$
 \\
-${\mathbf{I}_{\text{A}}}$ & Moment of Inertia Of Rigid Body A & kg$\text{m}^{2}$
+${\mathbf{I}_{\text{A}}}$ & Moment of Inertia of Rigid Body A & kg$\text{m}^{2}$
 \\
-${\mathbf{I}_{\text{B}}}$ & Moment of Inertia Of Rigid Body B & kg$\text{m}^{2}$
+${\mathbf{I}_{\text{B}}}$ & Moment of Inertia of Rigid Body B & kg$\text{m}^{2}$
 \\
 $\mathbf{J}$ & Impulse (vector) & Ns
 \\
@@ -103,7 +103,7 @@ $KE$ & Kinetic energy & J
 \\
 $L$ & Length & m
 \\
-$M$ & Total Mass of the Rigid Body & kg
+$M$ & Mass of the Larger Rigid Body & kg
 \\
 $m$ & Mass & kg
 \\
@@ -111,11 +111,13 @@ ${m_{1}}$ & Mass of the first body & kg
 \\
 ${m_{2}}$ & Mass of the second body & kg
 \\
-${m_{\text{A}}}$ & Mass Of Rigid Body A & kg
+${m_{\text{A}}}$ & Mass of Rigid Body A & kg
 \\
-${m_{\text{B}}}$ & Mass Of Rigid Body B & kg
+${m_{\text{B}}}$ & Mass of Rigid Body B & kg
 \\
-${m_{j}}$ & Mass Of the J-Th Particle & kg
+${m_{j}}$ & Mass of the J-Th Particle & kg
+\\
+${m_{T}}$ & Total Mass of the Rigid Body & kg
 \\
 $\mathbf{n}$ & Collision Normal Vector & m
 \\
@@ -147,33 +149,33 @@ $Δ\mathbf{v}$ & Change in velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $\mathbf{v}\text{(}t\text{)}$ & Linear Velocity & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}^{\text{A}\text{P}}}$ & Velocity Of the Point of Collision P in Body A & $\frac{\text{m}}{\text{s}}$
+${\mathbf{v}^{\text{A}\text{P}}}$ & Velocity of the Point of Collision P in Body A & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}^{\text{B}\text{P}}}$ & Velocity Of the Point of Collision P in Body B & $\frac{\text{m}}{\text{s}}$
+${\mathbf{v}^{\text{B}\text{P}}}$ & Velocity of the Point of Collision P in Body B & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{1}}$ & Velocity Of the First Body & $\frac{\text{m}}{\text{s}}$
+${\mathbf{v}_{1}}$ & Velocity of the First Body & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{2}}$ & Velocity Of the Second Body & $\frac{\text{m}}{\text{s}}$
+${\mathbf{v}_{2}}$ & Velocity of the Second Body & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{\text{A}}}$ & Velocity At Point A & $\frac{\text{m}}{\text{s}}$
+${\mathbf{v}_{\text{A}}}$ & Velocity at Point A & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{\text{B}}}$ & Velocity At Point B & $\frac{\text{m}}{\text{s}}$
+${\mathbf{v}_{\text{B}}}$ & Velocity at Point B & $\frac{\text{m}}{\text{s}}$
 \\
 ${{\mathbf{v}_{\text{f}}}^{\text{A}\text{B}}}$ & Final Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{i}}$ & Velocity Of the I-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
+${\mathbf{v}_{i}}$ & Velocity of the I-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ & Initial Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{\text{O}}}$ & Velocity At Point Origin & $\frac{\text{m}}{\text{s}}$
+${\mathbf{v}_{\text{O}}}$ & Velocity at Point Origin & $\frac{\text{m}}{\text{s}}$
 \\
 $\text{||}\mathbf{n}\text{||}$ & Length of the Normal Vector & m
 \\
 $\text{||}\mathbf{r}\text{||}$ & Euclidean norm of the displacement & m
 \\
-$\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}$ & Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body A & m
+$\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}$ & Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body A & m
 \\
-$\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}$ & Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body B & m
+$\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}$ & Length of the Perpendicular Vector to the Contact Displacement Vector of Rigid Body B & m
 \\
 ${\text{||}\mathbf{r}\text{||}^{2}}$ & Squared distance & $\text{m}^{2}$
 \\
@@ -316,7 +318,7 @@ This subsection provides a list of terms that are used in the subsequent section
 
 \begin{itemize}
 \item{Rigid body: A solid body in which deformation is neglected.}
-\item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
+\item{Elasticity: The ratio of the relative velocities of two colliding objects after and before a collision.}
 \item{Centre of mass: The mean location of the distribution of mass of the object.}
 \item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from \cite{cartesianWiki}).}
 \item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.}
@@ -338,12 +340,12 @@ The instance models that govern Game Physics are presented in \hyperref[Sec:IMs]
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{itemize}
-\item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[DD:chalses]{DD: chalses}, \hyperref[DD:reVeInColl]{DD: reVeInColl}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[DD:momentOfInertia]{DD: momentOfInertia}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulseV]{DD: impulseV}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[TM:ChaslesThm]{TM: ChaslesThm}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
-\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[DD:chalses]{DD: chalses}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
+\item[objectTy:\phantomsection\label{assumpOT}]{All objects are rigid bodies. (RefBy: \hyperref[DD:chaslesThm]{DD: chaslesThm}, \hyperref[DD:reVeInColl]{DD: reVeInColl}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[DD:momentOfInertia]{DD: momentOfInertia}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulseV]{DD: impulseV}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
+\item[objectDimension:\phantomsection\label{assumpOD}]{All objects are 2D. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:ctrOfMass]{DD: ctrOfMass}, \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[DD:impulse]{DD: impulse}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
 \item[coordinateSystemTy:\phantomsection\label{assumpCST}]{The library uses a Cartesian coordinate system.}
 \item[axesDefined:\phantomsection\label{assumpAD}]{The axes are defined using right-handed coordinate system. (RefBy: \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:impulse]{DD: impulse}, and \hyperref[IM:col2D]{IM: col2D}.)}
 \item[collisionType:\phantomsection\label{assumpCT}]{All rigid bodies collisions are vertex-to-edge collisions. (RefBy: \hyperref[lcEC]{LC: Expanded-Collisions}, \hyperref[DD:impulse]{DD: impulse}, and \hyperref[IM:col2D]{IM: col2D}.)}
-\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[DD:chalses]{DD: chalses}, \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[lcID]{LC: Include-Dampening}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
+\item[dampingInvolvement:\phantomsection\label{assumpDI}]{There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[DD:potEnergy]{DD: potEnergy}, \hyperref[DD:linVel]{DD: linVel}, \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linAcc]{DD: linAcc}, \hyperref[lcID]{LC: Include-Dampening}, \hyperref[DD:kEnergy]{DD: kEnergy}, \hyperref[IM:col2D]{IM: col2D}, \hyperref[DD:angVel]{DD: angVel}, \hyperref[DD:angDisp]{DD: angDisp}, and \hyperref[DD:angAccel]{DD: angAccel}.)}
 \item[constraintsAndJointsInvolvement:\phantomsection\label{assumpCAJI}]{There are no constraints and joints involved throughout the simulation. (RefBy: \hyperref[IM:transMot]{IM: transMot}, \hyperref[IM:rotMot]{IM: rotMot}, \hyperref[lcIJC]{LC: Include-Joints-Constraints}, and \hyperref[IM:col2D]{IM: col2D}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
@@ -436,39 +438,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{r}$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${\text{||}\mathbf{r}\text{||}^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $\text{||}\mathbf{r}\text{||}$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the An empirical physical constant, used to show the force between two objects caused by gravity ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
-        
-\\ \midrule \\
-Source & --
-         
-\\ \midrule \\
-RefBy & 
-\\ \bottomrule
-\end{tabular}
-\end{minipage}
-\vspace{\baselineskip}
-\noindent
-\begin{minipage}{\textwidth}
-\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{TM:ChaslesThm}
-\phantomsection 
-\label{TM:ChaslesThm}
-\\ \midrule \\
-Label & Chasles' theorem
-        
-\\ \midrule \\
-Equation & \begin{displaymath}
-           {\mathbf{v}_{\text{B}}}={\mathbf{v}_{\text{O}}}+ω\times{\mathbf{r}_{\text{O}\text{B}}}
-           \end{displaymath}
-\\ \midrule \\
-Description & \begin{symbDescription}
-              \item{${\mathbf{v}_{\text{B}}}$ is the velocity at point B ($\frac{\text{m}}{\text{s}}$)}
-              \item{${\mathbf{v}_{\text{O}}}$ is the velocity at point origin ($\frac{\text{m}}{\text{s}}$)}
-              \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${\mathbf{r}_{\text{O}\text{B}}}$ is the displacement vector between the origin and point B (m)}
-              \end{symbDescription}
-\\ \midrule \\
-Notes & The linear velocity ${\mathbf{v}_{\text{B}}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{\text{O}}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{\text{O}\text{B}}}$ (m).
+Notes & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${\text{||}\mathbf{r}\text{||}^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $\text{||}\mathbf{r}\text{||}$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the empirical physical constant used to show the force between two objects caused by gravity ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
         
 \\ \midrule \\
 Source & --
@@ -511,7 +481,41 @@ RefBy &
 \end{minipage}
 \subsubsection{General Definitions}
 \label{Sec:GDs}
-There are no general definitions.
+This section collects the laws and equations that will be used to build the instance models.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:accelGravity}
+\phantomsection 
+\label{GD:accelGravity}
+\\ \midrule \\
+Label & Acceleration due to gravity
+        
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}^{2}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           g=\frac{G M}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$)}
+              \item{$M$ is the mass of the larger rigid body (kg)}
+              \item{$\text{||}\mathbf{r}\text{||}$ is the Euclidean norm of the displacement (m)}
+              \item{$\mathbf{\hat{r}}$ is the displacement unit vector (m)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & \hyperref{https://en.wikipedia.org/wiki/Gravitational_acceleration}{}{}{Definition of Gravitational Acceleration}
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
 
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -535,14 +539,14 @@ Units & m
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{p}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{M}
+           {\mathbf{p}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{{m_{T}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${\mathbf{p}_{\text{CM}}}$ is the Center of Mass (m)}
               \item{${m_{j}}$ is the mass of the j-th particle (kg)}
               \item{${\mathbf{p}_{j}}$ is the position vector of the j-th particle (m)}
-              \item{$M$ is the total mass of the rigid body (kg)}
+              \item{${m_{T}}$ is the total mass of the rigid body (kg)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & \hyperref[assumpOT]{A: objectTy}
@@ -869,16 +873,32 @@ RefBy & \hyperref[IM:col2D]{IM: col2D}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\paragraph{Detailed derivation of impulse (scalar):}
+\label{DD:impulseDeriv}
+Newton's second law of motion states:
 
+\begin{displaymath}
+\mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}
+\end{displaymath}
+Rearranging :
+
+\begin{displaymath}
+\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)
+\end{displaymath}
+Integrating the right hand side :
+
+\begin{displaymath}
+\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}
+\end{displaymath}
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
 \begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:chalses}
+\toprule \textbf{Refname} & \textbf{DD:chaslesThm}
 \phantomsection 
-\label{DD:chalses}
+\label{DD:chaslesThm}
 \\ \midrule \\
-Label & Velocity At Point B
+Label & Chasles' theorem
         
 \\ \midrule \\
 Symbol & ${\mathbf{v}_{\text{B}}}$
@@ -898,16 +918,10 @@ Description & \begin{symbDescription}
               \item{${\mathbf{r}_{\text{O}\text{B}}}$ is the displacement vector between the origin and point B (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The linear velocity ${\mathbf{v}_{\text{B}}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body \hyperref[assumpOT]{A: objectTy} is the sum of the linear velocity ${\mathbf{v}_{\text{O}}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{\text{O}\text{B}}}$ (m).
-        
-        \hyperref[assumpOT]{A: objectTy}
-        
-        \hyperref[assumpOD]{A: objectDimension}
-        
-        \hyperref[assumpDI]{A: dampingInvolvement}
+Notes & The linear velocity ${\mathbf{v}_{\text{B}}}$ of any point B in a rigid body (from \hyperref[assumpOT]{A: objectTy}) is the sum of the linear velocity ${\mathbf{v}_{\text{O}}}$ of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $ω$ and the displacement vector between the origin and point B ${\mathbf{r}_{\text{O}\text{B}}}$.
         
 \\ \midrule \\
-Source & --
+Source & \cite{chaslesWiki}
          
 \\ \midrule \\
 RefBy & 
@@ -1548,7 +1562,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:impulse]{DD: impulse} & X & X &  & X & X &  & 
 \\
-\hyperref[DD:chalses]{DD: chalses} & X & X &  &  &  & X & 
+\hyperref[DD:chaslesThm]{DD: chaslesThm} & X &  &  &  &  &  & 
 \\
 \hyperref[DD:torque]{DD: torque} &  &  &  &  &  &  & 
 \\
@@ -1570,9 +1584,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw} &  &  &  &  &  &  & 
 \\
-\hyperref[TM:ChaslesThm]{TM: ChaslesThm} & X &  &  &  &  &  & 
-\\
 \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  & X &  &  &  &  & 
+\\
+\hyperref[GD:accelGravity]{GD: accelGravity} &  &  &  &  &  &  & 
 \\
 \hyperref[IM:transMot]{IM: transMot} & X & X &  &  &  & X & X
 \\
@@ -1632,7 +1646,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chalses]{DD: chalses}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:ChaslesThm]{TM: ChaslesThm}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}}
+\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chaslesThm]{DD: chaslesThm}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD: accelGravity}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}}
 \\
 \midrule
 \endhead
@@ -1652,7 +1666,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:impulse]{DD: impulse} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:chalses]{DD: chalses} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:chaslesThm]{DD: chaslesThm} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:torque]{DD: torque} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1674,9 +1688,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:ChaslesThm]{TM: ChaslesThm} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
 \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:accelGravity]{GD: accelGravity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[IM:transMot]{IM: transMot} & X & X & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1690,7 +1704,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chalses]{DD: chalses}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:ChaslesThm]{TM: ChaslesThm}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}} & \textbf{\hyperref[simSpace]{FR: Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR: Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR: Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[highPerformance]{NFR: High-Performance}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[portable]{NFR: Portable}} & \textbf{\hyperref[reliable]{NFR: Reliable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
+\textbf{} & \textbf{\hyperref[DD:ctrOfMass]{DD: ctrOfMass}} & \textbf{\hyperref[DD:linDisp]{DD: linDisp}} & \textbf{\hyperref[DD:linVel]{DD: linVel}} & \textbf{\hyperref[DD:linAcc]{DD: linAcc}} & \textbf{\hyperref[DD:angDisp]{DD: angDisp}} & \textbf{\hyperref[DD:angVel]{DD: angVel}} & \textbf{\hyperref[DD:angAccel]{DD: angAccel}} & \textbf{\hyperref[DD:impulse]{DD: impulse}} & \textbf{\hyperref[DD:chaslesThm]{DD: chaslesThm}} & \textbf{\hyperref[DD:torque]{DD: torque}} & \textbf{\hyperref[DD:kEnergy]{DD: kEnergy}} & \textbf{\hyperref[DD:coeffRestitution]{DD: coeffRestitution}} & \textbf{\hyperref[DD:reVeInColl]{DD: reVeInColl}} & \textbf{\hyperref[DD:impulseV]{DD: impulseV}} & \textbf{\hyperref[DD:potEnergy]{DD: potEnergy}} & \textbf{\hyperref[DD:momentOfInertia]{DD: momentOfInertia}} & \textbf{\hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}} & \textbf{\hyperref[TM:NewtonThirdLawMot]{TM: NewtonThirdLawMot}} & \textbf{\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}} & \textbf{\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}} & \textbf{\hyperref[GD:accelGravity]{GD: accelGravity}} & \textbf{\hyperref[IM:transMot]{IM: transMot}} & \textbf{\hyperref[IM:rotMot]{IM: rotMot}} & \textbf{\hyperref[IM:col2D]{IM: col2D}} & \textbf{\hyperref[simSpace]{FR: Simulation-Space}} & \textbf{\hyperref[inputInitialConds]{FR: Input-Initial-Conditions}} & \textbf{\hyperref[inputSurfaceProps]{FR: Input-Surface-Properties}} & \textbf{\hyperref[verifyPhysCons]{FR: Verify-Physical\_Constraints}} & \textbf{\hyperref[calcTransOverTime]{FR: Calculate-Translation-Over-Time}} & \textbf{\hyperref[calcRotOverTime]{FR: Calculate-Rotation-Over-Time}} & \textbf{\hyperref[deterColls]{FR: Determine-Collisions}} & \textbf{\hyperref[deterCollRespOverTime]{FR: Determine-Collision-Response-Over-Time}} & \textbf{\hyperref[highPerformance]{NFR: High-Performance}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[portable]{NFR: Portable}} & \textbf{\hyperref[reliable]{NFR: Reliable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
 \\
 \midrule
 \endhead
@@ -1787,6 +1801,12 @@ editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},
 pages={107--121},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
+@misc{chaslesWiki,
+author={Wikipedia Contributors},
+title={Chasles' theorem (kinematics)},
+howpublished={\url{https://en.wikipedia.org/wiki/Chasles'\_theorem\_(kinematics)}},
+month=nov,
+year={2018}}
 @misc{cartesianWiki,
 author={Wikipedia Contributors},
 title={Cartesian coordinate system},

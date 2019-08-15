@@ -121,9 +121,7 @@
                 </tr>
                 <tr>
                   <td><em>g</em></td>
-                  <td>
-                    Glass type <em>g&thinsp;&isin;&thinsp;{"AN","FT","HS"}</em>
-                  </td>
+                  <td>Glass type</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -148,30 +146,22 @@
                 </tr>
                 <tr>
                   <td><em>is-safeLoad</em></td>
-                  <td>
-                    Variable that is assigned true when load resistance (capacity) is greater than applied load (demand)
-                  </td>
+                  <td>Load resistance safety requirement</td>
                   <td>--</td>
                 </tr>
                 <tr>
                   <td><em>is-safeLR</em></td>
-                  <td>
-                    Variable that is assigned true when load resistance (capacity) is greater than load (demand)
-                  </td>
+                  <td>3 second load equivalent resistance safety requirement</td>
                   <td>--</td>
                 </tr>
                 <tr>
                   <td><em>is-safePb</em></td>
-                  <td>
-                    Variable that is assigned true when calculated probability is less than tolerable probability
-                  </td>
+                  <td>Probability of glass breakage safety requirement</td>
                   <td>--</td>
                 </tr>
                 <tr>
                   <td><em>is-safeProb</em></td>
-                  <td>
-                    Variable that is assigned true when probability of failure is less than tolerable probability of failure
-                  </td>
+                  <td>Probability of failure safety requirement</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -318,7 +308,7 @@
                 </tr>
                 <tr>
                   <td><em>w<sub>TNT</sub></em></td>
-                  <td>Explosive mass in equivalent weight of TNT</td>
+                  <td>Equivalent TNT charge mass</td>
                   <td>kg</td>
                 </tr>
               </table>
@@ -385,6 +375,10 @@
                 <tr>
                   <td>LR</td>
                   <td>Load Resistance</td>
+                </tr>
+                <tr>
+                  <td>LSF</td>
+                  <td>Load Share Factor</td>
                 </tr>
                 <tr>
                   <td>N/A</td>
@@ -588,7 +582,7 @@
               <div class="subsubsection">
                 <h3>Terminology and Definitions</h3>
                 <p class="paragraph">
-                  This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from <a href=#astm2009>astm2009</a> in <a href=#Sec:References>Section: References</a>.
+                  This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from <a href=#astm2009>astm2009</a>.
                 </p>
                 <ol class="list">
                   <li>
@@ -622,7 +616,7 @@
                     </ul>
                   </li>
                   <li>
-                    Load - A uniformly distributed lateral pressure.
+                    Applied load (demand) or pressure - A uniformly distributed lateral pressure.
                     <ul class="list">
                       <li>
                         Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in <a href=#astm2009>astm2009</a> (pp. 1 and 53).
@@ -782,7 +776,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is-safeProb</em> is the variable that is assigned true when probability of failure is less than tolerable probability of failure (Unitless)
+                            <em>is-safeProb</em> is the probability of failure safety requirement (Unitless)
                           </li>
                           <li>
                             <em>P<sub>f</sub></em> is the probability of failure (Unitless)
@@ -797,7 +791,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is-safeProb</em>, the glass is considered safe. <em>is-safeProb</em> and <em>is-safeLoad</em> (from <a href=#TM:isSafeLoad>TM: isSafeLoad</a>) are either both True or both False. <em>P<sub>f</sub></em> is the probability of failure, <em>P<sub>ftol</sub></em> is the tolerable probability of failure.
+                          If <em>is-safeProb</em>, the structure is considered safe.
                         </p>
                       </td>
                     </tr>
@@ -809,7 +803,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#TM:isSafeLoad>TM: isSafeLoad</a> and <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>
+                          <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>
                         </p>
                       </td>
                     </tr>
@@ -838,7 +832,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is-safeLoad</em> is the variable that is assigned true when load resistance (capacity) is greater than applied load (demand) (Unitless)
+                            <em>is-safeLoad</em> is the load resistance safety requirement (Unitless)
                           </li>
                           <li><em>capacity</em> is the capacity or load resistance (Pa)</li>
                           <li>
@@ -851,7 +845,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is-safeLoad</em>, the glass is considered safe. <em>is-safeProb</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a>) and <em>is-safeLoad</em> are either both True or both False. LR is the load resistance (also called capacity), <em>Load</em> (also referred as the Demand) is the 3 second duration equivalent pressure.
+                          If <em>is-safeLoad</em>, the structure is considered safe.
                         </p>
                       </td>
                     </tr>
@@ -863,7 +857,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#TM:isSafeProb>TM: isSafeProb</a> and <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>
+                          <a href=#checkGlassSafety>FR: Check-Glass-Safety</a>
                         </p>
                       </td>
                     </tr>
@@ -1317,9 +1311,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li><em>GTF</em> is the glass type factor (Unitless)</li>
-                          <li>
-                            <em>g</em> is the glass type <em>g&thinsp;&isin;&thinsp;{"AN","FT","HS"}</em> (Unitless)
-                          </li>
+                          <li><em>g</em> is the glass type (Unitless)</li>
                         </ul>
                       </td>
                     </tr>
@@ -1717,9 +1709,7 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td>
-                        <p class="paragraph">Explosive mass in equivalent weight of TNT</p>
-                      </td>
+                      <td><p class="paragraph">Equivalent TNT charge mass</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -1740,7 +1730,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+                            <em>w<sub>TNT</sub></em> is the equivalent TNT charge mass (kg)
                           </li>
                           <li><em>w</em> is the charge weight (kg)</li>
                           <li><em>TNT</em> is the TNT equivalent factor (Unitless)</li>
@@ -1917,7 +1907,7 @@
                           <li><em>interpY</em> is the interpY (Unitless)</li>
                           <li><em>SD</em> is the stand off distance (m)</li>
                           <li>
-                            <em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+                            <em>w<sub>TNT</sub></em> is the equivalent TNT charge mass (kg)
                           </li>
                         </ul>
                       </td>
@@ -1926,7 +1916,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>q</em>, or demand, is the 3 second duration equivalent pressure obtained from <a href=#Figure:demandVSsod>Fig:demandVSsod</a> by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined in <a href=#DD:eqTNTW>DD: eqTNTW</a>. <em>SD</em> is the stand off distance as defined in <a href=#DD:standOffDist>DD: standOffDist</a>.
+                          <em>q</em>, or applied load (demand), is the 3 second duration equivalent pressure obtained from <a href=#Figure:demandVSsod>Fig:demandVSsod</a> by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined in <a href=#DD:eqTNTW>DD: eqTNTW</a>. <em>SD</em> is the stand off distance as defined in <a href=#DD:standOffDist>DD: standOffDist</a>.
                         </p>
                       </td>
                     </tr>
@@ -2006,7 +1996,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is-safePb</em> is the variable that is assigned true when calculated probability is less than tolerable probability (Unitless)
+                            <em>is-safePb</em> is the probability of glass breakage safety requirement (Unitless)
                           </li>
                           <li>
                             <em>P<sub>b</sub></em> is the probability of breakage (Unitless)
@@ -2083,7 +2073,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>is-safeLR</em> is the variable that is assigned true when load resistance (capacity) is greater than load (demand) (Unitless)
+                            <em>is-safeLR</em> is the 3 second load equivalent resistance safety requirement (Unitless)
                           </li>
                           <li><em>LR</em> is the load resistance (Pa)</li>
                           <li><em>q</em> is the applied load (demand) (Pa)</li>
@@ -2094,7 +2084,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is-safeLR</em>, the glass is considered safe. <em>is-safePb</em> (from <a href=#IM:isSafePb>IM: isSafePb</a>) and <em>is-safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#DD:calofDemand>DD: calofDemand</a>.
+                          If <em>is-safeLR</em>, the glass is considered safe. <em>is-safePb</em> (from <a href=#IM:isSafePb>IM: isSafePb</a>) and <em>is-safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>. <em>q</em> (also referred as the Applied Load (demand)) is the 3 second duration equivalent pressure, as defined in <a href=#DD:calofDemand>DD: calofDemand</a>.
                         </p>
                       </td>
                     </tr>
@@ -2157,7 +2147,7 @@
                     <tr>
                       <td><em>P<sub>btol</sub></em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;P<sub>btol</sub>&thinsp;&lt;&thinsp;1</em>
+                        <em>0&thinsp;&le;&thinsp;P<sub>btol</sub>&thinsp;&le;&thinsp;1</em>
                       </td>
                       <td>--</td>
                       <td><em>0.008</em></td>
@@ -2208,7 +2198,7 @@
                     <tr>
                       <td><em>P<sub>b</sub></em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;P<sub>b</sub>&thinsp;&lt;&thinsp;1</em>
+                        <em>0&thinsp;&le;&thinsp;P<sub>b</sub>&thinsp;&le;&thinsp;1</em>
                       </td>
                     </tr>
                   </table>
@@ -2283,9 +2273,7 @@
                 </tr>
                 <tr>
                   <td><em>g</em></td>
-                  <td>
-                    Glass type <em>g&thinsp;&isin;&thinsp;{"AN","FT","HS"}</em>
-                  </td>
+                  <td>Glass type</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -3407,7 +3395,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
             </tr>
@@ -3428,7 +3416,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4140,9 +4128,9 @@
         </div>
         <div id="Figure:dimlessloadVSaspect">
           <figure>
-            <img src="../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png" alt="Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)" >
+            <img src="../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png" alt="Non dimensional lateral applied load (demand) or pressure (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)" >
             <figcaption>
-              Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)
+              Non dimensional lateral applied load (demand) or pressure (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)
             </figcaption>
           </figure>
         </div>

@@ -67,34 +67,34 @@ inSA, outSA, htCapL, htCapS, htCapV,
 
 inSA = uc' "inSA" (nounPhraseSP
   "surface area over which heat is transferred in")
-  "Surface area over which thermal energy is transferred into an object"
+  "surface area over which thermal energy is transferred into an object"
   (sub cA lIn) m_2
 
 outSA = uc' "outSA" (nounPhraseSP
   "surface area over which heat is transferred out")
-  "Surface area over which thermal energy is transferred out of an object"
+  "surface area over which thermal energy is transferred out of an object"
   (sub cA lOut) m_2
 
 htCapL = uc' "htCapL" (nounPhraseSP "specific heat capacity of a liquid")
-  ("The amount of energy required to raise the temperature of a given " ++
+  ("the amount of energy required to raise the temperature of a given " ++
   "unit mass of a given liquid by a given amount")
   (sup (eqSymb heatCapSpec) lLiquid) UT.heatCapSpec
 
 htCapS = uc' "htCapS"
   (nounPhraseSP "specific heat capacity of a solid")
-  ("The amount of energy required to raise the temperature of " ++
+  ("the amount of energy required to raise the temperature of " ++
   "a given unit mass of a given solid by a given amount")
   (sup (eqSymb heatCapSpec) lSolid) UT.heatCapSpec
 
 htCapV = uc' "htCapV"
   (nounPhraseSP "specific heat capacity of a vapour")
-  ("The amount of energy required to raise the temperature of a given " ++
+  ("the amount of energy required to raise the temperature of a given " ++
   "unit mass of vapour by a given amount")
   (sup (eqSymb heatCapSpec) lVapour) UT.heatCapSpec
 
 pcmInitMltE = uc' "pcmInitMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
-  "Change in thermal energy in the phase change material at the melting point"
+  "change in thermal energy in the phase change material at the melting point"
   (sup (sub (sub (eqSymb sensHeat) lPCM) lMelt) lInit) joule
 
 volHtGen = uc' "volHtGen"
@@ -103,96 +103,96 @@ volHtGen = uc' "volHtGen"
 
 htTransCoeff = uc' "htTransCoeff"
   (nounPhraseSP "convective heat transfer coefficient")
-  ("The proportionality constant between the heat flux and the " ++
+  ("the proportionality constant between the heat flux and the " ++
   "thermodynamic driving force for the flow of thermal energy")
   lH UT.heatTransferCoef
 
 pcmMass = uc' "pcmMass" (nounPhraseSP "mass of phase change material")
-  "The quantity of matter within the phase change material"
+  "the quantity of matter within the phase change material"
   (sub (eqSymb mass) lPCM) kilogram
 
 wMass = uc' "wMass" (nounPhraseSP "mass of water")
-  "The quantity of matter within the water" (sub (eqSymb mass) lWater) kilogram
+  "the quantity of matter within the water" (sub (eqSymb mass) lWater) kilogram
 
 thFluxVect = uc' "thFluxVect" (nounPhraseSP "thermal flux vector")
-  "Vector denoting the direction of thermal flux through a surface"
+  "vector denoting the direction of thermal flux through a surface"
   (vec lQ) UT.thermalFlux
 
 htFluxC = uc' "htFluxC"
   (nounPhraseSP "heat flux into the water from the coil")
-  "The rate of heat energy transfer into the water from the coil per unit time"
+  "the rate of heat energy transfer into the water from the coil per unit time"
   (sub (eqSymb htFlux) lCoil) UT.thermalFlux
 
 htFluxIn = uc' "htFluxIn" (nounPhraseSP "heat flux input")
-  "The rate of heat energy transfer into an object per unit time"
+  "the rate of heat energy transfer into an object per unit time"
   (sub (eqSymb htFlux) lIn) UT.thermalFlux
 
 htFluxOut = uc' "htFluxOut" (nounPhraseSP "heat flux output")
-  "The rate of heat energy transfer into an object per unit time"
+  "the rate of heat energy transfer into an object per unit time"
   (sub (eqSymb htFlux) lOut) UT.thermalFlux
 
 htFluxP = uc' "htFluxP" (nounPhraseSP "heat flux into the PCM from water")
-  ("The rate of heat energy transfer into the phase" ++
+  ("the rate of heat energy transfer into the phase" ++
   "change material from the water per unit time")
   (sub (eqSymb htFlux) lPCM) UT.thermalFlux
 
 latentEP = uc' "latentEP" (nounPhraseSP "latent heat energy added to PCM")
-  ("Energy released or absorbed, by a body or a thermodynamic system, "++
+  ("energy released or absorbed, by a body or a thermodynamic system, "++
   "during a constant-temperature process and absorbed by the phase" ++
   "change material") (sub (eqSymb latentHeat) lPCM) joule
 
 tempEnv = uc' "tempEnv" (nounPhraseSP "temperature of the environment")
-  "The tempature of a given environment"
+  "the tempature of a given environment"
   (sub (eqSymb temp) lEnv) centigrade
 
 tInitMelt = uc' "tInitMelt"
   (nounPhraseSP "time at which melting of PCM begins")
-  ("Time at which the phase change material " ++
+  ("time at which the phase change material " ++
     "begins changing from a solid to a liquid")
   (sup (sub (eqSymb time) lMelt) lInit) second
 
 tFinalMelt = uc' "tFinalMelt"
   (nounPhraseSP "time at which melting of PCM ends")
-  ("Time at which the phase change material " ++
+  ("time at which the phase change material " ++
     "finishes changes from a solid to a liquid")
   (sup (sub (eqSymb time) lMelt) lFinal) second
   
 tankVol = uc' "tankVol" (nounPhraseSP "volume of the cylindrical tank")
-  "The amount of space encompassed by a tank"
+  "the amount of space encompassed by a tank"
   (sub (eqSymb vol) lTank) m_3
 
 wVol = uc' "wVol" (vol `of_` water)
-  "The amount of space occupied by a given quantity of water"
+  "the amount of space occupied by a given quantity of water"
   (sub (eqSymb vol) lWater) m_3
 
 deltaT = uc' "deltaT" (nounPhraseSP "change in temperature")
-  "Change in the average kinetic energy of a given material"
+  "change in the average kinetic energy of a given material"
   (Concat [cDelta, eqSymb temp]) centigrade
 
 tau = uc' "tau" (nounPhraseSP "dummy variable for integration over time")
-  "Binary value representing the presence or absence of integration over time"
+  "binary value representing the presence or absence of integration over time"
   lTau second
 --Not sure how to define anything after this point
 
 tauLP = uc' "tauLP" (nounPhraseSP "ODE parameter for liquid PCM")
-  ("Derived through melting of phase change material, which " ++
+  ("derived through melting of phase change material, which " ++
   "changes ODE parameter for solid PCM into parameter for liquid")
   (sup (sub lTau lPCM) lLiquid) second
 
 tauSP = uc' "tauSP" (nounPhraseSP "ODE parameter for solid PCM")
-  "Derived parameter based on rate of change of temperature of phase change material"
+  "derived parameter based on rate of change of temperature of phase change material"
   (sup (sub lTau lPCM) lSolid) second
 
 tauW = uc' "tauW" (nounPhraseSP "ODE parameter for water related to decay time")
-  "Derived parameter based on rate of change of temperature of water"
+  "derived parameter based on rate of change of temperature of water"
   (sub lTau lWater) second
 
 simTime = uc' "simTime" (compoundPhrase' (simulation ^. term)
-  (time ^. term)) "Time over which the simulation runs"
+  (time ^. term)) "time over which the simulation runs"
   lT second
 
 thickness = uc'  "thickness" (nounPhraseSP "Minimum thickness of a sheet of PCM")
-  "The minimum thickness of a sheet of PCM"
+  "the minimum thickness of a sheet of PCM"
   (subMin lH) metre
 ----------------------
 -- Unitless symbols --
@@ -207,11 +207,11 @@ eta, meltFrac, fracMin, consTol, aspectRatio, aspectRatioMin, aspectRatioMax :: 
 
 -- FIXME: should this have units?
 eta = dqd' (dcc "eta" (nounPhraseSP "ODE parameter related to decay rate")
-  "Derived parameter based on rate of change of temperature of water")
+  "derived parameter based on rate of change of temperature of water")
   (const lEta) Real Nothing
 
 meltFrac = dqd' (dcc "meltFrac" (nounPhraseSP "melt fraction")
-  "Ratio of thermal energy to amount of mass melted")
+  "ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
   (const lPhi) Real Nothing
 
@@ -262,20 +262,20 @@ tempPCM, tempW, watE, pcmE :: ConstrConcept
 
 -- Constraint 1
 tankLength = uqc "tankLength" (nounPhraseSP "length of tank")
-  "The length of the tank" cL metre Rational
+  "the length of the tank" cL metre Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy tankLengthMin) (Inc, sy tankLengthMax)] (dbl 1.5)
   defaultUncrt
 
 -- Constraint 2
 diam = uqc "diam" (nounPhraseSP "diameter of tank")
-  "The diameter of the tank" cD metre Rational
+  "the diameter of the tank" cD metre Rational
   [gtZeroConstr, sfwrc $ Bounded (Inc, sy arMin) (Inc, sy arMax)]
   (dbl 0.412) defaultUncrt
 
 -- Constraint 3
 pcmVol = uqc "pcmVol" (nounPhraseSP "volume of PCM")
-  "The amount of space occupied by a given quantity of phase change material"
+  "the amount of space occupied by a given quantity of phase change material"
   (sub (eqSymb vol) lPCM) m_3 Rational
   [physc $ Bounded (Exc,0) (Exc, sy tankVol),
    sfwrc $ UpFrom (Inc, sy fracMin * sy tankVol)] 
@@ -289,7 +289,7 @@ pcmSA = uqc "pcmSA"
   (S "phase change material")
   CapFirst CapWords) (nounPhrase'' (phrase surArea) (phrase surArea)
   CapFirst CapWords))
-  "Area covered by the outermost layer of the phase change material"
+  "area covered by the outermost layer of the phase change material"
   (sub cA lPCM) m_2 Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy pcmVol) (Inc, (2 / sy thickness) * sy tankVol)]
@@ -305,15 +305,14 @@ pcmDensity = uq (cuc'' "pcmDensity" (nounPhraseSP "density of PCM")
 -- Constraint 6
 tempMeltP = uqc "tempMeltP"
   (nounPhraseSP "melting point temperature for PCM")
-  ("Temperature at which the phase change " ++
-    "material transitions from a solid to a liquid")
+  "temperature at which the phase change material transitions from a solid to a liquid"
   (sup (sub (eqSymb temp) lMelt) lPCM) centigrade Rational
   [physc $ Bounded (Exc,0) (Exc, sy tempC)] (dbl 44.2) defaultUncrt
 
 -- Constraint 7
 htCapSP = uqc "htCapSP"
   (nounPhraseSP "specific heat capacity of PCM as a solid")
-  ("The amount of energy required to raise the temperature of a " ++
+  ("the amount of energy required to raise the temperature of a " ++
   "given unit mass of solid phase change material by a given amount")
   (sup (sub (eqSymb heatCapSpec) lPCM) lSolid) UT.heatCapSpec Rational
   [gtZeroConstr,
@@ -323,7 +322,7 @@ htCapSP = uqc "htCapSP"
 -- Constraint 8
 htCapLP = uqc "htCapLP"
   (nounPhraseSP "specific heat capacity of PCM as a liquid")
-  ("The amount of energy required to raise the temperature of a " ++
+  ("the amount of energy required to raise the temperature of a " ++
   "given unit mass of liquid phase change material by a given amount")
   (sup (sub (eqSymb heatCapSpec) lPCM) lLiquid) UT.heatCapSpec Rational
   [gtZeroConstr,
@@ -332,8 +331,7 @@ htCapLP = uqc "htCapLP"
 
 --Constraint 9
 htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
-  ("amount of thermal energy required to " ++
-  "completely melt a unit mass of a substance")
+  "amount of thermal energy required to completely melt a unit mass of a substance"
   (sub cH lFusion) specificE Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Exc, sy htFusionMin) (Exc, sy htFusionMax)] (dbl 211600) defaultUncrt
@@ -344,26 +342,26 @@ htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
 coilSA = uqc "coilSA"
   (compoundPhrase (nounPhrase'' (S "heating coil") (S "heating coil") CapFirst CapWords)
   (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
-  "Area covered by the outermost layer of the coil" (sub cA lCoil) m_2 Rational
+  "area covered by the outermost layer of the coil" (sub cA lCoil) m_2 Rational
   [gtZeroConstr,
   sfwrc $ UpTo (Inc, sy coilSAMax)] (dbl 0.12) defaultUncrt
 
 -- Constraint 11
 tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
-  "The average kinetic energy of the particles within the coil"
+  "the average kinetic energy of the particles within the coil"
   (sub (eqSymb temp) lCoil) centigrade Rational
   [physc $ Bounded (Exc,0) (Exc,100)] (dbl 50) defaultUncrt
 
 -- Constraint 12
 wDensity = uq (cuc'' "wDensity" (density `of_` water)
-  "Mass per unit volume of water" (autoStage $ sub (eqSymb density) lWater) densityU Rational
+  "nass per unit volume of water" (autoStage $ sub (eqSymb density) lWater) densityU Rational
   [gtZeroConstr, sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)]
   (dbl 1000)) defaultUncrt
 
 -- Constraint 13
 htCapW = uqc "htCapW" (heatCapSpec `of_` water)
-  ("The amount of energy required to raise the " ++
-    "temperature of a given unit mass of water by a given amount")
+  ("the amount of energy required to raise the " ++
+   "temperature of a given unit mass of water by a given amount")
   (sub (eqSymb heatCapSpec) lWater) UT.heatCapSpec Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Exc, sy htCapWMin) (Exc, sy htCapWMax)] (dbl 4186) defaultUncrt
@@ -371,7 +369,7 @@ htCapW = uqc "htCapW" (heatCapSpec `of_` water)
 -- Constraint 14
 coilHTC = uqc "coilHTC" (nounPhraseSP
   "convective heat transfer coefficient between coil and water")
-  ("The convective heat transfer coefficient that models " ++
+  ("the convective heat transfer coefficient that models " ++
   "the thermal flux from the coil to the surrounding water")
   (sub (eqSymb htTransCoeff) lCoil)
   UT.heatTransferCoef Rational
@@ -381,29 +379,29 @@ coilHTC = uqc "coilHTC" (nounPhraseSP
 -- Constraint 15
 pcmHTC = uqc "pcmHTC"
   (nounPhraseSP "convective heat transfer coefficient between PCM and water")
-  ("The convective heat transfer coefficient that models " ++
-  "the thermal flux from the phase change material to the surrounding water")
+  ("the convective heat transfer coefficient that models " ++
+   "the thermal flux from the phase change material to the surrounding water")
   (sub lH lPCM) UT.heatTransferCoef Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTCMax)] (dbl 1000) defaultUncrt
   
 -- Constraint 16
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
-  "The temperature at the beginning of the simulation"
+  "the temperature at the beginning of the simulation"
   (sub (eqSymb temp) lInit) centigrade Rational
   [physc $ Bounded (Exc,0) (Exc, sy meltPt)] (dbl 40) defaultUncrt
   
 -- Constraint 17
 timeFinal = uqc "timeFinal" (nounPhraseSP "final time")
-  ("The amount of time elapsed from the beginning of the " ++
-  "simulation to its conclusion") (sub (eqSymb time) 
+  ("the amount of time elapsed from the beginning of the " ++
+   "simulation to its conclusion") (sub (eqSymb time) 
   lFinal) second Rational
   [gtZeroConstr,
   sfwrc $ UpTo (Exc, sy timeFinalMax)] (dbl 50000) defaultUncrt
 
 timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
-  ("The finite discretization of time used in the numerical method" ++
-    "for solving the computational model")
+  ("the finite discretization of time used in the numerical method " ++
+   "for solving the computational model")
   (sub (eqSymb time) lStep) second Rational
   [physc $ Bounded (Exc,0) (Exc, sy timeFinal)]
   (dbl 0.01) defaultUncrt
@@ -416,27 +414,26 @@ outputs = [tempW, tempPCM, watE, pcmE]
 -- Constraint 18
 tempW = cuc' "tempW"
   (nounPhraseSP "temperature of the water")
-  "The average kinetic energy of the particles within the water" 
+  "the average kinetic energy of the particles within the water" 
   (sub (eqSymb temp) lWater) centigrade Rational
   [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (dbl 0)
 
 -- Constraint 19
 tempPCM = cuc' "tempPCM"
-  (nounPhraseSP "temperature of the phase change material" )
-  ("The average kinetic energy of the " ++
-    "particles within the phase change material")
+  (nounPhraseSP "temperature of the phase change material")
+  "the average kinetic energy of the particles within the phase change material"
   (sub (eqSymb temp) lPCM) centigrade Rational
   [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (dbl 0)
   
 -- Constraint 20
 watE = cuc' "watE" (nounPhraseSP "change in heat energy in the water")
-  "Change in thermal energy within the water" 
+  "change in thermal energy within the water" 
   (sub (eqSymb sensHeat) lWater) joule Rational
   [physc $ UpFrom (Inc,0)] (dbl 0)
   
 -- Constraint 21
 pcmE = cuc' "pcmE" (nounPhraseSP "change in heat energy in the PCM")
-  "Change in thermal energy within the phase change material" 
+  "change in thermal energy within the phase change material" 
   (sub (eqSymb sensHeat) lPCM) joule Rational
   [physc $ UpFrom (Inc, 0)] (dbl 0)
 
@@ -448,12 +445,12 @@ absTol, relTol :: UncertainChunk
 
 absTol = uvc "absTol" (nounPhraseSP "absolute tolerance") 
   (sub cA lTol) Real
-  [ physc $ Bounded (Exc,0) (Exc,1)] 
+  [physc $ Bounded (Exc,0) (Exc,1)] 
    (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
 relTol = uvc "relTol" (nounPhraseSP "relative tolerance") 
   (sub cR lTol) Real
-  [ physc $ Bounded (Exc,0) (Exc,1)] 
+  [physc $ Bounded (Exc,0) (Exc,1)] 
   (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
 -------------------------

@@ -57,7 +57,7 @@ consThermENotes = map foldlSent [
    S "for", phrase transient, phrase heatTrans, S "in a given material"],
   [S "For this", phrase equation, S "to apply" `sC` S "other forms" `sOf`
    phrase energy `sC` S "such as", phrase mechEnergy `sC` S "are assumed",
-   S "to be negligible in the", phrase system, sParen (makeRef2S assumpTEO)]]
+   S "to be negligible" `inThe` phrase system, sParen (makeRef2S assumpTEO)]]
 
 -------------------------
 -- Theoretical Model 2 --

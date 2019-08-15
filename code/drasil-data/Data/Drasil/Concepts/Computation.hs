@@ -4,13 +4,13 @@ import Language.Drasil
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
-    quantity, type_, value, variable)
+  quantity, type_, value, variable)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.IdeaDicts
 
 algorithm :: ConceptChunk
-algorithm    = dcc "algorithm" (cn' "algorithm")
-  "A series of steps to be followed in calculations and problem-solving operations"
+algorithm = dcc "algorithm" (cn' "algorithm")
+  "a series of steps to be followed in calculations and problem-solving operations"
 
 modCalcDesc :: Sentence -> ConceptChunk
 modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")
@@ -24,10 +24,10 @@ os :: CI
 -------------------------------------------------------------------------------
 --  NC      |     |      id       |       term               |  abbreviation
 -------------------------------------------------------------------------------
-application  = nc  "application"    (cn' "application")      
-computer     = nc  "computer"       (cn' "computer")         
-structure    = nc  "structure"      (cn' "structure")         
-os           = commonIdeaWithDict "os"      (cn' "operating system")    "OS"   [compScience]
+application = nc   "application"      (cn' "application")      
+computer    = nc   "computer"         (cn' "computer")         
+structure   = nc   "structure"        (cn' "structure")         
+os          = commonIdeaWithDict "os" (cn' "operating system")    "OS"   [compScience]
 
 
 dataStruct, dataStruct', dataType, dataType', 

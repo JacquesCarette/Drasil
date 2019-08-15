@@ -8,7 +8,7 @@ import Control.Lens((^.))
 
 import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,
   goal, input_, solution, output_)
-import Data.Drasil.Concepts.Math (change, equation, ode, rOfChng, surArea)
+import Data.Drasil.Concepts.Math (change, equation, ode, rightSide, rOfChng, surArea)
 import Data.Drasil.Concepts.PhysicalProperties (liquid, mass, solid, vol)
 import Data.Drasil.Concepts.Thermodynamics (boilPt, boiling, heat, heatCapSpec, 
   heatTrans, htFlux, latentHeat, melting, phaseChange, sensHeat, temp)
@@ -17,7 +17,7 @@ import Data.Drasil.Quantities.Physics (energy, time)
 import Drasil.SWHS.Assumptions (assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL,
   assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpTHCCoL,
   assumpCWTAT, assumpTPCAV)
-import Drasil.SWHS.Concepts (coil, phsChgMtrl, rightSide, tank, water)
+import Drasil.SWHS.Concepts (coil, phsChgMtrl, tank, water)
 import Drasil.SWHS.DataDefs (ddHtFusion, ddMeltFrac, balanceDecayRate,
   balanceDecayTime, balanceSolidPCM, balanceLiquidPCM)
 import Drasil.SWHS.GenDefs (htFluxWaterFromCoil, htFluxPCMFromWater, rocTempSimp)

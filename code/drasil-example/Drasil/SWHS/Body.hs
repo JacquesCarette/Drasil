@@ -30,7 +30,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   property, purpose, quantity, reference, software, softwareSys, solution,
   srsDomains, sysCont, system, user, value, variable, doccon, doccon')
 import Data.Drasil.Concepts.Education (calculus, educon, engineering)
-import Data.Drasil.Concepts.Math (de, equation, ode, unit_, mathcon, mathcon')
+import Data.Drasil.Concepts.Math (de, equation, ode, rightSide, unit_, mathcon, mathcon')
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
 import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.Concepts.Software (program, softwarecon, correctness,
@@ -51,7 +51,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
 import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
-  phsChgMtrl, progName, rightSide, sWHT, swhsPCM, tank, tankPCM, transient, water)
+  phsChgMtrl, progName, sWHT, swhsPCM, tank, tankPCM, transient, water)
 import Drasil.SWHS.DataDefs (qDefs)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
 import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
@@ -203,7 +203,7 @@ introStart = foldlSent [S "Due to", foldlList Comma List (map S
   phrase energy, S "storage technology"]
 
 introStartSWHS :: Sentence
-introStartSWHS = foldlSent [swhsPCM ^. defn, sParen (short phsChgMtrl),
+introStartSWHS = foldlSent [capSent (swhsPCM ^. defn), sParen (short phsChgMtrl),
   S "use a renewable", phrase enerSrc `sAnd` S "provide a novel way of storing" +:+.
   phrase energy, atStart swhsPCM, S "improve over the traditional", plural progName,
   S "because of their smaller size. The smaller size is possible because of the ability" `sOf`
@@ -286,7 +286,7 @@ orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [S "The", plural inModel, 
   S "to be solved are referred to as" +:+. 
   foldlList Comma List (map makeRef2S iMods), S "The", plural inModel,
-  S "provide the", phrase ode, sParen (short ode :+: S "s") `sAnd` 
+  S "provide the", plural ode, sParen (short ode :+: S "s") `sAnd` 
   S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
   phrase swhsPCM, short progName, S "solves these", short ode :+: S "s"]
 

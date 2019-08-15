@@ -68,7 +68,7 @@ newtonLUGRel = sy force $=
 
 newtonLUGNotes :: [Sentence]
 newtonLUGNotes = map foldlSent [
-  [S "Two", plural rigidBody, S "in the universe attract each other with a",
+  [S "Two", plural rigidBody `inThe` S "universe attract each other with a",
    getTandS force, S "that is directly proportional to the product of their",
    plural mass `sC` ch mass_1 `sAnd` ch mass_2 `sC` EmptyS `sAnd`
    S "inversely proportional" `toThe` getTandS sqrDist, S "between them"],

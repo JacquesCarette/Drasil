@@ -35,8 +35,8 @@ doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characterist
   validation, value, variable, vav, vavPlan, verification, video, year]
 
 doccon' :: [CI]
-doccon' = [assumption, dataDefn, desSpec, genDefn, goalStmt, dataConst, inModel, likelyChg,
-  unlikelyChg, physSyst, requirement, thModel, mg, mis, notApp, srs, typUnc]
+doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
+  likelyChg, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg]
 
 assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requirement,
   mg, mis, notApp, srs, typUnc, sec :: CI
@@ -76,12 +76,11 @@ abbreviation, analysis, appendix, aspect, body, characteristic, class_, client,
   model, name_, nonfunctional, object, offShelf, open, organization, output_,
   physics, physical, plan, practice, priority, problem, product_, project,
   property, purpose, quantity, realtime, reference, requirement_, response, 
-  result, reviewer, safety, scope, second_, section_, scenario, source,
-  simulation, software, solution, specific, specification, stakeholder,
-  standard, statement, symbol_, system, table_, task, template, term_,
-  terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
-  useCase, validation, value, variable, video, verification, year,
-  scpOfTheProjS :: NamedChunk
+  result, reviewer, safety, scope, scpOfTheProjS, second_, section_, scenario,
+  source, simulation, software, solution, specific, specification, stakeholder,
+  standard, statement, symbol_, system, table_, task, template, term_, terminology,
+  theory, traceyGraph, traceyMatrix, type_, uncertainty, user, useCase, validation,
+  value, variable, video, verification, year :: NamedChunk
 
 abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
 analysis        = nc "analysis"       (cnIS   "analysis"           )

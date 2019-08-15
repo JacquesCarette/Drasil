@@ -57,7 +57,7 @@ termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ map termDef lst] []
                   plural section_ `sAnd` S "their meaning, with the", phrase purpose `sOf`
                   S "reducing ambiguity and making it easier to correctly understand the" +:+.
                   plural requirement, fromMaybe EmptyS end]
-        termDef x = atStart x +: EmptyS +:+ (x ^. defn)
+        termDef x = atStart x +: EmptyS +:+. capSent (x ^. defn)
 
 termDefnF' :: Maybe Sentence -> [Contents] -> Section
 termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []

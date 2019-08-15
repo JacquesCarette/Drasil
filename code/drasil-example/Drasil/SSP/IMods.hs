@@ -10,7 +10,7 @@ import Drasil.DocLang.SRS (propCorSol)
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis, assumption, constraint,
   definition, first, goal, method_, physical, problem, solution, value)
-import Data.Drasil.Concepts.Math (angle, equation)
+import Data.Drasil.Concepts.Math (angle, equation, leftSide)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (force)
 
@@ -171,8 +171,8 @@ fctSftyDerivSentence15 :: [Sentence]
 fctSftyDerivSentence15 = [S "and so on until", eqN 12, S "is obtained from",   eqN 7]
 
 fctSftyDerivSentence16 :: [Sentence]
-fctSftyDerivSentence16 = [eqN 9, S "can then be substituted into the left-hand",
-  S "side of", eqN 12 `sC` S "resulting in"]
+fctSftyDerivSentence16 = [eqN 9, S "can then be substituted into the",
+  phrase leftSide `sOf` eqN 12 `sC` S "resulting in"]
 
 fctSftyDerivSentence17 :: [Sentence]
 fctSftyDerivSentence17 = [S "This can be rearranged by multiplying boths sides",

@@ -22,8 +22,8 @@ module Utils.Drasil (
   compoundNCP1, compoundNCPlPh, compoundNCPlPl, for, for', for'', of_, of_',
   of_'', of__, ofA, ofN_, the, the', theCustom, with,
   -- Sentence
-  andIts, andThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, ofThe', sOf, sOr,
-  sVersus, sAnd, sAre, sIn, sIs, toThe
+  andIts, andThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, ofThe',
+  sOf, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe
 ) where
 
 import Utils.Drasil.Contents

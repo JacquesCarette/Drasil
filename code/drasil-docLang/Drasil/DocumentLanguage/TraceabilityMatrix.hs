@@ -60,10 +60,10 @@ traceMHeader f c = map (`markerHelper` c) l
 
 markerHelper :: UID -> SystemInformation -> Sentence
 markerHelper t si
-  | t `elem` Map.keys (s ^. dataDefnTable)        = shortRef  $ datadefnLookup    t (s ^. dataDefnTable)
-  | t `elem` Map.keys (s ^. insmodelTable)        = shortRef  $ insmodelLookup    t (s ^. insmodelTable)
-  | t `elem` Map.keys (s ^. gendefTable)          = shortRef  $ gendefLookup      t (s ^. gendefTable)
-  | t `elem` Map.keys (s ^. theoryModelTable)     = shortRef  $ theoryModelLookup t (s ^. theoryModelTable)
+  | t `elem` Map.keys (s ^. dataDefnTable)        = shortRef abrv $ datadefnLookup    t (s ^. dataDefnTable)
+  | t `elem` Map.keys (s ^. insmodelTable)        = shortRef abrv $ insmodelLookup    t (s ^. insmodelTable)
+  | t `elem` Map.keys (s ^. gendefTable)          = shortRef abrv $ gendefLookup      t (s ^. gendefTable)
+  | t `elem` Map.keys (s ^. theoryModelTable)     = shortRef abrv $ theoryModelLookup t (s ^. theoryModelTable)
   | t `elem` Map.keys (s ^. conceptinsTable)      = makeRef2S $ conceptinsLookup  t (s ^. conceptinsTable)
   | t `elem` Map.keys (s ^. sectionTable)         = makeRef2S $ sectionLookup     t (s ^. sectionTable)
   | t `elem` Map.keys (s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)

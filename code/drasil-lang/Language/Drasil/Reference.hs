@@ -4,16 +4,15 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Chunk.Citation (Citation)
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
-import Language.Drasil.Classes (CommonIdea(abrv), HasMarker(marker),
-  Referable(refAdd, renderRef))
+import Language.Drasil.Classes (HasMarker(marker), Referable(refAdd, renderRef))
 import Language.Drasil.Label.Type (LblType(RP), IRefProg(RS))
 import Language.Drasil.RefProg (Reference(..), RefInfo(..))
 import Language.Drasil.Sentence (Sentence(Ref))
 import Language.Drasil.ShortName (shortname')
 
-shortRef :: (CommonIdea l, HasMarker l) => l -> Sentence
-shortRef l = Ref $ Reference (l ^. uid) (RP (RS sn) (refAdd l)) (shortname' sn) None
-  where sn = abrv l ++ show (l ^. marker)
+shortRef :: HasMarker l => (l -> String) -> l -> Sentence
+shortRef f l = Ref $ Reference (l ^. uid) (RP (RS sn) (refAdd l)) (shortname' sn) None
+  where sn = f l ++ show (l ^. marker)
 
 makeRef2 :: (Referable l, HasShortName l) => l -> Reference
 makeRef2 l = Reference (l ^. uid) (renderRef l) (shortname l) None

@@ -556,7 +556,7 @@
               The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#dParnas1972>dParnas1972</a> and <a href=#parnasClements1984>parnasClements1984</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The instance models to be solved are referred to as <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
+              The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The instance models to be solved are referred to as <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>. The instance models provide the ordinary differential equations (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
             </p>
           </div>
         </div>
@@ -648,18 +648,18 @@
                 </p>
                 <ul class="list">
                   <li>
-                    Heat flux: The rate of thermal energy transfer through a given surface per unit time
+                    Heat flux: The rate of thermal energy transfer through a given surface per unit time.
                   </li>
                   <li>
-                    Phase change material: A substance that uses phase changes (such as melting) to absorb or release large amounts of heat at a constant temperature
+                    Phase change material: A substance that uses phase changes (such as melting) to absorb or release large amounts of heat at a constant temperature.
                   </li>
                   <li>
-                    Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount
+                    Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount.
                   </li>
                   <li>
-                    Thermal conduction: The transfer of heat energy through a substance
+                    Thermal conduction: The transfer of heat energy through a substance.
                   </li>
-                  <li>Transient: Changing with time</li>
+                  <li>Transient: Changing with time.</li>
                 </ul>
               </div>
             </div>
@@ -740,7 +740,7 @@
                   </p>
                   <p>
                     <div id="assumpHTCC">
-                      Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time. (RefBy: <a href=#GD:nwtnCooling>GD: nwtnCooling</a>.)
+                      Heat-Transfer-Coeffs-Constant: All heat transfer coefficients are constant over time. (RefBy: <a href=#TM:nwtnCooling>TM: nwtnCooling</a>.)
                     </div>
                   </p>
                   <p>
@@ -765,12 +765,12 @@
                   </p>
                   <p>
                     <div id="assumpLCCCW">
-                      Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. (RefBy: <a href=#DD:htFluxP>DD: htFluxP</a> and <a href=#DD:htFluxC>DD: htFluxC</a>.)
+                      Newton-Law-Convective-Cooling-Coil-Water: Newton's law of convective cooling applies between the heating coil and the water. (RefBy: <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpTHCCoT">
-                      Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. (RefBy: <a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a> and <a href=#DD:htFluxC>DD: htFluxC</a>.)
+                      Temp-Heating-Coil-Constant-over-Time: The temperature of the heating coil is constant over time. (RefBy: <a href=#likeChgTCVOD>LC: Temperature-Coil-Variable-Over-Day</a> and <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>.)
                     </div>
                   </p>
                   <p>
@@ -780,7 +780,7 @@
                   </p>
                   <p>
                     <div id="assumpLCCWP">
-                      Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM.
+                      Law-Convective-Cooling-Water-PCM: Newton's law of convective cooling applies between the water and the PCM. (RefBy: <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>.)
                     </div>
                   </p>
                   <p>
@@ -882,7 +882,10 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>ρ</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>∇</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#assumpTEO>A: Thermal-Energy-Only</a>).
+                          The above equation gives the law of conservation of energy for transient heat transfer in a given material.
+                        </p>
+                        <p class="paragraph">
+                          For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#assumpTEO>A: Thermal-Energy-Only</a>).
                         </p>
                       </td>
                     </tr>
@@ -954,7 +957,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>ΔT</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>= <em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#TM:latentHtE>TM: latentHtE</a>, Latent heat energy.
+                          Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T = T<sub>boil</sub></em> or <em>T = T<sub>melt</sub></em>. If this is the case, refer to <a href=#TM:latentHtE>TM: latentHtE</a>.
                         </p>
                       </td>
                     </tr>
@@ -1008,7 +1011,19 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>Q</em> is the change in thermal energy (J), latent heat energy. <em>Q(t) = &int;<sub>0</sub><sup>t</sup>$\frac{\,dQ\left(τ\right)}{\,dτ}$&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em> (s). <em>t</em> is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:htFusion>DD: htFusion</a>. <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
+                          <em>Q</em> is the change in thermal energy (latent heat energy).
+                        </p>
+                        <p class="paragraph">
+                          <em>Q(t) = &int;<sub>0</sub><sup>t</sup>$\frac{\,dQ\left(τ\right)}{\,dτ}$&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em>.
+                        </p>
+                        <p class="paragraph">
+                          <em>t</em> is the time elapsed, as long as the phase change is not complete.
+                        </p>
+                        <p class="paragraph">
+                          The status of the phase change depends on the melt fraction (from <a href=#DD:meltFrac>DD: meltFrac</a>).
+                        </p>
+                        <p class="paragraph">
+                          Latent heating stops when all material has changed to the new phase.
                         </p>
                       </td>
                     </tr>
@@ -1030,27 +1045,15 @@
                     </tr>
                   </table>
                 </div>
-              </div>
-            </div>
-            <div id="Sec:GDs">
-              <div class="subsubsection">
-                <h3>General Definitions</h3>
-                <p class="paragraph">
-                  This section collects the laws and equations that will be used to build the instance models.
-                </p>
-                <div id="GD:nwtnCooling">
-                  <table class="gdefn">
+                <div id="TM:nwtnCooling">
+                  <table class="tdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>GD:nwtnCooling</b></td>
+                      <td><b>TM:nwtnCooling</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Newton's law of cooling</p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">W/m<sup>2</sup></p></td>
                     </tr>
                     <tr>
                       <th>Equation</th>
@@ -1093,11 +1096,22 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a> and <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
+              </div>
+            </div>
+            <div id="Sec:GDs">
+              <div class="subsubsection">
+                <h3>General Definitions</h3>
+                <p class="paragraph">
+                  This section collects the laws and equations that will be used to build the instance models.
+                </p>
                 <div id="GD:rocTempSimp">
                   <table class="gdefn">
                     <tr>
@@ -1186,29 +1200,17 @@
                     $$m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V$$
                   </div>
                 </div>
-              </div>
-            </div>
-            <div id="Sec:DDs">
-              <div class="subsubsection">
-                <h3>Data Definitions</h3>
-                <p class="paragraph">
-                  This section collects and defines all the data needed to build the instance models.
-                </p>
-                <div id="DD:htFluxC">
-                  <table class="ddefn">
+                <div id="GD:htFluxWaterFromCoil">
+                  <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>DD:htFluxC</b></td>
+                      <td><b>GD:htFluxWaterFromCoil</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td>
                         <p class="paragraph">Heat flux into the water from the coil</p>
                       </td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>q<sub>C</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1244,7 +1246,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#assumpLCCCW>A: Newton-Law-Convective-Cooling-Coil-Water</a>
+                          <em>q<sub>C</sub></em> is found by assuming that Newton's law of cooling applies (<a href=#assumpLCCCW>A: Newton-Law-Convective-Cooling-Coil-Water</a>). This law (defined in <a href=#TM:nwtnCooling>TM: nwtnCooling</a>) is used on the surface of the heating coil.
                         </p>
                         <p class="paragraph">
                           <a href=#assumpTHCCoT>A: Temp-Heating-Coil-Constant-over-Time</a>
@@ -1268,19 +1270,15 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
-                <div id="DD:htFluxP">
-                  <table class="ddefn">
+                <div id="GD:htFluxPCMFromWater">
+                  <table class="gdefn">
                     <tr>
                       <th>Refname</th>
-                      <td><b>DD:htFluxP</b></td>
+                      <td><b>GD:htFluxPCMFromWater</b></td>
                     </tr>
                     <tr>
                       <th>Label</th>
                       <td><p class="paragraph">Heat flux into the PCM from water</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>q<sub>P</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1316,7 +1314,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#assumpLCCCW>A: Newton-Law-Convective-Cooling-Coil-Water</a>
+                          <em>q<sub>P</sub></em> is found by assuming that Newton's law of cooling applies (<a href=#assumpLCCWP>A: Law-Convective-Cooling-Water-PCM</a>). This law (defined in <a href=#TM:nwtnCooling>TM: nwtnCooling</a>) is used on the surface of the phase change material.
                         </p>
                       </td>
                     </tr>
@@ -1337,6 +1335,14 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
+              </div>
+            </div>
+            <div id="Sec:DDs">
+              <div class="subsubsection">
+                <h3>Data Definitions</h3>
+                <p class="paragraph">
+                  This section collects and defines all the data needed to build the instance models.
+                </p>
                 <div id="DD:balanceDecayRate">
                   <table class="ddefn">
                     <tr>
@@ -1651,7 +1657,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#DD:meltFrac>DD: meltFrac</a>, <a href=#TM:latentHtE>TM: latentHtE</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>
+                          <a href=#DD:meltFrac>DD: meltFrac</a> and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>
                         </p>
                       </td>
                     </tr>
@@ -1716,7 +1722,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
+                          <a href=#TM:latentHtE>TM: latentHtE</a> and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
                         </p>
                       </td>
                     </tr>
@@ -1883,11 +1889,11 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of the energy balance on water:</h4>
                     <p class="paragraph">
-                      To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#DD:htFluxC>DD: htFluxC</a>) and from the water into the PCM as <em>q<sub>P</sub></em> (<a href=#DD:htFluxP>DD: htFluxP</a>), over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+                      To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>) and from the water into the PCM as <em>q<sub>P</sub></em> (<a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>), over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
                     </p>
                     $${m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}-{q_{\text{P}}} {A_{\text{P}}}$$
                     <p class="paragraph">
-                      Using <a href=#DD:htFluxC>DD: htFluxC</a> for <em>q<sub>C</sub></em> and <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>P</sub></em>, this can be written as:
+                      Using <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a> for <em>q<sub>C</sub></em> and <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a> for <em>q<sub>P</sub></em>, this can be written as:
                     </p>
                     $${m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)-{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)$$
                     <p class="paragraph">
@@ -2023,11 +2029,11 @@
                       Detailed derivation of the energy balance on the PCM during sensible heating phase:
                     </h4>
                     <p class="paragraph">
-                      To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (<em>V<sub>P</sub></em>). The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> (<a href=#DD:htFluxP>DD: htFluxP</a>) over phase change material surface area <em>A<sub>P</sub></em>. The thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+                      To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (<em>V<sub>P</sub></em>). The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> (<a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>) over phase change material surface area <em>A<sub>P</sub></em>. The thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
                     </p>
                     $${m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}} \frac{\,d{T_{\text{P}}}}{\,dt}={q_{\text{P}}} {A_{\text{P}}}$$
                     <p class="paragraph">
-                      Using <a href=#DD:htFluxP>DD: htFluxP</a> for <em>q<sub>P</sub></em>, this equation can be written as:
+                      Using <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a> for <em>q<sub>P</sub></em>, this equation can be written as:
                     </p>
                     $${m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}} \frac{\,d{T_{\text{P}}}}{\,dt}={h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)$$
                     <p class="paragraph">
@@ -2485,7 +2491,7 @@
                   <p class="caption">Output Data Constraints</p>
                 </div>
                 <p class="paragraph">
-                  A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:htFluxC>DD: htFluxC</a> and <a href=#DD:htFluxP>DD: htFluxP</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
+                  A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a> and <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
                 </p>
                 $${E_{\text{W}}}=\int_{0}^{t}{{h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt$$
                 <p class="paragraph">
@@ -2838,52 +2844,6 @@
               <th><a href=#assumpVCN>A: Volume-Coil-Negligible</a></th>
             </tr>
             <tr>
-              <td><a href=#DD:htFluxC>DD: htFluxC</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:htFluxP>DD: htFluxP</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
               <td></td>
               <td></td>
@@ -3114,7 +3074,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:nwtnCooling>GD: nwtnCooling</a></td>
+              <td><a href=#TM:nwtnCooling>TM: nwtnCooling</a></td>
               <td></td>
               <td>X</td>
               <td></td>
@@ -3148,6 +3108,54 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3859,8 +3867,6 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
-              <th><a href=#DD:htFluxP>DD: htFluxP</a></th>
               <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
               <th><a href=#DD:balanceDecayTime>DD: balanceDecayTime</a></th>
               <th><a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a></th>
@@ -3871,54 +3877,16 @@
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
               <th><a href=#TM:latentHtE>TM: latentHtE</a></th>
-              <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
+              <th><a href=#TM:nwtnCooling>TM: nwtnCooling</a></th>
               <th><a href=#GD:rocTempSimp>GD: rocTempSimp</a></th>
+              <th>
+                <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>
+              </th>
+              <th><a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a></th>
               <th><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></th>
               <th><a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a></th>
               <th><a href=#IM:heatEInWtr>IM: heatEInWtr</a></th>
               <th><a href=#IM:heatEInPCM>IM: heatEInPCM</a></th>
-            </tr>
-            <tr>
-              <td><a href=#DD:htFluxC>DD: htFluxC</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:htFluxP>DD: htFluxP</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></td>
@@ -4031,9 +3999,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4099,9 +4067,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4116,8 +4084,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4131,7 +4099,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#GD:nwtnCooling>GD: nwtnCooling</a></td>
+              <td><a href=#TM:nwtnCooling>TM: nwtnCooling</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4160,13 +4128,57 @@
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td>X</td>
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4176,17 +4188,17 @@
               <td><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
               <td>X</td>
               <td>X</td>
@@ -4196,8 +4208,6 @@
             <tr>
               <td><a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a></td>
               <td></td>
-              <td>X</td>
-              <td></td>
               <td></td>
               <td>X</td>
               <td>X</td>
@@ -4207,6 +4217,8 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td>X</td>
               <td></td>
               <td>X</td>
               <td>X</td>
@@ -4224,9 +4236,9 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4241,14 +4253,14 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
               <td></td>
               <td>X</td>
               <td>X</td>
+              <td></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4265,8 +4277,6 @@
           <table class="table">
             <tr>
               <th></th>
-              <th><a href=#DD:htFluxC>DD: htFluxC</a></th>
-              <th><a href=#DD:htFluxP>DD: htFluxP</a></th>
               <th><a href=#DD:balanceDecayRate>DD: balanceDecayRate</a></th>
               <th><a href=#DD:balanceDecayTime>DD: balanceDecayTime</a></th>
               <th><a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a></th>
@@ -4277,8 +4287,12 @@
               <th><a href=#TM:consThermE>TM: consThermE</a></th>
               <th><a href=#TM:sensHtE>TM: sensHtE</a></th>
               <th><a href=#TM:latentHtE>TM: latentHtE</a></th>
-              <th><a href=#GD:nwtnCooling>GD: nwtnCooling</a></th>
+              <th><a href=#TM:nwtnCooling>TM: nwtnCooling</a></th>
               <th><a href=#GD:rocTempSimp>GD: rocTempSimp</a></th>
+              <th>
+                <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>
+              </th>
+              <th><a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a></th>
               <th><a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a></th>
               <th><a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a></th>
               <th><a href=#IM:heatEInWtr>IM: heatEInWtr</a></th>
@@ -4583,12 +4597,12 @@
               <td>
                 <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>
               </td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

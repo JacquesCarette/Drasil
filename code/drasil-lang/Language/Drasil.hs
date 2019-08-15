@@ -74,7 +74,7 @@ module Language.Drasil (
   , UnitalChunk(..), makeUCWDS
   , uc, uc', ucs, ucs', ucsWS
   -- Chunk.Unitary
-  , Unitary(..), UnitaryChunk, unitary, unitary', unit_symb
+  , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
   -- Chunk.Relation
   , RelationConcept, makeRC
   --Chunk.DefinedQuantity
@@ -96,8 +96,7 @@ module Language.Drasil (
   -- Chunk.Citation
   , HasCitation(getCitations)
   -- Sentence
-  , Sentence(..), sParen, sDash, (+:+), (+:+.), sC, (+:), ch
-  , SentenceStyle(..)
+  , Sentence(..), SentenceStyle(..), (+:+), (+:+.), (+:), capSent, ch, sC, sDash, sParen  
   -- Sentence.Extract
   , sdep, shortdep
   -- RefProg
@@ -256,8 +255,8 @@ import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
 import Language.Drasil.Space (Space(..)
   , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD))
-import Language.Drasil.Sentence (Sentence(..), sParen, sDash, sC, (+:+), (+:+.), (+:), ch
-  , SentenceStyle(..))
+import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
+  (+:+.), (+:), capSent, ch, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), autoStage, compsy,
@@ -268,7 +267,7 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'', comparePeople)
-import Language.Drasil.RefProg(Reference(..), RefInfo(..))
+import Language.Drasil.RefProg (Reference(..), RefInfo(..))
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..), prepend)
 
 import Language.Drasil.UnitLang (USymb(US))

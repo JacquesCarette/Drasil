@@ -129,7 +129,7 @@ public class InputConstraints {
             System.out.println(".");
             throw new Exception("InputError");
         }
-        if (!(0 < inParams.P_btol && inParams.P_btol < 1)) {
+        if (!(0 <= inParams.P_btol && inParams.P_btol <= 1)) {
             System.out.print("P_btol has value ");
             System.out.print(inParams.P_btol);
             System.out.print(" but expected to be ");

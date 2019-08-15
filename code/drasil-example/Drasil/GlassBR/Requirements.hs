@@ -66,7 +66,7 @@ sysSetValsFollowingAssumpsTable :: LabelledContent
 sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs) "ReqAssignments"
                                   (S "Required Assignments" `follows` sysSetValsFollowingAssumps)
   where
-    r2AQs = loadSF   : map qw (take 4 assumptionConstants)
+    r2AQs = qw loadSF   : map qw (take 4 assumptionConstants)
     r2ARs = assumpGL : replicate 4 assumpSV
     r2DDs = [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
 

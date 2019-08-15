@@ -34,7 +34,7 @@ import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
-  mathcon, mathcon', rightHand)
+  mathcon, mathcon', rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
@@ -331,7 +331,7 @@ probDescIntro = foldlSent_
 -----------------------------------------
 
 terms :: [ConceptChunk]
-terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand]
+terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand, CM.line, CM.point]
 
 -----------------------------
 -- 4.1.2 : Goal Statements --

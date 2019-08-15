@@ -10,8 +10,8 @@ import Control.Lens ((^.))
 
 mathcon :: [ConceptChunk]
 mathcon = [angle, area, calculation, cartesian, change, constraint, diameter,
-  equation, euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal,
-  normalV, number, orient, parameter, perp, perpV, pi_, probability, rOfChng,
+  equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal,
+  normalV, number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng,
   rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp,
   xDir, yAxis, yComp, yDir, zAxis, zComp, zDir]
 
@@ -19,8 +19,8 @@ mathcon' :: [CI]
 mathcon' = [pde, ode, de]
 
 angle, area, calculation, cartesian, change, constraint, diameter, equation,
-  euclidN, euclidSpace, gradient, graph, law, matrix, norm, normal, normalV,
-  number, orient, parameter, perp, perpV, pi_, probability, rOfChng, rate,
+  euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal, normalV,
+  number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng, rate,
   rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xComp, xDir,
   yAxis, yComp, yDir, zAxis, zComp, zDir :: ConceptChunk
 
@@ -44,6 +44,8 @@ euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the
 gradient     = dcc "gradient"     (cn' "gradient")                "degree of steepness of a graph at any point"
 graph        = dcc "graph"        (cn' "graph")                   "A diagram showing the relation between variable quantities"
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
+line         = dcc "line"         (cn' "line")                    "An interval between two points."
+--source:https://www.britannica.com/science/line-mathematics
 matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                   "is treated as a single entity and manipulated according to particular rules")
 norm         = dcc "norm"         (cn' "norm")                    "Positive length or size of a vector"
@@ -53,6 +55,8 @@ parameter    = dcc "parameter"    (cn' "parameter")               "A quantity wh
 --FIXME: Should "parameter" be in math?
 perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
 pi_          = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "The ratio of a circle's circumference to its diameter"
+point        = dcc "point"        (cn' "point")                   "An exact location, it has no size, only position."
+--source: https://www.mathsisfun.com/geometry/point.html
 probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"
 rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen."

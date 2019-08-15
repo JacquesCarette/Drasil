@@ -18,7 +18,7 @@ data Data = Singleton DataItem
 data LinePattern = Straight [DataItem] -- line of data with no pattern
                  | Repeat [DataItem]   -- line of data with repeated pattern       
 
-singleton :: CodeChunk -> Data
+singleton :: DataItem -> Data
 singleton = Singleton
 
 junkLine :: Data
@@ -51,15 +51,15 @@ isLines :: Data -> Bool
 isLines Lines{} = True
 isLines _ = False
 
-getInputs :: DataDesc -> [CodeChunk]
+getInputs :: DataDesc -> [DataItem]
 getInputs d = nub $ concatMap getDataInputs d
 
-getDataInputs :: Data -> [CodeChunk]
+getDataInputs :: Data -> [DataItem]
 getDataInputs (Singleton v) = [v]
 getDataInputs (Line lp _) = getPatternInputs lp
 getDataInputs (Lines lp _ _) = getPatternInputs lp
 getDataInputs JunkData = []
 
-getPatternInputs :: LinePattern -> [CodeChunk]
+getPatternInputs :: LinePattern -> [DataItem]
 getPatternInputs (Straight vs) = vs
 getPatternInputs (Repeat vs) = vs

@@ -1,8 +1,8 @@
 {-# LANGUAGE PostfixOperators #-}
 {-# LANGUAGE Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import (
-  publicMethod, publicInOutFunc, mkVar, mkVal, convExpr, genCalcBlock, 
-  CalcType(..), genModDef, readData, renderC
+  publicMethod, publicInOutFunc, genConstructor, mkVar, mkVal, convExpr, 
+  genCalcBlock, CalcType(..), genModDef, readData, renderC
 ) where
 
 import Language.Drasil hiding (int, log, ln, exp,
@@ -12,14 +12,15 @@ import Language.Drasil.Code.Code as C (CodeType(List))
 import Language.Drasil.Code.Imperative.Comments (paramComment, returnComment)
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, genModule, mkParam)
 import Language.Drasil.Code.Imperative.Helpers (getUpperBound, liftS, lookupC)
-import Language.Drasil.Code.Imperative.Logging (maybeLog, loggedMethod)
+import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, RenderSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), MethodSym(..))
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
+  MethodSym(..))
 import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType, codevar, 
   quantvar, quantfunc)
@@ -28,7 +29,7 @@ import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
   ConstantStructure(..), Func(..), FuncData(..), FuncDef(..), FuncStmt(..), 
-  Logging(..), Mod(..), Name, Structure(..), asExpr, fstdecl)
+  Mod(..), Name, Structure(..), asExpr, fstdecl)
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
@@ -92,27 +93,28 @@ mkVar v = variable (codeName v) (convType $ codeType v)
 publicMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   repr (MethodType repr) -> Label -> String -> [c] -> Maybe String -> 
   [repr (Block repr)] -> Reader State (repr (Method repr))
-publicMethod = genMethod public static_
+publicMethod t n = genMethod (function n public static_ t) n
 
 publicInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   Label -> String -> [c] -> [c] -> [c] -> [repr (Block repr)] -> 
   Reader State (repr (Method repr))
 publicInOutFunc = genInOutFunc public static_
 
+genConstructor :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
+  Label -> String -> [c] -> [repr (Block repr)] -> 
+  Reader State (repr (Method repr))
+genConstructor n desc p = genMethod (constructor n) n desc p Nothing
+
 genMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  repr (Scope repr) -> repr (Permanence repr) -> repr (MethodType repr) -> 
+  ([repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)) -> 
   Label -> String -> [c] -> Maybe String -> [repr (Block repr)] -> 
   Reader State (repr (Method repr))
-genMethod s pr t n desc p r b = do
+genMethod f n desc p r b = do
   g <- ask
   vars <- mapM mkVar p
+  bod <- logBody n vars b
   let ps = map mkParam vars
-      doLog = logKind g
-      loggedBody LogFunc = loggedMethod (logName g) n vars b
-      loggedBody LogAll  = loggedMethod (logName g) n vars b
-      loggedBody _       = b
-      bod = body $ loggedBody doLog
-      fn = function n s pr t ps bod
+      fn = f ps bod
   pComms <- mapM (paramComment . (^. uid)) p
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
@@ -120,18 +122,13 @@ genMethod s pr t n desc p r b = do
 genInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
   repr (Scope repr) -> repr (Permanence repr) -> Label -> String -> [c] ->
   [c] -> [c] -> [repr (Block repr)] -> Reader State (repr (Method repr))
-
 genInOutFunc s pr n desc ins outs both b = do
   g <- ask
   inVs <- mapM mkVar ins
   outVs <- mapM mkVar outs
   bothVs <- mapM mkVar both
-  let doLog = logKind g
-      loggedBody LogFunc = loggedMethod (logName g) n inVs b
-      loggedBody LogAll  = loggedMethod (logName g) n inVs b
-      loggedBody _       = b
-      bod = body $ loggedBody doLog
-      fn = inOutFunc n s pr inVs outVs bothVs bod
+  bod <- logBody n inVs b
+  let fn = inOutFunc n s pr inVs outVs bothVs bod
   pComms <- mapM (paramComment . (^. uid)) ins
   oComms <- mapM (paramComment . (^. uid)) outs
   bComms <- mapM (paramComment . (^. uid)) both

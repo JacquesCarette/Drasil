@@ -1,16 +1,18 @@
 module Language.Drasil.Code.Imperative.Descriptions (
   modDesc, inputParametersDesc, inputFormatDesc, derivedValuesDesc, 
-  inputConstraintsDesc, outputFormatDesc, inputClassDesc, inFmtFuncDesc,
-  inConsFuncDesc, dvFuncDesc, woFuncDesc
+  inputConstraintsDesc, outputFormatDesc, inputClassDesc, constCtorDesc,
+  inFmtFuncDesc, inConsFuncDesc, dvFuncDesc, woFuncDesc
 ) where
 
 import Utils.Drasil (stringList)
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.Chunk.Code (CodeIdea(codeName))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), 
   InputModule(..), Structure(..))
 
+import Data.Map (member)
 import qualified Data.Map as Map (lookup, elems)
 import Control.Monad.Reader (Reader, ask)
 
@@ -73,6 +75,14 @@ inputClassDesc = do
       dVs Nothing = ""
       dVs _ = "derived values"
   return $ inClassD $ inputs $ csi $ codeSpec g
+
+constCtorDesc :: Reader State String
+constCtorDesc = do
+  g <- ask
+  let ccDesc [] = ""
+      ccDesc _ = "Assigns values to variables for constants"
+  return $ ccDesc $ filter (flip member (eMap $ codeSpec g) . codeName) 
+    (constants $ csi $ codeSpec g)
 
 inFmtFuncDesc :: Reader State String
 inFmtFuncDesc = do

@@ -1,8 +1,8 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Database.Drasil.ChunkDB (ChunkDB(defTable), RefbyMap, TraceMap, UMap,
-  asOrderedList, cdb, collectUnits, conceptMap, conceptinsLookup,
-  conceptinsTable, dataDefnTable, datadefnLookup, defResolve, gendefLookup,
-  gendefTable, generateRefbyMap, insmodelLookup, insmodelTable,
+  asOrderedList, cdb, collectUnits, conA, conceptMap, conceptInstanceMap,
+  conceptinsLookup, conceptinsTable, dataDefnTable, datadefnLookup, defResolve,
+  gendefLookup, gendefTable, generateRefbyMap, insmodelLookup, insmodelTable,
   labelledconLookup, labelledcontentTable, refbyLookup, refbyTable,
   sectionLookup, sectionTable, symbResolve, termResolve, termTable,
   theoryModelLookup, theoryModelTable, traceLookup, traceMap, traceTable) where
@@ -11,7 +11,7 @@ import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 import Control.Lens ((^.), (&), (.~), makeLenses)
-import Data.List (sortOn)
+import Data.List (groupBy, sortOn)
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Map as Map
 
@@ -60,6 +60,17 @@ termMap = cdbMap nw
 -- | Smart constructor for a 'ConceptMap'
 conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap = cdbMap cw
+
+conA :: Idea a => a -> String
+conA = \x -> fromMaybe (error $ "No abbreviation found for " ++ x ^. uid) (getA x)
+
+-- | Smart constructor for a 'ConceptInstanceMap'
+conceptInstanceMap :: [ConceptInstance] -> ConceptInstanceMap
+conceptInstanceMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $
+  concatMap (\x -> zip x [1..]) grp
+  where
+    grp = groupBy conGrp $ sortOn cdom cs
+    conGrp a b = sDom (cdom a) == sDom (cdom b)
 
 -- | Smart constructor for a 'UnitMap'
 unitMap :: (IsUnit u) => [u] -> UnitMap
@@ -160,7 +171,7 @@ cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
     [LabelledContent] -> ChunkDB
 cdb s t c u d ins gd tm ci sect lc = CDB (symbolMap s) (termMap t) (conceptMap c)
   (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
-  (idMap ci) (idMap sect) (idMap lc)
+  (conceptInstanceMap ci) (idMap sect) (idMap lc)
 
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
 collectUnits m = map (unitWrapper . flip unitLookup (m ^. unitTable))

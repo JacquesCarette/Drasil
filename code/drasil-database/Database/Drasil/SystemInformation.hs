@@ -1,16 +1,14 @@
 {-# LANGUAGE GADTs, TemplateHaskell #-}
-module Database.Drasil.SystemInformation(SystemInformation(..), Block(..),
-  citeDB, ReferenceDB, citationsFromBibMap, citationDB, rdb, RefMap, simpleMap,
-  conceptDB
-  ) where
+module Database.Drasil.SystemInformation (Block(..), ReferenceDB, RefMap,
+  SystemInformation(..), citationDB, citationsFromBibMap, citeDB, conceptDB,
+  rdb, simpleMap) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition)
-import Database.Drasil.ChunkDB (ChunkDB)
+import Database.Drasil.ChunkDB (ChunkDB, conceptInstanceMap)
 
 import Control.Lens ((^.), makeLenses)
-import Data.Function (on)
-import Data.List (concatMap, find, groupBy, sortBy)
+import Data.List (find, sortBy)
 import qualified Data.Map as Map
 
 -- | Data structure for holding all of the requisite information about a system
@@ -107,7 +105,7 @@ data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
 makeLenses ''ReferenceDB
 
 rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
-rdb citations con = RDB (bibMap citations) (conceptMap con)
+rdb citations con = RDB (bibMap citations) (conceptInstanceMap con)
 
 simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
@@ -119,17 +117,3 @@ bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
         -- Sorting is necessary if using elems to pull all the citations
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
-
-conGrp :: ConceptInstance -> ConceptInstance -> Bool
-conGrp a b = cdl a == cdl b where
-  cdl :: ConceptInstance -> UID
-  cdl = sDom . cdom
-
-conceptMap :: [ConceptInstance] -> ConceptMap
-conceptMap cs = Map.fromList $ zip (map (^. uid) (concat grp)) $ concatMap
-  (\x -> zip x [1..]) grp
-  where grp :: [[ConceptInstance]]
-        grp = groupBy conGrp $ sortBy uidSort cs
-
-uidSort :: HasUID c => c -> c -> Ordering
-uidSort = compare `on` (^. uid)

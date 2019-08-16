@@ -18,7 +18,6 @@ import Control.Lens ((^.), Getting)
 import Data.List (nub)
 import qualified Data.Map as Map
 import Data.Maybe (fromMaybe)
-import Debug.Trace
 
 type TraceViewCat = [UID] -> ChunkDB -> [UID]
 
@@ -73,7 +72,7 @@ markerHelper t si
   | otherwise = error $ t ++ "Caught."
   where
     s = _sysinfodb si
-    conA = \x -> trace (fromMaybe "NOABBR" (getA x)) (fromMaybe "NOABBR" (getA x))
+    conA = \x -> fromMaybe (error $ "No abbreviation found for " ++ x ^. uid) (getA x)
  
 traceMColHeader :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
 traceMColHeader f = traceMHeader (traceMReferees f)

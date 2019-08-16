@@ -47,8 +47,10 @@ value u s t = do
   g <- ask
   let cs = codeSpec g
       mm = constMap cs
+      maybeInline Inline m = Just m
+      maybeInline _ _ = Nothing
   maybe (do { v <- variable s t; return $ valueOf v }) 
-    (convExpr . codeEquat) (Map.lookup u mm)
+    (convExpr . codeEquat) (Map.lookup u mm >>= maybeInline (conStruct g))
 
 variable :: (RenderSym repr) => String -> repr (StateType repr) -> 
   Reader State (repr (Variable repr))

@@ -69,11 +69,15 @@ inputClassDesc = do
   let inClassD [] = ""
       inClassD _ = "Structure for holding the " ++ stringList [
         inPs $ extInputs $ csi $ codeSpec g,
-        dVs $ Map.lookup "derived_values" (eMap $ codeSpec g)]
+        dVs $ Map.lookup "derived_values" (eMap $ codeSpec g),
+        cVs $ filter (flip member (eMap $ codeSpec g) . codeName) 
+          (constants $ csi $ codeSpec g)]
       inPs [] = ""
       inPs _ = "input values"
       dVs Nothing = ""
       dVs _ = "derived values"
+      cVs [] = ""
+      cVs _ = "constant values"
   return $ inClassD $ inputs $ csi $ codeSpec g
 
 constCtorDesc :: Reader State String

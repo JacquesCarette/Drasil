@@ -393,7 +393,7 @@ type Export = (String, String)
 
 getExportInput :: Choices -> [Input] -> [Export]
 getExportInput _ [] = []
-getExportInput chs ins cs = inExp (inputStructure chs) 
+getExportInput chs ins = inExp (inputStructure chs) 
   where inExp Unbundled = []
         inExp Bundled = map codeName ins `zip` repeat "InputParameters" 
 
@@ -402,6 +402,7 @@ getExportConstants _ [] = []
 getExportConstants chs cs = cExp (constStructure chs) (inputStructure chs)
   where cExp (Store Bundled) _ = map codeName cs `zip` repeat "Constants"
         cExp WithInputs Bundled = map codeName cs `zip` repeat "InputParameters"
+        cExp _ _ = []
 
 getExportDerived :: Choices -> [Derived] -> [Export]
 getExportDerived _ [] = []

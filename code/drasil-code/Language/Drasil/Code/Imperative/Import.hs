@@ -35,7 +35,7 @@ import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
 
 import Prelude hiding (sin, cos, tan, log, exp)
 import Data.List ((\\))
-import qualified Data.Map as Map (lookup, elems)
+import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
 import Control.Applicative ((<$>))
 import Control.Monad (liftM2,liftM3)

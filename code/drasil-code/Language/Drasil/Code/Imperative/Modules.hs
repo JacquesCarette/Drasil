@@ -30,7 +30,7 @@ import Language.Drasil.Chunk.Code (CodeIdea(codeName, codeChunk), CodeChunk,
   codeType, codevar, physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
-import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
   Comments(CommentFunc), ConstraintBehaviour(..), InputModule(..), Logging(..), 
@@ -38,7 +38,7 @@ import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import Prelude hiding (print)
-import Data.List (intersperse, intercalate)
+import Data.List (intersperse, intercalate, partition)
 import Data.Map (member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
@@ -59,6 +59,7 @@ genMainFunc = do
     v_filename <- mkVar $ codevar inFileName
     logInFile <- maybeLog v_filename
     ip <- getInputDecl
+    co <- initConsts
     gi <- getInputCall
     dv <- getDerivedCall
     ic <- getConstraintCall
@@ -68,7 +69,7 @@ genMainFunc = do
       "" $ bodyStatements $
       initLogFileVar (logKind g) ++
       varDecDef v_filename (arg 0) : logInFile ++
-      catMaybes ([ip, gi, dv, ic] ++ varDef ++ [wo])
+      catMaybes ([ip, co, gi, dv, ic] ++ varDef ++ [wo])
 
 getInputDecl :: (RenderSym repr) => Reader State (Maybe (repr (
   Statement repr)))
@@ -82,6 +83,21 @@ getInputDecl = do
       getDecl Bundled _ = return $ Just $ extObjDecNewVoid "InputParameters"
         v_params
   getDecl (inStruct g) (inputs $ csi $ codeSpec g)
+
+initConsts :: (RenderSym repr) => Reader State (Maybe (repr (Statement repr)))
+initConsts = do
+  g <- ask
+  v_consts <- mkVar (codevar consts)
+  let getDecl ([],[]) = return Nothing
+      getDecl (_,[]) = return $ Just $ extObjDecNewVoid "Constants" v_consts
+      getDecl ([],cs) = do 
+        vars <- mapM mkVar cs
+        vals <- mapM (convExpr . codeEquat) cs
+        logs <- mapM maybeLog vars
+        return $ Just $ multi $ zipWith varDecDef vars vals ++ concat logs
+      getDecl _ = error "Only some constants present in export map"
+  getDecl $ partition (flip member (eMap $ codeSpec g) . codeName) (constants $ 
+    csi $ codeSpec g)
 
 initLogFileVar :: (RenderSym repr) => Logging -> [repr (Statement repr)]
 initLogFileVar LogVar = [varDec varLogFile]

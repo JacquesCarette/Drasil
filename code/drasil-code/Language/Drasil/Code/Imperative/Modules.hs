@@ -1,13 +1,13 @@
 module Language.Drasil.Code.Imperative.Modules (
-  genMain, chooseInModule, genOutputMod, genSampleInput
+  genMain, chooseInModule, genConstMod, genOutputMod, genSampleInput
 ) where
 
 import Language.Drasil
 import Database.Drasil (ChunkDB)
-import Language.Drasil.Code.Imperative.Descriptions (constCtorDesc, 
-  derivedValuesDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc, 
-  inputConstraintsDesc, inputFormatDesc, inputParametersDesc, modDesc, 
-  outputFormatDesc, woFuncDesc)
+import Language.Drasil.Code.Imperative.Descriptions (constClassDesc, 
+  constCtorDesc, constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, 
+  inFmtFuncDesc, inputClassDesc, inputConstraintsDesc, inputFormatDesc, 
+  inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc)
 import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
   getConstraintCall, getDerivedCall, getInputCall, getOutputCall)
 import Language.Drasil.Code.Imperative.GenerateGOOL (genModule, publicClass)
@@ -162,26 +162,6 @@ genInputClass = do
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
     codeName) (ins ++ cs)
-
-genConstConstructor :: (RenderSym repr) => Label ->
-  Reader State (Maybe (repr (Method repr)))
-genConstConstructor l = do
-  g <- ask
-  let cnstnts = constants $ csi $ codeSpec g
-      genCtor :: (RenderSym repr) => [CodeDefinition] -> 
-        Reader State (Maybe (repr (Method repr)))
-      genCtor [] = return Nothing
-      genCtor _ = do
-        let vars = map (\c -> objVarSelf l (codeName c) (convType $ codeType c))
-              cnstnts
-        vals <- mapM (convExpr . codeEquat) cnstnts
-        logs <- mapM maybeLog vars
-        desc <- constCtorDesc
-        mthd <- genConstructor l desc ([] :: [CodeChunk]) (map block [ 
-          zipWith assign vars vals, concat logs])
-        return $ Just mthd
-  genCtor $ filter (flip member (Map.filter (l ==) (eMap $ codeSpec g)) . 
-    codeName) cnstnts
 
 genInputDerived :: (RenderSym repr) => Reader State 
   (Maybe (repr (Method repr)))
@@ -338,6 +318,53 @@ genSampleInput = do
   dd <- genDataDesc
   return [sampleInput (sysinfodb $ csi $ codeSpec g) dd (sampleData g) | SampleInput `elem` 
     auxiliaries g]
+
+----- CONSTANTS -----
+
+genConstMod :: (RenderSym repr) => Reader State [repr (RenderFile repr)]
+genConstMod = do
+  cDesc <- modDesc $ liftS constModDesc
+  liftS $ genModule "Constants" cDesc Nothing (Just $ fmap maybeToList 
+    genConstClass)
+
+genConstClass :: (RenderSym repr) => Reader State (Maybe (repr (Class repr)))
+genConstClass = do
+  g <- ask
+  let cs = constants $ csi $ codeSpec g
+      cname = "Constants"
+      genClass :: (RenderSym repr) => [CodeDefinition] -> Reader State (Maybe 
+        (repr (Class repr)))
+      genClass [] = return Nothing 
+      genClass vs = do
+        let constVars = map (\x -> pubMVar 0 (var (codeName x) (convType $ 
+              codeType x))) vs
+        cDesc <- constClassDesc
+        cConstruct <- genConstConstructor cname
+        cls <- publicClass cDesc cname Nothing constVars 
+          (maybeToList cConstruct)
+        return $ Just cls
+  genClass $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
+    codeName) cs
+
+genConstConstructor :: (RenderSym repr) => Label ->
+  Reader State (Maybe (repr (Method repr)))
+genConstConstructor l = do
+  g <- ask
+  let cnstnts = constants $ csi $ codeSpec g
+      genCtor :: (RenderSym repr) => [CodeDefinition] -> 
+        Reader State (Maybe (repr (Method repr)))
+      genCtor [] = return Nothing
+      genCtor _ = do
+        let vars = map (\c -> objVarSelf l (codeName c) (convType $ codeType c))
+              cnstnts
+        vals <- mapM (convExpr . codeEquat) cnstnts
+        logs <- mapM maybeLog vars
+        desc <- constCtorDesc
+        mthd <- genConstructor l desc ([] :: [CodeChunk]) (map block [ 
+          zipWith assign vars vals, concat logs])
+        return $ Just mthd
+  genCtor $ filter (flip member (Map.filter (l ==) (eMap $ codeSpec g)) . 
+    codeName) cnstnts
 
 ----- OUTPUT -------
 

@@ -5,8 +5,8 @@ module Language.Drasil.Code.Imperative.Generator (
 import Language.Drasil
 import Language.Drasil.Code.Imperative.GenerateGOOL (genDoxConfig)
 import Language.Drasil.Code.Imperative.Import (genModDef)
-import Language.Drasil.Code.Imperative.Modules (chooseInModule, genMain, 
-  genOutputMod, genSampleInput)
+import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstMod, 
+  genMain, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   ProgramSym(..), RenderSym(..), AuxiliarySym(..))
@@ -78,9 +78,10 @@ genModules = do
   let s = csi $ codeSpec g
   mn     <- genMain
   inp    <- chooseInModule $ inMod g
+  con    <- genConstMod 
   out    <- genOutputMod
   moddef <- traverse genModDef (mods s) -- hack ?
-  return $ mn : inp ++ out ++ moddef
+  return $ mn : inp ++ con ++ out ++ moddef
 
 -- private utilities used in generateCode
 getDir :: Lang -> String

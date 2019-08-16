@@ -1,12 +1,11 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Database.Drasil.ChunkDB (ChunkDB(defTable), RefbyMap, TraceMap, UMap,
-  asOrderedList, asOrderedListCC, cdb, collectUnits, conA, conceptMap,
-  conceptInstanceMap, conceptinsLookup, conceptinsTable, dataDefnTable,
-  datadefnLookup, defResolve, gendefLookup, gendefTable, generateRefbyMap,
-  insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
-  refbyLookup, refbyTable, sectionLookup, sectionTable, symbResolve,
-  termResolve, termTable, theoryModelLookup, theoryModelTable, traceLookup,
-  traceMap, traceTable) where
+  asOrderedList, cdb, collectUnits, conA, conceptMap, conceptInstanceMap,
+  conceptinsLookup, conceptinsTable, dataDefnTable, datadefnLookup, defResolve,
+  gendefLookup, gendefTable, generateRefbyMap, insmodelLookup, insmodelTable,
+  labelledconLookup, labelledcontentTable, refbyLookup, refbyTable, sectionLookup,
+  sectionTable, symbResolve, termResolve, termTable, theoryModelLookup,
+  theoryModelTable, traceLookup, traceMap, traceTable) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
@@ -63,7 +62,7 @@ conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap = cdbMap cw
 
 conA :: Idea a => a -> String
-conA = \x -> fromMaybe (error $ "No abbreviation found for " ++ x ^. uid) (getA x)
+conA x = fromMaybe (error $ "No abbreviation found for " ++ x ^. uid) (getA x)
 
 -- | Smart constructor for a 'ConceptInstanceMap'
 conceptInstanceMap :: [ConceptInstance] -> ConceptInstanceMap
@@ -145,9 +144,6 @@ labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
 
 asOrderedList :: UMap a -> [a]
 asOrderedList = map fst . sortOn snd . map snd . Map.toList
-
-asOrderedListCC :: UMap ConceptInstance -> [ConceptInstance]
-asOrderedListCC = sortOn conA . asOrderedList
 
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { symbolTable :: SymbolMap

@@ -2,8 +2,8 @@ module Drasil.DocumentLanguage.TraceabilityMatrix where
 
 import Language.Drasil
 import Database.Drasil (ChunkDB, SystemInformation, UMap, _sysinfodb,
-  asOrderedList, asOrderedListCC, citeDB, conceptinsLookup, conceptinsTable,
-  datadefnLookup, dataDefnTable, defResolve, gendefLookup, gendefTable, insmodelLookup,
+  asOrderedList, citeDB, conA, conceptinsLookup, conceptinsTable, datadefnLookup,
+  dataDefnTable, defResolve, gendefLookup, gendefTable, insmodelLookup,
   insmodelTable, labelledconLookup, labelledcontentTable, refbyTable, sectionLookup,
   sectionTable, theoryModelLookup, theoryModelTable, traceTable, traceLookup)
 import Utils.Drasil
@@ -15,9 +15,8 @@ import Data.Drasil.Concepts.Math (graph)
 import qualified Drasil.DocLang.SRS as SRS
 
 import Control.Lens ((^.), Getting)
-import Data.List (nub)
+import Data.List (nub, sortOn)
 import qualified Data.Map as Map
-import Data.Maybe (fromMaybe)
 
 type TraceViewCat = [UID] -> ChunkDB -> [UID]
 
@@ -72,7 +71,6 @@ markerHelper t si
   | otherwise = error $ t ++ "Caught."
   where
     s = _sysinfodb si
-    conA = \x -> fromMaybe (error $ "No abbreviation found for " ++ x ^. uid) (getA x)
  
 traceMColHeader :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
 traceMColHeader f = traceMHeader (traceMReferees f)
@@ -104,18 +102,15 @@ ensureItems _ l = l
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]
 layoutUIDs a c e = filter (`elem` (Map.keys $ c ^. traceTable)) $ concatMap (\x -> x e c) a
 
-traceViewFilt :: HasUID a => (a -> Bool) -> Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
-traceViewFilt f table _ = map (^. uid) . filter f . asOrderedList . (^. table)
+traceViewFilt :: HasUID a => (a -> Bool) -> (UMap a -> [a]) -> Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
+traceViewFilt f sort table _ = map (^. uid) . filter f . sort . (^. table)
 
 traceView :: HasUID a => Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
-traceView = traceViewFilt (const True)
-
-traceViewFiltCC :: (ConceptInstance -> Bool) ->
-  Getting (UMap ConceptInstance) ChunkDB (UMap ConceptInstance) -> TraceViewCat
-traceViewFiltCC f table _ = map (^. uid) . filter f . asOrderedListCC . (^. table)
+traceView = traceViewFilt (const True) asOrderedList
 
 traceViewCC :: Concept c => c -> TraceViewCat
-traceViewCC dom u c = traceViewFiltCC (isDomUnder (dom ^. uid) . sDom . cdom) conceptinsTable u c
+traceViewCC dom u c = traceViewFilt (isDomUnder (dom ^. uid) . sDom . cdom)
+  (sortOn conA . asOrderedList) conceptinsTable u c
   where
     isDomUnder :: UID -> UID -> Bool
     isDomUnder filtDom curr

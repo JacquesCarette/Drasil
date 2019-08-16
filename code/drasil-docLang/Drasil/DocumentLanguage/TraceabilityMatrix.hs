@@ -17,6 +17,8 @@ import qualified Drasil.DocLang.SRS as SRS
 import Control.Lens ((^.), Getting)
 import Data.List (nub)
 import qualified Data.Map as Map
+import Data.Maybe (fromMaybe)
+import Debug.Trace
 
 type TraceViewCat = [UID] -> ChunkDB -> [UID]
 
@@ -64,13 +66,14 @@ markerHelper t si
   | t `elem` Map.keys (s ^. insmodelTable)        = shortRef abrv $ insmodelLookup    t (s ^. insmodelTable)
   | t `elem` Map.keys (s ^. gendefTable)          = shortRef abrv $ gendefLookup      t (s ^. gendefTable)
   | t `elem` Map.keys (s ^. theoryModelTable)     = shortRef abrv $ theoryModelLookup t (s ^. theoryModelTable)
-  | t `elem` Map.keys (s ^. conceptinsTable)      = makeRef2S $ conceptinsLookup  t (s ^. conceptinsTable)
+  | t `elem` Map.keys (s ^. conceptinsTable)      = shortRef conA $ conceptinsLookup  t (s ^. conceptinsTable)
   | t `elem` Map.keys (s ^. sectionTable)         = makeRef2S $ sectionLookup     t (s ^. sectionTable)
   | t `elem` Map.keys (s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
   | t `elem` map (^. uid) (citeDB si) = EmptyS
   | otherwise = error $ t ++ "Caught."
   where
     s = _sysinfodb si
+    conA = \x -> trace (fromMaybe "NOABBR" (getA x)) (fromMaybe "NOABBR" (getA x))
  
 traceMColHeader :: ([UID] -> [UID]) -> SystemInformation -> [Sentence]
 traceMColHeader f = traceMHeader (traceMReferees f)

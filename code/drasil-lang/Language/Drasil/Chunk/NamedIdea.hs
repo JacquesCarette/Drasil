@@ -1,12 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, IdeaDict, nw, mkIdea) where
+module Language.Drasil.Chunk.NamedIdea (IdeaDict, NamedChunk, mkIdea, nc, nw) where
 
-import Language.Drasil.UID (UID)
-import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA))
-import Control.Lens ((^.), makeLenses)
-
+import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.UID (UID)
+
+import Control.Lens ((^.), makeLenses)
 
 -- === DATA TYPES/INSTANCES === --
 -- | Note that a |NamedChunk| does not have an acronym/abbreviation

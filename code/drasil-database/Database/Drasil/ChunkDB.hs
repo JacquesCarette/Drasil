@@ -121,7 +121,7 @@ theoryModelLookup = uMapLookupMark "TheoryModel" "TheoryModelMap"
 
 -- | Looks up a uid in the concept instance table. If nothing is found, an error is thrown.
 conceptinsLookup :: UID -> ConceptInstanceMap -> ConceptInstance
-conceptinsLookup = uMapLookup "ConceptInstance" "ConceptInstanceMap"
+conceptinsLookup = uMapLookupMark "ConceptInstance" "ConceptInstanceMap"
 
 -- | Looks up a uid in the section table. If nothing is found, an error is thrown.
 sectionLookup :: UID -> SectionMap -> Section

@@ -5,12 +5,12 @@ module Language.Drasil.Chunk.Concept
   ) where
 
 import Language.Drasil.Classes.Core (HasUID(uid))
-import Language.Drasil.Classes (Idea, Definition(defn), ConceptDomain(cdom), Concept)
+import Language.Drasil.Classes (Idea(getA), Definition(defn), ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.CommonIdea (commonIdea)
 import Language.Drasil.Chunk.Concept.Core (ConceptChunk(ConDict),
   ConceptInstance(ConInst), CommonConcept(ComConDict))
 import Language.Drasil.Sentence (Sentence(S))
-import Language.Drasil.Chunk.NamedIdea(mkIdea,nw, nc)
+import Language.Drasil.Chunk.NamedIdea (mkIdea, nw)
 import Language.Drasil.NounPhrase (NP, pn)
 import Language.Drasil.ShortName (shortname')
 
@@ -54,4 +54,4 @@ cw :: Concept c => c -> ConceptChunk
 cw c = ConDict (nw c) (c ^. defn) (cdom c)
 
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
-cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) u $ shortname' sn
+cic u d sn dom = ConInst (ccs (mkIdea u (pn sn) (getA dom)) d [dom]) u 0 $ shortname' sn

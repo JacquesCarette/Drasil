@@ -429,13 +429,15 @@ getExportOutput _ = [("write_output", "OutputFormat")]
 getDepsControl :: CodeSystInfo -> ModExportMap -> [String]
 getDepsControl cs mem = 
   let ins = inputs cs
+      cns = constants cs
       ip = map (\x -> Map.lookup (codeName x) mem) ins
+      co = map (\x -> Map.lookup (codeName x) mem) cns
       inf = Map.lookup "get_input" mem
       dv = Map.lookup "derived_values" mem
       ic = Map.lookup "input_constraints" mem
       wo = Map.lookup "write_output" mem
       calcs = map (\x -> Map.lookup (codeName x) mem) (execOrder cs)
-  in nub $ catMaybes (ip ++ [inf, dv, ic, wo] ++ calcs)
+  in nub $ catMaybes (ip ++ co ++ [inf, dv, ic, wo] ++ calcs)
 
 getDepsDerived :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
@@ -444,7 +446,6 @@ getDepsDerived cs mem chs = derivedDeps (inputStructure chs) (inputModule chs)
           (`Map.lookup` mem) . codeName) (concatMap (flip codevars 
           (sysinfodb cs) . codeEquat) (derivedInputs cs)))
         derivedDeps _ _ = Nothing
-        
 
 getDepsConstraints :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
@@ -458,7 +459,6 @@ getDepsConstraints cs mem chs = constraintDeps (inputStructure chs)
         varsList = filter (\i -> Map.member (i ^. uid) cm) ins
         reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v
           (sysinfodb cs) mem) (getConstraints cm varsList)
-        
 
 getDepsInFormat :: Choices -> Maybe (String, [String])
 getDepsInFormat chs = inFormatDeps (inputStructure chs) (inputModule chs)

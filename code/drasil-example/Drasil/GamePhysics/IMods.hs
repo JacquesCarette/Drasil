@@ -1,131 +1,131 @@
-module Drasil.GamePhysics.IMods (iModels, iModelsNew, im1_new, im2_new, im3_new, instModIntro) where
+module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
 import Language.Drasil
+import Language.Drasil.ShortHands (lI)
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs)
 import Utils.Drasil
 
-import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI,
-  assumpCAJI)
+import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
+import Drasil.GamePhysics.Concepts (centreMass)
+import Drasil.GamePhysics.DataDefs (ctrOfMassDD, linDispDD, linVelDD, linAccDD,
+  angDispDD, angVelDD, angAccelDD, impulseDD, collisionAssump, rightHandAssump,
+  rigidTwoDAssump)
+import Drasil.GamePhysics.GenDefs (accelGravityGD)
 import Drasil.GamePhysics.Goals (linearGS, angularGS)
-import Drasil.GamePhysics.Unitals(accI, forceI, transMotLegTerms, 
-  rotMotLegTerms, col2DLegTerms, massA, massI, normalVect, timeC, torqueI, velA,
-  velI)
-import Drasil.GamePhysics.DataDefs(ctrOfMassDD, linDispDD, linVelDD, linAccDD,
-  angDispDD, angVelDD, angAccelDD, impulseDD)
+import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
+import Drasil.GamePhysics.Unitals (accI, forceI, massA, massI, normalVect,
+  timeC, torqueI, velA, velI)
 
-import Data.Drasil.Concepts.Documentation (goal)
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
-import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
-  angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
-  time, impulseS)
+import Data.Drasil.IdeaDicts (inModel)
 
-iModels :: [RelationConcept]
-iModels = [transMot, rotMot, col2D]
+import Data.Drasil.Concepts.Documentation (condition, goal, output_)
+import Data.Drasil.Concepts.Math (equation, ode)
+import Data.Drasil.Concepts.Physics (rigidBody)
+import Data.Drasil.Quantities.Math (orientation)
+import Data.Drasil.Quantities.Physics (acceleration, angularAccel, angularVelocity,
+  force, gravitationalAccel, impulseS, momentOfInertia, position, time, velocity)
 
-iModelsNew :: [InstanceModel]
-iModelsNew = [im1_new, im2_new, im3_new]
+iMods :: [InstanceModel]
+iMods = [transMot, rotMot, col2D]
 
 {-- Force on the translational motion  --}
-im1_new :: InstanceModel
-im1_new = imNoDerivNoRefs transMot [qw velI, qw QP.time, qw QP.gravitationalAccel, qw forceI, qw massI] 
-  [sy velI $> 0, sy QP.time $> 0, sy QP.gravitationalAccel $> 0, 
-            sy forceI $> 0, sy massI $> 0 ] (qw accI) [] "transMot" [transMotDesc]
+transMot :: InstanceModel
+transMot = imNoDerivNoRefs transMotRC [qw velI, qw time, qw gravitationalAccel, qw forceI, qw massI] 
+  [sy velI $> 0, sy time $> 0, sy gravitationalAccel $> 0, sy forceI $> 0, sy massI $> 0 ]
+  (qw accI) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
-transMot :: RelationConcept
-transMot = makeRC "transMot" transMotNP (transMotDesc +:+ transMotLeg) transMotRel
+transMotRC :: RelationConcept
+transMotRC = makeRC "transMotRC" transMotNP EmptyS transMotRel
 
 transMotNP :: NP
-transMotNP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
+transMotNP = nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 transMotRel :: Relation -- FIXME: add proper equation
-transMotRel = sy accI $= deriv (apply1 velI QP.time) QP.time
-  $= sy QP.gravitationalAccel + (apply1 forceI QP.time / sy massI)
+transMotRel = sy accI $= deriv (apply1 velI time) time
+  $= sy gravitationalAccel + (apply1 forceI time / sy massI)
 
-
---fixme: need referencing
-transMotDesc, transMotLeg :: Sentence
-transMotDesc = foldlSent [S "The above equation expresses the total",
-  phrase QP.acceleration, S "of the", phrase CP.rigidBody,
-  makeRef2S assumpOT, makeRef2S assumpOD, S "i as the sum of",
-  phrase QP.gravitationalAccel,
-  S "(GD3) and", phrase QP.acceleration, S "due to applied",
-  phrase QP.force, S "Fi(t) (T1). The resultant outputs are",
-  S "then obtained from this equation using", makeRef2S linDispDD,
-  makeRef2S linVelDD +:+. makeRef2S linAccDD, S" It is currently",
-  S "assumed that there is no damping", makeRef2S assumpDI,
-  S "or constraints", makeRef2S assumpCAJI +:+. S "involved", makeRef2S ctrOfMassDD]
-
-transMotLeg = foldlSent_ $ map defList transMotLegTerms
+transMotDesc, transMotOutputs :: Sentence
+transMotDesc = foldlSent [S "The above", phrase equation, S "expresses",
+  (S "total" +:+ phrase acceleration) `ofThe` phrase rigidBody, P lI,
+  S "as the sum" `sOf` phrase gravitationalAccel, fromSource accelGravityGD `sAnd`
+  phrase acceleration, S "due to applied", phrase force, E (apply1 forceI time) +:+.
+  fromSource newtonSL, S "The resultant", plural output_ `sAre`
+  S "then obtained from this", phrase equation, S "using",
+  foldlList Comma List (map makeRef2S [linDispDD, linVelDD, linAccDD])]
+transMotOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
+ S "will be the functions" `sOf` phrase position `sAnd` phrase velocity,
+ S "over time that satisfy the", getAcc ode, S "for the", phrase acceleration `sC`
+ S "with the given initial", plural condition, S "for" +:+. (phrase position `sAnd`
+ phrase velocity), S "The motion is translational" `sC` S "so the",
+ phrase position `sAnd` phrase velocity, S "functions are for the",
+ phrase centreMass, fromSource ctrOfMassDD]
 
 {-- Rotational Motion --}
 
-im2_new :: InstanceModel
-im2_new = imNoDerivNoRefs rotMot [qw QP.angularVelocity, qw QP.time, qw torqueI, qw QP.momentOfInertia]
-  [sy QP.angularVelocity $> 0, sy QP.time $> 0, sy torqueI $> 0, sy QP.momentOfInertia $> 0] 
-    (qw QP.angularAccel) [sy QP.angularAccel $> 0] "rotMot"
-  [rotMotDesc]
+rotMot :: InstanceModel
+rotMot = imNoDerivNoRefs rotMotRC [qw angularVelocity, qw time, qw torqueI, qw momentOfInertia]
+  [sy angularVelocity $> 0, sy time $> 0, sy torqueI $> 0, sy momentOfInertia $> 0] 
+    (qw angularAccel) [sy angularAccel $> 0] "rotMot"
+  [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
-rotMot :: RelationConcept
-rotMot = makeRC "rotMot" rotMotNP (rotMotDesc +:+ rotMotLeg) rotMotRel
+rotMotRC :: RelationConcept
+rotMotRC = makeRC "rotMotRC" rotMotNP EmptyS rotMotRel
 
 rotMotNP :: NP
 rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
 rotMotRel :: Relation
-rotMotRel = sy QP.angularAccel $= deriv
-  (apply1 QP.angularVelocity QP.time) QP.time $= 
-     (apply1 torqueI QP.time / sy QP.momentOfInertia)
+rotMotRel = sy angularAccel $= deriv
+  (apply1 angularVelocity time) time $= 
+     (apply1 torqueI time / sy momentOfInertia)
 
---fixme: need referencing
-rotMotDesc, rotMotLeg :: Sentence
-rotMotDesc = foldlSent_ [S "The above equation for the total angular acceleration",
-  S "of the rigid body", makeRef2S assumpOT, makeRef2S assumpOD,
-  S "i is derived from T5, and the resultant outputs",
-  S "are then obtained from this equation using", makeRef2S angDispDD,
-  makeRef2S angVelDD +:+. makeRef2S angAccelDD, S "It is",
-  S "currently assumed that there is no damping", makeRef2S assumpDI,
-  S "or constraints", makeRef2S assumpCAJI +:+. S "involved", makeRef2S assumpAD]
-
-rotMotLeg = foldlSent_ $ map defList rotMotLegTerms
+rotMotDesc :: Sentence
+rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
+  (S "total" +:+ phrase angularAccel) `ofThe` phrase rigidBody, P lI `sIs`
+  S "derived from", makeRef2S newtonSLR `sC` EmptyS `andThe` S "resultant",
+  plural output_ `sAre` S "then obtained from this", phrase equation, S "using",
+  foldlList Comma List (map makeRef2S [angDispDD, angVelDD, angAccelDD])]
 
 {-- 2D Collision --}
 
-im3_new :: InstanceModel
-im3_new = imNoDerivNoRefs col2D [qw QP.time, qw QP.impulseS, qw massA, qw normalVect] 
-  [sy QP.time $> 0, sy QP.impulseS $> 0, sy massA $> 0, sy normalVect $> 0]
+col2D :: InstanceModel
+col2D = imNoDerivNoRefs col2DRC [qw time, qw impulseS, qw massA, qw normalVect] 
+  [sy time $> 0, sy impulseS $> 0, sy massA $> 0, sy normalVect $> 0]
   (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
-  [col2DDesc]
+  [col2DOutputs, rigidTwoDAssump, rightHandAssump, collisionAssump,
+    noDampConsAssumps, impulseNote]
 
-col2D :: RelationConcept
-col2D = makeRC "col2D" col2DNP (col2DDesc +:+ col2DLeg) col2DRel
+col2DRC :: RelationConcept
+col2DRC = makeRC "col2DRC" col2DNP EmptyS col2DRel
 
 col2DNP :: NP
 col2DNP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
 col2DRel {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equation
-col2DRel = apply1 velA timeC $= apply1 velA QP.time +
-  (sy QP.impulseS / sy massA) * sy normalVect
+col2DRel = apply1 velA timeC $= apply1 velA time +
+  (sy impulseS / sy massA) * sy normalVect
 
---im3Rel2 = (apply1 velB timeC) $= (apply1 velB QP.time) -
---  ((sy QP.impulseS) / (sy massB)) * (sy normalVect)
+--im3Rel2 = (apply1 velB timeC) $= (apply1 velB time) -
+--  ((sy impulseS) / (sy massB)) * (sy normalVect)
 
 
 --fixme: these two need to use cross product and parametrized dispUnit symbol
---im3Rel3 = (apply1 angVelA timeC) $= (apply1 angVelA QP.time) +
---  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
+--im3Rel3 = (apply1 angVelA timeC) $= (apply1 angVelA time) +
+--  ((sy dispUnit) * ((sy impulseS) * (sy normalVect))) / (sy momentOfInertia)
 
---im3Rel4 = (apply1 angVelB timeC) $= (apply1 angVelB QP.time) -
---  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
+--im3Rel4 = (apply1 angVelB timeC) $= (apply1 angVelB time) -
+--  ((sy dispUnit) * ((sy impulseS) * (sy normalVect))) / (sy momentOfInertia)
 
---fixme: need referencing
-col2DDesc, col2DLeg :: Sentence
-col2DDesc = foldlSent_ [S "This instance model is based on our assumptions",
-  S "regarding rigid body", makeRef2S assumpOT, makeRef2S assumpOD,
-  S "collisions", makeRef2S assumpCT, S "Again, this does not take",
-  S "damping", makeRef2S assumpDI, S "or constraints",
-  makeRef2S assumpCAJI +:+. S "into account" +:+. makeRef2S assumpAD,
-  makeRef2S ctrOfMassDD, makeRef2S impulseDD]
-
+col2DOutputs, impulseNote :: Sentence
+col2DOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
+  S "will be the functions" `sOf` vals,  S "over time that satisfy the",
+  plural equation, S "for the", phrase velocity `sAnd` phrase angularAccel `sC`
+  S "with the given initial", plural condition, S "for" +:+. vals, S
+  "The motion is translational" `sC` S "so the", vals, S "functions are for the",
+  phrase centreMass, fromSource ctrOfMassDD]
+    where vals = foldlList Comma List (map phrase [position, velocity,
+                                                   orientation, angularAccel])
+impulseNote = ch impulseDD +:+ S "is defined in" +:+. makeRef2S impulseDD
 
 {--S "Ik is the moment of inertia of the k-th rigid body (kg m2)",
   S "t is a point in time, t0 denotes the initial time" `sC` 
@@ -133,22 +133,21 @@ col2DDesc = foldlSent_ [S "This instance model is based on our assumptions",
   S "P is the point of collision (m)"
 --}
 
-defList :: (Quantity a, MayHaveUnit a) => a -> Sentence
-defList thing = foldlSent [ch thing, S "is the", phrase thing,
-  sParen (fmtU EmptyS thing)]
-
-col2DLeg = foldlSent_ $ map defList col2DLegTerms
-  
-
 {--displaceVectBtw  = cvR (ddcWDS "dispBtwVect" (compoundPhrase' 
-  (QP.displacement ^. term) (cn "vector between the centre of mass of the k-th
-  body and point P"))) (sub (QP.displacement ^. symbol) ) 
+  (displacement ^. term) (cn "vector between the centre of mass of the k-th
+  body and point P"))) (sub (displacement ^. symbol) ) 
 --}
 
 {- Intro -}
 
 instModIntro :: Sentence
 instModIntro = foldlSent [S "The", phrase goal, makeRef2S linearGS, 
-  S "is met by" +:+. (makeRef2S im1_new `sAnd` makeRef2S im3_new),
+  S "is met by" +:+. (makeRef2S transMot `sAnd` makeRef2S col2D),
   S "The", phrase goal, makeRef2S angularGS, S "is met by",
-  makeRef2S im2_new `sAnd` makeRef2S im3_new]
+  makeRef2S rotMot `sAnd` makeRef2S col2D]
+
+{- Notes -}
+noDampConsAssumps :: Sentence
+noDampConsAssumps = foldlSent [S "It is currently assumed that no damping",
+  S "occurs during the simulation", fromSource assumpDI `sAnd` S "that no", 
+  S "constraints are involved", fromSource assumpCAJI]

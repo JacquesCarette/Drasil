@@ -325,17 +325,6 @@ angVeloOutCons    = constrained' QP.angularVelocity    [] (dbl 0.0)
 -- INSTANCE MODELS --
 ---------------------
 
-transMotLegTerms, rotMotLegTerms, col2DLegTerms :: [UnitalChunk]
-transMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, inittime, posCM,
-  QP.acceleration, QP.velocity, forceI]
-
-rotMotLegTerms = [massIRigidBody, QP.gravitationalAccel, timeT, inittime,
-  QM.orientation, QP.angularVelocity, QP.angularAccel, torqueI, momtInertK]
-
-col2DLegTerms = [massIRigidBody, momtInertK, timeT, inittime, timeC, posCM,
-  QP.velocity, QM.orientation, QP.angularVelocity, normalVect, -- +:+. S "Its signed direction is determined by (A4)",
-  collisionImpulse, pointOfCollision, contDispK]
-
 ---------------------
 -- GOAL STATEMENTS --
 ---------------------

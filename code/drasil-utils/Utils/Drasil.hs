@@ -12,8 +12,8 @@ module Utils.Drasil (
   -- Misc
   addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart,
   displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, eqnWSource, 
-  fromReplace, fmtU, follows, getTandS, itemRefToSent, makeListRef, 
-  makeTMatrix, maybeChanged, maybeExpanded,
+  fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
+  itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
   tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList,

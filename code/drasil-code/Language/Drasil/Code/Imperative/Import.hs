@@ -60,7 +60,7 @@ variable s t = do
   let cs = csi $ codeSpec g
   if s `elem` map codeName (inputs cs) 
     then inputVariable (inStruct g) s t
-    else if s `elem` map codeName (Map.elems $ constMap $ codeSpec g)
+    else if s `elem` map codeName (constants $ csi $ codeSpec g)
       then constVariable (conStruct g) s t
       else return $ var s t
   

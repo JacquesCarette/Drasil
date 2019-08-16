@@ -25,16 +25,17 @@ import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType, codevar,
   quantvar, quantfunc)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
-import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
-import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
-import qualified Language.Drasil.CodeSpec as CS (Mod(..))
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
+import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
+  ConstantStructure(..), Func(..), FuncData(..), FuncDef(..), FuncStmt(..), 
+  Logging(..), Mod(..), Name, Structure(..), asExpr, fstdecl)
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
 
 import Prelude hiding (sin, cos, tan, log, exp)
 import Data.List ((\\))
-import qualified Data.Map as Map (lookup)
+import qualified Data.Map as Map (lookup, elems)
 import Data.Maybe (maybe)
 import Control.Applicative ((<$>))
 import Control.Monad (liftM2,liftM3)
@@ -59,7 +60,9 @@ variable s t = do
   let cs = csi $ codeSpec g
   if s `elem` map codeName (inputs cs) 
     then inputVariable (inStruct g) s t
-    else return $ var s t
+    else if s `elem` map codeName (Map.elems $ constMap $ codeSpec g)
+      then constVariable (conStruct g) s t
+      else return $ var s t
   
 inputVariable :: (RenderSym repr) => Structure -> String -> 
   repr (StateType repr) -> Reader State (repr (Variable repr))
@@ -67,6 +70,16 @@ inputVariable Unbundled s t = return $ var s t
 inputVariable Bundled s t = do
   ip <- mkVar (codevar inParams)
   return $ ip $-> var s t
+
+constVariable :: (RenderSym repr) => ConstantStructure -> String -> 
+  repr (StateType repr) -> Reader State (repr (Variable repr))
+constVariable (Store Bundled) s t = do
+  cs <- mkVar (codevar consts)
+  return $ cs $-> var s t
+constVariable WithInputs s t = do
+  g <- ask
+  inputVariable (inStruct g) s t
+constVariable _ s t = return $ var s t
 
 mkVal :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => c -> 
   Reader State (repr (Value repr))
@@ -263,8 +276,8 @@ genCaseBlock t v c cs = do
           "Undefined case encountered in function " ++ codeName v
 
 -- medium hacks --
-genModDef :: (RenderSym repr) => CS.Mod -> Reader State (repr (RenderFile repr))
-genModDef (CS.Mod n desc fs) = genModule n desc (Just $ mapM genFunc fs) Nothing
+genModDef :: (RenderSym repr) => Mod -> Reader State (repr (RenderFile repr))
+genModDef (Mod n desc fs) = genModule n desc (Just $ mapM genFunc fs) Nothing
 
 genFunc :: (RenderSym repr) => Func -> Reader State (repr (Method repr))
 genFunc (FDef (FuncDef n desc parms o rd s)) = do

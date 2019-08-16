@@ -1,17 +1,15 @@
-module Drasil.Sections.TraceabilityMandGs (generateTraceTable,tvAssumps,
-  tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
-  tvChanges, traceMatAssumpOther, traceMatRefinement, traceMatOtherReq,
-  traceMatStandard) where
+module Drasil.Sections.TraceabilityMandGs (generateTraceTable, traceMatAssumpOther,
+  traceMatRefinement, traceMatOtherReq, traceMatStandard) where
 
 import Drasil.DocumentLanguage.Core (TraceConfig(TraceConfig))
-import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
-  traceMReferrers, traceView, traceViewCC, TraceViewCat)
+import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat,
+  generateTraceTableView, traceMReferrers, traceView, traceViewCC)
 
 import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   goalStmt, goalStmtDom, requirement, reqDom, item, section_, likelyChg,
   unlikelyChg)
 import qualified Data.Drasil.IdeaDicts as Doc (genDefn, dataDefn, inModel, thModel)
-import Database.Drasil(SystemInformation, _sysinfodb, gendefTable, dataDefnTable,
+import Database.Drasil (SystemInformation, _sysinfodb, gendefTable, dataDefnTable,
   insmodelTable, theoryModelTable)
 import Language.Drasil
 
@@ -22,29 +20,16 @@ generateTraceTable = generateTraceTableView "Tracey"
 tvEverything :: TraceViewCat
 tvEverything = flip (const id)
 
-tvAssumps :: TraceViewCat
-tvAssumps = traceViewCC assumpDom
-
-tvDataDefns :: TraceViewCat
-tvDataDefns = traceView dataDefnTable
-
-tvGenDefns :: TraceViewCat
-tvGenDefns = traceView gendefTable
-
-tvTheoryModels :: TraceViewCat
-tvTheoryModels = traceView theoryModelTable
-
-tvInsModels :: TraceViewCat
-tvInsModels = traceView insmodelTable
-
-tvGoals :: TraceViewCat
-tvGoals = traceViewCC goalStmtDom
-
-tvReqs :: TraceViewCat
-tvReqs = traceViewCC reqDom
-
-tvChanges :: TraceViewCat
-tvChanges = traceViewCC chgProbDom
+tvAssumps, tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels,
+  tvGoals, tvReqs, tvChanges :: TraceViewCat
+tvAssumps      = traceViewCC assumpDom
+tvDataDefns    = traceView   dataDefnTable
+tvGenDefns     = traceView   gendefTable
+tvTheoryModels = traceView   theoryModelTable
+tvInsModels    = traceView   insmodelTable
+tvGoals        = traceViewCC goalStmtDom
+tvReqs         = traceViewCC reqDom
+tvChanges      = traceViewCC chgProbDom
 
 traceMatAssumpOther :: TraceConfig
 traceMatAssumpOther = TraceConfig "TraceMatAvsAll" [plural Doc.dataDefn,

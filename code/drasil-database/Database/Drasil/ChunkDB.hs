@@ -1,11 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Database.Drasil.ChunkDB (ChunkDB(defTable), RefbyMap, TraceMap, UMap,
-  asOrderedList, cdb, collectUnits, conA, conceptMap, conceptInstanceMap,
-  conceptinsLookup, conceptinsTable, dataDefnTable, datadefnLookup, defResolve,
-  gendefLookup, gendefTable, generateRefbyMap, insmodelLookup, insmodelTable,
-  labelledconLookup, labelledcontentTable, refbyLookup, refbyTable,
-  sectionLookup, sectionTable, symbResolve, termResolve, termTable,
-  theoryModelLookup, theoryModelTable, traceLookup, traceMap, traceTable) where
+  asOrderedList, asOrderedListCC, cdb, collectUnits, conA, conceptMap,
+  conceptInstanceMap, conceptinsLookup, conceptinsTable, dataDefnTable,
+  datadefnLookup, defResolve, gendefLookup, gendefTable, generateRefbyMap,
+  insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
+  refbyLookup, refbyTable, sectionLookup, sectionTable, symbResolve,
+  termResolve, termTable, theoryModelLookup, theoryModelTable, traceLookup,
+  traceMap, traceTable) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
@@ -144,6 +145,9 @@ labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
 
 asOrderedList :: UMap a -> [a]
 asOrderedList = map fst . sortOn snd . map snd . Map.toList
+
+asOrderedListCC :: UMap ConceptInstance -> [ConceptInstance]
+asOrderedListCC = sortOn conA . asOrderedList
 
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { symbolTable :: SymbolMap

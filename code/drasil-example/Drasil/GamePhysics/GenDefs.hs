@@ -1,17 +1,21 @@
-module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD) where
+module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD,
+ ) where
 
 import Language.Drasil
 import Utils.Drasil
 --import Data.Drasil.Concepts.Physics as CP (rigidBody, time)
 import Theory.Drasil (GenDefn, gd)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
- gravitationalAccel, gravitationalConst)
-import Drasil.GamePhysics.Unitals (mLarger, dispNorm, dispUnit)
+ gravitationalAccel, gravitationalConst, restitutionCoef, impulseS)
+import Drasil.GamePhysics.Unitals (mLarger, dispNorm, dispUnit, massA, massB,
+  momtInertA, momtInertB, normalLen, normalVect, perpLenA, perpLenB, initRelVel)
+import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
+  rigidTwoDAssump)
 
 ----- General Models -----
 
 generalDefns :: [GenDefn]
-generalDefns = [accelGravityGD]
+generalDefns = [accelGravityGD, impulseGD]
 
 
 {-conservationOfMomentGDef :: RelationConcept
@@ -101,3 +105,26 @@ accelGravityDesc = foldlSent [S "Acceleration due to gravity"]
 --   S "(expr6)"
 --   ]
 
+----------------------------Impulse for Collision--------------------------------------------
+
+impulseGD :: GenDefn
+impulseGD = gd impulseRC (getUnit QP.impulseS) Nothing 
+  [impulseSrc] "impulse" [rigidTwoDAssump, rightHandAssump, collisionAssump]
+
+impulseRC :: RelationConcept
+impulseRC = makeRC "impulseRC" (nounPhraseSP "Impulse for Collision") 
+  impulseDesc impulseRel
+
+impulseRel :: Relation
+impulseRel = sy QP.impulseS $= (negate (1 + sy QP.restitutionCoef) * sy initRelVel $.
+  sy normalVect) / (((1 / sy massA) + (1 / sy massB)) *
+  (sy normalLen $^ 2) +
+  ((sy perpLenA $^ 2) / sy momtInertA) +
+  ((sy perpLenB $^ 2) / sy momtInertB))
+
+impulseSrc :: Reference
+impulseSrc = makeURI "impulseSrc" "http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf" $
+  shortname' "Impulse for Collision Ref"
+
+impulseDesc :: Sentence
+impulseDesc = foldlSent [S "Impulse for Collision"]

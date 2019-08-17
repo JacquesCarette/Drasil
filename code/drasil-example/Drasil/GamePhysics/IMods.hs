@@ -8,7 +8,7 @@ import Utils.Drasil
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
 import Drasil.GamePhysics.Concepts (centreMass)
 import Drasil.GamePhysics.DataDefs (ctrOfMassDD, linDispDD, linVelDD, linAccDD,
-  angDispDD, angVelDD, angAccelDD, impulseDD, collisionAssump, rightHandAssump,
+  angDispDD, angVelDD, angAccelDD, collisionAssump, rightHandAssump,
   rigidTwoDAssump)
 import Drasil.GamePhysics.GenDefs (accelGravityGD)
 import Drasil.GamePhysics.Goals (linearGS, angularGS)
@@ -24,6 +24,7 @@ import Data.Drasil.Concepts.Physics (rigidBody)
 import Data.Drasil.Quantities.Math (orientation)
 import Data.Drasil.Quantities.Physics (acceleration, angularAccel, angularVelocity,
   force, gravitationalAccel, impulseS, momentOfInertia, position, time, velocity)
+import Drasil.GamePhysics.GenDefs (impulseGD)
 
 iMods :: [InstanceModel]
 iMods = [transMot, rotMot, col2D]
@@ -125,7 +126,7 @@ col2DOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
   phrase centreMass, fromSource ctrOfMassDD]
     where vals = foldlList Comma List (map phrase [position, velocity,
                                                    orientation, angularAccel])
-impulseNote = ch impulseDD +:+ S "is defined in" +:+. makeRef2S impulseDD
+impulseNote = ch impulseS +:+ S "is defined in" +:+. makeRef2S impulseGD
 
 {--S "Ik is the moment of inertia of the k-th rigid body (kg m2)",
   S "t is a point in time, t0 denotes the initial time" `sC` 

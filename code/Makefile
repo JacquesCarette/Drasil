@@ -132,6 +132,8 @@ test: $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)"log_check.sh
 
+prog: $(GEN_EXAMPLES)
+
 # generate pretty dot graphs too
 graphmod: check_stack
 	stack install dotgen graphmod

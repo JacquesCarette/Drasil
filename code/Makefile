@@ -93,7 +93,7 @@ NOISY=no
 SUMMARIZE_TEX=no
 
 # actual targets
-all: test graphs
+all: test
 
 debug: stackArgs+=$(PROFALL) 
 debug: EXECARGS+=$(PROFEXEC) 

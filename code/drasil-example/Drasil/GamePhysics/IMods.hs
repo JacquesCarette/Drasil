@@ -10,7 +10,7 @@ import Drasil.GamePhysics.Concepts (centreMass)
 import Drasil.GamePhysics.DataDefs (ctrOfMassDD, linDispDD, linVelDD, linAccDD,
   angDispDD, angVelDD, angAccelDD, collisionAssump, rightHandAssump,
   rigidTwoDAssump)
-import Drasil.GamePhysics.GenDefs (accelGravityGD)
+import Drasil.GamePhysics.GenDefs (accelGravityGD, impulseGD)
 import Drasil.GamePhysics.Goals (linearGS, angularGS)
 import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
 import Drasil.GamePhysics.Unitals (accI, forceI, massA, massI, normalVect,
@@ -24,7 +24,6 @@ import Data.Drasil.Concepts.Physics (rigidBody)
 import Data.Drasil.Quantities.Math (orientation)
 import Data.Drasil.Quantities.Physics (acceleration, angularAccel, angularVelocity,
   force, gravitationalAccel, impulseS, momentOfInertia, position, time, velocity)
-import Drasil.GamePhysics.GenDefs (impulseGD)
 
 iMods :: [InstanceModel]
 iMods = [transMot, rotMot, col2D]

@@ -253,33 +253,31 @@ mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSub
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
   SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) imStub] $
-    map (mkSubSCS si) l
+    map mkSubSCS l
   where
-    mkSubSCS :: SystemInformation -> SCSSub -> Section
-    mkSubSCS _ (TMs _ _ [])   = error "There are no Theoretical Models"
-    mkSubSCS _ (GDs _ _ [] _) = SSD.genDefnF []
-    mkSubSCS _ (DDs _ _ [] _) = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ _ [] _) = error "There are no Instance Models"
-    mkSubSCS si' (TMs intro fields ts) =
-      SSD.thModF (siSys si') $ map mkParagraph intro ++ map (LlC . tmodel fields si') ts
-    mkSubSCS si' (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ concatMap (\x -> [LlC $ ddefn fields si' x, derivation x]) dds
-    mkSubSCS si' (DDs intro fields dds _) =
-      SSD.dataDefnF EmptyS $ map mkParagraph intro ++ map (LlC . ddefn fields si') dds
-    mkSubSCS si' (GDs intro fields gs' ShowDerivation) =
-      SSD.genDefnF $ map mkParagraph intro ++ concatMap (\x -> [LlC $ gdefn fields si' x, derivation x]) gs'
-    mkSubSCS si' (GDs intro fields gs' _) =
-      SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
-    mkSubSCS si' (IMs intro fields ims ShowDerivation) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
-      concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
-    mkSubSCS si' (IMs intro fields ims _) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
-      map (LlC . instanceModel fields si') ims
-    mkSubSCS si' (Assumptions ci) =
-      SSD.assumpF $ mkEnumSimpleD $ map (`helperCI` si') ci
-    mkSubSCS _ (Constraints end cs)  = SSD.datConF end cs
-    mkSubSCS _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
+    mkSubSCS :: SCSSub -> Section
+    mkSubSCS (TMs _ _ [])   = error "There are no Theoretical Models"
+    mkSubSCS (GDs _ _ [] _) = SSD.genDefnF []
+    mkSubSCS (DDs _ _ [] _) = error "There are no Data Definitions"
+    mkSubSCS (IMs _ _ [] _) = error "There are no Instance Models"
+    mkSubSCS (TMs intro fields ts) =
+      SSD.thModF (siSys si) $ noDerivHelper intro fields tmodel ts
+    mkSubSCS (DDs intro fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
+      SSD.dataDefnF EmptyS $ derivHelper intro fields ddefn dds
+    mkSubSCS (DDs intro fields dds _) =
+      SSD.dataDefnF EmptyS $ noDerivHelper intro fields ddefn dds
+    mkSubSCS (GDs intro fields gs' ShowDerivation) = SSD.genDefnF $ derivHelper intro fields gdefn gs'
+    mkSubSCS (GDs intro fields gs' _) = SSD.genDefnF $ noDerivHelper intro fields gdefn gs'
+    mkSubSCS (IMs intro fields ims ShowDerivation) =
+      SSD.inModelF pdStub ddStub tmStub gdstub $ derivHelper intro fields instanceModel ims
+    mkSubSCS (IMs intro fields ims _) =
+      SSD.inModelF pdStub ddStub tmStub gdstub $ noDerivHelper intro fields instanceModel ims
+    mkSubSCS (Assumptions ci) =
+      SSD.assumpF $ mkEnumSimpleD $ map (`helperCI` si) ci
+    mkSubSCS (Constraints end cs)  = SSD.datConF end cs
+    mkSubSCS (CorrSolnPpties c cs) = SSD.propCorSolF c cs
+    derivHelper   i fs f ls = map mkParagraph i ++ concatMap (\x -> [LlC $ f fs si x, derivation x]) ls
+    noDerivHelper i fs f ls = map mkParagraph i ++ map (LlC . f fs si) ls
 
 helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
@@ -290,11 +288,12 @@ helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
 {--}
 
 -- | Section stubs for implicit referencing
-tmStub, ddStub, imStub, pdStub :: Section
-tmStub = SRS.thModel   [] []
-ddStub = SRS.dataDefn  [] []
-imStub = SRS.inModel   [] []
-pdStub = SRS.probDesc  [] []
+tmStub, ddStub, gdstub, imStub, pdStub :: Section
+tmStub = SRS.thModel  [] []
+ddStub = SRS.dataDefn [] []
+gdstub = SRS.genDefn  [] []
+imStub = SRS.inModel  [] []
+pdStub = SRS.probDesc [] []
 
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: ReqrmntSec -> Section

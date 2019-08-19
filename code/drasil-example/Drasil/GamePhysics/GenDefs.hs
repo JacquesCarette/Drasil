@@ -54,7 +54,7 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
 
 --------------------------Acceleration due to gravity----------------------------
 accelGravityGD :: GenDefn
-accelGravityGD = gd accelGravityRC (getUnit QP.acceleration) Nothing 
+accelGravityGD = gd accelGravityRC (getUnit QP.acceleration) (Just accelGravityDeriv)
    [accelGravitySrc] "accelGravity" [{-Notes-}]
   
 
@@ -73,10 +73,18 @@ accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravi
 accelGravityDesc :: Sentence
 accelGravityDesc = foldlSent [S "Acceleration due to gravity"]
 
--- [gravitationalAccel, mass, gravitationalConst]
+accelGravityDeriv :: Derivation
+accelGravityDeriv = mkDerivName (phrase QP. gravitationalAccel)
+                      (weave [accelGravityDerivSentences, map E accelGravityDerivEqns])
 
--- accelerationDueToGravityDeriv :: Sentence
--- accelerationDueToGravityDeriv = foldlSent [S "From Newton's law of universal",
+accelGravityDerivSentences :: [Sentence]
+accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1, 
+ accelGravityDerivSentence2, accelGravityDerivSentence3] 
+
+
+accelGravityDerivSentence1 :: Sentence
+accelGravityDerivSentence1 = 
+                    -- [S "From Newton's law of universal gravitation"]
 --   S "gravitation (T3 ref), we have:",
 --   S "(expr1)",
 --   S "Equation 3 **ref to 3** governs the gravitational attraction between two",

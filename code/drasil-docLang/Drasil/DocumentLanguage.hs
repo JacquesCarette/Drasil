@@ -278,10 +278,10 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS (CorrSolnPpties c cs) = SSD.propCorSolF c cs
     derivHelper :: (HasDerivation d, HasShortName d, Referable d) => [Sentence] -> Fields ->
       (Fields -> SystemInformation -> d -> Int -> LabelledContent) -> [d] -> [Contents]
-    derivHelper i fs f ls = map mkParagraph i ++ (concatMap (\(x, n) -> [LlC $ f fs si x n, derivation x]) $ zip ls [1..])
+    derivHelper i fs f ls = map mkParagraph i ++ concatMap (\(x, n) -> [LlC $ f fs si x n, derivation x]) (zip ls [1..])
     noDerivHelper :: [Sentence] -> Fields ->
       (Fields -> SystemInformation -> d -> Int -> LabelledContent) -> [d] -> [Contents]
-    noDerivHelper i fs f ls = map mkParagraph i ++ (map (\(x, n) -> LlC $ f fs si x n) $ zip ls [1..])
+    noDerivHelper i fs f ls = map mkParagraph i ++ map (\(x, n) -> LlC $ f fs si x n) (zip ls [1..])
 
 helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a

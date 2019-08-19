@@ -36,7 +36,7 @@ noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
 -- | Creates an enumerated list of ConceptInstances
 enumConInst :: [ConceptInstance] -> [Contents]
-enumConInst x = [UlC . ulcc . Enumeration . Simple $ map lt $ zip x ([1..] :: [Int])] 
+enumConInst x = [UlC . ulcc . Enumeration . Simple $ zipWith (curry lt) x ([1 ..] :: [Int])] 
   where
     lt (c, n) = (start c n, Flat $ c ^. defn, Just $ refAdd c)
     start c n = S (getStringSN $ shortname c) +:+ sParen (S $ conA c ++ show n)

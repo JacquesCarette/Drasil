@@ -40,7 +40,7 @@ data Document = Document Title Author [Section]
 
 -- | Smart constructor for labelled content chunks
 llcc :: Reference -> RawContent -> LabelledContent
-llcc = LblC
+llcc r c = LblC r c 0
 
 -- | Smart constructor for unlabelled content chunks
 ulcc :: RawContent -> UnlabelledContent

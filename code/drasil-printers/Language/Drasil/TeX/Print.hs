@@ -9,8 +9,8 @@ import Control.Applicative (pure)
 import Control.Arrow (second)
 
 import qualified Language.Drasil as L (CitationKind(..), Decoration(Prime, Hat, Vector),
-  Document, MaxWidthPercent, Month(..), People, RenderSpecial(..), Sentence(S),
-  Symbol(..), USymb(US), (+:+), rendPersLFM, special)
+  Document, DType(..), MaxWidthPercent, Month(..), People, RenderSpecial(..),
+  Sentence(S), Symbol(..), USymb(US), (+:+), rendPersLFM, special)
 import Utils.Drasil (checkValidStr, foldNums)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
@@ -54,16 +54,16 @@ buildStd sm (Document t a c) =
 
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: LayoutObj -> PrintingInformation -> D
-lo (Header d t l)         _ = sec d (spec t) %% label (spec l)
-lo (HDiv _ con _)        sm = print sm con -- FIXME ignoring 2 arguments?
-lo (Paragraph contents)   _ = toText $ newline (spec contents)
-lo (EqnBlock contents)    _ = makeEquation contents
-lo (Table _ rows r bl t)  _ = toText $ makeTable rows (spec r) bl (spec t)
-lo (Definition _ ssPs l) sm = toText $ makeDefn sm ssPs $ spec l
-lo (List l)               _ = toText $ makeList l
-lo (Figure r c f wp)      _ = toText $ makeFigure (spec r) (spec c) f wp
-lo (Bib bib)             sm = toText $ makeBib sm bib
-lo (Graph ps w h c l)    _  = toText $ makeGraph
+lo (Header d t l)           _ = sec d (spec t) %% label (spec l)
+lo (HDiv _ con _)          sm = print sm con -- FIXME ignoring 2 arguments?
+lo (Paragraph contents)     _ = toText $ newline (spec contents)
+lo (EqnBlock contents)      _ = makeEquation contents
+lo (Table _ rows r bl t)    _ = toText $ makeTable rows (spec r) bl (spec t)
+lo (Definition d ssPs l i) sm = toText $ makeDefn sm d ssPs (spec l) i
+lo (List l)                 _ = toText $ makeList l
+lo (Figure r c f wp)        _ = toText $ makeFigure (spec r) (spec c) f wp
+lo (Bib bib)               sm = toText $ makeBib sm bib
+lo (Graph ps w h c l)      _  = toText $ makeGraph
   (map (\(a,b) -> (spec a, spec b)) ps)
   (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
@@ -327,26 +327,27 @@ pUnit (UDiv n d) = toMath $
 ------------------ DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
 
-makeDefn :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
-makeDefn _  [] _ = error "Empty definition"
-makeDefn sm ps l = mkMinipage (makeDefTable sm ps l)
-
-makeDefTable :: PrintingInformation -> [(String,[LayoutObj])] -> D -> D
-makeDefTable _ [] _ = error "Trying to make empty Data Defn"
-makeDefTable sm ps l = mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth) $ vcat [
-  command0 "toprule " <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l, --shortname instead of refname?
+makeDefn :: PrintingInformation -> L.DType -> [(String,[LayoutObj])] -> D -> Int -> D
+makeDefn _  _ [] _ _ = error "Trying to make empty definition"
+makeDefn sm d ps l i = mkMinipage (mkEnvArgBr "tabular" (col rr colAwidth ++ col (rr ++ "\\arraybackslash") colBwidth) $ vcat [
+  command0 "toprule " <> bold (pure $ text "Refname") <> pure (text " & ") <> bold l <>
+    pure (text " ") <> parens (pure $ text $ dmark d ++ show i), -- space because <+> is not defined for type D
   command0 "phantomsection ", label l,
   makeDRows sm ps,
   pure $ dbs <+> text "\\bottomrule"
-  ]
+  ])
   where
     col s x = ">" ++ brace s ++ "p" ++ brace (show x ++ tw)
     rr = "\\raggedright"
     tw = "\\textwidth"
+    dmark L.General  = "GD"
+    dmark L.Instance = "IM"
+    dmark L.Theory   = "TM"
+    dmark L.Data     = "DD"
 
 makeDRows :: PrintingInformation -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
-makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d) ls
+makeDRows sm ls    = foldl1 (%%) $ map (\(f, d) -> dBoilerplate %% pure (text (f ++ " & ")) <> print sm d) ls
   where dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
 --makeDRows sm [(f,d)]    = dBoilerplate %%  pure (text (f ++ " & ")) <> print sm d
 --makeDRows sm ((f,d):ps) = dBoilerplate %% (pure (text (f ++ " & ")) <> print sm d %% makeDRows sm ps

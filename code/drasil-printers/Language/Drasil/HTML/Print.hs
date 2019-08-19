@@ -9,7 +9,7 @@ import Utils.Drasil (checkValidStr, numList)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
-  Symbol(..), DType(Data, Theory, Instance, General), MaxWidthPercent,
+  Symbol(..), DType(..), MaxWidthPercent,
   Decoration(Prime, Hat, Vector), Document,
   nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special, USymb(US))
 
@@ -71,23 +71,23 @@ printMath = (`runPrint` Text)
 
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
-printLO (HDiv ["equation"] layoutObs EmptyS)  = vcat (map printLO layoutObs)
+printLO (HDiv ["equation"] layoutObs EmptyS) = vcat (map printLO layoutObs)
 -- Dollar Doc needed to wrap in extra dollar signs.
 -- Latex print sets up a \begin{displaymath} environment instead of this
-printLO (EqnBlock contents)    = dollarDoc $ printMath $ TeX.spec contents
+printLO (EqnBlock contents)      = dollarDoc $ printMath $ TeX.spec contents
 -- Non-mathjax
 -- printLO (EqnBlock contents) = pSpec contents
-printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))
-printLO (HDiv ts layoutObs l)  = refwrap (pSpec l) $
+printLO (HDiv ts layoutObs EmptyS) = divTag ts (vcat (map printLO layoutObs))
+printLO (HDiv ts layoutObs l)    = refwrap (pSpec l) $
                                  divTag ts (vcat (map printLO layoutObs))
-printLO (Paragraph contents)   = paragraph $ pSpec contents
-printLO (Table ts rows r b t)  = makeTable ts rows (pSpec r) b (pSpec t)
-printLO (Definition dt ssPs l) = makeDefn dt ssPs (pSpec l)
-printLO (Header n contents _)  = h (n + 1) $ pSpec contents -- FIXME
-printLO (List t)               = makeList t
-printLO (Figure r c f wp)      = makeFigure (pSpec r) (pSpec c) (text f) wp
-printLO (Bib bib)              = makeBib bib
-printLO Graph{}                = empty -- FIXME
+printLO (Paragraph contents)     = paragraph $ pSpec contents
+printLO (Table ts rows r b t)    = makeTable ts rows (pSpec r) b (pSpec t)
+printLO (Definition dt ssPs l i) = makeDefn dt ssPs (pSpec l) i
+printLO (Header n contents _)    = h (n + 1) $ pSpec contents -- FIXME
+printLO (List t)                 = makeList t
+printLO (Figure r c f wp)        = makeFigure (pSpec r) (pSpec c) (text f) wp
+printLO (Bib bib)                = makeBib bib
+printLO Graph{}                  = empty -- FIXME
 
 
 -- | Called by build, uses 'printLO' to render the layout
@@ -290,14 +290,16 @@ makeColumns = vcat . map (td . pSpec)
 -----------------------------------------------------------------
 
 -- | Renders definition tables (Data, General, Theory, etc.)
-makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
-makeDefn _ [] _  = error "L.Empty definition"
-makeDefn dt ps l = refwrap l $ table [dtag dt]
-  (tr (th (text "Refname") $$ td (bold l)) $$ makeDRows ps)
-  where dtag L.General  = "gdefn"
-        dtag L.Instance = "idefn"
-        dtag L.Theory   = "tdefn"
-        dtag L.Data     = "ddefn"
+makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Int -> Doc
+makeDefn _  [] _ _ = error "L.Empty definition"
+makeDefn dt ps l i = refwrap l $ table [dtag]
+  (tr (th (text "Refname") $$ td (bold l <+> (text $ paren $ mark ++ show i))) $$ makeDRows ps)
+  where dID L.General  = ("gdefn", "GD")
+        dID L.Instance = ("idefn", "IM")
+        dID L.Theory   = ("tdefn", "TM")
+        dID L.Data     = ("ddefn", "DD")
+        dtag = fst $ dID dt
+        mark = snd $ dID dt
 
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc

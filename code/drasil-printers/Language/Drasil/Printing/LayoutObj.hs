@@ -22,7 +22,7 @@ data LayoutObj =
    | Header Depth Title Label
    | Paragraph Contents
    | EqnBlock Contents
-   | Definition DType [(String,[LayoutObj])] Label
+   | Definition DType [(String,[LayoutObj])] Label Int
    | List ListType
    | Figure Label Caption Filepath MaxWidthPercent
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label

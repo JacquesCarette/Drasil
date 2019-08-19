@@ -5,7 +5,7 @@ import Language.Drasil.Chunk.Citation (BibRef)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
-import Language.Drasil.Classes (Referable(refAdd, renderRef))
+import Language.Drasil.Classes (Referable(refAdd, renderRef), HasMarker(marker))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Type (LblType(RP), IRefProg, name, raw, (+::+))
 import Language.Drasil.RefProg(Reference)
@@ -68,8 +68,9 @@ data RawContent = Table [Sentence] [[Sentence]] Title Bool
                -- ^ TODO: Fill this one in.
 type Identifier = String
 
-data LabelledContent = LblC { _ref :: Reference
+data LabelledContent = LblC { _ref   :: Reference
                             , _ctype :: RawContent
+                            , _mark  :: Int
                             }
 
 newtype UnlabelledContent = UnlblC { _cntnts :: RawContent }
@@ -92,9 +93,10 @@ instance HasContents Contents where
   accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
   accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
 
+instance HasMarker LabelledContent where marker = mark
 instance Referable LabelledContent where
-  refAdd     (LblC lb _) = getRefAdd lb
-  renderRef  (LblC lb c) = RP (refLabelledCon c) (getRefAdd lb)
+  refAdd     (LblC lb _ _) = getRefAdd lb
+  renderRef  (LblC lb c _) = RP (refLabelledCon c) (getRefAdd lb)
 
 refLabelledCon :: RawContent -> IRefProg
 refLabelledCon Table{}        = raw "Table:" +::+ name 

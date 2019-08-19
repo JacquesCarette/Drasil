@@ -348,29 +348,29 @@ lay sm (LlC x) = layLabelled sm x
 lay sm (UlC x) = layUnlabelled sm (x ^. accessContents) 
 
 layLabelled :: PrintingInformation -> LabelledContent -> T.LayoutObj
-layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
+layLabelled sm x@(LblC _ (Table hdr lls t b) _) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getRefAdd x)
   b (spec sm t)
-layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
+layLabelled sm x@(LblC _ (EqnBlock c) _)          = T.HDiv ["equation"] 
   [T.EqnBlock (P.E (expr c sm))] 
   (P.S $ getRefAdd x)
-layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure 
+layLabelled sm x@(LblC _ (Figure c f wp) _)     = T.Figure 
   (P.S $ getRefAdd x)
   (spec sm c) f wp
-layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
+layLabelled sm x@(LblC _ (Graph ps w h t) _)    = T.Graph 
   (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
   (P.S $ getRefAdd x)
-layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition 
+layLabelled sm x@(LblC _ (Defini dtyp pairs) i) = T.Definition 
   dtyp (layPairs pairs) 
-  (P.S $ getRefAdd x)
+  (P.S $ getRefAdd x) i
   where layPairs = map (\(x',y) -> (x', map (lay sm) y))
-layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
-layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
+layLabelled sm (LblC _ (Paragraph c) _)    = T.Paragraph (spec sm c)
+layLabelled sm x@(LblC _ (DerivBlock h d) _) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
   where ref = P.S $ refAdd x ++ "Deriv"
-layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
-layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
+layLabelled sm (LblC _ (Enumeration cs) _) = T.List $ makeL sm cs
+layLabelled  _ (LblC _ (Bib bib) _)        = T.Bib $ map layCite bib
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
@@ -386,7 +386,7 @@ layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)  = T.Figure (P.S "nolabel2") (spec sm c) f wp
 layUnlabelled sm (Graph ps w h t) = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S "nolabel6")
-layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
+layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7") 0
   where layPairs = map (\(x,y) -> (x, map temp y ))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib

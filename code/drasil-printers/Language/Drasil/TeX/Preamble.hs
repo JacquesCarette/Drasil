@@ -97,7 +97,7 @@ parseDoc los' =
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in
       (pp, dd)
-    parseDoc' (Definition _ ps _) =
+    parseDoc' (Definition _ ps _ _) =
       let res1 = concatMap (map parseDoc' . snd) ps in
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in

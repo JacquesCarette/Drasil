@@ -1,7 +1,6 @@
 module Language.Drasil.Code.DataDesc where
 
-import Language.Drasil
-import Language.Drasil.Chunk.Code (CodeChunk, quantvar)
+import Language.Drasil.Chunk.Code (CodeChunk)
 
 import Data.List (nub)
 
@@ -19,7 +18,7 @@ data Data = Singleton DataItem
 data LinePattern = Straight [DataItem] -- line of data with no pattern
                  | Repeat [DataItem]   -- line of data with repeated pattern       
 
-singleton :: CodeChunk -> Data
+singleton :: DataItem -> Data
 singleton = Singleton
 
 junkLine :: Data
@@ -34,11 +33,15 @@ multiLine l = Lines l Nothing
 multiLine' :: LinePattern -> Integer -> Delim -> Data
 multiLine' l i = Lines l (Just i)
 
-straight :: (Quantity c, MayHaveUnit c) => [c] -> LinePattern
-straight = Straight . map quantvar
+straight :: [DataItem] -> LinePattern
+straight = Straight
 
-repeated :: (Quantity c, MayHaveUnit c) => [c] -> LinePattern
-repeated = Repeat . map quantvar
+repeated :: [DataItem] -> LinePattern
+repeated = Repeat
+
+isJunk :: Data -> Bool
+isJunk JunkData = True
+isJunk _ = False
 
 isLine :: Data -> Bool
 isLine Line{} = True
@@ -48,15 +51,15 @@ isLines :: Data -> Bool
 isLines Lines{} = True
 isLines _ = False
 
-getInputs :: DataDesc -> [CodeChunk]
+getInputs :: DataDesc -> [DataItem]
 getInputs d = nub $ concatMap getDataInputs d
 
-getDataInputs :: Data -> [CodeChunk]
+getDataInputs :: Data -> [DataItem]
 getDataInputs (Singleton v) = [v]
 getDataInputs (Line lp _) = getPatternInputs lp
 getDataInputs (Lines lp _ _) = getPatternInputs lp
 getDataInputs JunkData = []
 
-getPatternInputs :: LinePattern -> [CodeChunk]
+getPatternInputs :: LinePattern -> [DataItem]
 getPatternInputs (Straight vs) = vs
 getPatternInputs (Repeat vs) = vs

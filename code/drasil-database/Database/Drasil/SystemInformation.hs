@@ -38,6 +38,7 @@ data SystemInformation where
   , _sysinfodb :: ChunkDB
   , _usedinfodb :: ChunkDB
   , refdb :: ReferenceDB
+  , sampleData :: FilePath
   } -> SystemInformation
   
 -- | for listing QDefs in SystemInformation

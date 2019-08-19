@@ -4,7 +4,8 @@
     <link rel="stylesheet" type="text/css" href="GamePhysics_SRS.css">
     <title>Software Requirements Specification for Game Physics</title>
     <meta charset="utf-8">
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['$$','$$']]});</script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
   </head>
   <body>
     <div class="title">
@@ -628,7 +629,13 @@
                     Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from <a href=#cartesianWiki>cartesianWiki</a>).
                   </li>
                   <li>
-                    Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.
+                    Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen..
+                  </li>
+                  <li>
+                    Line: An interval between two points (from <a href=#lineSource>lineSource</a>).
+                  </li>
+                  <li>
+                    Point: An exact location, it has no size, only position (from <a href=#pointSource>pointSource</a>).
                   </li>
                 </ul>
               </div>
@@ -675,7 +682,7 @@
                   </p>
                   <p>
                     <div id="assumpOD">
-                      objectDimension: All objects are 2D. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:ctrOfMass>DD: ctrOfMass</a>, <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#DD:impulse>DD: impulse</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
+                      objectDimension: All objects are 2D. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#DD:impulse>DD: impulse</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
                     </div>
                   </p>
                   <p>
@@ -695,12 +702,12 @@
                   </p>
                   <p>
                     <div id="assumpDI">
-                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#lcID>LC: Include-Dampening</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
+                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#lcID>LC: Include-Dampening</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, and <a href=#IM:col2D>IM: col2D</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCAJI">
-                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#lcIJC>LC: Include-Joints-Constraints</a>, and <a href=#IM:col2D>IM: col2D</a>.)
+                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#lcIJC>LC: Include-Joints-Constraints</a>, and <a href=#IM:col2D>IM: col2D</a>.)
                     </div>
                   </p>
                 </div>
@@ -724,9 +731,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation"><em><b>F</b> = m&#8239;<b>a</b></em></div>
-                      </td>
+                      <td>$$\mathbf{F}=m \mathbf{a}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -742,7 +747,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The net force <em><b>F</b></em> (N) on a body is proportional to the acceleration <em><b>a</b></em> (m/s<sup>2</sup>) of the body, where <em>m</em> (kg) denotes the mass of the body as the constant of proportionality.
+                          The net force <em><b>F</b></em> on a body is proportional to the acceleration <em><b>a</b></em> of the body, where <em>m</em> denotes the mass of the body as the constant of proportionality.
                         </p>
                       </td>
                     </tr>
@@ -752,7 +757,9 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph"><a href=#IM:transMot>IM: transMot</a></p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -768,11 +775,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em><b>F</b><sub>1</sub> = &minus;<b>F</b><sub>2</sub></em>
-                        </div>
-                      </td>
+                      <td>$${\mathbf{F}_{1}}=-{\mathbf{F}_{2}}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -791,7 +794,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          Every action has an equal and opposite reaction. In other words, the force <em><b>F</b><sub>1</sub></em> (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force <em><b>F</b><sub>2</sub></em> (N) exerted on the first rigid body by the second.
+                          Every action has an equal and opposite reaction. In other words, the force <em><b>F</b><sub>1</sub></em> exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force <em><b>F</b><sub>2</sub></em> exerted on the first rigid body by the second.
                         </p>
                       </td>
                     </tr>
@@ -820,28 +823,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>F</b> = G&#8239;<div class="fraction">
-                                                   <span class="fup">
-                                                     m<sub>1</sub>&#8239;m<sub>2</sub>
-                                                   </span>
-                                                   <span class="fdn">||<b>r</b>||<sup>2</sup></span>
-                                                 </div>&#8239;<b>r&#770;</b> = G&#8239;<div class="fraction">
-                                                                                         <span class="fup">
-                                                                                           m<sub>1</sub>&#8239;m<sub>2</sub>
-                                                                                         </span>
-                                                                                         <span class="fdn">
-                                                                                           ||<b>r</b>||<sup>2</sup>
-                                                                                         </span>
-                                                                                       </div>&#8239;<div class="fraction">
-                                                                                                      <span class="fup">
-                                                                                                        <b>r</b>
-                                                                                                      </span>
-                                                                                                      <span class="fdn">
-                                                                                                        ||<b>r</b>||
-                                                                                                      </span>
-                                                                                                    </div></em>
-                        </div>
+                        $$\mathbf{F}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{r}\text{||}^{2}} \frac{\mathbf{r}}{\text{||}\mathbf{r}\text{||}}$$
                       </td>
                     </tr>
                     <tr>
@@ -868,7 +850,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, <em>G</em> is the empirical physical constant used to show the force between two objects caused by gravity (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
+                          Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em>, and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> between them.
+                        </p>
+                        <p class="paragraph">
+                          The vector <em><b>r</b></em> is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> is the absolute distance between the two.
+                        </p>
+                        <p class="paragraph">
+                          <em><b>r&#770;</b></em> is equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above.
                         </p>
                       </td>
                     </tr>
@@ -896,7 +884,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td><div class="equation"><em>τ = <b>I</b>&#8239;α</em></div></td>
+                      <td>$$τ=\mathbf{I} α$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -914,7 +902,10 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The net torque <em>τ</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>α</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional <a href=#assumpOD>A: objectDimension</a>.
+                          The net torque <em>τ</em> on a rigid body is proportional to its angular acceleration <em>α</em>, where <em><b>I</b></em> denotes the moment of inertia of the rigid body as the constant of proportionality.
+                        </p>
+                        <p class="paragraph">
+                          We also assume that all rigid bodies involved are two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
                         </p>
                       </td>
                     </tr>
@@ -924,7 +915,7 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td><p class="paragraph"><a href=#IM:rotMot>IM: rotMot</a></p></td>
                     </tr>
                   </table>
                 </div>
@@ -953,12 +944,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>g = <div class="fraction">
-                                    <span class="fup">G&#8239;M</span>
-                                    <span class="fdn">||<b>r</b>||<sup>2</sup></span>
-                                  </div>&#8239;<b>r&#770;</b></em>
-                        </div>
+                        $$g=\frac{G M}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}$$
                       </td>
                     </tr>
                     <tr>
@@ -991,7 +977,9 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph"><a href=#IM:transMot>IM: transMot</a></p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -1025,14 +1013,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>p</b><sub>CM</sub> = <div class="fraction">
-                                                        <span class="fup">
-                                                          &sum;m<sub>j</sub>&#8239;<b>p</b><sub>j</sub>
-                                                        </span>
-                                                        <span class="fdn">m<sub>T</sub></span>
-                                                      </div></em>
-                        </div>
+                        $${\mathbf{p}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{{m_{T}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1055,8 +1036,9 @@
                     <tr>
                       <th>Notes</th>
                       <td>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
-                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>).
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1095,12 +1077,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>r</b>(t) = <div class="fraction">
-                                              <span class="fup">&#8239;d<b>p</b>(t)</span>
-                                              <span class="fdn">&#8239;dt</span>
-                                            </div></em>
-                        </div>
+                        $$\mathbf{r}\text{(}t\text{)}=\frac{\,d\mathbf{p}\left(t\right)}{\,dt}$$
                       </td>
                     </tr>
                     <tr>
@@ -1116,10 +1093,8 @@
                     <tr>
                       <th>Notes</th>
                       <td>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
-                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
                         <p class="paragraph">
-                          <a href=#assumpDI>A: dampingInvolvement</a>
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>).
                         </p>
                       </td>
                     </tr>
@@ -1157,12 +1132,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b>(t) = <div class="fraction">
-                                              <span class="fup">&#8239;d<b>r</b>(t)</span>
-                                              <span class="fdn">&#8239;dt</span>
-                                            </div></em>
-                        </div>
+                        $$\mathbf{v}\text{(}t\text{)}=\frac{\,d\mathbf{r}\left(t\right)}{\,dt}$$
                       </td>
                     </tr>
                     <tr>
@@ -1178,10 +1148,8 @@
                     <tr>
                       <th>Notes</th>
                       <td>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
-                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
                         <p class="paragraph">
-                          <a href=#assumpDI>A: dampingInvolvement</a>
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>).
                         </p>
                       </td>
                     </tr>
@@ -1219,12 +1187,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>a</b>(t) = <div class="fraction">
-                                              <span class="fup">&#8239;d<b>v</b>(t)</span>
-                                              <span class="fdn">&#8239;dt</span>
-                                            </div></em>
-                        </div>
+                        $$\mathbf{a}\text{(}t\text{)}=\frac{\,d\mathbf{v}\left(t\right)}{\,dt}$$
                       </td>
                     </tr>
                     <tr>
@@ -1242,10 +1205,8 @@
                     <tr>
                       <th>Notes</th>
                       <td>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
-                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
                         <p class="paragraph">
-                          <a href=#assumpDI>A: dampingInvolvement</a>
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>).
                         </p>
                       </td>
                     </tr>
@@ -1282,14 +1243,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>θ = <div class="fraction">
-                                    <span class="fup">&#8239;dϕ(t)</span>
-                                    <span class="fdn">&#8239;dt</span>
-                                  </div></em>
-                        </div>
-                      </td>
+                      <td>$$θ=\frac{\,dϕ\left(t\right)}{\,dt}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1304,10 +1258,8 @@
                     <tr>
                       <th>Notes</th>
                       <td>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
-                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
                         <p class="paragraph">
-                          <a href=#assumpDI>A: dampingInvolvement</a>
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
                         </p>
                       </td>
                     </tr>
@@ -1342,14 +1294,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>ω = <div class="fraction">
-                                    <span class="fup">&#8239;dθ(t)</span>
-                                    <span class="fdn">&#8239;dt</span>
-                                  </div></em>
-                        </div>
-                      </td>
+                      <td>$$ω=\frac{\,dθ\left(t\right)}{\,dt}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1364,10 +1309,8 @@
                     <tr>
                       <th>Notes</th>
                       <td>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
-                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
                         <p class="paragraph">
-                          <a href=#assumpDI>A: dampingInvolvement</a>
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
                         </p>
                       </td>
                     </tr>
@@ -1402,14 +1345,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>α = <div class="fraction">
-                                    <span class="fup">&#8239;dω(t)</span>
-                                    <span class="fdn">&#8239;dt</span>
-                                  </div></em>
-                        </div>
-                      </td>
+                      <td>$$α=\frac{\,dω\left(t\right)}{\,dt}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1424,10 +1360,8 @@
                     <tr>
                       <th>Notes</th>
                       <td>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
-                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
                         <p class="paragraph">
-                          <a href=#assumpDI>A: dampingInvolvement</a>
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
                         </p>
                       </td>
                     </tr>
@@ -1463,36 +1397,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>j = <div class="fraction">
-                                    <span class="fup">
-                                      &minus;(1&plus;C<sub>R</sub>)&#8239;<b>v</b><sub>i</sub><sup>AB</sup>&sdot;<b>n</b>
-                                    </span>
-                                    <span class="fdn">
-                                      (<div class="fraction">
-                                         <span class="fup">1</span>
-                                         <span class="fdn">m<sub>A</sub></span>
-                                       </div>&plus;<div class="fraction">
-                                                     <span class="fup">1</span>
-                                                     <span class="fdn">m<sub>B</sub></span>
-                                                   </div>)&#8239;||<b>n</b>||<sup>2</sup>&plus;<div class="fraction">
-                                                                                                 <span class="fup">
-                                                                                                   ||<b>r</b><sub>AP</sub>*<b>n</b>||<sup>2</sup>
-                                                                                                 </span>
-                                                                                                 <span class="fdn">
-                                                                                                   <b>I</b><sub>A</sub>
-                                                                                                 </span>
-                                                                                               </div>&plus;<div class="fraction">
-                                                                                                             <span class="fup">
-                                                                                                               ||<b>r</b><sub>BP</sub>*<b>n</b>||<sup>2</sup>
-                                                                                                             </span>
-                                                                                                             <span class="fdn">
-                                                                                                               <b>I</b><sub>B</sub>
-                                                                                                             </span>
-                                                                                                           </div>
-                                    </span>
-                                  </div></em>
-                        </div>
+                        $$j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1530,10 +1435,15 @@
                     <tr>
                       <th>Notes</th>
                       <td>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
-                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
-                        <p class="paragraph"><a href=#assumpAD>A: axesDefined</a></p>
-                        <p class="paragraph"><a href=#assumpCT>A: collisionType</a></p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
+                        </p>
+                        <p class="paragraph">
+                          A right-handed coordinate system is used (from <a href=#assumpAD>A: axesDefined</a>).
+                        </p>
+                        <p class="paragraph">
+                          All collisions are vertex-to-edge (from <a href=#assumpCT>A: collisionType</a>).
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1550,22 +1460,11 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of impulse (scalar):</h4>
                     <p class="paragraph">Newton's second law of motion states:</p>
-                    <div class="equation">
-                      <em><b>F</b> = m&#8239;<b>a</b> = m&#8239;<div class="fraction">
-                                                                  <span class="fup">
-                                                                    &#8239;d<b>v</b>
-                                                                  </span>
-                                                                  <span class="fdn">&#8239;dt</span>
-                                                                </div></em>
-                    </div>
+                    $$\mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}$$
                     <p class="paragraph">Rearranging :</p>
-                    <div class="equation">
-                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;(&int;<sub><b>v</b><sub>1</sub></sub><sup><b>v</b><sub>2</sub></sup>1&#8239;d<b>v</b>)</em>
-                    </div>
+                    $$\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)$$
                     <p class="paragraph">Integrating the right hand side :</p>
-                    <div class="equation">
-                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;<b>v</b><sub>2</sub>&minus;m&#8239;<b>v</b><sub>1</sub> = m&#8239;Δ<b>v</b></em>
-                    </div>
+                    $$\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}$$
                   </div>
                 </div>
                 <div id="DD:chaslesThm">
@@ -1589,9 +1488,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b><sub>B</sub> = <b>v</b><sub>O</sub>&plus;ω&#10799;<b>r</b><sub>OB</sub></em>
-                        </div>
+                        $${\mathbf{v}_{\text{B}}}={\mathbf{v}_{\text{O}}}+ω\times{\mathbf{r}_{\text{O}\text{B}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1615,7 +1512,10 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The linear velocity <em><b>v</b><sub>B</sub></em> of any point B in a rigid body (from <a href=#assumpOT>A: objectTy</a>) is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> and the displacement vector between the origin and point B <em><b>r</b><sub>OB</sub></em>.
+                          The linear velocity <em><b>v</b><sub>B</sub></em> of any point B in a rigid body is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>ω</em> and the displacement vector between the origin and point B <em><b>r</b><sub>OB</sub></em>.
+                        </p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>).
                         </p>
                       </td>
                     </tr>
@@ -1652,9 +1552,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation"><em>τ = <b>r</b>&#10799;<b>F</b></em></div>
-                      </td>
+                      <td>$$τ=\mathbf{r}\times\mathbf{F}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1705,14 +1603,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>KE = <div class="fraction">
-                                     <span class="fup">m&#8239;<b>v</b><sup>2</sup></span>
-                                     <span class="fdn">2</span>
-                                   </div></em>
-                        </div>
-                      </td>
+                      <td>$$KE=\frac{m \mathbf{v}^{2}}{2}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1728,12 +1619,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The kinetic energy of an object is the energy it possess due to its motion.
+                          Kinetic energy is the measure of the energy a body possesses due to its motion.
                         </p>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
-                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
                         <p class="paragraph">
-                          <a href=#assumpDI>A: dampingInvolvement</a>
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
+                        </p>
+                        <p class="paragraph">
+                          No damping occurs during the simulation (from <a href=#assumpDI>A: dampingInvolvement</a>).
                         </p>
                       </td>
                     </tr>
@@ -1769,16 +1661,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>C<sub>R</sub> = &minus;(<div class="fraction">
-                                                        <span class="fup">
-                                                          <b>v</b><sub>f</sub><sup>AB</sup>&sdot;<b>n</b>
-                                                        </span>
-                                                        <span class="fdn">
-                                                          <b>v</b><sub>i</sub><sup>AB</sup>&sdot;<b>n</b>
-                                                        </span>
-                                                      </div>)</em>
-                        </div>
+                        $${C_{\text{R}}}=-\left(\frac{{{\mathbf{v}_{\text{f}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{{{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -1802,7 +1685,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The coefficient of restitution <em>C<sub>R</sub></em> is a unitless, dimensionless quantity that determines the elasticity of a collision between two rigid bodies. <em>C<sub>R</sub> = 1</em> results in an elastic collision, while <em>C<sub>R</sub>&thinsp;&lt;&thinsp;1</em> results in an inelastic collision, and <em>C<sub>R</sub> = 0</em> results in a totally inelastic collision.
+                          The coefficient of restitution <em>C<sub>R</sub></em> determines the elasticity of a collision between two rigid bodies. <em>C<sub>R</sub> = 1</em> results in an elastic collision, <em>C<sub>R</sub>&thinsp;&lt;&thinsp;1</em> results in an inelastic collision, and <em>C<sub>R</sub> = 0</em> results in a totally inelastic collision.
                         </p>
                       </td>
                     </tr>
@@ -1844,9 +1727,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b><sub>i</sub><sup>AB</sup> = <b>v</b><sup>AP</sup>&minus;<b>v</b><sup>BP</sup></em>
-                        </div>
+                        $${{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}={\mathbf{v}^{\text{A}\text{P}}}-{\mathbf{v}^{\text{B}\text{P}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1869,7 +1750,10 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          In a collision, the velocity of a rigid body <a href=#assumpOT>A: objectTy</a> A colliding with another rigid body B relative to that body <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the difference between the velocities of A and B at point P.
+                          In a collision, the velocity of a rigid body A colliding with another rigid body B relative to that body <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the difference between the velocities of A and B at point P.
+                        </p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>).
                         </p>
                       </td>
                     </tr>
@@ -1904,9 +1788,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation"><em><b>J</b> = m&#8239;Δ<b>v</b></em></div>
-                      </td>
+                      <td>$$\mathbf{J}=m Δ\mathbf{v}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1924,7 +1806,9 @@
                         <p class="paragraph">
                           An impulse (vector) <em><b>J</b></em> occurs when a force <em><b>F</b></em> acts over a body over an interval of time.
                         </p>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>).
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1941,22 +1825,11 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of impulse (vector):</h4>
                     <p class="paragraph">Newton's second law of motion states:</p>
-                    <div class="equation">
-                      <em><b>F</b> = m&#8239;<b>a</b> = m&#8239;<div class="fraction">
-                                                                  <span class="fup">
-                                                                    &#8239;d<b>v</b>
-                                                                  </span>
-                                                                  <span class="fdn">&#8239;dt</span>
-                                                                </div></em>
-                    </div>
+                    $$\mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}$$
                     <p class="paragraph">Rearranging :</p>
-                    <div class="equation">
-                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;(&int;<sub><b>v</b><sub>1</sub></sub><sup><b>v</b><sub>2</sub></sup>1&#8239;d<b>v</b>)</em>
-                    </div>
+                    $$\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)$$
                     <p class="paragraph">Integrating the right hand side :</p>
-                    <div class="equation">
-                      <em>&int;<sub>t<sub>1</sub></sub><sup>t<sub>2</sub></sup><b>F</b>&#8239;dt = m&#8239;<b>v</b><sub>2</sub>&minus;m&#8239;<b>v</b><sub>1</sub> = m&#8239;Δ<b>v</b></em>
-                    </div>
+                    $$\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}$$
                   </div>
                 </div>
                 <div id="DD:potEnergy">
@@ -1979,9 +1852,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation"><em>PE = m&#8239;g&#8239;h</em></div>
-                      </td>
+                      <td>$$PE=m g h$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2002,10 +1873,11 @@
                         <p class="paragraph">
                           The potential energy of an object is the energy held by an object because of its position to other objects.
                         </p>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
-                        <p class="paragraph"><a href=#assumpOD>A: objectDimension</a></p>
                         <p class="paragraph">
-                          <a href=#assumpDI>A: dampingInvolvement</a>
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
+                        </p>
+                        <p class="paragraph">
+                          No damping occurs during the simulation (from <a href=#assumpDI>A: dampingInvolvement</a>).
                         </p>
                       </td>
                     </tr>
@@ -2040,11 +1912,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em><b>I</b> = &sum;m<sub>j</sub>&#8239;r<sub>j</sub><sup>2</sup></em>
-                        </div>
-                      </td>
+                      <td>$$\mathbf{I}=\displaystyle\sum{{m_{j}} {r_{j}}^{2}}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2068,7 +1936,9 @@
                         <p class="paragraph">
                           The moment of inertia <em><b>I</b></em> of a body measures how much torque is needed for the body to achieve angular acceleration about the axis of rotation.
                         </p>
-                        <p class="paragraph"><a href=#assumpOT>A: objectTy</a></p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>).
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -2122,17 +1992,11 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b><sub>i</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation"><em>t&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation"><em>g&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation">
-                          <em><b>F</b><sub>i</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation">
-                          <em>m<sub>j</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
+                        $${\mathbf{v}_{i}}\gt{}0$$
+                        $$t\gt{}0$$
+                        $$g\gt{}0$$
+                        $${\mathbf{F}_{i}}\gt{}0$$
+                        $${m_{j}}\gt{}0$$
                       </td>
                     </tr>
                     <tr>
@@ -2142,21 +2006,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>a</b><sub>i</sub> = <div class="fraction">
-                                                       <span class="fup">
-                                                         &#8239;d<b>v</b><sub>i</sub>(t)
-                                                       </span>
-                                                       <span class="fdn">&#8239;dt</span>
-                                                     </div> = g&plus;<div class="fraction">
-                                                                       <span class="fup">
-                                                                         <b>F</b><sub>i</sub>(t)
-                                                                       </span>
-                                                                       <span class="fdn">
-                                                                         m<sub>j</sub>
-                                                                       </span>
-                                                                     </div></em>
-                        </div>
+                        $${\mathbf{a}_{i}}=\frac{\,d{\mathbf{v}_{i}}\left(t\right)}{\,dt}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -2186,7 +2036,16 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation expresses the total acceleration of the rigid body <a href=#assumpOT>A: objectTy</a> <a href=#assumpOD>A: objectDimension</a> i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using <a href=#DD:linDisp>DD: linDisp</a> <a href=#DD:linVel>DD: linVel</a> <a href=#DD:linAcc>DD: linAcc</a>.  It is currently assumed that there is no damping <a href=#assumpDI>A: dampingInvolvement</a> or constraints <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a> involved. <a href=#DD:ctrOfMass>DD: ctrOfMass</a>.
+                          The above equation expresses the total acceleration of the rigid body <em>i</em> as the sum of gravitational acceleration (from <a href=#GD:accelGravity>GD: accelGravity</a>) and acceleration due to applied force <em><b>F</b><sub>i</sub>(t)</em> (from <a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>). The resultant outputs are then obtained from this equation using <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linVel>DD: linVel</a>, and <a href=#DD:linAcc>DD: linAcc</a>.
+                        </p>
+                        <p class="paragraph">
+                          The output of the instance model will be the functions of position and velocity over time that satisfy the ODE for the acceleration, with the given initial conditions for position and velocity. The motion is translational, so the position and velocity functions are for the centre of mass (from <a href=#DD:ctrOfMass>DD: ctrOfMass</a>).
+                        </p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
+                        </p>
+                        <p class="paragraph">
+                          It is currently assumed that no damping occurs during the simulation (from <a href=#assumpDI>A: dampingInvolvement</a>) and that no constraints are involved (from <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a>).
                         </p>
                       </td>
                     </tr>
@@ -2230,32 +2089,20 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation"><em>ω&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation"><em>t&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation">
-                          <em>τ<sub>i</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation"><em><b>I</b>&thinsp;&gt;&thinsp;0</em></div>
+                        $$ω\gt{}0$$
+                        $$t\gt{}0$$
+                        $${τ_{i}}\gt{}0$$
+                        $$\mathbf{I}\gt{}0$$
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>
-                        <div class="equation"><em>α&thinsp;&gt;&thinsp;0</em></div>
-                      </td>
+                      <td>$$α\gt{}0$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>α = <div class="fraction">
-                                    <span class="fup">&#8239;dω(t)</span>
-                                    <span class="fdn">&#8239;dt</span>
-                                  </div> = <div class="fraction">
-                                             <span class="fup">τ<sub>i</sub>(t)</span>
-                                             <span class="fdn"><b>I</b></span>
-                                           </div></em>
-                        </div>
+                        $$α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}$$
                       </td>
                     </tr>
                     <tr>
@@ -2278,7 +2125,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation for the total angular acceleration of the rigid body <a href=#assumpOT>A: objectTy</a> <a href=#assumpOD>A: objectDimension</a> i is derived from T5, and the resultant outputs are then obtained from this equation using <a href=#DD:angDisp>DD: angDisp</a> <a href=#DD:angVel>DD: angVel</a> <a href=#DD:angAccel>DD: angAccel</a>. It is currently assumed that there is no damping <a href=#assumpDI>A: dampingInvolvement</a> or constraints <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a> involved. <a href=#assumpAD>A: axesDefined</a>
+                          The above equation for the total angular acceleration of the rigid body <em>i</em> is derived from <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>, and the resultant outputs are then obtained from this equation using <a href=#DD:angDisp>DD: angDisp</a>, <a href=#DD:angVel>DD: angVel</a>, and <a href=#DD:angAccel>DD: angAccel</a>.
+                        </p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
+                        </p>
+                        <p class="paragraph">
+                          A right-handed coordinate system is used (from <a href=#assumpAD>A: axesDefined</a>).
                         </p>
                       </td>
                     </tr>
@@ -2318,38 +2171,23 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation"><em>t&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation"><em>j&thinsp;&gt;&thinsp;0</em></div>
-                        <div class="equation">
-                          <em>m<sub>A</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation"><em><b>n</b>&thinsp;&gt;&thinsp;0</em></div>
+                        $$t\gt{}0$$
+                        $$j\gt{}0$$
+                        $${m_{\text{A}}}\gt{}0$$
+                        $$\mathbf{n}\gt{}0$$
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b><sub>A</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation">
-                          <em>t<sub>c</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
+                        $${\mathbf{v}_{\text{A}}}\gt{}0$$
+                        $${t_{\text{c}}}\gt{}0$$
                       </td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b><sub>A</sub>(t<sub>c</sub>) = <b>v</b><sub>A</sub>(t)&plus;<div class="fraction">
-                                                                                                   <span class="fup">
-                                                                                                     j
-                                                                                                   </span>
-                                                                                                   <span class="fdn">
-                                                                                                     m<sub>A</sub>
-                                                                                                   </span>
-                                                                                                 </div>&#8239;<b>n</b></em>
-                        </div>
+                        $${\mathbf{v}_{\text{A}}}\left({t_{\text{c}}}\right)={\mathbf{v}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}} \mathbf{n}$$
                       </td>
                     </tr>
                     <tr>
@@ -2373,7 +2211,22 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          This instance model is based on our assumptions regarding rigid body <a href=#assumpOT>A: objectTy</a> <a href=#assumpOD>A: objectDimension</a> collisions <a href=#assumpCT>A: collisionType</a> Again, this does not take damping <a href=#assumpDI>A: dampingInvolvement</a> or constraints <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a> into account. <a href=#assumpAD>A: axesDefined</a>. <a href=#DD:ctrOfMass>DD: ctrOfMass</a> <a href=#DD:impulse>DD: impulse</a>
+                          The output of the instance model will be the functions of position, velocity, orientation, and angular acceleration over time that satisfy the equations for the velocity and angular acceleration, with the given initial conditions for position, velocity, orientation, and angular acceleration. The motion is translational, so the position, velocity, orientation, and angular acceleration functions are for the centre of mass (from <a href=#DD:ctrOfMass>DD: ctrOfMass</a>).
+                        </p>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
+                        </p>
+                        <p class="paragraph">
+                          A right-handed coordinate system is used (from <a href=#assumpAD>A: axesDefined</a>).
+                        </p>
+                        <p class="paragraph">
+                          All collisions are vertex-to-edge (from <a href=#assumpCT>A: collisionType</a>).
+                        </p>
+                        <p class="paragraph">
+                          It is currently assumed that no damping occurs during the simulation (from <a href=#assumpDI>A: dampingInvolvement</a>) and that no constraints are involved (from <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a>).
+                        </p>
+                        <p class="paragraph">
+                          <em>j</em> is defined in <a href=#DD:impulse>DD: impulse</a>.
                         </p>
                       </td>
                     </tr>
@@ -2473,12 +2326,7 @@
                       <td>
                         <em>0&thinsp;&le;&thinsp;ϕ&thinsp;&le;&thinsp;2&#8239;π</em>
                       </td>
-                      <td>
-                        <em><div class="fraction">
-                              <span class="fup">π</span>
-                              <span class="fdn">2</span>
-                            </div></em> rad
-                      </td>
+                      <td><em>$\frac{π}{2}$</em> rad</td>
                       <td>10<em>%</em></td>
                     </tr>
                   </table>
@@ -2725,7 +2573,7 @@
             <tr>
               <td><a href=#DD:ctrOfMass>DD: ctrOfMass</a></td>
               <td>X</td>
-              <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2735,31 +2583,31 @@
             <tr>
               <td><a href=#DD:linDisp>DD: linDisp</a></td>
               <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
+              <td></td>
+              <td></td>
               <td></td>
             </tr>
             <tr>
               <td><a href=#DD:linVel>DD: linVel</a></td>
               <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
+              <td></td>
+              <td></td>
               <td></td>
             </tr>
             <tr>
               <td><a href=#DD:linAcc>DD: linAcc</a></td>
               <td>X</td>
-              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
+              <td></td>
+              <td></td>
               <td></td>
             </tr>
             <tr>
@@ -2769,7 +2617,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
+              <td></td>
               <td></td>
             </tr>
             <tr>
@@ -2779,7 +2627,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
+              <td></td>
               <td></td>
             </tr>
             <tr>
@@ -2789,7 +2637,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
+              <td></td>
               <td></td>
             </tr>
             <tr>
@@ -2949,8 +2797,8 @@
               <td></td>
               <td>X</td>
               <td></td>
-              <td>X</td>
-              <td>X</td>
+              <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:col2D>IM: col2D</a></td>
@@ -3823,11 +3671,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -3853,7 +3701,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>
@@ -4721,23 +4569,33 @@
             </div>
           </li>
           <li>
+            <div id="pointSource">
+              [7]: Pierce, Rod. <em>Point</em>. May, 2017. <a href="https://www.mathsisfun.com/geometry/point.html">https://www.mathsisfun.com/geometry/point.html</a>.
+            </div>
+          </li>
+          <li>
             <div id="smithLai2005">
-              [7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+              [8]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+            </div>
+          </li>
+          <li>
+            <div id="lineSource">
+              [9]: The Editors of Encyclopaedia Britannica. <em>Line</em>. June, 2019. <a href="https://www.britannica.com/science/line-mathematics">https://www.britannica.com/science/line-mathematics</a>.
             </div>
           </li>
           <li>
             <div id="chaslesWiki">
-              [8]: Wikipedia Contributors. <em>Chasles' theorem (kinematics)</em>. November, 2018. <a href="https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)">https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)</a>.
+              [10]: Wikipedia Contributors. <em>Chasles' theorem (kinematics)</em>. November, 2018. <a href="https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)">https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)</a>.
             </div>
           </li>
           <li>
             <div id="cartesianWiki">
-              [9]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
+              [11]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
             </div>
           </li>
           <li>
             <div id="sciComp2013">
-              [10]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
+              [12]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
             </div>
           </li>
         </ul>

@@ -4,7 +4,8 @@
     <link rel="stylesheet" type="text/css" href="Projectile_SRS.css">
     <title>Software Requirements Specification for Projectile</title>
     <meta charset="utf-8">
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['$$','$$']]});</script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
   </head>
   <body>
     <div class="title">
@@ -500,14 +501,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em><b>a</b> = <div class="fraction">
-                                           <span class="fup">&#8239;d<b>v</b></span>
-                                           <span class="fdn">&#8239;dt</span>
-                                         </div></em>
-                        </div>
-                      </td>
+                      <td>$$\mathbf{a}=\frac{\,d\mathbf{v}}{\,dt}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -547,14 +541,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em><b>v</b> = <div class="fraction">
-                                           <span class="fup">&#8239;d<b>p</b></span>
-                                           <span class="fdn">&#8239;dt</span>
-                                         </div></em>
-                        </div>
-                      </td>
+                      <td>$$\mathbf{v}=\frac{\,d\mathbf{p}}{\,dt}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -610,11 +597,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>v = v<sup>i</sup>&plus;a<sup>c</sup>&#8239;t</em>
-                        </div>
-                      </td>
+                      <td>$$v={v^{\text{i}}}+{a^{c}} t$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -653,22 +636,13 @@
                     <p class="paragraph">
                       Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The velocity is <em>v</em> and the acceleration is <em>a</em>. The motion in <a href=#TM:acceleration>TM: acceleration</a> is now one-dimensional with a constant acceleration, represented by <em>a<sup>c</sup></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em>v<sup>i</sup></em>. From <a href=#TM:acceleration>TM: acceleration</a>, using the above symbols we have:
                     </p>
-                    <div class="equation">
-                      <em>a<sup>c</sup> = <div class="fraction">
-                                            <span class="fup">&#8239;dv</span>
-                                            <span class="fdn">&#8239;dt</span>
-                                          </div></em>
-                    </div>
+                    $${a^{c}}=\frac{\,dv}{\,dt}$$
                     <p class="paragraph">Rearranging and integrating, we have:</p>
-                    <div class="equation">
-                      <em>&int;<sub>v<sup>i</sup></sub><sup>v</sup>1&#8239;dv = &int;<sub>0</sub><sup>t</sup>a<sup>c</sup>&#8239;dt</em>
-                    </div>
+                    $$\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt$$
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
-                    <div class="equation">
-                      <em>v = v<sup>i</sup>&plus;a<sup>c</sup>&#8239;t</em>
-                    </div>
+                    $$v={v^{\text{i}}}+{a^{c}} t$$
                   </div>
                 </div>
                 <div id="GD:rectPos">
@@ -692,16 +666,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>p = p<sup>i</sup>&plus;v<sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                                  <span class="fup">
-                                                                                    a<sup>c</sup>&#8239;t<sup>2</sup>
-                                                                                  </span>
-                                                                                  <span class="fdn">
-                                                                                    2
-                                                                                  </span>
-                                                                                </div></em>
-                        </div>
+                        $$p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}$$
                       </td>
                     </tr>
                     <tr>
@@ -738,35 +703,17 @@
                     <p class="paragraph">
                       Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The position is <em>p</em> and the velocity is <em>v</em>. The motion in <a href=#TM:velocity>TM: velocity</a> is now one-dimensional. The initial position (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em>p<sup>i</sup></em>. From <a href=#TM:velocity>TM: velocity</a>, using the above symbols we have:
                     </p>
-                    <div class="equation">
-                      <em>v = <div class="fraction">
-                                <span class="fup">&#8239;dp</span>
-                                <span class="fdn">&#8239;dt</span>
-                              </div></em>
-                    </div>
+                    $$v=\frac{\,dp}{\,dt}$$
                     <p class="paragraph">Rearranging and integrating, we have:</p>
-                    <div class="equation">
-                      <em>&int;<sub>p<sup>i</sup></sub><sup>p</sup>1&#8239;dp = &int;<sub>0</sub><sup>t</sup>v&#8239;dt</em>
-                    </div>
+                    $$\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt$$
                     <p class="paragraph">
                       From <a href=#GD:rectVel>GD: rectVel</a> we can replace <em>v</em>:
                     </p>
-                    <div class="equation">
-                      <em>&int;<sub>p<sup>i</sup></sub><sup>p</sup>1&#8239;dp = &int;<sub>0</sub><sup>t</sup>v<sup>i</sup>&plus;a<sup>c</sup>&#8239;t&#8239;dt</em>
-                    </div>
+                    $$\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt$$
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
-                    <div class="equation">
-                      <em>p = p<sup>i</sup>&plus;v<sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                              <span class="fup">
-                                                                                a<sup>c</sup>&#8239;t<sup>2</sup>
-                                                                              </span>
-                                                                              <span class="fdn">
-                                                                                2
-                                                                              </span>
-                                                                            </div></em>
-                    </div>
+                    $$p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}$$
                   </div>
                 </div>
                 <div id="GD:velVec">
@@ -790,12 +737,10 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>v</b> = <table class="matrix">
-<tr><td>v<sub>x</sub><sup>i</sup>&plus;a<sub>x</sub><sup>c</sup>&#8239;t</td></tr>
-<tr><td>v<sub>y</sub><sup>i</sup>&plus;a<sub>y</sub><sup>c</sup>&#8239;t</td></tr>
-</table></em>
-                        </div>
+                        $$\mathbf{v}=\begin{bmatrix}
+                                     {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
+                                     {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
+                                     \end{bmatrix}$$
                       </td>
                     </tr>
                     <tr>
@@ -833,26 +778,24 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of velocity vector:</h4>
                     <p class="paragraph">
-                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMotion</a> and <a href=#cartSyst>A: cartSyst</a>), we can represent the velocity vector as <em><b>v</b> = <table class="matrix">
-<tr><td>v<sub>x</sub></td></tr>
-<tr><td>v<sub>y</sub></td></tr>
-</table></em> and the acceleration vector as <em><b>a</b> = <table class="matrix">
-<tr><td>a<sub>x</sub></td></tr>
-<tr><td>a<sub>y</sub></td></tr>
-</table></em>. The acceleration is assumed to be constant (<a href=#constAccel>A: constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = <table class="matrix">
-<tr><td>a<sub>x</sub><sup>c</sup></td></tr>
-<tr><td>a<sub>y</sub><sup>c</sup></td></tr>
-</table></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = <table class="matrix">
-<tr><td>v<sub>x</sub><sup>i</sup></td></tr>
-<tr><td>v<sub>y</sub><sup>i</sup></td></tr>
-</table></em>. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD: rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
+                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMotion</a> and <a href=#cartSyst>A: cartSyst</a>), we can represent the velocity vector as <em><b>v</b> = $\begin{bmatrix}
+                                                                                                                                                                                                               {v_{\text{x}}}\\
+                                                                                                                                                                                                               {v_{\text{y}}}
+                                                                                                                                                                                                               \end{bmatrix}$</em> and the acceleration vector as <em><b>a</b> = $\begin{bmatrix}
+                                                                                                                                                                                                                                                                                  {a_{\text{x}}}\\
+                                                                                                                                                                                                                                                                                  {a_{\text{y}}}
+                                                                                                                                                                                                                                                                                  \end{bmatrix}$</em>. The acceleration is assumed to be constant (<a href=#constAccel>A: constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = $\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{a_{\text{x}}}^{\text{c}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{a_{\text{y}}}^{\text{c}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \end{bmatrix}$</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = $\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \end{bmatrix}$</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectVel>GD: rectVel</a> can be applied to each coordinate of the velocity vector to yield the required equation:
                     </p>
-                    <div class="equation">
-                      <em><b>v</b> = <table class="matrix">
-<tr><td>v<sub>x</sub><sup>i</sup>&plus;a<sub>x</sub><sup>c</sup>&#8239;t</td></tr>
-<tr><td>v<sub>y</sub><sup>i</sup>&plus;a<sub>y</sub><sup>c</sup>&#8239;t</td></tr>
-</table></em>
-                    </div>
+                    $$\mathbf{v}=\begin{bmatrix}
+                                 {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
+                                 {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
+                                 \end{bmatrix}$$
                   </div>
                 </div>
                 <div id="GD:posVec">
@@ -876,26 +819,10 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><b>p</b> = <table class="matrix">
-<tr><td>p<sub>x</sub><sup>i</sup>&plus;v<sub>x</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                                                                                                <span class="fup">
-                                                                                                                                                  a<sub>x</sub><sup>c</sup>&#8239;t<sup>2</sup>
-                                                                                                                                                </span>
-                                                                                                                                                <span class="fdn">
-                                                                                                                                                  2
-                                                                                                                                                </span>
-                                                                                                                                              </div></td></tr>
-<tr><td>p<sub>y</sub><sup>i</sup>&plus;v<sub>y</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                                                                                                                                                                                               <span class="fup">
-                                                                                                                                                                                                                                                 a<sub>y</sub><sup>c</sup>&#8239;t<sup>2</sup>
-                                                                                                                                                                                                                                               </span>
-                                                                                                                                                                                                                                               <span class="fdn">
-                                                                                                                                                                                                                                                 2
-                                                                                                                                                                                                                                               </span>
-                                                                                                                                                                                                                                             </div></td></tr>
-</table></em>
-                        </div>
+                        $$\mathbf{p}=\begin{bmatrix}
+                                     {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+                                     {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+                                     \end{bmatrix}$$
                       </td>
                     </tr>
                     <tr>
@@ -943,43 +870,27 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of position vector:</h4>
                     <p class="paragraph">
-                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMotion</a> and <a href=#cartSyst>A: cartSyst</a>), we can represent the position vector as <em><b>p</b> = <table class="matrix">
-<tr><td>p<sub>x</sub></td></tr>
-<tr><td>p<sub>y</sub></td></tr>
-</table></em>, the velocity vector as <em><b>v</b> = <table class="matrix">
-<tr><td>v<sub>x</sub></td></tr>
-<tr><td>v<sub>y</sub></td></tr>
-</table></em>, and the acceleration vector as <em><b>a</b> = <table class="matrix">
-<tr><td>a<sub>x</sub></td></tr>
-<tr><td>a<sub>y</sub></td></tr>
-</table></em>. The acceleration is assumed to be constant (<a href=#constAccel>A: constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = <table class="matrix">
-<tr><td>a<sub>x</sub><sup>c</sup></td></tr>
-<tr><td>a<sub>y</sub><sup>c</sup></td></tr>
-</table></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = <table class="matrix">
-<tr><td>v<sub>x</sub><sup>i</sup></td></tr>
-<tr><td>v<sub>y</sub><sup>i</sup></td></tr>
-</table></em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD: rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
+                      For a two-dimensional Cartesian coordinate system (<a href=#twoDMotion>A: twoDMotion</a> and <a href=#cartSyst>A: cartSyst</a>), we can represent the position vector as <em><b>p</b> = $\begin{bmatrix}
+                                                                                                                                                                                                               {p_{\text{x}}}\\
+                                                                                                                                                                                                               {p_{\text{y}}}
+                                                                                                                                                                                                               \end{bmatrix}$</em>, the velocity vector as <em><b>v</b> = $\begin{bmatrix}
+                                                                                                                                                                                                                                                                           {v_{\text{x}}}\\
+                                                                                                                                                                                                                                                                           {v_{\text{y}}}
+                                                                                                                                                                                                                                                                           \end{bmatrix}$</em>, and the acceleration vector as <em><b>a</b> = $\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                               {a_{\text{x}}}\\
+                                                                                                                                                                                                                                                                                                                                               {a_{\text{y}}}
+                                                                                                                                                                                                                                                                                                                                               \end{bmatrix}$</em>. The acceleration is assumed to be constant (<a href=#constAccel>A: constAccel</a>) and the constant acceleration vector is represented as <em><b>a</b><sup>c</sup> = $\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          {{a_{\text{x}}}^{\text{c}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          {{a_{\text{y}}}^{\text{c}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          \end{bmatrix}$</em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em><b>v</b><sup>i</sup> = $\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        \end{bmatrix}$</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD: rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
                     </p>
-                    <div class="equation">
-                      <em><b>p</b> = <table class="matrix">
-<tr><td>p<sub>x</sub><sup>i</sup>&plus;v<sub>x</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                                                                                            <span class="fup">
-                                                                                                                                              a<sub>x</sub><sup>c</sup>&#8239;t<sup>2</sup>
-                                                                                                                                            </span>
-                                                                                                                                            <span class="fdn">
-                                                                                                                                              2
-                                                                                                                                            </span>
-                                                                                                                                          </div></td></tr>
-<tr><td>p<sub>y</sub><sup>i</sup>&plus;v<sub>y</sub><sup>i</sup>&#8239;t&plus;<div class="fraction">
-                                                                                                                                                                                                                                           <span class="fup">
-                                                                                                                                                                                                                                             a<sub>y</sub><sup>c</sup>&#8239;t<sup>2</sup>
-                                                                                                                                                                                                                                           </span>
-                                                                                                                                                                                                                                           <span class="fdn">
-                                                                                                                                                                                                                                             2
-                                                                                                                                                                                                                                           </span>
-                                                                                                                                                                                                                                         </div></td></tr>
-</table></em>
-                    </div>
+                    $$\mathbf{p}=\begin{bmatrix}
+                                 {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+                                 {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+                                 \end{bmatrix}$$
                   </div>
                 </div>
               </div>
@@ -1010,7 +921,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td><div class="equation"><em>v = |<b>v</b>|</em></div></td>
+                      <td>$$v=|\mathbf{v}|$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1069,9 +980,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>v<sub>x</sub><sup>i</sup> = v<sup>i</sup>&#8239;cos(θ)</em>
-                        </div>
+                        $${{v_{\text{x}}}^{\text{i}}}={v^{\text{i}}} \cos\left(θ\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -1137,9 +1046,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>v<sub>y</sub><sup>i</sup> = v<sup>i</sup>&#8239;sin(θ)</em>
-                        </div>
+                        $${{v_{\text{y}}}^{\text{i}}}={v^{\text{i}}} \sin\left(θ\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -1211,36 +1118,18 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation">
-                          <em>v<sub>launch</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation">
-                          <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
-                                                                          <span class="fup">π</span>
-                                                                          <span class="fdn">2</span>
-                                                                        </div></em>
-                        </div>
+                        $${v_{\text{launch}}}\gt{}0$$
+                        $$0\lt{}θ\lt{}\frac{π}{2}$$
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                      </td>
+                      <td>$${t_{\text{flight}}}\gt{}0$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>t<sub>flight</sub> = <div class="fraction">
-                                                     <span class="fup">
-                                                       2&#8239;v<sub>launch</sub>&#8239;sin(θ)
-                                                     </span>
-                                                     <span class="fdn">g</span>
-                                                   </div></em>
-                        </div>
+                        $${t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}$$
                       </td>
                     </tr>
                     <tr>
@@ -1260,14 +1149,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
-                                                                                         <span class="fup">
-                                                                                           π
-                                                                                         </span>
-                                                                                         <span class="fdn">
-                                                                                           2
-                                                                                         </span>
-                                                                                       </div></em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
+                          The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;$\frac{π}{2}$</em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                         <p class="paragraph">
                           <em>g</em> is defined in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a>.
@@ -1297,62 +1179,23 @@
                     <p class="paragraph">
                       We know that <em>p<sub>y</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A: launchOrigin</a>) and <em>a<sub>y</sub><sup>c</sup> = &minus;g</em> (<a href=#accelYGravity>A: accelYGravity</a>). Substituting these values into the y-direction of <a href=#GD:posVec>GD: posVec</a> gives us:
                     </p>
-                    <div class="equation">
-                      <em>p<sub>y</sub> = v<sub>y</sub><sup>i</sup>&#8239;t&minus;<div class="fraction">
-                                                                                    <span class="fup">
-                                                                                      g&#8239;t<sup>2</sup>
-                                                                                    </span>
-                                                                                    <span class="fdn">
-                                                                                      2
-                                                                                    </span>
-                                                                                  </div></em>
-                    </div>
+                    $${p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{g t^{2}}{2}$$
                     <p class="paragraph">
                       To find the time that the projectile lands, we want to find the <em>t</em> value (<em>t<sub>flight</sub></em>) where <em>p<sub>y</sub> = 0</em> (since the target is on the <em>x</em>-axis from <a href=#targetXAxis>A: targetXAxis</a>). From the equation above we get:
                     </p>
-                    <div class="equation">
-                      <em>v<sub>y</sub><sup>i</sup>&#8239;t<sub>flight</sub>&minus;<div class="fraction">
-                                                                                     <span class="fup">
-                                                                                       g&#8239;t<sub>flight</sub><sup>2</sup>
-                                                                                     </span>
-                                                                                     <span class="fdn">
-                                                                                       2
-                                                                                     </span>
-                                                                                   </div> = 0</em>
-                    </div>
+                    $${{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0$$
                     <p class="paragraph">
                       Dividing by <em>t<sub>flight</sub></em> (with the constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em>) gives us:
                     </p>
-                    <div class="equation">
-                      <em>v<sub>y</sub><sup>i</sup>&minus;<div class="fraction">
-                                                            <span class="fup">
-                                                              g&#8239;t<sub>flight</sub>
-                                                            </span>
-                                                            <span class="fdn">2</span>
-                                                          </div> = 0</em>
-                    </div>
+                    $${{v_{\text{y}}}^{\text{i}}}-\frac{g {t_{\text{flight}}}}{2}=0$$
                     <p class="paragraph">
                       Solving for <em>t<sub>flight</sub></em> gives us:
                     </p>
-                    <div class="equation">
-                      <em>t<sub>flight</sub> = <div class="fraction">
-                                                 <span class="fup">
-                                                   2&#8239;v<sub>y</sub><sup>i</sup>
-                                                 </span>
-                                                 <span class="fdn">g</span>
-                                               </div></em>
-                    </div>
+                    $${t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{g}$$
                     <p class="paragraph">
                       From <a href=#DD:speedIY>DD: speedIY</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>y</sub><sup>i</sup></em>:
                     </p>
-                    <div class="equation">
-                      <em>t<sub>flight</sub> = <div class="fraction">
-                                                 <span class="fup">
-                                                   2&#8239;v<sub>launch</sub>&#8239;sin(θ)
-                                                 </span>
-                                                 <span class="fdn">g</span>
-                                               </div></em>
-                    </div>
+                    $${t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}$$
                   </div>
                 </div>
                 <div id="IM:calOfLandingDist">
@@ -1378,36 +1221,18 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation">
-                          <em>v<sub>launch</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation">
-                          <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
-                                                                          <span class="fup">π</span>
-                                                                          <span class="fdn">2</span>
-                                                                        </div></em>
-                        </div>
+                        $${v_{\text{launch}}}\gt{}0$$
+                        $$0\lt{}θ\lt{}\frac{π}{2}$$
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                      </td>
+                      <td>$${p_{\text{land}}}\gt{}0$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>p<sub>land</sub> = <div class="fraction">
-                                                   <span class="fup">
-                                                     2&#8239;v<sub>launch</sub><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
-                                                   </span>
-                                                   <span class="fdn">g</span>
-                                                 </div></em>
-                        </div>
+                        $${p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}$$
                       </td>
                     </tr>
                     <tr>
@@ -1427,14 +1252,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
-                                                                                         <span class="fup">
-                                                                                           π
-                                                                                         </span>
-                                                                                         <span class="fdn">
-                                                                                           2
-                                                                                         </span>
-                                                                                       </div></em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
+                          The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;$\frac{π}{2}$</em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                         <p class="paragraph">
                           <em>g</em> is defined in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a>.
@@ -1464,42 +1282,19 @@
                     <p class="paragraph">
                       We know that <em>p<sub>x</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A: launchOrigin</a>) and <em>a<sub>x</sub><sup>c</sup> = 0</em> (<a href=#accelXZero>A: accelXZero</a>). Substituting these values into the x-direction of <a href=#GD:posVec>GD: posVec</a> gives us:
                     </p>
-                    <div class="equation">
-                      <em>p<sub>x</sub> = v<sub>x</sub><sup>i</sup>&#8239;t</em>
-                    </div>
+                    $${p_{\text{x}}}={{v_{\text{x}}}^{\text{i}}} t$$
                     <p class="paragraph">
                       To find the landing position, we want to find the <em>p<sub>x</sub></em> value (<em>p<sub>land</sub></em>) at flight duration (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>):
                     </p>
-                    <div class="equation">
-                      <em>p<sub>land</sub> = <div class="fraction">
-                                               <span class="fup">
-                                                 v<sub>x</sub><sup>i</sup>&sdot;2&#8239;v<sub>launch</sub>&#8239;sin(θ)
-                                               </span>
-                                               <span class="fdn">g</span>
-                                             </div></em>
-                    </div>
+                    $${p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}$$
                     <p class="paragraph">
                       From <a href=#DD:speedIX>DD: speedIX</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>x</sub><sup>i</sup></em>:
                     </p>
-                    <div class="equation">
-                      <em>p<sub>land</sub> = <div class="fraction">
-                                               <span class="fup">
-                                                 v<sub>launch</sub>&#8239;cos(θ)&sdot;2&#8239;v<sub>launch</sub>&#8239;sin(θ)
-                                               </span>
-                                               <span class="fdn">g</span>
-                                             </div></em>
-                    </div>
+                    $${p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}$$
                     <p class="paragraph">
                       Rearranging this gives us the required equation:
                     </p>
-                    <div class="equation">
-                      <em>p<sub>land</sub> = <div class="fraction">
-                                               <span class="fup">
-                                                 2&#8239;v<sub>launch</sub><sup>2</sup>&#8239;sin(θ)&#8239;cos(θ)
-                                               </span>
-                                               <span class="fdn">g</span>
-                                             </div></em>
-                    </div>
+                    $${p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}$$
                   </div>
                 </div>
                 <div id="IM:offsetIM">
@@ -1527,12 +1322,8 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation">
-                          <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation">
-                          <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
+                        $${p_{\text{land}}}\gt{}0$$
+                        $${p_{\text{target}}}\gt{}0$$
                       </td>
                     </tr>
                     <tr>
@@ -1542,9 +1333,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>d<sub>offset</sub> = p<sub>land</sub>&minus;p<sub>target</sub></em>
-                        </div>
+                        $${d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1610,12 +1399,8 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        <div class="equation">
-                          <em>p<sub>target</sub>&thinsp;&gt;&thinsp;0</em>
-                        </div>
-                        <div class="equation">
-                          <em>d<sub>offset</sub>&thinsp;&gt;&thinsp;&minus;p<sub>land</sub></em>
-                        </div>
+                        $${p_{\text{target}}}\gt{}0$$
+                        $${d_{\text{offset}}}\gt{}-{p_{\text{land}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1625,33 +1410,11 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>s = <span class="casebr">{</span>
-                                  <div class="cases">
-                                    <span>
-                                      "The target was hit." , <span class="case">
-                                                                |<div class="fraction">
-                                                                   <span class="fup">
-                                                                     d<sub>offset</sub>
-                                                                   </span>
-                                                                   <span class="fdn">
-                                                                     p<sub>target</sub>
-                                                                   </span>
-                                                                 </div>|&thinsp;&lt;&thinsp;ε
-                                                              </span>
-                                    </span>
-                                    <span>
-                                      "The projectile fell short." , <span class="case">
-                                                                       d<sub>offset</sub>&thinsp;&lt;&thinsp;0
-                                                                     </span>
-                                    </span>
-                                    <span>
-                                      "The projectile went long." , <span class="case">
-                                                                      d<sub>offset</sub>&thinsp;&gt;&thinsp;0
-                                                                    </span>
-                                    </span>
-                                  </div></em>
-                        </div>
+                        $$s=\begin{cases}
+                            \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
+                            \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
+                            \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
+                            \end{cases}$$
                       </td>
                     </tr>
                     <tr>
@@ -1730,17 +1493,9 @@
                     <tr>
                       <td><em>θ</em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;<div class="fraction">
-                                                                        <span class="fup">π</span>
-                                                                        <span class="fdn">2</span>
-                                                                      </div></em>
+                        <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;$\frac{π}{2}$</em>
                       </td>
-                      <td>
-                        <em><div class="fraction">
-                              <span class="fup">π</span>
-                              <span class="fdn">4</span>
-                            </div></em> rad
-                      </td>
+                      <td><em>$\frac{π}{4}$</em> rad</td>
                       <td>10<em>%</em></td>
                     </tr>
                   </table>

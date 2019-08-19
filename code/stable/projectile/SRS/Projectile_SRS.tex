@@ -17,6 +17,8 @@
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
 \setmathfont{Latin Modern Math}
+\newcommand{\gt}{\ensuremath >}
+\newcommand{\lt}{\ensuremath <}
 \global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
@@ -688,14 +690,14 @@ Output & ${t_{\text{flight}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {v_{\text{launch}}}>0
+                    {v_{\text{launch}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    0<θ<\frac{π}{2}
+                    0\lt{}θ\lt{}\frac{π}{2}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {t_{\text{flight}}}>0
+                     {t_{\text{flight}}}\gt{}0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -709,11 +711,11 @@ Description & \begin{symbDescription}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         
         $g$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
         
-        The constraint ${t_{\text{flight}}}>0$ is from \hyperref[timeStartZero]{A: timeStartZero}.
+        The constraint ${t_{\text{flight}}}\gt{}0$ is from \hyperref[timeStartZero]{A: timeStartZero}.
         
 \\ \midrule \\
 Source & --
@@ -736,7 +738,7 @@ To find the time that the projectile lands, we want to find the $t$ value (${t_{
 \begin{displaymath}
 {{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0
 \end{displaymath}
-Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}>0$) gives us:
+Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}\gt{}0$) gives us:
 
 \begin{displaymath}
 {{v_{\text{y}}}^{\text{i}}}-\frac{g {t_{\text{flight}}}}{2}=0
@@ -769,14 +771,14 @@ Output & ${p_{\text{land}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {v_{\text{launch}}}>0
+                    {v_{\text{launch}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    0<θ<\frac{π}{2}
+                    0\lt{}θ\lt{}\frac{π}{2}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {p_{\text{land}}}>0
+                     {p_{\text{land}}}\gt{}0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -790,11 +792,11 @@ Description & \begin{symbDescription}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         
         $g$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
         
-        The constraint ${p_{\text{land}}}>0$ is from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint ${p_{\text{land}}}\gt{}0$ is from \hyperref[posXDirection]{A: posXDirection}.
         
 \\ \midrule \\
 Source & --
@@ -845,10 +847,10 @@ Output & ${d_{\text{offset}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {p_{\text{land}}}>0
+                    {p_{\text{land}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {p_{\text{target}}}>0
+                    {p_{\text{target}}}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
@@ -865,7 +867,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${p_{\text{land}}}$ is from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
         
-        The constraints ${p_{\text{land}}}>0$ and ${p_{\text{target}}}>0$ are from \hyperref[posXDirection]{A: posXDirection}.
+        The constraints ${p_{\text{land}}}\gt{}0$ and ${p_{\text{target}}}\gt{}0$ are from \hyperref[posXDirection]{A: posXDirection}.
         
 \\ \midrule \\
 Source & --
@@ -895,19 +897,19 @@ Output & $s$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {p_{\text{target}}}>0
+                    {p_{\text{target}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {d_{\text{offset}}}>-{p_{\text{land}}}
+                    {d_{\text{offset}}}\gt{}-{p_{\text{land}}}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
            s=\begin{cases}
-             \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|<ε\\
-             \text{``The projectile fell short.''}, & {d_{\text{offset}}}<0\\
-             \text{``The projectile went long.''}, & {d_{\text{offset}}}>0
+             \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
+             \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
+             \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
              \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -920,9 +922,9 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${d_{\text{offset}}}$ is from \hyperref[IM:offsetIM]{IM: offsetIM}.
         
-        The constraint ${p_{\text{target}}}>0$ is from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint ${p_{\text{target}}}\gt{}0$ is from \hyperref[posXDirection]{A: posXDirection}.
         
-        The constraint ${d_{\text{offset}}}>-{p_{\text{land}}}$ is from the fact that ${p_{\text{land}}}>0$, from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint ${d_{\text{offset}}}\gt{}-{p_{\text{land}}}$ is from the fact that ${p_{\text{land}}}\gt{}0$, from \hyperref[posXDirection]{A: posXDirection}.
         
         $ε$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
         
@@ -946,11 +948,11 @@ RefBy & \hyperref[outputValues]{FR: Output-Values} and \hyperref[calcValues]{FR:
 \\
 \midrule
 \endhead
-${p_{\text{target}}}$ & ${p_{\text{target}}}>0$ & $1000$ m & 10$\%$
+${p_{\text{target}}}$ & ${p_{\text{target}}}\gt{}0$ & $1000$ m & 10$\%$
 \\
-${v_{\text{launch}}}$ & ${v_{\text{launch}}}>0$ & $100$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
+${v_{\text{launch}}}$ & ${v_{\text{launch}}}\gt{}0$ & $100$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
-$θ$ & $0<θ<\frac{π}{2}$ & $\frac{π}{4}$ rad & 10$\%$
+$θ$ & $0\lt{}θ\lt{}\frac{π}{2}$ & $\frac{π}{4}$ rad & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -966,9 +968,9 @@ $θ$ & $0<θ<\frac{π}{2}$ & $\frac{π}{4}$ rad & 10$\%$
 \\
 \midrule
 \endhead
-${p_{\text{land}}}$ & ${p_{\text{land}}}>0$
+${p_{\text{land}}}$ & ${p_{\text{land}}}\gt{}0$
 \\
-${d_{\text{offset}}}$ & ${d_{\text{offset}}}>-{p_{\text{land}}}$
+${d_{\text{offset}}}$ & ${d_{\text{offset}}}\gt{}-{p_{\text{land}}}$
 \\
 \bottomrule
 \caption{Output Data Constraints}

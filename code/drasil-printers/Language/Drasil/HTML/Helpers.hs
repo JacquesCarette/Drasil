@@ -150,15 +150,17 @@ spanTag = wrap "span"
 indent :: Doc -> Doc
 indent = nest 2
 
+-- Not used since we use MathJax handles this
 -- | Create and markup fractions
-fraction :: Doc -> Doc -> Doc
-fraction a b =
-  divTag ["fraction"] (spanTag ["fup"] a $$ spanTag ["fdn"] b)
+-- fraction :: Doc -> Doc -> Doc
+-- fraction a b =
+--   divTag ["fraction"] (spanTag ["fup"] a $$ spanTag ["fdn"] b)
 
--- | Build cases for case expressions
-cases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
-cases ps pExpr = spanTag ["casebr"] (text "{") $$ divTag ["cases"] 
-                  (makeCases ps pExpr)
+-- Not used since we use MathJax handles this
+-- -- | Build cases for case expressions
+-- cases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc
+-- cases ps pExpr = spanTag ["casebr"] (text "{") $$ divTag ["cases"] 
+--                   (makeCases ps pExpr)
 
 -- | Build case expressions              
 makeCases :: [(Expr,Expr)] -> (Expr -> Doc) -> Doc                 

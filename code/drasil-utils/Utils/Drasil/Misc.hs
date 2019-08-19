@@ -1,8 +1,8 @@
 {-# Language TypeFamilies #-}
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
   chgsStart, displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, 
-  eqnWSource, fromReplace, fmtU, follows, getTandS, itemRefToSent, makeListRef, 
-  makeTMatrix, maybeChanged, maybeExpanded,
+  eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
+  itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
   tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
@@ -43,7 +43,7 @@ fromReplace src c = S "From" +:+ makeRef2S src +:+ S "we can replace" +: ch c
 -- | takes a referable and a HasSymbol and outputs as a Sentence "By substituting "
 substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
 substitute s = S "By substituting" +: (foldlList Comma List l `sC` S "this can be written as")
-  where l = map (\x -> ch x +:+ sParen (S "from" +:+ makeRef2S x)) s
+  where l = map (\x -> ch x +:+ fromSource x) s
 
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
 -- s - the number from which the enumeration should start from
@@ -171,6 +171,12 @@ tAndDOnly chunk  = Flat $ atStart chunk `sDash` EmptyS +:+. capSent (chunk ^. de
 
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
 preceding `follows` ref = preceding +:+ S "following" +:+ makeRef2S ref
+
+fromSource :: (Referable r, HasShortName r) => r -> Sentence
+fromSource ref = sParen (S "from" +:+ makeRef2S ref)
+
+fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
+fromSources refs = sParen (S "from" +:+ foldlList Comma List (map makeRef2S refs))
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a) => a -> Sentence

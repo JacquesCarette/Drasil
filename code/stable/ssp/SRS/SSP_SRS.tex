@@ -17,6 +17,8 @@
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
 \setmathfont{Latin Modern Math}
+\newcommand{\gt}{\ensuremath >}
+\newcommand{\lt}{\ensuremath <}
 \global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
@@ -609,7 +611,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The net force $\mathbf{F}$ (N) on a body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the body, where $m$ (kg) denotes the mass of the body as the constant of proportionality.
+Notes & The net force $\mathbf{F}$ on a body is proportional to the acceleration $\mathbf{a}$ of the body, where $m$ denotes the mass of the body as the constant of proportionality.
         
 \\ \midrule \\
 Source & --
@@ -1158,9 +1160,9 @@ Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \begin{cases}
-                                                         \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}, & {\mathbf{y}_{\text{wt},i}}>{\mathbf{y}_{\text{slope},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}>{\mathbf{y}_{\text{slope},i-1}}\\
+                                                         \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}, & {\mathbf{y}_{\text{wt},i}}\gt{}{\mathbf{y}_{\text{slope},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}\gt{}{\mathbf{y}_{\text{slope},i-1}}\\
                                                          \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{wt},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{wt},i-1}}\right) {γ_{\text{dry}}}+\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{sat}}}, & {\mathbf{y}_{\text{slope},i}}\geq{}{\mathbf{y}_{\text{wt},i}}\geq{}{\mathbf{y}_{\text{slip},i}}\land{}{\mathbf{y}_{\text{slope},i-1}}\geq{}{\mathbf{y}_{\text{wt},i-1}}\geq{}{\mathbf{y}_{\text{slip},i-1}}\\
-                                                         \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{dry}}}, & {\mathbf{y}_{\text{wt},i}}<{\mathbf{y}_{\text{slip},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}<{\mathbf{y}_{\text{slip},i-1}}
+                                                         \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{dry}}}, & {\mathbf{y}_{\text{wt},i}}\lt{}{\mathbf{y}_{\text{slip},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}\lt{}{\mathbf{y}_{\text{slip},i-1}}
                                                          \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1270,7 +1272,7 @@ Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{U}_{\text{b},i}}={\mathbf{ℓ}_{b,i}} {γ_{w}} \frac{1}{2} \begin{cases}
-                                                                            {\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}, & {\mathbf{y}_{\text{wt},i}}>{\mathbf{y}_{\text{slip},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}>{\mathbf{y}_{\text{slip},i-1}}\\
+                                                                            {\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}, & {\mathbf{y}_{\text{wt},i}}\gt{}{\mathbf{y}_{\text{slip},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}\gt{}{\mathbf{y}_{\text{slip},i-1}}\\
                                                                             0, & {\mathbf{y}_{\text{wt},i}}\leq{}{\mathbf{y}_{\text{slip},i}}\land{}{\mathbf{y}_{\text{wt},i-1}}\leq{}{\mathbf{y}_{\text{slip},i-1}}
                                                                             \end{cases}
            \end{displaymath}
@@ -1330,7 +1332,7 @@ Units & $\frac{\text{N}}{\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            {\mathbf{U}_{\text{g},i}}={\mathbf{ℓ}_{s,i}} {γ_{w}} \frac{1}{2} \begin{cases}
-                                                                            {\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slope},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slope},i-1}}, & {\mathbf{y}_{\text{wt},i}}>{\mathbf{y}_{\text{slope},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}>{\mathbf{y}_{\text{slope},i-1}}\\
+                                                                            {\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slope},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slope},i-1}}, & {\mathbf{y}_{\text{wt},i}}\gt{}{\mathbf{y}_{\text{slope},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}\gt{}{\mathbf{y}_{\text{slope},i-1}}\\
                                                                             0, & {\mathbf{y}_{\text{wt},i}}\leq{}{\mathbf{y}_{\text{slope},i}}\land{}{\mathbf{y}_{\text{wt},i-1}}\leq{}{\mathbf{y}_{\text{slope},i-1}}
                                                                             \end{cases}
            \end{displaymath}
@@ -1398,7 +1400,7 @@ Units & $\frac{\text{N}}{\text{m}}$
 Equation & \begin{displaymath}
            \mathbf{H}=\begin{cases}
                       \frac{\left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}+\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slope},i}}\right)^{2} {γ_{w}}, & {\mathbf{y}_{\text{wt},i}}\geq{}{\mathbf{y}_{\text{slope},i}}\\
-                      \frac{\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}, & {\mathbf{y}_{\text{slope},i}}>{\mathbf{y}_{\text{wt},i}}>{\mathbf{y}_{\text{slip},i}}\\
+                      \frac{\left({\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}\right)^{2}}{2} {γ_{w}}, & {\mathbf{y}_{\text{slope},i}}\gt{}{\mathbf{y}_{\text{wt},i}}\gt{}{\mathbf{y}_{\text{slip},i}}\\
                       0, & {\mathbf{y}_{\text{wt},i}}\leq{}{\mathbf{y}_{\text{slip},i}}
                       \end{cases}
            \end{displaymath}
@@ -2482,7 +2484,7 @@ RefBy & \hyperref[displayGraph]{FR: Display-Graph} and \hyperref[determineCritSl
 \\
 \midrule
 \endhead
-$c'$ & $c'>0$ & $10.0\cdot{}10^{3}$ Pa & 10$\%$
+$c'$ & $c'\gt{}0$ & $10.0\cdot{}10^{3}$ Pa & 10$\%$
 \\
 ${{x_{\text{slip}}}^{\text{maxEtr}}}$ & -- & $20.0$ m & 10$\%$
 \\
@@ -2504,13 +2506,13 @@ ${\mathbf{y}_{\text{slope}}}$ & -- & $0.0$ m & 10$\%$
 \\
 ${\mathbf{y}_{\text{wt}}}$ & -- & $0.0$ m & 10$\%$
 \\
-${γ_{\text{dry}}}$ & ${γ_{\text{dry}}}>0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{\text{dry}}}$ & ${γ_{\text{dry}}}\gt{}0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-${γ_{\text{sat}}}$ & ${γ_{\text{sat}}}>0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{\text{sat}}}$ & ${γ_{\text{sat}}}\gt{}0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-${γ_{w}}$ & ${γ_{w}}>0$ & $9.8\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{w}}$ & ${γ_{w}}\gt{}0$ & $9.8\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-$φ'$ & $0<φ'<90$ & $25.0$ ${}^{\circ}$ & 10$\%$
+$φ'$ & $0\lt{}φ'\lt{}90$ & $25.0$ ${}^{\circ}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -2526,7 +2528,7 @@ $φ'$ & $0<φ'<90$ & $25.0$ ${}^{\circ}$ & 10$\%$
 \\
 \midrule
 \endhead
-${F_{\text{S}}}$ & ${F_{\text{S}}}>0$
+${F_{\text{S}}}$ & ${F_{\text{S}}}\gt{}0$
 \\
 $\text{(x,y)}$ & --
 \\

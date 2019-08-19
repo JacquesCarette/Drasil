@@ -40,15 +40,16 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
-  makefileName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
-  appendToBody, surroundBody, getterName, setterName, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList, Terminator(..),
-  ScopeTag(..), AuxData(..), ad, emptyAux, FileData(..), srcFile, hdrFile, 
-  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, OpData(..), 
-  od, PackData(..), packD, emptyPack, ParamData(..), pd, ProgData(..), progD, 
-  emptyProg, StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), 
-  vard)
+  makefileName, sampleInputName, doubleSlash, blockCmtDoc, docCmtDoc, 
+  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
+  valList, appendToBody, surroundBody, getterName, setterName, setEmpty, 
+  intValue)
+import Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList, 
+  Terminator(..), ScopeTag(..), AuxData(..), ad, emptyAux, FileData(..), 
+  srcFile, hdrFile, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  updateModDoc, OpData(..), od, PackData(..), packD, emptyPack, ParamData(..), 
+  pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
+  ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, cppCompiler, nativeBinary)
@@ -57,6 +58,7 @@ import Language.Drasil.Code.Imperative.GOOL.Helpers (angles, blank, doubleQuoted
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
   getInnerType, convType, checkParams)
+import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import qualified Data.Map as Map (fromList,lookup)
@@ -107,6 +109,7 @@ instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
 instance (Pair p) => AuxiliarySym (p CppSrcCode CppHdrCode) where
   type Auxiliary (p CppSrcCode CppHdrCode) = AuxData
   doxConfig pName p = pair (doxConfig pName $ pfst p) (return emptyAux)
+  sampleInput db d sd = pair (sampleInput db d sd) (return emptyAux)
 
   optimizeDox = pair optimizeDox (return empty)
 
@@ -672,6 +675,7 @@ instance AuxiliarySym CppSrcCode where
   type Auxiliary CppSrcCode = AuxData
   doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
     optimizeDox p)
+  sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
 
   optimizeDox = return $ text "NO"
   

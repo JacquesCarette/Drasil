@@ -6,7 +6,8 @@
       Software Requirements Specification for Solar Water Heating Systems Incorporating PCM
     </title>
     <meta charset="utf-8">
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['$$','$$']]});</script>
+    <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
   </head>
   <body>
     <div class="title">
@@ -854,16 +855,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>&minus;∇&sdot;<b>q</b>&plus;g = ρ&#8239;C&#8239;<div class="fraction">
-                                                                                <span class="fup">
-                                                                                  &#8239;&part;T
-                                                                                </span>
-                                                                                <span class="fdn">
-                                                                                  &#8239;&part;t
-                                                                                </span>
-                                                                              </div></em>
-                        </div>
+                        $$-∇\cdot{}\mathbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}$$
                       </td>
                     </tr>
                     <tr>
@@ -928,26 +920,11 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>E = <span class="casebr">{</span>
-                                  <div class="cases">
-                                    <span>
-                                      C<sup>S</sup>&#8239;m&#8239;ΔT , <span class="case">
-                                                                         T&thinsp;&lt;&thinsp;T<sub>melt</sub>
-                                                                       </span>
-                                    </span>
-                                    <span>
-                                      C<sup>L</sup>&#8239;m&#8239;ΔT , <span class="case">
-                                                                         T<sub>melt</sub>&thinsp;&lt;&thinsp;T&thinsp;&lt;&thinsp;T<sub>boil</sub>
-                                                                       </span>
-                                    </span>
-                                    <span>
-                                      C<sup>V</sup>&#8239;m&#8239;ΔT , <span class="case">
-                                                                         T<sub>boil</sub>&thinsp;&lt;&thinsp;T
-                                                                       </span>
-                                    </span>
-                                  </div></em>
-                        </div>
+                        $$E=\begin{cases}
+                            {C^{\text{S}}} m ΔT, & T\lt{}{T_{\text{melt}}}\\
+                            {C^{\text{L}}} m ΔT, & {T_{\text{melt}}}\lt{}T\lt{}{T_{\text{boil}}}\\
+                            {C^{\text{V}}} m ΔT, & {T_{\text{boil}}}\lt{}T
+                            \end{cases}$$
                       </td>
                     </tr>
                     <tr>
@@ -1015,16 +992,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
-                                                                    <span class="fup">
-                                                                      &#8239;dQ(τ)
-                                                                    </span>
-                                                                    <span class="fdn">
-                                                                      &#8239;dτ
-                                                                    </span>
-                                                                  </div>&#8239;dτ</em>
-                        </div>
+                        $$Q\left(t\right)=\int_{0}^{t}{\frac{\,dQ\left(τ\right)}{\,dτ}}\,dτ$$
                       </td>
                     </tr>
                     <tr>
@@ -1046,14 +1014,7 @@
                           <em>Q</em> is the change in thermal energy (latent heat energy).
                         </p>
                         <p class="paragraph">
-                          <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
-                                                                    <span class="fup">
-                                                                      &#8239;dQ(τ)
-                                                                    </span>
-                                                                    <span class="fdn">
-                                                                      &#8239;dτ
-                                                                    </span>
-                                                                  </div>&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em>.
+                          <em>Q(t) = &int;<sub>0</sub><sup>t</sup>$\frac{\,dQ\left(τ\right)}{\,dτ}$&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em>.
                         </p>
                         <p class="paragraph">
                           <em>t</em> is the time elapsed, as long as the phase change is not complete.
@@ -1096,7 +1057,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td><div class="equation"><em>q(t) = h&#8239;ΔT(t)</em></div></td>
+                      <td>$$q\left(t\right)=h ΔT\left(t\right)$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1166,12 +1127,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>m&#8239;C&#8239;<div class="fraction">
-                                                <span class="fup">&#8239;dT</span>
-                                                <span class="fdn">&#8239;dt</span>
-                                              </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-                        </div>
+                        $$m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V$$
                       </td>
                     </tr>
                     <tr>
@@ -1225,60 +1181,23 @@
                     <p class="paragraph">
                       Integrating <a href=#TM:consThermE>TM: consThermE</a> over a volume (<em>V</em>), we have:
                     </p>
-                    <div class="equation">
-                      <em>&minus;&int;<sub>V</sub>∇&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                                 <span class="fup">
-                                                                                                                                                   &#8239;&part;T
-                                                                                                                                                 </span>
-                                                                                                                                                 <span class="fdn">
-                                                                                                                                                   &#8239;&part;t
-                                                                                                                                                 </span>
-                                                                                                                                               </div>&#8239;dV</em>
-                    </div>
+                    $$-\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV$$
                     <p class="paragraph">
                       Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em> of the volume, with <em><b>q</b></em> as the thermal flux vector for the surface and <em><b>n&#770;</b></em> as a unit outward normal vector for a surface:
                     </p>
-                    <div class="equation">
-                      <em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                                              <span class="fup">
-                                                                                                                                                                &#8239;&part;T
-                                                                                                                                                              </span>
-                                                                                                                                                              <span class="fdn">
-                                                                                                                                                                &#8239;&part;t
-                                                                                                                                                              </span>
-                                                                                                                                                            </div>&#8239;dV</em>
-                    </div>
+                    $$-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV$$
                     <p class="paragraph">
                       We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
                     </p>
-                    <div class="equation">
-                      <em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>ρ&#8239;C&#8239;<div class="fraction">
-                                                                                                                                                              <span class="fup">
-                                                                                                                                                                &#8239;&part;T
-                                                                                                                                                              </span>
-                                                                                                                                                              <span class="fdn">
-                                                                                                                                                                &#8239;&part;t
-                                                                                                                                                              </span>
-                                                                                                                                                            </div>&#8239;dV</em>
-                    </div>
+                    $${q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV$$
                     <p class="paragraph">
                       Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. The integral over the surface could be simplified because the thermal flux is assumed constant over <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> and <em>0</em> on all other surfaces. Outward flux is considered positive. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>, <a href=#assumpDWPCoV>A: Density-Water-PCM-Constant-over-Volume</a>, and <a href=#assumpSHECov>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
                     </p>
-                    <div class="equation">
-                      <em>ρ&#8239;C&#8239;V&#8239;<div class="fraction">
-                                                    <span class="fup">&#8239;dT</span>
-                                                    <span class="fdn">&#8239;dt</span>
-                                                  </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-                    </div>
+                    $$ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V$$
                     <p class="paragraph">
                       Using the fact that <em>ρ</em>=<em>m</em>/<em>V</em>, Equation (2) can be written as:
                     </p>
-                    <div class="equation">
-                      <em>m&#8239;C&#8239;<div class="fraction">
-                                            <span class="fup">&#8239;dT</span>
-                                            <span class="fdn">&#8239;dt</span>
-                                          </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-                    </div>
+                    $$m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V$$
                   </div>
                 </div>
                 <div id="GD:htFluxWaterFromCoil">
@@ -1300,9 +1219,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>q<sub>C</sub> = h<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
-                        </div>
+                        $${q_{\text{C}}}={h_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -1370,9 +1287,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>q<sub>P</sub> = h<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))</em>
-                        </div>
+                        $${q_{\text{P}}}={h_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -1453,16 +1368,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>τ<sub>W</sub> = <div class="fraction">
-                                                <span class="fup">
-                                                  m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                </span>
-                                                <span class="fdn">
-                                                  h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                </span>
-                                              </div></em>
-                        </div>
+                        $${τ_{\text{W}}}=\frac{{m_{\text{W}}} {C_{\text{W}}}}{{h_{\text{C}}} {A_{\text{C}}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1525,12 +1431,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>η = <div class="fraction">
-                                    <span class="fup">h<sub>P</sub>&#8239;A<sub>P</sub></span>
-                                    <span class="fdn">h<sub>C</sub>&#8239;A<sub>C</sub></span>
-                                  </div></em>
-                        </div>
+                        $$η=\frac{{h_{\text{P}}} {A_{\text{P}}}}{{h_{\text{C}}} {A_{\text{C}}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1595,16 +1496,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>τ<sub>P</sub><sup>S</sup> = <div class="fraction">
-                                                            <span class="fup">
-                                                              m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
-                                                            </span>
-                                                            <span class="fdn">
-                                                              h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                            </span>
-                                                          </div></em>
-                        </div>
+                        $${{τ_{\text{P}}}^{\text{S}}}=\frac{{m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}}}{{h_{\text{P}}} {A_{\text{P}}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1669,16 +1561,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>τ<sub>P</sub><sup>L</sup> = <div class="fraction">
-                                                            <span class="fup">
-                                                              m<sub>P</sub>&#8239;C<sub>P</sub><sup>L</sup>
-                                                            </span>
-                                                            <span class="fdn">
-                                                              h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                            </span>
-                                                          </div></em>
-                        </div>
+                        $${{τ_{\text{P}}}^{\text{L}}}=\frac{{m_{\text{P}}} {{C_{\text{P}}}^{\text{L}}}}{{h_{\text{P}}} {A_{\text{P}}}}$$
                       </td>
                     </tr>
                     <tr>
@@ -1740,14 +1623,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>H<sub>f</sub> = <div class="fraction">
-                                                <span class="fup">Q</span>
-                                                <span class="fdn">m</span>
-                                              </div></em>
-                        </div>
-                      </td>
+                      <td>$${H_{\text{f}}}=\frac{Q}{m}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1808,14 +1684,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>ϕ = <div class="fraction">
-                                    <span class="fup">Q<sub>P</sub></span>
-                                    <span class="fdn">H<sub>f</sub>&#8239;m<sub>P</sub></span>
-                                  </div></em>
-                        </div>
-                      </td>
+                      <td>$$ϕ=\frac{{Q_{\text{P}}}}{{H_{\text{f}}} {m_{\text{P}}}}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1880,14 +1749,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>
-                        <div class="equation">
-                          <em>AR = <div class="fraction">
-                                     <span class="fup">D</span>
-                                     <span class="fdn">L</span>
-                                   </div></em>
-                        </div>
-                      </td>
+                      <td>$$AR=\frac{D}{L}$$</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1949,32 +1811,16 @@
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
-                        </div>
-                      </td>
+                      <td>$${T_{\text{init}}}\lt{}{T_{\text{C}}}$$</td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>0&thinsp;&le;&thinsp;t&thinsp;&le;&thinsp;t<sub>final</sub></em>
-                        </div>
-                      </td>
+                      <td>$$0\leq{}t\leq{}{t_{\text{final}}}$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><div class="fraction">
-                                <span class="fup">&#8239;dT<sub>W</sub></span>
-                                <span class="fdn">&#8239;dt</span>
-                              </div> = <div class="fraction">
-                                         <span class="fup">1</span>
-                                         <span class="fdn">τ<sub>W</sub></span>
-                                       </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t)&plus;η&#8239;(T<sub>P</sub>(t)&minus;T<sub>W</sub>(t)))</em>
-                        </div>
+                        $$\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)+η \left({T_{\text{P}}}\left(t\right)-{T_{\text{W}}}\left(t\right)\right)\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -2045,132 +1891,29 @@
                     <p class="paragraph">
                       To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>) and from the water into the PCM as <em>q<sub>P</sub></em> (<a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>), over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
                     </p>
-                    <div class="equation">
-                      <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-                                                                    <span class="fup">
-                                                                      &#8239;dT<sub>W</sub>
-                                                                    </span>
-                                                                    <span class="fdn">
-                                                                      &#8239;dt
-                                                                    </span>
-                                                                  </div> = q<sub>C</sub>&#8239;A<sub>C</sub>&minus;q<sub>P</sub>&#8239;A<sub>P</sub></em>
-                    </div>
+                    $${m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}-{q_{\text{P}}} {A_{\text{P}}}$$
                     <p class="paragraph">
                       Using <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a> for <em>q<sub>C</sub></em> and <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a> for <em>q<sub>P</sub></em>, this can be written as:
                     </p>
-                    <div class="equation">
-                      <em>m<sub>W</sub>&#8239;C<sub>W</sub>&#8239;<div class="fraction">
-                                                                    <span class="fup">
-                                                                      &#8239;dT<sub>W</sub>
-                                                                    </span>
-                                                                    <span class="fdn">
-                                                                      &#8239;dt
-                                                                    </span>
-                                                                  </div> = h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&minus;h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
-                    </div>
+                    $${m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)-{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)$$
                     <p class="paragraph">
                       Dividing Equation (2) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
                     </p>
-                    <div class="equation">
-                      <em><div class="fraction">
-                            <span class="fup">&#8239;dT<sub>W</sub></span>
-                            <span class="fdn">&#8239;dt</span>
-                          </div> = <div class="fraction">
-                                     <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
-                                     <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
-                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&minus;<div class="fraction">
-                                                                                            <span class="fup">
-                                                                                              h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                            </span>
-                                                                                            <span class="fdn">
-                                                                                              m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                                                            </span>
-                                                                                          </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
-                    </div>
+                    $$\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)-\frac{{h_{\text{P}}} {A_{\text{P}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)$$
                     <p class="paragraph">
                       Factoring the negative sign out of the second term of the RHS of Equation (3) and multiplying it by <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> yields:
                     </p>
-                    <div class="equation">
-                      <em><div class="fraction">
-                            <span class="fup">&#8239;dT<sub>W</sub></span>
-                            <span class="fdn">&#8239;dt</span>
-                          </div> = <div class="fraction">
-                                     <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
-                                     <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
-                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&plus;<div class="fraction">
-                                                                                           <span class="fup">
-                                                                                             h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                           </span>
-                                                                                           <span class="fdn">
-                                                                                             h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                           </span>
-                                                                                         </div>&#8239;<div class="fraction">
-                                                                                                        <span class="fup">
-                                                                                                          h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                                        </span>
-                                                                                                        <span class="fdn">
-                                                                                                          m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                                                                        </span>
-                                                                                                      </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
-                    </div>
+                    $$\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{C}}} {A_{\text{C}}}}{{h_{\text{C}}} {A_{\text{C}}}} \frac{{h_{\text{P}}} {A_{\text{P}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)$$
                     <p class="paragraph">Rearraging this equation gives us:</p>
-                    <div class="equation">
-                      <em><div class="fraction">
-                            <span class="fup">&#8239;dT<sub>W</sub></span>
-                            <span class="fdn">&#8239;dt</span>
-                          </div> = <div class="fraction">
-                                     <span class="fup">h<sub>C</sub>&#8239;A<sub>C</sub></span>
-                                     <span class="fdn">m<sub>W</sub>&#8239;C<sub>W</sub></span>
-                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&plus;<div class="fraction">
-                                                                                           <span class="fup">
-                                                                                             h<sub>P</sub>&#8239;A<sub>P</sub>
-                                                                                           </span>
-                                                                                           <span class="fdn">
-                                                                                             h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                           </span>
-                                                                                         </div>&#8239;<div class="fraction">
-                                                                                                        <span class="fup">
-                                                                                                          h<sub>C</sub>&#8239;A<sub>C</sub>
-                                                                                                        </span>
-                                                                                                        <span class="fdn">
-                                                                                                          m<sub>W</sub>&#8239;C<sub>W</sub>
-                                                                                                        </span>
-                                                                                                      </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
-                    </div>
+                    $$\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{{h_{\text{P}}} {A_{\text{P}}}}{{h_{\text{C}}} {A_{\text{C}}}} \frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)$$
                     <p class="paragraph">
                       By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>) and <em>η</em> (from <a href=#DD:balanceDecayTime>DD: balanceDecayTime</a>), this can be written as:
                     </p>
-                    <div class="equation">
-                      <em><div class="fraction">
-                            <span class="fup">&#8239;dT<sub>W</sub></span>
-                            <span class="fdn">&#8239;dt</span>
-                          </div> = <div class="fraction">
-                                     <span class="fup">1</span>
-                                     <span class="fdn">τ<sub>W</sub></span>
-                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)&plus;<div class="fraction">
-                                                                                           <span class="fup">
-                                                                                             η
-                                                                                           </span>
-                                                                                           <span class="fdn">
-                                                                                             τ<sub>W</sub>
-                                                                                           </span>
-                                                                                         </div>&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>)</em>
-                    </div>
+                    $$\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)$$
                     <p class="paragraph">
-                      Finally, factoring out <em><div class="fraction">
-                                                   <span class="fup">1</span>
-                                                   <span class="fdn">τ<sub>W</sub></span>
-                                                 </div></em>, we are left with the governing ODE for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>:
+                      Finally, factoring out <em>$\frac{1}{{τ_{\text{W}}}}$</em>, we are left with the governing ODE for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>:
                     </p>
-                    <div class="equation">
-                      <em><div class="fraction">
-                            <span class="fup">&#8239;dT<sub>W</sub></span>
-                            <span class="fdn">&#8239;dt</span>
-                          </div> = <div class="fraction">
-                                     <span class="fup">1</span>
-                                     <span class="fdn">τ<sub>W</sub></span>
-                                   </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>&plus;η&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>))</em>
-                    </div>
+                    $$\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}+η \left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)$$
                   </div>
                 </div>
                 <div id="IM:eBalanceOnPCM">
@@ -2201,52 +1944,20 @@
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup></em>
-                        </div>
-                      </td>
+                      <td>$${T_{\text{init}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}$$</td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>0&thinsp;&le;&thinsp;t&thinsp;&le;&thinsp;t<sub>final</sub></em>
-                        </div>
-                      </td>
+                      <td>$$0\leq{}t\leq{}{t_{\text{final}}}$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em><div class="fraction">
-                                <span class="fup">&#8239;dT<sub>P</sub></span>
-                                <span class="fdn">&#8239;dt</span>
-                              </div> = <span class="casebr">{</span>
-                                       <div class="cases">
-                                         <span>
-                                           <div class="fraction">
-                                             <span class="fup">1</span>
-                                             <span class="fdn">τ<sub>P</sub><sup>S</sup></span>
-                                           </div>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t)) , <span class="case">
-                                                                                                      T<sub>P</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup>
-                                                                                                    </span>
-                                         </span>
-                                         <span>
-                                           <div class="fraction">
-                                             <span class="fup">1</span>
-                                             <span class="fdn">τ<sub>P</sub><sup>L</sup></span>
-                                           </div>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t)) , <span class="case">
-                                                                                                      T<sub>P</sub>&thinsp;&gt;&thinsp;T<sub>melt</sub><sup>P</sup>
-                                                                                                    </span>
-                                         </span>
-                                         <span>
-                                           0 , <span class="case">
-                                                 T<sub>P</sub> = T<sub>melt</sub><sup>P</sup> &and; 0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1
-                                               </span>
-                                         </span>
-                                       </div></em>
-                        </div>
+                        $$\frac{\,d{T_{\text{P}}}}{\,dt}=\begin{cases}
+                                                         \frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                                         \frac{1}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                                         0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
+                                                         \end{cases}$$
                       </td>
                     </tr>
                     <tr>
@@ -2320,55 +2031,19 @@
                     <p class="paragraph">
                       To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (<em>V<sub>P</sub></em>). The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> (<a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>) over phase change material surface area <em>A<sub>P</sub></em>. The thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
                     </p>
-                    <div class="equation">
-                      <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
-                                                                                <span class="fup">
-                                                                                  &#8239;dT<sub>P</sub>
-                                                                                </span>
-                                                                                <span class="fdn">
-                                                                                  &#8239;dt
-                                                                                </span>
-                                                                              </div> = q<sub>P</sub>&#8239;A<sub>P</sub></em>
-                    </div>
+                    $${m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}} \frac{\,d{T_{\text{P}}}}{\,dt}={q_{\text{P}}} {A_{\text{P}}}$$
                     <p class="paragraph">
                       Using <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a> for <em>q<sub>P</sub></em>, this equation can be written as:
                     </p>
-                    <div class="equation">
-                      <em>m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>&#8239;<div class="fraction">
-                                                                                <span class="fup">
-                                                                                  &#8239;dT<sub>P</sub>
-                                                                                </span>
-                                                                                <span class="fdn">
-                                                                                  &#8239;dt
-                                                                                </span>
-                                                                              </div> = h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
-                    </div>
+                    $${m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}} \frac{\,d{T_{\text{P}}}}{\,dt}={h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)$$
                     <p class="paragraph">
                       Dividing by <em>m<sub>P</sub></em> <em>C<sub>P</sub><sup>S</sup></em> we obtain:
                     </p>
-                    <div class="equation">
-                      <em><div class="fraction">
-                            <span class="fup">&#8239;dT<sub>P</sub></span>
-                            <span class="fdn">&#8239;dt</span>
-                          </div> = <div class="fraction">
-                                     <span class="fup">h<sub>P</sub>&#8239;A<sub>P</sub></span>
-                                     <span class="fdn">
-                                       m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
-                                     </span>
-                                   </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
-                    </div>
+                    $$\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{{h_{\text{P}}} {A_{\text{P}}}}{{m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)$$
                     <p class="paragraph">
                       By substituting <em>τ<sub>P</sub><sup>S</sup></em> (from <a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>), this can be written as:
                     </p>
-                    <div class="equation">
-                      <em><div class="fraction">
-                            <span class="fup">&#8239;dT<sub>P</sub></span>
-                            <span class="fdn">&#8239;dt</span>
-                          </div> = <div class="fraction">
-                                     <span class="fup">1</span>
-                                     <span class="fdn">τ<sub>P</sub><sup>S</sup></span>
-                                   </div>&#8239;(T<sub>W</sub>&minus;T<sub>P</sub>)</em>
-                    </div>
+                    $$\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)$$
                     <p class="paragraph">
                       Equation (4) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>τ<sub>P</sub><sup>S</sup></em> is replaced by <em>τ<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#assumpVCMPN>A: Volume-Change-Melting-PCM-Negligible</a>).
                     </p>
@@ -2408,18 +2083,12 @@
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>0&thinsp;&le;&thinsp;t&thinsp;&le;&thinsp;t<sub>final</sub></em>
-                        </div>
-                      </td>
+                      <td>$$0\leq{}t\leq{}{t_{\text{final}}}$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>E<sub>W</sub>(t) = C<sub>W</sub>&#8239;m<sub>W</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>init</sub>)</em>
-                        </div>
+                        $${E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)$$
                       </td>
                     </tr>
                     <tr>
@@ -2498,43 +2167,20 @@
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup></em>
-                        </div>
-                      </td>
+                      <td>$${T_{\text{init}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}$$</td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>
-                        <div class="equation">
-                          <em>0&thinsp;&le;&thinsp;t&thinsp;&le;&thinsp;t<sub>final</sub></em>
-                        </div>
-                      </td>
+                      <td>$$0\leq{}t\leq{}{t_{\text{final}}}$$</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        <div class="equation">
-                          <em>E<sub>P</sub> = <span class="casebr">{</span>
-                                              <div class="cases">
-                                                <span>
-                                                  C<sub>P</sub><sup>S</sup>&#8239;m<sub>P</sub>&#8239;(T<sub>P</sub>(t)&minus;T<sub>init</sub>) , <span class="case">
-                                                                                                                                                    T<sub>P</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup>
-                                                                                                                                                  </span>
-                                                </span>
-                                                <span>
-                                                  E<sub>P</sub><sub>melt</sub><sup>init</sup>&plus;H<sub>f</sub>&#8239;m<sub>P</sub>&plus;C<sub>P</sub><sup>L</sup>&#8239;m<sub>P</sub>&#8239;(T<sub>P</sub>(t)&minus;T<sub>melt</sub><sup>P</sup>) , <span class="case">
-                                                                                                                                                                                                                                                        T<sub>P</sub>&thinsp;&gt;&thinsp;T<sub>melt</sub><sup>P</sup>
-                                                                                                                                                                                                                                                      </span>
-                                                </span>
-                                                <span>
-                                                  E<sub>P</sub><sub>melt</sub><sup>init</sup>&plus;Q<sub>P</sub>(t) , <span class="case">
-                                                                                                                        T<sub>P</sub> = T<sub>melt</sub><sup>P</sup> &and; 0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1
-                                                                                                                      </span>
-                                                </span>
-                                              </div></em>
-                        </div>
+                        $${E_{\text{P}}}=\begin{cases}
+                                         {{C_{\text{P}}}^{\text{S}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                         {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{H_{\text{f}}} {m_{\text{P}}}+{{C_{\text{P}}}^{\text{L}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{{T_{\text{melt}}}^{\text{P}}}\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                         {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
+                                         \end{cases}$$
                       </td>
                     </tr>
                     <tr>
@@ -2625,14 +2271,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A: PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <span class="fdn">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      h<sub>min</sub>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  </div></em>, where <em>h<sub>min</sub></em> is the thickness of a "sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A: PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em>$\frac{2}{{h_{\text{min}}}}$</em>, where <em>h<sub>min</sub></em> is the thickness of a "sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -2656,14 +2295,7 @@
                       <td><em>A<sub>P</sub></em></td>
                       <td><em>A<sub>P</sub>&thinsp;&gt;&thinsp;0</em></td>
                       <td>
-                        <em>V<sub>P</sub>&thinsp;&le;&thinsp;A<sub>P</sub>&thinsp;&le;&thinsp;<div class="fraction">
-                                                                                                <span class="fup">
-                                                                                                  2
-                                                                                                </span>
-                                                                                                <span class="fdn">
-                                                                                                  h<sub>min</sub>
-                                                                                                </span>
-                                                                                              </div>&#8239;V<sub>tank</sub></em>
+                        <em>V<sub>P</sub>&thinsp;&le;&thinsp;A<sub>P</sub>&thinsp;&le;&thinsp;$\frac{2}{{h_{\text{min}}}}$&#8239;V<sub>tank</sub></em>
                       </td>
                       <td><em>1.2</em> m<sup>2</sup></td>
                       <td>10<em>%</em></td>
@@ -2861,15 +2493,11 @@
                 <p class="paragraph">
                   A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a> and <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
                 </p>
-                <div class="equation">
-                  <em>E<sub>W</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))&#8239;dt&minus;&int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
-                </div>
+                $${E_{\text{W}}}=\int_{0}^{t}{{h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt$$
                 <p class="paragraph">
                   In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
                 </p>
-                <div class="equation">
-                  <em>E<sub>P</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
-                </div>
+                $${E_{\text{P}}}=\int_{0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt$$
                 <p class="paragraph">
                   Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as "sanity" checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than <em>C<sub>tol</sub></em> <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>.
                 </p>
@@ -2899,14 +2527,7 @@
               </p>
               <p>
                 <div id="findMass">
-                  Find-Mass: Use the inputs in <a href=#inputInitQuants>FR: Input-Initial-Quantities</a> to find the masses needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>, using <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = (V<sub>tank</sub>&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub> = (π&#8239;(<div class="fraction">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <span class="fup">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            D
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                          <span class="fdn">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                            2
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                          </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>)<sup>2</sup>&#8239;L&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub></em>, <em>m<sub>P</sub> = V<sub>P</sub>&#8239;ρ<sub>P</sub></em>, and <a href=#assumpVCN>A: Volume-Coil-Negligible</a>, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank.
+                  Find-Mass: Use the inputs in <a href=#inputInitQuants>FR: Input-Initial-Quantities</a> to find the masses needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>, using <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = (V<sub>tank</sub>&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub> = (π&#8239;($\frac{D}{2}$)<sup>2</sup>&#8239;L&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub></em>, <em>m<sub>P</sub> = V<sub>P</sub>&#8239;ρ<sub>P</sub></em>, and <a href=#assumpVCN>A: Volume-Coil-Negligible</a>, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank.
                 </div>
               </p>
               <p>

@@ -39,12 +39,12 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
   dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
-  doxConfigName, makefileName, doubleSlash, blockCmtDoc, docCmtDoc, 
-  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
-  valList, appendToBody, surroundBody, getterName, setterName, setMain, 
-  setMainMethod, setEmpty, intValue)
-import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), ad, 
-  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  doxConfigName, makefileName, sampleInputName, doubleSlash, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
+  docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
+  setMain, setMainMethod, setEmpty, intValue)
+import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
+  ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   PackData(..), packD, ProgData(..), progD, TypeData(..), td, ValData(..), 
   VarData(..), vard)
@@ -56,6 +56,8 @@ import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.GOOL.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
+import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
+
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe, maybeToList)
@@ -113,6 +115,7 @@ instance AuxiliarySym JavaCode where
   type Auxiliary JavaCode = AuxData
   doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
     optimizeDox p)
+  sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
 
   optimizeDox = return $ text "YES"
 

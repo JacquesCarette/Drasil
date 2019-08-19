@@ -50,7 +50,6 @@ type D = PrintLaTeX TP.Doc
 switch :: (MathContext -> MathContext) -> D -> D
 switch f (PL g) = PL $ \c -> adjust c (f c) g
   where
-    dollar = H.dlr
     bstext = TP.text "\\text"
     br doc = TP.text "{" TP.<> doc TP.<> TP.text "}"
     adjust :: MathContext -> MathContext -> (MathContext -> TP.Doc) -> TP.Doc
@@ -59,7 +58,7 @@ switch f (PL g) = PL $ \c -> adjust c (f c) g
     -- we are producing Math, but want some Text embedded
     adjust Math Text gen = bstext TP.<> br (gen Text)
     -- we are producing Text, but want some Math embedded
-    adjust Text Math gen = dollar TP.<> gen Math TP.<> dollar
+    adjust Text Math gen = H.dollarDoc $ gen Math
     adjust Curr Curr gen = gen Text -- default
     adjust Curr x gen = gen x
     adjust x Curr gen = gen x 

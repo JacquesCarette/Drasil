@@ -41,12 +41,12 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
   blockCmtEnd, docCmtStart, observerListName, doxConfigName, makefileName, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  surroundBody, getterName, setterName, setMain, setMainMethod, setEmpty, 
-  intValue)
-import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), ad, 
-  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  sampleInputName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
+  appendToBody, surroundBody, getterName, setterName, setMain, setMainMethod, 
+  setEmpty, intValue)
+import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
+  ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
   ValData(..), updateValDoc, VarData(..), vard)
@@ -54,9 +54,11 @@ import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, nativeBinary, osClassDefault)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.GOOL.Helpers (emptyIfEmpty, liftA4, liftA5, 
-  liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
+import Language.Drasil.Code.Imperative.GOOL.Helpers (emptyIfEmpty, liftA4, 
+  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
+import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
+
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -109,6 +111,7 @@ instance AuxiliarySym CSharpCode where
   type Auxiliary CSharpCode = AuxData
   doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
     optimizeDox p)
+  sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
 
   optimizeDox = return $ text "NO"
 

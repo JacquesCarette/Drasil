@@ -37,11 +37,11 @@ import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title,
   Journal, BookTitle, Publisher, Series, Address, Edition), HP(URL, Verb), 
   Citation(Cite), BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..), Tags)
-import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac, dollarDoc)
+import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, spec)
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Text), D, toMath)
+import Language.Drasil.TeX.Monad (runPrint, MathContext(Text, Math), D, toMath, PrintLaTeX(PL))
 
 data OpenClose = Open | Close
 
@@ -56,7 +56,7 @@ build fn (Document t a c) =
   html (headTag (linkCSS fn $$ title (titleSpec t) $$
   text "<meta charset=\"utf-8\">" $$
   text ("<script type=\"text/x-mathjax-config\">" ++
-    "MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['$$','$$']]});" ++
+    "MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['\\[','\\]']]});" ++
     "</script>") $$
   text ("<script type=\"text/javascript\" async " ++
   "src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML\">" ++
@@ -71,10 +71,14 @@ printMath = (`runPrint` Text)
 
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
+-- FIXME: could be hacky
 printLO (HDiv ["equation"] layoutObs EmptyS)  = vcat (map printLO layoutObs)
--- Dollar Doc needed to wrap in extra dollar signs.
+-- Creates delimeters to be used for mathjax displayed equations
 -- Latex print sets up a \begin{displaymath} environment instead of this
-printLO (EqnBlock contents)    = dollarDoc $ printMath $ TeX.spec contents
+printLO (EqnBlock contents)    = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
+  where
+    toMathHelper (PL g) = PL (\_ -> g Math)
+    mjDelimDisp d = text "\\[" <> d <> text "\\]"
 -- Non-mathjax
 -- printLO (EqnBlock contents) = pSpec contents
 printLO (HDiv ts layoutObs EmptyS)  = divTag ts (vcat (map printLO layoutObs))

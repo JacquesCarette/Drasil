@@ -91,7 +91,7 @@ mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
 mkTMField t _ l@DefiningEquation fs =
   (show l, map eqUnR' (t ^. invariants)) : fs 
 mkTMField t m l@(Description v u) fs = (show l,
-  foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
+  concatMap (buildDescription v u m []) (t ^. invariants)) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getReferences) : fs
 mkTMField t _ l@Notes fs = 
@@ -135,10 +135,10 @@ mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
-buildDescription :: Verbosity -> InclUnits -> Expr -> SystemInformation -> [Contents] ->
+buildDescription :: Verbosity -> InclUnits -> SystemInformation -> [Contents] -> Expr ->
   [Contents]
 buildDescription Succinct _ _ _ _ = []
-buildDescription Verbose u e m cs = (UlC . ulcc .
+buildDescription Verbose u m cs e = (UlC . ulcc .
   Enumeration . Definitions . descPairs u $ vars e $ _sysinfodb m) : cs
 
 -- | Create the description field (if necessary) using the given verbosity and
@@ -156,7 +156,7 @@ mkGDField g _ l@Units fs =
   maybe fs (\udef -> (show l, [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
 mkGDField g _ l@DefiningEquation fs = (show l, [eqUnR' $ g ^. relat]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
-  buildDescription v u (g ^. relat) m []) : fs
+  buildDescription v u m [] (g ^. relat)) : fs
 mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
 mkGDField g _ l@Source fs = (show l, helperSources $ g ^. getReferences) : fs
 mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
@@ -167,38 +167,30 @@ mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, [mkParagraph $ atStart i]) : fs
 mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' $ i ^. relat]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
-  foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
+  concatMap (buildDescription v u m []) [i ^. relat]) : fs
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
 mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getReferences) : fs
-mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
-  where x = P . eqSymb $ i ^. imOutput
-mkIMField i _ l@Input fs = 
-  case i ^. imInputs of
-  [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
-  (_:_) -> (show l, [mkParagraph $ foldl sC x xs]) : fs
-  where (x:xs) = map (P . eqSymb) $ i ^. imInputs
-mkIMField i _ l@InConstraints fs  = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. inCons)) : fs
-mkIMField i _ l@OutConstraints fs = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock) [] (i ^. outCons)) : fs
-mkIMField i _ l@Notes fs = 
-  nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
-mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
-  "for instance models"
+mkIMField i _ l@Output fs = (show l, [mkParagraph . P . eqSymb $ i ^. imOutput]) : fs
+mkIMField i _ l@Input fs = (show l, [mkParagraph $ getIn $ map (P . eqSymb) (i ^. imInputs)]) : fs
+  where getIn [] = EmptyS -- FIXME? Should an empty input list be allowed?
+        getIn (x:xs) = foldl sC x xs
+mkIMField i _ l@InConstraints fs  = (show l, map (UlC . ulcc . EqnBlock) (i ^. inCons)) : fs
+mkIMField i _ l@OutConstraints fs = (show l, map (UlC . ulcc . EqnBlock) (i ^. outCons)) : fs
+mkIMField i _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
+mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported for instance models"
 
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.
-firstPair' :: InclUnits -> DataDefinition -> ListTuple
-firstPair' IgnoreUnits d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
-firstPair' IncludeUnits d =
-  (P $ eqSymb d, Flat $ phrase d +:+ sParen (toSentenceUnitless d), Nothing)
+firstPair' :: (Quantity q, MayHaveUnit q) => InclUnits -> q -> ListTuple
+firstPair' IgnoreUnits  d = pairHelper EmptyS d
+firstPair' IncludeUnits d = pairHelper (sParen $ toSentenceUnitless d) d
 
 -- | Create the descriptions for each symbol in the relation/equation
 descPairs :: (Quantity q, MayHaveUnit q) => InclUnits -> [q] -> [ListTuple]
-descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
-descPairs IncludeUnits =
-  map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ sParen (toSentenceUnitless x), Nothing))
-  -- FIXME: Need a Units map for looking up units from variables
+descPairs x = map (firstPair' x)
+
+pairHelper :: Quantity q => Sentence -> q -> ListTuple
+pairHelper units x = (P $ eqSymb x, Flat $ phrase x +:+ units, Nothing)
 
 instance Show Field where
   show Label             = "Label"

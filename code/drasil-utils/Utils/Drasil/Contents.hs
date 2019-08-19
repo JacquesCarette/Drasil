@@ -1,5 +1,5 @@
-module Utils.Drasil.Contents (enumBullet, enumBulletU, enumSimple,
-  enumSimpleU, eqUnR, eqUnR', mkEnumSimpleD) where
+module Utils.Drasil.Contents (enumBullet, enumBulletU, enumConInst, enumSimple,
+  enumSimpleU, eqUnR, eqUnR') where
 
 import Language.Drasil
 import Utils.Drasil.Misc (bulletFlat, conA, mkEnumAbbrevList)
@@ -34,24 +34,9 @@ enumSimpleU s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevL
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
--- | mkEnumSimpleD is a convenience function for transforming types which are
--- instances of the constraints Referable, HasShortName, and Definition, into
--- Simple-type Enumerations.
---mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
---mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
-
--- | mkEnumSimple is a convenience function for converting lists into
--- Simple-type Enumerations.
-mkEnumSimple :: ((a, Int) -> ListTuple) -> [a] -> [Contents]
-mkEnumSimple f x = [UlC . ulcc . Enumeration . Simple $ map f $ zip x [1..]]
-
--- | Creates a list tuple filling in the title with a ShortName and filling
--- reference information.
-mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
-mkListTuple f x = (S . getStringSN $ shortname x, f x, Just $ refAdd x)
-
 -- | Creates an enumerated list of ConceptInstances
-mkEnumSimpleD :: [ConceptInstance] -> [Contents]
-mkEnumSimpleD = mkEnumSimple (\(x, n) -> (start x n, Flat $ x ^. defn, Just $ refAdd x))
+enumConInst :: [ConceptInstance] -> [Contents]
+enumConInst x = [UlC . ulcc . Enumeration . Simple $ map lt $ zip x ([1..] :: [Int])] 
   where
-    start x n = S (getStringSN $ shortname x) +:+ sParen (S $ conA x ++ show n)
+    lt (c, n) = (start c n, Flat $ c ^. defn, Just $ refAdd c)
+    start c n = S (getStringSN $ shortname c) +:+ sParen (S $ conA c ++ show n)

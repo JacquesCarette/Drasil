@@ -248,7 +248,7 @@ mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
-        mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
+        mkSubPD (Goals ins g) = SSD.goalStmtF ins (enumConInst g)
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
@@ -273,7 +273,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS (IMs intro fields ims _) =
       SSD.inModelF pdStub ddStub tmStub gdstub $ noDerivHelper intro fields instanceModel ims
     mkSubSCS (Assumptions ci) =
-      SSD.assumpF $ mkEnumSimpleD $ map (`helperCI` si) ci
+      SSD.assumpF $ enumConInst $ map (`helperCI` si) ci
     mkSubSCS (Constraints end cs)  = SSD.datConF end cs
     mkSubSCS (CorrSolnPpties c cs) = SSD.propCorSolF c cs
     derivHelper :: (HasDerivation d, HasShortName d, Referable d) => [Sentence] -> Fields ->
@@ -304,14 +304,14 @@ mkReqrmntSec :: ReqrmntSec -> Section
 mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
-    mkSubs (FReqsSub frs tbs) = R.fReqF  (mkEnumSimpleD frs ++ map LlC tbs)
-    mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
+    mkSubs (FReqsSub frs tbs) = R.fReqF  (enumConInst frs ++ map LlC tbs)
+    mkSubs (NonFReqsSub nfrs) = R.nfReqF (enumConInst nfrs)
 
 {--}
 
 -- | Helper for making the 'LikelyChanges' section
 mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
+mkLCsSec (LCsProg c) = SRS.likeChg (intro : enumConInst c) []
   where intro = foldlSP [S "This", phrase section_, S "lists the",
                 plural likelyChg, S "to be made to the", phrase software]
 
@@ -319,7 +319,7 @@ mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
 
 -- | Helper for making the 'UnikelyChanges' section
 mkUCsSec :: UCsSec -> Section
-mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
+mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : enumConInst c) []
   where intro = foldlSP [S "This", phrase section_, S "lists the",
                 plural unlikelyChg, S "to be made to the", phrase software]
 

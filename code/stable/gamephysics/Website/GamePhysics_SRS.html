@@ -677,12 +677,12 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chaslesThm>DD: chaslesThm</a>, <a href=#DD:reVeInColl>DD: reVeInColl</a>, <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:ctrOfMass>DD: ctrOfMass</a>, <a href=#DD:momentOfInertia>DD: momentOfInertia</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#DD:impulseV>DD: impulseV</a>, <a href=#DD:impulse>DD: impulse</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
+                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chaslesThm>DD: chaslesThm</a>, <a href=#DD:reVeInColl>DD: reVeInColl</a>, <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#DD:ctrOfMass>DD: ctrOfMass</a>, <a href=#DD:momentOfInertia>DD: momentOfInertia</a>, <a href=#DD:linVel>DD: linVel</a>, <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linAcc>DD: linAcc</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#DD:impulseV>DD: impulseV</a>, <a href=#GD:impulse>GD: impulse</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpOD">
-                      objectDimension: All objects are 2D. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#DD:impulse>DD: impulse</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
+                      objectDimension: All objects are 2D. (RefBy: <a href=#IM:transMot>IM: transMot</a>, <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:potEnergy>DD: potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD: kEnergy</a>, <a href=#GD:impulse>GD: impulse</a>, <a href=#IM:col2D>IM: col2D</a>, <a href=#DD:angVel>DD: angVel</a>, <a href=#DD:angDisp>DD: angDisp</a>, and <a href=#DD:angAccel>DD: angAccel</a>.)
                     </div>
                   </p>
                   <p>
@@ -692,12 +692,12 @@
                   </p>
                   <p>
                     <div id="assumpAD">
-                      axesDefined: The axes are defined using right-handed coordinate system. (RefBy: <a href=#IM:rotMot>IM: rotMot</a>, <a href=#DD:impulse>DD: impulse</a>, and <a href=#IM:col2D>IM: col2D</a>.)
+                      axesDefined: The axes are defined using right-handed coordinate system. (RefBy: <a href=#IM:rotMot>IM: rotMot</a>, <a href=#GD:impulse>GD: impulse</a>, and <a href=#IM:col2D>IM: col2D</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCT">
-                      collisionType: All rigid bodies collisions are vertex-to-edge collisions. (RefBy: <a href=#lcEC>LC: Expanded-Collisions</a>, <a href=#DD:impulse>DD: impulse</a>, and <a href=#IM:col2D>IM: col2D</a>.)
+                      collisionType: All rigid bodies collisions are vertex-to-edge collisions. (RefBy: <a href=#lcEC>LC: Expanded-Collisions</a>, <a href=#GD:impulse>GD: impulse</a>, and <a href=#IM:col2D>IM: col2D</a>.)
                     </div>
                   </p>
                   <p>
@@ -980,6 +980,87 @@
                       <td>
                         <p class="paragraph"><a href=#IM:transMot>IM: transMot</a></p>
                       </td>
+                    </tr>
+                  </table>
+                </div>
+                <p class="paragraph"></p>
+                <div id="GD:impulse">
+                  <table class="gdefn">
+                    <tr>
+                      <th>Refname</th>
+                      <td><b>GD:impulse</b></td>
+                    </tr>
+                    <tr>
+                      <th>Label</th>
+                      <td><p class="paragraph">Impulse for Collision</p></td>
+                    </tr>
+                    <tr>
+                      <th>Units</th>
+                      <td><p class="paragraph">N&sdot;s</p></td>
+                    </tr>
+                    <tr>
+                      <th>Equation</th>
+                      <td>
+                        $$j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}$$
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Description</th>
+                      <td>
+                        <ul class="hide-list-style-no-indent">
+                          <li><em>j</em> is the impulse (scalar) (N&sdot;s)</li>
+                          <li>
+                            <em>C<sub>R</sub></em> is the coefficient of restitution (Unitless)
+                          </li>
+                          <li>
+                            <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the initial relative velocity between rigid bodies of A and B (m/s)
+                          </li>
+                          <li><em><b>n</b></em> is the collision normal vector (m)</li>
+                          <li><em>m<sub>A</sub></em> is the mass of rigid body A (kg)</li>
+                          <li><em>m<sub>B</sub></em> is the mass of rigid body B (kg)</li>
+                          <li>
+                            <em>||<b>n</b>||</em> is the length of the normal vector (m)
+                          </li>
+                          <li>
+                            <em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)
+                          </li>
+                          <li>
+                            <em><b>I</b><sub>A</sub></em> is the moment of inertia of rigid body A (kg&sdot;m<sup>2</sup>)
+                          </li>
+                          <li>
+                            <em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)
+                          </li>
+                          <li>
+                            <em><b>I</b><sub>B</sub></em> is the moment of inertia of rigid body B (kg&sdot;m<sup>2</sup>)
+                          </li>
+                        </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
+                        </p>
+                        <p class="paragraph">
+                          A right-handed coordinate system is used (from <a href=#assumpAD>A: axesDefined</a>).
+                        </p>
+                        <p class="paragraph">
+                          All collisions are vertex-to-edge (from <a href=#assumpCT>A: collisionType</a>).
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Source</th>
+                      <td>
+                        <p class="paragraph">
+                          <a href="http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf">Impulse for Collision Ref</a>
+                        </p>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>RefBy</th>
+                      <td><p class="paragraph"><a href=#IM:col2D>IM: col2D</a></p></td>
                     </tr>
                   </table>
                 </div>
@@ -1376,97 +1457,6 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
-                <div id="DD:impulse">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:impulse</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Impulse (scalar)</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>j</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">N&sdot;s</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        $$j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}$$
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>j</em> is the impulse (scalar) (N&sdot;s)</li>
-                          <li>
-                            <em>C<sub>R</sub></em> is the coefficient of restitution (Unitless)
-                          </li>
-                          <li>
-                            <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the initial relative velocity between rigid bodies of A and B (m/s)
-                          </li>
-                          <li><em><b>n</b></em> is the collision normal vector (m)</li>
-                          <li><em>m<sub>A</sub></em> is the mass of rigid body A (kg)</li>
-                          <li><em>m<sub>B</sub></em> is the mass of rigid body B (kg)</li>
-                          <li>
-                            <em>||<b>n</b>||</em> is the length of the normal vector (m)
-                          </li>
-                          <li>
-                            <em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)
-                          </li>
-                          <li>
-                            <em><b>I</b><sub>A</sub></em> is the moment of inertia of rigid body A (kg&sdot;m<sup>2</sup>)
-                          </li>
-                          <li>
-                            <em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)
-                          </li>
-                          <li>
-                            <em><b>I</b><sub>B</sub></em> is the moment of inertia of rigid body B (kg&sdot;m<sup>2</sup>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
-                        </p>
-                        <p class="paragraph">
-                          A right-handed coordinate system is used (from <a href=#assumpAD>A: axesDefined</a>).
-                        </p>
-                        <p class="paragraph">
-                          All collisions are vertex-to-edge (from <a href=#assumpCT>A: collisionType</a>).
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td><p class="paragraph"><a href=#IM:col2D>IM: col2D</a></p></td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:impulseDeriv">
-                  <div class="subsubsubsection">
-                    <h4>Detailed derivation of impulse (scalar):</h4>
-                    <p class="paragraph">Newton's second law of motion states:</p>
-                    $$\mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}$$
-                    <p class="paragraph">Rearranging :</p>
-                    $$\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)$$
-                    <p class="paragraph">Integrating the right hand side :</p>
-                    $$\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}$$
-                  </div>
-                </div>
                 <div id="DD:chaslesThm">
                   <table class="ddefn">
                     <tr>
@@ -2226,7 +2216,7 @@
                           It is currently assumed that no damping occurs during the simulation (from <a href=#assumpDI>A: dampingInvolvement</a>) and that no constraints are involved (from <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a>).
                         </p>
                         <p class="paragraph">
-                          <em>j</em> is defined in <a href=#DD:impulse>DD: impulse</a>.
+                          <em>j</em> is defined in <a href=#GD:impulse>GD: impulse</a>.
                         </p>
                       </td>
                     </tr>
@@ -2641,16 +2631,6 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#DD:impulse>DD: impulse</a></td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td>X</td>
-              <td>X</td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
               <td><a href=#DD:chaslesThm>DD: chaslesThm</a></td>
               <td>X</td>
               <td></td>
@@ -2777,6 +2757,16 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#GD:impulse>GD: impulse</a></td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
               <td></td>
               <td></td>
             </tr>
@@ -3068,7 +3058,6 @@
               <th><a href=#DD:angDisp>DD: angDisp</a></th>
               <th><a href=#DD:angVel>DD: angVel</a></th>
               <th><a href=#DD:angAccel>DD: angAccel</a></th>
-              <th><a href=#DD:impulse>DD: impulse</a></th>
               <th><a href=#DD:chaslesThm>DD: chaslesThm</a></th>
               <th><a href=#DD:torque>DD: torque</a></th>
               <th><a href=#DD:kEnergy>DD: kEnergy</a></th>
@@ -3082,6 +3071,7 @@
               <th><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></th>
               <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
               <th><a href=#GD:accelGravity>GD: accelGravity</a></th>
+              <th><a href=#GD:impulse>GD: impulse</a></th>
               <th><a href=#IM:transMot>IM: transMot</a></th>
               <th><a href=#IM:rotMot>IM: rotMot</a></th>
               <th><a href=#IM:col2D>IM: col2D</a></th>
@@ -3250,33 +3240,6 @@
             </tr>
             <tr>
               <td><a href=#DD:angAccel>DD: angAccel</a></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td><a href=#DD:impulse>DD: impulse</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3654,6 +3617,33 @@
               <td></td>
             </tr>
             <tr>
+              <td><a href=#GD:impulse>GD: impulse</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
               <td><a href=#IM:transMot>IM: transMot</a></td>
               <td>X</td>
               <td>X</td>
@@ -3670,12 +3660,12 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
               <td></td>
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3700,8 +3690,8 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3716,20 +3706,20 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
               <td>X</td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3750,7 +3740,6 @@
               <th><a href=#DD:angDisp>DD: angDisp</a></th>
               <th><a href=#DD:angVel>DD: angVel</a></th>
               <th><a href=#DD:angAccel>DD: angAccel</a></th>
-              <th><a href=#DD:impulse>DD: impulse</a></th>
               <th><a href=#DD:chaslesThm>DD: chaslesThm</a></th>
               <th><a href=#DD:torque>DD: torque</a></th>
               <th><a href=#DD:kEnergy>DD: kEnergy</a></th>
@@ -3764,6 +3753,7 @@
               <th><a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a></th>
               <th><a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a></th>
               <th><a href=#GD:accelGravity>GD: accelGravity</a></th>
+              <th><a href=#GD:impulse>GD: impulse</a></th>
               <th><a href=#IM:transMot>IM: transMot</a></th>
               <th><a href=#IM:rotMot>IM: rotMot</a></th>
               <th><a href=#IM:col2D>IM: col2D</a></th>

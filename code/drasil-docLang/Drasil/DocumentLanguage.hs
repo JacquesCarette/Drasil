@@ -24,11 +24,9 @@ import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name c
 import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _inputs,
-  _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB,
-  collectUnits, generateRefbyMap, refbyTable, termTable, traceTable)
-
-import Control.Lens ((^.), over, set)
-import qualified Data.Map as Map (elems)
+  _kind, {-_outputs,-} _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB,
+  collectUnits, conceptinsTable, generateRefbyMap, idMap, labelledcontentTable,
+  refbyTable, termTable, traceTable)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table, symbTableRef)
@@ -41,7 +39,8 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (reqF, fReqF', fReqF, nfReqF)
+import qualified Drasil.Sections.Requirements as R (reqF, fReqF, fReqF',
+  fullReqs, fullTables, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
   propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
@@ -53,14 +52,16 @@ import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF,
 import Data.Drasil.Concepts.Documentation (likelyChg, refmat, section_,
   software, unlikelyChg)
 
+import Control.Lens ((^.), over, set)
 import Data.Function (on)
-import Data.List (nub, sortBy)
+import Data.List (nub, sortBy, sortOn)
+import qualified Data.Map as Map (elems, toList)
 
 -- | Creates a document from a document description and system information
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors, _sysinfodb = db} =
   Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
-  mkSections (fillTraceMaps l si) l where
+  mkSections (fillTraceMaps l (fillReqs l si)) l where
     l = mkDocDesc db dd
 
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
@@ -70,6 +71,23 @@ fillTraceMaps :: DocDesc -> SystemInformation -> SystemInformation
 fillTraceMaps dd si@SI{_sysinfodb = db} = si {_sysinfodb =
   set refbyTable (generateRefbyMap tdb) $ set traceTable tdb db} where
   tdb = generateTraceMap dd
+
+fillReqs :: DocDesc -> SystemInformation -> SystemInformation
+fillReqs [] si = si
+fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_inputs = i, _sysinfodb = db} = genReqs x
+  where
+    genReqs [] = si
+    genReqs (FReqsSub c l:_) =
+      si {_sysinfodb = set conceptinsTable newCI $ set labelledcontentTable newLC db}
+      where
+        newCI = setHelper (R.fullReqs i c)   (db ^. conceptinsTable)
+        newLC = setHelper (R.fullTables i l) (db ^. labelledcontentTable)
+    genReqs (_:xs) = genReqs xs
+    setHelper r m = idMap $ {-nub $ -}r ++ (map fst $ sortOn snd $ map snd $ Map.toList m)
+    {-newCI = setHelper (R.fullReqs i c)   (db ^. conceptinsTable)
+    newLC = setHelper (R.fullTables i l) (db ^. labelledcontentTable)
+    setHelper r x = idMap $ nub $ r ++ (map fst $ map snd $ Map.toList x)-}
+fillReqs (_:xs) si = fillReqs xs si
 
 -- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]
@@ -299,12 +317,12 @@ pdStub = SRS.probDesc  [] []
 
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: SystemInformation -> ReqrmntSec -> Section
-mkReqrmntSec (SI {_inputs = is, _outputs = os}) (ReqsProg l) = R.reqF $ map mkSubs l
+mkReqrmntSec (SI {_inputs = is {-, _outputs = os-}}) (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
+    mkSubs (FReqsSub  frs tbs) = R.fReqF is {-os-} frs tbs
     mkSubs (FReqsSub' frs tbs) = R.fReqF' (mkEnumSimpleD frs ++ map LlC tbs)
-    mkSubs (FReqsSub frs tbs) = R.fReqF is os frs tbs
-    mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
+    mkSubs (NonFReqsSub nfrs) = R.nfReqF  (mkEnumSimpleD nfrs)
 
 {--}
 

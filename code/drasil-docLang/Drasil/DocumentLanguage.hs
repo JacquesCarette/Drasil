@@ -83,10 +83,7 @@ fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_inputs = i, _sysinfodb = db} = genRe
         newCI = setHelper (R.fullReqs i c)   (db ^. conceptinsTable)
         newLC = setHelper (R.fullTables i l) (db ^. labelledcontentTable)
     genReqs (_:xs) = genReqs xs
-    setHelper r m = idMap $ {-nub $ -}r ++ (map fst $ sortOn snd $ map snd $ Map.toList m)
-    {-newCI = setHelper (R.fullReqs i c)   (db ^. conceptinsTable)
-    newLC = setHelper (R.fullTables i l) (db ^. labelledcontentTable)
-    setHelper r x = idMap $ nub $ r ++ (map fst $ map snd $ Map.toList x)-}
+    setHelper r m = idMap $ {-nub $ -}r ++ map fst (sortOn snd $ map snd $ Map.toList m)
 fillReqs (_:xs) si = fillReqs xs si
 
 -- | Helper for creating the document sections
@@ -317,7 +314,7 @@ pdStub = SRS.probDesc  [] []
 
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: SystemInformation -> ReqrmntSec -> Section
-mkReqrmntSec (SI {_inputs = is {-, _outputs = os-}}) (ReqsProg l) = R.reqF $ map mkSubs l
+mkReqrmntSec SI{_inputs = is {-, _outputs = os-}} (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
     mkSubs (FReqsSub  frs tbs) = R.fReqF is {-os-} frs tbs

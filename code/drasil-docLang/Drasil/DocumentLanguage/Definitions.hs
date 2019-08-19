@@ -46,23 +46,23 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
 
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
-tmodel :: Fields -> SystemInformation -> TheoryModel -> LabelledContent
-tmodel fs m t = mkRawLC (Defini Theory (foldr (mkTMField t m) [] fs)) (makeRef2 t)
+tmodel :: Fields -> SystemInformation -> TheoryModel -> Int -> LabelledContent
+tmodel fs m t = mkRawLC (Defini Theory (foldr (mkTMField t m) [] fs)) (makeRef2 t) 
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- QDefinition (called automatically by 'SCSSub' program)
-ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
+ddefn :: Fields -> SystemInformation -> DataDefinition -> Int -> LabelledContent
 ddefn fs m d = mkRawLC (Defini Data (foldr (mkDDField d m) [] fs)) (makeRef2 d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program)
-gdefn :: Fields -> SystemInformation -> GenDefn -> LabelledContent
+gdefn :: Fields -> SystemInformation -> GenDefn -> Int -> LabelledContent
 gdefn fs m g = mkRawLC (Defini General (foldr (mkGDField g m) [] fs)) (makeRef2 g)
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
-instanceModel :: Fields -> SystemInformation -> InstanceModel -> LabelledContent
+instanceModel :: Fields -> SystemInformation -> InstanceModel -> Int -> LabelledContent
 instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (makeRef2 i)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,

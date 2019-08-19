@@ -14,8 +14,8 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
   SSDSec(..), SSDSub(..), TConvention(..), TraceabilitySec(..), TraceConfig(..),
   TSIntro(..), TUIntro(..), UCsSec(..))
-import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
-  gdefn, tmodel, helperRefs)
+import Drasil.DocumentLanguage.Definitions (Fields, ddefn, derivation,
+  instanceModel, gdefn, tmodel, helperRefs)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 
@@ -276,8 +276,12 @@ mkSolChSpec si (SCSProg l) =
       SSD.assumpF $ mkEnumSimpleD $ map (`helperCI` si) ci
     mkSubSCS (Constraints end cs)  = SSD.datConF end cs
     mkSubSCS (CorrSolnPpties c cs) = SSD.propCorSolF c cs
-    derivHelper   i fs f ls = map mkParagraph i ++ concatMap (\x -> [LlC $ f fs si x, derivation x]) ls
-    noDerivHelper i fs f ls = map mkParagraph i ++ map (LlC . f fs si) ls
+    derivHelper :: (HasDerivation d, HasShortName d, Referable d) => [Sentence] -> Fields ->
+      (Fields -> SystemInformation -> d -> Int -> LabelledContent) -> [d] -> [Contents]
+    derivHelper i fs f ls = map mkParagraph i ++ (concatMap (\(x, n) -> [LlC $ f fs si x n, derivation x]) $ zip ls [1..])
+    noDerivHelper :: [Sentence] -> Fields ->
+      (Fields -> SystemInformation -> d -> Int -> LabelledContent) -> [d] -> [Contents]
+    noDerivHelper i fs f ls = map mkParagraph i ++ (map (\(x, n) -> LlC $ f fs si x n) $ zip ls [1..])
 
 helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a

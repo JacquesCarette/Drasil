@@ -54,9 +54,8 @@ mkParagraph x = UlC $ ulcc $ Paragraph x
 mkFig :: Reference -> RawContent -> Contents
 mkFig x y = LlC $ llcc x y
 
---Fixme: use mkRawLc or llcc?
-mkRawLC :: RawContent -> Reference -> LabelledContent
-mkRawLC x lb = llcc lb x
+mkRawLC :: RawContent -> Reference -> Int -> LabelledContent
+mkRawLC x lb = LblC lb x
 
 ---------------------------------------------------------------------------
 -- smart constructors and combinators for making instances of the above

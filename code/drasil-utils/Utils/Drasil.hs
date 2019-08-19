@@ -10,7 +10,7 @@ module Utils.Drasil (
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
   foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
   -- Misc
-  addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart,
+  addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart, conA,
   displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, eqnWSource, 
   fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
   itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,

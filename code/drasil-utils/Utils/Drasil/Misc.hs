@@ -1,6 +1,6 @@
 {-# Language TypeFamilies #-}
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
-  chgsStart, displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, 
+  chgsStart, conA, displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, 
   eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
   itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
@@ -16,6 +16,7 @@ import Control.Lens ((^.))
 import Data.Decimal (DecimalRaw, realFracToDecimal)
 import Data.Function (on)
 import Data.List (elem, sortBy, transpose)
+import Data.Maybe (fromMaybe)
 
 -- Sorts a list of HasSymbols by Symbol
 sortBySymbol :: HasSymbol a => [a] -> [a]
@@ -26,6 +27,10 @@ sortBySymbolTuple = sortBy (compareBySymbol `on` fst)
 
 compareBySymbol :: HasSymbol a => a -> a -> Ordering
 compareBySymbol a b = compsy (symbol a Equational) (symbol b Equational)
+
+-- | Takes an Idea and returns its abbreviation; throws an error if it doesn't have one.
+conA :: Idea a => a -> String
+conA x = fromMaybe (error $ "No abbreviation found for " ++ x ^. uid) (getA x)
 
 --Ideally this would create a reference to the equation too
 --Doesn't use equation concept so utils doesn't depend on data

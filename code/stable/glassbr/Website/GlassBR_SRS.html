@@ -684,7 +684,7 @@
                 <div class="list">
                   <p>
                     <div id="willBreakGS">
-                      Predict-Glass-Withstands-Explosion: Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
+                      Predict-Glass-Withstands-Explosion (GS1): Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
                     </div>
                   </p>
                 </div>
@@ -707,42 +707,42 @@
                 <div class="list">
                   <p>
                     <div id="assumpGT">
-                      glassType: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.
+                      glassType (A1): The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.
                     </div>
                   </p>
                   <p>
                     <div id="assumpGC">
-                      glassCondition: Following <a href=#astm2009>astm2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: <a href=#accAlteredGlass>UC: Accommodate-Altered-Glass</a>.)
+                      glassCondition (A2): Following <a href=#astm2009>astm2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: <a href=#accAlteredGlass>UC: Accommodate-Altered-Glass</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpES">
-                      explainScenario: This system only considers the external explosion scenario for its calculations. (RefBy: <a href=#calcInternalBlastRisk>LC: Calculate-Internal-Blask-Risk</a>.)
+                      explainScenario (A3): This system only considers the external explosion scenario for its calculations. (RefBy: <a href=#calcInternalBlastRisk>LC: Calculate-Internal-Blask-Risk</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSV">
-                      standardValues: The values provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a>, <a href=#DD:sdfTol>DD: sdfTol</a>, <a href=#DD:nFL>DD: nFL</a>, <a href=#DD:loadDurFactor>DD: loadDurFactor</a>, <a href=#DD:dimlessLoad>DD: dimlessLoad</a>, and <a href=#assumpLDFC>A: ldfConstant</a>.)
+                      standardValues (A4): The values provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a>, <a href=#DD:sdfTol>DD: sdfTol</a>, <a href=#DD:nFL>DD: nFL</a>, <a href=#DD:loadDurFactor>DD: loadDurFactor</a>, <a href=#DD:dimlessLoad>DD: dimlessLoad</a>, and <a href=#assumpLDFC>A: ldfConstant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpGL">
-                      glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: <a href=#DD:calofCapacity>DD: calofCapacity</a>, <a href=#DD:dimlessLoad>DD: dimlessLoad</a>, and <a href=#accMoreThanSingleLite>LC: Accomodate-More-than-Single-Lite</a>.)
+                      glassLite (A5): Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: <a href=#DD:calofCapacity>DD: calofCapacity</a>, <a href=#DD:dimlessLoad>DD: dimlessLoad</a>, and <a href=#accMoreThanSingleLite>LC: Accomodate-More-than-Single-Lite</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpBC">
-                      boundaryConditions: Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: <a href=#accMoreBoundaryConditions>LC: Accomodate-More-Boundary-Conditions</a>.)
+                      boundaryConditions (A6): Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: <a href=#accMoreBoundaryConditions>LC: Accomodate-More-Boundary-Conditions</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpRT">
-                      responseType: The response type considered in GlassBR is flexural. (RefBy: <a href=#considerMoreThanFlexGlass>LC: Consider-More-than-Flexure-Glass</a>.)
+                      responseType (A7): The response type considered in GlassBR is flexural. (RefBy: <a href=#considerMoreThanFlexGlass>LC: Consider-More-than-Flexure-Glass</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpLDFC">
-                      ldfConstant: With reference to <a href=#assumpSV>A: standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. (RefBy: <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a> and <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.)
+                      ldfConstant (A8): With reference to <a href=#assumpSV>A: standardValues</a>, the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. (RefBy: <a href=#varValsOfmkE>LC: Variable-Values-of-m,k,E</a> and <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.)
                     </div>
                   </p>
                 </div>
@@ -2107,32 +2107,32 @@
             <div class="list">
               <p>
                 <div id="inputGlassProps">
-                  Input-Glass-Props: Input the quantities from <a href=#Table:ReqInputs>Table:ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.
+                  Input-Glass-Props (FR1): Input the quantities from <a href=#Table:ReqInputs>Table:ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.
                 </div>
               </p>
               <p>
                 <div id="sysSetValsFollowingAssumps">
-                  System-Set-Values-Following-Assumptions: The system shall set the known values as described in <a href=#Table:ReqAssignments>Table:ReqAssignments</a>.
+                  System-Set-Values-Following-Assumptions (FR2): The system shall set the known values as described in <a href=#Table:ReqAssignments>Table:ReqAssignments</a>.
                 </div>
               </p>
               <p>
                 <div id="checkInputWithDataCons">
-                  Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Section: Data Constraints</a>. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
+                  Check-Input-with-Data_Constraints (FR3): The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Section: Data Constraints</a>. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
                 </div>
               </p>
               <p>
                 <div id="outputValsAndKnownQuants">
-                  Output-Values-and-Known-Quantities: Output the input quantities from <a href=#inputGlassProps>FR: Input-Glass-Props</a> and the known quantities from <a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>.
+                  Output-Values-and-Known-Quantities (FR4): Output the input quantities from <a href=#inputGlassProps>FR: Input-Glass-Props</a> and the known quantities from <a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>.
                 </div>
               </p>
               <p>
                 <div id="checkGlassSafety">
-                  Check-Glass-Safety: If <em>is-safePb &and; is-safeLR</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a> and <a href=#TM:isSafeLoad>TM: isSafeLoad</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
+                  Check-Glass-Safety (FR5): If <em>is-safePb &and; is-safeLR</em> (from <a href=#TM:isSafeProb>TM: isSafeProb</a> and <a href=#TM:isSafeLoad>TM: isSafeLoad</a>), output the message "For the given input parameters, the glass is considered safe." If the condition is false, then output the message "For the given input parameters, the glass is NOT considered safe."
                 </div>
               </p>
               <p>
                 <div id="outputQuants">
-                  Output-Quantities: Output the quantities from <a href=#Table:ReqOutputs>Table:ReqOutputs</a>.
+                  Output-Quantities (FR6): Output the quantities from <a href=#Table:ReqOutputs>Table:ReqOutputs</a>.
                 </div>
               </p>
             </div>
@@ -2363,28 +2363,30 @@
             <div class="list">
               <p>
                 <div id="correct">
-                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
+                  Correct (NFR1): The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
                 </div>
               </p>
               <p>
                 <div id="verifiable">
-                  Verifiable: The code is tested with complete verification and validation plan.
+                  Verifiable (NFR2): The code is tested with complete verification and validation plan.
                 </div>
               </p>
               <p>
                 <div id="understandable">
-                  Understandable: The code is modularized with complete module guide and module interface specification.
+                  Understandable (NFR3): The code is modularized with complete module guide and module interface specification.
                 </div>
               </p>
-              <p><div id="reusable">Reusable: The code is modularized.</div></p>
+              <p>
+                <div id="reusable">Reusable (NFR4): The code is modularized.</div>
+              </p>
               <p>
                 <div id="maintainable">
-                  Maintainable: The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+                  Maintainable (NFR5): The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
                 </div>
               </p>
               <p>
                 <div id="portable">
-                  Portable: The code is able to be run in different environments.
+                  Portable (NFR6): The code is able to be run in different environments.
                 </div>
               </p>
             </div>
@@ -2401,27 +2403,27 @@
         <div class="list">
           <p>
             <div id="calcInternalBlastRisk">
-              Calculate-Internal-Blask-Risk: <a href=#assumpES>A: explainScenario</a> - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
+              Calculate-Internal-Blask-Risk (LC1): <a href=#assumpES>A: explainScenario</a> - The system currently only calculates for external blast risk. In the future, calculations can be added for the internal blast risk.
             </div>
           </p>
           <p>
             <div id="varValsOfmkE">
-              Variable-Values-of-m,k,E: <a href=#assumpSV>A: standardValues</a>, <a href=#assumpLDFC>A: ldfConstant</a> - Currently, the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
+              Variable-Values-of-m,k,E (LC2): <a href=#assumpSV>A: standardValues</a>, <a href=#assumpLDFC>A: ldfConstant</a> - Currently, the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future, these values can be changed to variable inputs.
             </div>
           </p>
           <p>
             <div id="accMoreThanSingleLite">
-              Accomodate-More-than-Single-Lite: <a href=#assumpGL>A: glassLite</a> - The software may be changed to accommodate more than a single lite.
+              Accomodate-More-than-Single-Lite (LC3): <a href=#assumpGL>A: glassLite</a> - The software may be changed to accommodate more than a single lite.
             </div>
           </p>
           <p>
             <div id="accMoreBoundaryConditions">
-              Accomodate-More-Boundary-Conditions: <a href=#assumpBC>A: boundaryConditions</a> - The software may be changed to accommodate more boundary conditions than 4-sided support.
+              Accomodate-More-Boundary-Conditions (LC4): <a href=#assumpBC>A: boundaryConditions</a> - The software may be changed to accommodate more boundary conditions than 4-sided support.
             </div>
           </p>
           <p>
             <div id="considerMoreThanFlexGlass">
-              Consider-More-than-Flexure-Glass: <a href=#assumpRT>A: responseType</a> - The software may be changed to consider more than just flexure of the glass.
+              Consider-More-than-Flexure-Glass (LC5): <a href=#assumpRT>A: responseType</a> - The software may be changed to consider more than just flexure of the glass.
             </div>
           </p>
         </div>
@@ -2436,12 +2438,12 @@
         <div class="list">
           <p>
             <div id="predictWithstandOfCertDeg">
-              Predict-Withstanding-of-Certain-Degree: The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
+              Predict-Withstanding-of-Certain-Degree (UC1): The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
             </div>
           </p>
           <p>
             <div id="accAlteredGlass">
-              Accommodate-Altered-Glass: <a href=#assumpGC>A: glassCondition</a> requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
+              Accommodate-Altered-Glass (UC2): <a href=#assumpGC>A: glassCondition</a> requires that the glass is not altered in any way. Therefore, this cannot be used on altered glass.
             </div>
           </p>
         </div>

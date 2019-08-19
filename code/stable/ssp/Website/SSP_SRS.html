@@ -1017,17 +1017,17 @@
                 <div class="list">
                   <p>
                     <div id="identifyCritAndFS">
-                      Identify-Crit-and-FS: Identify the critical slip surface and the corresponding factor of safety.
+                      Identify-Crit-and-FS (GS1): Identify the critical slip surface and the corresponding factor of safety.
                     </div>
                   </p>
                   <p>
                     <div id="determineNormalF">
-                      Determine-Normal-Forces: Determine the interslice normal forces between each pair of vertical slices of the slope.
+                      Determine-Normal-Forces (GS2): Determine the interslice normal forces between each pair of vertical slices of the slope.
                     </div>
                   </p>
                   <p>
                     <div id="determineShearF">
-                      Determine-Shear-Forces: Determine the interslice shear forces between each pair of vertical slices of the slope.
+                      Determine-Shear-Forces (GS3): Determine the interslice shear forces between each pair of vertical slices of the slope.
                     </div>
                   </p>
                 </div>
@@ -1050,82 +1050,82 @@
                 <div class="list">
                   <p>
                     <div id="assumpSSC">
-                      Slip-Surface-Concave: The slip surface is concave with respect to the slope surface. The (<em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>) coordinates of a slip surface follow a concave up function. (RefBy: <a href=#IM:crtSlpId>IM: crtSlpId</a>.)
+                      Slip-Surface-Concave (A1): The slip surface is concave with respect to the slope surface. The (<em><b>x</b><sub>slip</sub></em>, <em><b>y</b><sub>slip</sub></em>) coordinates of a slip surface follow a concave up function. (RefBy: <a href=#IM:crtSlpId>IM: crtSlpId</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpFOS">
-                      Factor-of-Safety: The factor of safety is assumed to be constant across the entire slip surface. (RefBy: <a href=#GD:mobShr>GD: mobShr</a>.)
+                      Factor-of-Safety (A2): The factor of safety is assumed to be constant across the entire slip surface. (RefBy: <a href=#GD:mobShr>GD: mobShr</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSLH">
-                      Soil-Layer-Homogeneous: The soil mass is homogeneous, with consistent soil properties throughout. (RefBy: <a href=#GD:sliceWght>GD: sliceWght</a>, <a href=#GD:resShr>GD: resShr</a>, and <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.)
+                      Soil-Layer-Homogeneous (A3): The soil mass is homogeneous, with consistent soil properties throughout. (RefBy: <a href=#GD:sliceWght>GD: sliceWght</a>, <a href=#GD:resShr>GD: resShr</a>, and <a href=#LC_inhomogeneous>LC: Calculate-Inhomogeneous-Soil-Layers</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSP">
-                      Soil-Properties: The soil properties are independent of dry or saturated conditions, with the exception of unit weight. (RefBy: <a href=#GD:resShr>GD: resShr</a>.)
+                      Soil-Properties (A4): The soil properties are independent of dry or saturated conditions, with the exception of unit weight. (RefBy: <a href=#GD:resShr>GD: resShr</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSLI">
-                      Soil-Layers-Isotropic: The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. (RefBy: <a href=#GD:resShr>GD: resShr</a>.)
+                      Soil-Layers-Isotropic (A5): The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. (RefBy: <a href=#GD:resShr>GD: resShr</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpINSFL">
-                      Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. (RefBy: <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#GD:normShrR>GD: normShrR</a>, <a href=#IM:fctSfty>IM: fctSfty</a>, and <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.)
+                      Interslice-Norm-Shear-Forces-Linear (A6): Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. (RefBy: <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#GD:normShrR>GD: normShrR</a>, <a href=#IM:fctSfty>IM: fctSfty</a>, and <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpPSC">
-                      Plane-Strain-Conditions: The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making 2D analysis appropriate. (RefBy: <a href=#GD:srfWtrF>GD: srfWtrF</a>, <a href=#GD:sliceWght>GD: sliceWght</a>, <a href=#GD:resShr>GD: resShr</a>, <a href=#GD:effNormF>GD: effNormF</a>, and <a href=#GD:baseWtrF>GD: baseWtrF</a>.)
+                      Plane-Strain-Conditions (A7): The slope and slip surface extends far into and out of the geometry (<em>z</em> coordinate). This implies plane strain conditions, making 2D analysis appropriate. (RefBy: <a href=#GD:srfWtrF>GD: srfWtrF</a>, <a href=#GD:sliceWght>GD: sliceWght</a>, <a href=#GD:resShr>GD: resShr</a>, <a href=#GD:effNormF>GD: effNormF</a>, and <a href=#GD:baseWtrF>GD: baseWtrF</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpENSL">
-                      Effective-Norm-Stress-Large: The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. (RefBy: <a href=#TM:equilibrium>TM: equilibrium</a> and <a href=#UC_2donly>UC: 2D-Analysis-Only</a>.)
+                      Effective-Norm-Stress-Large (A8): The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. (RefBy: <a href=#TM:equilibrium>TM: equilibrium</a> and <a href=#UC_2donly>UC: 2D-Analysis-Only</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSBSBISL">
-                      Surface-Base-Slice-between-Interslice-Straight-Lines: The surface and base of a slice are approximated as straight lines. (RefBy: <a href=#GD:srfWtrF>GD: srfWtrF</a>, <a href=#GD:sliceWght>GD: sliceWght</a>, <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a>, <a href=#DD:slcHeight>DD: slcHeight</a>, <a href=#DD:angleB>DD: angleB</a>, <a href=#GD:baseWtrF>GD: baseWtrF</a>, and <a href=#DD:angleA>DD: angleA</a>.)
+                      Surface-Base-Slice-between-Interslice-Straight-Lines (A9): The surface and base of a slice are approximated as straight lines. (RefBy: <a href=#GD:srfWtrF>GD: srfWtrF</a>, <a href=#GD:sliceWght>GD: sliceWght</a>, <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a>, <a href=#DD:slcHeight>DD: slcHeight</a>, <a href=#DD:angleB>DD: angleB</a>, <a href=#GD:baseWtrF>GD: baseWtrF</a>, and <a href=#DD:angleA>DD: angleA</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpES">
-                      Edge-Slices: The interslice forces at the 0th and <em>n</em>th interslice interfaces are zero. (RefBy: <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:intsliceFs>IM: intsliceFs</a>, and <a href=#IM:fctSfty>IM: fctSfty</a>.)
+                      Edge-Slices (A10): The interslice forces at the 0th and <em>n</em>th interslice interfaces are zero. (RefBy: <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:intsliceFs>IM: intsliceFs</a>, and <a href=#IM:fctSfty>IM: fctSfty</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSF">
-                      Seismic-Force: There is no seismic force acting on the slope. (RefBy: <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:fctSfty>IM: fctSfty</a>, and <a href=#LC_seismic>LC: Calculate-Seismic-Force</a>.)
+                      Seismic-Force (A11): There is no seismic force acting on the slope. (RefBy: <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:fctSfty>IM: fctSfty</a>, and <a href=#LC_seismic>LC: Calculate-Seismic-Force</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpSL">
-                      Surface-Load: There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:fctSfty>IM: fctSfty</a>, and <a href=#LC_external>LC: Calculate-External-Force</a>.)
+                      Surface-Load (A12): There is no imposed surface load, and therefore no external forces, acting on the slope. (RefBy: <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:fctSfty>IM: fctSfty</a>, and <a href=#LC_external>LC: Calculate-External-Force</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpWIBE">
-                      Water-Intersects-Base-Edge: The water table only intersects the base of a slice at an edge of the slice. (RefBy: <a href=#GD:sliceWght>GD: sliceWght</a> and <a href=#GD:baseWtrF>GD: baseWtrF</a>.)
+                      Water-Intersects-Base-Edge (A13): The water table only intersects the base of a slice at an edge of the slice. (RefBy: <a href=#GD:sliceWght>GD: sliceWght</a> and <a href=#GD:baseWtrF>GD: baseWtrF</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpWISE">
-                      Water-Intersects-Surface-Edge: The water table only intersects the slope surface at the edge of a slice. (RefBy: <a href=#GD:srfWtrF>GD: srfWtrF</a> and <a href=#GD:sliceWght>GD: sliceWght</a>.)
+                      Water-Intersects-Surface-Edge (A14): The water table only intersects the slope surface at the edge of a slice. (RefBy: <a href=#GD:srfWtrF>GD: srfWtrF</a> and <a href=#GD:sliceWght>GD: sliceWght</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpNESSS">
-                      Negligible-Effect-Surface-Slope-Seismic: The effect of the slope of the surface of the soil on the seismic force is assumed to be negligible. (RefBy: <a href=#GD:momentEql>GD: momentEql</a>.)
+                      Negligible-Effect-Surface-Slope-Seismic (A15): The effect of the slope of the surface of the soil on the seismic force is assumed to be negligible. (RefBy: <a href=#GD:momentEql>GD: momentEql</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpHFSM">
-                      Hydrostatic-Force-Slice-Midpoint: The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. (RefBy: <a href=#GD:srfWtrF>GD: srfWtrF</a>, <a href=#GD:momentEql>GD: momentEql</a>, and <a href=#GD:baseWtrF>GD: baseWtrF</a>.)
+                      Hydrostatic-Force-Slice-Midpoint (A16): The resultant surface hydrostatic forces act into the midpoint of each slice surface and the resultant base hydrostatic forces act into the midpoint of each slice base. (RefBy: <a href=#GD:srfWtrF>GD: srfWtrF</a>, <a href=#GD:momentEql>GD: momentEql</a>, and <a href=#GD:baseWtrF>GD: baseWtrF</a>.)
                     </div>
                   </p>
                 </div>
@@ -4305,52 +4305,52 @@
             <div class="list">
               <p>
                 <div id="readAndStore">
-                  Read-and-Store: Read the inputs, shown in <a href=#Table:ReqInputs>Table:ReqInputs</a>, and store the data.
+                  Read-and-Store (FR1): Read the inputs, shown in <a href=#Table:ReqInputs>Table:ReqInputs</a>, and store the data.
                 </div>
               </p>
               <p>
                 <div id="verifyInput">
-                  Verify-Input: Verify that the input data lie within the physical constraints shown in <a href=#Sec:DataConstraints>Section: Data Constraints</a>.
+                  Verify-Input (FR2): Verify that the input data lie within the physical constraints shown in <a href=#Sec:DataConstraints>Section: Data Constraints</a>.
                 </div>
               </p>
               <p>
                 <div id="determineCritSlip">
-                  Determine-Critical-Slip-Surface: Determine the critical slip surface for the input slope, corresponding to the minimum factor of safety, by using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a> to calculate the factor of safety for a slip surface and using <a href=#IM:crtSlpId>IM: crtSlpId</a> to find the slip surface that minimizes it.
+                  Determine-Critical-Slip-Surface (FR3): Determine the critical slip surface for the input slope, corresponding to the minimum factor of safety, by using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a> to calculate the factor of safety for a slip surface and using <a href=#IM:crtSlpId>IM: crtSlpId</a> to find the slip surface that minimizes it.
                 </div>
               </p>
               <p>
                 <div id="verifyOutput">
-                  Verify-Output: Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
+                  Verify-Output (FR4): Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
                 </div>
               </p>
               <p>
                 <div id="displayInput">
-                  Display-Input: Display as output the user-supplied inputs listed in <a href=#Table:inputsToOutputTable>Table:inputsToOutputTable</a>.
+                  Display-Input (FR5): Display as output the user-supplied inputs listed in <a href=#Table:inputsToOutputTable>Table:inputsToOutputTable</a>.
                 </div>
               </p>
               <p>
                 <div id="displayGraph">
-                  Display-Graph: Display the critical slip surface of the 2D slope, as determined from <a href=#IM:crtSlpId>IM: crtSlpId</a>, graphically.
+                  Display-Graph (FR6): Display the critical slip surface of the 2D slope, as determined from <a href=#IM:crtSlpId>IM: crtSlpId</a>, graphically.
                 </div>
               </p>
               <p>
                 <div id="displayFS">
-                  Display-Factor-of-Safety: Display the value of the factor of safety for the critical slip surface, as determined from <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a>.
+                  Display-Factor-of-Safety (FR7): Display the value of the factor of safety for the critical slip surface, as determined from <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a>.
                 </div>
               </p>
               <p>
                 <div id="displayNormal">
-                  Display-Interslice-Normal-Forces: Using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a>, calculate and graphically display the interslice normal forces.
+                  Display-Interslice-Normal-Forces (FR8): Using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a>, calculate and graphically display the interslice normal forces.
                 </div>
               </p>
               <p>
                 <div id="displayShear">
-                  Display-Interslice-Shear-Forces: Using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a>, calculate and graphically display the interslice shear forces.
+                  Display-Interslice-Shear-Forces (FR9): Using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a>, calculate and graphically display the interslice shear forces.
                 </div>
               </p>
               <p>
                 <div id="writeToFile">
-                  Write-Results-To-File: Provide the option of writing the output result data, as given in <a href=#displayInput>FR: Display-Input</a>, <a href=#displayGraph>FR: Display-Graph</a>, <a href=#displayFS>FR: Display-Factor-of-Safety</a>, <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a>, and <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a>, to a file.
+                  Write-Results-To-File (FR10): Provide the option of writing the output result data, as given in <a href=#displayInput>FR: Display-Input</a>, <a href=#displayGraph>FR: Display-Graph</a>, <a href=#displayFS>FR: Display-Factor-of-Safety</a>, <a href=#displayNormal>FR: Display-Interslice-Normal-Forces</a>, and <a href=#displayShear>FR: Display-Interslice-Shear-Forces</a>, to a file.
                 </div>
               </p>
             </div>
@@ -4499,18 +4499,20 @@
             <div class="list">
               <p>
                 <div id="correct">
-                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
+                  Correct (NFR1): The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
                 </div>
               </p>
               <p>
                 <div id="understandable">
-                  Understandable: The code is modularized with complete module guide and module interface specification.
+                  Understandable (NFR2): The code is modularized with complete module guide and module interface specification.
                 </div>
               </p>
-              <p><div id="reusable">Reusable: The code is modularized.</div></p>
+              <p>
+                <div id="reusable">Reusable (NFR3): The code is modularized.</div>
+              </p>
               <p>
                 <div id="maintainable">
-                  Maintainable: The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+                  Maintainable (NFR4): The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
                 </div>
               </p>
             </div>
@@ -4527,17 +4529,17 @@
         <div class="list">
           <p>
             <div id="LC_inhomogeneous">
-              Calculate-Inhomogeneous-Soil-Layers: <a href=#assumpSLH>A: Soil-Layer-Homogeneous</a> - The system currently assumes the soil mass is homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
+              Calculate-Inhomogeneous-Soil-Layers (LC1): <a href=#assumpSLH>A: Soil-Layer-Homogeneous</a> - The system currently assumes the soil mass is homogeneous. In the future, calculations can be added for inconsistent soil properties throughout.
             </div>
           </p>
           <p>
             <div id="LC_seismic">
-              Calculate-Seismic-Force: <a href=#assumpSF>A: Seismic-Force</a> - The system currently assumes no seismic force. In the future, calculations can be added for the presence of seismic force.
+              Calculate-Seismic-Force (LC2): <a href=#assumpSF>A: Seismic-Force</a> - The system currently assumes no seismic force. In the future, calculations can be added for the presence of seismic force.
             </div>
           </p>
           <p>
             <div id="LC_external">
-              Calculate-External-Force: <a href=#assumpSL>A: Surface-Load</a> - The system currently assumes no external forces. In the future, calculations can be added for an imposed surface load on the slope.
+              Calculate-External-Force (LC3): <a href=#assumpSL>A: Surface-Load</a> - The system currently assumes no external forces. In the future, calculations can be added for an imposed surface load on the slope.
             </div>
           </p>
         </div>
@@ -4552,12 +4554,12 @@
         <div class="list">
           <p>
             <div id="UC_normshearlinear">
-              Normal-And-Shear-Linear-Only: Changes related to <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal forces and interslice shear forces.
+              Normal-And-Shear-Linear-Only (UC1): Changes related to <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal forces and interslice shear forces.
             </div>
           </p>
           <p>
             <div id="UC_2donly">
-              2D-Analysis-Only: <a href=#assumpENSL>A: Effective-Norm-Stress-Large</a> allows for 2D analysis with these models only because stress along the <em>z</em>-direction is zero. These models do not take into account stress in the <em>z</em>-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.
+              2D-Analysis-Only (UC2): <a href=#assumpENSL>A: Effective-Norm-Stress-Large</a> allows for 2D analysis with these models only because stress along the <em>z</em>-direction is zero. These models do not take into account stress in the <em>z</em>-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.
             </div>
           </p>
         </div>

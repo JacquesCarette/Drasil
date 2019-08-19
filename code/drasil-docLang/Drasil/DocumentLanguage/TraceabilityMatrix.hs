@@ -2,7 +2,7 @@ module Drasil.DocumentLanguage.TraceabilityMatrix where
 
 import Language.Drasil
 import Database.Drasil (ChunkDB, SystemInformation, UMap, _sysinfodb,
-  asOrderedList, citeDB, conA, conceptinsLookup, conceptinsTable, datadefnLookup,
+  asOrderedList, citeDB, conceptinsLookup, conceptinsTable, datadefnLookup,
   dataDefnTable, defResolve, gendefLookup, gendefTable, insmodelLookup,
   insmodelTable, labelledconLookup, labelledcontentTable, refbyTable, sectionLookup,
   sectionTable, theoryModelLookup, theoryModelTable, traceTable, traceLookup)

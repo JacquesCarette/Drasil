@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Database.Drasil.ChunkDB (ChunkDB(defTable), RefbyMap, TraceMap, UMap,
-  asOrderedList, cdb, collectUnits, conA, conceptMap, conceptInstanceMap,
+  asOrderedList, cdb, collectUnits, conceptMap, conceptInstanceMap,
   conceptinsLookup, conceptinsTable, dataDefnTable, datadefnLookup, defResolve,
   gendefLookup, gendefTable, generateRefbyMap, insmodelLookup, insmodelTable,
   labelledconLookup, labelledcontentTable, refbyLookup, refbyTable, sectionLookup,
@@ -60,9 +60,6 @@ termMap = cdbMap nw
 -- | Smart constructor for a 'ConceptMap'
 conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap = cdbMap cw
-
-conA :: Idea a => a -> String
-conA x = fromMaybe (error $ "No abbreviation found for " ++ x ^. uid) (getA x)
 
 -- | Smart constructor for a 'ConceptInstanceMap'
 conceptInstanceMap :: [ConceptInstance] -> ConceptInstanceMap

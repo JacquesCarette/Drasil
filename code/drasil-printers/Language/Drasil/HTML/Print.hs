@@ -41,7 +41,7 @@ import Language.Drasil.Printing.Helpers (comm, dot, paren, sufxer, sqbrac)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, spec)
-import Language.Drasil.TeX.Monad (runPrint, MathContext(Text, Math), D, toMath, PrintLaTeX(PL))
+import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 
 data OpenClose = Open | Close
 
@@ -55,9 +55,6 @@ build fn (Document t a c) =
   text "<!DOCTYPE html>" $$
   html (headTag (linkCSS fn $$ title (titleSpec t) $$
   text "<meta charset=\"utf-8\">" $$
-  text ("<script type=\"text/x-mathjax-config\">" ++
-    "MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['\\[','\\]']]});" ++
-    "</script>") $$
   text ("<script type=\"text/javascript\" async " ++
   "src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML\">" ++
   "</script>")) $$
@@ -67,7 +64,7 @@ build fn (Document t a c) =
 
 -- Helper for rendering a D from Latex print
 printMath :: D -> Doc
-printMath = (`runPrint` Text)
+printMath = (`runPrint` Math)
 
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: LayoutObj -> Doc
@@ -194,7 +191,8 @@ pExpr (Font Bold e)  = bold $ pExpr e
 pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- FIXME
 pExpr (Spc Thin)     = text "&#8239;"
 -- Uses TeX for Mathjax for all other exprs
-pExpr e              = printMath $ toMath $ TeX.pExpr e
+pExpr e              = mjDelimDisp $ printMath $ toMath $ TeX.pExpr e
+  where mjDelimDisp d = text "\\(" <> d <> text "\\)"
 -- Non-mathjax
 {-
 pExpr (Sqrt e)       = text "&radic;(" <> pExpr e <> text ")"

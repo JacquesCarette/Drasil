@@ -6,7 +6,6 @@
       Software Requirements Specification for Solar Water Heating Systems Incorporating PCM
     </title>
     <meta charset="utf-8">
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['\[','\]']]});</script>
     <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
   </head>
   <body>
@@ -1014,7 +1013,7 @@
                           <em>Q</em> is the change in thermal energy (latent heat energy).
                         </p>
                         <p class="paragraph">
-                          <em>Q(t) = &int;<sub>0</sub><sup>t</sup>$\frac{\,dQ\left(τ\right)}{\,dτ}$&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em>.
+                          <em>Q(t) = &int;<sub>0</sub><sup>t</sup>\(\frac{\,dQ\left(τ\right)}{\,dτ}\)&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em>.
                         </p>
                         <p class="paragraph">
                           <em>t</em> is the time elapsed, as long as the phase change is not complete.
@@ -1911,7 +1910,7 @@
                     </p>
                     \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
                     <p class="paragraph">
-                      Finally, factoring out <em>$\frac{1}{{τ_{\text{W}}}}$</em>, we are left with the governing ODE for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>:
+                      Finally, factoring out <em>\(\frac{1}{{τ_{\text{W}}}}\)</em>, we are left with the governing ODE for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>:
                     </p>
                     \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}+η \left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)\]
                   </div>
@@ -2271,7 +2270,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A: PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em>$\frac{2}{{h_{\text{min}}}}$</em>, where <em>h<sub>min</sub></em> is the thickness of a "sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A: PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em>\(\frac{2}{{h_{\text{min}}}}\)</em>, where <em>h<sub>min</sub></em> is the thickness of a "sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -2295,7 +2294,7 @@
                       <td><em>A<sub>P</sub></em></td>
                       <td><em>A<sub>P</sub>&thinsp;&gt;&thinsp;0</em></td>
                       <td>
-                        <em>V<sub>P</sub>&thinsp;&le;&thinsp;A<sub>P</sub>&thinsp;&le;&thinsp;$\frac{2}{{h_{\text{min}}}}$&#8239;V<sub>tank</sub></em>
+                        <em>V<sub>P</sub>&thinsp;&le;&thinsp;A<sub>P</sub>&thinsp;&le;&thinsp;\(\frac{2}{{h_{\text{min}}}}\)&#8239;V<sub>tank</sub></em>
                       </td>
                       <td><em>1.2</em> m<sup>2</sup></td>
                       <td>10<em>%</em></td>
@@ -2527,7 +2526,7 @@
               </p>
               <p>
                 <div id="findMass">
-                  Find-Mass: Use the inputs in <a href=#inputInitQuants>FR: Input-Initial-Quantities</a> to find the masses needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>, using <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = (V<sub>tank</sub>&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub> = (π&#8239;($\frac{D}{2}$)<sup>2</sup>&#8239;L&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub></em>, <em>m<sub>P</sub> = V<sub>P</sub>&#8239;ρ<sub>P</sub></em>, and <a href=#assumpVCN>A: Volume-Coil-Negligible</a>, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank.
+                  Find-Mass: Use the inputs in <a href=#inputInitQuants>FR: Input-Initial-Quantities</a> to find the masses needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>, using <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = (V<sub>tank</sub>&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub> = (π&#8239;(\(\frac{D}{2}\))<sup>2</sup>&#8239;L&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub></em>, <em>m<sub>P</sub> = V<sub>P</sub>&#8239;ρ<sub>P</sub></em>, and <a href=#assumpVCN>A: Volume-Coil-Negligible</a>, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank.
                 </div>
               </p>
               <p>

@@ -1,49 +1,49 @@
-module Drasil.SWHS.TMods (swhsTMods, consThermE, sensHtE, sensHtE_template, latentHtE, PhaseChange(Liquid)) where
+module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
+  nwtnCooling, sensHtE, sensHtETemplate, tMods) where
 
 import Language.Drasil
 import Control.Lens ((^.))
 import Theory.Drasil (TheoryModel, tm)
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (system)
-import Data.Drasil.Concepts.Math (equation, rOfChng)
+import Data.Drasil.Concepts.Math (equation, rate, rOfChng)
 import Data.Drasil.Concepts.Physics (mechEnergy)
-import Data.Drasil.Concepts.Thermodynamics (phaseChange, thermalEnergy,
-  heatTrans, lawConsEnergy)
+import Data.Drasil.Concepts.Thermodynamics (heatTrans, lawConsEnergy,
+  lawConvCooling, phaseChange, thermalEnergy)
 
 import Data.Drasil.Quantities.Math (gradient)
-import Data.Drasil.Quantities.PhysicalProperties (mass, density)
+import Data.Drasil.Quantities.PhysicalProperties (density, mass)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Quantities.Thermodynamics (temp, heatCapSpec,
-  latentHeat, meltPt, boilPt, sensHeat, heatCapSpec)
+import Data.Drasil.Quantities.Thermodynamics (boilPt, heatCapSpec,
+  htFlux, latentHeat, meltPt, sensHeat, temp)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma),
-  foldlList, foldlSent, isThe, sAnd)
-import Data.Drasil.SI_Units (joule)
-import Drasil.SWHS.Assumptions (assumpTEO)
+import Drasil.SWHS.Assumptions (assumpHTCC, assumpTEO)
 import Drasil.SWHS.Concepts (transient)
-import Drasil.SWHS.DataDefs (dd3HtFusion)
-import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
-  htCap_L, vol_ht_gen, thFluxVect)
+import Drasil.SWHS.DataDefs (ddMeltFrac)
+import Drasil.SWHS.References (incroperaEtAl2007)
+import Drasil.SWHS.Unitals (deltaT, htCapL, htCapS, htCapV, htTransCoeff,
+  meltFrac, tau, tempEnv, thFluxVect, volHtGen)
 
-swhsTMods :: [TheoryModel]
-swhsTMods = [consThermE, sensHtE, latentHtE]
+tMods :: [TheoryModel]
+tMods = [consThermE, sensHtE, latentHtE, nwtnCooling]
 
 -------------------------
 -- Theoretical Model 1 --
 -------------------------
 consThermE :: TheoryModel
-consThermE = tm consThermE_rc
-  [qw thFluxVect, qw gradient, qw vol_ht_gen, 
+consThermE = tm consThermERC
+  [qw thFluxVect, qw gradient, qw volHtGen, 
     qw density, qw heatCapSpec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [consThermERel] [] [consThemESrc] "consThermE" [consThermEdesc]
+  [] [consThermERel] [] [consThemESrc] "consThermE" consThermENotes
 
-consThermE_rc :: RelationConcept
-consThermE_rc = makeRC "consThermE_rc"
-  (nounPhraseSP "Conservation of thermal energy") consThermEdesc consThermERel 
+consThermERC :: RelationConcept
+consThermERC = makeRC "consThermERC"
+  (nounPhraseSP "Conservation of thermal energy") (lawConsEnergy ^. defn) consThermERel 
 
 consThermERel :: Relation
-consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
-  (sy density) * (sy heatCapSpec) * (pderiv (sy temp) time)
+consThermERel = negate (sy gradient) $. sy thFluxVect + sy volHtGen $=
+  sy density * sy heatCapSpec * pderiv (sy temp) time
 
 -- the second argument is a 'ShortName'...
 consThemESrc :: Reference
@@ -51,40 +51,33 @@ consThemESrc = makeURI "consThemESrc"
   "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" $
   shortname' "Fourier Law of Heat Conduction and Heat Equation"
 
-consThermEdesc :: Sentence
-consThermEdesc = foldlSent [
-  S "The above", phrase equation, S "gives the", phrase lawConsEnergy, S "for",
-  phrase transient, phrase heatTrans, S "in a material of", phrase heatCapSpec,
-  ch heatCapSpec, sParen (Sy (unit_symb heatCapSpec)) `sAnd` phrase density `sC`
-  ch density, sParen (Sy (unit_symb density)) `sC` S "where" +:+. 
-  foldlList Comma List [ch thFluxVect `isThe` phrase thFluxVect +:+ sParen (Sy (unit_symb thFluxVect)),
-  ch vol_ht_gen `isThe` phrase vol_ht_gen +:+ sParen (Sy (unit_symb vol_ht_gen)),
-  ch temp `isThe` phrase temp +:+ sParen (Sy (unit_symb temp)),
-  ch time +:+ S "is" +:+ phrase time +:+ sParen (Sy (unit_symb time)), ch gradient +:+
-  S "is the" +:+ (gradient ^. defn)], S "For this", phrase equation, S "to apply" `sC`
-  S "other forms of", phrase energy `sC` S "such as", phrase mechEnergy `sC`
-  S "are assumed to be negligible in the", phrase system, sParen (makeRef2S assumpTEO)]
+consThermENotes :: [Sentence]
+consThermENotes = map foldlSent [
+  [S "The above", phrase equation, S "gives the", phrase lawConsEnergy,
+   S "for", phrase transient, phrase heatTrans, S "in a given material"],
+  [S "For this", phrase equation, S "to apply" `sC` S "other forms" `sOf`
+   phrase energy `sC` S "such as", phrase mechEnergy `sC` S "are assumed",
+   S "to be negligible" `inThe` phrase system, sParen (makeRef2S assumpTEO)]]
 
 -------------------------
 -- Theoretical Model 2 --
 -------------------------
-
 sensHtE :: TheoryModel
-sensHtE = sensHtE_template AllPhases sensHtEdesc
+sensHtE = sensHtETemplate AllPhases sensHtEdesc
 
 data PhaseChange = AllPhases
                  | Liquid
 
-sensHtE_template :: PhaseChange -> Sentence -> TheoryModel
-sensHtE_template pc desc = tm (sensHtE_rc pc eqn desc)
-  [qw sensHeat, qw htCap_S, qw mass, 
-    qw deltaT, qw meltPt, qw temp, qw htCap_L, qw boilPt, qw htCap_V] ([] :: [ConceptChunk])
+sensHtETemplate :: PhaseChange -> Sentence -> TheoryModel
+sensHtETemplate pc desc = tm (sensHtERC pc eqn desc)
+  [qw sensHeat, qw htCapS, qw mass, 
+    qw deltaT, qw meltPt, qw temp, qw htCapL, qw boilPt, qw htCapV] ([] :: [ConceptChunk])
   [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
     eqn = sensHtEEqn pc
 
 
-sensHtE_rc :: PhaseChange -> Relation -> Sentence -> RelationConcept
-sensHtE_rc pc eqn desc = makeRC "sensHtE_rc" (nounPhraseSP ("Sensible heat energy" ++ case pc of
+sensHtERC :: PhaseChange -> Relation -> Sentence -> RelationConcept
+sensHtERC pc eqn desc = makeRC "sensHtERC" (nounPhraseSP ("Sensible heat energy" ++ case pc of
   Liquid -> " (no state change)"
   AllPhases -> "")) desc eqn
 
@@ -94,14 +87,14 @@ sensHtESrc = makeURI "sensHtESrc"
   shortname' "Definition of Sensible Heat"
 
 sensHtEEqn :: PhaseChange -> Relation
-sensHtEEqn pChange = (sy sensHeat) $= case pChange of
+sensHtEEqn pChange = sy sensHeat $= case pChange of
   Liquid -> liquidFormula
-  AllPhases -> case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
-      ((sy temp) $< (sy meltPt))), (liquidFormula, ((sy meltPt) $< (sy temp) $<
-      (sy boilPt))), ((sy htCap_V) * (sy mass) *
-      (sy deltaT), ((sy boilPt) $< (sy temp)))]
+  AllPhases -> incompleteCase [(sy htCapS * sy mass * sy deltaT,
+      sy temp $< sy meltPt), (liquidFormula, sy meltPt $< sy temp $<
+      sy boilPt), (sy htCapV * sy mass *
+      sy deltaT, sy boilPt $< sy temp)]
   where
-    liquidFormula = (sy htCap_L) * (sy mass) * (sy deltaT)
+    liquidFormula = sy htCapL * sy mass * sy deltaT
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 
@@ -109,27 +102,10 @@ sensHtEEqn pChange = (sy sensHeat) $= case pChange of
 -- were implemented incorrectly.
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
-  ch sensHeat `isThe` S "change in",
-  phrase sensHeat, phrase energy +:+. sParen (Sy (usymb joule)),
-  ch htCap_S `sC` ch htCap_L `sC` ch htCap_V, S "are the",
-  phrase htCap_S `sC` phrase htCap_L `sC` S "and", phrase htCap_V `sC`
-  S "respectively" +:+. sParen (Sy (unit_symb heatCapSpec)),
-  ch mass `isThe` phrase mass +:+. sParen (Sy (unit_symb mass)),
-  ch temp `isThe` phrase temp,
-  sParen (Sy (unit_symb temp)) `sC` S "and", ch deltaT `isThe`
-  phrase deltaT +:+. sParen (Sy (unit_symb deltaT)),
-  ch meltPt `sAnd` ch boilPt,
-  S "are the", phrase meltPt `sAnd` phrase boilPt `sC`
-  S "respectively" +:+. sParen (Sy (unit_symb temp)),
-  at_start sensHeat :+: S "ing occurs as long as the material does",
-  S "not reach a", phrase temp, S "where a" +:+
-  phrase phaseChange, S "occurs. A",
-  phrase phaseChange, S "occurs if",
-  ch temp :+: S "=" :+: ch boilPt,
-  S "or", ch temp :+: S "=" +:+. ch meltPt,
-  S "If this" `isThe` S "case, refer to",
-  (makeRef2S latentHtE) `sC` at_start latentHeat,
-  phrase energy]
+  atStart sensHeat :+: S "ing occurs as long as the material does not reach a",
+  phrase temp, S "where a", phrase phaseChange, S "occurs. A", phrase phaseChange,
+  S "occurs if" +:+. (E (sy temp $= sy boilPt) `sOr` E (sy temp $= sy meltPt)),
+  S "If this is the case" `sC` S "refer to", makeRef2S latentHtE]
  
 --How to have new lines in the description?
 --Can't have relation and eqn chunks together since they are called in a list
@@ -142,13 +118,13 @@ sensHtEdesc = foldlSent [
 -- Theoretical Model 3 --
 -------------------------
 latentHtE :: TheoryModel
-latentHtE = tm latentHtE_rc
+latentHtE = tm latentHtERC
   [qw latentHeat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [latHtEEqn] [] [latHtESrc] "latentHtE" [latentHtEdesc]
+  [] [latHtEEqn] [] [latHtESrc] "latentHtE" latentHtENotes
 
-latentHtE_rc :: RelationConcept
-latentHtE_rc = makeRC "latentHtE_rc"
-  (nounPhraseSP "Latent heat energy") latentHtEdesc latHtEEqn 
+latentHtERC :: RelationConcept
+latentHtERC = makeRC "latentHtERC"
+  (nounPhraseSP "Latent heat energy") (latentHeat ^. defn) latHtEEqn 
 
 latHtEEqn :: Relation
 latHtEEqn = apply1 latentHeat time $= 
@@ -160,22 +136,40 @@ latHtESrc :: Reference
 latHtESrc = makeURI "latHtESrc" "http://en.wikipedia.org/wiki/Latent_heat" $
   shortname' "Definition of Latent Heat"
 
-latentHtEdesc :: Sentence
-latentHtEdesc = foldlSent [
-  ch latentHeat `isThe` S "change in",
-  phrase thermalEnergy, sParen (Sy (usymb joule)) `sC`
-  phrase latentHeat +:+. phrase energy, 
-  E latHtEEqn `isThe` phrase rOfChng, S "of",
-  ch latentHeat, S "with respect to", phrase time,
-  ch tau +:+. sParen (Sy (unit_symb tau)), ch time `isThe`
-  phrase time, sParen (Sy (unit_symb time)),
-  S "elapsed, as long as the",
-  phrase phaseChange, S "is not complete. The status of",
-  S "the", phrase phaseChange,
-  S "depends on the", phrase melt_frac `sC`
-  (makeRef2S dd3HtFusion) :+: S ".",
-  ch meltPt `sAnd` ch boilPt, S "are the",
-  phrase meltPt `sAnd` phrase boilPt `sC`
-  S "respectively" +:+. sParen (Sy (unit_symb temp)),
-  at_start latentHeat :+: S "ing stops when all material has",
-  S "changed to the new phase"]
+latentHtENotes :: [Sentence]
+latentHtENotes = map foldlSent [
+  [ch latentHeat `isThe` S "change" `sIn` phrase thermalEnergy,
+   sParen (phrase latentHeat +:+ phrase energy)],
+  [E latHtEEqn `isThe` phrase rOfChng `sOf` ch latentHeat,
+   S "with respect to", phrase time, ch tau],
+  [ch time `isThe` phrase time, S "elapsed" `sC` S "as long as the",
+   phrase phaseChange, S "is not complete"],
+  [S "status" `ofThe'` phrase phaseChange, S "depends on the",
+   phrase meltFrac, sParen (S "from" +:+ makeRef2S ddMeltFrac)],
+  [atStart latentHeat :+: S "ing stops when all material has changed to the new phase"]]
+
+-------------------------
+-- Theoretical Model 4 --
+-------------------------
+nwtnCooling :: TheoryModel
+nwtnCooling = tm nwtnCoolingRC
+  [qw latentHeat, qw time, qw htTransCoeff, qw deltaT] ([] :: [ConceptChunk])
+  [] [nwtnCoolingEqn] [] [makeCiteInfo incroperaEtAl2007 $ Page [8]]
+  "nwtnCooling" nwtnCoolingNotes
+
+nwtnCoolingRC :: RelationConcept
+nwtnCoolingRC = makeRC "nwtnCoolingRC" (nounPhraseSP "Newton's law of cooling") 
+  EmptyS nwtnCoolingEqn -- nwtnCoolingL
+
+nwtnCoolingEqn :: Relation
+nwtnCoolingEqn = apply1 htFlux time $= sy htTransCoeff * apply1 deltaT time
+
+nwtnCoolingNotes :: [Sentence]
+nwtnCoolingNotes = map foldlSent [
+  [atStart lawConvCooling +:+. S "describes convective cooling from a surface" +:
+   S "The law is stated as", S "the", phrase rate `sOf` S "heat loss from a body" `sIs`
+   S "proportional to the difference in", plural temp, S "between the body and its surroundings"],
+  [ch htTransCoeff, S "is assumed to be independent" `sOf` ch temp,
+   sParen (S "from" +:+ makeRef2S assumpHTCC)],
+  [E (apply1 deltaT time $= apply1 temp time - apply1 tempEnv time) `isThe`
+   S "time-dependant thermal gradient between the environment and the object"]]

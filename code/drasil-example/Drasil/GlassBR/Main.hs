@@ -1,26 +1,34 @@
 module Main (main) where
 
-import Language.Drasil.Code (Choices(..), Comments(..), ConstraintBehaviour(..), 
-  ImplementationType(..), Lang(..), Logging(..), Structure(..))
+import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
+  ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
+  Structure(..), InputModule(..), AuxFile(..), Visibility(..))
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
-import Drasil.GlassBR.Body (glassBRCode, glassBRSrs, printSetting)
+import Drasil.GlassBR.Body (si, srs, printSetting)
+import Drasil.GlassBR.ModuleDefs (allMods)
 
-glassChoices :: Choices
-glassChoices = Choices {
+code :: CodeSpec
+code = codeSpec si choices allMods
+
+choices :: Choices
+choices = Choices {
   lang = [Python, Cpp, CSharp, Java],
   impType = Program,
   logFile = "log.txt",
-  logging = LogNone,
-  comments = CommentNone,
+  logging = LogAll,
+  comments = [CommentFunc, CommentClass, CommentMod],
+  dates = Hide,
   onSfwrConstraint = Exception,
   onPhysConstraint = Exception,
-  inputStructure = AsClass
+  inputStructure = Bundled,
+  inputModule = Separated,
+  auxFiles = [SampleInput] 
 }
   
 main :: IO()
 main = do
-  gen (DocSpec SRS "GlassBR_SRS")     glassBRSrs printSetting
-  gen (DocSpec Website "GlassBR_SRS") glassBRSrs printSetting
-  genCode glassChoices glassBRCode
+  gen (DocSpec SRS "GlassBR_SRS")     srs printSetting
+  gen (DocSpec Website "GlassBR_SRS") srs printSetting
+  genCode choices code

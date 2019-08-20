@@ -20,6 +20,12 @@ fi
 
 ci_export_funcs() {
   declare -f > "$ALL_FUNCTIONS_FILE"
+  echo $(shopt | grep -E "on$" | cut -f1 | sed -E "s/^([^ ]*) *$/-O \1/g") > "$SHELL_OPTS_FILE"
+}
+
+ci_retry () {
+  # Wraps travis_retry to allow it to retry entire command pipelines.
+  travis_retry "$SHELL" $(shopt | grep -E "on$" | cut -f1 | sed -E "s/^([^ ]*) *$/-O \1/g") -c "source \"$ALL_FUNCTIONS_FILE\"; $*"
 }
 
 ci_fstep() {

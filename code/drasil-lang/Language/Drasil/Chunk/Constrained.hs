@@ -1,14 +1,10 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Constrained (
-    ConstrainedChunk(..)
-  , ConstrConcept(..)
-  , cuc, cvc, constrained', cuc', constrainedNRV'
-  , cnstrw, cnstrw'
-  ) where
+module Language.Drasil.Chunk.Constrained (ConstrainedChunk(..), ConstrConcept(..),
+  cnstrw, cnstrw', constrained', constrainedNRV', cuc, cuc', cuc'', cvc) where
 
 import Control.Lens ((^.), makeLenses, view)
 
-import Language.Drasil.Chunk.Concept (cw)
+import Language.Drasil.Chunk.Concept (cw, dcc)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr)
 import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
 import Language.Drasil.Chunk.Unital (ucs)
@@ -22,6 +18,7 @@ import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr(..))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
+import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
 
 -- | ConstrainedChunks are 'Symbolic Quantities'
@@ -76,13 +73,13 @@ instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 instance MayHaveUnit   ConstrConcept where getUnit = getUnit . view defq
 
-constrained' :: (Concept c, Quantity c, MayHaveUnit c) =>
+constrained' :: (Concept c, MayHaveUnit c, Quantity c) =>
   c -> [Constraint] -> Expr -> ConstrConcept
-constrained' q cs rv = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) cs (Just rv)
+constrained' q cs rv = ConstrConcept (dqdWr q) cs (Just rv)
 
-constrainedNRV' :: (MayHaveUnit c, Concept c, Quantity c) =>
+constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) =>
   c -> [Constraint] -> ConstrConcept
-constrainedNRV' q cs = ConstrConcept (dqd' (cw q) (symbol q) (q ^. typ) (getUnit q)) cs Nothing
+constrainedNRV' q cs = ConstrConcept (dqdWr q) cs Nothing
 
 cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u
             -> Space -> [Constraint] -> Expr -> ConstrConcept
@@ -90,6 +87,11 @@ cuc' nam trm desc sym un space cs rv =
   ConstrConcept (dqd (cw (ucs nam trm desc sym space un)) sym space uu) cs (Just rv)
   where uu = unitWrapper un
 
+cuc'' :: (IsUnit u) => String -> NP -> String -> (Stage -> Symbol) -> u
+            -> Space -> [Constraint] -> Expr -> ConstrConcept
+cuc'' nam trm desc sym un space cs rv =
+  ConstrConcept (dqd' (dcc nam trm desc) sym space (Just uu)) cs (Just rv)
+  where uu = unitWrapper un
+
 cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
 cnstrw' c = ConstrConcept (dqdWr c) (c ^. constraints) (c ^. reasVal)
-

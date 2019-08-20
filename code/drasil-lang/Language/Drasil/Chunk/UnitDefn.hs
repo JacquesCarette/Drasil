@@ -1,11 +1,11 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.UnitDefn (
     UnitDefn(..)
-  , from_udefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$),(^$), new_unit
+  , fromUDefn, unitCon, makeDerU
+  , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
   , scale, shift
   , derUC, derUC', derUC''
-  , fund, fund', comp_unitdefn, derCUC, derCUC', derCUC''
+  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
   , IsUnit(getUnits)
   ) where
@@ -18,9 +18,9 @@ import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), HasUnitSymbol(usymb), IsUnit(udefn, getUnits))
 import Language.Drasil.NounPhrase (cn,cn',NP)
-import Language.Drasil.Symbol (Symbol(Atomic))
+import Language.Drasil.Symbol (Symbol(Label))
 import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift), 
-  comp_usymb, from_udefn, get_usymb, get_defn, UnitSymbol(BaseSI, DerivedSI, Defined))
+  compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
 import Language.Drasil.UID
 
 -- | for defining units
@@ -37,10 +37,10 @@ instance HasUID        UnitDefn where uid = vc . uid
 instance NamedIdea     UnitDefn where term   = vc . term
 instance Idea          UnitDefn where getA c = getA (c ^. vc)
 instance Definition    UnitDefn where defn = vc . defn
-instance Eq            UnitDefn where a == b = (usymb a) == (usymb b)
+instance Eq            UnitDefn where a == b = usymb a == usymb b
 instance ConceptDomain UnitDefn where cdom = cdom . view vc
-instance HasUnitSymbol UnitDefn where usymb = get_usymb . view cas
-instance IsUnit        UnitDefn where udefn = get_defn . view cas
+instance HasUnitSymbol UnitDefn where usymb = getUSymb . view cas
+instance IsUnit        UnitDefn where udefn = getDefn . view cas
                                       getUnits = view cu
 class MayHaveUnit u where
    getUnit :: u -> Maybe UnitDefn
@@ -66,16 +66,16 @@ derCUC' a b c s ue = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (usymb ue) (US
 -- symbol, and unit equation
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
 -- | Uses self-plural term
-derUC  a b c s u = UD (dcc a (cn b) c) (DerivedSI (US [(s,1)]) (from_udefn u) u) []
+derUC  a b c s u = UD (dcc a (cn b) c) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
 -- | Uses term that pluralizes by adding *s* to the end
-derUC' a b c s u = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (from_udefn u) u) []
+derUC' a b c s u = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
 
 derCUC'' :: String -> NP -> String -> Symbol -> UnitEquation -> UnitDefn
 derCUC'' a b c s ue = UD (dcc a b c) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) (getCu ue)
 -- | Create a derived unit chunk from an id, term (as noun phrase), definition, 
 -- symbol, and unit equation
 derUC'' :: String -> NP -> String -> Symbol -> UDefn -> UnitDefn
-derUC'' a b c s u = UD (dcc a b c) (DerivedSI (US [(s,1)]) (from_udefn u) u) []
+derUC'' a b c s u = UD (dcc a b c) (DerivedSI (US [(s,1)]) (fromUDefn u) u) []
 
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same string
@@ -115,31 +115,31 @@ u ^: i = UE (helperUnit u) (upow (usymb u))
 (/:) :: UnitDefn -> UnitDefn -> UnitEquation
 u1 /: u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE ((helperUnit u1) ++ (helperUnit u2)) (US $ l1 ++ map (second negate) l2)
+  UE (helperUnit u1 ++ helperUnit u2) (US $ l1 ++ map (second negate) l2)
 
 -- | Combinator for multiplying two units together
 (*:) :: UnitDefn -> UnitDefn -> UnitEquation
 u1 *: u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE ((helperUnit u1) ++ (helperUnit u2)) (US $ l1 ++ l2)
+  UE (helperUnit u1 ++ helperUnit u2) (US $ l1 ++ l2)
 
 -- | Combinator for multiplying a unit and a symbol
 (*$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 *$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE ((helperUnit u1) ++(getCu u2)) (US $ l1 ++ l2)
+  UE (helperUnit u1 ++ getCu u2) (US $ l1 ++ l2)
 
 -- | Combinator for dividing a unit and a symbol
 (/$) :: UnitDefn -> UnitEquation -> UnitEquation
 u1 /$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE ((helperUnit u1) ++ (getCu u2)) (US $ l1 ++ map (second negate) l2)
+  UE (helperUnit u1 ++ getCu u2) (US $ l1 ++ map (second negate) l2)
 
 -- | Combinator for mulitiplying two unit equations
 (^$) :: UnitEquation -> UnitEquation -> UnitEquation
 u1 ^$ u2 = let US l1 = usymb u1
                US l2 = usymb u2 in
-  UE ((getCu u1)++(getCu u2)) (US $ l1 ++ l2)
+  UE (getCu u1 ++ getCu u2) (US $ l1 ++ l2)
  
 -- | Combinator for scaling one unit by some number
 scale :: IsUnit s => Double -> s -> UDefn
@@ -150,17 +150,17 @@ shift :: IsUnit s => Double -> s -> UDefn
 shift a b = UShift a (usymb b)
 
 -- | Smart constructor for new derived units from existing units.
-new_unit :: String -> UnitEquation -> UnitDefn
-new_unit s = makeDerU (unitCon s)
+newUnit :: String -> UnitEquation -> UnitDefn
+newUnit s = makeDerU (unitCon s)
 
 -- | Smart constructor for a "fundamental" unit
 fund :: String -> String -> String -> UnitDefn
-fund nam desc sym = UD (dcc nam (cn' nam) desc) (BaseSI $ US [(Atomic sym, 1)]) [nam]
+fund nam desc sym = UD (dcc nam (cn' nam) desc) (BaseSI $ US [(Label sym, 1)]) [nam]
 
 -- | Variant of the above, useful for degree
 fund' :: String -> String -> Symbol -> UnitDefn
 fund' nam desc sym = UD (dcc nam (cn' nam) desc) (BaseSI $ US [(sym, 1)]) [nam]
 
 -- | We don't want an Ord on units, but this still allows us to compare them
-comp_unitdefn :: UnitDefn -> UnitDefn -> Ordering
-comp_unitdefn a b = comp_usymb (usymb a) (usymb b)
+compUnitDefn :: UnitDefn -> UnitDefn -> Ordering
+compUnitDefn a b = compUSymb (usymb a) (usymb b)

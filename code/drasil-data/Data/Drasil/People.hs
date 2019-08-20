@@ -10,7 +10,7 @@ spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
   mCampidelli,   dmWiess, sPalmer, scottSmith, bKarchewski, rHuston, 
-  hJosephs, nrMorgenstern, vePrice :: Person
+  hJosephs, nrMorgenstern, vePrice, samCrawford, rcHibbeler, olu, rodPierce :: Person
   
 pjAgerfalk    = person    "PJ"                        "Agerfalk"
 daAruliah     = personWM  "D"         ["A"]           "Aruliah"
@@ -23,6 +23,7 @@ grChen        = personWM' "G"         ["R"]           "Chen"
 ymChen        = person'   "Yun-Min"                   "Chen"
 pjCleall      = personWM  "Peter"     ["John"]        "Cleall"
 pcClements    = personWM  "P"         ["C"]           "Clements" -- The Modular Structure of Complex Systems ICSE '84
+samCrawford   = personWM  "Samuel"    ["J"]           "Crawford"
 mDavis        = person    "Matt"                      "Davis"
 dDewitt       = personWM  "D"         ["P"]           "Dewitt"
 henryFrankis  = person    "Henry"                     "Frankis"
@@ -31,6 +32,7 @@ rGuy          = personWM  "Richard"   ["T"]           "Guy"
 pGuo          = person    "Peijun"                    "Guo"
 shdHaddock    = personWM  "Steven"    ["H", "D"]      "Haddock"
 alex          = person    "Alex"                      "Halliwushka"
+rcHibbeler    = personWM' "R"         ["C"]           "Hibbeler"
 rHuston       = person    "Ronald"                    "Huston"
 nChueHong     = personWM  "Neil"      ["P"]           "Chue Hong"
 kdHuff        = personWM  "Kathryn"   ["D"]           "Huff"
@@ -74,3 +76,5 @@ pWilson       = person    "Paul"                      "Wilson" -- Best Practices
 tltZhan       = personWM  "Tony"      ["L","T"]       "Zhan"
 dyZhu         = personWM' "D"         ["Y"]           "Zhu"
 dmWiess       = personWM  ""          []              "Wiess"
+olu           = person    "Olu"                       "Owojaiye"
+rodPierce     = person    "Rod"                       "Pierce"

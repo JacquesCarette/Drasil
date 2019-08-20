@@ -1,31 +1,31 @@
-module Drasil.SWHS.Goals (swhsGoals, waterTempGS, pcmTempGS, waterEnergyGS, 
+module Drasil.SWHS.Goals (goals, waterTempGS, pcmTempGS, waterEnergyGS, 
   pcmEnergyGS) where
 
 import Language.Drasil
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import Data.Drasil.Concepts.Physics (time)
-import Data.Drasil.SentenceStructures (foldlSent)
 
-import Drasil.SWHS.Unitals (temp_W, temp_PCM, w_E, pcm_E)
+import Drasil.SWHS.Unitals (tempW, tempPCM, watE, pcmE)
 
-swhsGoals :: [ConceptInstance]
-swhsGoals = [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]
+goals :: [ConceptInstance]
+goals = [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]
 
 waterTempGS :: ConceptInstance
-waterTempGS = cic "waterTempGS" (goalState temp_W) "Predict-Water-Temperature"
+waterTempGS = cic "waterTempGS" (goalState tempW) "Predict-Water-Temperature"
   goalStmtDom
 
 pcmTempGS :: ConceptInstance
-pcmTempGS = cic "pcmTempGS" (goalState temp_PCM) "Predict-PCM-Temperature" 
+pcmTempGS = cic "pcmTempGS" (goalState tempPCM) "Predict-PCM-Temperature" 
   goalStmtDom
 
 waterEnergyGS :: ConceptInstance
-waterEnergyGS = cic "waterEnergyGS" (goalState w_E) "Predict-Water-Energy"
+waterEnergyGS = cic "waterEnergyGS" (goalState watE) "Predict-Water-Energy"
   goalStmtDom
 
 pcmEnergyGS :: ConceptInstance
-pcmEnergyGS = cic "pcmEnergyGS" (goalState pcm_E) "Predict-PCM-Energy" 
+pcmEnergyGS = cic "pcmEnergyGS" (goalState pcmE) "Predict-PCM-Energy" 
   goalStmtDom
 
 goalState :: NamedIdea varTerm => varTerm -> Sentence

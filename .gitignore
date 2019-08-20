@@ -29,8 +29,16 @@ desktop.ini
 /code/Docs
 /code/build
 /code/logs
+/code/graphs
+/code/deploy
+/code/website/_cache
+/code/website/_site
 *.synctex.gz
 *.pyc
 __pycache__
 *.class
 .drasil-min-stack-ver
+*/Projectile/output.txt
+*.fls
+*.fdb_latexmk
+stack.yaml.lock

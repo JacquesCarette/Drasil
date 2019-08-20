@@ -1,178 +1,159 @@
-module Drasil.SWHS.GenDefs (swhsGDs, nwtnCooling, rocTempSimp,
-  roc_temp_simp_deriv, nwtnCooling_desc, rocTempSimpRC, rocTempSimp_desc) where
-
-import Prelude hiding (sin, cos, tan)
+module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
+  rocTempSimp, rocTempSimpDeriv, rocTempSimpRC) where
 
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, gdNoRefs)
+import Utils.Drasil
 
-import Data.Drasil.Concepts.Math (equation, rate, rOfChng, unit_)
+import Control.Lens ((^.))
+
+import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)
 
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass, density)
 import Data.Drasil.Quantities.Physics as QP (time)
-import Data.Drasil.Quantities.Thermodynamics as QT (htFlux, heatCapSpec,
-  temp)
+import Data.Drasil.Quantities.Thermodynamics as QT (heatCapSpec, temp)
 
-import Data.Drasil.SentenceStructures (FoldType(List), SepType(Comma), 
-  foldlList, foldlSent, foldlSentCol, isThe, ofThe, sAnd)
-import Data.Drasil.Units.Thermodynamics (thermalFlux)
-import Data.Drasil.Utils (unwrap, weave)
-
-import Drasil.SWHS.Assumptions (assumpHTCC, assumpCWTAT, assumpTPCAV,
-  assumpDWPCoV, assumpSHECoV)
-import Drasil.SWHS.Concepts (gauss_div)
-import Drasil.SWHS.References (incroperaEtAl2007)
-import Drasil.SWHS.TMods (consThermE)
-import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
-  out_SA, in_SA, ht_flux_in, ht_flux_out, htTransCoeff, thFluxVect)
+import Drasil.SWHS.Assumptions (assumpCWTAT, assumpLCCCW, assumpLCCWP,
+  assumpTPCAV, assumpDWPCoV, assumpSHECoV, assumpTHCCoT)
+import Drasil.SWHS.Concepts (coil, gaussDiv, phaseChangeMaterial)
+import Drasil.SWHS.References (koothoor2013)
+import Drasil.SWHS.TMods (consThermE, nwtnCooling)
+import Drasil.SWHS.Unitals (coilHTC, htFluxC, htFluxIn, htFluxOut, htFluxP,
+  inSA, outSA, pcmHTC, tempC, tempPCM, tempW, thFluxVect, volHtGen)
 
 ---------------------------
 --  General Definitions  --
 ---------------------------
 
---FIXME: swhsGDs, nwtnCoolingGD, and rocTempSimpGD were added--
+--FIXME: genDefs, nwtnCoolingGD, and rocTempSimpGD were added--
 --since referencing implementation for RelationConcept hasn't--
 --stabilized yet (since RelationConcept isn't an instance of --
 --the Referable class.                                       --
-swhsGDs :: [GenDefn]
-swhsGDs = [nwtnCooling, rocTempSimp] 
+genDefs :: [GenDefn]
+genDefs = [rocTempSimp, htFluxWaterFromCoil, htFluxPCMFromWater] 
 
--- FIXME: page reference
-nwtnCooling, rocTempSimp :: GenDefn
-nwtnCooling = gd nwtnCoolingRC (Just thermalFlux) ([] :: Derivation) 
-  [makeCite incroperaEtAl2007 {- +:+ sParen (S "pg. 8") -}] "nwtnCooling" [nwtnCooling_desc]
+rocTempSimp :: GenDefn
+rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn)
+  (Just $ rocTempSimpDeriv rocTempDerivConsFlxSWHS
+   [assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV])
+  "rocTempSimp" [{-Notes-}]
 
-rocTempSimp = gdNoRefs rocTempSimpRC (Nothing :: Maybe UnitDefn) roc_temp_simp_deriv
-                 "rocTempSimp" [rocTempSimp_desc]
-
---
-
-nwtnCoolingRC :: RelationConcept
-nwtnCoolingRC = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
-  nwtnCooling_desc nwtnCooling_rel -- nwtnCoolingL
-
-nwtnCooling_rel :: Relation
-nwtnCooling_rel = apply1 htFlux QP.time $= sy htTransCoeff *
-  apply1 deltaT QP.time
-
-nwtnCooling_desc :: Sentence
-nwtnCooling_desc = foldlSent [at_start lawConvCooling +:+.
-  S "describes convective cooling from a surface" +:
-  S "The law is stated as", S "the", phrase rate,
-  S "of heat loss from a body is proportional to the",
-  S "difference in", plural temp, S "between the body" +:+.
-  S "and its surroundings", E (apply1 thFluxVect QP.time) `isThe`
-  S "thermal flux" +:+. sParen (Sy $ unit_symb thFluxVect),
-  ch htTransCoeff `isThe` S "heat transfer coefficient" `sC`
-  S "assumed independant of", ch QT.temp, sParen (makeRef2S assumpHTCC) +:+.
-  sParen (Sy $ unit_symb htTransCoeff), E (apply1 deltaT QP.time $= 
-  apply1 temp QP.time - apply1 temp_env QP.time) `isThe` 
-  S "time-dependant thermal gradient between the environment and the object",
-  sParen (Sy $ unit_symb deltaT)]
-
---
 rocTempSimpRC :: RelationConcept
-rocTempSimpRC = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") rocTempSimp_desc rocTempSimp_rel -- rocTempSimpL
+rocTempSimpRC = makeRC "rocTempSimpRC" (nounPhraseSP $ "Simplified rate " ++
+  "of change of temperature") EmptyS rocTempSimpRel
 
-rocTempSimp_rel :: Relation
-rocTempSimp_rel = (sy QPP.mass) * (sy QT.heatCapSpec) *
-  deriv (sy QT.temp) QP.time $= sy ht_flux_in * sy in_SA -
-  sy ht_flux_out * sy out_SA + sy vol_ht_gen * sy QPP.vol
+rocTempSimpRel :: Relation
+rocTempSimpRel = sy QPP.mass * sy QT.heatCapSpec *
+  deriv (sy QT.temp) QP.time $= sy htFluxIn * sy inSA -
+  sy htFluxOut * sy outSA + sy volHtGen * sy QPP.vol
 
-rocTempSimp_desc :: Sentence
-rocTempSimp_desc = foldlSent [S "The basic", phrase equation,
-  S "governing the", phrase rOfChng, S "of", phrase temp `sC`
-  S "for a given", phrase QPP.vol, ch QPP.vol `sC` S "with" +:+.
-  phrase QP.time, ch QPP.mass `isThe` phrase QPP.mass +:+.
-  sParen (Sy $ unit_symb QPP.mass), ch QT.heatCapSpec `isThe` 
-  phrase QT.heatCapSpec +:+. sParen (Sy $ unit_symb QT.heatCapSpec),
-  ch temp `isThe` phrase temp, sParen (Sy $ unit_symb temp) `sAnd`
-  ch QP.time `isThe` phrase QP.time +:+. sParen (Sy $ unit_symb QP.time),
-  ch ht_flux_in `sAnd` ch ht_flux_out, S "are the in and out heat",
-  S "transfer rates, respectively" +:+. sParen (Sy $ unit_symb QT.htFlux),
-  ch in_SA `sAnd` ch out_SA, S "are the surface areas over which the",
-  S "heat is being transferred in and out, respectively" +:+.
-  sParen (unwrap $ getUnit pcm_SA), ch vol_ht_gen `isThe`
-  S "volumetric heat generated" +:+. sParen (Sy $ unit_symb vol_ht_gen),
-  ch QPP.vol `isThe` phrase QPP.vol, sParen (Sy $ unit_symb QPP.vol)]
+----
 
----------------------------------------
---  General Definitions  Derivation  --
----------------------------------------
+htFluxWaterFromCoil :: GenDefn
+htFluxWaterFromCoil = gd htFluxWaterFromCoilRC (getUnit htFluxC) Nothing
+  [makeCite koothoor2013] "htFluxWaterFromCoil"
+  [newtonLawNote htFluxC assumpLCCCW coil, makeRef2S assumpTHCCoT]
 
-roc_temp_simp_deriv :: Derivation
-roc_temp_simp_deriv =
-  S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+
-    phrase temp +:+ S ":" :
-  weave [roc_temp_simp_deriv_sentences, map E roc_temp_simp_deriv_eqns]
+htFluxWaterFromCoilRC :: RelationConcept
+htFluxWaterFromCoilRC = makeRC "htFluxWaterFromCoilRC" (htFluxC ^. term)
+  EmptyS htFluxWaterFromCoilRel
 
-roc_temp_simp_deriv_sentences :: [Sentence]
-roc_temp_simp_deriv_sentences = map foldlSentCol [
-  s4_2_3_desc1 consThermE vol,
-  s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
-  s4_2_3_desc3 vol vol_ht_gen,
-  s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heatCapSpec
-    QT.temp vol [makeRef2S assumpCWTAT, makeRef2S assumpTPCAV,
-                 makeRef2S assumpDWPCoV, makeRef2S assumpSHECoV],
-  s4_2_3_desc5 density mass vol]
+htFluxWaterFromCoilRel :: Relation
+htFluxWaterFromCoilRel = sy htFluxC $= sy coilHTC * (sy tempC - apply1 tempW time)
 
-s4_2_3_desc1 :: (HasShortName x, Referable x) => x -> UnitalChunk -> [Sentence]
-s4_2_3_desc1 t1c vo =
-  [S "Integrating", makeRef2S t1c, S "over a", phrase vo, sParen (ch vo) `sC` S "we have"]
+--Can't include info in description beyond definition of variables?
+----
 
-s4_2_3_desc2 :: (NamedIdea b, HasSymbol b) => ConceptChunk -> b -> UnitalChunk -> UnitalChunk ->
-  DefinedQuantityDict -> ConceptChunk -> [Sentence]
-s4_2_3_desc2 cchn su vo tfv unv un =
-  [S "Applying", titleize cchn, S "to the first term over",
-  (phrase su +:+ ch su `ofThe` phrase vo) `sC` S "with",
-  ch tfv, S "as the", phrase tfv, S "for the",
-  phrase su `sAnd` ch unv, S "as a", phrase un,
-  S "outward", phrase unv, S "for a", phrase su]
+htFluxPCMFromWater :: GenDefn
+htFluxPCMFromWater = gd htFluxPCMFromWaterRC (getUnit htFluxP) Nothing
+  [makeCite koothoor2013] "htFluxPCMFromWater"
+  [newtonLawNote htFluxP assumpLCCWP phaseChangeMaterial]
 
-s4_2_3_desc3 :: UnitalChunk -> UnitalChunk -> [Sentence]
-s4_2_3_desc3 vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
-  phrase vhg, S "is assumed constant. Then (1) can be written as"]
+htFluxPCMFromWaterRC :: RelationConcept
+htFluxPCMFromWaterRC = makeRC "htFluxPCMFromWaterRC" (htFluxP ^. term)
+  EmptyS htFluxPCMFromWaterRel
 
-s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
-  UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
-  [Sentence] -> [Sentence]
-s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", ch hfi `sC`
-  ch hfo `sC` ch iS `sC` S "and", ch oS, S "are explained in" +:+.
-  makeRef2S rocTempSimp, S "Assuming", ch den `sC` ch hcs `sAnd` ch te,
-  S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  (foldlList Comma List assumps) `sC` S "we have"]
+htFluxPCMFromWaterRel :: Relation
+htFluxPCMFromWaterRel = sy htFluxP $= sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
 
-s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
-s4_2_3_desc5 den ma vo = [S "Using the fact that", ch den :+: S "=" :+:
-  ch ma :+: S "/" :+: ch vo `sC` S "(2) can be written as"]
+newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
+newtonLawNote u a c = foldlSent [ch u `sIs` S "found by assuming that",
+  phrase lawConvCooling, S "applies" +:+. sParen (makeRef2S a), S "This law",
+  sParen (S "defined" `sIn` makeRef2S nwtnCooling) `sIs` S "used on",
+  phrase surface `ofThe` phrase c]
 
-s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
+--------------------------------------
+--  General Definitions Derivation  --
+--------------------------------------
 
-s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
+rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
+rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phrase rOfChng `sOf` phrase temp)
+  (weave [rocTempSimpDerivSent s a, map E rocTempSimpDerivEqns])
 
-s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
-  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
-  (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
+rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
+rocTempSimpDerivSent s a = map foldlSentCol [rocTempDerivInteg, rocTempDerivGauss,
+  rocTempDerivArbVol, rocTempDerivConsFlx s a, rocTempDerivDens]
 
-s4_2_3_eq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heatCapSpec) * pderiv (sy QT.temp) time))
+rocTempDerivInteg :: [Sentence]
+rocTempDerivInteg = [S "Integrating", makeRef2S consThermE, S "over a",
+  phrase vol, sParen (ch vol) `sC` S "we have"]
 
-s4_2_3_eq4 = (sy density) * (sy QT.heatCapSpec) * (sy vol) * deriv
-  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
-  (sy out_SA) + (sy vol_ht_gen) * (sy vol)
+rocTempDerivGauss :: [Sentence]
+rocTempDerivGauss = [S "Applying", titleize gaussDiv, S "to the first term over",
+  (phrase surface +:+ ch surface `ofThe` phrase vol) `sC` S "with",
+  ch thFluxVect, S "as the", phrase thFluxVect, S "for the",
+  phrase surface `sAnd` ch uNormalVect, S "as a", phrase unit_,
+  S "outward", phrase uNormalVect, S "for a", phrase surface]
 
-s4_2_3_eq5 = (sy mass) * (sy QT.heatCapSpec) * deriv (sy QT.temp)
-  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
-  * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
+rocTempDerivArbVol :: [Sentence]
+rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol, S "The",
+  phrase volHtGen, S "is assumed constant. Then", eqN 1, S "can be written as"]
 
-roc_temp_simp_deriv_eqns :: [Expr]
-roc_temp_simp_deriv_eqns = [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4,
-  s4_2_3_eq5]
+rocTempDerivConsFlx :: Sentence -> [ConceptInstance] -> [Sentence]
+rocTempDerivConsFlx s assumps = [S "Where", 
+  foldlList Comma List (map ch [htFluxIn, htFluxOut, inSA, outSA]),
+  S "are explained in" +:+. makeRef2S rocTempSimp, s, S "Assuming", 
+  foldlList Comma List (map ch [density, QT.heatCapSpec, QT.temp]),
+  S "are constant over the", phrase vol `sC` S "which is true in our case by",
+  foldlList Comma List (map makeRef2S assumps) `sC` S "we have"]
+
+rocTempDerivConsFlxSWHS :: Sentence
+rocTempDerivConsFlxSWHS = foldlSent [S "The integral over the", phrase surface,
+  S "could be simplified because the thermal flux is assumed constant over",
+  ch inSA `sAnd` ch outSA `sAnd` E 0, S "on all other" +:+. plural surface,
+  S "Outward flux is considered positive"]
+
+rocTempDerivDens :: [Sentence]
+rocTempDerivDens = [S "Using the fact that", ch density :+: S "=" :+: ch mass :+:
+  S "/" :+: ch vol `sC` eqN 2, S "can be written as"]
+
+rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq,
+  rocTempDerivConsFlxEq, rocTempDerivDensEq :: Expr
+
+rocTempDerivIntegEq = negate (intAll (eqSymb vol) (sy gradient $. sy thFluxVect)) +
+  intAll (eqSymb vol) (sy volHtGen) $=
+  intAll (eqSymb vol) (sy density
+  * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
+
+rocTempDerivGaussEq = negate (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalVect)) +
+  intAll (eqSymb vol) (sy volHtGen) $= 
+  intAll (eqSymb vol)
+  (sy density * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
+
+rocTempDerivArbVolEq = sy htFluxIn * sy inSA - sy htFluxOut *
+  sy outSA + sy volHtGen * sy vol $= 
+  intAll (eqSymb vol) (sy density * sy QT.heatCapSpec * pderiv (sy QT.temp) time)
+
+rocTempDerivConsFlxEq = sy density * sy QT.heatCapSpec * sy vol * deriv
+  (sy QT.temp) time $= sy htFluxIn * sy inSA - sy htFluxOut *
+  sy outSA + sy volHtGen * sy vol
+
+rocTempDerivDensEq = sy mass * sy QT.heatCapSpec * deriv (sy QT.temp)
+  time $= sy htFluxIn * sy inSA - sy htFluxOut
+  * sy outSA + sy volHtGen * sy vol
+
+rocTempSimpDerivEqns :: [Expr]
+rocTempSimpDerivEqns = [rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq, rocTempDerivConsFlxEq,
+  rocTempDerivDensEq]

@@ -1,7 +1,7 @@
 module Data.Drasil.Units.Thermodynamics where
 
 import Language.Drasil (dccWDS, cnIES, cn, cn', cn'', dcc, Sentence(S),
-  UnitDefn, (/:), (*:), (/$), new_unit, makeDerU)
+  UnitDefn, (/:), (*:), (/$), newUnit, makeDerU)
 
 import Data.Drasil.SI_Units (centigrade, joule, kilogram, watt, m_2, m_3)
 
@@ -18,7 +18,7 @@ thermalFlux = makeDerU (dccWDS "thermalFlux" (cn'' "heat flux")
   (S "the rate of heat energy transfer per unit area")) (watt /: m_2)
 
 heatTransferCoef :: UnitDefn
-heatTransferCoef = new_unit "heat transfer coefficient" $ (watt /$ (m_2 *: centigrade))
+heatTransferCoef = newUnit "heat transfer coefficient" (watt /$ (m_2 *: centigrade))
 
 volHtGenU :: UnitDefn
 volHtGenU = makeDerU (dcc "volHtGenU" (cn "volumetric heat generation")

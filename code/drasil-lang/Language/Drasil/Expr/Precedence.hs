@@ -46,6 +46,7 @@ eprec :: Expr -> Int
 eprec Dbl{}             = 500
 eprec Int{}             = 500
 eprec Str{}             = 500
+eprec Perc{}            = 500
 eprec (AssocA op _)     = precA op
 eprec (AssocB op _)     = precB op
 eprec C{}               = 500

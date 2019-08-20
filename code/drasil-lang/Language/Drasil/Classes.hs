@@ -82,7 +82,7 @@ class HasReference c where
   getReferences :: Lens' c [Reference]
 
 class HasDerivation c where
-  derivations :: Lens' c Derivation
+  derivations :: Lens' c (Maybe Derivation)
 
 -- | CommonIdea is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation.

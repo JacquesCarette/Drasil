@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 25, 2018
+Last updated: June 11, 2019
 --------------------------------------------------
 
 **Concepts**
@@ -24,18 +24,9 @@ Constraints.hs
 People.hs
   - Contains author names for our examples
 
-Phrase.hs
-  - Contains functions for building `Noun Phrase`s
-
 README.md
   - This file
 
-SentenceStructures.hs
-  - Contains functions for building `Sentence`s
-  
 SI_Units.hs
   - Contains the fundamental SI Units, and several derived units
-  
-Utils.hs
-  - Contains utility functions for use with Drasil
   

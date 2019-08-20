@@ -19,9 +19,10 @@ data Expr = Dbl   Double
           | Int   Integer
           | Str   String
           | Case  [(Expr,Expr)]
-          | Mtx [[Expr]]
+          | Mtx   [[Expr]]
           | Row   [Expr]
           | Ident String
+          | Label String
           | Spec  Special
           
           | Sub   Expr

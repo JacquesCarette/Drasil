@@ -6,8 +6,8 @@ module Theory.Drasil.InstanceModel
   , Constraints
   ) where
 
-import Data.Drasil.IdeaDicts (instanceMod)
 import Language.Drasil
+import Data.Drasil.IdeaDicts (inModel)
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -28,7 +28,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         , _imOutput :: Output
                         , _outCons :: OutputConstraints
                         , _ref :: [Reference]
-                        , _deri :: Derivation
+                        , _deri :: Maybe Derivation
                         ,  lb :: ShortName
                         ,  ra :: String
                         , _notes :: [Sentence]
@@ -50,34 +50,34 @@ instance HasSymbol          InstanceModel where symbol = symbol . view imOutput 
 instance HasSpace           InstanceModel where typ = imOutput . typ
 instance Quantity           InstanceModel where
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view imOutput
-instance CommonIdea         InstanceModel where abrv _ = abrv instanceMod
+instance CommonIdea         InstanceModel where abrv _ = abrv inModel
 instance Referable          InstanceModel where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
 -- | Smart constructor for instance models with everything defined
 im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> [Reference] -> Derivation -> String -> [Sentence] -> InstanceModel
+  OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 im rcon _ _  _ _  [] _  _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
 im rcon i ic o oc r der sn = 
-  IM rcon i ic o oc r der (shortname' sn) (prependAbrv instanceMod sn)
+  IM rcon i ic o oc r der (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no derivation
 imNoDeriv :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
 imNoDeriv rcon _ _  _ _ [] _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
 imNoDeriv rcon i ic o oc r sn =
-  IM rcon i ic o oc r [] (shortname' sn) (prependAbrv instanceMod sn)
+  IM rcon i ic o oc r Nothing (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no references
 imNoRefs :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
-  OutputConstraints -> Derivation -> String -> [Sentence] -> InstanceModel
+  OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 imNoRefs rcon i ic o oc der sn = 
-  IM rcon i ic o oc [] der (shortname' sn) (prependAbrv instanceMod sn)
+  IM rcon i ic o oc [] der (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no derivations or references
 imNoDerivNoRefs :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> String -> [Sentence] -> InstanceModel
 imNoDerivNoRefs rcon i ic o oc sn = 
-  IM rcon i ic o oc [] [] (shortname' sn) (prependAbrv instanceMod sn)
+  IM rcon i ic o oc [] Nothing (shortname' sn) (prependAbrv inModel sn)
 

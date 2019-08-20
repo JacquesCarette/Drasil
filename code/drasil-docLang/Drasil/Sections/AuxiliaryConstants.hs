@@ -2,9 +2,9 @@ module Drasil.Sections.AuxiliaryConstants
   (valsOfAuxConstantsF) where
 
 import Language.Drasil
+import Utils.Drasil
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 import Drasil.DocumentLanguage.Units (toSentence)
-import Data.Drasil.SentenceStructures (foldlSP)
 import Data.Drasil.Concepts.Documentation (value, description, symbol_)
 import qualified Data.Drasil.Concepts.Math as CM (unit_)
 import Control.Lens ((^.))
@@ -23,6 +23,6 @@ intro kWord =  foldlSP [S "This section contains the standard values that are us
 tableOfConstants :: [QDefinition] -> LabelledContent
 tableOfConstants f = llcc (makeTabRef "TAuxConsts") $ Table
   [titleize symbol_, titleize description, titleize value, titleize CM.unit_]
-  (mkTable [ch, phrase, (\c -> E $ c^.equat), toSentence] f)
+  (mkTable [ch, phrase, \c -> E $ c^.equat, toSentence] f)
   (S "Auxiliary Constants")
   True

@@ -2,10 +2,9 @@ module Language.Drasil.TeX.Preamble (genPreamble) where
 
 import Data.List (nub)
 
-import Language.Drasil.Printing.LayoutObj (LayoutObj(Paragraph, Header, Bib, Graph, 
-  List, EqnBlock, Figure, Table, Definition, HDiv))
+import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
 import Language.Drasil.TeX.Monad (D, vcat, (%%))
-import Language.Drasil.TeX.Helpers (docclass, command, command0, command1o, command3, 
+import Language.Drasil.TeX.Helpers (docclass, command, command0, command1o, command2, command3, 
   usepackage)
 
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
@@ -55,12 +54,16 @@ addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 addPackage Tabu      = usepackage "tabu"
 addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
+-- Discussed in issue #1819
+-- Because we are using LuaLatex, we use fontspec here instead of fontenc
 addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
 addPackage EnumItem  = usepackage "enumitem"
 
 data Def = Bibliography
          | TabuLine
+         | GreaterThan
+         | LessThan
          | SetMathFont
          | SymbDescriptionP1
          | SymbDescriptionP2
@@ -68,6 +71,8 @@ data Def = Bibliography
 
 addDef :: Def -> D
 addDef Bibliography  = command "bibliography" bibFname
+addDef GreaterThan   = command2 "newcommand" "\\gt" "\\ensuremath >"
+addDef LessThan      = command2 "newcommand" "\\lt" "\\ensuremath <"
 addDef TabuLine      = command0 "global\\tabulinesep=1mm"
 addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1"
@@ -75,14 +80,14 @@ addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitems
 
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let (pkgs, defs) = parseDoc los
-  in docclass (Just $ (show fontSize) ++ "pt") "article" %%
+  in docclass (show fontSize ++ "pt") "article" %%
      vcat (map addPackage pkgs) %% vcat (map addDef defs)
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])
 parseDoc los' = 
   ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 
    nub (concatMap fst res)
-  , [SymbDescriptionP1, SymbDescriptionP2, SetMathFont] ++ nub (concatMap snd res))
+  , [SetMathFont, GreaterThan, LessThan] ++ nub (concatMap snd res))
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
@@ -96,11 +101,11 @@ parseDoc los' =
       let res1 = concatMap (map parseDoc' . snd) ps in
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in
-      (Tabu:LongTable:BookTabs:pp,TabuLine:dd)
-    parseDoc' Figure{}       = ([Graphics,Caption],[])
-    parseDoc' Graph{}        = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
-    parseDoc' Bib{}          = ([FileContents,BibLaTeX,URL],[Bibliography])
-    parseDoc' Header{}       = ([], [])
-    parseDoc' Paragraph{}    = ([], [])
-    parseDoc' List{}         = ([EnumItem], [])
-    parseDoc' EqnBlock{}    = ([], [])
+      (Tabu:LongTable:BookTabs:pp,SymbDescriptionP1:SymbDescriptionP2:TabuLine:dd)
+    parseDoc' Figure{}     = ([Graphics,Caption],[])
+    parseDoc' Graph{}      = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
+    parseDoc' Bib{}        = ([FileContents,BibLaTeX,URL],[Bibliography])
+    parseDoc' Header{}     = ([], [])
+    parseDoc' Paragraph{}  = ([], [])
+    parseDoc' List{}       = ([EnumItem], [])
+    parseDoc' EqnBlock{}   = ([], [])

@@ -1,24 +1,24 @@
 ifeq "$(OS)" "Windows_NT"
-	TARGET_EXTENSION=.exe
-	RM=del
+    TARGET_EXTENSION=.exe
 else
-	UNAME_S := $(shell uname -s)
-	ifeq ($(UNAME_S), Linux)
-		TARGET_EXTENSION=
-		RM=rm
-	endif
-	ifeq ($(UNAME_S), Darwin)
-		TARGET_EXTENSION=
-		RM=rm
-	endif
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S), Linux)
+        TARGET_EXTENSION=
+    endif
+    ifeq ($(UNAME_S), Darwin)
+        TARGET_EXTENSION=
+    endif
 endif
 
 build: GlassBR$(TARGET_EXTENSION)
 
-GlassBR$(TARGET_EXTENSION): InputParameters.hpp DerivedValues.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp ReadTable.hpp InputFormat.hpp Interpolation.hpp Control.cpp InputParameters.cpp DerivedValues.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp ReadTable.cpp InputFormat.cpp Interpolation.cpp
-	"$(CXX)" Control.cpp InputParameters.cpp DerivedValues.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp ReadTable.cpp InputFormat.cpp Interpolation.cpp --std=c++11 -o GlassBR$(TARGET_EXTENSION)
+GlassBR$(TARGET_EXTENSION): InputParameters.hpp InputFormat.hpp DerivedValues.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp ReadTable.hpp Interpolation.hpp Control.cpp InputParameters.cpp InputFormat.cpp DerivedValues.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp ReadTable.cpp Interpolation.cpp
+	"$(CXX)" Control.cpp InputParameters.cpp InputFormat.cpp DerivedValues.cpp InputConstraints.cpp OutputFormat.cpp Calculations.cpp ReadTable.cpp Interpolation.cpp --std=c++11 -o GlassBR$(TARGET_EXTENSION)
 
 run: build
 	./GlassBR$(TARGET_EXTENSION) $(RUNARGS)
 
-.PHONY: build run
+doc: doxConfig InputParameters.hpp InputFormat.hpp DerivedValues.hpp InputConstraints.hpp OutputFormat.hpp Calculations.hpp ReadTable.hpp Interpolation.hpp Control.cpp
+	doxygen doxConfig
+
+.PHONY: build run doc

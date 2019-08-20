@@ -1,4 +1,7 @@
-#include "InputParameters.hpp"
+/** \file InputFormat.hpp
+    \author Nikitha Krithnan and W. Spencer Smith
+    \brief Provides the function for reading inputs
+*/
 #ifndef InputFormat_h
 #define InputFormat_h
 
@@ -10,8 +13,12 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
+#include "InputParameters.hpp"
 
-
-void func_get_input(string filename, InputParameters &inParams);
+/** \brief Reads input from a file with the given file name
+    \param filename name of the input file
+    \param inParams structure holding the input values
+*/
+void get_input(string filename, InputParameters &inParams);
 
 #endif

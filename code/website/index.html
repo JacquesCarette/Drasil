@@ -1,0 +1,64 @@
+<h2>Drasil - Generate All the Things!</h2>
+<p id="center"><a href="https://github.com/JacquesCarette/Drasil">Link to GitHub repository</a></p>
+<hr>
+<br>
+<p>
+  Drasil is a framework for generating all of the software artifacts from a stable knowledge base,
+  focusing currently on scientific software. The main goals are to reduce knowledge duplication and
+  improve traceability. The atifacts are generated from a common knowledge-base using recipes
+  written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of
+  knowledge should be used in which artifacts, how to transform them, and more.
+  <br><br>
+  This webpage is designed to contain the most up to date
+  <a href="#caseStudies">case study artifacts</a>,
+  $if(docsUrl)$ <a href="#haskDoc">Haddock documentation</a>, $endif$
+  and <a href="#packages">package dependency graphs</a> from the Drasil repository.
+  The case study artifacts include the Software Requirements Specification (SRS) for the case study,
+  which specifies what the program sets out to achieve.
+  The Haddock Documentation section contains the current documentation for the Drasil framework.
+  The package dependency graphs shows the hierarchy of modules within each package.
+  The footer of this page contains the continuous integration build of the project,
+  as well as the commit number that the build and artifacts are based off of.
+</p>
+<br>
+<h3 id="caseStudies">Case Studies</h3>
+<p>Each of the case studies contain their own generated PDF and HTML reports,
+and in some cases, their own generated code.</p>
+<ul>
+$-for(examples)$
+  <li><b>$name$</b> - $if(desc)-$ $desc$ $endif$
+    <br>
+    <br>
+    <ul>
+      <li>$name$ SRS
+        $-for(srs)$
+          <a href="$url$">[$type$]</a>
+        $-endfor$
+      </li>
+      $-if(src)$
+        <li>
+          Generated Code:
+          $-for(src)$
+            <a href="$path$">[$lang$]</a>
+          $-endfor$
+        </li>
+      $-endif$
+    </ul>
+    <br>
+  </li>$sep-$
+$endfor$
+</ul>
+
+$if(docsUrl)-$
+  <h3 id="haskDoc">Haddock Documentation</h3>
+  <p>
+    The current <a href="$docsUrl$">Haddock documentation</a> for the Drasil framework.
+  </p>
+$-endif$
+
+<h3 id="packages">Package Dependency Graphs</h3>
+<ul>
+  $-for(graphs)$
+    <li><a href="$url$">$name$</a></li>$sep-$
+  $endfor$
+</ul>

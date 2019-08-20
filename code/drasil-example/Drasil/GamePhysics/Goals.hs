@@ -1,11 +1,10 @@
 module Drasil.GamePhysics.Goals (goals, linearGS, angularGS) where
 
 import Language.Drasil
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import Data.Drasil.Concepts.Physics (time)
-import Data.Drasil.SentenceStructures (foldlSent, foldlList, FoldType(List), 
-  SepType(Comma))
 
 import Drasil.GamePhysics.Unitals (inputSymbols, outputSymbols)
 
@@ -23,5 +22,5 @@ angularGS = cic "angularGS" (goalStatementStruct (drop 3 $ take 5 inputSymbols)
 goalStatementStruct :: (NamedIdea a) => [a] -> Sentence -> Sentence -> Sentence
 goalStatementStruct outputs condition1 condition2 = foldlSent
   [ S "Determine", condition1, listOfOutputs, S "over a period of",
-  (phrase time), condition2]
-  where listOfOutputs       = (foldlList Comma List $ map plural outputs)
+  phrase time, condition2]
+  where listOfOutputs       = foldlList Comma List $ map plural outputs

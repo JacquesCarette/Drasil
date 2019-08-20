@@ -16,10 +16,12 @@
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
+\setmathfont{Latin Modern Math}
+\newcommand{\gt}{\ensuremath >}
+\newcommand{\lt}{\ensuremath <}
+\global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
-\setmathfont{Latin Modern Math}
-\global\tabulinesep=1mm
 \bibliography{bibfile}
 \title{Software Requirements Specification for Solar Water Heating Systems}
 \author{Thulasi Jegatheesan}
@@ -30,26 +32,28 @@
 \section{Reference Material}
 \label{Sec:RefMat}
 This section records information for easy reference.
+
 \subsection{Table of Units}
 \label{Sec:ToU}
-The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
-\begin{longtable}{l l}
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, \hyperref[Table:ToU]{Tab: ToU} lists the symbol, a description and the SI name.
+
+\begin{longtable}{l l l}
 \toprule
-Symbol & Description
+\textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
 \\
 \midrule
 \endhead
-${}^{\circ}$C & temperature (centigrade)
+${}^{\circ}$C & temperature & centigrade
 \\
-J & energy (joule)
+J & energy & joule
 \\
-kg & mass (kilogram)
+kg & mass & kilogram
 \\
-m & length (metre)
+m & length & metre
 \\
-s & time (second)
+s & time & second
 \\
-W & power (watt)
+W & power & watt
 \\
 \bottomrule
 \caption{}
@@ -57,84 +61,91 @@ W & power (watt)
 \end{longtable}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
+The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
+
 \begin{longtabu}{l X[l] l}
 \toprule
-Symbol & Description & Units
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
 \midrule
 \endhead
-${A_{C}}$ & Heating coil surface area & $\text{m}^{2}$
+${A_{\text{C}}}$ & Heating coil surface area & $\text{m}^{2}$
 \\
-${A_{in}}$ & Surface area over which heat is transferred in & $\text{m}^{2}$
+${A_{\text{in}}}$ & Surface area over which heat is transferred in & $\text{m}^{2}$
 \\
-${A_{out}}$ & Surface area over which heat is transferred out & $\text{m}^{2}$
+${A_{\text{out}}}$ & Surface area over which heat is transferred out & $\text{m}^{2}$
+\\
+${A_{\text{tol}}}$ & Absolute tolerance & --
 \\
 $C$ & Specific heat capacity & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${C^{L}}$ & Specific heat capacity of a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+${C^{\text{L}}}$ & Specific heat capacity of a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${C_{W}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+${C_{\text{W}}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
 $D$ & Diameter of tank & m
 \\
 $E$ & Sensible heat & J
 \\
-${E_{W}}$ & Change in heat energy in the water & J
+${E_{\text{W}}}$ & Change in heat energy in the water & J
 \\
 $g$ & Volumetric heat generation per unit volume & $\frac{\text{W}}{\text{m}^{3}}$
 \\
 $h$ & Convective heat transfer coefficient & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
-${h_{C}}$ & Convective heat transfer coefficient between coil and water & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+${h_{\text{C}}}$ & Convective heat transfer coefficient between coil and water & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
 $L$ & Length of tank & m
 \\
 $m$ & Mass & kg
 \\
-${m_{W}}$ & Mass of water & kg
+${m_{\text{W}}}$ & Mass of water & kg
 \\
 $\mathbf{\hat{n}}$ & Normal Vector & --
 \\
 $q$ & Heat flux & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-${q_{C}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
+${q_{\text{C}}}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-${q_{in}}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
+${q_{\text{in}}}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-${q_{out}}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
+${q_{\text{out}}}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 $\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
+\\
+${R_{\text{tol}}}$ & Relative tolerance & --
 \\
 $S$ & Surface & $\text{m}^{2}$
 \\
 $T$ & Temperature & ${}^{\circ}$C
 \\
-$t$ & Time & s
-\\
 $ΔT$ & Change in temperature & ${}^{\circ}$C
 \\
-${T_{C}}$ & Temperature of the heating coil & ${}^{\circ}$C
+${T_{\text{C}}}$ & Temperature of the heating coil & ${}^{\circ}$C
 \\
-${T_{env}}$ & Temperature of the environment & ${}^{\circ}$C
+${T_{\text{env}}}$ & Temperature of the environment & ${}^{\circ}$C
 \\
-${t_{final}}$ & Final time & s
+${T_{\text{init}}}$ & Initial temperature & ${}^{\circ}$C
 \\
-${T_{init}}$ & Initial temperature & ${}^{\circ}$C
+${T_{\text{W}}}$ & Temperature of the water & ${}^{\circ}$C
 \\
-${T_{W}}$ & Temperature of the water & ${}^{\circ}$C
+$t$ & Time & s
+\\
+${t_{\text{final}}}$ & Final time & s
+\\
+${t_{\text{step}}}$ & Time step for simulation & s
 \\
 $V$ & Volume & $\text{m}^{3}$
 \\
-${V_{W}}$ & Volume of water & $\text{m}^{3}$
+${V_{\text{W}}}$ & Volume of water & $\text{m}^{3}$
 \\
-$π$ & Circumference to diameter ratio & --
+$π$ & Ratio of circumference to diameter for any circle & --
 \\
 $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${ρ_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
+${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${τ_{W}}$ & ODE parameter for water & s
+${τ_{\text{W}}}$ & ODE parameter for water related to decay time & s
 \\
 $∇$ & Gradient & --
 \\
@@ -146,7 +157,7 @@ $∇$ & Gradient & --
 \label{Sec:TAbbAcc}
 \begin{longtable}{l l}
 \toprule
-Abbreviation & Full Form
+\textbf{Abbreviation} & \textbf{Full Form}
 \\
 \midrule
 \endhead
@@ -172,7 +183,7 @@ SRS & Software Requirements Specification
 \\
 SWHS & Solar Water Heating System
 \\
-T & Theoretical Model
+TM & Theoretical Model
 \\
 UC & Unlikely Change
 \\
@@ -184,28 +195,38 @@ Uncert. & Typical Uncertainty
 \end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
-Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems provide a novel way of storing energy.
+Due to increasing costs, diminishing availability, and negative environmental impact of fossil fuels, the demand is high for renewable energy sources and energy storage technology. Solar water heating systems provide a novel way of storing energy.
+
 The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
+
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The main purpose of this document is to describe the modelling of solar water heating system. The goals and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
+The main purpose of this document is to describe the modelling of solar water heating system. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
+
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
+
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes thermal analysis of a single solar water heating tank. Given the appropriate inputs, SWHS predicts the temperature and thermal energy histories for the water.
+The scope of the requirements includes thermal analysis of a single solar water heating tank.
+
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
 Reviewers of this documentation should have an understanding of heat transfer theory from level 3 or 4 mechanical engineering and differential equations from level 1 and 2 calculus. The users of SWHS can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
+
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
 The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{dParnas1972} and \cite{parnasClements1984}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
-The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models, and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}). The instance model to be solved is referred to as \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
+
+The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}). The instance model to be solved is referred to as \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}. The instance model provides the Ordinary Differential Equation (ODE) that models the solar water heating system. SWHS solves this ODE.
+
 \section{General System Description}
 \label{Sec:GenSysDesc}
 This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
+
 \subsection{System Context}
 \label{Sec:SysContext}
 \hyperref[Figure:SysCon]{Fig:SysCon} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
+
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/SWHS/SystemContextFigure.png}
@@ -214,6 +235,7 @@ This section provides general information about the system. It identifies the in
 \end{center}
 \end{figure}
 SWHS is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
+
 \begin{itemize}
 \item{User Responsibilities:}
 \begin{itemize}
@@ -230,81 +252,92 @@ SWHS is mostly self-contained. The only external interaction is through the user
 \subsection{User Characteristics}
 \label{Sec:UserChars}
 The end user of SWHS should have an understanding of undergraduate Level 1 Calculus and Physics.
+
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
 There are no system constraints.
+
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-SWHS is a computer program developed to investigate the heating of water in a solar water heating tank.
+A system is needed to investigate the heating of water in a solar water heating tank.
+
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+
 \begin{itemize}
-\item{Heat flux: The rate of thermal energy transfer through a given surface per unit time}
-\item{Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount}
-\item{Thermal conduction: The transfer of heat energy through a substance}
-\item{Transient: Changing with time}
+\item{Heat flux: The rate of thermal energy transfer through a given surface per unit time.}
+\item{Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount.}
+\item{Thermal conduction: The transfer of heat energy through a substance.}
+\item{Transient: Changing with time.}
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
 The physical system of SWHS, as shown in \hyperref[Figure:Tank]{Fig:Tank}, includes the following elements:
+
 \begin{itemize}
-\item[PS1:]Tank containing water.
-\item[PS2:]Heating coil at bottom of tank. (${q_{C}}$ represents the heat flux into the water from the coil.)
+\item[PS1:]{Tank containing water.}
+\item[PS2:]{Heating coil at bottom of tank. (${q_{\text{C}}}$ represents the heat flux into the water from the coil.)}
 \end{itemize}
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/NoPCM/TankWaterOnly.png}
-\caption{Solar water heating tank, with heat flux from heating coil of ${q_{C}}$}
+\caption{Solar water heating tank, with heat flux from heating coil of ${q_{\text{C}}}$}
 \label{Figure:Tank}
 \end{center}
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
 Given the temperature of the heating coil, the initial temperature of the water, and the material properties, the goal statements are:
+
 \begin{itemize}
-\item[Predict-Water-Temperature:\phantomsection\label{waterTempGS}]Predict the temperature of the water over time.
-\item[Predict-Water-Energy:\phantomsection\label{waterEnergyGS}]Predict the change in heat energy in the water over time.
+\item[Predict-Water-Temperature:\phantomsection\label{waterTempGS}]{Predict the temperature of the water over time.}
+\item[Predict-Water-Energy:\phantomsection\label{waterEnergyGS}]{Predict the change in heat energy in the water over time.}
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
 The instance models that govern SWHS are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models \hyperref[Sec:TMs]{Section: Theoretical Models}, General Definitions \hyperref[Sec:GDs]{Section: General Definitions}, Data Definitions \hyperref[Sec:DDs]{Section: Data Definitions}, Instance Models \hyperref[Sec:IMs]{Section: Instance Models}, Likely Changes \hyperref[Sec:LCs]{Section: Likely Changes}, or Unlikely Changes \hyperref[Sec:UCs]{Section: Unlikely Changes}, in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
+
 \begin{itemize}
-\item[Thermal-Energy-Only:\phantomsection\label{assumpTEO}]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. \hyperref[TM:consThermE]{TM: consThermE}.
-\item[Heat-Transfer-Coeffs-Constant:\phantomsection\label{assumpHTCC}]All heat transfer coefficients are constant over time. \hyperref[GD:nwtnCooling]{GD: nwtnCooling}.
-\item[Constant-Water-Temp-Across-Tank:\phantomsection\label{assumpCWTAT}]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.
-\item[Density-Water-Constant-over-Volume:\phantomsection\label{assumpDWCoW}]The density of water has no spatial variation; that is, it is constant over their entire volume. \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.
-\item[Specific-Heat-Energy-Constant-over-Volume:\phantomsection\label{assumpSHECoW}]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume. \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.
-\item[Newton-Law-Convective-Cooling-Coil-Water:\phantomsection\label{assumpLCCCW}]Newton's law of convective cooling applies between the heating coil and the water. \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}.
-\item[Temp-Heating-Coil-Constant-over-Time:\phantomsection\label{assumpTHCCoT}]The temperature of the heating coil is constant over time. \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}.
-\item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]The temperature of the heating coil does not vary along its length. \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}.
-\item[Charging-Tank-No-Temp-Discharge:\phantomsection\label{assumpCTNTD}]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. \hyperref[likeChgDT]{LC: Discharging-Tank} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
-\item[Water-Always-Liquid:\phantomsection\label{assumpWAL}]The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. \hyperref[unlikeChgWFS]{UC: Water-Fixed-States} \hyperref[TM:sensHtE]{TM: sensHtE} \hyperref[IM:heatEInWtr]{IM: heatEInWtr} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
-\item[Perfect-Insulation-Tank:\phantomsection\label{assumpPIT}]The tank is perfectly insulated so that there is no heat loss from the tank. \hyperref[likeChgTLH]{LC: Tank-Lose-Heat}.
-\item[No-Internal-Heat-Generation-By-Water:\phantomsection\label{assumpNIHGBW}]No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero. \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
-\item[Atmospheric-Pressure-Tank:\phantomsection\label{assumpAPT}]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively \hyperref[IM:heatEInWtr]{IM: heatEInWtr}.
+\item[Thermal-Energy-Only:\phantomsection\label{assumpTEO}]{The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible. (RefBy: \hyperref[TM:consThermE]{TM: consThermE}.)}
+\item[Heat-Transfer-Coeffs-Constant:\phantomsection\label{assumpHTCC}]{All heat transfer coefficients are constant over time. (RefBy: \hyperref[TM:nwtnCooling]{TM: nwtnCooling}.)}
+\item[Constant-Water-Temp-Across-Tank:\phantomsection\label{assumpCWTAT}]{The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)}
+\item[Density-Water-Constant-over-Volume:\phantomsection\label{assumpDWCoW}]{The density of water has no spatial variation; that is, it is constant over their entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)}
+\item[Specific-Heat-Energy-Constant-over-Volume:\phantomsection\label{assumpSHECoW}]{The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume. (RefBy: \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.)}
+\item[Newton-Law-Convective-Cooling-Coil-Water:\phantomsection\label{assumpLCCCW}]{Newton's law of convective cooling applies between the heating coil and the water. (RefBy: \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}.)}
+\item[Temp-Heating-Coil-Constant-over-Time:\phantomsection\label{assumpTHCCoT}]{The temperature of the heating coil is constant over time. (RefBy: \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} and \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}.)}
+\item[Temp-Heating-Coil-Constant-over-Length:\phantomsection\label{assumpTHCCoL}]{The temperature of the heating coil does not vary along its length. (RefBy: \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length}.)}
+\item[Charging-Tank-No-Temp-Discharge:\phantomsection\label{assumpCTNTD}]{The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. (RefBy: \hyperref[likeChgDT]{LC: Discharging-Tank}.)}
+\item[Water-Always-Liquid:\phantomsection\label{assumpWAL}]{The operating temperature range of the system is such that the material (water in this case) is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature. (RefBy: \hyperref[unlikeChgWFS]{UC: Water-Fixed-States}, \hyperref[TM:sensHtE]{TM: sensHtE}, \hyperref[IM:heatEInWtr]{IM: heatEInWtr}, and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
+\item[Perfect-Insulation-Tank:\phantomsection\label{assumpPIT}]{The tank is perfectly insulated so that there is no heat loss from the tank. (RefBy: \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
+\item[No-Internal-Heat-Generation-By-Water:\phantomsection\label{assumpNIHGBW}]{No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero. (RefBy: \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.)}
+\item[Atmospheric-Pressure-Tank:\phantomsection\label{assumpAPT}]{The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively (RefBy: \hyperref[IM:heatEInWtr]{IM: heatEInWtr}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
 This section focuses on the general equations and laws that SWHS is based on.
-\par~
 
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:consThermE}
 \phantomsection 
 \label{TM:consThermE}
 \\ \midrule \\
 Label & Conservation of thermal energy
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
-           -∇\cdot{}\mathbf{q}+g=ρ C \frac{\partial{}\,T}{\partial{}\,t}
+           -∇\cdot{}\mathbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -317,55 +350,62 @@ Description & \begin{symbDescription}
               \item{$T$ is the temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $ρ$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $∇$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (\hyperref[assumpTEO]{A: Thermal-Energy-Only}).
+Notes & The above equation gives the law of conservation of energy for transient heat transfer in a given material.
+        
+        For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (\hyperref[assumpTEO]{A: Thermal-Energy-Only}).
+        
 \\ \midrule \\
 Source & \hyperref{http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm}{}{}{Fourier Law of Heat Conduction and Heat Equation}
+         
 \\ \midrule \\
-RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp}.
-\\ \bottomrule \end{tabular}
+RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp}
+        
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
-\par~
-
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{TM:sensHtE}
 \phantomsection 
 \label{TM:sensHtE}
 \\ \midrule \\
 Label & Sensible heat energy (no state change)
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
-           E={C^{L}} m ΔT
+           E={C^{\text{L}}} m ΔT
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$E$ is the sensible heat (J)}
-              \item{${C^{L}}$ is the specific heat capacity of a liquid ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
+              \item{${C^{\text{L}}}$ is the specific heat capacity of a liquid ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
               \item{$m$ is the mass (kg)}
               \item{$ΔT$ is the change in temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & $E$ occurs as long as the material does not reach a temperature where a phase change occurs, as assumed in \hyperref[assumpWAL]{A: Water-Always-Liquid}.
+        
 \\ \midrule \\
 Source & \hyperref{http://en.wikipedia.org/wiki/Sensible_heat}{}{}{Definition of Sensible Heat}
+         
 \\ \midrule \\
-RefBy & \hyperref[IM:heatEInWtr]{IM: heatEInWtr}.
-\\ \bottomrule \end{tabular}
+RefBy & \hyperref[IM:heatEInWtr]{IM: heatEInWtr}
+        
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
-\subsubsection{General Definitions}
-\label{Sec:GDs}
-This section collects the laws and equations that will be used to build the instance models.
-\par~
-
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{GD:nwtnCooling}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:nwtnCooling}
 \phantomsection 
-\label{GD:nwtnCooling}
+\label{TM:nwtnCooling}
 \\ \midrule \\
 Label & Newton's law of cooling
-\\ \midrule \\
-Units & $\frac{\text{W}}{\text{m}^{2}}$
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
            q\left(t\right)=h ΔT\left(t\right)
@@ -378,25 +418,38 @@ Description & \begin{symbDescription}
               \item{$ΔT$ is the change in temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (\hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant}) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $ΔT\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
+Notes & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings.
+        
+        $h$ is assumed to be independent of $T$ (from \hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant}).
+        
+        $ΔT\left(t\right)=T\left(t\right)-{T_{\text{env}}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object.
+        
 \\ \midrule \\
-Source & \cite{incroperaEtAl2007}
+Source & \cite[(pg. 8)]{incroperaEtAl2007}
+         
 \\ \midrule \\
-RefBy & 
-\\ \bottomrule \end{tabular}
+RefBy & \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}
+        
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
-\par~
+\subsubsection{General Definitions}
+\label{Sec:GDs}
+This section collects the laws and equations that will be used to build the instance models.
 
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{GD:rocTempSimp}
 \phantomsection 
 \label{GD:rocTempSimp}
 \\ \midrule \\
 Label & Simplified rate of change of temperature
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
-           m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+           m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -404,465 +457,550 @@ Description & \begin{symbDescription}
               \item{$C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
               \item{$t$ is the time (s)}
               \item{$T$ is the temperature (${}^{\circ}$C)}
-              \item{${q_{in}}$ is the heat flux input ($\frac{\text{W}}{\text{m}^{2}}$)}
-              \item{${A_{in}}$ is the surface area over which heat is transferred in ($\text{m}^{2}$)}
-              \item{${q_{out}}$ is the heat flux output ($\frac{\text{W}}{\text{m}^{2}}$)}
-              \item{${A_{out}}$ is the surface area over which heat is transferred out ($\text{m}^{2}$)}
+              \item{${q_{\text{in}}}$ is the heat flux input ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{${A_{\text{in}}}$ is the surface area over which heat is transferred in ($\text{m}^{2}$)}
+              \item{${q_{\text{out}}}$ is the heat flux output ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{${A_{\text{out}}}$ is the surface area over which heat is transferred out ($\text{m}^{2}$)}
               \item{$g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$)}
               \item{$V$ is the volume ($\text{m}^{3}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
-\\ \midrule \\
 Source & --
+         
 \\ \midrule \\
-RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
-\\ \bottomrule \end{tabular}
+RefBy & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
+        
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
-Detailed derivation of simplified rate of change of temperature.
+\paragraph{Detailed derivation of simplified rate of change of temperature:}
+\label{GD:rocTempSimpDeriv}
 Integrating \hyperref[TM:consThermE]{TM: consThermE} over a volume ($V$), we have:
+
 \begin{displaymath}
--\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
+-\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
-\begin{displaymath}
--\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
-\end{displaymath}
-We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
-\begin{displaymath}
-{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{ρ C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
-\end{displaymath}
-Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$ and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume}, and \hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
-\begin{displaymath}
-ρ C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
-\end{displaymath}
-Using the fact that $ρ$=$m$/$V$, (2) can be written as:
-\begin{displaymath}
-m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
-\end{displaymath}
-\subsubsection{Data Definitions}
-\label{Sec:DDs}
-This section collects and defines all the data needed to build the instance models.
-\par~
 
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:ht.flux.C}
+\begin{displaymath}
+-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
+\end{displaymath}
+We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
+
+\begin{displaymath}
+{q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
+\end{displaymath}
+Where ${q_{\text{in}}}$, ${q_{\text{out}}}$, ${A_{\text{in}}}$, and ${A_{\text{out}}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. Assuming $ρ$, $C$, and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume}, and \hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
+
+\begin{displaymath}
+ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V
+\end{displaymath}
+Using the fact that $ρ$=$m$/$V$, Equation (2) can be written as:
+
+\begin{displaymath}
+m C \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:htFluxWaterFromCoil}
 \phantomsection 
-\label{DD:ht.flux.C}
+\label{GD:htFluxWaterFromCoil}
 \\ \midrule \\
 Label & Heat flux into the water from the coil
-\\ \midrule \\
-Symbol & ${q_{C}}$
+        
 \\ \midrule \\
 Units & $\frac{\text{W}}{\text{m}^{2}}$
+        
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {q_{C}}={h_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
+           {q_{\text{C}}}={h_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${q_{C}}$ is the heat flux into the water from the coil ($\frac{\text{W}}{\text{m}^{2}}$)}
-              \item{${h_{C}}$ is the convective heat transfer coefficient between coil and water ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)}
-              \item{${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)}
-              \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
+              \item{${q_{\text{C}}}$ is the heat flux into the water from the coil ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{${h_{\text{C}}}$ is the convective heat transfer coefficient between coil and water ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)}
+              \item{${T_{\text{C}}}$ is the temperature of the heating coil (${}^{\circ}$C)}
+              \item{${T_{\text{W}}}$ is the temperature of the water (${}^{\circ}$C)}
               \item{$t$ is the time (s)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}
+Notes & ${q_{\text{C}}}$ is found by assuming that Newton's law of cooling applies (\hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}). This law (defined in \hyperref[TM:nwtnCooling]{TM: nwtnCooling}) is used on the surface of the heating coil.
+        
         \hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time}
-        \hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length}
+        
 \\ \midrule \\
 Source & \cite{koothoor2013}
+         
 \\ \midrule \\
-RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
-\\ \bottomrule \end{tabular}
+RefBy & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
+        
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+
+\subsubsection{Data Definitions}
+\label{Sec:DDs}
+This section collects and defines all the data needed to build the instance models.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:balanceDecayRate}
+\phantomsection 
+\label{DD:balanceDecayRate}
+\\ \midrule \\
+Label & ODE parameter for water related to decay time
+        
+\\ \midrule \\
+Symbol & ${τ_{\text{W}}}$
+         
+\\ \midrule \\
+Units & s
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {τ_{\text{W}}}=\frac{{m_{\text{W}}} {C_{\text{W}}}}{{h_{\text{C}}} {A_{\text{C}}}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${τ_{\text{W}}}$ is the ODE parameter for water related to decay time (s)}
+              \item{${m_{\text{W}}}$ is the mass of water (kg)}
+              \item{${C_{\text{W}}}$ is the specific heat capacity of water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
+              \item{${h_{\text{C}}}$ is the convective heat transfer coefficient between coil and water ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)}
+              \item{${A_{\text{C}}}$ is the heating coil surface area ($\text{m}^{2}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & \cite{koothoor2013}
+         
+\\ \midrule \\
+RefBy & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
 \subsubsection{Instance Models}
 \label{Sec:IMs}
 This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
-The goal \hyperref[waterTempGS]{GS: Predict-Water-Temperature} is met by \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and the goal \hyperref[waterEnergyGS]{GS: Predict-Water-Energy} is met by \hyperref[IM:heatEInWtr]{IM: heatEInWtr}.
-\par~
 
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+The goal \hyperref[waterTempGS]{GS: Predict-Water-Temperature} is met by \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} and the goal \hyperref[waterEnergyGS]{GS: Predict-Water-Energy} is met by \hyperref[IM:heatEInWtr]{IM: heatEInWtr}.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:eBalanceOnWtr}
 \phantomsection 
 \label{IM:eBalanceOnWtr}
 \\ \midrule \\
 Label & Energy balance on water to find the temperature of the water
+        
 \\ \midrule \\
-Input & ${T_{C}}$, ${T_{init}}$, ${t_{final}}$, ${A_{C}}$, ${h_{C}}$, ${C_{W}}$, ${m_{W}}$
+Input & ${T_{\text{C}}}$, ${T_{\text{init}}}$, ${t_{\text{final}}}$, ${A_{\text{C}}}$, ${h_{\text{C}}}$, ${C_{\text{W}}}$, ${m_{\text{W}}}$
+        
 \\ \midrule \\
-Output & ${T_{W}}$
+Output & ${T_{\text{W}}}$
+         
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {T_{init}}\leq{}{T_{C}}
+                    {T_{\text{init}}}\leq{}{T_{\text{C}}}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     0<t<{t_{final}}
+                     0\lt{}t\lt{}{t_{\text{final}}}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
+           \frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$t$ is the time (s)}
-              \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
-              \item{${τ_{W}}$ is the ODE parameter for water (s)}
-              \item{${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)}
+              \item{${T_{\text{W}}}$ is the temperature of the water (${}^{\circ}$C)}
+              \item{${τ_{\text{W}}}$ is the ODE parameter for water related to decay time (s)}
+              \item{${T_{\text{C}}}$ is the temperature of the heating coil (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${τ_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}).
+Notes & ${τ_{\text{W}}}$ is calculated from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}.
+        
+        The above equation applies as long as the water is in liquid form, $0\lt{}{T_{\text{W}}}\lt{}100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}).
+        
 \\ \midrule \\
-Source & \cite{koothoor2013}
+Source & \cite[(with PCM removed)]{koothoor2013}
+         
 \\ \midrule \\
-RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} \hyperref[findMass]{FR: Find-Mass} \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}.
-\\ \bottomrule \end{tabular}
+RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[findMass]{FR: Find-Mass}, and \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}
+        
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
-Derivation of the energy balance on water:
-To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$ . Heat transfer occurs in the water from the coil as ${q_{C}}$, over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpCTNTD]{A: Charging-Tank-No-Temp-Discharge}) . Assuming no volumetric heat generation per unit volume (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0$ . Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
-\begin{displaymath}
-{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={q_{C}} {A_{C}}
-\end{displaymath}
-Using \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} , this can be written as:
-\begin{displaymath}
-{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)
-\end{displaymath}
-Dividing (3) by ${m_{W}} {C_{W}}$, we obtain:
-\begin{displaymath}
-\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)
-\end{displaymath}
-Setting ${τ_{W}}$ = ${m_{W}}$ ${C_{W}}$ / ${h_{C}}$ ${A_{C}}$ , Equation (4) can be written in its final form as:
-\begin{displaymath}
-\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{τ_{W}}} \left({T_{C}}-{T_{W}}\right)
-\end{displaymath}
-\par~
+\paragraph{Detailed derivation of the energy balance on water:}
+\label{IM:eBalanceOnWtrDeriv}
+To find the rate of change of ${T_{\text{W}}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{\text{W}}}$, which has mass ${m_{\text{W}}}$ and specific heat capacity, ${C_{\text{W}}}$. Heat transfer occurs in the water from the heating coil as ${q_{\text{C}}}$ (\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}), over area ${A_{\text{C}}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\begin{displaymath}
+{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}
+\end{displaymath}
+Using \hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} for ${q_{\text{C}}}$, this can be written as:
+
+\begin{displaymath}
+{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)
+\end{displaymath}
+Dividing Equation (2) by ${m_{\text{W}}} {C_{\text{W}}}$, we obtain:
+
+\begin{displaymath}
+\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{{h_{\text{C}}} {A_{\text{C}}}}{{m_{\text{W}}} {C_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)
+\end{displaymath}
+By substituting ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}), this can be written as:
+
+\begin{displaymath}
+\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
 \toprule \textbf{Refname} & \textbf{IM:heatEInWtr}
 \phantomsection 
 \label{IM:heatEInWtr}
 \\ \midrule \\
 Label & Heat energy in the water
+        
 \\ \midrule \\
-Input & ${T_{init}}$, ${m_{W}}$, ${C_{W}}$, ${m_{W}}$
+Input & ${T_{\text{init}}}$, ${m_{\text{W}}}$, ${C_{\text{W}}}$, ${m_{\text{W}}}$
+        
 \\ \midrule \\
-Output & ${E_{W}}$
+Output & ${E_{\text{W}}}$
+         
 \\ \midrule \\
 Input Constraints & 
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     0<t<{t_{final}}
+                     0\leq{}t\leq{}{t_{\text{final}}}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {E_{W}}\left(t\right)={C_{W}} {m_{W}} \left({T_{W}}\left(t\right)-{T_{init}}\right)
+           {E_{\text{W}}}\left(t\right)={C_{\text{W}}} {m_{\text{W}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{init}}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${E_{W}}$ is the change in heat energy in the water (J)}
+              \item{${E_{\text{W}}}$ is the change in heat energy in the water (J)}
               \item{$t$ is the time (s)}
-              \item{${C_{W}}$ is the specific heat capacity of water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
-              \item{${m_{W}}$ is the mass of water (kg)}
-              \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
-              \item{${T_{init}}$ is the initial temperature (${}^{\circ}$C)}
+              \item{${C_{\text{W}}}$ is the specific heat capacity of water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
+              \item{${m_{\text{W}}}$ is the mass of water (kg)}
+              \item{${T_{\text{W}}}$ is the temperature of the water (${}^{\circ}$C)}
+              \item{${T_{\text{init}}}$ is the initial temperature (${}^{\circ}$C)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}.
+        
+        The change in temperature is the difference between the temperature at time $t$ (s), ${T_{\text{W}}}$ and the initial temperature, ${T_{\text{init}}}$ (${}^{\circ}$C).
+        
+        This equation applies as long as $0\lt{}{T_{\text{W}}}\lt{}100$${}^{\circ}$C (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+        
 \\ \midrule \\
 Source & \cite{koothoor2013}
+         
 \\ \midrule \\
-RefBy & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}.
-\\ \bottomrule \end{tabular}
+RefBy & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}
+        
+\\ \bottomrule
+\end{tabular}
 \end{minipage}
+
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} and \hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.
+
 \begin{longtable}{l l l l l}
 \toprule
-Var & Physical Constraints & Software Constraints & Typical Value & Uncert.
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Software Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
 \\
 \midrule
 \endhead
-${A_{C}}$ & ${A_{C}}>0$ & ${A_{C}}\leq{}{{A_{C}}^{max}}$ & $120.0\cdot{}10^{-3}$ $\text{m}^{2}$ & 10$\%$
+${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0$ & ${A_{\text{C}}}\leq{}{{A_{\text{C}}}^{\text{max}}}$ & $0.12$ $\text{m}^{2}$ & 10$\%$
 \\
-${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
+${C_{\text{W}}}$ & ${C_{\text{W}}}\gt{}0$ & ${{C_{\text{W}}}^{\text{min}}}\lt{}{C_{\text{W}}}\lt{}{{C_{\text{W}}}^{\text{max}}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 10$\%$
 \\
-$D$ & $D>0$ & -- & $412.0\cdot{}10^{-3}$ m & 10$\%$
+$D$ & $D\gt{}0$ & ${AR_{\text{min}}}\leq{}D\leq{}{AR_{\text{max}}}$ & $0.412$ m & 10$\%$
 \\
-${h_{C}}$ & ${h_{C}}>0$ & ${{h_{C}}^{min}}\leq{}{h_{C}}\leq{}{{h_{C}}^{max}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10$\%$
+${h_{\text{C}}}$ & ${h_{\text{C}}}\gt{}0$ & ${{h_{\text{C}}}^{\text{min}}}\leq{}{h_{\text{C}}}\leq{}{{h_{\text{C}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & 10$\%$
 \\
-$L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 10$\%$
+$L$ & $L\gt{}0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ m & 10$\%$
 \\
-${T_{C}}$ & $0<{T_{C}}<100$ & -- & $50.0$ ${}^{\circ}$C & 10$\%$
+${T_{\text{C}}}$ & $0\lt{}{T_{\text{C}}}\lt{}100$ & -- & $50.0$ ${}^{\circ}$C & 10$\%$
 \\
-${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50.0\cdot{}10^{3}$ s & 10$\%$
+${T_{\text{init}}}$ & $0\lt{}{T_{\text{init}}}\lt{}100$ & -- & $40.0$ ${}^{\circ}$C & 10$\%$
 \\
-${T_{init}}$ & $0<{T_{init}}<100$ & -- & $40.0$ ${}^{\circ}$C & 10$\%$
+${t_{\text{final}}}$ & ${t_{\text{final}}}\gt{}0$ & ${t_{\text{final}}}\lt{}{{t_{\text{final}}}^{\text{max}}}$ & $50.0\cdot{}10^{3}$ s & 10$\%$
 \\
-${ρ_{W}}$ & ${ρ_{W}}>0$ & ${{ρ_{W}}^{min}}<{ρ_{W}}\leq{}{{ρ_{W}}^{max}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+${t_{\text{step}}}$ & $0\lt{}{t_{\text{step}}}\lt{}{t_{\text{final}}}$ & -- & $0.01$ s & 10$\%$
+\\
+${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0$ & ${{ρ_{\text{W}}}^{\text{min}}}\lt{}{ρ_{\text{W}}}\leq{}{{ρ_{\text{W}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
 \label{Table:InDataConstraints}
 \end{longtable}
+\subsubsection{Properties of a Correct Solution}
+\label{Sec:CorSolProps}
+\hyperref[Table:OutDataConstraints]{Table:OutDataConstraints} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+
 \begin{longtable}{l l}
 \toprule
-Var & Physical Constraints
+\textbf{Var} & \textbf{Physical Constraints}
 \\
 \midrule
 \endhead
-${T_{W}}$ & ${T_{init}}\leq{}{T_{W}}\leq{}{T_{C}}$
+${T_{\text{W}}}$ & ${T_{\text{init}}}\leq{}{T_{\text{W}}}\leq{}{T_{\text{C}}}$
 \\
-${E_{W}}$ & ${E_{W}}\geq{}0$
+${E_{\text{W}}}$ & ${E_{\text{W}}}\geq{}0$
 \\
 \bottomrule
 \caption{Output Data Constraints}
 \label{Table:OutDataConstraints}
 \end{longtable}
-\subsubsection{Properties of a Correct Solution}
-\label{Sec:CorSolProps}
-FIXME.
 \section{Requirements}
 \label{Sec:Requirements}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+
 \subsection{Functional Requirements}
 \label{Sec:FRs}
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
+
 \begin{itemize}
-\item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]Input the following quantities described in \hyperref[Table:Input-Variable-Requirements]{Table:Input-Variable-Requirements}, which define the tank parameters, material properties and initial conditions.
-\item[Find-Mass:\phantomsection\label{findMass}]Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, using ${m_{W}}={V_{W}} {ρ_{W}}=π \left(\frac{D}{2}\right)^{2} L {ρ_{W}}$, where ${V_{W}}$ is the volume of water.
-\item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]Verify that the inputs satisfy the required physical constraints shown in \hyperref[Table:InDataConstraints]{Table:InDataConstraints}.
-\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the mass from \hyperref[findMass]{FR: Find-Mass}, and ${τ_{W}}$ (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).
-\item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).
-\item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).
+\item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]{Input the following quantities described in \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the tank parameters, material properties and initial conditions.}
+\item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, using ${m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}=π \left(\frac{D}{2}\right)^{2} L {ρ_{\text{W}}}$, where ${V_{\text{W}}}$ is the volume of water.}
+\item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]{Verify that the inputs satisfy the required physical constraints shown in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.}
+\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]{Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the mass from \hyperref[findMass]{FR: Find-Mass}, and ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}).}
+\item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]{Calculate and output the temperature of the water (${T_{\text{W}}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).}
+\item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]{Calculate and output the change in heat energy in the water (${E_{\text{W}}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).}
 \end{itemize}
-\begin{longtabu}{l l X[l]}
+\begin{longtabu}{l X[l] l}
 \toprule
-Symbol & Unit & Description
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
 \\
 \midrule
 \endhead
-$L$ & m & length of tank
+${A_{\text{C}}}$ & Heating coil surface area & $\text{m}^{2}$
 \\
-$D$ & m & diameter of tank
+${A_{\text{tol}}}$ & Absolute tolerance & --
 \\
-${A_{C}}$ & $\text{m}^{2}$ & heating coil surface area
+${C_{\text{W}}}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
 \\
-${T_{C}}$ & ${}^{\circ}$C & temperature of the heating coil
+$D$ & Diameter of tank & m
 \\
-${ρ_{W}}$ & $\frac{\text{kg}}{\text{m}^{3}}$ & density of water
+${h_{\text{C}}}$ & Convective heat transfer coefficient between coil and water & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\
-${C_{W}}$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & specific heat capacity of water
+$L$ & Length of tank & m
 \\
-${h_{C}}$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$ & convective heat transfer coefficient between coil and water
+${R_{\text{tol}}}$ & Relative tolerance & --
 \\
-${T_{init}}$ & ${}^{\circ}$C & initial temperature
+${T_{\text{C}}}$ & Temperature of the heating coil & ${}^{\circ}$C
 \\
-${t_{final}}$ & s & final time
+${T_{\text{init}}}$ & Initial temperature & ${}^{\circ}$C
 \\
-${A_{tol}}$ & -- & absolute tolerance
+${t_{\text{final}}}$ & Final time & s
 \\
-${R_{tol}}$ & -- & relative tolerance
+${t_{\text{step}}}$ & Time step for simulation & s
 \\
-${C_{tol}}$ & -- & relative tolerance for conservation of energy
+${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 \bottomrule
-\caption{Input Variable Requirements}
-\label{Table:Input-Variable-Requirements}
+\caption{Required Inputs following \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}}
+\label{Table:ReqInputs}
 \end{longtabu}
 \subsection{Non-Functional Requirements}
 \label{Sec:NFRs}
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
+
 \begin{itemize}
-\item[Correct:\phantomsection\label{correct}]The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.
-\item[Verifiable:\phantomsection\label{verifiable}]The code is tested with complete verification and validation plan.
-\item[Understandable:\phantomsection\label{understandable}]The code is modularized with complete module guide and module interface specification.
-\item[Reusable:\phantomsection\label{reusable}]The code is modularized.
-\item[Maintainable:\phantomsection\label{maintainable}]The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.
+\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.}
+\item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
+\item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
+\item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
+\item[Maintainable:\phantomsection\label{maintainable}]{The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.}
 \end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}
+This section lists the likely changes to be made to the software.
+
 \begin{itemize}
-\item[Temperature-Coil-Variable-Over-Day:\phantomsection\label{likeChgTCVOD}]\hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
-\item[Temperature-Coil-Variable-Over-Length:\phantomsection\label{likeChgTCVOL}]\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.
-\item[Discharging-Tank:\phantomsection\label{likeChgDT}]\hyperref[assumpCTNTD]{A: Charging-Tank-No-Temp-Discharge}- The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.
-\item[Tank-Lose-Heat:\phantomsection\label{likeChgTLH}]\hyperref[assumpPIT]{A: Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.
+\item[Temperature-Coil-Variable-Over-Day:\phantomsection\label{likeChgTCVOD}]{\hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.}
+\item[Temperature-Coil-Variable-Over-Length:\phantomsection\label{likeChgTCVOL}]{\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length} - The temperature of the heating coil will actually change along its length as the water within it cools.}
+\item[Discharging-Tank:\phantomsection\label{likeChgDT}]{\hyperref[assumpCTNTD]{A: Charging-Tank-No-Temp-Discharge} - The model currently only accounts for charging of the tank. That is, increasing the temperature of the water to match the temperature of the coil. A more complete model would also account for discharging of the tank.}
+\item[Tank-Lose-Heat:\phantomsection\label{likeChgTLH}]{\hyperref[assumpPIT]{A: Perfect-Insulation-Tank} - Any real tank cannot be perfectly insulated and will lose heat.}
 \end{itemize}
 \section{Unlikely Changes}
 \label{Sec:UCs}
+This section lists the unlikely changes to be made to the software.
+
 \begin{itemize}
-\item[Water-Fixed-States:\phantomsection\label{unlikeChgWFS}]\hyperref[assumpWAL]{A: Water-Always-Liquid} - It is unlikely for the change of water from liquid to a solid, or from liquid to gas to be considered.
-\item[No-Internal-Heat-Generation:\phantomsection\label{unlikeChgNIHG}]\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water} - Is used for the derivations of \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.
+\item[Water-Fixed-States:\phantomsection\label{unlikeChgWFS}]{\hyperref[assumpWAL]{A: Water-Always-Liquid} - It is unlikely for the change of water from liquid to a solid, or from liquid to gas to be considered.}
+\item[No-Internal-Heat-Generation:\phantomsection\label{unlikeChgNIHG}]{\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water} - Is used for the derivations of \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}.}
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the row of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:Tracey]{Table:Tracey} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. \hyperref[Table:TraceyRI]{Table:TraceyRI} shows the dependencies of instance models, requirements, and data constraints on each other. \hyperref[Table:TraceyRIs]{Table:TraceyRIs} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
-\begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+
+\begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} & \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} & \hyperref[IM:heatEInWtr]{IM: heatEInWtr} & \hyperref[likeChgDT]{LC: Discharging-Tank} & \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & \hyperref[GD:rocTempSimp]{GD: rocTempSimp} & \hyperref[GD:nwtnCooling]{GD: nwtnCooling} & \hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} & \hyperref[likeChgTLH]{LC: Tank-Lose-Heat} & \hyperref[TM:consThermE]{TM: consThermE} & \hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} & \hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} & \hyperref[unlikeChgWFS]{UC: Water-Fixed-States} & \hyperref[TM:sensHtE]{TM: sensHtE} & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} & \hyperref[findMass]{FR: Find-Mass} & \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} & \hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}
+\textbf{} & \textbf{\hyperref[assumpTEO]{A: Thermal-Energy-Only}} & \textbf{\hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant}} & \textbf{\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}} & \textbf{\hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume}} & \textbf{\hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume}} & \textbf{\hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}} & \textbf{\hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time}} & \textbf{\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length}} & \textbf{\hyperref[assumpCTNTD]{A: Charging-Tank-No-Temp-Discharge}} & \textbf{\hyperref[assumpWAL]{A: Water-Always-Liquid}} & \textbf{\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}} & \textbf{\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}} & \textbf{\hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}}
 \\
 \midrule
 \endhead
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[Table:Input-Variable-Requirements]{Table:Input-Variable-Requirements} &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:consThermE]{TM: consThermE} & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:sensHtE]{TM: sensHtE} &  &  &  &  &  &  &  &  &  & X &  &  & 
 \\
-\hyperref[assumpCTNTD]{A: Charging-Tank-No-Temp-Discharge} &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:nwtnCooling]{TM: nwtnCooling} &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  & X & X & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} &  &  &  &  &  & X & X &  &  &  &  &  & 
 \\
-\hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} &  &  &  &  &  &  &  &  &  & X & X & X & 
 \\
-\hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[IM:heatEInWtr]{IM: heatEInWtr} &  &  &  &  &  &  &  &  &  & X &  &  & X
 \\
-\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water} &  &  &  &  & X &  &  &  & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputInitQuants]{FR: Input-Initial-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpPIT]{A: Perfect-Insulation-Tank} &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\hyperref[findMass]{FR: Find-Mass} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpTEO]{A: Thermal-Energy-Only} &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length} &  &  &  &  &  &  &  & X &  &  &  & X &  &  &  &  &  &  & 
+\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time} &  &  &  &  &  &  &  & X &  &  &  &  & X &  &  &  &  &  & 
+\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[assumpWAL]{A: Water-Always-Liquid} &  &  & X &  & X &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:consThermE]{TM: consThermE} &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifiable]{NFR: Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & X & X & X & 
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[findMass]{FR: Find-Mass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:heatEInWtr]{IM: heatEInWtr} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C} &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day} &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-\hyperref[inputInitQuants]{FR: Input-Initial-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  & 
+\hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length} &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
-\hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[likeChgDT]{LC: Discharging-Tank} &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
-\hyperref[TM:sensHtE]{TM: sensHtE} &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[likeChgTLH]{LC: Tank-Lose-Heat} &  &  &  &  &  &  &  &  &  &  & X &  & 
 \\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
-\label{Table:Tracey}
-\end{longtable}
-\begin{longtable}{l l l l l l l l}
-\toprule
- & T1 (\hyperref[TM:consThermE]{TM: consThermE}) & T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) & GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) & GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr})
+\hyperref[unlikeChgWFS]{UC: Water-Fixed-States} &  &  &  &  &  &  &  &  &  & X &  &  & 
 \\
-\midrule
-\endhead
-T1 (\hyperref[TM:consThermE]{TM: consThermE}) &  &  &  &  &  &  & 
-\\
-T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) &  &  &  &  &  &  & 
-\\
-GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) & X &  &  &  &  &  & 
-\\
-GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) &  &  & X &  &  &  & 
-\\
-DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) &  &  &  & X & X &  & 
-\\
-IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
-\label{Table:TraceyRI}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l}
-\toprule
- & IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) & IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) & Data Constraints (\hyperref[Table:InDataConstraints]{Table:InDataConstraints}) & R1 (\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}) & R2 (\hyperref[findMass]{FR: Find-Mass}) & R3 (\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}) & R4 (\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}) & R5 (\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}) & R6 (\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time})
-\\
-\midrule
-\endhead
-IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  &  &  &  &  & 
-\\
-IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  &  &  &  &  &  &  &  & 
-\\
-R1 (\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}) &  &  &  &  &  &  &  &  & 
-\\
-R2 (\hyperref[findMass]{FR: Find-Mass}) & X &  &  & X &  &  &  &  & 
-\\
-R3 (\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}) &  &  & X &  &  &  &  &  & 
-\\
-R4 (\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}) & X &  &  & X & X &  &  &  & 
-\\
-R5 (\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}) & X &  &  &  &  &  &  &  & 
-\\
-R6 (\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}) &  & X &  &  &  &  &  &  & 
-\\
-\bottomrule
-\caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
-\label{Table:TraceyRIs}
-\end{longtable}
-\begin{longtable}{l l l l l l l l l l l l l l l}
-\toprule
- & A1 (\hyperref[assumpTEO]{A: Thermal-Energy-Only}) & A2 (\hyperref[assumpHTCC]{A: Heat-Transfer-Coeffs-Constant}) & A3 (\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}) & A4 (\hyperref[assumpDWCoW]{A: Density-Water-Constant-over-Volume}) & A5 (\hyperref[assumpSHECoW]{A: Specific-Heat-Energy-Constant-over-Volume}) & A6 (\hyperref[assumpLCCCW]{A: Newton-Law-Convective-Cooling-Coil-Water}) & A7 (\hyperref[assumpTHCCoT]{A: Temp-Heating-Coil-Constant-over-Time}) & A8 (\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length}) & A9 (\hyperref[assumpCTNTD]{A: Charging-Tank-No-Temp-Discharge}) & A10 (\hyperref[assumpWAL]{A: Water-Always-Liquid}) & A11 (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}) & A12 (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}) & A13 (\hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank})
-\\
-\midrule
-\endhead
-T1 (\hyperref[TM:consThermE]{TM: consThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-T2 (\hyperref[TM:sensHtE]{TM: sensHtE}) &  & X &  &  &  &  &  &  &  &  &  &  &  & 
-\\
-GD1 (\hyperref[GD:nwtnCooling]{GD: nwtnCooling}) &  &  & X & X & X &  &  &  &  &  &  &  &  & 
-\\
-GD2 (\hyperref[GD:rocTempSimp]{GD: rocTempSimp}) &  &  &  &  &  & X & X & X &  &  &  &  &  & 
-\\
-DD1 (\hyperref[DD:ht.flux.C]{DD: ht\_flux\_C}) &  &  &  &  &  &  &  &  & X & X &  &  &  & 
-\\
-IM1 (\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}) &  &  &  &  &  &  &  &  &  & X &  &  &  & 
-\\
-IM2 (\hyperref[IM:heatEInWtr]{IM: heatEInWtr}) &  &  &  &  &  &  & X &  &  &  &  &  &  & 
-\\
-LC1 (\hyperref[likeChgTCVOD]{LC: Temperature-Coil-Variable-Over-Day}) &  &  &  &  &  &  &  & X &  &  &  &  &  & 
-\\
-LC2 (\hyperref[likeChgTCVOL]{LC: Temperature-Coil-Variable-Over-Length}) &  &  &  &  &  &  &  &  & X &  &  &  &  & 
-\\
-LC3 (\hyperref[likeChgDT]{LC: Discharging-Tank}) &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+\hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation} &  &  &  &  &  &  &  &  &  &  &  & X & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-\label{Table:TraceyAI}
+\label{Table:TraceMatAvsAll}
 \end{longtable}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceyA]{Fig:TraceyA} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. \hyperref[Figure:TraceyR]{Fig:TraceyR} shows the dependencies of instance models, requirements, and data constraints on each other.
-\section{Values of Auxiliary Constants}
-\label{Sec:AuxConstants}
-This section contains the standard values that are used for calculations in SWHS.
-\begin{longtabu}{l X[l] l l}
+\begin{longtable}{l l l l l l l l l}
 \toprule
-Symbol & Description & Value & Unit
+\textbf{} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}}
 \\
 \midrule
 \endhead
-${L_{min}}$ & minimum length of tank & $100.0\cdot{}10^{-3}$ & m
+\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate} &  &  &  &  &  &  &  & 
 \\
-${L_{max}}$ & maximum length of tank & $50$ & m
+\hyperref[TM:consThermE]{TM: consThermE} &  &  &  &  &  &  &  & 
 \\
-${{ρ_{W}}^{min}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
+\hyperref[TM:sensHtE]{TM: sensHtE} &  &  &  &  &  &  &  & 
 \\
-${{ρ_{W}}^{max}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+\hyperref[TM:nwtnCooling]{TM: nwtnCooling} &  &  &  &  &  &  &  & 
 \\
-${{C_{W}}^{min}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+\hyperref[GD:rocTempSimp]{GD: rocTempSimp} &  & X &  &  & X &  &  & 
 \\
-${{C_{W}}^{max}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil} &  &  &  & X &  &  &  & 
 \\
-${{h_{C}}^{min}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr} & X &  &  &  & X & X &  & 
 \\
-${{h_{C}}^{max}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+\hyperref[IM:heatEInWtr]{IM: heatEInWtr} &  &  & X &  &  &  &  & 
 \\
-${{t_{final}}^{max}}$ & maximum final time & $86400$ & s
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
+\label{Table:TraceMatRefvsRef}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}} & \textbf{\hyperref[findMass]{FR: Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}} & \textbf{\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
+\\
+\midrule
+\endhead
+\hyperref[waterTempGS]{GS: Predict-Water-Temperature} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[waterEnergyGS]{GS: Predict-Water-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[inputInitQuants]{FR: Input-Initial-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[findMass]{FR: Find-Mass} &  &  &  &  &  &  & X &  & X &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} & X &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time} &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR: Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}
+\label{Table:TraceMatAllvsR}
+\end{longtable}
+\section{Values of Auxiliary Constants}
+\label{Sec:AuxConstants}
+This section contains the standard values that are used for calculations in SWHS.
+
+\begin{longtabu}{l X[l] l l}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Value} & \textbf{Unit}
+\\
+\midrule
+\endhead
+${{A_{\text{C}}}^{\text{max}}}$ & maximum surface area of coil & $100000$ & $\text{m}^{2}$
+\\
+${AR_{\text{max}}}$ & maximum aspect ratio & $100$ & --
+\\
+${AR_{\text{min}}}$ & minimum aspect ratio & $0.01$ & --
+\\
+${{C_{\text{W}}}^{\text{max}}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+\\
+${{C_{\text{W}}}^{\text{min}}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$
+\\
+${{h_{\text{C}}}^{\text{max}}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+\\
+${{h_{\text{C}}}^{\text{min}}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
+\\
+${L_{\text{max}}}$ & maximum length of tank & $50$ & m
+\\
+${L_{\text{min}}}$ & minimum length of tank & $0.1$ & m
+\\
+${{t_{\text{final}}}^{\text{max}}}$ & maximum final time & $86400$ & s
+\\
+${{ρ_{\text{W}}}^{\text{max}}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+\\
+${{ρ_{\text{W}}}^{\text{min}}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 \bottomrule
 \caption{Auxiliary Constants}
@@ -878,20 +1016,17 @@ publisher={John Wiley and Sons},
 year={2007},
 edition={6},
 address={Hoboken, New Jersey}}
-
 @mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
 title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
 year={2013},
 address={Hamilton, ON, Canada}}
-
 @misc{lightstone2012,
 author={Lightstone, Marilyn},
 title={Derivation of tank/pcm model},
 year={2012},
 note={From Marilyn Lightstone's Personal Notes}}
-
 @article{parnasClements1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
@@ -900,9 +1035,8 @@ year={1986},
 month=feb,
 volume={12},
 number={2},
-pages={"251-257"},
+pages={251--257},
 address={Washington, USA}}
-
 @inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
@@ -910,7 +1044,7 @@ booktitle={Proceedings of the First International Workshop on Situational Requir
 year={2005},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 address={Paris, France},
-pages={"107-121"},
+pages={107--121},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
 \end{filecontents*}
 \nocite{*}

@@ -23,10 +23,9 @@ import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name c
                                                      -- Vector - Name conflict (defined in file)
 import Utils.Drasil
 
-import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _inputs,
-  _kind, {-_outputs,-} _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss',
-  citeDB, collectUnits, conceptinsTable, generateRefbyMap, idMap, refbyTable,
-  termTable, traceTable)
+import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
+  _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
+  conceptinsTable, generateRefbyMap, idMap, refbyTable, termTable, traceTable)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table, symbTableRef)
@@ -39,7 +38,7 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (reqF, fReqF, fullReqs, nfReqF)
+import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
   propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
@@ -73,12 +72,11 @@ fillTraceMaps dd si@SI{_sysinfodb = db} = si {_sysinfodb =
 
 fillReqs :: DocDesc -> SystemInformation -> SystemInformation
 fillReqs [] si = si
-fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_inputs = i, _sysinfodb = db} = genReqs x
+fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_sysinfodb = db} = genReqs x
   where
     genReqs [] = si
     genReqs (FReqsSub c _:_) = si {_sysinfodb = set conceptinsTable newCI db} where
-        newCI = idMap $ nub $ R.fullReqs i c ++
-          map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)    
+        newCI = idMap $ nub $ c ++ map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)
     genReqs (_:xs) = genReqs xs
 fillReqs (_:xs) si = fillReqs xs si
 

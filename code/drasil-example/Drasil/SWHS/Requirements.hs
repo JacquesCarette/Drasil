@@ -63,7 +63,7 @@ findMassConstruct :: (Referable r, HasShortName r, Referable s, HasShortName s)
   => r -> Sentence -> [s] -> Sentence -> Sentence -> ConceptInstance
 findMassConstruct fr m ims exprs defs = cic "findMass" (foldlSent [
   S "Use the", plural input_ `sIn` makeRef2S fr, S "to find the", 
-  m, S "needed for", (foldlList Comma List $ map makeRef2S ims) `sC`
+  m, S "needed for", foldlList Comma List (map makeRef2S ims) `sC`
   S "using", exprs `sC` S "where", defs])
   "Find-Mass" funcReqDom -- FIXME: Equations shouldn't be inline
 

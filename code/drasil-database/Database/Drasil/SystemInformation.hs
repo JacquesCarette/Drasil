@@ -22,7 +22,8 @@ data SystemInformation where
 -- use a lookup of some sort from their internal (Drasil) ids.
  SI :: (CommonIdea a, Idea a, Idea b, HasName c,
   Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f,
-  Quantity q, MayHaveUnit q, HasUID j, Constrained j) => 
+  Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i,
+  HasUID j, Constrained j) => 
   { _sys :: a
   , _kind :: b
   , _authors :: [c]
@@ -30,8 +31,8 @@ data SystemInformation where
   , _concepts :: [f]
   , _definitions :: [QDefinition] --FIXME: will be removed upon migration to use of [DataDefinition] below
   , _datadefs :: [DataDefinition]
-  , _inputs :: [q]
-  , _outputs :: [q]
+  , _inputs :: [h]
+  , _outputs :: [i]
   , _defSequence :: [Block QDefinition]
   , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
   , _constants :: [QDefinition]

@@ -22,7 +22,7 @@ module Drasil.DocLang (
   -- Sections.ReferenceMaterial
   intro,
   -- Sections.Requirements
-  mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, 
+  inReq, inTable, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- Sections.SpecificSystemDescription
   auxSpecSent, termDefnF',
   -- Sections.Stakeholders
@@ -57,8 +57,8 @@ import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
 --import Drasil.Sections.GeneralSystDesc
 --import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (mkInputPropsTable, mkQRTuple, mkQRTupleRef,
-    mkValsSourceTable)
+import Drasil.Sections.Requirements (inReq, inTable, mkInputPropsTable,
+  mkQRTuple, mkQRTupleRef, mkValsSourceTable)
 import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF')
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms

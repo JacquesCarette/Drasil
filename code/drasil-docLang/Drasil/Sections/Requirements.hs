@@ -1,5 +1,5 @@
-module Drasil.Sections.Requirements (fReqF, fullReqs, fullTables, mkInputPropsTable,
-  mkQRTuple, mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
+module Drasil.Sections.Requirements (fReqF, fullReqs, fullTables, inReq, inTable,
+  mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
 
 import Language.Drasil
 import Utils.Drasil

@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 10, 2019
+Last updated: August 20, 2019
 --------------------------------------------------
 
 Assumptions.hs

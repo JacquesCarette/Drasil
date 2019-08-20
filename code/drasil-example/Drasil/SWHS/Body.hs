@@ -23,7 +23,7 @@ import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
-import Data.Drasil.Concepts.Computation (compcon, algorithm)
+import Data.Drasil.Concepts.Computation (algorithm, compcon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   constraint, content, corSol, datum, definition, document, environment, goalStmt,
   information, input_, model, organization, output_, physical, physics, problem,
@@ -59,8 +59,7 @@ import Drasil.SWHS.Goals (goals)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
   iMods, instModIntro)
 import Drasil.SWHS.References (parnas1972, parnasClements1984, citations)
-import Drasil.SWHS.Requirements (funcReqs, inputInitQuantsTable, nfRequirements,
-  verifyEnergyOutput)
+import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
 import Drasil.SWHS.TMods (tMods)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
@@ -112,7 +111,7 @@ symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section labCon
+  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
@@ -155,7 +154,7 @@ mkSRS = [RefSec $ RefProg intro [
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub' [inputInitQuantsTable],
+    FReqsSub inReqDesc [],
     NonFReqsSub
   ],
   LCsSec,
@@ -174,9 +173,6 @@ insModel = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 concIns :: [ConceptInstance]
 concIns = goals ++ assumptions ++ likelyChgs ++ unlikelyChgs ++ funcReqs
   ++ nfRequirements
-
-labCon :: [LabelledContent]
-labCon = [inputInitQuantsTable]
 
 section :: [Section]
 section = extractSection srs
@@ -489,7 +485,7 @@ dataConTail = dataContMid +:+ dataContFooter
 
 dataContMid :: Sentence
 dataContMid = foldlSent [S "The", phrase column, S "for", phrase software,
-  plural constraint, S "restricts the range" `sOf`  plural input_,
+  plural constraint, S "restricts the range" `sOf` plural input_,
   S "to reasonable", plural value]
 
 dataContFooter :: Sentence

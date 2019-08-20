@@ -576,7 +576,7 @@ Description & \begin{symbDescription}
 Source & \cite{koothoor2013}
          
 \\ \midrule \\
-RefBy & \hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
+RefBy & \hyperref[outputInputDerivVals]{FR: Output-Input-Derived-Values} and \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}
         
 \\ \bottomrule
 \end{tabular}
@@ -772,10 +772,10 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
 \begin{itemize}
-\item[Input-Initial-Quantities:\phantomsection\label{inputInitQuants}]{Input the following quantities described in \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the tank parameters, material properties and initial conditions.}
-\item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputInitQuants]{FR: Input-Initial-Quantities} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, using ${m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}=π \left(\frac{D}{2}\right)^{2} L {ρ_{\text{W}}}$, where ${V_{\text{W}}}$ is the volume of water.}
+\item[Input-Initial-Values:\phantomsection\label{inputInitVals}]{Input the following values described in \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the tank parameters, material properties, and initial conditions.}
+\item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputInitVals]{FR: Input-Initial-Values} to find the mass needed for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}, using ${m_{\text{W}}}={V_{\text{W}}} {ρ_{\text{W}}}=π \left(\frac{D}{2}\right)^{2} L {ρ_{\text{W}}}$, where ${V_{\text{W}}}$ is the volume of water.}
 \item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]{Verify that the inputs satisfy the required physical constraints shown in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.}
-\item[Output-Input-Derived-Quantities:\phantomsection\label{outputInputDerivQuants}]{Output the input quantities and derived quantities in the following list: the quantities from \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}, the mass from \hyperref[findMass]{FR: Find-Mass}, and ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}).}
+\item[Output-Input-Derived-Values:\phantomsection\label{outputInputDerivVals}]{Output the input values and derived values in the following list: the values from \hyperref[inputInitVals]{FR: Input-Initial-Values}, the mass from \hyperref[findMass]{FR: Find-Mass}, and ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}).}
 \item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]{Calculate and output the temperature of the water (${T_{\text{W}}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}).}
 \item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]{Calculate and output the change in heat energy in the water (${E_{\text{W}}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM: heatEInWtr}).}
 \end{itemize}
@@ -810,7 +810,7 @@ ${t_{\text{step}}}$ & Time step for simulation & s
 ${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 \bottomrule
-\caption{Required Inputs following \hyperref[inputInitQuants]{FR: Input-Initial-Quantities}}
+\caption{Required Inputs following \hyperref[inputInitVals]{FR: Input-Initial-Values}}
 \label{Table:ReqInputs}
 \end{longtabu}
 \subsection{Non-Functional Requirements}
@@ -868,13 +868,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:heatEInWtr]{IM: heatEInWtr} &  &  &  &  &  &  &  &  &  & X &  &  & X
 \\
-\hyperref[inputInitQuants]{FR: Input-Initial-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputInitVals]{FR: Input-Initial-Values} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[findMass]{FR: Find-Mass} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputInputDerivVals]{FR: Output-Input-Derived-Values} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -934,7 +934,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[inputInitQuants]{FR: Input-Initial-Quantities}} & \textbf{\hyperref[findMass]{FR: Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities}} & \textbf{\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
+\textbf{} & \textbf{\hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}} & \textbf{\hyperref[TM:consThermE]{TM: consThermE}} & \textbf{\hyperref[TM:sensHtE]{TM: sensHtE}} & \textbf{\hyperref[TM:nwtnCooling]{TM: nwtnCooling}} & \textbf{\hyperref[GD:rocTempSimp]{GD: rocTempSimp}} & \textbf{\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}} & \textbf{\hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}} & \textbf{\hyperref[IM:heatEInWtr]{IM: heatEInWtr}} & \textbf{\hyperref[inputInitVals]{FR: Input-Initial-Values}} & \textbf{\hyperref[findMass]{FR: Find-Mass}} & \textbf{\hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints}} & \textbf{\hyperref[outputInputDerivVals]{FR: Output-Input-Derived-Values}} & \textbf{\hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time}} & \textbf{\hyperref[calcChgHeatEnergyWtrOverTime]{FR: Calculate-Change-Heat\_Energy-Water-Over-Time}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}}
 \\
 \midrule
 \endhead
@@ -942,13 +942,13 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[waterEnergyGS]{GS: Predict-Water-Energy} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputInitQuants]{FR: Input-Initial-Quantities} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputInitVals]{FR: Input-Initial-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[findMass]{FR: Find-Mass} &  &  &  &  &  &  & X &  & X &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[checkWithPhysConsts]{FR: Check-Input-with-Physical\_Constraints} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputInputDerivQuants]{FR: Output-Input-Derived-Quantities} & X &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & 
+\hyperref[outputInputDerivVals]{FR: Output-Input-Derived-Values} & X &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcTempWtrOverTime]{FR: Calculate-Temperature-Water-Over-Time} &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\

@@ -1,5 +1,5 @@
-module Drasil.Sections.Requirements (fReqF, fReqF', fullReqs, fullTables, mkInputPropsTable, mkQRTuple,
-  mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
+module Drasil.Sections.Requirements (fReqF, fullReqs, fullTables, mkInputPropsTable,
+  mkQRTuple, mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -16,19 +16,11 @@ import Drasil.DocumentLanguage.Units (toSentence)
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
-fReqF :: (Quantity q, MayHaveUnit q) => [q] {- -> [q]-} -> [ConceptInstance]
-  -> [LabelledContent] -> Section
-fReqF i {-o-} r t = SRS.funcReq (fReqIntro : reqContents) []
-  where
-    reqContents = mkEnumSimpleD (fullReqs i r) ++ map LlC (fullTables i t) -- ++ [outTable])
-
 fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> [ConceptInstance] -> [ConceptInstance]
 fullReqs i r = inReq (inReqDesc $ inTable i) : r-- ++ [outReq (outReqDesc outTable)]
 
 fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [LabelledContent]
 fullTables i t = inTable i : t
-
---reqContents = mkEnumSimpleD fullReqs ++ map LlC (inTable : tables) -- ++ [outTable])
 
 inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
 inTable i = mkInputPropsTable i (inReq EmptyS) -- passes empty Sentence to make stub of inReq
@@ -43,8 +35,8 @@ inReq :: Sentence -> ConceptInstance
 inReq  s = cic "inputValues"  s "Input-Values"  funcReqDom
 --outReq s = cic "inputValues" s "Output-Values" funcReqDom
 
-fReqF' :: [Contents] -> Section
-fReqF' listOfFReqs = SRS.funcReq (fReqIntro : listOfFReqs) []
+fReqF :: [Contents] -> Section
+fReqF listOfFReqs = SRS.funcReq (fReqIntro : listOfFReqs) []
 
 nfReqF :: [Contents] -> Section
 nfReqF nfrs = SRS.nonfuncReq (nfReqIntro : nfrs) []
@@ -54,14 +46,12 @@ reqIntroStart :: Sentence
 reqIntroStart = foldlSent_ [S "This", phrase section_, S "provides"]
 
 frReqIntroBody :: Sentence
-frReqIntroBody = foldlSent_
-        [S "the", plural functionalRequirement `sC` S "the tasks and behaviours that the",
-        phrase software, S "is expected to complete"]
+frReqIntroBody = foldlSent_ [S "the", plural functionalRequirement `sC`
+  S "the tasks and behaviours that the", phrase software, S "is expected to complete"]
 
 nfrReqIntroBody :: Sentence
-nfrReqIntroBody = foldlSent_
-        [S "the", plural nonfunctionalRequirement `sC` S "the qualities that the",
-        phrase software, S "is expected to exhibit"]
+nfrReqIntroBody = foldlSent_ [S "the", plural nonfunctionalRequirement `sC`
+  S "the qualities that the", phrase software, S "is expected to exhibit"]
 
 --generalized requirements introduction
 reqIntro :: Contents

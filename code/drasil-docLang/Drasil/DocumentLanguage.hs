@@ -24,9 +24,9 @@ import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name c
 import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _inputs,
-  _kind, {-_outputs,-} _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB,
-  collectUnits, conceptinsTable, generateRefbyMap, idMap, labelledcontentTable,
-  refbyTable, termTable, traceTable)
+  _kind, {-_outputs,-} _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss',
+  citeDB, collectUnits, conceptinsTable, generateRefbyMap, idMap, refbyTable,
+  termTable, traceTable)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table, symbTableRef)
@@ -39,8 +39,7 @@ import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
-import qualified Drasil.Sections.Requirements as R (reqF, fReqF, fReqF',
-  fullReqs, fullTables, nfReqF)
+import qualified Drasil.Sections.Requirements as R (reqF, fReqF, fullReqs, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
   propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
@@ -59,10 +58,10 @@ import qualified Data.Map as Map (elems, toList)
 
 -- | Creates a document from a document description and system information
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
-mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors, _sysinfodb = db} =
+mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
   mkSections (fillTraceMaps l (fillReqs l si)) l where
-    l = mkDocDesc db dd
+    l = mkDocDesc si dd
 
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
@@ -77,13 +76,10 @@ fillReqs [] si = si
 fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_inputs = i, _sysinfodb = db} = genReqs x
   where
     genReqs [] = si
-    genReqs (FReqsSub c l:_) =
-      si {_sysinfodb = set conceptinsTable newCI $ set labelledcontentTable newLC db}
-      where
-        newCI = setHelper (R.fullReqs i c)   (db ^. conceptinsTable)
-        newLC = setHelper (R.fullTables i l) (db ^. labelledcontentTable)
+    genReqs (FReqsSub c _:_) = si {_sysinfodb = set conceptinsTable newCI db} where
+        newCI = idMap $ nub $ R.fullReqs i c ++
+          map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)    
     genReqs (_:xs) = genReqs xs
-    setHelper r m = idMap $ {-nub $ -}r ++ map fst (sortOn snd $ map snd $ Map.toList m)
 fillReqs (_:xs) si = fillReqs xs si
 
 -- | Helper for creating the document sections
@@ -98,7 +94,7 @@ mkSections si dd = map doit dd
     doit (AuxConstntSec acs) = mkAuxConsSec acs 
     doit Bibliography        = mkBib (citeDB si)
     doit (GSDSec gs')        = mkGSDSec gs'
-    doit (ReqrmntSec r)      = mkReqrmntSec si r
+    doit (ReqrmntSec r)      = mkReqrmntSec r
     doit (LCsSec lc)         = mkLCsSec lc
     doit (UCsSec ulcs)       = mkUCsSec ulcs
     doit (TraceabilitySec t) = mkTraceabilitySec t si
@@ -313,13 +309,13 @@ imStub = SRS.inModel   [] []
 pdStub = SRS.probDesc  [] []
 
 -- | Helper for making the 'Requirements' section
-mkReqrmntSec :: SystemInformation -> ReqrmntSec -> Section
-mkReqrmntSec SI{_inputs = is {-, _outputs = os-}} (ReqsProg l) = R.reqF $ map mkSubs l
+mkReqrmntSec :: ReqrmntSec -> Section
+mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
-    mkSubs (FReqsSub  frs tbs) = R.fReqF is {-os-} frs tbs
-    mkSubs (FReqsSub' frs tbs) = R.fReqF' (mkEnumSimpleD frs ++ map LlC tbs)
-    mkSubs (NonFReqsSub nfrs) = R.nfReqF  (mkEnumSimpleD nfrs)
+    mkSubs (FReqsSub  frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
+    mkSubs (FReqsSub' frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
+    mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 {--}
 

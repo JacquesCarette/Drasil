@@ -57,7 +57,7 @@ import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
+import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
@@ -126,7 +126,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqsTables,
+    FReqsSub inReqDesc funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,

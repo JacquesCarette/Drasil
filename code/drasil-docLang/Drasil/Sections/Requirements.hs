@@ -16,8 +16,8 @@ import Drasil.DocumentLanguage.Units (toSentence)
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
 
-fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> [ConceptInstance] -> [ConceptInstance]
-fullReqs i r = inReq (inReqDesc $ inTable i) : r-- ++ [outReq (outReqDesc outTable)]
+fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> [ConceptInstance] -> [ConceptInstance]
+fullReqs i d r = inReq (inReqDesc (inTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
 
 fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [LabelledContent]
 fullTables i t = inTable i : t
@@ -27,8 +27,10 @@ inTable i = mkInputPropsTable i (inReq EmptyS) -- passes empty Sentence to make 
 --outTable    = mkValsSourceTable o "ReqOutputs" (S "Required" +:+ titleize' output_ `follows` (outReq EmptyS))
                                                 -- passes empty Sentence to make stub of outReq
 
-inReqDesc :: (HasShortName r, Referable r) => r -> Sentence 
-inReqDesc  t = foldlSent [atStart input_,  S "the", plural value, S "from", makeRef2S t]
+inReqDesc :: (HasShortName r, Referable r) => r -> Sentence -> Sentence 
+inReqDesc  t desc = foldlSent [atStart input_,  S "the", plural value, S "from", end]
+  where end = case desc of EmptyS -> makeRef2S t
+                           sent   -> makeRef2S t `sC` S "which define" +:+ sent
 --outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", makeRef2S t]
 
 inReq :: Sentence -> ConceptInstance

@@ -70,7 +70,7 @@ data SCSSub where
 newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
-  FReqsSub    :: [LabelledContent] -> ReqsSub -- LabelledContent for tables
+  FReqsSub    :: Sentence -> [LabelledContent] -> ReqsSub -- LabelledContent for tables
   FReqsSub'   :: [LabelledContent] -> ReqsSub -- LabelledContent for tables
   NonFReqsSub :: ReqsSub
 
@@ -91,7 +91,7 @@ mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec (AppndxSec a) = DL.AppndxSec a
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
   reqSec :: ReqsSub -> DL.ReqsSub
-  reqSec (FReqsSub t) = DL.FReqsSub (fullReqs is $ fromConcInsDB funcReqDom) (fullTables is t)
+  reqSec (FReqsSub d t) = DL.FReqsSub (fullReqs is d $ fromConcInsDB funcReqDom) (fullTables is t)
   reqSec (FReqsSub' t) = DL.FReqsSub' (fromConcInsDB funcReqDom) t
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
   ssdSec :: SSDSub -> DL.SSDSub

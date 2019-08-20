@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs) where
+module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfuncReqs) where
 
 import Control.Lens ((^.))
 
@@ -9,21 +9,24 @@ import Theory.Drasil (DataDefinition)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Computation (inValue)
-import Data.Drasil.Concepts.Documentation (assumption, code, condition,
-  datumConstraint, environment, funcReqDom, likelyChg, message, mg, mis,
-  module_, nonFuncReqDom, output_, property, requirement, srs, system,
-  traceyMatrix, unlikelyChg, value, vavPlan)
+import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,
+  condition, datumConstraint, environment, funcReqDom, likelyChg, message, mg,
+  mis, module_, nonFuncReqDom, output_, property, requirement, srs, system,
+  traceyMatrix, type_, unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)
+import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.GlassBR.Assumptions (assumpSV, assumpGL, assumptionConstants)
+import Drasil.GlassBR.Concepts (glass)
 import Drasil.GlassBR.DataDefs (aspRat, dimLL, glaTyFac, hFromt, loadDF, nonFL, 
   risk, standOffDis, strDisFac, tolPre, tolStrDisFac)
 import Drasil.GlassBR.IMods (iMods)
 import Drasil.GlassBR.TMods (lrIsSafe, pbIsSafe)
-import Drasil.GlassBR.Unitals (isSafeLR, isSafePb, loadSF, notSafe, safeMessage)
+import Drasil.GlassBR.Unitals (blast, isSafeLR, isSafePb, loadSF, notSafe,
+  pbTolfail, safeMessage)
 
 {--Functional Requirements--}
 
@@ -43,9 +46,11 @@ outputValsAndKnownValues   = cic "outputValsAndKnownValues"   outputValsAndKnown
 checkGlassSafety           = cic "checkGlassSafety"           checkGlassSafetyDesc           "Check-Glass-Safety"                      funcReqDom
 outputValues               = cic "outputValues"               outputValuesDesc               "Output-Values"                           funcReqDom
 
-checkInputWithDataConsDesc, outputValsAndKnownValuesDesc, checkGlassSafetyDesc :: Sentence
+inReqDesc, sysSetValsFollowingAssumpsDesc, checkInputWithDataConsDesc, outputValsAndKnownValuesDesc, checkGlassSafetyDesc :: Sentence
 
-sysSetValsFollowingAssumpsDesc :: Sentence
+inReqDesc = foldlList Comma List [S "the" +:+ phrase glass +:+ plural dimension,
+  phrase type_ `sOf` phrase glass, phrase pbTolfail, plural characteristic `ofThe` phrase blast]
+
 sysSetValsFollowingAssumpsDesc = foldlSent [S "The", phrase system, S "shall set the known",
     plural value, S "as described in", makeRef2S sysSetValsFollowingAssumpsTable]
 
@@ -61,8 +66,8 @@ sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++
 -- the assumption(s) that're being followed? (Issue #349)
 
 checkInputWithDataConsDesc = foldlSent [S "The", phrase system, S "shall check the entered",
-  plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
+  plural inValue, S "to ensure that they do not exceed the", plural datumConstraint,
+  S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
   S "If any" `sOf` S "the", plural inValue, S "are out" `sOf` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
 

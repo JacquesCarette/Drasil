@@ -1168,7 +1168,11 @@ Description & \begin{symbDescription}
               \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safePb$ (from \hyperref[IM:isSafeLR]{IM: isSafeLR}) are either both True or both False. ${P_{\text{b}}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage entered by the user.
+Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safePb$ (from \hyperref[IM:isSafeLR]{IM: isSafeLR}) are either both True or both False.
+        
+        ${P_{\text{b}}}$ is defined in \hyperref[DD:probOfBreak]{DD: probOfBreak}.
+        
+        ${P_{\text{b}\text{tol}}}$ is entered by the user.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1215,7 +1219,11 @@ Description & \begin{symbDescription}
               \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Applied Load (demand)) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofDemand]{DD: calofDemand}.
+Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False.
+        
+        $LR$ is defined in \hyperref[DD:calofCapacity]{DD: calofCapacity} and is also called capacity.
+        
+        $q$ is the 3 second duration equivalent pressure, as given in \hyperref[DD:calofDemand]{DD: calofDemand}.
         
 \\ \midrule \\
 Source & \cite{astm2009}

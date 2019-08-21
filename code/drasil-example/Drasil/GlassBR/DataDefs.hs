@@ -1,6 +1,6 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefs, dimLL, qDefns, glaTyFac, 
   hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac, 
-  eqTNTWDD, probOfBreak, calofCapacity, calofDemand) where
+  eqTNTWDD, probOfBreak, calofCapacity, calofDemand, pbTolUsr, qRef) where
   
 import Control.Lens ((^.))
 import Language.Drasil

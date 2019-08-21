@@ -7,11 +7,6 @@ import Data.Drasil.Concepts.Documentation (interface, system, environment,
   userCharacteristic, systemConstraint, information, section_)
 import qualified Drasil.DocLang.SRS as SRS (genSysDes, userChar, sysCon, sysCont)
 
--- wrapper for general system description
-genSysF :: [Section] -> Contents -> [Contents] -> [Section] -> Section
-genSysF sCntxt userIntro cnstrnts systSubSec = SRS.genSysDes [genSysIntro]
-  (sCntxt ++ [usrCharsF [userIntro], systCon cnstrnts systSubSec])
-
 --generalized general system description introduction
 genSysIntro :: Contents
 genSysIntro = foldlSP

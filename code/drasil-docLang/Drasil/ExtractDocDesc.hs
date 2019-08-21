@@ -18,9 +18,8 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   introSub = Constant <$> \case
     (IOrgSec _ _ s _) -> mSec [s]
     _ -> mempty,
-  gsdSec = Constant <$> \case
-    (GSDProg s1 c1 c2 s2) -> mconcat [mSec s1, mCon [c1], mCon c2, mSec s2]
-    (GSDProg2 _) -> mempty,
+  --gsdSec = Constant <$> \case
+  --  (GSDProg _) -> mempty,
   gsdSub = Constant <$> \case
     (SysCntxt c) -> mCon c
     (UsrChars c) -> mCon c

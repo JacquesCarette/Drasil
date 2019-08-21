@@ -37,7 +37,7 @@ import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
   stakeholder, thModel, tOfSymb, tOfUnit, userChar, offShelfSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
-import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
+import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
@@ -228,8 +228,7 @@ mkStkhldrSec (StkhldrProg2 l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkS
 
 -- | Helper for making the 'General System Description' section
 mkGSDSec :: GSDSec -> Section
-mkGSDSec (GSDProg cntxt uI cnstrnts systSubSec) = GSD.genSysF cntxt uI cnstrnts systSubSec
-mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
+mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
    where
      mkSubs :: GSDSub -> Section
      mkSubs (SysCntxt cs)            = GSD.sysContxt cs

@@ -11,8 +11,8 @@ import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (Theory(defined_fun, defined_quant))
 import Utils.Drasil
 
-import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
-  DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..),
+import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
+  DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..),
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
   ProblemDescription(..), PDSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl, SSDSec(..), SSDSub(..),
@@ -108,7 +108,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
       [Client glassBR $ S "a" +:+ phrase company
         +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli),
       Cstmr glassBR],
-  GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
+  GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg

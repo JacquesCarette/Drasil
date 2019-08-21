@@ -113,8 +113,7 @@ data StkhldrSub where
 
 {--}
 
-data GSDSec = GSDProg [Section] Contents [Contents] [Section]
-            | GSDProg2 [GSDSub]
+newtype GSDSec = GSDProg [GSDSub]
 
 data GSDSub where
   SysCntxt   :: [Contents] -> GSDSub --FIXME: partially automate
@@ -248,8 +247,7 @@ instance Multiplate DLPlate where
     stk (StkhldrProg2 progs) = StkhldrProg2 <$> traverse (stkSub p) progs
     stk' (Client c s) = Client <$> pure c <*> pure s
     stk' (Cstmr c) = Cstmr <$> pure c
-    gs (GSDProg s1 c labcon s2) = GSDProg <$> pure s1 <*> pure c <*> pure labcon <*> pure s2
-    gs (GSDProg2 x) = GSDProg2 <$> traverse (gsdSub p) x
+    gs (GSDProg x) = GSDProg <$> traverse (gsdSub p) x
     gs' (SysCntxt c) = SysCntxt <$> pure c
     gs' (UsrChars c) = UsrChars <$> pure c
     gs' (SystCons c s) = SystCons <$> pure c <*> pure s

@@ -45,8 +45,8 @@ import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
   propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
-import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
-  stakeholderIntro, tClientF, tCustomerF)
+import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
+  tClientF, tCustomerF)
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF,
   generateTraceTableView)
 
@@ -219,8 +219,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
 
 -- | Helper for making the 'Stakeholders' section
 mkStkhldrSec :: StkhldrSec -> Section
-mkStkhldrSec (StkhldrProg key details) = Stk.stakehldrGeneral key details
-mkStkhldrSec (StkhldrProg2 l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
+mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
   where
     mkSubs :: StkhldrSub -> Section
     mkSubs (Client kWrd details) = Stk.tClientF kWrd details

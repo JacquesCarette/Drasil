@@ -96,9 +96,6 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
       (IOrgSec s1 _ _ s2) -> [s1, s2],
-    stkSec = Constant . f <$> \case
-      (StkhldrProg _ s) -> [s]
-      _ -> [],
     stkSub = Constant . f <$> \case
       (Client _ s) -> [s]
       (Cstmr _) -> [],
@@ -217,9 +214,6 @@ ciPlate = preorderFold $ purePlate {
   introSub = Constant <$> \case
     (IOrgSec _ ci _ _) -> [ci]
     _ -> [],
-  stkSec = Constant <$> \case
-    (StkhldrProg ci _) -> [ci]
-    (StkhldrProg2 _) -> [],
   stkSub = Constant <$> \case
    (Client ci _) -> [ci]
    (Cstmr ci) -> [ci],

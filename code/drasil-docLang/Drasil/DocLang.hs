@@ -9,7 +9,7 @@ module Drasil.DocLang (
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
-  RefSec(..), RefTab(..), StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr),
+  RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
   -- DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
@@ -46,7 +46,7 @@ import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'', tunit, tunit')
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
-  Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(StkhldrProg2),
+  Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),

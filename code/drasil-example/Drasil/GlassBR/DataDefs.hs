@@ -16,17 +16,17 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Data.Drasil.Citations (campidelli)
 
-import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC, assumpGL)
+import Drasil.GlassBR.Assumptions (assumpSV, assumpLDFC)
 import Drasil.GlassBR.Concepts (annealed, fullyT, glass, heatS)
 import Drasil.GlassBR.Figures (demandVsSDFig, dimlessloadVsARFig)
 import Drasil.GlassBR.ModuleDefs (interpY, interpZ)
 import Drasil.GlassBR.References (astm2009, beasonEtAl1998)
 import Drasil.GlassBR.Unitals (actualThicknesses, aspectRatio, charWeight,
-  demand, dimlessLoad, gTF, glassTypeCon, glassTypeFactors, glassType, 
-  lDurFac, lite, loadDur, modElas, nomThick, nominalThicknesses, nonFactorL, pbTol, 
-  plateLen, plateWidth, riskFun, sdfTol, sdx, sdy, sdz, standOffDist, sflawParamK, 
-  sflawParamM, stressDistFac, tNT, tolLoad, minThick, probBr, lRe, loadSF,
-  demandq, eqTNTWeight)
+  demand, demandq, dimlessLoad, eqTNTWeight, gTF, glassType, glassTypeCon,
+  glassTypeFactors, lDurFac, lRe, loadDur, loadSF, minThick, modElas, nomThick,
+  nominalThicknesses, nonFactorL, pbTol, plateLen, plateWidth, probBr, riskFun,
+  sdfTol, sdx, sdy, sdz, sflawParamK, sflawParamM, standOffDist, stressDistFac,
+  tNT, tolLoad)
 
 ----------------------
 -- DATA DEFINITIONS --
@@ -140,7 +140,7 @@ dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
 dimLL :: DataDefinition
 dimLL = dd dimLLQD [makeCite astm2009, makeCiteInfo campidelli $ Equation [7]] Nothing "dimlessLoad"
-  [glassLite, qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
+  [qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
 
 --DD8--
 
@@ -222,7 +222,7 @@ calofCapacityQD = mkQuantDef lRe calofCapacityEq
 
 calofCapacity :: DataDefinition
 calofCapacity = dd calofCapacityQD [makeCite astm2009] Nothing "calofCapacity"
-  [lrCap, nonFLRef, gtfRef, glassLite]
+  [lrCap, nonFLRef, gtfRef]
 
 --DD15--
 calofDemandEq :: Expr
@@ -254,11 +254,6 @@ anGlass = getAcc annealed `sIs` phrase annealed +:+. phrase glass
 
 ftGlass :: Sentence
 ftGlass = getAcc fullyT `sIs` phrase fullyT +:+. phrase glass
-
-glassLite :: Sentence 
-glassLite = foldlSent [S "The", phrase glass `sIs` S "considered to be a single",
-  phrase lite, fromSource assumpGL]
-
 
 hMin :: Sentence
 hMin = ch nomThick `sIs` S "a function that maps from the nominal thickness"

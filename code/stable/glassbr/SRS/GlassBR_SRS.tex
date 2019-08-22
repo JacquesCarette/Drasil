@@ -378,7 +378,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[glassCondition:\phantomsection\label{assumpGC}]{Following \cite[(pg. 1)]{astm2009}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass}.)}
 \item[explainScenario:\phantomsection\label{assumpES}]{This system only considers the external explosion scenario for its calculations. (RefBy: \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk}.)}
 \item[standardValues:\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} are assumed for the duration of load (${t_{\text{d}}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E}, \hyperref[DD:sdfTol]{DD: sdfTol}, \hyperref[DD:nFL]{DD: nFL}, \hyperref[DD:loadDurFactor]{DD: loadDurFactor}, \hyperref[DD:dimlessLoad]{DD: dimlessLoad}, and \hyperref[assumpLDFC]{A: ldfConstant}.)}
-\item[glassLite:\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[DD:calofCapacity]{DD: calofCapacity}, \hyperref[DD:dimlessLoad]{DD: dimlessLoad}, and \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}.)}
+\item[glassLite:\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}.)}
 \item[boundaryConditions:\phantomsection\label{assumpBC}]{Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions}.)}
 \item[responseType:\phantomsection\label{assumpRT}]{The response type considered in GlassBR is flexural. (RefBy: \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass}.)}
 \item[ldfConstant:\phantomsection\label{assumpLDFC}]{With reference to \hyperref[assumpSV]{A: standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR. (RefBy: \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} and \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.)}
@@ -771,9 +771,7 @@ Description & \begin{symbDescription}
               \item{$GTF$ is the glass type factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The glass is considered to be a single lite (from \hyperref[assumpGL]{A: glassLite}).
-        
-        $q$ is the 3 second duration equivalent pressure, as given in \hyperref[DD:calofDemand]{DD: calofDemand}.
+Notes & $q$ is the 3 second duration equivalent pressure, as given in \hyperref[DD:calofDemand]{DD: calofDemand}.
         
         $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
         
@@ -1073,8 +1071,6 @@ Notes & $LR$ is also called capacity.
         $NFL$ is defined in \hyperref[DD:nFL]{DD: nFL}.
         
         $GTF$ is defined in \hyperref[DD:gTF]{DD: gTF}.
-        
-        The glass is considered to be a single lite (from \hyperref[assumpGL]{A: glassLite}).
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1439,7 +1435,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:gTF]{DD: gTF} &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dimlessLoad]{DD: dimlessLoad} &  &  &  & X & X &  &  & 
+\hyperref[DD:dimlessLoad]{DD: dimlessLoad} &  &  &  & X &  &  &  & 
 \\
 \hyperref[DD:tolLoad]{DD: tolLoad} &  &  &  &  &  &  &  & 
 \\
@@ -1453,7 +1449,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:probOfBreak]{DD: probOfBreak} &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:calofCapacity]{DD: calofCapacity} &  &  &  &  & X &  &  & 
+\hyperref[DD:calofCapacity]{DD: calofCapacity} &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:calofDemand]{DD: calofDemand} &  &  &  &  &  &  &  & 
 \\

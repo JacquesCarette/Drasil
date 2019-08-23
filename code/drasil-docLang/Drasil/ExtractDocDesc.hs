@@ -38,8 +38,6 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (FReqsSub' _ c) -> mCon c
     (FReqsSub _ c) -> mCon c
     (NonFReqsSub _) -> mempty,
-  lcsSec = Constant <$> \(LCsProg _) -> mempty,
-  ucsSec = Constant <$> \(UCsProg _) -> mempty,
   offShelfSec = Constant <$> \(OffShelfSolnsProg c) -> mCon c,
   appendSec = Constant <$> \(AppndxProg c) -> mCon c
 }

@@ -4,7 +4,7 @@ if [ -z "$TRAVIS_PULL_REQUEST_BRANCH" ]; then
   exit 0
 fi
 
-CHANGED_FILES=$(git diff --name-only "$TRAVIS_BRANCH" | grep "website/" | wc -l)
+CHANGED_FILES=$(git diff --name-only "$TRAVIS_BRANCH" | grep -E "website/|deploy_stage" | wc -l)
 if [ $CHANGED_FILES -gt 0 ]; then
   echo "Looks like there were changes to the deploy website."
   make deploy_lite

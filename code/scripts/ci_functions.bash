@@ -25,7 +25,7 @@ ci_export_funcs() {
 
 ci_retry () {
   # Wraps travis_retry to allow it to retry entire command pipelines.
-  travis_retry "$SHELL" $(shopt | grep -E "on$" | cut -f1 | sed -E "s/^([^ ]*) *$/-O \1/g") -c "source \"$ALL_FUNCTIONS_FILE\"; $*"
+  travis_retry "$SHELL" $(cat "$SHELL_OPTS_FILE") -c "source \"$ALL_FUNCTIONS_FILE\"; $*"
 }
 
 ci_fstep() {

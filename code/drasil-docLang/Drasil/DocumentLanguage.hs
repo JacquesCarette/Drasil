@@ -37,7 +37,7 @@ import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
   stakeholder, thModel, tOfSymb, tOfUnit, userChar, offShelfSol)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
-import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysF, genSysIntro,
+import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
 import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
   introductionSection, orgSec, purposeOfDoc, scopeOfRequirements)
@@ -45,8 +45,8 @@ import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
   propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
-import qualified Drasil.Sections.Stakeholders as Stk (stakehldrGeneral,
-  stakeholderIntro, tClientF, tCustomerF)
+import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
+  tClientF, tCustomerF)
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF,
   generateTraceTableView)
 
@@ -219,8 +219,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
 
 -- | Helper for making the 'Stakeholders' section
 mkStkhldrSec :: StkhldrSec -> Section
-mkStkhldrSec (StkhldrProg key details) = Stk.stakehldrGeneral key details
-mkStkhldrSec (StkhldrProg2 l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
+mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
   where
     mkSubs :: StkhldrSub -> Section
     mkSubs (Client kWrd details) = Stk.tClientF kWrd details
@@ -228,8 +227,7 @@ mkStkhldrSec (StkhldrProg2 l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkS
 
 -- | Helper for making the 'General System Description' section
 mkGSDSec :: GSDSec -> Section
-mkGSDSec (GSDProg cntxt uI cnstrnts systSubSec) = GSD.genSysF cntxt uI cnstrnts systSubSec
-mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
+mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
    where
      mkSubs :: GSDSub -> Section
      mkSubs (SysCntxt cs)            = GSD.sysContxt cs

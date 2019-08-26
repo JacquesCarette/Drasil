@@ -33,8 +33,8 @@ import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
-  Comments(CommentFunc), ConstraintBehaviour(..), InputModule(..), Logging(..), 
-  Structure(..))
+  Comments(CommentFunc), ConstantStructure(..), ConstraintBehaviour(..), 
+  InputModule(..), Logging(..), Structure(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import Prelude hiding (print)
@@ -89,11 +89,12 @@ initConsts = do
   g <- ask
   v_consts <- mkVar (codevar consts)
   let cname = "Constants"
-      getDecl ([],[]) = return Nothing
-      getDecl (_,[]) = return $ Just $ extObjDecNewVoid cname v_consts
-      getDecl ([],cs) = getDecl' $ partition (flip member (eMap $ codeSpec g) . 
-        codeName) cs 
-      getDecl _ = error "Only some constants associated with Constants module in export map"
+      getDecl _ Inline = return Nothing
+      getDecl ([],[]) _ = return Nothing
+      getDecl (_,[]) _ = return $ Just $ extObjDecNewVoid cname v_consts
+      getDecl ([],cs) _ = getDecl' $ partition (flip member (eMap $ codeSpec g) 
+        . codeName) cs 
+      getDecl _ _ = error "Only some constants associated with Constants module in export map"
       getDecl' (_,[]) = return Nothing
       getDecl' ([],cs) = do 
         vars <- mapM mkVar cs
@@ -101,8 +102,8 @@ initConsts = do
         logs <- mapM maybeLog vars
         return $ Just $ multi $ zipWith varDecDef vars vals ++ concat logs
       getDecl' _ = error "Only some constants present in export map"
-  getDecl $ partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
-    . codeName) (constants $ csi $ codeSpec g)
+  getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
+    . codeName) (constants $ csi $ codeSpec g)) (conStruct g)
 
 initLogFileVar :: (RenderSym repr) => Logging -> [repr (Statement repr)]
 initLogFileVar LogVar = [varDec varLogFile]

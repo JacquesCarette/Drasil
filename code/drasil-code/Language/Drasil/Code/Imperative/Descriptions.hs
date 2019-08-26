@@ -14,7 +14,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..),
   InputModule(..), Structure(..))
 
 import Data.Map (member)
-import qualified Data.Map as Map (lookup, elems)
+import qualified Data.Map as Map (filter, lookup, elems)
 import Control.Monad.Reader (Reader, ask)
 
 modDesc :: Reader State [String] -> Reader State String
@@ -75,12 +75,13 @@ outputFormatDesc = do
 inputClassDesc :: Reader State String
 inputClassDesc = do
   g <- ask
-  let inClassD [] = ""
+  let cname = "InputParameters"
+      inClassD [] = ""
       inClassD _ = "Structure for holding the " ++ stringList [
         inPs $ extInputs $ csi $ codeSpec g,
         dVs $ Map.lookup "derived_values" (eMap $ codeSpec g),
-        cVs $ filter (flip member (eMap $ codeSpec g) . codeName) 
-          (constants $ csi $ codeSpec g)]
+        cVs $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
+          codeName) (constants $ csi $ codeSpec g)]
       inPs [] = ""
       inPs _ = "input values"
       dVs Nothing = ""

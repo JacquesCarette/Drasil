@@ -177,7 +177,7 @@ si = SI {
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but neither tankVol
   -- or tau appear in the document and thus should not be displayed.
-  _quants = (map qw unconstrained ++ map qw symbols) \\ map qw [tankVol, tau],
+  _quants = (map qw unconstrained ++ map qw symbolsAll) \\ map qw [tankVol, tau],
   _concepts = symbols,
   _definitions = [],
   _datadefs = NoPCM.dataDefs,

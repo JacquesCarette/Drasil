@@ -133,7 +133,7 @@ mkSRS = [RefSec $ RefProg intro [
      IChar [] charsOfReader [],
      IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
     ],
-  GSDSec $ GSDProg2 
+  GSDSec $ GSDProg
     [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
     , UsrChars [userChars progName]
     , SystCons [] []

@@ -124,11 +124,12 @@ mkSRS = [RefSec $ RefProg intro
     , IChar [] charsOfReader []
     , IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
     ],
-  GSDSec $ GSDProg2 
-    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
-    , UsrChars [userChars progName]
-    , SystCons [] []
-    ],
+  GSDSec $
+    GSDProg
+      [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
+      , UsrChars [userChars progName]
+      , SystCons [] []
+      ],
   SSDSec $
     SSDProg
     [ SSDProblem $ PDProg probDescIntro []

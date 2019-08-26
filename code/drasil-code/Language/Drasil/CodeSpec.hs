@@ -295,8 +295,8 @@ modExportMap cs@CSI {
 type ModDepMap = Map.Map String [String]
 
 modDepMap :: CodeSystInfo -> ModExportMap -> Choices -> ModDepMap
-modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _ _) -> (n, getModDep m)) 
-  (mods cs) ++ ("Control", getDepsControl cs mem)
+modDepMap cs mem chs = Map.fromListWith (++) $ map (\m@(Mod n _ _) -> (n, 
+  getModDep m)) (mods cs) ++ ("Control", getDepsControl cs mem)
   : catMaybes [getDepsDerived cs mem chs,
                getDepsConstraints cs mem chs,
                getDepsInFormat chs]
@@ -441,24 +441,25 @@ getDepsControl cs mem =
 
 getDepsDerived :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
-getDepsDerived cs mem chs = derivedDeps (inputStructure chs) (inputModule chs)
-  where derivedDeps Bundled Separated = Just ("DerivedValues", nub $ mapMaybe (
-          (`Map.lookup` mem) . codeName) (concatMap (flip codevars 
-          (sysinfodb cs) . codeEquat) (derivedInputs cs)))
-        derivedDeps _ _ = Nothing
+getDepsDerived cs mem chs = if null derivedDeps then Nothing else Just 
+  (derivedMod (inputModule chs), derivedDeps)
+  where derivedDeps = nub $ mapMaybe ((`Map.lookup` mem) . codeName) (concatMap 
+          (flip codevars (sysinfodb cs) . codeEquat) (derivedInputs cs))
+        derivedMod Separated = "DerivedValues"
+        derivedMod Combined = "InputParameters"
 
 getDepsConstraints :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
-getDepsConstraints cs mem chs = constraintDeps (inputStructure chs) 
-  (inputModule chs)
-  where constraintDeps Bundled Separated = Just ("InputConstraints", nub $ 
-          mapMaybe ((`Map.lookup` mem) . codeName) reqdVals)
-        constraintDeps _ _ = Nothing
+getDepsConstraints cs mem chs = if null constraintDeps then Nothing else Just 
+  (constraintMod (inputModule chs), constraintDeps)
+  where constraintDeps = nub $ mapMaybe ((`Map.lookup` mem) . codeName) reqdVals
         ins = inputs cs
         cm = cMap cs
         varsList = filter (\i -> Map.member (i ^. uid) cm) ins
         reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v
           (sysinfodb cs) mem) (getConstraints cm varsList)
+        constraintMod Separated = "InputConstraints"
+        constraintMod Combined = "InputParameters"
 
 getDepsInFormat :: Choices -> Maybe (String, [String])
 getDepsInFormat chs = inFormatDeps (inputStructure chs) (inputModule chs)

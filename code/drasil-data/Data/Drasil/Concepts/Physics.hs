@@ -83,7 +83,7 @@ isotropy = dccWDS "isotropy" (cn "isotropy")
 joint = dcc "joint" (cn' "joint")
   "a connection between two rigid bodies which allows movement with one or more degrees of freedom"
 kEnergy = dccWDS "kEnergy" (cn "kinetic energy")
-  (S "measure" `ofThe` phrase energy +:+ S "a body possess due to its motion")
+  (S "measure" `ofThe` phrase energy +:+ S "a body possesses due to its motion")
 linear = dcc "linear" (cn' "linear")
   "arranged in or extending along a straight or nearly straight line"
 mechEnergy = dcc "mechEnergy" (cn "mechanical energy")

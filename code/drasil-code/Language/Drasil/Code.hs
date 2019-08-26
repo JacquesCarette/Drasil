@@ -25,7 +25,8 @@ import Prelude hiding (break, print, return, log, exp)
 
 import Language.Drasil.Code.Imperative.Generator (generator, generateCode)
 
-import Language.Drasil.Code.Imperative.Input (readWithDataDesc, sampleInputDD)
+import Language.Drasil.Code.Imperative.ReadInput (readWithDataDesc, 
+  sampleInputDD)
 
 import Language.Drasil.Code.CodeGeneration (makeCode, createCodeFiles)
 

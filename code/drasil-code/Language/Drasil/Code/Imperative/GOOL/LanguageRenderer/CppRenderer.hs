@@ -58,7 +58,7 @@ import Language.Drasil.Code.Imperative.GOOL.Helpers (angles, blank, doubleQuoted
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
   getInnerType, convType, checkParams)
-import Language.Drasil.Code.Imperative.Input (makeInputFile)
+import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import qualified Data.Map as Map (fromList,lookup)

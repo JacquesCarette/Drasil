@@ -4,7 +4,7 @@ module Drasil.GamePhysics.References (chaslesWiki, citations, parnas1972,
 import Language.Drasil
 
 import Data.Drasil.Citations (cartesianWiki, koothoor2013, parnasClements1986,
-  parnas1972, parnasClements1984, smithLai2005)
+  parnas1972, parnasClements1984, smithLai2005, lineSource, pointSource)
 import Data.Drasil.People (bWaugh, cTitus, dParnas, daAruliah, epWhite, gWilson,
   imMitchell, jBueche, kdHuff, mDavis, mdPlumblet, nChueHong, pWilson, rGuy, shdHaddock)
 
@@ -12,7 +12,7 @@ chaslesWiki, jfBeucheIntro, parnas1978, sciComp2013 :: Citation
 
 citations :: BibRef
 citations = [parnas1978, sciComp2013, parnas1972, parnasClements1984, chaslesWiki,
-  parnasClements1986, koothoor2013, smithLai2005, jfBeucheIntro, cartesianWiki]
+  parnasClements1986, koothoor2013, smithLai2005, jfBeucheIntro, cartesianWiki, lineSource, pointSource]
 
 --FIXME: check for references made within document
 
@@ -39,3 +39,4 @@ sciComp2013 = cArticle
   "Best Practices for Scientific Computing, 2013"
   "PLoS Biol" 2013
   [volume 12, number 1] "sciComp2013"
+

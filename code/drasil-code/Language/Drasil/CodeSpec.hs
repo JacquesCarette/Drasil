@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc,
   codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
-import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 import Language.Drasil.Printers (toPlainName)
 
@@ -83,17 +83,17 @@ codeSpec SI {_sys = sys
               , _inputs = ins
               , _outputs = outs
               , _constraints = cs
-              , _constants = consts
+              , _constants = cnsts
               , _sysinfodb = db
               , sampleData = sd} chs ms = 
   let inputs' = map quantvar ins
-      const' = map qtov consts
+      const' = map qtov cnsts
       derived = getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc ((defs' ++ map qdFromDD ddefs) \\ derived)
       mem   = modExportMap csi' chs
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
-      exOrder = getExecOrder rels (allInputs ++ map quantvar consts) outs' db
+      exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
       csi' = CSI {
         authors = as,
         inputs = allInputs,
@@ -260,10 +260,14 @@ asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
 getAdditionalVars :: Choices -> [Mod] -> [CodeChunk]
-getAdditionalVars chs ms = map codevar (inFileName : inParamsVar 
-  (inputStructure chs)) ++ concatMap funcParams ms
+getAdditionalVars chs ms = map codevar (inFileName 
+  : inParamsVar (inputStructure chs) 
+  ++ constsVar (constStructure chs))
+  ++ concatMap funcParams ms
   where inParamsVar Bundled = [inParams]
         inParamsVar Unbundled = []
+        constsVar (Store Bundled) = [consts]
+        constsVar _ = []
         funcParams (Mod _ _ fs) = concatMap getFuncParams fs
 
 getFuncParams :: Func -> [CodeChunk]
@@ -365,8 +369,8 @@ prefixFunctions = map (\(Mod nm desc fs) -> Mod nm desc $ map pfunc fs)
 
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
-getDerivedInputs ddefs defs' ins consts sm  =
-  let refSet = ins ++ map codeChunk consts
+getDerivedInputs ddefs defs' ins cnsts sm  =
+  let refSet = ins ++ map codeChunk cnsts
   in  if null ddefs then filter ((`subsetOf` refSet) . flip codevars sm . (^.equat)) defs'
       else filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
 

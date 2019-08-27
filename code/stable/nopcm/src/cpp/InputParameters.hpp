@@ -13,6 +13,8 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
+#include "Constants.hpp"
+
 /** \brief Reads input from a file with the given file name
     \param filename name of the input file
     \param A_C heating coil surface area: area covered by the outermost layer of the coil (m^2)
@@ -45,7 +47,8 @@ void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T
     \param D diameter of tank: the diameter of the tank (m)
     \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
     \param E_W change in heat energy in the water: change in thermal energy within the water (J)
+    \param consts structure holding the constant values
 */
-void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W);
+void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W, Constants &consts);
 
 #endif

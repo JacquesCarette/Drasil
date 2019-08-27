@@ -15,6 +15,8 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
+#include "Constants.hpp"
+
 void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T_init, double &t_final, double &L, double &T_C, double &t_step, double &rho_W, double &D, double &A_tol, double &R_tol, double &T_W, double &E_W) {
     ifstream infile;
     infile.open(filename, std::fstream::in);
@@ -63,89 +65,89 @@ void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T
     infile.close();
 }
 
-void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
-    if (!(A_C <= 100000)) {
+void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W, Constants &consts) {
+    if (!(A_C <= consts.A_C_max)) {
         std::cout << "Warning: ";
         std::cout << "A_C has value ";
         std::cout << A_C;
         std::cout << " but suggested to be ";
         std::cout << "below ";
-        std::cout << 100000;
-        std::cout << " (A_C^max)";
+        std::cout << consts.A_C_max;
+        std::cout << " (A_C_max)";
         std::cout << "." << std::endl;
     }
-    if (!(4170 < C_W && C_W < 4210)) {
+    if (!(consts.C_W_min < C_W && C_W < consts.C_W_max)) {
         std::cout << "Warning: ";
         std::cout << "C_W has value ";
         std::cout << C_W;
         std::cout << " but suggested to be ";
         std::cout << "between ";
-        std::cout << 4170;
-        std::cout << " (C_W^min)";
+        std::cout << consts.C_W_min;
+        std::cout << " (C_W_min)";
         std::cout << " and ";
-        std::cout << 4210;
-        std::cout << " (C_W^max)";
+        std::cout << consts.C_W_max;
+        std::cout << " (C_W_max)";
         std::cout << "." << std::endl;
     }
-    if (!(10 <= h_C && h_C <= 10000)) {
+    if (!(consts.h_C_min <= h_C && h_C <= consts.h_C_max)) {
         std::cout << "Warning: ";
         std::cout << "h_C has value ";
         std::cout << h_C;
         std::cout << " but suggested to be ";
         std::cout << "between ";
-        std::cout << 10;
-        std::cout << " (h_C^min)";
+        std::cout << consts.h_C_min;
+        std::cout << " (h_C_min)";
         std::cout << " and ";
-        std::cout << 10000;
-        std::cout << " (h_C^max)";
+        std::cout << consts.h_C_max;
+        std::cout << " (h_C_max)";
         std::cout << "." << std::endl;
     }
-    if (!(t_final < 86400)) {
+    if (!(t_final < consts.t_final_max)) {
         std::cout << "Warning: ";
         std::cout << "t_final has value ";
         std::cout << t_final;
         std::cout << " but suggested to be ";
         std::cout << "below ";
-        std::cout << 86400;
-        std::cout << " (t_final^max)";
+        std::cout << consts.t_final_max;
+        std::cout << " (t_final_max)";
         std::cout << "." << std::endl;
     }
-    if (!(0.1 <= L && L <= 50)) {
+    if (!(consts.L_min <= L && L <= consts.L_max)) {
         std::cout << "Warning: ";
         std::cout << "L has value ";
         std::cout << L;
         std::cout << " but suggested to be ";
         std::cout << "between ";
-        std::cout << 0.1;
+        std::cout << consts.L_min;
         std::cout << " (L_min)";
         std::cout << " and ";
-        std::cout << 50;
+        std::cout << consts.L_max;
         std::cout << " (L_max)";
         std::cout << "." << std::endl;
     }
-    if (!(950 < rho_W && rho_W <= 1000)) {
+    if (!(consts.rho_W_min < rho_W && rho_W <= consts.rho_W_max)) {
         std::cout << "Warning: ";
         std::cout << "rho_W has value ";
         std::cout << rho_W;
         std::cout << " but suggested to be ";
         std::cout << "between ";
-        std::cout << 950;
-        std::cout << " (rho_W^min)";
+        std::cout << consts.rho_W_min;
+        std::cout << " (rho_W_min)";
         std::cout << " and ";
-        std::cout << 1000;
-        std::cout << " (rho_W^max)";
+        std::cout << consts.rho_W_max;
+        std::cout << " (rho_W_max)";
         std::cout << "." << std::endl;
     }
-    if (!(1.0e-2 <= D && D <= 100)) {
+    if (!(consts.AR_min <= D && D <= consts.AR_max)) {
         std::cout << "Warning: ";
         std::cout << "D has value ";
         std::cout << D;
         std::cout << " but suggested to be ";
         std::cout << "between ";
-        std::cout << 1.0e-2;
+        std::cout << consts.AR_min;
         std::cout << " (AR_min)";
         std::cout << " and ";
-        std::cout << 100;
+        std::cout << consts.AR_max;
         std::cout << " (AR_max)";
         std::cout << "." << std::endl;
     }

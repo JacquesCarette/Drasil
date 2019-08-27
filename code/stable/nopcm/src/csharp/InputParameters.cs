@@ -73,90 +73,91 @@ public class InputParameters {
         \param D diameter of tank: the diameter of the tank (m)
         \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
         \param E_W change in heat energy in the water: change in thermal energy within the water (J)
+        \param consts structure holding the constant values
     */
-    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
-        if (!(A_C <= 100000)) {
+    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W, Constants consts) {
+        if (!(A_C <= consts.A_C_max)) {
             Console.Write("Warning: ");
             Console.Write("A_C has value ");
             Console.Write(A_C);
             Console.Write(" but suggested to be ");
             Console.Write("below ");
-            Console.Write(100000);
-            Console.Write(" (A_C^max)");
+            Console.Write(consts.A_C_max);
+            Console.Write(" (A_C_max)");
             Console.WriteLine(".");
         }
-        if (!(4170 < C_W && C_W < 4210)) {
+        if (!(consts.C_W_min < C_W && C_W < consts.C_W_max)) {
             Console.Write("Warning: ");
             Console.Write("C_W has value ");
             Console.Write(C_W);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(4170);
-            Console.Write(" (C_W^min)");
+            Console.Write(consts.C_W_min);
+            Console.Write(" (C_W_min)");
             Console.Write(" and ");
-            Console.Write(4210);
-            Console.Write(" (C_W^max)");
+            Console.Write(consts.C_W_max);
+            Console.Write(" (C_W_max)");
             Console.WriteLine(".");
         }
-        if (!(10 <= h_C && h_C <= 10000)) {
+        if (!(consts.h_C_min <= h_C && h_C <= consts.h_C_max)) {
             Console.Write("Warning: ");
             Console.Write("h_C has value ");
             Console.Write(h_C);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(10);
-            Console.Write(" (h_C^min)");
+            Console.Write(consts.h_C_min);
+            Console.Write(" (h_C_min)");
             Console.Write(" and ");
-            Console.Write(10000);
-            Console.Write(" (h_C^max)");
+            Console.Write(consts.h_C_max);
+            Console.Write(" (h_C_max)");
             Console.WriteLine(".");
         }
-        if (!(t_final < 86400)) {
+        if (!(t_final < consts.t_final_max)) {
             Console.Write("Warning: ");
             Console.Write("t_final has value ");
             Console.Write(t_final);
             Console.Write(" but suggested to be ");
             Console.Write("below ");
-            Console.Write(86400);
-            Console.Write(" (t_final^max)");
+            Console.Write(consts.t_final_max);
+            Console.Write(" (t_final_max)");
             Console.WriteLine(".");
         }
-        if (!(0.1 <= L && L <= 50)) {
+        if (!(consts.L_min <= L && L <= consts.L_max)) {
             Console.Write("Warning: ");
             Console.Write("L has value ");
             Console.Write(L);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(0.1);
+            Console.Write(consts.L_min);
             Console.Write(" (L_min)");
             Console.Write(" and ");
-            Console.Write(50);
+            Console.Write(consts.L_max);
             Console.Write(" (L_max)");
             Console.WriteLine(".");
         }
-        if (!(950 < rho_W && rho_W <= 1000)) {
+        if (!(consts.rho_W_min < rho_W && rho_W <= consts.rho_W_max)) {
             Console.Write("Warning: ");
             Console.Write("rho_W has value ");
             Console.Write(rho_W);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(950);
-            Console.Write(" (rho_W^min)");
+            Console.Write(consts.rho_W_min);
+            Console.Write(" (rho_W_min)");
             Console.Write(" and ");
-            Console.Write(1000);
-            Console.Write(" (rho_W^max)");
+            Console.Write(consts.rho_W_max);
+            Console.Write(" (rho_W_max)");
             Console.WriteLine(".");
         }
-        if (!(1.0e-2 <= D && D <= 100)) {
+        if (!(consts.AR_min <= D && D <= consts.AR_max)) {
             Console.Write("Warning: ");
             Console.Write("D has value ");
             Console.Write(D);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(1.0e-2);
+            Console.Write(consts.AR_min);
             Console.Write(" (AR_min)");
             Console.Write(" and ");
-            Console.Write(100);
+            Console.Write(consts.AR_max);
             Console.Write(" (AR_max)");
             Console.WriteLine(".");
         }

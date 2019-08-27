@@ -13,14 +13,16 @@ import System.FilePath (takeBaseName, takeExtension)
 
 -- type FilePath = String -- from System.FilePath
 type Name = String
-type CodeSource = (FilePath, String)
+data CodeSource = CS {codePath :: FilePath, 
+                      doxPath :: FilePath, 
+                      langName :: String}
 type SRSVariants = [(Name, String)]
 type Description = Maybe String
 data Example = E Name [CodeSource] SRSVariants Description
 
 -- Returns FilePath of the SRS
-srsPath :: FilePath -> FilePath -> FilePath -> FilePath
-srsPath baseDir ex srs = baseDir ++ ex ++ "/" ++ srs
+exDirPath :: FilePath -> FilePath -> FilePath -> FilePath
+exDirPath baseDir ex dir = baseDir ++ ex ++ "/" ++ dir
 
 -- Returns the Uppercase String of the given extension
 getExtensionName :: String -> String
@@ -33,10 +35,12 @@ getExtensionName _ = error "Expected some extension."
 getSRS :: [Name] -> SRSVariants
 getSRS = map (\x -> (x, getExtensionName $ takeExtension x)) . filter (\x -> any (`endswith` x) [".pdf", ".html"])
 
--- returns a tuple of the link to the specific code folder and its language in the form (urlPath, Language)
-getSrc :: String -> FilePath -> CodeSource
+-- returns a CodeSource with the path to the source code, doxygen page, and the name of the language
+getSrc :: String -> FilePath -> FilePath -> CodeSource
 -- source comes in as a path, takeBaseName takes only rightmost folder name
-getSrc repoRoot source = (repoRoot ++ source, lang $ takeBaseName source)
+getSrc repoRoot path source = CS (repoRoot ++ source) 
+  (path ++ takeBaseName source ++ "/index.html")
+  (lang $ takeBaseName source)
   where
     -- Some languages might be named differently than the folders they are stored in.
     lang "cpp"    = "C++"
@@ -45,8 +49,8 @@ getSrc repoRoot source = (repoRoot ++ source, lang $ takeBaseName source)
     lang "java"   = "Java"
     lang x        = error ("No given display name for language: " ++ x)
 
-mkExamples :: String -> FilePath -> FilePath -> IO [Example]
-mkExamples repoRoot path srsDir = do
+mkExamples :: String -> FilePath -> FilePath -> FilePath -> IO [Example]
+mkExamples repoRoot path srsDir doxDir = do
 
   -- names will be a sorted list of example names (GamePhysics, GlassBR, etc.) of type FilePath
   names <- sort <$> (listDirectory path >>= filterM (\x -> doesDirectoryExist $ path ++ x))
@@ -54,7 +58,8 @@ mkExamples repoRoot path srsDir = do
   -- a list of lists of sources based on existence and contents of src file for each example.
   -- if no src file, then the inner list will be empty
   sources <- mapM (\x -> doesFileExist (path ++ x ++ "/src") >>=
-    \y -> if y then map (getSrc repoRoot) . lines . rstrip <$> readFile (path ++ x ++ "/src") else return []) names
+    \y -> if y then map (getSrc repoRoot (exDirPath path x doxDir)) . lines . 
+    rstrip <$> readFile (path ++ x ++ "/src") else return []) names
     
 
   -- a list of Just descriptions or Nothing based on existence and contents of desc file.
@@ -63,7 +68,7 @@ mkExamples repoRoot path srsDir = do
 
   -- creates a list of SRSVariants, so a list of list of tuples.
   -- the outer list has an element for each example.
-  srss <- mapM (\x -> sort . getSRS <$> listDirectory (srsPath path x srsDir)) names
+  srss <- mapM (\x -> sort . getSRS <$> listDirectory (exDirPath path x srsDir)) names
 
   -- returns the IO list of examples with constructor E containing
   -- the name of the example, sources, list of variants, and description
@@ -102,13 +107,13 @@ mkExampleCtx exampleDir srsDir =
 
     -- returns filename from ((filename, TYPE), E _ _ _ _)
     field "filename" (return . fst . srsVar) <>
-    -- returns TYPE from ((_, _), E _ _ _ _)
+    -- returns TYPE from ((_, TYPE), E _ _ _ _)
     field "type" (return . snd . srsVar) <>
     -- returns name from ((_, _), E name [codeSource] srsVariants description)
     -- which is the same name as the outer scope example name
     field "name" (return . name . example) <>
     -- gets the URL by taking the path to the srs ++ the filename of the srs
-    field "url" (\x -> return $ srsPath exampleDir (name $ example x) srsDir ++ fst (srsVar x))
+    field "url" (\x -> return $ exDirPath exampleDir (name $ example x) srsDir ++ fst (srsVar x))
   -- creates a list of items where each item contains a tuple
   -- the tuple contains (specific srs variant, general Example)
   -- in this way, each srs variant is accounted for, and all information can be accessible 
@@ -123,9 +128,10 @@ mkExampleCtx exampleDir srsDir =
   -- Lists sources if they exist
   maybeListFieldWith "src" (
     -- return filepath from (filepath, language)
-    field "path" (return . fst . itemBody) <>
+    field "path" (return . codePath . itemBody) <>
     -- return language from (filepath, language)
-    field "lang" (return . snd . itemBody)
+    field "lang" (return . langName . itemBody) <>
+    field "doxPath" (return . doxPath . itemBody)
   -- (src . itemBody) gets the list of sources to be checked for emptiness
   -- (mapM makeItem . src . itemBody) rewraps every item in src to be used internally
   ) (src . itemBody) (mapM makeItem . src . itemBody)
@@ -156,6 +162,7 @@ main = do
   docsRoot <- getEnv "DOCS_FOLDER"
   exampleRoot <- getEnv "EXAMPLES_FOLDER"
   srsDir <- getEnv "SRS_FOLDER_FRAG"
+  doxDir <- getEnv "DOX_FOLDER"
   graphRoot <- getEnv "GRAPH_FOLDER"
 
   -- Env variables relating to variables exposed on CI.
@@ -173,7 +180,7 @@ main = do
   let travisBuildPath = "https://travis-ci.org/" ++ travisRepoSlug ++ maybe "" ("/builds/" ++) travisBuildId
 
   doesDocsExist <- doesFileExist $ deployLocation ++ docsPath
-  examples <- mkExamples repoCommitRoot (deployLocation ++ exampleRoot) srsDir
+  examples <- mkExamples repoCommitRoot (deployLocation ++ exampleRoot) srsDir doxDir
   graphs <- mkGraphs $ deployLocation ++ graphRoot
 
   hakyll $ do

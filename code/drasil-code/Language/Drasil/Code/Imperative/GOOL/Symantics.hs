@@ -189,7 +189,7 @@ class (StateTypeSym repr) => VariableSym repr where
   variableType :: repr (Variable repr) -> repr (StateType repr)
   variableDoc  :: repr (Variable repr) -> Doc
 
-class (VariableSym repr, StateVarSym repr) => ValueSym repr where
+class (VariableSym repr) => ValueSym repr where
   type Value repr
   litTrue   :: repr (Value repr)
   litFalse  :: repr (Value repr)
@@ -576,13 +576,13 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
 
   parameters :: repr (Method repr) -> [repr (Parameter repr)]
 
-class (ScopeSym repr, InternalScope repr, PermanenceSym repr, StateTypeSym repr)
-   => StateVarSym repr where
+class (ScopeSym repr, InternalScope repr, PermanenceSym repr, StateTypeSym repr,
+  StatementSym repr) => StateVarSym repr where
   type StateVar repr
   stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr) -> repr (StateVar repr)
   constVar :: Int -> repr (Scope repr) ->  repr (Variable repr) -> 
-    repr (StateVar repr)
+    repr (Value repr) -> repr (StateVar repr)
   privMVar :: Int -> repr (Variable repr) -> repr (StateVar repr)
   pubMVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
   pubGVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)

@@ -579,8 +579,8 @@ instance MethodSym CSharpCode where
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
   stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
-  constVar _ s v = liftA4 constVarDocD (includeScope s) (return empty) v 
-    endStatement
+  constVar _ s vr vl = liftA3 constVarDocD (includeScope s) (return empty) 
+    (fst <$> state (constDecDef vr vl))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_

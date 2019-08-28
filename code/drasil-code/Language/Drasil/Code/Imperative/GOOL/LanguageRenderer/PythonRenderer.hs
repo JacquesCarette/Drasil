@@ -22,21 +22,21 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..),
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
-  methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
-  plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
-  mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD', 
-  negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
-  tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, unExpr', 
-  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
-  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
-  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, 
-  mkVal, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD,
-  enumElemDocD, objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, 
-  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
-  continueDocD, staticDocD, dynamicDocD, classDec, dot, forLabel, 
-  observerListName, doxConfigName, makefileName, sampleInputName, commentedItem,
-  addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  getterName, setterName)
+  methodListDocD, stateVarListDocD, ifCondDocD, stratDocD, assignDocD, 
+  multiAssignDoc, plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, 
+  commentDocD, mkStNoEnd, stringListVals', stringListLists', unOpPrec, 
+  notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', 
+  cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, 
+  unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, 
+  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD, litFloatD, litIntD, 
+  litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
+  funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, listAccessFuncDocD, 
+  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
+  classDec, dot, forLabel, observerListName, doxConfigName, makefileName, 
+  sampleInputName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
+  docFuncRepr, valList, appendToBody, getterName, setterName)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
@@ -549,19 +549,19 @@ instance MethodSym PythonCode where
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ _ = return empty
-  constVar _ _ _ = return empty
+  constVar _ _ vr vl = fst <$> state (constDecDef vr vl)
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
 
 instance ClassSym PythonCode where
   type Class PythonCode = (Doc, Bool)
-  buildClass n p _ _ fs = liftPairFst (liftA2 (pyClass n) pname (liftList 
+  buildClass n p _ vs fs = liftPairFst (liftA3 (pyClass n) pname (liftList stateVarListDocD vs) (liftList 
     methodListDocD (map (fmap mthdDoc) fs)), any (isMainMthd . unPC) fs)
     where pname = case p of Nothing -> return empty
                             Just pn -> return $ parens (text pn)
-  enum n es _ = liftPairFst (liftA2 (pyClass n) (return empty) (return $ 
-    enumElementsDocD' es), False)
+  enum n es _ = liftPairFst (liftA3 (pyClass n) (return empty) (return $ 
+    enumElementsDocD' es) (return empty), False)
   mainClass _ _ fs = liftPairFst (liftList methodListDocD (map (fmap mthdDoc) 
     fs), True)
   privClass n p = buildClass n p private
@@ -699,12 +699,14 @@ pyFunction n ps b = vcat [
   where bodyD | isEmpty b = text "None"
               | otherwise = b
 
-pyClass :: Label -> Doc -> Doc -> Doc
-pyClass n pn fs = vcat [
+pyClass :: Label -> Doc -> Doc -> Doc -> Doc
+pyClass n pn vs fs = vcat [
   classDec <+> text n <> pn <> colon,
   indent funcSec]
-  where funcSec | isEmpty fs = text "None"
-                | otherwise = fs    
+  where funcSec | isEmpty (vs <> fs) = text "None"
+                | isEmpty vs = fs
+                | isEmpty fs = vs
+                | otherwise = vcat [vs, blank, fs]    
 
 pyModuleImportList :: [Doc] -> Doc
 pyModuleImportList = vcat

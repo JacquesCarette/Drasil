@@ -595,8 +595,8 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
   stateVar del s p v = pair (stateVar del (pfst s) (pfst p) (pfst v))
     (stateVar del (psnd s) (psnd p) (psnd v))
-  constVar del s v = pair (constVar del (pfst s) (pfst v)) 
-    (constVar del (psnd s) (psnd v))
+  constVar del s vr vl = pair (constVar del (pfst s) (pfst vr) (pfst vl)) 
+    (constVar del (psnd s) (psnd vr) (psnd vl))
   privMVar del v = pair (privMVar del $ pfst v) (privMVar del $ psnd v)
   pubMVar del v = pair (pubMVar del $ pfst v) (pubMVar del $ psnd v)
   pubGVar del v = pair (pubGVar del $ pfst v) (pubGVar del $ psnd v)
@@ -1180,9 +1180,9 @@ instance StateVarSym CppSrcCode where
   stateVar del s p v = liftA3 svd (fmap snd s) (liftA4 stateVarDocD 
     (fst <$> includeScope s) p v endStatement) (if del < alwaysDel then
     return (mkStNoEnd empty) else cppDestruct v)
-  constVar del s v = liftA3 svd (fmap snd s) (liftA4 constVarDocD 
-    (fst <$> includeScope s) static_ v endStatement) (if del < alwaysDel then 
-    return (mkStNoEnd empty) else cppDestruct v)
+  constVar del s vr vl = liftA3 svd (fmap snd s) (liftA3 constVarDocD 
+    (fst <$> includeScope s) (return empty) (fst <$> state (constDecDef vr vl)))
+    (if del < alwaysDel then return (mkStNoEnd empty) else cppDestruct vr)
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
@@ -1380,23 +1380,23 @@ instance VariableSym CppHdrCode where
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
-  litTrue = liftA2 mkVal void (return empty)
-  litFalse = liftA2 mkVal void (return empty)
-  litChar _ = liftA2 mkVal void (return empty)
-  litFloat _ = liftA2 mkVal void (return empty)
-  litInt _ = liftA2 mkVal void (return empty)
-  litString _ = liftA2 mkVal void (return empty)
+  litTrue = liftA2 mkVal bool (return litTrueD)
+  litFalse = liftA2 mkVal bool (return litFalseD)
+  litChar c = liftA2 mkVal char (return $ litCharD c)
+  litFloat v = liftA2 mkVal float (return $ litFloatD v)
+  litInt v = liftA2 mkVal int (return $ litIntD v)
+  litString s = liftA2 mkVal string (return $ litStringD s)
 
-  ($:) _ _ = liftA2 mkVal void (return empty)
+  ($:) = enumElement
 
-  valueOf _ = liftA2 mkVal void (return empty)
-  arg _ = liftA2 mkVal void (return empty)
-  enumElement _ _ = liftA2 mkVal void (return empty)
+  valueOf v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
+  arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n+1)) argsList)
+  enumElement en e = liftA2 mkVal (enumType en) (return $ text e)
   
-  argsList = liftA2 mkVal void (return empty)
+  argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
-  valueType _ = error "Attempted to extract type from Value for C++ header file"
-  valueDoc _ = error "Attempted to extract doc from Value for C++ header file"
+  valueType = fmap valType
+  valueDoc = valDoc . unCPPHC
 
 instance NumericExpression CppHdrCode where
   (#~) _ = liftA2 mkVal void (return empty)
@@ -1509,7 +1509,7 @@ instance InternalFunction CppHdrCode where
 instance InternalStatement CppHdrCode where
   printSt _ _ _ _ = return (mkStNoEnd empty)
 
-  state _ = return (mkStNoEnd empty)
+  state = fmap statementDocD
   loopState _ = return (mkStNoEnd empty)
 
 instance StatementSym CppHdrCode where
@@ -1532,7 +1532,7 @@ instance StatementSym CppHdrCode where
   extObjDecNew _ _ _ = return (mkStNoEnd empty)
   objDecNewVoid _ = return (mkStNoEnd empty)
   extObjDecNewVoid _ _ = return (mkStNoEnd empty)
-  constDecDef _ _ = return (mkStNoEnd empty)
+  constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
   print _ = return (mkStNoEnd empty)
   printLn _ = return (mkStNoEnd empty)
@@ -1672,8 +1672,9 @@ instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar _ s p v = liftA3 svd (fmap snd s) (liftA4 stateVarDocD 
     (fmap fst (includeScope s)) p v endStatement) (return (mkStNoEnd empty))
-  constVar _ s v = liftA3 svd (fmap snd s) (liftA4 constVarDocD (fmap fst 
-    (includeScope s)) static_ v endStatement) (return (mkStNoEnd empty))
+  constVar _ s vr vl = liftA3 svd (fmap snd s) (liftA3 constVarDocD (fmap fst 
+    (includeScope s)) (return empty) (fst <$> state (constDecDef vr vl))) 
+    (return (mkStNoEnd empty))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_

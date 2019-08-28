@@ -23,8 +23,8 @@ import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, RenderSym(..),
   AuxiliarySym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
   VariableSym(..), ValueSym(..), BooleanExpression(..), StatementSym(..), 
-  ControlStatementSym(..), MethodTypeSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..))
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..))
 import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName, codeChunk), CodeChunk,
   codeType, codevar, physLookup, sfwrLookup)
@@ -344,12 +344,13 @@ genConstClass = do
         (repr (Class repr)))
       genClass [] = return Nothing 
       genClass vs = do
-        let constVars = map (\x -> pubMVar 0 (var (codeName x) (convType $ 
-              codeType x))) vs
+        vals <- mapM (convExpr . codeEquat) vs 
+        let vars = map (\x -> var (codeName x) (convType $ codeType x)) vs
+            constVars = zipWith (constVar 0 public) vars vals
         cDesc <- constClassDesc
-        cConstruct <- genConstConstructor cname
-        cls <- publicClass cDesc cname Nothing constVars 
-          (maybeToList cConstruct)
+        -- cConstruct <- genConstConstructor cname
+        cls <- publicClass cDesc cname Nothing constVars []
+          -- (maybeToList cConstruct)
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
     codeName) cs

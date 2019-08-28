@@ -268,9 +268,8 @@ methodListDocD ms = vibcat methods
 stateVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
 stateVarDocD s p v end = s <+> p <+> typeDoc (varType v) <+> varDoc v <> end
 
-constVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
-constVarDocD s p v end = s <+> p <+> text "const" <+> typeDoc (varType v) <+> 
-  varDoc v <> end
+constVarDocD :: Doc -> Doc -> Doc -> Doc
+constVarDocD s p dec = s <+> p <+> dec
 
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat

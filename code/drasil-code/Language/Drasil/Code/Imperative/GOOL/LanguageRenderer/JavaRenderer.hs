@@ -25,12 +25,12 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
   boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
   voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam, 
-  methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, 
-  forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
-  plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, 
-  statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, stringListVals', 
-  stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr',
-  typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD, ifCondDocD, 
+  switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, 
+  plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, 
+  objDecDefDocD, statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, 
+  stringListVals', stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, 
+  unExpr', typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
   binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
@@ -598,7 +598,8 @@ instance MethodSym JavaCode where
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
   stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
-  constVar _ s v = liftA4 jConstVar (includeScope s) static_ v endStatement
+  constVar _ s vr vl = liftA3 constVarDocD (includeScope s) static_ (fst <$> 
+    state (constDecDef vr vl))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
@@ -727,10 +728,6 @@ jOpenFileWorA n t wa = mkVal t $ new <+> text "PrintWriter" <>
 jStringSplit :: VarData -> ValData -> Doc
 jStringSplit vnew s = varDoc vnew <+> equals <+> new <+> typeDoc (varType vnew)
   <> parens (valDoc s)
-
-jConstVar :: Doc -> Doc -> VarData -> Doc -> Doc
-jConstVar s p v end = s <+> p <+> text "final" <+> typeDoc (varType v) <+> 
-  varDoc v <> end
 
 jMethod :: Label -> Doc -> Doc -> TypeData -> Doc -> Doc -> Doc
 jMethod n s p t ps b = vcat [

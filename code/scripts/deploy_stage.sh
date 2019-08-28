@@ -25,6 +25,7 @@ fi
 
 DOC_DEST=docs/
 SRS_DEST=srs/
+DOX_DEST=doxygen/
 EXAMPLE_DEST=examples/
 CUR_DIR="$PWD/"
 
@@ -69,6 +70,13 @@ copy_examples() {
       cp -r "$example/"Website/. "$EXAMPLE_DEST$example_name/$SRS_DEST"
     fi
     if [ -d "$example/"src ]; then
+      mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST"
+      for lang in "$example/"src/*; do
+        lang_name=$(basename "$lang")
+        mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name"
+        "$MAKE" -C "$lang" doc
+        cp -r "$lang/"html/. "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name/"
+      done
       # We don't expose code in deploy. It's more conveneient to link to GitHub's directory
       # We place a stub file which Hakyll will replace.
       REL_PATH=$(cd "$CUR_DIR" && "$MAKE" deploy_code_path | grep "$example_name" | cut -d"$DEPLOY_CODE_PATH_KV_SEP" -f 2-)
@@ -89,7 +97,7 @@ copy_images() {
 
 build_website() {
   cd "$CUR_DIR"website
-  make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER" DOCS_FOLDER="$DOC_DEST" EXAMPLES_FOLDER="$EXAMPLE_DEST" \
+  make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER" DOCS_FOLDER="$DOC_DEST" DOX_FOLDER="$DOX_DEST" EXAMPLES_FOLDER="$EXAMPLE_DEST" \
   SRS_FOLDER_FRAG="$SRS_DEST" GRAPH_FOLDER="$GRAPH_FOLDER"
   RET=$?
   if [ $RET != 0 ]; then

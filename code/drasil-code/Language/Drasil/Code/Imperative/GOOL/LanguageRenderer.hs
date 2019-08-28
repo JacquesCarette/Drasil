@@ -10,10 +10,10 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
-  printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
-  charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
-  methodDocD, methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, 
+  printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
+  stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, voidDocD, 
+  constructDocD, stateParamDocD, paramListDocD, mkParam, methodDocD, 
+  methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD, alwaysDel, 
   ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, 
   assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, 
   plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, 
@@ -267,6 +267,10 @@ methodListDocD ms = vibcat methods
 
 stateVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
 stateVarDocD s p v end = s <+> p <+> typeDoc (varType v) <+> varDoc v <> end
+
+constVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
+constVarDocD s p v end = s <+> p <+> text "const" <+> typeDoc (varType v) <+> 
+  varDoc v <> end
 
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat

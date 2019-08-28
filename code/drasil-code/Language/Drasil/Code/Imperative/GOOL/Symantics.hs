@@ -581,6 +581,8 @@ class (ScopeSym repr, InternalScope repr, PermanenceSym repr, StateTypeSym repr)
   type StateVar repr
   stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr) -> repr (StateVar repr)
+  constVar :: Int -> repr (Scope repr) ->  repr (Variable repr) -> 
+    repr (StateVar repr)
   privMVar :: Int -> repr (Variable repr) -> repr (StateVar repr)
   pubMVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
   pubGVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)

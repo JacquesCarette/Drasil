@@ -26,7 +26,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD, 
   typeDocD, enumTypeDocD, listTypeDocD, voidDocD, constructDocD, stateParamDocD,
   paramListDocD, mkParam, methodDocD, methodListDocD, 
-  stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
+  stateVarDocD, constVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD,
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
   constDecDefDocD, statementDocD, returnDocD, mkSt, mkStNoEnd, stringListVals',
@@ -579,6 +579,8 @@ instance MethodSym CSharpCode where
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
   stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
+  constVar _ s v = liftA4 constVarDocD (includeScope s) (return empty) v 
+    endStatement
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_

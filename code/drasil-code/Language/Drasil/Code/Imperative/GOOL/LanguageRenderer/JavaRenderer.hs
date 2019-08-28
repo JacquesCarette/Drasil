@@ -598,6 +598,7 @@ instance MethodSym JavaCode where
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
   stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
+  constVar _ s v = liftA4 jConstVar (includeScope s) static_ v endStatement
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
@@ -726,6 +727,10 @@ jOpenFileWorA n t wa = mkVal t $ new <+> text "PrintWriter" <>
 jStringSplit :: VarData -> ValData -> Doc
 jStringSplit vnew s = varDoc vnew <+> equals <+> new <+> typeDoc (varType vnew)
   <> parens (valDoc s)
+
+jConstVar :: Doc -> Doc -> VarData -> Doc -> Doc
+jConstVar s p v end = s <+> p <+> text "final" <+> typeDoc (varType v) <+> 
+  varDoc v <> end
 
 jMethod :: Label -> Doc -> Doc -> TypeData -> Doc -> Doc -> Doc
 jMethod n s p t ps b = vcat [

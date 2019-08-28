@@ -25,11 +25,11 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDoc,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
   listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
-  methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, ifCondDocD, 
-  switchDocD, forDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
-  plusPlusDocD, varDecDocD, varDecDefDocD, objDecDefDocD, constDecDefDocD, 
-  statementDocD, returnDocD, commentDocD, freeDocD, mkSt, mkStNoEnd, 
-  stringListVals', stringListLists', unOpPrec, notOpDocD, 
+  methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD, alwaysDel, 
+  ifCondDocD, switchDocD, forDocD, whileDocD, stratDocD, assignDocD, 
+  plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, objDecDefDocD, 
+  constDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, mkSt, 
+  mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD, 
   negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, 
   tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, unExpr', typeUnExpr, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
@@ -595,6 +595,8 @@ instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
   stateVar del s p v = pair (stateVar del (pfst s) (pfst p) (pfst v))
     (stateVar del (psnd s) (psnd p) (psnd v))
+  constVar del s v = pair (constVar del (pfst s) (pfst v)) 
+    (constVar del (psnd s) (psnd v))
   privMVar del v = pair (privMVar del $ pfst v) (privMVar del $ psnd v)
   pubMVar del v = pair (pubMVar del $ pfst v) (pubMVar del $ psnd v)
   pubGVar del v = pair (pubGVar del $ pfst v) (pubGVar del $ psnd v)
@@ -1178,6 +1180,9 @@ instance StateVarSym CppSrcCode where
   stateVar del s p v = liftA3 svd (fmap snd s) (liftA4 stateVarDocD 
     (fst <$> includeScope s) p v endStatement) (if del < alwaysDel then
     return (mkStNoEnd empty) else cppDestruct v)
+  constVar del s v = liftA3 svd (fmap snd s) (liftA4 constVarDocD 
+    (fst <$> includeScope s) static_ v endStatement) (if del < alwaysDel then 
+    return (mkStNoEnd empty) else cppDestruct v)
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
@@ -1667,6 +1672,8 @@ instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
   stateVar _ s p v = liftA3 svd (fmap snd s) (liftA4 stateVarDocD 
     (fmap fst (includeScope s)) p v endStatement) (return (mkStNoEnd empty))
+  constVar _ s v = liftA3 svd (fmap snd s) (liftA4 constVarDocD (fmap fst 
+    (includeScope s)) static_ v endStatement) (return (mkStNoEnd empty))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_

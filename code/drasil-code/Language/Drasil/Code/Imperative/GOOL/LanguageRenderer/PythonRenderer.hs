@@ -549,6 +549,7 @@ instance MethodSym PythonCode where
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ _ = return empty
+  constVar _ _ _ = return empty
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
@@ -581,7 +582,6 @@ instance ModuleSym PythonCode where
     pyModuleClassList cs))
 
   moduleName m = name (unPC m)
-    
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc

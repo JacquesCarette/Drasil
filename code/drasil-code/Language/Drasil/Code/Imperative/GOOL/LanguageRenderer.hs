@@ -26,9 +26,9 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
   greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
   minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, 
-  orOpDocD, binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, 
-  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
-  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfD, 
+  orOpDocD, binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, mkVar,
+  mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
+  varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfD, 
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
@@ -51,9 +51,10 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, Library,
 import qualified Language.Drasil.Code.Imperative.GOOL.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), FileData(..), 
   fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
-  od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, VarData(..))
-import Language.Drasil.Code.Imperative.GOOL.Helpers (angles,blank, doubleQuotedText,
-  hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
+  od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
+  VarData(..), vard)
+import Language.Drasil.Code.Imperative.GOOL.Helpers (angles,blank, 
+  doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
 import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
@@ -645,6 +646,12 @@ typeBinExpr b t v1 v2 = mkExpr (opPrec b) t (binOpDocD (opDoc b) (exprParensL b
 
 mkVal :: TypeData -> Doc -> ValData
 mkVal = vd Nothing
+
+mkVar :: String -> TypeData -> Doc -> VarData
+mkVar = vard Dynamic
+
+mkStaticVar :: String -> TypeData -> Doc -> VarData
+mkStaticVar = vard Static
 
 mkExpr :: Int -> TypeData -> Doc -> ValData
 mkExpr p = vd (Just p)

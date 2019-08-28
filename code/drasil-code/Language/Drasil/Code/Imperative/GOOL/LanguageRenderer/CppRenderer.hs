@@ -35,21 +35,21 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
-  typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
-  litStringD, varDocD, selfDocD, argDocD, objVarDocD, inlineIfD, funcAppDocD,
-  funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, classDec, dot, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
-  makefileName, sampleInputName, doubleSlash, blockCmtDoc, docCmtDoc, 
-  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
-  valList, appendToBody, surroundBody, getterName, setterName, setEmpty, 
-  intValue)
+  typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, litCharD, 
+  litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, objVarDocD, 
+  inlineIfD, funcAppDocD, funcDocD, castDocD, objAccessDocD, castObjDocD, 
+  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
+  classDec, dot, blockCmtStart, blockCmtEnd, docCmtStart, observerListName, 
+  doxConfigName, makefileName, sampleInputName, doubleSlash, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc,
+  docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
+  setEmpty, intValue)
 import Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList, 
   Terminator(..), ScopeTag(..), AuxData(..), ad, emptyAux, FileData(..), 
   srcFile, hdrFile, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, OpData(..), od, PackData(..), packD, emptyPack, ParamData(..), 
   pd, ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
-  ValData(..), VarData(..), vard)
+  ValData(..), VarData(..))
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, cppCompiler, nativeBinary)
@@ -225,6 +225,7 @@ instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   type Variable (p CppSrcCode CppHdrCode) = VarData
   var n t = pair (var n $ pfst t) (var n $ psnd t)
+  staticVar n t = pair (staticVar n $ pfst t) (staticVar n $ psnd t)
   const n t = pair (const n $ pfst t) (const n $ psnd t)
   extVar l n t = pair (extVar l n $ pfst t) (extVar l n $ psnd t)
   self l = pair (self l) (self l)
@@ -237,6 +238,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   
   ($->) v1 v2 = pair (($->) (pfst v1) (pfst v2)) (($->) (psnd v1) (psnd v2))
 
+  variablePerm v = variablePerm $ pfst v
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
   variableDoc v = variableDoc $ pfst v
@@ -807,20 +809,22 @@ instance BinaryOpSym CppSrcCode where
 
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
-  var n t = liftA2 (vard n) t (return $ varDocD n) 
+  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
+  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
   const = var
   extVar _ = var
-  self l = liftA2 (vard "this") (obj l) (return selfDocD)
+  self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
   enumVar e en = var e (enumType en)
-  objVar o v = liftA2 (vard $ variableName o ++ "." ++ variableName v)
+  objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
     (variableType v) (liftA2 objVarDocD o v)
   objVarSelf _ = var
   listVar n p t = var n (listType p t)
   n `listOf` t = listVar n static_ t
-  iterVar l t = liftA2 (vard l) (iterator t) (return $ text $ "(*" ++ l ++ ")")
+  iterVar l t = liftA2 (mkVar l) (iterator t) (return $ text $ "(*" ++ l ++ ")")
 
   ($->) = objVar
 
+  variablePerm = varPerm . unCPPSC
   variableName = varName . unCPPSC
   variableType = fmap varType
   variableDoc = varDoc . unCPPSC
@@ -1361,19 +1365,21 @@ instance BinaryOpSym CppHdrCode where
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
-  var n t = liftA2 (vard n) t (return $ varDocD n) 
-  const _ _ = liftA2 (vard "") void (return empty)
-  extVar _ _ _ = liftA2 (vard "") void (return empty)
-  self _ = liftA2 (vard "") void (return empty)
-  enumVar _ _ = liftA2 (vard "") void (return empty)
-  objVar _ _ = liftA2 (vard "") void (return empty)
-  objVarSelf _ _ _ = liftA2 (vard "") void (return empty)
-  listVar _ _ _ = liftA2 (vard "") void (return empty)
-  listOf _ _ = liftA2 (vard "") void (return empty)
-  iterVar _ _ = liftA2 (vard "") void (return empty)
+  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
+  staticVar _ _ = liftA2 (mkStaticVar "") void (return empty)
+  const _ _ = liftA2 (mkVar "") void (return empty)
+  extVar _ _ _ = liftA2 (mkVar "") void (return empty)
+  self _ = liftA2 (mkVar "") void (return empty)
+  enumVar _ _ = liftA2 (mkVar "") void (return empty)
+  objVar _ _ = liftA2 (mkVar "") void (return empty)
+  objVarSelf _ _ _ = liftA2 (mkVar "") void (return empty)
+  listVar _ _ _ = liftA2 (mkVar "") void (return empty)
+  listOf _ _ = liftA2 (mkVar "") void (return empty)
+  iterVar _ _ = liftA2 (mkVar "") void (return empty)
 
-  ($->) _ _ = liftA2 (vard "") void (return empty)
-
+  ($->) _ _ = liftA2 (mkVar "") void (return empty)
+  
+  variablePerm = varPerm . unCPPHC
   variableName = varName . unCPPHC
   variableType = fmap varType
   variableDoc = varDoc . unCPPHC
@@ -1879,7 +1885,7 @@ cppDestruct v = cppDestruct' (getType $ variableType v)
         v_i = valueOf var_i
         guard = v_i ?< listSize (valueOf v)
         listelem = at (valueOf v) i
-        loopBody = oneLiner $ free (liftA2 (vard "") (valueType listelem) 
+        loopBody = oneLiner $ free (liftA2 (mkVar "") (valueType listelem) 
           (return $ valueDoc listelem))
         initv = var_i &= litInt 0
         deleteLoop = for initv guard (var_i &++) loopBody

@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList,
   MethodData(..), mthd, OpData(..), od, PackData(..), packD, emptyPack, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, 
-  VarData(..), vard
+  Binding(..), VarData(..), vard
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -139,10 +139,13 @@ vd = VD
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)
 
-data VarData = VarD {varName :: String, varType :: TypeData, varDoc :: Doc}
+data Binding = Static | Dynamic deriving Eq
+
+data VarData = VarD {varPerm :: Binding, varName :: String, 
+  varType :: TypeData, varDoc :: Doc}
 
 instance Eq VarData where
-  VarD n1 t1 _ == VarD n2 t2 _ = n1 == n2 && t1 == t2 
+  VarD p1 n1 t1 _ == VarD p2 n2 t2 _ = p1 == p2 && n1 == n2 && t1 == t2
 
-vard :: String -> TypeData -> Doc -> VarData
+vard :: Binding -> String -> TypeData -> Doc -> VarData
 vard = VarD

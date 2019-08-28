@@ -20,6 +20,7 @@ import Language.Drasil (Expr)
 import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.Code (CodeType)
 import Language.Drasil.Code.DataDesc (DataDesc)
+import Language.Drasil.Code.Imperative.GOOL.Data (Binding)
 import Language.Drasil.CodeSpec (Comments)
 import Text.PrettyPrint.HughesPJ (Doc)
 
@@ -168,6 +169,7 @@ class BinaryOpSym repr where
 class (StateTypeSym repr) => VariableSym repr where
   type Variable repr
   var          :: Label -> repr (StateType repr) -> repr (Variable repr)
+  staticVar    :: Label -> repr (StateType repr) -> repr (Variable repr)
   const        :: Label -> repr (StateType repr) -> repr (Variable repr)
   extVar       :: Library -> Label -> repr (StateType repr) -> 
     repr (Variable repr)
@@ -185,6 +187,7 @@ class (StateTypeSym repr) => VariableSym repr where
   ($->) :: repr (Variable repr) -> repr (Variable repr) -> repr (Variable repr)
   infixl 9 $->
 
+  variablePerm :: repr (Variable repr) -> Binding
   variableName :: repr (Variable repr) -> String
   variableType :: repr (Variable repr) -> repr (StateType repr)
   variableDoc  :: repr (Variable repr) -> Doc

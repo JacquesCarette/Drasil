@@ -30,18 +30,19 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc',
   unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, binExpr, typeBinExpr, mkVal, litCharD, litFloatD, litIntD, 
-  litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, objVarDocD, 
-  funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, listAccessFuncDocD, 
-  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
-  classDec, dot, forLabel, observerListName, doxConfigName, makefileName, 
-  sampleInputName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
-  docFuncRepr, valList, appendToBody, getterName, setterName)
+  moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, mkStaticVar, litCharD, 
+  litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
+  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, 
+  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
+  doxConfigName, makefileName, sampleInputName, commentedItem, addCommentsDocD, 
+  classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
+  setterName)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
-  VarData(..), vard)
+  VarData(..))
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
@@ -219,14 +220,15 @@ instance BinaryOpSym PythonCode where
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
-  var n t = liftA2 (vard n) t (return $ varDocD n) 
+  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
+  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
   const = var
-  extVar l n t = liftA2 (vard $ l ++ "." ++ n) t (return $ extVarDocD l n)
-  self l = liftA2 (vard "self") (obj l) (return $ text "self")
+  extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
+  self l = liftA2 (mkVar "self") (obj l) (return $ text "self")
   enumVar e en = var e (enumType en)
-  objVar o v = liftA2 (vard $ variableName o ++ "." ++ variableName v)
+  objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
     (variableType v) (liftA2 objVarDocD o v)
-  objVarSelf l n t = liftA2 (vard $ "self." ++ n) t (liftA2 objVarDocD
+  objVarSelf l n t = liftA2 (mkVar $ "self." ++ n) t (liftA2 objVarDocD
     (self l) (var n t))
   listVar n p t = var n (listType p t)
   n `listOf` t = listVar n static_ t
@@ -234,6 +236,7 @@ instance VariableSym PythonCode where
 
   ($->) = objVar
 
+  variablePerm = varPerm . unPC
   variableName = varName . unPC
   variableType = fmap varType
   variableDoc = varDoc . unPC

@@ -2128,8 +2128,8 @@
             </p>
             <div class="list">
               <p>
-                <div id="inputGlassProps">
-                  Input-Glass-Props: Input the quantities from <a href=#Table:ReqInputs>Table:ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.
+                <div id="inputValues">
+                  Input-Values: Input the values from <a href=#Table:ReqInputs>Table:ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.
                 </div>
               </p>
               <p>
@@ -2139,12 +2139,12 @@
               </p>
               <p>
                 <div id="checkInputWithDataCons">
-                  Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Section: Data Constraints</a>. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
+                  Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Section: Data Constraints</a>. If any of the input values are out of bounds, an error message is displayed and the calculations stop.
                 </div>
               </p>
               <p>
-                <div id="outputValsAndKnownQuants">
-                  Output-Values-and-Known-Quantities: Output the input quantities from <a href=#inputGlassProps>FR: Input-Glass-Props</a> and the known quantities from <a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>.
+                <div id="outputValsAndKnownValues">
+                  Output-Values-and-Known-Values: Output the input values from <a href=#inputValues>FR: Input-Values</a> and the known values from <a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>.
                 </div>
               </p>
               <p>
@@ -2153,8 +2153,8 @@
                 </div>
               </p>
               <p>
-                <div id="outputQuants">
-                  Output-Quantities: Output the quantities from <a href=#Table:ReqOutputs>Table:ReqOutputs</a>.
+                <div id="outputValues">
+                  Output-Values: Output the values from <a href=#Table:ReqOutputs>Table:ReqOutputs</a>.
                 </div>
               </p>
             </div>
@@ -2219,7 +2219,7 @@
                 </tr>
               </table>
               <p class="caption">
-                Required Inputs following <a href=#inputGlassProps>FR: Input-Glass-Props</a>
+                Required Inputs following <a href=#inputValues>FR: Input-Values</a>
               </p>
             </div>
             <div id="Table:ReqAssignments">
@@ -2371,7 +2371,7 @@
                 </tr>
               </table>
               <p class="caption">
-                Required Outputs following <a href=#outputQuants>FR: Output-Quantities</a>
+                Required Outputs following <a href=#outputValues>FR: Output-Values</a>
               </p>
             </div>
           </div>
@@ -2698,7 +2698,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#inputGlassProps>FR: Input-Glass-Props</a></td>
+              <td><a href=#inputValues>FR: Input-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2736,7 +2736,7 @@
             </tr>
             <tr>
               <td>
-                <a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>
+                <a href=#outputValsAndKnownValues>FR: Output-Values-and-Known-Values</a>
               </td>
               <td></td>
               <td></td>
@@ -2759,7 +2759,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#outputQuants>FR: Output-Quantities</a></td>
+              <td><a href=#outputValues>FR: Output-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3397,7 +3397,7 @@
               <th><a href=#TM:isSafeLoad>TM: isSafeLoad</a></th>
               <th><a href=#IM:isSafePb>IM: isSafePb</a></th>
               <th><a href=#IM:isSafeLR>IM: isSafeLR</a></th>
-              <th><a href=#inputGlassProps>FR: Input-Glass-Props</a></th>
+              <th><a href=#inputValues>FR: Input-Values</a></th>
               <th>
                 <a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>
               </th>
@@ -3405,10 +3405,10 @@
                 <a href=#checkInputWithDataCons>FR: Check-Input-with-Data_Constraints</a>
               </th>
               <th>
-                <a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>
+                <a href=#outputValsAndKnownValues>FR: Output-Values-and-Known-Values</a>
               </th>
               <th><a href=#checkGlassSafety>FR: Check-Glass-Safety</a></th>
-              <th><a href=#outputQuants>FR: Output-Quantities</a></th>
+              <th><a href=#outputValues>FR: Output-Values</a></th>
               <th><a href=#correct>NFR: Correct</a></th>
               <th><a href=#verifiable>NFR: Verifiable</a></th>
               <th><a href=#understandable>NFR: Understandable</a></th>
@@ -3453,7 +3453,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#inputGlassProps>FR: Input-Glass-Props</a></td>
+              <td><a href=#inputValues>FR: Input-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3560,7 +3560,7 @@
             </tr>
             <tr>
               <td>
-                <a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>
+                <a href=#outputValsAndKnownValues>FR: Output-Values-and-Known-Values</a>
               </td>
               <td></td>
               <td></td>
@@ -3629,7 +3629,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#outputQuants>FR: Output-Quantities</a></td>
+              <td><a href=#outputValues>FR: Output-Values</a></td>
               <td></td>
               <td></td>
               <td></td>

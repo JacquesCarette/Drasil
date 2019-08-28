@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2019
+Last updated: August 21, 2019
 --------------------------------------------------
 
 **gamephysics**
@@ -9,8 +9,14 @@ Last updated: July 19, 2019
 **glassbr**
   - Contains the (currently) expected output for the GlassBR example
 
+**hghc**
+  - Contains the (currently) expected output for the HGHC example
+
 **nopcm**
   - Contains the (currently) expected output for the NoPCM example
+
+**projectile**
+  - Contains the (currently) expected output for the Projectile example
 
 **ssp**
   - Contains the (currently) expected output for the SSP example
@@ -18,8 +24,9 @@ Last updated: July 19, 2019
 **swhs**
   - Contains the (currently) expected output for the SWHS example
 
-**hghc**
-  - Contains the (currently) expected output for the HGHC example
+**template**
+  - Contains the (currently) expected output for the Template example
+
 
 README.md
   - This file

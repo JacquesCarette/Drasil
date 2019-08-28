@@ -98,36 +98,39 @@ mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
-    [IPurpose prpsOfDoc_p1
+    [ IPurpose prpsOfDoc_p1
     , IScope scope
     , IChar []
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
         phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
         [phrase soilMechanics]
-    , IOrgSec orgSecStart inModel (SRS.inModel [] []) orgSecEnd],
+    , IOrgSec orgSecStart inModel (SRS.inModel [] []) orgSecEnd
+    ],
     --FIXME: issue #235
-    GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-      UsrChars [userCharIntro], SystCons [sysConstraints] []],
-    SSDSec $
-      SSDProg
-        [ SSDProblem $ PDProg prob []
-          [ TermsAndDefs Nothing terms
-          , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
-          , Goals goalsInputs]
-        , SSDSolChSpec $ SCSProg
-          [Assumptions
-          , TMs [] (Label : stdFields)
-          , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-          , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-          , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-          , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
-          , CorrSolnPpties outputs []
-          ]
-        ],
-    ReqrmntSec $ ReqsProg [
-    FReqsSub' funcReqTables,
-    NonFReqsSub
-  ],
+  GSDSec $ GSDProg
+    [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
+    , UsrChars [userCharIntro], SystCons [sysConstraints] []
+    ],
+  SSDSec $
+    SSDProg
+      [ SSDProblem $ PDProg prob []
+        [ TermsAndDefs Nothing terms
+        , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
+        , Goals goalsInputs]
+      , SSDSolChSpec $ SCSProg
+        [ Assumptions
+        , TMs [] (Label : stdFields)
+        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
+        , CorrSolnPpties outputs []
+        ]
+      ],
+  ReqrmntSec $ ReqsProg
+    [ FReqsSub' funcReqTables
+    , NonFReqsSub
+    ],
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,

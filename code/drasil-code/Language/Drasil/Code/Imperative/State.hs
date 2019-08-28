@@ -3,8 +3,8 @@ module Language.Drasil.Code.Imperative.State (
 ) where
 
 import Language.Drasil
-import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Comments, ConstantStructure,
-  ConstraintBehaviour, InputModule, Logging, Structure)
+import Language.Drasil.CodeSpec (AuxFile, CodeSpec, Comments, ConstantRepr,
+  ConstantStructure, ConstraintBehaviour, InputModule, Logging, Structure)
 
 -- Private State, used to push these options around the generator
 data State = State {
@@ -12,6 +12,7 @@ data State = State {
   date :: String,
   inStruct :: Structure,
   conStruct :: ConstantStructure,
+  conRepr :: ConstantRepr,
   inMod :: InputModule,
   logName :: String,
   logKind :: Logging,

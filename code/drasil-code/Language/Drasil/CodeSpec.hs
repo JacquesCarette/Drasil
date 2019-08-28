@@ -131,6 +131,7 @@ data Choices = Choices {
   onPhysConstraint :: ConstraintBehaviour,
   inputStructure :: Structure,
   constStructure :: ConstantStructure,
+  constRepr :: ConstantRepr,
   inputModule :: InputModule,
   auxFiles :: [AuxFile]
 }
@@ -155,6 +156,8 @@ data Structure = Unbundled
 
 data ConstantStructure = Inline | WithInputs | Store Structure
 
+data ConstantRepr = Var | Const
+
 data InputModule = Combined
                  | Separated
 
@@ -175,6 +178,7 @@ defaultChoices = Choices {
   onPhysConstraint = Warning,
   inputStructure = Bundled,
   constStructure = Inline,
+  constRepr = Const,
   inputModule = Combined,
   auxFiles = [SampleInput]
 }

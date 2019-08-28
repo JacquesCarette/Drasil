@@ -162,6 +162,7 @@ data DerivationDisplay = ShowDerivation
 newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
+  FReqsSub'   :: [ConceptInstance] -> [LabelledContent] -> ReqsSub -- LabelledContent for tables
   FReqsSub    :: [ConceptInstance] -> [LabelledContent] -> ReqsSub -- LabelledContent for tables
   NonFReqsSub :: [ConceptInstance] -> ReqsSub
 
@@ -266,6 +267,7 @@ instance Multiplate DLPlate where
     sc (CorrSolnPpties c cs) = CorrSolnPpties <$> pure c <*> pure cs
     rs (ReqsProg reqs) = ReqsProg <$> traverse (reqSub p) reqs
     rs' (FReqsSub ci con) = FReqsSub <$> pure ci <*> pure con
+    rs' (FReqsSub' ci con) = FReqsSub' <$> pure ci <*> pure con
     rs' (NonFReqsSub c) = NonFReqsSub <$> pure c
     lcp (LCsProg c) = LCsProg <$> pure c
     ucp (UCsProg c) = UCsProg <$> pure c

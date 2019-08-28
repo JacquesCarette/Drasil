@@ -8,9 +8,11 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   ProblemDescription(..), PDSub(..), SolChSpec(..), SCSSub(..), ReqrmntSec(..),
   ReqsSub(..), LCsSec(..), UCsSec(..), TraceabilitySec(..), AuxConstntSec(..),
   AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
+import Drasil.Sections.Requirements (fullReqs, fullTables)
 
-import Database.Drasil (ChunkDB, UMap, asOrderedList, conceptinsTable,
-  dataDefnTable, gendefTable, insmodelTable, theoryModelTable)
+import Database.Drasil (ChunkDB, SystemInformation(SI), UMap, asOrderedList,
+  _inputs, _sysinfodb, conceptinsTable, dataDefnTable, gendefTable,
+  insmodelTable, theoryModelTable)
 import Language.Drasil hiding (sec)
 
 import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
@@ -68,11 +70,12 @@ data SCSSub where
 newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 data ReqsSub where
-  FReqsSub    :: [LabelledContent] -> ReqsSub -- LabelledContent for tables
+  FReqsSub    :: Sentence -> [LabelledContent] -> ReqsSub -- LabelledContent for tables
+  FReqsSub'   :: [LabelledContent] -> ReqsSub -- LabelledContent for tables
   NonFReqsSub :: ReqsSub
 
-mkDocDesc :: ChunkDB -> SRSDecl -> DocDesc
-mkDocDesc cdb = map sec where
+mkDocDesc :: SystemInformation -> SRSDecl -> DocDesc
+mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec :: DocSection -> DL.DocSection
   sec (RefSec r) = DL.RefSec r
   sec (IntroSec i) = DL.IntroSec i
@@ -88,7 +91,8 @@ mkDocDesc cdb = map sec where
   sec (AppndxSec a) = DL.AppndxSec a
   sec (OffShelfSolnsSec e) = DL.OffShelfSolnsSec e
   reqSec :: ReqsSub -> DL.ReqsSub
-  reqSec (FReqsSub t) = DL.FReqsSub (fromConcInsDB funcReqDom) t
+  reqSec (FReqsSub d t) = DL.FReqsSub (fullReqs is d $ fromConcInsDB funcReqDom) (fullTables is t)
+  reqSec (FReqsSub' t) = DL.FReqsSub' (fromConcInsDB funcReqDom) t
   reqSec NonFReqsSub = DL.NonFReqsSub $ fromConcInsDB nonFuncReqDom
   ssdSec :: SSDSub -> DL.SSDSub
   ssdSec (SSDProblem (PDProg s ls p)) = DL.SSDProblem $ DL.PDProg s ls $ map pdSub p
@@ -106,7 +110,7 @@ mkDocDesc cdb = map sec where
   scsSub (Constraints s c) = DL.Constraints s c
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs
   expandFromDB :: ([a] -> [a]) -> Getting (UMap a) ChunkDB (UMap a) -> [a]
-  expandFromDB f = f . asOrderedList . (cdb ^.)
+  expandFromDB f = f . asOrderedList . (db ^.)
   allInDB :: Getting (UMap a) ChunkDB (UMap a) -> [a]
   allInDB = expandFromDB id
   fromConcInsDB :: Concept c => c -> [ConceptInstance]

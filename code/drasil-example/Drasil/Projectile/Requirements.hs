@@ -1,49 +1,39 @@
-module Drasil.Projectile.Requirements (funcReqs, inputParamsTable, nonfuncReqs) where
+module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs) where
 
 import Language.Drasil
-import Drasil.DocLang (mkInputPropsTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Computation (inParam)
+import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (assumption, code, datumConstraint,
-  environment, funcReqDom, input_, likelyChg, mg, mis, module_,
-  nonFuncReqDom, output_, property, quantity, requirement, srs, traceyMatrix,
-  unlikelyChg, vavPlan)
+  environment, funcReqDom, likelyChg, mg, mis, module_, nonFuncReqDom, output_,
+  property, requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
 
 import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.Projectile.IMods (landPosIM, messageIM, offsetIM, timeIM)
-import Drasil.Projectile.Unitals (flightDur, inputs, landPos, launAngle,
-  launSpeed, message, offset, targPos)
+import Drasil.Projectile.Unitals (flightDur, landPos, message, offset)
 
 {--Functional Requirements--}
 
 funcReqs :: [ConceptInstance]
-funcReqs = [inputParams, verifyParams, calcValues, outputValues]
+funcReqs = [verifyInVals, calcValues, outputValues]
 
-inputParams, verifyParams, calcValues, outputValues :: ConceptInstance
+verifyInVals, calcValues, outputValues :: ConceptInstance
 
-inputParams  = cic "inputParams"  inputParamsDesc  "Input-Parameters"  funcReqDom
-verifyParams = cic "verifyParams" verifyParamsDesc "Verify-Parameters" funcReqDom
-calcValues   = cic "calcValues"   calcValuesDesc   "Calculate-Values"  funcReqDom
-outputValues = cic "outputValues" outputValuesDesc "Output-Values"     funcReqDom
+verifyInVals = cic "verifyInVals" verifyParamsDesc "Verify-Input-Values" funcReqDom
+calcValues   = cic "calcValues"   calcValuesDesc   "Calculate-Values"    funcReqDom
+outputValues = cic "outputValues" outputValuesDesc "Output-Values"       funcReqDom
 
-inputParamsTable :: LabelledContent
-inputParamsTable = mkInputPropsTable inputs inputParams
-
-inputParamsDesc, verifyParamsDesc, calcValuesDesc, outputValuesDesc :: Sentence
-inputParamsDesc = foldlSent [atStart input_, S "the", plural quantity, S "from",
-  makeRef2S inputParamsTable `sC` S "which define the" +:+
-  foldlList Comma List (map phrase [launAngle, launSpeed, targPos])]
-verifyParamsDesc = foldlSent [S "Check the entered", plural inParam,
+verifyParamsDesc, calcValuesDesc, outputValuesDesc :: Sentence
+verifyParamsDesc = foldlSent [S "Check the entered", plural inValue,
   S "to ensure that they do not exceed the", plural datumConstraint,
   S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
-  S "If any of the", plural inParam, S "are out of bounds" `sC`
+  S "If any of the", plural inValue, S "are out of bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
-calcValuesDesc = foldlSent [S "Calculate the following" +: plural quantity,
+calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
   foldlList Comma List [
     ch flightDur +:+ sParen (S "from" +:+ makeRef2S timeIM),
     ch landPos   +:+ sParen (S "from" +:+ makeRef2S landPosIM),

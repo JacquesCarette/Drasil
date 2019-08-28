@@ -1400,7 +1400,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a> and <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>
+                          <a href=#outputInputDerivVals>FR: Output-Input-Derived-Values</a> and <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>
                         </p>
                       </td>
                     </tr>
@@ -1465,7 +1465,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a> and <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>
+                          <a href=#outputInputDerivVals>FR: Output-Input-Derived-Values</a> and <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>
                         </p>
                       </td>
                     </tr>
@@ -1530,7 +1530,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a> and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
+                          <a href=#outputInputDerivVals>FR: Output-Input-Derived-Values</a> and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
                         </p>
                       </td>
                     </tr>
@@ -1595,7 +1595,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a> and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
+                          <a href=#outputInputDerivVals>FR: Output-Input-Derived-Values</a> and <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>
                         </p>
                       </td>
                     </tr>
@@ -2520,13 +2520,13 @@
             </p>
             <div class="list">
               <p>
-                <div id="inputInitQuants">
-                  Input-Initial-Quantities: Input the following quantities described in <a href=#Table:ReqInputs>Table:ReqInputs</a>, which define the tank parameters, material properties and initial conditions.
+                <div id="inputValues">
+                  Input-Values: Input the values from <a href=#Table:ReqInputs>Table:ReqInputs</a>, which define the tank parameters, material properties, and initial conditions.
                 </div>
               </p>
               <p>
                 <div id="findMass">
-                  Find-Mass: Use the inputs in <a href=#inputInitQuants>FR: Input-Initial-Quantities</a> to find the masses needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>, using <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = (V<sub>tank</sub>&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub> = (π&#8239;(\(\frac{D}{2}\))<sup>2</sup>&#8239;L&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub></em>, <em>m<sub>P</sub> = V<sub>P</sub>&#8239;ρ<sub>P</sub></em>, and <a href=#assumpVCN>A: Volume-Coil-Negligible</a>, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank.
+                  Find-Mass: Use the inputs in <a href=#inputValues>FR: Input-Values</a> to find the masses needed for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>, <a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a>, <a href=#IM:heatEInWtr>IM: heatEInWtr</a>, and <a href=#IM:heatEInPCM>IM: heatEInPCM</a>, using <em>m<sub>W</sub> = V<sub>W</sub>&#8239;ρ<sub>W</sub> = (V<sub>tank</sub>&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub> = (π&#8239;(\(\frac{D}{2}\))<sup>2</sup>&#8239;L&minus;V<sub>P</sub>)&#8239;ρ<sub>W</sub></em>, <em>m<sub>P</sub> = V<sub>P</sub>&#8239;ρ<sub>P</sub></em>, and <a href=#assumpVCN>A: Volume-Coil-Negligible</a>, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank.
                 </div>
               </p>
               <p>
@@ -2535,8 +2535,8 @@
                 </div>
               </p>
               <p>
-                <div id="outputInputDerivQuants">
-                  Output-Input-Derived-Quantities: Output the input quantities and derived quantities in the following list: the quantities from <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>, the masses from <a href=#findMass>FR: Find-Mass</a>, <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>), <em>η</em> (from <a href=#DD:balanceDecayTime>DD: balanceDecayTime</a>), <em>τ<sub>P</sub><sup>S</sup></em> (from <a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>), and <em>τ<sub>P</sub><sup>L</sup></em> (from <a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>).
+                <div id="outputInputDerivVals">
+                  Output-Input-Derived-Values: Output the input values and derived values in the following list: the values from <a href=#inputValues>FR: Input-Values</a>, the masses from <a href=#findMass>FR: Find-Mass</a>, <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>), <em>η</em> (from <a href=#DD:balanceDecayTime>DD: balanceDecayTime</a>), <em>τ<sub>P</sub><sup>S</sup></em> (from <a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>), and <em>τ<sub>P</sub><sup>L</sup></em> (from <a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>).
                 </div>
               </p>
               <p>
@@ -2686,7 +2686,7 @@
                 </tr>
               </table>
               <p class="caption">
-                Required Inputs following <a href=#inputInitQuants>FR: Input-Initial-Quantities</a>
+                Required Inputs following <a href=#inputValues>FR: Input-Values</a>
               </p>
             </div>
           </div>
@@ -3259,7 +3259,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#inputInitQuants>FR: Input-Initial-Quantities</a></td>
+              <td><a href=#inputValues>FR: Input-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3331,7 +3331,7 @@
             </tr>
             <tr>
               <td>
-                <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>
+                <a href=#outputInputDerivVals>FR: Output-Input-Derived-Values</a>
               </td>
               <td></td>
               <td></td>
@@ -4296,13 +4296,13 @@
               <th><a href=#IM:eBalanceOnPCM>IM: eBalanceOnPCM</a></th>
               <th><a href=#IM:heatEInWtr>IM: heatEInWtr</a></th>
               <th><a href=#IM:heatEInPCM>IM: heatEInPCM</a></th>
-              <th><a href=#inputInitQuants>FR: Input-Initial-Quantities</a></th>
+              <th><a href=#inputValues>FR: Input-Values</a></th>
               <th><a href=#findMass>FR: Find-Mass</a></th>
               <th>
                 <a href=#checkWithPhysConsts>FR: Check-Input-with-Physical_Constraints</a>
               </th>
               <th>
-                <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>
+                <a href=#outputInputDerivVals>FR: Output-Input-Derived-Values</a>
               </th>
               <th>
                 <a href=#calcTempWtrOverTime>FR: Calculate-Temperature-Water-Over-Time</a>
@@ -4480,7 +4480,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#inputInitQuants>FR: Input-Initial-Quantities</a></td>
+              <td><a href=#inputValues>FR: Input-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -4594,7 +4594,7 @@
             </tr>
             <tr>
               <td>
-                <a href=#outputInputDerivQuants>FR: Output-Input-Derived-Quantities</a>
+                <a href=#outputInputDerivVals>FR: Output-Input-Derived-Values</a>
               </td>
               <td>X</td>
               <td>X</td>

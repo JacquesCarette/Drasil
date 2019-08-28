@@ -118,7 +118,7 @@ mkSRS = [RefSec $ RefProg intro
         , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
         , Goals goalsInputs]
       , SSDSolChSpec $ SCSProg
-        [Assumptions
+        [ Assumptions
         , TMs [] (Label : stdFields)
         , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
@@ -128,7 +128,7 @@ mkSRS = [RefSec $ RefProg intro
         ]
       ],
   ReqrmntSec $ ReqsProg
-    [ FReqsSub funcReqTables
+    [ FReqsSub' funcReqTables
     , NonFReqsSub
     ],
   LCsSec,

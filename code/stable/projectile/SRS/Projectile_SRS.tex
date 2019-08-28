@@ -985,9 +985,9 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
 \begin{itemize}
-\item[Input-Parameters:\phantomsection\label{inputParams}]{Input the quantities from \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the launch angle, launch speed, and target position.}
-\item[Verify-Parameters:\phantomsection\label{verifyParams}]{Check the entered input parameters to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.}
-\item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following quantities: ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}), ${p_{\text{land}}}$ (from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}), ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}), and $s$ (from \hyperref[IM:messageIM]{IM: messageIM}).}
+\item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Table:ReqInputs}.}
+\item[Verify-Input-Values:\phantomsection\label{verifyInVals}]{Check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
+\item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following values: ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}), ${p_{\text{land}}}$ (from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}), ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}), and $s$ (from \hyperref[IM:messageIM]{IM: messageIM}).}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output $s$ (from \hyperref[IM:messageIM]{IM: messageIM}) and ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}).}
 \end{itemize}
 \begin{longtable}{l l l}
@@ -1003,7 +1003,7 @@ ${v_{\text{launch}}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
 $θ$ & Launch angle & rad
 \\
 \bottomrule
-\caption{Required Inputs following \hyperref[inputParams]{FR: Input-Parameters}}
+\caption{Required Inputs following \hyperref[inputValues]{FR: Input-Values}}
 \label{Table:ReqInputs}
 \end{longtable}
 \subsection{Non-Functional Requirements}
@@ -1054,9 +1054,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:messageIM]{IM: messageIM} &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputParams]{FR: Input-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyParams]{FR: Verify-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInVals]{FR: Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcValues]{FR: Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1116,15 +1116,15 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:vecMag]{DD: vecMag}} & \textbf{\hyperref[DD:speedIX]{DD: speedIX}} & \textbf{\hyperref[DD:speedIY]{DD: speedIY}} & \textbf{\hyperref[TM:acceleration]{TM: acceleration}} & \textbf{\hyperref[TM:velocity]{TM: velocity}} & \textbf{\hyperref[GD:rectVel]{GD: rectVel}} & \textbf{\hyperref[GD:rectPos]{GD: rectPos}} & \textbf{\hyperref[GD:velVec]{GD: velVec}} & \textbf{\hyperref[GD:posVec]{GD: posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM: offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM: messageIM}} & \textbf{\hyperref[inputParams]{FR: Input-Parameters}} & \textbf{\hyperref[verifyParams]{FR: Verify-Parameters}} & \textbf{\hyperref[calcValues]{FR: Calculate-Values}} & \textbf{\hyperref[outputValues]{FR: Output-Values}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}} & \textbf{\hyperref[portable]{NFR: Portable}}
+\textbf{} & \textbf{\hyperref[DD:vecMag]{DD: vecMag}} & \textbf{\hyperref[DD:speedIX]{DD: speedIX}} & \textbf{\hyperref[DD:speedIY]{DD: speedIY}} & \textbf{\hyperref[TM:acceleration]{TM: acceleration}} & \textbf{\hyperref[TM:velocity]{TM: velocity}} & \textbf{\hyperref[GD:rectVel]{GD: rectVel}} & \textbf{\hyperref[GD:rectPos]{GD: rectPos}} & \textbf{\hyperref[GD:velVec]{GD: velVec}} & \textbf{\hyperref[GD:posVec]{GD: posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM: offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM: messageIM}} & \textbf{\hyperref[inputValues]{FR: Input-Values}} & \textbf{\hyperref[verifyInVals]{FR: Verify-Input-Values}} & \textbf{\hyperref[calcValues]{FR: Calculate-Values}} & \textbf{\hyperref[outputValues]{FR: Output-Values}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}} & \textbf{\hyperref[portable]{NFR: Portable}}
 \\
 \midrule
 \endhead
 \hyperref[targetHit]{GS: targetHit} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputParams]{FR: Input-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyParams]{FR: Verify-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInVals]{FR: Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcValues]{FR: Calculate-Values} &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  & 
 \\

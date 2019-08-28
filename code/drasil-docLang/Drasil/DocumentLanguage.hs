@@ -23,12 +23,9 @@ import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name c
                                                      -- Vector - Name conflict (defined in file)
 import Utils.Drasil
 
-import Database.Drasil(SystemInformation(SI), citeDB, termTable, ccss, ccss',
-  _authors, _kind, _quants, _sys, _usedinfodb, _sysinfodb, collectUnits,
-  ChunkDB, traceTable, refbyTable, generateRefbyMap)
-
-import Control.Lens ((^.), over, set)
-import qualified Data.Map as Map (elems)
+import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
+  _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
+  conceptinsTable, generateRefbyMap, idMap, refbyTable, termTable, traceTable)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
 import Drasil.Sections.TableOfSymbols (table, symbTableRef)
@@ -53,15 +50,17 @@ import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF,
 import Data.Drasil.Concepts.Documentation (likelyChg, refmat, section_,
   software, unlikelyChg)
 
+import Control.Lens ((^.), over, set)
 import Data.Function (on)
-import Data.List (nub, sortBy)
+import Data.List (nub, sortBy, sortOn)
+import qualified Data.Map as Map (elems, toList)
 
 -- | Creates a document from a document description and system information
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
-mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors, _sysinfodb = db} =
+mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
-  mkSections (fillTraceMaps l si) l where
-    l = mkDocDesc db dd
+  mkSections (fillTraceMaps l (fillReqs l si)) l where
+    l = mkDocDesc si dd
 
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
@@ -70,6 +69,16 @@ fillTraceMaps :: DocDesc -> SystemInformation -> SystemInformation
 fillTraceMaps dd si@SI{_sysinfodb = db} = si {_sysinfodb =
   set refbyTable (generateRefbyMap tdb) $ set traceTable tdb db} where
   tdb = generateTraceMap dd
+
+fillReqs :: DocDesc -> SystemInformation -> SystemInformation
+fillReqs [] si = si
+fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_sysinfodb = db} = genReqs x
+  where
+    genReqs [] = si
+    genReqs (FReqsSub c _:_) = si {_sysinfodb = set conceptinsTable newCI db} where
+        newCI = idMap $ nub $ c ++ map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)
+    genReqs (_:xs) = genReqs xs
+fillReqs (_:xs) si = fillReqs xs si
 
 -- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]
@@ -300,7 +309,8 @@ mkReqrmntSec :: ReqrmntSec -> Section
 mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
     mkSubs :: ReqsSub -> Section
-    mkSubs (FReqsSub frs tbs) = R.fReqF  (mkEnumSimpleD frs ++ map LlC tbs)
+    mkSubs (FReqsSub  frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
+    mkSubs (FReqsSub' frs tbs) = R.fReqF (mkEnumSimpleD frs ++ map LlC tbs)
     mkSubs (NonFReqsSub nfrs) = R.nfReqF (mkEnumSimpleD nfrs)
 
 {--}

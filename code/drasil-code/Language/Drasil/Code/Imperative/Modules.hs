@@ -33,8 +33,8 @@ import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
-  Comments(CommentFunc), ConstantStructure(..), ConstraintBehaviour(..), 
-  InputModule(..), Logging(..), Structure(..))
+  Comments(CommentFunc), ConstantStructure(..), ConstantRepr(..), 
+  ConstraintBehaviour(..), InputModule(..), Logging(..), Structure(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import Prelude hiding (print)
@@ -100,8 +100,10 @@ initConsts = do
         vars <- mapM mkVar cs
         vals <- mapM (convExpr . codeEquat) cs
         logs <- mapM maybeLog vars
-        return $ Just $ multi $ zipWith varDecDef vars vals ++ concat logs
+        return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ concat logs
       getDecl' _ = error "Only some constants present in export map"
+      defFunc Var = varDecDef
+      defFunc Const = constDecDef
   getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
     . codeName) (constants $ csi $ codeSpec g)) (conStruct g)
 

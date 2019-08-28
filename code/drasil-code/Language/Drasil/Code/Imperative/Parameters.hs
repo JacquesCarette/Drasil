@@ -7,9 +7,10 @@ import Language.Drasil
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk), codevar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
-import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Structure(..), 
-  codevars, codevars', constraintvarsandfuncs, getConstraints)
+  ConstantStructure(..), codevars, codevars', constraintvarsandfuncs, 
+  getConstraints)
 
 import Data.List (nub, (\\))
 import Data.Map (member)
@@ -74,19 +75,24 @@ getParams cs' = do
   g <- ask
   let cs = map codeChunk cs'
       ins = inputs $ csi $ codeSpec g
-      consts = map codeChunk $ constants $ csi $ codeSpec g
+      cnsnts = map codeChunk $ constants $ csi $ codeSpec g
       inpVars = filter (`elem` ins) cs
-      conVars = filter (`elem` consts) cs
-      csSubIns = cs \\ (ins ++ consts)
+      conVars = filter (`elem` cnsnts) cs
+      csSubIns = cs \\ (ins ++ cnsnts)
       inVs = getInputVars (inStruct g) inpVars
-      conVs = getConstVars conVars
-  return $ inVs ++ conVs ++ csSubIns
+  conVs <- getConstVars (conStruct g) conVars
+  return $ nub $ inVs ++ conVs ++ csSubIns
 
 getInputVars :: Structure -> [CodeChunk] -> [CodeChunk]
 getInputVars _ [] = []
 getInputVars Unbundled cs = cs
 getInputVars Bundled _ = [codevar inParams]
 
--- Right now, we always inline constants. In the future, this will be captured by a choice and this function should be updated to read that choice
-getConstVars :: [CodeChunk] -> [CodeChunk]
-getConstVars _ = []
+getConstVars :: ConstantStructure -> [CodeChunk] -> Reader State [CodeChunk]
+getConstVars _ [] = return []
+getConstVars (Store Unbundled) cs = return cs
+getConstVars (Store Bundled) _ = return [codevar consts]
+getConstVars WithInputs cs = do
+  g <- ask
+  return $ getInputVars (inStruct g) cs
+getConstVars Inline _ = return []

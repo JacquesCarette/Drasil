@@ -1,15 +1,16 @@
 {-# Language TypeFamilies #-}
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
-  chgsStart, conA, displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, 
-  eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
-  itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
-  maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
-  showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
-  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
+  chgsStart, conA, definedIn, definedIn', displayStrConstrntsAsSet,
+  displayDblConstrntsAsSet, eqN, eqnWSource, fromReplace, fromSource,
+  fromSources, fmtU, follows, getTandS, itemRefToSent, makeListRef,
+  makeTMatrix, maybeChanged, maybeExpanded, maybeWOVerb, mkEnumAbbrevList,
+  mkTableFromColumns, noRefs, refineChain, showingCxnBw, sortBySymbol,
+  sortBySymbolTuple, substitute, tAndDOnly, tAndDWAcc, tAndDWSym, typUncr,
+  underConsidertn, unwrap, weave, zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
-import Utils.Drasil.Sentence (sAre, toThe)
+import Utils.Drasil.Sentence (sAre, sIn, sIs, toThe)
 
 import Control.Lens ((^.))
 
@@ -49,6 +50,14 @@ fromReplace src c = S "From" +:+ makeRef2S src +:+ S "we can replace" +: ch c
 substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
 substitute s = S "By substituting" +: (foldlList Comma List l `sC` S "this can be written as")
   where l = map (\x -> ch x +:+ fromSource x) s
+
+-- | takes a HasSymbol and a referable and outputs as a Sentence "is defined in"
+definedIn :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence
+definedIn q = ch q `sIs` S "defined in" +:+. makeRef2S q
+
+-- | same as definedIn, but allows for more information
+definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sentence
+definedIn' q info = ch q `sIs` S "defined" `sIn` makeRef2S q +:+. info
 
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
 -- s - the number from which the enumeration should start from

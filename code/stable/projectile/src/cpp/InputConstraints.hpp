@@ -17,7 +17,8 @@ using std::ofstream;
 
 /** \brief Verifies that input values satisfy the physical constraints and software constraints
     \param inParams structure holding the input values
+    \param pi ratio of circumference to diameter for any circle: The ratio of a circle's circumference to its diameter
 */
-void input_constraints(InputParameters &inParams);
+void input_constraints(InputParameters &inParams, double pi);
 
 #endif

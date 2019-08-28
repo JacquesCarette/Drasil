@@ -27,7 +27,7 @@ symbolsWithDefns = [modElas]
 
 modElas :: UnitalChunk
 modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
-  "The ratio of tensile stress to tensile strain of glass." cE pascal
+  "the ratio of tensile stress to tensile strain of glass" cE pascal
 
 {--}
 

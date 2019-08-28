@@ -18,9 +18,8 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   introSub = Constant <$> \case
     (IOrgSec _ _ s _) -> mSec [s]
     _ -> mempty,
-  gsdSec = Constant <$> \case
-    (GSDProg s1 c1 c2 s2) -> mconcat [mSec s1, mCon [c1], mCon c2, mSec s2]
-    (GSDProg2 _) -> mempty,
+  --gsdSec = Constant <$> \case
+  --  (GSDProg _) -> mempty,
   gsdSub = Constant <$> \case
     (SysCntxt c) -> mCon c
     (UsrChars c) -> mCon c
@@ -95,9 +94,6 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
       (IOrgSec s1 _ _ s2) -> [s1, s2],
-    stkSec = Constant . f <$> \case
-      (StkhldrProg _ s) -> [s]
-      _ -> [],
     stkSub = Constant . f <$> \case
       (Client _ s) -> [s]
       (Cstmr _) -> [],
@@ -216,9 +212,6 @@ ciPlate = preorderFold $ purePlate {
   introSub = Constant <$> \case
     (IOrgSec _ ci _ _) -> [ci]
     _ -> [],
-  stkSec = Constant <$> \case
-    (StkhldrProg ci _) -> [ci]
-    (StkhldrProg2 _) -> [],
   stkSub = Constant <$> \case
    (Client ci _) -> [ci]
    (Cstmr ci) -> [ci],

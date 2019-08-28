@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc,
   codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
 import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
-import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 import Language.Drasil.Printers (toPlainName)
 
@@ -83,17 +83,17 @@ codeSpec SI {_sys = sys
               , _inputs = ins
               , _outputs = outs
               , _constraints = cs
-              , _constants = consts
+              , _constants = cnsts
               , _sysinfodb = db
               , sampleData = sd} chs ms = 
   let inputs' = map quantvar ins
-      const' = map qtov consts
+      const' = map qtov cnsts
       derived = getDerivedInputs ddefs defs' inputs' const' db
       rels = map qtoc ((defs' ++ map qdFromDD ddefs) \\ derived)
       mem   = modExportMap csi' chs
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
-      exOrder = getExecOrder rels (allInputs ++ map quantvar consts) outs' db
+      exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
       csi' = CSI {
         authors = as,
         inputs = allInputs,
@@ -130,6 +130,7 @@ data Choices = Choices {
   onSfwrConstraint :: ConstraintBehaviour,
   onPhysConstraint :: ConstraintBehaviour,
   inputStructure :: Structure,
+  constStructure :: ConstantStructure,
   inputModule :: InputModule,
   auxFiles :: [AuxFile]
 }
@@ -152,6 +153,8 @@ data ConstraintBehaviour = Warning
 data Structure = Unbundled
                | Bundled
 
+data ConstantStructure = Inline | WithInputs | Store Structure
+
 data InputModule = Combined
                  | Separated
 
@@ -171,6 +174,7 @@ defaultChoices = Choices {
   onSfwrConstraint = Exception,
   onPhysConstraint = Warning,
   inputStructure = Bundled,
+  constStructure = Inline,
   inputModule = Combined,
   auxFiles = [SampleInput]
 }
@@ -256,10 +260,14 @@ asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FCD _) = error "Can't make QuantityDict from FCD function" -- vc'' cd (codeSymb cd) (cd ^. typ)
 
 getAdditionalVars :: Choices -> [Mod] -> [CodeChunk]
-getAdditionalVars chs ms = map codevar (inFileName : inParamsVar 
-  (inputStructure chs)) ++ concatMap funcParams ms
+getAdditionalVars chs ms = map codevar (inFileName 
+  : inParamsVar (inputStructure chs) 
+  ++ constsVar (constStructure chs))
+  ++ concatMap funcParams ms
   where inParamsVar Bundled = [inParams]
         inParamsVar Unbundled = []
+        constsVar (Store Bundled) = [consts]
+        constsVar _ = []
         funcParams (Mod _ _ fs) = concatMap getFuncParams fs
 
 getFuncParams :: Func -> [CodeChunk]
@@ -274,10 +282,12 @@ modExportMap :: CodeSystInfo -> Choices -> ModExportMap
 modExportMap cs@CSI {
   inputs = ins,
   extInputs = extIns,
-  derivedInputs = ds
+  derivedInputs = ds,
+  constants = cns
   } chs = Map.fromList $ concatMap mpair (mods cs)
   where mpair (Mod n _ fs) = map fname fs `zip` repeat n
                         ++ getExportInput chs ins
+                        ++ getExportConstants chs cns
                         ++ getExportDerived chs ds
                         ++ getExportConstraints chs (getConstraints (cMap cs) 
                           ins)
@@ -289,8 +299,8 @@ modExportMap cs@CSI {
 type ModDepMap = Map.Map String [String]
 
 modDepMap :: CodeSystInfo -> ModExportMap -> Choices -> ModDepMap
-modDepMap cs mem chs = Map.fromList $ map (\m@(Mod n _ _) -> (n, getModDep m)) 
-  (mods cs) ++ ("Control", getDepsControl cs mem)
+modDepMap cs mem chs = Map.fromListWith (++) $ map (\m@(Mod n _ _) -> (n, 
+  getModDep m)) (mods cs) ++ ("Control", getDepsControl cs mem)
   : catMaybes [getDepsDerived cs mem chs,
                getDepsConstraints cs mem chs,
                getDepsInFormat chs]
@@ -359,8 +369,8 @@ prefixFunctions = map (\(Mod nm desc fs) -> Mod nm desc $ map pfunc fs)
 
 getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
-getDerivedInputs ddefs defs' ins consts sm  =
-  let refSet = ins ++ map codeChunk consts
+getDerivedInputs ddefs defs' ins cnsts sm  =
+  let refSet = ins ++ map codeChunk cnsts
   in  if null ddefs then filter ((`subsetOf` refSet) . flip codevars sm . (^.equat)) defs'
       else filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
 
@@ -387,9 +397,16 @@ type Export = (String, String)
 
 getExportInput :: Choices -> [Input] -> [Export]
 getExportInput _ [] = []
-getExportInput chs ins = inExp $ inputStructure chs
+getExportInput chs ins = inExp (inputStructure chs) 
   where inExp Unbundled = []
-        inExp Bundled = map codeName ins `zip` repeat "InputParameters"
+        inExp Bundled = map codeName ins `zip` repeat "InputParameters" 
+
+getExportConstants :: Choices -> [Const] -> [Export]
+getExportConstants _ [] = []
+getExportConstants chs cs = cExp (constStructure chs) (inputStructure chs)
+  where cExp (Store Bundled) _ = map codeName cs `zip` repeat "Constants"
+        cExp WithInputs Bundled = map codeName cs `zip` repeat "InputParameters"
+        cExp _ _ = []
 
 getExportDerived :: Choices -> [Derived] -> [Export]
 getExportDerived _ [] = []
@@ -416,36 +433,37 @@ getExportOutput _ = [("write_output", "OutputFormat")]
 getDepsControl :: CodeSystInfo -> ModExportMap -> [String]
 getDepsControl cs mem = 
   let ins = inputs cs
+      cns = constants cs
       ip = map (\x -> Map.lookup (codeName x) mem) ins
+      co = map (\x -> Map.lookup (codeName x) mem) cns
       inf = Map.lookup "get_input" mem
       dv = Map.lookup "derived_values" mem
       ic = Map.lookup "input_constraints" mem
       wo = Map.lookup "write_output" mem
       calcs = map (\x -> Map.lookup (codeName x) mem) (execOrder cs)
-  in nub $ catMaybes (ip ++ [inf, dv, ic, wo] ++ calcs)
+  in nub $ catMaybes (ip ++ co ++ [inf, dv, ic, wo] ++ calcs)
 
 getDepsDerived :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
-getDepsDerived cs mem chs = derivedDeps (inputStructure chs) (inputModule chs)
-  where derivedDeps Bundled Separated = Just ("DerivedValues", nub $ mapMaybe (
-          (`Map.lookup` mem) . codeName) (concatMap (flip codevars 
-          (sysinfodb cs) . codeEquat) (derivedInputs cs)))
-        derivedDeps _ _ = Nothing
-        
+getDepsDerived cs mem chs = if null derivedDeps then Nothing else Just 
+  (derivedMod (inputModule chs), derivedDeps)
+  where derivedDeps = nub $ mapMaybe ((`Map.lookup` mem) . codeName) (concatMap 
+          (flip codevars (sysinfodb cs) . codeEquat) (derivedInputs cs))
+        derivedMod Separated = "DerivedValues"
+        derivedMod Combined = "InputParameters"
 
 getDepsConstraints :: CodeSystInfo -> ModExportMap -> Choices -> 
   Maybe (String, [String])
-getDepsConstraints cs mem chs = constraintDeps (inputStructure chs) 
-  (inputModule chs)
-  where constraintDeps Bundled Separated = Just ("InputConstraints", nub $ 
-          mapMaybe ((`Map.lookup` mem) . codeName) reqdVals)
-        constraintDeps _ _ = Nothing
+getDepsConstraints cs mem chs = if null constraintDeps then Nothing else Just 
+  (constraintMod (inputModule chs), constraintDeps)
+  where constraintDeps = nub $ mapMaybe ((`Map.lookup` mem) . codeName) reqdVals
         ins = inputs cs
         cm = cMap cs
         varsList = filter (\i -> Map.member (i ^. uid) cm) ins
         reqdVals = nub $ varsList ++ concatMap (\v -> constraintvarsandfuncs v
           (sysinfodb cs) mem) (getConstraints cm varsList)
-        
+        constraintMod Separated = "InputConstraints"
+        constraintMod Combined = "InputParameters"
 
 getDepsInFormat :: Choices -> Maybe (String, [String])
 getDepsInFormat chs = inFormatDeps (inputStructure chs) (inputModule chs)

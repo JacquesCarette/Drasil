@@ -1,10 +1,10 @@
 module Language.Drasil.Code.Imperative.Logging (
-  maybeLog, loggedMethod, varLogFile
+  maybeLog, logBody, loggedMethod, varLogFile
 ) where
 
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, RenderSym(..),
-  BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..),
+  BodySym(..), BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..),
   StatementSym(..))
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 
@@ -35,6 +35,15 @@ loggedVar v = do
       printFile valLogFile (valueOf v),
       printFileStrLn valLogFile (" in module " ++ currentModule g),
       closeFile valLogFile ]
+
+logBody :: (RenderSym repr) => Label -> [repr (Variable repr)] -> 
+  [repr (Block repr)] -> Reader State (repr (Body repr))
+logBody n vars b = do
+  g <- ask
+  let loggedBody LogFunc = loggedMethod (logName g) n vars b
+      loggedBody LogAll  = loggedMethod (logName g) n vars b
+      loggedBody _       = b
+  return $ body $ loggedBody $ logKind g
 
 loggedMethod :: (RenderSym repr) => Label -> Label -> [repr (Variable repr)] -> 
   [repr (Block repr)] -> [repr (Block repr)]

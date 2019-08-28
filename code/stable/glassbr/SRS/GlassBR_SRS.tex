@@ -378,7 +378,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[glassCondition (A2):\phantomsection\label{assumpGC}]{Following \cite[(pg. 1)]{astm2009}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: \hyperref[accAlteredGlass]{UC: Accommodate-Altered-Glass}.)}
 \item[explainScenario (A3):\phantomsection\label{assumpES}]{This system only considers the external explosion scenario for its calculations. (RefBy: \hyperref[calcInternalBlastRisk]{LC: Calculate-Internal-Blask-Risk}.)}
 \item[standardValues (A4):\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} are assumed for the duration of load (${t_{\text{d}}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E}, \hyperref[DD:sdfTol]{DD: sdfTol}, \hyperref[DD:nFL]{DD: nFL}, \hyperref[DD:loadDurFactor]{DD: loadDurFactor}, \hyperref[DD:dimlessLoad]{DD: dimlessLoad}, and \hyperref[assumpLDFC]{A: ldfConstant}.)}
-\item[glassLite (A5):\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[DD:calofCapacity]{DD: calofCapacity}, \hyperref[DD:dimlessLoad]{DD: dimlessLoad}, and \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}.)}
+\item[glassLite (A5):\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[accMoreThanSingleLite]{LC: Accomodate-More-than-Single-Lite}.)}
 \item[boundaryConditions (A6):\phantomsection\label{assumpBC}]{Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: \hyperref[accMoreBoundaryConditions]{LC: Accomodate-More-Boundary-Conditions}.)}
 \item[responseType (A7):\phantomsection\label{assumpRT}]{The response type considered in GlassBR is flexural. (RefBy: \hyperref[considerMoreThanFlexGlass]{LC: Consider-More-than-Flexure-Glass}.)}
 \item[ldfConstant (A8):\phantomsection\label{assumpLDFC}]{With reference to \hyperref[assumpSV]{A: standardValues}, the value of load duration factor ($LDF$) is a constant in GlassBR. (RefBy: \hyperref[varValsOfmkE]{LC: Variable-Values-of-m,k,E} and \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.)}
@@ -492,13 +492,13 @@ Description & \begin{symbDescription}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+Notes & $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
         
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+        $h$ is defined in \hyperref[DD:minThick]{DD: minThick} and is based on the nominal thicknesses.
         
-        $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
+        $LDF$ is defined in \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
         
-        $J$ is the stress distribution factor (Function), as defined in \hyperref[DD:stressDistFac]{DD: stressDistFac}.
+        $J$ is defined in \hyperref[DD:stressDistFac]{DD: stressDistFac}.
         
 \\ \midrule \\
 Source & \cite{astm2009}, \cite[(Eqs. 4-5)]{beasonEtAl1998}, and \cite[(Eq. 14)]{campidelli}
@@ -588,9 +588,9 @@ Description & \begin{symbDescription}
               \item{$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & \hyperref[assumpSV]{A: standardValues}
+Notes & ${t_{\text{d}}}$ and $m$ come from \hyperref[assumpSV]{A: standardValues}.
         
-        \hyperref[assumpLDFC]{A: ldfConstant}
+        $LDF$ is assumed to be constant (from \hyperref[assumpLDFC]{A: ldfConstant}).
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -630,11 +630,11 @@ Description & \begin{symbDescription}
               \item{$\hat{q}$ is the dimensionless load (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $J$ is the stress distribution factor (Function), which is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
+Notes & $J$ is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
         
-        $\hat{q}$ is the dimensionless load defined in \hyperref[DD:dimlessLoad]{DD: dimlessLoad}.
+        $AR$ is defined in \hyperref[DD:aspectRatio]{DD: aspectRatio}.
         
-        $AR$ is the aspect ratio defined in \hyperref[DD:aspectRatio]{DD: aspectRatio}.
+        $\hat{q}$ is defined in \hyperref[DD:dimlessLoad]{DD: dimlessLoad}.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -676,13 +676,13 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+Notes & ${\hat{q}_{\text{tol}}}$ is defined in \hyperref[DD:tolLoad]{DD: tolLoad}.
         
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+        $E$ comes from \hyperref[assumpSV]{A: standardValues}.
         
-        ${\hat{q}_{\text{tol}}}$ is the tolerable load defined in \hyperref[DD:tolLoad]{DD: tolLoad}.
+        $h$ is defined in \hyperref[DD:minThick]{DD: minThick} and is based on the nominal thicknesses.
         
-        \hyperref[assumpSV]{A: standardValues}
+        $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -771,17 +771,15 @@ Description & \begin{symbDescription}
               \item{$GTF$ is the glass type factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $q$ is the 3 second equivalent pressure, as given in \hyperref[DD:calofDemand]{DD: calofDemand}.
+Notes & $q$ is the 3 second duration equivalent pressure, as given in \hyperref[DD:calofDemand]{DD: calofDemand}.
         
-        $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+        $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
         
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+        $E$ comes from \hyperref[assumpSV]{A: standardValues}.
         
-        $GTF$ is the glass type factor, as given by \hyperref[DD:gTF]{DD: gTF}.
+        $h$ is defined in \hyperref[DD:minThick]{DD: minThick} and is based on the nominal thicknesses.
         
-        $\hat{q}$ is calculated with reference to \hyperref[assumpGL]{A: glassLite}.
-        
-        \hyperref[assumpSV]{A: standardValues}
+        $GTF$ is defined in \hyperref[DD:gTF]{DD: gTF}.
         
 \\ \midrule \\
 Source & \cite{astm2009} and \cite[(Eq. 7)]{campidelli}
@@ -821,7 +819,11 @@ Description & \begin{symbDescription}
               \item{${J_{\text{tol}}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${\hat{q}_{\text{tol}}}$ is the tolerable load which is obtained from \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect} using ${J_{\text{tol}}}$ and aspect ratio as parameters using interpolation. Calculations of ${J_{\text{tol}}}$ and $AR$ are defined in \hyperref[DD:sdfTol]{DD: sdfTol} and \hyperref[DD:aspectRatio]{DD: aspectRatio}, respectively.
+Notes & ${\hat{q}_{\text{tol}}}$ is obtained by interpolating from data shown in \hyperref[Figure:dimlessloadVSaspect]{Fig:dimlessloadVSaspect}.
+        
+        $AR$ is defined in \hyperref[DD:aspectRatio]{DD: aspectRatio}.
+        
+        ${J_{\text{tol}}}$ is defined in \hyperref[DD:sdfTol]{DD: sdfTol}.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -866,17 +868,15 @@ Description & \begin{symbDescription}
               \item{$LDF$ is the load duration factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & ${J_{\text{tol}}}$  is calculated with reference to  ${P_{\text{b}\text{tol}}}$.
+Notes & ${P_{\text{b}\text{tol}}}$ is entered by the user.
         
-        $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+        $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
         
-        $h$ is the minimum thickness, which is based on the nominal thicknesses as shown in \hyperref[DD:minThick]{DD: minThick}.
+        $m$, $k$, and $E$ come from \hyperref[assumpSV]{A: standardValues}.
         
-        $LDF$ is the load duration factor as defined by \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
+        $h$ is defined in \hyperref[DD:minThick]{DD: minThick} and is based on the nominal thicknesses.
         
-        ${P_{\text{b}\text{tol}}}$ is the tolerable probability entered by the user.
-        
-        \hyperref[assumpSV]{A: standardValues}
+        $LDF$ is defined in \hyperref[DD:loadDurFactor]{DD: loadDurFactor}.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -952,7 +952,7 @@ Description & \begin{symbDescription}
               \item{$b$ is the plate width (short dimension) (m)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $a$ and $b$ are dimensions of the plate, where ($a\geq{}b$).
+Notes & $a$ and $b$ are the dimensions of the plate, where ($a\geq{}b$).
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1026,7 +1026,7 @@ Description & \begin{symbDescription}
               \item{$B$ is the risk of failure (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $B$ is the risk of failure, as defined in \hyperref[DD:riskFun]{DD: riskFun}.
+Notes & $B$ is defined in \hyperref[DD:riskFun]{DD: riskFun}.
         
 \\ \midrule \\
 Source & \cite{astm2009} and \cite{beasonEtAl1998}
@@ -1066,13 +1066,11 @@ Description & \begin{symbDescription}
               \item{$LSF$ is the load share factor (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load, as defined in \hyperref[DD:nFL]{DD: nFL}. $GTF$ is the glass type factor, as defined in \hyperref[DD:gTF]{DD: gTF}.
+Notes & $LR$ is also called capacity.
         
-        \hyperref[assumpGL]{A: glassLite}
+        $NFL$ is defined in \hyperref[DD:nFL]{DD: nFL}.
         
-        \hyperref[DD:gTF]{DD: gTF}
-        
-        \hyperref[DD:nFL]{DD: nFL}
+        $GTF$ is defined in \hyperref[DD:gTF]{DD: gTF}.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1166,7 +1164,11 @@ Description & \begin{symbDescription}
               \item{${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safePb$ (from \hyperref[IM:isSafeLR]{IM: isSafeLR}) are either both True or both False. ${P_{\text{b}}}$ is the probability of breakage, as calculated in \hyperref[DD:probOfBreak]{DD: probOfBreak}. ${P_{\text{b}\text{tol}}}$ is the tolerable probability of breakage entered by the user.
+Notes & If $is-safePb$, the glass is considered safe. $is-safePb$ and $is-safePb$ (from \hyperref[IM:isSafeLR]{IM: isSafeLR}) are either both True or both False.
+        
+        ${P_{\text{b}}}$ is defined in \hyperref[DD:probOfBreak]{DD: probOfBreak}.
+        
+        ${P_{\text{b}\text{tol}}}$ is entered by the user.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1213,7 +1215,11 @@ Description & \begin{symbDescription}
               \item{$q$ is the applied load (demand) (Pa)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[DD:calofCapacity]{DD: calofCapacity}. $q$ (also referred as the Applied Load (demand)) is the 3 second duration equivalent pressure, as defined in \hyperref[DD:calofDemand]{DD: calofDemand}.
+Notes & If $is-safeLR$, the glass is considered safe. $is-safePb$ (from \hyperref[IM:isSafePb]{IM: isSafePb}) and $is-safeLR$ are either both True or both False.
+        
+        $LR$ is defined in \hyperref[DD:calofCapacity]{DD: calofCapacity} and is also called capacity.
+        
+        $q$ is the 3 second duration equivalent pressure, as given in \hyperref[DD:calofDemand]{DD: calofDemand}.
         
 \\ \midrule \\
 Source & \cite{astm2009}
@@ -1429,7 +1435,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:gTF]{DD6} &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:dimlessLoad]{DD7} &  &  &  & X & X &  &  & 
+\hyperref[DD:dimlessLoad]{DD7} &  &  &  & X &  &  &  & 
 \\
 \hyperref[DD:tolLoad]{DD8} &  &  &  &  &  &  &  & 
 \\
@@ -1443,7 +1449,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[DD:probOfBreak]{DD13} &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:calofCapacity]{DD14} &  &  &  &  & X &  &  & 
+\hyperref[DD:calofCapacity]{DD14} &  &  &  &  &  &  &  & 
 \\
 \hyperref[DD:calofDemand]{DD15} &  &  &  &  &  &  &  & 
 \\

@@ -55,7 +55,7 @@ import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
-import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn, 
+import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn, 
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempEnv, 
   tempW, thFluxVect, volHtGen, watE, wMass, wVol, unitalChuncks, absTol, relTol)
 
@@ -95,8 +95,7 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ map qw specParamValList ++ 
-  map qw [coilSAMax] ++ map qw [tauW] ++ map qw [eta] ++
-  map qw [absTol, relTol]
+  map qw [coilSAMax] ++ map qw [tauW] ++ map qw [absTol, relTol]
 
 concepts :: [UnitaryConceptDict]
 concepts = map ucw [density, tau, inSA, outSA,
@@ -125,11 +124,12 @@ mkSRS = [RefSec $ RefProg intro
     , IChar [] charsOfReader []
     , IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
     ],
-  GSDSec $ GSDProg2 
-    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
-    , UsrChars [userChars progName]
-    , SystCons [] []
-    ],
+  GSDSec $
+    GSDProg
+      [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
+      , UsrChars [userChars progName]
+      , SystCons [] []
+      ],
   SSDSec $
     SSDProg
     [ SSDProblem $ PDProg probDescIntro []
@@ -177,7 +177,7 @@ si = SI {
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but neither tankVol
   -- or tau appear in the document and thus should not be displayed.
-  _quants = (map qw unconstrained ++ map qw symbols) \\ map qw [tankVol, tau],
+  _quants = (map qw unconstrained ++ map qw symbolsAll) \\ map qw [tankVol, tau],
   _concepts = symbols,
   _definitions = [],
   _datadefs = NoPCM.dataDefs,

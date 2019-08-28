@@ -67,7 +67,8 @@ module Language.Drasil (
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat, ec
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant, mkQuant'
-  , codeVC, implVar , dcc, dcc', dccWDS, dccWDS', vc, vc'', vcUnit, ccs, cc, cc', cic
+  , codeVC, implVar , dcc, dcc', dccWDS, dccWDS', vc, vc'', vcSt, vcUnit, ccs, 
+    cc, cc', cic
   -- Chunk.UncertainQuantity
   , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
   , uncrtnw
@@ -126,7 +127,7 @@ module Language.Drasil (
   , RealInterval(..), Inclusive(..), RTopology(..), DomainDesc(AllDD, BoundedDD)
   -- Symbol
   , Decoration(..), Symbol(..), autoStage, compsy, hat, prime, staged, sub, sup
-  , upperLeft, vec
+  , unicodeConv, upperLeft, vec
   -- Misc
   , mkTable
   -- People
@@ -262,7 +263,7 @@ import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-
 import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo,
   makeCiteInfoS, shortRef)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), autoStage, compsy,
-  hat, prime, staged, sub, sup, upperLeft, vec)
+  hat, prime, staged, sub, sup, unicodeConv, upperLeft, vec)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc -- all of it

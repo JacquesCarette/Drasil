@@ -141,7 +141,7 @@ updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)
 
 data Binding = Static | Dynamic deriving Eq
 
-data VarData = VarD {varPerm :: Binding, varName :: String, 
+data VarData = VarD {varBind :: Binding, varName :: String, 
   varType :: TypeData, varDoc :: Doc}
 
 instance Eq VarData where

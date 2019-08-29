@@ -49,7 +49,7 @@ import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..),
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
-  ValData(..), updateValDoc, VarData(..))
+  ValData(..), updateValDoc, Binding(..), VarData(..))
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, nativeBinary, osClassDefault)
@@ -256,7 +256,7 @@ instance VariableSym CSharpCode where
 
   ($->) = objVar
 
-  variablePerm = varPerm . unCSC
+  variableBind = varBind . unCSC
   variableName = varName . unCSC
   variableType = fmap varType
   variableDoc = varDoc . unCSC
@@ -409,16 +409,21 @@ instance StatementSym CSharpCode where
   (&++) v = mkSt <$> fmap plusPlusDocD v
   (&~-) v = v &= (valueOf v #- litInt 1)
 
-  varDec v = mkSt <$> fmap varDecDocD v
-  varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
-  listDec n v = mkSt <$> liftA2 listDecDocD v (litInt n)
-  listDecDef v vs = mkSt <$> lift1List listDecDefDocD v vs
-  objDecDef v def = mkSt <$> liftA2 objDecDefDocD v def
-  objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
-    vs)
+  varDec v = csVarDec (variableBind v) $ mkSt <$> liftA3 varDecDocD v static_ 
+    dynamic_ 
+  varDecDef v def = csVarDec (variableBind v) $mkSt <$> liftA4 varDecDefDocD v 
+    def static_ dynamic_ 
+  listDec n v = csVarDec (variableBind v) $ mkSt <$> liftA4 listDecDocD v 
+    (litInt n) static_ dynamic_
+  listDecDef v vs = csVarDec (variableBind v) $ mkSt <$> liftA4 listDecDefDocD 
+    v (sequence vs) static_ dynamic_ 
+  objDecDef v def = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
+    def static_ dynamic_ 
+  objDecNew v vs = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
+    (stateObj (variableType v) vs) static_ dynamic_ 
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
-    [])
+  objDecNewVoid v = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
+    (stateObj (variableType v) []) static_ dynamic_ 
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
@@ -699,3 +704,8 @@ csBuildConfig = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs",
 
 csRunnable :: Runnable
 csRunnable = nativeBinary
+
+csVarDec :: Binding -> CSharpCode (Statement CSharpCode) -> 
+  CSharpCode (Statement CSharpCode)
+csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
+csVarDec Dynamic d = d

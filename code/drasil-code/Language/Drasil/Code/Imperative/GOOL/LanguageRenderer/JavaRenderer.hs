@@ -260,7 +260,7 @@ instance VariableSym JavaCode where
 
   ($->) = objVar
 
-  variablePerm = varPerm . unJC
+  variableBind = varBind . unJC
   variableName = varName . unJC
   variableType = fmap varType
   variableDoc = varDoc . unJC
@@ -415,16 +415,17 @@ instance StatementSym JavaCode where
   (&++) v = mkSt <$> fmap plusPlusDocD v
   (&~-) v = v &= (valueOf v #- litInt 1)
 
-  varDec v = mkSt <$> fmap varDecDocD v
-  varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
-  listDec n v = mkSt <$> liftA2 listDecDocD v (litInt n)
-  listDecDef v vs = mkSt <$> liftA2 jListDecDef v (liftList valList vs)
-  objDecDef v def = mkSt <$> liftA2 objDecDefDocD v def
-  objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
-    vs)
+  varDec v = mkSt <$> liftA3 varDecDocD v static_ dynamic_
+  varDecDef v def = mkSt <$> liftA4 varDecDefDocD v def static_ dynamic_
+  listDec n v = mkSt <$> liftA4 listDecDocD v (litInt n) static_ dynamic_ 
+  listDecDef v vs = mkSt <$> liftA4 jListDecDef v (liftList valList vs) static_ 
+    dynamic_ 
+  objDecDef v def = mkSt <$> liftA4 objDecDefDocD v def static_ dynamic_ 
+  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+    vs) static_ dynamic_ 
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
-    [])
+  objDecNewVoid v = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+    []) static_ dynamic_ 
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
 
@@ -683,8 +684,8 @@ jCast t v = jCast' (getType t) (getType $ valueType v)
         jCast' Integer (Enum _) = v $. func "ordinal" int []
         jCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
-jListDecDef :: VarData -> Doc -> Doc
-jListDecDef v vs = typeDoc (varType v) <+> varDoc v <+> equals <+> new <+> 
+jListDecDef :: VarData -> Doc -> Doc -> Doc -> Doc
+jListDecDef v vs s d = varDecDocD v s d <+> equals <+> new <+> 
   typeDoc (varType v) <+> parens listElements
   where listElements = emptyIfEmpty vs $ text "Arrays.asList" <> parens vs
 

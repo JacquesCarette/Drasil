@@ -238,7 +238,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   
   ($->) v1 v2 = pair (($->) (pfst v1) (pfst v2)) (($->) (psnd v1) (psnd v2))
 
-  variablePerm v = variablePerm $ pfst v
+  variableBind v = variableBind $ pfst v
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
   variableDoc v = variableDoc $ pfst v
@@ -824,7 +824,7 @@ instance VariableSym CppSrcCode where
 
   ($->) = objVar
 
-  variablePerm = varPerm . unCPPSC
+  variableBind = varBind . unCPPSC
   variableName = varName . unCPPSC
   variableType = fmap varType
   variableDoc = varDoc . unCPPSC
@@ -976,16 +976,17 @@ instance StatementSym CppSrcCode where
   (&++) v = mkSt <$> fmap plusPlusDocD v
   (&~-) v = v &= (valueOf v #- litInt 1)
 
-  varDec v = mkSt <$> fmap varDecDocD v
-  varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
-  listDec n v = mkSt <$> liftA2 cppListDecDoc v (litInt n)
-  listDecDef v vs = mkSt <$> liftA2 cppListDecDefDoc v (liftList valList vs)
-  objDecDef v def = mkSt <$> liftA2 objDecDefDocD v def
-  objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
-    vs)
+  varDec v = mkSt <$> liftA3 varDecDocD v static_ dynamic_ 
+  varDecDef v def = mkSt <$> liftA4 varDecDefDocD v def static_ dynamic_ 
+  listDec n v = mkSt <$> liftA4 cppListDecDoc v (litInt n) static_ dynamic_ 
+  listDecDef v vs = mkSt <$> liftA4 cppListDecDefDoc v (liftList valList vs) 
+    static_ dynamic_ 
+  objDecDef v def = mkSt <$> liftA4 objDecDefDocD v def static_ dynamic_ 
+  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+    vs) static_ dynamic_ 
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
-    [])
+  objDecNewVoid v = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+    []) static_ dynamic_ 
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
@@ -1379,7 +1380,7 @@ instance VariableSym CppHdrCode where
 
   ($->) _ _ = liftA2 (mkVar "") void (return empty)
   
-  variablePerm = varPerm . unCPPHC
+  variableBind = varBind . unCPPHC
   variableName = varName . unCPPHC
   variableType = fmap varType
   variableDoc = varDoc . unCPPHC
@@ -1816,11 +1817,11 @@ cppCast t v = cppCast' (getType t) (getType $ valueType v)
 cppListSetDoc :: ValData -> ValData -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens (valDoc i) <+> equals <+> valDoc v
 
-cppListDecDoc :: VarData -> ValData -> Doc
-cppListDecDoc v n = typeDoc (varType v) <+> varDoc v <> parens (valDoc n)
+cppListDecDoc :: VarData -> ValData -> Doc -> Doc -> Doc
+cppListDecDoc v n s d = varDecDocD v s d <> parens (valDoc n)
 
-cppListDecDefDoc :: VarData -> Doc -> Doc
-cppListDecDefDoc v vs = typeDoc (varType v) <+> varDoc v <> braces vs
+cppListDecDefDoc :: VarData -> Doc -> Doc -> Doc -> Doc
+cppListDecDefDoc v vs s d = varDecDocD v s d <> braces vs
 
 cppPrint :: Bool -> ValData -> ValData -> Doc
 cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> val (valDoc v) <+> 

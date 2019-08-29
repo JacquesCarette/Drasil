@@ -380,21 +380,23 @@ plusPlusDocD' :: VarData -> OpData -> Doc
 plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> opDoc plusOp <+>
   int 1
 
-varDecDocD :: VarData -> Doc
-varDecDocD v = typeDoc (varType v) <+> varDoc v
+varDecDocD :: VarData -> Doc -> Doc -> Doc
+varDecDocD v s d = bind (varBind v) <+> typeDoc (varType v) <+> varDoc v
+  where bind Static = s
+        bind Dynamic = d
 
-varDecDefDocD :: VarData -> ValData -> Doc
-varDecDefDocD v def = typeDoc (varType v) <+> varDoc v <+> equals <+> valDoc def
+varDecDefDocD :: VarData -> ValData -> Doc -> Doc -> Doc
+varDecDefDocD v def s d = varDecDocD v s d <+> equals <+> valDoc def
 
-listDecDocD :: VarData -> ValData -> Doc
-listDecDocD v n = typeDoc (varType v) <+> varDoc v <+> equals <+> new <+> 
+listDecDocD :: VarData -> ValData -> Doc -> Doc -> Doc
+listDecDocD v n s d = varDecDocD v s d <+> equals <+> new <+> 
   typeDoc (varType v) <> parens (valDoc n)
 
-listDecDefDocD :: VarData -> [ValData] -> Doc
-listDecDefDocD v vs = typeDoc (varType v) <+> varDoc v <+> equals <+> new <+> 
+listDecDefDocD :: VarData -> [ValData] -> Doc -> Doc -> Doc
+listDecDefDocD v vs s d = varDecDocD v s d <+> equals <+> new <+> 
   typeDoc (varType v) <+> braces (valList vs)
 
-objDecDefDocD :: VarData -> ValData -> Doc
+objDecDefDocD :: VarData -> ValData -> Doc -> Doc -> Doc
 objDecDefDocD = varDecDefDocD
 
 constDecDefDocD :: VarData -> ValData -> Doc

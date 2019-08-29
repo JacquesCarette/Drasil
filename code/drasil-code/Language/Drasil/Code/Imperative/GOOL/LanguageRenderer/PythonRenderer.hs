@@ -34,7 +34,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc',
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
   objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, 
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, classDec, dot, forLabel, observerListName, 
+  dynamicDocD, classDec, dot, forLabel, observerListName, 
   doxConfigName, makefileName, sampleInputName, commentedItem, addCommentsDocD, 
   classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
   setterName)
@@ -136,7 +136,7 @@ instance KeywordSym PythonCode where
 
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
-  static_ = return staticDocD
+  static_ = return empty
   dynamic_ = return dynamicDocD
 
 instance BodySym PythonCode where
@@ -236,7 +236,7 @@ instance VariableSym PythonCode where
 
   ($->) = objVar
 
-  variablePerm = varPerm . unPC
+  variableBind = varBind . unPC
   variableName = varName . unPC
   variableType = fmap varType
   variableDoc = varDoc . unPC

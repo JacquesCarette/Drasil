@@ -187,7 +187,7 @@ class (StateTypeSym repr) => VariableSym repr where
   ($->) :: repr (Variable repr) -> repr (Variable repr) -> repr (Variable repr)
   infixl 9 $->
 
-  variablePerm :: repr (Variable repr) -> Binding
+  variableBind :: repr (Variable repr) -> Binding
   variableName :: repr (Variable repr) -> String
   variableType :: repr (Variable repr) -> repr (StateType repr)
   variableDoc  :: repr (Variable repr) -> Doc

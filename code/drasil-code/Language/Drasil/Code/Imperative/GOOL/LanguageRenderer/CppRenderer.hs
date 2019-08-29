@@ -1367,7 +1367,7 @@ instance BinaryOpSym CppHdrCode where
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
   var n t = liftA2 (mkVar n) t (return $ varDocD n) 
-  staticVar _ _ = liftA2 (mkStaticVar "") void (return empty)
+  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
   const _ _ = liftA2 (mkVar "") void (return empty)
   extVar _ _ _ = liftA2 (mkVar "") void (return empty)
   self _ = liftA2 (mkVar "") void (return empty)

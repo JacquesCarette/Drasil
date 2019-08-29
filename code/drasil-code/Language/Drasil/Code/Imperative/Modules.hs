@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.Modules (
 import Language.Drasil
 import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc, 
-  constCtorDesc, constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, 
+  constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, 
   inFmtFuncDesc, inputClassDesc, inputConstraintsDesc, inputFormatDesc, 
   inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc)
 import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
@@ -13,21 +13,20 @@ import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
 import Language.Drasil.Code.Imperative.GenerateGOOL (genModule, publicClass)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (CalcType(CalcAssign), convExpr,
-  genCalcBlock, genConstructor, mkVal, mkVar, publicInOutFunc, publicMethod, 
-  readData, renderC)
+  genCalcBlock, mkVal, mkVar, publicInOutFunc, publicMethod, readData, renderC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, varLogFile)
 import Language.Drasil.Code.Imperative.Parameters (getConstraintParams, 
   getDerivedIns, getDerivedOuts, getInputFormatIns, getInputFormatOuts, 
   getOutputParams)
 import Language.Drasil.Code.Imperative.State (State(..))
-import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, RenderSym(..),
+import Language.Drasil.Code.Imperative.GOOL.Symantics (RenderSym(..),
   AuxiliarySym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
   VariableSym(..), ValueSym(..), BooleanExpression(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..))
 import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
-import Language.Drasil.Chunk.Code (CodeIdea(codeName, codeChunk), CodeChunk,
-  codeType, codevar, physLookup, sfwrLookup)
+import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeChunk, codeType, 
+  codevar, physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
@@ -154,22 +153,25 @@ chooseInStructure Bundled = genInputClass
 genInputClass :: (RenderSym repr) => Reader State (Maybe (repr (Class repr)))
 genInputClass = do
   g <- ask
-  let ins = inputs (csi $ codeSpec g)
-      cs = map codeChunk (constants $ csi $ codeSpec g)
+  let ins = inputs $ csi $ codeSpec g
+      cs = constants $ csi $ codeSpec g
       cname = "InputParameters"
-      genClass :: (RenderSym repr) => [CodeChunk] -> Reader State (Maybe 
-        (repr (Class repr)))
-      genClass [] = return Nothing 
-      genClass vs = do
+      filt :: (CodeIdea c) => [c] -> [c]
+      filt = filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
+        codeName)
+      genClass :: (RenderSym repr) => [CodeChunk] -> [CodeDefinition] ->
+        Reader State (Maybe (repr (Class repr)))
+      genClass [] [] = return Nothing 
+      genClass inps csts = do
+        vals <- mapM (convExpr . codeEquat) csts
         let inputVars = map (\x -> pubMVar 0 (var (codeName x) (convType $ 
-              codeType x))) vs
+              codeType x))) inps
+            constVars = zipWith (\c vl -> constVar 0 public (staticVar 
+              (codeName c) (convType $ codeType c)) vl) csts vals
         icDesc <- inputClassDesc
-        iConstruct <- genConstConstructor cname
-        cls <- publicClass icDesc cname Nothing inputVars 
-          (maybeToList iConstruct)
+        cls <- publicClass icDesc cname Nothing (inputVars ++ constVars) []
         return $ Just cls
-  genClass $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
-    codeName) (ins ++ cs)
+  genClass (filt ins) (filt cs)
 
 genInputDerived :: (RenderSym repr) => Reader State 
   (Maybe (repr (Method repr)))
@@ -348,32 +350,10 @@ genConstClass = do
         let vars = map (\x -> var (codeName x) (convType $ codeType x)) vs
             constVars = zipWith (constVar 0 public) vars vals
         cDesc <- constClassDesc
-        -- cConstruct <- genConstConstructor cname
         cls <- publicClass cDesc cname Nothing constVars []
-          -- (maybeToList cConstruct)
         return $ Just cls
   genClass $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
     codeName) cs
-
-genConstConstructor :: (RenderSym repr) => Label ->
-  Reader State (Maybe (repr (Method repr)))
-genConstConstructor l = do
-  g <- ask
-  let cnstnts = constants $ csi $ codeSpec g
-      genCtor :: (RenderSym repr) => [CodeDefinition] -> 
-        Reader State (Maybe (repr (Method repr)))
-      genCtor [] = return Nothing
-      genCtor _ = do
-        let vars = map (\c -> objVarSelf l (codeName c) (convType $ codeType c))
-              cnstnts
-        vals <- mapM (convExpr . codeEquat) cnstnts
-        logs <- mapM maybeLog vars
-        desc <- constCtorDesc
-        mthd <- genConstructor l desc ([] :: [CodeChunk]) (map block [ 
-          zipWith assign vars vals, concat logs])
-        return $ Just mthd
-  genCtor $ filter (flip member (Map.filter (l ==) (eMap $ codeSpec g)) . 
-    codeName) cnstnts
 
 ----- OUTPUT -------
 

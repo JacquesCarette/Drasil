@@ -65,7 +65,7 @@ import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
-  semi, vcat, lbrace, rbrace, colon)
+  semi, vcat, lbrace, rbrace, colon, render)
 
 csExt :: String
 csExt = "cs"
@@ -246,8 +246,7 @@ instance VariableSym CSharpCode where
   extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
   self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
   enumVar e en = var e (enumType en)
-  objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
-    (variableType v) (liftA2 objVarDocD o v)
+  objVar = liftA2 csObjVar
   objVarSelf l n t = liftA2 (mkVar $ "this." ++ n) t (liftA2 objVarDocD (self l)
     (var n t))
   listVar n p t = var n (listType p t)
@@ -709,3 +708,10 @@ csVarDec :: Binding -> CSharpCode (Statement CSharpCode) ->
   CSharpCode (Statement CSharpCode)
 csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
 csVarDec Dynamic d = d
+
+csObjVar :: VarData -> VarData -> VarData
+csObjVar o v = csObjVar' (varBind v)
+  where csObjVar' Static = mkVar (render (typeDoc (varType o)) ++ "." ++ 
+          varName v) (varType v) (typeDoc (varType o) <> dot <> varDoc v)
+        csObjVar' Dynamic = mkVar (varName o ++ "." ++ varName v) 
+          (varType v) (objVarDocD o v)

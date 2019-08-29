@@ -76,7 +76,7 @@ constVariable :: (RenderSym repr) => ConstantStructure -> String ->
   repr (StateType repr) -> Reader State (repr (Variable repr))
 constVariable (Store Bundled) s t = do
   cs <- mkVar (codevar consts)
-  return $ cs $-> var s t
+  return $ cs $-> staticVar s t
 constVariable WithInputs s t = do
   g <- ask
   inputVariable (inStruct g) s t

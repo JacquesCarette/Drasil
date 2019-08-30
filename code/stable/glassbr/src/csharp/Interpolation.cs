@@ -231,7 +231,7 @@ public class Interpolation {
             outfile.Write(k_2);
             outfile.WriteLine(" in module Interpolation");
             outfile.Close();
-        } catch (Exception exc) {
+        } catch {
             throw new Exception("Interpolation of y failed");
         }
         y_1 = func_lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x);
@@ -352,7 +352,7 @@ public class Interpolation {
                 outfile.Write(k_2);
                 outfile.WriteLine(" in module Interpolation");
                 outfile.Close();
-            } catch (Exception exc) {
+            } catch {
                 continue;
             }
             y_1 = func_lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x);

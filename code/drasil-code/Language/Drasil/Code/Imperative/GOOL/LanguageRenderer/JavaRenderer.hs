@@ -25,7 +25,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
   boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
   voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam, 
-  methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD, ifCondDocD, 
+  methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, 
   switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, 
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, 
   objDecDefDocD, statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, 
@@ -42,8 +42,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   docCmtStart, observerListName, doxConfigName, makefileName, sampleInputName, 
   doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  surroundBody, getterName, setterName, setMain, setMainMethod, setEmpty, 
-  intValue)
+  surroundBody, getterName, setterName, setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
@@ -602,8 +601,10 @@ instance MethodSym JavaCode where
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
   stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
-  constVar _ s vr vl = liftA3 constVarDocD (includeScope s) static_ (fst <$> 
-    state (constDecDef vr vl))
+  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD (includeScope s) p (fst <$>
+    state (varDecDef vr vl))
+  constVar _ _ s vr vl = liftA3 stateVarDefDocD (includeScope s) static_ (fst 
+    <$> state (constDecDef vr vl))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
@@ -616,7 +617,6 @@ instance ClassSym JavaCode where
     fs)), any (isMainMthd . unJC) fs)
   enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ 
     enumElementsDocD es enumsEqualInts) s, False)
-  mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
   

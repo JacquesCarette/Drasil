@@ -552,7 +552,8 @@ instance MethodSym PythonCode where
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ _ = return empty
-  constVar _ _ vr vl = fst <$> state (constDecDef vr vl)
+  stateVarDef _ _ _ _ vr vl = fst <$> state (varDecDef vr vl)
+  constVar _ _ _ vr vl = fst <$> state (constDecDef vr vl)
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
@@ -565,8 +566,6 @@ instance ClassSym PythonCode where
                             Just pn -> return $ parens (text pn)
   enum n es _ = liftPairFst (liftA3 (pyClass n) (return empty) (return $ 
     enumElementsDocD' es) (return empty), False)
-  mainClass _ _ fs = liftPairFst (liftList methodListDocD (map (fmap mthdDoc) 
-    fs), True)
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 

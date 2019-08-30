@@ -26,7 +26,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD, 
   typeDocD, enumTypeDocD, listTypeDocD, voidDocD, constructDocD, stateParamDocD,
   paramListDocD, mkParam, methodDocD, methodListDocD, 
-  stateVarDocD, constVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD,
+  stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD,
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
   constDecDefDocD, statementDocD, returnDocD, mkSt, mkStNoEnd, stringListVals',
@@ -43,8 +43,8 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
   makefileName, sampleInputName, doubleSlash, blockCmtDoc, docCmtDoc, 
   commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
-  valList, appendToBody, surroundBody, getterName, setterName, setMain, 
-  setMainMethod, setEmpty, intValue)
+  valList, appendToBody, surroundBody, getterName, setterName, setMainMethod, 
+  setEmpty, intValue)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
@@ -585,7 +585,9 @@ instance MethodSym CSharpCode where
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
   stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
-  constVar _ s vr vl = liftA3 constVarDocD (includeScope s) (return empty) 
+  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD (includeScope s) p (fst <$>
+    state (varDecDef vr vl))
+  constVar _ _ s vr vl = liftA3 stateVarDefDocD (includeScope s) (return empty) 
     (fst <$> state (constDecDef vr vl))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
@@ -599,7 +601,6 @@ instance ClassSym CSharpCode where
     fs)), any (isMainMthd . unCSC) fs)
   enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ 
     enumElementsDocD es False) s, False)
-  mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 

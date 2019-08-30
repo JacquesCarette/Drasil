@@ -13,29 +13,30 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
   stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, voidDocD, 
   constructDocD, stateParamDocD, paramListDocD, mkParam, methodDocD, 
-  methodListDocD, stateVarDocD, constVarDocD, stateVarListDocD, alwaysDel, 
-  ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, 
-  assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, 
-  plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, 
-  statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd,
-  stringListVals', stringListLists', stratDocD, unOpPrec, notOpDocD, notOpDocD',
-  negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, 
-  logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD',
-  cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', 
-  acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, unExpr, unExpr',
-  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
-  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
-  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, 
-  orOpDocD, binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, mkVar,
-  mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, 
-  varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfD, 
-  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
+  methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, stateVarListDocD,
+  alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
+  tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
+  plusPlusDocD, plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, 
+  listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, 
+  mkSt, mkStNoEnd, stringListVals', stringListLists', stratDocD, unOpPrec, 
+  notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
+  absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
+  sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
+  asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', 
+  unOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, 
+  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
+  binExpr, binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, 
+  litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
+  selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfD, funcAppDocD, 
+  extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
   includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, prependToBody, 
-  appendToBody, surroundBody, getterName, setterName, setMain, setMainMethod, 
+  appendToBody, surroundBody, getterName, setterName, setMainMethod, 
   setEmpty, intValue
 ) where
 
@@ -269,8 +270,12 @@ methodListDocD ms = vibcat methods
 stateVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
 stateVarDocD s p v end = s <+> p <+> typeDoc (varType v) <+> varDoc v <> end
 
-constVarDocD :: Doc -> Doc -> Doc -> Doc
-constVarDocD s p dec = s <+> p <+> dec
+stateVarDefDocD :: Doc -> Doc -> Doc -> Doc
+stateVarDefDocD s p dec = s <+> p <+> dec
+
+constVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
+constVarDocD s p v end = s <+> p <+> text "const" <+> typeDoc (varType v) <+>
+  varDoc v <> end
 
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat
@@ -852,9 +857,6 @@ getterName s = "Get" ++ capitalize s
 
 setterName :: String -> String
 setterName s = "Set" ++ capitalize s
-
-setMain :: (Doc, Bool) -> (Doc, Bool)
-setMain (d, _) = (d, True)
 
 setMainMethod :: MethodData -> MethodData
 setMainMethod (MthD _ ps d) = MthD True ps d

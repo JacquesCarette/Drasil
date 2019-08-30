@@ -1,7 +1,7 @@
 module Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList,
   Terminator(..), ScopeTag(..), FileType(..), AuxData(..), ad, emptyAux, 
-  FileData(..), fileD, file, srcFile, hdrFile, isSource, isHeader, 
-  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  BindData(..), bd, FileData(..), fileD, file, srcFile, hdrFile, isSource, 
+  isHeader, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, OpData(..), od, PackData(..), packD, emptyPack, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, 
@@ -29,6 +29,13 @@ data Terminator = Semi | Empty
 data ScopeTag = Pub | Priv deriving Eq
 
 data FileType = Combined | Source | Header deriving Eq
+
+data Binding = Static | Dynamic deriving Eq
+
+data BindData = BD {bind :: Binding, bindDoc :: Doc}
+
+bd :: Binding -> Doc -> BindData
+bd = BD
 
 data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}
 
@@ -138,8 +145,6 @@ vd = VD
 
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)
-
-data Binding = Static | Dynamic deriving Eq
 
 data VarData = VarD {varBind :: Binding, varName :: String, 
   varType :: TypeData, varDoc :: Doc}

@@ -584,7 +584,9 @@ class (ScopeSym repr, InternalScope repr, PermanenceSym repr, StateTypeSym repr,
   type StateVar repr
   stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr) -> repr (StateVar repr)
-  constVar :: Int -> repr (Scope repr) ->  repr (Variable repr) -> 
+  stateVarDef :: Int -> Label -> repr (Scope repr) -> repr (Permanence repr) ->
+    repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr)
+  constVar :: Int -> Label -> repr (Scope repr) ->  repr (Variable repr) -> 
     repr (Value repr) -> repr (StateVar repr)
   privMVar :: Int -> repr (Variable repr) -> repr (StateVar repr)
   pubMVar  :: Int -> repr (Variable repr) -> repr (StateVar repr)
@@ -595,8 +597,6 @@ class (StateVarSym repr, MethodSym repr) => ClassSym repr where
   buildClass :: Label -> Maybe Label -> repr (Scope repr) -> 
     [repr (StateVar repr)] -> [repr (Method repr)] -> repr (Class repr)
   enum :: Label -> [Label] -> repr (Scope repr) -> repr (Class repr)
-  mainClass :: Label -> [repr (StateVar repr)] -> [repr (Method repr)] -> 
-    repr (Class repr)
   privClass :: Label -> Maybe Label -> [repr (StateVar repr)] -> 
     [repr (Method repr)] -> repr (Class repr)
   pubClass :: Label -> Maybe Label -> [repr (StateVar repr)] -> 

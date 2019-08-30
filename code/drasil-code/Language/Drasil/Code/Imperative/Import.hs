@@ -28,8 +28,8 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
-  ConstantStructure(..), Func(..), FuncData(..), FuncDef(..), FuncStmt(..), 
-  Mod(..), Name, Structure(..), asExpr, fstdecl)
+  ConstantRepr(..), ConstantStructure(..), Func(..), FuncData(..), FuncDef(..), 
+  FuncStmt(..), Mod(..), Name, Structure(..), asExpr, fstdecl)
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
@@ -59,10 +59,12 @@ variable :: (RenderSym repr) => String -> repr (StateType repr) ->
 variable s t = do
   g <- ask
   let cs = csi $ codeSpec g
+      defFunc Var = var
+      defFunc Const = staticVar
   if s `elem` map codeName (inputs cs) 
     then inputVariable (inStruct g) (var s t)
     else if s `elem` map codeName (constants $ csi $ codeSpec g)
-      then constVariable (conStruct g) (staticVar s t)
+      then constVariable (conStruct g) ((defFunc $ conRepr g) s t)
       else return $ var s t
   
 inputVariable :: (RenderSym repr) => Structure -> repr (Variable repr) -> 

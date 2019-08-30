@@ -20,10 +20,10 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getOutputParams)
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (RenderSym(..),
-  AuxiliarySym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
-  VariableSym(..), ValueSym(..), BooleanExpression(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..))
+  AuxiliarySym(..), BodySym(..), BlockSym(..), PermanenceSym(..), 
+  StateTypeSym(..), VariableSym(..), ValueSym(..), BooleanExpression(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..))
 import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeChunk, codeType, 
   codevar, physLookup, sfwrLookup)
@@ -150,6 +150,11 @@ chooseInStructure :: (RenderSym repr) => Structure -> Reader State
 chooseInStructure Unbundled = return Nothing
 chooseInStructure Bundled = genInputClass
 
+constVarFunc :: (RenderSym repr) => ConstantRepr -> String ->
+  (repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr))
+constVarFunc Var n = stateVarDef 0 n public dynamic_
+constVarFunc Const n = constVar 0 n public
+
 genInputClass :: (RenderSym repr) => Reader State (Maybe (repr (Class repr)))
 genInputClass = do
   g <- ask
@@ -166,8 +171,8 @@ genInputClass = do
         vals <- mapM (convExpr . codeEquat) csts
         let inputVars = map (\x -> pubMVar 0 (var (codeName x) (convType $ 
               codeType x))) inps
-            constVars = zipWith (\c vl -> constVar 0 public (staticVar 
-              (codeName c) (convType $ codeType c)) vl) csts vals
+            constVars = zipWith (\c vl -> constVarFunc (conRepr g) cname
+              (var (codeName c) (convType $ codeType c)) vl) csts vals
         icDesc <- inputClassDesc
         cls <- publicClass icDesc cname Nothing (inputVars ++ constVars) []
         return $ Just cls
@@ -348,7 +353,7 @@ genConstClass = do
       genClass vs = do
         vals <- mapM (convExpr . codeEquat) vs 
         let vars = map (\x -> var (codeName x) (convType $ codeType x)) vs
-            constVars = zipWith (constVar 0 public) vars vals
+            constVars = zipWith (constVarFunc (conRepr g) cname) vars vals
         cDesc <- constClassDesc
         cls <- publicClass cDesc cname Nothing constVars []
         return $ Just cls

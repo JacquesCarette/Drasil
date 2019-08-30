@@ -3,7 +3,7 @@ module Main (main) where
 import Language.Drasil.Code (Choices(..), CodeSpec, Comments(..), 
   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
   Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
-  Visibility(..), codeSpec)
+  AuxFile(..), Visibility(..), codeSpec)
 import Language.Drasil.Generate (gen, genCode)
 import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
 
@@ -26,7 +26,7 @@ choices = Choices {
   constStructure = Store Unbundled,
   constRepr = Var,
   inputModule = Separated,
-  auxFiles = []
+  auxFiles = [SampleInput]
 }
 
 main :: IO()

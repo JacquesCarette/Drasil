@@ -76,88 +76,88 @@ public class InputParameters {
         \param consts structure holding the constant values
     */
     public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W, Constants consts) {
-        if (!(A_C <= consts.A_C_max)) {
+        if (!(A_C <= Constants.A_C_max)) {
             Console.Write("Warning: ");
             Console.Write("A_C has value ");
             Console.Write(A_C);
             Console.Write(" but suggested to be ");
             Console.Write("below ");
-            Console.Write(consts.A_C_max);
+            Console.Write(Constants.A_C_max);
             Console.Write(" (A_C_max)");
             Console.WriteLine(".");
         }
-        if (!(consts.C_W_min < C_W && C_W < consts.C_W_max)) {
+        if (!(Constants.C_W_min < C_W && C_W < Constants.C_W_max)) {
             Console.Write("Warning: ");
             Console.Write("C_W has value ");
             Console.Write(C_W);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(consts.C_W_min);
+            Console.Write(Constants.C_W_min);
             Console.Write(" (C_W_min)");
             Console.Write(" and ");
-            Console.Write(consts.C_W_max);
+            Console.Write(Constants.C_W_max);
             Console.Write(" (C_W_max)");
             Console.WriteLine(".");
         }
-        if (!(consts.h_C_min <= h_C && h_C <= consts.h_C_max)) {
+        if (!(Constants.h_C_min <= h_C && h_C <= Constants.h_C_max)) {
             Console.Write("Warning: ");
             Console.Write("h_C has value ");
             Console.Write(h_C);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(consts.h_C_min);
+            Console.Write(Constants.h_C_min);
             Console.Write(" (h_C_min)");
             Console.Write(" and ");
-            Console.Write(consts.h_C_max);
+            Console.Write(Constants.h_C_max);
             Console.Write(" (h_C_max)");
             Console.WriteLine(".");
         }
-        if (!(t_final < consts.t_final_max)) {
+        if (!(t_final < Constants.t_final_max)) {
             Console.Write("Warning: ");
             Console.Write("t_final has value ");
             Console.Write(t_final);
             Console.Write(" but suggested to be ");
             Console.Write("below ");
-            Console.Write(consts.t_final_max);
+            Console.Write(Constants.t_final_max);
             Console.Write(" (t_final_max)");
             Console.WriteLine(".");
         }
-        if (!(consts.L_min <= L && L <= consts.L_max)) {
+        if (!(Constants.L_min <= L && L <= Constants.L_max)) {
             Console.Write("Warning: ");
             Console.Write("L has value ");
             Console.Write(L);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(consts.L_min);
+            Console.Write(Constants.L_min);
             Console.Write(" (L_min)");
             Console.Write(" and ");
-            Console.Write(consts.L_max);
+            Console.Write(Constants.L_max);
             Console.Write(" (L_max)");
             Console.WriteLine(".");
         }
-        if (!(consts.rho_W_min < rho_W && rho_W <= consts.rho_W_max)) {
+        if (!(Constants.rho_W_min < rho_W && rho_W <= Constants.rho_W_max)) {
             Console.Write("Warning: ");
             Console.Write("rho_W has value ");
             Console.Write(rho_W);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(consts.rho_W_min);
+            Console.Write(Constants.rho_W_min);
             Console.Write(" (rho_W_min)");
             Console.Write(" and ");
-            Console.Write(consts.rho_W_max);
+            Console.Write(Constants.rho_W_max);
             Console.Write(" (rho_W_max)");
             Console.WriteLine(".");
         }
-        if (!(consts.AR_min <= D && D <= consts.AR_max)) {
+        if (!(Constants.AR_min <= D && D <= Constants.AR_max)) {
             Console.Write("Warning: ");
             Console.Write("D has value ");
             Console.Write(D);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(consts.AR_min);
+            Console.Write(Constants.AR_min);
             Console.Write(" (AR_min)");
             Console.Write(" and ");
-            Console.Write(consts.AR_max);
+            Console.Write(Constants.AR_max);
             Console.Write(" (AR_max)");
             Console.WriteLine(".");
         }

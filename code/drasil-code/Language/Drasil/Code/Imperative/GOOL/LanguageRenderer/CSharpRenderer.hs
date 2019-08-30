@@ -643,7 +643,7 @@ csTryCatch :: Doc -> Doc -> Doc
 csTryCatch tb cb= vcat [
   text "try" <+> lbrace,
   indent tb,
-  rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> 
+  rbrace <+> text "catch" <+> 
     lbrace,
   indent cb,
   rbrace]

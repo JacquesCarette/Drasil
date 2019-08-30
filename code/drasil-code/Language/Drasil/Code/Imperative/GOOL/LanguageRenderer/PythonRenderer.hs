@@ -676,7 +676,7 @@ pyTryCatch :: Doc -> Doc -> Doc
 pyTryCatch tryB catchB = vcat [
   text "try" <+> colon,
   indent tryB,
-  text "except" <+> text "Exception" <+> text "as" <+> text "exc" <+> colon,
+  text "except" <+> text "Exception" <+> colon,
   indent catchB]
 
 pyListSlice :: VarData -> ValData -> 

@@ -74,7 +74,6 @@ copy_examples() {
       for lang in "$example/"src/*; do
         lang_name=$(basename "$lang")
         mkdir -p "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name"
-        "$MAKE" -C "$lang" doc
         cp -r "$lang/"html/. "$EXAMPLE_DEST$example_name/$DOX_DEST$lang_name/"
       done
       # We don't expose code in deploy. It's more conveneient to link to GitHub's directory

@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, TupleSections #-}
 
 import Control.Monad (filterM)
 import Data.Char (toUpper)
@@ -36,10 +36,10 @@ getSRS :: [Name] -> SRSVariants
 getSRS = map (\x -> (x, getExtensionName $ takeExtension x)) . filter (\x -> any (`endswith` x) [".pdf", ".html"])
 
 -- returns a CodeSource with the path to the source code, doxygen page, and the name of the language
-getSrc :: String -> FilePath -> FilePath -> CodeSource
+getSrc :: String -> FilePath -> CodeSource
 -- source comes in as a path, takeBaseName takes only rightmost folder name
-getSrc repoRoot path source = CS (repoRoot ++ source) 
-  (path ++ takeBaseName source ++ "/index.html")
+getSrc repoRoot source = CS (repoRoot ++ source)
+  (takeBaseName source ++ "/index.html")
   (lang $ takeBaseName source)
   where
     -- Some languages might be named differently than the folders they are stored in.
@@ -49,17 +49,17 @@ getSrc repoRoot path source = CS (repoRoot ++ source)
     lang "java"   = "Java"
     lang x        = error ("No given display name for language: " ++ x)
 
-mkExamples :: String -> FilePath -> FilePath -> FilePath -> IO [Example]
-mkExamples repoRoot path srsDir doxDir = do
+mkExamples :: String -> FilePath -> FilePath -> IO [Example]
+mkExamples repoRoot localPath srsDir = do
 
   -- names will be a sorted list of example names (GamePhysics, GlassBR, etc.) of type FilePath
-  names <- sort <$> (listDirectory path >>= filterM (\x -> doesDirectoryExist $ path ++ x))
+  names <- sort <$> (listDirectory localPath >>= filterM (\x -> doesDirectoryExist $ localPath ++ x))
 
   -- a list of lists of sources based on existence and contents of src file for each example.
   -- if no src file, then the inner list will be empty
-  sources <- mapM (\x -> doesFileExist (path ++ x ++ "/src") >>=
-    \y -> if y then map (getSrc repoRoot (exDirPath path x doxDir)) . lines . 
-    rstrip <$> readFile (path ++ x ++ "/src") else return []) names
+  sources <- mapM (\x -> doesFileExist (localPath ++ x ++ "/src") >>=
+    \y -> if y then map (getSrc repoRoot) . lines .
+    rstrip <$> readFile (localPath ++ x ++ "/src") else return []) names
     
 
   -- a list of Just descriptions or Nothing based on existence and contents of desc file.
@@ -68,7 +68,7 @@ mkExamples repoRoot path srsDir doxDir = do
 
   -- creates a list of SRSVariants, so a list of list of tuples.
   -- the outer list has an element for each example.
-  srss <- mapM (\x -> sort . getSRS <$> listDirectory (exDirPath path x srsDir)) names
+  srss <- mapM (\x -> sort . getSRS <$> listDirectory (exDirPath localPath x srsDir)) names
 
   -- returns the IO list of examples with constructor E containing
   -- the name of the example, sources, list of variants, and description
@@ -95,8 +95,8 @@ maybeListFieldWith s contxt checkNull f = listFieldWith s contxt
   -- If the list is empty, fail is used so as not to create a specific section
   (\x -> if null (checkNull x) then fail ("No instances of " ++ s) else f x)
 
-mkExampleCtx :: FilePath -> FilePath -> Context Example
-mkExampleCtx exampleDir srsDir =
+mkExampleCtx :: FilePath -> FilePath -> FilePath -> Context Example
+mkExampleCtx exampleDir srsDir doxDir =
   -- each function is applied to the item containing an Example of form:
   -- E Name [CodeSource] SRSVariants Description
 
@@ -128,13 +128,13 @@ mkExampleCtx exampleDir srsDir =
   -- Lists sources if they exist
   maybeListFieldWith "src" (
     -- return filepath from (filepath, language)
-    field "path" (return . codePath . itemBody) <>
+    field "path" (return . codePath . snd . itemBody) <>
     -- return language from (filepath, language)
-    field "lang" (return . langName . itemBody) <>
-    field "doxPath" (return . doxPath . itemBody)
+    field "lang" (return . langName . snd . itemBody) <>
+    field "doxPath" (return . (\x -> exDirPath exampleDir (name $ fst x) doxDir ++ doxPath (snd x)) . itemBody)
   -- (src . itemBody) gets the list of sources to be checked for emptiness
   -- (mapM makeItem . src . itemBody) rewraps every item in src to be used internally
-  ) (src . itemBody) (mapM makeItem . src . itemBody)
+  ) (src . itemBody) ((\x -> mapM (makeItem . (x,)) $ src x) . itemBody)
   where
     name (E nm _ _ _) = nm
     src (E _ s _ _) = s
@@ -180,7 +180,7 @@ main = do
   let travisBuildPath = "https://travis-ci.org/" ++ travisRepoSlug ++ maybe "" ("/builds/" ++) travisBuildId
 
   doesDocsExist <- doesFileExist $ deployLocation ++ docsPath
-  examples <- mkExamples repoCommitRoot (deployLocation ++ exampleRoot) srsDir doxDir
+  examples <- mkExamples repoCommitRoot (deployLocation ++ exampleRoot) srsDir
   graphs <- mkGraphs $ deployLocation ++ graphRoot
 
   hakyll $ do
@@ -198,7 +198,7 @@ main = do
     match "index.html" $ do
       route idRoute
       compile $ do
-        let indexCtx = listField "examples" (mkExampleCtx exampleRoot srsDir) (mapM makeItem examples) <>
+        let indexCtx = listField "examples" (mkExampleCtx exampleRoot srsDir doxDir) (mapM makeItem examples) <>
                        listField "graphs" (mkGraphCtx graphRoot) (mapM makeItem graphs) <>
                        (if doesDocsExist then field "docsUrl" (return . const docsPath) else mempty) <>
                        field "buildNumber" (return . const travisBuildNumber) <>

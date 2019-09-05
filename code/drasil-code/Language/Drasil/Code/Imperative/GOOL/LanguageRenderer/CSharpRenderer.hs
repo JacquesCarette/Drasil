@@ -177,6 +177,7 @@ instance StateTypeSym CSharpCode where
   void = return voidDocD
 
   getType = cType . unCSC
+  getTypeString = typeString . unCSC
 
 instance ControlBlockSym CSharpCode where
   runStrategy l strats rv av = maybe
@@ -526,7 +527,7 @@ instance InternalScope CSharpCode where
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
   mState t = t
-  construct n = return $ td (Object n) (constructDocD n)
+  construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = ParamData
@@ -630,13 +631,13 @@ cstop end inc = vcat [
   inc <+> text "System.Collections.Generic" <> end]
 
 csFloatTypeDoc :: TypeData
-csFloatTypeDoc = td Float (text "double") -- Same as Java, maybe make a common function
+csFloatTypeDoc = td Float "double" (text "double") -- Same as Java, maybe make a common function
 
 csInfileTypeDoc :: TypeData
-csInfileTypeDoc = td File (text "StreamReader")
+csInfileTypeDoc = td File "StreamReader" (text "StreamReader")
 
 csOutfileTypeDoc :: TypeData
-csOutfileTypeDoc = td File (text "StreamWriter")
+csOutfileTypeDoc = td File "StreamWriter" (text "StreamWriter")
 
 csCast :: CSharpCode (StateType CSharpCode) -> CSharpCode (Value CSharpCode) -> 
   CSharpCode (Value CSharpCode)

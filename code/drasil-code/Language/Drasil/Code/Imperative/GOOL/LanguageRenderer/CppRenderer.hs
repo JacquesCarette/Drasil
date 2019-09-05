@@ -177,6 +177,7 @@ instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
   void = pair void void
 
   getType s = getType $ pfst s
+  getTypeString s = getTypeString $ pfst s
 
 instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
   runStrategy l strats rv av = pair (runStrategy l (map (mapPairSnd pfst) 
@@ -746,6 +747,7 @@ instance StateTypeSym CppSrcCode where
   void = return voidDocD
 
   getType = cType . unCPPSC
+  getTypeString = typeString . unCPPSC
 
 instance ControlBlockSym CppSrcCode where
   runStrategy l strats rv av = maybe
@@ -1114,7 +1116,7 @@ instance InternalScope CppSrcCode where
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
   mState t = t
-  construct n = return $ td (Object n) (constructDocD n)
+  construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym CppSrcCode where
   type Parameter CppSrcCode = ParamData
@@ -1325,6 +1327,7 @@ instance StateTypeSym CppHdrCode where
   void = return voidDocD
 
   getType = cType . unCPPHC
+  getTypeString = typeString . unCPPHC
 
 instance ControlBlockSym CppHdrCode where
   runStrategy _ _ _ _ = return empty
@@ -1628,7 +1631,7 @@ instance InternalScope CppHdrCode where
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData
   mState t = t
-  construct n = return $ td (Object n) (constructDocD n)
+  construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
@@ -1796,20 +1799,20 @@ usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <>
 usingNameSpace n Nothing end = text "using namespace" <+> text n <> end
 
 cppBoolTypeDoc :: TypeData
-cppBoolTypeDoc = td Boolean (text "bool")
+cppBoolTypeDoc = td Boolean "bool" (text "bool")
 
 cppFloatTypeDoc :: TypeData
-cppFloatTypeDoc = td Float (text "double")
+cppFloatTypeDoc = td Float "double" (text "double")
 
 cppInfileTypeDoc :: TypeData
-cppInfileTypeDoc = td File (text "ifstream")
+cppInfileTypeDoc = td File "ifstream" (text "ifstream")
 
 cppOutfileTypeDoc :: TypeData
-cppOutfileTypeDoc = td File (text "ofstream")
+cppOutfileTypeDoc = td File "ofstream" (text "ofstream")
 
 cppIterTypeDoc :: TypeData -> TypeData
-cppIterTypeDoc t = td (Iterator (cType t)) (text "std::" <> typeDoc t <>
-  text "::iterator")
+cppIterTypeDoc t = td (Iterator (cType t)) (typeString t ++ "::iterator")
+  (text "std::" <> typeDoc t <> text "::iterator")
 
 cppStateObjDoc :: TypeData -> Doc -> Doc
 cppStateObjDoc t ps = typeDoc t <> parens ps

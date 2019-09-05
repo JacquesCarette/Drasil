@@ -121,6 +121,7 @@ class (PermanenceSym repr) => StateTypeSym repr where
   void          :: repr (StateType repr)
 
   getType :: repr (StateType repr) -> CodeType
+  getTypeString :: repr (StateType repr) -> String
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 

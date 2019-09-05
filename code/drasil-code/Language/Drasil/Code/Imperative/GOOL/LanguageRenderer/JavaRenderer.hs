@@ -181,6 +181,7 @@ instance StateTypeSym JavaCode where
   void = return voidDocD
 
   getType = cType . unJC
+  getTypeString = typeString . unJC
 
 instance ControlBlockSym JavaCode where
   runStrategy l strats rv av = maybe
@@ -529,7 +530,7 @@ instance InternalScope JavaCode where
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
   mState t = t
-  construct n = return $ td (Object n) (constructDocD n)
+  construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym JavaCode where
   type Parameter JavaCode = ParamData
@@ -652,24 +653,26 @@ jtop end inc lst = vcat [
   inc <+> text ("java.util." ++ render lst) <> end]
 
 jFloatTypeDocD :: TypeData
-jFloatTypeDocD = td Float (text "double")
+jFloatTypeDocD = td Float "double" (text "double")
 
 jStringTypeDoc :: TypeData
-jStringTypeDoc = td String (text "String")
+jStringTypeDoc = td String "String" (text "String")
 
 jInfileTypeDoc :: TypeData
-jInfileTypeDoc = td File (text "Scanner")
+jInfileTypeDoc = td File "Scanner" (text "Scanner")
 
 jOutfileTypeDoc :: TypeData
-jOutfileTypeDoc = td File (text "PrintWriter")
+jOutfileTypeDoc = td File "PrintWriter" (text "PrintWriter")
 
 jListType :: TypeData -> Doc -> TypeData
-jListType (TD Integer _) lst = td (List Integer) (lst <> angles (text "Integer"))
-jListType (TD Float _) lst = td (List Float) (lst <> angles (text "Double"))
+jListType (TD Integer _ _) lst = td (List Integer) (render lst ++ "<Integer>") 
+  (lst <> angles (text "Integer"))
+jListType (TD Float _ _) lst = td (List Float) (render lst ++ "<Double>") 
+  (lst <> angles (text "Double"))
 jListType t lst = listTypeDocD t lst
 
 jArrayType :: JavaCode (StateType JavaCode)
-jArrayType = return $ td (List $ Object "Object") (text "Object[]")
+jArrayType = return $ td (List $ Object "Object") "Object" (text "Object[]")
 
 jEquality :: JavaCode (Value JavaCode) -> JavaCode (Value JavaCode) -> 
   JavaCode (Value JavaCode)

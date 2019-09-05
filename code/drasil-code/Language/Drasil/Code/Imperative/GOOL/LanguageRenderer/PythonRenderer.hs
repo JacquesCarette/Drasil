@@ -153,21 +153,22 @@ instance BlockSym PythonCode where
 
 instance StateTypeSym PythonCode where
   type StateType PythonCode = TypeData
-  bool = return $ td Boolean empty
+  bool = return $ td Boolean "" empty
   int = return intTypeDocD
   float = return floatTypeDocD
-  char = return $ td Char empty
+  char = return $ td Char "" empty
   string = return pyStringType
-  infile = return $ td File empty
-  outfile = return $ td File empty
-  listType _ t = liftA2 td (fmap (List . cType) t) (return $ brackets empty)
+  infile = return $ td File "" empty
+  outfile = return $ td File "" empty
+  listType _ t = return $ td (List (getType t)) "[]" (brackets empty)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator _ = error "Iterator-type variables do not exist in Python"
-  void = return $ td Void (text "NoneType")
+  void = return $ td Void "NoneType" (text "NoneType")
 
   getType = cType . unPC
+  getTypeString = typeString . unPC
 
 instance ControlBlockSym PythonCode where
   runStrategy l strats rv av = maybe
@@ -502,7 +503,7 @@ instance InternalScope PythonCode where
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
   mState t = t
-  construct n = return $ td (Object n) (constructDocD n)
+  construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
@@ -625,7 +626,7 @@ pyListSize :: ValData -> FuncData -> Doc
 pyListSize v f = funcDoc f <> parens (valDoc v)
 
 pyStringType :: TypeData
-pyStringType = td String (text "str")
+pyStringType = td String "str" (text "str")
 
 pyListDec :: VarData -> Doc
 pyListDec v = varDoc v <+> equals <+> typeDoc (varType v)

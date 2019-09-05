@@ -208,36 +208,37 @@ printFileDocD fn f = valDoc f <> dot <> text fn
 -- Type Printers --
 
 boolTypeDocD :: TypeData
-boolTypeDocD = td Boolean (text "Boolean") -- capital B?
+boolTypeDocD = td Boolean "Boolean" (text "Boolean") -- capital B?
 
 intTypeDocD :: TypeData
-intTypeDocD = td Integer (text "int")
+intTypeDocD = td Integer "int" (text "int")
 
 floatTypeDocD :: TypeData
-floatTypeDocD = td Float (text "float")
+floatTypeDocD = td Float "float" (text "float")
 
 charTypeDocD :: TypeData
-charTypeDocD = td Char (text "char")
+charTypeDocD = td Char "char" (text "char")
 
 stringTypeDocD :: TypeData
-stringTypeDocD = td String (text "string")
+stringTypeDocD = td String "string" (text "string")
 
 fileTypeDocD :: TypeData
-fileTypeDocD = td File (text "File")
+fileTypeDocD = td File "File" (text "File")
 
 typeDocD :: Label -> TypeData
-typeDocD t = td (Object t) (text t)
+typeDocD t = td (Object t) t (text t)
 
 enumTypeDocD :: Label -> TypeData
-enumTypeDocD t = td (Enum t) (text t)
+enumTypeDocD t = td (Enum t) t (text t)
 
 listTypeDocD :: TypeData -> Doc -> TypeData
-listTypeDocD t lst = td (List (cType t)) (lst <> angles (typeDoc t))
+listTypeDocD t lst = td (List (cType t)) 
+  (render lst ++ "<" ++ typeString t ++ ">") (lst <> angles (typeDoc t))
 
 -- Method Types --
 
 voidDocD :: TypeData
-voidDocD = td Void (text "void")
+voidDocD = td Void "void" (text "void")
 
 constructDocD :: Label -> Doc
 constructDocD _ = empty

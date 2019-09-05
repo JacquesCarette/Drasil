@@ -161,9 +161,13 @@ tex: $(TEX_EXAMPLES)
 %$(CODE_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(CODE_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFIX)
-	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
+	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" \
+	TARGET=$(TARGET) MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
 
 code: $(CODE_EXAMPLES)
+
+doxygen: TARGET=doc
+doxygen: $(CODE_EXAMPLES)
 
 %$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(DCP_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
@@ -183,7 +187,7 @@ deploy_lite:
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
 # everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
 # what `deploy.bash` calls. 
-deploy: graphs docs tex
+deploy: graphs docs tex doxygen
 	"$(MAKE)" deploy_lite
 
 

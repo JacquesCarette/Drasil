@@ -765,7 +765,7 @@ makeDoxConfig prog opt p =
   text "# messages are off.",
   text "# The default value is: NO.",
   blank,
-  text "QUIET                  = NO",
+  text "QUIET                  = YES",
   blank,
   text "# The WARNINGS tag can be used to turn on/off the warning messages that are",
   text "# generated to standard error (stderr) by doxygen. If WARNINGS is set to YES",

@@ -52,33 +52,32 @@ To be written when paper is mostly done.
 \end{abstract}
 
 \section{Introduction}
-Before writing code, a programmer must first select a programming language to 
-use. Whatever they may base their choice upon, any programming 
-language that is Turing-complete---which excludes few---will work. While a 
-program may be more difficult to express in one 
-language over another, it should at least be possible to write the program in 
-either language. Just as the same sentence can be translated to any spoken 
-language, the same program can be written in any programming language. Though 
-they will accomplish the same tasks semantically, the expressions of a program 
-in different programming languages can appear substantially different due to 
-the unique syntax of each language. Within a single programming language 
-paradigm, such as object-oriented (OO) programming, these differences should
-not be so extreme. OO programs, no matter the language, share certain 
-structural properties. They are built from variables, methods, classes, and
-objects. Some OO languages even have very similar syntax. But however similar 
-they may be, no two programming languages are identical.
+Given a task, before writing any code a programmer must select a programming 
+language to use. Whatever they may base their choice upon, almost any
+programming language will work. While a program may be more difficult to
+express in one language over another, it should at least be possible to write
+the program in either language. Just as the same sentence can be translated to
+any spoken language, the same program can be written in any programming
+language. Though they will accomplish the same tasks semantically, the
+expressions of a program in different programming languages can appear
+substantially different due to the unique syntax of each language. Within a
+single programming language paradigm, such as object-oriented (OO) programming,
+these differences should not be so extreme. OO programs, no matter the
+language, share certain structural properties. They are built from variables,
+methods, classes, and objects. Some OO languages even have very similar syntax.
+But however similar they may be, no two programming languages are identical.
 
 If a programmer wishes to write a program that will integrate into 
-existing systems written in diffferent languages, they will likely need to 
+existing systems written in different languages, they will likely need to 
 write a different version of the program for each. This 
 requires investing the time to learn the idiosyncrasies of each language and 
 give attention to the operational details where languages differ. Repeatedly 
 writing the same program in different languages is entirely inefficient. 
 Languages in the same paradigm have many similarities, and there is an 
-excellent opportunity to take advantage of these similarities to improve 
-efficiency. If a program could be written in one language and automatically 
-translated to any other language in the same paradigm, this would greatly 
-facilitate program reuse. Directly translating between existing 
+excellent opportunity to take advantage of these similarities to improve the
+efficiency of writing code. If a program could be written in one language and
+automatically translated to any other language in the same paradigm, this would
+greatly facilitate program reuse. Directly translating between existing 
 OO languages will not always be possible because some languages 
 require more information than others. A dynamically typed language like Python, 
 for instance, cannot be straightforwardly translated to a statically typed 
@@ -90,26 +89,25 @@ language-agnostic, free of any of the idiosyncratic ``noise'' required by
 specific languages.
 
 The similarities between OO programs do not end with syntax and structural 
-components. Additionally, there are language-agnostic tasks and patterns 
-commonly performed by OO programs. from simple tasks like splitting a string or 
+components. Additionally, there are tasks and patterns commonly performed by OO
+programs in any language, from simple tasks like splitting a string or 
 patterns like defining functions on inputs to produce outputs, to higher-level 
 design patterns like those described in \cite{DesignPatterns}. A language 
 that provided abstractions for these tasks and patterns would make the process 
 of writing OO code even easier.
 
-A Domain Specific Language (DSL) is a high-level programming language with 
+A Domain-Specific Language (DSL) is a high-level programming language with 
 syntax tailored to a specific domain \cite{DSLs}. DSLs allow domain experts 
-to write code 
-without having to concern themselves with the syntactical and operational
-requirements of general purpose programming languages. A DSL abstracts over the
-details of the code, providing notation for a user to specify domain specific
-knowledge in a natural manner. The DSL code is typically then compiled to a
-more traditional target language. Abstracting over code details and compiling
-into traditional OO languages is exactly what we want our source OO language to
-do. The code details in this case include both the operational details of using 
-a specific language as well as higher-level patterns that commonly show up in OO
-programs. So the source language we are looking for seems to be nothing more
-than a DSL in the domain of OO programming languages!
+to write code without having to concern themselves with the syntactical and
+operational requirements of general-purpose programming languages. A DSL
+abstracts over the details of the code, providing notation for a user to
+specify domain-specific knowledge in a natural manner. DSL code is typically
+compiled to a more traditional target language. Abstracting over code details
+and compiling into traditional OO languages is exactly what we want our source
+OO language to do. The code details to abstract over in this case include both
+the operational details of using a specific language as well as the higher-level
+patterns that commonly show up in OO programs. So the source language we are
+looking for is just a DSL in the domain of OO programming languages!
 
 We have developed a Generic Object-Oriented Language (GOOL), proving that such 
 a language indeed exists. GOOL is a DSL embedded in Haskell that can currently
@@ -119,13 +117,15 @@ starting with the syntax of the language in Section \ref{syntax}. Section
 \ref{implementation} describes how GOOL is implemented. GOOL provides some 
 higher-level functions for convenient generation of code following commonly 
 used patterns, examples of which are presented in Section \ref{patterns}. We 
-close with a discussion of related work in Section \ref{related} and 
-conclusions in Section \ref{conclusions}.
+close with a discussion of related work in Section \ref{related}, plans for 
+future improvements in Section \ref{future}, and conclusions in Section 
+\ref{conclusions}.
 
 \section{GOOL Syntax} \label{syntax}
 \section{GOOL Implementation} \label{implementation}
 \section{Higher-level GOOL functions} \label{patterns}
 \section{Related Work} \label{related}
+\section{Future Work} \label{future}
 \section{Conclusion} \label{conclusions}
 
 %%

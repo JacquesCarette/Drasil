@@ -2,8 +2,8 @@ module Main (main) where
 
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
---   Structure(..), ConstantStructure(..), InputModule(..), AuxFile(..), 
---   Visibility(..))
+--   Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
+--   AuxFile(..), Visibility(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -24,6 +24,7 @@ import Drasil.SSP.Body (srs, printSetting) -- si
 --   onPhysConstraint = Warning,  -- Warning, Exception
 --   inputStructure = Unbundled,    -- Unbundled, Bundled
 --   constStructure = Inline,   -- Inline, WithInputs, Store Structure
+--   constRepr = Const,    -- Var, Const
 --   inputModule = Combined,    -- Combined, Separated
 --   auxFiles = [SampleInput]
 -- }

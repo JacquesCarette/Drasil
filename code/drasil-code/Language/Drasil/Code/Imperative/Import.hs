@@ -28,8 +28,8 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
-  ConstantStructure(..), Func(..), FuncData(..), FuncDef(..), FuncStmt(..), 
-  Mod(..), Name, Structure(..), asExpr, fstdecl)
+  ConstantRepr(..), ConstantStructure(..), Func(..), FuncData(..), FuncDef(..), 
+  FuncStmt(..), Mod(..), Name, Structure(..), asExpr, fstdecl)
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
@@ -59,28 +59,30 @@ variable :: (RenderSym repr) => String -> repr (StateType repr) ->
 variable s t = do
   g <- ask
   let cs = csi $ codeSpec g
+      defFunc Var = var
+      defFunc Const = staticVar
   if s `elem` map codeName (inputs cs) 
-    then inputVariable (inStruct g) s t
+    then inputVariable (inStruct g) (var s t)
     else if s `elem` map codeName (constants $ csi $ codeSpec g)
-      then constVariable (conStruct g) s t
+      then constVariable (conStruct g) ((defFunc $ conRepr g) s t)
       else return $ var s t
   
-inputVariable :: (RenderSym repr) => Structure -> String -> 
-  repr (StateType repr) -> Reader State (repr (Variable repr))
-inputVariable Unbundled s t = return $ var s t
-inputVariable Bundled s t = do
+inputVariable :: (RenderSym repr) => Structure -> repr (Variable repr) -> 
+  Reader State (repr (Variable repr))
+inputVariable Unbundled v = return v
+inputVariable Bundled v = do
   ip <- mkVar (codevar inParams)
-  return $ ip $-> var s t
+  return $ ip $-> v
 
-constVariable :: (RenderSym repr) => ConstantStructure -> String -> 
-  repr (StateType repr) -> Reader State (repr (Variable repr))
-constVariable (Store Bundled) s t = do
+constVariable :: (RenderSym repr) => ConstantStructure -> repr (Variable repr) 
+  -> Reader State (repr (Variable repr))
+constVariable (Store Bundled) v = do
   cs <- mkVar (codevar consts)
-  return $ cs $-> var s t
-constVariable WithInputs s t = do
+  return $ cs $-> v
+constVariable WithInputs v = do
   g <- ask
-  inputVariable (inStruct g) s t
-constVariable _ s t = return $ var s t
+  inputVariable (inStruct g) v
+constVariable _ v = return v
 
 mkVal :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => c -> 
   Reader State (repr (Value repr))

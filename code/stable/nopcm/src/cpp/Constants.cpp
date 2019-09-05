@@ -15,20 +15,18 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
-Constants::Constants() {
-    L_min = 0.1;
-    L_max = 50;
-    rho_W_min = 950;
-    rho_W_max = 1000;
-    A_C_max = 100000;
-    C_W_min = 4170;
-    C_W_max = 4210;
-    h_C_min = 10;
-    h_C_max = 10000;
-    t_final_max = 86400;
-    AR_min = 1.0e-2;
-    AR_max = 100;
-}
+const double Constants::L_min = 0.1;
+const double Constants::L_max = 50;
+const double Constants::rho_W_min = 950;
+const double Constants::rho_W_max = 1000;
+const double Constants::A_C_max = 100000;
+const double Constants::C_W_min = 4170;
+const double Constants::C_W_max = 4210;
+const double Constants::h_C_min = 10;
+const double Constants::h_C_max = 10000;
+const double Constants::t_final_max = 86400;
+const double Constants::AR_min = 1.0e-2;
+const double Constants::AR_max = 100;
 
 Constants::~Constants() {
 }

@@ -25,29 +25,29 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
   boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
   voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam, 
-  methodListDocD, stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, 
-  forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, 
-  plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, 
-  statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, stringListVals', 
-  stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr',
-  typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, 
+  switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, 
+  plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, 
+  objDecDefDocD, statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, 
+  stringListVals', stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, 
+  unExpr', typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
-  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
-  litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
-  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
-  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
-  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
-  doxConfigName, makefileName, sampleInputName, doubleSlash, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
-  docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
-  setMain, setMainMethod, setEmpty, intValue)
+  binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
+  litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
+  argDocD, enumElemDocD, objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, 
+  stateObjDocD, listStateObjDocD, notNullDocD, funcDocD, castDocD, 
+  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
+  privateDocD, publicDocD, dot, new, forLabel, blockCmtStart, blockCmtEnd, 
+  docCmtStart, observerListName, doxConfigName, makefileName, sampleInputName, 
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
+  surroundBody, getterName, setterName, setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   PackData(..), packD, ProgData(..), progD, TypeData(..), td, ValData(..), 
-  VarData(..), vard)
+  VarData(..))
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
@@ -244,12 +244,13 @@ instance BinaryOpSym JavaCode where
 
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
-  var n t = liftA2 (vard n) t (return $ varDocD n) 
+  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
+  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
   const = var
-  extVar l n t = liftA2 (vard $ l ++ "." ++ n) t (return $ extVarDocD l n)
-  self l = liftA2 (vard "this") (obj l) (return selfDocD)
+  extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
+  self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
   enumVar e en = var e (enumType en)
-  objVar o v = liftA2 (vard $ variableName o ++ "." ++ variableName v)
+  objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
     (variableType v) (liftA2 objVarDocD o v)
   objVarSelf _ = var
   listVar n p t = var n (listType p t)
@@ -258,6 +259,7 @@ instance VariableSym JavaCode where
 
   ($->) = objVar
 
+  variableBind = varBind . unJC
   variableName = varName . unJC
   variableType = fmap varType
   variableDoc = varDoc . unJC
@@ -412,16 +414,17 @@ instance StatementSym JavaCode where
   (&++) v = mkSt <$> fmap plusPlusDocD v
   (&~-) v = v &= (valueOf v #- litInt 1)
 
-  varDec v = mkSt <$> fmap varDecDocD v
-  varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
-  listDec n v = mkSt <$> liftA2 listDecDocD v (litInt n)
-  listDecDef v vs = mkSt <$> liftA2 jListDecDef v (liftList valList vs)
-  objDecDef v def = mkSt <$> liftA2 objDecDefDocD v def
-  objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
-    vs)
+  varDec v = mkSt <$> liftA3 varDecDocD v static_ dynamic_
+  varDecDef v def = mkSt <$> liftA4 varDecDefDocD v def static_ dynamic_
+  listDec n v = mkSt <$> liftA4 listDecDocD v (litInt n) static_ dynamic_ 
+  listDecDef v vs = mkSt <$> liftA4 jListDecDef v (liftList valList vs) static_ 
+    dynamic_ 
+  objDecDef v def = mkSt <$> liftA4 objDecDefDocD v def static_ dynamic_ 
+  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+    vs) static_ dynamic_ 
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
-    [])
+  objDecNewVoid v = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+    []) static_ dynamic_ 
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
 
@@ -598,6 +601,10 @@ instance MethodSym JavaCode where
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
   stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
+  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD (includeScope s) p (fst <$>
+    state (varDecDef vr vl))
+  constVar _ _ s vr vl = liftA3 stateVarDefDocD (includeScope s) static_ (fst 
+    <$> state (constDecDef vr vl))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
@@ -610,7 +617,6 @@ instance ClassSym JavaCode where
     fs)), any (isMainMthd . unJC) fs)
   enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ 
     enumElementsDocD es enumsEqualInts) s, False)
-  mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
   
@@ -678,8 +684,8 @@ jCast t v = jCast' (getType t) (getType $ valueType v)
         jCast' Integer (Enum _) = v $. func "ordinal" int []
         jCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
-jListDecDef :: VarData -> Doc -> Doc
-jListDecDef v vs = typeDoc (varType v) <+> varDoc v <+> equals <+> new <+> 
+jListDecDef :: VarData -> Doc -> Doc -> Doc -> Doc
+jListDecDef v vs s d = varDecDocD v s d <+> equals <+> new <+> 
   typeDoc (varType v) <+> parens listElements
   where listElements = emptyIfEmpty vs $ text "Arrays.asList" <> parens vs
 

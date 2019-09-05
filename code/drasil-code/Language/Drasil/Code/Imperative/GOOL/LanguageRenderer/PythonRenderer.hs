@@ -22,26 +22,27 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..),
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
-  methodListDocD, ifCondDocD, stratDocD, assignDocD, multiAssignDoc, 
-  plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, commentDocD, 
-  mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD', 
-  negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', 
-  tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, unExpr', 
-  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
-  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
-  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, 
-  mkVal, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD,
-  enumElemDocD, objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, 
-  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
-  continueDocD, staticDocD, dynamicDocD, classDec, dot, forLabel, 
-  observerListName, doxConfigName, makefileName, sampleInputName, commentedItem,
-  addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  getterName, setterName)
+  methodListDocD, stateVarListDocD, ifCondDocD, stratDocD, assignDocD, 
+  multiAssignDoc, plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, 
+  commentDocD, mkStNoEnd, stringListVals', stringListLists', unOpPrec, 
+  notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', 
+  cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, 
+  unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, 
+  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, mkStaticVar, litCharD, 
+  litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
+  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, 
+  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  dynamicDocD, classDec, dot, forLabel, observerListName, 
+  doxConfigName, makefileName, sampleInputName, commentedItem, addCommentsDocD, 
+  classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
+  setterName)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
-  VarData(..), vard)
+  VarData(..))
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
@@ -135,7 +136,7 @@ instance KeywordSym PythonCode where
 
 instance PermanenceSym PythonCode where
   type Permanence PythonCode = Doc
-  static_ = return staticDocD
+  static_ = return empty
   dynamic_ = return dynamicDocD
 
 instance BodySym PythonCode where
@@ -219,14 +220,15 @@ instance BinaryOpSym PythonCode where
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
-  var n t = liftA2 (vard n) t (return $ varDocD n) 
+  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
+  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
   const = var
-  extVar l n t = liftA2 (vard $ l ++ "." ++ n) t (return $ extVarDocD l n)
-  self l = liftA2 (vard "self") (obj l) (return $ text "self")
+  extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
+  self l = liftA2 (mkVar "self") (obj l) (return $ text "self")
   enumVar e en = var e (enumType en)
-  objVar o v = liftA2 (vard $ variableName o ++ "." ++ variableName v)
+  objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
     (variableType v) (liftA2 objVarDocD o v)
-  objVarSelf l n t = liftA2 (vard $ "self." ++ n) t (liftA2 objVarDocD
+  objVarSelf l n t = liftA2 (mkVar $ "self." ++ n) t (liftA2 objVarDocD
     (self l) (var n t))
   listVar n p t = var n (listType p t)
   n `listOf` t = listVar n static_ t
@@ -234,6 +236,7 @@ instance VariableSym PythonCode where
 
   ($->) = objVar
 
+  variableBind = varBind . unPC
   variableName = varName . unPC
   variableType = fmap varType
   variableDoc = varDoc . unPC
@@ -549,20 +552,20 @@ instance MethodSym PythonCode where
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
   stateVar _ _ _ _ = return empty
+  stateVarDef _ _ _ _ vr vl = fst <$> state (varDecDef vr vl)
+  constVar _ _ _ vr vl = fst <$> state (constDecDef vr vl)
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
 
 instance ClassSym PythonCode where
   type Class PythonCode = (Doc, Bool)
-  buildClass n p _ _ fs = liftPairFst (liftA2 (pyClass n) pname (liftList 
+  buildClass n p _ vs fs = liftPairFst (liftA3 (pyClass n) pname (liftList stateVarListDocD vs) (liftList 
     methodListDocD (map (fmap mthdDoc) fs)), any (isMainMthd . unPC) fs)
     where pname = case p of Nothing -> return empty
                             Just pn -> return $ parens (text pn)
-  enum n es _ = liftPairFst (liftA2 (pyClass n) (return empty) (return $ 
-    enumElementsDocD' es), False)
-  mainClass _ _ fs = liftPairFst (liftList methodListDocD (map (fmap mthdDoc) 
-    fs), True)
+  enum n es _ = liftPairFst (liftA3 (pyClass n) (return empty) (return $ 
+    enumElementsDocD' es) (return empty), False)
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
@@ -581,7 +584,6 @@ instance ModuleSym PythonCode where
     pyModuleClassList cs))
 
   moduleName m = name (unPC m)
-    
 
 instance BlockCommentSym PythonCode where
   type BlockComment PythonCode = Doc
@@ -699,12 +701,14 @@ pyFunction n ps b = vcat [
   where bodyD | isEmpty b = text "None"
               | otherwise = b
 
-pyClass :: Label -> Doc -> Doc -> Doc
-pyClass n pn fs = vcat [
+pyClass :: Label -> Doc -> Doc -> Doc -> Doc
+pyClass n pn vs fs = vcat [
   classDec <+> text n <> pn <> colon,
   indent funcSec]
-  where funcSec | isEmpty fs = text "None"
-                | otherwise = fs    
+  where funcSec | isEmpty (vs <> fs) = text "None"
+                | isEmpty vs = fs
+                | isEmpty fs = vs
+                | otherwise = vcat [vs, blank, fs]    
 
 pyModuleImportList :: [Doc] -> Doc
 pyModuleImportList = vcat

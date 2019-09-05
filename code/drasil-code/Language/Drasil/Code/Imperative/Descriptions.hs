@@ -1,8 +1,7 @@
 module Language.Drasil.Code.Imperative.Descriptions (
   modDesc, inputParametersDesc, inputFormatDesc, derivedValuesDesc, 
   inputConstraintsDesc, constModDesc, outputFormatDesc, inputClassDesc, 
-  constClassDesc, constCtorDesc, inFmtFuncDesc, inConsFuncDesc, dvFuncDesc, 
-  woFuncDesc
+  constClassDesc, inFmtFuncDesc, inConsFuncDesc, dvFuncDesc, woFuncDesc
 ) where
 
 import Utils.Drasil (stringList)
@@ -95,14 +94,6 @@ constClassDesc = do
   g <- ask
   let ccDesc [] = ""
       ccDesc _ = "Structure for holding the constant values"
-  return $ ccDesc $ filter (flip member (eMap $ codeSpec g) . codeName) 
-    (constants $ csi $ codeSpec g)
-
-constCtorDesc :: Reader State String
-constCtorDesc = do
-  g <- ask
-  let ccDesc [] = ""
-      ccDesc _ = "Assigns values to variables for constants"
   return $ ccDesc $ filter (flip member (eMap $ codeSpec g) . codeName) 
     (constants $ csi $ codeSpec g)
 

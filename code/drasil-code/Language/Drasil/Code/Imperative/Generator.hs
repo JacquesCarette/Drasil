@@ -26,6 +26,7 @@ generator dt sd chs spec = State {
   date = showDate $ dates chs,
   inStruct = inputStructure chs,
   conStruct = constStructure chs,
+  conRepr = constRepr chs,
   inMod = inputModule chs,
   logKind  = logging chs,
   commented = comments chs,

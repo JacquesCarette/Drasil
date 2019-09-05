@@ -26,7 +26,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD, 
   typeDocD, enumTypeDocD, listTypeDocD, voidDocD, constructDocD, stateParamDocD,
   paramListDocD, mkParam, methodDocD, methodListDocD, 
-  stateVarDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD, 
+  stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD,
   forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
   varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
   constDecDefDocD, statementDocD, returnDocD, mkSt, mkStNoEnd, stringListVals',
@@ -34,22 +34,22 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   unExpr', typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
-  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
-  litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
-  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
-  listStateObjDocD, notNullDocD, funcDocD, castDocD, listSetFuncDocD, 
-  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
-  blockCmtEnd, docCmtStart, observerListName, doxConfigName, makefileName, 
-  sampleInputName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
-  appendToBody, surroundBody, getterName, setterName, setMain, setMainMethod, 
+  binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
+  litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
+  argDocD, enumElemDocD, objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, 
+  stateObjDocD, listStateObjDocD, notNullDocD, funcDocD, castDocD, 
+  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
+  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
+  makefileName, sampleInputName, doubleSlash, blockCmtDoc, docCmtDoc, 
+  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
+  valList, appendToBody, surroundBody, getterName, setterName, setMainMethod, 
   setEmpty, intValue)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
-  ValData(..), updateValDoc, VarData(..), vard)
+  ValData(..), updateValDoc, Binding(..), VarData(..))
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, nativeBinary, osClassDefault)
@@ -65,7 +65,7 @@ import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
-  semi, vcat, lbrace, rbrace, colon)
+  semi, vcat, lbrace, rbrace, colon, render)
 
 csExt :: String
 csExt = "cs"
@@ -240,14 +240,14 @@ instance BinaryOpSym CSharpCode where
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
-  var n t = liftA2 (vard n) t (return $ varDocD n) 
+  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
+  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
   const = var
-  extVar l n t = liftA2 (vard $ l ++ "." ++ n) t (return $ extVarDocD l n)
-  self l = liftA2 (vard "this") (obj l) (return selfDocD)
+  extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
+  self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
   enumVar e en = var e (enumType en)
-  objVar o v = liftA2 (vard $ variableName o ++ "." ++ variableName v)
-    (variableType v) (liftA2 objVarDocD o v)
-  objVarSelf l n t = liftA2 (vard $ "this." ++ n) t (liftA2 objVarDocD (self l) 
+  objVar = liftA2 csObjVar
+  objVarSelf l n t = liftA2 (mkVar $ "this." ++ n) t (liftA2 objVarDocD (self l)
     (var n t))
   listVar n p t = var n (listType p t)
   n `listOf` t = listVar n static_ t
@@ -255,6 +255,7 @@ instance VariableSym CSharpCode where
 
   ($->) = objVar
 
+  variableBind = varBind . unCSC
   variableName = varName . unCSC
   variableType = fmap varType
   variableDoc = varDoc . unCSC
@@ -407,16 +408,21 @@ instance StatementSym CSharpCode where
   (&++) v = mkSt <$> fmap plusPlusDocD v
   (&~-) v = v &= (valueOf v #- litInt 1)
 
-  varDec v = mkSt <$> fmap varDecDocD v
-  varDecDef v def = mkSt <$> liftA2 varDecDefDocD v def
-  listDec n v = mkSt <$> liftA2 listDecDocD v (litInt n)
-  listDecDef v vs = mkSt <$> lift1List listDecDefDocD v vs
-  objDecDef v def = mkSt <$> liftA2 objDecDefDocD v def
-  objDecNew v vs = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
-    vs)
+  varDec v = csVarDec (variableBind v) $ mkSt <$> liftA3 varDecDocD v static_ 
+    dynamic_ 
+  varDecDef v def = csVarDec (variableBind v) $mkSt <$> liftA4 varDecDefDocD v 
+    def static_ dynamic_ 
+  listDec n v = csVarDec (variableBind v) $ mkSt <$> liftA4 listDecDocD v 
+    (litInt n) static_ dynamic_
+  listDecDef v vs = csVarDec (variableBind v) $ mkSt <$> liftA4 listDecDefDocD 
+    v (sequence vs) static_ dynamic_ 
+  objDecDef v def = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
+    def static_ dynamic_ 
+  objDecNew v vs = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
+    (stateObj (variableType v) vs) static_ dynamic_ 
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = mkSt <$> liftA2 objDecDefDocD v (stateObj (variableType v) 
-    [])
+  objDecNewVoid v = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
+    (stateObj (variableType v) []) static_ dynamic_ 
   extObjDecNewVoid _ = objDecNewVoid
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
@@ -579,6 +585,10 @@ instance MethodSym CSharpCode where
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
   stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
+  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD (includeScope s) p (fst <$>
+    state (varDecDef vr vl))
+  constVar _ _ s vr vl = liftA3 stateVarDefDocD (includeScope s) (return empty) 
+    (fst <$> state (constDecDef vr vl))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_
@@ -591,7 +601,6 @@ instance ClassSym CSharpCode where
     fs)), any (isMainMthd . unCSC) fs)
   enum n es s = liftPairFst (liftA2 (enumDocD n) (return $ 
     enumElementsDocD es False) s, False)
-  mainClass n vs fs = setMain <$> buildClass n Nothing public vs fs
   privClass n p = buildClass n p private
   pubClass n p = buildClass n p public
 
@@ -695,3 +704,15 @@ csBuildConfig = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs",
 
 csRunnable :: Runnable
 csRunnable = nativeBinary
+
+csVarDec :: Binding -> CSharpCode (Statement CSharpCode) -> 
+  CSharpCode (Statement CSharpCode)
+csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
+csVarDec Dynamic d = d
+
+csObjVar :: VarData -> VarData -> VarData
+csObjVar o v = csObjVar' (varBind v)
+  where csObjVar' Static = mkVar (render (typeDoc (varType o)) ++ "." ++ 
+          varName v) (varType v) (typeDoc (varType o) <> dot <> varDoc v)
+        csObjVar' Dynamic = mkVar (varName o ++ "." ++ varName v) 
+          (varType v) (objVarDocD o v)

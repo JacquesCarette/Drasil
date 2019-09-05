@@ -17,22 +17,19 @@ using std::ofstream;
 */
 class Constants {
     public:
-        double L_min;
-        double L_max;
-        double rho_W_min;
-        double rho_W_max;
-        double A_C_max;
-        double C_W_min;
-        double C_W_max;
-        double h_C_min;
-        double h_C_max;
-        double t_final_max;
-        double AR_min;
-        double AR_max;
+        static const double L_min;
+        static const double L_max;
+        static const double rho_W_min;
+        static const double rho_W_max;
+        static const double A_C_max;
+        static const double C_W_min;
+        static const double C_W_max;
+        static const double h_C_min;
+        static const double h_C_max;
+        static const double t_final_max;
+        static const double AR_min;
+        static const double AR_max;
         
-        /** \brief Assigns values to variables for constants
-        */
-        Constants();
         ~Constants();
     
     private:

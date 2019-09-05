@@ -10,32 +10,33 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
-  printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
-  charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
-  methodDocD, methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, 
-  ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, 
-  assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, 
-  plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, 
-  statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd,
-  stringListVals', stringListLists', stratDocD, unOpPrec, notOpDocD, notOpDocD',
-  negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, 
-  logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD',
-  cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', 
-  acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, unExpr, unExpr',
-  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
-  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
-  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, 
-  orOpDocD, binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, 
-  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
-  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfD, 
-  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
+  printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
+  stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, voidDocD, 
+  constructDocD, stateParamDocD, paramListDocD, mkParam, methodDocD, 
+  methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, stateVarListDocD,
+  alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
+  tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
+  plusPlusDocD, plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, 
+  listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, 
+  mkSt, mkStNoEnd, stringListVals', stringListLists', stratDocD, unOpPrec, 
+  notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
+  absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
+  sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
+  asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', 
+  unOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, 
+  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
+  binExpr, binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, 
+  litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
+  selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfD, funcAppDocD, 
+  extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
   constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
   sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
   includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, prependToBody, 
-  appendToBody, surroundBody, getterName, setterName, setMain, setMainMethod, 
+  appendToBody, surroundBody, getterName, setterName, setMainMethod, 
   setEmpty, intValue
 ) where
 
@@ -51,9 +52,10 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, Library,
 import qualified Language.Drasil.Code.Imperative.GOOL.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), FileData(..), 
   fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
-  od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, VarData(..))
-import Language.Drasil.Code.Imperative.GOOL.Helpers (angles,blank, doubleQuotedText,
-  hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
+  od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
+  VarData(..), vard)
+import Language.Drasil.Code.Imperative.GOOL.Helpers (angles,blank, 
+  doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
 import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
@@ -268,6 +270,13 @@ methodListDocD ms = vibcat methods
 stateVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
 stateVarDocD s p v end = s <+> p <+> typeDoc (varType v) <+> varDoc v <> end
 
+stateVarDefDocD :: Doc -> Doc -> Doc -> Doc
+stateVarDefDocD s p dec = s <+> p <+> dec
+
+constVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
+constVarDocD s p v end = s <+> p <+> text "const" <+> typeDoc (varType v) <+>
+  varDoc v <> end
+
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat
 
@@ -376,21 +385,23 @@ plusPlusDocD' :: VarData -> OpData -> Doc
 plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> opDoc plusOp <+>
   int 1
 
-varDecDocD :: VarData -> Doc
-varDecDocD v = typeDoc (varType v) <+> varDoc v
+varDecDocD :: VarData -> Doc -> Doc -> Doc
+varDecDocD v s d = bind (varBind v) <+> typeDoc (varType v) <+> varDoc v
+  where bind Static = s
+        bind Dynamic = d
 
-varDecDefDocD :: VarData -> ValData -> Doc
-varDecDefDocD v def = typeDoc (varType v) <+> varDoc v <+> equals <+> valDoc def
+varDecDefDocD :: VarData -> ValData -> Doc -> Doc -> Doc
+varDecDefDocD v def s d = varDecDocD v s d <+> equals <+> valDoc def
 
-listDecDocD :: VarData -> ValData -> Doc
-listDecDocD v n = typeDoc (varType v) <+> varDoc v <+> equals <+> new <+> 
+listDecDocD :: VarData -> ValData -> Doc -> Doc -> Doc
+listDecDocD v n s d = varDecDocD v s d <+> equals <+> new <+> 
   typeDoc (varType v) <> parens (valDoc n)
 
-listDecDefDocD :: VarData -> [ValData] -> Doc
-listDecDefDocD v vs = typeDoc (varType v) <+> varDoc v <+> equals <+> new <+> 
+listDecDefDocD :: VarData -> [ValData] -> Doc -> Doc -> Doc
+listDecDefDocD v vs s d = varDecDocD v s d <+> equals <+> new <+> 
   typeDoc (varType v) <+> braces (valList vs)
 
-objDecDefDocD :: VarData -> ValData -> Doc
+objDecDefDocD :: VarData -> ValData -> Doc -> Doc -> Doc
 objDecDefDocD = varDecDefDocD
 
 constDecDefDocD :: VarData -> ValData -> Doc
@@ -643,6 +654,12 @@ typeBinExpr b t v1 v2 = mkExpr (opPrec b) t (binOpDocD (opDoc b) (exprParensL b
 mkVal :: TypeData -> Doc -> ValData
 mkVal = vd Nothing
 
+mkVar :: String -> TypeData -> Doc -> VarData
+mkVar = vard Dynamic
+
+mkStaticVar :: String -> TypeData -> Doc -> VarData
+mkStaticVar = vard Static
+
 mkExpr :: Int -> TypeData -> Doc -> ValData
 mkExpr p = vd (Just p)
 
@@ -840,9 +857,6 @@ getterName s = "Get" ++ capitalize s
 
 setterName :: String -> String
 setterName s = "Set" ++ capitalize s
-
-setMain :: (Doc, Bool) -> (Doc, Bool)
-setMain (d, _) = (d, True)
 
 setMainMethod :: MethodData -> MethodData
 setMainMethod (MthD _ ps d) = MthD True ps d

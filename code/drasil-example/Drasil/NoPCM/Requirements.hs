@@ -1,18 +1,17 @@
-module Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable) where
+module Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable) where
 
 import Language.Drasil
+import Drasil.DocLang (mkInputPropsTable)
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (quantity)
+import Data.Drasil.Concepts.Documentation (funcReqDom, input_, value)
 
 import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
-import Drasil.DocLang (mkInputPropsTable)
-
 import Drasil.SWHS.DataDefs (balanceDecayRate)
 import Drasil.SWHS.Requirements (calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime,
-  checkWithPhysConsts, findMassConstruct, iIQConstruct, oIDQConstruct)
+  checkWithPhysConsts, findMassConstruct, inReqDesc, oIDQConstruct)
 import Drasil.SWHS.Unitals (diam, tankLength, wDensity, wMass, wVol)
 
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
@@ -27,8 +26,11 @@ import Drasil.NoPCM.Unitals (inputs)
 ---------------------------------------
 
 --
-inputInitQuants :: ConceptInstance
-inputInitQuants = iIQConstruct inputInitQuantsTable
+inputInitVals :: ConceptInstance
+inputInitVals = cic "inputInitVals" ( foldlSent [
+  titleize input_, S "the following", plural value, S "described in",
+  makeRef2S inputInitValsTable `sC` S "which define", inReqDesc])
+  "Input-Initial-Values" funcReqDom
 
 --
 findMassExpr :: Expr
@@ -36,23 +38,23 @@ findMassExpr = sy wMass $= sy wVol * sy wDensity $=
   (sy pi_ * ((sy diam / 2) $^ 2) * sy tankLength * sy wDensity)
 
 findMass :: ConceptInstance
-findMass = findMassConstruct inputInitQuants (phrase mass) (makeRef2S eBalanceOnWtr)
+findMass = findMassConstruct inputInitVals (phrase mass) [eBalanceOnWtr]
               (E findMassExpr) (ch wVol `isThe` phrase wVol)
 
 --
-oIDQQuants :: [Sentence]
-oIDQQuants = map foldlSent_ [
-  [S "the", plural quantity, S "from", makeRef2S inputInitQuants],
+oIDQVals :: [Sentence]
+oIDQVals = map foldlSent_ [
+  [S "the", plural value, S "from", makeRef2S inputInitVals],
   [S "the", phrase mass, S "from", makeRef2S findMass],
   [ch balanceDecayRate, sParen (S "from" +:+ makeRef2S balanceDecayRate)]
   ]
 
-inputInitQuantsTable :: LabelledContent
-inputInitQuantsTable = mkInputPropsTable inputs inputInitQuants
+inputInitValsTable :: LabelledContent
+inputInitValsTable = mkInputPropsTable inputs inputInitVals
 
 funcReqs :: [ConceptInstance]
-funcReqs = [inputInitQuants, findMass, checkWithPhysConsts,
-        oIDQConstruct oIDQQuants, calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime]
+funcReqs = [inputInitVals, findMass, checkWithPhysConsts,
+        oIDQConstruct oIDQVals, calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime]
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS

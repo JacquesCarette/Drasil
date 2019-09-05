@@ -42,3 +42,5 @@ __pycache__
 *.fls
 *.fdb_latexmk
 stack.yaml.lock
+/code/stable/*/src/*/html
+/code/stable/*/src/*/latex

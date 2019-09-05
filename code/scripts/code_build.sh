@@ -14,7 +14,7 @@ if [ -d "$BUILD_FOLDER$EDIR/$EXAMPLE_CODE_SUBFOLDER" ]; then
   OLD_DIR=$(pwd)
   for d in */; do
     cd "$d"
-    "$MAKE"
+    "$MAKE" $TARGET
     RET=$(( $RET || $? ))
     cd "$OLD_DIR"
   done

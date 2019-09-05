@@ -18,9 +18,8 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   introSub = Constant <$> \case
     (IOrgSec _ _ s _) -> mSec [s]
     _ -> mempty,
-  gsdSec = Constant <$> \case
-    (GSDProg s1 c1 c2 s2) -> mconcat [mSec s1, mCon [c1], mCon c2, mSec s2]
-    (GSDProg2 _) -> mempty,
+  --gsdSec = Constant <$> \case
+  --  (GSDProg _) -> mempty,
   gsdSub = Constant <$> \case
     (SysCntxt c) -> mCon c
     (UsrChars c) -> mCon c
@@ -35,10 +34,9 @@ secConPlate mCon mSec = preorderFold $ purePlate {
     (CorrSolnPpties c cs) -> mCon [outDataConstTbl c] `mappend` mCon cs
     _ -> mempty,
   reqSub = Constant <$> \case
+    (FReqsSub' _ c) -> mCon c
     (FReqsSub _ c) -> mCon c
     (NonFReqsSub _) -> mempty,
-  lcsSec = Constant <$> \(LCsProg _) -> mempty,
-  ucsSec = Constant <$> \(UCsProg _) -> mempty,
   offShelfSec = Constant <$> \(OffShelfSolnsProg c) -> mCon c,
   appendSec = Constant <$> \(AppndxProg c) -> mCon c
 }
@@ -97,9 +95,6 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (IScope s) -> [s]
       (IChar s1 s2 s3) -> concat [s1, s2, s3]
       (IOrgSec s1 _ _ s2) -> [s1, s2],
-    stkSec = Constant . f <$> \case
-      (StkhldrProg _ s) -> [s]
-      _ -> [],
     stkSub = Constant . f <$> \case
       (Client _ s) -> [s]
       (Cstmr _) -> [],
@@ -120,6 +115,7 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
       (Constraints s _) -> [s]
       (CorrSolnPpties _ _) -> [],
     reqSub = Constant . f <$> \case
+      (FReqsSub' c _) -> def c
       (FReqsSub c _) -> def c
       (NonFReqsSub c) -> def c,
     lcsSec = Constant . f <$> \(LCsProg c) -> def c,
@@ -218,9 +214,6 @@ ciPlate = preorderFold $ purePlate {
   introSub = Constant <$> \case
     (IOrgSec _ ci _ _) -> [ci]
     _ -> [],
-  stkSec = Constant <$> \case
-    (StkhldrProg ci _) -> [ci]
-    (StkhldrProg2 _) -> [],
   stkSub = Constant <$> \case
    (Client ci _) -> [ci]
    (Cstmr ci) -> [ci],

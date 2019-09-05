@@ -17,7 +17,7 @@ using std::ofstream;
 
 #include "InputParameters.hpp"
 
-void input_constraints(InputParameters &inParams) {
+void input_constraints(InputParameters &inParams, double pi) {
     if (!(inParams.v_launch > 0)) {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";
@@ -27,7 +27,7 @@ void input_constraints(InputParameters &inParams) {
         std::cout << 0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < inParams.theta && inParams.theta < 3.14159265 / 2)) {
+    if (!(0 < inParams.theta && inParams.theta < pi / 2)) {
         std::cout << "Warning: ";
         std::cout << "theta has value ";
         std::cout << inParams.theta;
@@ -35,7 +35,7 @@ void input_constraints(InputParameters &inParams) {
         std::cout << "between ";
         std::cout << 0;
         std::cout << " and ";
-        std::cout << (3.14159265 / 2);
+        std::cout << (pi / 2);
         std::cout << " ((pi)/(2))";
         std::cout << "." << std::endl;
     }

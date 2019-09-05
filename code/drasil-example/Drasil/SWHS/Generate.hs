@@ -2,7 +2,8 @@ module Drasil.SWHS.Generate (generate) where
 
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
 --   ConstraintBehaviour(..), ImplementationType(..), Lang(..), Logging(..), 
---   Structure(..), InputModule(..), AuxFile(..), Visibility(..))
+--   Structure(..), ConstantStructure(..), ConstantRepr(..), InputModule(..), 
+--   AuxFile(..), Visibility(..))
 import Language.Drasil.Generate (gen)
 import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
 
@@ -22,6 +23,8 @@ import Drasil.SWHS.Body (srs, printSetting) -- si
 --   onSfwrConstraint = Warning,  -- Warning, Exception
 --   onPhysConstraint = Warning,  -- Warning, Exception
 --   inputStructure = Unbundled,    -- Unbundled, Bundled
+--   constStructure = Inline,   -- Inline, WithInputs, Store Structure
+--   constRepr = Const,      -- Var, Const
 --   inputModule = Combined,    -- Combined, Separated
 --   auxFiles = [SampleInput]
 -- }

@@ -488,12 +488,12 @@ arMax = mkQuantDef aspectRatioMax 100
 
 -- Used in Constraint 5
 pcmDensityMin = mkQuantDef (unitary' "pcmDensityMin"
-  (nounPhraseSP "minimum density of PCM")
-  (autoStage $ supMin (eqSymb pcmDensity)) densityU Rational) 500
+  (nounPhraseSP "minimum density of PCM") (staged (supMin (eqSymb pcmDensity)) 
+  (subMin (unicodeConv $ eqSymb pcmDensity))) densityU Rational) 500
 
 pcmDensityMax = mkQuantDef (unitary' "pcmDensityMax"
-  (nounPhraseSP "maximum density of PCM")
-  (autoStage $ supMax (eqSymb pcmDensity)) densityU Rational) 20000
+  (nounPhraseSP "maximum density of PCM") (staged (supMax (eqSymb pcmDensity)) 
+  (subMax (unicodeConv $ eqSymb pcmDensity))) densityU Rational) 20000
 
 -- Used in Constraint 7
 htCapSPMin = mkQuantDef (unitary "htCapSPMin"
@@ -523,54 +523,61 @@ htFusionMax = mkQuantDef (unitary "htFusionMax"
   (subMax (eqSymb htFusion)) UT.heatCapSpec Rational) 1000000 
 
 -- Used in Constraint 10
-coilSAMax = mkQuantDef (unitary "coilSAMax"
-  (nounPhraseSP "maximum surface area of coil")
-  (supMax (eqSymb coilSA)) m_2 Rational) 100000
+coilSAMax = mkQuantDef (unitary' "coilSAMax"
+  (nounPhraseSP "maximum surface area of coil") (staged (supMax (eqSymb coilSA))
+  (subMax (eqSymb coilSA))) m_2 Rational) 100000
 
 -- Used in Constraint 12
 wDensityMin = mkQuantDef (unitary' "wDensityMin"
-  (nounPhraseSP "minimum density of water")
-  (autoStage $ supMin (eqSymb wDensity)) densityU Rational) 950
+  (nounPhraseSP "minimum density of water") (staged (supMin (eqSymb wDensity)) 
+  (subMin (unicodeConv $ eqSymb wDensity))) densityU Rational) 950
 
 wDensityMax = mkQuantDef (unitary' "wDensityMax"
-  (nounPhraseSP "maximum density of water")
-  (autoStage $ supMax (eqSymb wDensity)) densityU Rational) 1000
+  (nounPhraseSP "maximum density of water") (staged (supMax (eqSymb wDensity)) 
+  (subMax (unicodeConv $ eqSymb wDensity))) densityU Rational) 1000
   
 -- Used in Constraint 13
-htCapWMin = mkQuantDef (unitary "htCapWMin"
+htCapWMin = mkQuantDef (unitary' "htCapWMin"
   (nounPhraseSP "minimum specific heat capacity of water")
-  (supMin (eqSymb htCapW)) UT.heatCapSpec Rational) 4170
+  (staged (supMin (eqSymb htCapW)) (subMin (eqSymb htCapW))) UT.heatCapSpec 
+  Rational) 4170
 
-htCapWMax = mkQuantDef (unitary "htCapWMax"
+htCapWMax = mkQuantDef (unitary' "htCapWMax"
   (nounPhraseSP "maximum specific heat capacity of water")
-  (supMax (eqSymb htCapW)) UT.heatCapSpec Rational) 4210
+  (staged (supMax (eqSymb htCapW)) (subMax (eqSymb htCapW))) UT.heatCapSpec 
+  Rational) 4210
 
 -- Used in Constraint 14
-coilHTCMin = mkQuantDef (unitary "coilHTCMin"
+coilHTCMin = mkQuantDef (unitary' "coilHTCMin"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between coil and water")
-  (supMin (eqSymb coilHTC)) UT.heatTransferCoef Rational) 10
+  (staged (supMin (eqSymb coilHTC)) (subMin (eqSymb coilHTC))) 
+  UT.heatTransferCoef Rational) 10
 
-coilHTCMax = mkQuantDef (unitary "coilHTCMax"
+coilHTCMax = mkQuantDef (unitary' "coilHTCMax"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between coil and water")
-  (supMax (eqSymb coilHTC)) UT.heatTransferCoef Rational) 10000
+  (staged (supMax (eqSymb coilHTC)) (subMax (eqSymb coilHTC))) 
+  UT.heatTransferCoef Rational) 10000
   
 -- Used in Constraint 15
-pcmHTCMin = mkQuantDef (unitary "pcmHTCMin"
+pcmHTCMin = mkQuantDef (unitary' "pcmHTCMin"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between PCM and water")
-  (supMin (eqSymb pcmHTC)) UT.heatTransferCoef Rational) 10
+  (staged (supMin (eqSymb pcmHTC)) (subMin (eqSymb pcmHTC))) 
+  UT.heatTransferCoef Rational) 10
 
-pcmHTCMax = mkQuantDef (unitary "pcmHTCMax"
+pcmHTCMax = mkQuantDef (unitary' "pcmHTCMax"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between PCM and water")
-  (supMax (eqSymb pcmHTC)) UT.heatTransferCoef Rational) 10000
+  (staged (supMax (eqSymb pcmHTC)) (subMax (eqSymb pcmHTC))) 
+  UT.heatTransferCoef Rational) 10000
   
 -- Used in Constraint 17
-timeFinalMax = mkQuantDef (unitary "timeFinalMax"
+timeFinalMax = mkQuantDef (unitary' "timeFinalMax"
   (nounPhraseSP "maximum final time")
-  (supMax (eqSymb timeFinal)) second Rational) 86400
+  (staged (supMax (eqSymb timeFinal)) (subMax (eqSymb timeFinal))) second 
+  Rational) 86400
 
 -- Labels
 lCoil, lEnv, lFinal, lFusion, lIn, lInit, lLiquid, lMelt, lOut, lPCM, lSolid,

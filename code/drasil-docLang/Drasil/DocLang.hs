@@ -7,9 +7,9 @@ module Drasil.DocLang (
   mkDoc, tsymb, tsymb'', tunit, tunit',
   -- DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
-  OffShelfSolnsSec(..), GSDSec(GSDProg2), GSDSub(UsrChars, SystCons, SysCntxt),
+  OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
-  RefSec(..), RefTab(..), StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr),
+  RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
   -- DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(Verbose), ddefn,
@@ -22,7 +22,7 @@ module Drasil.DocLang (
   -- Sections.ReferenceMaterial
   intro,
   -- Sections.Requirements
-  mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, 
+  inReq, inTable, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable,
   -- Sections.SpecificSystemDescription
   auxSpecSent, termDefnF',
   -- Sections.Stakeholders
@@ -44,9 +44,9 @@ import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   SolChSpec(..))
 import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'', tunit, tunit')
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
-  DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(GSDProg2),
+  DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
-  Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(StkhldrProg2),
+  Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
@@ -57,8 +57,8 @@ import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
 --import Drasil.Sections.GeneralSystDesc
 --import Drasil.Sections.Introduction
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.Requirements (mkInputPropsTable, mkQRTuple, mkQRTupleRef,
-    mkValsSourceTable)
+import Drasil.Sections.Requirements (inReq, inTable, mkInputPropsTable,
+  mkQRTuple, mkQRTupleRef, mkValsSourceTable)
 import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF')
 --import Drasil.Sections.Stakeholders
 --import Drasil.Sections.TableOfAbbAndAcronyms

@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: May 10, 2019
+Last updated: August 20, 2019
 --------------------------------------------------
 
 Assumptions.hs
@@ -11,6 +11,9 @@ Body.hs
 
 Changes.hs
   - NoPCM's likely and unlikely changes
+
+DataDefs.hs
+  - NoPCM's data definitions
 
 DataDesc.hs
   - NoPCM's input data
@@ -32,6 +35,9 @@ Main.hs
   
 README.md
   - This file
+
+References.hs
+  - NoPCM's references
 
 Requirements.hs 
   - NoPCM's requirements

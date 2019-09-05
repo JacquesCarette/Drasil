@@ -5,6 +5,8 @@ from __future__ import print_function
 import sys
 import math
 
+import Constants
+
 ## \brief Reads input from a file with the given file name
 # \param filename name of the input file
 # \return heating coil surface area: area covered by the outermost layer of the coil (m^2)
@@ -68,83 +70,84 @@ def get_input(filename):
 # \param D diameter of tank: the diameter of the tank (m)
 # \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
 # \param E_W change in heat energy in the water: change in thermal energy within the water (J)
-def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W):
-    if (not(A_C <= 100000)) :
+# \param consts structure holding the constant values
+def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W, consts):
+    if (not(A_C <= consts.A_C_max)) :
         print("Warning: ", end='')
         print("A_C has value ", end='')
         print(A_C, end='')
         print(" but suggested to be ", end='')
         print("below ", end='')
-        print(100000, end='')
-        print(" (A_C^max)", end='')
+        print(consts.A_C_max, end='')
+        print(" (A_C_max)", end='')
         print(".")
-    if (not(4170 < C_W and C_W < 4210)) :
+    if (not(consts.C_W_min < C_W and C_W < consts.C_W_max)) :
         print("Warning: ", end='')
         print("C_W has value ", end='')
         print(C_W, end='')
         print(" but suggested to be ", end='')
         print("between ", end='')
-        print(4170, end='')
-        print(" (C_W^min)", end='')
+        print(consts.C_W_min, end='')
+        print(" (C_W_min)", end='')
         print(" and ", end='')
-        print(4210, end='')
-        print(" (C_W^max)", end='')
+        print(consts.C_W_max, end='')
+        print(" (C_W_max)", end='')
         print(".")
-    if (not(10 <= h_C and h_C <= 10000)) :
+    if (not(consts.h_C_min <= h_C and h_C <= consts.h_C_max)) :
         print("Warning: ", end='')
         print("h_C has value ", end='')
         print(h_C, end='')
         print(" but suggested to be ", end='')
         print("between ", end='')
-        print(10, end='')
-        print(" (h_C^min)", end='')
+        print(consts.h_C_min, end='')
+        print(" (h_C_min)", end='')
         print(" and ", end='')
-        print(10000, end='')
-        print(" (h_C^max)", end='')
+        print(consts.h_C_max, end='')
+        print(" (h_C_max)", end='')
         print(".")
-    if (not(t_final < 86400)) :
+    if (not(t_final < consts.t_final_max)) :
         print("Warning: ", end='')
         print("t_final has value ", end='')
         print(t_final, end='')
         print(" but suggested to be ", end='')
         print("below ", end='')
-        print(86400, end='')
-        print(" (t_final^max)", end='')
+        print(consts.t_final_max, end='')
+        print(" (t_final_max)", end='')
         print(".")
-    if (not(0.1 <= L and L <= 50)) :
+    if (not(consts.L_min <= L and L <= consts.L_max)) :
         print("Warning: ", end='')
         print("L has value ", end='')
         print(L, end='')
         print(" but suggested to be ", end='')
         print("between ", end='')
-        print(0.1, end='')
+        print(consts.L_min, end='')
         print(" (L_min)", end='')
         print(" and ", end='')
-        print(50, end='')
+        print(consts.L_max, end='')
         print(" (L_max)", end='')
         print(".")
-    if (not(950 < rho_W and rho_W <= 1000)) :
+    if (not(consts.rho_W_min < rho_W and rho_W <= consts.rho_W_max)) :
         print("Warning: ", end='')
         print("rho_W has value ", end='')
         print(rho_W, end='')
         print(" but suggested to be ", end='')
         print("between ", end='')
-        print(950, end='')
-        print(" (rho_W^min)", end='')
+        print(consts.rho_W_min, end='')
+        print(" (rho_W_min)", end='')
         print(" and ", end='')
-        print(1000, end='')
-        print(" (rho_W^max)", end='')
+        print(consts.rho_W_max, end='')
+        print(" (rho_W_max)", end='')
         print(".")
-    if (not(1.0e-2 <= D and D <= 100)) :
+    if (not(consts.AR_min <= D and D <= consts.AR_max)) :
         print("Warning: ", end='')
         print("D has value ", end='')
         print(D, end='')
         print(" but suggested to be ", end='')
         print("between ", end='')
-        print(1.0e-2, end='')
+        print(consts.AR_min, end='')
         print(" (AR_min)", end='')
         print(" and ", end='')
-        print(100, end='')
+        print(consts.AR_max, end='')
         print(" (AR_max)", end='')
         print(".")
     

@@ -122,6 +122,7 @@ class (PermanenceSym repr) => StateTypeSym repr where
 
   getType :: repr (StateType repr) -> CodeType
   getTypeString :: repr (StateType repr) -> String
+  getTypeDoc :: repr (StateType repr) -> Doc
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 
@@ -175,6 +176,7 @@ class (StateTypeSym repr) => VariableSym repr where
   extVar       :: Library -> Label -> repr (StateType repr) -> 
     repr (Variable repr)
   self         :: Label -> repr (Variable repr)
+  classVar     :: repr (StateType repr) -> repr (Variable repr) -> repr (Variable repr)
   objVar       :: repr (Variable repr) -> repr (Variable repr) -> repr (Variable repr)
   objVarSelf   :: Label -> Label -> repr (StateType repr) -> 
     repr (Variable repr)
@@ -192,6 +194,9 @@ class (StateTypeSym repr) => VariableSym repr where
   variableName :: repr (Variable repr) -> String
   variableType :: repr (Variable repr) -> repr (StateType repr)
   variableDoc  :: repr (Variable repr) -> Doc
+
+  varFromData :: Binding -> String -> repr (StateType repr) -> Doc -> 
+    repr (Variable repr)
 
 class (VariableSym repr) => ValueSym repr where
   type Value repr

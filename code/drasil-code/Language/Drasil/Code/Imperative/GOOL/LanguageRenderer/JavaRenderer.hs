@@ -35,19 +35,20 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
   binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
-  argDocD, enumElemDocD, objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, 
-  stateObjDocD, listStateObjDocD, notNullDocD, funcDocD, castDocD, 
-  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
-  privateDocD, publicDocD, dot, new, forLabel, blockCmtStart, blockCmtEnd, 
-  docCmtStart, observerListName, doxConfigName, makefileName, sampleInputName, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  surroundBody, getterName, setterName, setMainMethod, setEmpty, intValue)
+  argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD, 
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
+  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
+  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
+  doxConfigName, makefileName, sampleInputName, doubleSlash, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
+  docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
+  setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   PackData(..), packD, ProgData(..), progD, TypeData(..), td, ValData(..), 
-  VarData(..))
+  VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
@@ -182,6 +183,7 @@ instance StateTypeSym JavaCode where
 
   getType = cType . unJC
   getTypeString = typeString . unJC
+  getTypeDoc = typeDoc . unJC
 
 instance ControlBlockSym JavaCode where
   runStrategy l strats rv av = maybe
@@ -251,6 +253,7 @@ instance VariableSym JavaCode where
   extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
   self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
   enumVar e en = var e (enumType en)
+  classVar c v = classVarCheckStatic (classVarD c v classVarDocD)
   objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
     (variableType v) (liftA2 objVarDocD o v)
   objVarSelf _ = var
@@ -264,6 +267,8 @@ instance VariableSym JavaCode where
   variableName = varName . unJC
   variableType = fmap varType
   variableDoc = varDoc . unJC
+  
+  varFromData b n t d = liftA2 (vard b n) t (return d)
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData

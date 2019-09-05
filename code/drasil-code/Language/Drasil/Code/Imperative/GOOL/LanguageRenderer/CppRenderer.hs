@@ -36,20 +36,20 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
   typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, litCharD, 
-  litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, objVarDocD, 
-  inlineIfD, funcAppDocD, funcDocD, castDocD, objAccessDocD, castObjDocD, 
-  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  classDec, dot, blockCmtStart, blockCmtEnd, docCmtStart, observerListName, 
-  doxConfigName, makefileName, sampleInputName, doubleSlash, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
-  docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
-  setEmpty, intValue)
+  litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, 
+  classVarCheckStatic, objVarDocD, inlineIfD, funcAppDocD, funcDocD, castDocD, 
+  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD,
+  privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
+  docCmtStart, observerListName, doxConfigName, makefileName, sampleInputName, 
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
+  surroundBody, getterName, setterName, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList, 
   Terminator(..), ScopeTag(..), Binding(..), AuxData(..), ad, emptyAux, 
   BindData(..), bd, FileData(..), srcFile, hdrFile, updateFileMod, FuncData(..),
   fd, ModData(..), md, updateModDoc, OpData(..), od, PackData(..), packD, 
   emptyPack, ParamData(..), pd, ProgData(..), progD, emptyProg, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..))
+  StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, cppCompiler, nativeBinary)
@@ -178,6 +178,7 @@ instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
 
   getType s = getType $ pfst s
   getTypeString s = getTypeString $ pfst s
+  getTypeDoc s = getTypeDoc $ pfst s
 
 instance (Pair p) => ControlBlockSym (p CppSrcCode CppHdrCode) where
   runStrategy l strats rv av = pair (runStrategy l (map (mapPairSnd pfst) 
@@ -231,6 +232,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   extVar l n t = pair (extVar l n $ pfst t) (extVar l n $ psnd t)
   self l = pair (self l) (self l)
   enumVar e en = pair (enumVar e en) (enumVar e en)
+  classVar c v = pair (classVar (pfst c) (pfst v)) (classVar (psnd c) (psnd v))
   objVar o v = pair (objVar (pfst o) (pfst v)) (objVar (psnd o) (psnd v))
   objVarSelf l n t = pair (objVarSelf l n $ pfst t) (objVarSelf l n $ psnd t)
   listVar n p t = pair (listVar n (pfst p) (pfst t)) (listVar n (psnd p) (psnd t))
@@ -243,6 +245,9 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   variableName v = variableName $ pfst v
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
   variableDoc v = variableDoc $ pfst v
+
+  varFromData b n t d = pair (varFromData b n (pfst t) d) 
+    (varFromData b n (psnd t) d)
 
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   type Value (p CppSrcCode CppHdrCode) = ValData
@@ -748,6 +753,7 @@ instance StateTypeSym CppSrcCode where
 
   getType = cType . unCPPSC
   getTypeString = typeString . unCPPSC
+  getTypeDoc = typeDoc . unCPPSC
 
 instance ControlBlockSym CppSrcCode where
   runStrategy l strats rv av = maybe
@@ -817,6 +823,9 @@ instance VariableSym CppSrcCode where
   extVar _ = var
   self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
   enumVar e en = var e (enumType en)
+  classVar c v = classVarCheckStatic (varFromData (variableBind v) 
+    (getTypeString c ++ "::" ++ variableName v) (variableType v) 
+    (cppClassVar (getTypeDoc c) (variableDoc v)))
   objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
     (variableType v) (liftA2 objVarDocD o v)
   objVarSelf _ = var
@@ -830,6 +839,8 @@ instance VariableSym CppSrcCode where
   variableName = varName . unCPPSC
   variableType = fmap varType
   variableDoc = varDoc . unCPPSC
+  
+  varFromData b n t d = liftA2 (vard b n) t (return d)
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
@@ -1328,6 +1339,7 @@ instance StateTypeSym CppHdrCode where
 
   getType = cType . unCPPHC
   getTypeString = typeString . unCPPHC
+  getTypeDoc = typeDoc . unCPPHC
 
 instance ControlBlockSym CppHdrCode where
   runStrategy _ _ _ _ = return empty
@@ -1377,6 +1389,7 @@ instance VariableSym CppHdrCode where
   extVar _ _ _ = liftA2 (mkVar "") void (return empty)
   self _ = liftA2 (mkVar "") void (return empty)
   enumVar _ _ = liftA2 (mkVar "") void (return empty)
+  classVar _ _ = liftA2 (mkVar "") void (return empty)
   objVar _ _ = liftA2 (mkVar "") void (return empty)
   objVarSelf _ _ _ = liftA2 (mkVar "") void (return empty)
   listVar _ _ _ = liftA2 (mkVar "") void (return empty)
@@ -1389,6 +1402,8 @@ instance VariableSym CppHdrCode where
   variableName = varName . unCPPHC
   variableType = fmap varType
   variableDoc = varDoc . unCPPHC
+
+  varFromData b n t d = liftA2 (vard b n) t (return d)
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
@@ -1813,6 +1828,9 @@ cppOutfileTypeDoc = td File "ofstream" (text "ofstream")
 cppIterTypeDoc :: TypeData -> TypeData
 cppIterTypeDoc t = td (Iterator (cType t)) (typeString t ++ "::iterator")
   (text "std::" <> typeDoc t <> text "::iterator")
+
+cppClassVar :: Doc -> Doc -> Doc
+cppClassVar c v = c <> text "::" <> v
 
 cppStateObjDoc :: TypeData -> Doc -> Doc
 cppStateObjDoc t ps = typeDoc t <> parens ps

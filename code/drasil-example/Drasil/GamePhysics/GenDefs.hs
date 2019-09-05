@@ -81,22 +81,17 @@ accelGravityDerivSentences :: [Sentence]
 accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1, 
  accelGravityDerivSentence2, accelGravityDerivSentence3] 
 
-
 accelGravityDerivSentence1 :: Sentence
-accelGravityDerivSentence1 = 
-                    -- [S "From Newton's law of universal gravitation"]
---   S "gravitation (T3 ref), we have:",
---   S "(expr1)",
---   S "Equation 3 **ref to 3** governs the gravitational attraction between two",
---   S "bodies. Suppose that one of the bodies is significantly more massive than",
---   S "other, so that we concern ourselves with the force the massive body exerts",
---   S "on the lighter body" +:+. S "Further suppose that the coordinate system is",
---   S "chosen such that this force acts on a line which lies along one of the",
---   S "principle axes (A2 ref)" +:+. S "Then our unit vector", S "(expr2)", S "for",
---   S "the x or y axes (A3 ref), respectively"
---   S "Given the above assumptions, let M and m be the", phrase mass, 
---   S "of the massive and",
---   S "light body, respectively" +:+. S "Using 3 **ref to 3** and equating this",
+accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", ]
+              S "The above equation governs the gravitational attraction between two bodies",
+              S "Suppose that one of the bodies is significantly more massive than the other" `Sc`
+              S "so that we concern ourselves with the" phrase force , S "the massive body",
+              S "exerts on the lighter body" +:+. S "Further suppose that the", phrase cartesian `sIs`
+              S "is chosen such that this", phrase force, S "acts on a", phrase line, 
+              S "which lies along one of the principal axes", sParen (makeRef2S rigidTwoDAssump), 
+              S "Then our", phrase dispunit, 
+
+              --   S "light body, respectively" +:+. S "Using 3 **ref to 3** and equating this",
 --   S "with Newton's second law (T1 ref) for the force experienced by the light",
 --   S "body, we get:",
 --   S "(expr3)",

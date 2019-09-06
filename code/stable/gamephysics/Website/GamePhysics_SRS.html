@@ -1000,7 +1000,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        $$j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}$$
+                        \[j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1456,100 +1456,6 @@
                   </table>
                 </div>
                 <p class="paragraph"></p>
-<<<<<<< HEAD
-=======
-                <div id="DD:impulse">
-                  <table class="ddefn">
-                    <tr>
-                      <th>Refname</th>
-                      <td><b>DD:impulse</b></td>
-                    </tr>
-                    <tr>
-                      <th>Label</th>
-                      <td><p class="paragraph">Impulse (scalar)</p></td>
-                    </tr>
-                    <tr>
-                      <th>Symbol</th>
-                      <td><p class="paragraph"><em>j</em></p></td>
-                    </tr>
-                    <tr>
-                      <th>Units</th>
-                      <td><p class="paragraph">N&sdot;s</p></td>
-                    </tr>
-                    <tr>
-                      <th>Equation</th>
-                      <td>
-                        \[j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{r}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{r}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}\]
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Description</th>
-                      <td>
-                        <ul class="hide-list-style-no-indent">
-                          <li><em>j</em> is the impulse (scalar) (N&sdot;s)</li>
-                          <li>
-                            <em>C<sub>R</sub></em> is the coefficient of restitution (Unitless)
-                          </li>
-                          <li>
-                            <em><b>v</b><sub>i</sub><sup>AB</sup></em> is the initial relative velocity between rigid bodies of A and B (m/s)
-                          </li>
-                          <li><em><b>n</b></em> is the collision normal vector (m)</li>
-                          <li><em>m<sub>A</sub></em> is the mass of rigid body A (kg)</li>
-                          <li><em>m<sub>B</sub></em> is the mass of rigid body B (kg)</li>
-                          <li>
-                            <em>||<b>n</b>||</em> is the length of the normal vector (m)
-                          </li>
-                          <li>
-                            <em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)
-                          </li>
-                          <li>
-                            <em><b>I</b><sub>A</sub></em> is the moment of inertia of rigid body A (kg&sdot;m<sup>2</sup>)
-                          </li>
-                          <li>
-                            <em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)
-                          </li>
-                          <li>
-                            <em><b>I</b><sub>B</sub></em> is the moment of inertia of rigid body B (kg&sdot;m<sup>2</sup>)
-                          </li>
-                        </ul>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Notes</th>
-                      <td>
-                        <p class="paragraph">
-                          All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).
-                        </p>
-                        <p class="paragraph">
-                          A right-handed coordinate system is used (from <a href=#assumpAD>A: axesDefined</a>).
-                        </p>
-                        <p class="paragraph">
-                          All collisions are vertex-to-edge (from <a href=#assumpCT>A: collisionType</a>).
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>Source</th>
-                      <td><p class="paragraph">--</p></td>
-                    </tr>
-                    <tr>
-                      <th>RefBy</th>
-                      <td><p class="paragraph"><a href=#IM:col2D>IM: col2D</a></p></td>
-                    </tr>
-                  </table>
-                </div>
-                <div id="DD:impulseDeriv">
-                  <div class="subsubsubsection">
-                    <h4>Detailed derivation of impulse (scalar):</h4>
-                    <p class="paragraph">Newton's second law of motion states:</p>
-                    \[\mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}\]
-                    <p class="paragraph">Rearranging :</p>
-                    \[\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)\]
-                    <p class="paragraph">Integrating the right hand side :</p>
-                    \[\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}\]
-                  </div>
-                </div>
->>>>>>> master
                 <div id="DD:chaslesThm">
                   <table class="ddefn">
                     <tr>
@@ -2309,7 +2215,7 @@
                           It is currently assumed that no damping occurs during the simulation (from <a href=#assumpDI>A: dampingInvolvement</a>) and that no constraints are involved (from <a href=#assumpCAJI>A: constraintsAndJointsInvolvement</a>).
                         </p>
                         <p class="paragraph">
-                          <em>j</em> is defined in <a href=#GD:impulse>GD: impulse</a>.
+                          <em>j</em> is defined in <a href=#GD:impulse>GD: impulse</a>
                         </p>
                       </td>
                     </tr>

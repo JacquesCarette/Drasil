@@ -42,7 +42,8 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   docCmtStart, observerListName, doxConfigName, makefileName, sampleInputName, 
   doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  surroundBody, getterName, setterName, setMainMethod, setEmpty, intValue)
+  surroundBody, getterName, setterName, setMainMethod, setEmpty, intValue,
+  filterOutObjs)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
@@ -570,21 +571,27 @@ instance MethodSym JavaCode where
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) (map 
-    stateParam $ v : ins) (liftA2 appendToBody b (returnState $ valueOf v))
-  inOutFunc n s p ins outs both b = function n s p jArrayType
-    (map stateParam $ both ++ ins) (liftA3 surroundBody decls b (multi 
-      (varDecDef outputs (valueOf (var 
-        ("new Object[" ++ show (length $ both ++ outs) ++ "]") jArrayType))
-      : assignArray 0 (map valueOf $ both ++ outs)
-      ++ [returnState (valueOf outputs)])))
-      where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
-              [JavaCode (Statement JavaCode)]
-            assignArray _ [] = []
-            assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
-              (fmap valType v) &= v) : assignArray (c+1) vs
-            decls = multi $ map varDec outs
-            outputs = var "outputs" jArrayType
+  inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
+    then mState void else mState $ variableType v) (map stateParam $ v : ins) 
+    (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
+    (returnState $ valueOf v))
+  inOutFunc n s p ins outs both b = function n s p (returnTp rets)
+    (map stateParam $ both ++ ins) (liftA3 surroundBody decls b (returnSt rets))
+    where returnTp [x] = mState $ variableType x
+          returnTp _ = jArrayType
+          returnSt [x] = returnState $ valueOf x
+          returnSt _ = multi (varDecDef outputs (valueOf (var 
+            ("new Object[" ++ show (length rets) ++ "]") jArrayType))
+            : assignArray 0 (map valueOf rets)
+            ++ [returnState (valueOf outputs)])
+          assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
+            [JavaCode (Statement JavaCode)]
+          assignArray _ [] = []
+          assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
+            (fmap valType v) &= v) : assignArray (c+1) vs
+          decls = multi $ map varDec outs
+          rets = filterOutObjs both ++ outs
+          outputs = var "outputs" jArrayType
     
   docInOutFunc desc iComms [] [] = docFuncRepr desc iComms []
   docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
@@ -753,10 +760,14 @@ jInOutCall :: (Label -> JavaCode (StateType JavaCode) ->
   [JavaCode (Variable JavaCode)] -> JavaCode (Statement JavaCode)
 jInOutCall f n ins [] [] = valState $ f n void ins
 jInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
-jInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out 
-  : ins)
-jInOutCall f n ins outs both = multi $ varDecDef (var "outputs" jArrayType) 
-  (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 (both ++ outs)
+jInOutCall f n ins [] [out] = if null (filterOutObjs [out])
+  then valState $ f n void (valueOf out : ins) 
+  else assign out $ f n (variableType out) (valueOf out : ins)
+jInOutCall f n ins outs both = fCall rets
+  where rets = filterOutObjs both ++ outs
+        fCall [x] = assign x $ f n (variableType x) (map valueOf both ++ ins)
+        fCall xs = multi $ varDecDef (var "outputs" jArrayType) 
+          (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs
 
 jBuildConfig :: Maybe BuildConfig
 jBuildConfig = buildSingle (\i _ -> asFragment "javac" : i) $

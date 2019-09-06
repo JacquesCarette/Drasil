@@ -43,7 +43,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   doxConfigName, makefileName, sampleInputName, doubleSlash, blockCmtDoc, 
   docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
   docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
-  setEmpty, intValue)
+  setEmpty, intValue, filterOutObjs)
 import Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList, 
   Terminator(..), ScopeTag(..), Binding(..), AuxData(..), ad, emptyAux, 
   BindData(..), bd, FileData(..), srcFile, hdrFile, updateFileMod, FuncData(..),
@@ -1167,8 +1167,8 @@ instance MethodSym CppSrcCode where
     (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
   inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v)
-    (map (fmap getParam) $ v : ins) (liftA2 appendToBody b (returnState $ 
-    valueOf v))
+    (map (fmap getParam) $ v : ins) (if null (filterOutObjs [v]) then b 
+    else liftA2 appendToBody b (returnState $ valueOf v))
   inOutFunc n s p ins outs both b = function n s p (mState void) (map
     pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
@@ -1952,8 +1952,9 @@ cppInOutCall :: (Label -> CppSrcCode (StateType CppSrcCode) ->
   [CppSrcCode (Value CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
   [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Statement CppSrcCode)
 cppInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
-cppInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf 
-  out : ins)
+cppInOutCall f n ins [] [out] = if null (filterOutObjs [out]) 
+  then valState $ f n void (valueOf out : ins)
+  else assign out $ f n (variableType out) (valueOf out : ins)
 cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins 
   ++ map valueOf outs)
 

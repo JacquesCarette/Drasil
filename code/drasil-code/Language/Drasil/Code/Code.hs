@@ -2,7 +2,7 @@
 module Language.Drasil.Code.Code (
     Code(..),
     CodeType(..),
-    spaceToCodeType
+    isObject, spaceToCodeType
     ) where
 
 import qualified Language.Drasil as S (Space(..))
@@ -23,6 +23,10 @@ data CodeType = Boolean
               | Object String
               | Enum String
               | Void deriving Eq
+
+isObject :: CodeType -> Bool
+isObject (Object _) = True
+isObject _ = False
 
 spaceToCodeType :: S.Space -> CodeType
 spaceToCodeType S.Integer       = Integer

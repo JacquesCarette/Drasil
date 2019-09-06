@@ -37,12 +37,12 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, prependToBody, 
   appendToBody, surroundBody, getterName, setterName, setMainMethod, 
-  setEmpty, intValue
+  setEmpty, intValue, filterOutObjs
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList, stringList)
 
-import Language.Drasil.Code.Code (CodeType(..))
+import Language.Drasil.Code.Code (CodeType(..), isObject)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, Library,
   RenderSym(..), BodySym(..), StateTypeSym(getType, listInnerType), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -875,6 +875,10 @@ intValue i = intValue' (getType $ valueType i)
   where intValue' Integer = i
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
+
+filterOutObjs :: (VariableSym repr) => [repr (Variable repr)] -> 
+  [repr (Variable repr)]
+filterOutObjs = filter (not . isObject . getType . variableType)
 
 doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String
 doxCommand = "\\"

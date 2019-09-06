@@ -44,7 +44,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   makefileName, sampleInputName, doubleSlash, blockCmtDoc, docCmtDoc, 
   commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
   valList, appendToBody, surroundBody, getterName, setterName, setMainMethod, 
-  setEmpty, intValue)
+  setEmpty, intValue, filterOutObjs)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
@@ -566,7 +566,8 @@ instance MethodSym CSharpCode where
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
   inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) 
-    (map stateParam $ v : ins) (liftA2 appendToBody b (returnState $ valueOf v))
+    (map stateParam $ v : ins) (if null (filterOutObjs [v]) then b 
+    else liftA2 appendToBody b (returnState $ valueOf v))
   inOutFunc n s p ins outs both b = function n s p (mState void) (map (fmap 
     (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ 
     map (fmap (updateParamDoc csOut) . stateParam) outs) b
@@ -692,8 +693,9 @@ csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) ->
   [CSharpCode (Value CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
   [CSharpCode (Variable CSharpCode)] -> CSharpCode (Statement CSharpCode)
 csInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
-csInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out
-  : ins)
+csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
+  then valState $ f n void (valueOf out : ins) 
+  else assign out $ f n (variableType out) (valueOf out : ins)
 csInOutCall f n ins outs both = valState $ f n void (map (fmap (updateValDoc 
   csRef) . valueOf) both ++ ins ++ map (fmap (updateValDoc csOut) . valueOf) 
   outs)

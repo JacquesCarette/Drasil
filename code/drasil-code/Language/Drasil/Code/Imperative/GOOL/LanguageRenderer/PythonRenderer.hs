@@ -37,7 +37,7 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc',
   dynamicDocD, classDec, dot, forLabel, observerListName, 
   doxConfigName, makefileName, sampleInputName, commentedItem, addCommentsDocD, 
   classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
-  setterName)
+  setterName, filterOutObjs)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
@@ -538,8 +538,9 @@ instance MethodSym PythonCode where
   inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
     ins) b
   inOutFunc n s p ins outs both b = function n s p (mState void) (map 
-    stateParam $ both ++ ins) (liftA2 appendToBody b (multiReturn $
-    map valueOf $ both ++ outs))
+    stateParam $ both ++ ins) (if null rets then b else liftA2 appendToBody b 
+    (multiReturn $ map valueOf rets))
+    where rets = filterOutObjs both ++ outs
 
   docInOutFunc desc iComms oComms bComms = docFuncRepr desc (bComms ++ iComms) 
     (bComms ++ oComms)
@@ -729,8 +730,10 @@ pyInOutCall :: (Label -> PythonCode (StateType PythonCode) ->
   [PythonCode (Value PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
   [PythonCode (Variable PythonCode)] -> PythonCode (Statement PythonCode)
 pyInOutCall f n ins [] [] = valState $ f n void ins
-pyInOutCall f n ins outs both = multiAssign (both ++ outs) 
+pyInOutCall f n ins outs both = if null rets then valState (f n void (map 
+  valueOf both ++ ins)) else multiAssign (filterOutObjs both ++ outs) 
   [f n void (map valueOf both ++ ins)]
+  where rets = filterOutObjs both ++ outs
 
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns

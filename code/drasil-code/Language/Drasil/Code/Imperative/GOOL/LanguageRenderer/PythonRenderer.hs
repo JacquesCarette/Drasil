@@ -34,10 +34,10 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc',
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
   objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, 
   listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  dynamicDocD, classDec, dot, forLabel, observerListName, 
-  doxConfigName, makefileName, sampleInputName, commentedItem, addCommentsDocD, 
-  classDoc, moduleDoc, docFuncRepr, valList, appendToBody, getterName, 
-  setterName, filterOutObjs)
+  dynamicDocD, classDec, dot, forLabel, observerListName, doxConfigName, 
+  makefileName, sampleInputName, commentedItem, addCommentsDocD, classDoc, 
+  moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
+  filterOutObjs)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
@@ -538,8 +538,8 @@ instance MethodSym PythonCode where
   inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
     ins) b
   inOutFunc n s p ins outs both b = function n s p (mState void) (map 
-    stateParam $ both ++ ins) (if null rets then b else liftA2 appendToBody b 
-    (multiReturn $ map valueOf rets))
+    stateParam $ both ++ ins) (if null rets then b else liftA3 surroundBody 
+    (multi $ map varDec outs) b (multiReturn $ map valueOf rets))
     where rets = filterOutObjs both ++ outs
 
   docInOutFunc desc iComms oComms bComms = docFuncRepr desc (bComms ++ iComms) 

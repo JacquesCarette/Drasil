@@ -843,11 +843,11 @@ varList vs = hcat (intersperse (text ", ") (map varDoc vs))
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statementDocD s, maybeBlank, b]
-  where maybeBlank = emptyIfEmpty b blank
+  where maybeBlank = emptyIfEmpty (fst s) (emptyIfEmpty b blank)
 
 appendToBody :: Doc -> (Doc, Terminator) -> Doc
 appendToBody b s = vcat [b, maybeBlank, fst $ statementDocD s]
-  where maybeBlank = emptyIfEmpty b blank
+  where maybeBlank = emptyIfEmpty b (emptyIfEmpty (fst s) blank)
 
 surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
 surroundBody p b a = prependToBody p (appendToBody b a)

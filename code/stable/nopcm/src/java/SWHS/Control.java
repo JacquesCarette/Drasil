@@ -33,7 +33,6 @@ public class Control {
         double R_tol;
         double T_W;
         double E_W;
-        Constants consts = new Constants();
         Object[] outputs = InputParameters.get_input(filename);
         A_C = (double)(outputs[0]);
         C_W = (double)(outputs[1]);
@@ -49,7 +48,7 @@ public class Control {
         R_tol = (double)(outputs[11]);
         T_W = (double)(outputs[12]);
         E_W = (double)(outputs[13]);
-        InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W, consts);
+        InputParameters.input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, T_W, E_W);
         OutputFormat.write_output(T_W, E_W);
     }
 }

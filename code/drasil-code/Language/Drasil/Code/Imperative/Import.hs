@@ -133,12 +133,12 @@ genInOutFunc s pr n desc ins' outs' b = do
   outVs <- mapM mkVar outs
   bothVs <- mapM mkVar both
   bod <- logBody n inVs b
-  let fn = inOutFunc n s pr inVs outVs bothVs bod
   pComms <- mapM (paramComment . (^. uid)) ins
   oComms <- mapM (paramComment . (^. uid)) outs
   bComms <- mapM (paramComment . (^. uid)) both
   return $ if CommentFunc `elem` commented g 
-    then docInOutFunc desc pComms oComms bComms fn else fn
+    then docInOutFunc n s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
+    bComms bothVs) bod else inOutFunc n s pr inVs outVs bothVs bod
 
 convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr))
 convExpr (Dbl d) = return $ litFloat d

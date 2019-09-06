@@ -10,7 +10,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
 
 import Utils.Drasil (indent, indentList)
 
-import Language.Drasil.Code.Code (CodeType(..))
+import Language.Drasil.Code.Code (CodeType(..), isObject)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
@@ -585,8 +585,10 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     pfst ins) (map pfst outs) (map pfst both) (pfst b)) (inOutFunc n (psnd s) 
     (psnd p) (map psnd ins) (map psnd outs) (map psnd both) (psnd b))
 
-  docInOutFunc desc iComms oComms bComms f = pair (docInOutFunc desc iComms 
-    oComms bComms $ pfst f) (docInOutFunc desc iComms oComms bComms $ psnd f)
+  docInOutFunc n s p desc is os bs b = pair (docInOutFunc n (pfst s) (pfst p) 
+    desc (map (mapPairSnd pfst) is) (map (mapPairSnd pfst) os) (map (mapPairSnd 
+    pfst) bs) (pfst b)) (docInOutFunc n (psnd s) (psnd p) desc (map (mapPairSnd 
+    psnd) is) (map (mapPairSnd psnd) os) (map (mapPairSnd psnd) bs) (psnd b))
 
   commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
     (commentedFunc (psnd cmt) (psnd fn)) 
@@ -1173,11 +1175,13 @@ instance MethodSym CppSrcCode where
   inOutFunc n s p ins outs both b = function n s p (mState void) (map
     pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
-  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
-  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms)
-    [bComm]
-  docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
-    (bComms ++ iComms ++ oComms) []
+  docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
+    (inOutFunc n s p (map snd is) [snd o] [] b)
+  docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst $ both : 
+    is) (if (isObject . getType . variableType . snd) both then [] else [fst 
+    both]) (inOutFunc n s p (map snd is) [] [snd both] b)
+  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ 
+    os) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
 
   commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
@@ -1668,11 +1672,13 @@ instance MethodSym CppHdrCode where
   inOutFunc n s p ins outs both b = function n s p (mState void) (map 
     pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
-  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
-  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms)
-    [bComm]
-  docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
-    (bComms ++ iComms ++ oComms) []
+  docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
+    (inOutFunc n s p (map snd is) [snd o] [] b)
+  docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst $ both : 
+    is) (if (isObject . getType . variableType . snd) both then [] else [fst 
+    both]) (inOutFunc n s p (map snd is) [] [snd both] b)
+  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ 
+    os) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
 
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)

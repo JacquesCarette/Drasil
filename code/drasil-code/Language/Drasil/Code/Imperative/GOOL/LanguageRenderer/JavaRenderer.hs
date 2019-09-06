@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
 
 import Utils.Drasil (indent)
 
-import Language.Drasil.Code.Code (CodeType(..))
+import Language.Drasil.Code.Code (CodeType(..), isObject)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
@@ -593,12 +593,20 @@ instance MethodSym JavaCode where
           rets = filterOutObjs both ++ outs
           outputs = var "outputs" jArrayType
     
-  docInOutFunc desc iComms [] [] = docFuncRepr desc iComms []
-  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
-  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms) 
-    [bComm]
-  docInOutFunc desc iComms oComms bComms = docFuncRepr desc (bComms ++ iComms) 
-    ("array containing the following values:" : bComms ++ oComms)
+  docInOutFunc n s p desc is [] [] b = docFuncRepr desc (map fst is) [] 
+    (inOutFunc n s p (map snd is) [] [] b)
+  docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
+    (inOutFunc n s p (map snd is) [snd o] [] b)
+  docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst (both : 
+    is)) (if (isObject . getType . variableType . snd) both then [] 
+    else [fst both]) (inOutFunc n s p (map snd is) [] [snd both] b)
+  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
+    (bRets ++ map fst os) (inOutFunc n s p (map snd is) (map snd os) 
+    (map snd bs) b)
+    where bRets = bRets' (map fst (filter (not . isObject . getType . 
+            variableType . snd) bs))
+          bRets' [x] = [x]
+          bRets' xs = "array containing the following values:" : xs
             
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

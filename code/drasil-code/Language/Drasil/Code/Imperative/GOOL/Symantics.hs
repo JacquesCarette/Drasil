@@ -570,9 +570,11 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     [repr (Variable repr)] -> [repr (Variable repr)] -> [repr (Variable repr)] 
     -> repr (Body repr) -> repr (Method repr)
-  -- Parameters are: brief description, input descriptions, output descriptions, descriptions of parameters that are both input and output, function
-  docInOutFunc :: String -> [String] -> [String] -> [String] -> 
-    repr (Method repr) -> repr (Method repr)
+  -- Parameters are: function name, scope, permanence, brief description, input descriptions and variables, output descriptions and variables, descriptions and variables for parameters that are both input and output, function body
+  docInOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
+    String -> [(String, repr (Variable repr))] -> [(String, repr 
+    (Variable repr))] -> [(String, repr (Variable repr))] -> repr (Body repr)
+    -> repr (Method repr)
 
   commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
     repr (Method repr)

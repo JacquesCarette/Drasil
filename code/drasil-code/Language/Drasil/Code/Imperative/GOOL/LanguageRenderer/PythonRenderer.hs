@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
 
 import Utils.Drasil (indent)
 
-import Language.Drasil.Code.Code (CodeType(..))
+import Language.Drasil.Code.Code (CodeType(..), isObject)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
@@ -542,8 +542,10 @@ instance MethodSym PythonCode where
     (multi $ map varDec outs) b (multiReturn $ map valueOf rets))
     where rets = filterOutObjs both ++ outs
 
-  docInOutFunc desc iComms oComms bComms = docFuncRepr desc (bComms ++ iComms) 
-    (bComms ++ oComms)
+  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
+    (map fst $ bRets ++ os) (inOutFunc n s p (map snd is) (map snd os) (map snd
+    bs) b)
+    where bRets = filter (not . isObject . getType . variableType . snd) bs
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))

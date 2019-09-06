@@ -28,10 +28,7 @@ getInputFormatIns = do
 getInputFormatOuts :: Reader State [CodeChunk]
 getInputFormatOuts = do
   g <- ask
-  let getOuts :: Structure -> [CodeChunk]
-      getOuts Unbundled = extInputs $ csi $ codeSpec g
-      getOuts Bundled = []
-  getParams $ getOuts (inStruct g)
+  getParams $ extInputs $ csi $ codeSpec g
 
 getDerivedIns :: Reader State [CodeChunk]
 getDerivedIns = do
@@ -44,10 +41,7 @@ getDerivedIns = do
 getDerivedOuts :: Reader State [CodeChunk]
 getDerivedOuts = do
   g <- ask
-  let getOuts :: Structure -> [CodeChunk]
-      getOuts Unbundled = map codeChunk $ derivedInputs $ csi $ codeSpec g
-      getOuts Bundled = []
-  getParams $ getOuts (inStruct g)
+  getParams $ map codeChunk $ derivedInputs $ csi $ codeSpec g
 
 getConstraintParams :: Reader State [CodeChunk]
 getConstraintParams = do 

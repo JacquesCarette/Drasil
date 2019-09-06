@@ -35,7 +35,7 @@ import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   getPatternInputs)
 
 import Prelude hiding (sin, cos, tan, log, exp)
-import Data.List ((\\))
+import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
 import Control.Applicative ((<$>))
@@ -97,8 +97,8 @@ publicMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) =>
   [repr (Block repr)] -> Reader State (repr (Method repr))
 publicMethod t n = genMethod (function n public static_ t) n
 
-publicInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  Label -> String -> [c] -> [c] -> [c] -> [repr (Block repr)] -> 
+publicInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) 
+  => Label -> String -> [c] -> [c] -> [repr (Block repr)] -> 
   Reader State (repr (Method repr))
 publicInOutFunc = genInOutFunc public static_
 
@@ -121,11 +121,14 @@ genMethod f n desc p r b = do
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
 
-genInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
+genInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) => 
   repr (Scope repr) -> repr (Permanence repr) -> Label -> String -> [c] ->
-  [c] -> [c] -> [repr (Block repr)] -> Reader State (repr (Method repr))
-genInOutFunc s pr n desc ins outs both b = do
+  [c] -> [repr (Block repr)] -> Reader State (repr (Method repr))
+genInOutFunc s pr n desc ins' outs' b = do
   g <- ask
+  let ins = ins' \\ outs'
+      outs = outs' \\ ins'
+      both = ins' `intersect` outs'
   inVs <- mapM mkVar ins
   outVs <- mapM mkVar outs
   bothVs <- mapM mkVar both

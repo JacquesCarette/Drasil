@@ -565,9 +565,10 @@ instance MethodSym CSharpCode where
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) 
-    (map stateParam $ v : ins) (if null (filterOutObjs [v]) then b 
-    else liftA2 appendToBody b (returnState $ valueOf v))
+  inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
+    then mState void else mState $ variableType v) (map stateParam $ v : ins) 
+    (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
+    (returnState $ valueOf v))
   inOutFunc n s p ins outs both b = function n s p (mState void) (map (fmap 
     (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ 
     map (fmap (updateParamDoc csOut) . stateParam) outs) b

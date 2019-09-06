@@ -1166,9 +1166,10 @@ instance MethodSym CppSrcCode where
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v)
     (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v)
-    (map (fmap getParam) $ v : ins) (if null (filterOutObjs [v]) then b 
-    else liftA2 appendToBody b (returnState $ valueOf v))
+  inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
+    then mState void else mState $ variableType v) (map (fmap getParam) $ v : 
+    ins) (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
+    (returnState $ valueOf v))
   inOutFunc n s p ins outs both b = function n s p (mState void) (map
     pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
@@ -1661,7 +1662,8 @@ instance MethodSym CppHdrCode where
 
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map (fmap getParam) ins) b
-  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) 
+  inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
+    then mState void else mState $ variableType v) 
     (map (fmap getParam) $ v : ins) b
   inOutFunc n s p ins outs both b = function n s p (mState void) (map 
     pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b

@@ -1,5 +1,5 @@
 module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD, linDispDD, linVelDD,
-  linAccDD, angDispDD, angVelDD, angAccelDD, impulseDD, torqueDD, kEnergyDD,
+  linAccDD, angDispDD, angVelDD, angAccelDD, torqueDD, kEnergyDD,
   coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD,
   collisionAssump, rightHandAssump, rigidTwoDAssump) where
 
@@ -10,20 +10,18 @@ import Control.Lens ((^.))
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 import Drasil.GamePhysics.References (chaslesWiki)
-import Drasil.GamePhysics.Unitals (initRelVel, massA, massB, massI,
-  momtInertA, momtInertB, mTot, normalLen, normalVect,
-  perpLenA, perpLenB, posCM, posI, velB, velO, rOB, finRelVel, velAP, velBP, rRot,
-  velo_1, velo_2, timeT, time_1, time_2)
+import Drasil.GamePhysics.Unitals (initRelVel, massI, mTot, normalVect,
+  posCM, posI, velB, velO, rOB, finRelVel,
+  velAP, velBP, rRot, velo_1, velo_2, timeT, time_1, time_2)
 
 import Data.Drasil.Concepts.Math (rightHand)
 import Data.Drasil.Concepts.Physics (rigidBody, twoD)
 
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
-import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
-  angularDisplacement, angularVelocity, displacement, impulseS, linearAccel, 
-  linearDisplacement, linearVelocity, position, restitutionCoef, time, velocity,
-  force, torque, kEnergy, energy, impulseV, chgInVelocity, acceleration, potEnergy,
-  height, gravitationalAccel, momentOfInertia)
+import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, angularDisplacement, angularVelocity,
+  displacement, linearAccel, linearDisplacement, linearVelocity, position,
+  restitutionCoef, time, velocity,force, torque, kEnergy, energy, impulseV, chgInVelocity,
+  acceleration, potEnergy, height, gravitationalAccel, momentOfInertia)
 
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 
@@ -32,7 +30,7 @@ import Data.Drasil.Theories.Physics (torqueDD)
 
 dataDefs :: [DataDefinition]
 dataDefs = [ctrOfMassDD, linDispDD, linVelDD, linAccDD, angDispDD,
- angVelDD, angAccelDD, impulseDD, chaslesDD, torqueDD, kEnergyDD,
+ angVelDD, angAccelDD, chaslesDD, torqueDD, kEnergyDD,
  coeffRestitutionDD, reVelInCollDD, impulseVDD, potEnergyDD, momentOfInertiaDD]
 
 -- DD1 : Centre of mass --
@@ -188,61 +186,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 -- need norms and cross products
 
 -------------------------DD8 Impulse for Collision-------------------------------
-
-impulseDD :: DataDefinition
-impulseDD = ddNoRefs impulse (Just impulseDeriv) "impulse"
-  [rigidTwoDAssump, rightHandAssump, collisionAssump]
-
-impulse :: QDefinition
-impulse = mkQuantDef QP.impulseS impulseEqn
-
--- The last two terms in the denominator should be cross products.
-impulseEqn :: Expr
-impulseEqn = (negate (1 + sy QP.restitutionCoef) * sy initRelVel $.
-  sy normalVect) / (((1 / sy massA) + (1 / sy massB)) *
-  (sy normalLen $^ 2) +
-  ((sy perpLenA $^ 2) / sy momtInertA) +
-  ((sy perpLenB $^ 2) / sy momtInertB))
-{-
---NOTE: Removed an extra "the" that was showing up in the output.
-dd8descr :: Sentence
-dd8descr = (impulseScl ^. term) +:+ S "used to determine" +:+
-  (collision ^. term) +:+ S "response between two" +:+ 
-  irregPlur (rigidBody ^. term)
--}
-
-impulseDeriv :: Derivation
-impulseDeriv = mkDerivName (phrase QP.impulseS) (weave [impulseDerivSentences, map E impulseDerivEqns])
-
-impulseDerivSentences :: [Sentence]
-impulseDerivSentences = map foldlSentCol [impulseDerivSentence1, 
- impulseDerivSentence2, impulseDerivSentence3]  
-
-impulseDerivSentence1 :: [Sentence]
-impulseDerivSentence1 = [S "Newton's second law of motion states"]
-
-impulseDerivSentence2 :: [Sentence]
-impulseDerivSentence2 = [S "Rearranging "] 
-
-impulseDerivSentence3 :: [Sentence]
-impulseDerivSentence3 = [S "Integrating the right hand side "] 
-
-impulseDerivEqn1 :: Expr
-impulseDerivEqn1 = sy QP.force $= sy QPP.mass * sy QP.acceleration
-                    $= sy QPP.mass * deriv (sy QP.velocity) QP.time
-
-impulseDerivEqn2 :: Expr
-impulseDerivEqn2 = defint (eqSymb timeT) (sy time_1) (sy time_2) (sy QP.force) $=
-                    sy QPP.mass * defint (eqSymb QP.velocity) (sy velo_1) (sy velo_2) 1
-
-
-impulseDerivEqn3 :: Expr
-impulseDerivEqn3 = defint (eqSymb timeT) (sy time_1) (sy time_2) (sy QP.force)
-                    $= (sy QPP.mass * sy velo_2) - (sy QPP.mass * sy velo_1) 
-                    $= sy QPP.mass * sy QP.chgInVelocity
-                                      
-impulseDerivEqns :: [Expr]
-impulseDerivEqns = [impulseDerivEqn1, impulseDerivEqn2, impulseDerivEqn3]
+--moved to GenDefs.hs
 
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition

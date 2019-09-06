@@ -132,7 +132,7 @@ genInOutFunc s pr n desc ins' outs' b = do
   inVs <- mapM mkVar ins
   outVs <- mapM mkVar outs
   bothVs <- mapM mkVar both
-  bod <- logBody n inVs b
+  bod <- logBody n (bothVs ++ inVs) b
   pComms <- mapM (paramComment . (^. uid)) ins
   oComms <- mapM (paramComment . (^. uid)) outs
   bComms <- mapM (paramComment . (^. uid)) both

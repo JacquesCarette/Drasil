@@ -125,7 +125,7 @@ col2DOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
   phrase centreMass, fromSource ctrOfMassDD]
     where vals = foldlList Comma List (map phrase [position, velocity,
                                                    orientation, angularAccel])
-impulseNote = definedIn impulseGD
+impulseNote = ch impulseS `sIs` definedIn'' impulseGD
 
 {--S "Ik is the moment of inertia of the k-th rigid body (kg m2)",
   S "t is a point in time, t0 denotes the initial time" `sC` 

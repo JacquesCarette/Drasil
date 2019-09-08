@@ -2,9 +2,9 @@ module Language.Drasil.Code.Imperative.Doxygen.Import (
   makeDoxConfig
 ) where
 
-import Language.Drasil.Code.Imperative.Data (ProgData(..), FileData(..), 
+import Language.Drasil.Code.Imperative.GOOL.Data (ProgData(..), FileData(..), 
   ModData(..), isHeader)
-import Language.Drasil.Code.Imperative.Helpers (blank)
+import Language.Drasil.Code.Imperative.GOOL.Helpers (blank)
 
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), isEmpty, text, hcat, vcat)
@@ -765,7 +765,7 @@ makeDoxConfig prog opt p =
   text "# messages are off.",
   text "# The default value is: NO.",
   blank,
-  text "QUIET                  = NO",
+  text "QUIET                  = YES",
   blank,
   text "# The WARNINGS tag can be used to turn on/off the warning messages that are",
   text "# generated to standard error (stderr) by doxygen. If WARNINGS is set to YES",

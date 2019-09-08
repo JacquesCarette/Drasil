@@ -7,16 +7,16 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
   _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
+  _sysinfodb, _usedinfodb, sampleData)
 import Theory.Drasil (Theory(defined_fun, defined_quant))
 import Utils.Drasil
 
-import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), 
-  DocSection(..), Field(..), Fields, GSDSec(GSDProg2), GSDSub(..),
+import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
+  DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..),
   InclUnits(IncludeUnits), IntroSec(IntroProg), IntroSub(IChar, IOrgSec, IPurpose, IScope), 
   ProblemDescription(..), PDSub(..), RefSec(RefProg), RefTab(TAandA, TUnits),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl, SSDSec(..), SSDSub(..),
-  SolChSpec(..), StkhldrSec(StkhldrProg2), StkhldrSub(Client, Cstmr),
+  SolChSpec(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
   Verbosity(Verbose), auxSpecSent, characteristicsLabel, intro, mkDoc,
   termDefnF', tsymb, traceMatStandard)
@@ -57,7 +57,7 @@ import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, nonfuncReqs)
+import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
@@ -89,7 +89,8 @@ si = SI {
   _constants   = constants,
   _sysinfodb   = symbMap,
   _usedinfodb = usedDB,
-   refdb       = refDB
+   refdb       = refDB,
+   sampleData  = "../../datafiles/GlassBR/sampleInput.txt"
 }
   --FIXME: All named ideas, not just acronyms.
 
@@ -103,11 +104,11 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IChar [] (undIR ++ appStanddIR) [],
      IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
-    StkhldrProg2
+    StkhldrProg
       [Client glassBR $ S "a" +:+ phrase company
         +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli),
       Cstmr glassBR],
-  GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
+  GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
   SSDSec $
     SSDProg
@@ -125,7 +126,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
         ]
       ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqsTables,
+    FReqsSub inReqDesc funcReqsTables,
     NonFReqsSub
   ],
   LCsSec,
@@ -142,7 +143,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
-  (map cw symb ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
+  (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns section
   labCon
 
@@ -182,10 +183,10 @@ termsAndDescBullets = UlC $ ulcc $ Enumeration$
 
 termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
 
-termsAndDescBulletsGlTySubSec = [Nested (titleize glassTy :+: S ":") $
+termsAndDescBulletsGlTySubSec = [Nested (EmptyS +: titleize glassTy) $
   Bullet $ noRefs $ map tAndDWAcc glassTypes]
 
-termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` (load ^. defn)) $
+termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` EmptyS +:+. capSent (load ^. defn)) $
   Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes)]
@@ -334,9 +335,8 @@ prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict whether a",
 {--Terminology and Definitions--}
 
 termsAndDesc :: Section
-termsAndDesc = termDefnF' (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
-  S "are extracted from" +:+ makeCiteS astm2009 `sIn`
-  makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section])))) [termsAndDescBullets]
+termsAndDesc = termDefnF' (Just (S "All of the" +:+ plural term_ +:+
+  S "are extracted from" +:+ makeCiteS astm2009)) [termsAndDescBullets]
 
 {--Physical System Description--}
 

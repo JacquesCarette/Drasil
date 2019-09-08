@@ -9,8 +9,8 @@ import Language.Drasil.Plain.Helpers (toPlainName)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
   OverSymb(..), Fonts(..), Spacing(..))
 import Language.Drasil.Printing.Import (expr, spec, symbol)
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..), 
-  defaultConfiguration)
+import Language.Drasil.Printing.PrintingInformation (PrintingConfiguration(..), 
+  PrintingInformation(..), Notation(Scientific))
 
 import Prelude hiding ((<>))
 import Data.List (partition)
@@ -20,11 +20,14 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
 
 data Linearity = Linear | Nonlinear
 
+plainConfiguration :: PrintingConfiguration
+plainConfiguration = PC Scientific
+
 exprDoc :: ChunkDB -> Stage -> Linearity -> L.Expr -> Doc
-exprDoc db st f e = pExprDoc f (expr e (PI db st defaultConfiguration))
+exprDoc db st f e = pExprDoc f (expr e (PI db st plainConfiguration))
 
 sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
-sentenceDoc db st f s = specDoc f (spec (PI db st defaultConfiguration) s)
+sentenceDoc db st f s = specDoc f (spec (PI db st plainConfiguration) s)
 
 symbolDoc :: Symbol -> Doc
 symbolDoc s = pExprDoc Linear (symbol s)
@@ -55,7 +58,7 @@ specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
 specDoc f (Sy u) = unitDoc f u
 specDoc _ (Sp s) = specialDoc s
-specDoc f (Ref _ r s) = specDoc f s <+> parens (text r)
+specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r)
 specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2
 specDoc _ EmptyS = empty
 specDoc f (Quote s) = doubleQuotes $ specDoc f s

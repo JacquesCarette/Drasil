@@ -1,80 +1,65 @@
-module Drasil.GamePhysics.TMods (tMods, t2NewtonTL_new, 
-t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new, tModsNew) where
+module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR) where
 
 import Language.Drasil
-import Prelude hiding (id)
-import Control.Lens ((^.))
 import Theory.Drasil (TheoryModel, tmNoRefs)
 import Utils.Drasil
 
-import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD)
+import Drasil.GamePhysics.Assumptions (assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dispUnit, force_1, force_2,
-  mass_1, mass_2, rOB, sqrDist, velB, velO)
+  mass_1, mass_2, sqrDist)
 
-import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import qualified Data.Drasil.Quantities.Physics as QP (angularAccel, 
-  angularVelocity, displacement, force, gravitationalConst, 
-  momentOfInertia, torque, velocity)
-import qualified Data.Drasil.Theories.Physics as TP (newtonSL, newtonSLRC)
+import Data.Drasil.Concepts.Documentation (constant)
+import Data.Drasil.Concepts.Math (vector)
+import Data.Drasil.Concepts.Physics (rigidBody, twoD)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
+import Data.Drasil.Quantities.Physics (angularAccel, displacement, distance,
+  force, gravitationalConst, momentOfInertia, torque)
+import Data.Drasil.Theories.Physics (newtonSL)
 
 ----- Theoretical Models -----
 
-tMods :: [RelationConcept]
-tMods = [TP.newtonSLRC, newtonTL, newtonLUG, chaslesThm, newtonSLR]
-
-tModsNew :: [TheoryModel]
-tModsNew = [TP.newtonSL, t2NewtonTL_new, t3NewtonLUG_new, 
-  t4ChaslesThm_new, t5NewtonSLR_new]
+tMods :: [TheoryModel]
+tMods = [newtonSL, newtonTL, newtonLUG, newtonSLR]
 
 -- T1 : Newton's second law of motion --
 
 -- T2 : Newton's third law of motion --
 
-t2NewtonTL_new :: TheoryModel
-t2NewtonTL_new = tmNoRefs (cw newtonTL)
-  [qw force_1, qw force_2] ([] :: [ConceptChunk])
-  [] [sy force_1 $= negate (sy force_2)] []
-  "NewtonThirdLawMot" [newtonTLDesc]
+newtonTL :: TheoryModel
+newtonTL = tmNoRefs (cw newtonTLRC) [qw force_1, qw force_2]
+  ([] :: [ConceptChunk]) [] [newtonTLRel] [] "NewtonThirdLawMot" [newtonTLNote]
 
-newtonTL :: RelationConcept
-newtonTL = makeRC "newtonTL" (nounPhraseSP "Newton's third law of motion")
-  newtonTLDesc newtonTLRel
+newtonTLRC :: RelationConcept
+newtonTLRC = makeRC "newtonTLRC" (nounPhraseSP "Newton's third law of motion")
+  EmptyS newtonTLRel
 
 newtonTLRel :: Relation
 newtonTLRel = sy force_1 $= negate (sy force_2)
 
-newtonTLDesc :: Sentence
-newtonTLDesc = foldlSent [S "Every action has an equal and opposite reaction. In other",
-  S "words, the", phrase QP.force, ch force_1,
-  sParen $ Sy $ unit_symb force_1, S "exerted on the second",
-  phrase CP.rigidBody, S "by the first is equal in magnitude and",
-  S "in the opposite direction to the", phrase QP.force,
-  ch force_2, sParen $ Sy $ unit_symb force_2,
-  S "exerted on the first", phrase CP.rigidBody, S "by the second"]
+newtonTLNote :: Sentence
+newtonTLNote = foldlSent [S "Every action has an equal and opposite reaction.",
+  S "In other words, the", phrase force, ch force_1, S "exerted on the second",
+  phrase rigidBody, S "by the first is equal in magnitude and in the opposite direction" `toThe`
+  phrase force, ch force_2, S "exerted on the first", phrase rigidBody, S "by the second"]
 
 -- T3 : Newton's law of universal gravitation --
 
-t3NewtonLUG_new :: TheoryModel
-t3NewtonLUG_new = tmNoRefs (cw newtonLUG)
-  [qw QP.force, qw QP.gravitationalConst, qw mass_1, qw mass_2,
-  qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [ConceptChunk])
-  [] [sy QP.force $= sy QP.gravitationalConst * (sy mass_1 * 
-  sy mass_2 / (sy dispNorm $^ 2)) * sy dispUnit $= 
-  sy QP.gravitationalConst * (sy mass_1 * sy mass_2 / (sy dispNorm
-  $^ 2)) * (sy QP.displacement / sy dispNorm)] []
-  "UniversalGravLaw" [newtonLUGDesc]
+newtonLUG :: TheoryModel
+newtonLUG = tmNoRefs (cw newtonLUGRC)
+  [qw force, qw gravitationalConst, qw mass_1, qw mass_2,
+  qw dispNorm, qw dispUnit, qw displacement] ([] :: [ConceptChunk])
+  [] [newtonLUGRel] [] "UniversalGravLaw" newtonLUGNotes
 
-newtonLUG :: RelationConcept
-newtonLUG = makeRC "newtonLUG" 
-  (nounPhraseSP "Newton's law of universal gravitation") newtonLUGDesc newtonLUGRel
+newtonLUGRC :: RelationConcept
+newtonLUGRC = makeRC "newtonLUGRC" 
+  (nounPhraseSP "Newton's law of universal gravitation") EmptyS newtonLUGRel
 
 newtonLUGRel :: Relation
-newtonLUGRel = sy QP.force $=
-  sy QP.gravitationalConst * (sy mass_1 * sy mass_2 /
+newtonLUGRel = sy force $=
+  sy gravitationalConst * (sy mass_1 * sy mass_2 /
   (sy dispNorm $^ 2)) * sy dispUnit $=
-  sy QP.gravitationalConst * (sy mass_1 * sy mass_2 /
-  (sy dispNorm $^ 2)) * (sy QP.displacement / sy dispNorm)
+  sy gravitationalConst * (sy mass_1 * sy mass_2 /
+  (sy dispNorm $^ 2)) * (sy displacement / sy dispNorm)
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a
@@ -83,88 +68,37 @@ newtonLUGRel = sy QP.force $=
 -- Can't properly include the gravitational constant in a sentence (in the last
 -- sentence, supposed to include "6.673 * 10^{-11} m/kgs^2" (line 187)).
 
-newtonLUGDesc :: Sentence
-newtonLUGDesc = foldlSent [S "Two", plural CP.rigidBody, S "in the universe",
-  S "attract each other with a", phrase QP.force, 
-  ch QP.force, sParen $ Sy $ unit_symb QP.force,
-  S "that is directly proportional to the product of their",
-  plural QPP.mass `sC` ch mass_1, S "and",
-  ch mass_2, sParen (Sy $ unit_symb QPP.mass) `sC` S "and",
-  S "inversely proportional to the", phrase sqrDist,
-  ch sqrDist, sParen $ Sy $ unit_symb sqrDist,
-  S "between them. The vector", ch QP.displacement,
-  sParen $ Sy $ unit_symb QP.displacement, S "is the", 
-  phrase QP.displacement, S "between the centres of the", 
-  plural CP.rigidBody, S "and", ch dispNorm, 
-  sParen $ Sy $ unit_symb dispNorm, S "represents the" +:+. 
-  (phrase dispNorm `sC` S "or absolute distance between the two"), 
-  ch dispUnit, S "denotes the", phrase dispUnit `sC`
-  S "equivalent to the", phrase QP.displacement,
-  S "divided by the" +:+. (phrase dispNorm `sC`
-  S "as shown above"), S "Finally" `sC` ch QP.gravitationalConst, 
-  S "is the", QP.gravitationalConst ^. defn, 
-  sParen $ Sy $ unit_symb QP.gravitationalConst]
+newtonLUGNotes :: [Sentence]
+newtonLUGNotes = map foldlSent [
+  [S "Two", plural rigidBody `inThe` S "universe attract each other with a",
+   getTandS force, S "that is directly proportional to the product of their",
+   plural mass `sC` ch mass_1 `sAnd` ch mass_2 `sC` EmptyS `sAnd`
+   S "inversely proportional" `toThe` getTandS sqrDist, S "between them"],
+  [S "The", phrase vector, ch displacement `isThe` phrase displacement,
+   S "between", S "centres" `ofThe` plural rigidBody `sAnd` ch dispNorm `isThe`
+   S "absolute", phrase distance, S "between the two"],
+  [ch dispUnit `sIs` S "equivalent" `toThe` phrase displacement,
+   S "divided by the", phrase dispNorm `sC` S "as shown above"]]
 
--- T4 : Chasles' theorem --
+-- T4 : Newton's second law for rotational motion --
 
-t4ChaslesThm_new :: TheoryModel
-t4ChaslesThm_new = tmNoRefs (cw chaslesThm)
-  [qw velB, qw velO, qw QP.angularVelocity, qw rOB] 
-  ([] :: [ConceptChunk]) [] [sy velB $= sy velO + cross 
-  (sy  QP.angularVelocity) (sy rOB)] [] "ChaslesThm" [chaslesThmDesc]
+newtonSLR :: TheoryModel
+newtonSLR = tmNoRefs (cw newtonSLRRC)
+  [qw torque, qw momentOfInertia, qw angularAccel] 
+  ([] :: [ConceptChunk]) [] [newtonSLRRel] [] "NewtonSecLawRotMot" newtonSLRNotes
 
-chaslesThm :: RelationConcept
-chaslesThm = makeRC "chaslesThm" (nounPhraseSP "Chasles' theorem")
-  chaslesThmDesc chaslesThmRel
-
--- Need the cross product symbol - third term should be a cross product.
-chaslesThmRel :: Relation
-chaslesThmRel = sy velB $= sy velO + cross (sy  QP.angularVelocity) (sy rOB)
-
--- B should ideally be italicized in 'point B' (line 202).
-chaslesThmDesc :: Sentence
-chaslesThmDesc = foldlSent [S "The linear", phrase QP.velocity,
-  ch velB, sParen $ Sy $ unit_symb velB, S "of any point B in a",
-  phrase CP.rigidBody, makeRef2S assumpOT, S "is the sum of the linear",
-  phrase QP.velocity, ch velO,
-  sParen $ Sy $ unit_symb velO, S "of the", phrase CP.rigidBody,
-  S "at the origin (axis of rotation) and the",
-  S "resultant vector from the cross product of the",
-  phrase CP.rigidBody :+: S "'s", phrase QP.angularVelocity,
-  ch QP.angularVelocity,
-  sParen $ Sy $ unit_symb QP.angularVelocity, S "and the",
-  phrase rOB `sC` ch rOB,
-  sParen $ Sy $ unit_symb rOB]
-
--- T5 : Newton's second law for rotational motion --
-
-t5NewtonSLR_new :: TheoryModel
-t5NewtonSLR_new = tmNoRefs (cw newtonSLR)
-  [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
-  ([] :: [ConceptChunk]) [] [sy QP.torque $= sy QP.momentOfInertia
-  * sy QP.angularAccel] [] "NewtonSecLawRotMot" [newtonSLRDesc]
-
-newtonSLR :: RelationConcept
-newtonSLR = makeRC "newtonSLR" 
-  (nounPhraseSP "Newton's second law for rotational motion") newtonSLRDesc newtonSLRRel
+newtonSLRRC :: RelationConcept
+newtonSLRRC = makeRC "newtonSLRRC" 
+  (nounPhraseSP "Newton's second law for rotational motion") EmptyS newtonSLRRel
 
 newtonSLRRel :: Relation
-newtonSLRRel = sy QP.torque $= sy QP.momentOfInertia * sy QP.angularAccel
+newtonSLRRel = sy torque $= sy momentOfInertia * sy angularAccel
 
--- Need reference to A2 (line 236) -- can't reference specific assumptions
--- without referencing the entire section or dividing each bullet into its own
--- section.
-newtonSLRDesc :: Sentence
-newtonSLRDesc = foldlSent [S "The net", phrase QP.torque,
-  ch QP.torque,
-  sParen $ Sy $ unit_symb QP.torque, S "on a", phrase CP.rigidBody,
-  S "is proportional to its", phrase QP.angularAccel,
-  ch QP.angularAccel +:+. sParen (Sy $ unit_symb QP.angularAccel),
-  S "Here" `sC` ch QP.momentOfInertia,
-  sParen $ Sy $ unit_symb QP.momentOfInertia,
-  S "denotes the", phrase QP.momentOfInertia, S "of the" +:+.
-  phrase CP.rigidBody, S "We also assume that all",
-  plural CP.rigidBody, S "involved are two-dimensional",
-  makeRef2S assumpOD]
-
-  
+newtonSLRNotes :: [Sentence]
+newtonSLRNotes = map foldlSent [
+  [S "The net", getTandS torque, S "on a", phrase rigidBody `sIs`
+   S "proportional to its", getTandS angularAccel `sC` S "where",
+   ch momentOfInertia, S "denotes", phrase momentOfInertia `ofThe`
+   phrase rigidBody, S "as the", phrase constant `sOf` S "proportionality"],
+  [S "We also assume that all", plural rigidBody, S "involved" `sAre`
+   phrase twoD, fromSource assumpOD]]

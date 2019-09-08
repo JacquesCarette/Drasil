@@ -60,14 +60,13 @@ effFandS, slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable :: ConceptChunk
 effFandS = dccWDS "effective forces and stresses" 
   (cn "effective forces and stresses") 
   (S "The" +:+ phrase normForce `sOr` phrase nrmStrss +:+
-  S "carried by the" +:+ phrase soil +:+ S "skeleton. The total" +:+
-  phrase normForce `sOr` phrase nrmStrss +:+ S "is composed of the" +:+
-  S "effective" +:+ phrase force `sOr` phrase stress `andThe` 
-  phrase force `sOr` phrase stress +:+ S "exerted by water.")
+  S "carried by the" +:+ phrase soil +:+ S "skeleton" `sC`
+  S "composed of the effective" +:+ phrase force `sOr` phrase stress `andThe`
+  phrase force `sOr` phrase stress +:+ S "exerted by water")
 
 slpSrf = dccWDS "slip surface" (cn' "slip surface") (S "A" +:+
   phrase surface +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+
-  S "potential to fail or displace due to load or other" +:+. plural force)
+  S "potential to fail or displace due to load or other" +:+ plural force)
 
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though
 plnStrn = dccWDS "plane strain" (cn' "plane strain") 
@@ -78,22 +77,22 @@ plnStrn = dccWDS "plane strain" (cn' "plane strain")
   phrase len +:+ S "of one" +:+ phrase dimension +:+ S "of the body" +:+
   S "dominates the others, to the point where it can be assumed as" +:+.
   S "infinite" +:+ atStart' stress +:+ S "in the direction of the" +:+
-  S "dominant" +:+ phrase dimension +:+ S "can be approximated as zero.")
+  S "dominant" +:+ phrase dimension +:+ S "can be approximated as zero")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
   (atStart slpSrf +:+ S "of the" +:+ phrase slope +:+
   S "that has the lowest" +:+ phrase fsConcept `sC`
-  S "and is therefore most likely to experience failure.")
+  S "and is therefore most likely to experience failure")
 
 fsConcept = dccWDS "FS" factorOfSafety
   (S "The global stability metric of a" +:+ phrase slpSrf +:+ S "of a" +:+
   phrase slope `sC` S "defined as the ratio of" +:+ phrase shearRes +:+ 
-  S "to" +:+. phrase mobShear)
+  S "to" +:+ phrase mobShear)
 -- OLD DEFN: Stability metric. How likely a slip surface is to
 -- experience failure through slipping.
 
 waterTable = dcc "water table" (cn' "water table") ("The upper boundary of a" ++
-  " saturated zone in the ground.")
+  " saturated zone in the ground")
 
 --
 factor :: NamedChunk --FIXME: this is here becuase this phrase is

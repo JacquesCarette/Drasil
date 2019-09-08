@@ -5,14 +5,14 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb)
+  _quants, _sys, _sysinfodb, _usedinfodb, sampleData)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 
 import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
-import Data.Drasil.Concepts.Computation (algorithm)
+import Data.Drasil.Concepts.Computation (algorithm, inValue)
 import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.IdeaDicts as Doc (inModel)
@@ -54,8 +54,8 @@ import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.Requirements (nfRequirements)
-import Drasil.SWHS.TMods (consThermE, sensHtETemplate, PhaseChange(Liquid))
-import Drasil.SWHS.Unitals (coilSAMax, deltaT, eta, htFluxC, htFluxIn, 
+import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
+import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn, 
   htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempEnv, 
   tempW, thFluxVect, volHtGen, watE, wMass, wVol, unitalChuncks, absTol, relTol)
 
@@ -68,7 +68,7 @@ import Drasil.NoPCM.GenDefs (genDefs)
 import Drasil.NoPCM.Goals (goals)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
-import Drasil.NoPCM.Requirements (funcReqs, inputInitQuantsTable)
+import Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable)
 import Drasil.NoPCM.References (citations)
 import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained, 
   specParamValList)
@@ -95,8 +95,7 @@ symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
 symbolsAll = map qw symbols ++ map qw specParamValList ++ 
-  map qw [coilSAMax] ++ map qw [tauW] ++ map qw [eta] ++
-  map qw [absTol, relTol]
+  map qw [coilSAMax] ++ map qw [tauW] ++ map qw [absTol, relTol]
 
 concepts :: [UnitaryConceptDict]
 concepts = map ucw [density, tau, inSA, outSA,
@@ -125,11 +124,12 @@ mkSRS = [RefSec $ RefProg intro
     , IChar [] charsOfReader []
     , IOrgSec orgDocIntro inModel (SRS.inModel [] []) orgDocEnd
     ],
-  GSDSec $ GSDProg2 
-    [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
-    , UsrChars [userChars progName]
-    , SystCons [] []
-    ],
+  GSDSec $
+    GSDProg
+      [ SysCntxt [sysCntxtDesc progName, LlC sysCntxtFig, sysCntxtRespIntro progName, systContRespBullets]
+      , UsrChars [userChars progName]
+      , SystCons [] []
+      ],
   SSDSec $
     SSDProg
     [ SSDProblem $ PDProg probDescIntro []
@@ -147,7 +147,7 @@ mkSRS = [RefSec $ RefProg intro
       ]
     ],
   ReqrmntSec $ ReqsProg [
-    FReqsSub [inputInitQuantsTable],
+    FReqsSub' [inputInitValsTable],
     NonFReqsSub
   ],
   LCsSec,
@@ -161,7 +161,7 @@ concIns = goals ++ funcReqs ++ nfRequirements ++ assumptions ++
  [likeChgTCVOD, likeChgTCVOL] ++ likelyChgs ++ [likeChgTLH] ++ unlikelyChgs
 
 labCon :: [LabelledContent]
-labCon = [inputInitQuantsTable]
+labCon = [inputInitValsTable]
 
 section :: [Section]
 section = extractSection srs
@@ -177,7 +177,7 @@ si = SI {
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but neither tankVol
   -- or tau appear in the document and thus should not be displayed.
-  _quants = (map qw unconstrained ++ map qw symbols) \\ map qw [tankVol, tau],
+  _quants = (map qw unconstrained ++ map qw symbolsAll) \\ map qw [tankVol, tau],
   _concepts = symbols,
   _definitions = [],
   _datadefs = NoPCM.dataDefs,
@@ -188,7 +188,8 @@ si = SI {
   _constants = specParamValList,
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
-   refdb = refDB
+   refdb = refDB,
+   sampleData = "../../datafiles/NoPCM/sampleInput.txt"
 }
 
 refDB :: ReferenceDB
@@ -199,10 +200,10 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
-  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw htTrans]
+  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans]
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  theoreticalModels concIns section labCon
+  tMods concIns section labCon
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
@@ -297,8 +298,8 @@ goalInputs = [phrase temp `ofThe` phrase coil,
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
 
-theoreticalModels :: [TheoryModel]
-theoreticalModels = [consThermE, sensHtE]
+tMods :: [TheoryModel]
+tMods = [consThermE, sensHtE, nwtnCooling]
 
 sensHtE :: TheoryModel
 sensHtE = sensHtETemplate Liquid sensHtEdesc

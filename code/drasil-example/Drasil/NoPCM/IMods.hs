@@ -13,12 +13,12 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boilPt)
 import Data.Drasil.Quantities.Physics (energy, time)
 
 import Drasil.SWHS.Concepts (water)
-import Drasil.SWHS.DataDefs (ddHtFluxC, balanceDecayRate)
-import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc2,
-  eBalanceOnWtrDerivDesc3, heatEInWtr)
+import Drasil.SWHS.DataDefs (balanceDecayRate)
+import Drasil.SWHS.GenDefs (htFluxWaterFromCoil)
+import Drasil.SWHS.IMods (eBalanceOnWtrDerivDesc1, eBalanceOnWtrDerivDesc3, heatEInWtr)
 import Drasil.SWHS.References (koothoor2013)
-import Drasil.SWHS.Unitals (tempW, tempC, tauW, wMass, htCapW, coilHTC, 
-  coilSA, tempInit, timeFinal, htFluxC)
+import Drasil.SWHS.Unitals (coilHTC, coilSA, htCapW, htFluxC, tauW, tempC,
+  tempInit, tempW, timeFinal, wMass)
 
 import Drasil.NoPCM.Assumptions (assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.Goals (waterTempGS, waterEnergyGS)
@@ -66,7 +66,11 @@ eBalanceOnWtrDeriv = mkDerivName (S "the" +:+ phrase energy +:+ S "balance on wa
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ ch coilSA) EmptyS assumpNIHGBW,
-  eBalanceOnWtrDerivDesc2 [ddHtFluxC], eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4]
+  eBalanceOnWtrDerivDesc2, eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4]
+
+eBalanceOnWtrDerivDesc2 :: Sentence
+eBalanceOnWtrDerivDesc2 = foldlSentCol [S "Using", makeRef2S htFluxWaterFromCoil, S "for",
+  ch htFluxC `sC` S "this can be written as"]
 
 eBalanceOnWtrDerivDesc4 :: Sentence
 eBalanceOnWtrDerivDesc4 = substitute [balanceDecayRate]

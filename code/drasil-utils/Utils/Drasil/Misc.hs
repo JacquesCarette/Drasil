@@ -1,15 +1,15 @@
 {-# Language TypeFamilies #-}
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
-  chgsStart, displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, 
-  eqnWSource, fromReplace, fmtU, follows, getTandS, itemRefToSent, makeListRef, 
-  makeTMatrix, maybeChanged, maybeExpanded,
+  chgsStart, definedIn, definedIn', definedIn'',  displayStrConstrntsAsSet, displayDblConstrntsAsSet,
+  eqN, eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
+  itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
   tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
-import Utils.Drasil.Sentence (sAre, toThe)
+import Utils.Drasil.Sentence (sAre, sIn, sIs, toThe)
 
 import Control.Lens ((^.))
 
@@ -43,7 +43,19 @@ fromReplace src c = S "From" +:+ makeRef2S src +:+ S "we can replace" +: ch c
 -- | takes a referable and a HasSymbol and outputs as a Sentence "By substituting "
 substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
 substitute s = S "By substituting" +: (foldlList Comma List l `sC` S "this can be written as")
-  where l = map (\x -> ch x +:+ sParen (S "from" +:+ makeRef2S x)) s
+  where l = map (\x -> ch x +:+ fromSource x) s
+
+-- | takes a HasSymbol and a referable and outputs as a Sentence "is defined in"
+definedIn :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence
+definedIn q = ch q `sIs` S "defined in" +:+. makeRef2S q
+
+-- | same as definedIn, but allows for more information
+definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sentence
+definedIn' q info = ch q `sIs` S "defined" `sIn` makeRef2S q +:+. info 
+
+-- | takes a referable and outputs as a Sentence "is defined in" (no HasSymbol)
+definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
+definedIn'' q =  S "defined" `sIn` makeRef2S q
 
 -- | zip helper function enumerates abbreviation and zips it with list of itemtype
 -- s - the number from which the enumeration should start from
@@ -161,16 +173,22 @@ maybeExpanded a = likelyFrame a (S "expanded")
 -- | helpful combinators for making Sentences for Terminologies with Definitions
 -- term (acc) - definition
 tAndDWAcc :: Concept s => s -> ItemType
-tAndDWAcc temp = Flat $ atStart temp +:+ (sParen (short temp) `sDash` (temp ^. defn))
+tAndDWAcc temp = Flat $ atStart temp +:+. (sParen (short temp) `sDash` capSent (temp ^. defn))
 -- term (symbol) - definition
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
-tAndDWSym tD sym = Flat $ atStart tD +:+ (sParen (ch sym) `sDash` (tD ^. defn))
+tAndDWSym tD sym = Flat $ atStart tD +:+. (sParen (ch sym) `sDash` capSent (tD ^. defn))
 -- term - definition
 tAndDOnly :: Concept s => s -> ItemType
-tAndDOnly chunk  = Flat $ atStart chunk `sDash` (chunk ^. defn)
+tAndDOnly chunk  = Flat $ atStart chunk `sDash` EmptyS +:+. capSent (chunk ^. defn)
 
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
 preceding `follows` ref = preceding +:+ S "following" +:+ makeRef2S ref
+
+fromSource :: (Referable r, HasShortName r) => r -> Sentence
+fromSource ref = sParen (S "from" +:+ makeRef2S ref)
+
+fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
+fromSources refs = sParen (S "from" +:+ foldlList Comma List (map makeRef2S refs))
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a) => a -> Sentence

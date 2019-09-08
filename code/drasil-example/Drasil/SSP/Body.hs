@@ -5,7 +5,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
   _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb)
+  _quants, _sys, _sysinfodb, _usedinfodb, sampleData)
 import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
@@ -90,43 +90,47 @@ si = SI {
   _constants = [],
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
-   refdb = refDB
+   refdb = refDB,
+   sampleData = "../../datafiles/SSP/sampleInput.txt"
 }
   
 mkSRS :: SRSDecl
 mkSRS = [RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
-    [IPurpose prpsOfDoc_p1
+    [ IPurpose prpsOfDoc_p1
     , IScope scope
     , IChar []
         [phrase undergraduate +:+ S "level 4" +:+ phrase Doc.physics,
         phrase undergraduate +:+ S "level 2 or higher" +:+ phrase solidMechanics]
         [phrase soilMechanics]
-    , IOrgSec orgSecStart inModel (SRS.inModel [] []) orgSecEnd],
+    , IOrgSec orgSecStart inModel (SRS.inModel [] []) orgSecEnd
+    ],
     --FIXME: issue #235
-    GSDSec $ GSDProg2 [SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
-      UsrChars [userCharIntro], SystCons [sysConstraints] []],
-    SSDSec $
-      SSDProg
-        [ SSDProblem $ PDProg prob []
-          [ TermsAndDefs Nothing terms
-          , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
-          , Goals goalsInputs]
-        , SSDSolChSpec $ SCSProg
-          [Assumptions
-          , TMs [] (Label : stdFields)
-          , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
-          , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
-          , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-          , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
-          , CorrSolnPpties outputs []
-          ]
-        ],
-    ReqrmntSec $ ReqsProg [
-    FReqsSub funcReqTables,
-    NonFReqsSub
-  ],
+  GSDSec $ GSDProg
+    [ SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList]
+    , UsrChars [userCharIntro], SystCons [sysConstraints] []
+    ],
+  SSDSec $
+    SSDProg
+      [ SSDProblem $ PDProg prob []
+        [ TermsAndDefs Nothing terms
+        , PhySysDesc ssp physSystParts figPhysSyst physSystContents 
+        , Goals goalsInputs]
+      , SSDSolChSpec $ SCSProg
+        [ Assumptions
+        , TMs [] (Label : stdFields)
+        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
+        , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
+        , IMs instModIntro ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
+        , Constraints EmptyS inputsWUncrtn --FIXME: issue #295
+        , CorrSolnPpties outputs []
+        ]
+      ],
+  ReqrmntSec $ ReqsProg
+    [ FReqsSub' funcReqTables
+    , NonFReqsSub
+    ],
   LCsSec,
   UCsSec,
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,

@@ -10,10 +10,10 @@ module Utils.Drasil (
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
   foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
   -- Misc
-  addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart,
-  displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN, eqnWSource, 
-  fromReplace, fmtU, follows, getTandS, itemRefToSent, makeListRef, 
-  makeTMatrix, maybeChanged, maybeExpanded,
+  addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart, definedIn,
+  definedIn', definedIn'',  displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN,
+  eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
+  itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
   tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList,
@@ -22,8 +22,8 @@ module Utils.Drasil (
   compoundNCP1, compoundNCPlPh, compoundNCPlPl, for, for', for'', of_, of_',
   of_'', of__, ofA, ofN_, the, the', theCustom, with,
   -- Sentence
-  andIts, andThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, ofThe', sOf, sOr,
-  sVersus, sAnd, sAre, sIn, sIs, toThe
+  andIts, andThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, ofThe',
+  sOf, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe
 ) where
 
 import Utils.Drasil.Contents

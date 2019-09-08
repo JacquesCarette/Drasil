@@ -6,7 +6,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
   _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
+  _sysinfodb, _usedinfodb, sampleData)
 import Utils.Drasil
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
@@ -19,7 +19,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
   Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
 
-import Data.Drasil.Concepts.Computation (inParam)
+import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
   problem, srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -44,7 +44,7 @@ import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.References (citations)
-import Drasil.Projectile.Requirements (funcReqs, inputParamsTable, nonfuncReqs)
+import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
 import Drasil.Projectile.TMods (tMods)
 import Drasil.Projectile.Unitals (acronyms, constants, constrained, inConstraints,
   inputs, launAngle, outConstraints, outputs, symbols, unitalIdeas, unitalQuants)
@@ -84,7 +84,7 @@ mkSRS = [
       ],
   ReqrmntSec $
     ReqsProg
-      [ FReqsSub [inputParamsTable]
+      [ FReqsSub EmptyS []
       , NonFReqsSub
       ],
   TraceabilitySec $ TraceabilityProg $ traceMatStandard si,
@@ -119,15 +119,16 @@ si = SI {
   _constants   = constants,
   _sysinfodb   = symbMap,
   _usedinfodb  = usedDB,
-   refdb       = refDB
+   refdb       = refDB,
+   sampleData  = "../../datafiles/Projectile/sampleInput.txt"
 }
 
 symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
-  (nw projectileTitle : nw mass : nw inParam : [nw errMsg, nw program] ++
+  (nw projectileTitle : nw mass : nw inValue : [nw errMsg, nw program] ++
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
-    map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : srsDomains)
+    map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
   (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] []
 
 usedDB :: ChunkDB

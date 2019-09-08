@@ -17,20 +17,20 @@ public class InputParameters {
     /** \brief Reads input from a file with the given file name
         \param filename name of the input file
         \return array containing the following values:
-        \return heating coil surface area (m^2)
-        \return specific heat capacity of water (J/(kg degreeC))
-        \return convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
-        \return initial temperature (degreeC)
-        \return final time (s)
-        \return length of tank (m)
-        \return temperature of the heating coil (degreeC)
-        \return time step for simulation (s)
-        \return density of water (kg/m^3)
-        \return diameter of tank (m)
+        \return heating coil surface area: area covered by the outermost layer of the coil (m^2)
+        \return specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC))
+        \return convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC))
+        \return initial temperature: the temperature at the beginning of the simulation (degreeC)
+        \return final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
+        \return length of tank: the length of the tank (m)
+        \return temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
+        \return time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
+        \return density of water: nass per unit volume of water (kg/m^3)
+        \return diameter of tank: the diameter of the tank (m)
         \return absolute tolerance
         \return relative tolerance
-        \return temperature of the water (degreeC)
-        \return change in heat energy in the water (J)
+        \return temperature of the water: the average kinetic energy of the particles within the water (degreeC)
+        \return change in heat energy in the water: change in thermal energy within the water (J)
     */
     public static Object[] get_input(String filename) throws Exception {
         double A_C;
@@ -99,102 +99,103 @@ public class InputParameters {
     }
     
     /** \brief Verifies that input values satisfy the physical constraints and software constraints
-        \param A_C heating coil surface area (m^2)
-        \param C_W specific heat capacity of water (J/(kg degreeC))
-        \param h_C convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
-        \param T_init initial temperature (degreeC)
-        \param t_final final time (s)
-        \param L length of tank (m)
-        \param T_C temperature of the heating coil (degreeC)
-        \param t_step time step for simulation (s)
-        \param rho_W density of water (kg/m^3)
-        \param D diameter of tank (m)
-        \param T_W temperature of the water (degreeC)
-        \param E_W change in heat energy in the water (J)
+        \param A_C heating coil surface area: area covered by the outermost layer of the coil (m^2)
+        \param C_W specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC))
+        \param h_C convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC))
+        \param T_init initial temperature: the temperature at the beginning of the simulation (degreeC)
+        \param t_final final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
+        \param L length of tank: the length of the tank (m)
+        \param T_C temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
+        \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
+        \param rho_W density of water: nass per unit volume of water (kg/m^3)
+        \param D diameter of tank: the diameter of the tank (m)
+        \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
+        \param E_W change in heat energy in the water: change in thermal energy within the water (J)
+        \param consts structure holding the constant values
     */
-    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) throws Exception {
-        if (!(A_C <= 100000)) {
+    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W, Constants consts) throws Exception {
+        if (!(A_C <= consts.A_C_max)) {
             System.out.print("Warning: ");
             System.out.print("A_C has value ");
             System.out.print(A_C);
             System.out.print(" but suggested to be ");
             System.out.print("below ");
-            System.out.print(100000);
-            System.out.print(" (A_C^max)");
+            System.out.print(consts.A_C_max);
+            System.out.print(" (A_C_max)");
             System.out.println(".");
         }
-        if (!(4170 < C_W && C_W < 4210)) {
+        if (!(consts.C_W_min < C_W && C_W < consts.C_W_max)) {
             System.out.print("Warning: ");
             System.out.print("C_W has value ");
             System.out.print(C_W);
             System.out.print(" but suggested to be ");
             System.out.print("between ");
-            System.out.print(4170);
-            System.out.print(" (C_W^min)");
+            System.out.print(consts.C_W_min);
+            System.out.print(" (C_W_min)");
             System.out.print(" and ");
-            System.out.print(4210);
-            System.out.print(" (C_W^max)");
+            System.out.print(consts.C_W_max);
+            System.out.print(" (C_W_max)");
             System.out.println(".");
         }
-        if (!(10 <= h_C && h_C <= 10000)) {
+        if (!(consts.h_C_min <= h_C && h_C <= consts.h_C_max)) {
             System.out.print("Warning: ");
             System.out.print("h_C has value ");
             System.out.print(h_C);
             System.out.print(" but suggested to be ");
             System.out.print("between ");
-            System.out.print(10);
-            System.out.print(" (h_C^min)");
+            System.out.print(consts.h_C_min);
+            System.out.print(" (h_C_min)");
             System.out.print(" and ");
-            System.out.print(10000);
-            System.out.print(" (h_C^max)");
+            System.out.print(consts.h_C_max);
+            System.out.print(" (h_C_max)");
             System.out.println(".");
         }
-        if (!(t_final < 86400)) {
+        if (!(t_final < consts.t_final_max)) {
             System.out.print("Warning: ");
             System.out.print("t_final has value ");
             System.out.print(t_final);
             System.out.print(" but suggested to be ");
             System.out.print("below ");
-            System.out.print(86400);
-            System.out.print(" (t_final^max)");
+            System.out.print(consts.t_final_max);
+            System.out.print(" (t_final_max)");
             System.out.println(".");
         }
-        if (!(0.1 <= L && L <= 50)) {
+        if (!(consts.L_min <= L && L <= consts.L_max)) {
             System.out.print("Warning: ");
             System.out.print("L has value ");
             System.out.print(L);
             System.out.print(" but suggested to be ");
             System.out.print("between ");
-            System.out.print(0.1);
+            System.out.print(consts.L_min);
             System.out.print(" (L_min)");
             System.out.print(" and ");
-            System.out.print(50);
+            System.out.print(consts.L_max);
             System.out.print(" (L_max)");
             System.out.println(".");
         }
-        if (!(950 < rho_W && rho_W <= 1000)) {
+        if (!(consts.rho_W_min < rho_W && rho_W <= consts.rho_W_max)) {
             System.out.print("Warning: ");
             System.out.print("rho_W has value ");
             System.out.print(rho_W);
             System.out.print(" but suggested to be ");
             System.out.print("between ");
-            System.out.print(950);
-            System.out.print(" (rho_W^min)");
+            System.out.print(consts.rho_W_min);
+            System.out.print(" (rho_W_min)");
             System.out.print(" and ");
-            System.out.print(1000);
-            System.out.print(" (rho_W^max)");
+            System.out.print(consts.rho_W_max);
+            System.out.print(" (rho_W_max)");
             System.out.println(".");
         }
-        if (!(1.0e-2 <= D && D <= 100)) {
+        if (!(consts.AR_min <= D && D <= consts.AR_max)) {
             System.out.print("Warning: ");
             System.out.print("D has value ");
             System.out.print(D);
             System.out.print(" but suggested to be ");
             System.out.print("between ");
-            System.out.print(1.0e-2);
+            System.out.print(consts.AR_min);
             System.out.print(" (AR_min)");
             System.out.print(" and ");
-            System.out.print(100);
+            System.out.print(consts.AR_max);
             System.out.print(" (AR_max)");
             System.out.println(".");
         }

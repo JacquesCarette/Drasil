@@ -32,12 +32,9 @@ newtonSLRel :: Relation
 newtonSLRel = sy QP.force $= sy QPP.mass * sy QP.acceleration
 
 newtonSLDesc :: Sentence
-newtonSLDesc = foldlSent [S "The net", phrase QP.force, ch QP.force,
-  sParen $ Sy $ unit_symb QP.force, S "on a", phrase body,
-  S "is proportional" `toThe` phrase QP.acceleration,
-  ch QP.acceleration, sParen $ Sy $ unit_symb QP.acceleration,
-  S "of the", phrase body `sC` S "where", ch QPP.mass, 
-  sParen $ Sy $ unit_symb QPP.mass, S "denotes", phrase QPP.mass `ofThe` 
+newtonSLDesc = foldlSent [S "The net", getTandS QP.force, S "on a",
+  phrase body `sIs` S "proportional to", getTandS QP.acceleration `ofThe`
+  phrase body `sC` S "where", ch QPP.mass, S "denotes", phrase QPP.mass `ofThe`
   phrase body, S "as the", phrase constant `sOf` S "proportionality"]
 
 --

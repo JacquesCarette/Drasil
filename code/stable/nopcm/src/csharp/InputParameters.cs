@@ -11,20 +11,20 @@ public class InputParameters {
     
     /** \brief Reads input from a file with the given file name
         \param filename name of the input file
-        \param A_C heating coil surface area (m^2)
-        \param C_W specific heat capacity of water (J/(kg degreeC))
-        \param h_C convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
-        \param T_init initial temperature (degreeC)
-        \param t_final final time (s)
-        \param L length of tank (m)
-        \param T_C temperature of the heating coil (degreeC)
-        \param t_step time step for simulation (s)
-        \param rho_W density of water (kg/m^3)
-        \param D diameter of tank (m)
+        \param A_C heating coil surface area: area covered by the outermost layer of the coil (m^2)
+        \param C_W specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC))
+        \param h_C convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC))
+        \param T_init initial temperature: the temperature at the beginning of the simulation (degreeC)
+        \param t_final final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
+        \param L length of tank: the length of the tank (m)
+        \param T_C temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
+        \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
+        \param rho_W density of water: nass per unit volume of water (kg/m^3)
+        \param D diameter of tank: the diameter of the tank (m)
         \param A_tol absolute tolerance
         \param R_tol relative tolerance
-        \param T_W temperature of the water (degreeC)
-        \param E_W change in heat energy in the water (J)
+        \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
+        \param E_W change in heat energy in the water: change in thermal energy within the water (J)
     */
     public static void get_input(string filename, out double A_C, out double C_W, out double h_C, out double T_init, out double t_final, out double L, out double T_C, out double t_step, out double rho_W, out double D, out double A_tol, out double R_tol, out double T_W, out double E_W) {
         StreamReader infile;
@@ -61,102 +61,103 @@ public class InputParameters {
     }
     
     /** \brief Verifies that input values satisfy the physical constraints and software constraints
-        \param A_C heating coil surface area (m^2)
-        \param C_W specific heat capacity of water (J/(kg degreeC))
-        \param h_C convective heat transfer coefficient between coil and water (W/(m^2 degreeC))
-        \param T_init initial temperature (degreeC)
-        \param t_final final time (s)
-        \param L length of tank (m)
-        \param T_C temperature of the heating coil (degreeC)
-        \param t_step time step for simulation (s)
-        \param rho_W density of water (kg/m^3)
-        \param D diameter of tank (m)
-        \param T_W temperature of the water (degreeC)
-        \param E_W change in heat energy in the water (J)
+        \param A_C heating coil surface area: area covered by the outermost layer of the coil (m^2)
+        \param C_W specific heat capacity of water: the amount of energy required to raise the temperature of a given unit mass of water by a given amount (J/(kg degreeC))
+        \param h_C convective heat transfer coefficient between coil and water: the convective heat transfer coefficient that models the thermal flux from the coil to the surrounding water (W/(m^2 degreeC))
+        \param T_init initial temperature: the temperature at the beginning of the simulation (degreeC)
+        \param t_final final time: the amount of time elapsed from the beginning of the simulation to its conclusion (s)
+        \param L length of tank: the length of the tank (m)
+        \param T_C temperature of the heating coil: the average kinetic energy of the particles within the coil (degreeC)
+        \param t_step time step for simulation: the finite discretization of time used in the numerical method for solving the computational model (s)
+        \param rho_W density of water: nass per unit volume of water (kg/m^3)
+        \param D diameter of tank: the diameter of the tank (m)
+        \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
+        \param E_W change in heat energy in the water: change in thermal energy within the water (J)
+        \param consts structure holding the constant values
     */
-    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
-        if (!(A_C <= 100000)) {
+    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W, Constants consts) {
+        if (!(A_C <= Constants.A_C_max)) {
             Console.Write("Warning: ");
             Console.Write("A_C has value ");
             Console.Write(A_C);
             Console.Write(" but suggested to be ");
             Console.Write("below ");
-            Console.Write(100000);
-            Console.Write(" (A_C^max)");
+            Console.Write(Constants.A_C_max);
+            Console.Write(" (A_C_max)");
             Console.WriteLine(".");
         }
-        if (!(4170 < C_W && C_W < 4210)) {
+        if (!(Constants.C_W_min < C_W && C_W < Constants.C_W_max)) {
             Console.Write("Warning: ");
             Console.Write("C_W has value ");
             Console.Write(C_W);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(4170);
-            Console.Write(" (C_W^min)");
+            Console.Write(Constants.C_W_min);
+            Console.Write(" (C_W_min)");
             Console.Write(" and ");
-            Console.Write(4210);
-            Console.Write(" (C_W^max)");
+            Console.Write(Constants.C_W_max);
+            Console.Write(" (C_W_max)");
             Console.WriteLine(".");
         }
-        if (!(10 <= h_C && h_C <= 10000)) {
+        if (!(Constants.h_C_min <= h_C && h_C <= Constants.h_C_max)) {
             Console.Write("Warning: ");
             Console.Write("h_C has value ");
             Console.Write(h_C);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(10);
-            Console.Write(" (h_C^min)");
+            Console.Write(Constants.h_C_min);
+            Console.Write(" (h_C_min)");
             Console.Write(" and ");
-            Console.Write(10000);
-            Console.Write(" (h_C^max)");
+            Console.Write(Constants.h_C_max);
+            Console.Write(" (h_C_max)");
             Console.WriteLine(".");
         }
-        if (!(t_final < 86400)) {
+        if (!(t_final < Constants.t_final_max)) {
             Console.Write("Warning: ");
             Console.Write("t_final has value ");
             Console.Write(t_final);
             Console.Write(" but suggested to be ");
             Console.Write("below ");
-            Console.Write(86400);
-            Console.Write(" (t_final^max)");
+            Console.Write(Constants.t_final_max);
+            Console.Write(" (t_final_max)");
             Console.WriteLine(".");
         }
-        if (!(0.1 <= L && L <= 50)) {
+        if (!(Constants.L_min <= L && L <= Constants.L_max)) {
             Console.Write("Warning: ");
             Console.Write("L has value ");
             Console.Write(L);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(0.1);
+            Console.Write(Constants.L_min);
             Console.Write(" (L_min)");
             Console.Write(" and ");
-            Console.Write(50);
+            Console.Write(Constants.L_max);
             Console.Write(" (L_max)");
             Console.WriteLine(".");
         }
-        if (!(950 < rho_W && rho_W <= 1000)) {
+        if (!(Constants.rho_W_min < rho_W && rho_W <= Constants.rho_W_max)) {
             Console.Write("Warning: ");
             Console.Write("rho_W has value ");
             Console.Write(rho_W);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(950);
-            Console.Write(" (rho_W^min)");
+            Console.Write(Constants.rho_W_min);
+            Console.Write(" (rho_W_min)");
             Console.Write(" and ");
-            Console.Write(1000);
-            Console.Write(" (rho_W^max)");
+            Console.Write(Constants.rho_W_max);
+            Console.Write(" (rho_W_max)");
             Console.WriteLine(".");
         }
-        if (!(1.0e-2 <= D && D <= 100)) {
+        if (!(Constants.AR_min <= D && D <= Constants.AR_max)) {
             Console.Write("Warning: ");
             Console.Write("D has value ");
             Console.Write(D);
             Console.Write(" but suggested to be ");
             Console.Write("between ");
-            Console.Write(1.0e-2);
+            Console.Write(Constants.AR_min);
             Console.Write(" (AR_min)");
             Console.Write(" and ");
-            Console.Write(100);
+            Console.Write(Constants.AR_max);
             Console.Write(" (AR_max)");
             Console.WriteLine(".");
         }

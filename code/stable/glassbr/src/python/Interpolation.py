@@ -142,7 +142,7 @@ def func_interpY(filename, x, z):
         print(k_2, end='', file=outfile)
         print(" in module Interpolation", file=outfile)
         outfile.close()
-    except Exception as exc :
+    except Exception :
         raise Exception("Interpolation of y failed")
     y_1 = func_lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x)
     outfile = open("log.txt", "a")
@@ -219,7 +219,7 @@ def func_interpZ(filename, x, y):
             print(k_2, end='', file=outfile)
             print(" in module Interpolation", file=outfile)
             outfile.close()
-        except Exception as exc :
+        except Exception :
             continue
         y_1 = func_lin_interp(x_z_1[j], y_z_1[j], x_z_1[j + 1], y_z_1[j + 1], x)
         outfile = open("log.txt", "a")

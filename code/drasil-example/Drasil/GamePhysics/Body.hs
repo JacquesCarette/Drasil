@@ -2,9 +2,11 @@ module Drasil.GamePhysics.Body where
 
 import Language.Drasil hiding (Symbol(..), Vector, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
-import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI), cdb, rdb,
-  refdb, _authors, _concepts, _constants, _constraints, _datadefs, _definitions,
-  _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(SI),
+  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
+  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys, _sysinfodb,
+  _usedinfodb, sampleData)
+import Theory.Drasil (qdFromDD)
 import Utils.Drasil
 import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), IntroSub(..),
@@ -26,7 +28,7 @@ import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)
-import Data.Drasil.People (alex, luthfi)
+import Data.Drasil.People (alex, luthfi, olu)
 import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
   derived, fundamentals, joule)
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
@@ -34,21 +36,21 @@ import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
 import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
-  mathcon, mathcon', rightHand)
+  mathcon, mathcon', rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
 import Drasil.GamePhysics.Assumptions (assumptions)
 import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
-import Drasil.GamePhysics.DataDefs (qDefs, blockQDefs)
-import qualified Drasil.GamePhysics.DataDefs as GP (dataDefs)
+import Drasil.GamePhysics.DataDefs (dataDefs)
 import Drasil.GamePhysics.Goals (goals)
-import Drasil.GamePhysics.IMods (iModelsNew, instModIntro)
+import Drasil.GamePhysics.IMods (iMods, instModIntro)
 import Drasil.GamePhysics.References (citations, parnas1972, parnasClements1984)
 import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
-import Drasil.GamePhysics.TMods (tModsNew)
+import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
+import Drasil.GamePhysics.GenDefs (generalDefns)
 
 srs :: Document
 srs = mkDoc mkSRS for' si
@@ -66,7 +68,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
    IScope scope,
    IChar [] [S "rigid body dynamics", phrase highSchoolCalculus] [],
    IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
-   GSDSec $ GSDProg2 [
+   GSDSec $ GSDProg [
     SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] []],
    SSDSec $ SSDProg
@@ -78,7 +80,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
-        , GDs [] [] HideDerivation -- No Gen Defs for Gamephysics
+        , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
         , Constraints (S "FIXME") inputConstraints
@@ -86,7 +88,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         ]
       ],
     ReqrmntSec $ ReqsProg [
-      FReqsSub [],
+      FReqsSub' [],
       NonFReqsSub
     ],
     LCsSec,
@@ -101,25 +103,27 @@ si :: SystemInformation
 si = SI {
   _sys = gamePhysics,
   _kind = Doc.srs,
-  _authors = [alex, luthfi],
+  _authors = [alex, luthfi, olu],
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
   -- because _quants are only used relative to #1658 and in code gen. And
   -- Gamephysics is not in a place to be able to do codegen.
-  _quants =  [] :: [QuantityDict], -- map qw iModelsNew ++ map qw symbolsAll,
+  _quants =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = qDefs,
-  _datadefs = GP.dataDefs,
+  _datadefs = dataDefs,
   _inputs = inputSymbols,
   _outputs = outputSymbols, 
-  _defSequence = blockQDefs,
+  _defSequence = map (\x -> Parallel x []) qDefs,
   _constraints = inputConstraints,
   _constants = [],
   _sysinfodb = symbMap,
   _usedinfodb = usedDB,
-   refdb = refDB
+   refdb = refDB,
+   sampleData = "../../datafiles/GamePhysics/sampleInput.txt"
 }
+  where qDefs = map qdFromDD dataDefs
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -141,13 +145,13 @@ units :: [UnitDefn] -- FIXME
 units = map unitWrapper [metre, kilogram, second, joule] ++ map unitWrapper [newton, radian]
 
 symbMap :: ChunkDB
-symbMap = cdb (map qw iModelsNew ++ map qw symbolsAll) (map nw symbolsAll
-  ++ map nw acronyms ++ map nw prodtcon ++ map nw iModelsNew
+symbMap = cdb (map qw iMods ++ map qw symbolsAll) (map nw symbolsAll
+  ++ map nw acronyms ++ map nw prodtcon ++ map nw generalDefns ++ map nw iMods
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon')
-  (map cw defSymbols ++ srsDomains ++ map cw iModelsNew) units GP.dataDefs
-  iModelsNew [] tModsNew concIns section []
+  (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
+  iMods generalDefns tMods concIns section []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
@@ -331,7 +335,7 @@ probDescIntro = foldlSent_
 -----------------------------------------
 
 terms :: [ConceptChunk]
-terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand]
+terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand, CM.line, CM.point]
 
 -----------------------------
 -- 4.1.2 : Goal Statements --

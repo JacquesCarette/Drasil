@@ -6,10 +6,10 @@ body {
   padding-right: 3%;
   padding-top: 10px;
 }
-h2 {
+h1, h2 {
   text-align: center;
 }
-h3 {
+h2 {
   font-weight: normal;
 }
 h4 {

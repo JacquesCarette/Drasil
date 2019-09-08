@@ -17,6 +17,8 @@
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
 \setmathfont{Latin Modern Math}
+\newcommand{\gt}{\ensuremath >}
+\newcommand{\lt}{\ensuremath <}
 \global\tabulinesep=1mm
 \newlist{symbDescription}{description}{1}
 \setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
@@ -688,14 +690,14 @@ Output & ${t_{\text{flight}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {v_{\text{launch}}}>0
+                    {v_{\text{launch}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    0<θ<\frac{π}{2}
+                    0\lt{}θ\lt{}\frac{π}{2}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {t_{\text{flight}}}>0
+                     {t_{\text{flight}}}\gt{}0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -709,11 +711,11 @@ Description & \begin{symbDescription}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         
         $g$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
         
-        The constraint ${t_{\text{flight}}}>0$ is from \hyperref[timeStartZero]{A: timeStartZero}.
+        The constraint ${t_{\text{flight}}}\gt{}0$ is from \hyperref[timeStartZero]{A: timeStartZero}.
         
 \\ \midrule \\
 Source & --
@@ -736,7 +738,7 @@ To find the time that the projectile lands, we want to find the $t$ value (${t_{
 \begin{displaymath}
 {{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0
 \end{displaymath}
-Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}>0$) gives us:
+Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}\gt{}0$) gives us:
 
 \begin{displaymath}
 {{v_{\text{y}}}^{\text{i}}}-\frac{g {t_{\text{flight}}}}{2}=0
@@ -769,14 +771,14 @@ Output & ${p_{\text{land}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {v_{\text{launch}}}>0
+                    {v_{\text{launch}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    0<θ<\frac{π}{2}
+                    0\lt{}θ\lt{}\frac{π}{2}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {p_{\text{land}}}>0
+                     {p_{\text{land}}}\gt{}0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -790,11 +792,11 @@ Description & \begin{symbDescription}
               \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The constraint $0<θ<\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         
         $g$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
         
-        The constraint ${p_{\text{land}}}>0$ is from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint ${p_{\text{land}}}\gt{}0$ is from \hyperref[posXDirection]{A: posXDirection}.
         
 \\ \midrule \\
 Source & --
@@ -845,10 +847,10 @@ Output & ${d_{\text{offset}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {p_{\text{land}}}>0
+                    {p_{\text{land}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {p_{\text{target}}}>0
+                    {p_{\text{target}}}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
@@ -865,7 +867,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${p_{\text{land}}}$ is from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
         
-        The constraints ${p_{\text{land}}}>0$ and ${p_{\text{target}}}>0$ are from \hyperref[posXDirection]{A: posXDirection}.
+        The constraints ${p_{\text{land}}}\gt{}0$ and ${p_{\text{target}}}\gt{}0$ are from \hyperref[posXDirection]{A: posXDirection}.
         
 \\ \midrule \\
 Source & --
@@ -895,19 +897,19 @@ Output & $s$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {p_{\text{target}}}>0
+                    {p_{\text{target}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {d_{\text{offset}}}>-{p_{\text{land}}}
+                    {d_{\text{offset}}}\gt{}-{p_{\text{land}}}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
            s=\begin{cases}
-             \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|<ε\\
-             \text{``The projectile fell short.''}, & {d_{\text{offset}}}<0\\
-             \text{``The projectile went long.''}, & {d_{\text{offset}}}>0
+             \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
+             \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
+             \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
              \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -920,9 +922,9 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${d_{\text{offset}}}$ is from \hyperref[IM:offsetIM]{IM: offsetIM}.
         
-        The constraint ${p_{\text{target}}}>0$ is from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint ${p_{\text{target}}}\gt{}0$ is from \hyperref[posXDirection]{A: posXDirection}.
         
-        The constraint ${d_{\text{offset}}}>-{p_{\text{land}}}$ is from the fact that ${p_{\text{land}}}>0$, from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint ${d_{\text{offset}}}\gt{}-{p_{\text{land}}}$ is from the fact that ${p_{\text{land}}}\gt{}0$, from \hyperref[posXDirection]{A: posXDirection}.
         
         $ε$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
         
@@ -946,11 +948,11 @@ RefBy & \hyperref[outputValues]{FR: Output-Values} and \hyperref[calcValues]{FR:
 \\
 \midrule
 \endhead
-${p_{\text{target}}}$ & ${p_{\text{target}}}>0$ & $1000$ m & 10$\%$
+${p_{\text{target}}}$ & ${p_{\text{target}}}\gt{}0$ & $1000$ m & 10$\%$
 \\
-${v_{\text{launch}}}$ & ${v_{\text{launch}}}>0$ & $100$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
+${v_{\text{launch}}}$ & ${v_{\text{launch}}}\gt{}0$ & $100$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
-$θ$ & $0<θ<\frac{π}{2}$ & $\frac{π}{4}$ rad & 10$\%$
+$θ$ & $0\lt{}θ\lt{}\frac{π}{2}$ & $\frac{π}{4}$ rad & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -966,9 +968,9 @@ $θ$ & $0<θ<\frac{π}{2}$ & $\frac{π}{4}$ rad & 10$\%$
 \\
 \midrule
 \endhead
-${p_{\text{land}}}$ & ${p_{\text{land}}}>0$
+${p_{\text{land}}}$ & ${p_{\text{land}}}\gt{}0$
 \\
-${d_{\text{offset}}}$ & ${d_{\text{offset}}}>-{p_{\text{land}}}$
+${d_{\text{offset}}}$ & ${d_{\text{offset}}}\gt{}-{p_{\text{land}}}$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -983,9 +985,9 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
 \begin{itemize}
-\item[Input-Parameters:\phantomsection\label{inputParams}]{Input the quantities from \hyperref[Table:ReqInputs]{Table:ReqInputs}, which define the launch angle, launch speed, and target position.}
-\item[Verify-Parameters:\phantomsection\label{verifyParams}]{Check the entered input parameters to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.}
-\item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following quantities: ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}), ${p_{\text{land}}}$ (from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}), ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}), and $s$ (from \hyperref[IM:messageIM]{IM: messageIM}).}
+\item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Table:ReqInputs}.}
+\item[Verify-Input-Values:\phantomsection\label{verifyInVals}]{Check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
+\item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following values: ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}), ${p_{\text{land}}}$ (from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}), ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}), and $s$ (from \hyperref[IM:messageIM]{IM: messageIM}).}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output $s$ (from \hyperref[IM:messageIM]{IM: messageIM}) and ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM: offsetIM}).}
 \end{itemize}
 \begin{longtable}{l l l}
@@ -1001,7 +1003,7 @@ ${v_{\text{launch}}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
 $θ$ & Launch angle & rad
 \\
 \bottomrule
-\caption{Required Inputs following \hyperref[inputParams]{FR: Input-Parameters}}
+\caption{Required Inputs following \hyperref[inputValues]{FR: Input-Values}}
 \label{Table:ReqInputs}
 \end{longtable}
 \subsection{Non-Functional Requirements}
@@ -1052,9 +1054,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[IM:messageIM]{IM: messageIM} &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputParams]{FR: Input-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyParams]{FR: Verify-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInVals]{FR: Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcValues]{FR: Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -1114,15 +1116,15 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[DD:vecMag]{DD: vecMag}} & \textbf{\hyperref[DD:speedIX]{DD: speedIX}} & \textbf{\hyperref[DD:speedIY]{DD: speedIY}} & \textbf{\hyperref[TM:acceleration]{TM: acceleration}} & \textbf{\hyperref[TM:velocity]{TM: velocity}} & \textbf{\hyperref[GD:rectVel]{GD: rectVel}} & \textbf{\hyperref[GD:rectPos]{GD: rectPos}} & \textbf{\hyperref[GD:velVec]{GD: velVec}} & \textbf{\hyperref[GD:posVec]{GD: posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM: offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM: messageIM}} & \textbf{\hyperref[inputParams]{FR: Input-Parameters}} & \textbf{\hyperref[verifyParams]{FR: Verify-Parameters}} & \textbf{\hyperref[calcValues]{FR: Calculate-Values}} & \textbf{\hyperref[outputValues]{FR: Output-Values}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}} & \textbf{\hyperref[portable]{NFR: Portable}}
+\textbf{} & \textbf{\hyperref[DD:vecMag]{DD: vecMag}} & \textbf{\hyperref[DD:speedIX]{DD: speedIX}} & \textbf{\hyperref[DD:speedIY]{DD: speedIY}} & \textbf{\hyperref[TM:acceleration]{TM: acceleration}} & \textbf{\hyperref[TM:velocity]{TM: velocity}} & \textbf{\hyperref[GD:rectVel]{GD: rectVel}} & \textbf{\hyperref[GD:rectPos]{GD: rectPos}} & \textbf{\hyperref[GD:velVec]{GD: velVec}} & \textbf{\hyperref[GD:posVec]{GD: posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM: offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM: messageIM}} & \textbf{\hyperref[inputValues]{FR: Input-Values}} & \textbf{\hyperref[verifyInVals]{FR: Verify-Input-Values}} & \textbf{\hyperref[calcValues]{FR: Calculate-Values}} & \textbf{\hyperref[outputValues]{FR: Output-Values}} & \textbf{\hyperref[correct]{NFR: Correct}} & \textbf{\hyperref[verifiable]{NFR: Verifiable}} & \textbf{\hyperref[understandable]{NFR: Understandable}} & \textbf{\hyperref[reusable]{NFR: Reusable}} & \textbf{\hyperref[maintainable]{NFR: Maintainable}} & \textbf{\hyperref[portable]{NFR: Portable}}
 \\
 \midrule
 \endhead
 \hyperref[targetHit]{GS: targetHit} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputParams]{FR: Input-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyParams]{FR: Verify-Parameters} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInVals]{FR: Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[calcValues]{FR: Calculate-Values} &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  & 
 \\

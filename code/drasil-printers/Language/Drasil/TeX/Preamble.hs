@@ -4,7 +4,7 @@ import Data.List (nub)
 
 import Language.Drasil.Printing.LayoutObj (LayoutObj(..))
 import Language.Drasil.TeX.Monad (D, vcat, (%%))
-import Language.Drasil.TeX.Helpers (docclass, command, command0, command1o, command3, 
+import Language.Drasil.TeX.Helpers (docclass, command, command0, command1o, command2, command3, 
   usepackage)
 
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
@@ -54,12 +54,16 @@ addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 addPackage Tabu      = usepackage "tabu"
 addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
+-- Discussed in issue #1819
+-- Because we are using LuaLatex, we use fontspec here instead of fontenc
 addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
 addPackage EnumItem  = usepackage "enumitem"
 
 data Def = Bibliography
          | TabuLine
+         | GreaterThan
+         | LessThan
          | SetMathFont
          | SymbDescriptionP1
          | SymbDescriptionP2
@@ -67,6 +71,8 @@ data Def = Bibliography
 
 addDef :: Def -> D
 addDef Bibliography  = command "bibliography" bibFname
+addDef GreaterThan   = command2 "newcommand" "\\gt" "\\ensuremath >"
+addDef LessThan      = command2 "newcommand" "\\lt" "\\ensuremath <"
 addDef TabuLine      = command0 "global\\tabulinesep=1mm"
 addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1"
@@ -81,7 +87,7 @@ parseDoc :: [LayoutObj] -> ([Package], [Def])
 parseDoc los' = 
   ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 
    nub (concatMap fst res)
-  , SetMathFont:nub (concatMap snd res))
+  , [SetMathFont, GreaterThan, LessThan] ++ nub (concatMap snd res))
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])

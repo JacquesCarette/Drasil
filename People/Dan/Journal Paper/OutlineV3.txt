@@ -1,6 +1,3 @@
-JC: I will put my comments inline below, but with all lines prefixed with JC.
-DS: Responses to comments/questions will be prefixed with DS.
-
 Title: Being redundant just got less tedious! 
           The Drasil framework.
 
@@ -14,32 +11,111 @@ Take, for example, a software requirements document. It is a human-readable
 abstraction of *what* the software is supposed to do. Whereas a design document 
 is a human-readable version of *how* the software is supposed to fulfill its 
 requirements. The source code itself is a computer-readable list of instructions
-of *what* must be done and, in many languages, *how* that is to be accomplished.
+combining *what* must be done and, in many languages, *how* that is to be 
+accomplished.
 
 [Put in figures of an example from GlassBR/Projectile here, showing SRS, DD, and
 code versions of the same knowledge]
 
-Manually writing and maintaining multiple documents for different audiences is 
+Manually writing and maintaining a full range of software artifacts (i.e. 
+multiple documents for different audiences and the source code) is 
 redundant and tedious. Factor in deadlines, changing requirements, and other 
-common issues faced by developers and you have a perfect storm for 
-syncronization issues between artifacts for a given piece of software.
+common issues faced during development and you have a perfect storm for 
+inter-artifact syncronization issues.
 
-How can we avoid out of sync artifacts? Some would argue "just write code!" And 
-that is exactly what a number of other approaches have tried. Documentation 
-generators like Doxygen, Javadoc, Pandoc, and more take a code-centric view of 
-the problem. Typically, they work by having natural-language descriptions and/or
-explanations written as specially delimited comments in the code which are later
-automatically compiled into a human-readable document.
+How can we avoid having our artifacts fall out of sync with each other? 
+Some would argue "just write code!" And that is exactly what a number of other 
+approaches have tried. Documentation generators like Doxygen, Javadoc, Pandoc, 
+and more take a code-centric view of the problem. Typically, they work by having
+natural-language descriptions and/or explanations written as specially delimited
+comments in the code which are later automatically compiled into a 
+human-readable document.
 
-While these approaches definitely have their place, they do not solve the 
-underlying redundancy problem. The developers are still forced to manually write 
-descriptions of systems in both code and comments. They also do not generate all
-software artifacts.
+While these approaches definitely have their place and can come in quite handy,
+they do not solve the underlying redundancy problem. The developers are still 
+forced to manually write descriptions of systems in both code and comments. 
+They also do not generate all software artifacts - commonly they are used to
+generate only API documentation targeted towards developers or user manuals.
 
 We propose a new framework, Drasil, alongside a knowledge-centric view of
 software, to help deal with these redundancy and syncronization problems.
 Our approach looks at what underlies the problems we solve using software, then 
 capturing that "common" or "core" knowledge to generate our software artifacts.
+
+-- Scope --
+We are well aware of the ambitious nature of attempting to solve the problem of 
+redundancy across all possible software systems. Frankly, it would be highly
+impractical to attempt to solve such a broad spectrum of problems. Each software
+domain poses its own challenges, alongside specific benefits and drawbacks. With
+that in mind, we have decided to focus solely on scientific computing (SC) 
+software. Specifically, we look at software that follows the pattern 
+'input -> process -> output'.
+
+SC software has a strong fundamental underpinning of well-understood concepts. 
+It also has the benefit of seldomly changing, and when it does, existing models 
+are not necessarily invalidated. For example, rigid-body problems in physics are
+well-understood and the underlying modeling equations are unlikely to change. 
+However, should they change, the current models will likely remain as good 
+approximations under a specific set of assumptions. For instance, who hasn't 
+heard 'assume each body is a sphere' during a physics lecture?
+
+==Background==
+*TBD see 'OLD STUFF' for ideas
+
+== A look under the hood - Our process ==
+The first step in removing unnecessary redundancy is identifying exactly what
+that redundancy is, and where it exists. To that end we need to understand what
+each of our software artifacts is attempting to communicate, who their audience
+is, and what information can be considered boilerplate versus system-specific.
+  **NOTE: in the breakdown make sure to mention "We actually found that some 
+  info is boilerplate, some is system-specific, and some is general to all 
+  members of a software family, but more specific than generic boilerplate"
+  **NOTE: Also ensure each artifact has a 'who' (audience), 'what' (problem 
+  being solved), and 'how' (specific-knowledge vs boilerplate)
+Luckily, we have an excellent starting point thanks to the work of many smart 
+people - artifact templates. 
+
+Lots of work has been done to specify exactly what should be documented in a 
+given artifact in an effort for standardization. Ironically, this has led to
+many different 'standardized' templates. However, through the examination of a 
+number of templates for different artifact types, we have concluded they convey 
+roughly the same overall information for a given artifact. Most differences are
+stylistic or related to content organization.
+
+Once we understand our artifacts, we take a practical, example-driven approach 
+to identifying redundancy through the use of existing software system case 
+studies. For each of these case studies, we start by examining the source code 
+and existing software artifacts to understand exactly what problem they are 
+trying to solve. From there, we attempt to distill the system-specific knowledge
+and generalize the boilerplate.
+
+--Breaking down artifacts--
+As noted earlier, for our approach to work we must understand exactly what each 
+of our artifacts are trying to say and to whom. Since we are taking a practical,
+example-driven approach to our process, we have specifically chosen our case
+studies from software systems that were developed using common artifact 
+templates. Specifically the templates used by SmithEtAl [source].
+
+To start, we look at the Software Requirements Specification (SRS). The SRS
+(or some incarnation of it) is one of the most important artifacts for any
+software project as it specifies what problem the software is trying to solve.
+
+- Practical approach to design
+- Let's use some case studies
+- Understanding what's really going on
+
+-- Summary --
+
+See Table [NUM] for a summary of each software artifact's 'what', 'who', and 'how'.
+
+*TABLE*
+| Artifact | Who (Audience) | What (Problem) | How (Specific vs boilerplate) |
+
+
+
+===============OLD STUFF (Not part of current paper yet)========================
+JC: I will put my comments inline below, but with all lines prefixed with JC.
+DS: Responses to comments/questions will be prefixed with DS.
 
 ==Background==
 -- Software Artifacts --
@@ -102,6 +178,7 @@ DS: Yes, just need to re-find them.
 - Somewhat redundant b/c of natural-language descriptions + code.
 
 -- Generative Programming --
+
 
 == Understanding Commonality and the source of redundancy==
 - Breakdown our process of working through each of the case studies and 

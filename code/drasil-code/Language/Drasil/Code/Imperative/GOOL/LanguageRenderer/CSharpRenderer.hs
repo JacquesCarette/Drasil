@@ -576,8 +576,8 @@ instance MethodSym CSharpCode where
   docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
     (inOutFunc n s p (map snd is) [snd o] [] b)
   docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst (both : 
-    is)) (if (isObject . getType . variableType . snd) both then [] else [fst 
-    both]) (inOutFunc n s p (map snd is) [] [snd both] b)
+    is)) [fst both | not ((isObject . getType . variableType . snd) both)] 
+    (inOutFunc n s p (map snd is) [] [snd both] b)
   docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst (is ++ os ++ 
     bs)) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
 

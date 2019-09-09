@@ -32,23 +32,23 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc',
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, mkStaticVar, litCharD, 
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
-  objVarDocD, funcAppDocD, extFuncAppDocD, funcDocD, listSetFuncDocD, 
-  listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  dynamicDocD, classDec, dot, forLabel, observerListName, doxConfigName, 
-  makefileName, sampleInputName, commentedItem, addCommentsDocD, classDoc, 
-  moduleDoc, docFuncRepr, valList, surroundBody, getterName, setterName, 
-  filterOutObjs)
+  classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, extFuncAppDocD, 
+  funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
+  breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, 
+  observerListName, doxConfigName, makefileName, sampleInputName, commentedItem,
+  addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
+  getterName, setterName, filterOutObjs)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
-  VarData(..))
+  VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.GOOL.Helpers (blank, vibcat, emptyIfEmpty, 
-  liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, liftPair, 
-  liftPairFst, getInnerType, convType, checkParams)
+import Language.Drasil.Code.Imperative.GOOL.Helpers (blank, vibcat, 
+  emptyIfEmpty, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
+  liftPair, liftPairFst, getInnerType, convType, checkParams)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -153,21 +153,23 @@ instance BlockSym PythonCode where
 
 instance StateTypeSym PythonCode where
   type StateType PythonCode = TypeData
-  bool = return $ td Boolean empty
+  bool = return $ td Boolean "" empty
   int = return intTypeDocD
   float = return floatTypeDocD
-  char = return $ td Char empty
+  char = return $ td Char "" empty
   string = return pyStringType
-  infile = return $ td File empty
-  outfile = return $ td File empty
-  listType _ t = liftA2 td (fmap (List . cType) t) (return $ brackets empty)
+  infile = return $ td File "" empty
+  outfile = return $ td File "" empty
+  listType _ t = return $ td (List (getType t)) "[]" (brackets empty)
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator _ = error "Iterator-type variables do not exist in Python"
-  void = return $ td Void (text "NoneType")
+  void = return $ td Void "NoneType" (text "NoneType")
 
   getType = cType . unPC
+  getTypeString = typeString . unPC
+  getTypeDoc = typeDoc . unPC
 
 instance ControlBlockSym PythonCode where
   runStrategy l strats rv av = maybe
@@ -226,6 +228,7 @@ instance VariableSym PythonCode where
   extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
   self l = liftA2 (mkVar "self") (obj l) (return $ text "self")
   enumVar e en = var e (enumType en)
+  classVar c v = classVarCheckStatic (classVarD c v pyClassVar)
   objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
     (variableType v) (liftA2 objVarDocD o v)
   objVarSelf l n t = liftA2 (mkVar $ "self." ++ n) t (liftA2 objVarDocD
@@ -240,6 +243,8 @@ instance VariableSym PythonCode where
   variableName = varName . unPC
   variableType = fmap varType
   variableDoc = varDoc . unPC
+
+  varFromData b n t d = liftA2 (vard b n) t (return d)
 
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
@@ -502,7 +507,7 @@ instance InternalScope PythonCode where
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
   mState t = t
-  construct n = return $ td (Object n) (constructDocD n)
+  construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
@@ -614,6 +619,9 @@ pyLogOp = unOpPrec "math.log10"
 pyLnOp :: OpData
 pyLnOp = unOpPrec "math.log"
 
+pyClassVar :: Doc -> Doc -> Doc
+pyClassVar c v = c <> dot <> c <> dot <> v
+
 pyStateObj :: TypeData -> Doc -> Doc
 pyStateObj t vs = typeDoc t <> parens vs
 
@@ -628,7 +636,7 @@ pyListSize :: ValData -> FuncData -> Doc
 pyListSize v f = funcDoc f <> parens (valDoc v)
 
 pyStringType :: TypeData
-pyStringType = td String (text "str")
+pyStringType = td String "str" (text "str")
 
 pyListDec :: VarData -> Doc
 pyListDec v = varDoc v <+> equals <+> typeDoc (varType v)

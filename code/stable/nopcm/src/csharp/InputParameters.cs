@@ -73,9 +73,8 @@ public class InputParameters {
         \param D diameter of tank: the diameter of the tank (m)
         \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
         \param E_W change in heat energy in the water: change in thermal energy within the water (J)
-        \param consts structure holding the constant values
     */
-    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W, Constants consts) {
+    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
         if (!(A_C <= Constants.A_C_max)) {
             Console.Write("Warning: ");
             Console.Write("A_C has value ");

@@ -2,15 +2,15 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render C# code is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
+module GOOL.Drasil.LanguageRenderer.CSharpRenderer (
   -- * C# Code Configuration -- defines syntax of all C# code
   CSharpCode(..)
 ) where
 
 import Utils.Drasil (indent)
 
-import Language.Drasil.Code.Code (CodeType(..), isObject)
-import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
+import GOOL.Drasil.CodeType (CodeType(..), isObject)
+import GOOL.Drasil.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
+import GOOL.Drasil.LanguageRenderer (addExt,
   fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, multiStateDocD,
   blockDocD, bodyDocD, printDoc, outDoc, printFileDocD, boolTypeDocD, 
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
@@ -45,19 +45,19 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
   moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
   setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
-import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
+import GOOL.Drasil.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
   ValData(..), updateValDoc, Binding(..), VarData(..), vard)
-import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
-import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
+import GOOL.Drasil.Doxygen.Import (makeDoxConfig)
+import GOOL.Drasil.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, nativeBinary, osClassDefault)
-import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.GOOL.Helpers (emptyIfEmpty, liftA4, 
+import GOOL.Drasil.Build.Import (makeBuild)
+import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
-import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
+import GOOL.Drasil.WriteInput (makeInputFile)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))

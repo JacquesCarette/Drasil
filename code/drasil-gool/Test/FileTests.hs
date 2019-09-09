@@ -1,6 +1,6 @@
 module Test.FileTests (fileTests) where
 
-import Language.Drasil.Code (PackageSym(..), ProgramSym(..), RenderSym(..), 
+import GOOL.Drasil (PackageSym(..), ProgramSym(..), RenderSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
   MethodSym(..), ModuleSym(..))

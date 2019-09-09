@@ -1,11 +1,11 @@
 module Test.Main (main) where
 
-import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (JavaCode(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (PythonCode(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (CSharpCode(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (unCPPC)
-import Language.Drasil.Code.Imperative.GOOL.Data (FileData(..), ModData(..), 
+import GOOL.Drasil.Symantics (Label, PackageSym(..))
+import GOOL.Drasil.LanguageRenderer.JavaRenderer (JavaCode(..))
+import GOOL.Drasil.LanguageRenderer.PythonRenderer (PythonCode(..))
+import GOOL.Drasil.LanguageRenderer.CSharpRenderer (CSharpCode(..))
+import GOOL.Drasil.LanguageRenderer.CppRenderer (unCPPC)
+import GOOL.Drasil.Data (FileData(..), ModData(..), 
   PackData(..), ProgData(..))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)

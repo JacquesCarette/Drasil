@@ -2,7 +2,7 @@
 
 module Test.HelloWorld (helloWorld) where
 
-import Language.Drasil.Code (
+import GOOL.Drasil (
   PackageSym(..), ProgramSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..),  VariableSym(..), ValueSym(..), 

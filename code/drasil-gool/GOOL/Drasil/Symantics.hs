@@ -1,6 +1,6 @@
 {-# LANGUAGE TypeFamilies #-}
 
-module Language.Drasil.Code.Imperative.GOOL.Symantics (
+module GOOL.Drasil.Symantics (
   -- Types
   Label, Library,
   -- Typeclasses
@@ -18,9 +18,9 @@ module Language.Drasil.Code.Imperative.GOOL.Symantics (
 
 import Language.Drasil (Expr)
 import Database.Drasil (ChunkDB)
-import Language.Drasil.Code.Code (CodeType)
+import GOOL.Drasil.CodeType (CodeType)
 import Language.Drasil.Code.DataDesc (DataDesc)
-import Language.Drasil.Code.Imperative.GOOL.Data (Binding)
+import GOOL.Drasil.Data (Binding)
 import Language.Drasil.CodeSpec (Comments)
 import Text.PrettyPrint.HughesPJ (Doc)
 

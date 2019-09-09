@@ -41,23 +41,5 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec(..),
   funcDef, packmod, relToQD,
   )
 
-import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
-  ProgramSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), StateTypeSym(..), StatementSym(..), 
-  ControlStatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..),
-  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), MethodSym(..), ModuleSym(..), BlockCommentSym(..))
-
-import Language.Drasil.Code.Imperative.GOOL.Data (ModData(..))
-
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer 
-  (JavaCode (..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer 
-  (PythonCode(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer 
-  (CSharpCode(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer 
-  (CppSrcCode(..), CppHdrCode(..), unCPPC)
-
 import Language.Drasil.Chunk.Code (quantvar)
 

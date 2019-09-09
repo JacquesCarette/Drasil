@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The structure for a class of renderers is defined here.
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
+module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
   docCmtStart, observerListName, doxConfigName, makefileName, sampleInputName, 
@@ -42,20 +42,20 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
 
 import Utils.Drasil (capitalize, indent, indentList, stringList)
 
-import Language.Drasil.Code.Code (CodeType(..), isObject)
-import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, Library,
+import GOOL.Drasil.CodeType (CodeType(..), isObject)
+import GOOL.Drasil.Symantics (Label, Library,
   RenderSym(..), BodySym(..), 
   StateTypeSym(StateType, getType, getTypeString, getTypeDoc, listInnerType), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ParameterSym(..), MethodSym(..), BlockCommentSym(..))
-import qualified Language.Drasil.Code.Imperative.GOOL.Symantics as S (StateTypeSym(int))
-import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), FileData(..), 
+import qualified GOOL.Drasil.Symantics as S (StateTypeSym(int))
+import GOOL.Drasil.Data (Terminator(..), FileData(..), 
   fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
   od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
   VarData(..), vard)
-import Language.Drasil.Code.Imperative.GOOL.Helpers (angles,blank, 
+import GOOL.Drasil.Helpers (angles,blank, 
   doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
 import Control.Applicative ((<|>))

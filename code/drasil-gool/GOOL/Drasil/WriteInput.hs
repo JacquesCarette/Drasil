@@ -1,4 +1,4 @@
-module Language.Drasil.Code.Imperative.WriteInput (
+module GOOL.Drasil.WriteInput (
   makeInputFile
 ) where 
 

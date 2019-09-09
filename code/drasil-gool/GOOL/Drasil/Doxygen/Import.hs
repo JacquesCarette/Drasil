@@ -1,10 +1,10 @@
-module Language.Drasil.Code.Imperative.Doxygen.Import (
+module GOOL.Drasil.Doxygen.Import (
   makeDoxConfig
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.Data (ProgData(..), FileData(..), 
+import GOOL.Drasil.Data (ProgData(..), FileData(..), 
   ModData(..), isHeader)
-import Language.Drasil.Code.Imperative.GOOL.Helpers (blank)
+import GOOL.Drasil.Helpers (blank)
 
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), isEmpty, text, hcat, vcat)

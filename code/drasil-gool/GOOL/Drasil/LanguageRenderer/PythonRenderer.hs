@@ -1,15 +1,15 @@
 {-# LANGUAGE TypeFamilies #-}
 
 -- | The logic to render Python code is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
+module GOOL.Drasil.LanguageRenderer.PythonRenderer (
   -- * Python Code Configuration -- defines syntax of all Python code
   PythonCode(..)
 ) where
 
 import Utils.Drasil (indent)
 
-import Language.Drasil.Code.Code (CodeType(..), isObject)
-import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
+import GOOL.Drasil.CodeType (CodeType(..), isObject)
+import GOOL.Drasil.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
@@ -19,7 +19,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc', 
+import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
   methodListDocD, stateVarListDocD, ifCondDocD, stratDocD, assignDocD, 
@@ -38,18 +38,18 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc',
   observerListName, doxConfigName, makefileName, sampleInputName, commentedItem,
   addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
   getterName, setterName, filterOutObjs)
-import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
+import GOOL.Drasil.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
   VarData(..), vard)
-import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
-import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
-import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
-import Language.Drasil.Code.Imperative.GOOL.Helpers (blank, vibcat, 
+import GOOL.Drasil.Doxygen.Import (makeDoxConfig)
+import GOOL.Drasil.Build.AST (Runnable, interpMM)
+import GOOL.Drasil.Build.Import (makeBuild)
+import GOOL.Drasil.Helpers (blank, vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
   liftPair, liftPairFst, getInnerType, convType, checkParams)
-import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
+import GOOL.Drasil.WriteInput (makeInputFile)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)

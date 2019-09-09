@@ -1,4 +1,4 @@
-module Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList,
+module GOOL.Drasil.Data (Pair(..), pairList,
   Terminator(..), ScopeTag(..), FileType(..), AuxData(..), ad, emptyAux, 
   BindData(..), bd, FileData(..), fileD, file, srcFile, hdrFile, isSource, 
   isHeader, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList,
   Binding(..), VarData(..), vard
 ) where
 
-import Language.Drasil.Code.Code (CodeType)
+import GOOL.Drasil.CodeType (CodeType)
 
 import Control.Applicative (liftA2)
 import Prelude hiding ((<>))

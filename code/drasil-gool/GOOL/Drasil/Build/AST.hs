@@ -1,4 +1,4 @@
-module Language.Drasil.Code.Imperative.Build.AST where
+module GOOL.Drasil.Build.AST where
 import Build.Drasil (makeS, MakeString, mkImplicitVar, mkWindowsVar)
 
 type CommandFragment = MakeString

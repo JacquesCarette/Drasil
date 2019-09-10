@@ -29,22 +29,23 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
   binExpr, binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, 
   litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
-  selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfD, funcAppDocD, 
-  extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
-  constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
-  sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
-  includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, prependToBody, 
-  appendToBody, surroundBody, getterName, setterName, setMainMethod, 
-  setEmpty, intValue
+  selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD,
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
+  listIndexExistsDocD, funcDocD, castDocD, sizeDocD, listAccessFuncDocD, 
+  listSetFuncDocD, objAccessDocD, castObjDocD, includeD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
+  docFuncRepr, valList, prependToBody, appendToBody, surroundBody, getterName, 
+  setterName, setMainMethod, setEmpty, intValue
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList, stringList)
 
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, Library,
-  RenderSym(..), BodySym(..), StateTypeSym(getType, listInnerType), 
+  RenderSym(..), BodySym(..), 
+  StateTypeSym(StateType, getType, getTypeString, getTypeDoc, listInnerType), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
@@ -208,36 +209,37 @@ printFileDocD fn f = valDoc f <> dot <> text fn
 -- Type Printers --
 
 boolTypeDocD :: TypeData
-boolTypeDocD = td Boolean (text "Boolean") -- capital B?
+boolTypeDocD = td Boolean "Boolean" (text "Boolean") -- capital B?
 
 intTypeDocD :: TypeData
-intTypeDocD = td Integer (text "int")
+intTypeDocD = td Integer "int" (text "int")
 
 floatTypeDocD :: TypeData
-floatTypeDocD = td Float (text "float")
+floatTypeDocD = td Float "float" (text "float")
 
 charTypeDocD :: TypeData
-charTypeDocD = td Char (text "char")
+charTypeDocD = td Char "char" (text "char")
 
 stringTypeDocD :: TypeData
-stringTypeDocD = td String (text "string")
+stringTypeDocD = td String "string" (text "string")
 
 fileTypeDocD :: TypeData
-fileTypeDocD = td File (text "File")
+fileTypeDocD = td File "File" (text "File")
 
 typeDocD :: Label -> TypeData
-typeDocD t = td (Object t) (text t)
+typeDocD t = td (Object t) t (text t)
 
 enumTypeDocD :: Label -> TypeData
-enumTypeDocD t = td (Enum t) (text t)
+enumTypeDocD t = td (Enum t) t (text t)
 
 listTypeDocD :: TypeData -> Doc -> TypeData
-listTypeDocD t lst = td (List (cType t)) (lst <> angles (typeDoc t))
+listTypeDocD t lst = td (List (cType t)) 
+  (render lst ++ "<" ++ typeString t ++ ">") (lst <> angles (typeDoc t))
 
 -- Method Types --
 
 voidDocD :: TypeData
-voidDocD = td Void (text "void")
+voidDocD = td Void "void" (text "void")
 
 constructDocD :: Label -> Doc
 constructDocD _ = empty
@@ -699,6 +701,22 @@ argDocD n args = valDoc args <> brackets (valDoc n)
 
 enumElemDocD :: Label -> Label -> Doc
 enumElemDocD en e = text en <> dot <> text e
+
+classVarCheckStatic :: (VariableSym repr) => repr (Variable repr) -> 
+  repr (Variable repr)
+classVarCheckStatic v = classVarCS (variableBind v)
+  where classVarCS Dynamic = error
+          "classVar can only be used to access static variables"
+        classVarCS Static = v
+
+classVarD :: (VariableSym repr) => repr (StateType repr) -> 
+  repr (Variable repr) -> (Doc -> Doc -> Doc) -> repr (Variable repr)
+classVarD c v f = varFromData (variableBind v) 
+  (getTypeString c ++ "." ++ variableName v) 
+  (variableType v) (f (getTypeDoc c) (variableDoc v))
+
+classVarDocD :: Doc -> Doc -> Doc
+classVarDocD c v = c <> dot <> v
 
 objVarDocD :: VarData -> VarData ->  Doc
 objVarDocD n1 n2 = varDoc n1 <> dot <> varDoc n2

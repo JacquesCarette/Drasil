@@ -62,27 +62,33 @@ variable s t = do
       defFunc Var = var
       defFunc Const = staticVar
   if s `elem` map codeName (inputs cs) 
-    then inputVariable (inStruct g) (var s t)
+    then inputVariable (inStruct g) Var (var s t)
     else if s `elem` map codeName (constants $ csi $ codeSpec g)
-      then constVariable (conStruct g) ((defFunc $ conRepr g) s t)
+      then constVariable (conStruct g) (conRepr g) ((defFunc $ conRepr g) s t)
       else return $ var s t
   
-inputVariable :: (RenderSym repr) => Structure -> repr (Variable repr) -> 
-  Reader State (repr (Variable repr))
-inputVariable Unbundled v = return v
-inputVariable Bundled v = do
+inputVariable :: (RenderSym repr) => Structure -> ConstantRepr -> 
+  repr (Variable repr) -> Reader State (repr (Variable repr))
+inputVariable Unbundled _ v = return v
+inputVariable Bundled Var v = do
   ip <- mkVar (codevar inParams)
   return $ ip $-> v
+inputVariable Bundled Const v = do
+  ip <- mkVar (codevar inParams)
+  return $ classVar (variableType ip) v
 
-constVariable :: (RenderSym repr) => ConstantStructure -> repr (Variable repr) 
-  -> Reader State (repr (Variable repr))
-constVariable (Store Bundled) v = do
+constVariable :: (RenderSym repr) => ConstantStructure -> ConstantRepr -> 
+  repr (Variable repr) -> Reader State (repr (Variable repr))
+constVariable (Store Bundled) Var v = do
   cs <- mkVar (codevar consts)
   return $ cs $-> v
-constVariable WithInputs v = do
+constVariable (Store Bundled) Const v = do
+  cs <- mkVar (codevar consts)
+  return $ classVar (variableType cs) v
+constVariable WithInputs cr v = do
   g <- ask
-  inputVariable (inStruct g) v
-constVariable _ v = return v
+  inputVariable (inStruct g) cr v
+constVariable _ _ v = return v
 
 mkVal :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => c -> 
   Reader State (repr (Value repr))

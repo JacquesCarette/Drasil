@@ -35,19 +35,20 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
   binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
-  argDocD, enumElemDocD, objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, 
-  stateObjDocD, listStateObjDocD, notNullDocD, funcDocD, castDocD, 
-  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
-  privateDocD, publicDocD, dot, new, forLabel, blockCmtStart, blockCmtEnd, 
-  docCmtStart, observerListName, doxConfigName, makefileName, sampleInputName, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  surroundBody, getterName, setterName, setMainMethod, setEmpty, intValue)
+  argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD, 
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
+  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
+  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
+  doxConfigName, makefileName, sampleInputName, doubleSlash, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
+  docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
+  setMainMethod, setEmpty, intValue)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   PackData(..), packD, ProgData(..), progD, TypeData(..), td, ValData(..), 
-  VarData(..))
+  VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
@@ -181,6 +182,8 @@ instance StateTypeSym JavaCode where
   void = return voidDocD
 
   getType = cType . unJC
+  getTypeString = typeString . unJC
+  getTypeDoc = typeDoc . unJC
 
 instance ControlBlockSym JavaCode where
   runStrategy l strats rv av = maybe
@@ -250,6 +253,7 @@ instance VariableSym JavaCode where
   extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
   self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
   enumVar e en = var e (enumType en)
+  classVar c v = classVarCheckStatic (classVarD c v classVarDocD)
   objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
     (variableType v) (liftA2 objVarDocD o v)
   objVarSelf _ = var
@@ -263,6 +267,8 @@ instance VariableSym JavaCode where
   variableName = varName . unJC
   variableType = fmap varType
   variableDoc = varDoc . unJC
+  
+  varFromData b n t d = liftA2 (vard b n) t (return d)
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
@@ -529,7 +535,7 @@ instance InternalScope JavaCode where
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
   mState t = t
-  construct n = return $ td (Object n) (constructDocD n)
+  construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym JavaCode where
   type Parameter JavaCode = ParamData
@@ -652,24 +658,26 @@ jtop end inc lst = vcat [
   inc <+> text ("java.util." ++ render lst) <> end]
 
 jFloatTypeDocD :: TypeData
-jFloatTypeDocD = td Float (text "double")
+jFloatTypeDocD = td Float "double" (text "double")
 
 jStringTypeDoc :: TypeData
-jStringTypeDoc = td String (text "String")
+jStringTypeDoc = td String "String" (text "String")
 
 jInfileTypeDoc :: TypeData
-jInfileTypeDoc = td File (text "Scanner")
+jInfileTypeDoc = td File "Scanner" (text "Scanner")
 
 jOutfileTypeDoc :: TypeData
-jOutfileTypeDoc = td File (text "PrintWriter")
+jOutfileTypeDoc = td File "PrintWriter" (text "PrintWriter")
 
 jListType :: TypeData -> Doc -> TypeData
-jListType (TD Integer _) lst = td (List Integer) (lst <> angles (text "Integer"))
-jListType (TD Float _) lst = td (List Float) (lst <> angles (text "Double"))
+jListType (TD Integer _ _) lst = td (List Integer) (render lst ++ "<Integer>") 
+  (lst <> angles (text "Integer"))
+jListType (TD Float _ _) lst = td (List Float) (render lst ++ "<Double>") 
+  (lst <> angles (text "Double"))
 jListType t lst = listTypeDocD t lst
 
 jArrayType :: JavaCode (StateType JavaCode)
-jArrayType = return $ td (List $ Object "Object") (text "Object[]")
+jArrayType = return $ td (List $ Object "Object") "Object" (text "Object[]")
 
 jEquality :: JavaCode (Value JavaCode) -> JavaCode (Value JavaCode) -> 
   JavaCode (Value JavaCode)

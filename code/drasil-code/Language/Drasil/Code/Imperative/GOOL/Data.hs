@@ -130,12 +130,12 @@ data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc,
 svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
 
-data TypeData = TD {cType :: CodeType, typeDoc :: Doc}
+data TypeData = TD {cType :: CodeType, typeString :: String, typeDoc :: Doc}
 
 instance Eq TypeData where
-  TD t1 _ == TD t2 _ = t1 == t2
+  TD t1 _ _ == TD t2 _ _ = t1 == t2
 
-td :: CodeType -> Doc -> TypeData
+td :: CodeType -> String -> Doc -> TypeData
 td = TD
 
 data ValData = VD {valPrec :: Maybe Int, valType :: TypeData, valDoc :: Doc}

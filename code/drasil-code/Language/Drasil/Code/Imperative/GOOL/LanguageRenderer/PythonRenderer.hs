@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
 
 import Utils.Drasil (indent)
 
-import Language.Drasil.Code.Code (CodeType(..))
+import Language.Drasil.Code.Code (CodeType(..), isObject)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
@@ -36,8 +36,8 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt, fileDoc',
   funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
   breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, 
   observerListName, doxConfigName, makefileName, sampleInputName, commentedItem,
-  addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  getterName, setterName)
+  addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
+  getterName, setterName, filterOutObjs)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
@@ -543,11 +543,14 @@ instance MethodSym PythonCode where
   inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
     ins) b
   inOutFunc n s p ins outs both b = function n s p (mState void) (map 
-    stateParam $ both ++ ins) (liftA2 appendToBody b (multiReturn $
-    map valueOf $ both ++ outs))
+    stateParam $ both ++ ins) (if null rets then b else liftA3 surroundBody 
+    (multi $ map varDec outs) b (multiReturn $ map valueOf rets))
+    where rets = filterOutObjs both ++ outs
 
-  docInOutFunc desc iComms oComms bComms = docFuncRepr desc (bComms ++ iComms) 
-    (bComms ++ oComms)
+  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
+    (map fst $ bRets ++ os) (inOutFunc n s p (map snd is) (map snd os) (map snd
+    bs) b)
+    where bRets = filter (not . isObject . getType . variableType . snd) bs
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
@@ -737,8 +740,10 @@ pyInOutCall :: (Label -> PythonCode (StateType PythonCode) ->
   [PythonCode (Value PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
   [PythonCode (Variable PythonCode)] -> PythonCode (Statement PythonCode)
 pyInOutCall f n ins [] [] = valState $ f n void ins
-pyInOutCall f n ins outs both = multiAssign (both ++ outs) 
+pyInOutCall f n ins outs both = if null rets then valState (f n void (map 
+  valueOf both ++ ins)) else multiAssign (filterOutObjs both ++ outs) 
   [f n void (map valueOf both ++ ins)]
+  where rets = filterOutObjs both ++ outs
 
 pyBlockComment :: [String] -> Doc -> Doc
 pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns

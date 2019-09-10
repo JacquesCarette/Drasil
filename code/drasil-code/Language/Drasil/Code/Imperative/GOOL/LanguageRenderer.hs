@@ -37,12 +37,12 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, blockCmtDoc, 
   docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
   docFuncRepr, valList, prependToBody, appendToBody, surroundBody, getterName, 
-  setterName, setMainMethod, setEmpty, intValue
+  setterName, setMainMethod, setEmpty, intValue, filterOutObjs
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList, stringList)
 
-import Language.Drasil.Code.Code (CodeType(..))
+import Language.Drasil.Code.Code (CodeType(..), isObject)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, Library,
   RenderSym(..), BodySym(..), 
   StateTypeSym(StateType, getType, getTypeString, getTypeDoc, listInnerType), 
@@ -861,11 +861,11 @@ varList vs = hcat (intersperse (text ", ") (map varDoc vs))
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statementDocD s, maybeBlank, b]
-  where maybeBlank = emptyIfEmpty b blank
+  where maybeBlank = emptyIfEmpty (fst s) (emptyIfEmpty b blank)
 
 appendToBody :: Doc -> (Doc, Terminator) -> Doc
 appendToBody b s = vcat [b, maybeBlank, fst $ statementDocD s]
-  where maybeBlank = emptyIfEmpty b blank
+  where maybeBlank = emptyIfEmpty b (emptyIfEmpty (fst s) blank)
 
 surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
 surroundBody p b a = prependToBody p (appendToBody b a)
@@ -893,6 +893,10 @@ intValue i = intValue' (getType $ valueType i)
   where intValue' Integer = i
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
+
+filterOutObjs :: (VariableSym repr) => [repr (Variable repr)] -> 
+  [repr (Variable repr)]
+filterOutObjs = filter (not . isObject . getType . variableType)
 
 doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String
 doxCommand = "\\"

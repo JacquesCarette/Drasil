@@ -35,7 +35,7 @@ import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   getPatternInputs)
 
 import Prelude hiding (sin, cos, tan, log, exp)
-import Data.List ((\\))
+import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
 import Control.Applicative ((<$>))
@@ -103,8 +103,8 @@ publicMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) =>
   [repr (Block repr)] -> Reader State (repr (Method repr))
 publicMethod t n = genMethod (function n public static_ t) n
 
-publicInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  Label -> String -> [c] -> [c] -> [c] -> [repr (Block repr)] -> 
+publicInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) 
+  => Label -> String -> [c] -> [c] -> [repr (Block repr)] -> 
   Reader State (repr (Method repr))
 publicInOutFunc = genInOutFunc public static_
 
@@ -127,21 +127,24 @@ genMethod f n desc p r b = do
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
 
-genInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
+genInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) => 
   repr (Scope repr) -> repr (Permanence repr) -> Label -> String -> [c] ->
-  [c] -> [c] -> [repr (Block repr)] -> Reader State (repr (Method repr))
-genInOutFunc s pr n desc ins outs both b = do
+  [c] -> [repr (Block repr)] -> Reader State (repr (Method repr))
+genInOutFunc s pr n desc ins' outs' b = do
   g <- ask
+  let ins = ins' \\ outs'
+      outs = outs' \\ ins'
+      both = ins' `intersect` outs'
   inVs <- mapM mkVar ins
   outVs <- mapM mkVar outs
   bothVs <- mapM mkVar both
-  bod <- logBody n inVs b
-  let fn = inOutFunc n s pr inVs outVs bothVs bod
+  bod <- logBody n (bothVs ++ inVs) b
   pComms <- mapM (paramComment . (^. uid)) ins
   oComms <- mapM (paramComment . (^. uid)) outs
   bComms <- mapM (paramComment . (^. uid)) both
   return $ if CommentFunc `elem` commented g 
-    then docInOutFunc desc pComms oComms bComms fn else fn
+    then docInOutFunc n s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
+    bComms bothVs) bod else inOutFunc n s pr inVs outVs bothVs bod
 
 convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr))
 convExpr (Dbl d) = return $ litFloat d

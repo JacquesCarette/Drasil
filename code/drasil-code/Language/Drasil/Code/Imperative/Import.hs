@@ -1,4 +1,4 @@
-{-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE PostfixOperators, FlexibleContexts #-}
 {-# LANGUAGE Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import (
   publicMethod, publicInOutFunc, genConstructor, mkVar, mkVal, convExpr, 
@@ -17,7 +17,7 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, RenderSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  VariableSym(..), ValueClass(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
   MethodSym(..))
@@ -43,7 +43,7 @@ import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
-value :: (RenderSym repr) => UID -> String -> repr (StateType repr) -> 
+value :: (RenderSym repr, ValueClass repr (Value repr)) => UID -> String -> repr (StateType repr) -> 
   Reader State (repr (Value repr))
 value u s t = do
   g <- ask
@@ -84,7 +84,7 @@ constVariable WithInputs v = do
   inputVariable (inStruct g) v
 constVariable _ v = return v
 
-mkVal :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => c -> 
+mkVal :: (RenderSym repr, ValueClass repr (Value repr), HasUID c, HasCodeType c, CodeIdea c) => c -> 
   Reader State (repr (Value repr))
 mkVal v = value (v ^. uid) (codeName v) (convType $ codeType v)
 
@@ -137,7 +137,7 @@ genInOutFunc s pr n desc ins outs both b = do
   return $ if CommentFunc `elem` commented g 
     then docInOutFunc desc pComms oComms bComms fn else fn
 
-convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr))
+convExpr :: (RenderSym repr, ValueClass repr a) => Expr -> Reader State (repr a)
 convExpr (Dbl d) = return $ litFloat d
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
@@ -146,7 +146,7 @@ convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
 convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
 convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
-convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
+convExpr Deriv{} = error "**convExpr :: Deriv unimplemented**"
 convExpr (C c)   = do
   g <- ask
   let v = quantvar (lookupC g c)
@@ -161,10 +161,10 @@ convExpr (FCall (C c) x) = do
   args <- mapM convExpr x
   maybe (error $ "Call to non-existent function" ++ funcNm) 
     (\f -> fApp f funcNm funcTp args) (Map.lookup funcNm mem)
-convExpr FCall{}   = return $ litString "**convExpr :: FCall unimplemented**"
+convExpr FCall{}   = error "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
-convExpr (BinaryOp Frac (Int a) (Int b)) =
-  return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division
+-- convExpr (BinaryOp Frac (Int a) (Int b)) =
+--   return $ litFloat (fromIntegral a) #/ litFloat (fromIntegral b) -- hack to deal with integer division
 convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)      = doit l -- FIXME this is sub-optimal
   where
@@ -194,7 +194,7 @@ renderRealInt s (UpTo (Exc,a))    = sy s $< a
 renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
-unop :: (RenderSym repr) => UFunc -> (repr (Value repr) -> repr (Value repr))
+unop :: (RenderSym repr, ValueClass repr a) => UFunc -> (repr a -> repr a)
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln
@@ -214,8 +214,8 @@ unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
 
-bfunc :: (RenderSym repr) => BinOp -> (repr (Value repr) -> repr
-  (Value repr) -> repr (Value repr))
+bfunc :: (RenderSym repr, ValueClass repr a) => BinOp -> (repr a -> repr
+  a -> repr a)
 bfunc Eq    = (?==)
 bfunc NEq   = (?!=)
 bfunc Gt    = (?>)
@@ -251,7 +251,7 @@ genCalcFunc cdef = do
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
-genCalcBlock :: (RenderSym repr) => CalcType -> CodeDefinition -> Expr ->
+genCalcBlock :: (RenderSym repr, ValueClass repr (Value repr)) => CalcType -> CodeDefinition -> Expr ->
   Reader State (repr (Block repr))
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock t v e
@@ -259,7 +259,7 @@ genCalcBlock t v e
       convExpr e; l <- maybeLog vv; return $ multi $ assign vv ee : l}
     | otherwise        = block <$> liftS (returnState <$> convExpr e)
 
-genCaseBlock :: (RenderSym repr) => CalcType -> CodeDefinition -> Completeness 
+genCaseBlock :: (RenderSym repr, ValueClass repr (Value repr)) => CalcType -> CodeDefinition -> Completeness 
   -> [(Expr,Relation)] -> Reader State (repr (Block repr))
 genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
@@ -288,7 +288,7 @@ genFunc (FDef (FuncDef n desc parms o rd s)) = do
 genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 genFunc (FCD cd) = genCalcFunc cd
 
-convStmt :: (RenderSym repr) => FuncStmt -> Reader State (repr (Statement repr))
+convStmt :: (RenderSym repr, ValueClass repr (Value repr)) => FuncStmt -> Reader State (repr (Statement repr))
 convStmt (FAsg v e) = do
   e' <- convExpr e
   v' <- mkVar v

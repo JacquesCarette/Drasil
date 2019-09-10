@@ -291,12 +291,12 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
   ValueExpression repr where -- for values that can include expressions
   inlineIf     :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) ->
     repr (Value repr)
-  funcApp      :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
-    repr (Value repr)
+  funcApp      :: (ValueClass repr a) => Label -> repr (StateType repr) -> [repr a] -> 
+    repr a
   selfFuncApp  :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Value repr)
-  extFuncApp   :: Library -> Label -> repr (StateType repr) -> 
-    [repr (Value repr)] -> repr (Value repr)
+  extFuncApp   :: (ValueClass repr a) => Library -> Label -> repr (StateType repr) -> 
+    [repr a] -> repr a
   stateObj     :: repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Value repr)
   extStateObj  :: Library -> repr (StateType repr) -> [repr (Value repr)] -> 

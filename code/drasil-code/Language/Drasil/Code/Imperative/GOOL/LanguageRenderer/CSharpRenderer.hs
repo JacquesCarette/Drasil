@@ -327,9 +327,9 @@ instance BooleanExpression CSharpCode where
   
 instance ValueExpression CSharpCode where
   inlineIf = liftA3 inlineIfD
-  funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
+  funcApp n t vs = liftA2 mkVal t (return $ funcAppDocD n (map valueDoc vs))
   selfFuncApp = funcApp
-  extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
+  extFuncApp l n t vs = liftA2 mkVal t (return $ extFuncAppDocD l n (map valueDoc vs))
   stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t (liftList valList vs))
   extStateObj _ = stateObj
   listStateObj t vs = liftA2 mkVal t (liftA3 listStateObjDocD listObj t 

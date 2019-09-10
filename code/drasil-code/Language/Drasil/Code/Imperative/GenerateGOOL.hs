@@ -7,7 +7,7 @@ import Language.Drasil.Code.Code as C (CodeType(List, Object))
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, ProgramSym(..), 
   RenderSym(..), AuxiliarySym(..), StateTypeSym(..), VariableSym(..), 
-  ValueSym(..), ValueExpression(..), StatementSym(..), ParameterSym(..),
+  ValueClass(..), ValueSym(..), ValueExpression(..), StatementSym(..), ParameterSym(..),
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..), 
   Name)
@@ -51,8 +51,8 @@ publicClass desc n l vs ms = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-fApp :: (RenderSym repr) => String -> String -> repr (StateType repr) -> 
-  [repr (Value repr)] -> Reader State (repr (Value repr))
+fApp :: (RenderSym repr, ValueClass repr a) => String -> String -> repr (StateType repr) -> 
+  [repr a] -> Reader State (repr a)
 fApp m s t vl = do
   g <- ask
   return $ if m /= currentModule g then extFuncApp m s t vl else funcApp s t vl

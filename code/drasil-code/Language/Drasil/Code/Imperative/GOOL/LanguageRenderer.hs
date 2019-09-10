@@ -708,10 +708,10 @@ inlineIfD c v1 v2 = vd prec (valType v1) (valDoc c <+> text "?" <+>
   valDoc v1 <+> text ":" <+> valDoc v2)
   where prec = valPrec c <|> Just 0
 
-funcAppDocD :: Label -> [ValData] -> Doc
-funcAppDocD n vs = text n <> parens (valList vs)
+funcAppDocD :: Label -> [Doc] -> Doc
+funcAppDocD n vs = text n <> parens (vcat $ intersperse (text ", ") vs)
 
-extFuncAppDocD :: Library -> Label -> [ValData] -> Doc
+extFuncAppDocD :: Library -> Label -> [Doc] -> Doc
 extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
 
 stateObjDocD :: TypeData -> Doc -> Doc

@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TypeFamilies, MultiParamTypeClasses #-}
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render Java code is contained in this module
@@ -14,7 +14,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..),
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  VariableSym(..), {-BooleanValSym(..),-} ValueClass(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
@@ -264,6 +264,13 @@ instance VariableSym JavaCode where
   variableType = fmap varType
   variableDoc = varDoc . unJC
 
+-- instance BooleanValSym JavaCode where
+--   type BooleanValue JavaCode = ValData
+
+instance ValueClass JavaCode ValData where
+  valueType = fmap valType
+  valueDoc = valDoc . unJC
+
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
   litTrue = liftA2 mkVal bool (return litTrueD)
@@ -281,8 +288,8 @@ instance ValueSym JavaCode where
   
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
-  valueType = fmap valType
-  valueDoc = valDoc . unJC
+  -- valueType = fmap valType
+  -- valueDoc = valDoc . unJC
 
 instance NumericExpression JavaCode where
   (#~) = liftA2 unExpr' negateOp

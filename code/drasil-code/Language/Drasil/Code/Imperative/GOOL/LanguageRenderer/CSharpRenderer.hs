@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TypeFamilies, MultiParamTypeClasses #-}
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render C# code is contained in this module
@@ -14,7 +14,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..),
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  VariableSym(..), {-BooleanValSym(..),-} ValueClass(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
@@ -260,6 +260,13 @@ instance VariableSym CSharpCode where
   variableType = fmap varType
   variableDoc = varDoc . unCSC
 
+-- instance BooleanValSym CSharpCode where
+--   type BooleanValue CSharpCode = ValData
+
+instance ValueClass CSharpCode ValData where
+  valueType = fmap valType
+  valueDoc = valDoc . unCSC
+
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
   litTrue = liftA2 mkVal bool (return litTrueD)
@@ -277,8 +284,8 @@ instance ValueSym CSharpCode where
   
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
-  valueType = fmap valType
-  valueDoc = valDoc . unCSC
+  -- valueType = fmap valType
+  -- valueDoc = valDoc . unCSC
 
 instance NumericExpression CSharpCode where
   (#~) = liftA2 unExpr' negateOp

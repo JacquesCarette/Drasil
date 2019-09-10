@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TypeFamilies, MultiParamTypeClasses #-}
 
 module Language.Drasil.Code.Imperative.GOOL.Symantics (
   -- Types
@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.GOOL.Symantics (
   PackageSym(..), ProgramSym(..), RenderSym(..), InternalFile(..), 
   AuxiliarySym(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
   ControlBlockSym(..), BlockSym(..), StateTypeSym(..), UnaryOpSym(..), 
-  BinaryOpSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
+  BinaryOpSym(..), VariableSym(..), {-BooleanValSym(..),-} ValueClass(..), ValueSym(..), NumericExpression(..), 
   BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
   FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
@@ -192,6 +192,15 @@ class (StateTypeSym repr) => VariableSym repr where
   variableType :: repr (Variable repr) -> repr (StateType repr)
   variableDoc  :: repr (Variable repr) -> Doc
 
+class ValueClass repr a where
+  valueType :: (ValueSym repr) => repr a -> repr (StateType repr)
+  valueDoc :: (ValueSym repr) => repr a -> Doc
+
+-- class BooleanValSym repr where
+--   type BooleanValue repr
+--   litTrue2  :: repr (BooleanValue repr)
+--   litFalse2 :: repr (BooleanValue repr)
+
 class (VariableSym repr) => ValueSym repr where
   type Value repr
   litTrue   :: repr (Value repr)
@@ -212,8 +221,8 @@ class (VariableSym repr) => ValueSym repr where
 
   argsList  :: repr (Value repr)
 
-  valueType :: repr (Value repr) -> repr (StateType repr)
-  valueDoc :: repr (Value repr) -> Doc
+  -- valueType :: repr (Value repr) -> repr (StateType repr)
+  -- valueDoc :: repr (Value repr) -> Doc
 
 class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => 
   NumericExpression repr where

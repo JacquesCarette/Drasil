@@ -1,4 +1,4 @@
-{-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE PostfixOperators, FlexibleContexts #-}
 
 -- | The structure for a class of renderers is defined here.
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
@@ -45,7 +45,7 @@ import Utils.Drasil (capitalize, indent, indentList, stringList)
 import Language.Drasil.Code.Code (CodeType(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, Library,
   RenderSym(..), BodySym(..), StateTypeSym(getType, listInnerType), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  VariableSym(..), ValueClass(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ParameterSym(..), MethodSym(..), BlockCommentSym(..))
@@ -191,7 +191,7 @@ printObjDoc :: String -> (String -> repr (Statement repr))
   -> repr (Statement repr)
 printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-outDoc :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
+outDoc :: (RenderSym repr, ValueClass repr (Value repr)) => Bool -> repr (Value repr) -> repr (Value repr) 
   -> Maybe (repr (Value repr)) -> repr (Statement repr)
 outDoc newLn printFn v f = outDoc' (getType $ valueType v)
   where outDoc' (List t) = printListDoc (getNestDegree 1 t) v prFn prStrFn 
@@ -434,7 +434,7 @@ mkSt s = (s, Semi)
 mkStNoEnd :: Doc -> (Doc, Terminator)
 mkStNoEnd s = (s, Empty)
 
-stringListVals' :: (RenderSym repr) => [repr (Variable repr)] -> 
+stringListVals' :: (RenderSym repr, ValueClass repr (Value repr)) => [repr (Variable repr)] -> 
   repr (Value repr) -> repr (Statement repr)
 stringListVals' vars sl = multi $ checkList (getType $ valueType sl)
     where checkList (List String) = assignVals vars 0
@@ -444,7 +444,7 @@ stringListVals' vars sl = multi $ checkList (getType $ valueType sl)
           assignVals (v:vs) n = assign v (cast (variableType v) 
             (listAccess sl (litInt n))) : assignVals vs (n+1)
 
-stringListLists' :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr)
+stringListLists' :: (RenderSym repr, ValueClass repr (Value repr)) => [repr (Variable repr)] -> repr (Value repr)
   -> repr (Statement repr)
 stringListLists' lsts sl = checkList (getType $ valueType sl)
   where checkList (List String) = listVals (map (getType . variableType) lsts)
@@ -870,7 +870,7 @@ exprParensL o v = if maybe False (< opPrec o) (valPrec v) then parens else id
 exprParensR :: OpData -> ValData -> (Doc -> Doc)
 exprParensR o v = if maybe False (<= opPrec o) (valPrec v) then parens else id
 
-intValue :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
+intValue :: (RenderSym repr, ValueClass repr (Value repr)) => repr (Value repr) -> repr (Value repr)
 intValue i = intValue' (getType $ valueType i)
   where intValue' Integer = i
         intValue' (Enum _) = cast S.int i

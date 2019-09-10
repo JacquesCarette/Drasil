@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TypeFamilies, MultiParamTypeClasses, FlexibleContexts #-}
 
 -- | The logic to render Python code is contained in this module
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
@@ -13,7 +13,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..),
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  VariableSym(..), {-BooleanValSym(..),-} ValueClass(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
@@ -241,6 +241,15 @@ instance VariableSym PythonCode where
   variableType = fmap varType
   variableDoc = varDoc . unPC
 
+instance ValueClass PythonCode ValData where
+  valueType = fmap valType
+  valueDoc = valDoc . unPC
+
+-- instance BooleanValSym PythonCode where
+--   type BooleanValue PythonCode = ValData
+--   litTrue2 = liftA2 mkVal bool (return $ text "True")
+--   litFalse2 = liftA2 mkVal bool (return $ text "False")
+
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
   litTrue = liftA2 mkVal bool (return $ text "True")
@@ -257,8 +266,8 @@ instance ValueSym PythonCode where
   enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "sys.argv")
 
-  valueType = fmap valType
-  valueDoc = valDoc . unPC
+  -- valueType = fmap valType
+  -- valueDoc = valDoc . unPC
 
 instance NumericExpression PythonCode where
   (#~) = liftA2 unExpr' negateOp
@@ -638,7 +647,7 @@ pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
         fl = emptyIfEmpty (valDoc f) $ text ", file=" <> valDoc f
 
-pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
+pyOut :: (RenderSym repr, ValueClass repr (Value repr)) => Bool -> repr (Value repr) -> repr (Value repr) 
   -> Maybe (repr (Value repr)) -> repr (Statement repr)
 pyOut newLn printFn v f = pyOut' (getType $ valueType v)
   where pyOut' (List _) = printSt newLn printFn v f

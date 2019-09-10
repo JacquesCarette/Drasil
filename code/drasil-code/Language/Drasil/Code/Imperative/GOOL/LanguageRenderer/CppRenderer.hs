@@ -1,4 +1,4 @@
-{-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE TypeFamilies, MultiParamTypeClasses #-}
 {-# LANGUAGE FlexibleInstances #-}
 {-# LANGUAGE PostfixOperators #-}
 
@@ -15,7 +15,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..),
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  VariableSym(..), {-BooleanValSym(..),-} ValueClass(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
@@ -243,6 +243,13 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
   variableType v = pair (variableType $ pfst v) (variableType $ psnd v)
   variableDoc v = variableDoc $ pfst v
 
+-- instance (Pair p) => BooleanValSym (p CppSrcCode CppHdrCode) where
+--   type BooleanValue (p CppSrcCode CppHdrCode) = ValData
+
+instance (Pair p) => ValueClass (p CppSrcCode CppHdrCode) ValData where
+  valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
+  valueDoc v = valueDoc $ pfst v
+
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   type Value (p CppSrcCode CppHdrCode) = ValData
   litTrue = pair litTrue litTrue
@@ -260,8 +267,8 @@ instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   
   argsList = pair argsList argsList
 
-  valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
-  valueDoc v = valueDoc $ pfst v
+  -- valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
+  -- valueDoc v = valueDoc $ pfst v
 
 instance (Pair p) => NumericExpression (p CppSrcCode CppHdrCode) where
   (#~) v = pair ((#~) $ pfst v) ((#~) $ psnd v)
@@ -829,6 +836,13 @@ instance VariableSym CppSrcCode where
   variableType = fmap varType
   variableDoc = varDoc . unCPPSC
 
+-- instance BooleanValSym CppSrcCode where
+--   type BooleanValue CppSrcCode = ValData
+
+instance ValueClass CppSrcCode ValData where
+  valueType = fmap valType
+  valueDoc = valDoc . unCPPSC
+
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
   litTrue = liftA2 mkVal bool (return litTrueD)
@@ -846,8 +860,8 @@ instance ValueSym CppSrcCode where
   
   argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
-  valueType = fmap valType
-  valueDoc = valDoc . unCPPSC
+  -- valueType = fmap valType
+  -- valueDoc = valDoc . unCPPSC
 
 instance NumericExpression CppSrcCode where
   (#~) = liftA2 unExpr' negateOp
@@ -1387,6 +1401,13 @@ instance VariableSym CppHdrCode where
   variableType = fmap varType
   variableDoc = varDoc . unCPPHC
 
+-- instance BooleanValSym CppHdrCode where
+--   type BooleanValue CppHdrCode = ValData
+
+instance ValueClass CppHdrCode ValData where
+  valueType = fmap valType
+  valueDoc = valDoc . unCPPHC
+
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
   litTrue = liftA2 mkVal bool (return litTrueD)
@@ -1404,8 +1425,8 @@ instance ValueSym CppHdrCode where
   
   argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
-  valueType = fmap valType
-  valueDoc = valDoc . unCPPHC
+  -- valueType = fmap valType
+  -- valueDoc = valDoc . unCPPHC
 
 instance NumericExpression CppHdrCode where
   (#~) _ = liftA2 mkVal void (return empty)

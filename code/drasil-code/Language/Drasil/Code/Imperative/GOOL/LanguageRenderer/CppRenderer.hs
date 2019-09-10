@@ -249,6 +249,7 @@ instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => ValueClass (p CppSrcCode CppHdrCode) ValData where
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
   valueDoc v = valueDoc $ pfst v
+  valFromData t d = pair (valFromData (pfst t) d) (valFromData (psnd t) d)
 
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   type Value (p CppSrcCode CppHdrCode) = ValData
@@ -842,6 +843,7 @@ instance VariableSym CppSrcCode where
 instance ValueClass CppSrcCode ValData where
   valueType = fmap valType
   valueDoc = valDoc . unCPPSC
+  valFromData t d = liftA2 mkVal t (return d)
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
@@ -903,7 +905,7 @@ instance BooleanExpression CppSrcCode where
    
 instance ValueExpression CppSrcCode where
   inlineIf = liftA3 inlineIfD
-  funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
+  funcApp n t vs = valFromData t (funcAppDocD n (map valueDoc vs))
   selfFuncApp = funcApp
   extFuncApp _ = funcApp
   stateObj t vs = liftA2 mkVal t (liftA2 cppStateObjDoc t (liftList valList vs))
@@ -1407,6 +1409,7 @@ instance VariableSym CppHdrCode where
 instance ValueClass CppHdrCode ValData where
   valueType = fmap valType
   valueDoc = valDoc . unCPPHC
+  valFromData t d = liftA2 mkVal t (return d)
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
@@ -1468,9 +1471,9 @@ instance BooleanExpression CppHdrCode where
    
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = liftA2 mkVal void (return empty)
-  funcApp _ _ _ = liftA2 mkVal void (return empty)
+  funcApp _ _ _ = valFromData void empty
   selfFuncApp _ _ _ = liftA2 mkVal void (return empty)
-  extFuncApp _ _ _ _ = liftA2 mkVal void (return empty)
+  extFuncApp _ _ _ _ = valFromData void empty
   stateObj _ _ = liftA2 mkVal void (return empty)
   extStateObj _ _ _ = liftA2 mkVal void (return empty)
   listStateObj _ _ = liftA2 mkVal void (return empty)

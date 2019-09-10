@@ -266,6 +266,7 @@ instance VariableSym CSharpCode where
 instance ValueClass CSharpCode ValData where
   valueType = fmap valType
   valueDoc = valDoc . unCSC
+  valFromData t d = liftA2 mkVal t (return d)
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
@@ -327,9 +328,9 @@ instance BooleanExpression CSharpCode where
   
 instance ValueExpression CSharpCode where
   inlineIf = liftA3 inlineIfD
-  funcApp n t vs = liftA2 mkVal t (return $ funcAppDocD n (map valueDoc vs))
+  funcApp n t vs = valFromData t (funcAppDocD n (map valueDoc vs))
   selfFuncApp = funcApp
-  extFuncApp l n t vs = liftA2 mkVal t (return $ extFuncAppDocD l n (map valueDoc vs))
+  extFuncApp l n t vs = valFromData t (extFuncAppDocD l n (map valueDoc vs))
   stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t (liftList valList vs))
   extStateObj _ = stateObj
   listStateObj t vs = liftA2 mkVal t (liftA3 listStateObjDocD listObj t 

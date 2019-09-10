@@ -233,7 +233,7 @@ bfunc Index = listAccess
 
 ------- CALC ----------
 
-genCalcFunc :: (RenderSym repr) => CodeDefinition -> Reader State (repr
+genCalcFunc :: (RenderSym repr, ValueClass repr (Value repr)) => CodeDefinition -> Reader State (repr
   (Method repr))
 genCalcFunc cdef = do
   parms <- getCalcParams cdef
@@ -275,10 +275,10 @@ genCaseBlock t v c cs = do
           "Undefined case encountered in function " ++ codeName v
 
 -- medium hacks --
-genModDef :: (RenderSym repr) => Mod -> Reader State (repr (RenderFile repr))
+genModDef :: (RenderSym repr, ValueClass repr (Value repr)) => Mod -> Reader State (repr (RenderFile repr))
 genModDef (Mod n desc fs) = genModule n desc (Just $ mapM genFunc fs) Nothing
 
-genFunc :: (RenderSym repr) => Func -> Reader State (repr (Method repr))
+genFunc :: (RenderSym repr, ValueClass repr (Value repr)) => Func -> Reader State (repr (Method repr))
 genFunc (FDef (FuncDef n desc parms o rd s)) = do
   g <- ask
   stmts <- mapM convStmt s
@@ -333,7 +333,7 @@ convStmt (FAppend a b) = do
   b' <- convExpr b
   return $ valState $ listAppend a' b'
 
-genDataFunc :: (RenderSym repr) => Name -> String -> DataDesc -> 
+genDataFunc :: (RenderSym repr, ValueClass repr (Value repr)) => Name -> String -> DataDesc -> 
   Reader State (repr (Method repr))
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
@@ -342,7 +342,7 @@ genDataFunc nameTitle desc ddef = do
     Nothing bod
 
 -- this is really ugly!!
-readData :: (RenderSym repr) => DataDesc -> Reader State
+readData :: (RenderSym repr, ValueClass repr (Value repr)) => DataDesc -> Reader State
   [repr (Block repr)]
 readData ddef = do
   inD <- mapM inData ddef

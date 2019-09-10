@@ -192,9 +192,10 @@ class (StateTypeSym repr) => VariableSym repr where
   variableType :: repr (Variable repr) -> repr (StateType repr)
   variableDoc  :: repr (Variable repr) -> Doc
 
-class ValueClass repr a where
-  valueType :: (ValueSym repr) => repr a -> repr (StateType repr)
-  valueDoc :: (ValueSym repr) => repr a -> Doc
+class (ValueSym repr) => ValueClass repr a where
+  valueType :: repr a -> repr (StateType repr)
+  valueDoc ::repr a -> Doc
+  valFromData :: repr (StateType repr) -> Doc -> repr a
 
 -- class BooleanValSym repr where
 --   type BooleanValue repr

@@ -244,6 +244,7 @@ instance VariableSym PythonCode where
 instance ValueClass PythonCode ValData where
   valueType = fmap valType
   valueDoc = valDoc . unPC
+  valFromData t d = liftA2 mkVal t (return d)
 
 -- instance BooleanValSym PythonCode where
 --   type BooleanValue PythonCode = ValData
@@ -311,9 +312,9 @@ instance BooleanExpression PythonCode where
 
 instance ValueExpression PythonCode where
   inlineIf = liftA3 pyInlineIf
-  funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
+  funcApp n t vs = valFromData t (funcAppDocD n (map valueDoc vs))
   selfFuncApp = funcApp
-  extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
+  extFuncApp l n t vs = valFromData t (extFuncAppDocD l n (map valueDoc vs))
   stateObj t vs = liftA2 mkVal t (liftA2 pyStateObj t (liftList valList vs))
   extStateObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
     valList vs))

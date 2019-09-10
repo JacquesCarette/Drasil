@@ -270,6 +270,7 @@ instance VariableSym JavaCode where
 instance ValueClass JavaCode ValData where
   valueType = fmap valType
   valueDoc = valDoc . unJC
+  valFromData t d = liftA2 mkVal t (return d)
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
@@ -331,9 +332,9 @@ instance BooleanExpression JavaCode where
   
 instance ValueExpression JavaCode where
   inlineIf = liftA3 inlineIfD
-  funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
+  funcApp n t vs = valFromData t (funcAppDocD n (map valueDoc vs))
   selfFuncApp = funcApp
-  extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
+  extFuncApp l n t vs = valFromData t (extFuncAppDocD l n (map valueDoc vs))
   stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t (liftList valList vs))
   extStateObj _ = stateObj
   listStateObj t vs = liftA2 mkVal t (liftA3 listStateObjDocD listObj t 

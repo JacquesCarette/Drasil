@@ -1,10 +1,13 @@
-module GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
-  FileType(..), BindData(..), bd, FileData(..), fileD, file, srcFile, hdrFile, 
-  isSource, isHeader, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), od, ParamData(..), pd, 
-  updateParamDoc, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
-  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
-  vard
+{-# LANGUAGE GADTs #-}
+
+module GOOL.Drasil.Data (Boolean, Val, Pair(..), pairList, Terminator(..), 
+  ScopeTag(..), FileType(..), BindData(..), bd, FileData(..), fileD, file, 
+  srcFile, hdrFile, isSource, isHeader, updateFileMod, FuncData(..), fd, 
+  ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), od, 
+  ParamData(..), pd, updateParamDoc, ProgData(..), progD, emptyProg, 
+  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, bvd, 
+  TypedValue(..), otherVal, boolVal, valPrec, valType, valDoc, Binding(..), 
+  VarData(..), vard
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -22,6 +25,10 @@ pairList :: (Pair p) => [x a] -> [y a] -> [p x y a]
 pairList [] _ = []
 pairList _ [] = []
 pairList (x:xs) (y:ys) = pair x y : pairList xs ys
+
+data Boolean
+-- Temporary Val type to keep some things from breaking
+data Val
  
 data Terminator = Semi | Empty
 
@@ -120,13 +127,37 @@ instance Eq TypeData where
 td :: CodeType -> String -> Doc -> TypeData
 td = TD
 
-data ValData = VD {valPrec :: Maybe Int, valType :: TypeData, valDoc :: Doc}
+data ValData = VD {vlPrec :: Maybe Int, vlType :: TypeData, vlDoc :: Doc}
 
-vd :: Maybe Int -> TypeData -> Doc -> ValData
+vd :: Maybe Int -> TypeData -> Doc -> TypedValue Val
 vd = VD
 
-updateValDoc :: (Doc -> Doc) -> ValData -> ValData
+updateValDoc :: (Doc -> Doc) -> TypedValue Val -> TypedValue Val
 updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)
+
+bvd :: Maybe Int -> TypeData -> Doc -> TypedValue Boolean
+bvd p t d = boolVal (VD p t d)
+
+data TypedValue a where
+  BV :: ValData -> TypedValue Boolean
+  OV :: ValData -> TypedValue Val
+
+boolVal :: ValData -> TypedValue Boolean
+boolVal = BV
+
+otherVal :: ValData -> TypedValue Val
+otherVal = OV
+
+getValData :: TypedValue a -> ValData
+getValData (BV v) = v
+getValData (OV v) = v
+
+valPrec :: TypedValue a -> Maybe Int
+valType :: TypedValue a -> TypeData
+valDoc :: TypedValue a -> Doc
+valPrec = vlPrec . getValData 
+valType = vlType . getValData
+valDoc = vlDoc . getValData
 
 data VarData = VarD {varBind :: Binding, varName :: String, 
   varType :: TypeData, varDoc :: Doc}
@@ -136,3 +167,7 @@ instance Eq VarData where
 
 vard :: Binding -> String -> TypeData -> Doc -> VarData
 vard = VarD
+
+-- Reminder for later
+-- varToVal :: TypedVar a -> TypedValue a
+-- varToVal (BVar x) = BVal x

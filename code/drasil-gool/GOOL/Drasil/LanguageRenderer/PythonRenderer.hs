@@ -30,19 +30,17 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, mkStaticVar, litCharD, 
-  litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
-  classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, extFuncAppDocD, 
-  funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
-  breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, 
-  observerListName, commentedItem,
-  addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
-  getterName, setterName, filterOutObjs)
-import GOOL.Drasil.Data (Terminator(..),
-  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), 
-  ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
-  VarData(..), vard)
+  moduloOpDocD, binExpr, typeBinExpr, mkVal, mkBoolVal, mkVar, mkStaticVar, 
+  litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, 
+  enumElemDocD, classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, 
+  extFuncAppDocD, funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, 
+  castObjDocD, breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, 
+  observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
+  docFuncRepr, valList, surroundBody, getterName, setterName, filterOutObjs)
+import GOOL.Drasil.Data (Val, Terminator(..), FileData(..), file, updateFileMod,
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
+  vd, TypedValue(..), valPrec, valType, valDoc, VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
   liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -229,9 +227,9 @@ instance VariableSym PythonCode where
   varFromData b n t d = liftA2 (vard b n) t (return d)
 
 instance ValueSym PythonCode where
-  type Value PythonCode = ValData
-  litTrue = liftA2 mkVal bool (return $ text "True")
-  litFalse = liftA2 mkVal bool (return $ text "False")
+  type Value PythonCode = TypedValue
+  litTrue = liftA2 mkBoolVal bool (return $ text "True")
+  litFalse = liftA2 mkBoolVal bool (return $ text "False")
   litChar c = liftA2 mkVal char (return $ litCharD c)
   litFloat v = liftA2 mkVal float (return $ litFloatD v)
   litInt v = liftA2 mkVal int (return $ litIntD v)
@@ -610,11 +608,11 @@ pyStateObj t vs = typeDoc t <> parens vs
 pyExtStateObj :: Label -> TypeData -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs
 
-pyInlineIf :: ValData -> ValData -> ValData -> ValData
+pyInlineIf :: TypedValue Val -> TypedValue Val -> TypedValue Val -> TypedValue Val
 pyInlineIf c v1 v2 = vd (valPrec c) (valType v1) (valDoc v1 <+> text "if" <+> 
   valDoc c <+> text "else" <+> valDoc v2)
 
-pyListSize :: ValData -> FuncData -> Doc
+pyListSize :: TypedValue Val -> FuncData -> Doc
 pyListSize v f = funcDoc f <> parens (valDoc v)
 
 pyStringType :: TypeData
@@ -626,19 +624,20 @@ pyListDec v = varDoc v <+> equals <+> typeDoc (varType v)
 pyListDecDef :: VarData -> Doc -> Doc
 pyListDecDef v vs = varDoc v <+> equals <+> brackets vs
 
-pyPrint :: Bool ->  ValData -> ValData -> ValData -> Doc
+pyPrint :: Bool ->  TypedValue Val -> TypedValue Val -> TypedValue Val -> Doc
 pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
         fl = emptyIfEmpty (valDoc f) $ text ", file=" <> valDoc f
 
-pyOut :: (RenderSym repr) => Bool -> repr (Value repr) -> repr (Value repr) 
-  -> Maybe (repr (Value repr)) -> repr (Statement repr)
+pyOut :: (RenderSym repr) => Bool -> repr (Value repr Val) -> 
+  repr (Value repr Val) -> Maybe (repr (Value reprVal )) -> 
+  repr (Statement repr)
 pyOut newLn printFn v f = pyOut' (getType $ valueType v)
   where pyOut' (List _) = printSt newLn printFn v f
         pyOut' _ = outDoc newLn printFn v f
 
-pyInput :: PythonCode (Value PythonCode) -> PythonCode (Variable PythonCode) -> 
-  PythonCode (Statement PythonCode)
+pyInput :: PythonCode (Value PythonCode Val) -> PythonCode (Variable PythonCode)
+  ->  PythonCode (Statement PythonCode)
 pyInput inSrc v = v &= pyInput' (getType $ variableType v)
   where pyInput' Integer = funcApp "int" int [inSrc]
         pyInput' Float = funcApp "float" float [inSrc]
@@ -647,22 +646,22 @@ pyInput inSrc v = v &= pyInput' (getType $ variableType v)
         pyInput' Char = inSrc
         pyInput' _ = error "Attempt to read a value of unreadable type"
 
-pyThrow ::  ValData -> Doc
+pyThrow ::  TypedValue Val -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valDoc errMsg)
 
-pyForRange :: Label -> Doc ->  ValData ->  ValData ->
-  ValData -> Doc -> Doc
+pyForRange :: Label -> Doc ->  TypedValue Val ->  TypedValue Val ->
+  TypedValue Val -> Doc -> Doc
 pyForRange i inLabel initv finalv stepv b = vcat [
   forLabel <+> text i <+> inLabel <+> text "range" <> parens (valDoc initv <> 
     text ", " <> valDoc finalv <> text ", " <> valDoc stepv) <> colon,
   indent b]
 
-pyForEach :: Label -> Doc -> Doc ->  ValData -> Doc -> Doc
+pyForEach :: Label -> Doc -> Doc ->  TypedValue Val -> Doc -> Doc
 pyForEach i forEachLabel inLabel lstVar b = vcat [
   forEachLabel <+> text i <+> inLabel <+> valDoc lstVar <> colon,
   indent b]
 
-pyWhile ::  ValData -> Doc -> Doc
+pyWhile ::  TypedValue Val -> Doc -> Doc
 pyWhile v b = vcat [
   text "while" <+> valDoc v <> colon,
   indent b]
@@ -674,8 +673,8 @@ pyTryCatch tryB catchB = vcat [
   text "except" <+> text "Exception" <+> colon,
   indent catchB]
 
-pyListSlice :: VarData -> ValData -> 
-  ValData -> ValData -> ValData -> Doc
+pyListSlice :: VarData -> TypedValue Val -> 
+  TypedValue Val -> TypedValue Val -> TypedValue Val -> Doc
 pyListSlice vnew vold b e s = varDoc vnew <+> equals <+> valDoc vold <> 
   brackets (valDoc b <> colon <> valDoc e <> colon <> valDoc s)
 
@@ -718,9 +717,10 @@ pyModule ls fs cs =
         funcs = emptyIfEmpty fs $ fs $+$ blank
 
 pyInOutCall :: (Label -> PythonCode (StateType PythonCode) -> 
-  [PythonCode (Value PythonCode)] -> PythonCode (Value PythonCode)) -> Label -> 
-  [PythonCode (Value PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
-  [PythonCode (Variable PythonCode)] -> PythonCode (Statement PythonCode)
+  [PythonCode (Value PythonCode Val)] -> PythonCode (Value PythonCode Val)) -> 
+  Label -> [PythonCode (Value PythonCode Val)] -> 
+  [PythonCode (Variable PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
+  PythonCode (Statement PythonCode)
 pyInOutCall f n ins [] [] = valState $ f n void ins
 pyInOutCall f n ins outs both = if null rets then valState (f n void (map 
   valueOf both ++ ins)) else multiAssign (filterOutObjs both ++ outs) 

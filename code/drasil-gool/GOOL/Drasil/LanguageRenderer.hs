@@ -52,7 +52,8 @@ import GOOL.Drasil.Symantics (Label, Library,
 import qualified GOOL.Drasil.Symantics as S (StateTypeSym(int))
 import GOOL.Drasil.Data (Boolean, Val, Terminator(..), FileData(..), 
   fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
-  od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, VarData(..), vard)
+  od, ParamData(..), pd, TypeData(..), td, vd, bvd, TypedValue(..), valPrec, 
+  valType, valDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, 
   doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 

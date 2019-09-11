@@ -11,7 +11,7 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
 import GOOL.Drasil (Label, RenderSym(..), StateTypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..), ProgData)
+  CodeType(..), Val, ProgData)
 
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
@@ -53,12 +53,12 @@ publicClass desc n l vs ms = do
     else pubClass n l vs ms
 
 fApp :: (RenderSym repr) => String -> String -> repr (StateType repr) -> 
-  [repr (Value repr)] -> Reader State (repr (Value repr))
+  [repr (Value repr Val)] -> Reader State (repr (Value repr Val))
 fApp m s t vl = do
   g <- ask
   return $ if m /= currentModule g then extFuncApp m s t vl else funcApp s t vl
 
-fAppInOut :: (RenderSym repr) => String -> String -> [repr (Value repr)] -> 
+fAppInOut :: (RenderSym repr) => String -> String -> [repr (Value repr Val)] -> 
   [repr (Variable repr)] -> [repr (Variable repr)] -> 
   Reader State (repr (Statement repr))
 fAppInOut m n ins outs both = do

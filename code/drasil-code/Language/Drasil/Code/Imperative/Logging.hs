@@ -6,7 +6,7 @@ import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 
 import GOOL.Drasil (Label, RenderSym(..), BodySym(..), BlockSym(..), 
-  StateTypeSym(..), VariableSym(..), ValueSym(..), StatementSym(..))
+  StateTypeSym(..), VariableSym(..), ValueSym(..), StatementSym(..), Val)
 
 import Data.Maybe (maybeToList)
 import Control.Applicative ((<$>))
@@ -68,5 +68,5 @@ loggedMethod lName n vars b = block [
 varLogFile :: (RenderSym repr) => repr (Variable repr)
 varLogFile = var "outfile" outfile
 
-valLogFile :: (RenderSym repr) => repr (Value repr)
+valLogFile :: (RenderSym repr) => repr (Value repr Val)
 valLogFile = valueOf varLogFile

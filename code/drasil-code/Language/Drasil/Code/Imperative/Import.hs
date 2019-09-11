@@ -31,7 +31,7 @@ import GOOL.Drasil (Label, RenderSym(..), PermanenceSym(..), BodySym(..),
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
-  MethodSym(..), convType) 
+  MethodSym(..), Val, convType) 
 import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -44,7 +44,7 @@ import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
 value :: (RenderSym repr) => UID -> String -> repr (StateType repr) -> 
-  Reader State (repr (Value repr))
+  Reader State (repr (Value repr Val))
 value u s t = do
   g <- ask
   let cs = codeSpec g
@@ -91,7 +91,7 @@ constVariable WithInputs cr v = do
 constVariable _ _ v = return v
 
 mkVal :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => c -> 
-  Reader State (repr (Value repr))
+  Reader State (repr (Value repr Val))
 mkVal v = value (v ^. uid) (codeName v) (convType $ codeType v)
 
 mkVar :: (RenderSym repr, HasCodeType c, CodeIdea c) => c -> 
@@ -146,7 +146,7 @@ genInOutFunc s pr n desc ins' outs' b = do
     then docInOutFunc n s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
     bComms bothVs) bod else inOutFunc n s pr inVs outVs bothVs bod
 
-convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr))
+convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr Val))
 convExpr (Dbl d) = return $ litFloat d
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
@@ -203,7 +203,7 @@ renderRealInt s (UpTo (Exc,a))    = sy s $< a
 renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
-unop :: (RenderSym repr) => UFunc -> (repr (Value repr) -> repr (Value repr))
+unop :: (RenderSym repr) => UFunc -> (repr (Value repr Val) -> repr (Value repr Val))
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln
@@ -223,8 +223,8 @@ unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
 
-bfunc :: (RenderSym repr) => BinOp -> (repr (Value repr) -> repr
-  (Value repr) -> repr (Value repr))
+bfunc :: (RenderSym repr) => BinOp -> (repr (Value repr Val) -> repr
+  (Value repr Val) -> repr (Value repr Val))
 bfunc Eq    = (?==)
 bfunc NEq   = (?!=)
 bfunc Gt    = (?>)
@@ -424,7 +424,7 @@ readData ddef = do
         var_line, var_lines, var_linetokens, var_infile :: 
           (RenderSym repr) => repr (Variable repr)
         v_line, v_lines, v_linetokens, v_infile, v_i ::
-          (RenderSym repr) => repr (Value repr)
+          (RenderSym repr) => repr (Value repr Val)
         l_line = "line"
         var_line = var l_line string
         v_line = valueOf var_line

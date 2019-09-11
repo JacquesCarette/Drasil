@@ -6,7 +6,7 @@ module GOOL.Drasil (Label, ProgramSym(..), RenderSym(..), PermanenceSym(..),
   Selector(..), FunctionSym(..), SelectorFunction(..), ScopeSym(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
-  ProgData(..), FileData(..), isSource, isHeader, ModData(..),
+  Val, ProgData(..), FileData(..), isSource, isHeader, ModData(..),
   CodeType(..),
   convType, liftList,
   unPC, unJC, unCSC, unCPPC
@@ -20,7 +20,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 
-import GOOL.Drasil.Data (FileData(..), ModData(..), ProgData(..), 
+import GOOL.Drasil.Data (Val, FileData(..), ModData(..), ProgData(..), 
   isHeader, isSource)
 
 import GOOL.Drasil.CodeType (CodeType(..))

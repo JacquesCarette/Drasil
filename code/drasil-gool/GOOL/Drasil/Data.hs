@@ -130,7 +130,7 @@ td = TD
 data ValData = VD {vlPrec :: Maybe Int, vlType :: TypeData, vlDoc :: Doc}
 
 vd :: Maybe Int -> TypeData -> Doc -> TypedValue Val
-vd = VD
+vd p t d = otherVal (VD p t d)
 
 updateValDoc :: (Doc -> Doc) -> TypedValue Val -> TypedValue Val
 updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)

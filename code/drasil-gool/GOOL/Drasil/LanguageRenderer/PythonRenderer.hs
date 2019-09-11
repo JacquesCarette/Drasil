@@ -630,7 +630,7 @@ pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
         fl = emptyIfEmpty (valDoc f) $ text ", file=" <> valDoc f
 
 pyOut :: (RenderSym repr) => Bool -> repr (Value repr Val) -> 
-  repr (Value repr Val) -> Maybe (repr (Value reprVal )) -> 
+  repr (Value repr Val) -> Maybe (repr (Value repr Val)) -> 
   repr (Statement repr)
 pyOut newLn printFn v f = pyOut' (getType $ valueType v)
   where pyOut' (List _) = printSt newLn printFn v f

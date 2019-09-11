@@ -55,7 +55,7 @@ getOutputCall = do
 
 getFuncCall :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => String 
   -> repr (StateType repr) -> Reader State [c] -> 
-  Reader State (Maybe (repr (Value repr)))
+  Reader State (Maybe (repr (Value repr Val)))
 getFuncCall n t funcPs = do
   g <- ask
   let getCall Nothing = return Nothing

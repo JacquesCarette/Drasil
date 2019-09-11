@@ -161,7 +161,7 @@ chooseInStructure Unbundled = return Nothing
 chooseInStructure Bundled = genInputClass
 
 constVarFunc :: (RenderSym repr) => ConstantRepr -> String ->
-  (repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr))
+  (repr (Variable repr) -> repr (Value repr Val) -> repr (StateVar repr))
 constVarFunc Var n = stateVarDef 0 n public dynamic_
 constVarFunc Const n = constVar 0 n public
 

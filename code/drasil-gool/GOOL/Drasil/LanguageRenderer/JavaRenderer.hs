@@ -44,7 +44,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
   docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
   setMainMethod, setEmpty, intValue, filterOutObjs)
-import GOOL.Drasil.Data (Val, Terminator(..), 
+import GOOL.Drasil.Data (Val, Boolean, Terminator(..), 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), TypedValue(..), valPrec,

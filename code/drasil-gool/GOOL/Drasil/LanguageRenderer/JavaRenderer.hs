@@ -4,7 +4,7 @@
 -- | The logic to render Java code is contained in this module
 module GOOL.Drasil.LanguageRenderer.JavaRenderer (
   -- * Java Code Configuration -- defines syntax of all Java code
-  JavaCode(..), jNameOpts
+  JavaCode(..)
 ) where
 
 import Utils.Drasil (indent)
@@ -44,10 +44,10 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
   docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
   setMainMethod, setEmpty, intValue, filterOutObjs)
-import GOOL.Drasil.Data (Terminator(..), AuxData(..), 
-  ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
+import GOOL.Drasil.Data (Terminator(..), 
+  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
-  PackData(..), packD, ProgData(..), progD, TypeData(..), td, ValData(..), 
+  ProgData(..), progD, TypeData(..), td, ValData(..), 
   VarData(..), vard)
 import GOOL.Drasil.Doxygen.Import (makeDoxConfig)
 import GOOL.Drasil.Build.AST (BuildConfig, Runnable, 
@@ -69,12 +69,6 @@ import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
 jExt :: String
 jExt = "java"
 
-jNameOpts :: NameOpts
-jNameOpts = NameOpts {
-  packSep = ".",
-  includeExt = False
-}
-
 newtype JavaCode a = JC {unJC :: a}
 
 instance Functor JavaCode where
@@ -87,10 +81,6 @@ instance Applicative JavaCode where
 instance Monad JavaCode where
   return = JC
   JC x >>= f = f x
-
-instance PackageSym JavaCode where
-  type Package JavaCode = PackData
-  package = lift1List packD
 
 instance ProgramSym JavaCode where
   type Program JavaCode = ProgData
@@ -111,16 +101,6 @@ instance RenderSym JavaCode where
 instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)
   bottom = return empty
-
-instance AuxiliarySym JavaCode where
-  type Auxiliary JavaCode = AuxData
-  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
-    optimizeDox p)
-  sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
-
-  optimizeDox = return $ text "YES"
-
-  makefile cms = fmap (ad makefileName . makeBuild cms jBuildConfig jRunnable)
 
 instance KeywordSym JavaCode where
   type Keyword JavaCode = Doc
@@ -783,11 +763,3 @@ jInOutCall f n ins outs both = fCall rets
         fCall [x] = assign x $ f n (variableType x) (map valueOf both ++ ins)
         fCall xs = multi $ varDecDef (var "outputs" jArrayType) 
           (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs
-
-jBuildConfig :: Maybe BuildConfig
-jBuildConfig = buildSingle (\i _ -> asFragment "javac" : i) $
-  inCodePackage mainModuleFile
-
-jRunnable :: Runnable
-jRunnable = interp (flip withExt ".class" $ inCodePackage mainModule) 
-  jNameOpts "java"

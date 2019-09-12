@@ -45,10 +45,10 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
   surroundBody, getterName, setterName, setEmpty, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Pair(..), pairList, 
-  Terminator(..), ScopeTag(..), Binding(..), AuxData(..), ad, emptyAux, 
+  Terminator(..), ScopeTag(..), Binding(..),
   BindData(..), bd, FileData(..), srcFile, hdrFile, updateFileMod, FuncData(..),
-  fd, ModData(..), md, updateModDoc, OpData(..), od, PackData(..), packD, 
-  emptyPack, ParamData(..), pd, ProgData(..), progD, emptyProg, 
+  fd, ModData(..), md, updateModDoc, OpData(..), od,
+  ParamData(..), pd, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), vard)
 import GOOL.Drasil.Doxygen.Import (makeDoxConfig)
 import GOOL.Drasil.Build.AST (BuildConfig, Runnable, 
@@ -84,10 +84,6 @@ unCPPC (CPPC (CPPSC a) _) = a
 hdrToSrc :: CppHdrCode a -> CppSrcCode a
 hdrToSrc (CPPHC a) = CPPSC a
 
-instance (Pair p) => PackageSym (p CppSrcCode CppHdrCode) where
-  type Package (p CppSrcCode CppHdrCode) = PackData
-  package p aux = pair (package (pfst p) (map pfst aux)) (return emptyPack)
-
 instance (Pair p) => ProgramSym (p CppSrcCode CppHdrCode) where
   type Program (p CppSrcCode CppHdrCode) = ProgData
   prog n ms = pair (prog n $ map (hdrToSrc . psnd) ms ++ map pfst ms) 
@@ -105,15 +101,6 @@ instance (Pair p) => RenderSym (p CppSrcCode CppHdrCode) where
 instance (Pair p) => InternalFile (p CppSrcCode CppHdrCode) where
   top m = pair (top $ pfst m) (top $ psnd m)
   bottom = pair bottom bottom
-
-instance (Pair p) => AuxiliarySym (p CppSrcCode CppHdrCode) where
-  type Auxiliary (p CppSrcCode CppHdrCode) = AuxData
-  doxConfig pName p = pair (doxConfig pName $ pfst p) (return emptyAux)
-  sampleInput db d sd = pair (sampleInput db d sd) (return emptyAux)
-
-  optimizeDox = pair optimizeDox (return empty)
-
-  makefile cms p = pair (makefile cms $ pfst p) (return emptyAux)
 
 instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   type Keyword (p CppSrcCode CppHdrCode) = Doc
@@ -658,10 +645,6 @@ instance Monad CppSrcCode where
   return = CPPSC
   CPPSC x >>= f = f x
 
-instance PackageSym CppSrcCode where
-  type Package CppSrcCode = PackData
-  package = lift1List packD
-
 instance ProgramSym CppSrcCode where
   type Program CppSrcCode = ProgData
   prog n = liftList (progD n)
@@ -682,17 +665,6 @@ instance RenderSym CppSrcCode where
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
   bottom = return empty
-
-instance AuxiliarySym CppSrcCode where
-  type Auxiliary CppSrcCode = AuxData
-  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
-    optimizeDox p)
-  sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
-
-  optimizeDox = return $ text "NO"
-  
-  makefile cms = fmap (ad makefileName . makeBuild cms cppBuildConfig 
-    cppRunnable)
 
 instance KeywordSym CppSrcCode where
   type Keyword CppSrcCode = Doc
@@ -1985,10 +1957,3 @@ cppInOutCall f n ins [] [out] = if null (filterOutObjs [out])
   else assign out $ f n (variableType out) (valueOf out : ins)
 cppInOutCall f n ins outs both = valState $ f n void (map valueOf both ++ ins 
   ++ map valueOf outs)
-
-cppBuildConfig :: Maybe BuildConfig
-cppBuildConfig = buildAll $ \i o -> cppCompiler : i ++ map asFragment
-  ["--std=c++11", "-o"] ++ [o]
-
-cppRunnable :: Runnable
-cppRunnable = nativeBinary

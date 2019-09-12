@@ -4,33 +4,23 @@ module GOOL.Drasil.Symantics (
   -- Types
   Label, Library,
   -- Typeclasses
-  PackageSym(..), ProgramSym(..), RenderSym(..), InternalFile(..), 
-  AuxiliarySym(..), KeywordSym(..), PermanenceSym(..), BodySym(..), 
-  ControlBlockSym(..), BlockSym(..), StateTypeSym(..), UnaryOpSym(..), 
-  BinaryOpSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
-  BooleanExpression(..), ValueExpression(..), InternalValue(..), Selector(..), 
-  FunctionSym(..), SelectorFunction(..), InternalFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ScopeSym(..), InternalScope(..), MethodTypeSym(..), ParameterSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..), 
-  BlockCommentSym(..)
+  ProgramSym(..), RenderSym(..), InternalFile(..),  KeywordSym(..), 
+  PermanenceSym(..), BodySym(..), ControlBlockSym(..), BlockSym(..), 
+  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
+  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..)
 ) where
 
-import Language.Drasil (Expr)
-import Database.Drasil (ChunkDB)
 import GOOL.Drasil.CodeType (CodeType)
-import Language.Drasil.Code.DataDesc (DataDesc)
 import GOOL.Drasil.Data (Binding)
-import Language.Drasil.CodeSpec (Comments)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
 type Library = String
-
-class (ProgramSym repr, AuxiliarySym repr) => PackageSym repr where
-  type Package repr 
-  package :: repr (Program repr) -> [repr (Auxiliary repr)] -> 
-    repr (Package repr)
 
 class (RenderSym repr) => ProgramSym repr where
   type Program repr
@@ -51,15 +41,6 @@ class (ModuleSym repr, ControlBlockSym repr, InternalFile repr) =>
 class (ModuleSym repr) => InternalFile repr where
   top :: repr (Module repr) -> repr (Block repr)
   bottom :: repr (Block repr)
-
-class (KeywordSym repr, RenderSym repr) => AuxiliarySym repr where
-  type Auxiliary repr
-  doxConfig :: String -> repr (Program repr) -> repr (Auxiliary repr)
-  sampleInput :: ChunkDB -> DataDesc -> [Expr] -> repr (Auxiliary repr)
-
-  optimizeDox :: repr (Keyword repr)
-
-  makefile :: [Comments] -> repr (Program repr) -> repr (Auxiliary repr)
 
 class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   type Keyword repr

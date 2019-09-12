@@ -38,9 +38,9 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   observerListName, doxConfigName, makefileName, sampleInputName, commentedItem,
   addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
   getterName, setterName, filterOutObjs)
-import GOOL.Drasil.Data (Terminator(..), AuxData(..), 
-  ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
+import GOOL.Drasil.Data (Terminator(..),
+  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
   VarData(..), vard)
 import GOOL.Drasil.Doxygen.Import (makeDoxConfig)
@@ -74,10 +74,6 @@ instance Monad PythonCode where
   return = PC
   PC x >>= f = f x
 
-instance PackageSym PythonCode where
-  type Package PythonCode = PackData
-  package = lift1List packD
-
 instance ProgramSym PythonCode where
   type Program PythonCode = ProgData
   prog n = liftList (progD n)
@@ -97,16 +93,6 @@ instance RenderSym PythonCode where
 instance InternalFile PythonCode where
   top _ = return pytop
   bottom = return empty
-
-instance AuxiliarySym PythonCode where
-  type Auxiliary PythonCode = AuxData
-  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
-    optimizeDox p)
-  sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
-
-  optimizeDox = return $ text "YES"
-
-  makefile cms = fmap (ad makefileName . makeBuild cms Nothing pyRunnable)
 
 instance KeywordSym PythonCode where
   type Keyword PythonCode = Doc
@@ -751,6 +737,3 @@ pyBlockComment lns cmt = vcat $ map ((<+>) cmt . text) lns
 pyDocComment :: [String] -> Doc -> Doc -> Doc
 pyDocComment [] _ _ = empty
 pyDocComment (l:lns) start mid = vcat $ start <+> text l : map ((<+>) mid . text) lns
-
-pyRunnable :: Runnable
-pyRunnable = interpMM "python"

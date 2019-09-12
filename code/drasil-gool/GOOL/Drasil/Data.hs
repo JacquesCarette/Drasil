@@ -1,11 +1,10 @@
-module GOOL.Drasil.Data (Pair(..), pairList,
-  Terminator(..), ScopeTag(..), FileType(..), AuxData(..), ad, emptyAux, 
-  BindData(..), bd, FileData(..), fileD, file, srcFile, hdrFile, isSource, 
-  isHeader, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
-  MethodData(..), mthd, OpData(..), od, PackData(..), packD, emptyPack, 
-  ParamData(..), pd, updateParamDoc, ProgData(..), progD, emptyProg, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, 
-  Binding(..), VarData(..), vard
+module GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
+  FileType(..), BindData(..), bd, FileData(..), fileD, file, srcFile, hdrFile, 
+  isSource, isHeader, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  updateModDoc, MethodData(..), mthd, OpData(..), od, ParamData(..), pd, 
+  updateParamDoc, ProgData(..), progD, emptyProg, StateVarData(..), svd, 
+  TypeData(..), td, ValData(..), vd, updateValDoc, Binding(..), VarData(..), 
+  vard
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -36,14 +35,6 @@ data BindData = BD {bind :: Binding, bindDoc :: Doc}
 
 bd :: Binding -> Doc -> BindData
 bd = BD
-
-data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}
-
-ad :: String -> Doc -> AuxData
-ad = AD
-
-emptyAux :: AuxData
-emptyAux = ad "" empty
 
 data FileData = FileD {fileType :: FileType, filePath :: FilePath,
   fileMod :: ModData}
@@ -95,14 +86,6 @@ data OpData = OD {opPrec :: Int, opDoc :: Doc}
 
 od :: Int -> Doc -> OpData
 od = OD
-
-data PackData = PackD {packProg :: ProgData, packAux :: [AuxData]}
-
-packD :: ProgData -> [AuxData] -> PackData
-packD = PackD
-
-emptyPack :: PackData
-emptyPack = packD emptyProg []
 
 data ParamData = PD {paramName :: String, paramType :: TypeData, 
   paramDoc :: Doc}

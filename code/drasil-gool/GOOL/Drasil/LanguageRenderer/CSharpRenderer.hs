@@ -45,9 +45,9 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
   moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
   setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
-import GOOL.Drasil.Data (Terminator(..), AuxData(..), 
-  ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
+import GOOL.Drasil.Data (Terminator(..),
+  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
   ValData(..), updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Doxygen.Import (makeDoxConfig)
@@ -83,10 +83,6 @@ instance Monad CSharpCode where
   return = CSC
   CSC x >>= f = f x
 
-instance PackageSym CSharpCode where
-  type Package CSharpCode = PackData
-  package = lift1List packD
-
 instance ProgramSym CSharpCode where
   type Program CSharpCode = ProgData
   prog n = liftList (progD n)
@@ -106,16 +102,6 @@ instance RenderSym CSharpCode where
 instance InternalFile CSharpCode where
   top _ = liftA2 cstop endStatement (include "")
   bottom = return empty
-
-instance AuxiliarySym CSharpCode where
-  type Auxiliary CSharpCode = AuxData
-  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
-    optimizeDox p)
-  sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
-
-  optimizeDox = return $ text "NO"
-
-  makefile cms = fmap (ad makefileName . makeBuild cms csBuildConfig csRunnable)
 
 instance KeywordSym CSharpCode where
   type Keyword CSharpCode = Doc
@@ -707,13 +693,6 @@ csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
 csInOutCall f n ins outs both = valState $ f n void (map (fmap (updateValDoc 
   csRef) . valueOf) both ++ ins ++ map (fmap (updateValDoc csOut) . valueOf) 
   outs)
-
-csBuildConfig :: Maybe BuildConfig
-csBuildConfig = buildAll $ \i o -> [osClassDefault "CSC" "csc" "mcs", 
-  asFragment "-out:" P.<> o] ++ i
-
-csRunnable :: Runnable
-csRunnable = nativeBinary
 
 csVarDec :: Binding -> CSharpCode (Statement CSharpCode) -> 
   CSharpCode (Statement CSharpCode)

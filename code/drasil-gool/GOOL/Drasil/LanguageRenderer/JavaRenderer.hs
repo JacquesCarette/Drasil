@@ -10,8 +10,8 @@ module GOOL.Drasil.LanguageRenderer.JavaRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, PackageSym(..), 
-  ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
+import GOOL.Drasil.Symantics (Label,
+  ProgramSym(..), RenderSym(..), InternalFile(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -40,7 +40,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
   breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
   dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
-  doxConfigName, makefileName, sampleInputName, doubleSlash, blockCmtDoc, 
+  doubleSlash, blockCmtDoc, 
   docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
   docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
   setMainMethod, setEmpty, intValue, filterOutObjs)
@@ -49,15 +49,9 @@ import GOOL.Drasil.Data (Terminator(..),
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), 
   VarData(..), vard)
-import GOOL.Drasil.Doxygen.Import (makeDoxConfig)
-import GOOL.Drasil.Build.AST (BuildConfig, Runnable, 
-  NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
-  interp, mainModule, mainModuleFile, packSep, withExt)
-import GOOL.Drasil.Build.Import (makeBuild)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
-import GOOL.Drasil.WriteInput (makeInputFile)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)

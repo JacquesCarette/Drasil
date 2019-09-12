@@ -1,12 +1,11 @@
 module Test.Main (main) where
 
-import GOOL.Drasil.Symantics (Label, PackageSym(..))
+import GOOL.Drasil.Symantics (Label, ProgramSym(..))
 import GOOL.Drasil.LanguageRenderer.JavaRenderer (JavaCode(..))
 import GOOL.Drasil.LanguageRenderer.PythonRenderer (PythonCode(..))
 import GOOL.Drasil.LanguageRenderer.CSharpRenderer (CSharpCode(..))
 import GOOL.Drasil.LanguageRenderer.CppRenderer (unCPPC)
-import GOOL.Drasil.Data (FileData(..), ModData(..), 
-  PackData(..), ProgData(..))
+import GOOL.Drasil.Data (FileData(..), ModData(..), ProgData(..))
 import Text.PrettyPrint.HughesPJ (Doc, render)
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import System.FilePath.Posix (takeDirectory)
@@ -36,12 +35,11 @@ main = do
   genCode (classes unCPPC)
   setCurrentDirectory workingDir
     
-genCode :: [PackData] -> IO()
-genCode files = createCodeFiles (concatMap (\p -> replicate (length $ progMods $
-  packProg p) (progName $ packProg p)) files) $ makeCode (concatMap (progMods . packProg) 
-  files)
+genCode :: [ProgData] -> IO()
+genCode files = createCodeFiles (concatMap (\p -> replicate (length $ progMods 
+  p) (progName p)) files) $ makeCode (concatMap progMods files)
 
-classes :: (PackageSym repr) => (repr (Package repr) -> PackData) -> [PackData]
+classes :: (ProgramSym repr) => (repr (Program repr) -> ProgData) -> [ProgData]
 classes unRepr = map unRepr [helloWorld, patternTest, fileTests]
 
 -- | Takes code

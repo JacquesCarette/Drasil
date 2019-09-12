@@ -11,8 +11,8 @@ module GOOL.Drasil.LanguageRenderer.CppRenderer (
 import Utils.Drasil (indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, PackageSym(..), 
-  ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
+import GOOL.Drasil.Symantics (Label,
+  ProgramSym(..), RenderSym(..), InternalFile(..),
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -40,7 +40,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   classVarCheckStatic, objVarDocD, inlineIfD, funcAppDocD, funcDocD, castDocD, 
   objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD,
   privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
-  docCmtStart, observerListName, doxConfigName, makefileName, sampleInputName, 
+  docCmtStart, observerListName, 
   doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
   surroundBody, getterName, setterName, setEmpty, intValue, filterOutObjs)
@@ -50,15 +50,10 @@ import GOOL.Drasil.Data (Pair(..), pairList,
   fd, ModData(..), md, updateModDoc, OpData(..), od,
   ParamData(..), pd, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), vard)
-import GOOL.Drasil.Doxygen.Import (makeDoxConfig)
-import GOOL.Drasil.Build.AST (BuildConfig, Runnable, 
-  asFragment, buildAll, cppCompiler, nativeBinary)
-import GOOL.Drasil.Build.Import (makeBuild)
 import GOOL.Drasil.Helpers (angles, blank, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
   getInnerType, convType, checkParams)
-import GOOL.Drasil.WriteInput (makeInputFile)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import qualified Data.Map as Map (fromList,lookup)

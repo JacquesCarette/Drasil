@@ -11,7 +11,7 @@ import GOOL.Drasil.CodeType (CodeType)
 
 import Control.Applicative (liftA2)
 import Prelude hiding ((<>))
-import Text.PrettyPrint.HughesPJ (Doc, empty, isEmpty)
+import Text.PrettyPrint.HughesPJ (Doc, isEmpty)
 
 class Pair p where
   pfst :: p x y a -> x a

@@ -10,8 +10,8 @@ module GOOL.Drasil.LanguageRenderer.CSharpRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, PackageSym(..), 
-  ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
+import GOOL.Drasil.Symantics (Label,
+  ProgramSym(..), RenderSym(..), InternalFile(..),
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -41,7 +41,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   funcDocD, castDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, 
   castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
   publicDocD, dot, new, blockCmtStart, blockCmtEnd, docCmtStart, 
-  observerListName, doxConfigName, makefileName, sampleInputName, doubleSlash, 
+  observerListName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
   moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
   setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
@@ -50,17 +50,11 @@ import GOOL.Drasil.Data (Terminator(..),
   updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
   ValData(..), updateValDoc, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Doxygen.Import (makeDoxConfig)
-import GOOL.Drasil.Build.AST (BuildConfig, Runnable, 
-  asFragment, buildAll, nativeBinary, osClassDefault)
-import GOOL.Drasil.Build.Import (makeBuild)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
-import GOOL.Drasil.WriteInput (makeInputFile)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import qualified Prelude as P ((<>))
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)

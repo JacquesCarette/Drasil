@@ -1,15 +1,15 @@
 module Test.PatternTest (patternTest) where
 
 import GOOL.Drasil (
-  PackageSym(..), ProgramSym(..), RenderSym(..), PermanenceSym(..),
+  ProgramSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..),
   ValueExpression(..), FunctionSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
 import Test.Observer (observer)
 
-patternTest :: (PackageSym repr) => repr (Package repr)
-patternTest = package (prog "PatternTest" [fileDoc (buildModule "PatternTest" ["Observer"] [patternTestMainMethod] []), observer]) []
+patternTest :: (ProgramSym repr) => repr (Program repr)
+patternTest = prog "PatternTest" [fileDoc (buildModule "PatternTest" ["Observer"] [patternTestMainMethod] []), observer]
 
 patternTestMainMethod :: (RenderSym repr) => repr (Method repr)
 patternTestMainMethod = mainMethod "PatternTest" (body [block [

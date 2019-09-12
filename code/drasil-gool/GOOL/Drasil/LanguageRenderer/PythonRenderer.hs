@@ -9,8 +9,8 @@ module GOOL.Drasil.LanguageRenderer.PythonRenderer (
 import Utils.Drasil (indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
-import GOOL.Drasil.Symantics (Label, PackageSym(..), 
-  ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
+import GOOL.Drasil.Symantics (Label,
+  ProgramSym(..), RenderSym(..), InternalFile(..),
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
   ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
@@ -35,7 +35,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, extFuncAppDocD, 
   funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
   breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, 
-  observerListName, doxConfigName, makefileName, sampleInputName, commentedItem,
+  observerListName, commentedItem,
   addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
   getterName, setterName, filterOutObjs)
 import GOOL.Drasil.Data (Terminator(..),
@@ -43,13 +43,9 @@ import GOOL.Drasil.Data (Terminator(..),
   updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
   VarData(..), vard)
-import GOOL.Drasil.Doxygen.Import (makeDoxConfig)
-import GOOL.Drasil.Build.AST (Runnable, interpMM)
-import GOOL.Drasil.Build.Import (makeBuild)
 import GOOL.Drasil.Helpers (blank, vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
   liftPair, liftPairFst, getInnerType, convType, checkParams)
-import GOOL.Drasil.WriteInput (makeInputFile)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)

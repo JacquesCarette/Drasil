@@ -2,6 +2,8 @@ module Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, emptyAux,
   PackData(..), packD, emptyPack
 ) where
 
+import GOOL.Drasil (ProgData, emptyProg)
+
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 
 data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}

@@ -39,7 +39,7 @@ module GOOL.Drasil.LanguageRenderer (
   setterName, setMainMethod, setEmpty, intValue, filterOutObjs
 ) where
 
-import Utils.Drasil (capitalize, indent, indentList, stringList)
+import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library,
@@ -54,7 +54,7 @@ import GOOL.Drasil.Data (Terminator(..), FileData(..),
   fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
   od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
   VarData(..), vard)
-import GOOL.Drasil.Helpers (angles,blank, 
+import GOOL.Drasil.Helpers (angles, 
   doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
 import Control.Applicative ((<|>))

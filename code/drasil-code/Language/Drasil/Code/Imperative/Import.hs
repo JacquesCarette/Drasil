@@ -8,20 +8,12 @@ module Language.Drasil.Code.Imperative.Import (
 import Language.Drasil hiding (int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil (symbResolve)
-import Language.Drasil.Code.Code as C (CodeType(List))
 import Language.Drasil.Code.Imperative.Comments (paramComment, returnComment)
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, genModule, mkParam)
 import Language.Drasil.Code.Imperative.Helpers (getUpperBound, liftS, lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
 import Language.Drasil.Code.Imperative.State (State(..))
-import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, RenderSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
-  MethodSym(..))
-import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType, codevar, 
   quantvar, quantfunc)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
@@ -33,6 +25,14 @@ import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..),
 import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight), 
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
+
+import GOOL.Drasil (Label, RenderSym(..), PermanenceSym(..), BodySym(..), 
+  BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
+  MethodSym(..), convType) 
+import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
 import Data.List ((\\), intersect)

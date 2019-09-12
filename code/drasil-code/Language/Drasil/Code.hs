@@ -10,14 +10,7 @@ module Language.Drasil.Code (
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, 
   packmod, relToQD,
   junkLine, multiLine, repeated, singleLine, singleton,
-  PackageSym(..), ProgramSym(..), RenderSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  StateTypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..),
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..),
-  MethodSym(..), ModuleSym(..), BlockCommentSym(..), ModData(..),
-  JavaCode(..), PythonCode(..), CSharpCode(..), CppSrcCode(..), CppHdrCode(..),
-  unCPPC,
+  PackageSym(..),
   quantvar
 ) where
 
@@ -38,8 +31,14 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec(..),
   ImplementationType(..), Lang(..), Logging(..), Mod(Mod), Structure(..), 
   ConstantStructure(..), ConstantRepr(..), InputModule(..), AuxFile(..), 
   Visibility(..), asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, 
-  funcDef, packmod, relToQD,
-  )
+  funcDef, packmod, relToQD)
+
+import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 
 import Language.Drasil.Chunk.Code (quantvar)
 
+-- Need to re-import these to export new instances
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer ()
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer ()
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer ()
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer ()

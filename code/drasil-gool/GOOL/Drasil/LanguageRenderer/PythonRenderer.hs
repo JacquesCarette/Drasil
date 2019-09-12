@@ -6,7 +6,7 @@ module GOOL.Drasil.LanguageRenderer.PythonRenderer (
   PythonCode(..)
 ) where
 
-import Utils.Drasil (indent)
+import Utils.Drasil (blank, indent)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label,
@@ -43,7 +43,7 @@ import GOOL.Drasil.Data (Terminator(..),
   updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
   VarData(..), vard)
-import GOOL.Drasil.Helpers (blank, vibcat, 
+import GOOL.Drasil.Helpers (vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
   liftPair, liftPairFst, getInnerType, convType, checkParams)
 

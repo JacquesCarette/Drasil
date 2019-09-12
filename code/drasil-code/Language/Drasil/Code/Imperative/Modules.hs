@@ -19,12 +19,7 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getDerivedIns, getDerivedOuts, getInputFormatIns, getInputFormatOuts, 
   getOutputParams)
 import Language.Drasil.Code.Imperative.State (State(..))
-import Language.Drasil.Code.Imperative.GOOL.Symantics (RenderSym(..),
-  AuxiliarySym(..), BodySym(..), BlockSym(..), PermanenceSym(..), 
-  StateTypeSym(..), VariableSym(..), ValueSym(..), BooleanExpression(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..))
-import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
+import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName, codeChunk), CodeChunk, 
   codeType, codevar, physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
@@ -35,6 +30,11 @@ import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
   Comments(CommentFunc), ConstantStructure(..), ConstantRepr(..), 
   ConstraintBehaviour(..), InputModule(..), Logging(..), Structure(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
+
+import GOOL.Drasil (RenderSym(..), BodySym(..), BlockSym(..), PermanenceSym(..),
+  StateTypeSym(..), VariableSym(..), ValueSym(..), BooleanExpression(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..), convType)
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)

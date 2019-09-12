@@ -9,12 +9,14 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstMod,
   genMain, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
-  ProgramSym(..), RenderSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ProgData(..))
+  AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (programName)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Visibility(..))
+
+import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..))
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Control.Monad.Reader (Reader, ask, runReader)

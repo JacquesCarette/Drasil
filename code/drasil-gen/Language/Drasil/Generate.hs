@@ -14,8 +14,9 @@ import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec),
   DocType(SRS, MG, MIS, Website), Filename, makeCSS, genHTML,
   genTeX, PrintingInformation)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
-  CodeSystInfo(..), Lang(..), readWithDataDesc, sampleInputDD, unJC, unPC, 
-  unCSC, unCPPC)
+  CodeSystInfo(..), Lang(..), readWithDataDesc, sampleInputDD)
+
+import GOOL.Drasil (unJC, unPC, unCSC, unCPPC)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()

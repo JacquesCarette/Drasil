@@ -8,7 +8,7 @@ module GOOL.Drasil.LanguageRenderer.CppRenderer (
   CppSrcCode(..), CppHdrCode(..), CppCode(..), unCPPC
 ) where
 
-import Utils.Drasil (indent, indentList)
+import Utils.Drasil (blank, indent, indentList)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label,
@@ -50,7 +50,7 @@ import GOOL.Drasil.Data (Pair(..), pairList,
   fd, ModData(..), md, updateModDoc, OpData(..), od,
   ParamData(..), pd, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, blank, doubleQuotedText,
+import GOOL.Drasil.Helpers (angles, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
   getInnerType, convType, checkParams)

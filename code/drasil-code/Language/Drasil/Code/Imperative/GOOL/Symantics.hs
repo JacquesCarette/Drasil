@@ -10,6 +10,8 @@ import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.CodeSpec (Comments)
 
+import GOOL.Drasil (ProgramSym(..), RenderSym(..), KeywordSym(..))
+
 class (ProgramSym repr, AuxiliarySym repr) => PackageSym repr where
   type Package repr 
   package :: repr (Program repr) -> [repr (Auxiliary repr)] -> 

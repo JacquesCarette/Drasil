@@ -17,15 +17,15 @@ using std::ofstream;
 
 #include "InputParameters.hpp"
 
-void get_input(string filename, InputParameters &inParams) {
+void get_input(InputParameters &inParams, string filename) {
     ofstream outfile;
     outfile.open("log.txt", std::fstream::app);
     outfile << "function get_input called with inputs: {" << std::endl;
-    outfile << "  filename = ";
-    outfile << filename;
-    outfile << ", " << std::endl;
     outfile << "  inParams = ";
-    outfile << "Instance of InputParameters object" << std::endl;
+    outfile << "Instance of InputParameters object";
+    outfile << ", " << std::endl;
+    outfile << "  filename = ";
+    outfile << filename << std::endl;
     outfile << "  }" << std::endl;
     outfile.close();
     

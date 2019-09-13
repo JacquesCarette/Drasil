@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
 
 import Utils.Drasil (indent)
 
-import Language.Drasil.Code.Code (CodeType(..))
+import Language.Drasil.Code.Code (CodeType(..), isObject)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
@@ -21,35 +21,35 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..),
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
-  fileDoc', moduleDocD, classDocD, enumDocD,
-  enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, printDoc, outDoc,
-  printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, stringTypeDocD, 
-  typeDocD, enumTypeDocD, listTypeDocD, voidDocD, constructDocD, stateParamDocD,
-  paramListDocD, mkParam, methodDocD, methodListDocD, 
-  stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, switchDocD, forDocD,
-  forEachDocD, whileDocD, stratDocD, assignDocD, plusEqualsDocD, plusPlusDocD,
-  varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, objDecDefDocD, 
-  constDecDefDocD, statementDocD, returnDocD, mkSt, mkStNoEnd, stringListVals',
-  stringListLists', commentDocD, unOpPrec, notOpDocD, negateOpDocD, unExpr, 
-  unExpr', typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
-  binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
-  litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
-  argDocD, enumElemDocD, objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, 
-  stateObjDocD, listStateObjDocD, notNullDocD, funcDocD, castDocD, 
-  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
-  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doxConfigName, 
-  makefileName, sampleInputName, doubleSlash, blockCmtDoc, docCmtDoc, 
-  commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr,
-  valList, appendToBody, surroundBody, getterName, setterName, setMainMethod, 
-  setEmpty, intValue)
+  fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, multiStateDocD,
+  blockDocD, bodyDocD, printDoc, outDoc, printFileDocD, boolTypeDocD, 
+  intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
+  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
+  methodDocD, methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, 
+  ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, 
+  assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
+  listDecDocD, listDecDefDocD, objDecDefDocD, constDecDefDocD, statementDocD, 
+  returnDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', commentDocD, 
+  unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, 
+  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
+  mkVar, mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
+  litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
+  classVarCheckStatic, classVarD, classVarDocD, objVarDocD, inlineIfD, 
+  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
+  funcDocD, castDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, 
+  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
+  publicDocD, dot, new, blockCmtStart, blockCmtEnd, docCmtStart, 
+  observerListName, doxConfigName, makefileName, sampleInputName, doubleSlash, 
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
+  moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
+  setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), PackData(..), packD, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
-  ValData(..), updateValDoc, Binding(..), VarData(..))
+  ValData(..), updateValDoc, Binding(..), VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, nativeBinary, osClassDefault)
@@ -65,7 +65,7 @@ import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
-  semi, vcat, lbrace, rbrace, colon, render)
+  semi, vcat, lbrace, rbrace, colon)
 
 csExt :: String
 csExt = "cs"
@@ -177,6 +177,8 @@ instance StateTypeSym CSharpCode where
   void = return voidDocD
 
   getType = cType . unCSC
+  getTypeString = typeString . unCSC
+  getTypeDoc = typeDoc . unCSC
 
 instance ControlBlockSym CSharpCode where
   runStrategy l strats rv av = maybe
@@ -246,6 +248,7 @@ instance VariableSym CSharpCode where
   extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
   self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
   enumVar e en = var e (enumType en)
+  classVar c v = classVarCheckStatic (classVarD c v classVarDocD)
   objVar = liftA2 csObjVar
   objVarSelf l n t = liftA2 (mkVar $ "this." ++ n) t (liftA2 objVarDocD (self l)
     (var n t))
@@ -259,6 +262,8 @@ instance VariableSym CSharpCode where
   variableName = varName . unCSC
   variableType = fmap varType
   variableDoc = varDoc . unCSC
+  
+  varFromData b n t d = liftA2 (vard b n) t (return d)
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
@@ -526,7 +531,7 @@ instance InternalScope CSharpCode where
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
   mState t = t
-  construct n = return $ td (Object n) (constructDocD n)
+  construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = ParamData
@@ -565,17 +570,21 @@ instance MethodSym CSharpCode where
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) 
-    (map stateParam $ v : ins) (liftA2 appendToBody b (returnState $ valueOf v))
+  inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
+    then mState void else mState $ variableType v) (map stateParam $ v : ins) 
+    (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
+    (returnState $ valueOf v))
   inOutFunc n s p ins outs both b = function n s p (mState void) (map (fmap 
     (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ 
     map (fmap (updateParamDoc csOut) . stateParam) outs) b
 
-  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
-  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms)
-    [bComm]
-  docInOutFunc desc iComms oComms bComms = docFuncRepr desc 
-    (bComms ++ iComms ++ oComms) []
+  docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
+    (inOutFunc n s p (map snd is) [snd o] [] b)
+  docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst (both : 
+    is)) [fst both | not ((isObject . getType . variableType . snd) both)] 
+    (inOutFunc n s p (map snd is) [] [snd both] b)
+  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst (is ++ os ++ 
+    bs)) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
 
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
@@ -630,13 +639,13 @@ cstop end inc = vcat [
   inc <+> text "System.Collections.Generic" <> end]
 
 csFloatTypeDoc :: TypeData
-csFloatTypeDoc = td Float (text "double") -- Same as Java, maybe make a common function
+csFloatTypeDoc = td Float "double" (text "double") -- Same as Java, maybe make a common function
 
 csInfileTypeDoc :: TypeData
-csInfileTypeDoc = td File (text "StreamReader")
+csInfileTypeDoc = td File "StreamReader" (text "StreamReader")
 
 csOutfileTypeDoc :: TypeData
-csOutfileTypeDoc = td File (text "StreamWriter")
+csOutfileTypeDoc = td File "StreamWriter" (text "StreamWriter")
 
 csCast :: CSharpCode (StateType CSharpCode) -> CSharpCode (Value CSharpCode) -> 
   CSharpCode (Value CSharpCode)
@@ -692,8 +701,9 @@ csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) ->
   [CSharpCode (Value CSharpCode)] -> [CSharpCode (Variable CSharpCode)] -> 
   [CSharpCode (Variable CSharpCode)] -> CSharpCode (Statement CSharpCode)
 csInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
-csInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out
-  : ins)
+csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
+  then valState $ f n void (valueOf out : ins) 
+  else assign out $ f n (variableType out) (valueOf out : ins)
 csInOutCall f n ins outs both = valState $ f n void (map (fmap (updateValDoc 
   csRef) . valueOf) both ++ ins ++ map (fmap (updateValDoc csOut) . valueOf) 
   outs)
@@ -712,7 +722,7 @@ csVarDec Dynamic d = d
 
 csObjVar :: VarData -> VarData -> VarData
 csObjVar o v = csObjVar' (varBind v)
-  where csObjVar' Static = mkVar (render (typeDoc (varType o)) ++ "." ++ 
-          varName v) (varType v) (typeDoc (varType o) <> dot <> varDoc v)
+  where csObjVar' Static = error 
+          "Cannot use objVar to access static variables through an object in C#"
         csObjVar' Dynamic = mkVar (varName o ++ "." ++ varName v) 
           (varType v) (objVarDocD o v)

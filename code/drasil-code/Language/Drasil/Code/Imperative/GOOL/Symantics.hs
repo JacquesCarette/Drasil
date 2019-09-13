@@ -121,6 +121,8 @@ class (PermanenceSym repr) => StateTypeSym repr where
   void          :: repr (StateType repr)
 
   getType :: repr (StateType repr) -> CodeType
+  getTypeString :: repr (StateType repr) -> String
+  getTypeDoc :: repr (StateType repr) -> Doc
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 
@@ -174,6 +176,7 @@ class (StateTypeSym repr) => VariableSym repr where
   extVar       :: Library -> Label -> repr (StateType repr) -> 
     repr (Variable repr)
   self         :: Label -> repr (Variable repr)
+  classVar     :: repr (StateType repr) -> repr (Variable repr) -> repr (Variable repr)
   objVar       :: repr (Variable repr) -> repr (Variable repr) -> repr (Variable repr)
   objVarSelf   :: Label -> Label -> repr (StateType repr) -> 
     repr (Variable repr)
@@ -191,6 +194,9 @@ class (StateTypeSym repr) => VariableSym repr where
   variableName :: repr (Variable repr) -> String
   variableType :: repr (Variable repr) -> repr (StateType repr)
   variableDoc  :: repr (Variable repr) -> Doc
+
+  varFromData :: Binding -> String -> repr (StateType repr) -> Doc -> 
+    repr (Variable repr)
 
 class (VariableSym repr) => ValueSym repr where
   type Value repr
@@ -570,9 +576,11 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   inOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     [repr (Variable repr)] -> [repr (Variable repr)] -> [repr (Variable repr)] 
     -> repr (Body repr) -> repr (Method repr)
-  -- Parameters are: brief description, input descriptions, output descriptions, descriptions of parameters that are both input and output, function
-  docInOutFunc :: String -> [String] -> [String] -> [String] -> 
-    repr (Method repr) -> repr (Method repr)
+  -- Parameters are: function name, scope, permanence, brief description, input descriptions and variables, output descriptions and variables, descriptions and variables for parameters that are both input and output, function body
+  docInOutFunc :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
+    String -> [(String, repr (Variable repr))] -> [(String, repr 
+    (Variable repr))] -> [(String, repr (Variable repr))] -> repr (Body repr)
+    -> repr (Method repr)
 
   commentedFunc :: repr (BlockComment repr) -> repr (Method repr) -> 
     repr (Method repr)

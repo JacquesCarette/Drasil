@@ -10,10 +10,10 @@ using System.Collections.Generic;
 public class InputFormat {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file
         \param inParams structure holding the input values
+        \param filename name of the input file
     */
-    public static void get_input(string filename, InputParameters inParams) {
+    public static void get_input(InputParameters inParams, string filename) {
         StreamReader infile;
         infile = new StreamReader(filename);
         infile.ReadLine();

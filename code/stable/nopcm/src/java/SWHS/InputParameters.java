@@ -111,91 +111,90 @@ public class InputParameters {
         \param D diameter of tank: the diameter of the tank (m)
         \param T_W temperature of the water: the average kinetic energy of the particles within the water (degreeC)
         \param E_W change in heat energy in the water: change in thermal energy within the water (J)
-        \param consts structure holding the constant values
     */
-    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W, Constants consts) throws Exception {
-        if (!(A_C <= consts.A_C_max)) {
+    public static void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) throws Exception {
+        if (!(A_C <= Constants.A_C_max)) {
             System.out.print("Warning: ");
             System.out.print("A_C has value ");
             System.out.print(A_C);
             System.out.print(" but suggested to be ");
             System.out.print("below ");
-            System.out.print(consts.A_C_max);
+            System.out.print(Constants.A_C_max);
             System.out.print(" (A_C_max)");
             System.out.println(".");
         }
-        if (!(consts.C_W_min < C_W && C_W < consts.C_W_max)) {
+        if (!(Constants.C_W_min < C_W && C_W < Constants.C_W_max)) {
             System.out.print("Warning: ");
             System.out.print("C_W has value ");
             System.out.print(C_W);
             System.out.print(" but suggested to be ");
             System.out.print("between ");
-            System.out.print(consts.C_W_min);
+            System.out.print(Constants.C_W_min);
             System.out.print(" (C_W_min)");
             System.out.print(" and ");
-            System.out.print(consts.C_W_max);
+            System.out.print(Constants.C_W_max);
             System.out.print(" (C_W_max)");
             System.out.println(".");
         }
-        if (!(consts.h_C_min <= h_C && h_C <= consts.h_C_max)) {
+        if (!(Constants.h_C_min <= h_C && h_C <= Constants.h_C_max)) {
             System.out.print("Warning: ");
             System.out.print("h_C has value ");
             System.out.print(h_C);
             System.out.print(" but suggested to be ");
             System.out.print("between ");
-            System.out.print(consts.h_C_min);
+            System.out.print(Constants.h_C_min);
             System.out.print(" (h_C_min)");
             System.out.print(" and ");
-            System.out.print(consts.h_C_max);
+            System.out.print(Constants.h_C_max);
             System.out.print(" (h_C_max)");
             System.out.println(".");
         }
-        if (!(t_final < consts.t_final_max)) {
+        if (!(t_final < Constants.t_final_max)) {
             System.out.print("Warning: ");
             System.out.print("t_final has value ");
             System.out.print(t_final);
             System.out.print(" but suggested to be ");
             System.out.print("below ");
-            System.out.print(consts.t_final_max);
+            System.out.print(Constants.t_final_max);
             System.out.print(" (t_final_max)");
             System.out.println(".");
         }
-        if (!(consts.L_min <= L && L <= consts.L_max)) {
+        if (!(Constants.L_min <= L && L <= Constants.L_max)) {
             System.out.print("Warning: ");
             System.out.print("L has value ");
             System.out.print(L);
             System.out.print(" but suggested to be ");
             System.out.print("between ");
-            System.out.print(consts.L_min);
+            System.out.print(Constants.L_min);
             System.out.print(" (L_min)");
             System.out.print(" and ");
-            System.out.print(consts.L_max);
+            System.out.print(Constants.L_max);
             System.out.print(" (L_max)");
             System.out.println(".");
         }
-        if (!(consts.rho_W_min < rho_W && rho_W <= consts.rho_W_max)) {
+        if (!(Constants.rho_W_min < rho_W && rho_W <= Constants.rho_W_max)) {
             System.out.print("Warning: ");
             System.out.print("rho_W has value ");
             System.out.print(rho_W);
             System.out.print(" but suggested to be ");
             System.out.print("between ");
-            System.out.print(consts.rho_W_min);
+            System.out.print(Constants.rho_W_min);
             System.out.print(" (rho_W_min)");
             System.out.print(" and ");
-            System.out.print(consts.rho_W_max);
+            System.out.print(Constants.rho_W_max);
             System.out.print(" (rho_W_max)");
             System.out.println(".");
         }
-        if (!(consts.AR_min <= D && D <= consts.AR_max)) {
+        if (!(Constants.AR_min <= D && D <= Constants.AR_max)) {
             System.out.print("Warning: ");
             System.out.print("D has value ");
             System.out.print(D);
             System.out.print(" but suggested to be ");
             System.out.print("between ");
-            System.out.print(consts.AR_min);
+            System.out.print(Constants.AR_min);
             System.out.print(" (AR_min)");
             System.out.print(" and ");
-            System.out.print(consts.AR_max);
+            System.out.print(Constants.AR_max);
             System.out.print(" (AR_max)");
             System.out.println(".");
         }

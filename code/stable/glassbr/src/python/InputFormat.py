@@ -8,16 +8,16 @@ import math
 import InputParameters
 
 ## \brief Reads input from a file with the given file name
-# \param filename name of the input file
 # \param inParams structure holding the input values
-def get_input(filename, inParams):
+# \param filename name of the input file
+def get_input(inParams, filename):
     outfile = open("log.txt", "a")
     print("function get_input called with inputs: {", file=outfile)
-    print("  filename = ", end='', file=outfile)
-    print(filename, end='', file=outfile)
-    print(", ", file=outfile)
     print("  inParams = ", end='', file=outfile)
-    print("Instance of InputParameters object", file=outfile)
+    print("Instance of InputParameters object", end='', file=outfile)
+    print(", ", file=outfile)
+    print("  filename = ", end='', file=outfile)
+    print(filename, file=outfile)
     print("  }", file=outfile)
     outfile.close()
     

@@ -15,10 +15,10 @@ import java.util.ArrayList;
 public class InputFormat {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file
         \param inParams structure holding the input values
+        \param filename name of the input file
     */
-    public static void get_input(String filename, InputParameters inParams) throws Exception {
+    public static void get_input(InputParameters inParams, String filename) throws Exception {
         Scanner infile;
         infile = new Scanner(new File(filename));
         infile.nextLine();

@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
 
 import Utils.Drasil (indent)
 
-import Language.Drasil.Code.Code (CodeType(..))
+import Language.Drasil.Code.Code (CodeType(..), isObject)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, PackageSym(..), 
   ProgramSym(..), RenderSym(..), InternalFile(..), AuxiliarySym(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
@@ -35,19 +35,20 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (addExt,
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
   binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
-  argDocD, enumElemDocD, objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, 
-  stateObjDocD, listStateObjDocD, notNullDocD, funcDocD, castDocD, 
-  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
-  privateDocD, publicDocD, dot, new, forLabel, blockCmtStart, blockCmtEnd, 
-  docCmtStart, observerListName, doxConfigName, makefileName, sampleInputName, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  surroundBody, getterName, setterName, setMainMethod, setEmpty, intValue)
+  argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD, 
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
+  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
+  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
+  doxConfigName, makefileName, sampleInputName, doubleSlash, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
+  docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
+  setMainMethod, setEmpty, intValue, filterOutObjs)
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), AuxData(..), 
   ad, FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   PackData(..), packD, ProgData(..), progD, TypeData(..), td, ValData(..), 
-  VarData(..))
+  VarData(..), vard)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   NameOpts(NameOpts), asFragment, buildSingle, includeExt, inCodePackage, 
@@ -181,6 +182,8 @@ instance StateTypeSym JavaCode where
   void = return voidDocD
 
   getType = cType . unJC
+  getTypeString = typeString . unJC
+  getTypeDoc = typeDoc . unJC
 
 instance ControlBlockSym JavaCode where
   runStrategy l strats rv av = maybe
@@ -250,6 +253,7 @@ instance VariableSym JavaCode where
   extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
   self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
   enumVar e en = var e (enumType en)
+  classVar c v = classVarCheckStatic (classVarD c v classVarDocD)
   objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
     (variableType v) (liftA2 objVarDocD o v)
   objVarSelf _ = var
@@ -263,6 +267,8 @@ instance VariableSym JavaCode where
   variableName = varName . unJC
   variableType = fmap varType
   variableDoc = varDoc . unJC
+  
+  varFromData b n t d = liftA2 (vard b n) t (return d)
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
@@ -529,7 +535,7 @@ instance InternalScope JavaCode where
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
   mState t = t
-  construct n = return $ td (Object n) (constructDocD n)
+  construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym JavaCode where
   type Parameter JavaCode = ParamData
@@ -570,28 +576,42 @@ instance MethodSym JavaCode where
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
     (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
-  inOutFunc n s p ins [] [v] b = function n s p (mState $ variableType v) (map 
-    stateParam $ v : ins) (liftA2 appendToBody b (returnState $ valueOf v))
-  inOutFunc n s p ins outs both b = function n s p jArrayType
-    (map stateParam $ both ++ ins) (liftA3 surroundBody decls b (multi 
-      (varDecDef outputs (valueOf (var 
-        ("new Object[" ++ show (length $ both ++ outs) ++ "]") jArrayType))
-      : assignArray 0 (map valueOf $ both ++ outs)
-      ++ [returnState (valueOf outputs)])))
-      where assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
-              [JavaCode (Statement JavaCode)]
-            assignArray _ [] = []
-            assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
-              (fmap valType v) &= v) : assignArray (c+1) vs
-            decls = multi $ map varDec outs
-            outputs = var "outputs" jArrayType
+  inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
+    then mState void else mState $ variableType v) (map stateParam $ v : ins) 
+    (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
+    (returnState $ valueOf v))
+  inOutFunc n s p ins outs both b = function n s p (returnTp rets)
+    (map stateParam $ both ++ ins) (liftA3 surroundBody decls b (returnSt rets))
+    where returnTp [x] = mState $ variableType x
+          returnTp _ = jArrayType
+          returnSt [x] = returnState $ valueOf x
+          returnSt _ = multi (varDecDef outputs (valueOf (var 
+            ("new Object[" ++ show (length rets) ++ "]") jArrayType))
+            : assignArray 0 (map valueOf rets)
+            ++ [returnState (valueOf outputs)])
+          assignArray :: Int -> [JavaCode (Value JavaCode)] -> 
+            [JavaCode (Statement JavaCode)]
+          assignArray _ [] = []
+          assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
+            (fmap valType v) &= v) : assignArray (c+1) vs
+          decls = multi $ map varDec outs
+          rets = filterOutObjs both ++ outs
+          outputs = var "outputs" jArrayType
     
-  docInOutFunc desc iComms [] [] = docFuncRepr desc iComms []
-  docInOutFunc desc iComms [oComm] [] = docFuncRepr desc iComms [oComm]
-  docInOutFunc desc iComms [] [bComm] = docFuncRepr desc (bComm : iComms) 
-    [bComm]
-  docInOutFunc desc iComms oComms bComms = docFuncRepr desc (bComms ++ iComms) 
-    ("array containing the following values:" : bComms ++ oComms)
+  docInOutFunc n s p desc is [] [] b = docFuncRepr desc (map fst is) [] 
+    (inOutFunc n s p (map snd is) [] [] b)
+  docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
+    (inOutFunc n s p (map snd is) [snd o] [] b)
+  docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst (both : 
+    is)) [fst both | not ((isObject . getType . variableType . snd) both)]
+    (inOutFunc n s p (map snd is) [] [snd both] b)
+  docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is) 
+    (bRets ++ map fst os) (inOutFunc n s p (map snd is) (map snd os) 
+    (map snd bs) b)
+    where bRets = bRets' (map fst (filter (not . isObject . getType . 
+            variableType . snd) bs))
+          bRets' [x] = [x]
+          bRets' xs = "array containing the following values:" : xs
             
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
@@ -652,24 +672,26 @@ jtop end inc lst = vcat [
   inc <+> text ("java.util." ++ render lst) <> end]
 
 jFloatTypeDocD :: TypeData
-jFloatTypeDocD = td Float (text "double")
+jFloatTypeDocD = td Float "double" (text "double")
 
 jStringTypeDoc :: TypeData
-jStringTypeDoc = td String (text "String")
+jStringTypeDoc = td String "String" (text "String")
 
 jInfileTypeDoc :: TypeData
-jInfileTypeDoc = td File (text "Scanner")
+jInfileTypeDoc = td File "Scanner" (text "Scanner")
 
 jOutfileTypeDoc :: TypeData
-jOutfileTypeDoc = td File (text "PrintWriter")
+jOutfileTypeDoc = td File "PrintWriter" (text "PrintWriter")
 
 jListType :: TypeData -> Doc -> TypeData
-jListType (TD Integer _) lst = td (List Integer) (lst <> angles (text "Integer"))
-jListType (TD Float _) lst = td (List Float) (lst <> angles (text "Double"))
+jListType (TD Integer _ _) lst = td (List Integer) (render lst ++ "<Integer>") 
+  (lst <> angles (text "Integer"))
+jListType (TD Float _ _) lst = td (List Float) (render lst ++ "<Double>") 
+  (lst <> angles (text "Double"))
 jListType t lst = listTypeDocD t lst
 
 jArrayType :: JavaCode (StateType JavaCode)
-jArrayType = return $ td (List $ Object "Object") (text "Object[]")
+jArrayType = return $ td (List $ Object "Object") "Object" (text "Object[]")
 
 jEquality :: JavaCode (Value JavaCode) -> JavaCode (Value JavaCode) -> 
   JavaCode (Value JavaCode)
@@ -753,10 +775,14 @@ jInOutCall :: (Label -> JavaCode (StateType JavaCode) ->
   [JavaCode (Variable JavaCode)] -> JavaCode (Statement JavaCode)
 jInOutCall f n ins [] [] = valState $ f n void ins
 jInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
-jInOutCall f n ins [] [out] = assign out $ f n (variableType out) (valueOf out 
-  : ins)
-jInOutCall f n ins outs both = multi $ varDecDef (var "outputs" jArrayType) 
-  (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 (both ++ outs)
+jInOutCall f n ins [] [out] = if null (filterOutObjs [out])
+  then valState $ f n void (valueOf out : ins) 
+  else assign out $ f n (variableType out) (valueOf out : ins)
+jInOutCall f n ins outs both = fCall rets
+  where rets = filterOutObjs both ++ outs
+        fCall [x] = assign x $ f n (variableType x) (map valueOf both ++ ins)
+        fCall xs = multi $ varDecDef (var "outputs" jArrayType) 
+          (f n jArrayType (map valueOf both ++ ins)) : jAssignFromArray 0 xs
 
 jBuildConfig :: Maybe BuildConfig
 jBuildConfig = buildSingle (\i _ -> asFragment "javac" : i) $

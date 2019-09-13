@@ -25,8 +25,8 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (RenderSym(..),
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..))
 import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeChunk, codeType, 
-  codevar, physLookup, sfwrLookup)
+import Language.Drasil.Chunk.Code (CodeIdea(codeName, codeChunk), CodeChunk, 
+  codeType, codevar, physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
@@ -42,7 +42,7 @@ import Data.Map (member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
 import Control.Applicative ((<$>))
-import Control.Monad.Reader (Reader, ask)
+import Control.Monad.Reader (Reader, ask, asks)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
 
@@ -75,13 +75,21 @@ getInputDecl :: (RenderSym repr) => Reader State (Maybe (repr (
 getInputDecl = do
   g <- ask
   v_params <- mkVar (codevar inParams)
-  let getDecl _ [] = return Nothing
-      getDecl Unbundled ins = do
+  let cname = "InputParameters"
+      getDecl ([],[]) = constIns (partition (flip member (Map.filter (cname ==) 
+        (eMap $ codeSpec g)) . codeName) (map codeChunk $ constants $ csi $ 
+        codeSpec g)) (conRepr g)
+      getDecl ([],ins) = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
-      getDecl Bundled _ = return $ Just $ extObjDecNewVoid "InputParameters"
-        v_params
-  getDecl (inStruct g) (inputs $ csi $ codeSpec g)
+      getDecl (_,[]) = return $ Just $ extObjDecNewVoid cname v_params
+      getDecl _ = error ("Inputs or constants are only partially contained in " 
+        ++ cname ++ " class")
+      constIns ([],[]) _ = return Nothing
+      constIns _ Const = return Nothing
+      constIns cs Var = getDecl cs 
+  getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
+    . codeName) (inputs $ csi $ codeSpec g))
 
 initConsts :: (RenderSym repr) => Reader State (Maybe (repr (Statement repr)))
 initConsts = do
@@ -90,10 +98,12 @@ initConsts = do
   let cname = "Constants"
       getDecl _ Inline = return Nothing
       getDecl ([],[]) _ = return Nothing
-      getDecl (_,[]) _ = return $ Just $ extObjDecNewVoid cname v_consts
+      getDecl (_,[]) _ = asks (constCont . conRepr)
       getDecl ([],cs) _ = getDecl' $ partition (flip member (eMap $ codeSpec g) 
         . codeName) cs 
       getDecl _ _ = error "Only some constants associated with Constants module in export map"
+      constCont Var = Just $ extObjDecNewVoid cname v_consts
+      constCont Const = Nothing
       getDecl' (_,[]) = return Nothing
       getDecl' ([],cs) = do 
         vars <- mapM mkVar cs
@@ -191,7 +201,7 @@ genInputDerived = do
         outs <- getDerivedOuts
         bod <- mapM (\x -> genCalcBlock CalcAssign x (codeEquat x)) dvals
         desc <- dvFuncDesc
-        mthd <- publicInOutFunc "derived_values" desc ins outs [] bod
+        mthd <- publicInOutFunc "derived_values" desc ins outs bod
         return $ Just mthd
   genDerived $ Map.lookup "derived_values" (eMap $ codeSpec g)
 
@@ -317,7 +327,7 @@ genInputFormat = do
         outs <- getInputFormatOuts
         bod <- readData dd
         desc <- inFmtFuncDesc
-        mthd <- publicInOutFunc "get_input" desc ins outs [] bod
+        mthd <- publicInOutFunc "get_input" desc ins outs bod
         return $ Just mthd
   genInFormat $ Map.lookup "get_input" (eMap $ codeSpec g)
 

@@ -34,7 +34,7 @@ int main(int argc, const char *argv[]) {
     double g = 9.8;
     double pi = 3.14159265;
     double epsilon = 2.0e-2;
-    get_input(filename, inParams);
+    get_input(inParams, filename);
     input_constraints(inParams, pi);
     double t_flight = func_t_flight(inParams, g);
     double p_land = func_p_land(inParams, g);

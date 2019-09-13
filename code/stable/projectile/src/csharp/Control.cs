@@ -18,7 +18,7 @@ public class Control {
         double g = 9.8;
         double pi = 3.14159265;
         double epsilon = 2.0e-2;
-        InputFormat.get_input(filename, inParams);
+        InputFormat.get_input(inParams, filename);
         InputConstraints.input_constraints(inParams, pi);
         double t_flight = Calculations.func_t_flight(inParams, g);
         double p_land = Calculations.func_p_land(inParams, g);

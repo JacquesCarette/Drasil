@@ -202,8 +202,14 @@ If a programmer wishes to write a program that will integrate into
 existing systems written in different languages, they will likely need to 
 write a different version of the program for each. This 
 requires investing the time to learn the idiosyncrasies of each language and 
-give attention to the operational details where languages differ. Repeatedly 
-writing the same program in different languages is entirely inefficient. 
+give attention to the operational details where languages differ. Ultimately, 
+the code they write will likely be marred by influences of the language they 
+know best. They may consistently use techniques that they are familiar with 
+from one language, while unaware that the language in which they are currently 
+writing offers a better or cleaner way of doing the same task 
+\cite{ScholtzWiedenbeck, AlexandronEtAl}. Besides this 
+likelihood of writing sub-optimal code, repeatedly writing the same program in 
+different languages is entirely inefficient. 
 Languages in the same paradigm have many similarities, and there is an 
 excellent opportunity to take advantage of these similarities to improve the
 efficiency of writing code. If a program could be written in one language and
@@ -217,7 +223,10 @@ provided. But if there was a language that contained all of the information
 that any of the other OO languages would need, it could be used as the source 
 language for translation. This source language should also be completely 
 language-agnostic, free of any of the idiosyncratic ``noise'' required by
-specific languages.
+specific languages. In addition, a translator for such a language would not be 
+subject to the influences of any one target language when translating to a 
+different target language; the code resulting from the translation should be 
+well-suited to the target language.
 
 The similarities between OO programs do not end with syntax and structural 
 components. Additionally, there are tasks and patterns commonly performed by OO
@@ -239,6 +248,17 @@ OO language to do. The code details to abstract over in this case include both
 the operational details of using a specific language as well as the higher-level
 patterns that commonly show up in OO programs. So the source language we are
 looking for is just a DSL in the domain of OO programming languages!
+
+There are DSLs already for generating code in multiple languages, and these 
+will be discussed further in Section \ref{related}, but none of these have the 
+combination of features we require. We should be able to generate OO code for 
+any purpose, rather than being limited to a narrow domain of application. The 
+generated code should be human-readable, so that it can be used in applications 
+where understandability of the code is important. The DSL should generate 
+idiomatic code. That is, code generated in each target language should be 
+expressed naturally given the features and capabilities of that language. 
+Finally, the DSL should provide facilities for generating code adhering to 
+common high-level OO patterns. 
 
 We have developed a Generic Object-Oriented Language (GOOL), proving that such 
 a language indeed exists. GOOL is a DSL embedded in Haskell that can currently

@@ -2,9 +2,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render Java auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer ( 
-  JavaCode(..)
-) where
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer where
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
@@ -19,7 +17,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
-import GOOL.Drasil (lift1List, JavaCode(..))
+import GOOL.Drasil (lift1List, JavaCode)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (liftA2)

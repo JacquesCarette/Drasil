@@ -2,9 +2,8 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render C# auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
-  CSharpCode(..)
-) where
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer 
+where
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
@@ -18,7 +17,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
-import GOOL.Drasil (lift1List, CSharpCode(..))
+import GOOL.Drasil (lift1List, CSharpCode)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))

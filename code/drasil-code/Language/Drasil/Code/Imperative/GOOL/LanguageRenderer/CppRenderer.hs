@@ -3,9 +3,7 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render C++ auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
-  CppSrcCode(..)
-) where
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer where
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..),
   AuxiliarySym(..))
@@ -19,7 +17,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
-import GOOL.Drasil (Pair(..), lift1List, CppSrcCode(..), CppHdrCode)
+import GOOL.Drasil (Pair(..), lift1List, CppSrcCode, CppHdrCode)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Control.Applicative (liftA2)

@@ -1,9 +1,8 @@
 {-# LANGUAGE TypeFamilies #-}
 
 -- | The logic to render Python auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
-  PythonCode(..)
-) where
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer 
+where
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
@@ -16,7 +15,7 @@ import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
-import GOOL.Drasil (lift1List, PythonCode(..))
+import GOOL.Drasil (lift1List, PythonCode)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Control.Applicative (liftA2)

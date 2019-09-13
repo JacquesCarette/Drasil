@@ -40,6 +40,7 @@ addons:
       - libgmp-dev
       - python3
       - graphviz
+      - doxygen
 # TeX Building
       - fonts-lmodern
       - texlive-bibtex-extra
@@ -77,7 +78,11 @@ script:
  - >-
      ci_fstep "CI: Code" make code
  - >-
+     ci_fstep "CI: Doxygen" make doxygen
+ - >-
      ci_fstep "CI: Docs" make docs haddockArgs=\"--no-haddock-deps --no-haddock-hyperlink-source\"
+ - >-
+     ci_fstep "CI: Graphs" make graphs
  - >-
      ci_fstep "CI: Deploy" sh scripts/maybe_test_deploy.sh
  - python3 scripts/pr_label_update.py

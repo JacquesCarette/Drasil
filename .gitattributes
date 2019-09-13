@@ -1,7 +1,6 @@
 *.sh text eol=lf
-Dan/* linguist-documentation
+People/* linguist-documentation
 FamilyOfGamePhysicsEngines/* linguist-documentation
-Steve/* linguist-documentation
 notes/* linguist-documentation
 Presentations/* linguist-documentation
 code/stable/* linguist-generated=true

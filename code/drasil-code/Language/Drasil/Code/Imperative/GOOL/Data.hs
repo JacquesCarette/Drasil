@@ -1,11 +1,11 @@
 module Language.Drasil.Code.Imperative.GOOL.Data (Pair(..), pairList,
   Terminator(..), ScopeTag(..), FileType(..), AuxData(..), ad, emptyAux, 
-  FileData(..), fileD, file, srcFile, hdrFile, isSource, isHeader, 
-  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  BindData(..), bd, FileData(..), fileD, file, srcFile, hdrFile, isSource, 
+  isHeader, updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, OpData(..), od, PackData(..), packD, emptyPack, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, 
-  VarData(..), vard
+  Binding(..), VarData(..), vard
 ) where
 
 import Language.Drasil.Code.Code (CodeType)
@@ -29,6 +29,13 @@ data Terminator = Semi | Empty
 data ScopeTag = Pub | Priv deriving Eq
 
 data FileType = Combined | Source | Header deriving Eq
+
+data Binding = Static | Dynamic deriving Eq
+
+data BindData = BD {bind :: Binding, bindDoc :: Doc}
+
+bd :: Binding -> Doc -> BindData
+bd = BD
 
 data AuxData = AD {auxFilePath :: FilePath, auxDoc :: Doc}
 
@@ -123,12 +130,12 @@ data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc,
 svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
 
-data TypeData = TD {cType :: CodeType, typeDoc :: Doc}
+data TypeData = TD {cType :: CodeType, typeString :: String, typeDoc :: Doc}
 
 instance Eq TypeData where
-  TD t1 _ == TD t2 _ = t1 == t2
+  TD t1 _ _ == TD t2 _ _ = t1 == t2
 
-td :: CodeType -> Doc -> TypeData
+td :: CodeType -> String -> Doc -> TypeData
 td = TD
 
 data ValData = VD {valPrec :: Maybe Int, valType :: TypeData, valDoc :: Doc}
@@ -139,10 +146,11 @@ vd = VD
 updateValDoc :: (Doc -> Doc) -> ValData -> ValData
 updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)
 
-data VarData = VarD {varName :: String, varType :: TypeData, varDoc :: Doc}
+data VarData = VarD {varBind :: Binding, varName :: String, 
+  varType :: TypeData, varDoc :: Doc}
 
 instance Eq VarData where
-  VarD n1 t1 _ == VarD n2 t2 _ = n1 == n2 && t1 == t2 
+  VarD p1 n1 t1 _ == VarD p2 n2 t2 _ = p1 == p2 && n1 == n2 && t1 == t2
 
-vard :: String -> TypeData -> Doc -> VarData
+vard :: Binding -> String -> TypeData -> Doc -> VarData
 vard = VarD

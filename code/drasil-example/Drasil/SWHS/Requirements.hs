@@ -3,13 +3,14 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 import Language.Drasil
 import Utils.Drasil
 
-import Drasil.DocLang (mkInputPropsTable)
+import Drasil.DocLang (inReq)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
 
+import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (assumption, code, condition,
   funcReqDom, input_, likelyChg, mg, mis, module_, nonFuncReqDom, output_,
-  physicalConstraint, property, quantity, requirement, simulation, srs,
-  traceyMatrix, unlikelyChg, vavPlan)
+  physicalConstraint, property, requirement, simulation, srs, traceyMatrix,
+  unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty)
 import Data.Drasil.Concepts.Thermodynamics as CT (lawConsEnergy, melting)
@@ -25,9 +26,9 @@ import Drasil.SWHS.DataDefs (balanceDecayRate, balanceDecayTime,
   balanceSolidPCM, balanceLiquidPCM)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM, iMods)
-import Drasil.SWHS.Unitals (inputs, consTol, diam, pcmE, pcmDensity, pcmMass,
-  pcmVol, tFinalMelt, tInitMelt, tankLength, tankVol, tempPCM, tempW, watE,
-  wDensity, wMass, wVol)
+import Drasil.SWHS.Unitals (consTol, diam, pcmE, pcmDensity, pcmMass, pcmVol,
+  tFinalMelt, tInitMelt, tankLength, tankVol, tempPCM, tempW, watE, wDensity,
+  wMass, wVol)
 
 ------------------------------
 -- Data Constraint: Table 1 --
@@ -40,45 +41,35 @@ import Drasil.SWHS.Unitals (inputs, consTol, diam, pcmE, pcmDensity, pcmMass,
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
+inReqDesc :: Sentence
+inReqDesc = foldlList Comma List [S "the" +:+ phrase tank +:+ plural parameter,
+  plural materialProprty, S "initial" +:+ plural condition]
+
 funcReqs :: [ConceptInstance]
-funcReqs = [inputInitQuants, findMass, checkWithPhysConsts, outputInputDerivQuants,
+funcReqs = [findMass, checkWithPhysConsts, outputInputDerivVals,
   calcTempWtrOverTime, calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime,
   calcChgHeatEnergyPCMOverTime, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd]
 
-inputInitQuants, findMass, checkWithPhysConsts, outputInputDerivQuants,
-  calcTempWtrOverTime, calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime,
-  calcChgHeatEnergyPCMOverTime, verifyEnergyOutput, calcPCMMeltBegin,
-  calcPCMMeltEnd :: ConceptInstance
-
-
-inputInitQuants = iIQConstruct inputInitQuantsTable
-
-iIQConstruct :: (Referable l, HasShortName l) => l -> ConceptInstance
-iIQConstruct req = cic "inputInitQuants" ( foldlSent [
-  titleize input_, S "the following", plural quantity, S "described in",
-  makeRef2S req `sC` S "which define the", phrase tank,
-  plural parameter `sC` plural materialProprty, S "and initial",
-  plural condition]) "Input-Initial-Quantities" funcReqDom
-
-inputInitQuantsTable :: LabelledContent
-inputInitQuantsTable = mkInputPropsTable inputs inputInitQuants
+findMass, checkWithPhysConsts, outputInputDerivVals, calcTempWtrOverTime,
+  calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, calcChgHeatEnergyPCMOverTime,
+  verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd :: ConceptInstance
 
 --
-findMass = findMassConstruct inputInitQuants (plural mass)
-            (foldlList Comma List $ map makeRef2S iMods)
-            (foldlList Comma List [E inputInitQuantsEqn, E findMassEqn, makeRef2S assumpVCN])
+findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods
+            (foldlList Comma List [E inputInitValsEqn, E findMassEqn, makeRef2S assumpVCN])
             (ch wVol `isThe` phrase wVol `sAnd` ch tankVol `isThe` phrase tankVol)
 
-findMassConstruct :: (Referable l, HasShortName l) => l -> Sentence ->
-                                   Sentence -> Sentence -> Sentence -> ConceptInstance
-findMassConstruct fr m ims exprs defs = cic "findMass" ( foldlSent [
-  S "Use the", plural input_, S "in", makeRef2S fr, S "to find the", 
-  m, S "needed for", ims `sC` S "using", exprs `sC` S "where", defs])
+findMassConstruct :: (Referable r, HasShortName r, Referable s, HasShortName s)
+  => r -> Sentence -> [s] -> Sentence -> Sentence -> ConceptInstance
+findMassConstruct fr m ims exprs defs = cic "findMass" (foldlSent [
+  S "Use the", plural input_ `sIn` makeRef2S fr, S "to find the", 
+  m, S "needed for", foldlList Comma List (map makeRef2S ims) `sC`
+  S "using", exprs `sC` S "where", defs])
   "Find-Mass" funcReqDom -- FIXME: Equations shouldn't be inline
 
-inputInitQuantsEqn, findMassEqn :: Expr --Fixme: rename labels
+inputInitValsEqn, findMassEqn :: Expr --Fixme: rename labels
 
-inputInitQuantsEqn = sy wMass $= sy wVol * sy wDensity $=
+inputInitValsEqn = sy wMass $= sy wVol * sy wDensity $=
   (sy tankVol - sy pcmVol) * sy wDensity $=
   (sy pi_ * ((sy diam / 2) $^ 2) * sy tankLength - sy pcmVol) * sy wDensity -- FIXME: Ref Hack
 
@@ -89,17 +80,17 @@ checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
   plural physicalConstraint, S "shown in", makeRef2S (datCon ([]::[Contents]) ([]::[Section]))])
   "Check-Input-with-Physical_Constraints" funcReqDom
 --
-outputInputDerivQuants = oIDQConstruct oIDQQuants
+outputInputDerivVals = oIDQConstruct oIDQVals
 
 oIDQConstruct :: [Sentence] -> ConceptInstance
-oIDQConstruct x = cic "outputInputDerivQuants" (foldlSent_ [
-  titleize output_, S "the", phrase input_, plural quantity `sAnd`
-  S "derived", plural quantity +: S "in the following list"] +:+.
-  foldlList Comma List x) "Output-Input-Derived-Quantities" funcReqDom
+oIDQConstruct x = cic "outputInputDerivVals" (foldlSentCol [
+  titleize output_, S "the", plural inValue `sAnd`
+  S "derived", plural value `inThe` S "following list"] +:+.
+  foldlList Comma List x) "Output-Input-Derived-Values" funcReqDom
 
-oIDQQuants :: [Sentence]
-oIDQQuants = map foldlSent_ [
-  [S "the", plural quantity, S "from", makeRef2S inputInitQuants],
+oIDQVals :: [Sentence]
+oIDQVals = map foldlSent_ [
+  [S "the", plural value, S "from", makeRef2S (inReq EmptyS)],
   [S "the", plural mass, S "from", makeRef2S findMass],
   [ch balanceDecayRate, sParen (S "from" +:+ makeRef2S balanceDecayRate)],
   [ch balanceDecayTime, sParen (S "from" +:+ makeRef2S balanceDecayTime)],

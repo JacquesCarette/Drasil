@@ -17,6 +17,7 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
+#include "Constants.hpp"
 #include "InputParameters.hpp"
 #include "OutputFormat.hpp"
 

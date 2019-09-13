@@ -1,17 +1,19 @@
 module Language.Drasil.Code.Imperative.Descriptions (
   modDesc, inputParametersDesc, inputFormatDesc, derivedValuesDesc, 
-  inputConstraintsDesc, outputFormatDesc, inputClassDesc, inFmtFuncDesc,
-  inConsFuncDesc, dvFuncDesc, woFuncDesc
+  inputConstraintsDesc, constModDesc, outputFormatDesc, inputClassDesc, 
+  constClassDesc, inFmtFuncDesc, inConsFuncDesc, dvFuncDesc, woFuncDesc
 ) where
 
 import Utils.Drasil (stringList)
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.State (State(..))
+import Language.Drasil.Chunk.Code (CodeIdea(codeName))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), 
   InputModule(..), Structure(..))
 
-import qualified Data.Map as Map (lookup, elems)
+import Data.Map (member)
+import qualified Data.Map as Map (filter, lookup, elems)
 import Control.Monad.Reader (Reader, ask)
 
 modDesc :: Reader State [String] -> Reader State String
@@ -54,6 +56,14 @@ inputConstraintsDesc = do
         " on the input"
   return $ icDesc $ Map.lookup "input_constraints" (eMap $ codeSpec g)
 
+constModDesc :: Reader State String
+constModDesc = do
+  g <- ask
+  let cDesc [] = ""
+      cDesc _ = "the structure for holding constant values"
+  return $ cDesc $ filter (flip member (eMap $ codeSpec g) . codeName) 
+    (constants $ csi $ codeSpec g)
+
 outputFormatDesc :: Reader State String
 outputFormatDesc = do
   g <- ask
@@ -64,15 +74,28 @@ outputFormatDesc = do
 inputClassDesc :: Reader State String
 inputClassDesc = do
   g <- ask
-  let inClassD [] = ""
+  let cname = "InputParameters"
+      inClassD [] = ""
       inClassD _ = "Structure for holding the " ++ stringList [
         inPs $ extInputs $ csi $ codeSpec g,
-        dVs $ Map.lookup "derived_values" (eMap $ codeSpec g)]
+        dVs $ Map.lookup "derived_values" (eMap $ codeSpec g),
+        cVs $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
+          codeName) (constants $ csi $ codeSpec g)]
       inPs [] = ""
       inPs _ = "input values"
       dVs Nothing = ""
       dVs _ = "derived values"
+      cVs [] = ""
+      cVs _ = "constant values"
   return $ inClassD $ inputs $ csi $ codeSpec g
+
+constClassDesc :: Reader State String
+constClassDesc = do
+  g <- ask
+  let ccDesc [] = ""
+      ccDesc _ = "Structure for holding the constant values"
+  return $ ccDesc $ filter (flip member (eMap $ codeSpec g) . codeName) 
+    (constants $ csi $ codeSpec g)
 
 inFmtFuncDesc :: Reader State String
 inFmtFuncDesc = do

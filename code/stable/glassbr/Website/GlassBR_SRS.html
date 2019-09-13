@@ -4,7 +4,6 @@
     <link rel="stylesheet" type="text/css" href="GlassBR_SRS.css">
     <title>Software Requirements Specification for GlassBR</title>
     <meta charset="utf-8">
-    <script type="text/x-mathjax-config">MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}, displayMath: [['$$','$$']]});</script>
     <script type="text/javascript" async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML"></script>
   </head>
   <body>
@@ -727,7 +726,7 @@
                   </p>
                   <p>
                     <div id="assumpGL">
-                      glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: <a href=#DD:calofCapacity>DD: calofCapacity</a>, <a href=#DD:dimlessLoad>DD: dimlessLoad</a>, and <a href=#accMoreThanSingleLite>LC: Accomodate-More-than-Single-Lite</a>.)
+                      glassLite: Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: <a href=#accMoreThanSingleLite>LC: Accomodate-More-than-Single-Lite</a>.)
                     </div>
                   </p>
                   <p>
@@ -767,7 +766,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        $$is-safeProb={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}$$
+                        \[is-safeProb={P_{\text{f}}}\lt{}{P_{\text{f}\text{tol}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -820,7 +819,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>$$is-safeLoad=capacity\gt{}Load$$</td>
+                      <td>\[is-safeLoad=capacity\gt{}Load\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -893,7 +892,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        $$B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} LDF e^{J}$$
+                        \[B=\frac{k}{\left(a b\right)^{m-1}} \left(E h^{2}\right)^{m} LDF e^{J}\]
                       </td>
                     </tr>
                     <tr>
@@ -922,16 +921,16 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>a</em> and <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
                         </p>
                         <p class="paragraph">
-                          <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
+                          <em>h</em> is defined in <a href=#DD:minThick>DD: minThick</a> and is based on the nominal thicknesses.
                         </p>
                         <p class="paragraph">
-                          <em>LDF</em> is the load duration factor as defined by <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
+                          <em>LDF</em> is defined in <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
                         </p>
                         <p class="paragraph">
-                          <em>J</em> is the stress distribution factor (Function), as defined in <a href=#DD:stressDistFac>DD: stressDistFac</a>.
+                          <em>J</em> is defined in <a href=#DD:stressDistFac>DD: stressDistFac</a>.
                         </p>
                       </td>
                     </tr>
@@ -975,7 +974,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        $$h=\frac{1}{1000} \begin{cases}
+                        \[h=\frac{1}{1000} \begin{cases}
                                            2.16, & t=2.5\\
                                            2.59, & t=2.7\\
                                            2.92, & t=3.0\\
@@ -988,7 +987,7 @@
                                            15.09, & t=16.0\\
                                            18.26, & t=19.0\\
                                            21.44, & t=22.0
-                                           \end{cases}$$
+                                           \end{cases}\]
                       </td>
                     </tr>
                     <tr>
@@ -1046,7 +1045,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        $$LDF=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}$$
+                        \[LDF=\left(\frac{{t_{\text{d}}}}{60}\right)^{\frac{m}{16}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1064,8 +1063,12 @@
                     <tr>
                       <th>Notes</th>
                       <td>
-                        <p class="paragraph"><a href=#assumpSV>A: standardValues</a></p>
-                        <p class="paragraph"><a href=#assumpLDFC>A: ldfConstant</a></p>
+                        <p class="paragraph">
+                          <em>t<sub>d</sub></em> and <em>m</em> come from <a href=#assumpSV>A: standardValues</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>LDF</em> is assumed to be constant (from <a href=#assumpLDFC>A: ldfConstant</a>).
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1105,7 +1108,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>$$J=interpZ\left(\text{``SDF.txt''},AR,\hat{q}\right)$$</td>
+                      <td>\[J=interpZ\left(\text{``SDF.txt''},AR,\hat{q}\right)\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1124,13 +1127,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>J</em> is the stress distribution factor (Function), which is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
+                          <em>J</em> is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
                         </p>
                         <p class="paragraph">
-                          <em>q&#770;</em> is the dimensionless load defined in <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
+                          <em>AR</em> is defined in <a href=#DD:aspectRatio>DD: aspectRatio</a>.
                         </p>
                         <p class="paragraph">
-                          <em>AR</em> is the aspect ratio defined in <a href=#DD:aspectRatio>DD: aspectRatio</a>.
+                          <em>q&#770;</em> is defined in <a href=#DD:dimlessLoad>DD: dimlessLoad</a>.
                         </p>
                       </td>
                     </tr>
@@ -1168,7 +1171,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        $$NFL=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}$$
+                        \[NFL=\frac{{\hat{q}_{\text{tol}}} E h^{4}}{\left(a b\right)^{2}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1190,15 +1193,17 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>a</em> and <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                          <em>q&#770;<sub>tol</sub></em> is defined in <a href=#DD:tolLoad>DD: tolLoad</a>.
                         </p>
                         <p class="paragraph">
-                          <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
+                          <em>E</em> comes from <a href=#assumpSV>A: standardValues</a>.
                         </p>
                         <p class="paragraph">
-                          <em>q&#770;<sub>tol</sub></em> is the tolerable load defined in <a href=#DD:tolLoad>DD: tolLoad</a>.
+                          <em>h</em> is defined in <a href=#DD:minThick>DD: minThick</a> and is based on the nominal thicknesses.
                         </p>
-                        <p class="paragraph"><a href=#assumpSV>A: standardValues</a></p>
+                        <p class="paragraph">
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1237,11 +1242,11 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        $$GTF=\begin{cases}
+                        \[GTF=\begin{cases}
                               1, & g=\text{``AN''}\\
                               4, & g=\text{``FT''}\\
                               2, & g=\text{``HS''}
-                              \end{cases}$$
+                              \end{cases}\]
                       </td>
                     </tr>
                     <tr>
@@ -1296,7 +1301,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>$$\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}$$</td>
+                      <td>\[\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1316,21 +1321,20 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>q</em> is the 3 second equivalent pressure, as given in <a href=#DD:calofDemand>DD: calofDemand</a>.
+                          <em>q</em> is the 3 second duration equivalent pressure, as given in <a href=#DD:calofDemand>DD: calofDemand</a>.
                         </p>
                         <p class="paragraph">
-                          <em>a</em> and <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
                         </p>
                         <p class="paragraph">
-                          <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
+                          <em>E</em> comes from <a href=#assumpSV>A: standardValues</a>.
                         </p>
                         <p class="paragraph">
-                          <em>GTF</em> is the glass type factor, as given by <a href=#DD:gTF>DD: gTF</a>.
+                          <em>h</em> is defined in <a href=#DD:minThick>DD: minThick</a> and is based on the nominal thicknesses.
                         </p>
                         <p class="paragraph">
-                          <em>q&#770;</em> is calculated with reference to <a href=#assumpGL>A: glassLite</a>.
+                          <em>GTF</em> is defined in <a href=#DD:gTF>DD: gTF</a>.
                         </p>
-                        <p class="paragraph"><a href=#assumpSV>A: standardValues</a></p>
                       </td>
                     </tr>
                     <tr>
@@ -1373,7 +1377,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        $${\hat{q}_{\text{tol}}}=interpY\left(\text{``SDF.txt''},AR,{J_{\text{tol}}}\right)$$
+                        \[{\hat{q}_{\text{tol}}}=interpY\left(\text{``SDF.txt''},AR,{J_{\text{tol}}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1395,7 +1399,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>q&#770;<sub>tol</sub></em> is the tolerable load which is obtained from <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a> using <em>J<sub>tol</sub></em> and aspect ratio as parameters using interpolation. Calculations of <em>J<sub>tol</sub></em> and <em>AR</em> are defined in <a href=#DD:sdfTol>DD: sdfTol</a> and <a href=#DD:aspectRatio>DD: aspectRatio</a>, respectively.
+                          <em>q&#770;<sub>tol</sub></em> is obtained by interpolating from data shown in <a href=#Figure:dimlessloadVSaspect>Fig:dimlessloadVSaspect</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>AR</em> is defined in <a href=#DD:aspectRatio>DD: aspectRatio</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>J<sub>tol</sub></em> is defined in <a href=#DD:sdfTol>DD: sdfTol</a>.
                         </p>
                       </td>
                     </tr>
@@ -1435,7 +1445,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        $${J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} LDF}\right)$$
+                        \[{J_{\text{tol}}}=\ln\left(\ln\left(\frac{1}{1-{P_{\text{b}\text{tol}}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(E h^{2}\right)^{m} LDF}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1466,21 +1476,20 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>J<sub>tol</sub></em>  is calculated with reference to  <em>P<sub>btol</sub></em>.
+                          <em>P<sub>btol</sub></em> is entered by the user.
                         </p>
                         <p class="paragraph">
-                          <em>a</em> and <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
                         </p>
                         <p class="paragraph">
-                          <em>h</em> is the minimum thickness, which is based on the nominal thicknesses as shown in <a href=#DD:minThick>DD: minThick</a>.
+                          <em>m</em>, <em>k</em>, and <em>E</em> come from <a href=#assumpSV>A: standardValues</a>.
                         </p>
                         <p class="paragraph">
-                          <em>LDF</em> is the load duration factor as defined by <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
+                          <em>h</em> is defined in <a href=#DD:minThick>DD: minThick</a> and is based on the nominal thicknesses.
                         </p>
                         <p class="paragraph">
-                          <em>P<sub>btol</sub></em> is the tolerable probability entered by the user.
+                          <em>LDF</em> is defined in <a href=#DD:loadDurFactor>DD: loadDurFactor</a>.
                         </p>
-                        <p class="paragraph"><a href=#assumpSV>A: standardValues</a></p>
                       </td>
                     </tr>
                     <tr>
@@ -1517,7 +1526,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        $$SD=\sqrt{{SD_{\text{x}}}^{2}+{SD_{\text{y}}}^{2}+{SD_{\text{z}}}^{2}}$$
+                        \[SD=\sqrt{{SD_{\text{x}}}^{2}+{SD_{\text{y}}}^{2}+{SD_{\text{z}}}^{2}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1572,7 +1581,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>$$AR=\frac{a}{b}$$</td>
+                      <td>\[AR=\frac{a}{b}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1588,7 +1597,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>a</em> and <em>b</em> are dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
+                          <em>a</em> and <em>b</em> are the dimensions of the plate, where (<em>a&thinsp;&ge;&thinsp;b</em>).
                         </p>
                       </td>
                     </tr>
@@ -1627,7 +1636,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>$${w_{TNT}}=w TNT$$</td>
+                      <td>\[{w_{TNT}}=w TNT\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1676,7 +1685,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>$${P_{\text{b}}}=1-e^{-B}$$</td>
+                      <td>\[{P_{\text{b}}}=1-e^{-B}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1693,7 +1702,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          <em>B</em> is the risk of failure, as defined in <a href=#DD:riskFun>DD: riskFun</a>.
+                          <em>B</em> is defined in <a href=#DD:riskFun>DD: riskFun</a>.
                         </p>
                       </td>
                     </tr>
@@ -1734,7 +1743,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>$$LR=NFL GTF LSF$$</td>
+                      <td>\[LR=NFL GTF LSF\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1750,12 +1759,13 @@
                     <tr>
                       <th>Notes</th>
                       <td>
+                        <p class="paragraph"><em>LR</em> is also called capacity.</p>
                         <p class="paragraph">
-                          <em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load, as defined in <a href=#DD:nFL>DD: nFL</a>. <em>GTF</em> is the glass type factor, as defined in <a href=#DD:gTF>DD: gTF</a>.
+                          <em>NFL</em> is defined in <a href=#DD:nFL>DD: nFL</a>.
                         </p>
-                        <p class="paragraph"><a href=#assumpGL>A: glassLite</a></p>
-                        <p class="paragraph"><a href=#DD:gTF>DD: gTF</a></p>
-                        <p class="paragraph"><a href=#DD:nFL>DD: nFL</a></p>
+                        <p class="paragraph">
+                          <em>GTF</em> is defined in <a href=#DD:gTF>DD: gTF</a>.
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1791,7 +1801,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>$$q=interpY\left(\text{``TSD.txt''},SD,{w_{TNT}}\right)$$</td>
+                      <td>\[q=interpY\left(\text{``TSD.txt''},SD,{w_{TNT}}\right)\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1865,8 +1875,8 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        $${P_{\text{b}}}\gt{}0$$
-                        $${P_{\text{b}\text{tol}}}\gt{}0$$
+                        \[{P_{\text{b}}}\gt{}0\]
+                        \[{P_{\text{b}\text{tol}}}\gt{}0\]
                       </td>
                     </tr>
                     <tr>
@@ -1875,7 +1885,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>$$is-safePb={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}$$</td>
+                      <td>\[is-safePb={P_{\text{b}}}\lt{}{P_{\text{b}\text{tol}}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1897,7 +1907,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is-safePb</em>, the glass is considered safe. <em>is-safePb</em> and <em>is-safePb</em> (from <a href=#IM:isSafeLR>IM: isSafeLR</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#DD:probOfBreak>DD: probOfBreak</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
+                          If <em>is-safePb</em>, the glass is considered safe. <em>is-safePb</em> and <em>is-safePb</em> (from <a href=#IM:isSafeLR>IM: isSafeLR</a>) are either both True or both False.
+                        </p>
+                        <p class="paragraph">
+                          <em>P<sub>b</sub></em> is defined in <a href=#DD:probOfBreak>DD: probOfBreak</a>.
+                        </p>
+                        <p class="paragraph">
+                          <em>P<sub>btol</sub></em> is entered by the user.
                         </p>
                       </td>
                     </tr>
@@ -1938,8 +1954,8 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        $$LR\gt{}0$$
-                        $$q\gt{}0$$
+                        \[LR\gt{}0\]
+                        \[q\gt{}0\]
                       </td>
                     </tr>
                     <tr>
@@ -1948,7 +1964,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>$$is-safeLR=LR\gt{}q$$</td>
+                      <td>\[is-safeLR=LR\gt{}q\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1966,7 +1982,13 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          If <em>is-safeLR</em>, the glass is considered safe. <em>is-safePb</em> (from <a href=#IM:isSafePb>IM: isSafePb</a>) and <em>is-safeLR</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#DD:calofCapacity>DD: calofCapacity</a>. <em>q</em> (also referred as the Applied Load (demand)) is the 3 second duration equivalent pressure, as defined in <a href=#DD:calofDemand>DD: calofDemand</a>.
+                          If <em>is-safeLR</em>, the glass is considered safe. <em>is-safePb</em> (from <a href=#IM:isSafePb>IM: isSafePb</a>) and <em>is-safeLR</em> are either both True or both False.
+                        </p>
+                        <p class="paragraph">
+                          <em>LR</em> is defined in <a href=#DD:calofCapacity>DD: calofCapacity</a> and is also called capacity.
+                        </p>
+                        <p class="paragraph">
+                          <em>q</em> is the 3 second duration equivalent pressure, as given in <a href=#DD:calofDemand>DD: calofDemand</a>.
                         </p>
                       </td>
                     </tr>
@@ -2106,8 +2128,8 @@
             </p>
             <div class="list">
               <p>
-                <div id="inputGlassProps">
-                  Input-Glass-Props: Input the quantities from <a href=#Table:ReqInputs>Table:ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.
+                <div id="inputValues">
+                  Input-Values: Input the values from <a href=#Table:ReqInputs>Table:ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.
                 </div>
               </p>
               <p>
@@ -2117,12 +2139,12 @@
               </p>
               <p>
                 <div id="checkInputWithDataCons">
-                  Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Section: Data Constraints</a>. If any of the input parameters are out of bounds, an error message is displayed and the calculations stop.
+                  Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Section: Data Constraints</a>. If any of the input values are out of bounds, an error message is displayed and the calculations stop.
                 </div>
               </p>
               <p>
-                <div id="outputValsAndKnownQuants">
-                  Output-Values-and-Known-Quantities: Output the input quantities from <a href=#inputGlassProps>FR: Input-Glass-Props</a> and the known quantities from <a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>.
+                <div id="outputValsAndKnownValues">
+                  Output-Values-and-Known-Values: Output the input values from <a href=#inputValues>FR: Input-Values</a> and the known values from <a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>.
                 </div>
               </p>
               <p>
@@ -2131,8 +2153,8 @@
                 </div>
               </p>
               <p>
-                <div id="outputQuants">
-                  Output-Quantities: Output the quantities from <a href=#Table:ReqOutputs>Table:ReqOutputs</a>.
+                <div id="outputValues">
+                  Output-Values: Output the values from <a href=#Table:ReqOutputs>Table:ReqOutputs</a>.
                 </div>
               </p>
             </div>
@@ -2197,7 +2219,7 @@
                 </tr>
               </table>
               <p class="caption">
-                Required Inputs following <a href=#inputGlassProps>FR: Input-Glass-Props</a>
+                Required Inputs following <a href=#inputValues>FR: Input-Values</a>
               </p>
             </div>
             <div id="Table:ReqAssignments">
@@ -2349,7 +2371,7 @@
                 </tr>
               </table>
               <p class="caption">
-                Required Outputs following <a href=#outputQuants>FR: Output-Quantities</a>
+                Required Outputs following <a href=#outputValues>FR: Output-Values</a>
               </p>
             </div>
           </div>
@@ -2538,7 +2560,7 @@
               <td></td>
               <td></td>
               <td>X</td>
-              <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2615,7 +2637,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2676,7 +2698,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#inputGlassProps>FR: Input-Glass-Props</a></td>
+              <td><a href=#inputValues>FR: Input-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2714,7 +2736,7 @@
             </tr>
             <tr>
               <td>
-                <a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>
+                <a href=#outputValsAndKnownValues>FR: Output-Values-and-Known-Values</a>
               </td>
               <td></td>
               <td></td>
@@ -2737,7 +2759,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#outputQuants>FR: Output-Quantities</a></td>
+              <td><a href=#outputValues>FR: Output-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3375,7 +3397,7 @@
               <th><a href=#TM:isSafeLoad>TM: isSafeLoad</a></th>
               <th><a href=#IM:isSafePb>IM: isSafePb</a></th>
               <th><a href=#IM:isSafeLR>IM: isSafeLR</a></th>
-              <th><a href=#inputGlassProps>FR: Input-Glass-Props</a></th>
+              <th><a href=#inputValues>FR: Input-Values</a></th>
               <th>
                 <a href=#sysSetValsFollowingAssumps>FR: System-Set-Values-Following-Assumptions</a>
               </th>
@@ -3383,10 +3405,10 @@
                 <a href=#checkInputWithDataCons>FR: Check-Input-with-Data_Constraints</a>
               </th>
               <th>
-                <a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>
+                <a href=#outputValsAndKnownValues>FR: Output-Values-and-Known-Values</a>
               </th>
               <th><a href=#checkGlassSafety>FR: Check-Glass-Safety</a></th>
-              <th><a href=#outputQuants>FR: Output-Quantities</a></th>
+              <th><a href=#outputValues>FR: Output-Values</a></th>
               <th><a href=#correct>NFR: Correct</a></th>
               <th><a href=#verifiable>NFR: Verifiable</a></th>
               <th><a href=#understandable>NFR: Understandable</a></th>
@@ -3431,7 +3453,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#inputGlassProps>FR: Input-Glass-Props</a></td>
+              <td><a href=#inputValues>FR: Input-Values</a></td>
               <td></td>
               <td></td>
               <td></td>
@@ -3538,7 +3560,7 @@
             </tr>
             <tr>
               <td>
-                <a href=#outputValsAndKnownQuants>FR: Output-Values-and-Known-Quantities</a>
+                <a href=#outputValsAndKnownValues>FR: Output-Values-and-Known-Values</a>
               </td>
               <td></td>
               <td></td>
@@ -3607,7 +3629,7 @@
               <td></td>
             </tr>
             <tr>
-              <td><a href=#outputQuants>FR: Output-Quantities</a></td>
+              <td><a href=#outputValues>FR: Output-Values</a></td>
               <td></td>
               <td></td>
               <td></td>

@@ -4,7 +4,7 @@ module Database.Drasil (
   ChunkDB(defTable), RefbyMap, TraceMap, UMap, asOrderedList, cdb, collectUnits
   , conceptMap, conceptinsLookup, conceptinsTable, dataDefnTable
   , datadefnLookup, defResolve, gendefLookup, gendefTable, generateRefbyMap
-  , insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable
+  , idMap, insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable
   , refbyLookup, refbyTable, sectionLookup, sectionTable, symbResolve
   , termResolve, termTable, theoryModelLookup, theoryModelTable, traceLookup
   , traceMap, traceTable

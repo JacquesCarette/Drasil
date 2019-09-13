@@ -1,13 +1,13 @@
 module Language.Drasil.Code.Imperative.Modules (
-  genMain, chooseInModule, genOutputMod, genSampleInput
+  genMain, chooseInModule, genConstMod, genOutputMod, genSampleInput
 ) where
 
 import Language.Drasil
 import Database.Drasil (ChunkDB)
-import Language.Drasil.Code.Imperative.Descriptions (derivedValuesDesc, 
-  dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, inputClassDesc, 
-  inputConstraintsDesc, inputFormatDesc, inputParametersDesc, modDesc, 
-  outputFormatDesc, woFuncDesc)
+import Language.Drasil.Code.Imperative.Descriptions (constClassDesc, 
+  constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, 
+  inFmtFuncDesc, inputClassDesc, inputConstraintsDesc, inputFormatDesc, 
+  inputParametersDesc, modDesc, outputFormatDesc, woFuncDesc)
 import Language.Drasil.Code.Imperative.FunctionCalls (getCalcCall,
   getConstraintCall, getDerivedCall, getInputCall, getOutputCall)
 import Language.Drasil.Code.Imperative.GenerateGOOL (genModule, publicClass)
@@ -20,29 +20,29 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
   getOutputParams)
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (RenderSym(..),
-  AuxiliarySym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
-  VariableSym(..), ValueSym(..), BooleanExpression(..), StatementSym(..), 
-  ControlStatementSym(..), MethodTypeSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..))
+  AuxiliarySym(..), BodySym(..), BlockSym(..), PermanenceSym(..), 
+  StateTypeSym(..), VariableSym(..), ValueSym(..), BooleanExpression(..), 
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  MethodSym(..), StateVarSym(..), ClassSym(..))
 import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
-import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType, codevar, 
-  physLookup, sfwrLookup)
-import Language.Drasil.Chunk.CodeDefinition (codeEquat)
+import Language.Drasil.Chunk.Code (CodeIdea(codeName, codeChunk), CodeChunk, 
+  codeType, codevar, physLookup, sfwrLookup)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
-import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams)
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
 import Language.Drasil.CodeSpec (AuxFile(..), CodeSpec(..), CodeSystInfo(..),
-  Comments(CommentFunc), ConstraintBehaviour(..), InputModule(..), Logging(..), 
-  Structure(..))
+  Comments(CommentFunc), ConstantStructure(..), ConstantRepr(..), 
+  ConstraintBehaviour(..), InputModule(..), Logging(..), Structure(..))
 import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import Prelude hiding (print)
-import Data.List (intersperse, intercalate)
+import Data.List (intersperse, intercalate, partition)
 import Data.Map (member)
-import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybeToList, catMaybes, mapMaybe)
+import qualified Data.Map as Map (lookup, filter)
+import Data.Maybe (maybeToList, catMaybes)
 import Control.Applicative ((<$>))
-import Control.Monad.Reader (Reader, ask)
+import Control.Monad.Reader (Reader, ask, asks)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
 
@@ -58,6 +58,7 @@ genMainFunc = do
     v_filename <- mkVar $ codevar inFileName
     logInFile <- maybeLog v_filename
     ip <- getInputDecl
+    co <- initConsts
     gi <- getInputCall
     dv <- getDerivedCall
     ic <- getConstraintCall
@@ -67,20 +68,53 @@ genMainFunc = do
       "" $ bodyStatements $
       initLogFileVar (logKind g) ++
       varDecDef v_filename (arg 0) : logInFile ++
-      catMaybes ([ip, gi, dv, ic] ++ varDef ++ [wo])
+      catMaybes ([ip, co, gi, dv, ic] ++ varDef ++ [wo])
 
 getInputDecl :: (RenderSym repr) => Reader State (Maybe (repr (
   Statement repr)))
 getInputDecl = do
   g <- ask
   v_params <- mkVar (codevar inParams)
-  let getDecl _ [] = return Nothing
-      getDecl Unbundled ins = do
+  let cname = "InputParameters"
+      getDecl ([],[]) = constIns (partition (flip member (Map.filter (cname ==) 
+        (eMap $ codeSpec g)) . codeName) (map codeChunk $ constants $ csi $ 
+        codeSpec g)) (conRepr g)
+      getDecl ([],ins) = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
-      getDecl Bundled _ = return $ Just $ extObjDecNewVoid "InputParameters"
-        v_params 
-  getDecl (inStruct g) (inputs $ csi $ codeSpec g)
+      getDecl (_,[]) = return $ Just $ extObjDecNewVoid cname v_params
+      getDecl _ = error ("Inputs or constants are only partially contained in " 
+        ++ cname ++ " class")
+      constIns ([],[]) _ = return Nothing
+      constIns _ Const = return Nothing
+      constIns cs Var = getDecl cs 
+  getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
+    . codeName) (inputs $ csi $ codeSpec g))
+
+initConsts :: (RenderSym repr) => Reader State (Maybe (repr (Statement repr)))
+initConsts = do
+  g <- ask
+  v_consts <- mkVar (codevar consts)
+  let cname = "Constants"
+      getDecl _ Inline = return Nothing
+      getDecl ([],[]) _ = return Nothing
+      getDecl (_,[]) _ = asks (constCont . conRepr)
+      getDecl ([],cs) _ = getDecl' $ partition (flip member (eMap $ codeSpec g) 
+        . codeName) cs 
+      getDecl _ _ = error "Only some constants associated with Constants module in export map"
+      constCont Var = Just $ extObjDecNewVoid cname v_consts
+      constCont Const = Nothing
+      getDecl' (_,[]) = return Nothing
+      getDecl' ([],cs) = do 
+        vars <- mapM mkVar cs
+        vals <- mapM (convExpr . codeEquat) cs
+        logs <- mapM maybeLog vars
+        return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ concat logs
+      getDecl' _ = error "Only some constants present in export map"
+      defFunc Var = varDecDef
+      defFunc Const = constDecDef
+  getDecl (partition (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) 
+    . codeName) (constants $ csi $ codeSpec g)) (conStruct g)
 
 initLogFileVar :: (RenderSym repr) => Logging -> [repr (Statement repr)]
 initLogFileVar LogVar = [varDec varLogFile]
@@ -126,20 +160,33 @@ chooseInStructure :: (RenderSym repr) => Structure -> Reader State
 chooseInStructure Unbundled = return Nothing
 chooseInStructure Bundled = genInputClass
 
+constVarFunc :: (RenderSym repr) => ConstantRepr -> String ->
+  (repr (Variable repr) -> repr (Value repr) -> repr (StateVar repr))
+constVarFunc Var n = stateVarDef 0 n public dynamic_
+constVarFunc Const n = constVar 0 n public
+
 genInputClass :: (RenderSym repr) => Reader State (Maybe (repr (Class repr)))
 genInputClass = do
   g <- ask
-  let ins       = inputs $ csi $ codeSpec g
-      genClass :: (RenderSym repr) => [String] -> Reader State (Maybe 
-        (repr (Class repr)))
-      genClass [] = return Nothing 
-      genClass _ = do
+  let ins = inputs $ csi $ codeSpec g
+      cs = constants $ csi $ codeSpec g
+      cname = "InputParameters"
+      filt :: (CodeIdea c) => [c] -> [c]
+      filt = filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
+        codeName)
+      genClass :: (RenderSym repr) => [CodeChunk] -> [CodeDefinition] ->
+        Reader State (Maybe (repr (Class repr)))
+      genClass [] [] = return Nothing 
+      genClass inps csts = do
+        vals <- mapM (convExpr . codeEquat) csts
         let inputVars = map (\x -> pubMVar 0 (var (codeName x) (convType $ 
-              codeType x))) ins
+              codeType x))) inps
+            constVars = zipWith (\c vl -> constVarFunc (conRepr g) cname
+              (var (codeName c) (convType $ codeType c)) vl) csts vals
         icDesc <- inputClassDesc
-        cls <- publicClass icDesc "InputParameters" Nothing inputVars []
+        cls <- publicClass icDesc cname Nothing (inputVars ++ constVars) []
         return $ Just cls
-  genClass $ mapMaybe (\x -> Map.lookup (codeName x) (eMap $ codeSpec g)) ins
+  genClass (filt ins) (filt cs)
 
 genInputDerived :: (RenderSym repr) => Reader State 
   (Maybe (repr (Method repr)))
@@ -154,7 +201,7 @@ genInputDerived = do
         outs <- getDerivedOuts
         bod <- mapM (\x -> genCalcBlock CalcAssign x (codeEquat x)) dvals
         desc <- dvFuncDesc
-        mthd <- publicInOutFunc "derived_values" desc ins outs [] bod
+        mthd <- publicInOutFunc "derived_values" desc ins outs bod
         return $ Just mthd
   genDerived $ Map.lookup "derived_values" (eMap $ codeSpec g)
 
@@ -280,7 +327,7 @@ genInputFormat = do
         outs <- getInputFormatOuts
         bod <- readData dd
         desc <- inFmtFuncDesc
-        mthd <- publicInOutFunc "get_input" desc ins outs [] bod
+        mthd <- publicInOutFunc "get_input" desc ins outs bod
         return $ Just mthd
   genInFormat $ Map.lookup "get_input" (eMap $ codeSpec g)
 
@@ -296,6 +343,32 @@ genSampleInput = do
   dd <- genDataDesc
   return [sampleInput (sysinfodb $ csi $ codeSpec g) dd (sampleData g) | SampleInput `elem` 
     auxiliaries g]
+
+----- CONSTANTS -----
+
+genConstMod :: (RenderSym repr) => Reader State [repr (RenderFile repr)]
+genConstMod = do
+  cDesc <- modDesc $ liftS constModDesc
+  liftS $ genModule "Constants" cDesc Nothing (Just $ fmap maybeToList 
+    genConstClass)
+
+genConstClass :: (RenderSym repr) => Reader State (Maybe (repr (Class repr)))
+genConstClass = do
+  g <- ask
+  let cs = constants $ csi $ codeSpec g
+      cname = "Constants"
+      genClass :: (RenderSym repr) => [CodeDefinition] -> Reader State (Maybe 
+        (repr (Class repr)))
+      genClass [] = return Nothing 
+      genClass vs = do
+        vals <- mapM (convExpr . codeEquat) vs 
+        let vars = map (\x -> var (codeName x) (convType $ codeType x)) vs
+            constVars = zipWith (constVarFunc (conRepr g) cname) vars vals
+        cDesc <- constClassDesc
+        cls <- publicClass cDesc cname Nothing constVars []
+        return $ Just cls
+  genClass $ filter (flip member (Map.filter (cname ==) (eMap $ codeSpec g)) . 
+    codeName) cs
 
 ----- OUTPUT -------
 

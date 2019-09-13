@@ -10,40 +10,42 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
-  printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, 
-  charTypeDocD, stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
-  methodDocD, methodListDocD, stateVarDocD, stateVarListDocD, alwaysDel, 
-  ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, tryCatchDocD, 
-  assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', plusPlusDocD, 
-  plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, 
-  statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, mkSt, mkStNoEnd,
-  stringListVals', stringListLists', stratDocD, unOpPrec, notOpDocD, notOpDocD',
-  negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, absOpDocD', logOpDocD, 
-  logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD', sinOpDocD, sinOpDocD',
-  cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', asinOpDocD, asinOpDocD', 
-  acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', unOpDocD, unExpr, unExpr',
-  typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD,
-  greaterOpDocD, greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, 
-  minusOpDocD, multOpDocD, divideOpDocD, moduloOpDocD, powerOpDocD, andOpDocD, 
-  orOpDocD, binOpDocD, binOpDocD', binExpr, binExpr', typeBinExpr, mkVal, 
-  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
-  extVarDocD, selfDocD, argDocD, enumElemDocD, objVarDocD, inlineIfD, 
-  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, objDecDefDocD, 
-  constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, castDocD, 
-  sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, castObjDocD, 
-  includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, prependToBody, 
-  appendToBody, surroundBody, getterName, setterName, setMain, setMainMethod, 
-  setEmpty, intValue
+  printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
+  stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, voidDocD, 
+  constructDocD, stateParamDocD, paramListDocD, mkParam, methodDocD, 
+  methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, stateVarListDocD,
+  alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
+  tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
+  plusPlusDocD, plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, 
+  listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, 
+  mkSt, mkStNoEnd, stringListVals', stringListLists', stratDocD, unOpPrec, 
+  notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
+  absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
+  sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
+  asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', 
+  unOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, 
+  equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
+  binExpr, binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, 
+  litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
+  selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD,
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
+  listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
+  listIndexExistsDocD, funcDocD, castDocD, sizeDocD, listAccessFuncDocD, 
+  listSetFuncDocD, objAccessDocD, castObjDocD, includeD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
+  docFuncRepr, valList, prependToBody, appendToBody, surroundBody, getterName, 
+  setterName, setMainMethod, setEmpty, intValue, filterOutObjs
 ) where
 
 import Utils.Drasil (capitalize, indent, indentList, stringList)
 
-import Language.Drasil.Code.Code (CodeType(..))
+import Language.Drasil.Code.Code (CodeType(..), isObject)
 import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, Library,
-  RenderSym(..), BodySym(..), StateTypeSym(getType, listInnerType), 
+  RenderSym(..), BodySym(..), 
+  StateTypeSym(StateType, getType, getTypeString, getTypeDoc, listInnerType), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
@@ -51,9 +53,10 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, Library,
 import qualified Language.Drasil.Code.Imperative.GOOL.Symantics as S (StateTypeSym(int))
 import Language.Drasil.Code.Imperative.GOOL.Data (Terminator(..), FileData(..), 
   fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
-  od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, VarData(..))
-import Language.Drasil.Code.Imperative.GOOL.Helpers (angles,blank, doubleQuotedText,
-  hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
+  od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
+  VarData(..), vard)
+import Language.Drasil.Code.Imperative.GOOL.Helpers (angles,blank, 
+  doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
 import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
@@ -206,36 +209,37 @@ printFileDocD fn f = valDoc f <> dot <> text fn
 -- Type Printers --
 
 boolTypeDocD :: TypeData
-boolTypeDocD = td Boolean (text "Boolean") -- capital B?
+boolTypeDocD = td Boolean "Boolean" (text "Boolean") -- capital B?
 
 intTypeDocD :: TypeData
-intTypeDocD = td Integer (text "int")
+intTypeDocD = td Integer "int" (text "int")
 
 floatTypeDocD :: TypeData
-floatTypeDocD = td Float (text "float")
+floatTypeDocD = td Float "float" (text "float")
 
 charTypeDocD :: TypeData
-charTypeDocD = td Char (text "char")
+charTypeDocD = td Char "char" (text "char")
 
 stringTypeDocD :: TypeData
-stringTypeDocD = td String (text "string")
+stringTypeDocD = td String "string" (text "string")
 
 fileTypeDocD :: TypeData
-fileTypeDocD = td File (text "File")
+fileTypeDocD = td File "File" (text "File")
 
 typeDocD :: Label -> TypeData
-typeDocD t = td (Object t) (text t)
+typeDocD t = td (Object t) t (text t)
 
 enumTypeDocD :: Label -> TypeData
-enumTypeDocD t = td (Enum t) (text t)
+enumTypeDocD t = td (Enum t) t (text t)
 
 listTypeDocD :: TypeData -> Doc -> TypeData
-listTypeDocD t lst = td (List (cType t)) (lst <> angles (typeDoc t))
+listTypeDocD t lst = td (List (cType t)) 
+  (render lst ++ "<" ++ typeString t ++ ">") (lst <> angles (typeDoc t))
 
 -- Method Types --
 
 voidDocD :: TypeData
-voidDocD = td Void (text "void")
+voidDocD = td Void "void" (text "void")
 
 constructDocD :: Label -> Doc
 constructDocD _ = empty
@@ -267,6 +271,13 @@ methodListDocD ms = vibcat methods
 
 stateVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
 stateVarDocD s p v end = s <+> p <+> typeDoc (varType v) <+> varDoc v <> end
+
+stateVarDefDocD :: Doc -> Doc -> Doc -> Doc
+stateVarDefDocD s p dec = s <+> p <+> dec
+
+constVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
+constVarDocD s p v end = s <+> p <+> text "const" <+> typeDoc (varType v) <+>
+  varDoc v <> end
 
 stateVarListDocD :: [Doc] -> Doc
 stateVarListDocD = vcat
@@ -376,21 +387,23 @@ plusPlusDocD' :: VarData -> OpData -> Doc
 plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> opDoc plusOp <+>
   int 1
 
-varDecDocD :: VarData -> Doc
-varDecDocD v = typeDoc (varType v) <+> varDoc v
+varDecDocD :: VarData -> Doc -> Doc -> Doc
+varDecDocD v s d = bind (varBind v) <+> typeDoc (varType v) <+> varDoc v
+  where bind Static = s
+        bind Dynamic = d
 
-varDecDefDocD :: VarData -> ValData -> Doc
-varDecDefDocD v def = typeDoc (varType v) <+> varDoc v <+> equals <+> valDoc def
+varDecDefDocD :: VarData -> ValData -> Doc -> Doc -> Doc
+varDecDefDocD v def s d = varDecDocD v s d <+> equals <+> valDoc def
 
-listDecDocD :: VarData -> ValData -> Doc
-listDecDocD v n = typeDoc (varType v) <+> varDoc v <+> equals <+> new <+> 
+listDecDocD :: VarData -> ValData -> Doc -> Doc -> Doc
+listDecDocD v n s d = varDecDocD v s d <+> equals <+> new <+> 
   typeDoc (varType v) <> parens (valDoc n)
 
-listDecDefDocD :: VarData -> [ValData] -> Doc
-listDecDefDocD v vs = typeDoc (varType v) <+> varDoc v <+> equals <+> new <+> 
+listDecDefDocD :: VarData -> [ValData] -> Doc -> Doc -> Doc
+listDecDefDocD v vs s d = varDecDocD v s d <+> equals <+> new <+> 
   typeDoc (varType v) <+> braces (valList vs)
 
-objDecDefDocD :: VarData -> ValData -> Doc
+objDecDefDocD :: VarData -> ValData -> Doc -> Doc -> Doc
 objDecDefDocD = varDecDefDocD
 
 constDecDefDocD :: VarData -> ValData -> Doc
@@ -643,6 +656,12 @@ typeBinExpr b t v1 v2 = mkExpr (opPrec b) t (binOpDocD (opDoc b) (exprParensL b
 mkVal :: TypeData -> Doc -> ValData
 mkVal = vd Nothing
 
+mkVar :: String -> TypeData -> Doc -> VarData
+mkVar = vard Dynamic
+
+mkStaticVar :: String -> TypeData -> Doc -> VarData
+mkStaticVar = vard Static
+
 mkExpr :: Int -> TypeData -> Doc -> ValData
 mkExpr p = vd (Just p)
 
@@ -682,6 +701,22 @@ argDocD n args = valDoc args <> brackets (valDoc n)
 
 enumElemDocD :: Label -> Label -> Doc
 enumElemDocD en e = text en <> dot <> text e
+
+classVarCheckStatic :: (VariableSym repr) => repr (Variable repr) -> 
+  repr (Variable repr)
+classVarCheckStatic v = classVarCS (variableBind v)
+  where classVarCS Dynamic = error
+          "classVar can only be used to access static variables"
+        classVarCS Static = v
+
+classVarD :: (VariableSym repr) => repr (StateType repr) -> 
+  repr (Variable repr) -> (Doc -> Doc -> Doc) -> repr (Variable repr)
+classVarD c v f = varFromData (variableBind v) 
+  (getTypeString c ++ "." ++ variableName v) 
+  (variableType v) (f (getTypeDoc c) (variableDoc v))
+
+classVarDocD :: Doc -> Doc -> Doc
+classVarDocD c v = c <> dot <> v
 
 objVarDocD :: VarData -> VarData ->  Doc
 objVarDocD n1 n2 = varDoc n1 <> dot <> varDoc n2
@@ -826,11 +861,11 @@ varList vs = hcat (intersperse (text ", ") (map varDoc vs))
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
 prependToBody s b = vcat [fst $ statementDocD s, maybeBlank, b]
-  where maybeBlank = emptyIfEmpty b blank
+  where maybeBlank = emptyIfEmpty (fst s) (emptyIfEmpty b blank)
 
 appendToBody :: Doc -> (Doc, Terminator) -> Doc
 appendToBody b s = vcat [b, maybeBlank, fst $ statementDocD s]
-  where maybeBlank = emptyIfEmpty b blank
+  where maybeBlank = emptyIfEmpty b (emptyIfEmpty (fst s) blank)
 
 surroundBody :: (Doc, Terminator) -> Doc -> (Doc, Terminator) -> Doc
 surroundBody p b a = prependToBody p (appendToBody b a)
@@ -840,9 +875,6 @@ getterName s = "Get" ++ capitalize s
 
 setterName :: String -> String
 setterName s = "Set" ++ capitalize s
-
-setMain :: (Doc, Bool) -> (Doc, Bool)
-setMain (d, _) = (d, True)
 
 setMainMethod :: MethodData -> MethodData
 setMainMethod (MthD _ ps d) = MthD True ps d
@@ -861,6 +893,10 @@ intValue i = intValue' (getType $ valueType i)
   where intValue' Integer = i
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
+
+filterOutObjs :: (VariableSym repr) => [repr (Variable repr)] -> 
+  [repr (Variable repr)]
+filterOutObjs = filter (not . isObject . getType . variableType)
 
 doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String
 doxCommand = "\\"

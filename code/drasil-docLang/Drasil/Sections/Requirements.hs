@@ -1,11 +1,12 @@
-module Drasil.Sections.Requirements (fReqF, mkInputPropsTable, mkQRTuple,
-  mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
+module Drasil.Sections.Requirements (fReqF, fullReqs, fullTables, inReq, inTable,
+  mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
 
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (description, functionalRequirement,
-  input_, nonfunctionalRequirement, section_, software, symbol_)
+import Data.Drasil.Concepts.Documentation (description, funcReqDom,
+  functionalRequirement, input_, nonfunctionalRequirement, {-output_,-} section_,
+  software, symbol_, value)
 import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
@@ -14,6 +15,27 @@ import Drasil.DocumentLanguage.Units (toSentence)
 -- wrapper for reqIntro
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
+
+fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> [ConceptInstance] -> [ConceptInstance]
+fullReqs i d r = inReq (inReqDesc (inTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
+
+fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [LabelledContent]
+fullTables i t = inTable i : t
+
+inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
+inTable i = mkInputPropsTable i (inReq EmptyS) -- passes empty Sentence to make stub of inReq
+--outTable    = mkValsSourceTable o "ReqOutputs" (S "Required" +:+ titleize' output_ `follows` (outReq EmptyS))
+                                                -- passes empty Sentence to make stub of outReq
+
+inReqDesc :: (HasShortName r, Referable r) => r -> Sentence -> Sentence 
+inReqDesc  t desc = foldlSent [atStart input_,  S "the", plural value, S "from", end]
+  where end = case desc of EmptyS -> makeRef2S t
+                           sent   -> makeRef2S t `sC` S "which define" +:+ sent
+--outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", makeRef2S t]
+
+inReq :: Sentence -> ConceptInstance
+inReq  s = cic "inputValues"  s "Input-Values"  funcReqDom
+--outReq s = cic "inputValues" s "Output-Values" funcReqDom
 
 fReqF :: [Contents] -> Section
 fReqF listOfFReqs = SRS.funcReq (fReqIntro : listOfFReqs) []
@@ -26,14 +48,12 @@ reqIntroStart :: Sentence
 reqIntroStart = foldlSent_ [S "This", phrase section_, S "provides"]
 
 frReqIntroBody :: Sentence
-frReqIntroBody = foldlSent_
-        [S "the", plural functionalRequirement `sC` S "the tasks and behaviours that the",
-        phrase software, S "is expected to complete"]
+frReqIntroBody = foldlSent_ [S "the", plural functionalRequirement `sC`
+  S "the tasks and behaviours that the", phrase software, S "is expected to complete"]
 
 nfrReqIntroBody :: Sentence
-nfrReqIntroBody = foldlSent_
-        [S "the", plural nonfunctionalRequirement `sC` S "the qualities that the",
-        phrase software, S "is expected to exhibit"]
+nfrReqIntroBody = foldlSent_ [S "the", plural nonfunctionalRequirement `sC`
+  S "the qualities that the", phrase software, S "is expected to exhibit"]
 
 --generalized requirements introduction
 reqIntro :: Contents

@@ -13,6 +13,8 @@ using std::vector;
 using std::ifstream;
 using std::ofstream;
 
+#include "Constants.hpp"
+
 /** \brief Reads input from a file with the given file name
     \param filename name of the input file
     \param A_C heating coil surface area: area covered by the outermost layer of the coil (m^2)

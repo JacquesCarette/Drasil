@@ -63,7 +63,7 @@
 \begin{document}
 
 %% Title information
-\title[Short Title]{GOOL: A Generic Object-Oriented Language}         %% [Short 
+\title{GOOL: A Generic Object-Oriented Language}         %% [Short 
 %%Title] is optional;
                                         %% when present, will be used in
 %                                        %% header instead of Full Title.
@@ -284,6 +284,16 @@ However, it does not offer the high-level abstractions GOOL provides
 readable as Haxe generates a lot of ``noise'' and strips comments from the 
 original Haxe source code.
 
+Protokit's 2nd version is a DSL and code generator for Java and C++, where the 
+generator is designed to be capable of producing general-purpose imperative or 
+object-oriented code. The Protokit generator is model-driven and uses a final 
+``output model'' from which actual code can be trivially generated. Since the 
+``output model'' was so similar to the generated code, it presented challenges 
+with regards to semantic, conventional, and library-related differences between 
+the target language \cite{kovesdan2017multi}. GOOL's finally-tagless approach 
+and syntax for high-level tasks, on the other hand, helped it overcome 
+differences between target languages.
+
 ThingML \cite{harrand2016thingml} is a DSL for model-driven engineering 
 targeting C, C++, Java, and 
 JavaScript. While it can be used in a broad range of application domains, they 
@@ -305,15 +315,15 @@ C++ \cite{Protobuf}. Thrift is a Facebook-developed tool for generating code in
 multiple languages and even multiple paradigms based on language-neutral 
 descriptions of data types and interfaces \cite{slee2007thrift}. Clearwater is 
 an approach for implementing DSLs with multiple target languages for components 
-of distributed systems \cite{swint2005clearwater}. The domain of mobile 
+of distributed systems \cite{swint2005clearwater}. The Time Weaver tool uses a 
+multi-language code generator to generate ``glue'' code for real-time embedded 
+systems \cite{de2004glue}. The domain of mobile 
 applications is host to a bevy of DSLs with multiple target languages, of which 
 MobDSL \cite{kramer2010mobdsl} and XIS-Mobile \cite{ribeiro2014xis} are two 
 examples. Conjure is a DSL for generating APIs. It reads YML descriptions of 
 APIs and can generate code in Java, TypeScript, Python, and Rust 
 \cite{Conjure}. All of these are examples of multi-language code generation, 
 but none of them generate general-purpose code like GOOL does.
-
-vortex - an optimizing compiler for OO languages (OO language frontends)
 
 \section{Future Work} \label{future}
 \section{Conclusion} \label{conclusions}

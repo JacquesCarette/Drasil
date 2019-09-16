@@ -139,7 +139,7 @@ $\mathbf{r}\text{(}t\text{)}$ & Linear Displacement & m
 \\
 ${\mathbf{r}_{\text{O}\text{B}}}$ & Displacement vector between the origin and point B & m
 \\
-$\mathbf{\hat{r}}$ & Displacement unit vector & m
+$\mathbf{\hat{r}}$ & Unit vector directed from the large mass to the smaller mass & m
 \\
 $t$ & Time & s
 \\
@@ -439,7 +439,7 @@ Description & \begin{symbDescription}
               \item{${m_{1}}$ is the mass of the first body (kg)}
               \item{${m_{2}}$ is the mass of the second body (kg)}
               \item{$\text{||}\mathbf{r}\text{||}$ is the Euclidean norm of the displacement (m)}
-              \item{$\mathbf{\hat{r}}$ is the displacement unit vector (m)}
+              \item{$\mathbf{\hat{r}}$ is the unit vector directed from the large mass to the smaller mass (m)}
               \item{$\mathbf{r}$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
@@ -510,16 +510,19 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{g}=\frac{G M}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}
+           \mathbf{g}=-\frac{G M}{\mathbf{r}^{2}} \mathbf{\hat{r}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$)}
               \item{$M$ is the mass of the larger rigid body (kg)}
-              \item{$\text{||}\mathbf{r}\text{||}$ is the Euclidean norm of the displacement (m)}
-              \item{$\mathbf{\hat{r}}$ is the displacement unit vector (m)}
+              \item{$\mathbf{r}$ is the displacement (m)}
+              \item{$\mathbf{\hat{r}}$ is the unit vector directed from the large mass to the smaller mass (m)}
               \end{symbDescription}
+\\ \midrule \\
+Notes & If one of the masses is much larger than the other it is convenient to define a gravitational field around the larger mass as shown above. The negative sign in the equation indicates that the force is an attractive force.
+        
 \\ \midrule \\
 Source & \hyperref{https://en.wikipedia.org/wiki/Gravitational_acceleration}{}{}{Definition of Gravitational Acceleration}
          

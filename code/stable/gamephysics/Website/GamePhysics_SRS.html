@@ -258,7 +258,9 @@
                 </tr>
                 <tr>
                   <td><em><b>r&#770;</b></em></td>
-                  <td>Displacement unit vector</td>
+                  <td>
+                    Unit vector directed from the large mass to the smaller mass
+                  </td>
                   <td>m</td>
                 </tr>
                 <tr>
@@ -839,7 +841,7 @@
                             <em>||<b>r</b>||</em> is the Euclidean norm of the displacement (m)
                           </li>
                           <li>
-                            <em><b>r&#770;</b></em> is the displacement unit vector (m)
+                            <em><b>r&#770;</b></em> is the unit vector directed from the large mass to the smaller mass (m)
                           </li>
                           <li><em><b>r</b></em> is the displacement (m)</li>
                         </ul>
@@ -943,7 +945,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{g}=\frac{G M}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}\]
+                        \[\mathbf{g}=-\frac{G M}{\mathbf{r}^{2}} \mathbf{\hat{r}}\]
                       </td>
                     </tr>
                     <tr>
@@ -957,13 +959,19 @@
                             <em>G</em> is the gravitational constant (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>))
                           </li>
                           <li><em>M</em> is the mass of the larger rigid body (kg)</li>
+                          <li><em><b>r</b></em> is the displacement (m)</li>
                           <li>
-                            <em>||<b>r</b>||</em> is the Euclidean norm of the displacement (m)
-                          </li>
-                          <li>
-                            <em><b>r&#770;</b></em> is the displacement unit vector (m)
+                            <em><b>r&#770;</b></em> is the unit vector directed from the large mass to the smaller mass (m)
                           </li>
                         </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          If one of the masses is much larger than the other it is convenient to define a gravitational field around the larger mass as shown above. The negative sign in the equation indicates that the force is an attractive force.
+                        </p>
                       </td>
                     </tr>
                     <tr>

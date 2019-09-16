@@ -207,7 +207,7 @@ the code they write will likely be marred by influences of the language they
 know best. They may consistently use techniques that they are familiar with 
 from one language, while unaware that the language in which they are currently 
 writing offers a better or cleaner way of doing the same task 
-\cite{ScholtzWiedenbeck, AlexandronEtAl}. Besides this 
+\cite{scholtz1990learning, alexandron2012effect}. Besides this 
 likelihood of writing sub-optimal code, repeatedly writing the same program in 
 different languages is entirely inefficient. 
 Languages in the same paradigm have many similarities, and there is an 
@@ -232,12 +232,13 @@ The similarities between OO programs do not end with syntax and structural
 components. Additionally, there are tasks and patterns commonly performed by OO
 programs in any language, from simple tasks like splitting a string or 
 patterns like defining functions on inputs to produce outputs, to higher-level 
-design patterns like those described in \cite{DesignPatterns}. A language 
+design patterns like those described in \cite{gamma1995design}. A language 
 that provided abstractions for these tasks and patterns would make the process 
 of writing OO code even easier.
 
 A Domain-Specific Language (DSL) is a high-level programming language with 
-syntax tailored to a specific domain \cite{DSLs}. DSLs allow domain experts 
+syntax tailored to a specific domain \cite{mernik2005and}. DSLs allow domain 
+experts 
 to write code without having to concern themselves with the syntactical and
 operational requirements of general-purpose programming languages. A DSL
 abstracts over the details of the code, providing notation for a user to
@@ -276,6 +277,44 @@ future improvements in Section \ref{future}, and conclusions in Section
 \section{GOOL Implementation} \label{implementation}
 \section{Higher-level GOOL functions} \label{patterns}
 \section{Related Work} \label{related}
+Haxe is a general-purpose multi-paradigm language and cross-platform compiler. 
+It compiles to all of the languages GOOL does, in addition to many others. 
+However, it does not offer the high-level abstractions GOOL provides 
+\cite{Haxe} (better reference?). Also, the generated source code is not very 
+readable as Haxe generates a lot of ``noise'' and strips comments from the 
+original Haxe source code.
+
+ThingML \cite{harrand2016thingml} is a DSL for model-driven engineering 
+targeting C, C++, Java, and 
+JavaScript. While it can be used in a broad range of application domains, they 
+all fall under the umbrella domain of distributed reactive systems, and so it 
+is not quite a general-purpose DSL, unlike GOOL. ThingML's modelling-related 
+syntax and abstractions are a contrast to GOOL's object-oriented syntax and 
+abstractions. The generated code lacks some of the pretty-printing provided by 
+GOOL, specifically indentation, which detracts from the readability.
+
+IBM developed a DSL for automatic generation of OO code based on design 
+patterns \cite{budinsky1996automatic}. Their DSL was in the form of a visual 
+user interface rather than a programming language, and could only generate code 
+that followed a design pattern. It could not generate any general-purpose code.
+
+There are many examples of DSLs with multiple OO target languages but for a 
+more restricted domain. Google protocol buffers is a DSL for serializing 
+structured data, which can then be compiled into Java, Python, Objective C, and 
+C++ \cite{Protobuf}. Thrift is a Facebook-developed tool for generating code in 
+multiple languages and even multiple paradigms based on language-neutral 
+descriptions of data types and interfaces \cite{slee2007thrift}. Clearwater is 
+an approach for implementing DSLs with multiple target languages for components 
+of distributed systems \cite{swint2005clearwater}. The domain of mobile 
+applications is host to a bevy of DSLs with multiple target languages, of which 
+MobDSL \cite{kramer2010mobdsl} and XIS-Mobile \cite{ribeiro2014xis} are two 
+examples. Conjure is a DSL for generating APIs. It reads YML descriptions of 
+APIs and can generate code in Java, TypeScript, Python, and Rust 
+\cite{Conjure}. All of these are examples of multi-language code generation, 
+but none of them generate general-purpose code like GOOL does.
+
+vortex - an optimizing compiler for OO languages (OO language frontends)
+
 \section{Future Work} \label{future}
 \section{Conclusion} \label{conclusions}
 

@@ -9,7 +9,7 @@ import qualified Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradi
 import Data.Drasil.SI_Units (metre, m_2, radian)
 
 gradient, normalVect, unitVect, unitVectj, euclidNorm, perpVect,
-  pi_, uNormalVect :: DefinedQuantityDict
+  pi_, uNormalVect, euclidNormX, euclidNormY :: DefinedQuantityDict
 
 gradient    = dqdNoUnit CM.gradient lNabla         Real
 normalVect  = dqdNoUnit CM.normalV  (vec lN)       Real
@@ -19,6 +19,8 @@ unitVectj   = dqdNoUnit CM.unitV    (vec $ hat lJ) Real
 perpVect    = dqdNoUnit CM.perpV    (vec lN)       Real
 pi_         = dqd'      CM.pi_      (staged lPi (Variable "pi")) Real Nothing
 euclidNorm  = dqdNoUnit CM.euclidN  (Concat [Label "||", vec lR, Label "||"]) Real  
+euclidNormX = dqdNoUnit CM.euclidN  (Concat [Label "||", (sub(vec lR) lX), Label "||"]) Real 
+euclidNormY = dqdNoUnit CM.euclidN  (Concat [Label "||", (sub(vec lR) lY), Label "||"]) Real 
 
 area, diameter, surface, surArea, orientation :: UnitalChunk
 

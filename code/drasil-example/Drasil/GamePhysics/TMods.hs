@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR) where
+module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG) where
 
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tmNoRefs)

@@ -3,14 +3,20 @@ module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD,
 
 import Language.Drasil
 import Utils.Drasil
---import Data.Drasil.Concepts.Physics as CP (rigidBody, time)
 import Theory.Drasil (GenDefn, gd)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
- gravitationalAccel, gravitationalConst, restitutionCoef, impulseS)
+ gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
+ displacement, fOfGravity, gravitationalAccelX, gravitationalAccelY)
 import Drasil.GamePhysics.Unitals (mLarger, dispNorm, dispUnit, massA, massB,
-  momtInertA, momtInertB, normalLen, normalVect, perpLenA, perpLenB, initRelVel)
+  momtInertA, momtInertB, normalLen, normalVect, perpLenA, perpLenB, initRelVel,
+  dispUnit, iVect, jVect, dispUnit, mass_1, mass_2, sqrDist, sqrDistX, sqrDistY)
 import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
   rigidTwoDAssump)
+import Data.Drasil.Concepts.Math as CM (line, cartesian)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+--import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, perpVect, unitVect, euclidNormX, euclidNormY)
+--import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
+import Drasil.GamePhysics.TMods (newtonLUG)
 
 ----- General Models -----
 
@@ -78,35 +84,72 @@ accelGravityDesc :: Sentence
 accelGravityDesc = foldlSent [S "Acceleration due to gravity"]
 
 accelGravityDeriv :: Derivation
-accelGravityDeriv = mkDerivName (phrase QP. gravitationalAccel)
+accelGravityDeriv = mkDerivName (phrase QP.gravitationalAccel)
                       (weave [accelGravityDerivSentences, map E accelGravityDerivEqns])
 
 accelGravityDerivSentences :: [Sentence]
 accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1, 
- accelGravityDerivSentence2, accelGravityDerivSentence3] 
+ accelGravityDerivSentence2, accelGravityDerivSentence3, accelGravityDerivSentence4,
+ accelGravityDerivSentence5, accelGravityDerivSentence6] 
 
-accelGravityDerivSentence1 :: Sentence
-accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", ]
-              S "The above equation governs the gravitational attraction between two bodies",
-              S "Suppose that one of the bodies is significantly more massive than the other" `Sc`
-              S "so that we concern ourselves with the" phrase force , S "the massive body",
-              S "exerts on the lighter body" +:+. S "Further suppose that the", phrase cartesian `sIs`
-              S "is chosen such that this", phrase force, S "acts on a", phrase line, 
-              S "which lies along one of the principal axes", sParen (makeRef2S rigidTwoDAssump), 
-              S "Then our", phrase dispunit, 
+accelGravityDerivSentence1 :: [Sentence]
+accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", sParen( makeRef2S newtonLUG), S "we have"]
 
-              --   S "light body, respectively" +:+. S "Using 3 **ref to 3** and equating this",
---   S "with Newton's second law (T1 ref) for the force experienced by the light",
---   S "body, we get:",
---   S "(expr3)",
---   S "where", getS gravitationalConst, S "is", phrase gravitationalAccel,
---   S "Dividing 4 **ref to 4**",
---   S "by m, and resolving this into separate x and y components:",
---   S "(expr4)",
---   S "(expr5)",
---   S "Thus:",
---   S "(expr6)"
---   ]
+
+accelGravityDerivSentence2 :: [Sentence]
+accelGravityDerivSentence2 = [S "The above equation governs the gravitational attraction between two bodies.",
+        S "Suppose that one of the bodies is significantly more massive than the other" `sC`
+        S "so that we concern ourselves with the", phrase QP.force, 
+        S "the massive body",
+        S "exerts on the lighter body.", S "Further" `sC` S "suppose that the", phrase cartesian `sIs`
+        S "chosen such that this", phrase QP.force, S "acts on a", phrase line, 
+        S "which lies along one of the principal axes.", 
+        S "Then our", getTandS dispUnit, S "for the x or y axes is"]
+
+accelGravityDerivSentence3 :: [Sentence]
+accelGravityDerivSentence3 =  [S "Given the above assumptions" `sC` S "let", ch mLarger `sAnd` ch QPP.mass, 
+        S "be the", phrase QPP.mass `ofThe` S "massive and light body respectively.",
+        S "Equating", ch QP.force, S "above with Newton's second law",
+        S "for the", phrase QP.force, S "experienced by the light body" `sC` S "we get"]
+                              
+accelGravityDerivSentence4 :: [Sentence]
+accelGravityDerivSentence4 =  [S "where", ch QP.gravitationalAccel `isThe` phrase QP.gravitationalAccel,
+        S "Dividing the above equation by", ch QPP.mass `sC` S "and resolving this",
+        S "into separate x and y components" `sC` S "we have"]
+
+accelGravityDerivSentence5 :: [Sentence]
+accelGravityDerivSentence5 =  [S "and"]
+
+accelGravityDerivSentence6 :: [Sentence]
+accelGravityDerivSentence6 =  [S "Thus" ]
+
+accelGravityDerivEqn1 :: Expr
+accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst * (sy mass_1 *  sy mass_2)/
+                        sy sqrDist) * sy dispUnit 
+
+accelGravityDerivEqn2 :: Expr
+accelGravityDerivEqn2 = sy dispUnit $= (sy QP.displacement/ sy dispNorm) $= (sy jVect * sy iVect)
+
+accelGravityDerivEqn3 :: Expr
+accelGravityDerivEqn3 = sy QP.fOfGravity $= (sy QP.gravitationalConst) *
+                         (sy mLarger * sy QPP.mass / sy sqrDist) * sy dispUnit
+                         $= sy QPP.mass * sy QP.gravitationalAccel
+
+accelGravityDerivEqn4 :: Expr
+accelGravityDerivEqn4 = sy QP.gravitationalConst *  (sy mLarger / sy sqrDistX) * sy iVect
+                        $= negate (sy QP.gravitationalAccelX) * sy iVect
+
+accelGravityDerivEqn5 :: Expr
+accelGravityDerivEqn5 = sy QP.gravitationalConst *  (sy mLarger / sy sqrDistY) * sy jVect
+                        $= negate (sy QP.gravitationalAccelY) * sy jVect
+
+accelGravityDerivEqn6 :: Expr
+accelGravityDerivEqn6 = sy QP.gravitationalAccel $= negate (sy QP.gravitationalAccelX) * negate (sy QP.gravitationalAccelY)
+
+accelGravityDerivEqns :: [Expr]
+accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,
+                         accelGravityDerivEqn4, accelGravityDerivEqn5, accelGravityDerivEqn6]
+
 
 ----------------------------Impulse for Collision--------------------------------------------
 

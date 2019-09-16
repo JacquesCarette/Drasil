@@ -19,7 +19,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
   rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
-  yAccel, yConstAccel, yDist, yPos, yVel]
+  yAccel, yConstAccel, yDist, yPos, yVel, fOfGravity, gravitationalAccelX, gravitationalAccelY ]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
@@ -33,7 +33,7 @@ acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
   pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
   space, speed, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel :: ConceptChunk
+  yPos, yVel, fOfGravity, gravitationalAccelX, gravitationalAccelY :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -69,6 +69,8 @@ force = dcc "force" (cn' "force")
   "an interaction that tends to produce change in the motion of an object"
 friction = dcc "friction" (cn' "friction")
   "the force resisting the relative motion of two surfaces"
+fOfGravity = dcc "fOfGravity" (cn "force of gravity")
+  "the force exerted by gravity on an object"
 gravity = dcc "gravity" (cn "gravity")
   "the force that attracts one physical body with mass to another"
 gravitationalAccel = dcc "gravitationalAccel" (cn "gravitational acceleration")
@@ -155,6 +157,13 @@ yAccel = dccWDS "yScalAcc" (nounPhraseSent $ phrase yComp `sOf` phrase accelerat
 constAccelV = dccWDS "constAccelV" (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
 xConstAccel = dccWDS "xConstAccel" (nounPhraseSent $ phrase xComp `sOf` phrase constAccel) (S "The" +:+ phrase xComp `sOf` phrase constAccel)
 yConstAccel = dccWDS "yConstAccel" (nounPhraseSent $ phrase yComp `sOf` phrase constAccel) (S "The" +:+ phrase yComp `sOf` phrase constAccel)
+
+
+--Variants of gravitational acceleration for x and y axes
+gravitationalAccelX = dccWDS "gravitationalAccelX" (cn " x component gravitational acceleration")
+  ( S "the" +:+ phrase xComp `sOf` phrase gravitationalAccel)
+gravitationalAccelY = dccWDS "gravitationalAccelY" (cn " y component gravitational acceleration")
+  ( S "the" +:+ phrase yComp `sOf` phrase gravitationalAccel)
 
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" (compoundPhrase' (angular ^. term) (displacement ^. term))

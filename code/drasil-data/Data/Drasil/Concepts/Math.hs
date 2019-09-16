@@ -44,7 +44,7 @@ euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the
 gradient     = dcc "gradient"     (cn' "gradient")                "degree of steepness of a graph at any point"
 graph        = dcc "graph"        (cn' "graph")                   "A diagram showing the relation between variable quantities"
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
-line         = dccWDS "line"      (pn' "Line")                    $ S "An interval between two points" +:+
+line         = dccWDS "line"      (pn' "line")                    $ S "An interval between two points" +:+
                                                                   sParen (S "from" +:+ makeRef2S lineSource)
 matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                  "is treated as a single entity and manipulated according to particular rules")

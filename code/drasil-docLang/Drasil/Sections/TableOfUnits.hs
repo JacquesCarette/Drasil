@@ -19,7 +19,7 @@ tOfUnitDesc = tOfUnitHelper [atStart symbol_, atStart description]
 -- | Helper for making Table of Units
 tOfUnitHelper :: [Sentence] -> [s -> Sentence] -> [s] -> LabelledContent
 tOfUnitHelper headers fs u = llcc unitTableRef $ Table headers
-  (mkTable fs u) (S "Table of Units") False
+  (mkTable fs u) (S "Table of Units") True
 
 unitTableRef :: Reference
 unitTableRef = makeTabRef "ToU"

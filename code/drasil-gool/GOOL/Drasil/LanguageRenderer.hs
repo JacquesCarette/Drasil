@@ -22,11 +22,11 @@ module GOOL.Drasil.LanguageRenderer (
   absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
   sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
   asinOpDocD, asinOpDocD', acosOpDocD, acosOpDocD', atanOpDocD, atanOpDocD', 
-  unOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, 
+  unOpDocD, unExpr, unExpr', boolUnExpr, powerPrec, multPrec, andPrec, orPrec, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
-  binExpr, binExpr', typeBinExpr, mkVal, mkBoolVal, mkVar, mkStaticVar, 
+  binExpr, binExpr', boolBinExpr, mkVal, mkBoolVal, mkVar, mkStaticVar, 
   litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, 
   extVarDocD, selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarD, 
   classVarDocD, objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, 
@@ -281,7 +281,7 @@ alwaysDel = 4
 
 -- Controls --
 
-ifCondDocD :: Doc -> Doc -> Doc -> Doc -> [(TypedValue Val, Doc)] -> Doc
+ifCondDocD :: Doc -> Doc -> Doc -> Doc -> [(TypedValue Boolean, Doc)] -> Doc
 ifCondDocD _ _ _ _ [] = error "if condition created with no cases"
 ifCondDocD ifStart elif bEnd elseBody (c:cs) = 
   let ifSect (v, b) = vcat [
@@ -553,8 +553,8 @@ unExpr u v = mkExpr (opPrec u) (valType v) (unOpDocD (opDoc u) (valDoc v))
 unExpr' :: OpData -> TypedValue Val -> TypedValue Val
 unExpr' u v = mkExpr (opPrec u) (valType v) (unOpDocD' (opDoc u) (valDoc v))
 
-typeUnExpr :: OpData -> TypeData -> TypedValue Val -> TypedValue Val
-typeUnExpr u t v = mkExpr (opPrec u) t (unOpDocD (opDoc u) (valDoc v))
+boolUnExpr :: OpData -> TypeData -> TypedValue Boolean -> TypedValue Boolean
+boolUnExpr u t v = mkBoolExpr (opPrec u) t (unOpDocD (opDoc u) (valDoc v))
 
 -- Binary Operators --
 
@@ -643,9 +643,10 @@ numType t1 t2 = numericType (cType t1) (cType t2)
         numericType _ Float = t2
         numericType _ _ = error "Numeric types required for numeric expression"
 
-typeBinExpr :: OpData -> TypeData -> TypedValue Val -> TypedValue Val -> TypedValue Val
-typeBinExpr b t v1 v2 = mkExpr (opPrec b) t (binOpDocD (opDoc b) (exprParensL b 
-  v1 $ valDoc v1) (exprParensR b v2 $ valDoc v2))
+boolBinExpr :: OpData -> TypeData -> TypedValue a -> TypedValue a -> 
+  TypedValue Boolean
+boolBinExpr b t v1 v2 = mkBoolExpr (opPrec b) t (binOpDocD (opDoc b) 
+  (exprParensL b v1 $ valDoc v1) (exprParensR b v2 $ valDoc v2))
 
 mkVal :: TypeData -> Doc -> TypedValue Val
 mkVal = vd Nothing
@@ -661,6 +662,9 @@ mkStaticVar = vard Static
 
 mkExpr :: Int -> TypeData -> Doc -> TypedValue Val
 mkExpr p = vd (Just p)
+
+mkBoolExpr :: Int -> TypeData -> Doc -> TypedValue Boolean
+mkBoolExpr p = bvd (Just p)
 
 -- Literals --
 
@@ -879,10 +883,10 @@ setMainMethod (MthD _ ps d) = MthD True ps d
 setEmpty :: (Doc, Terminator) -> (Doc, Terminator)
 setEmpty (d, _) = (d, Empty)
 
-exprParensL :: OpData -> TypedValue Val -> (Doc -> Doc)
+exprParensL :: OpData -> TypedValue a -> (Doc -> Doc)
 exprParensL o v = if maybe False (< opPrec o) (valPrec v) then parens else id
 
-exprParensR :: OpData -> TypedValue Val -> (Doc -> Doc)
+exprParensR :: OpData -> TypedValue a -> (Doc -> Doc)
 exprParensR o v = if maybe False (<= opPrec o) (valPrec v) then parens else id
 
 intValue :: (RenderSym repr) => repr (Value repr Val) -> repr (Value repr Val)

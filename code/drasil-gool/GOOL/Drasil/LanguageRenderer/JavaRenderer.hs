@@ -30,10 +30,10 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, 
   objDecDefDocD, statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, 
   stringListVals', stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, 
-  unExpr', typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  unExpr', boolUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
-  binExpr', typeBinExpr, mkVal, mkBoolVal, mkVar, mkStaticVar, litTrueD, 
+  binExpr', boolBinExpr, mkVal, mkBoolVal, mkVar, mkStaticVar, litTrueD, 
   litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
   selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD,
   objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
@@ -291,16 +291,16 @@ instance NumericExpression JavaCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression JavaCode where
-  (?!) = liftA3 typeUnExpr notOp bool
-  (?&&) = liftA4 typeBinExpr andOp bool
-  (?||) = liftA4 typeBinExpr orOp bool
+  (?!) = liftA3 boolUnExpr notOp bool
+  (?&&) = liftA4 boolBinExpr andOp bool
+  (?||) = liftA4 boolBinExpr orOp bool
 
-  (?<) = liftA4 typeBinExpr lessOp bool
-  (?<=) = liftA4 typeBinExpr lessEqualOp bool
-  (?>) = liftA4 typeBinExpr greaterOp bool
-  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
+  (?<) = liftA4 boolBinExpr lessOp bool
+  (?<=) = liftA4 boolBinExpr lessEqualOp bool
+  (?>) = liftA4 boolBinExpr greaterOp bool
+  (?>=) = liftA4 boolBinExpr greaterEqualOp bool
   (?==) = jEquality
-  (?!=) = liftA4 typeBinExpr notEqualOp bool
+  (?!=) = liftA4 boolBinExpr notEqualOp bool
   
 instance ValueExpression JavaCode where
   inlineIf = liftA3 inlineIfD
@@ -671,7 +671,7 @@ jEquality :: JavaCode (Value JavaCode Val) -> JavaCode (Value JavaCode Val) ->
   JavaCode (Value JavaCode Val)
 jEquality v1 v2 = jEquality' (getType $ valueType v2)
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
-        jEquality' _ = liftA4 typeBinExpr equalOp bool v1 v2
+        jEquality' _ = liftA4 boolBinExpr equalOp bool v1 v2
 
 jCast :: JavaCode (StateType JavaCode) -> JavaCode (Value JavaCode Val) -> 
   JavaCode (Value JavaCode Val)

@@ -27,20 +27,21 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   commentDocD, mkStNoEnd, stringListVals', stringListLists', unOpPrec, 
   notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', 
   cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', atanOpDocD', unExpr, 
-  unExpr', typeUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, 
+  unExpr', boolUnExpr, powerPrec, multPrec, andPrec, orPrec, equalOpDocD, 
   notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, binExpr, typeBinExpr, mkVal, mkBoolVal, mkVar, mkStaticVar, 
+  moduloOpDocD, binExpr, boolBinExpr, mkVal, mkBoolVal, mkVar, mkStaticVar, 
   litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, 
   enumElemDocD, classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, 
   extFuncAppDocD, funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, 
   castObjDocD, breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, 
   observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
   docFuncRepr, valList, surroundBody, getterName, setterName, filterOutObjs)
-import GOOL.Drasil.Data (Val, Terminator(..), FileData(..), file, updateFileMod,
-  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  OpData(..), ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..),
-  vd, TypedValue(..), valPrec, valType, valDoc, VarData(..), vard)
+import GOOL.Drasil.Data (Boolean, Val, Terminator(..), FileData(..), file, 
+  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, OpData(..), ParamData(..), ProgData(..), progD, 
+  TypeData(..), td, ValData(..), vd, TypedValue(..), valPrec, valType, valDoc, 
+  VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
   liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -274,16 +275,16 @@ instance NumericExpression PythonCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression PythonCode where
-  (?!) = liftA3 typeUnExpr notOp bool
-  (?&&) = liftA4 typeBinExpr andOp bool
-  (?||) = liftA4 typeBinExpr orOp bool
+  (?!) = liftA3 boolUnExpr notOp bool
+  (?&&) = liftA4 boolBinExpr andOp bool
+  (?||) = liftA4 boolBinExpr orOp bool
 
-  (?<) = liftA4 typeBinExpr lessOp bool
-  (?<=) = liftA4 typeBinExpr lessEqualOp bool
-  (?>) = liftA4 typeBinExpr greaterOp bool
-  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
-  (?==) = liftA4 typeBinExpr equalOp bool
-  (?!=) = liftA4 typeBinExpr notEqualOp bool
+  (?<) = liftA4 boolBinExpr lessOp bool
+  (?<=) = liftA4 boolBinExpr lessEqualOp bool
+  (?>) = liftA4 boolBinExpr greaterOp bool
+  (?>=) = liftA4 boolBinExpr greaterEqualOp bool
+  (?==) = liftA4 boolBinExpr equalOp bool
+  (?!=) = liftA4 boolBinExpr notEqualOp bool
 
 instance ValueExpression PythonCode where
   inlineIf = liftA3 pyInlineIf
@@ -608,7 +609,8 @@ pyStateObj t vs = typeDoc t <> parens vs
 pyExtStateObj :: Label -> TypeData -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs
 
-pyInlineIf :: TypedValue Val -> TypedValue Val -> TypedValue Val -> TypedValue Val
+pyInlineIf :: TypedValue Boolean -> TypedValue Val -> TypedValue Val -> 
+  TypedValue Val
 pyInlineIf c v1 v2 = vd (valPrec c) (valType v1) (valDoc v1 <+> text "if" <+> 
   valDoc c <+> text "else" <+> valDoc v2)
 
@@ -661,7 +663,7 @@ pyForEach i forEachLabel inLabel lstVar b = vcat [
   forEachLabel <+> text i <+> inLabel <+> valDoc lstVar <> colon,
   indent b]
 
-pyWhile ::  TypedValue Val -> Doc -> Doc
+pyWhile ::  TypedValue Boolean -> Doc -> Doc
 pyWhile v b = vcat [
   text "while" <+> valDoc v <> colon,
   indent b]

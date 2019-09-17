@@ -325,7 +325,7 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
   selfAccess :: Label -> repr (Function repr) -> repr (Value repr Val)
 
   listIndexExists :: repr (Value repr Val) -> repr (Value repr Val) -> 
-    repr (Value repr Val)
+    repr (Value repr Boolean)
   argExists       :: Integer -> repr (Value repr Val)
 
   indexOf :: repr (Value repr Val) -> repr (Value repr Val) -> 

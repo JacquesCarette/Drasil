@@ -31,11 +31,11 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   constDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, mkSt, 
   mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD, 
   negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, 
-  tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, unExpr', typeUnExpr, 
+  tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, unExpr', boolUnExpr, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
-  typeBinExpr, mkVal, mkBoolVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
+  boolBinExpr, mkVal, mkBoolVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, 
   classVarCheckStatic, objVarDocD, inlineIfD, funcAppDocD, funcDocD, castDocD, 
   objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD,
@@ -859,16 +859,16 @@ instance NumericExpression CppSrcCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression CppSrcCode where
-  (?!) = liftA3 typeUnExpr notOp bool
-  (?&&) = liftA4 typeBinExpr andOp bool
-  (?||) = liftA4 typeBinExpr orOp bool
+  (?!) = liftA3 boolUnExpr notOp bool
+  (?&&) = liftA4 boolBinExpr andOp bool
+  (?||) = liftA4 boolBinExpr orOp bool
 
-  (?<) = liftA4 typeBinExpr lessOp bool
-  (?<=) = liftA4 typeBinExpr lessEqualOp bool
-  (?>) = liftA4 typeBinExpr greaterOp bool
-  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
-  (?==) = liftA4 typeBinExpr equalOp bool
-  (?!=) = liftA4 typeBinExpr notEqualOp bool
+  (?<) = liftA4 boolBinExpr lessOp bool
+  (?<=) = liftA4 boolBinExpr lessEqualOp bool
+  (?>) = liftA4 boolBinExpr greaterOp bool
+  (?>=) = liftA4 boolBinExpr greaterEqualOp bool
+  (?==) = liftA4 boolBinExpr equalOp bool
+  (?!=) = liftA4 boolBinExpr notEqualOp bool
    
 instance ValueExpression CppSrcCode where
   inlineIf = liftA3 inlineIfD

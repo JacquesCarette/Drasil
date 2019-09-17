@@ -30,10 +30,10 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
   listDecDocD, listDecDefDocD, objDecDefDocD, constDecDefDocD, statementDocD, 
   returnDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', commentDocD, 
-  unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, 
+  unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', boolUnExpr, powerPrec, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
+  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', boolBinExpr, mkVal, 
   mkBoolVal, mkVar, mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, 
   litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
   classVarCheckStatic, classVarD, classVarDocD, objVarDocD, inlineIfD, 
@@ -293,16 +293,16 @@ instance NumericExpression CSharpCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression CSharpCode where
-  (?!) = liftA3 typeUnExpr notOp bool
-  (?&&) = liftA4 typeBinExpr andOp bool
-  (?||) = liftA4 typeBinExpr orOp bool
+  (?!) = liftA3 boolUnExpr notOp bool
+  (?&&) = liftA4 boolBinExpr andOp bool
+  (?||) = liftA4 boolBinExpr orOp bool
 
-  (?<) = liftA4 typeBinExpr lessOp bool
-  (?<=) = liftA4 typeBinExpr lessEqualOp bool
-  (?>) = liftA4 typeBinExpr greaterOp bool
-  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
-  (?==) = liftA4 typeBinExpr equalOp bool
-  (?!=) = liftA4 typeBinExpr notEqualOp bool
+  (?<) = liftA4 boolBinExpr lessOp bool
+  (?<=) = liftA4 boolBinExpr lessEqualOp bool
+  (?>) = liftA4 boolBinExpr greaterOp bool
+  (?>=) = liftA4 boolBinExpr greaterEqualOp bool
+  (?==) = liftA4 boolBinExpr equalOp bool
+  (?!=) = liftA4 boolBinExpr notEqualOp bool
   
 instance ValueExpression CSharpCode where
   inlineIf = liftA3 inlineIfD

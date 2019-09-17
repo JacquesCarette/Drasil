@@ -145,7 +145,8 @@ normalVect  = ucs' (dccWDS "normalVect" (compoundPhrase' (cn "collision")
                    (QM.normalVect ^. term)) (phrase QM.normalVect)) 
                    (eqSymb QM.normalVect) Real metre
 
-dispUnit = ucs' (dccWDS "dispUnit" (cn "unit vector directed from the center of the large mass to the center of the smaller mass") 
+dispUnit = ucs' (dccWDS "dispUnit" 
+          (cn "unit vector directed from the center of the large mass to the center of the smaller mass") 
                    (phrase QM.unitVect)) (vec (hat lR)) Real metre
 
 dispNorm = ucs' (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the displacement")

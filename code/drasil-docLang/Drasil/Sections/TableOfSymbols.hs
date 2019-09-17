@@ -14,7 +14,7 @@ table st ls f = llcc symbTableRef $
   Table [atStart symbol_, atStart description, atStart' unit_]
   (mkTable [P . (`symbol` st), f, toSentence]
   $ filter (`hasStageSymbol`st) ls)
-  (titleize tOfSymb) False
+  (titleize tOfSymb) True
 
 symbTableRef :: Reference
 symbTableRef = makeTabRef "ToS"

@@ -147,7 +147,7 @@ resShrDeriv = mkDerivNoHeader [foldlSent [S "Derived by substituting",
   sParen (makeRef2S assumpPSC) `sC` S "the resulting", plural force,
   S "are expressed per", phrase metre, S "in the" +:+. phrase zDir, S "The",
   getTandS fricAngle `andThe` getTandS effCohesion, S "are not indexed by",
-  ch index, S "becaused they are assumed to be isotropic", 
+  ch index, S "because they are assumed to be isotropic", 
   sParen (makeRef2S assumpSLI) `andThe` phrase soil, S "is assumed to be",
   S "homogeneous, with", phrase constant, plural soilPrpty, S "throughout",
   sParen (makeRef2S assumpSLH `sC` makeRef2S assumpSP)]]

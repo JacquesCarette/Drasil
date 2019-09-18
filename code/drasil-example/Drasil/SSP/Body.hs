@@ -181,10 +181,9 @@ refDB = rdb citations concIns
 --automatically generated in mkSRS using the intro below
 tableOfSymbIntro :: [TSIntro]
 tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
-  [plural value, S "with a subscript", ch index, S "implies that the",
-  phrase value, S "will be taken at and analyzed at a", phrase slice
-  `sOr` phrase slice, S "interface composing the total slip", phrase mass]],
-  VectorUnits]
+  [S "a subscript", ch index, S "indicates that the", phrase value, 
+  S "will be taken at and analyzed at a", phrase slice `sOr` phrase slice, 
+  S "interface composing the total slip", phrase mass]], VectorUnits]
 
 -- SECTION 1.3 --
 --automatically generated in mkSRS

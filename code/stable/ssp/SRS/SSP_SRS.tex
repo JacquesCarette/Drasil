@@ -61,7 +61,7 @@ s & time & second
 \end{longtable}
 \subsection{Table of Symbols}
 \label{Sec:ToS}
-The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. Throughout the document, values with a subscript $i$ implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass. For vector quantities, the units shown are for each component of the vector.
+The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: ToS} along with their units. Throughout the document, a subscript $i$ indicates that the value will be taken at, and analyzed at, a slice or slice interface composing the total slip mass. For vector quantities, the units shown are for each component of the vector.
 
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -762,7 +762,7 @@ RefBy & \hyperref[GD:mobShr]{GD: mobShr}
 \end{minipage}
 \paragraph{}
 \label{GD:resShrDeriv}
-Derived by substituting \hyperref[DD:stress]{DD: stress} into the Mohr-Coulomb shear strength, \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}, and multiplying both sides of the equation by the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction. The effective angle of friction $φ'$ and the effective cohesion $c'$ are not indexed by $i$ becaused they are assumed to be isotropic (\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}) and the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}, \hyperref[assumpSP]{A: Soil-Properties}).
+Derived by substituting \hyperref[DD:stress]{DD: stress} into the Mohr-Coulomb shear strength, \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}, and multiplying both sides of the equation by the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction. The effective angle of friction $φ'$ and the effective cohesion $c'$ are not indexed by $i$ because they are assumed to be isotropic (\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}) and the soil is assumed to be homogeneous, with constant soil properties throughout (\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}, \hyperref[assumpSP]{A: Soil-Properties}).
 
 \vspace{\baselineskip}
 \noindent
@@ -2161,7 +2161,7 @@ Equation (9) can then be substituted into the left hand side of Equation (12), r
 \begin{displaymath}
 -\left(\frac{{F_{\text{S}}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}}{{\mathbf{Ψ}}_{n-1}}\right)={\mathbf{Ψ}}_{n-2} \left({\mathbf{Ψ}}_{n-3} \left({\mathbf{Ψ}}_{1} \left({F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{F_{\text{S}}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{F_{\text{S}}} {\mathbf{T}}_{n-2}-{\mathbf{R}}_{n-2}\right)+{F_{\text{S}}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}
 \end{displaymath}
-This can be rearranged by multiplying boths sides by ${\mathbf{Ψ}}_{n-1}$ and then distributing the multiplication of each $\mathbf{Ψ}$ over addition to obtain:
+This can be rearranged by multiplying both sides by ${\mathbf{Ψ}}_{n-1}$ and then distributing the multiplication of each $\mathbf{Ψ}$ over addition to obtain:
 
 \begin{displaymath}
 -\left({F_{\text{S}}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}\right)={\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{1} \left({F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{2} \left({F_{\text{S}}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{\mathbf{Ψ}}_{n-1} \left({F_{\text{S}}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}\right)

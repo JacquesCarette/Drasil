@@ -2,7 +2,9 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render Java auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer where
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
+  JavaProject(..)
+) where
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
   AuxiliarySym(..))
@@ -17,11 +19,10 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable,
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
-import GOOL.Drasil (lift1List, JavaCode)
+import GOOL.Drasil (liftList)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Control.Applicative (liftA2)
-import Text.PrettyPrint.HughesPJ (text)
+import Text.PrettyPrint.HughesPJ (Doc, text)
 
 jNameOpts :: NameOpts
 jNameOpts = NameOpts {
@@ -29,19 +30,34 @@ jNameOpts = NameOpts {
   includeExt = False
 }
 
-instance PackageSym JavaCode where
-  type Package JavaCode = PackData
-  package = lift1List packD
+newtype JavaProject a = JP {unJP :: a}
 
-instance AuxiliarySym JavaCode where
-  type Auxiliary JavaCode = AuxData
-  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
-    optimizeDox p)
+instance Functor JavaProject where
+  fmap f (JP x) = JP (f x)
+
+instance Applicative JavaProject where
+  pure = JP
+  (JP f) <*> (JP x) = JP (f x)
+
+instance Monad JavaProject where
+  return = JP
+  JP x >>= f = f x
+
+instance PackageSym JavaProject where
+  type Package JavaProject = PackData
+  package p = liftList (packD p)
+
+instance AuxiliarySym JavaProject where
+  type Auxiliary JavaProject = AuxData
+  type AuxHelper JavaProject = Doc
+  doxConfig pName p = fmap (ad doxConfigName . makeDoxConfig pName p)
+    optimizeDox
   sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
 
   optimizeDox = return $ text "YES"
 
-  makefile cms = fmap (ad makefileName . makeBuild cms jBuildConfig jRunnable)
+  makefile cms p = return $ ad makefileName (makeBuild cms jBuildConfig 
+    jRunnable p)
 
 jBuildConfig :: Maybe BuildConfig
 jBuildConfig = buildSingle (\i _ -> asFragment "javac" : i) $

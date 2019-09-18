@@ -45,27 +45,31 @@ generator dt sd chs spec = State {
   where showDate Show = dt
         showDate Hide = ""
 
-generateCode :: (PackageSym repr) => Lang -> (repr (Package repr) -> PackData) 
-  -> State -> IO ()
-generateCode l unRepr g = do 
+generateCode :: (ProgramSym progRepr, PackageSym packRepr) => Lang -> 
+  (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 
+  PackData) -> State -> IO ()
+generateCode l unReprProg unReprPack g = do 
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   createCodeFiles code
   setCurrentDirectory workingDir
-  where pckg = runReader genPackage g
-        code = makeCode (progMods $ packProg $ unRepr pckg) (packAux $ unRepr 
-          pckg)
+  where pckg = runReader (genPackage unReprProg) g 
+        code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
+          unReprPack pckg)
 
-genPackage :: (PackageSym repr) => Reader State (repr (Package repr))
-genPackage = do
+genPackage :: (ProgramSym progRepr, PackageSym packRepr) => 
+  (progRepr (Program progRepr) -> ProgData) -> 
+  Reader State (packRepr (Package packRepr))
+genPackage unRepr = do
   g <- ask
   p <- genProgram
-  let n = case codeSpec g of CodeSpec {program = pr} -> programName pr
-      m = makefile (commented g) p
+  let pd = unRepr p
+      n = case codeSpec g of CodeSpec {program = pr} -> programName pr
+      m = makefile (commented g) pd
   i <- genSampleInput
-  d <- genDoxConfig n p
-  return $ package p (m:i++d)
+  d <- genDoxConfig n pd
+  return $ package pd (m:i++d)
 
 genProgram :: (ProgramSym repr) => Reader State (repr (Program repr))
 genProgram = do

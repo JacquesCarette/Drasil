@@ -11,7 +11,8 @@ module Language.Drasil.Code (
   packmod, relToQD,
   junkLine, multiLine, repeated, singleLine, singleton,
   PackageSym(..),
-  quantvar
+  quantvar,
+  unPP, unJP, unCSP, unCPPP
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -37,8 +38,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 
 import Language.Drasil.Chunk.Code (quantvar)
 
--- Need to re-import these to export new instances
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer ()
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer ()
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer ()
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer ()
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (unCSP)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (unCPPP)

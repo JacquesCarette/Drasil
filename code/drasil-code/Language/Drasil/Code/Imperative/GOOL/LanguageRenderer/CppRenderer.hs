@@ -3,57 +3,55 @@
 {-# LANGUAGE PostfixOperators #-}
 
 -- | The logic to render C++ auxiliary files is contained in this module
-module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer where
+module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (
+  CppProject(..)
+) where
 
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..),
   AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName, 
   makefileName, sampleInputName)
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, emptyAux, 
-  PackData(..), packD, emptyPack)
+import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, 
+  PackData(..), packD)
 import Language.Drasil.Code.Imperative.Doxygen.Import (makeDoxConfig)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
   asFragment, buildAll, cppCompiler, nativeBinary)
 import Language.Drasil.Code.Imperative.Build.Import (makeBuild)
 import Language.Drasil.Code.Imperative.WriteInput (makeInputFile)
 
-import GOOL.Drasil (Pair(..), lift1List, CppSrcCode, CppHdrCode)
+import GOOL.Drasil (liftList)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
-import Control.Applicative (liftA2)
-import Text.PrettyPrint.HughesPJ (text, empty)
+import Text.PrettyPrint.HughesPJ (Doc, text)
 
-instance (Pair p) => PackageSym (p CppSrcCode CppHdrCode) where
-  type Package (p CppSrcCode CppHdrCode) = PackData
-  package p aux = pair (package (pfst p) (map pfst aux)) (return emptyPack)
+newtype CppProject a = CPPP {unCPPP :: a}
 
-instance (Pair p) => AuxiliarySym (p CppSrcCode CppHdrCode) where
-  type Auxiliary (p CppSrcCode CppHdrCode) = AuxData
-  doxConfig pName p = pair (doxConfig pName $ pfst p) (return emptyAux)
-  sampleInput db d sd = pair (sampleInput db d sd) (return emptyAux)
+instance Functor CppProject where
+  fmap f (CPPP x) = CPPP (f x)
 
-  optimizeDox = pair optimizeDox (return empty)
+instance Applicative CppProject where
+  pure = CPPP
+  (CPPP f) <*> (CPPP x) = CPPP (f x)
 
-  makefile cms p = pair (makefile cms $ pfst p) (return emptyAux)
+instance Monad CppProject where
+  return = CPPP
+  CPPP x >>= f = f x
 
------------------
--- Source File --
------------------
+instance PackageSym CppProject where
+  type Package CppProject = PackData
+  package p = liftList (packD p)
 
-instance PackageSym CppSrcCode where
-  type Package CppSrcCode = PackData
-  package = lift1List packD
-
-instance AuxiliarySym CppSrcCode where
-  type Auxiliary CppSrcCode = AuxData
-  doxConfig pName p = fmap (ad doxConfigName) (liftA2 (makeDoxConfig pName)
-    optimizeDox p)
+instance AuxiliarySym CppProject where
+  type Auxiliary CppProject = AuxData
+  type AuxHelper CppProject = Doc
+  doxConfig pName p = fmap (ad doxConfigName . makeDoxConfig pName p)
+    optimizeDox
   sampleInput db d sd = return $ ad sampleInputName (makeInputFile db d sd)
 
   optimizeDox = return $ text "NO"
   
-  makefile cms = fmap (ad makefileName . makeBuild cms cppBuildConfig 
-    cppRunnable)
+  makefile cms p = return $ ad makefileName (makeBuild cms cppBuildConfig 
+    cppRunnable p)
 
 -- helpers
 

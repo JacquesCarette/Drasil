@@ -8,10 +8,10 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..), 
   Name)
   
-import GOOL.Drasil (Label, ProgramSym(..), RenderSym(..), StateTypeSym(..), 
+import GOOL.Drasil (Label, RenderSym(..), StateTypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
-  CodeType(..))
+  CodeType(..), ProgData)
 
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
@@ -36,7 +36,7 @@ genModule n desc maybeMs maybeCs = do
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n ls ms cs
 
-genDoxConfig :: (AuxiliarySym repr) => String -> repr (Program repr) ->
+genDoxConfig :: (AuxiliarySym repr) => String -> ProgData ->
   Reader State [repr (Auxiliary repr)]
 genDoxConfig n p = do
   g <- ask

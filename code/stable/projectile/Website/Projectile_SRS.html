@@ -482,6 +482,11 @@
                       timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD: velVec</a>, <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#GD:rectVel>GD: rectVel</a>, <a href=#GD:rectPos>GD: rectPos</a>, and <a href=#GD:posVec>GD: posVec</a>.)
                     </div>
                   </p>
+                  <p>
+                    <div id="gravAccelValue">
+                      gravAccelValue: The acceleration due to gravity is assumed to have the value provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a>. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> and <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.)
+                    </div>
+                  </p>
                 </div>
               </div>
             </div>
@@ -1154,7 +1159,7 @@
                           The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{π}{2}\)</em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                         <p class="paragraph">
-                          <em>g</em> is defined in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a>.
+                          <em>g</em> is defined in <a href=#gravAccelValue>A: gravAccelValue</a>.
                         </p>
                         <p class="paragraph">
                           The constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#timeStartZero>A: timeStartZero</a>.
@@ -1257,7 +1262,7 @@
                           The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{π}{2}\)</em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                         <p class="paragraph">
-                          <em>g</em> is defined in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a>.
+                          <em>g</em> is defined in <a href=#gravAccelValue>A: gravAccelValue</a>.
                         </p>
                         <p class="paragraph">
                           The constraint <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A: posXDirection</a>.
@@ -1661,9 +1666,11 @@
               <th><a href=#freeFlight>A: freeFlight</a></th>
               <th><a href=#neglectCurv>A: neglectCurv</a></th>
               <th><a href=#timeStartZero>A: timeStartZero</a></th>
+              <th><a href=#gravAccelValue>A: gravAccelValue</a></th>
             </tr>
             <tr>
               <td><a href=#DD:vecMag>DD: vecMag</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1695,9 +1702,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:speedIY>DD: speedIY</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1729,9 +1738,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:velocity>TM: velocity</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1763,6 +1774,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:rectPos>GD: rectPos</a></td>
@@ -1780,6 +1792,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:velVec>GD: velVec</a></td>
@@ -1797,6 +1810,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:posVec>GD: posVec</a></td>
@@ -1814,6 +1828,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:calOfLandingTime>IM: calOfLandingTime</a></td>
@@ -1830,6 +1845,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
               <td>X</td>
             </tr>
             <tr>
@@ -1848,6 +1864,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
             </tr>
             <tr>
               <td><a href=#IM:offsetIM>IM: offsetIM</a></td>
@@ -1857,6 +1874,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1882,9 +1900,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#inputValues>FR: Input-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1916,9 +1936,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#calcValues>FR: Calculate-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1950,9 +1972,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#correct>NFR: Correct</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1984,9 +2008,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#understandable>NFR: Understandable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2018,6 +2044,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR: Maintainable</a></td>
@@ -2035,9 +2062,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#portable>NFR: Portable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>

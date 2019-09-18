@@ -15,8 +15,8 @@ import Data.Drasil.Quantities.Math (pi_)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst, iSpeed, ixPos,
   ixVel, iyPos, iyVel, time, xConstAccel, xPos, yConstAccel, yPos)
 
-import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, launchOrigin,
-  posXDirection, targetXAxis, timeStartZero, yAxisGravity)
+import Drasil.Projectile.Assumptions (accelXZero, accelYGravity, gravAccelValue,
+  launchOrigin, posXDirection, targetXAxis, timeStartZero, yAxisGravity)
 import Drasil.Projectile.Concepts (projectile, target)
 import Drasil.Projectile.DataDefs (speedIX, speedIY)
 import Drasil.Projectile.Figures (figLaunch)
@@ -150,7 +150,7 @@ angleConstraintNote = foldlSent [S "The", phrase constraint,
   S "and is shown" `sIn` makeRef2S figLaunch]
 
 gravitationalAccelConstNote = ch gravitationalAccelConst `sIs`
-  S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
+  S "defined in" +:+. makeRef2S gravAccelValue
 
 landAndTargPosConsNote = S "The" +:+ plural constraint +:+
   E (sy landPos $> 0) `sAnd` E (sy targPos $> 0) `sAre` S "from" +:+. makeRef2S posXDirection

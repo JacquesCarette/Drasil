@@ -15,6 +15,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel)
+import qualified Drasil.DocLang.SRS as SRS (assumpt)
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
@@ -261,14 +262,15 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", phrase product_,
 
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
-    phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
-    plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
-    S "applied to them",
+  phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
+  plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
+  S "applied to them",
   S "Ensure application programming" +:+ phrase interface +:+
-    S "use complies with the" +:+ phrase user +:+. phrase guide,
+  S "use complies with the" +:+ phrase user +:+. phrase guide,
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-    S "(FIXME REF)" +:+ S "are appropriate for any particular" +:+
-    phrase problem +:+ S "the" +:+ phrase software +:+. S "addresses"]
+  sParen (makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ 
+  S "are appropriate for any particular" +:+
+  phrase problem +:+ S "the" +:+ phrase software +:+. S "addresses"]
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+

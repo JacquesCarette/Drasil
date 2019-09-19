@@ -1,6 +1,6 @@
 # For documentation on how to add to this, see Issue #1371
 # List of all known packages
-PACKAGES = lang utils build code theory database printers gen data docLang example
+PACKAGES = lang utils build gool code theory database printers gen data docLang example
 
 # and associated package-level suffixes
 BUILD_P_SUFFIX = _build

@@ -6,7 +6,9 @@ import Control.Lens (Lens', (^.), makeLenses, view)
 
 import Language.Drasil
 
-import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
+import Language.Drasil.Code.Code (spaceToCodeType)
+
+import GOOL.Drasil (CodeType)
 
 -- | HasCodeType is anything which has a CodeType
 class HasCodeType c where

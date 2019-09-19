@@ -87,7 +87,7 @@ ${\mathbf{F}_{i}}$ & Force Applied to the I-Th Body at Time T & N
 \\
 $G$ & Gravitational constant & $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$
 \\
-$g$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$\mathbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $h$ & Height & m
 \\
@@ -139,7 +139,7 @@ $\mathbf{r}\text{(}t\text{)}$ & Linear Displacement & m
 \\
 ${\mathbf{r}_{\text{O}\text{B}}}$ & Displacement vector between the origin and point B & m
 \\
-$\mathbf{\hat{r}}$ & Displacement unit vector & m
+$\mathbf{\hat{r}}$ & Unit vector directed from the center of the large mass to the center of the smaller mass & m
 \\
 $t$ & Time & s
 \\
@@ -326,6 +326,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen..}
 \item{Line: An interval between two points (from \cite{lineSource}).}
 \item{Point: An exact location, it has no size, only position (from \cite{pointSource}).}
+\item{damping: An influence within or upon an oscillatory system that has the effect of reducing, restricting or preventing its oscillations (from \cite{dampingSource}).}
 \end{itemize}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
@@ -439,7 +440,7 @@ Description & \begin{symbDescription}
               \item{${m_{1}}$ is the mass of the first body (kg)}
               \item{${m_{2}}$ is the mass of the second body (kg)}
               \item{$\text{||}\mathbf{r}\text{||}$ is the Euclidean norm of the displacement (m)}
-              \item{$\mathbf{\hat{r}}$ is the displacement unit vector (m)}
+              \item{$\mathbf{\hat{r}}$ is the unit vector directed from the center of the large mass to the center of the smaller mass (m)}
               \item{$\mathbf{r}$ is the displacement (m)}
               \end{symbDescription}
 \\ \midrule \\
@@ -510,16 +511,19 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           g=\frac{G M}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}
+           \mathbf{g}=-\frac{G M}{\mathbf{r}^{2}} \mathbf{\hat{r}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$)}
               \item{$M$ is the mass of the larger rigid body (kg)}
-              \item{$\text{||}\mathbf{r}\text{||}$ is the Euclidean norm of the displacement (m)}
-              \item{$\mathbf{\hat{r}}$ is the displacement unit vector (m)}
+              \item{$\mathbf{r}$ is the displacement (m)}
+              \item{$\mathbf{\hat{r}}$ is the unit vector directed from the center of the large mass to the center of the smaller mass (m)}
               \end{symbDescription}
+\\ \midrule \\
+Notes & If one of the masses is much larger than the other it is convenient to define a gravitational field around the larger mass as shown above. The negative sign in the equation indicates that the force is an attractive force.
+        
 \\ \midrule \\
 Source & \hyperref{https://en.wikipedia.org/wiki/Gravitational_acceleration}{}{}{Definition of Gravitational Acceleration}
          
@@ -1130,13 +1134,13 @@ Units & J
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           PE=m g h
+           PE=m \mathbf{g} h
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$PE$ is the potential energy (J)}
               \item{$m$ is the mass (kg)}
-              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$h$ is the height (m)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1212,7 +1216,7 @@ The goal \hyperref[linearGS]{GS: Determine-Linear-Properties} is met by \hyperre
 Label & Force on the translational motion of a set of 2d rigid bodies
         
 \\ \midrule \\
-Input & ${\mathbf{v}_{i}}$, $t$, $g$, ${\mathbf{F}_{i}}$, ${m_{j}}$
+Input & ${\mathbf{v}_{i}}$, $t$, $\mathbf{g}$, ${\mathbf{F}_{i}}$, ${m_{j}}$
         
 \\ \midrule \\
 Output & ${\mathbf{a}_{i}}$
@@ -1225,7 +1229,7 @@ Input Constraints & \begin{displaymath}
                     t\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    g\gt{}0
+                    \mathbf{g}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     {\mathbf{F}_{i}}\gt{}0
@@ -1237,14 +1241,14 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{a}_{i}}=\frac{\,d{\mathbf{v}_{i}}\left(t\right)}{\,dt}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
+           {\mathbf{a}_{i}}=\frac{\,d{\mathbf{v}_{i}}\left(t\right)}{\,dt}=\mathbf{g}+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${\mathbf{a}_{i}}$ is the the i-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
               \item{${\mathbf{v}_{i}}$ is the velocity of the i-th body's velocity ($\frac{\text{m}}{\text{s}}$)}
-              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{${\mathbf{F}_{i}}$ is the force applied to the i-th body at time t (N)}
               \item{${m_{j}}$ is the mass of the j-th particle (kg)}
               \end{symbDescription}
@@ -1810,6 +1814,12 @@ author={Wikipedia Contributors},
 title={Cartesian coordinate system},
 howpublished={\url{https://en.wikipedia.org/wiki/Cartesian\_coordinate\_system}},
 month=jun,
+year={2019}}
+@misc{dampingSource,
+author={Wikipedia Contributors},
+title={Damping},
+howpublished={\url{https://en.wikipedia.org/wiki/Damping\_ratio}},
+month=jul,
 year={2019}}
 @article{sciComp2013,
 author={Wilson, Greg and Aruliah, D. A. and Titus, C. and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumblet, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},

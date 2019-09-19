@@ -9,10 +9,11 @@ import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil
 
-import Language.Drasil.Code.Code (CodeType)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp), CodeQuantityDict, 
   cqw)
 import Language.Drasil.Printers (symbolDoc, toPlainName)
+
+import GOOL.Drasil (CodeType)
 
 import qualified Data.Map as Map
 import Text.PrettyPrint.HughesPJ (render)

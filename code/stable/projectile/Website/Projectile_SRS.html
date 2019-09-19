@@ -115,7 +115,7 @@
                   <td>m</td>
                 </tr>
                 <tr>
-                  <td><em>g</em></td>
+                  <td><em><b>g</b></em></td>
                   <td>Gravitational acceleration</td>
                   <td>m/s<sup>2</sup></td>
                 </tr>
@@ -1136,7 +1136,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
+                        \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1147,7 +1147,7 @@
                           <li><em>v<sub>launch</sub></em> is the launch speed (m/s)</li>
                           <li><em>θ</em> is the launch angle (rad)</li>
                           <li>
-                            <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+                            <em><b>g</b></em> is the gravitational acceleration (m/s<sup>2</sup>)
                           </li>
                         </ul>
                       </td>
@@ -1159,7 +1159,7 @@
                           The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{π}{2}\)</em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                         <p class="paragraph">
-                          <em>g</em> is defined in <a href=#gravAccelValue>A: gravAccelValue</a>.
+                          <em><b>g</b></em> is defined in <a href=#gravAccelValue>A: gravAccelValue</a>.
                         </p>
                         <p class="paragraph">
                           The constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#timeStartZero>A: timeStartZero</a>.
@@ -1184,25 +1184,25 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of flight duration:</h4>
                     <p class="paragraph">
-                      We know that <em>p<sub>y</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A: launchOrigin</a>) and <em>a<sub>y</sub><sup>c</sup> = &minus;g</em> (<a href=#accelYGravity>A: accelYGravity</a>). Substituting these values into the y-direction of <a href=#GD:posVec>GD: posVec</a> gives us:
+                      We know that <em>p<sub>y</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A: launchOrigin</a>) and <em>a<sub>y</sub><sup>c</sup> = &minus;<b>g</b></em> (<a href=#accelYGravity>A: accelYGravity</a>). Substituting these values into the y-direction of <a href=#GD:posVec>GD: posVec</a> gives us:
                     </p>
-                    \[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{g t^{2}}{2}\]
+                    \[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{\mathbf{g} t^{2}}{2}\]
                     <p class="paragraph">
                       To find the time that the projectile lands, we want to find the <em>t</em> value (<em>t<sub>flight</sub></em>) where <em>p<sub>y</sub> = 0</em> (since the target is on the <em>x</em>-axis from <a href=#targetXAxis>A: targetXAxis</a>). From the equation above we get:
                     </p>
-                    \[{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0\]
+                    \[{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{\mathbf{g} {t_{\text{flight}}}^{2}}{2}=0\]
                     <p class="paragraph">
                       Dividing by <em>t<sub>flight</sub></em> (with the constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em>) gives us:
                     </p>
-                    \[{{v_{\text{y}}}^{\text{i}}}-\frac{g {t_{\text{flight}}}}{2}=0\]
+                    \[{{v_{\text{y}}}^{\text{i}}}-\frac{\mathbf{g} {t_{\text{flight}}}}{2}=0\]
                     <p class="paragraph">
                       Solving for <em>t<sub>flight</sub></em> gives us:
                     </p>
-                    \[{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{g}\]
+                    \[{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{\mathbf{g}}\]
                     <p class="paragraph">
                       From <a href=#DD:speedIY>DD: speedIY</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>y</sub><sup>i</sup></em>:
                     </p>
-                    \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
+                    \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                   </div>
                 </div>
                 <div id="IM:calOfLandingDist">
@@ -1239,7 +1239,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\]
+                        \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1250,7 +1250,7 @@
                           <li><em>v<sub>launch</sub></em> is the launch speed (m/s)</li>
                           <li><em>θ</em> is the launch angle (rad)</li>
                           <li>
-                            <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+                            <em><b>g</b></em> is the gravitational acceleration (m/s<sup>2</sup>)
                           </li>
                         </ul>
                       </td>
@@ -1262,7 +1262,7 @@
                           The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{π}{2}\)</em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                         <p class="paragraph">
-                          <em>g</em> is defined in <a href=#gravAccelValue>A: gravAccelValue</a>.
+                          <em><b>g</b></em> is defined in <a href=#gravAccelValue>A: gravAccelValue</a>.
                         </p>
                         <p class="paragraph">
                           The constraint <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A: posXDirection</a>.
@@ -1293,15 +1293,15 @@
                     <p class="paragraph">
                       To find the landing position, we want to find the <em>p<sub>x</sub></em> value (<em>p<sub>land</sub></em>) at flight duration (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>):
                     </p>
-                    \[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
+                    \[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                     <p class="paragraph">
                       From <a href=#DD:speedIX>DD: speedIX</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>x</sub><sup>i</sup></em>:
                     </p>
-                    \[{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
+                    \[{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                     <p class="paragraph">
                       Rearranging this gives us the required equation:
                     </p>
-                    \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\]
+                    \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}\]
                   </div>
                 </div>
                 <div id="IM:offsetIM">
@@ -2654,7 +2654,7 @@
               <th>Unit</th>
             </tr>
             <tr>
-              <td><em>g</em></td>
+              <td><em><b>g</b></em></td>
               <td>gravitational acceleration</td>
               <td><em>9.8</em></td>
               <td>m/s<sup>2</sup></td>

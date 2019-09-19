@@ -1,6 +1,9 @@
-module Utils.Drasil.Document (indent, indentList) where
+module Utils.Drasil.Document (blank, indent, indentList) where
 
-import Text.PrettyPrint.HughesPJ (Doc, nest, vcat)
+import Text.PrettyPrint.HughesPJ (Doc, nest, text, vcat)
+
+blank :: Doc
+blank = text ""
 
 indent :: Doc -> Doc
 indent = nest 4

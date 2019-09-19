@@ -2,7 +2,7 @@ module Utils.Drasil (
   -- Contents
   enumBullet, enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', mkEnumSimpleD,
   -- Document
-  indent, indentList,
+  blank, indent, indentList,
   -- English
   capitalize, stringList,
   -- Fold

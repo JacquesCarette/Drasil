@@ -9,6 +9,7 @@ import Data.Drasil.Concepts.Documentation (property, value)
 import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir)
 import Control.Lens((^.)) --need for parametrization hack
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+import Data.Drasil.Citations (dampingSource)
 
 physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
@@ -53,8 +54,9 @@ cohesion = dccWDS "cohesion" (cn "cohesion")
   (S "an attractive" +:+ phrase force +:+ S "between adjacent particles that holds the matter together")
 compression = dccWDS "compression" (cn' "compression")
   (S "a" +:+ phrase stress +:+ S "that causes displacement of the body towards its center")
-damping = dcc "damping" (cn' "damping")
-  "an effect that tends to reduce the amplitude of vibrations"
+damping = dccWDS "damping" (pn' "damping")
+  $ S "an influence within or upon an oscillatory system that has the effect of reducing," +:+
+  S "restricting or preventing its oscillations" +:+ sParen (S "from" +:+ makeRef2S dampingSource)
 displacement = dccWDS "displacement" (cn' "displacement")
   (S "the change in" +:+ (position ^. defn))
 distance = dcc "distance" (cn' "distance")

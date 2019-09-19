@@ -9,7 +9,7 @@ import Data.Drasil.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem,
 ---------------
 
 campidelli, cartesianWiki, koothoor2013, parnas1972, parnasClements1984,
-  parnasClements1986, smithLai2005, lineSource, pointSource :: Citation
+  parnasClements1986, smithLai2005, lineSource, pointSource, dampingSource :: Citation
 
 campidelli = cBooklet
   "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading"
@@ -67,6 +67,11 @@ pointSource = cMisc
   month May, year 2017]
   "pointSource"
 
+dampingSource = cMisc
+  [author [mononym "Wikipedia Contributors"], title "Damping",
+  howPublishedU "https://en.wikipedia.org/wiki/Damping_ratio",
+  month Jul, year 2019]
+  "dampingSource"
 ------------------------
 -- COMMON CITE-FIELDS --
 ------------------------

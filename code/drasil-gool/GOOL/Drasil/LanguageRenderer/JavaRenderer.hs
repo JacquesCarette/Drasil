@@ -313,8 +313,8 @@ instance ValueExpression JavaCode where
     (liftList valList vs))
 
   exists = notNull
-  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf (var 
-    "null" (fmap valType v))))
+  notNull v = liftA2 mkBoolVal bool (liftA3 notNullDocD notEqualOp v (valueOf 
+    (var "null" (fmap valType v))))
 
 instance InternalValue JavaCode where
   inputFunc = liftA2 mkVal (obj "Scanner") (return $ parens (
@@ -668,7 +668,7 @@ jArrayType :: JavaCode (StateType JavaCode)
 jArrayType = return $ td (List $ Object "Object") "Object" (text "Object[]")
 
 jEquality :: JavaCode (Value JavaCode Val) -> JavaCode (Value JavaCode Val) -> 
-  JavaCode (Value JavaCode Val)
+  JavaCode (Value JavaCode Boolean)
 jEquality v1 v2 = jEquality' (getType $ valueType v2)
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
         jEquality' _ = liftA4 boolBinExpr equalOp bool v1 v2

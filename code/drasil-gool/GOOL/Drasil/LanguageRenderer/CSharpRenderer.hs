@@ -315,8 +315,8 @@ instance ValueExpression CSharpCode where
     (liftList valList vs))
 
   exists = notNull
-  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf (var
-    "null" (fmap valType v))))
+  notNull v = liftA2 mkBoolVal bool (liftA3 notNullDocD notEqualOp v (valueOf 
+    (var "null" (fmap valType v))))
 
 instance InternalValue CSharpCode where
   inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")

@@ -1425,16 +1425,16 @@ instance NumericExpression CppHdrCode where
   ceil _ = liftA2 mkVal void (return empty)
 
 instance BooleanExpression CppHdrCode where
-  (?!) _ = liftA2 mkVal void (return empty)
-  (?&&) _ _ = liftA2 mkVal void (return empty)
-  (?||) _ _ = liftA2 mkVal void (return empty)
+  (?!) _ = liftA2 mkBoolVal void (return empty)
+  (?&&) _ _ = liftA2 mkBoolVal void (return empty)
+  (?||) _ _ = liftA2 mkBoolVal void (return empty)
 
-  (?<) _ _ = liftA2 mkVal void (return empty)
-  (?<=) _ _ = liftA2 mkVal void (return empty)
-  (?>) _ _ = liftA2 mkVal void (return empty)
-  (?>=) _ _ = liftA2 mkVal void (return empty)
-  (?==) _ _ = liftA2 mkVal void (return empty)
-  (?!=) _ _ = liftA2 mkVal void (return empty)
+  (?<) _ _ = liftA2 mkBoolVal void (return empty)
+  (?<=) _ _ = liftA2 mkBoolVal void (return empty)
+  (?>) _ _ = liftA2 mkBoolVal void (return empty)
+  (?>=) _ _ = liftA2 mkBoolVal void (return empty)
+  (?==) _ _ = liftA2 mkBoolVal void (return empty)
+  (?!=) _ _ = liftA2 mkBoolVal void (return empty)
    
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = liftA2 mkVal void (return empty)
@@ -1445,8 +1445,8 @@ instance ValueExpression CppHdrCode where
   extStateObj _ _ _ = liftA2 mkVal void (return empty)
   listStateObj _ _ = liftA2 mkVal void (return empty)
 
-  exists _ = liftA2 mkVal void (return empty)
-  notNull _ = liftA2 mkVal void (return empty)
+  exists _ = liftA2 mkBoolVal void (return empty)
+  notNull _ = liftA2 mkBoolVal void (return empty)
 
 instance InternalValue CppHdrCode where
   inputFunc = liftA2 mkVal void (return empty)
@@ -1466,7 +1466,7 @@ instance Selector CppHdrCode where
 
   selfAccess _ _ = liftA2 mkVal void (return empty)
 
-  listIndexExists _ _ = liftA2 mkVal void (return empty)
+  listIndexExists _ _ = liftA2 mkBoolVal void (return empty)
   argExists _ = liftA2 mkVal void (return empty)
   
   indexOf _ _ = liftA2 mkVal void (return empty)

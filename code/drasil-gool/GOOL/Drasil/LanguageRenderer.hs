@@ -722,7 +722,7 @@ classVarDocD c v = c <> dot <> v
 objVarDocD :: VarData -> VarData ->  Doc
 objVarDocD n1 n2 = varDoc n1 <> dot <> varDoc n2
 
-inlineIfD :: TypedValue Val -> TypedValue Val -> TypedValue Val -> TypedValue Val
+inlineIfD :: TypedValue Boolean -> TypedValue Val -> TypedValue Val -> TypedValue Val
 inlineIfD c v1 v2 = vd prec (valType v1) (valDoc c <+> text "?" <+> 
   valDoc v1 <+> text ":" <+> valDoc v2)
   where prec = valPrec c <|> Just 0

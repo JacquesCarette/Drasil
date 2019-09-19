@@ -95,12 +95,12 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a29852b32299451e9763a283f86be6bf1"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_calculations.html#a29852b32299451e9763a283f86be6bf1">func_t_flight</a> (InputParameters inParams, double g)  throws Exception </td></tr>
-<tr class="memdesc:a29852b32299451e9763a283f86be6bf1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="#a29852b32299451e9763a283f86be6bf1">More...</a><br /></td></tr>
-<tr class="separator:a29852b32299451e9763a283f86be6bf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba117eead41c02ac61dfb7e61557fd9e"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_calculations.html#aba117eead41c02ac61dfb7e61557fd9e">func_p_land</a> (InputParameters inParams, double g)  throws Exception </td></tr>
-<tr class="memdesc:aba117eead41c02ac61dfb7e61557fd9e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="#aba117eead41c02ac61dfb7e61557fd9e">More...</a><br /></td></tr>
-<tr class="separator:aba117eead41c02ac61dfb7e61557fd9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb36ea2f0de786c80cd63714168aa4ed"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_calculations.html#acb36ea2f0de786c80cd63714168aa4ed">func_t_flight</a> (InputParameters inParams, double g_vect)  throws Exception </td></tr>
+<tr class="memdesc:acb36ea2f0de786c80cd63714168aa4ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates flight duration: the time when the projectile lands (s)  <a href="#acb36ea2f0de786c80cd63714168aa4ed">More...</a><br /></td></tr>
+<tr class="separator:acb36ea2f0de786c80cd63714168aa4ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d6e915b504d64c6c7439f5f46775829"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_calculations.html#a9d6e915b504d64c6c7439f5f46775829">func_p_land</a> (InputParameters inParams, double g_vect)  throws Exception </td></tr>
+<tr class="memdesc:a9d6e915b504d64c6c7439f5f46775829"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates landing position: the distance from the launcher to the final position of the projectile (m)  <a href="#a9d6e915b504d64c6c7439f5f46775829">More...</a><br /></td></tr>
+<tr class="separator:a9d6e915b504d64c6c7439f5f46775829"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2120d1a655882671d42792dd7b0fab8c"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_projectile_1_1_calculations.html#a2120d1a655882671d42792dd7b0fab8c">func_d_offset</a> (InputParameters inParams, double p_land)  throws Exception </td></tr>
 <tr class="memdesc:a2120d1a655882671d42792dd7b0fab8c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)  <a href="#a2120d1a655882671d42792dd7b0fab8c">More...</a><br /></td></tr>
 <tr class="separator:a2120d1a655882671d42792dd7b0fab8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -153,7 +153,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="aba117eead41c02ac61dfb7e61557fd9e"></a>
+<a class="anchor" id="a9d6e915b504d64c6c7439f5f46775829"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -170,7 +170,7 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>g</em>&#160;</td>
+          <td class="paramname"><em>g_vect</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -189,7 +189,7 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inParams</td><td>structure holding the input values </td></tr>
-    <tr><td class="paramname">g</td><td>gravitational acceleration (m/s^2) </td></tr>
+    <tr><td class="paramname">g_vect</td><td>gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>
@@ -248,7 +248,7 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a29852b32299451e9763a283f86be6bf1"></a>
+<a class="anchor" id="acb36ea2f0de786c80cd63714168aa4ed"></a>
 <div class="memitem">
 <div class="memproto">
 <table class="mlabels">
@@ -265,7 +265,7 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>g</em>&#160;</td>
+          <td class="paramname"><em>g_vect</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -284,7 +284,7 @@ Static Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">inParams</td><td>structure holding the input values </td></tr>
-    <tr><td class="paramname">g</td><td>gravitational acceleration (m/s^2) </td></tr>
+    <tr><td class="paramname">g_vect</td><td>gravitational acceleration (m/s^2) </td></tr>
   </table>
   </dd>
 </dl>

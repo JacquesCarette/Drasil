@@ -8,9 +8,10 @@ module GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, Terminator(..),
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, btd, TypedType(..), cType, 
   typeString, typeDoc, ValData(..), vd, updateValDoc, TypedValue(..), 
-  otherVal, boolVal, valPrec, valType, valDoc, Binding(..), VarData(..), vard,
-  TypedVar(..), varBind, varName, varType, varDoc, typeToFunc, typeToVal, 
-  typeToVar, funcToType, valToType, varToType
+  otherVal, boolVal, valPrec, valType, valDoc, toOtherVal, Binding(..), 
+  VarData(..), vard, TypedVar(..), getVarData, otherVar, varBind, varName, 
+  varType, varDoc, typeToFunc, typeToVal, typeToVar, funcToType, valToType, 
+  varToType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -217,6 +218,10 @@ valPrec = vlPrec . getValData
 valType = vlType . getValData
 valDoc = vlDoc . getValData
 
+toOtherVal :: TypedValue a -> TypedValue Other
+toOtherVal (BV v) = OV v
+toOtherVal (OV v) = OV v
+
 ---- Variables ----
 
 data VarData = VarD {vrBind :: Binding, vrName :: String, 
@@ -235,6 +240,9 @@ data TypedVar a where
 getVarData :: TypedVar a -> VarData
 getVarData (BVr v) = v
 getVarData (OVr v) = v
+
+otherVar :: VarData -> TypedVar Other
+otherVar = OVr
 
 varBind :: TypedVar a -> Binding
 varName :: TypedVar a -> String

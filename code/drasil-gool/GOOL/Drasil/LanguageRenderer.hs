@@ -55,7 +55,7 @@ import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..),
   od, ParamData(..), pd, TypeData(..), td, btd, TypedType(..), cType, 
   typeString, typeDoc, 
   TypedValue(..), valPrec, valDoc, Binding(..),
-  TypedVar(..), varBind, varName, varType, varDoc, typeToVal, typeToVar, 
+  TypedVar(..), getVarData, varBind, varType, varDoc, typeToVal, typeToVar, 
   valToType)
 import GOOL.Drasil.Helpers (angles, 
   doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
@@ -250,7 +250,7 @@ paramListDocD :: [ParamData] -> Doc
 paramListDocD = hicat (text ", ") . map paramDoc
 
 mkParam :: (TypedVar Other -> Doc) -> TypedVar Other -> ParamData
-mkParam f v = pd v (f v)
+mkParam f v = pd (getVarData v) (f v)
 
 -- Method --
 
@@ -364,7 +364,7 @@ stratDocD b resultState = vcat [
 
 -- Statements --
 
-assignDocD :: TypedVar Other -> TypedValue Other -> Doc
+assignDocD :: TypedVar a -> TypedValue a -> Doc
 assignDocD vr vl = varDoc vr <+> equals <+> valDoc vl
 
 multiAssignDoc :: [TypedVar Other] -> [TypedValue Other] -> Doc
@@ -745,7 +745,7 @@ listIndexExistsDocD greater lst index = parens (valDoc lst <>
 funcDocD :: TypedValue a -> Doc
 funcDocD fnApp = dot <> valDoc fnApp
 
-castDocD :: TypedType Other -> Doc
+castDocD :: TypedType a -> Doc
 castDocD t = parens $ typeDoc t
 
 sizeDocD :: Doc
@@ -760,7 +760,7 @@ listSetFuncDocD i v = brackets (valDoc i) <+> equals <+> valDoc v
 objAccessDocD :: TypedValue a -> TypedFunc b -> Doc
 objAccessDocD v f = valDoc v <> funcDoc f
 
-castObjDocD :: Doc -> TypedValue Other -> Doc
+castObjDocD :: Doc -> TypedValue a -> Doc
 castObjDocD t v = t <> parens (valDoc v)
 
 -- Keywords --

@@ -20,7 +20,7 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 
-import GOOL.Drasil.Data (Val, FileData(..), ModData(..), ProgData(..), 
+import GOOL.Drasil.Data (Other, FileData(..), ModData(..), ProgData(..), 
   isHeader, isSource)
 
 import GOOL.Drasil.CodeType (CodeType(..))

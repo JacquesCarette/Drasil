@@ -38,12 +38,12 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
   docFuncRepr, valList, surroundBody, getterName, setterName, filterOutObjs)
 import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..), file, 
-  updateFileMod, fd, TypedFunc(..), funcDoc, ModData(..), md, updateModDoc, 
+  updateFileMod, TypedFunc(..), funcDoc, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, OpData(..), ParamData(..), ProgData(..), progD, 
-  TypeData(..), td, btd, TypedType(..), cType, typeString, typeDoc, ValData(..),
-  vd, TypedValue(..), valPrec, valType, valDoc, vard, 
-  TypedVar(..), varBind, varName, varType, varDoc, typeToFunc, typeToVal, 
-  typeToVar, funcToType, valToType, varToType)
+  TypeData(..), td, btd, TypedType(..), cType, typeString, typeDoc,
+  TypedValue(..), valPrec, valDoc, TypedVar(..), otherVar, varBind, varName, 
+  varType, varDoc, typeToFunc, typeToVal, typeToVar, funcToType, valToType, 
+  varToType)
 import GOOL.Drasil.Helpers (vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
   liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -497,8 +497,7 @@ instance ParameterSym PythonCode where
   stateParam = fmap (mkParam varDoc)
   pointerParam = stateParam
 
-  parameterName = variableName . fmap paramVar
-  parameterType = variableType . fmap paramVar
+  parameterName = variableName . fmap (otherVar . paramVar)
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
@@ -640,15 +639,18 @@ pyOut newLn printFn v f = pyOut' (getType $ valueType v)
   where pyOut' (List _) = printSt newLn printFn v f
         pyOut' _ = outDoc newLn printFn v f
 
-pyInput :: PythonCode (Value PythonCode Other) -> PythonCode (Variable PythonCode Other)
-  ->  PythonCode (Statement PythonCode)
-pyInput inSrc v = v &= pyInput' (getType $ variableType v)
-  where pyInput' Integer = funcApp "int" int [inSrc]
-        pyInput' Float = funcApp "float" float [inSrc]
-        pyInput' Boolean = inSrc ?!= litString "0"
-        pyInput' String = objMethodCall string inSrc "rstrip" []
-        pyInput' Char = inSrc
-        pyInput' _ = error "Attempt to read a value of unreadable type"
+pyInput :: PythonCode (Value PythonCode Other) -> 
+  PythonCode (Variable PythonCode a) ->  PythonCode (Statement PythonCode)
+pyInput inSrc v = v &= pyInput' (unPC $ variableType v)
+  where pyInput' :: TypedType a -> PythonCode (TypedValue a)
+        pyInput' (BT _) = inSrc ?!= litString "0"
+        pyInput' (OT t) = pyInput'' $ cdType t
+        pyInput'' :: CodeType -> PythonCode (TypedValue Other)
+        pyInput'' Integer = funcApp "int" int [inSrc]
+        pyInput'' Float = funcApp "float" float [inSrc]
+        pyInput'' String = objMethodCall string inSrc "rstrip" []
+        pyInput'' Char = inSrc
+        pyInput'' _ = error "Attempt to read a value of unreadable type"
 
 pyThrow ::  TypedValue Other -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valDoc errMsg)

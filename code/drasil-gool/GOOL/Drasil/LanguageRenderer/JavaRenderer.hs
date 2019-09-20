@@ -45,12 +45,12 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
   setMainMethod, setEmpty, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Other, Boolean, Terminator(..), 
-  FileData(..), file, updateFileMod, fd, TypedFunc(..), ModData(..), md, 
+  FileData(..), file, updateFileMod, TypedFunc(..), ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, TypedType(..), cType, typeString, 
-  typeDoc,ValData(..), TypedValue(..), valPrec, valType, valDoc, VarData(..), 
-  vard, TypedVar(..), varBind, varName, varType, varDoc, typeToFunc, typeToVar, funcToType,
-  valToType, varToType)
+  typeDoc, TypedValue(..), valDoc, toOtherVal, 
+  TypedVar(..), getVarData, otherVar, varBind, varName, varType, varDoc, 
+  typeToFunc, typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -518,8 +518,7 @@ instance ParameterSym JavaCode where
   stateParam = fmap (mkParam stateParamDocD)
   pointerParam = stateParam
 
-  parameterName = variableName . fmap paramVar
-  parameterType = variableType . fmap paramVar
+  parameterName = variableName . fmap (otherVar . paramVar)
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
@@ -532,7 +531,7 @@ instance MethodSym JavaCode where
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   mainMethod c b = setMainMethod <$> method "main" c public static_ 
-    (mState void) [liftA2 pd (var "args" (listType static_ string)) 
+    (mState void) [liftA2 pd (getVarData <$> var "args" (listType static_ string)) 
     (return $ text "String[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -669,17 +668,18 @@ jListType t lst = listTypeDocD t lst
 jArrayType :: JavaCode (StateType JavaCode Other)
 jArrayType = return $ td (List $ Object "Object") "Object" (text "Object[]")
 
-jEquality :: JavaCode (Value JavaCode Other) -> JavaCode (Value JavaCode Other) -> 
-  JavaCode (Value JavaCode Boolean)
+jEquality :: JavaCode (Value JavaCode Other) -> JavaCode (Value JavaCode Other) 
+  -> JavaCode (Value JavaCode Boolean)
 jEquality v1 v2 = jEquality' (getType $ valueType v2)
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
         jEquality' _ = liftA4 typeBinExpr equalOp bool v1 v2
 
-jCast :: JavaCode (StateType JavaCode Other) -> JavaCode (Value JavaCode Other) -> 
-  JavaCode (Value JavaCode Other)
-jCast t v = jCast' (getType t) (getType $ valueType v)
-  where jCast' Float String = funcApp "Double.parseDouble" float [v]
-        jCast' Integer (Enum _) = v $. func "ordinal" int []
+jCast :: JavaCode (StateType JavaCode a) -> JavaCode (Value JavaCode b) -> 
+  JavaCode (Value JavaCode a)
+jCast t v = jCast' (unJC t) (getType $ valueType v)
+  where jCast' (OT (TD Float _ _)) String = funcApp "Double.parseDouble" 
+          float [fmap toOtherVal v]
+        jCast' (OT (TD Integer _ _)) (Enum _) = v $. func "ordinal" int []
         jCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
 jListDecDef :: TypedVar Other -> Doc -> Doc -> Doc -> Doc

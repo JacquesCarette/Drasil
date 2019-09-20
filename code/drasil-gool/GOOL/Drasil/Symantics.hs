@@ -101,9 +101,9 @@ class (PermanenceSym repr) => StateTypeSym repr where
   iterator      :: repr (StateType repr Other) -> repr (StateType repr Other)
   void          :: repr (StateType repr Other)
 
-  getType :: repr (StateType repr Other) -> CodeType
-  getTypeString :: repr (StateType repr Other) -> String
-  getTypeDoc :: repr (StateType repr Other) -> Doc
+  getType :: repr (StateType repr a) -> CodeType
+  getTypeString :: repr (StateType repr a) -> String
+  getTypeDoc :: repr (StateType repr a) -> Doc
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 
@@ -171,13 +171,13 @@ class (StateTypeSym repr) => VariableSym repr where
   ($->) :: repr (Variable repr Other) -> repr (Variable repr Other) -> repr (Variable repr Other)
   infixl 9 $->
 
-  variableBind :: repr (Variable repr Other) -> Binding
-  variableName :: repr (Variable repr Other) -> String
-  variableType :: repr (Variable repr Other) -> repr (StateType repr Other)
-  variableDoc  :: repr (Variable repr Other) -> Doc
+  variableBind :: repr (Variable repr a) -> Binding
+  variableName :: repr (Variable repr a) -> String
+  variableType :: repr (Variable repr a) -> repr (StateType repr a)
+  variableDoc  :: repr (Variable repr a) -> Doc
 
-  varFromData :: Binding -> String -> repr (StateType repr Other) -> Doc -> 
-    repr (Variable repr Other)
+  varFromData :: Binding -> String -> repr (StateType repr a) -> Doc -> 
+    repr (Variable repr a)
 
 class (VariableSym repr) => ValueSym repr where
   type Value repr :: * -> *
@@ -199,8 +199,8 @@ class (VariableSym repr) => ValueSym repr where
 
   argsList  :: repr (Value repr Other)
 
-  valueType :: repr (Value repr Other) -> repr (StateType repr Other)
-  valueDoc :: repr (Value repr Other) -> Doc
+  valueType :: repr (Value repr a) -> repr (StateType repr a)
+  valueDoc :: repr (Value repr a) -> Doc
 
 class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => 
   NumericExpression repr where
@@ -300,8 +300,8 @@ class (ValueExpression repr) => InternalValue repr where
   printFileFunc   :: repr (Value repr Other) -> repr (Value repr Other)
   printFileLnFunc :: repr (Value repr Other) -> repr (Value repr Other)
 
-  cast :: repr (StateType repr Other) -> repr (Value repr Other) -> 
-    repr (Value repr Other)
+  cast :: repr (StateType repr a) -> repr (Value repr b) -> 
+    repr (Value repr a)
 
 -- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,
 -- but really one might want one of these values as part of an expression, so the
@@ -388,7 +388,7 @@ class (Selector repr) => InternalStatement repr where
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
   InternalFunction repr, InternalStatement repr) => StatementSym repr where
   type Statement repr
-  (&=)   :: repr (Variable repr Other) -> repr (Value repr Other) -> 
+  (&=)   :: repr (Variable repr a) -> repr (Value repr a) -> 
     repr (Statement repr)
   infixr 1 &=
   (&-=)  :: repr (Variable repr Other) -> repr (Value repr Other) -> 
@@ -402,7 +402,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
   (&~-)  :: repr (Variable repr Other) -> repr (Statement repr)
   infixl 8 &~-
 
-  assign            :: repr (Variable repr Other) -> repr (Value repr Other) -> 
+  assign            :: repr (Variable repr a) -> repr (Value repr a) -> 
     repr (Statement repr)
   assignToListIndex :: repr (Variable repr Other) -> repr (Value repr Other) -> 
     repr (Value repr Other) -> repr (Statement repr)
@@ -544,7 +544,6 @@ class ParameterSym repr where
   pointerParam :: repr (Variable repr Other) -> repr (Parameter repr)
 
   parameterName :: repr (Parameter repr) -> String
-  parameterType :: repr (Parameter repr) -> repr (StateType repr Other)
 
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   BodySym repr, BlockCommentSym repr) => MethodSym repr where

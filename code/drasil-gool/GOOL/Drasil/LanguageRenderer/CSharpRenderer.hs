@@ -46,13 +46,13 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
   setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Boolean, Other, Terminator(..),
-  FileData(..), file, updateFileMod, fd, TypedFunc(..), ModData(..), md, 
+  FileData(..), file, updateFileMod, TypedFunc(..), ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   updateParamDoc, ProgData(..), progD, TypeData(..), td, 
-  TypedType(..), cType, typeString, typeDoc, TypedValue(..), ValData(..), 
-  updateValDoc, valPrec, valType, 
-  valDoc, Binding(..), VarData(..), vard, TypedVar(..),  varBind, varName, 
-  varType, varDoc, typeToFunc, typeToVar, funcToType, valToType, varToType)
+  TypedType(..), cType, typeString, typeDoc, TypedValue(..),
+  updateValDoc, 
+  valDoc, toOtherVal, Binding(..), TypedVar(..), getVarData, otherVar, varBind, varName, 
+  varDoc, typeToFunc, typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -521,8 +521,7 @@ instance ParameterSym CSharpCode where
   stateParam = fmap (mkParam stateParamDocD)
   pointerParam = stateParam
 
-  parameterName = variableName . fmap paramVar
-  parameterType = variableType . fmap paramVar
+  parameterName = variableName . fmap (otherVar . paramVar)
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
@@ -535,7 +534,7 @@ instance MethodSym CSharpCode where
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   mainMethod c b = setMainMethod <$> method "Main" c public static_ 
-    (mState void) [liftA2 pd (var "args" (listType static_ string)) 
+    (mState void) [liftA2 pd (getVarData <$> var "args" (listType static_ string)) 
     (return $ text "string[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -630,10 +629,11 @@ csInfileTypeDoc = td File "StreamReader" (text "StreamReader")
 csOutfileTypeDoc :: TypedType Other
 csOutfileTypeDoc = td File "StreamWriter" (text "StreamWriter")
 
-csCast :: CSharpCode (StateType CSharpCode Other) -> CSharpCode (Value CSharpCode Other) -> 
-  CSharpCode (Value CSharpCode Other)
-csCast t v = csCast' (getType t) (getType $ valueType v)
-  where csCast' Float String = funcApp "Double.Parse" float [v]
+csCast :: CSharpCode (StateType CSharpCode a) -> CSharpCode (Value CSharpCode b)
+  -> CSharpCode (Value CSharpCode a)
+csCast t v = csCast' (unCSC t) (getType $ valueType v)
+  where csCast' (OT (TD Float _ _)) String = funcApp "Double.Parse" float 
+          [fmap toOtherVal v]
         csCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
 csThrowDoc :: TypedValue Other -> Doc

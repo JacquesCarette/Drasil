@@ -47,13 +47,13 @@ import GOOL.Drasil.LanguageRenderer (addExt,
 import GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, 
   Terminator(..), ScopeTag(..), Binding(..), BindData(..), bd, FileData(..), 
   srcFile, hdrFile, updateFileMod,
-  fd, TypedFunc(..), ModData(..), md, updateModDoc, OpData(..), od,
+  TypedFunc(..), ModData(..), md, updateModDoc, OpData(..), od,
   ParamData(..), pd, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, btd, TypedType(..), cType, 
-  typeString, typeDoc, ValData(..), 
-  TypedValue(..), valPrec, valType, valDoc, VarData(..), vard, TypedVar(..),
-  varBind, varName, varType, varDoc, typeToFunc, typeToVar, funcToType, 
-  valToType, varToType)
+  typeString, typeDoc, 
+  TypedValue(..), valPrec, valDoc, toOtherVal, TypedVar(..),
+  getVarData, otherVar, varBind, varName, varType, varDoc, typeToFunc, 
+  typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
@@ -547,7 +547,6 @@ instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   pointerParam v = pair (pointerParam $ pfst v) (pointerParam $ psnd v)
 
   parameterName p = parameterName $ pfst p
-  parameterType p = pair (parameterType $ pfst p) (parameterType $ psnd p)
 
 instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   type Method (p CppSrcCode CppHdrCode) = MethodData
@@ -883,7 +882,7 @@ instance ValueExpression CppSrcCode where
   listStateObj = stateObj
 
   exists = notNull
-  notNull v = v
+  notNull = cast bool
 
 instance InternalValue CppSrcCode where
   inputFunc = liftA2 mkVal string (return $ text "std::cin")
@@ -1107,8 +1106,7 @@ instance ParameterSym CppSrcCode where
   stateParam = fmap (mkParam stateParamDocD)
   pointerParam = fmap (mkParam cppPointerParamDoc)
 
-  parameterName = variableName . fmap paramVar
-  parameterType = variableType . fmap paramVar
+  parameterName = variableName . fmap (otherVar . paramVar)
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
@@ -1123,7 +1121,7 @@ instance MethodSym CppSrcCode where
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   mainMethod _ b = setMainMethod <$> function "main" public static_ int 
     [stateParam $ var "argc" int, 
-    liftA2 pd (var "argv" (listType static_ string)) 
+    liftA2 pd (getVarData <$> var "argv" (listType static_ string)) 
     (return $ text "const char *argv[]")] 
     (liftA2 appendToBody b (returnState $ litInt 0))
   privMethod n c = method n c private dynamic_
@@ -1458,7 +1456,7 @@ instance InternalValue CppHdrCode where
   printFileFunc _ = liftA2 mkVal void (return empty)
   printFileLnFunc _ = liftA2 mkVal void (return empty)
   
-  cast _ _ = liftA2 mkVal void (return empty)
+  cast t _ = liftA2 mkVal t (return empty)
 
 instance Selector CppHdrCode where
   objAccess _ f = liftA2 mkVal (fmap funcToType f) (return empty)
@@ -1629,8 +1627,7 @@ instance ParameterSym CppHdrCode where
   stateParam = fmap (mkParam stateParamDocD)
   pointerParam = fmap (mkParam cppPointerParamDoc)
 
-  parameterName = variableName . fmap paramVar
-  parameterType = variableType . fmap paramVar
+  parameterName = variableName . fmap (otherVar . paramVar)
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
@@ -1813,10 +1810,11 @@ cppClassVar c v = c <> text "::" <> v
 cppStateObjDoc :: TypedType Other -> Doc -> Doc
 cppStateObjDoc t ps = typeDoc t <> parens ps
 
-cppCast :: CppSrcCode (StateType CppSrcCode Other) -> 
-  CppSrcCode (Value CppSrcCode Other) -> CppSrcCode (Value CppSrcCode Other)
-cppCast t v = cppCast' (getType t) (getType $ valueType v)
-  where cppCast' Float String = funcApp "std::stod" float [v]
+cppCast :: CppSrcCode (StateType CppSrcCode a) -> 
+  CppSrcCode (Value CppSrcCode b) -> CppSrcCode (Value CppSrcCode a)
+cppCast t v = cppCast' (unCPPSC t) (getType $ valueType v)
+  where cppCast' (OT (TD Float _ _)) String  = funcApp "std::stod" float 
+          [fmap toOtherVal v]
         cppCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
 cppListSetDoc :: TypedValue Other -> TypedValue Other -> Doc

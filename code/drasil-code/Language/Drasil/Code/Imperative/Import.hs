@@ -31,7 +31,7 @@ import GOOL.Drasil (Label, RenderSym(..), PermanenceSym(..), BodySym(..),
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
-  MethodSym(..), Val, convType) 
+  MethodSym(..), Other, convType) 
 import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -43,8 +43,8 @@ import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
-value :: (RenderSym repr) => UID -> String -> repr (StateType repr) -> 
-  Reader State (repr (Value repr Val))
+value :: (RenderSym repr) => UID -> String -> repr (StateType repr Other) -> 
+  Reader State (repr (Value repr Other))
 value u s t = do
   g <- ask
   let cs = codeSpec g
@@ -54,7 +54,7 @@ value u s t = do
   maybe (do { v <- variable s t; return $ valueOf v }) 
     (convExpr . codeEquat) (Map.lookup u mm >>= maybeInline (conStruct g))
 
-variable :: (RenderSym repr) => String -> repr (StateType repr) -> 
+variable :: (RenderSym repr) => String -> repr (StateType repr Other) -> 
   Reader State (repr (Variable repr))
 variable s t = do
   g <- ask
@@ -91,7 +91,7 @@ constVariable WithInputs cr v = do
 constVariable _ _ v = return v
 
 mkVal :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => c -> 
-  Reader State (repr (Value repr Val))
+  Reader State (repr (Value repr Other))
 mkVal v = value (v ^. uid) (codeName v) (convType $ codeType v)
 
 mkVar :: (RenderSym repr, HasCodeType c, CodeIdea c) => c -> 
@@ -146,7 +146,7 @@ genInOutFunc s pr n desc ins' outs' b = do
     then docInOutFunc n s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
     bComms bothVs) bod else inOutFunc n s pr inVs outVs bothVs bod
 
-convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr Val))
+convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr Other))
 convExpr (Dbl d) = return $ litFloat d
 convExpr (Int i) = return $ litInt i
 convExpr (Str s) = return $ litString s
@@ -203,7 +203,7 @@ renderRealInt s (UpTo (Exc,a))    = sy s $< a
 renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
-unop :: (RenderSym repr) => UFunc -> (repr (Value repr Val) -> repr (Value repr Val))
+unop :: (RenderSym repr) => UFunc -> (repr (Value repr Other) -> repr (Value repr Other))
 unop Sqrt = (#/^)
 unop Log  = log
 unop Ln   = ln
@@ -223,8 +223,8 @@ unop Norm = error "unop: Norm not implemented"
 unop Not  = (?!)
 unop Neg  = (#~)
 
-bfunc :: (RenderSym repr) => BinOp -> (repr (Value repr Val) -> repr
-  (Value repr Val) -> repr (Value repr Val))
+bfunc :: (RenderSym repr) => BinOp -> (repr (Value repr Other) -> repr
+  (Value repr Other) -> repr (Value repr Other))
 bfunc Eq    = (?==)
 bfunc NEq   = (?!=)
 bfunc Gt    = (?>)
@@ -424,7 +424,7 @@ readData ddef = do
         var_line, var_lines, var_linetokens, var_infile :: 
           (RenderSym repr) => repr (Variable repr)
         v_line, v_lines, v_linetokens, v_infile, v_i ::
-          (RenderSym repr) => repr (Value repr Val)
+          (RenderSym repr) => repr (Value repr Other)
         l_line = "line"
         var_line = var l_line string
         v_line = valueOf var_line

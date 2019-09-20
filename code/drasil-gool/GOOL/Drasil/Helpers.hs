@@ -10,7 +10,7 @@ module GOOL.Drasil.Helpers (verticalComma,
 import Utils.Drasil (blank)
 
 import qualified GOOL.Drasil.CodeType as C (CodeType(..))
-import GOOL.Drasil.Data (ParamData)
+import GOOL.Drasil.Data (ParamData, Other)
 import qualified GOOL.Drasil.Symantics as S ( 
   RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
 
@@ -113,8 +113,8 @@ getNestDegree :: Integer -> C.CodeType -> Integer
 getNestDegree n (C.List t) = getNestDegree (n+1) t
 getNestDegree n _ = n
 
-convType :: (S.RenderSym repr) => C.CodeType -> repr (S.StateType repr)
-convType C.Boolean = S.bool
+convType :: (S.RenderSym repr) => C.CodeType -> repr (S.StateType repr Other)
+convType C.Boolean = S.int -- hack to keep things from breaking, for now.
 convType C.Integer = S.int
 convType C.Float = S.float
 convType C.Char = S.char

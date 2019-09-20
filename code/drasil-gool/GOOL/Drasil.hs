@@ -6,7 +6,7 @@ module GOOL.Drasil (Label, ProgramSym(..), RenderSym(..), PermanenceSym(..),
   Selector(..), FunctionSym(..), SelectorFunction(..), ScopeSym(..), 
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
   ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
-  Val, ProgData(..), FileData(..), isSource, isHeader, ModData(..),
+  Other, ProgData(..), FileData(..), isSource, isHeader, ModData(..),
   CodeType(..),
   convType, liftList,
   unPC, unJC, unCSC, unCPPC

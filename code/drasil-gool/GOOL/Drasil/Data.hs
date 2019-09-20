@@ -1,13 +1,14 @@
 {-# LANGUAGE GADTs #-}
 
-module GOOL.Drasil.Data (Boolean, Val, Pair(..), pairList, Terminator(..), 
+module GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, Terminator(..), 
   ScopeTag(..), FileType(..), BindData(..), bd, FileData(..), fileD, file, 
   srcFile, hdrFile, isSource, isHeader, updateFileMod, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), od, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, emptyProg, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), vd, updateValDoc, bvd, 
-  TypedValue(..), otherVal, boolVal, valPrec, valType, valDoc, Binding(..), 
-  VarData(..), vard
+  StateVarData(..), svd, TypeData(..), td, btd, TypedType(..), cType, 
+  typeString, typeDoc, ValData(..), vd, updateValDoc, TypedValue(..), 
+  otherVal, boolVal, valPrec, valType, valDoc, Binding(..), VarData(..), vard,
+  TypedVar(..), typeToVal, typeToVar, valToType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -27,8 +28,8 @@ pairList _ [] = []
 pairList (x:xs) (y:ys) = pair x y : pairList xs ys
 
 data Boolean
--- Temporary Val type to keep some things from breaking
-data Val
+-- Temporary Other type to keep some things from breaking
+data Other
  
 data Terminator = Semi | Empty
 
@@ -119,33 +120,59 @@ data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc,
 svd :: ScopeTag -> Doc -> (Doc, Terminator) -> StateVarData
 svd = SVD
 
-data TypeData = TD {cType :: CodeType, typeString :: String, typeDoc :: Doc}
+---- Types ----
+
+data TypeData = TD {cdType :: CodeType, tpString :: String, tpDoc :: Doc}
 
 instance Eq TypeData where
   TD t1 _ _ == TD t2 _ _ = t1 == t2
 
-td :: CodeType -> String -> Doc -> TypeData
-td = TD
+td :: CodeType -> String -> Doc -> TypedType Other
+td c s d = otherType (TD c s d)
+
+btd :: CodeType -> String -> Doc -> TypedType Boolean
+btd c s d = boolType (TD c s d)
+
+data TypedType a where
+  BT :: TypeData -> TypedType Boolean
+  OT :: TypeData -> TypedType Other
+
+boolType :: TypeData -> TypedType Boolean
+boolType = BT
+
+otherType :: TypeData -> TypedType Other
+otherType = OT
+
+getTypeData :: TypedType a -> TypeData
+getTypeData (BT t) = t
+getTypeData (OT t) = t
+
+cType :: TypedType a -> CodeType
+typeString :: TypedType a -> String
+typeDoc :: TypedType a -> Doc
+cType = cdType . getTypeData
+typeString = tpString . getTypeData
+typeDoc = tpDoc . getTypeData
+
+---- Values ----
 
 data ValData = VD {vlPrec :: Maybe Int, vlType :: TypeData, vlDoc :: Doc}
 
-vd :: Maybe Int -> TypeData -> Doc -> TypedValue Val
-vd p t d = otherVal (VD p t d)
+vd :: Maybe Int -> TypeData -> Doc -> ValData
+vd = VD
 
-updateValDoc :: (Doc -> Doc) -> TypedValue Val -> TypedValue Val
-updateValDoc f v = vd (valPrec v) (valType v) ((f . valDoc) v)
-
-bvd :: Maybe Int -> TypeData -> Doc -> TypedValue Boolean
-bvd p t d = boolVal (VD p t d)
+updateValDoc :: (Doc -> Doc) -> TypedValue a -> TypedValue a
+updateValDoc f (BV v) = BV $ vd (vlPrec v) (vlType v) ((f . vlDoc) v)
+updateValDoc f (OV v) = OV $ vd (vlPrec v) (vlType v) ((f . vlDoc) v)
 
 data TypedValue a where
   BV :: ValData -> TypedValue Boolean
-  OV :: ValData -> TypedValue Val
+  OV :: ValData -> TypedValue Other
 
 boolVal :: ValData -> TypedValue Boolean
 boolVal = BV
 
-otherVal :: ValData -> TypedValue Val
+otherVal :: ValData -> TypedValue Other
 otherVal = OV
 
 getValData :: TypedValue a -> ValData
@@ -155,9 +182,11 @@ getValData (OV v) = v
 valPrec :: TypedValue a -> Maybe Int
 valType :: TypedValue a -> TypeData
 valDoc :: TypedValue a -> Doc
-valPrec = vlPrec . getValData 
+valPrec = vlPrec . getValData
 valType = vlType . getValData
 valDoc = vlDoc . getValData
+
+---- Variables ----
 
 data VarData = VarD {varBind :: Binding, varName :: String, 
   varType :: TypeData, varDoc :: Doc}
@@ -167,6 +196,24 @@ instance Eq VarData where
 
 vard :: Binding -> String -> TypeData -> Doc -> VarData
 vard = VarD
+
+data TypedVar a where
+  BVr :: VarData -> TypedVar Boolean
+  OVr :: VarData -> TypedVar Other
+
+---- Transformations ----
+
+typeToVal :: Maybe Int -> TypedType a -> Doc -> TypedValue a
+typeToVal p (BT t) d = BV (vd p t d)
+typeToVal p (OT t) d = OV (vd p t d)
+
+typeToVar :: Binding -> String -> TypedType a -> Doc -> TypedVar a
+typeToVar b n (BT t) d = BVr (vard b n t d)
+typeToVar b n (OT t) d = OVr (vard b n t d)
+
+valToType :: TypedValue a -> TypedType a
+valToType (BV v) = BT (vlType v)
+valToType (OV v) = OT (vlType v)
 
 -- Reminder for later
 -- varToVal :: TypedVar a -> TypedValue a

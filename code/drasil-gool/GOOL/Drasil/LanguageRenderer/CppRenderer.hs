@@ -31,11 +31,11 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   constDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, mkSt, 
   mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD, 
   negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, cosOpDocD, 
-  tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, unExpr', boolUnExpr, 
+  tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, unExpr', 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
-  boolBinExpr, mkVal, mkBoolVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
+  typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, 
   classVarCheckStatic, objVarDocD, inlineIfD, funcAppDocD, funcDocD, castDocD, 
   objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD,
@@ -44,13 +44,14 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
   surroundBody, getterName, setterName, setEmpty, intValue, filterOutObjs)
-import GOOL.Drasil.Data (Val, Pair(..), pairList, 
+import GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, 
   Terminator(..), ScopeTag(..), Binding(..),
   BindData(..), bd, FileData(..), srcFile, hdrFile, updateFileMod, FuncData(..),
   fd, ModData(..), md, updateModDoc, OpData(..), od,
   ParamData(..), pd, ProgData(..), progD, emptyProg, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), TypedValue(..), 
-  valPrec, valType, valDoc, VarData(..), vard)
+  StateVarData(..), svd, TypeData(..), td, btd, TypedType(..), cType, 
+  typeString, typeDoc, ValData(..), 
+  TypedValue(..), valPrec, valType, valDoc, VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
@@ -143,7 +144,7 @@ instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   block sts = pair (block $ map pfst sts) (block $ map psnd sts)
 
 instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
-  type StateType (p CppSrcCode CppHdrCode) = TypeData
+  type StateType (p CppSrcCode CppHdrCode) = TypedType
   bool = pair bool bool
   int = pair int int
   float = pair float float
@@ -706,7 +707,7 @@ instance BlockSym CppSrcCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
 instance StateTypeSym CppSrcCode where
-  type StateType CppSrcCode = TypeData
+  type StateType CppSrcCode = TypedType
   bool = return cppBoolTypeDoc
   int = return intTypeDocD
   float = return cppFloatTypeDoc
@@ -814,8 +815,8 @@ instance VariableSym CppSrcCode where
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = TypedValue
-  litTrue = liftA2 mkBoolVal bool (return litTrueD)
-  litFalse = liftA2 mkBoolVal bool (return litFalseD)
+  litTrue = liftA2 mkVal bool (return litTrueD)
+  litFalse = liftA2 mkVal bool (return litFalseD)
   litChar c = liftA2 mkVal char (return $ litCharD c)
   litFloat v = liftA2 mkVal float (return $ litFloatD v)
   litInt v = liftA2 mkVal int (return $ litIntD v)
@@ -859,16 +860,16 @@ instance NumericExpression CppSrcCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression CppSrcCode where
-  (?!) = liftA3 boolUnExpr notOp bool
-  (?&&) = liftA4 boolBinExpr andOp bool
-  (?||) = liftA4 boolBinExpr orOp bool
+  (?!) = liftA3 unExpr notOp bool
+  (?&&) = liftA4 typeBinExpr andOp bool
+  (?||) = liftA4 typeBinExpr orOp bool
 
-  (?<) = liftA4 boolBinExpr lessOp bool
-  (?<=) = liftA4 boolBinExpr lessEqualOp bool
-  (?>) = liftA4 boolBinExpr greaterOp bool
-  (?>=) = liftA4 boolBinExpr greaterEqualOp bool
-  (?==) = liftA4 boolBinExpr equalOp bool
-  (?!=) = liftA4 boolBinExpr notEqualOp bool
+  (?<) = liftA4 typeBinExpr lessOp bool
+  (?<=) = liftA4 typeBinExpr lessEqualOp bool
+  (?>) = liftA4 typeBinExpr greaterOp bool
+  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
+  (?==) = liftA4 typeBinExpr equalOp bool
+  (?!=) = liftA4 typeBinExpr notEqualOp bool
    
 instance ValueExpression CppSrcCode where
   inlineIf = liftA3 inlineIfD
@@ -1295,7 +1296,7 @@ instance BlockSym CppHdrCode where
   block _ = return empty
 
 instance StateTypeSym CppHdrCode where
-  type StateType CppHdrCode = TypeData
+  type StateType CppHdrCode = TypedType
   bool = return cppBoolTypeDoc
   int = return intTypeDocD
   float = return cppFloatTypeDoc
@@ -1380,8 +1381,8 @@ instance VariableSym CppHdrCode where
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = TypedValue
-  litTrue = liftA2 mkBoolVal bool (return litTrueD)
-  litFalse = liftA2 mkBoolVal bool (return litFalseD)
+  litTrue = liftA2 mkVal bool (return litTrueD)
+  litFalse = liftA2 mkVal bool (return litFalseD)
   litChar c = liftA2 mkVal char (return $ litCharD c)
   litFloat v = liftA2 mkVal float (return $ litFloatD v)
   litInt v = liftA2 mkVal int (return $ litIntD v)
@@ -1425,16 +1426,16 @@ instance NumericExpression CppHdrCode where
   ceil _ = liftA2 mkVal void (return empty)
 
 instance BooleanExpression CppHdrCode where
-  (?!) _ = liftA2 mkBoolVal void (return empty)
-  (?&&) _ _ = liftA2 mkBoolVal void (return empty)
-  (?||) _ _ = liftA2 mkBoolVal void (return empty)
+  (?!) _ = liftA2 mkVal void (return empty)
+  (?&&) _ _ = liftA2 mkVal void (return empty)
+  (?||) _ _ = liftA2 mkVal void (return empty)
 
-  (?<) _ _ = liftA2 mkBoolVal void (return empty)
-  (?<=) _ _ = liftA2 mkBoolVal void (return empty)
-  (?>) _ _ = liftA2 mkBoolVal void (return empty)
-  (?>=) _ _ = liftA2 mkBoolVal void (return empty)
-  (?==) _ _ = liftA2 mkBoolVal void (return empty)
-  (?!=) _ _ = liftA2 mkBoolVal void (return empty)
+  (?<) _ _ = liftA2 mkVal void (return empty)
+  (?<=) _ _ = liftA2 mkVal void (return empty)
+  (?>) _ _ = liftA2 mkVal void (return empty)
+  (?>=) _ _ = liftA2 mkVal void (return empty)
+  (?==) _ _ = liftA2 mkVal void (return empty)
+  (?!=) _ _ = liftA2 mkVal void (return empty)
    
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = liftA2 mkVal void (return empty)
@@ -1445,8 +1446,8 @@ instance ValueExpression CppHdrCode where
   extStateObj _ _ _ = liftA2 mkVal void (return empty)
   listStateObj _ _ = liftA2 mkVal void (return empty)
 
-  exists _ = liftA2 mkBoolVal void (return empty)
-  notNull _ = liftA2 mkBoolVal void (return empty)
+  exists _ = liftA2 mkVal void (return empty)
+  notNull _ = liftA2 mkVal void (return empty)
 
 instance InternalValue CppHdrCode where
   inputFunc = liftA2 mkVal void (return empty)
@@ -1466,7 +1467,7 @@ instance Selector CppHdrCode where
 
   selfAccess _ _ = liftA2 mkVal void (return empty)
 
-  listIndexExists _ _ = liftA2 mkBoolVal void (return empty)
+  listIndexExists _ _ = liftA2 mkVal void (return empty)
   argExists _ = liftA2 mkVal void (return empty)
   
   indexOf _ _ = liftA2 mkVal void (return empty)
@@ -1788,50 +1789,50 @@ usingNameSpace n (Just m) end = text "using" <+> text n <> colon <> colon <>
   text m <> end
 usingNameSpace n Nothing end = text "using namespace" <+> text n <> end
 
-cppBoolTypeDoc :: TypeData
-cppBoolTypeDoc = td Boolean "bool" (text "bool")
+cppBoolTypeDoc :: TypedType Boolean
+cppBoolTypeDoc = btd Boolean "bool" (text "bool")
 
-cppFloatTypeDoc :: TypeData
+cppFloatTypeDoc :: TypedType Other
 cppFloatTypeDoc = td Float "double" (text "double")
 
-cppInfileTypeDoc :: TypeData
+cppInfileTypeDoc :: TypedType Other
 cppInfileTypeDoc = td File "ifstream" (text "ifstream")
 
-cppOutfileTypeDoc :: TypeData
+cppOutfileTypeDoc :: TypedType Other
 cppOutfileTypeDoc = td File "ofstream" (text "ofstream")
 
-cppIterTypeDoc :: TypeData -> TypeData
+cppIterTypeDoc :: TypedType Other -> TypedType Other
 cppIterTypeDoc t = td (Iterator (cType t)) (typeString t ++ "::iterator")
   (text "std::" <> typeDoc t <> text "::iterator")
 
 cppClassVar :: Doc -> Doc -> Doc
 cppClassVar c v = c <> text "::" <> v
 
-cppStateObjDoc :: TypeData -> Doc -> Doc
+cppStateObjDoc :: TypedType Other -> Doc -> Doc
 cppStateObjDoc t ps = typeDoc t <> parens ps
 
-cppCast :: CppSrcCode (StateType CppSrcCode) -> 
-  CppSrcCode (Value CppSrcCode Val) -> CppSrcCode (Value CppSrcCode Val)
+cppCast :: CppSrcCode (StateType CppSrcCode Other) -> 
+  CppSrcCode (Value CppSrcCode Other) -> CppSrcCode (Value CppSrcCode Other)
 cppCast t v = cppCast' (getType t) (getType $ valueType v)
   where cppCast' Float String = funcApp "std::stod" float [v]
         cppCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
-cppListSetDoc :: TypedValue Val -> TypedValue Val -> Doc
+cppListSetDoc :: TypedValue Other -> TypedValue Other -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens (valDoc i) <+> equals <+> valDoc v
 
-cppListDecDoc :: VarData -> TypedValue Val -> Doc -> Doc -> Doc
+cppListDecDoc :: VarData -> TypedValue Other -> Doc -> Doc -> Doc
 cppListDecDoc v n s d = varDecDocD v s d <> parens (valDoc n)
 
 cppListDecDefDoc :: VarData -> Doc -> Doc -> Doc -> Doc
 cppListDecDefDoc v vs s d = varDecDocD v s d <> braces vs
 
-cppPrint :: Bool -> TypedValue Val -> TypedValue Val -> Doc
+cppPrint :: Bool -> TypedValue Other -> TypedValue Other -> Doc
 cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> val (valDoc v) <+> 
   end
   where val = if maybe False (< 9) (valPrec v) then parens else id
         end = if newLn then text "<<" <+> text "std::endl" else empty
 
-cppThrowDoc :: TypedValue Val -> Doc
+cppThrowDoc :: TypedValue Other -> Doc
 cppThrowDoc errMsg = text "throw" <> parens (valDoc errMsg)
 
 cppTryCatch :: Doc -> Doc -> Doc
@@ -1842,25 +1843,25 @@ cppTryCatch tb cb = vcat [
   indent cb,
   rbrace]
 
-cppDiscardInput :: Label -> TypedValue Val -> Doc
+cppDiscardInput :: Label -> TypedValue Other -> Doc
 cppDiscardInput sep inFn = valDoc inFn <> dot <> text "ignore" <> parens 
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 
-cppInput :: VarData -> TypedValue Val -> Doc -> Doc
+cppInput :: VarData -> TypedValue Other -> Doc -> Doc
 cppInput v inFn end = vcat [
   valDoc inFn <+> text ">>" <+> varDoc v <> end,
   valDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]
 
-cppOpenFile :: Label -> VarData -> TypedValue Val -> Doc
+cppOpenFile :: Label -> VarData -> TypedValue Other -> Doc
 cppOpenFile mode f n = varDoc f <> dot <> text "open" <> 
   parens (valDoc n <> comma <+> text mode)
 
 cppPointerParamDoc :: VarData -> Doc
 cppPointerParamDoc v = typeDoc (varType v) <+> text "&" <> varDoc v
 
-cppsMethod :: Label -> Label -> TypeData -> Doc -> Doc -> Doc -> Doc -> Doc
+cppsMethod :: Label -> Label -> TypedType Other -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 
   text n <> parens ps <+> bStart,
   indent b,
@@ -1868,17 +1869,17 @@ cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <>
   where ttype | isDtor n = empty
               | otherwise = typeDoc t
 
-cppsFunction :: Label -> TypeData -> Doc -> Doc -> Doc -> Doc -> Doc
+cppsFunction :: Label -> TypedType Other -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsFunction n t ps b bStart bEnd = vcat [
   typeDoc t <+> text n <> parens ps <+> bStart,
   indent b,
   bEnd]
 
-cpphMethod :: Label -> TypeData -> Doc -> Doc -> Doc
+cpphMethod :: Label -> TypedType Other -> Doc -> Doc -> Doc
 cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
                       | otherwise = typeDoc t <+> text n <> parens ps <> end
 
-cppsStateVarDef :: Label -> Doc -> BindData -> VarData -> TypedValue Val -> Doc -> Doc
+cppsStateVarDef :: Label -> Doc -> BindData -> VarData -> TypedValue Other -> Doc -> Doc
 cppsStateVarDef n cns p vr vl end = if bind p == Static then cns <+> typeDoc 
   (varType vr) <+> text (n ++ "::") <> varDoc vr <+> equals <+> valDoc vl <>
   end else empty
@@ -1943,9 +1944,9 @@ cppModuleDoc ls blnk1 fs blnk2 cs = vcat [
   blnk2,
   fs]
 
-cppInOutCall :: (Label -> CppSrcCode (StateType CppSrcCode) -> 
-  [CppSrcCode (Value CppSrcCode Val)] -> CppSrcCode (Value CppSrcCode Val)) -> Label -> 
-  [CppSrcCode (Value CppSrcCode Val)] -> [CppSrcCode (Variable CppSrcCode)] -> 
+cppInOutCall :: (Label -> CppSrcCode (StateType CppSrcCode Other) -> 
+  [CppSrcCode (Value CppSrcCode Other)] -> CppSrcCode (Value CppSrcCode Other)) -> Label -> 
+  [CppSrcCode (Value CppSrcCode Other)] -> [CppSrcCode (Variable CppSrcCode)] -> 
   [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Statement CppSrcCode)
 cppInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
 cppInOutCall f n ins [] [out] = if null (filterOutObjs [out]) 

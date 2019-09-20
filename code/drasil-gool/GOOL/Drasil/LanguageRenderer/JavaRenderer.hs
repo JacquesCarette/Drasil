@@ -30,10 +30,10 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, 
   objDecDefDocD, statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, 
   stringListVals', stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, 
-  unExpr', boolUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  unExpr', powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
-  binExpr', boolBinExpr, mkVal, mkBoolVal, mkVar, mkStaticVar, litTrueD, 
+  binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, 
   litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
   selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD,
   objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
@@ -44,11 +44,12 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
   docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
   setMainMethod, setEmpty, intValue, filterOutObjs)
-import GOOL.Drasil.Data (Val, Boolean, Terminator(..), 
+import GOOL.Drasil.Data (Other, Boolean, Terminator(..), 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
-  ProgData(..), progD, TypeData(..), td, ValData(..), TypedValue(..), valPrec,
-  valType, valDoc, VarData(..), vard)
+  ProgData(..), progD, TypeData(..), td, TypedType(..), cType, typeString, 
+  typeDoc,ValData(..), TypedValue(..), valPrec, valType, valDoc, VarData(..), 
+  vard)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -140,7 +141,7 @@ instance BlockSym JavaCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst .state) sts)
 
 instance StateTypeSym JavaCode where
-  type StateType JavaCode = TypeData
+  type StateType JavaCode = TypedType
   bool = return boolTypeDocD
   int = return intTypeDocD
   float = return jFloatTypeDocD
@@ -246,8 +247,8 @@ instance VariableSym JavaCode where
 
 instance ValueSym JavaCode where
   type Value JavaCode = TypedValue
-  litTrue = liftA2 mkBoolVal bool (return litTrueD)
-  litFalse = liftA2 mkBoolVal bool (return litFalseD)
+  litTrue = liftA2 mkVal bool (return litTrueD)
+  litFalse = liftA2 mkVal bool (return litFalseD)
   litChar c = liftA2 mkVal char (return $ litCharD c)
   litFloat v = liftA2 mkVal float (return $ litFloatD v)
   litInt v = liftA2 mkVal int (return $ litIntD v)
@@ -291,16 +292,16 @@ instance NumericExpression JavaCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression JavaCode where
-  (?!) = liftA3 boolUnExpr notOp bool
-  (?&&) = liftA4 boolBinExpr andOp bool
-  (?||) = liftA4 boolBinExpr orOp bool
+  (?!) = liftA3 unExpr notOp bool
+  (?&&) = liftA4 typeBinExpr andOp bool
+  (?||) = liftA4 typeBinExpr orOp bool
 
-  (?<) = liftA4 boolBinExpr lessOp bool
-  (?<=) = liftA4 boolBinExpr lessEqualOp bool
-  (?>) = liftA4 boolBinExpr greaterOp bool
-  (?>=) = liftA4 boolBinExpr greaterEqualOp bool
+  (?<) = liftA4 typeBinExpr lessOp bool
+  (?<=) = liftA4 typeBinExpr lessEqualOp bool
+  (?>) = liftA4 typeBinExpr greaterOp bool
+  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
   (?==) = jEquality
-  (?!=) = liftA4 boolBinExpr notEqualOp bool
+  (?!=) = liftA4 typeBinExpr notEqualOp bool
   
 instance ValueExpression JavaCode where
   inlineIf = liftA3 inlineIfD
@@ -313,7 +314,7 @@ instance ValueExpression JavaCode where
     (liftList valList vs))
 
   exists = notNull
-  notNull v = liftA2 mkBoolVal bool (liftA3 notNullDocD notEqualOp v (valueOf 
+  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf 
     (var "null" (fmap valType v))))
 
 instance InternalValue JavaCode where
@@ -563,7 +564,7 @@ instance MethodSym JavaCode where
             ("new Object[" ++ show (length rets) ++ "]") jArrayType))
             : assignArray 0 (map valueOf rets)
             ++ [returnState (valueOf outputs)])
-          assignArray :: Int -> [JavaCode (Value JavaCode Val)] -> 
+          assignArray :: Int -> [JavaCode (Value JavaCode Other)] -> 
             [JavaCode (Statement JavaCode)]
           assignArray _ [] = []
           assignArray c (v:vs) = (var ("outputs[" ++ show c ++ "]") 
@@ -645,36 +646,36 @@ jtop end inc lst = vcat [
   inc <+> text "java.io.File" <> end,
   inc <+> text ("java.util." ++ render lst) <> end]
 
-jFloatTypeDocD :: TypeData
+jFloatTypeDocD :: TypedType Other
 jFloatTypeDocD = td Float "double" (text "double")
 
-jStringTypeDoc :: TypeData
+jStringTypeDoc :: TypedType Other
 jStringTypeDoc = td String "String" (text "String")
 
-jInfileTypeDoc :: TypeData
+jInfileTypeDoc :: TypedType Other
 jInfileTypeDoc = td File "Scanner" (text "Scanner")
 
-jOutfileTypeDoc :: TypeData
+jOutfileTypeDoc :: TypedType Other
 jOutfileTypeDoc = td File "PrintWriter" (text "PrintWriter")
 
-jListType :: TypeData -> Doc -> TypeData
+jListType :: TypedType Other -> Doc -> TypedType Other
 jListType (TD Integer _ _) lst = td (List Integer) (render lst ++ "<Integer>") 
   (lst <> angles (text "Integer"))
 jListType (TD Float _ _) lst = td (List Float) (render lst ++ "<Double>") 
   (lst <> angles (text "Double"))
 jListType t lst = listTypeDocD t lst
 
-jArrayType :: JavaCode (StateType JavaCode)
+jArrayType :: JavaCode (StateType JavaCode Other)
 jArrayType = return $ td (List $ Object "Object") "Object" (text "Object[]")
 
-jEquality :: JavaCode (Value JavaCode Val) -> JavaCode (Value JavaCode Val) -> 
+jEquality :: JavaCode (Value JavaCode Other) -> JavaCode (Value JavaCode Other) -> 
   JavaCode (Value JavaCode Boolean)
 jEquality v1 v2 = jEquality' (getType $ valueType v2)
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
-        jEquality' _ = liftA4 boolBinExpr equalOp bool v1 v2
+        jEquality' _ = liftA4 typeBinExpr equalOp bool v1 v2
 
-jCast :: JavaCode (StateType JavaCode) -> JavaCode (Value JavaCode Val) -> 
-  JavaCode (Value JavaCode Val)
+jCast :: JavaCode (StateType JavaCode Other) -> JavaCode (Value JavaCode Other) -> 
+  JavaCode (Value JavaCode Other)
 jCast t v = jCast' (getType t) (getType $ valueType v)
   where jCast' Float String = funcApp "Double.parseDouble" float [v]
         jCast' Integer (Enum _) = v $. func "ordinal" int []
@@ -685,11 +686,11 @@ jListDecDef v vs s d = varDecDocD v s d <+> equals <+> new <+>
   typeDoc (varType v) <+> parens listElements
   where listElements = emptyIfEmpty vs $ text "Arrays.asList" <> parens vs
 
-jConstDecDef :: VarData -> TypedValue Val -> Doc
+jConstDecDef :: VarData -> TypedValue Other -> Doc
 jConstDecDef v def = text "final" <+> typeDoc (varType v) <+> varDoc v <+> 
   equals <+> valDoc def
 
-jThrowDoc :: TypedValue Val -> Doc
+jThrowDoc :: TypedValue Other -> Doc
 jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valDoc 
   errMsg)
 
@@ -702,10 +703,10 @@ jTryCatch tb cb = vcat [
   indent cb,
   rbrace]
 
-jDiscardInput :: TypedValue Val -> Doc
+jDiscardInput :: TypedValue Other -> Doc
 jDiscardInput inFn = valDoc inFn <> dot <> text "next()"
 
-jInput :: TypeData -> TypedValue Val -> TypedValue Val
+jInput :: TypedType Other -> TypedValue Other -> TypedValue Other
 jInput t inFn = mkVal t $ jInput' (cType t) 
   where jInput' Integer = text "Integer.parseInt" <> parens (valDoc inFn <> 
           dot <> text "nextLine()")
@@ -716,21 +717,21 @@ jInput t inFn = mkVal t $ jInput' (cType t)
         jInput' Char = valDoc inFn <> dot <> text "next().charAt(0)"
         jInput' _ = error "Attempt to read value of unreadable type"
 
-jOpenFileR :: TypedValue Val -> TypeData -> TypedValue Val
+jOpenFileR :: TypedValue Other -> TypedType Other -> TypedValue Other
 jOpenFileR n t = mkVal t $ new <+> text "Scanner" <> parens 
   (new <+> text "File" <> parens (valDoc n))
 
-jOpenFileWorA :: TypedValue Val -> TypeData -> TypedValue Boolean -> 
-  TypedValue Val
+jOpenFileWorA :: TypedValue Other -> TypedType Other -> TypedValue Boolean -> 
+  TypedValue Other
 jOpenFileWorA n t wa = mkVal t $ new <+> text "PrintWriter" <> 
   parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> 
   parens (valDoc n) <> comma <+> valDoc wa))
 
-jStringSplit :: VarData -> TypedValue Val -> Doc
+jStringSplit :: VarData -> TypedValue Other -> Doc
 jStringSplit vnew s = varDoc vnew <+> equals <+> new <+> typeDoc (varType vnew)
   <> parens (valDoc s)
 
-jMethod :: Label -> Doc -> Doc -> TypeData -> Doc -> Doc -> Doc
+jMethod :: Label -> Doc -> Doc -> TypedType Other -> Doc -> Doc -> Doc
 jMethod n s p t ps b = vcat [
   s <+> p <+> typeDoc t <+> text n <> parens ps <+> text "throws Exception" <+> 
     lbrace,
@@ -744,9 +745,9 @@ jAssignFromArray c (v:vs) = (v &= cast (variableType v)
   (valueOf (var ("outputs[" ++ show c ++ "]") (variableType v))))
   : jAssignFromArray (c+1) vs
 
-jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 
-  [JavaCode (Value JavaCode Val)] -> JavaCode (Value JavaCode Val)) -> Label -> 
-  [JavaCode (Value JavaCode Val)] -> [JavaCode (Variable JavaCode)] -> 
+jInOutCall :: (Label -> JavaCode (StateType JavaCode Other) -> 
+  [JavaCode (Value JavaCode Other)] -> JavaCode (Value JavaCode Other)) -> Label -> 
+  [JavaCode (Value JavaCode Other)] -> [JavaCode (Variable JavaCode)] -> 
   [JavaCode (Variable JavaCode)] -> JavaCode (Statement JavaCode)
 jInOutCall f n ins [] [] = valState $ f n void ins
 jInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins

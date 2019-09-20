@@ -30,11 +30,11 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
   listDecDocD, listDecDefDocD, objDecDefDocD, constDecDefDocD, statementDocD, 
   returnDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', commentDocD, 
-  unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', boolUnExpr, powerPrec, 
+  unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', powerPrec, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
-  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', boolBinExpr, mkVal, 
-  mkBoolVal, mkVar, mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, 
+  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
+  mkVar, mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, 
   litIntD, litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
   classVarCheckStatic, classVarD, classVarDocD, objVarDocD, inlineIfD, 
   funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
@@ -45,12 +45,13 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
   moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
   setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
-import GOOL.Drasil.Data (Boolean, Val, Terminator(..),
+import GOOL.Drasil.Data (Boolean, Other, Terminator(..),
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), 
-  ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
-  TypedValue(..), ValData(..), updateValDoc, valPrec, valType, valDoc, 
-  Binding(..), VarData(..), vard)
+  updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
+  updateParamDoc, ProgData(..), progD, TypeData(..), td, 
+  TypedType(..), cType, typeString, typeDoc, TypedValue(..), ValData(..), 
+  updateValDoc, valPrec, valType, 
+  valDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -142,7 +143,7 @@ instance BlockSym CSharpCode where
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
 instance StateTypeSym CSharpCode where
-  type StateType CSharpCode = TypeData
+  type StateType CSharpCode = TypedType
   bool = return boolTypeDocD
   int = return intTypeDocD
   float = return csFloatTypeDoc
@@ -248,8 +249,8 @@ instance VariableSym CSharpCode where
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = TypedValue
-  litTrue = liftA2 mkBoolVal bool (return litTrueD)
-  litFalse = liftA2 mkBoolVal bool (return litFalseD)
+  litTrue = liftA2 mkVal bool (return litTrueD)
+  litFalse = liftA2 mkVal bool (return litFalseD)
   litChar c = liftA2 mkVal char (return $ litCharD c)
   litFloat v = liftA2 mkVal float (return $ litFloatD v)
   litInt v = liftA2 mkVal int (return $ litIntD v)
@@ -293,16 +294,16 @@ instance NumericExpression CSharpCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression CSharpCode where
-  (?!) = liftA3 boolUnExpr notOp bool
-  (?&&) = liftA4 boolBinExpr andOp bool
-  (?||) = liftA4 boolBinExpr orOp bool
+  (?!) = liftA3 unExpr notOp bool
+  (?&&) = liftA4 typeBinExpr andOp bool
+  (?||) = liftA4 typeBinExpr orOp bool
 
-  (?<) = liftA4 boolBinExpr lessOp bool
-  (?<=) = liftA4 boolBinExpr lessEqualOp bool
-  (?>) = liftA4 boolBinExpr greaterOp bool
-  (?>=) = liftA4 boolBinExpr greaterEqualOp bool
-  (?==) = liftA4 boolBinExpr equalOp bool
-  (?!=) = liftA4 boolBinExpr notEqualOp bool
+  (?<) = liftA4 typeBinExpr lessOp bool
+  (?<=) = liftA4 typeBinExpr lessEqualOp bool
+  (?>) = liftA4 typeBinExpr greaterOp bool
+  (?>=) = liftA4 typeBinExpr greaterEqualOp bool
+  (?==) = liftA4 typeBinExpr equalOp bool
+  (?!=) = liftA4 typeBinExpr notEqualOp bool
   
 instance ValueExpression CSharpCode where
   inlineIf = liftA3 inlineIfD
@@ -315,7 +316,7 @@ instance ValueExpression CSharpCode where
     (liftList valList vs))
 
   exists = notNull
-  notNull v = liftA2 mkBoolVal bool (liftA3 notNullDocD notEqualOp v (valueOf 
+  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf 
     (var "null" (fmap valType v))))
 
 instance InternalValue CSharpCode where
@@ -619,22 +620,22 @@ cstop end inc = vcat [
   inc <+> text "System.Collections" <> end,
   inc <+> text "System.Collections.Generic" <> end]
 
-csFloatTypeDoc :: TypeData
+csFloatTypeDoc :: TypedType Other
 csFloatTypeDoc = td Float "double" (text "double") -- Same as Java, maybe make a common function
 
-csInfileTypeDoc :: TypeData
+csInfileTypeDoc :: TypedType Other
 csInfileTypeDoc = td File "StreamReader" (text "StreamReader")
 
-csOutfileTypeDoc :: TypeData
+csOutfileTypeDoc :: TypedType Other
 csOutfileTypeDoc = td File "StreamWriter" (text "StreamWriter")
 
-csCast :: CSharpCode (StateType CSharpCode) -> CSharpCode (Value CSharpCode Val) -> 
-  CSharpCode (Value CSharpCode Val)
+csCast :: CSharpCode (StateType CSharpCode Other) -> CSharpCode (Value CSharpCode Other) -> 
+  CSharpCode (Value CSharpCode Other)
 csCast t v = csCast' (getType t) (getType $ valueType v)
   where csCast' Float String = funcApp "Double.Parse" float [v]
         csCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
-csThrowDoc :: TypedValue Val -> Doc
+csThrowDoc :: TypedValue Other -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
   parens (valDoc errMsg)
 
@@ -647,10 +648,10 @@ csTryCatch tb cb= vcat [
   indent cb,
   rbrace]
 
-csDiscardInput :: TypedValue Val -> Doc
+csDiscardInput :: TypedValue Other -> Doc
 csDiscardInput = valDoc
 
-csInput :: TypeData -> TypedValue Val -> TypedValue Val
+csInput :: TypedType Other -> TypedValue Other -> TypedValue Other
 csInput t inFn = mkVal t $ text (csInput' (cType t)) <> 
   parens (valDoc inFn)
   where csInput' Integer = "Int32.Parse"
@@ -660,15 +661,15 @@ csInput t inFn = mkVal t $ text (csInput' (cType t)) <>
         csInput' Char = "Char.Parse"
         csInput' _ = error "Attempt to read value of unreadable type"
 
-csFileInput :: TypedValue Val -> TypedValue Val
+csFileInput :: TypedValue Other -> TypedValue Other
 csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
 
-csOpenFileR :: TypedValue Val -> TypeData -> TypedValue Val
+csOpenFileR :: TypedValue Other -> TypedType Other -> TypedValue Other
 csOpenFileR n r = mkVal r $ new <+> typeDoc r <> 
   parens (valDoc n)
 
-csOpenFileWorA :: TypedValue Val -> TypeData -> TypedValue Boolean -> 
-  TypedValue Val
+csOpenFileWorA :: TypedValue Other -> TypedType Other -> TypedValue Boolean -> 
+  TypedValue Other
 csOpenFileWorA n w a = mkVal w $ new <+> typeDoc w <> 
   parens (valDoc n <> comma <+> valDoc a)
 
@@ -678,9 +679,9 @@ csRef p = text "ref" <+> p
 csOut :: Doc -> Doc
 csOut p = text "out" <+> p
 
-csInOutCall :: (Label -> CSharpCode (StateType CSharpCode) -> 
-  [CSharpCode (Value CSharpCode Val)] -> CSharpCode (Value CSharpCode Val)) -> Label -> 
-  [CSharpCode (Value CSharpCode Val)] -> [CSharpCode (Variable CSharpCode)] -> 
+csInOutCall :: (Label -> CSharpCode (StateType CSharpCode Other) -> 
+  [CSharpCode (Value CSharpCode Other)] -> CSharpCode (Value CSharpCode Other)) -> Label -> 
+  [CSharpCode (Value CSharpCode Other)] -> [CSharpCode (Variable CSharpCode)] -> 
   [CSharpCode (Variable CSharpCode)] -> CSharpCode (Statement CSharpCode)
 csInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
 csInOutCall f n ins [] [out] = if null (filterOutObjs [out])

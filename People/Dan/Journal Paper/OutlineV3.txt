@@ -17,8 +17,14 @@ accomplished.
 [Put in figures of an example from GlassBR/Projectile here, showing SRS, DD, and
 code versions of the same knowledge]
 
+[Figure] shows an example of the same information represented in several 
+different views (requirements, detailed design, and source code). We aim to
+take advantage of the inherent redundancy across these views to distill a single
+source of information, thus removing the need to manually duplicate information
+across software artifacts.
+
 Manually writing and maintaining a full range of software artifacts (i.e. 
-multiple documents for different audiences and the source code) is 
+multiple documents for different audiences plus the source code) is 
 redundant and tedious. Factor in deadlines, changing requirements, and other 
 common issues faced during development and you have a perfect storm for 
 inter-artifact syncronization issues.
@@ -38,18 +44,21 @@ They also do not generate all software artifacts - commonly they are used to
 generate only API documentation targeted towards developers or user manuals.
 
 We propose a new framework, Drasil, alongside a knowledge-centric view of
-software, to help deal with these redundancy and syncronization problems.
-Our approach looks at what underlies the problems we solve using software, then 
-capturing that "common" or "core" knowledge to generate our software artifacts.
+software, to help take advantage of inherent redundancy, while avoiding manual 
+duplication and syncronization problems. Our approach looks at what underlies 
+the problems we solve using software and capturing that "common" or "core" 
+knowledge. We then use that knowledge to generate our software artifacts, thus
+gaining the benefits inherent to the generation process: lack of manual 
+duplication, one source to maintain, and 'free' traceability of information.
 
 -- Scope --
 We are well aware of the ambitious nature of attempting to solve the problem of 
-redundancy across all possible software systems. Frankly, it would be highly
-impractical to attempt to solve such a broad spectrum of problems. Each software
-domain poses its own challenges, alongside specific benefits and drawbacks. With
-that in mind, we have decided to focus solely on scientific computing (SC) 
-software. Specifically, we look at software that follows the pattern 
-'input -> process -> output'.
+manual duplication and unnecessary redundancy across all possible software 
+systems. Frankly, it would be highly impractical to attempt to solve such a 
+broad spectrum of problems. Each software domain poses its own challenges, 
+alongside specific benefits and drawbacks. With that in mind, we have decided to
+focus solely on scientific computing (SC) software. Specifically, we look at 
+software that follows the pattern 'input -> process -> output'.
 
 SC software has a strong fundamental underpinning of well-understood concepts. 
 It also has the benefit of seldomly changing, and when it does, existing models 
@@ -94,11 +103,40 @@ As noted earlier, for our approach to work we must understand exactly what each
 of our artifacts are trying to say and to whom. Since we are taking a practical,
 example-driven approach to our process, we have specifically chosen our case
 studies from software systems that were developed using common artifact 
-templates. Specifically the templates used by SmithEtAl [source].
+templates. Specifically the templates used by [SmithEtAl] [source].
 
 To start, we look at the Software Requirements Specification (SRS). The SRS
 (or some incarnation of it) is one of the most important artifacts for any
 software project as it specifies what problem the software is trying to solve.
+There are many ways to state this problem, and [SmithEtAl] have given us a
+strong recommendation of what to use as a starting point in their template. 
+[Figure] shows the table of contents for an SRS using the [SmithEtAl] template.
+
+[Figure showing the ToC of SmithEtAl template]
+
+With the structure of the document in mind, let us look at several of our case
+studies' SRS documents to get a deeper understanding of what each section truly
+represents. [Figure] shows the first section of several of our case studies. The
+case studies themselves will be introduced in more detail in later sections, but
+keep in mind at this point, we don't care about the superficial differences. We 
+are strictly looking for patterns! Patterns will give us insight
+into the root of *what* is being said in each section.
+
+[Figure showing the Ref Section of at least 3 (preferably 4-6) case studies, may
+need to be split into multiple, or have them somehow cropped/overlayed/arranged 
+to be not terrible to look at - TBD]
+
+Looking at the Table of Symbols, Table of Units, and [...] from [Previous 
+Figure] we can see that, barring the table values themselves, they are almost
+identical. The Table of Symbols is simply a table of values, essentially akin to
+a glossary, specific to the symbols that appear throughout the rest of the 
+document. For each of those symbols, we see the symbol itself, ...
+
+  **NOTE: ... above to be filled in next time, I hadn't actually built the
+  examples in a long while and I wanted to see the current versions before I
+  finish the description to make sure it's accurate. Building took too long
+  for me to actually see the results before I had to commit/push/exit
+
 
 - Practical approach to design
 - Let's use some case studies

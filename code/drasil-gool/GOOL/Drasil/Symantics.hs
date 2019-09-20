@@ -277,8 +277,8 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
   ValueExpression repr where -- for values that can include expressions
   inlineIf     :: repr (Value repr Boolean) -> repr (Value repr Other) -> 
     repr (Value repr Other) -> repr (Value repr Other)
-  funcApp      :: Label -> repr (StateType repr Other) -> [repr (Value repr Other)] -> 
-    repr (Value repr Other)
+  funcApp      :: Label -> repr (StateType repr a) -> [repr (Value repr Other)] 
+    -> repr (Value repr a)
   selfFuncApp  :: Label -> repr (StateType repr Other) -> [repr (Value repr Other)] -> 
     repr (Value repr Other)
   extFuncApp   :: Library -> Label -> repr (StateType repr Other) -> 
@@ -311,10 +311,10 @@ class (ValueExpression repr) => InternalValue repr where
 -- I'm leaving it as is for now, even though I suspect this will change in the future.
 class (FunctionSym repr, ValueSym repr, ValueExpression repr) => 
   Selector repr where
-  objAccess :: repr (Value repr Other) -> repr (Function repr) -> 
-    repr (Value repr Other)
-  ($.)      :: repr (Value repr Other) -> repr (Function repr) -> 
-    repr (Value repr Other)
+  objAccess :: repr (Value repr b) -> repr (Function repr a) -> 
+    repr (Value repr a)
+  ($.)      :: repr (Value repr b) -> repr (Function repr a) -> 
+    repr (Value repr a)
   infixl 9 $.
 
   objMethodCall     :: repr (StateType repr Other) -> repr (Value repr Other) -> Label 
@@ -322,7 +322,7 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
   objMethodCallNoParams :: repr (StateType repr Other) -> repr (Value repr Other) -> 
     Label -> repr (Value repr Other)
 
-  selfAccess :: Label -> repr (Function repr) -> repr (Value repr Other)
+  selfAccess :: Label -> repr (Function repr Other) -> repr (Value repr Other)
 
   listIndexExists :: repr (Value repr Other) -> repr (Value repr Other) -> 
     repr (Value repr Boolean)
@@ -332,13 +332,13 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
     repr (Value repr Other)
 
 class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
-  type Function repr
+  type Function repr :: * -> *
   func           :: Label -> repr (StateType repr a) -> 
-    [repr (Value repr Other)] -> repr (Function repr)
+    [repr (Value repr Other)] -> repr (Function repr a)
 
   get :: repr (Value repr Other) -> repr (Variable repr Other) -> repr (Value repr Other)
-  set :: repr (Value repr Other) -> repr (Variable repr Other) -> repr (Value repr Other) 
-    -> repr (Value repr Other)
+  set :: repr (Value repr Other) -> repr (Variable repr Other) -> 
+    repr (Value repr Other) -> repr (Value repr Other)
 
   listSize   :: repr (Value repr Other) -> repr (Value repr Other)
   listAdd    :: repr (Value repr Other) -> repr (Value repr Other) -> 
@@ -358,24 +358,24 @@ class (ValueSym repr, InternalValue repr, FunctionSym repr, Selector repr) =>
   at         :: repr (Value repr Other) -> Label -> repr (Value repr Other)
 
 class (ValueSym repr, InternalValue repr) => InternalFunction repr where
-  getFunc        :: repr (Variable repr Other) -> repr (Function repr)
+  getFunc        :: repr (Variable repr Other) -> repr (Function repr Other)
   setFunc        :: repr (StateType repr Other) -> repr (Variable repr Other) -> 
-    repr (Value repr Other) -> repr (Function repr)
+    repr (Value repr Other) -> repr (Function repr Other)
 
-  listSizeFunc       :: repr (Function repr)
+  listSizeFunc       :: repr (Function repr Other)
   listAddFunc        :: repr (Value repr Other) -> repr (Value repr Other) -> 
-    repr (Value repr Other) -> repr (Function repr)
-  listAppendFunc         :: repr (Value repr Other) -> repr (Function repr)
+    repr (Value repr Other) -> repr (Function repr Other)
+  listAppendFunc         :: repr (Value repr Other) -> repr (Function repr Other)
 
-  iterBeginFunc :: repr (StateType repr Other) -> repr (Function repr)
-  iterEndFunc   :: repr (StateType repr Other) -> repr (Function repr)
+  iterBeginFunc :: repr (StateType repr Other) -> repr (Function repr Other)
+  iterEndFunc   :: repr (StateType repr Other) -> repr (Function repr Other)
 
   listAccessFunc :: repr (StateType repr Other) -> repr (Value repr Other) -> 
-    repr (Function repr)
+    repr (Function repr Other)
   listSetFunc    :: repr (Value repr Other) -> repr (Value repr Other) -> 
-    repr (Value repr Other) -> repr (Function repr)
+    repr (Value repr Other) -> repr (Function repr Other)
 
-  atFunc :: repr (StateType repr Other) -> Label -> repr (Function repr)
+  atFunc :: repr (StateType repr Other) -> Label -> repr (Function repr Other)
 
 class (Selector repr) => InternalStatement repr where
   -- newLn, printFunc, value to print, maybe a file to print to 
@@ -518,7 +518,7 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
 
   checkState      :: Label -> [(repr (Value repr Other), repr (Body repr))] -> 
     repr (Body repr) -> repr (Statement repr)
-  notifyObservers :: repr (Function repr) -> repr (StateType repr Other) -> 
+  notifyObservers :: repr (Function repr Other) -> repr (StateType repr Other) -> 
     repr (Statement repr)
 
   getFileInputAll  :: repr (Value repr Other) -> repr (Variable repr Other) -> 

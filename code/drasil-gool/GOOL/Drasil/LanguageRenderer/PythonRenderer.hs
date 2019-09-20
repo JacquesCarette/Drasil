@@ -38,12 +38,12 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
   docFuncRepr, valList, surroundBody, getterName, setterName, filterOutObjs)
 import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..), file, 
-  updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
+  updateFileMod, fd, TypedFunc(..), funcDoc, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, OpData(..), ParamData(..), ProgData(..), progD, 
   TypeData(..), td, btd, TypedType(..), cType, typeString, typeDoc, ValData(..),
-   vd, TypedValue(..), valPrec, valType, valDoc, vard, 
-   TypedVar(..), varBind, varName, varType, varDoc, typeToVar, valToType, 
-   varToType)
+  vd, TypedValue(..), valPrec, valType, valDoc, vard, 
+  TypedVar(..), varBind, varName, varType, varDoc, typeToFunc, typeToVal, 
+  typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
   liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -311,7 +311,7 @@ instance InternalValue PythonCode where
   cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
 
 instance Selector PythonCode where
-  objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
+  objAccess v f = liftA2 mkVal (fmap funcToType f) (liftA2 objAccessDocD v f)
   ($.) = objAccess 
 
   objMethodCall t o f ps = objAccess o (func f t ps)
@@ -325,13 +325,13 @@ instance Selector PythonCode where
   indexOf l v = objAccess l (func "index" int [v])
 
 instance FunctionSym PythonCode where
-  type Function PythonCode = FuncData
-  func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
+  type Function PythonCode = TypedFunc
+  func l t vs = liftA2 typeToFunc t (fmap funcDocD (funcApp l t vs))
 
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
 
-  listSize v = liftA2 mkVal (fmap funcType listSizeFunc) 
+  listSize v = liftA2 mkVal (fmap funcToType listSizeFunc) 
     (liftA2 pyListSize v listSizeFunc)
   listAdd v i vToAdd = v $. listAddFunc v i vToAdd
   listAppend v vToApp = v $. listAppendFunc vToApp
@@ -348,15 +348,15 @@ instance InternalFunction PythonCode where
   getFunc v = func (getterName $ variableName v) (variableType v) []
   setFunc t v toVal = func (setterName $ variableName v) t [toVal]
 
-  listSizeFunc = liftA2 fd int (return $ text "len")
+  listSizeFunc = liftA2 typeToFunc int (return $ text "len")
   listAddFunc _ i v = func "insert" (listType static_ $ fmap valToType v) [i, v]
   listAppendFunc v = func "append" (listType static_ $ fmap valToType v) [v]
 
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
   iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
 
-  listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
-  listSetFunc v i toVal = liftA2 fd (valueType v) 
+  listAccessFunc t v = liftA2 typeToFunc t (fmap listAccessFuncDocD v)
+  listSetFunc v i toVal = liftA2 typeToFunc (valueType v) 
     (liftA2 listSetFuncDocD i toVal)
 
   atFunc t l = listAccessFunc t (valueOf $ var l int)
@@ -616,7 +616,7 @@ pyInlineIf :: TypedValue Boolean -> TypedValue Other -> TypedValue Other ->
 pyInlineIf c v1 v2 = typeToVal (valPrec c) (valToType v1) (valDoc v1 <+> 
   text "if" <+> valDoc c <+> text "else" <+> valDoc v2)
 
-pyListSize :: TypedValue Other -> FuncData -> Doc
+pyListSize :: TypedValue Other -> TypedFunc Other -> Doc
 pyListSize v f = funcDoc f <> parens (valDoc v)
 
 pyStringType :: TypedType Other

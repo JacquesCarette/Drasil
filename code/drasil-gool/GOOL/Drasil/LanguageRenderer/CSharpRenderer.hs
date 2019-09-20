@@ -46,13 +46,13 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
   setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Boolean, Other, Terminator(..),
-  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  FileData(..), file, updateFileMod, fd, TypedFunc(..), ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   updateParamDoc, ProgData(..), progD, TypeData(..), td, 
   TypedType(..), cType, typeString, typeDoc, TypedValue(..), ValData(..), 
   updateValDoc, valPrec, valType, 
   valDoc, Binding(..), VarData(..), vard, TypedVar(..),  varBind, varName, 
-  varType, varDoc, typeToVar, valToType, varToType)
+  varType, varDoc, typeToFunc, typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -330,7 +330,7 @@ instance InternalValue CSharpCode where
   cast = csCast
 
 instance Selector CSharpCode where
-  objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
+  objAccess v f = liftA2 mkVal (fmap funcToType f) (liftA2 objAccessDocD v f)
   ($.) = objAccess
 
   objMethodCall t o f ps = objAccess o (func f t ps)
@@ -344,8 +344,8 @@ instance Selector CSharpCode where
   indexOf l v = objAccess l (func "IndexOf" int [v])
 
 instance FunctionSym CSharpCode where
-  type Function CSharpCode = FuncData
-  func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
+  type Function CSharpCode = TypedFunc
+  func l t vs = liftA2 typeToFunc t (fmap funcDocD (funcApp l t vs))
 
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
@@ -366,15 +366,15 @@ instance InternalFunction CSharpCode where
   getFunc v = func (getterName $ variableName v) (variableType v) []
   setFunc t v toVal = func (setterName $ variableName v) t [toVal]
 
-  listSizeFunc = liftA2 fd int (fmap funcDocD (valueOf (var "Count" int)))
+  listSizeFunc = liftA2 typeToFunc int (fmap funcDocD (valueOf (var "Count" int)))
   listAddFunc _ i v = func "Insert" (fmap valToType v) [i, v]
   listAppendFunc v = func "Add" (fmap valToType v) [v]
 
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
   iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
 
-  listAccessFunc t v = liftA2 fd t (listAccessFuncDocD <$> intValue v)
-  listSetFunc v i toVal = liftA2 fd (valueType v) 
+  listAccessFunc t v = liftA2 typeToFunc t (listAccessFuncDocD <$> intValue v)
+  listSetFunc v i toVal = liftA2 typeToFunc (valueType v) 
     (liftA2 listSetFuncDocD (intValue i) toVal)
 
   atFunc t l = listAccessFunc t (valueOf $ var l int)
@@ -499,7 +499,7 @@ instance ControlStatementSym CSharpCode where
           initv = varDecDef var_index $ litInt 0
           notify = oneLiner $ valState $ at obsList index $. f
 
-  getFileInputAll f v = while ((f $. liftA2 fd bool (return $ text 
+  getFileInputAll f v = while ((f $. liftA2 typeToFunc bool (return $ text 
     ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) (fmap 
     csFileInput f))
 

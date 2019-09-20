@@ -45,12 +45,12 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
   setMainMethod, setEmpty, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Other, Boolean, Terminator(..), 
-  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
+  FileData(..), file, updateFileMod, fd, TypedFunc(..), ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, TypedType(..), cType, typeString, 
   typeDoc,ValData(..), TypedValue(..), valPrec, valType, valDoc, VarData(..), 
-  vard, TypedVar(..), varBind, varName, varType, varDoc, typeToVar, valToType, 
-  varToType)
+  vard, TypedVar(..), varBind, varName, varType, varDoc, typeToFunc, typeToVar, funcToType,
+  valToType, varToType)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -329,7 +329,7 @@ instance InternalValue JavaCode where
   cast = jCast
 
 instance Selector JavaCode where
-  objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
+  objAccess v f = liftA2 mkVal (fmap funcToType f) (liftA2 objAccessDocD v f)
   ($.) = objAccess
 
   objMethodCall t o f ps = objAccess o (func f t ps)
@@ -344,8 +344,8 @@ instance Selector JavaCode where
   indexOf l v = objAccess l (func "indexOf" int [v])
 
 instance FunctionSym JavaCode where
-  type Function JavaCode = FuncData
-  func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
+  type Function JavaCode = TypedFunc
+  func l t vs = liftA2 typeToFunc t (fmap funcDocD (funcApp l t vs))
 
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
@@ -660,9 +660,9 @@ jOutfileTypeDoc :: TypedType Other
 jOutfileTypeDoc = td File "PrintWriter" (text "PrintWriter")
 
 jListType :: TypedType Other -> Doc -> TypedType Other
-jListType (OT (TD Integer _ _)) lst = OT $ td (List Integer) (render lst ++ 
+jListType (OT (TD Integer _ _)) lst = td (List Integer) (render lst ++ 
   "<Integer>") (lst <> angles (text "Integer"))
-jListType (OT (TD Float _ _)) lst = OT $ td (List Float) (render lst ++ 
+jListType (OT (TD Float _ _)) lst = td (List Float) (render lst ++ 
   "<Double>") (lst <> angles (text "Double"))
 jListType t lst = listTypeDocD t lst
 

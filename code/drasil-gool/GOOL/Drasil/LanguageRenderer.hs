@@ -51,7 +51,7 @@ import GOOL.Drasil.Symantics (Label, Library,
   ParameterSym(..), MethodSym(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (StateTypeSym(int))
 import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..), 
-  fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
+  fileD, TypedFunc(..), funcDoc, ModData(..), updateModDoc, MethodData(..), OpData(..), 
   od, ParamData(..), pd, TypeData(..), td, btd, TypedType(..), cType, 
   typeString, typeDoc, 
   TypedValue(..), valPrec, valDoc, Binding(..),
@@ -742,7 +742,7 @@ listIndexExistsDocD greater lst index = parens (valDoc lst <>
 
 -- Functions --
 
-funcDocD :: TypedValue Other -> Doc
+funcDocD :: TypedValue a -> Doc
 funcDocD fnApp = dot <> valDoc fnApp
 
 castDocD :: TypedType Other -> Doc
@@ -757,7 +757,7 @@ listAccessFuncDocD v = brackets $ valDoc v
 listSetFuncDocD :: TypedValue Other -> TypedValue Other -> Doc
 listSetFuncDocD i v = brackets (valDoc i) <+> equals <+> valDoc v
 
-objAccessDocD :: TypedValue Other -> FuncData -> Doc
+objAccessDocD :: TypedValue a -> TypedFunc b -> Doc
 objAccessDocD v f = valDoc v <> funcDoc f
 
 castObjDocD :: Doc -> TypedValue Other -> Doc

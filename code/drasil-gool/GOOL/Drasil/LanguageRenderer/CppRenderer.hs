@@ -46,13 +46,14 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   surroundBody, getterName, setterName, setEmpty, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, 
   Terminator(..), ScopeTag(..), Binding(..), BindData(..), bd, FileData(..), 
-  srcFile, hdrFile, updateFileMod, FuncData(..),
-  fd, ModData(..), md, updateModDoc, OpData(..), od,
+  srcFile, hdrFile, updateFileMod,
+  fd, TypedFunc(..), ModData(..), md, updateModDoc, OpData(..), od,
   ParamData(..), pd, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, btd, TypedType(..), cType, 
   typeString, typeDoc, ValData(..), 
   TypedValue(..), valPrec, valType, valDoc, VarData(..), vard, TypedVar(..),
-  varBind, varName, varType, varDoc, typeToVar, valToType, varToType)
+  varBind, varName, varType, varDoc, typeToFunc, typeToVar, funcToType, 
+  valToType, varToType)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
@@ -339,7 +340,7 @@ instance (Pair p) => Selector (p CppSrcCode CppHdrCode) where
   indexOf l v = pair (indexOf (pfst l) (pfst v)) (indexOf (psnd l) (psnd v))
 
 instance (Pair p) => FunctionSym (p CppSrcCode CppHdrCode) where
-  type Function (p CppSrcCode CppHdrCode) = FuncData
+  type Function (p CppSrcCode CppHdrCode) = TypedFunc
   func l t vs = pair (func l (pfst t) (map pfst vs)) (func l (psnd t) (map psnd vs))
 
   get v vToGet = pair (get (pfst v) (pfst vToGet)) (get (psnd v) (psnd vToGet))
@@ -894,7 +895,7 @@ instance InternalValue CppSrcCode where
   cast = cppCast
 
 instance Selector CppSrcCode where
-  objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
+  objAccess v f = liftA2 mkVal (fmap funcToType f) (liftA2 objAccessDocD v f)
   ($.) = objAccess
 
   objMethodCall t o f ps = objAccess o (func f t ps)
@@ -908,8 +909,8 @@ instance Selector CppSrcCode where
   indexOf l v = funcApp "find" int [iterBegin l, iterEnd l, v] #- iterBegin l
 
 instance FunctionSym CppSrcCode where
-  type Function CppSrcCode = FuncData
-  func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
+  type Function CppSrcCode = TypedFunc
+  func l t vs = liftA2 typeToFunc t (fmap funcDocD (funcApp l t vs))
 
   get v vToGet = v $. getFunc vToGet
   set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
@@ -939,7 +940,7 @@ instance InternalFunction CppSrcCode where
   iterEndFunc t = func "end" (iterator t) []
 
   listAccessFunc t v = func "at" t [intValue v]
-  listSetFunc v i toVal = liftA2 fd (valueType v) 
+  listSetFunc v i toVal = liftA2 typeToFunc (valueType v) 
     (liftA2 cppListSetDoc (intValue i) toVal)
 
   atFunc t l = listAccessFunc t (valueOf $ var l int) 
@@ -1013,7 +1014,7 @@ instance StatementSym CppSrcCode where
       varDec var_ss,
       valState $ objMethodCall string v_ss "str" [s],
       varDec var_word,
-      while (funcApp "std::getline" string [v_ss, v_word, litChar d]) 
+      while (funcApp "std::getline" bool [v_ss, v_word, litChar d]) 
         (oneLiner $ valState $ listAppend (valueOf vnew) v_word)
     ]
 
@@ -1085,7 +1086,7 @@ instance ControlStatementSym CppSrcCode where
                             v_line = valueOf var_line
                         in
     multi [varDec var_line,
-      while (funcApp "std::getline" string [f, v_line])
+      while (funcApp "std::getline" bool [f, v_line])
       (oneLiner $ valState $ listAppend (valueOf v) v_line)]
 
 instance ScopeSym CppSrcCode where
@@ -1440,7 +1441,7 @@ instance BooleanExpression CppHdrCode where
    
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = liftA2 mkVal void (return empty)
-  funcApp _ _ _ = liftA2 mkVal void (return empty)
+  funcApp _ t _ = liftA2 mkVal t (return empty)
   selfFuncApp _ _ _ = liftA2 mkVal void (return empty)
   extFuncApp _ _ _ _ = liftA2 mkVal void (return empty)
   stateObj _ _ = liftA2 mkVal void (return empty)
@@ -1460,8 +1461,8 @@ instance InternalValue CppHdrCode where
   cast _ _ = liftA2 mkVal void (return empty)
 
 instance Selector CppHdrCode where
-  objAccess _ _ = liftA2 mkVal void (return empty)
-  ($.) _ _ = liftA2 mkVal void (return empty)
+  objAccess _ f = liftA2 mkVal (fmap funcToType f) (return empty)
+  ($.) = objAccess
 
   objMethodCall _ _ _ _ = liftA2 mkVal void (return empty)
   objMethodCallNoParams _ _ _ = liftA2 mkVal void (return empty)
@@ -1474,8 +1475,8 @@ instance Selector CppHdrCode where
   indexOf _ _ = liftA2 mkVal void (return empty)
 
 instance FunctionSym CppHdrCode where
-  type Function CppHdrCode = FuncData
-  func _ _ _ = liftA2 fd void (return empty)
+  type Function CppHdrCode = TypedFunc
+  func _ t _ = liftA2 typeToFunc t (return empty)
   
   get _ _ = liftA2 mkVal void (return empty)
   set _ _ _ = liftA2 mkVal void (return empty)
@@ -1493,20 +1494,20 @@ instance SelectorFunction CppHdrCode where
   at _ _ = liftA2 mkVal void (return empty)
 
 instance InternalFunction CppHdrCode where
-  getFunc _ = liftA2 fd void (return empty)
-  setFunc _ _ _ = liftA2 fd void (return empty)
+  getFunc _ = liftA2 typeToFunc void (return empty)
+  setFunc _ _ _ = liftA2 typeToFunc void (return empty)
 
-  listSizeFunc = liftA2 fd void (return empty)
-  listAddFunc _ _ _ = liftA2 fd void (return empty)
-  listAppendFunc _ = liftA2 fd void (return empty)
+  listSizeFunc = liftA2 typeToFunc void (return empty)
+  listAddFunc _ _ _ = liftA2 typeToFunc void (return empty)
+  listAppendFunc _ = liftA2 typeToFunc void (return empty)
 
-  iterBeginFunc _ = liftA2 fd void (return empty)
-  iterEndFunc _ = liftA2 fd void (return empty)
+  iterBeginFunc _ = liftA2 typeToFunc void (return empty)
+  iterEndFunc _ = liftA2 typeToFunc void (return empty)
 
-  listAccessFunc _ _ = liftA2 fd void (return empty)
-  listSetFunc _ _ _ = liftA2 fd void (return empty)
+  listAccessFunc _ _ = liftA2 typeToFunc void (return empty)
+  listSetFunc _ _ _ = liftA2 typeToFunc void (return empty)
 
-  atFunc _ _ = liftA2 fd void (return empty)
+  atFunc _ _ = liftA2 typeToFunc void (return empty)
 
 instance InternalStatement CppHdrCode where
   printSt _ _ _ _ = return (mkStNoEnd empty)

@@ -3,13 +3,14 @@
 module GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, Terminator(..), 
   ScopeTag(..), FileType(..), BindData(..), bd, FileData(..), fileD, file, 
   srcFile, hdrFile, isSource, isHeader, updateFileMod, FuncData(..), fd, 
-  ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), od, 
+  TypedFunc(..), funcType, funcDoc, ModData(..), md, updateModDoc, 
+  MethodData(..), mthd, OpData(..), od, 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, btd, TypedType(..), cType, 
   typeString, typeDoc, ValData(..), vd, updateValDoc, TypedValue(..), 
   otherVal, boolVal, valPrec, valType, valDoc, Binding(..), VarData(..), vard,
-  TypedVar(..), varBind, varName, varType, varDoc, typeToVal, typeToVar, 
-  valToType, varToType
+  TypedVar(..), varBind, varName, varType, varDoc, typeToFunc, typeToVal, 
+  typeToVar, funcToType, valToType, varToType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -45,6 +46,8 @@ data BindData = BD {bind :: Binding, bindDoc :: Doc}
 bd :: Binding -> Doc -> BindData
 bd = BD
 
+---- Files ----
+
 data FileData = FileD {fileType :: FileType, filePath :: FilePath,
   fileMod :: ModData}
 
@@ -72,10 +75,27 @@ isHeader = liftA2 (||) (Header ==) (Combined ==) . fileType
 updateFileMod :: ModData -> FileData -> FileData
 updateFileMod m f = fileD (fileType f) (filePath f) m
 
-data FuncData = FD {funcType :: TypeData, funcDoc :: Doc}
+---- Functions ----
+
+data FuncData = FD {fnType :: TypeData, fnDoc :: Doc}
 
 fd :: TypeData -> Doc -> FuncData
 fd = FD
+
+data TypedFunc a where
+  BF :: FuncData -> TypedFunc Boolean
+  OF :: FuncData -> TypedFunc Other
+
+getFuncData :: TypedFunc a -> FuncData
+getFuncData (BF f) = f
+getFuncData (OF f) = f
+
+funcType :: TypedFunc a -> TypeData
+funcDoc :: TypedFunc a -> Doc
+funcType = fnType . getFuncData
+funcDoc = fnDoc . getFuncData
+
+---- Modules ----
 
 data ModData = MD {name :: String, isMainMod :: Bool, modDoc :: Doc}
 
@@ -85,16 +105,22 @@ md = MD
 updateModDoc :: Doc -> ModData -> ModData
 updateModDoc d m = md (name m) (isMainMod m) d
 
+---- Methods ----
+
 data MethodData = MthD {isMainMthd :: Bool, mthdParams :: [ParamData], 
   mthdDoc :: Doc}
 
 mthd :: Bool -> [ParamData] -> Doc -> MethodData
 mthd = MthD 
 
+---- Operators ----
+
 data OpData = OD {opPrec :: Int, opDoc :: Doc}
 
 od :: Int -> Doc -> OpData
 od = OD
+
+---- Parameters ----
 
 data ParamData = PD {paramVar :: VarData, paramDoc :: Doc}
 
@@ -107,6 +133,8 @@ pd = PD
 updateParamDoc :: (Doc -> Doc) -> ParamData -> ParamData
 updateParamDoc f v = pd (paramVar v) ((f . paramDoc) v)
 
+---- Programs ----
+
 data ProgData = ProgD {progName :: String, progMods :: [FileData]}
 
 progD :: String -> [FileData] -> ProgData
@@ -114,6 +142,8 @@ progD n fs = ProgD n (filter (not . isEmpty . modDoc . fileMod) fs)
 
 emptyProg :: ProgData
 emptyProg = progD "" []
+
+---- State Variables ----
 
 data StateVarData = SVD {getStVarScp :: ScopeTag, stVarDoc :: Doc, 
   destructSts :: (Doc, Terminator)}
@@ -217,6 +247,10 @@ varDoc = vrDoc . getVarData
 
 ---- Transformations ----
 
+typeToFunc :: TypedType a -> Doc -> TypedFunc a
+typeToFunc (BT t) d = BF (fd t d)
+typeToFunc (OT t) d = OF (fd t d)
+
 typeToVal :: Maybe Int -> TypedType a -> Doc -> TypedValue a
 typeToVal p (BT t) d = BV (vd p t d)
 typeToVal p (OT t) d = OV (vd p t d)
@@ -224,6 +258,10 @@ typeToVal p (OT t) d = OV (vd p t d)
 typeToVar :: Binding -> String -> TypedType a -> Doc -> TypedVar a
 typeToVar b n (BT t) d = BVr (vard b n t d)
 typeToVar b n (OT t) d = OVr (vard b n t d)
+
+funcToType :: TypedFunc a -> TypedType a
+funcToType (BF f) = BT (fnType f)
+funcToType (OF f) = OT (fnType f)
 
 valToType :: TypedValue a -> TypedType a
 valToType (BV v) = BT (vlType v)

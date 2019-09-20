@@ -2,9 +2,9 @@ module Language.Drasil.Code.Imperative.Doxygen.Import (
   makeDoxConfig
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.Data (ProgData(..), FileData(..), 
-  ModData(..), isHeader)
-import Language.Drasil.Code.Imperative.GOOL.Helpers (blank)
+import Utils.Drasil (blank)
+
+import GOOL.Drasil (ProgData(..), FileData(..), ModData(..), isHeader)
 
 import Data.List (intersperse)
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), isEmpty, text, hcat, vcat)
@@ -12,8 +12,8 @@ import Text.PrettyPrint.HughesPJ (Doc, (<+>), isEmpty, text, hcat, vcat)
 type OptimizeChoice = Doc
 type ProjName = String
 
-makeDoxConfig :: ProjName -> OptimizeChoice -> ProgData -> Doc
-makeDoxConfig prog opt p = 
+makeDoxConfig :: ProjName -> ProgData -> OptimizeChoice -> Doc
+makeDoxConfig prog p opt = 
   let fs = map filePath (filter (\f -> not (isEmpty $ modDoc $ fileMod f) && 
              (isMainMod (fileMod f) || isHeader f)) (progMods p))
   in vcat [

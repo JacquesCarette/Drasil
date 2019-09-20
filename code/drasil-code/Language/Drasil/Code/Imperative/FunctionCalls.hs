@@ -10,13 +10,13 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.State (State(..))
-import Language.Drasil.Code.Imperative.GOOL.Symantics (RenderSym(..),
-  StateTypeSym(..), ValueSym(..), StatementSym(..))
-import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.CodeSpec (CodeSpec(..))
+
+import GOOL.Drasil (RenderSym(..), StateTypeSym(..), ValueSym(..), 
+  StatementSym(..), convType)
 
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)

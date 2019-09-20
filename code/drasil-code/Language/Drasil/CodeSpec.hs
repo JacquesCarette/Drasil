@@ -14,10 +14,12 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeIdea(codeChunk),
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, 
   codeEquat)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType(ctyp))
-import Language.Drasil.Code.Code (CodeType, spaceToCodeType)
+import Language.Drasil.Code.Code (spaceToCodeType)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, getInputs)
 import Language.Drasil.Printers (toPlainName)
+
+import GOOL.Drasil (CodeType)
 
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))

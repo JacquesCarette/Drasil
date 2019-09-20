@@ -15,6 +15,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel)
+--import qualified Drasil.DocLang.SRS as SRS (assumpt)
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
@@ -34,7 +35,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision)
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision, damping)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon, mathcon', rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
@@ -261,14 +262,15 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", phrase product_,
 
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
-    phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
-    plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
-    S "applied to them",
+  phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
+  plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
+  S "applied to them",
   S "Ensure application programming" +:+ phrase interface +:+
-    S "use complies with the" +:+ phrase user +:+. phrase guide,
+  S "use complies with the" +:+ phrase user +:+. phrase guide,
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-    S "(FIXME REF)" +:+ S "are appropriate for any particular" +:+
-    phrase problem +:+ S "the" +:+ phrase software +:+. S "addresses"]
+  sParen (makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ 
+  S "are appropriate for any particular" +:+
+  phrase problem +:+ S "the" +:+ phrase software +:+. S "addresses"]
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+
@@ -335,7 +337,7 @@ probDescIntro = foldlSent_
 -----------------------------------------
 
 terms :: [ConceptChunk]
-terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand, CM.line, CM.point]
+terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand, CM.line, CM.point, CP.damping]
 
 -----------------------------
 -- 4.1.2 : Goal Statements --

@@ -3,10 +3,11 @@ module Language.Drasil.Code.Imperative.ReadInput (
 ) where
 
 import Language.Drasil
-import qualified Language.Drasil.Code.Code as C (CodeType(..))
 import Language.Drasil.Code.DataDesc (DataDesc, Data(..), DataItem, Delim,
   LinePattern(..), isJunk, junkLine, repeated, singleton, singleLine)
 import Language.Drasil.Chunk.Code (codeType)
+
+import qualified GOOL.Drasil as C (CodeType(..))
 
 import Data.List (intersperse, transpose)
 import Data.List.Split (wordsBy)

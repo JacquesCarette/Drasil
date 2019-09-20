@@ -1,6 +1,6 @@
 module Test.Observer (observer) where
 
-import Language.Drasil.Code.Imperative.GOOL.Symantics (
+import GOOL.Drasil.Symantics (
   RenderSym(..), PermanenceSym(..), BodySym(..), StateTypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), ScopeSym(..), 
   MethodTypeSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 

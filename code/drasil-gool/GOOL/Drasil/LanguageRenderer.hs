@@ -247,7 +247,7 @@ paramListDocD :: [ParamData] -> Doc
 paramListDocD = hicat (text ", ") . map paramDoc
 
 mkParam :: (VarData -> Doc) -> VarData -> ParamData
-mkParam f v = pd (varName v) (varType v) (f v)
+mkParam f v = pd v (f v)
 
 -- Method --
 

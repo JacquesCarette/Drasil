@@ -512,7 +512,7 @@ instance InternalScope CSharpCode where
   includeScope s = s
 
 instance MethodTypeSym CSharpCode where
-  type MethodType CSharpCode = TypeData
+  type MethodType CSharpCode = TypedType
   mState t = t
   construct n = return $ td (Object n) n (constructDocD n)
 

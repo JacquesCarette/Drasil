@@ -254,7 +254,7 @@ mkParam f v = pd v (f v)
 
 -- Method --
 
-methodDocD :: Label -> Doc -> Doc -> TypedType Other -> Doc -> Doc -> Doc
+methodDocD :: Label -> Doc -> Doc -> TypedType a -> Doc -> Doc -> Doc
 methodDocD n s p t ps b = vcat [
   s <+> p <+> typeDoc t <+> text n <> parens ps <+> lbrace,
   indent b,

@@ -533,9 +533,9 @@ class (ScopeSym repr) => InternalScope repr where
   includeScope :: repr (Scope repr) -> repr (Scope repr)
 
 class MethodTypeSym repr where
-  type MethodType repr
-  mState    :: repr (StateType repr Other) -> repr (MethodType repr)
-  construct :: Label -> repr (MethodType repr)
+  type MethodType repr :: * -> *
+  mState    :: repr (StateType repr a) -> repr (MethodType repr a)
+  construct :: Label -> repr (MethodType repr Other)
 
 class ParameterSym repr where
   type Parameter repr
@@ -551,14 +551,14 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   type Method repr
   -- Second label is class name
   method      :: Label -> Label -> repr (Scope repr) -> 
-    repr (Permanence repr) -> repr (MethodType repr) -> 
+    repr (Permanence repr) -> repr (MethodType repr a) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
   getMethod   :: Label -> repr (Variable repr Other) -> repr (Method repr)
   setMethod   :: Label -> repr (Variable repr Other) -> repr (Method repr) 
   mainMethod  :: Label -> repr (Body repr) -> repr (Method repr)
-  privMethod  :: Label -> Label -> repr (MethodType repr) -> 
+  privMethod  :: Label -> Label -> repr (MethodType repr a) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
-  pubMethod   :: Label -> Label -> repr (MethodType repr) -> 
+  pubMethod   :: Label -> Label -> repr (MethodType repr a) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
   constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr)
@@ -567,7 +567,7 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   docMain :: Label -> repr (Body repr) -> repr (Method repr)
 
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
+    repr (MethodType repr a) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr) 
   -- Parameters are: function description, parameter descriptions, 
   --   return value description if applicable, function

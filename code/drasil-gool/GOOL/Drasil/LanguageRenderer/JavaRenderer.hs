@@ -509,7 +509,7 @@ instance InternalScope JavaCode where
   includeScope s = s
 
 instance MethodTypeSym JavaCode where
-  type MethodType JavaCode = TypeData
+  type MethodType JavaCode = TypedType
   mState t = t
   construct n = return $ td (Object n) n (constructDocD n)
 
@@ -732,7 +732,7 @@ jStringSplit :: TypedVar Other -> TypedValue Other -> Doc
 jStringSplit vnew s = varDoc vnew <+> equals <+> new <+> tpDoc (varType vnew)
   <> parens (valDoc s)
 
-jMethod :: Label -> Doc -> Doc -> TypedType Other -> Doc -> Doc -> Doc
+jMethod :: Label -> Doc -> Doc -> TypedType a -> Doc -> Doc -> Doc
 jMethod n s p t ps b = vcat [
   s <+> p <+> typeDoc t <+> text n <> parens ps <+> text "throws Exception" <+> 
     lbrace,

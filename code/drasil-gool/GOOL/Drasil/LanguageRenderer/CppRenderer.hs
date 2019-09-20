@@ -537,7 +537,7 @@ instance (Pair p) => InternalScope (p CppSrcCode CppHdrCode) where
   includeScope s = pair (includeScope $ pfst s) (includeScope $ psnd s)
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
-  type MethodType (p CppSrcCode CppHdrCode) = TypeData
+  type MethodType (p CppSrcCode CppHdrCode) = TypedType
   mState t = pair (mState $ pfst t) (mState $ psnd t)
   construct n = pair (construct n) (construct n)
 
@@ -1098,7 +1098,7 @@ instance InternalScope CppSrcCode where
   includeScope _ = return (empty, Priv)
 
 instance MethodTypeSym CppSrcCode where
-  type MethodType CppSrcCode = TypeData
+  type MethodType CppSrcCode = TypedType
   mState t = t
   construct n = return $ td (Object n) n (constructDocD n)
 
@@ -1620,7 +1620,7 @@ instance InternalScope CppHdrCode where
   includeScope _ = return (empty, Priv)
 
 instance MethodTypeSym CppHdrCode where
-  type MethodType CppHdrCode = TypeData
+  type MethodType CppHdrCode = TypedType
   mState t = t
   construct n = return $ td (Object n) n (constructDocD n)
 
@@ -1863,7 +1863,7 @@ cppOpenFile mode f n = varDoc f <> dot <> text "open" <>
 cppPointerParamDoc :: TypedVar Other -> Doc
 cppPointerParamDoc v = tpDoc (varType v) <+> text "&" <> varDoc v
 
-cppsMethod :: Label -> Label -> TypedType Other -> Doc -> Doc -> Doc -> Doc -> Doc
+cppsMethod :: Label -> Label -> TypedType a -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 
   text n <> parens ps <+> bStart,
   indent b,
@@ -1871,13 +1871,13 @@ cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <>
   where ttype | isDtor n = empty
               | otherwise = typeDoc t
 
-cppsFunction :: Label -> TypedType Other -> Doc -> Doc -> Doc -> Doc -> Doc
+cppsFunction :: Label -> TypedType a -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsFunction n t ps b bStart bEnd = vcat [
   typeDoc t <+> text n <> parens ps <+> bStart,
   indent b,
   bEnd]
 
-cpphMethod :: Label -> TypedType Other -> Doc -> Doc -> Doc
+cpphMethod :: Label -> TypedType a -> Doc -> Doc -> Doc
 cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
                       | otherwise = typeDoc t <+> text n <> parens ps <> end
 

@@ -488,7 +488,7 @@ instance InternalScope PythonCode where
   includeScope s = s
 
 instance MethodTypeSym PythonCode where
-  type MethodType PythonCode = TypeData
+  type MethodType PythonCode = TypedType
   mState t = t
   construct n = return $ td (Object n) n (constructDocD n)
 

@@ -63,6 +63,7 @@
                   <td>second</td>
                 </tr>
               </table>
+              <p class="caption">Table of Units</p>
             </div>
           </div>
         </div>
@@ -125,7 +126,7 @@
                   <td>m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)</td>
                 </tr>
                 <tr>
-                  <td><em>g</em></td>
+                  <td><em><b>g</b></em></td>
                   <td>Gravitational acceleration</td>
                   <td>m/s<sup>2</sup></td>
                 </tr>
@@ -258,7 +259,9 @@
                 </tr>
                 <tr>
                   <td><em><b>r&#770;</b></em></td>
-                  <td>Displacement unit vector</td>
+                  <td>
+                    Unit vector directed from the center of the large mass to the center of the smaller mass
+                  </td>
                   <td>m</td>
                 </tr>
                 <tr>
@@ -396,6 +399,7 @@
                   <td>rad</td>
                 </tr>
               </table>
+              <p class="caption">Table of Symbols</p>
             </div>
           </div>
         </div>
@@ -473,6 +477,7 @@
                   <td>Typical Uncertainty</td>
                 </tr>
               </table>
+              <p class="caption">Abbreviations and Acronyms</p>
             </div>
           </div>
         </div>
@@ -485,7 +490,7 @@
           Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for Game Physics. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (SRS) for Game Physics. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
@@ -635,6 +640,9 @@
                   </li>
                   <li>
                     Point: An exact location, it has no size, only position (from <a href=#pointSource>pointSource</a>).
+                  </li>
+                  <li>
+                    damping: An influence within or upon an oscillatory system that has the effect of reducing, restricting or preventing its oscillations (from <a href=#dampingSource>dampingSource</a>).
                   </li>
                 </ul>
               </div>
@@ -839,7 +847,7 @@
                             <em>||<b>r</b>||</em> is the Euclidean norm of the displacement (m)
                           </li>
                           <li>
-                            <em><b>r&#770;</b></em> is the displacement unit vector (m)
+                            <em><b>r&#770;</b></em> is the unit vector directed from the center of the large mass to the center of the smaller mass (m)
                           </li>
                           <li><em><b>r</b></em> is the displacement (m)</li>
                         </ul>
@@ -943,7 +951,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[g=\frac{G M}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}\]
+                        \[\mathbf{g}=-\frac{G M}{\mathbf{r}^{2}} \mathbf{\hat{r}}\]
                       </td>
                     </tr>
                     <tr>
@@ -951,19 +959,25 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+                            <em><b>g</b></em> is the gravitational acceleration (m/s<sup>2</sup>)
                           </li>
                           <li>
                             <em>G</em> is the gravitational constant (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>))
                           </li>
                           <li><em>M</em> is the mass of the larger rigid body (kg)</li>
+                          <li><em><b>r</b></em> is the displacement (m)</li>
                           <li>
-                            <em>||<b>r</b>||</em> is the Euclidean norm of the displacement (m)
-                          </li>
-                          <li>
-                            <em><b>r&#770;</b></em> is the displacement unit vector (m)
+                            <em><b>r&#770;</b></em> is the unit vector directed from the center of the large mass to the center of the smaller mass (m)
                           </li>
                         </ul>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td>
+                        <p class="paragraph">
+                          If one of the masses is much larger than the other it is convenient to define a gravitational field around the larger mass as shown above. The negative sign in the equation indicates that the force is an attractive force.
+                        </p>
                       </td>
                     </tr>
                     <tr>
@@ -1841,7 +1855,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[PE=m g h\]</td>
+                      <td>\[PE=m \mathbf{g} h\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1850,7 +1864,7 @@
                           <li><em>PE</em> is the potential energy (J)</li>
                           <li><em>m</em> is the mass (kg)</li>
                           <li>
-                            <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+                            <em><b>g</b></em> is the gravitational acceleration (m/s<sup>2</sup>)
                           </li>
                           <li><em>h</em> is the height (m)</li>
                         </ul>
@@ -1970,7 +1984,7 @@
                       <th>Input</th>
                       <td>
                         <p class="paragraph">
-                          <em><b>v</b><sub>i</sub></em>, <em>t</em>, <em>g</em>, <em><b>F</b><sub>i</sub></em>, <em>m<sub>j</sub></em>
+                          <em><b>v</b><sub>i</sub></em>, <em>t</em>, <em><b>g</b></em>, <em><b>F</b><sub>i</sub></em>, <em>m<sub>j</sub></em>
                         </p>
                       </td>
                     </tr>
@@ -1983,7 +1997,7 @@
                       <td>
                         \[{\mathbf{v}_{i}}\gt{}0\]
                         \[t\gt{}0\]
-                        \[g\gt{}0\]
+                        \[\mathbf{g}\gt{}0\]
                         \[{\mathbf{F}_{i}}\gt{}0\]
                         \[{m_{j}}\gt{}0\]
                       </td>
@@ -1995,7 +2009,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\mathbf{a}_{i}}=\frac{\,d{\mathbf{v}_{i}}\left(t\right)}{\,dt}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}\]
+                        \[{\mathbf{a}_{i}}=\frac{\,d{\mathbf{v}_{i}}\left(t\right)}{\,dt}=\mathbf{g}+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -2010,7 +2024,7 @@
                             <em><b>v</b><sub>i</sub></em> is the velocity of the i-th body's velocity (m/s)
                           </li>
                           <li>
-                            <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+                            <em><b>g</b></em> is the gravitational acceleration (m/s<sup>2</sup>)
                           </li>
                           <li>
                             <em><b>F</b><sub>i</sub></em> is the force applied to the i-th body at time t (N)
@@ -4583,8 +4597,13 @@
             </div>
           </li>
           <li>
+            <div id="dampingSource">
+              [12]: Wikipedia Contributors. <em>Damping</em>. July, 2019. <a href="https://en.wikipedia.org/wiki/Damping_ratio">https://en.wikipedia.org/wiki/Damping_ratio</a>.
+            </div>
+          </li>
+          <li>
             <div id="sciComp2013">
-              [12]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
+              [13]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." <em>PLoS Biol</em>, vol. 12, no. 1, 2013. Print.
             </div>
           </li>
         </ul>

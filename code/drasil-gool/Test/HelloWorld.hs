@@ -2,8 +2,8 @@
 
 module Test.HelloWorld (helloWorld) where
 
-import Language.Drasil.Code (
-  PackageSym(..), ProgramSym(..), RenderSym(..), PermanenceSym(..),
+import GOOL.Drasil (
+  ProgramSym(..), RenderSym(..), PermanenceSym(..),
   BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
   StatementSym(..), ControlStatementSym(..),  VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
@@ -12,10 +12,10 @@ import Language.Drasil.Code (
 import Prelude hiding (return,print,log,exp,sin,cos,tan,const)
 import Test.Helper (helper)
 
-helloWorld :: (PackageSym repr) => repr (Package repr)
-helloWorld = package (prog "HelloWorld" [docMod description 
+helloWorld :: (ProgramSym repr) => repr (Program repr)
+helloWorld = prog "HelloWorld" [docMod description 
   ["Brooks MacLachlan"] "" $ fileDoc (buildModule "HelloWorld" ["Helper"] 
-  [helloWorldMain] []), helper]) []
+  [helloWorldMain] []), helper]
 
 description :: String
 description = "Tests various GOOL functions. It should run without errors."

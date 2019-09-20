@@ -8,9 +8,9 @@ import math
 import InputParameters
 
 ## \brief Reads input from a file with the given file name
-# \param filename name of the input file
 # \param inParams structure holding the input values
-def get_input(filename, inParams):
+# \param filename name of the input file
+def get_input(inParams, filename):
     infile = open(filename, "r")
     infile.readline()
     inParams.v_launch = float(infile.readline())

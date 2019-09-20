@@ -1,28 +1,17 @@
 -- | Defines the 'Code' data type
 module Language.Drasil.Code.Code (
     Code(..),
-    CodeType(..),
     spaceToCodeType
     ) where
 
 import qualified Language.Drasil as S (Space(..))
 
+import GOOL.Drasil (CodeType(..))
+
 import Text.PrettyPrint.HughesPJ (Doc)
 
 -- | Represents the generated code as a list of file names and rendered code pairs
 newtype Code = Code { unCode :: [(FilePath, Doc)]}
-
-data CodeType = Boolean
-              | Integer
-              | Float
-              | Char
-              | String
-              | File
-              | List CodeType
-              | Iterator CodeType
-              | Object String
-              | Enum String
-              | Void deriving Eq
 
 spaceToCodeType :: S.Space -> CodeType
 spaceToCodeType S.Integer       = Integer

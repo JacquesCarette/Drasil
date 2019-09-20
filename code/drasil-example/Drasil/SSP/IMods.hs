@@ -175,7 +175,7 @@ fctSftyDerivSentence16 = [eqN 9, S "can then be substituted into the",
   phrase leftSide `sOf` eqN 12 `sC` S "resulting in"]
 
 fctSftyDerivSentence17 :: [Sentence]
-fctSftyDerivSentence17 = [S "This can be rearranged by multiplying boths sides",
+fctSftyDerivSentence17 = [S "This can be rearranged by multiplying both sides",
   S "by", E (idx (sy mobShrC) (sy numbSlices - int 1)) `sAnd`
   S "then distributing the multiplication of each", ch mobShrC,
   S "over addition to obtain"]

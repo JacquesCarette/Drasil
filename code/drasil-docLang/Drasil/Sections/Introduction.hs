@@ -10,7 +10,7 @@ import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   decision, definition, desSpec, design, designDoc, document, documentation,
   environment, goal, goalStmt, implementation, intReader, model, organization,
-  purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs, system,
+  purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs,
   theory, user, vavPlan)
 import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986)
@@ -42,7 +42,7 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
 -- | Sentence containing the subsections of the introduction
 introductionSubsections :: Sentence
 introductionSubsections = foldlList Comma List (map (uncurry ofThe) 
-  [(phrase scope, phrase system), 
+  [(phrase scope, plural requirement), 
   (plural characteristic, phrase intReader),
   (phrase Doc.organization, phrase document)])
 

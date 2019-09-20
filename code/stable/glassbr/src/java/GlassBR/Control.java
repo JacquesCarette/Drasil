@@ -26,7 +26,7 @@ public class Control {
         outfile.println(" in module Control");
         outfile.close();
         InputParameters inParams = new InputParameters();
-        InputFormat.get_input(filename, inParams);
+        InputFormat.get_input(inParams, filename);
         DerivedValues.derived_values(inParams);
         InputConstraints.input_constraints(inParams);
         double J_tol = Calculations.func_J_tol(inParams);

@@ -1,15 +1,17 @@
 {-# LANGUAGE TupleSections #-}
 
-module Language.Drasil.Code.Imperative.GOOL.Helpers (blank,verticalComma,
+module GOOL.Drasil.Helpers (verticalComma,
   angles,doubleQuotedText,himap,hicat,vicat,vibcat,vmap,vimap,vibmap, 
   emptyIfEmpty, emptyIfNull, mapPairFst, mapPairSnd, liftA4, liftA5, liftA6, 
   liftA7, liftA8, liftList, lift2Lists, lift1List, liftPair, lift3Pair, 
   lift4Pair, liftPairFst, getInnerType, getNestDegree, convType, checkParams
 ) where
 
-import qualified Language.Drasil.Code.Code as C (CodeType(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (ParamData)
-import qualified Language.Drasil.Code.Imperative.GOOL.Symantics as S ( 
+import Utils.Drasil (blank)
+
+import qualified GOOL.Drasil.CodeType as C (CodeType(..))
+import GOOL.Drasil.Data (ParamData)
+import qualified GOOL.Drasil.Symantics as S ( 
   RenderSym(..), StateTypeSym(..), PermanenceSym(dynamic_))
 
 import Prelude hiding ((<>))
@@ -17,9 +19,6 @@ import Control.Applicative (liftA2, liftA3)
 import Data.List (intersperse, nub)
 import Text.PrettyPrint.HughesPJ (Doc, vcat, hcat, text, char, doubleQuotes, 
   (<>), comma, punctuate, empty, isEmpty)
-
-blank :: Doc
-blank = text ""
 
 verticalComma :: (a -> Doc) -> [a] -> Doc
 verticalComma f = vcat . punctuate comma . map f

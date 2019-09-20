@@ -65,89 +65,89 @@ void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T
     infile.close();
 }
 
-void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W, Constants &consts) {
-    if (!(A_C <= consts.A_C_max)) {
+void input_constraints(double A_C, double C_W, double h_C, double T_init, double t_final, double L, double T_C, double t_step, double rho_W, double D, double T_W, double E_W) {
+    if (!(A_C <= Constants::A_C_max)) {
         std::cout << "Warning: ";
         std::cout << "A_C has value ";
         std::cout << A_C;
         std::cout << " but suggested to be ";
         std::cout << "below ";
-        std::cout << consts.A_C_max;
+        std::cout << Constants::A_C_max;
         std::cout << " (A_C_max)";
         std::cout << "." << std::endl;
     }
-    if (!(consts.C_W_min < C_W && C_W < consts.C_W_max)) {
+    if (!(Constants::C_W_min < C_W && C_W < Constants::C_W_max)) {
         std::cout << "Warning: ";
         std::cout << "C_W has value ";
         std::cout << C_W;
         std::cout << " but suggested to be ";
         std::cout << "between ";
-        std::cout << consts.C_W_min;
+        std::cout << Constants::C_W_min;
         std::cout << " (C_W_min)";
         std::cout << " and ";
-        std::cout << consts.C_W_max;
+        std::cout << Constants::C_W_max;
         std::cout << " (C_W_max)";
         std::cout << "." << std::endl;
     }
-    if (!(consts.h_C_min <= h_C && h_C <= consts.h_C_max)) {
+    if (!(Constants::h_C_min <= h_C && h_C <= Constants::h_C_max)) {
         std::cout << "Warning: ";
         std::cout << "h_C has value ";
         std::cout << h_C;
         std::cout << " but suggested to be ";
         std::cout << "between ";
-        std::cout << consts.h_C_min;
+        std::cout << Constants::h_C_min;
         std::cout << " (h_C_min)";
         std::cout << " and ";
-        std::cout << consts.h_C_max;
+        std::cout << Constants::h_C_max;
         std::cout << " (h_C_max)";
         std::cout << "." << std::endl;
     }
-    if (!(t_final < consts.t_final_max)) {
+    if (!(t_final < Constants::t_final_max)) {
         std::cout << "Warning: ";
         std::cout << "t_final has value ";
         std::cout << t_final;
         std::cout << " but suggested to be ";
         std::cout << "below ";
-        std::cout << consts.t_final_max;
+        std::cout << Constants::t_final_max;
         std::cout << " (t_final_max)";
         std::cout << "." << std::endl;
     }
-    if (!(consts.L_min <= L && L <= consts.L_max)) {
+    if (!(Constants::L_min <= L && L <= Constants::L_max)) {
         std::cout << "Warning: ";
         std::cout << "L has value ";
         std::cout << L;
         std::cout << " but suggested to be ";
         std::cout << "between ";
-        std::cout << consts.L_min;
+        std::cout << Constants::L_min;
         std::cout << " (L_min)";
         std::cout << " and ";
-        std::cout << consts.L_max;
+        std::cout << Constants::L_max;
         std::cout << " (L_max)";
         std::cout << "." << std::endl;
     }
-    if (!(consts.rho_W_min < rho_W && rho_W <= consts.rho_W_max)) {
+    if (!(Constants::rho_W_min < rho_W && rho_W <= Constants::rho_W_max)) {
         std::cout << "Warning: ";
         std::cout << "rho_W has value ";
         std::cout << rho_W;
         std::cout << " but suggested to be ";
         std::cout << "between ";
-        std::cout << consts.rho_W_min;
+        std::cout << Constants::rho_W_min;
         std::cout << " (rho_W_min)";
         std::cout << " and ";
-        std::cout << consts.rho_W_max;
+        std::cout << Constants::rho_W_max;
         std::cout << " (rho_W_max)";
         std::cout << "." << std::endl;
     }
-    if (!(consts.AR_min <= D && D <= consts.AR_max)) {
+    if (!(Constants::AR_min <= D && D <= Constants::AR_max)) {
         std::cout << "Warning: ";
         std::cout << "D has value ";
         std::cout << D;
         std::cout << " but suggested to be ";
         std::cout << "between ";
-        std::cout << consts.AR_min;
+        std::cout << Constants::AR_min;
         std::cout << " (AR_min)";
         std::cout << " and ";
-        std::cout << consts.AR_max;
+        std::cout << Constants::AR_max;
         std::cout << " (AR_max)";
         std::cout << "." << std::endl;
     }

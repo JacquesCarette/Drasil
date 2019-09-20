@@ -8,20 +8,12 @@ module Language.Drasil.Code.Imperative.Import (
 import Language.Drasil hiding (int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Database.Drasil (symbResolve)
-import Language.Drasil.Code.Code as C (CodeType(List))
 import Language.Drasil.Code.Imperative.Comments (paramComment, returnComment)
 import Language.Drasil.Code.Imperative.GenerateGOOL (fApp, genModule, mkParam)
 import Language.Drasil.Code.Imperative.Helpers (getUpperBound, liftS, lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams)
 import Language.Drasil.Code.Imperative.State (State(..))
-import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, RenderSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
-  VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
-  MethodSym(..))
-import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType, codevar, 
   quantvar, quantfunc)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, codeEquat)
@@ -34,8 +26,16 @@ import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   Data(Line, Lines, JunkData, Singleton), DataDesc, isLine, isLines, getInputs,
   getPatternInputs)
 
+import GOOL.Drasil (Label, RenderSym(..), PermanenceSym(..), BodySym(..), 
+  BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..), 
+  NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
+  FunctionSym(..), SelectorFunction(..), StatementSym(..), 
+  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
+  MethodSym(..), convType) 
+import qualified GOOL.Drasil as C (CodeType(List))
+
 import Prelude hiding (sin, cos, tan, log, exp)
-import Data.List ((\\))
+import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
 import Control.Applicative ((<$>))
@@ -62,27 +62,33 @@ variable s t = do
       defFunc Var = var
       defFunc Const = staticVar
   if s `elem` map codeName (inputs cs) 
-    then inputVariable (inStruct g) (var s t)
+    then inputVariable (inStruct g) Var (var s t)
     else if s `elem` map codeName (constants $ csi $ codeSpec g)
-      then constVariable (conStruct g) ((defFunc $ conRepr g) s t)
+      then constVariable (conStruct g) (conRepr g) ((defFunc $ conRepr g) s t)
       else return $ var s t
   
-inputVariable :: (RenderSym repr) => Structure -> repr (Variable repr) -> 
-  Reader State (repr (Variable repr))
-inputVariable Unbundled v = return v
-inputVariable Bundled v = do
+inputVariable :: (RenderSym repr) => Structure -> ConstantRepr -> 
+  repr (Variable repr) -> Reader State (repr (Variable repr))
+inputVariable Unbundled _ v = return v
+inputVariable Bundled Var v = do
   ip <- mkVar (codevar inParams)
   return $ ip $-> v
+inputVariable Bundled Const v = do
+  ip <- mkVar (codevar inParams)
+  return $ classVar (variableType ip) v
 
-constVariable :: (RenderSym repr) => ConstantStructure -> repr (Variable repr) 
-  -> Reader State (repr (Variable repr))
-constVariable (Store Bundled) v = do
+constVariable :: (RenderSym repr) => ConstantStructure -> ConstantRepr -> 
+  repr (Variable repr) -> Reader State (repr (Variable repr))
+constVariable (Store Bundled) Var v = do
   cs <- mkVar (codevar consts)
   return $ cs $-> v
-constVariable WithInputs v = do
+constVariable (Store Bundled) Const v = do
+  cs <- mkVar (codevar consts)
+  return $ classVar (variableType cs) v
+constVariable WithInputs cr v = do
   g <- ask
-  inputVariable (inStruct g) v
-constVariable _ v = return v
+  inputVariable (inStruct g) cr v
+constVariable _ _ v = return v
 
 mkVal :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => c -> 
   Reader State (repr (Value repr))
@@ -97,8 +103,8 @@ publicMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) =>
   [repr (Block repr)] -> Reader State (repr (Method repr))
 publicMethod t n = genMethod (function n public static_ t) n
 
-publicInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  Label -> String -> [c] -> [c] -> [c] -> [repr (Block repr)] -> 
+publicInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) 
+  => Label -> String -> [c] -> [c] -> [repr (Block repr)] -> 
   Reader State (repr (Method repr))
 publicInOutFunc = genInOutFunc public static_
 
@@ -121,21 +127,24 @@ genMethod f n desc p r b = do
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
 
-genInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
+genInOutFunc :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c, Eq c) => 
   repr (Scope repr) -> repr (Permanence repr) -> Label -> String -> [c] ->
-  [c] -> [c] -> [repr (Block repr)] -> Reader State (repr (Method repr))
-genInOutFunc s pr n desc ins outs both b = do
+  [c] -> [repr (Block repr)] -> Reader State (repr (Method repr))
+genInOutFunc s pr n desc ins' outs' b = do
   g <- ask
+  let ins = ins' \\ outs'
+      outs = outs' \\ ins'
+      both = ins' `intersect` outs'
   inVs <- mapM mkVar ins
   outVs <- mapM mkVar outs
   bothVs <- mapM mkVar both
-  bod <- logBody n inVs b
-  let fn = inOutFunc n s pr inVs outVs bothVs bod
+  bod <- logBody n (bothVs ++ inVs) b
   pComms <- mapM (paramComment . (^. uid)) ins
   oComms <- mapM (paramComment . (^. uid)) outs
   bComms <- mapM (paramComment . (^. uid)) both
   return $ if CommentFunc `elem` commented g 
-    then docInOutFunc desc pComms oComms bComms fn else fn
+    then docInOutFunc n s pr desc (zip pComms inVs) (zip oComms outVs) (zip 
+    bComms bothVs) bod else inOutFunc n s pr inVs outVs bothVs bod
 
 convExpr :: (RenderSym repr) => Expr -> Reader State (repr (Value repr))
 convExpr (Dbl d) = return $ litFloat d

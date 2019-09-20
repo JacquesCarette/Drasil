@@ -1,12 +1,12 @@
 module Language.Drasil.Code.Imperative.WriteInput (
   makeInputFile
 ) where 
-
+  
+import Utils.Drasil (blank)
 import Database.Drasil (ChunkDB)
 import Language.Drasil
 import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim, 
   LinePattern(..), getDataInputs, isJunk)
-import Language.Drasil.Code.Imperative.GOOL.Helpers (blank)
 import Language.Drasil.Printers (Linearity(Linear), exprDoc, sentenceDoc, 
   unitDoc)
 

@@ -50,7 +50,7 @@ rad & angle & radian
 s & time & second
 \\
 \bottomrule
-\caption{}
+\caption{Table of Units}
 \label{Table:ToU}
 \end{longtable}
 \subsection{Table of Symbols}
@@ -81,7 +81,7 @@ ${\mathbf{a}^{\text{c}}}$ & Constant acceleration vector & $\frac{\text{m}}{\tex
 \\
 ${d_{\text{offset}}}$ & Distance between the target position and the landing position & m
 \\
-$g$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+$\mathbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $p$ & Scalar position & m
 \\
@@ -132,7 +132,7 @@ $θ$ & Launch angle & rad
 $π$ & Ratio of circumference to diameter for any circle & --
 \\
 \bottomrule
-\caption{}
+\caption{Table of Symbols}
 \label{Table:ToS}
 \end{longtabu}
 \subsection{Abbreviations and Acronyms}
@@ -168,14 +168,14 @@ TM & Theoretical Model
 Uncert. & Typical Uncertainty
 \\
 \bottomrule
-\caption{}
+\caption{Abbreviations and Acronyms}
 \label{Table:TAbbAcc}
 \end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
 Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. The program documented here is called Projectile.
 
-The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
+The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
@@ -247,6 +247,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A: constAccel}.)}
 \item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the Earth can be neglected. (RefBy: \hyperref[targetXAxis]{A: targetXAxis} and \hyperref[cartSyst]{A: cartSyst}.)}
 \item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD: velVec}, \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectVel]{GD: rectVel}, \hyperref[GD:rectPos]{GD: rectPos}, and \hyperref[GD:posVec]{GD: posVec}.)}
+\item[gravAccelValue:\phantomsection\label{gravAccelValue}]{The acceleration due to gravity is assumed to have the value provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -701,19 +702,19 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
+           {t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${t_{\text{flight}}}$ is the flight duration (s)}
               \item{${v_{\text{launch}}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (rad)}
-              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         
-        $g$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
+        $\mathbf{g}$ is defined in \hyperref[gravAccelValue]{A: gravAccelValue}.
         
         The constraint ${t_{\text{flight}}}\gt{}0$ is from \hyperref[timeStartZero]{A: timeStartZero}.
         
@@ -728,30 +729,30 @@ RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[calcV
 \end{minipage}
 \paragraph{Detailed derivation of flight duration:}
 \label{IM:calOfLandingTimeDeriv}
-We know that ${{p_{\text{y}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{\text{y}}}^{\text{c}}}=-g$ (\hyperref[accelYGravity]{A: accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
+We know that ${{p_{\text{y}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{\text{y}}}^{\text{c}}}=-\mathbf{g}$ (\hyperref[accelYGravity]{A: accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
 
 \begin{displaymath}
-{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{g t^{2}}{2}
+{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{\mathbf{g} t^{2}}{2}
 \end{displaymath}
 To find the time that the projectile lands, we want to find the $t$ value (${t_{\text{flight}}}$) where ${p_{\text{y}}}=0$ (since the target is on the $x$-axis from \hyperref[targetXAxis]{A: targetXAxis}). From the equation above we get:
 
 \begin{displaymath}
-{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0
+{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{\mathbf{g} {t_{\text{flight}}}^{2}}{2}=0
 \end{displaymath}
 Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}\gt{}0$) gives us:
 
 \begin{displaymath}
-{{v_{\text{y}}}^{\text{i}}}-\frac{g {t_{\text{flight}}}}{2}=0
+{{v_{\text{y}}}^{\text{i}}}-\frac{\mathbf{g} {t_{\text{flight}}}}{2}=0
 \end{displaymath}
 Solving for ${t_{\text{flight}}}$ gives us:
 
 \begin{displaymath}
-{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{g}
+{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{\mathbf{g}}
 \end{displaymath}
 From \hyperref[DD:speedIY]{DD: speedIY} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{y}}}^{\text{i}}}$:
 
 \begin{displaymath}
-{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
+{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -782,19 +783,19 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+           {p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${p_{\text{land}}}$ is the landing position (m)}
               \item{${v_{\text{launch}}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$θ$ is the launch angle (rad)}
-              \item{$g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         
-        $g$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
+        $\mathbf{g}$ is defined in \hyperref[gravAccelValue]{A: gravAccelValue}.
         
         The constraint ${p_{\text{land}}}\gt{}0$ is from \hyperref[posXDirection]{A: posXDirection}.
         
@@ -817,17 +818,17 @@ We know that ${{p_{\text{x}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A: launchO
 To find the landing position, we want to find the ${p_{\text{x}}}$ value (${p_{\text{land}}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
+{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
 \end{displaymath}
 From \hyperref[DD:speedIX]{DD: speedIX} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{x}}}^{\text{i}}}$:
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}
+{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
 \end{displaymath}
 Rearranging this gives us the required equation:
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}
+{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -1022,57 +1023,57 @@ This section provides the non-functional requirements, the qualities that the so
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
-\begin{longtable}{l l l l l l l l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[twoDMotion]{A: twoDMotion}} & \textbf{\hyperref[cartSyst]{A: cartSyst}} & \textbf{\hyperref[yAxisGravity]{A: yAxisGravity}} & \textbf{\hyperref[launchOrigin]{A: launchOrigin}} & \textbf{\hyperref[targetXAxis]{A: targetXAxis}} & \textbf{\hyperref[posXDirection]{A: posXDirection}} & \textbf{\hyperref[constAccel]{A: constAccel}} & \textbf{\hyperref[accelXZero]{A: accelXZero}} & \textbf{\hyperref[accelYGravity]{A: accelYGravity}} & \textbf{\hyperref[neglectDrag]{A: neglectDrag}} & \textbf{\hyperref[pointMass]{A: pointMass}} & \textbf{\hyperref[freeFlight]{A: freeFlight}} & \textbf{\hyperref[neglectCurv]{A: neglectCurv}} & \textbf{\hyperref[timeStartZero]{A: timeStartZero}}
+\textbf{} & \textbf{\hyperref[twoDMotion]{A: twoDMotion}} & \textbf{\hyperref[cartSyst]{A: cartSyst}} & \textbf{\hyperref[yAxisGravity]{A: yAxisGravity}} & \textbf{\hyperref[launchOrigin]{A: launchOrigin}} & \textbf{\hyperref[targetXAxis]{A: targetXAxis}} & \textbf{\hyperref[posXDirection]{A: posXDirection}} & \textbf{\hyperref[constAccel]{A: constAccel}} & \textbf{\hyperref[accelXZero]{A: accelXZero}} & \textbf{\hyperref[accelYGravity]{A: accelYGravity}} & \textbf{\hyperref[neglectDrag]{A: neglectDrag}} & \textbf{\hyperref[pointMass]{A: pointMass}} & \textbf{\hyperref[freeFlight]{A: freeFlight}} & \textbf{\hyperref[neglectCurv]{A: neglectCurv}} & \textbf{\hyperref[timeStartZero]{A: timeStartZero}} & \textbf{\hyperref[gravAccelValue]{A: gravAccelValue}}
 \\
 \midrule
 \endhead
-\hyperref[DD:vecMag]{DD: vecMag} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:vecMag]{DD: vecMag} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:speedIX]{DD: speedIX} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:speedIX]{DD: speedIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:speedIY]{DD: speedIY} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[DD:speedIY]{DD: speedIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:acceleration]{TM: acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:acceleration]{TM: acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[TM:velocity]{TM: velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[TM:velocity]{TM: velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:rectVel]{GD: rectVel} &  &  &  &  &  &  &  &  &  &  & X &  &  & X
+\hyperref[GD:rectVel]{GD: rectVel} &  &  &  &  &  &  &  &  &  &  & X &  &  & X & 
 \\
-\hyperref[GD:rectPos]{GD: rectPos} &  &  &  &  &  &  &  &  &  &  & X &  &  & X
+\hyperref[GD:rectPos]{GD: rectPos} &  &  &  &  &  &  &  &  &  &  & X &  &  & X & 
 \\
-\hyperref[GD:velVec]{GD: velVec} & X & X &  &  &  &  & X &  &  &  &  &  &  & X
+\hyperref[GD:velVec]{GD: velVec} & X & X &  &  &  &  & X &  &  &  &  &  &  & X & 
 \\
-\hyperref[GD:posVec]{GD: posVec} & X & X &  &  &  &  & X &  &  &  &  &  &  & X
+\hyperref[GD:posVec]{GD: posVec} & X & X &  &  &  &  & X &  &  &  &  &  &  & X & 
 \\
-\hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} &  &  & X & X & X & X &  &  & X &  &  &  &  & X
+\hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} &  &  & X & X & X & X &  &  & X &  &  &  &  & X & X
 \\
-\hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} &  &  & X & X &  & X &  & X &  &  &  &  &  & 
+\hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} &  &  & X & X &  & X &  & X &  &  &  &  &  &  & X
 \\
-\hyperref[IM:offsetIM]{IM: offsetIM} &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[IM:offsetIM]{IM: offsetIM} &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[IM:messageIM]{IM: messageIM} &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+\hyperref[IM:messageIM]{IM: messageIM} &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[inputValues]{FR: Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifyInVals]{FR: Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifyInVals]{FR: Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[calcValues]{FR: Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[calcValues]{FR: Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[outputValues]{FR: Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[outputValues]{FR: Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[correct]{NFR: Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[verifiable]{NFR: Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[verifiable]{NFR: Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[understandable]{NFR: Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[reusable]{NFR: Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[maintainable]{NFR: Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[portable]{NFR: Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
@@ -1156,7 +1157,7 @@ This section contains the standard values that are used for calculations in Proj
 \\
 \midrule
 \endhead
-$g$ & gravitational acceleration & $9.8$ & $\frac{\text{m}}{\text{s}^{2}}$
+$\mathbf{g}$ & gravitational acceleration & $9.8$ & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $ε$ & hit tolerance & $2.0\%$ & --
 \\

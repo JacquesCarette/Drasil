@@ -10,18 +10,18 @@ using System.Collections.Generic;
 public class InputFormat {
     
     /** \brief Reads input from a file with the given file name
-        \param filename name of the input file
         \param inParams structure holding the input values
+        \param filename name of the input file
     */
-    public static void get_input(string filename, InputParameters inParams) {
+    public static void get_input(InputParameters inParams, string filename) {
         StreamWriter outfile;
         outfile = new StreamWriter("log.txt", true);
         outfile.WriteLine("function get_input called with inputs: {");
-        outfile.Write("  filename = ");
-        outfile.Write(filename);
-        outfile.WriteLine(", ");
         outfile.Write("  inParams = ");
-        outfile.WriteLine("Instance of InputParameters object");
+        outfile.Write("Instance of InputParameters object");
+        outfile.WriteLine(", ");
+        outfile.Write("  filename = ");
+        outfile.WriteLine(filename);
         outfile.WriteLine("  }");
         outfile.Close();
         

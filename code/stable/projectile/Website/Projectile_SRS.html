@@ -50,6 +50,7 @@
                   <td>second</td>
                 </tr>
               </table>
+              <p class="caption">Table of Units</p>
             </div>
           </div>
         </div>
@@ -114,7 +115,7 @@
                   <td>m</td>
                 </tr>
                 <tr>
-                  <td><em>g</em></td>
+                  <td><em><b>g</b></em></td>
                   <td>Gravitational acceleration</td>
                   <td>m/s<sup>2</sup></td>
                 </tr>
@@ -239,6 +240,7 @@
                   <td>--</td>
                 </tr>
               </table>
+              <p class="caption">Table of Symbols</p>
             </div>
           </div>
         </div>
@@ -300,6 +302,7 @@
                   <td>Typical Uncertainty</td>
                 </tr>
               </table>
+              <p class="caption">Abbreviations and Acronyms</p>
             </div>
           </div>
         </div>
@@ -312,7 +315,7 @@
           Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. The program documented here is called Projectile.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:ReqsScope">
           <div class="subsection">
@@ -477,6 +480,11 @@
                   <p>
                     <div id="timeStartZero">
                       timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD: velVec</a>, <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#GD:rectVel>GD: rectVel</a>, <a href=#GD:rectPos>GD: rectPos</a>, and <a href=#GD:posVec>GD: posVec</a>.)
+                    </div>
+                  </p>
+                  <p>
+                    <div id="gravAccelValue">
+                      gravAccelValue: The acceleration due to gravity is assumed to have the value provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a>. (RefBy: <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a> and <a href=#IM:calOfLandingDist>IM: calOfLandingDist</a>.)
                     </div>
                   </p>
                 </div>
@@ -1128,7 +1136,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
+                        \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1139,7 +1147,7 @@
                           <li><em>v<sub>launch</sub></em> is the launch speed (m/s)</li>
                           <li><em>θ</em> is the launch angle (rad)</li>
                           <li>
-                            <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+                            <em><b>g</b></em> is the gravitational acceleration (m/s<sup>2</sup>)
                           </li>
                         </ul>
                       </td>
@@ -1151,7 +1159,7 @@
                           The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{π}{2}\)</em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                         <p class="paragraph">
-                          <em>g</em> is defined in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a>.
+                          <em><b>g</b></em> is defined in <a href=#gravAccelValue>A: gravAccelValue</a>.
                         </p>
                         <p class="paragraph">
                           The constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#timeStartZero>A: timeStartZero</a>.
@@ -1176,25 +1184,25 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of flight duration:</h4>
                     <p class="paragraph">
-                      We know that <em>p<sub>y</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A: launchOrigin</a>) and <em>a<sub>y</sub><sup>c</sup> = &minus;g</em> (<a href=#accelYGravity>A: accelYGravity</a>). Substituting these values into the y-direction of <a href=#GD:posVec>GD: posVec</a> gives us:
+                      We know that <em>p<sub>y</sub><sup>i</sup> = 0</em> (<a href=#launchOrigin>A: launchOrigin</a>) and <em>a<sub>y</sub><sup>c</sup> = &minus;<b>g</b></em> (<a href=#accelYGravity>A: accelYGravity</a>). Substituting these values into the y-direction of <a href=#GD:posVec>GD: posVec</a> gives us:
                     </p>
-                    \[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{g t^{2}}{2}\]
+                    \[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{\mathbf{g} t^{2}}{2}\]
                     <p class="paragraph">
                       To find the time that the projectile lands, we want to find the <em>t</em> value (<em>t<sub>flight</sub></em>) where <em>p<sub>y</sub> = 0</em> (since the target is on the <em>x</em>-axis from <a href=#targetXAxis>A: targetXAxis</a>). From the equation above we get:
                     </p>
-                    \[{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{g {t_{\text{flight}}}^{2}}{2}=0\]
+                    \[{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{\mathbf{g} {t_{\text{flight}}}^{2}}{2}=0\]
                     <p class="paragraph">
                       Dividing by <em>t<sub>flight</sub></em> (with the constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0</em>) gives us:
                     </p>
-                    \[{{v_{\text{y}}}^{\text{i}}}-\frac{g {t_{\text{flight}}}}{2}=0\]
+                    \[{{v_{\text{y}}}^{\text{i}}}-\frac{\mathbf{g} {t_{\text{flight}}}}{2}=0\]
                     <p class="paragraph">
                       Solving for <em>t<sub>flight</sub></em> gives us:
                     </p>
-                    \[{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{g}\]
+                    \[{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{\mathbf{g}}\]
                     <p class="paragraph">
                       From <a href=#DD:speedIY>DD: speedIY</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>y</sub><sup>i</sup></em>:
                     </p>
-                    \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
+                    \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                   </div>
                 </div>
                 <div id="IM:calOfLandingDist">
@@ -1231,7 +1239,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\]
+                        \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1242,7 +1250,7 @@
                           <li><em>v<sub>launch</sub></em> is the launch speed (m/s)</li>
                           <li><em>θ</em> is the launch angle (rad)</li>
                           <li>
-                            <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+                            <em><b>g</b></em> is the gravitational acceleration (m/s<sup>2</sup>)
                           </li>
                         </ul>
                       </td>
@@ -1254,7 +1262,7 @@
                           The constraint <em>0&thinsp;&lt;&thinsp;θ&thinsp;&lt;&thinsp;\(\frac{π}{2}\)</em> is from <a href=#posXDirection>A: posXDirection</a> and <a href=#yAxisGravity>A: yAxisGravity</a>, and is shown in <a href=#Figure:Launch>Fig:Launch</a>.
                         </p>
                         <p class="paragraph">
-                          <em>g</em> is defined in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a>.
+                          <em><b>g</b></em> is defined in <a href=#gravAccelValue>A: gravAccelValue</a>.
                         </p>
                         <p class="paragraph">
                           The constraint <em>p<sub>land</sub>&thinsp;&gt;&thinsp;0</em> is from <a href=#posXDirection>A: posXDirection</a>.
@@ -1285,15 +1293,15 @@
                     <p class="paragraph">
                       To find the landing position, we want to find the <em>p<sub>x</sub></em> value (<em>p<sub>land</sub></em>) at flight duration (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>):
                     </p>
-                    \[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
+                    \[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                     <p class="paragraph">
                       From <a href=#DD:speedIX>DD: speedIX</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>x</sub><sup>i</sup></em>:
                     </p>
-                    \[{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{g}\]
+                    \[{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                     <p class="paragraph">
                       Rearranging this gives us the required equation:
                     </p>
-                    \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{g}\]
+                    \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}\]
                   </div>
                 </div>
                 <div id="IM:offsetIM">
@@ -1658,9 +1666,11 @@
               <th><a href=#freeFlight>A: freeFlight</a></th>
               <th><a href=#neglectCurv>A: neglectCurv</a></th>
               <th><a href=#timeStartZero>A: timeStartZero</a></th>
+              <th><a href=#gravAccelValue>A: gravAccelValue</a></th>
             </tr>
             <tr>
               <td><a href=#DD:vecMag>DD: vecMag</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1692,9 +1702,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#DD:speedIY>DD: speedIY</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1726,9 +1738,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#TM:velocity>TM: velocity</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1760,6 +1774,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:rectPos>GD: rectPos</a></td>
@@ -1777,6 +1792,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:velVec>GD: velVec</a></td>
@@ -1794,6 +1810,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#GD:posVec>GD: posVec</a></td>
@@ -1811,6 +1828,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#IM:calOfLandingTime>IM: calOfLandingTime</a></td>
@@ -1827,6 +1845,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
               <td>X</td>
             </tr>
             <tr>
@@ -1845,6 +1864,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td>X</td>
             </tr>
             <tr>
               <td><a href=#IM:offsetIM>IM: offsetIM</a></td>
@@ -1854,6 +1874,7 @@
               <td></td>
               <td></td>
               <td>X</td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1879,9 +1900,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#inputValues>FR: Input-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1913,9 +1936,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#calcValues>FR: Calculate-Values</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1947,9 +1972,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#correct>NFR: Correct</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -1981,9 +2008,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#understandable>NFR: Understandable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2015,6 +2044,7 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#maintainable>NFR: Maintainable</a></td>
@@ -2032,9 +2062,11 @@
               <td></td>
               <td></td>
               <td></td>
+              <td></td>
             </tr>
             <tr>
               <td><a href=#portable>NFR: Portable</a></td>
+              <td></td>
               <td></td>
               <td></td>
               <td></td>
@@ -2622,7 +2654,7 @@
               <th>Unit</th>
             </tr>
             <tr>
-              <td><em>g</em></td>
+              <td><em><b>g</b></em></td>
               <td>gravitational acceleration</td>
               <td><em>9.8</em></td>
               <td>m/s<sup>2</sup></td>

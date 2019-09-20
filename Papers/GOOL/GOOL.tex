@@ -1,63 +1,382 @@
-\documentclass[10pt,conference]{IEEEtran}
-\bibliographystyle{plainurl}% the recommnded bibstyle
+%% For double-blind review submission, w/o CCS and ACM Reference (max submission space)
+\documentclass[sigplan,review,anonymous]{acmart}
+\settopmatter{printfolios=true,printccs=false,printacmref=false}
+%% For double-blind review submission, w/ CCS and ACM Reference
+%\documentclass[sigplan,review,anonymous]{acmart}\settopmatter{printfolios=true}
+%% For single-blind review submission, w/o CCS and ACM Reference (max submission space)
+%\documentclass[sigplan,review]{acmart}\settopmatter{printfolios=true,printccs=false,printacmref=false}
+%% For single-blind review submission, w/ CCS and ACM Reference
+%\documentclass[sigplan,review]{acmart}\settopmatter{printfolios=true}
+%% For final camera-ready submission, w/ required CCS and ACM Reference
+%\documentclass[sigplan]{acmart}\settopmatter{}
 
-\usepackage{listings}
-\usepackage{amsmath}
-\usepackage{hyperref}
-\usepackage{cite}
+
+%% Conference information
+%% Supplied to authors by publisher for camera-ready submission;
+%% use defaults for review submission.
+\acmConference[PL'18]{ACM SIGPLAN Conference on Programming Languages}{January 01--03, 2018}{New York, NY, USA}
+\acmYear{2018}
+\acmISBN{} % \acmISBN{978-x-xxxx-xxxx-x/YY/MM}
+\acmDOI{} % \acmDOI{10.1145/nnnnnnn.nnnnnnn}
+\startPage{1}
+
+%% Copyright information
+%% Supplied to authors (based on authors' rights management selection;
+%% see authors.acm.org) by publisher for camera-ready submission;
+%% use 'none' for review submission.
+\setcopyright{none}
+%\setcopyright{acmcopyright}
+%\setcopyright{acmlicensed}
+%\setcopyright{rightsretained}
+%\copyrightyear{2018}           %% If different from \acmYear
+
+%% Bibliography style
+\bibliographystyle{ACM-Reference-Format}
+%% Citation style
+%\citestyle{acmauthoryear}  %% For author/year citations
+%\citestyle{acmnumeric}     %% For numeric citations
+%\setcitestyle{nosort}      %% With 'acmnumeric', to disable automatic
+                            %% sorting of references within a single citation;
+                            %% e.g., \cite{Smith99,Carpenter05,Baker12}
+                            %% rendered as [14,5,2] rather than [2,5,14].
+%\setcitesyle{nocompress}   %% With 'acmnumeric', to disable automatic
+                            %% compression of sequential references within a
+                            %% single citation;
+                            %% e.g., \cite{Baker12,Baker14,Baker16}
+                            %% rendered as [2,3,4] rather than [2-4].
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Note: Authors migrating a paper from traditional SIGPLAN
+%% proceedings format to PACMPL format must update the
+%% '\documentclass' and topmatter commands above; see
+%% 'acmart-pacmpl-template.tex'.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Some recommended packages.
+\usepackage{booktabs}   %% For formal tables:
+                        %% http://ctan.org/pkg/booktabs
+\usepackage{subcaption} %% For complex figures with subfigures/subcaptions
+                        %% http://ctan.org/pkg/subcaption
+
 
 \begin{document}
-\title{GOOL: A Generic Object-Oriented Language}
 
-%\titlerunning{Dummy short title}%optional, please use if title is longer than 
-%%one line
+%% Title information
+\title{GOOL: A Generic Object-Oriented Language}         %% [Short 
+%%Title] is optional;
+                                        %% when present, will be used in
+%                                        %% header instead of Full Title.
+%\titlenote{with title note}             %% \titlenote is optional;
+%                                        %% can be repeated if necessary;
+%                                        %% contents suppressed with 'anonymous'
+%\subtitle{Subtitle}                     %% \subtitle is optional
+%\subtitlenote{with subtitle note}       %% \subtitlenote is optional;
+%                                        %% can be repeated if necessary;
+%                                        %% contents suppressed with 'anonymous'
 
-\author{\IEEEauthorblockN{Brooks MacLachlan}
-\IEEEauthorblockA{Department of Computing and Software\\
-McMaster University, Canada\\
-Email: maclachb@mcmaster.ca}
-\and
-\IEEEauthorblockN{Jacques Carette}
-\IEEEauthorblockA{Department of Computing and Software\\
-McMaster University, Canada\\
-Email: carette@mcmaster.ca}
-\and
-\IEEEauthorblockN{W. Spencer Smith}
-\IEEEauthorblockA{Department of Computing and Software\\
-McMaster University, Canada\\
-Email: smiths@mcmaster.ca}
+
+%% Author information
+%% Contents and number of authors suppressed with 'anonymous'.
+%% Each author should be introduced by \author, followed by
+%% \authornote (optional), \orcid (optional), \affiliation, and
+%% \email.
+%% An author may have multiple affiliations and/or emails; repeat the
+%% appropriate command.
+%% Many elements are not rendered, but should be provided for metadata
+%% extraction tools.
+
+%% Author with single affiliation.
+\author{Brooks MacLachlan}
+%\authornote{with author1 note}          %% \authornote is optional;
+                                        %% can be repeated if necessary
+%\orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
+\affiliation{
+  \position{Position1}
+  \department{Department of Computing and Software}              %% \department 
+  %%is recommended
+  \institution{McMaster University}            %% \institution is required
+  \streetaddress{1280 Main Street West}
+  \city{Hamilton}
+  \state{Ontario}
+  \postcode{L8S 4L8}
+  \country{Canada}                    %% \country is recommended
 }
-%\authorrunning{J. Carette and S. Smith}
+\email{maclachb@mcmaster.ca}          %% \email is recommended
 
-% \Copyright{Jacques Carette and W. Spencer Smith}
+\author{Jacques Carette}
+%\authornote{with author1 note}          %% \authornote is optional;
+%% can be repeated if necessary
+%\orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
+\affiliation{
+	\position{Position1}
+	\department{Department of Computing and Software}              %% 
+	%%\department is recommended
+	\institution{McMaster University}            %% \institution is required
+	\streetaddress{1280 Main Street West}
+	\city{Hamilton}
+	\state{Ontario}
+	\postcode{L8S 4L8}
+	\country{Canada}                    %% \country is recommended
+}
+\email{carette@mcmaster.ca}          %% \email is recommended
 
-%\subjclass{Dummy classification}% mandatory: Please choose ACM 2012 classifications from https://www.acm.org/publications/class-2012 or https://dl.acm.org/ccs/ccs_flat.cfm . E.g., cite as "General and reference $\rightarrow$ General literature" or \ccsdesc[100]{General and reference~General literature}. 
+\author{Spencer Smith}
+%\authornote{with author1 note}          %% \authornote is optional;
+%% can be repeated if necessary
+%\orcid{nnnn-nnnn-nnnn-nnnn}             %% \orcid is optional
+\affiliation{
+	\position{Position1}
+	\department{Department of Computing and Software}              %% 
+	%%\department is recommended
+	\institution{McMaster University}            %% \institution is required
+	\streetaddress{1280 Main Street West}
+	\city{Hamilton}
+	\state{Ontario}
+	\postcode{L8S 4L8}
+	\country{Canada}                    %% \country is recommended
+}
+\email{smiths@mcmaster.ca}          %% \email is recommended
 
-%\keywords{Dummy keyword}%mandatory
 
-%\category{}%optional, e.g. invited paper
-
-%\relatedversion{}%optional, e.g. full version hosted on arXiv, HAL, or other respository/website
-
-%\supplement{}%optional, e.g. related research data, source code, ... hosted on a repository like zenodo, figshare, GitHub, ...
-
-%\funding{}%optional, to capture a funding statement, which applies to all authors. Please enter author specific funding statements as fifth argument of the \author macro.
-
-%\acknowledgements{I want to thank \dots}%optional
-
-\maketitle
-
+%% Abstract
+%% Note: \begin{abstract}...\end{abstract} environment must come
+%% before \maketitle command
 \begin{abstract}
-To do when the paper is mostly written.
+Text of abstract \ldots.
 \end{abstract}
 
+
+%% 2012 ACM Computing Classification System (CSS) concepts
+%% Generate at 'http://dl.acm.org/ccs/ccs.cfm'.
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10011007.10011006.10011008</concept_id>
+<concept_desc>Software and its engineering~General programming languages</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+<concept>
+<concept_id>10003456.10003457.10003521.10003525</concept_id>
+<concept_desc>Social and professional topics~History of programming languages</concept_desc>
+<concept_significance>300</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+
+\ccsdesc[500]{Software and its engineering~General programming languages}
+\ccsdesc[300]{Social and professional topics~History of programming languages}
+%% End of generated code
+
+
+%% Keywords
+%% comma separated list
+\keywords{keyword1, keyword2, keyword3}  %% \keywords are mandatory in final camera-ready submission
+
+
+%% \maketitle
+%% Note: \maketitle command must come after title commands, author
+%% commands, abstract environment, Computing Classification System
+%% environment and commands, and keywords command.
+\maketitle
+
+
 \section{Introduction}
-\section{Related Work}
-\section{Conclusion}
 
-%%
+Given a task, before writing any code a programmer must select a programming 
+language to use. Whatever they may base their choice upon, almost any
+programming language will work. While a program may be more difficult to
+express in one language over another, it should at least be possible to write
+the program in either language. Just as the same sentence can be translated to
+any spoken language, the same program can be written in any programming
+language. Though they will accomplish the same tasks, the
+expressions of a program in different programming languages can appear
+substantially different due to the unique syntax of each language. Within a
+single language paradigm, such as object-oriented (OO),
+these differences should not be as extreme -- at least the global structuring
+mechanisms and the local idioms will be shared.  Mainstream OO languages
+generally contain (mutable) variables, methods, classes, objects and a core
+imperative set of primitives. Some OO languages even have very similar syntax
+(such as Java and C\# say).
+
+When faced with the task to write a program meant to fit into multiple existing
+infrastructure, which might be written in different languages, frequently that
+entails writing different versions of the program, one for each. While not
+necessarily difficult, it nevertheless
+requires investing the time to learn the idiosyncrasies of each language and 
+pay attention to the operational details where languages differ. Ultimately, 
+the code they write will likely be marred by influences of the language they 
+know best. They may consistently use techniques that they are familiar with 
+from one language, while unaware that the language in which they are currently 
+writing offers a better or cleaner way of doing the same task 
+\cite{scholtz1990learning, alexandron2012effect}. Besides this 
+likelihood of writing sub-optimal code, repeatedly writing the same program in 
+different languages is entirely inefficient, both as an up-front development cost,
+and even more so for maintenance.
+
+Since languages from the same paradigm share many semantic similarities,
+it is tempting to try to leverage this; perhaps the program could be written in
+one language and
+automatically translated to the others?  But a direct translation is often
+difficult, as different languages require the programmer to provide different
+levels of information, even to achieve the same taks.  For example, a dynamically
+typed language like Python
+cannot be straightforwardly translated to a statically typed 
+language like Java, as additional type information generally needs to be 
+provided\footnote{Type inference for Python notwithstanding}.
+
+What if, instead, there was a single meta-language which was designed to
+contain the common semantic concepts of a number of OO languages, encoded
+in such a way that all the necessary information for translation was always
+present?  This source language could be made to be agnostic about what the
+eventual target language was used -- free of the idiosyncratic details of
+any given language.  This would be quite the boon for the translator.
+In fact, we could try to go even further, and attempt to teach the translator
+about idiomatic patterns of each target language.
+
+Why would this even be possible? There are commonly performed tasks and
+patterns of OO solutions, from idioms to architecture patterns, as outlined
+in~\cite{gamma1995design}. A meta-language 
+that provided abstractions for these tasks and patterns would make the process 
+of writing OO code even easier.
+
+But is this even feasible? In some sense, this is already old hat: most
+modern compilers have a single internal Intermediate Representation (IR)
+which is used to target multiple processors. Compilers can generate
+human-readable symbolic assembly code for a large family of CPUs. But this
+is not quite the same as generating human-readable, idiomatic high-level
+languages.
+
+There is another area where something like this has been looked at:
+the production of high-level code from Domain-Specific Languages (DSL).
+A DSL is a high-level programming language with syntax and semantics tailored
+to a specific domain \cite{mernik2005and}. DSLs allow domain experts 
+to write code without having to concern themselves with the details of
+general-purpose programming languages (GPL). A DSL
+abstracts over the details of the code, providing notation for a user to
+specify domain-specific knowledge in a natural manner. Such DSL code is typically
+translated to a GPL for execution. Abstracting over code details
+and compiling into traditional OO languages is exactly what we want to do!
+The details to abstract over include both syntactic and operational details of
+any specific language, but also higher-level idioms in common use.  Thus
+the language we are looking for
+is just a DSL in the domain of OO programming languages!
+
+There are some DSLs that already generate code in multiple languages, to be
+be further discussed in Section \ref{related}, but none of them have the 
+combination of features we require. We are indeed trying to do something odd:
+writing a ``DSL'' for what is essentially the domain of OO GPLs. Furthermore,
+we have additional requirements:
+\begin{enumerate}
+\item The generated code should be human-readable,
+\item The generated code should be idiomatic,
+\item The generated code should be documented,
+\item The generator should allow one to express common OO patterns.
+\end{enumerate}
+
+We have developed a Generic Object-Oriented Language (GOOL), demonstrating
+that all these requirements can be met.  GOOL is a DSL embedded in Haskell that
+can currently generate code in Python, Java, C\#, and C++%
+\footnote{and is close to generating Lua and Objective-C, but those backends
+have fallen into disuse}. Others could be added, with the implementation
+effort being commensurate to their (semantic) distance to the languages
+already supported.
+
+First we present the high-level requirements for such an endeavour, in
+Section~\ref{sec:req}.  To be able to give illustrated examples, we
+next show the syntax of GOOL in Section~\ref{syntax}. The details of
+the implementations, namely the internal representation and the
+family of pretty-printers, is in Section~\ref{implementation}.
+Common patterns are illustrated in Section~\ref{patterns}.  We 
+close with a discussion of related work in Section \ref{related}, plans for 
+future improvements in Section \ref{future}, and conclusions in Section 
+\ref{conclusions}.
+
+\section{Requirements} \label{sec:req}
+\section{GOOL Syntax} \label{syntax}
+\section{GOOL Implementation} \label{implementation}
+\section{Higher-level GOOL functions} \label{patterns}
+\section{Related Work} \label{related}
+
+We divide the Related Work into the following categories
+\begin{itemize}
+\item cat 1
+\item cat 2
+\item cat 3
+\end{itemize}
+which we present in turn.
+
+Haxe is a general-purpose multi-paradigm language and cross-platform compiler. 
+It compiles to all of the languages GOOL does, in addition to many others. 
+However, it does not offer the high-level abstractions GOOL provides 
+\cite{Haxe} (better reference?). Also, the generated source code is not very 
+readable as Haxe generates a lot of ``noise'' and strips comments from the 
+original Haxe source code.
+
+Protokit's 2nd version is a DSL and code generator for Java and C++, where the 
+generator is designed to be capable of producing general-purpose imperative or 
+object-oriented code. The Protokit generator is model-driven and uses a final 
+``output model'' from which actual code can be trivially generated. Since the 
+``output model'' was so similar to the generated code, it presented challenges 
+with regards to semantic, conventional, and library-related differences between 
+the target language \cite{kovesdan2017multi}. GOOL's finally-tagless approach 
+and syntax for high-level tasks, on the other hand, helped it overcome 
+differences between target languages.
+
+ThingML \cite{harrand2016thingml} is a DSL for model-driven engineering 
+targeting C, C++, Java, and 
+JavaScript. While it can be used in a broad range of application domains, they 
+all fall under the umbrella domain of distributed reactive systems, and so it 
+is not quite a general-purpose DSL, unlike GOOL. ThingML's modelling-related 
+syntax and abstractions are a contrast to GOOL's object-oriented syntax and 
+abstractions. The generated code lacks some of the pretty-printing provided by 
+GOOL, specifically indentation, which detracts from the readability.
+
+IBM developed a DSL for automatic generation of OO code based on design 
+patterns \cite{budinsky1996automatic}. Their DSL was in the form of a visual 
+user interface rather than a programming language, and could only generate code 
+that followed a design pattern. It could not generate any general-purpose code.
+
+There are many examples of DSLs with multiple OO target languages but for a 
+more restricted domain. Google protocol buffers is a DSL for serializing 
+structured data, which can then be compiled into Java, Python, Objective C, and 
+C++ \cite{Protobuf}. Thrift is a Facebook-developed tool for generating code in 
+multiple languages and even multiple paradigms based on language-neutral 
+descriptions of data types and interfaces \cite{slee2007thrift}. Clearwater is 
+an approach for implementing DSLs with multiple target languages for components 
+of distributed systems \cite{swint2005clearwater}. The Time Weaver tool uses a 
+multi-language code generator to generate ``glue'' code for real-time embedded 
+systems \cite{de2004glue}. The domain of mobile 
+applications is host to a bevy of DSLs with multiple target languages, of which 
+MobDSL \cite{kramer2010mobdsl} and XIS-Mobile \cite{ribeiro2014xis} are two 
+examples. Conjure is a DSL for generating APIs. It reads YML descriptions of 
+APIs and can generate code in Java, TypeScript, Python, and Rust 
+\cite{Conjure}. All of these are examples of multi-language code generation, 
+but none of them generate general-purpose code like GOOL does.
+
+\section{Future Work} \label{future}
+\section{Conclusion} \label{conclusions}
+
+
+%% Acknowledgments
+%\begin{acks}                            %% acks environment is optional
+                                        %% contents suppressed with 'anonymous'
+  %% Commands \grantsponsor{<sponsorID>}{<name>}{<url>} and
+  %% \grantnum[<url>]{<sponsorID>}{<number>} should be used to
+  %% acknowledge financial support and will be used by metadata
+  %% extraction tools.
+%\end{acks}
+
+
 %% Bibliography
-%%
+\bibliography{References}
 
+
+%% Appendix
+\appendix
+\section{Appendix}
+
+Text of appendix \ldots
 
 \end{document}

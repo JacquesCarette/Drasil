@@ -45,13 +45,14 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
   surroundBody, getterName, setterName, setEmpty, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, 
-  Terminator(..), ScopeTag(..), Binding(..),
-  BindData(..), bd, FileData(..), srcFile, hdrFile, updateFileMod, FuncData(..),
+  Terminator(..), ScopeTag(..), Binding(..), BindData(..), bd, FileData(..), 
+  srcFile, hdrFile, updateFileMod, FuncData(..),
   fd, ModData(..), md, updateModDoc, OpData(..), od,
   ParamData(..), pd, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, btd, TypedType(..), cType, 
   typeString, typeDoc, ValData(..), 
-  TypedValue(..), valPrec, valType, valDoc, VarData(..), vard)
+  TypedValue(..), valPrec, valType, valDoc, VarData(..), vard, TypedVar(..),
+  varBind, varName, varType, varDoc, typeToVar, valToType, varToType)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
@@ -209,7 +210,7 @@ instance (Pair p) => BinaryOpSym (p CppSrcCode CppHdrCode) where
   orOp = pair orOp orOp
 
 instance (Pair p) => VariableSym (p CppSrcCode CppHdrCode) where
-  type Variable (p CppSrcCode CppHdrCode) = VarData
+  type Variable (p CppSrcCode CppHdrCode) = TypedVar
   var n t = pair (var n $ pfst t) (var n $ psnd t)
   staticVar n t = pair (staticVar n $ pfst t) (staticVar n $ psnd t)
   const n t = pair (const n $ pfst t) (const n $ psnd t)
@@ -787,7 +788,7 @@ instance BinaryOpSym CppSrcCode where
   orOp = return orOpDocD
 
 instance VariableSym CppSrcCode where
-  type Variable CppSrcCode = VarData
+  type Variable CppSrcCode = TypedVar
   var n t = liftA2 (mkVar n) t (return $ varDocD n) 
   staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
   const = var
@@ -808,10 +809,10 @@ instance VariableSym CppSrcCode where
 
   variableBind = varBind . unCPPSC
   variableName = varName . unCPPSC
-  variableType = fmap varType
+  variableType = fmap varToType
   variableDoc = varDoc . unCPPSC
   
-  varFromData b n t d = liftA2 (vard b n) t (return d)
+  varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = TypedValue
@@ -830,7 +831,7 @@ instance ValueSym CppSrcCode where
   
   argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
-  valueType = fmap valType
+  valueType = fmap valToType
   valueDoc = valDoc . unCPPSC
 
 instance NumericExpression CppSrcCode where
@@ -860,7 +861,7 @@ instance NumericExpression CppSrcCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression CppSrcCode where
-  (?!) = liftA3 unExpr notOp bool
+  (?!) = liftA2 unExpr notOp
   (?&&) = liftA4 typeBinExpr andOp bool
   (?||) = liftA4 typeBinExpr orOp bool
 
@@ -930,9 +931,9 @@ instance InternalFunction CppSrcCode where
   setFunc t v toVal = func (setterName $ variableName v) t [toVal]
 
   listSizeFunc = func "size" int []
-  listAddFunc l i v = func "insert" (listType static_ $ fmap valType v) 
+  listAddFunc l i v = func "insert" (listType static_ $ fmap valToType v) 
     [iterBegin l #+ i, v]
-  listAppendFunc v = func "push_back" (listType static_ $ fmap valType v) [v]
+  listAppendFunc v = func "push_back" (listType static_ $ fmap valToType v) [v]
 
   iterBeginFunc t = func "begin" (iterator t) []
   iterEndFunc t = func "end" (iterator t) []
@@ -1356,7 +1357,7 @@ instance BinaryOpSym CppHdrCode where
   orOp = return $ od 0 empty
 
 instance VariableSym CppHdrCode where
-  type Variable CppHdrCode = VarData
+  type Variable CppHdrCode = TypedVar
   var n t = liftA2 (mkVar n) t (return $ varDocD n) 
   staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
   const _ _ = liftA2 (mkVar "") void (return empty)
@@ -1374,10 +1375,10 @@ instance VariableSym CppHdrCode where
   
   variableBind = varBind . unCPPHC
   variableName = varName . unCPPHC
-  variableType = fmap varType
+  variableType = fmap varToType
   variableDoc = varDoc . unCPPHC
 
-  varFromData b n t d = liftA2 (vard b n) t (return d)
+  varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = TypedValue
@@ -1396,7 +1397,7 @@ instance ValueSym CppHdrCode where
   
   argsList = liftA2 mkVal (listType static_ string) (return $ text "argv")
 
-  valueType = fmap valType
+  valueType = fmap valToType
   valueDoc = valDoc . unCPPHC
 
 instance NumericExpression CppHdrCode where
@@ -1426,16 +1427,16 @@ instance NumericExpression CppHdrCode where
   ceil _ = liftA2 mkVal void (return empty)
 
 instance BooleanExpression CppHdrCode where
-  (?!) _ = liftA2 mkVal void (return empty)
-  (?&&) _ _ = liftA2 mkVal void (return empty)
-  (?||) _ _ = liftA2 mkVal void (return empty)
+  (?!) _ = liftA2 mkVal bool (return empty)
+  (?&&) _ _ = liftA2 mkVal bool (return empty)
+  (?||) _ _ = liftA2 mkVal bool (return empty)
 
-  (?<) _ _ = liftA2 mkVal void (return empty)
-  (?<=) _ _ = liftA2 mkVal void (return empty)
-  (?>) _ _ = liftA2 mkVal void (return empty)
-  (?>=) _ _ = liftA2 mkVal void (return empty)
-  (?==) _ _ = liftA2 mkVal void (return empty)
-  (?!=) _ _ = liftA2 mkVal void (return empty)
+  (?<) _ _ = liftA2 mkVal bool (return empty)
+  (?<=) _ _ = liftA2 mkVal bool (return empty)
+  (?>) _ _ = liftA2 mkVal bool (return empty)
+  (?>=) _ _ = liftA2 mkVal bool (return empty)
+  (?==) _ _ = liftA2 mkVal bool (return empty)
+  (?!=) _ _ = liftA2 mkVal bool (return empty)
    
 instance ValueExpression CppHdrCode where
   inlineIf _ _ _ = liftA2 mkVal void (return empty)
@@ -1446,8 +1447,8 @@ instance ValueExpression CppHdrCode where
   extStateObj _ _ _ = liftA2 mkVal void (return empty)
   listStateObj _ _ = liftA2 mkVal void (return empty)
 
-  exists _ = liftA2 mkVal void (return empty)
-  notNull _ = liftA2 mkVal void (return empty)
+  exists _ = liftA2 mkVal bool (return empty)
+  notNull _ = liftA2 mkVal bool (return empty)
 
 instance InternalValue CppHdrCode where
   inputFunc = liftA2 mkVal void (return empty)
@@ -1467,7 +1468,7 @@ instance Selector CppHdrCode where
 
   selfAccess _ _ = liftA2 mkVal void (return empty)
 
-  listIndexExists _ _ = liftA2 mkVal void (return empty)
+  listIndexExists _ _ = liftA2 mkVal bool (return empty)
   argExists _ = liftA2 mkVal void (return empty)
   
   indexOf _ _ = liftA2 mkVal void (return empty)
@@ -1731,8 +1732,8 @@ isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
-getParam :: VarData -> ParamData
-getParam v = mkParam (getParamFunc ((cType . varType) v)) v
+getParam :: TypedVar Other -> ParamData
+getParam v = mkParam (getParamFunc ((cdType . varType) v)) v
   where getParamFunc (List _) = cppPointerParamDoc
         getParamFunc (Object _) = cppPointerParamDoc
         getParamFunc _ = stateParamDocD
@@ -1820,10 +1821,10 @@ cppCast t v = cppCast' (getType t) (getType $ valueType v)
 cppListSetDoc :: TypedValue Other -> TypedValue Other -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens (valDoc i) <+> equals <+> valDoc v
 
-cppListDecDoc :: VarData -> TypedValue Other -> Doc -> Doc -> Doc
+cppListDecDoc :: TypedVar Other -> TypedValue Other -> Doc -> Doc -> Doc
 cppListDecDoc v n s d = varDecDocD v s d <> parens (valDoc n)
 
-cppListDecDefDoc :: VarData -> Doc -> Doc -> Doc -> Doc
+cppListDecDefDoc :: TypedVar Other -> Doc -> Doc -> Doc -> Doc
 cppListDecDefDoc v vs s d = varDecDocD v s d <> braces vs
 
 cppPrint :: Bool -> TypedValue Other -> TypedValue Other -> Doc
@@ -1848,18 +1849,18 @@ cppDiscardInput sep inFn = valDoc inFn <> dot <> text "ignore" <> parens
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 
-cppInput :: VarData -> TypedValue Other -> Doc -> Doc
+cppInput :: TypedVar Other -> TypedValue Other -> Doc -> Doc
 cppInput v inFn end = vcat [
   valDoc inFn <+> text ">>" <+> varDoc v <> end,
   valDoc inFn <> dot <> 
     text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')"]
 
-cppOpenFile :: Label -> VarData -> TypedValue Other -> Doc
+cppOpenFile :: Label -> TypedVar Other -> TypedValue Other -> Doc
 cppOpenFile mode f n = varDoc f <> dot <> text "open" <> 
   parens (valDoc n <> comma <+> text mode)
 
-cppPointerParamDoc :: VarData -> Doc
-cppPointerParamDoc v = typeDoc (varType v) <+> text "&" <> varDoc v
+cppPointerParamDoc :: TypedVar Other -> Doc
+cppPointerParamDoc v = tpDoc (varType v) <+> text "&" <> varDoc v
 
 cppsMethod :: Label -> Label -> TypedType Other -> Doc -> Doc -> Doc -> Doc -> Doc
 cppsMethod n c t ps b bStart bEnd = vcat [ttype <+> text c <> text "::" <> 
@@ -1879,16 +1880,16 @@ cpphMethod :: Label -> TypedType Other -> Doc -> Doc -> Doc
 cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
                       | otherwise = typeDoc t <+> text n <> parens ps <> end
 
-cppsStateVarDef :: Label -> Doc -> BindData -> VarData -> TypedValue Other -> Doc -> Doc
-cppsStateVarDef n cns p vr vl end = if bind p == Static then cns <+> typeDoc 
+cppsStateVarDef :: Label -> Doc -> BindData -> TypedVar Other -> TypedValue Other -> Doc -> Doc
+cppsStateVarDef n cns p vr vl end = if bind p == Static then cns <+> tpDoc 
   (varType vr) <+> text (n ++ "::") <> varDoc vr <+> equals <+> valDoc vl <>
   end else empty
 
-cpphStateVarDef :: Doc -> BindData -> VarData -> Doc -> Doc -> Doc
+cpphStateVarDef :: Doc -> BindData -> TypedVar Other -> Doc -> Doc -> Doc
 cpphStateVarDef s p v asg end = if bind p == Static then 
   stateVarDocD s (bindDoc p) v end else stateVarDefDocD s (bindDoc p) asg
 
-cppDestruct :: CppSrcCode (Variable CppSrcCode) -> 
+cppDestruct :: CppSrcCode (Variable CppSrcCode Other) -> 
   CppSrcCode (Statement CppSrcCode)
 cppDestruct v = cppDestruct' (getType $ variableType v)
   where cppDestruct' (List _) = deleteLoop
@@ -1946,8 +1947,8 @@ cppModuleDoc ls blnk1 fs blnk2 cs = vcat [
 
 cppInOutCall :: (Label -> CppSrcCode (StateType CppSrcCode Other) -> 
   [CppSrcCode (Value CppSrcCode Other)] -> CppSrcCode (Value CppSrcCode Other)) -> Label -> 
-  [CppSrcCode (Value CppSrcCode Other)] -> [CppSrcCode (Variable CppSrcCode)] -> 
-  [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Statement CppSrcCode)
+  [CppSrcCode (Value CppSrcCode Other)] -> [CppSrcCode (Variable CppSrcCode Other)] -> 
+  [CppSrcCode (Variable CppSrcCode Other)] -> CppSrcCode (Statement CppSrcCode)
 cppInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
 cppInOutCall f n ins [] [out] = if null (filterOutObjs [out]) 
   then valState $ f n void (valueOf out : ins)

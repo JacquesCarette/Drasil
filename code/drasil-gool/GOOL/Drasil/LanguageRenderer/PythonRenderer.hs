@@ -41,7 +41,9 @@ import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..), file,
   updateFileMod, FuncData(..), fd, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, OpData(..), ParamData(..), ProgData(..), progD, 
   TypeData(..), td, btd, TypedType(..), cType, typeString, typeDoc, ValData(..),
-   vd, TypedValue(..), valPrec, valType, valDoc, VarData(..), vard)
+   vd, TypedValue(..), valPrec, valType, valDoc, vard, 
+   TypedVar(..), varBind, varName, varType, varDoc, typeToVar, valToType, 
+   varToType)
 import GOOL.Drasil.Helpers (vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
   liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -202,7 +204,7 @@ instance BinaryOpSym PythonCode where
   orOp = return $ orPrec "or"
 
 instance VariableSym PythonCode where
-  type Variable PythonCode = VarData
+  type Variable PythonCode = TypedVar
   var n t = liftA2 (mkVar n) t (return $ varDocD n) 
   staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
   const = var
@@ -222,10 +224,10 @@ instance VariableSym PythonCode where
 
   variableBind = varBind . unPC
   variableName = varName . unPC
-  variableType = fmap varType
+  variableType = fmap varToType
   variableDoc = varDoc . unPC
 
-  varFromData b n t d = liftA2 (vard b n) t (return d)
+  varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym PythonCode where
   type Value PythonCode = TypedValue
@@ -243,7 +245,7 @@ instance ValueSym PythonCode where
   enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
   argsList = liftA2 mkVal (listType static_ string) (return $ text "sys.argv")
 
-  valueType = fmap valType
+  valueType = fmap valToType
   valueDoc = valDoc . unPC
 
 instance NumericExpression PythonCode where
@@ -275,7 +277,7 @@ instance NumericExpression PythonCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression PythonCode where
-  (?!) = liftA3 unExpr notOp bool
+  (?!) = liftA2 unExpr notOp
   (?&&) = liftA4 typeBinExpr andOp bool
   (?||) = liftA4 typeBinExpr orOp bool
 
@@ -347,8 +349,8 @@ instance InternalFunction PythonCode where
   setFunc t v toVal = func (setterName $ variableName v) t [toVal]
 
   listSizeFunc = liftA2 fd int (return $ text "len")
-  listAddFunc _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
-  listAppendFunc v = func "append" (listType static_ $ fmap valType v) [v]
+  listAddFunc _ i v = func "insert" (listType static_ $ fmap valToType v) [i, v]
+  listAppendFunc v = func "append" (listType static_ $ fmap valToType v) [v]
 
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
   iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
@@ -611,8 +613,8 @@ pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs
 
 pyInlineIf :: TypedValue Boolean -> TypedValue Other -> TypedValue Other -> 
   TypedValue Other
-pyInlineIf c v1 v2 = vd (valPrec c) (valType v1) (valDoc v1 <+> text "if" <+> 
-  valDoc c <+> text "else" <+> valDoc v2)
+pyInlineIf c v1 v2 = typeToVal (valPrec c) (valToType v1) (valDoc v1 <+> 
+  text "if" <+> valDoc c <+> text "else" <+> valDoc v2)
 
 pyListSize :: TypedValue Other -> FuncData -> Doc
 pyListSize v f = funcDoc f <> parens (valDoc v)
@@ -620,10 +622,10 @@ pyListSize v f = funcDoc f <> parens (valDoc v)
 pyStringType :: TypedType Other
 pyStringType = td String "str" (text "str")
 
-pyListDec :: VarData -> Doc
-pyListDec v = varDoc v <+> equals <+> typeDoc (varType v)
+pyListDec :: TypedVar Other -> Doc
+pyListDec v = varDoc v <+> equals <+> tpDoc (varType v)
 
-pyListDecDef :: VarData -> Doc -> Doc
+pyListDecDef :: TypedVar Other -> Doc -> Doc
 pyListDecDef v vs = varDoc v <+> equals <+> brackets vs
 
 pyPrint :: Bool ->  TypedValue Other -> TypedValue Other -> TypedValue Other -> Doc
@@ -638,7 +640,7 @@ pyOut newLn printFn v f = pyOut' (getType $ valueType v)
   where pyOut' (List _) = printSt newLn printFn v f
         pyOut' _ = outDoc newLn printFn v f
 
-pyInput :: PythonCode (Value PythonCode Other) -> PythonCode (Variable PythonCode)
+pyInput :: PythonCode (Value PythonCode Other) -> PythonCode (Variable PythonCode Other)
   ->  PythonCode (Statement PythonCode)
 pyInput inSrc v = v &= pyInput' (getType $ variableType v)
   where pyInput' Integer = funcApp "int" int [inSrc]
@@ -675,12 +677,12 @@ pyTryCatch tryB catchB = vcat [
   text "except" <+> text "Exception" <+> colon,
   indent catchB]
 
-pyListSlice :: VarData -> TypedValue Other -> 
+pyListSlice :: TypedVar Other -> TypedValue Other -> 
   TypedValue Other -> TypedValue Other -> TypedValue Other -> Doc
 pyListSlice vnew vold b e s = varDoc vnew <+> equals <+> valDoc vold <> 
   brackets (valDoc b <> colon <> valDoc e <> colon <> valDoc s)
 
-pyMethod :: Label -> VarData -> Doc -> Doc -> Doc
+pyMethod :: Label -> TypedVar Other -> Doc -> Doc -> Doc
 pyMethod n slf ps b = vcat [
   text "def" <+> text n <> parens (varDoc slf <> oneParam <> ps) <> colon,
   indent bodyD]
@@ -721,7 +723,7 @@ pyModule ls fs cs =
 pyInOutCall :: (Label -> PythonCode (StateType PythonCode Other) -> 
   [PythonCode (Value PythonCode Other)] -> PythonCode (Value PythonCode Other)) -> 
   Label -> [PythonCode (Value PythonCode Other)] -> 
-  [PythonCode (Variable PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
+  [PythonCode (Variable PythonCode Other)] -> [PythonCode (Variable PythonCode Other)] -> 
   PythonCode (Statement PythonCode)
 pyInOutCall f n ins [] [] = valState $ f n void ins
 pyInOutCall f n ins outs both = if null rets then valState (f n void (map 

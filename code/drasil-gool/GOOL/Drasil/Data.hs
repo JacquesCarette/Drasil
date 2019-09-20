@@ -8,7 +8,8 @@ module GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, Terminator(..),
   StateVarData(..), svd, TypeData(..), td, btd, TypedType(..), cType, 
   typeString, typeDoc, ValData(..), vd, updateValDoc, TypedValue(..), 
   otherVal, boolVal, valPrec, valType, valDoc, Binding(..), VarData(..), vard,
-  TypedVar(..), typeToVal, typeToVar, valToType
+  TypedVar(..), varBind, varName, varType, varDoc, typeToVal, typeToVar, 
+  valToType, varToType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -188,8 +189,8 @@ valDoc = vlDoc . getValData
 
 ---- Variables ----
 
-data VarData = VarD {varBind :: Binding, varName :: String, 
-  varType :: TypeData, varDoc :: Doc}
+data VarData = VarD {vrBind :: Binding, vrName :: String, 
+  vrType :: TypeData, vrDoc :: Doc}
 
 instance Eq VarData where
   VarD p1 n1 t1 _ == VarD p2 n2 t2 _ = p1 == p2 && n1 == n2 && t1 == t2
@@ -200,6 +201,19 @@ vard = VarD
 data TypedVar a where
   BVr :: VarData -> TypedVar Boolean
   OVr :: VarData -> TypedVar Other
+
+getVarData :: TypedVar a -> VarData
+getVarData (BVr v) = v
+getVarData (OVr v) = v
+
+varBind :: TypedVar a -> Binding
+varName :: TypedVar a -> String
+varType :: TypedVar a -> TypeData
+varDoc :: TypedVar a -> Doc
+varBind = vrBind . getVarData
+varName = vrName . getVarData
+varType = vrType . getVarData
+varDoc = vrDoc . getVarData
 
 ---- Transformations ----
 
@@ -214,6 +228,10 @@ typeToVar b n (OT t) d = OVr (vard b n t d)
 valToType :: TypedValue a -> TypedType a
 valToType (BV v) = BT (vlType v)
 valToType (OV v) = OT (vlType v)
+
+varToType :: TypedVar a -> TypedType a
+varToType (BVr v) = BT (vrType v)
+varToType (OVr v) = OT (vrType v)
 
 -- Reminder for later
 -- varToVal :: TypedVar a -> TypedValue a

@@ -54,8 +54,9 @@ import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..),
   fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
   od, ParamData(..), pd, TypeData(..), td, btd, TypedType(..), cType, 
   typeString, typeDoc, 
-  TypedValue(..), valPrec, valDoc, Binding(..), VarData(..),
-  TypedVar(..), typeToVal, typeToVar, valToType)
+  TypedValue(..), valPrec, valDoc, Binding(..),
+  TypedVar(..), varBind, varName, varType, varDoc, typeToVal, typeToVar, 
+  valToType)
 import GOOL.Drasil.Helpers (angles, 
   doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
 
@@ -242,13 +243,13 @@ constructDocD _ = empty
 
 -- Parameters --
 
-stateParamDocD :: VarData -> Doc
+stateParamDocD :: TypedVar Other -> Doc
 stateParamDocD v = tpDoc (varType v) <+> varDoc v
 
 paramListDocD :: [ParamData] -> Doc
 paramListDocD = hicat (text ", ") . map paramDoc
 
-mkParam :: (VarData -> Doc) -> VarData -> ParamData
+mkParam :: (TypedVar Other -> Doc) -> TypedVar Other -> ParamData
 mkParam f v = pd v (f v)
 
 -- Method --
@@ -265,13 +266,13 @@ methodListDocD ms = vibcat methods
 
 -- StateVar --
 
-stateVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
+stateVarDocD :: Doc -> Doc -> TypedVar Other -> Doc -> Doc
 stateVarDocD s p v end = s <+> p <+> tpDoc (varType v) <+> varDoc v <> end
 
 stateVarDefDocD :: Doc -> Doc -> Doc -> Doc
 stateVarDefDocD s p dec = s <+> p <+> dec
 
-constVarDocD :: Doc -> Doc -> VarData -> Doc -> Doc
+constVarDocD :: Doc -> Doc -> TypedVar Other -> Doc -> Doc
 constVarDocD s p v end = s <+> p <+> text "const" <+> tpDoc (varType v) <+>
   varDoc v <> end
 
@@ -363,46 +364,46 @@ stratDocD b resultState = vcat [
 
 -- Statements --
 
-assignDocD :: VarData -> TypedValue Other -> Doc
+assignDocD :: TypedVar Other -> TypedValue Other -> Doc
 assignDocD vr vl = varDoc vr <+> equals <+> valDoc vl
 
-multiAssignDoc :: [VarData] -> [TypedValue Other] -> Doc
+multiAssignDoc :: [TypedVar Other] -> [TypedValue Other] -> Doc
 multiAssignDoc vrs vls = varList vrs <+> equals <+> valList vls
 
-plusEqualsDocD :: VarData -> TypedValue Other -> Doc
+plusEqualsDocD :: TypedVar Other -> TypedValue Other -> Doc
 plusEqualsDocD vr vl = varDoc vr <+> text "+=" <+> valDoc vl
 
-plusEqualsDocD' :: VarData -> OpData -> TypedValue Other -> Doc
+plusEqualsDocD' :: TypedVar Other -> OpData -> TypedValue Other -> Doc
 plusEqualsDocD' vr plusOp vl = varDoc vr <+> equals <+> varDoc vr <+> 
   opDoc plusOp <+> valDoc vl
 
-plusPlusDocD :: VarData -> Doc
+plusPlusDocD :: TypedVar Other -> Doc
 plusPlusDocD v = varDoc v <> text "++"
 
-plusPlusDocD' :: VarData -> OpData -> Doc
+plusPlusDocD' :: TypedVar Other -> OpData -> Doc
 plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> opDoc plusOp <+>
   int 1
 
-varDecDocD :: VarData -> Doc -> Doc -> Doc
+varDecDocD :: TypedVar Other -> Doc -> Doc -> Doc
 varDecDocD v s d = bind (varBind v) <+> tpDoc (varType v) <+> varDoc v
   where bind Static = s
         bind Dynamic = d
 
-varDecDefDocD :: VarData -> TypedValue Other -> Doc -> Doc -> Doc
+varDecDefDocD :: TypedVar Other -> TypedValue Other -> Doc -> Doc -> Doc
 varDecDefDocD v def s d = varDecDocD v s d <+> equals <+> valDoc def
 
-listDecDocD :: VarData -> TypedValue Other -> Doc -> Doc -> Doc
+listDecDocD :: TypedVar Other -> TypedValue Other -> Doc -> Doc -> Doc
 listDecDocD v n s d = varDecDocD v s d <+> equals <+> new <+> 
   tpDoc (varType v) <> parens (valDoc n)
 
-listDecDefDocD :: VarData -> [TypedValue Other] -> Doc -> Doc -> Doc
+listDecDefDocD :: TypedVar Other -> [TypedValue Other] -> Doc -> Doc -> Doc
 listDecDefDocD v vs s d = varDecDocD v s d <+> equals <+> new <+> 
   tpDoc (varType v) <+> braces (valList vs)
 
-objDecDefDocD :: VarData -> TypedValue Other -> Doc -> Doc -> Doc
+objDecDefDocD :: TypedVar Other -> TypedValue Other -> Doc -> Doc -> Doc
 objDecDefDocD = varDecDefDocD
 
-constDecDefDocD :: VarData -> TypedValue Other -> Doc
+constDecDefDocD :: TypedVar Other -> TypedValue Other -> Doc
 constDecDefDocD v def = text "const" <+> tpDoc (varType v) <+> varDoc v <+> 
   equals <+> valDoc def
 
@@ -412,7 +413,7 @@ returnDocD vs = text "return" <+> valList vs
 commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt
 
-freeDocD :: VarData -> Doc
+freeDocD :: TypedVar Other -> Doc
 freeDocD v = text "delete" <+> varDoc v
 
 throwDocD :: Doc -> Doc
@@ -432,7 +433,7 @@ mkSt s = (s, Semi)
 mkStNoEnd :: Doc -> (Doc, Terminator)
 mkStNoEnd s = (s, Empty)
 
-stringListVals' :: (RenderSym repr) => [repr (Variable repr)] -> 
+stringListVals' :: (RenderSym repr) => [repr (Variable repr Other)] -> 
   repr (Value repr Other) -> repr (Statement repr)
 stringListVals' vars sl = multi $ checkList (getType $ valueType sl)
     where checkList (List String) = assignVals vars 0
@@ -442,7 +443,7 @@ stringListVals' vars sl = multi $ checkList (getType $ valueType sl)
           assignVals (v:vs) n = assign v (cast (variableType v) 
             (listAccess sl (litInt n))) : assignVals vs (n+1)
 
-stringListLists' :: (RenderSym repr) => [repr (Variable repr)] -> repr (Value repr Other)
+stringListLists' :: (RenderSym repr) => [repr (Variable repr Other)] -> repr (Value repr Other)
   -> repr (Statement repr)
 stringListLists' lsts sl = checkList (getType $ valueType sl)
   where checkList (List String) = listVals (map (getType . variableType) lsts)
@@ -696,15 +697,15 @@ argDocD n args = valDoc args <> brackets (valDoc n)
 enumElemDocD :: Label -> Label -> Doc
 enumElemDocD en e = text en <> dot <> text e
 
-classVarCheckStatic :: (VariableSym repr) => repr (Variable repr) -> 
-  repr (Variable repr)
+classVarCheckStatic :: (VariableSym repr) => repr (Variable repr Other) -> 
+  repr (Variable repr Other)
 classVarCheckStatic v = classVarCS (variableBind v)
   where classVarCS Dynamic = error
           "classVar can only be used to access static variables"
         classVarCS Static = v
 
 classVarD :: (VariableSym repr) => repr (StateType repr Other) -> 
-  repr (Variable repr) -> (Doc -> Doc -> Doc) -> repr (Variable repr)
+  repr (Variable repr Other) -> (Doc -> Doc -> Doc) -> repr (Variable repr Other)
 classVarD c v f = varFromData (variableBind v) 
   (getTypeString c ++ "." ++ variableName v) 
   (variableType v) (f (getTypeDoc c) (variableDoc v))
@@ -712,7 +713,7 @@ classVarD c v f = varFromData (variableBind v)
 classVarDocD :: Doc -> Doc -> Doc
 classVarDocD c v = c <> dot <> v
 
-objVarDocD :: VarData -> VarData ->  Doc
+objVarDocD :: TypedVar Other -> TypedVar Other ->  Doc
 objVarDocD n1 n2 = varDoc n1 <> dot <> varDoc n2
 
 inlineIfD :: TypedValue Boolean -> TypedValue Other -> TypedValue Other -> TypedValue Other
@@ -850,7 +851,7 @@ docFuncRepr desc pComms rComms f = commentedFunc (docComment $ functionDoc desc
 valList :: [TypedValue Other] -> Doc
 valList vs = hcat (intersperse (text ", ") (map valDoc vs))
 
-varList :: [VarData] -> Doc
+varList :: [TypedVar Other] -> Doc
 varList vs = hcat (intersperse (text ", ") (map varDoc vs))
 
 prependToBody :: (Doc, Terminator) -> Doc -> Doc
@@ -888,8 +889,8 @@ intValue i = intValue' (getType $ valueType i)
         intValue' (Enum _) = cast S.int i
         intValue' _ = error "Value passed must be Integer or Enum"
 
-filterOutObjs :: (VariableSym repr) => [repr (Variable repr)] -> 
-  [repr (Variable repr)]
+filterOutObjs :: (VariableSym repr) => [repr (Variable repr Other)] -> 
+  [repr (Variable repr Other)]
 filterOutObjs = filter (not . isObject . getType . variableType)
 
 doxCommand, doxBrief, doxParam, doxReturn, doxFile, doxAuthor, doxDate :: String

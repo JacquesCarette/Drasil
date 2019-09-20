@@ -51,7 +51,8 @@ import GOOL.Drasil.Data (Boolean, Other, Terminator(..),
   updateParamDoc, ProgData(..), progD, TypeData(..), td, 
   TypedType(..), cType, typeString, typeDoc, TypedValue(..), ValData(..), 
   updateValDoc, valPrec, valType, 
-  valDoc, Binding(..), VarData(..), vard)
+  valDoc, Binding(..), VarData(..), vard, TypedVar(..),  varBind, varName, 
+  varType, varDoc, typeToVar, valToType, varToType)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -223,7 +224,7 @@ instance BinaryOpSym CSharpCode where
   orOp = return orOpDocD
 
 instance VariableSym CSharpCode where
-  type Variable CSharpCode = VarData
+  type Variable CSharpCode = TypedVar
   var n t = liftA2 (mkVar n) t (return $ varDocD n) 
   staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
   const = var
@@ -242,10 +243,10 @@ instance VariableSym CSharpCode where
 
   variableBind = varBind . unCSC
   variableName = varName . unCSC
-  variableType = fmap varType
+  variableType = fmap varToType
   variableDoc = varDoc . unCSC
   
-  varFromData b n t d = liftA2 (vard b n) t (return d)
+  varFromData b n t d = liftA2 (typeToVar b n) t (return d)
 
 instance ValueSym CSharpCode where
   type Value CSharpCode = TypedValue
@@ -264,7 +265,7 @@ instance ValueSym CSharpCode where
   
   argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
 
-  valueType = fmap valType
+  valueType = fmap valToType
   valueDoc = valDoc . unCSC
 
 instance NumericExpression CSharpCode where
@@ -294,7 +295,7 @@ instance NumericExpression CSharpCode where
   ceil = liftA2 unExpr ceilOp
 
 instance BooleanExpression CSharpCode where
-  (?!) = liftA3 unExpr notOp bool
+  (?!) = liftA2 unExpr notOp
   (?&&) = liftA4 typeBinExpr andOp bool
   (?||) = liftA4 typeBinExpr orOp bool
 
@@ -317,7 +318,7 @@ instance ValueExpression CSharpCode where
 
   exists = notNull
   notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf 
-    (var "null" (fmap valType v))))
+    (var "null" (fmap valToType v))))
 
 instance InternalValue CSharpCode where
   inputFunc = liftA2 mkVal string (return $ text "Console.ReadLine()")
@@ -366,8 +367,8 @@ instance InternalFunction CSharpCode where
   setFunc t v toVal = func (setterName $ variableName v) t [toVal]
 
   listSizeFunc = liftA2 fd int (fmap funcDocD (valueOf (var "Count" int)))
-  listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
-  listAppendFunc v = func "Add" (fmap valType v) [v]
+  listAddFunc _ i v = func "Insert" (fmap valToType v) [i, v]
+  listAppendFunc v = func "Add" (fmap valToType v) [v]
 
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
   iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
@@ -662,7 +663,7 @@ csInput t inFn = mkVal t $ text (csInput' (cType t)) <>
         csInput' _ = error "Attempt to read value of unreadable type"
 
 csFileInput :: TypedValue Other -> TypedValue Other
-csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
+csFileInput f = mkVal (valToType f) (valDoc f <> dot <> text "ReadLine()")
 
 csOpenFileR :: TypedValue Other -> TypedType Other -> TypedValue Other
 csOpenFileR n r = mkVal r $ new <+> typeDoc r <> 
@@ -681,8 +682,8 @@ csOut p = text "out" <+> p
 
 csInOutCall :: (Label -> CSharpCode (StateType CSharpCode Other) -> 
   [CSharpCode (Value CSharpCode Other)] -> CSharpCode (Value CSharpCode Other)) -> Label -> 
-  [CSharpCode (Value CSharpCode Other)] -> [CSharpCode (Variable CSharpCode)] -> 
-  [CSharpCode (Variable CSharpCode)] -> CSharpCode (Statement CSharpCode)
+  [CSharpCode (Value CSharpCode Other)] -> [CSharpCode (Variable CSharpCode Other)] -> 
+  [CSharpCode (Variable CSharpCode Other)] -> CSharpCode (Statement CSharpCode)
 csInOutCall f n ins [out] [] = assign out $ f n (variableType out) ins
 csInOutCall f n ins [] [out] = if null (filterOutObjs [out])
   then valState $ f n void (valueOf out : ins) 
@@ -696,9 +697,9 @@ csVarDec :: Binding -> CSharpCode (Statement CSharpCode) ->
 csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
 csVarDec Dynamic d = d
 
-csObjVar :: VarData -> VarData -> VarData
+csObjVar :: TypedVar Other -> TypedVar Other -> TypedVar Other
 csObjVar o v = csObjVar' (varBind v)
   where csObjVar' Static = error 
           "Cannot use objVar to access static variables through an object in C#"
         csObjVar' Dynamic = mkVar (varName o ++ "." ++ varName v) 
-          (varType v) (objVarDocD o v)
+          (varToType v) (objVarDocD o v)

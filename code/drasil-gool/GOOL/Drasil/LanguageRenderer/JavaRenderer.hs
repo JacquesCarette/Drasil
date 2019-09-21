@@ -516,8 +516,8 @@ instance ParameterSym JavaCode where
   stateParam = fmap (mkParam stateParamDocD)
   pointerParam = stateParam
 
-  parameterName = paramName . unJC
-  parameterType = fmap paramType
+  parameterName = variableName . fmap paramVar
+  parameterType = variableType . fmap paramVar
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
@@ -530,7 +530,7 @@ instance MethodSym JavaCode where
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   mainMethod c b = setMainMethod <$> method "main" c public static_ 
-    (mState void) [liftA2 (pd "args") (listType static_ string) 
+    (mState void) [liftA2 pd (var "args" (listType static_ string)) 
     (return $ text "String[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_

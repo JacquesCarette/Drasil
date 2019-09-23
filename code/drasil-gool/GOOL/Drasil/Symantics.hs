@@ -344,7 +344,7 @@ class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   get :: repr (Value repr Other) -> repr (Variable repr a) -> 
     repr (Value repr a)
   set :: repr (Value repr Other) -> repr (Variable repr a) -> 
-    repr (Value repr a) -> repr (Value repr a)
+    repr (Value repr a) -> repr (Value repr Other)
 
   listSize   :: repr (Value repr Other) -> repr (Value repr Other)
   listAdd    :: repr (Value repr Other) -> repr (Value repr Other) -> 
@@ -366,7 +366,7 @@ class (ValueSym repr, InternalValue repr, FunctionSym repr, Selector repr) =>
 class (ValueSym repr, InternalValue repr) => InternalFunction repr where
   getFunc        :: repr (Variable repr a) -> repr (Function repr a)
   setFunc        :: repr (StateType repr Other) -> repr (Variable repr a) -> 
-    repr (Value repr a) -> repr (Function repr a)
+    repr (Value repr a) -> repr (Function repr Other)
 
   listSizeFunc       :: repr (Function repr Other)
   listAddFunc        :: repr (Value repr Other) -> repr (Value repr Other) -> 

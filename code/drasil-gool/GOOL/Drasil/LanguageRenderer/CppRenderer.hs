@@ -1481,7 +1481,7 @@ instance FunctionSym CppHdrCode where
   func _ t _ = liftA2 typeToFunc t (return empty)
   
   get _ v = liftA2 mkVal (variableType v) (return empty)
-  set _ v _ = liftA2 mkVal (variableType v) (return empty)
+  set _ v _ = liftA2 mkVal void (return empty)
 
   listSize _ = liftA2 mkVal void (return empty)
   listAdd _ _ _ = liftA2 mkVal void (return empty)
@@ -1497,7 +1497,7 @@ instance SelectorFunction CppHdrCode where
 
 instance InternalFunction CppHdrCode where
   getFunc v = liftA2 typeToFunc (variableType v) (return empty)
-  setFunc _ v _ = liftA2 typeToFunc (variableType v) (return empty)
+  setFunc _ v _ = liftA2 typeToFunc void (return empty)
 
   listSizeFunc = liftA2 typeToFunc void (return empty)
   listAddFunc _ _ _ = liftA2 typeToFunc void (return empty)

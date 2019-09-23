@@ -206,8 +206,8 @@ entails writing different versions of the program, one for each. While not
 necessarily difficult, it nevertheless
 requires investing the time to learn the idiosyncrasies of each language and 
 pay attention to the operational details where languages differ. Ultimately, 
-the code they write will likely be marred by influences of the language they 
-know best. They may consistently use techniques that they are familiar with 
+the code will likely be marred by influences of the language the programmer 
+knows best. They may consistently use techniques that they are familiar with 
 from one language, while unaware that the language in which they are currently 
 writing offers a better or cleaner way of doing the same task 
 \cite{scholtz1990learning, alexandron2012effect}. Besides this 
@@ -229,7 +229,7 @@ provided\footnote{Type inference for Python notwithstanding}.
 What if, instead, there was a single meta-language which was designed to
 contain the common semantic concepts of a number of OO languages, encoded
 in such a way that all the necessary information for translation was always
-present?  This source language could be made to be agnostic about what the
+present?  This source language could be made to be agnostic about what
 eventual target language was used -- free of the idiosyncratic details of
 any given language.  This would be quite the boon for the translator.
 In fact, we could try to go even further, and attempt to teach the translator
@@ -253,7 +253,7 @@ the production of high-level code from Domain-Specific Languages (DSL).
 A DSL is a high-level programming language with syntax and semantics tailored
 to a specific domain \cite{mernik2005and}. DSLs allow domain experts 
 to write code without having to concern themselves with the details of
-general-purpose programming languages (GPL). A DSL
+General-Purpose programming Languages (GPL). A DSL
 abstracts over the details of the code, providing notation for a user to
 specify domain-specific knowledge in a natural manner. Such DSL code is typically
 translated to a GPL for execution. Abstracting over code details
@@ -264,7 +264,7 @@ the language we are looking for
 is just a DSL in the domain of OO programming languages!
 
 There are some DSLs that already generate code in multiple languages, to be
-be further discussed in Section \ref{related}, but none of them have the 
+further discussed in Section \ref{related}, but none of them have the 
 combination of features we require. We are indeed trying to do something odd:
 writing a ``DSL'' for what is essentially the domain of OO GPLs. Furthermore,
 we have additional requirements:

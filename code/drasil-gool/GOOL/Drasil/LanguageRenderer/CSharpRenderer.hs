@@ -37,11 +37,10 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   mkVar, mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
   litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
   classVarCheckStatic, classVarD, classVarDocD, objVarDocD, inlineIfD, 
-  funcAppDocD, extFuncAppDocD, stateObjDocD, listStateObjDocD, notNullDocD, 
-  funcDocD, castDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, 
-  castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, 
-  publicDocD, dot, new, blockCmtStart, blockCmtEnd, docCmtStart, 
-  observerListName, doubleSlash, 
+  funcAppDocD, extFuncAppDocD, newObjDocD, notNullDocD, funcDocD, castDocD, 
+  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
+  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
+  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
   moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
   setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
@@ -106,7 +105,6 @@ instance KeywordSym CSharpCode where
   inherit = return colon
 
   list _ = return $ text "List"
-  listObj = return new
 
   blockStart = return lbrace
   blockEnd = return rbrace
@@ -308,10 +306,8 @@ instance ValueExpression CSharpCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t (liftList valList vs))
-  extStateObj _ = stateObj
-  listStateObj t vs = liftA2 mkVal t (liftA3 listStateObjDocD listObj t 
-    (liftList valList vs))
+  newObj t vs = liftA2 mkVal t (liftA2 newObjDocD t (liftList valList vs))
+  extNewObj _ = newObj
 
   exists = notNull
   notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf (var
@@ -404,11 +400,11 @@ instance StatementSym CSharpCode where
   objDecDef v def = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
     def static_ dynamic_ 
   objDecNew v vs = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
-    (stateObj (variableType v) vs) static_ dynamic_ 
+    (newObj (variableType v) vs) static_ dynamic_ 
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
-    (stateObj (variableType v) []) static_ dynamic_ 
-  extObjDecNewVoid _ = objDecNewVoid
+  objDecNewNoParams v = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
+    (newObj (variableType v) []) static_ dynamic_ 
+  extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
   print v = outDoc False printFunc v Nothing
@@ -433,7 +429,7 @@ instance StatementSym CSharpCode where
 
   getFileInputLine = getFileInput
   discardFileLine f = valState $ fmap csFileInput f
-  stringSplit d vnew s = assign vnew $ listStateObj (listType dynamic_ string) 
+  stringSplit d vnew s = assign vnew $ newObj (listType dynamic_ string) 
     [s $. func "Split" (listType static_ string) [litChar d]]
 
   stringListVals = stringListVals'

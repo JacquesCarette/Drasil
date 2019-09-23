@@ -106,7 +106,6 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   inherit = pair inherit inherit
 
   list p = pair (list $ pfst p) (list $ psnd p)
-  listObj = pair listObj listObj
 
   blockStart = pair blockStart blockStart
   blockEnd = pair blockEnd blockEnd
@@ -298,12 +297,10 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
     (selfFuncApp n (psnd t) (map psnd vs))
   extFuncApp l n t vs = pair (extFuncApp l n (pfst t) (map pfst vs)) 
     (extFuncApp l n (psnd t) (map psnd vs))
-  stateObj t vs = pair (stateObj (pfst t) (map pfst vs)) (stateObj (psnd t) 
+  newObj t vs = pair (newObj (pfst t) (map pfst vs)) (newObj (psnd t) 
     (map psnd vs))
-  extStateObj l t vs = pair (extStateObj l (pfst t) (map pfst vs)) 
-    (extStateObj l (psnd t) (map psnd vs))
-  listStateObj t vs = pair (listStateObj (pfst t) (map pfst vs)) 
-    (listStateObj (psnd t) (map psnd vs))
+  extNewObj l t vs = pair (extNewObj l (pfst t) (map pfst vs)) 
+    (extNewObj l (psnd t) (map psnd vs))
 
   exists v = pair (exists $ pfst v) (exists $ psnd v)
   notNull v = pair (notNull $ pfst v) (notNull $ psnd v)
@@ -411,9 +408,9 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (psnd v) (map psnd vs))
   extObjDecNew lib v vs = pair (extObjDecNew lib (pfst v) (map pfst vs)) 
     (extObjDecNew lib (psnd v) (map psnd vs))
-  objDecNewVoid v = pair (objDecNewVoid $ pfst v) (objDecNewVoid $ psnd v)
-  extObjDecNewVoid lib v = pair (extObjDecNewVoid lib $ pfst v) 
-    (extObjDecNewVoid lib $ psnd v)
+  objDecNewNoParams v = pair (objDecNewNoParams $ pfst v) (objDecNewNoParams $ psnd v)
+  extObjDecNewNoParams lib v = pair (extObjDecNewNoParams lib $ pfst v) 
+    (extObjDecNewNoParams lib $ psnd v)
   constDecDef v def = pair (constDecDef (pfst v) (pfst def)) (constDecDef 
     (psnd v) (psnd def))
 
@@ -670,7 +667,6 @@ instance KeywordSym CppSrcCode where
   inherit = return colon
 
   list _ = return $ text "vector"
-  listObj = return empty
 
   blockStart = return lbrace
   blockEnd = return rbrace
@@ -874,9 +870,8 @@ instance ValueExpression CppSrcCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp _ = funcApp
-  stateObj t vs = liftA2 mkVal t (liftA2 cppStateObjDoc t (liftList valList vs))
-  extStateObj _ = stateObj
-  listStateObj = stateObj
+  newObj t vs = liftA2 mkVal t (liftA2 cppStateObjDoc t (liftList valList vs))
+  extNewObj _ = newObj
 
   exists = notNull
   notNull v = v
@@ -968,12 +963,12 @@ instance StatementSym CppSrcCode where
     (bindDoc <$> static_) (bindDoc <$> dynamic_) 
   objDecDef v def = mkSt <$> liftA4 objDecDefDocD v def (bindDoc <$> static_) 
     (bindDoc <$> dynamic_) 
-  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
     vs) (bindDoc <$> static_) (bindDoc <$> dynamic_) 
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+  objDecNewNoParams v = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
     []) (bindDoc <$> static_) (bindDoc <$> dynamic_) 
-  extObjDecNewVoid _ = objDecNewVoid
+  extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
   print v = outDoc False printFunc v Nothing
@@ -1259,7 +1254,6 @@ instance KeywordSym CppHdrCode where
   inherit = return colon
 
   list _ = return $ text "vector"
-  listObj = return empty
 
   blockStart = return lbrace
   blockEnd = return rbrace
@@ -1440,9 +1434,8 @@ instance ValueExpression CppHdrCode where
   funcApp _ _ _ = liftA2 mkVal void (return empty)
   selfFuncApp _ _ _ = liftA2 mkVal void (return empty)
   extFuncApp _ _ _ _ = liftA2 mkVal void (return empty)
-  stateObj _ _ = liftA2 mkVal void (return empty)
-  extStateObj _ _ _ = liftA2 mkVal void (return empty)
-  listStateObj _ _ = liftA2 mkVal void (return empty)
+  newObj _ _ = liftA2 mkVal void (return empty)
+  extNewObj _ _ _ = liftA2 mkVal void (return empty)
 
   exists _ = liftA2 mkVal void (return empty)
   notNull _ = liftA2 mkVal void (return empty)
@@ -1530,8 +1523,8 @@ instance StatementSym CppHdrCode where
   objDecDef _ _ = return (mkStNoEnd empty)
   objDecNew _ _ = return (mkStNoEnd empty)
   extObjDecNew _ _ _ = return (mkStNoEnd empty)
-  objDecNewVoid _ = return (mkStNoEnd empty)
-  extObjDecNewVoid _ _ = return (mkStNoEnd empty)
+  objDecNewNoParams _ = return (mkStNoEnd empty)
+  extObjDecNewNoParams _ _ = return (mkStNoEnd empty)
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
   print _ = return (mkStNoEnd empty)

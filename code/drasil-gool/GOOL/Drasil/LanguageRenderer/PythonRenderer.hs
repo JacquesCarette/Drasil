@@ -99,7 +99,6 @@ instance KeywordSym PythonCode where
   inherit = return empty
 
   list _ = return empty
-  listObj = return empty
 
   blockStart = return colon
   blockEnd = return empty
@@ -292,10 +291,9 @@ instance ValueExpression PythonCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 pyStateObj t (liftList valList vs))
-  extStateObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
+  newObj t vs = liftA2 mkVal t (liftA2 pyStateObj t (liftList valList vs))
+  extNewObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
     valList vs))
-  listStateObj t _ = liftA2 mkVal t (fmap typeDoc t)
 
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
@@ -384,10 +382,10 @@ instance StatementSym PythonCode where
   listDec _ v = mkStNoEnd <$> fmap pyListDec v
   listDecDef v vs = mkStNoEnd <$> liftA2 pyListDecDef v (liftList valList vs)
   objDecDef = varDecDef
-  objDecNew v vs = varDecDef v (stateObj (variableType v) vs)
-  extObjDecNew lib v vs = varDecDef v (extStateObj lib (variableType v) vs)
-  objDecNewVoid v = varDecDef v (stateObj (variableType v) [])
-  extObjDecNewVoid lib v = varDecDef v (extStateObj lib (variableType v) [])
+  objDecNew v vs = varDecDef v (newObj (variableType v) vs)
+  extObjDecNew lib v vs = varDecDef v (extNewObj lib (variableType v) vs)
+  objDecNewNoParams v = varDecDef v (newObj (variableType v) [])
+  extObjDecNewNoParams lib v = varDecDef v (extNewObj lib (variableType v) [])
   constDecDef = varDecDef
 
   print v = pyOut False printFunc v Nothing

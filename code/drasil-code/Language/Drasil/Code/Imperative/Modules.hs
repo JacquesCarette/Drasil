@@ -82,7 +82,7 @@ getInputDecl = do
       getDecl ([],ins) = do
         vars <- mapM mkVar ins
         return $ Just $ multi $ map varDec vars
-      getDecl (_,[]) = return $ Just $ extObjDecNewVoid cname v_params
+      getDecl (_,[]) = return $ Just $ extObjDecNewNoParams cname v_params
       getDecl _ = error ("Inputs or constants are only partially contained in " 
         ++ cname ++ " class")
       constIns ([],[]) _ = return Nothing
@@ -102,7 +102,7 @@ initConsts = do
       getDecl ([],cs) _ = getDecl' $ partition (flip member (eMap $ codeSpec g) 
         . codeName) cs 
       getDecl _ _ = error "Only some constants associated with Constants module in export map"
-      constCont Var = Just $ extObjDecNewVoid cname v_consts
+      constCont Var = Just $ extObjDecNewNoParams cname v_consts
       constCont Const = Nothing
       getDecl' (_,[]) = return Nothing
       getDecl' ([],cs) = do 

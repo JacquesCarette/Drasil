@@ -59,7 +59,7 @@
                         %% http://ctan.org/pkg/booktabs
 \usepackage{subcaption} %% For complex figures with subfigures/subcaptions
                         %% http://ctan.org/pkg/subcaption
-
+\usepackage{listings}
 
 \begin{document}
 
@@ -295,8 +295,126 @@ future improvements in Section \ref{future}, and conclusions in Section
 
 \section{Requirements} \label{sec:req}
 \section{GOOL Syntax} \label{syntax}
+
+GOOL's syntax was designed to be similar to OO languages while also providing 
+useful abstractions. Basic types in GOOL are \verb|bool| for Booleans, 
+\verb|int| for integers, \verb|float| for doubles, \verb|char| 
+for characters, \verb|string| for strings, \verb|infile| for a file 
+in read mode, and \verb|outfile| for a file in write mode. Lists can be 
+specified with \verb|listType|. For example, \verb|listType int| 
+specifies a list of integers. Types of objects are specified using 
+\verb|obj| followed by the class name, so \verb|obj "FooClass"| is the type of 
+an object of a class called ``FooClass''. 
+
+Variables are specified with \verb|var| followed by the variable name and type. 
+For example, \verb|var "ages" (listType int)| defines a variable called 
+``ages'' that is a list of integers. GOOL offers a shortcut for defining 
+list-type variables with \verb|listVar|, so the ``ages'' variable could 
+alternatively be specified by \verb|listVar "ages" int|. Since GOOL is embedded 
+in Haskell, such a variable definition can be assigned as the value of a 
+Haskell function:
+\begin{lstlisting}
+ages = listVar "ages" int
+\end{lstlisting}
+Then, in future code the variable can be referred to simply by \verb|ages|. 
+Other keywords for specifying variables include \verb|extVar| for variables 
+from external libraries, \verb|classVar| for accessing variables from a class, 
+\verb|objVar| for specifying variables from an object, and \verb|self| for 
+referring to an object in its own class definition, equivalent to \verb|self| 
+in Python or \verb|this| in Java. The infix operator \verb|$->| is an 
+alternative to the \verb|objVar| keyword.
+
+Unlike in most OO languages, the syntax of GOOL distinguishes a variable from 
+its value. To actually use the value of the \verb|ages| variable defined above, 
+one must write \verb|valueOf ages|. This highlights another goal in developing 
+the syntax of GOOL. We did not want to simply look at the syntax of existing OO 
+languages and develop a parallel syntax for GOOL. Instead, we considered 
+semantics, and aimed to provide different syntax for semantically different 
+tasks. In most languages, writing a variable's name is the syntax both for 
+referring to the variable as a variable and referring to the variable's value, 
+but since these are semantically different tasks, GOOL provides different 
+syntax for each. Having distinguishing syntax for semantically distinguishable 
+tasks enables stricter typing and higher-level syntax that translates to more 
+idiomatic code, which will become apparent in future sections of this paper.
+
+Literal values can be referred to by \verb|litTrue|, \verb|litFalse|, 
+\verb|litInt|, \verb|litFloat|, \verb|litChar|, and \verb|litString|. Similar 
+to those seen in most programming languages, GOOL provides many unary prefix 
+operators and binary infix operators for defining expressions. In GOOL, each 
+operator is prefixed with an additional symbol based on type. Operators that 
+return Booleans are prefixed by a \verb|?|, for example \verb|?!| is used for 
+negation, \verb|?&&| for conjunction, \verb|?||| for disjunction, and
+\verb|?==| for equality. Operators on numeric values are prefixed by \verb|#|, 
+such as \verb|#~| for negation, \verb|#/^| for square root, \verb|#|| for 
+absolute value, \verb|#%| for modulus, and \verb|#^| for exponentiation. Any 
+other operators are prefixed by \verb|$|, such as the previously mentioned 
+\verb|$->| operator for accessing a variable from an object.
+
+A conditional value can be specified with the keyword \verb|inlineIf| followed 
+by the condition, the value if the condition is true, and the value if the 
+condition is false. For example, given a Boolean-type variable \verb|a|, the 
+following conditional value can be constructed:
+\begin{lstlisting}
+inlineIf (valueOf a) 
+  (litString "a is true") 
+  (litString "a is false")
+\end{lstlisting}
+Note that since this is really just Haskell, values can extend across multiple 
+lines as long as subsequent lines are indented.
+
+Function application can be done with the keyword \verb|funcApp| followed by 
+the function name, return type, and values to pass as parameters. Assuming one 
+has defined a function ``add'' for adding two integers, it could be called like 
+so:
+\begin{lstlisting}
+funcApp "add" int [litInt 5, litInt 4]
+\end{lstlisting}
+Other keywords for function application are \verb|extFuncApp| for when the 
+function comes from an external library, \verb|stateObj| and \verb|extStateObj| 
+for calling an object constructor, and \\
+\verb|objMethodCall| for calling a method on an object. \verb|selfFuncApp| and 
+\verb|objMethodCallNoParams| are two shortcuts for the common cases when a 
+method is being called on \verb|self| or when the method takes no parameters. 
+
+If Haskell function \verb|a| has been defined as GOOL variable 
+\verb|var "a" int|, a GOOL statement declaring the variable would be
+\verb|varDec a|. To declare and define the variable at the same time,
+\verb|varDecDef a (litInt 5)| can be used. Or to define the variable when it
+has already been declared, \verb|assign a (litInt 5)| can be used. Other GOOL 
+keywords for declarations and definitions are \verb|constDecDef| for declaring 
+and defining constants, \verb|listDec| and \verb|listDecDef| for declaring and 
+defining lists, and \verb|objDecDef| for declaring and defining objects. 
+\verb|objDecNew| is a shortcut for the common case where an object constructor 
+is called to define an object, and \verb|objDecNewNoParams| is a further 
+shortcut for when the constructor takes no parameters.
+
+Infix and suffix operators for assignments, as seen in most programming 
+languages, are also offered by GOOL. These are all prefixed with \verb|&|. 
+Instead of \verb|assign a (litInt 5)|, an assignment can be written as 
+\verb|a &= litInt 5|, which looks more like traditional programming languages. 
+The other assignment operators are \verb|&+=| for adding a value to a variable, 
+\verb|&++| for adding 1 to a variable, \verb|&-=| for subtracting a value 
+from a variable, and \verb|&~-| for subtracting 1 from a variable 
+(Unfortunately, the more intuitive \verb|&--| could not be used because 
+\verb|--| initiates a comment in Haskell).
+
+Other keywords for one-liner statements in GOOL include \verb|break| and
+\verb|continue|, \verb|returnState| for returning a value, \verb|throw| for
+throwing an error with a given message, \verb|free| for freeing variables from
+memory, and \verb|comment| for single-line comments.
+ 
+GOOL statements can also take the form of loops and conditionals, though these 
+statements have bodies. A GOOL body can be created by passing a list of GOOL 
+blocks to \verb|body|, and a GOOL block can be created by passing a list of 
+GOOL statements to \verb|block|. Alternatively, a body can be created directly 
+from a list of statements using \verb|bodyFromStatements|.
 \section{GOOL Implementation} \label{implementation}
 \section{Higher-level GOOL functions} \label{patterns}
+- simple examples: log, sin, etc.  , args \\
+- bigger examples: print, listAppend, listSize \\
+- even bigger examples: listSlice, inOutFunc, inOutCall \\
+- design patterns: runStrategy, checkState, addObserver, initObserverList \\
+- auxiliary files
 \section{Related Work} \label{related}
 
 We divide the Related Work into the following categories

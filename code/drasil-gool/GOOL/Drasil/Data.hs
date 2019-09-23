@@ -10,8 +10,8 @@ module GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList, Terminator(..),
   typeString, typeDoc, ValData(..), vd, updateValDoc, TypedValue(..), 
   otherVal, boolVal, valPrec, valType, valDoc, toOtherVal, Binding(..), 
   VarData(..), vard, TypedVar(..), getVarData, otherVar, varBind, varName, 
-  varType, varDoc, typeToFunc, typeToVal, typeToVar, funcToType, valToType, 
-  varToType
+  varType, varDoc, toOtherVar, typeToFunc, typeToVal, typeToVar, funcToType, 
+  valToType, varToType
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -252,6 +252,10 @@ varBind = vrBind . getVarData
 varName = vrName . getVarData
 varType = vrType . getVarData
 varDoc = vrDoc . getVarData
+
+toOtherVar :: TypedVar a -> TypedVar Other
+toOtherVar (BVr v) = OVr v
+toOtherVar (OVr v) = OVr v
 
 ---- Transformations ----
 

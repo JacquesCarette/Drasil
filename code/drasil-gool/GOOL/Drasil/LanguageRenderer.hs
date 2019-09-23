@@ -1,4 +1,4 @@
-{-# LANGUAGE PostfixOperators #-}
+{-# LANGUAGE PostfixOperators, GADTs #-}
 
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer (
@@ -44,7 +44,8 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library,
   RenderSym(..), BodySym(..), 
-  StateTypeSym(StateType, getType, getTypeString, getTypeDoc, listInnerType), 
+  StateTypeSym(StateType, getTypedType, getType, getTypeString, getTypeDoc, 
+    listInnerType), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
@@ -168,17 +169,17 @@ bodyDocD bs = vibcat blocks
 
 -- IO --
 
-printDoc :: TypedValue Other -> TypedValue Other -> Doc
+printDoc :: TypedValue Other -> TypedValue a -> Doc
 printDoc printFn v = valDoc printFn <> parens (valDoc v)
 
 printListDoc :: (RenderSym repr) => Integer -> repr (Value repr Other) -> 
-  (repr (Value repr Other) -> repr (Statement repr)) -> 
+  (repr (Value repr a) -> repr (Statement repr)) -> 
   (String -> repr (Statement repr)) -> 
   (String -> repr (Statement repr)) -> 
   repr (Statement repr)
 printListDoc n v prFn prStrFn prLnFn = multi [prStrFn "[", 
   for (varDecDef i (litInt 0)) (valueOf i ?< (listSize v #- litInt 1))
-    (i &++) (bodyStatements [prFn (listAccess v (valueOf i)), prStrFn ", /f "]), 
+    (i &++) (bodyStatements [prFn (listAccess v (valueOf i)), prStrFn ", /f "]),
   ifNoElse [(listSize v ?> litInt 0, oneLiner $
     prFn (listAccess v (listSize v #- litInt 1)))], 
   prLnFn "]"]
@@ -189,12 +190,13 @@ printObjDoc :: String -> (String -> repr (Statement repr))
   -> repr (Statement repr)
 printObjDoc n prLnFn = prLnFn $ "Instance of " ++ n ++ " object"
 
-outDoc :: (RenderSym repr) => Bool -> repr (Value repr Other) -> repr (Value repr Other) 
-  -> Maybe (repr (Value repr Other)) -> repr (Statement repr)
-outDoc newLn printFn v f = outDoc' (getType $ valueType v)
-  where outDoc' (List t) = printListDoc (getNestDegree 1 t) v prFn prStrFn 
-          prLnFn
-        outDoc' (Object n) = printObjDoc n prLnFn
+outDoc :: (RenderSym repr) => Bool -> repr (Value repr Other) -> 
+  repr (Value repr a) -> Maybe (repr (Value repr Other)) -> 
+  repr (Statement repr)
+outDoc newLn printFn v f = outDoc' (getTypedType $ valueType v)
+  where outDoc' (OT (TD (List t) _ _)) = printListDoc (getNestDegree 1 t) v 
+          prFn prStrFn prLnFn
+        outDoc' (OT (TD (Object n) _ _)) = printObjDoc n prLnFn
         outDoc' _ = printSt newLn printFn v f
         prFn = maybe print printFile f
         prStrFn = maybe printStr printFileStr f
@@ -229,7 +231,7 @@ typeDocD t = td (Object t) t (text t)
 enumTypeDocD :: Label -> TypedType Other
 enumTypeDocD t = td (Enum t) t (text t)
 
-listTypeDocD :: TypedType Other -> Doc -> TypedType Other
+listTypeDocD :: TypedType a -> Doc -> TypedType Other
 listTypeDocD t lst = td (List (cType t)) 
   (render lst ++ "<" ++ typeString t ++ ">") (lst <> angles (typeDoc t))
 
@@ -243,13 +245,13 @@ constructDocD _ = empty
 
 -- Parameters --
 
-stateParamDocD :: TypedVar Other -> Doc
+stateParamDocD :: TypedVar a -> Doc
 stateParamDocD v = tpDoc (varType v) <+> varDoc v
 
 paramListDocD :: [ParamData] -> Doc
 paramListDocD = hicat (text ", ") . map paramDoc
 
-mkParam :: (TypedVar Other -> Doc) -> TypedVar Other -> ParamData
+mkParam :: (TypedVar a -> Doc) -> TypedVar a -> ParamData
 mkParam f v = pd (getVarData v) (f v)
 
 -- Method --
@@ -266,13 +268,13 @@ methodListDocD ms = vibcat methods
 
 -- StateVar --
 
-stateVarDocD :: Doc -> Doc -> TypedVar Other -> Doc -> Doc
+stateVarDocD :: Doc -> Doc -> TypedVar a -> Doc -> Doc
 stateVarDocD s p v end = s <+> p <+> tpDoc (varType v) <+> varDoc v <> end
 
 stateVarDefDocD :: Doc -> Doc -> Doc -> Doc
 stateVarDefDocD s p dec = s <+> p <+> dec
 
-constVarDocD :: Doc -> Doc -> TypedVar Other -> Doc -> Doc
+constVarDocD :: Doc -> Doc -> TypedVar a -> Doc -> Doc
 constVarDocD s p v end = s <+> p <+> text "const" <+> tpDoc (varType v) <+>
   varDoc v <> end
 
@@ -304,8 +306,8 @@ ifCondDocD ifStart elif bEnd elseBody (c:cs) =
     vmap elseIfSect cs,
     elseSect]
 
-switchDocD :: (Doc, Terminator) -> TypedValue Other -> Doc -> 
-  [(TypedValue Other, Doc)] -> Doc
+switchDocD :: (Doc, Terminator) -> TypedValue a -> Doc -> 
+  [(TypedValue a, Doc)] -> Doc
 switchDocD breakState v defBody cs = 
   let caseDoc (l, result) = vcat [
         text "case" <+> valDoc l <> colon,
@@ -334,8 +336,8 @@ forDocD bStart bEnd sInit vGuard sUpdate b = vcat [
   indent b,
   bEnd]
 
-forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> TypedType Other -> TypedValue Other -> Doc 
-  -> Doc
+forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> TypedType a -> 
+  TypedValue Other -> Doc -> Doc
 forEachDocD l bStart bEnd forEachLabel inLabel t v b =
   vcat [forEachLabel <+> parens (typeDoc t <+> text l <+> inLabel <+> valDoc v) 
     <+> bStart,
@@ -384,12 +386,12 @@ plusPlusDocD' :: TypedVar Other -> OpData -> Doc
 plusPlusDocD' v plusOp = varDoc v <+> equals <+> varDoc v <+> opDoc plusOp <+>
   int 1
 
-varDecDocD :: TypedVar Other -> Doc -> Doc -> Doc
+varDecDocD :: TypedVar a -> Doc -> Doc -> Doc
 varDecDocD v s d = bind (varBind v) <+> tpDoc (varType v) <+> varDoc v
   where bind Static = s
         bind Dynamic = d
 
-varDecDefDocD :: TypedVar Other -> TypedValue Other -> Doc -> Doc -> Doc
+varDecDefDocD :: TypedVar a -> TypedValue a -> Doc -> Doc -> Doc
 varDecDefDocD v def s d = varDecDocD v s d <+> equals <+> valDoc def
 
 listDecDocD :: TypedVar Other -> TypedValue Other -> Doc -> Doc -> Doc
@@ -403,7 +405,7 @@ listDecDefDocD v vs s d = varDecDocD v s d <+> equals <+> new <+>
 objDecDefDocD :: TypedVar Other -> TypedValue Other -> Doc -> Doc -> Doc
 objDecDefDocD = varDecDefDocD
 
-constDecDefDocD :: TypedVar Other -> TypedValue Other -> Doc
+constDecDefDocD :: TypedVar a -> TypedValue a -> Doc
 constDecDefDocD v def = text "const" <+> tpDoc (varType v) <+> varDoc v <+> 
   equals <+> valDoc def
 
@@ -413,7 +415,7 @@ returnDocD vs = text "return" <+> valList vs
 commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt
 
-freeDocD :: TypedVar Other -> Doc
+freeDocD :: TypedVar a -> Doc
 freeDocD v = text "delete" <+> varDoc v
 
 throwDocD :: Doc -> Doc
@@ -697,15 +699,15 @@ argDocD n args = valDoc args <> brackets (valDoc n)
 enumElemDocD :: Label -> Label -> Doc
 enumElemDocD en e = text en <> dot <> text e
 
-classVarCheckStatic :: (VariableSym repr) => repr (Variable repr Other) -> 
-  repr (Variable repr Other)
+classVarCheckStatic :: (VariableSym repr) => repr (Variable repr a) -> 
+  repr (Variable repr a)
 classVarCheckStatic v = classVarCS (variableBind v)
   where classVarCS Dynamic = error
           "classVar can only be used to access static variables"
         classVarCS Static = v
 
 classVarD :: (VariableSym repr) => repr (StateType repr Other) -> 
-  repr (Variable repr Other) -> (Doc -> Doc -> Doc) -> repr (Variable repr Other)
+  repr (Variable repr a) -> (Doc -> Doc -> Doc) -> repr (Variable repr a)
 classVarD c v f = varFromData (variableBind v) 
   (getTypeString c ++ "." ++ variableName v) 
   (variableType v) (f (getTypeDoc c) (variableDoc v))
@@ -713,10 +715,10 @@ classVarD c v f = varFromData (variableBind v)
 classVarDocD :: Doc -> Doc -> Doc
 classVarDocD c v = c <> dot <> v
 
-objVarDocD :: TypedVar Other -> TypedVar Other ->  Doc
+objVarDocD :: TypedVar Other -> TypedVar a ->  Doc
 objVarDocD n1 n2 = varDoc n1 <> dot <> varDoc n2
 
-inlineIfD :: TypedValue Boolean -> TypedValue Other -> TypedValue Other -> TypedValue Other
+inlineIfD :: TypedValue Boolean -> TypedValue a -> TypedValue a -> TypedValue a
 inlineIfD c v1 v2 = typeToVal prec (valToType v1) (valDoc c <+> text "?" <+> 
   valDoc v1 <+> text ":" <+> valDoc v2)
   where prec = valPrec c <|> Just 0
@@ -733,7 +735,7 @@ stateObjDocD st vs = new <+> typeDoc st <> parens vs
 listStateObjDocD :: Doc -> TypedType Other -> Doc -> Doc
 listStateObjDocD lstObj st vs = lstObj <+> typeDoc st <> parens vs
 
-notNullDocD :: OpData -> TypedValue Other -> TypedValue Other -> Doc
+notNullDocD :: OpData -> TypedValue a -> TypedValue a -> Doc
 notNullDocD op v1 v2 = binOpDocD (opDoc op) (valDoc v1) (valDoc v2)
 
 listIndexExistsDocD :: OpData -> TypedValue Other -> TypedValue Other -> Doc
@@ -754,7 +756,7 @@ sizeDocD = dot <> text "Count"
 listAccessFuncDocD :: TypedValue Other -> Doc
 listAccessFuncDocD v = brackets $ valDoc v
 
-listSetFuncDocD :: TypedValue Other -> TypedValue Other -> Doc
+listSetFuncDocD :: TypedValue Other -> TypedValue a -> Doc
 listSetFuncDocD i v = brackets (valDoc i) <+> equals <+> valDoc v
 
 objAccessDocD :: TypedValue a -> TypedFunc b -> Doc

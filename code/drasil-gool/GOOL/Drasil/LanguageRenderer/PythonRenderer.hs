@@ -41,9 +41,9 @@ import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..), file,
   updateFileMod, TypedFunc(..), funcDoc, ModData(..), md, updateModDoc, 
   MethodData(..), mthd, OpData(..), ParamData(..), ProgData(..), progD, 
   TypeData(..), td, btd, TypedType(..), cType, typeString, typeDoc,
-  TypedValue(..), valPrec, valDoc, TypedVar(..), otherVar, varBind, varName, 
-  varType, varDoc, typeToFunc, typeToVal, typeToVar, funcToType, valToType, 
-  varToType)
+  TypedValue(..), valPrec, valDoc, toOtherVal, TypedVar(..), otherVar, varBind, 
+  varName, varType, varDoc, toOtherVar, typeToFunc, typeToVal, typeToVar, 
+  funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
   liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -150,6 +150,7 @@ instance StateTypeSym PythonCode where
   iterator _ = error "Iterator-type variables do not exist in Python"
   void = return $ td Void "NoneType" (text "NoneType")
 
+  getTypedType = unPC
   getType = cType . unPC
   getTypeString = typeString . unPC
   getTypeDoc = typeDoc . unPC
@@ -322,7 +323,7 @@ instance Selector PythonCode where
   listIndexExists lst index = listSize lst ?> index
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
-  indexOf l v = objAccess l (func "index" int [v])
+  indexOf l v = objAccess l (func "index" int [fmap toOtherVal v])
 
 instance FunctionSym PythonCode where
   type Function PythonCode = TypedFunc
@@ -346,11 +347,11 @@ instance SelectorFunction PythonCode where
 
 instance InternalFunction PythonCode where
   getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+  setFunc t v toVal = func (setterName $ variableName v) t [fmap toOtherVal toVal]
 
   listSizeFunc = liftA2 typeToFunc int (return $ text "len")
-  listAddFunc _ i v = func "insert" (listType static_ $ fmap valToType v) [i, v]
-  listAppendFunc v = func "append" (listType static_ $ fmap valToType v) [v]
+  listAddFunc _ i v = func "insert" (listType static_ $ fmap valToType v) [fmap toOtherVal i, fmap toOtherVal v]
+  listAppendFunc v = func "append" (listType static_ $ fmap valToType v) [fmap toOtherVal v]
 
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
   iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
@@ -422,7 +423,7 @@ instance StatementSym PythonCode where
   break = return (mkStNoEnd breakDocD)
   continue = return (mkStNoEnd continueDocD)
 
-  returnState v = mkStNoEnd <$> liftList returnDocD [v]
+  returnState v = mkStNoEnd <$> liftList returnDocD [fmap toOtherVal v]
   multiReturn [] = error "Attempt to write return statement with no return variables"
   multiReturn vs = mkStNoEnd <$> liftList returnDocD vs
 
@@ -430,7 +431,7 @@ instance StatementSym PythonCode where
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
-  free v = v &= valueOf (var "None" void)
+  free v = fmap toOtherVar v &= valueOf (var "None" void)
 
   throw errMsg = mkStNoEnd <$> fmap pyThrow (litString errMsg)
 
@@ -610,8 +611,8 @@ pyStateObj t vs = typeDoc t <> parens vs
 pyExtStateObj :: Label -> TypedType Other -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs
 
-pyInlineIf :: TypedValue Boolean -> TypedValue Other -> TypedValue Other -> 
-  TypedValue Other
+pyInlineIf :: TypedValue Boolean -> TypedValue a -> TypedValue a -> 
+  TypedValue a
 pyInlineIf c v1 v2 = typeToVal (valPrec c) (valToType v1) (valDoc v1 <+> 
   text "if" <+> valDoc c <+> text "else" <+> valDoc v2)
 
@@ -627,16 +628,16 @@ pyListDec v = varDoc v <+> equals <+> tpDoc (varType v)
 pyListDecDef :: TypedVar Other -> Doc -> Doc
 pyListDecDef v vs = varDoc v <+> equals <+> brackets vs
 
-pyPrint :: Bool ->  TypedValue Other -> TypedValue Other -> TypedValue Other -> Doc
+pyPrint :: Bool ->  TypedValue Other -> TypedValue a -> TypedValue Other -> Doc
 pyPrint newLn prf v f = valDoc prf <> parens (valDoc v <> nl <> fl)
   where nl = if newLn then empty else text ", end=''"
         fl = emptyIfEmpty (valDoc f) $ text ", file=" <> valDoc f
 
 pyOut :: (RenderSym repr) => Bool -> repr (Value repr Other) -> 
-  repr (Value repr Other) -> Maybe (repr (Value repr Other)) -> 
+  repr (Value repr a) -> Maybe (repr (Value repr Other)) -> 
   repr (Statement repr)
-pyOut newLn printFn v f = pyOut' (getType $ valueType v)
-  where pyOut' (List _) = printSt newLn printFn v f
+pyOut newLn printFn v f = pyOut' (getTypedType $ valueType v)
+  where pyOut' (OT (TD (List _) _ _)) = printSt newLn printFn v f
         pyOut' _ = outDoc newLn printFn v f
 
 pyInput :: PythonCode (Value PythonCode Other) -> 

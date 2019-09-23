@@ -159,6 +159,7 @@ instance StateTypeSym CSharpCode where
   iterator _ = error "Iterator-type variables do not exist in C#"
   void = return voidDocD
 
+  getTypedType = unCSC
   getType = cType . unCSC
   getTypeString = typeString . unCSC
   getTypeDoc = typeDoc . unCSC
@@ -341,7 +342,7 @@ instance Selector CSharpCode where
   listIndexExists l i = listSize l ?> i
   argExists i = listAccess argsList (litInt $ fromIntegral i)
 
-  indexOf l v = objAccess l (func "IndexOf" int [v])
+  indexOf l v = objAccess l (func "IndexOf" int [fmap toOtherVal v])
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = TypedFunc
@@ -364,11 +365,11 @@ instance SelectorFunction CSharpCode where
 
 instance InternalFunction CSharpCode where
   getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+  setFunc t v toVal = func (setterName $ variableName v) t [fmap toOtherVal toVal]
 
   listSizeFunc = liftA2 typeToFunc int (fmap funcDocD (valueOf (var "Count" int)))
-  listAddFunc _ i v = func "Insert" (fmap valToType v) [i, v]
-  listAppendFunc v = func "Add" (fmap valToType v) [v]
+  listAddFunc _ i v = func "Insert" (listType static_ $ valueType v) [fmap toOtherVal i, fmap toOtherVal v]
+  listAppendFunc v = func "Add" (listType static_ $ valueType v) [fmap toOtherVal v]
 
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
   iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
@@ -445,7 +446,7 @@ instance StatementSym CSharpCode where
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)
 
-  returnState v = mkSt <$> liftList returnDocD [v]
+  returnState v = mkSt <$> liftList returnDocD [fmap toOtherVal v]
   multiReturn _ = error "Cannot return multiple values in C#"
 
   valState v = mkSt <$> fmap valDoc v
@@ -652,7 +653,7 @@ csTryCatch tb cb= vcat [
 csDiscardInput :: TypedValue Other -> Doc
 csDiscardInput = valDoc
 
-csInput :: TypedType Other -> TypedValue Other -> TypedValue Other
+csInput :: TypedType a -> TypedValue Other -> TypedValue a
 csInput t inFn = mkVal t $ text (csInput' (cType t)) <> 
   parens (valDoc inFn)
   where csInput' Integer = "Int32.Parse"
@@ -697,7 +698,7 @@ csVarDec :: Binding -> CSharpCode (Statement CSharpCode) ->
 csVarDec Static _ = error "Static variables can't be declared locally to a function in C#. Use stateVar to make a static state variable instead."
 csVarDec Dynamic d = d
 
-csObjVar :: TypedVar Other -> TypedVar Other -> TypedVar Other
+csObjVar :: TypedVar Other -> TypedVar a -> TypedVar a
 csObjVar o v = csObjVar' (varBind v)
   where csObjVar' Static = error 
           "Cannot use objVar to access static variables through an object in C#"

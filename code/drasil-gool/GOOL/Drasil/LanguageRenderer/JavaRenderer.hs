@@ -157,6 +157,7 @@ instance StateTypeSym JavaCode where
   iterator _ = error "Iterator-type variables do not exist in Java"
   void = return voidDocD
 
+  getTypedType = unJC
   getType = cType . unJC
   getTypeString = typeString . unJC
   getTypeDoc = typeDoc . unJC
@@ -341,7 +342,7 @@ instance Selector JavaCode where
 
   argExists i = listAccess argsList (litInt $ fromIntegral i)
 
-  indexOf l v = objAccess l (func "indexOf" int [v])
+  indexOf l v = objAccess l (func "indexOf" int [fmap toOtherVal v])
 
 instance FunctionSym JavaCode where
   type Function JavaCode = TypedFunc
@@ -364,17 +365,20 @@ instance SelectorFunction JavaCode where
 
 instance InternalFunction JavaCode where
   getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+  setFunc t v toVal = func (setterName $ variableName v) t 
+    [fmap toOtherVal toVal]
 
   listSizeFunc = func "size" int []
-  listAddFunc _ i v = func "add" (listType static_ $ fmap valToType v) [i, v]
-  listAppendFunc v = func "add" (listType static_ $ fmap valToType v) [v]
+  listAddFunc _ i v = func "add" (listType static_ $ valueType v) 
+    [fmap toOtherVal i, fmap toOtherVal v]
+  listAppendFunc v = func "add" (listType static_ $ valueType v) 
+    [fmap toOtherVal v]
 
   iterBeginFunc _ = error "Attempt to use iterBeginFunc in Java, but Java has no iterators"
   iterEndFunc _ = error "Attempt to use iterEndFunc in Java, but Java has no iterators"
   
   listAccessFunc t i = func "get" t [intValue i]
-  listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
+  listSetFunc v i toVal = func "set" (valueType v) [intValue i, fmap toOtherVal toVal]
 
   atFunc t l = listAccessFunc t (valueOf $ var l int)
 
@@ -442,7 +446,7 @@ instance StatementSym JavaCode where
   break = return (mkSt breakDocD)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
   continue = return (mkSt continueDocD)
 
-  returnState v = mkSt <$> liftList returnDocD [v]
+  returnState v = mkSt <$> liftList returnDocD [fmap toOtherVal v]
   multiReturn _ = error "Cannot return multiple values in Java"
 
   valState v = mkSt <$> fmap valDoc v
@@ -658,7 +662,7 @@ jInfileTypeDoc = td File "Scanner" (text "Scanner")
 jOutfileTypeDoc :: TypedType Other
 jOutfileTypeDoc = td File "PrintWriter" (text "PrintWriter")
 
-jListType :: TypedType Other -> Doc -> TypedType Other
+jListType :: TypedType a -> Doc -> TypedType Other
 jListType (OT (TD Integer _ _)) lst = td (List Integer) (render lst ++ 
   "<Integer>") (lst <> angles (text "Integer"))
 jListType (OT (TD Float _ _)) lst = td (List Float) (render lst ++ 
@@ -668,10 +672,10 @@ jListType t lst = listTypeDocD t lst
 jArrayType :: JavaCode (StateType JavaCode Other)
 jArrayType = return $ td (List $ Object "Object") "Object" (text "Object[]")
 
-jEquality :: JavaCode (Value JavaCode Other) -> JavaCode (Value JavaCode Other) 
+jEquality :: JavaCode (Value JavaCode a) -> JavaCode (Value JavaCode a) 
   -> JavaCode (Value JavaCode Boolean)
 jEquality v1 v2 = jEquality' (getType $ valueType v2)
-  where jEquality' String = objAccess v1 (func "equals" bool [v2])
+  where jEquality' String = objAccess v1 (func "equals" bool [fmap toOtherVal v2])
         jEquality' _ = liftA4 typeBinExpr equalOp bool v1 v2
 
 jCast :: JavaCode (StateType JavaCode a) -> JavaCode (Value JavaCode b) -> 
@@ -687,7 +691,7 @@ jListDecDef v vs s d = varDecDocD v s d <+> equals <+> new <+>
   tpDoc (varType v) <+> parens listElements
   where listElements = emptyIfEmpty vs $ text "Arrays.asList" <> parens vs
 
-jConstDecDef :: TypedVar Other -> TypedValue Other -> Doc
+jConstDecDef :: TypedVar a -> TypedValue a -> Doc
 jConstDecDef v def = text "final" <+> tpDoc (varType v) <+> varDoc v <+> 
   equals <+> valDoc def
 
@@ -707,7 +711,7 @@ jTryCatch tb cb = vcat [
 jDiscardInput :: TypedValue Other -> Doc
 jDiscardInput inFn = valDoc inFn <> dot <> text "next()"
 
-jInput :: TypedType Other -> TypedValue Other -> TypedValue Other
+jInput :: TypedType a -> TypedValue Other -> TypedValue a
 jInput t inFn = mkVal t $ jInput' (cType t) 
   where jInput' Integer = text "Integer.parseInt" <> parens (valDoc inFn <> 
           dot <> text "nextLine()")

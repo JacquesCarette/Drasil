@@ -50,8 +50,8 @@ import GOOL.Drasil.Data (Boolean, Other, Pair(..), pairList,
   TypedFunc(..), ModData(..), md, updateModDoc, OpData(..), od,
   ParamData(..), pd, ProgData(..), progD, emptyProg, 
   StateVarData(..), svd, TypeData(..), td, btd, TypedType(..), cType, 
-  typeString, typeDoc, 
-  TypedValue(..), valPrec, valDoc, toOtherVal, TypedVar(..),
+  typeString, typeDoc,
+  TypedValue(..), valPrec, valDoc, toOtherVal, VarData(..), TypedVar(..),
   getVarData, otherVar, varBind, varName, varType, varDoc, typeToFunc, 
   typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText,
@@ -162,6 +162,7 @@ instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
   iterator t = pair (iterator $ pfst t) (iterator $ psnd t)
   void = pair void void
 
+  getTypedType s = getTypedType $ pfst s
   getType s = getType $ pfst s
   getTypeString s = getTypeString $ pfst s
   getTypeDoc s = getTypeDoc $ pfst s
@@ -723,6 +724,7 @@ instance StateTypeSym CppSrcCode where
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
   void = return voidDocD
 
+  getTypedType = unCPPSC
   getType = cType . unCPPSC
   getTypeString = typeString . unCPPSC
   getTypeDoc = typeDoc . unCPPSC
@@ -905,7 +907,8 @@ instance Selector CppSrcCode where
   listIndexExists v i = listSize v ?> i
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
-  indexOf l v = funcApp "find" int [iterBegin l, iterEnd l, v] #- iterBegin l
+  indexOf l v = funcApp "find" int [iterBegin l, iterEnd l, fmap toOtherVal v] 
+    #- iterBegin l
 
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = TypedFunc
@@ -928,12 +931,12 @@ instance SelectorFunction CppSrcCode where
 
 instance InternalFunction CppSrcCode where
   getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+  setFunc t v toVal = func (setterName $ variableName v) t [fmap toOtherVal toVal]
 
   listSizeFunc = func "size" int []
-  listAddFunc l i v = func "insert" (listType static_ $ fmap valToType v) 
-    [iterBegin l #+ i, v]
-  listAppendFunc v = func "push_back" (listType static_ $ fmap valToType v) [v]
+  listAddFunc l i v = func "insert" (listType static_ $ valueType v) 
+    [iterBegin l #+ i, fmap toOtherVal v]
+  listAppendFunc v = func "push_back" (listType static_ $ valueType v) [fmap toOtherVal v]
 
   iterBeginFunc t = func "begin" (iterator t) []
   iterEndFunc t = func "end" (iterator t) []
@@ -1023,7 +1026,7 @@ instance StatementSym CppSrcCode where
   break = return (mkSt breakDocD)
   continue = return (mkSt continueDocD)
 
-  returnState v = mkSt <$> liftList returnDocD [v]
+  returnState v = mkSt <$> liftList returnDocD [fmap toOtherVal v]
   multiReturn _ = error "Cannot return multiple values in C++"
 
   valState v = mkSt <$> fmap valDoc v
@@ -1311,6 +1314,7 @@ instance StateTypeSym CppHdrCode where
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
   void = return voidDocD
 
+  getTypedType = unCPPHC
   getType = cType . unCPPHC
   getTypeString = typeString . unCPPHC
   getTypeDoc = typeDoc . unCPPHC
@@ -1359,18 +1363,18 @@ instance VariableSym CppHdrCode where
   type Variable CppHdrCode = TypedVar
   var n t = liftA2 (mkVar n) t (return $ varDocD n) 
   staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
-  const _ _ = liftA2 (mkVar "") void (return empty)
-  extVar _ _ _ = liftA2 (mkVar "") void (return empty)
+  const _ t = liftA2 (mkVar "") t (return empty)
+  extVar _ _ t = liftA2 (mkVar "") t (return empty)
   self _ = liftA2 (mkVar "") void (return empty)
   enumVar _ _ = liftA2 (mkVar "") void (return empty)
-  classVar _ _ = liftA2 (mkVar "") void (return empty)
-  objVar _ _ = liftA2 (mkVar "") void (return empty)
-  objVarSelf _ _ _ = liftA2 (mkVar "") void (return empty)
+  classVar _ v = liftA2 (mkVar "") (variableType v) (return empty)
+  objVar _ v = liftA2 (mkVar "") (variableType v) (return empty)
+  objVarSelf _ _ t = liftA2 (mkVar "") t (return empty)
   listVar _ _ _ = liftA2 (mkVar "") void (return empty)
   listOf _ _ = liftA2 (mkVar "") void (return empty)
   iterVar _ _ = liftA2 (mkVar "") void (return empty)
 
-  ($->) _ _ = liftA2 (mkVar "") void (return empty)
+  ($->) _ v = liftA2 (mkVar "") (variableType v) (return empty)
   
   variableBind = varBind . unCPPHC
   variableName = varName . unCPPHC
@@ -1438,10 +1442,10 @@ instance BooleanExpression CppHdrCode where
   (?!=) _ _ = liftA2 mkVal bool (return empty)
    
 instance ValueExpression CppHdrCode where
-  inlineIf _ _ _ = liftA2 mkVal void (return empty)
+  inlineIf _ v _ = liftA2 mkVal (valueType v) (return empty)
   funcApp _ t _ = liftA2 mkVal t (return empty)
-  selfFuncApp _ _ _ = liftA2 mkVal void (return empty)
-  extFuncApp _ _ _ _ = liftA2 mkVal void (return empty)
+  selfFuncApp _ t _ = liftA2 mkVal t (return empty)
+  extFuncApp _ _ t _ = liftA2 mkVal t (return empty)
   stateObj _ _ = liftA2 mkVal void (return empty)
   extStateObj _ _ _ = liftA2 mkVal void (return empty)
   listStateObj _ _ = liftA2 mkVal void (return empty)
@@ -1462,13 +1466,13 @@ instance Selector CppHdrCode where
   objAccess _ f = liftA2 mkVal (fmap funcToType f) (return empty)
   ($.) = objAccess
 
-  objMethodCall _ _ _ _ = liftA2 mkVal void (return empty)
-  objMethodCallNoParams _ _ _ = liftA2 mkVal void (return empty)
+  objMethodCall t _ _ _ = liftA2 mkVal t (return empty)
+  objMethodCallNoParams t _ _ = liftA2 mkVal t (return empty)
 
-  selfAccess _ _ = liftA2 mkVal void (return empty)
+  selfAccess _ f = liftA2 mkVal (fmap funcToType f) (return empty)
 
   listIndexExists _ _ = liftA2 mkVal bool (return empty)
-  argExists _ = liftA2 mkVal void (return empty)
+  argExists _ = liftA2 mkVal bool (return empty)
   
   indexOf _ _ = liftA2 mkVal void (return empty)
 
@@ -1476,8 +1480,8 @@ instance FunctionSym CppHdrCode where
   type Function CppHdrCode = TypedFunc
   func _ t _ = liftA2 typeToFunc t (return empty)
   
-  get _ _ = liftA2 mkVal void (return empty)
-  set _ _ _ = liftA2 mkVal void (return empty)
+  get _ v = liftA2 mkVal (variableType v) (return empty)
+  set _ v _ = liftA2 mkVal (variableType v) (return empty)
 
   listSize _ = liftA2 mkVal void (return empty)
   listAdd _ _ _ = liftA2 mkVal void (return empty)
@@ -1487,13 +1491,13 @@ instance FunctionSym CppHdrCode where
   iterEnd _ = liftA2 mkVal void (return empty)
 
 instance SelectorFunction CppHdrCode where
-  listAccess _ _ = liftA2 mkVal void (return empty)
+  listAccess v _ = liftA2 mkVal (listInnerType $ valueType v) (return empty)
   listSet _ _ _ = liftA2 mkVal void (return empty)
-  at _ _ = liftA2 mkVal void (return empty)
+  at v _ = liftA2 mkVal (listInnerType $ valueType v) (return empty)
 
 instance InternalFunction CppHdrCode where
-  getFunc _ = liftA2 typeToFunc void (return empty)
-  setFunc _ _ _ = liftA2 typeToFunc void (return empty)
+  getFunc v = liftA2 typeToFunc (variableType v) (return empty)
+  setFunc _ v _ = liftA2 typeToFunc (variableType v) (return empty)
 
   listSizeFunc = liftA2 typeToFunc void (return empty)
   listAddFunc _ _ _ = liftA2 typeToFunc void (return empty)
@@ -1502,10 +1506,10 @@ instance InternalFunction CppHdrCode where
   iterBeginFunc _ = liftA2 typeToFunc void (return empty)
   iterEndFunc _ = liftA2 typeToFunc void (return empty)
 
-  listAccessFunc _ _ = liftA2 typeToFunc void (return empty)
+  listAccessFunc t _ = liftA2 typeToFunc t (return empty)
   listSetFunc _ _ _ = liftA2 typeToFunc void (return empty)
 
-  atFunc _ _ = liftA2 typeToFunc void (return empty)
+  atFunc t _ = liftA2 typeToFunc t (return empty)
 
 instance InternalStatement CppHdrCode where
   printSt _ _ _ _ = return (mkStNoEnd empty)
@@ -1730,7 +1734,7 @@ isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
 
-getParam :: TypedVar Other -> ParamData
+getParam :: TypedVar a -> ParamData
 getParam v = mkParam (getParamFunc ((cdType . varType) v)) v
   where getParamFunc (List _) = cppPointerParamDoc
         getParamFunc (Object _) = cppPointerParamDoc
@@ -1817,7 +1821,7 @@ cppCast t v = cppCast' (unCPPSC t) (getType $ valueType v)
           [fmap toOtherVal v]
         cppCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
-cppListSetDoc :: TypedValue Other -> TypedValue Other -> Doc
+cppListSetDoc :: TypedValue Other -> TypedValue a -> Doc
 cppListSetDoc i v = dot <> text "at" <> parens (valDoc i) <+> equals <+> valDoc v
 
 cppListDecDoc :: TypedVar Other -> TypedValue Other -> Doc -> Doc -> Doc
@@ -1826,7 +1830,7 @@ cppListDecDoc v n s d = varDecDocD v s d <> parens (valDoc n)
 cppListDecDefDoc :: TypedVar Other -> Doc -> Doc -> Doc -> Doc
 cppListDecDefDoc v vs s d = varDecDocD v s d <> braces vs
 
-cppPrint :: Bool -> TypedValue Other -> TypedValue Other -> Doc
+cppPrint :: Bool -> TypedValue Other -> TypedValue a -> Doc
 cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> val (valDoc v) <+> 
   end
   where val = if maybe False (< 9) (valPrec v) then parens else id
@@ -1848,7 +1852,7 @@ cppDiscardInput sep inFn = valDoc inFn <> dot <> text "ignore" <> parens
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 
-cppInput :: TypedVar Other -> TypedValue Other -> Doc -> Doc
+cppInput :: TypedVar a -> TypedValue Other -> Doc -> Doc
 cppInput v inFn end = vcat [
   valDoc inFn <+> text ">>" <+> varDoc v <> end,
   valDoc inFn <> dot <> 
@@ -1858,7 +1862,7 @@ cppOpenFile :: Label -> TypedVar Other -> TypedValue Other -> Doc
 cppOpenFile mode f n = varDoc f <> dot <> text "open" <> 
   parens (valDoc n <> comma <+> text mode)
 
-cppPointerParamDoc :: TypedVar Other -> Doc
+cppPointerParamDoc :: TypedVar a -> Doc
 cppPointerParamDoc v = tpDoc (varType v) <+> text "&" <> varDoc v
 
 cppsMethod :: Label -> Label -> TypedType a -> Doc -> Doc -> Doc -> Doc -> Doc
@@ -1879,29 +1883,30 @@ cpphMethod :: Label -> TypedType a -> Doc -> Doc -> Doc
 cpphMethod n t ps end | isDtor n = text n <> parens ps <> end
                       | otherwise = typeDoc t <+> text n <> parens ps <> end
 
-cppsStateVarDef :: Label -> Doc -> BindData -> TypedVar Other -> TypedValue Other -> Doc -> Doc
+cppsStateVarDef :: Label -> Doc -> BindData -> TypedVar a -> TypedValue a -> 
+  Doc -> Doc
 cppsStateVarDef n cns p vr vl end = if bind p == Static then cns <+> tpDoc 
   (varType vr) <+> text (n ++ "::") <> varDoc vr <+> equals <+> valDoc vl <>
   end else empty
 
-cpphStateVarDef :: Doc -> BindData -> TypedVar Other -> Doc -> Doc -> Doc
+cpphStateVarDef :: Doc -> BindData -> TypedVar a -> Doc -> Doc -> Doc
 cpphStateVarDef s p v asg end = if bind p == Static then 
   stateVarDocD s (bindDoc p) v end else stateVarDefDocD s (bindDoc p) asg
 
-cppDestruct :: CppSrcCode (Variable CppSrcCode Other) -> 
+cppDestruct :: CppSrcCode (Variable CppSrcCode a) -> 
   CppSrcCode (Statement CppSrcCode)
-cppDestruct v = cppDestruct' (getType $ variableType v)
-  where cppDestruct' (List _) = deleteLoop
+cppDestruct v = cppDestruct' v
+  where cppDestruct' :: CppSrcCode (Variable CppSrcCode a) -> CppSrcCode (Statement CppSrcCode)
+        cppDestruct' vr@(CPPSC (OVr (VarD _ _ (TD (List _) _ _) _))) = for initv (v_i ?< listSize (valueOf vr)) (var_i &++) (loopBody vr)
         cppDestruct' _ = free v
         i = "i"
+        var_i :: CppSrcCode (Variable CppSrcCode Other)
         var_i = var i int
         v_i = valueOf var_i
-        guard = v_i ?< listSize (valueOf v)
-        listelem = at (valueOf v) i
-        loopBody = oneLiner $ free (liftA2 (mkVar "") (valueType listelem) 
-          (return $ valueDoc listelem))
+        listelem vr = at (valueOf vr) i
+        loopBody vr = oneLiner $ free (liftA2 (mkVar "") (valueType (listelem 
+          vr)) (return $ valueDoc (listelem vr)))
         initv = var_i &= litInt 0
-        deleteLoop = for initv guard (var_i &++) loopBody
 
 cpphVarsFuncsList :: ScopeTag -> [StateVarData] -> [MethodData] -> Doc
 cpphVarsFuncsList st vs fs = 

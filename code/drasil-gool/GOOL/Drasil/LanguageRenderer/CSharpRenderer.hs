@@ -51,7 +51,7 @@ import GOOL.Drasil.Data (Terminator(..),
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
   ValData(..), updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
-  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
+  liftA5, liftA6, liftA8, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -153,7 +153,7 @@ instance StateTypeSym CSharpCode where
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
-  iterator _ = error "Iterator-type variables do not exist in C#"
+  iterator t = t
   void = return voidDocD
 
   getType = cType . unCSC
@@ -357,7 +357,7 @@ instance FunctionSym CSharpCode where
 instance SelectorFunction CSharpCode where
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (valueOf $ var l int)
+  at = listAccess
 
 instance InternalFunction CSharpCode where
   getFunc v = func (getterName $ variableName v) (variableType v) []
@@ -373,8 +373,6 @@ instance InternalFunction CSharpCode where
   listAccessFunc t v = liftA2 fd t (listAccessFuncDocD <$> intValue v)
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD (intValue i) toVal)
-
-  atFunc t l = listAccessFunc t (valueOf $ var l int)
 
 instance InternalStatement CSharpCode where
   printSt _ p v _ = mkSt <$> liftA2 printDoc p v
@@ -478,9 +476,9 @@ instance ControlStatementSym CSharpCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
-    (valueOf (var i int) ?< finalv) (var i int &+= stepv)
-  forEach l v b = mkStNoEnd <$> liftA7 (forEachDocD l) blockStart blockEnd 
+  forRange i initv finalv stepv = for (varDecDef i initv) 
+    (valueOf i ?< finalv) (i &+= stepv)
+  forEach e v b = mkStNoEnd <$> liftA8 forEachDocD e blockStart blockEnd 
     iterForEachLabel iterInLabel (listInnerType $ valueType v) v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
@@ -490,11 +488,10 @@ instance ControlStatementSym CSharpCode where
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (var_index &++) notify
     where obsList = valueOf $ observerListName `listOf` t
-          index = "observerIndex"
-          var_index = var index int
+          var_index = var "observerIndex" int
           v_index = valueOf var_index
           initv = varDecDef var_index $ litInt 0
-          notify = oneLiner $ valState $ at obsList index $. f
+          notify = oneLiner $ valState $ at obsList v_index $. f
 
   getFileInputAll f v = while ((f $. liftA2 fd bool (return $ text 
     ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) (fmap 

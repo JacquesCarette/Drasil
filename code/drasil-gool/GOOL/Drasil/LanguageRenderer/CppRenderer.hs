@@ -357,7 +357,7 @@ instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
     (listAccess (psnd v) (psnd i))
   listSet v i toVal = pair (listSet (pfst v) (pfst i) (pfst toVal)) 
     (listSet (psnd v) (psnd i) (psnd toVal))
-  at v l = pair (at (pfst v) l) (at (psnd v) l)
+  at v i = pair (at (pfst v) (pfst i)) (at (psnd v) (psnd i))
 
 instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where  
   getFunc v = pair (getFunc $ pfst v) (getFunc $ psnd v)
@@ -376,8 +376,6 @@ instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where
     (psnd t) (psnd v))
   listSetFunc v i toVal = pair (listSetFunc (pfst v) (pfst i) (pfst toVal)) 
     (listSetFunc (psnd v) (psnd i) (psnd toVal))
-
-  atFunc t l = pair (atFunc (pfst t) l) (atFunc (psnd t) l)
 
 instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
   printSt nl p v f = pair (printSt nl (pfst p) (pfst v) (fmap pfst f)) 
@@ -504,11 +502,11 @@ instance (Pair p) => ControlStatementSym (p CppSrcCode CppHdrCode) where
 
   for sInit vGuard sUpdate b = pair (for (pfst sInit) (pfst vGuard) (pfst 
     sUpdate) (pfst b)) (for (psnd sInit) (psnd vGuard) (psnd sUpdate) (psnd b))
-  forRange i initv finalv stepv b = pair (forRange i (pfst initv) (pfst finalv) 
-    (pfst stepv) (pfst b)) (forRange i (psnd initv) (psnd finalv) (psnd stepv) 
-    (psnd b))
-  forEach l v b = pair (forEach l (pfst v) (pfst b)) (forEach l (psnd v) 
-    (psnd b))
+  forRange i initv finalv stepv b = pair (forRange (pfst i) (pfst initv) 
+    (pfst finalv) (pfst stepv) (pfst b)) (forRange (psnd i) (psnd initv) 
+    (psnd finalv) (psnd stepv) (psnd b))
+  forEach i v b = pair (forEach (pfst i) (pfst v) (pfst b)) (forEach (psnd i) 
+    (psnd v) (psnd b))
   while v b = pair (while (pfst v) (pfst b)) (while (psnd v) (psnd b))
 
   tryCatch tb cb = pair (tryCatch (pfst tb) (pfst cb)) (tryCatch (psnd tb) 
@@ -921,7 +919,7 @@ instance FunctionSym CppSrcCode where
 instance SelectorFunction CppSrcCode where
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (valueOf $ var l int)
+  at = listAccess
 
 instance InternalFunction CppSrcCode where
   getFunc v = func (getterName $ variableName v) (variableType v) []
@@ -938,8 +936,6 @@ instance InternalFunction CppSrcCode where
   listAccessFunc t v = func "at" t [intValue v]
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 cppListSetDoc (intValue i) toVal)
-
-  atFunc t l = listAccessFunc t (valueOf $ var l int) 
 
 instance InternalStatement CppSrcCode where
   printSt nl p v _ = mkSt <$> liftA2 (cppPrint nl) p v
@@ -1057,11 +1053,11 @@ instance ControlStatementSym CppSrcCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
-    (valueOf (var i int) ?< finalv) (var i int &+= stepv)
-  forEach l v = for (varDecDef (var l (iterator t)) (iterBegin v)) 
-    (valueOf (var l (iterator t)) ?!= iterEnd v) (var l (iterator t) &++)
-    where t = listInnerType $ valueType v
+  forRange i initv finalv stepv = for (varDecDef i initv) 
+    (valueOf i ?< finalv) (i &+= stepv)
+  forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
+    (e &++)
+    where e = toBasicVar i
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 cppTryCatch tb cb
@@ -1071,11 +1067,10 @@ instance ControlStatementSym CppSrcCode where
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (var_index &++) notify
     where obsList = valueOf $ observerListName `listOf` t
-          index = "observerIndex"
-          var_index = var index int
+          var_index = var "observerIndex" int
           v_index = valueOf var_index
           initv = varDecDef var_index $ litInt 0
-          notify = oneLiner $ valState $ at obsList index $. f
+          notify = oneLiner $ valState $ at obsList v_index $. f
 
   getFileInputAll f v = let l_line = "nextLine"
                             var_line = var l_line string
@@ -1503,8 +1498,6 @@ instance InternalFunction CppHdrCode where
   listAccessFunc _ _ = liftA2 fd void (return empty)
   listSetFunc _ _ _ = liftA2 fd void (return empty)
 
-  atFunc _ _ = liftA2 fd void (return empty)
-
 instance InternalStatement CppHdrCode where
   printSt _ _ _ _ = return (mkStNoEnd empty)
 
@@ -1725,6 +1718,10 @@ instance BlockCommentSym CppHdrCode where
   docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
 
 -- helpers
+toBasicVar :: CppSrcCode (Variable CppSrcCode) -> 
+  CppSrcCode (Variable CppSrcCode)
+toBasicVar v = var (variableName v) (variableType v)
+
 isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
@@ -1891,11 +1888,10 @@ cppDestruct :: CppSrcCode (Variable CppSrcCode) ->
 cppDestruct v = cppDestruct' (getType $ variableType v)
   where cppDestruct' (List _) = deleteLoop
         cppDestruct' _ = free v
-        i = "i"
-        var_i = var i int
+        var_i = var "i" int
         v_i = valueOf var_i
         guard = v_i ?< listSize (valueOf v)
-        listelem = at (valueOf v) i
+        listelem = at (valueOf v) v_i
         loopBody = oneLiner $ free (liftA2 (mkVar "") (valueType listelem) 
           (return $ valueDoc listelem))
         initv = var_i &= litInt 0

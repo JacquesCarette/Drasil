@@ -319,7 +319,7 @@ ages = listVar "ages" int
 Then, in future code the variable can be referred to simply by \verb|ages|. 
 Other keywords for specifying variables include \verb|extVar| for variables 
 from external libraries, \verb|classVar| for accessing variables from a class, 
-\verb|objVar| for specifying variables from an object, and \verb|self| for 
+\verb|objVar| for accessing variables from an object, and \verb|self| for 
 referring to an object in its own class definition, equivalent to \verb|self| 
 in Python or \verb|this| in Java. The infix operator \verb|$->| is an 
 alternative to the \verb|objVar| keyword.
@@ -370,17 +370,17 @@ so:
 funcApp "add" int [litInt 5, litInt 4]
 \end{lstlisting}
 Other keywords for function application are \verb|extFuncApp| for when the 
-function comes from an external library, \verb|stateObj| and \verb|extStateObj| 
+function comes from an external library, \verb|newObj| and \verb|extNewObj| 
 for calling an object constructor, and \\
 \verb|objMethodCall| for calling a method on an object. \verb|selfFuncApp| and 
 \verb|objMethodCallNoParams| are two shortcuts for the common cases when a 
 method is being called on \verb|self| or when the method takes no parameters. 
 
-If Haskell function \verb|a| has been defined as GOOL variable 
-\verb|var "a" int|, a GOOL statement declaring the variable would be
-\verb|varDec a|. To declare and define the variable at the same time,
-\verb|varDecDef a (litInt 5)| can be used. Or to define the variable when it
-has already been declared, \verb|assign a (litInt 5)| can be used. Other GOOL 
+If Haskell function \verb|foo| has been defined as GOOL variable 
+\verb|var "foo" int|, a GOOL statement declaring the variable would be
+\verb|varDec foo|. To declare and define the variable at the same time,
+\verb|varDecDef foo (litInt 5)| can be used. Or to define the variable when it
+has already been declared, \verb|assign foo (litInt 5)| can be used. Other GOOL 
 keywords for declarations and definitions are \verb|constDecDef| for declaring 
 and defining constants, \verb|listDec| and \verb|listDecDef| for declaring and 
 defining lists, and \verb|objDecDef| for declaring and defining objects. 
@@ -398,21 +398,129 @@ from a variable, and \verb|&~-| for subtracting 1 from a variable
 (Unfortunately, the more intuitive \verb|&--| could not be used because 
 \verb|--| initiates a comment in Haskell).
 
-Other keywords for one-liner statements in GOOL include \verb|break| and
-\verb|continue|, \verb|returnState| for returning a value, \verb|throw| for
-throwing an error with a given message, \verb|free| for freeing variables from
-memory, and \verb|comment| for single-line comments.
+Other simple statements in GOOL include \verb|break| and \verb|continue|, 
+\verb|returnState| followed by a value to return, \verb|throw| followed by an 
+error message to throw, \verb|free| followed by a variable to free from
+memory, and \verb|comment| followed by a string to be displayed as a 
+single-line comment.
+
+GOOL statements can be grouped together into blocks by specifying a list of 
+statements after the \verb|block| keyword. A GOOL body can then be made by 
+specifying a list of blocks after the \verb|body| keyword. A body can be used 
+as a function body, conditional body, loop body, or similar. The purpose of 
+blocks as an intermediate structure between statement and body is to allow for 
+more organized, readable generated code. For example, the generator can choose 
+to insert a blank line between blocks so lines of code related to the same task 
+are visually grouped together. However, for the case where there is no need for 
+distinct blocks in a body, the body can be made directly from a list of 
+statements with \verb|bodyFromStatements| or even from a single statement with 
+\verb|oneLiner|. 
  
-GOOL statements can also take the form of loops and conditionals, though these 
-statements have bodies. A GOOL body can be created by passing a list of GOOL 
-blocks to \verb|body|, and a GOOL block can be created by passing a list of 
-GOOL statements to \verb|block|. Alternatively, a body can be created directly 
-from a list of statements using \verb|bodyFromStatements|.
+As alluded to before, bodies can be used in more complex statements like 
+conditionals and loops. An if-then-else statement can be written in GOOL as 
+\verb|ifCond| followed by a list of condition-body pairs and then a final body 
+for the else. An example is shown below.
+\begin{lstlisting}
+ifCond [
+  (foo ?> litInt 0, oneLiner (
+    printStrLn "foo is positive")),
+  (foo ?< litInt 0, oneLiner (
+    printStrLn "foo is negative"))] 
+  (oneLiner $ printStrLn "foo is zero")
+\end{lstlisting}
+\verb|ifNoElse| can be used in place of \verb|ifCond| for when there is no else 
+condition. GOOL also supports \verb|switch| statements. A for-loop can be 
+written in GOOL as \verb|for| followed by a statement to 
+initialize the loop variable, a condition, a statement to update the loop 
+variable, and a body. GOOL also offers \verb|forRange| loops, which are given a 
+starting value, ending value, and step size, as well as \verb|forEach| loops. 
+The following examples assume variable \verb|age| and \verb|ages| and body 
+\verb|loopBody| have already been defined:
+\begin{lstlisting}
+for (varDecDef age (litInt 0)) 
+  (age < litInt 10) (age &++) loopBody
+forRange age (litInt 0) (litInt 9) 
+  (litInt 1) loopBody
+forEach age ages loopBody
+\end{lstlisting}
+While-loops are also available, using keyword \verb|while| followed by the 
+condition and body. Finally, GOOL offers try-catch statements, which are 
+written as \verb|tryCatch| followed by a body to try and a body for when an 
+exception is caught.
+
+A function in GOOL is specified by \verb|function| followed by the function 
+name, scope, either static or dynamic binding, type, list of parameters, and 
+body. Methods are defined similarly, using the \verb|method| keyword, with the 
+only other difference from functions being that the name of the class 
+containing the method must be specified. Parameters are built from variables, 
+using \verb|stateParam| or \verb|pointerParam|. The ``add'' function called in 
+an earlier example can thus be defined like so, assuming variables ``num1'' and 
+``num2'' have been defined:
+\begin{lstlisting}
+function "add" public dynamic_ int 
+  [stateParam num1, stateParam num2] 
+  (oneLiner (returnState (num1 #+ num2)))
+\end{lstlisting}
+The  \verb|pubMethod| and \verb|privMethod| shortcuts can be used for public 
+dynamic methods and private dynamic methods, respectively. \verb|mainFunction| 
+followed by a body defines the main function of a program. A documented 
+function can be generated with \verb|docFunc| followed by a brief function 
+description, a list of parameter descriptions, a description of what is 
+returned (if applicable), and lastly the function itself. A documented function 
+will have comments in Doxygen-style, and GOOL offers further support for 
+compiling Doxygen documentation, to be discussed at the end of this section.
+
+Classes are defined with \verb|buildClass| followed by the class name, name of 
+the parent class (if applicable), scope, list of state variables, and list of 
+methods. State variables can be built by \verb|stateVar| followed by an 
+integer, scope, static or dynamic binding, and the variable itself. The integer 
+is a measure of delete priority. \verb|constVar| can be used for constant state 
+variables. Shortcuts for state variables include \verb|privMVar| for private 
+dynamic, \verb|pubMVar| for public dynamic, and \verb|pubGVar| for public 
+static variables. Assuming variables ``var1'' and ``var2'' and methods ``mth1'' 
+and ``mth2'' have been defined, a class containing them all can be defined as:
+\begin{lstlisting}
+buildClass "FooClass" Nothing public 
+  [pubMVar 0 var1, privMVar 0 var2] 
+  [mth1, mth2]
+\end{lstlisting}
+``Nothing'' indicates that this class does not have a parent. \verb|privClass| 
+and \verb|pubClass| are shortcuts for private and public classes, respectively. 
+Classes can be documented using \verb|docClass| followed by a description of 
+the class then the class itself. Like with functions, the documentation will be 
+in Doxygen-style.
+
+Functions and classes can be grouped together into a GOOL module using 
+\verb|buildModule|, followed by the module name, a list of libraries to import, 
+the list of functions, and the list of classes. Passing a module to 
+\verb|fileDoc| will put the finishing touches on the generated file, such as 
+imports of standard libraries and preprocessor guards for C++ header files. 
+\begin{lstlisting}
+fileDoc $ buildModule "mod1" ["library1"] 
+  [func1, func2] [class1, class2] 
+\end{lstlisting}
+Documenting a file with a Doxygen-style file header can be done with 
+\verb|docMod| followed by a file description, list of author names, date 
+string, and then the file, specified in GOOL,  to document.
+
+Finally, at the top of the GOOL hierarchy are programs, auxiliary files, and 
+packages. A program is constructed by passing a program name and list of files 
+to \verb|prog|. Then a program and a list of auxiliary files can be passed to 
+\verb|package| to create a complete package, specified in GOOL. Auxiliary files 
+are non-OO code files that augment the OO program. For example, a Doxygen 
+configuration file is an auxiliary file that can be specified using the 
+\verb|doxConfig| keyword, and a makefile is another auxiliary file that can be 
+specified with the \verb|makefile| keyword. One of the parameters to the 
+\verb|makefile| keyword will toggle generation of a \verb|make doc| rule, which 
+will compile the Doxygen documentation with the generated Doxygen configuration 
+file.
+
+Syntax for higher-level patterns will be discussed in Section \ref{patterns}.
 \section{GOOL Implementation} \label{implementation}
 \section{Higher-level GOOL functions} \label{patterns}
 - simple examples: log, sin, etc.  , args \\
 - bigger examples: print, listAppend, listSize \\
-- even bigger examples: listSlice, inOutFunc, inOutCall \\
+- even bigger examples: listSlice, inOutFunc, inOutCall, getMethod, setMethod \\
 - design patterns: runStrategy, checkState, addObserver, initObserverList \\
 - auxiliary files
 \section{Related Work} \label{related}

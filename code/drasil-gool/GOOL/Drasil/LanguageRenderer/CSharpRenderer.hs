@@ -531,19 +531,19 @@ instance MethodSym CSharpCode where
   setMethod c v = method (setterName $ variableName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
-  mainMethod c b = setMainMethod <$> method "Main" c public static_ 
-    (mState void) [liftA2 pd (var "args" (listType static_ string)) 
-    (return $ text "string[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in C#"
 
-  docMain c b = commentedFunc (docComment $ functionDoc 
+  docMain b = commentedFunc (docComment $ functionDoc 
     "Controls the flow of the program" 
-    [("args", "List of command-line arguments")] []) (mainMethod c b)
+    [("args", "List of command-line arguments")] []) (mainFunction b)
 
   function n = method n ""
+  mainFunction b = setMainMethod <$> function "Main" public static_ 
+    (mState void) [liftA2 pd (var "args" (listType static_ string)) 
+    (return $ text "string[] args")] b
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 

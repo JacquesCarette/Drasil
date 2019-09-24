@@ -12,7 +12,7 @@ patternTest :: (ProgramSym repr) => repr (Program repr)
 patternTest = prog "PatternTest" [fileDoc (buildModule "PatternTest" ["Observer"] [patternTestMainMethod] []), observer]
 
 patternTestMainMethod :: (RenderSym repr) => repr (Method repr)
-patternTestMainMethod = mainMethod "PatternTest" (body [block [
+patternTestMainMethod = mainFunction (body [block [
   varDec $ var "n" int,
   initState "myFSM" "Off", 
   changeState "myFSM" "On",

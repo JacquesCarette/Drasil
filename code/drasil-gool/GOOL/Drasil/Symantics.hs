@@ -535,7 +535,6 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
   getMethod   :: Label -> repr (Variable repr) -> repr (Method repr)
   setMethod   :: Label -> repr (Variable repr) -> repr (Method repr) 
-  mainMethod  :: Label -> repr (Body repr) -> repr (Method repr)
   privMethod  :: Label -> Label -> repr (MethodType repr) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
   pubMethod   :: Label -> Label -> repr (MethodType repr) -> 
@@ -544,11 +543,12 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
     repr (Method repr)
   destructor :: Label -> [repr (StateVar repr)] -> repr (Method repr)
 
-  docMain :: Label -> repr (Body repr) -> repr (Method repr)
+  docMain :: repr (Body repr) -> repr (Method repr)
 
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
     repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr) 
+  mainFunction  :: repr (Body repr) -> repr (Method repr)
   -- Parameters are: function description, parameter descriptions, 
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> repr (Method repr) -> repr (Method repr) 

@@ -551,7 +551,6 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     ps) (pfst b)) (method n c (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
   getMethod c v = pair (getMethod c $ pfst v) (getMethod c $ psnd v) 
   setMethod c v = pair (setMethod c $ pfst v) (setMethod c $ psnd v)
-  mainMethod l b = pair (mainMethod l $ pfst b) (mainMethod l $ psnd b)
   privMethod n c t ps b = pair (privMethod n c (pfst t) (map pfst ps) (pfst b))
     (privMethod n c (psnd t) (map psnd ps) (psnd b))
   pubMethod n c t ps b = pair (pubMethod n c (pfst t) (map pfst ps) (pfst b)) 
@@ -561,10 +560,11 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
   destructor n vs = pair (destructor n $ map pfst vs) 
     (destructor n $ map psnd vs)
 
-  docMain c b = pair (docMain c $ pfst b) (docMain c $ psnd b)
+  docMain b = pair (docMain $ pfst b) (docMain $ psnd b)
 
   function n s p t ps b = pair (function n (pfst s) (pfst p) (pfst t) (map pfst
     ps) (pfst b)) (function n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
+  mainFunction b = pair (mainFunction $ pfst b) (mainFunction $ psnd b)
 
   docFunc desc pComms rComm f = pair (docFunc desc pComms rComm $ pfst f) 
     (docFunc desc pComms rComm $ psnd f)
@@ -1117,11 +1117,6 @@ instance MethodSym CppSrcCode where
   setMethod c v = method (setterName $ variableName v) c public dynamic_ 
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
-  mainMethod _ b = setMainMethod <$> function "main" public static_ int 
-    [stateParam $ var "argc" int, 
-    liftA2 pd (var "argv" (listType static_ string)) 
-    (return $ text "const char *argv[]")] 
-    (liftA2 appendToBody b (returnState $ litInt 0))
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
@@ -1134,14 +1129,19 @@ instance MethodSym CppSrcCode where
           bodyStatements $ loopIndexDec : deleteStatements
     in pubMethod ('~':n) n void [] dbody
 
-  docMain c b = commentedFunc (docComment $ functionDoc 
+  docMain b = commentedFunc (docComment $ functionDoc 
     "Controls the flow of the program" 
     [("argc", "Number of command-line arguments"),
-    ("argv", "List of command-line arguments")] ["exit code"]) (mainMethod c b)
+    ("argv", "List of command-line arguments")] ["exit code"]) (mainFunction b)
 
   function n s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n <$> 
     sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
     blockStart blockEnd)
+  mainFunction b = setMainMethod <$> function "main" public static_ int 
+    [stateParam $ var "argc" int, 
+    liftA2 pd (var "argv" (listType static_ string)) 
+    (return $ text "const char *argv[]")] 
+    (liftA2 appendToBody b (returnState $ litInt 0))
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
@@ -1637,15 +1637,15 @@ instance MethodSym CppHdrCode where
     (mState $ variableType v) [] (return empty)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ 
     (mState void) [stateParam v] (return empty)
-  mainMethod _ _ = return (mthd True Pub [] empty)
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
   destructor n _ = pubMethod ('~':n) n void [] (return empty)
 
-  docMain = mainMethod
+  docMain = mainFunction
 
   function n = method n ""
+  mainFunction _ = return (mthd True Pub [] empty)
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 

@@ -509,16 +509,16 @@ instance MethodSym PythonCode where
   setMethod c v = method (setterName $ variableName v) c public dynamic_
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
-  mainMethod _ = fmap (mthd True [])
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method initName n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Python"
 
-  docMain = mainMethod
+  docMain = mainFunction
 
   function n _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
     (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
+  mainFunction = fmap (mthd True [])
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 

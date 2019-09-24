@@ -9,11 +9,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, potEnergy,
   pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel,
-<<<<<<< HEAD
-  yDist,  yPos, yVel, momentum, fOfGravity)
-=======
-  yDist,  yPos, yVel, momentum, moment)
->>>>>>> master
+  yDist,  yPos, yVel, momentum, moment, fOfGravity)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
@@ -31,11 +27,7 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position,
   potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
   weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-<<<<<<< HEAD
-  yPos, yVel,momentum, fOfGravity]
-=======
-  yPos, yVel, momentum, moment]
->>>>>>> master
+  yPos, yVel,momentum, moment, fOfGravity]
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
@@ -43,11 +35,7 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy, linearAccel, linearDisplacement,
   linearVelocity, momentOfInertia, position, potEnergy, pressure, scalarAccel,
   scalarPos, speed, time, torque, velocity, weight, xAccel, xConstAccel, xDist,
-<<<<<<< HEAD
-  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, fOfGravity :: UnitalChunk
-=======
-  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment :: UnitalChunk
->>>>>>> master
+  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity :: UnitalChunk
 
 acceleration         = uc CP.acceleration (vec lA) accelU
 angularAccel         = uc CP.angAccel lAlpha angAccelU

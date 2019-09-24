@@ -91,7 +91,7 @@ accelGravityDeriv = mkDerivName (phrase QP.gravitationalAccel)
 accelGravityDerivSentences :: [Sentence]
 accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1, 
  accelGravityDerivSentence2, accelGravityDerivSentence3, accelGravityDerivSentence4,
- accelGravityDerivSentence5, accelGravityDerivSentence6] 
+ accelGravityDerivSentence5] 
 
 accelGravityDerivSentence1 :: [Sentence]
 accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", sParen(makeRef2S newtonLUG), S "we have"]
@@ -119,10 +119,7 @@ accelGravityDerivSentence4 =  [S "where", ch QP.gravitationalAccel `isThe` phras
         S "Dividing the above equation by", ch QPP.mass `sC` S " we have"]
 
 accelGravityDerivSentence5 :: [Sentence]
-accelGravityDerivSentence5 =  [S "and thus"]
-
-accelGravityDerivSentence6 :: [Sentence]
-accelGravityDerivSentence6 =  [S "The negative sign indicates that the", phrase QP.force `sIs`
+accelGravityDerivSentence5 =  [S "and thus the negative sign indicates that the", phrase QP.force `sIs`
                                S "an attractive", phrase QP.force]
 
 accelGravityDerivEqn1 :: Expr
@@ -143,9 +140,6 @@ accelGravityDerivEqn4 = sy QP.gravitationalConst *  (sy mLarger / sy sqrDist) * 
 accelGravityDerivEqn5 :: Expr
 accelGravityDerivEqn5 = sy QP.gravitationalAccel $= negate (sy QP.gravitationalConst *  (sy mLarger / sy sqrDist)) * sy dispUnit
                       
---accelGravityDerivEqn6 :: Expr
---accelGravityDerivEqn6 = sy QP.gravitationalAccel $= negate (sy QP.gravitationalAccel) * negate (sy QP.gravitationalAccel)
-
 accelGravityDerivEqns :: [Expr]
 accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,
                          accelGravityDerivEqn4, accelGravityDerivEqn5]

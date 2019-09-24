@@ -21,11 +21,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
   rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
-<<<<<<< HEAD
-  yAccel, yConstAccel, yDist, yPos, yVel, momentum, fOfGravity]
-=======
-  yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment]
->>>>>>> master
+  yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
@@ -39,11 +35,7 @@ acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
   pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
   space, speed, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-<<<<<<< HEAD
-  yPos, yVel, momentum, fOfGravity :: ConceptChunk
-=======
-  yPos, yVel, momentum, moment :: ConceptChunk
->>>>>>> master
+  yPos, yVel, momentum, moment, fOfGravity :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]

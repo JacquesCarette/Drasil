@@ -493,8 +493,8 @@ instance MethodTypeSym PythonCode where
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
-  stateParam = fmap (mkParam varDoc)
-  pointerParam = stateParam
+  param = fmap (mkParam varDoc)
+  pointerParam = param
 
   parameterName = variableName . fmap paramVar
   parameterType = variableType . fmap paramVar
@@ -507,7 +507,7 @@ instance MethodSym PythonCode where
     (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
   setMethod c v = method (setterName $ variableName v) c public dynamic_
-    (mState void) [stateParam v] setBody
+    (mState void) [param v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -522,10 +522,10 @@ instance MethodSym PythonCode where
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
-  inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
+  inOutFunc n s p ins [] [] b = function n s p (mState void) (map param 
     ins) b
   inOutFunc n s p ins outs both b = function n s p (mState void) (map 
-    stateParam $ both ++ ins) (if null rets then b else liftA3 surroundBody 
+    param $ both ++ ins) (if null rets then b else liftA3 surroundBody 
     (multi $ map varDec outs) b (multiReturn $ map valueOf rets))
     where rets = filterOutObjs both ++ outs
 

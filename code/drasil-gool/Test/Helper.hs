@@ -14,7 +14,7 @@ doubleAndAdd :: (RenderSym repr) => repr (Method repr)
 doubleAndAdd = docFunc "This function adds two numbers" 
   ["First number to add", "Second number to add"] (Just "Sum") $ 
   function "doubleAndAdd"  public static_ (mState float) 
-  [stateParam $ var "num1" float, stateParam $ var "num2" float]
+  [param $ var "num1" float, param $ var "num2" float]
   (bodyStatements [
     varDec $ var "doubledSum" float, 
     var "doubledSum" float &= ((litFloat 2.0 #* valueOf (var "num1" float)) #+ 

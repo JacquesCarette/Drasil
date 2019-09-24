@@ -11,7 +11,7 @@ module GOOL.Drasil.LanguageRenderer (
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
   stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, voidDocD, 
-  constructDocD, stateParamDocD, paramListDocD, mkParam, methodDocD, 
+  constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, stateVarListDocD,
   alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
   tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
@@ -240,8 +240,8 @@ constructDocD _ = empty
 
 -- Parameters --
 
-stateParamDocD :: VarData -> Doc
-stateParamDocD v = typeDoc (varType v) <+> varDoc v
+paramDocD :: VarData -> Doc
+paramDocD v = typeDoc (varType v) <+> varDoc v
 
 paramListDocD :: [ParamData] -> Doc
 paramListDocD = hicat (text ", ") . map paramDoc

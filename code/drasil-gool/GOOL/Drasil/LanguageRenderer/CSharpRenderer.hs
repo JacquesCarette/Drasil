@@ -24,7 +24,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, multiStateDocD,
   blockDocD, bodyDocD, printDoc, outDoc, printFileDocD, boolTypeDocD, 
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
+  listTypeDocD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam,
   methodDocD, methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, 
   ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, 
   assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
@@ -515,8 +515,8 @@ instance MethodTypeSym CSharpCode where
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = ParamData
-  stateParam = fmap (mkParam stateParamDocD)
-  pointerParam = stateParam
+  param = fmap (mkParam paramDocD)
+  pointerParam = param
 
   parameterName = variableName . fmap paramVar
   parameterType = variableType . fmap paramVar
@@ -529,7 +529,7 @@ instance MethodSym CSharpCode where
     (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ 
-    (mState void) [stateParam v] setBody
+    (mState void) [param v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -548,15 +548,15 @@ instance MethodSym CSharpCode where
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
-    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
+    (map param ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
   inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then mState void else mState $ variableType v) (map stateParam $ v : ins) 
+    then mState void else mState $ variableType v) (map param $ v : ins) 
     (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
     (returnState $ valueOf v))
   inOutFunc n s p ins outs both b = function n s p (mState void) (map (fmap 
-    (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ 
-    map (fmap (updateParamDoc csOut) . stateParam) outs) b
+    (updateParamDoc csRef) . param) both ++ map param ins ++ 
+    map (fmap (updateParamDoc csOut) . param) outs) b
 
   docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
     (inOutFunc n s p (map snd is) [snd o] [] b)

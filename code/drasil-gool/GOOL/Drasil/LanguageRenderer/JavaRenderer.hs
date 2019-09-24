@@ -24,7 +24,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
   boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
-  voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam, 
+  voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, 
   methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, 
   switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, 
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, 
@@ -513,8 +513,8 @@ instance MethodTypeSym JavaCode where
 
 instance ParameterSym JavaCode where
   type Parameter JavaCode = ParamData
-  stateParam = fmap (mkParam stateParamDocD)
-  pointerParam = stateParam
+  param = fmap (mkParam paramDocD)
+  pointerParam = param
 
   parameterName = variableName . fmap paramVar
   parameterType = variableType . fmap paramVar
@@ -527,7 +527,7 @@ instance MethodSym JavaCode where
     (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ 
-    (mState void) [stateParam v] setBody
+    (mState void) [param v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -545,17 +545,17 @@ instance MethodSym JavaCode where
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
-  inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
+  inOutFunc n s p ins [] [] b = function n s p (mState void) (map param 
     ins) b
   inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
-    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
+    (map param ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
   inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then mState void else mState $ variableType v) (map stateParam $ v : ins) 
+    then mState void else mState $ variableType v) (map param $ v : ins) 
     (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
     (returnState $ valueOf v))
   inOutFunc n s p ins outs both b = function n s p (returnTp rets)
-    (map stateParam $ both ++ ins) (liftA3 surroundBody decls b (returnSt rets))
+    (map param $ both ++ ins) (liftA3 surroundBody decls b (returnSt rets))
     where returnTp [x] = mState $ variableType x
           returnTp _ = jArrayType
           returnSt [x] = returnState $ valueOf x

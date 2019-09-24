@@ -70,4 +70,4 @@ mkParam :: (RenderSym repr) => repr (Variable repr) -> repr (Parameter repr)
 mkParam v = paramFunc (getType $ variableType v) v
   where paramFunc (List _) = pointerParam
         paramFunc (Object _) = pointerParam
-        paramFunc _ = stateParam
+        paramFunc _ = param

@@ -24,7 +24,7 @@ import GOOL.Drasil.Symantics (Label,
 import GOOL.Drasil.LanguageRenderer (addExt,
   fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDoc,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
+  listTypeDocD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam,
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, alwaysDel, 
   ifCondDocD, switchDocD, forDocD, whileDocD, stratDocD, assignDocD, 
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, objDecDefDocD, 
@@ -539,7 +539,7 @@ instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
   type Parameter (p CppSrcCode CppHdrCode) = ParamData
-  stateParam v = pair (stateParam $ pfst v) (stateParam $ psnd v)
+  param v = pair (param $ pfst v) (param $ psnd v)
   pointerParam v = pair (pointerParam $ pfst v) (pointerParam $ psnd v)
 
   parameterName p = parameterName $ pfst p
@@ -1100,7 +1100,7 @@ instance MethodTypeSym CppSrcCode where
 
 instance ParameterSym CppSrcCode where
   type Parameter CppSrcCode = ParamData
-  stateParam = fmap (mkParam stateParamDocD)
+  param = fmap (mkParam paramDocD)
   pointerParam = fmap (mkParam cppPointerParamDoc)
 
   parameterName = variableName . fmap paramVar
@@ -1115,7 +1115,7 @@ instance MethodSym CppSrcCode where
     (mState $ variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ 
-    (mState void) [stateParam v] setBody
+    (mState void) [param v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
@@ -1138,7 +1138,7 @@ instance MethodSym CppSrcCode where
     sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
     blockStart blockEnd)
   mainFunction b = setMainMethod <$> function "main" public static_ int 
-    [stateParam $ var "argc" int, 
+    [param $ var "argc" int, 
     liftA2 pd (var "argv" (listType static_ string)) 
     (return $ text "const char *argv[]")] 
     (liftA2 appendToBody b (returnState $ litInt 0))
@@ -1622,7 +1622,7 @@ instance MethodTypeSym CppHdrCode where
 
 instance ParameterSym CppHdrCode where
   type Parameter CppHdrCode = ParamData
-  stateParam = fmap (mkParam stateParamDocD)
+  param = fmap (mkParam paramDocD)
   pointerParam = fmap (mkParam cppPointerParamDoc)
 
   parameterName = variableName . fmap paramVar
@@ -1636,7 +1636,7 @@ instance MethodSym CppHdrCode where
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (mState $ variableType v) [] (return empty)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ 
-    (mState void) [stateParam v] (return empty)
+    (mState void) [param v] (return empty)
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
   constructor n = method n n public dynamic_ (construct n)
@@ -1733,7 +1733,7 @@ getParam :: VarData -> ParamData
 getParam v = mkParam (getParamFunc ((cType . varType) v)) v
   where getParamFunc (List _) = cppPointerParamDoc
         getParamFunc (Object _) = cppPointerParamDoc
-        getParamFunc _ = stateParamDocD
+        getParamFunc _ = paramDocD
  
 data MethodData = MthD {isMainMthd :: Bool, getMthdScp :: ScopeTag, 
   mthdParams :: [ParamData], mthdDoc :: Doc}

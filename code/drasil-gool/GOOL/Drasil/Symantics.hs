@@ -519,7 +519,7 @@ class MethodTypeSym repr where
 
 class ParameterSym repr where
   type Parameter repr
-  stateParam :: repr (Variable repr) -> repr (Parameter repr)
+  param :: repr (Variable repr) -> repr (Parameter repr)
   -- funcParam  :: Label -> repr (MethodType repr) -> [repr (Parameter repr)] -> repr (Parameter repr) -- not implemented in GOOL
   pointerParam :: repr (Variable repr) -> repr (Parameter repr)
 

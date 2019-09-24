@@ -116,6 +116,11 @@
                   <td>N</td>
                 </tr>
                 <tr>
+                  <td><em><b>F</b><sub><b>g</b></sub></em></td>
+                  <td>Force of gravity</td>
+                  <td>N</td>
+                </tr>
+                <tr>
                   <td><em><b>F</b><sub>i</sub></em></td>
                   <td>Force Applied to the I-Th Body at Time T</td>
                   <td>N</td>
@@ -151,6 +156,11 @@
                   <td>kg&sdot;m<sup>2</sup></td>
                 </tr>
                 <tr>
+                  <td><em><b>i&#770;</b></em></td>
+                  <td>Horizontal Unit Vector</td>
+                  <td>m</td>
+                </tr>
+                <tr>
                   <td><em><b>J</b></em></td>
                   <td>Impulse (vector)</td>
                   <td>N&sdot;s</td>
@@ -159,6 +169,11 @@
                   <td><em>j</em></td>
                   <td>Impulse (scalar)</td>
                   <td>N&sdot;s</td>
+                </tr>
+                <tr>
+                  <td><em><b>j&#770;</b></em></td>
+                  <td>Vertical Unit Vector</td>
+                  <td>m</td>
                 </tr>
                 <tr>
                   <td><em>KE</em></td>
@@ -636,7 +651,7 @@
                     Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen..
                   </li>
                   <li>
-                    Line: An interval between two points (from <a href=#lineSource>lineSource</a>).
+                    line: An interval between two points (from <a href=#lineSource>lineSource</a>).
                   </li>
                   <li>
                     Point: An exact location, it has no size, only position (from <a href=#pointSource>pointSource</a>).
@@ -873,7 +888,11 @@
                     </tr>
                     <tr>
                       <th>RefBy</th>
-                      <td><p class="paragraph"></p></td>
+                      <td>
+                        <p class="paragraph">
+                          <a href=#GD:accelGravity>GD: accelGravity</a>
+                        </p>
+                      </td>
                     </tr>
                   </table>
                 </div>
@@ -951,7 +970,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{g}=-\frac{G M}{\mathbf{r}^{2}} \mathbf{\hat{r}}\]
+                        \[\mathbf{g}=-\frac{G M}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}\]
                       </td>
                     </tr>
                     <tr>
@@ -965,7 +984,9 @@
                             <em>G</em> is the gravitational constant (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>))
                           </li>
                           <li><em>M</em> is the mass of the larger rigid body (kg)</li>
-                          <li><em><b>r</b></em> is the displacement (m)</li>
+                          <li>
+                            <em>||<b>r</b>||</em> is the Euclidean norm of the displacement (m)
+                          </li>
                           <li>
                             <em><b>r&#770;</b></em> is the unit vector directed from the center of the large mass to the center of the smaller mass (m)
                           </li>
@@ -996,7 +1017,32 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
+                <div id="GD:accelGravityDeriv">
+                  <div class="subsubsubsection">
+                    <h4>Detailed derivation of gravitational acceleration:</h4>
+                    <p class="paragraph">
+                      From Newton's law of universal gravitation (<a href=#TM:UniversalGravLaw>TM: UniversalGravLaw</a>) we have:
+                    </p>
+                    \[\mathbf{F}=\frac{G {m_{1}} {m_{2}}}{{\text{||}\mathbf{r}\text{||}^{2}}} \mathbf{\hat{r}}\]
+                    <p class="paragraph">
+                      The above equation governs the gravitational attraction between two bodies. Suppose that one of the bodies is significantly more massive than the other, so that we concern ourselves with the force the massive body exerts on the lighter body. Further, suppose that the Cartesian coordinate system is chosen such that this force acts on a line which lies along one of the principal axes. Then our unit vector directed from the center of the large mass to the center of the smaller mass <em><b>r&#770;</b></em> for the x or y axes is:
+                    </p>
+                    \[\mathbf{\hat{r}}=\frac{\mathbf{r}}{\text{||}\mathbf{r}\text{||}}=\mathbf{\hat{j}} \mathbf{\hat{i}}\]
+                    <p class="paragraph">
+                      Given the above assumptions, let <em>M</em> and <em>m</em> be the the mass of the massive and light body respectively. Equating <em><b>F</b></em> above with Newton's second law for the force experienced by the light body, we get:
+                    </p>
+                    \[{\mathbf{F}_{\mathbf{g}}}=G \frac{M m}{{\text{||}\mathbf{r}\text{||}^{2}}} \mathbf{\hat{r}}=m \mathbf{g}\]
+                    <p class="paragraph">
+                      where <em><b>g</b></em> is the gravitational acceleration. Dividing the above equation by <em>m</em>,  we have:
+                    </p>
+                    \[G \frac{M}{{\text{||}\mathbf{r}\text{||}^{2}}} \mathbf{\hat{r}}=\mathbf{g}\]
+                    <p class="paragraph">and thus:</p>
+                    \[\mathbf{g}=-G \frac{M}{{\text{||}\mathbf{r}\text{||}^{2}}} \mathbf{\hat{r}}\]
+                    <p class="paragraph">
+                      The negative sign indicates that the force is an attractive force:
+                    </p>
+                  </div>
+                </div>
                 <div id="GD:impulse">
                   <table class="gdefn">
                     <tr>
@@ -3621,7 +3667,7 @@
               <td></td>
               <td></td>
               <td></td>
-              <td></td>
+              <td>X</td>
               <td></td>
               <td></td>
               <td></td>

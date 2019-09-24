@@ -83,6 +83,8 @@ ${\mathbf{F}_{1}}$ & Force exerted by the first body (on another body) & N
 \\
 ${\mathbf{F}_{2}}$ & Force exerted by the second body (on another body) & N
 \\
+${\mathbf{F}_{\mathbf{g}}}$ & Force of gravity & N
+\\
 ${\mathbf{F}_{i}}$ & Force Applied to the I-Th Body at Time T & N
 \\
 $G$ & Gravitational constant & $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$
@@ -97,9 +99,13 @@ ${\mathbf{I}_{\text{A}}}$ & Moment of Inertia of Rigid Body A & kg$\text{m}^{2}$
 \\
 ${\mathbf{I}_{\text{B}}}$ & Moment of Inertia of Rigid Body B & kg$\text{m}^{2}$
 \\
+$\mathbf{\hat{i}}$ & Horizontal Unit Vector & m
+\\
 $\mathbf{J}$ & Impulse (vector) & Ns
 \\
 $j$ & Impulse (scalar) & Ns
+\\
+$\mathbf{\hat{j}}$ & Vertical Unit Vector & m
 \\
 $KE$ & Kinetic energy & J
 \\
@@ -324,7 +330,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Centre of mass: The mean location of the distribution of mass of the object.}
 \item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from \cite{cartesianWiki}).}
 \item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen..}
-\item{Line: An interval between two points (from \cite{lineSource}).}
+\item{line: An interval between two points (from \cite{lineSource}).}
 \item{Point: An exact location, it has no size, only position (from \cite{pointSource}).}
 \item{damping: An influence within or upon an oscillatory system that has the effect of reducing, restricting or preventing its oscillations (from \cite{dampingSource}).}
 \end{itemize}
@@ -454,7 +460,8 @@ Notes & Two rigid bodies in the universe attract each other with a force $\mathb
 Source & --
          
 \\ \midrule \\
-RefBy & 
+RefBy & \hyperref[GD:accelGravity]{GD: accelGravity}
+        
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
@@ -511,14 +518,14 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \mathbf{g}=-\frac{G M}{\mathbf{r}^{2}} \mathbf{\hat{r}}
+           \mathbf{g}=-\frac{G M}{\text{||}\mathbf{r}\text{||}^{2}} \mathbf{\hat{r}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$G$ is the gravitational constant ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$)}
               \item{$M$ is the mass of the larger rigid body (kg)}
-              \item{$\mathbf{r}$ is the displacement (m)}
+              \item{$\text{||}\mathbf{r}\text{||}$ is the Euclidean norm of the displacement (m)}
               \item{$\mathbf{\hat{r}}$ is the unit vector directed from the center of the large mass to the center of the smaller mass (m)}
               \end{symbDescription}
 \\ \midrule \\
@@ -533,6 +540,34 @@ RefBy & \hyperref[IM:transMot]{IM: transMot}
 \\ \bottomrule
 \end{tabular}
 \end{minipage}
+\paragraph{Detailed derivation of gravitational acceleration:}
+\label{GD:accelGravityDeriv}
+From Newton's law of universal gravitation (\hyperref[TM:UniversalGravLaw]{TM: UniversalGravLaw}) we have:
+
+\begin{displaymath}
+\mathbf{F}=\frac{G {m_{1}} {m_{2}}}{{\text{||}\mathbf{r}\text{||}^{2}}} \mathbf{\hat{r}}
+\end{displaymath}
+The above equation governs the gravitational attraction between two bodies. Suppose that one of the bodies is significantly more massive than the other, so that we concern ourselves with the force the massive body exerts on the lighter body. Further, suppose that the Cartesian coordinate system is chosen such that this force acts on a line which lies along one of the principal axes. Then our unit vector directed from the center of the large mass to the center of the smaller mass $\mathbf{\hat{r}}$ for the x or y axes is:
+
+\begin{displaymath}
+\mathbf{\hat{r}}=\frac{\mathbf{r}}{\text{||}\mathbf{r}\text{||}}=\mathbf{\hat{j}} \mathbf{\hat{i}}
+\end{displaymath}
+Given the above assumptions, let $M$ and $m$ be the the mass of the massive and light body respectively. Equating $\mathbf{F}$ above with Newton's second law for the force experienced by the light body, we get:
+
+\begin{displaymath}
+{\mathbf{F}_{\mathbf{g}}}=G \frac{M m}{{\text{||}\mathbf{r}\text{||}^{2}}} \mathbf{\hat{r}}=m \mathbf{g}
+\end{displaymath}
+where $\mathbf{g}$ is the gravitational acceleration. Dividing the above equation by $m$,  we have:
+
+\begin{displaymath}
+G \frac{M}{{\text{||}\mathbf{r}\text{||}^{2}}} \mathbf{\hat{r}}=\mathbf{g}
+\end{displaymath}
+and thus:
+
+\begin{displaymath}
+\mathbf{g}=-G \frac{M}{{\text{||}\mathbf{r}\text{||}^{2}}} \mathbf{\hat{r}}
+\end{displaymath}
+The negative sign indicates that the force is an attractive force:
 
 \vspace{\baselineskip}
 \noindent
@@ -1678,7 +1713,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[GD:accelGravity]{GD: accelGravity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[GD:accelGravity]{GD: accelGravity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
 \hyperref[GD:impulse]{GD: impulse} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\

@@ -87,17 +87,16 @@ data OpData = OD {opPrec :: Int, opDoc :: Doc}
 od :: Int -> Doc -> OpData
 od = OD
 
-data ParamData = PD {paramName :: String, paramType :: TypeData, 
-  paramDoc :: Doc}
+data ParamData = PD {paramVar :: VarData, paramDoc :: Doc}
 
 instance Eq ParamData where
-  PD n1 _ _ == PD n2 _ _ = n1 == n2
+  PD v1 _ == PD v2 _ = v1 == v2
 
-pd :: String -> TypeData -> Doc -> ParamData
+pd :: VarData -> Doc -> ParamData
 pd = PD 
 
 updateParamDoc :: (Doc -> Doc) -> ParamData -> ParamData
-updateParamDoc f v = pd (paramName v) (paramType v) ((f . paramDoc) v)
+updateParamDoc f v = pd (paramVar v) ((f . paramDoc) v)
 
 data ProgData = ProgD {progName :: String, progMods :: [FileData]}
 

@@ -1103,8 +1103,8 @@ instance ParameterSym CppSrcCode where
   stateParam = fmap (mkParam stateParamDocD)
   pointerParam = fmap (mkParam cppPointerParamDoc)
 
-  parameterName = paramName . unCPPSC
-  parameterType = fmap paramType
+  parameterName = variableName . fmap paramVar
+  parameterType = variableType . fmap paramVar
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
@@ -1119,7 +1119,7 @@ instance MethodSym CppSrcCode where
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   mainMethod _ b = setMainMethod <$> function "main" public static_ int 
     [stateParam $ var "argc" int, 
-    liftA2 (pd "argv") (listType static_ string) 
+    liftA2 pd (var "argv" (listType static_ string)) 
     (return $ text "const char *argv[]")] 
     (liftA2 appendToBody b (returnState $ litInt 0))
   privMethod n c = method n c private dynamic_
@@ -1625,8 +1625,8 @@ instance ParameterSym CppHdrCode where
   stateParam = fmap (mkParam stateParamDocD)
   pointerParam = fmap (mkParam cppPointerParamDoc)
 
-  parameterName = paramName . unCPPHC
-  parameterType = fmap paramType
+  parameterName = variableName . fmap paramVar
+  parameterType = variableType . fmap paramVar
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData

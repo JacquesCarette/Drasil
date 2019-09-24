@@ -10,7 +10,7 @@ import Control.Lens ((^.))
 
 mathcon :: [ConceptChunk]
 
-mathcon = [angle, area, calculation, cartesian, centre, change, constraint, diameter,
+mathcon = [angle, area, axis, calculation, cartesian, centre, change, constraint, diameter,
   equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal,
   normalV, number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng,
   rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp,
@@ -19,7 +19,7 @@ mathcon = [angle, area, calculation, cartesian, centre, change, constraint, diam
 mathcon' :: [CI]
 mathcon' = [de, leftSide, ode, pde, rightSide]
 
-angle, area, calculation, cartesian, centre, change, constraint, diameter, equation,
+angle, area, axis, calculation, cartesian, centre, change, constraint, diameter, equation,
   euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal, normalV,
   number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng, rate,
   rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
@@ -28,6 +28,7 @@ angle, area, calculation, cartesian, centre, change, constraint, diameter, equat
 
 angle       = dcc "angle"        (cn' "angle")                   "the amount of rotation needed to bring one line or plane into coincidence with another"
 area        = dcc "area"         (cn' "area")                    "a part of an object or surface"
+axis        = dcc "axis"         (cn' "axis")                    "a fixed reference line for the measurement of coordinates" 
 calculation = dcc "calculation"  (cn' "calculation")             "a mathematical determination of the size or number of something"
 cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coordinate system that specifies each point uniquely in a plane by a set" `sOf`
                                                                   S "numerical coordinates, which are the signed distances to the point from" +:+
@@ -56,7 +57,7 @@ parameter   = dcc "parameter"    (cn' "parameter")               "a quantity who
 --FIXME: Should "parameter" be in math?
 perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
 pi_          = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "The ratio of a circle's circumference to its diameter"
-point        = dccWDS "point"     (pn' "Point")                   $ S "An exact location, it has no size, only position" +:+
+point        = dccWDS "point"     (pn' "point")                   $ S "An exact location, it has no size, only position" +:+
                                                                   sParen (S "from" +:+ makeRef2S pointSource)
 probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"

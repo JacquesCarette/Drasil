@@ -518,8 +518,8 @@ instance ParameterSym CSharpCode where
   stateParam = fmap (mkParam stateParamDocD)
   pointerParam = stateParam
 
-  parameterName = paramName . unCSC
-  parameterType = fmap paramType
+  parameterName = variableName . fmap paramVar
+  parameterType = variableType . fmap paramVar
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
@@ -532,7 +532,7 @@ instance MethodSym CSharpCode where
     (mState void) [stateParam v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   mainMethod c b = setMainMethod <$> method "Main" c public static_ 
-    (mState void) [liftA2 (pd "args") (listType static_ string) 
+    (mState void) [liftA2 pd (var "args" (listType static_ string)) 
     (return $ text "string[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_

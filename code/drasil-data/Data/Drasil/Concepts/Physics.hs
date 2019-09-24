@@ -21,7 +21,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
   rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
-  yAccel, yConstAccel, yDist, yPos, yVel, momentum, fOfGravity, gravitationalAccelX, gravitationalAccelY ]
+  yAccel, yConstAccel, yDist, yPos, yVel, momentum, fOfGravity]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
@@ -35,7 +35,7 @@ acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
   pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
   space, speed, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum, fOfGravity, gravitationalAccelX, gravitationalAccelY :: ConceptChunk
+  yPos, yVel, momentum, fOfGravity :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -164,12 +164,6 @@ constAccelV = dccWDS "constAccelV" (cn "constant acceleration vector") (S "The" 
 xConstAccel = dccWDS "xConstAccel" (nounPhraseSent $ phrase xComp `sOf` phrase constAccel) (S "The" +:+ phrase xComp `sOf` phrase constAccel)
 yConstAccel = dccWDS "yConstAccel" (nounPhraseSent $ phrase yComp `sOf` phrase constAccel) (S "The" +:+ phrase yComp `sOf` phrase constAccel)
 
-
---Variants of gravitational acceleration for x and y axes
-gravitationalAccelX = dccWDS "gravitationalAccelX" (cn " x component gravitational acceleration")
-  ( S "the" +:+ phrase xComp `sOf` phrase gravitationalAccel)
-gravitationalAccelY = dccWDS "gravitationalAccelY" (cn " y component gravitational acceleration")
-  ( S "the" +:+ phrase yComp `sOf` phrase gravitationalAccel)
 
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" (compoundPhrase' (angular ^. term) (displacement ^. term))

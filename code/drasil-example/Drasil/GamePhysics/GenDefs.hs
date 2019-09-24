@@ -5,12 +5,11 @@ import Language.Drasil
 import Utils.Drasil
 import Theory.Drasil (GenDefn, gd)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
-<<<<<<< HEAD
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
- displacement, fOfGravity, gravitationalAccelX, gravitationalAccelY)
+ displacement, fOfGravity)
 import Drasil.GamePhysics.Unitals (mLarger, dispNorm, dispUnit, massA, massB,
   momtInertA, momtInertB, normalLen, normalVect, perpLenA, perpLenB, initRelVel,
-  dispUnit, iVect, jVect, dispUnit, mass_1, mass_2, sqrDist, sqrDistX, sqrDistY)
+  dispUnit, iVect, jVect, dispUnit, mass_1, mass_2, sqrDist)
 import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
   rigidTwoDAssump)
 import Data.Drasil.Concepts.Math as CM (line, cartesian)
@@ -18,14 +17,6 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 --import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, perpVect, unitVect, euclidNormX, euclidNormY)
 --import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 import Drasil.GamePhysics.TMods (newtonLUG)
-=======
- gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, displacement, force, acceleration)
-import Drasil.GamePhysics.Unitals (mLarger, dispUnit, massA, massB,
-  momtInertA, momtInertB, normalLen, normalVect, perpLenA, perpLenB, initRelVel)
-import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
-  rigidTwoDAssump)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
->>>>>>> master
 
 ----- General Models -----
 
@@ -70,33 +61,28 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
   ]
 -}
 
-
 --------------------------Acceleration due to gravity----------------------------
 accelGravityGD :: GenDefn
-<<<<<<< HEAD
 accelGravityGD = gd accelGravityRC (getUnit QP.acceleration) (Just accelGravityDeriv)
-   [accelGravitySrc] "accelGravity" [{-Notes-}]
-=======
-accelGravityGD = gd accelGravityRC (getUnit QP.acceleration) Nothing 
    [accelGravitySrc] "accelGravity" [accelGravityDesc]
->>>>>>> master
-  
 
 accelGravityRC :: RelationConcept
 accelGravityRC = makeRC "accelGravityRC" (nounPhraseSP "Acceleration due to gravity") 
   accelGravityDesc accelGravityRel
 
+accelGravityDesc :: Sentence
+accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much larger than the other",
+  S "it is convenient to define a gravitational field around the larger mass as shown above.",
+  S "The negative sign in the equation indicates that the", phrase QP.force, S "is an attractive",
+  phrase QP.force]
+
 accelGravityRel :: Relation
 accelGravityRel = sy QP.gravitationalAccel $= negate (sy QP.gravitationalConst * sy mLarger/
-                  (sy QP.displacement $^ 2) * sy dispUnit)
+                  (sy dispNorm $^ 2) * sy dispUnit)
 
 accelGravitySrc :: Reference
 accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
   shortname' "Definition of Gravitational Acceleration"
-
-accelGravityDesc :: Sentence
-<<<<<<< HEAD
-accelGravityDesc = foldlSent [S "Acceleration due to gravity"]
 
 accelGravityDeriv :: Derivation
 accelGravityDeriv = mkDerivName (phrase QP.gravitationalAccel)
@@ -108,7 +94,7 @@ accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1,
  accelGravityDerivSentence5, accelGravityDerivSentence6] 
 
 accelGravityDerivSentence1 :: [Sentence]
-accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", sParen( makeRef2S newtonLUG), S "we have"]
+accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", sParen(makeRef2S newtonLUG), S "we have"]
 
 
 accelGravityDerivSentence2 :: [Sentence]
@@ -128,15 +114,16 @@ accelGravityDerivSentence3 =  [S "Given the above assumptions" `sC` S "let", ch 
         S "for the", phrase QP.force, S "experienced by the light body" `sC` S "we get"]
                               
 accelGravityDerivSentence4 :: [Sentence]
-accelGravityDerivSentence4 =  [S "where", ch QP.gravitationalAccel `isThe` phrase QP.gravitationalAccel,
-        S "Dividing the above equation by", ch QPP.mass `sC` S "and resolving this",
-        S "into separate x and y components" `sC` S "we have"]
+accelGravityDerivSentence4 =  [S "where", ch QP.gravitationalAccel `isThe` phrase QP.gravitationalAccel :+:
+        S ".",
+        S "Dividing the above equation by", ch QPP.mass `sC` S " we have"]
 
 accelGravityDerivSentence5 :: [Sentence]
-accelGravityDerivSentence5 =  [S "and"]
+accelGravityDerivSentence5 =  [S "and thus"]
 
 accelGravityDerivSentence6 :: [Sentence]
-accelGravityDerivSentence6 =  [S "Thus" ]
+accelGravityDerivSentence6 =  [S "The negative sign indicates that the", phrase QP.force `sIs`
+                               S "an attractive", phrase QP.force]
 
 accelGravityDerivEqn1 :: Expr
 accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst * (sy mass_1 *  sy mass_2)/
@@ -151,26 +138,19 @@ accelGravityDerivEqn3 = sy QP.fOfGravity $= (sy QP.gravitationalConst) *
                          $= sy QPP.mass * sy QP.gravitationalAccel
 
 accelGravityDerivEqn4 :: Expr
-accelGravityDerivEqn4 = sy QP.gravitationalConst *  (sy mLarger / sy sqrDistX) * sy iVect
-                        $= negate (sy QP.gravitationalAccelX) * sy iVect
-
+accelGravityDerivEqn4 = sy QP.gravitationalConst *  (sy mLarger / sy sqrDist) * sy dispUnit $= sy QP.gravitationalAccel
+                        
 accelGravityDerivEqn5 :: Expr
-accelGravityDerivEqn5 = sy QP.gravitationalConst *  (sy mLarger / sy sqrDistY) * sy jVect
-                        $= negate (sy QP.gravitationalAccelY) * sy jVect
-
-accelGravityDerivEqn6 :: Expr
-accelGravityDerivEqn6 = sy QP.gravitationalAccel $= negate (sy QP.gravitationalAccelX) * negate (sy QP.gravitationalAccelY)
+accelGravityDerivEqn5 = sy QP.gravitationalAccel $= negate (sy QP.gravitationalConst *  (sy mLarger / sy sqrDist)) * sy dispUnit
+                      
+--accelGravityDerivEqn6 :: Expr
+--accelGravityDerivEqn6 = sy QP.gravitationalAccel $= negate (sy QP.gravitationalAccel) * negate (sy QP.gravitationalAccel)
 
 accelGravityDerivEqns :: [Expr]
 accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,
-                         accelGravityDerivEqn4, accelGravityDerivEqn5, accelGravityDerivEqn6]
+                         accelGravityDerivEqn4, accelGravityDerivEqn5]
 
-=======
-accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much larger than the other",
-  S "it is convenient to define a gravitational field around the larger mass as shown above.",
-  S "The negative sign in the equation indicates that the", phrase QP.force, S "is an attractive",
-  phrase QP.force]
->>>>>>> master
+
 
 ----------------------------Impulse for Collision--------------------------------------------
 

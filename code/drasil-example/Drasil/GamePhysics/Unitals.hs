@@ -10,10 +10,10 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration, angularAcce
   final, force, gravitationalAccel, gravitationalConst, gravitationalConstValue,
   height, impulseS, impulseV, initial, kEnergy, linearAccel, linearDisplacement,
   linearVelocity, momentOfInertia, position, potEnergy, restitutionCoef, time,
-  torque, velocity, fOfGravity, gravitationalAccelX, gravitationalAccelY)
+  torque, velocity, fOfGravity)
 
 import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, normalVect, 
-  orientation, perpVect, pi_, unitVect, euclidNormX, euclidNormY)
+  orientation, perpVect, pi_, unitVect)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU, 
   torqueU, velU)
@@ -33,7 +33,7 @@ unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP,
-  velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, sqrDistX, sqrDistY]
+  velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger]
 
 ----------------------
 -- TABLE OF SYMBOLS --
@@ -53,7 +53,7 @@ inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation,
   [qw QP.restitutionCoef]
 
 outputSymbols = map qw [QP.position, QP.velocity, QM.orientation, 
-  QP.angularVelocity, QP.gravitationalAccelX, QP.gravitationalAccelY]
+  QP.angularVelocity]
 
 
 unitalChunks :: [UnitalChunk]
@@ -66,8 +66,7 @@ unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
   contDispK, collisionImpulse, QP.kEnergy, finRelVel, velAP, velBP, time_1, time_2, velo_1, velo_2,
-  QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity, sqrDistX, sqrDistY,
-  QP.gravitationalAccelX, QP.gravitationalAccelY]
+  QP.chgInVelocity, QP.potEnergy, QP.height, rRot, mLarger, QP.fOfGravity]
 
 -----------------------
 -- PARAMETRIZED HACK --
@@ -136,7 +135,7 @@ iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, dispUnit,
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
-  velAP, velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger, sqrDistX, sqrDistY:: UnitalChunk
+  velAP, velBP, time_1, time_2, velo_1, velo_2, rRot, mLarger :: UnitalChunk
 
 iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
@@ -156,14 +155,6 @@ dispNorm = ucs' (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the displacem
 
 sqrDist = ucs' (dccWDS "euclideanNorm" (cn' "squared distance")
                (phrase QM.euclidNorm)) (sup (eqSymb QM.euclidNorm) 
-               label2) Real m_2
-
-sqrDistX = ucs' (dccWDS "euclideanNormX" (cn' "squared distance of x")
-               (phrase QM.euclidNormX)) (sup (eqSymb QM.euclidNormX) 
-               label2) Real m_2
-
-sqrDistY = ucs' (dccWDS "euclideanNormY" (cn' "squared distance of y")
-               (phrase QM.euclidNormY)) (sup (eqSymb QM.euclidNormY) 
                label2) Real m_2
              
 rOB    = uc' "rOB" 

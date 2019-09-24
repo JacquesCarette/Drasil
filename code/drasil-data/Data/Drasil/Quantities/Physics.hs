@@ -9,7 +9,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, potEnergy,
   pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel,
-  yDist,  yPos, yVel, momentum, fOfGravity, gravitationalAccelX, gravitationalAccelY)
+  yDist,  yPos, yVel, momentum, fOfGravity)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
@@ -27,7 +27,7 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position,
   potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
   weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel,momentum, fOfGravity, gravitationalAccelX, gravitationalAccelY]
+  yPos, yVel,momentum, fOfGravity]
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
@@ -35,8 +35,7 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy, linearAccel, linearDisplacement,
   linearVelocity, momentOfInertia, position, potEnergy, pressure, scalarAccel,
   scalarPos, speed, time, torque, velocity, weight, xAccel, xConstAccel, xDist,
-  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, fOfGravity, gravitationalAccelX,
-  gravitationalAccelY :: UnitalChunk
+  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, fOfGravity :: UnitalChunk
 
 acceleration         = uc CP.acceleration (vec lA) accelU
 angularAccel         = uc CP.angAccel lAlpha angAccelU
@@ -107,10 +106,6 @@ constant, final, initial :: Symbol
 constant = Label "c"
 final    = Label "f"
 initial  = Label "i"
-
---Variants of gravitational acceleration for x and y axes
-gravitationalAccelX = uc CP.gravitationalAccelX (sub (vec  lG) lX ) accelU
-gravitationalAccelY = uc CP.gravitationalAccelY (sub (vec  lG) lY ) accelU
 
 -- Helpers for common modifiers
 subMax, subMin, subX, subY, subZ, supMax, supMin :: Symbol -> Symbol

@@ -12,7 +12,7 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label,
   ProgramSym(..), RenderSym(..), InternalFile(..),
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
@@ -133,8 +133,8 @@ instance BlockSym PythonCode where
   type Block PythonCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
-instance StateTypeSym PythonCode where
-  type StateType PythonCode = TypeData
+instance TypeSym PythonCode where
+  type Type PythonCode = TypeData
   bool = return $ td Boolean "" empty
   int = return intTypeDocD
   float = return floatTypeDocD
@@ -719,7 +719,7 @@ pyModule ls fs cs =
   where libs = emptyIfEmpty ls $ ls $+$ blank
         funcs = emptyIfEmpty fs $ fs $+$ blank
 
-pyInOutCall :: (Label -> PythonCode (StateType PythonCode) -> 
+pyInOutCall :: (Label -> PythonCode (Type PythonCode) -> 
   [PythonCode (Value PythonCode)] -> PythonCode (Value PythonCode)) -> Label -> 
   [PythonCode (Value PythonCode)] -> [PythonCode (Variable PythonCode)] -> 
   [PythonCode (Variable PythonCode)] -> PythonCode (Statement PythonCode)

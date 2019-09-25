@@ -6,7 +6,7 @@ module GOOL.Drasil.Symantics (
   -- Typeclasses
   ProgramSym(..), RenderSym(..), InternalFile(..),  KeywordSym(..), 
   PermanenceSym(..), BodySym(..), ControlBlockSym(..), BlockSym(..), 
-  StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
+  TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
@@ -85,25 +85,25 @@ class (StatementSym repr) => BlockSym repr where
   type Block repr
   block   :: [repr (Statement repr)] -> repr (Block repr)
 
-class (PermanenceSym repr) => StateTypeSym repr where
-  type StateType repr
-  bool          :: repr (StateType repr)
-  int           :: repr (StateType repr)
-  float         :: repr (StateType repr)
-  char          :: repr (StateType repr)
-  string        :: repr (StateType repr)
-  infile        :: repr (StateType repr)
-  outfile       :: repr (StateType repr)
-  listType      :: repr (Permanence repr) -> repr (StateType repr) -> repr (StateType repr)
-  listInnerType :: repr (StateType repr) -> repr (StateType repr)
-  obj           :: Label -> repr (StateType repr)
-  enumType      :: Label -> repr (StateType repr)
-  iterator      :: repr (StateType repr) -> repr (StateType repr)
-  void          :: repr (StateType repr)
+class (PermanenceSym repr) => TypeSym repr where
+  type Type repr
+  bool          :: repr (Type repr)
+  int           :: repr (Type repr)
+  float         :: repr (Type repr)
+  char          :: repr (Type repr)
+  string        :: repr (Type repr)
+  infile        :: repr (Type repr)
+  outfile       :: repr (Type repr)
+  listType      :: repr (Permanence repr) -> repr (Type repr) -> repr (Type repr)
+  listInnerType :: repr (Type repr) -> repr (Type repr)
+  obj           :: Label -> repr (Type repr)
+  enumType      :: Label -> repr (Type repr)
+  iterator      :: repr (Type repr) -> repr (Type repr)
+  void          :: repr (Type repr)
 
-  getType :: repr (StateType repr) -> CodeType
-  getTypeString :: repr (StateType repr) -> String
-  getTypeDoc :: repr (StateType repr) -> Doc
+  getType :: repr (Type repr) -> CodeType
+  getTypeString :: repr (Type repr) -> String
+  getTypeDoc :: repr (Type repr) -> Doc
 
 class (BodySym repr, ControlStatementSym repr) => ControlBlockSym repr where
   runStrategy     :: Label -> [(Label, repr (Body repr))] -> 
@@ -149,34 +149,34 @@ class BinaryOpSym repr where
   andOp          :: repr (BinaryOp repr)
   orOp           :: repr (BinaryOp repr)
 
-class (StateTypeSym repr) => VariableSym repr where
+class (TypeSym repr) => VariableSym repr where
   type Variable repr
-  var          :: Label -> repr (StateType repr) -> repr (Variable repr)
-  staticVar    :: Label -> repr (StateType repr) -> repr (Variable repr)
-  const        :: Label -> repr (StateType repr) -> repr (Variable repr)
-  extVar       :: Library -> Label -> repr (StateType repr) -> 
+  var          :: Label -> repr (Type repr) -> repr (Variable repr)
+  staticVar    :: Label -> repr (Type repr) -> repr (Variable repr)
+  const        :: Label -> repr (Type repr) -> repr (Variable repr)
+  extVar       :: Library -> Label -> repr (Type repr) -> 
     repr (Variable repr)
   self         :: Label -> repr (Variable repr)
-  classVar     :: repr (StateType repr) -> repr (Variable repr) -> repr (Variable repr)
+  classVar     :: repr (Type repr) -> repr (Variable repr) -> repr (Variable repr)
   objVar       :: repr (Variable repr) -> repr (Variable repr) -> repr (Variable repr)
-  objVarSelf   :: Label -> Label -> repr (StateType repr) -> 
+  objVarSelf   :: Label -> Label -> repr (Type repr) -> 
     repr (Variable repr)
   enumVar      :: Label -> Label -> repr (Variable repr)
-  listVar      :: Label -> repr (Permanence repr) -> repr (StateType repr) -> 
+  listVar      :: Label -> repr (Permanence repr) -> repr (Type repr) -> 
     repr (Variable repr)
-  listOf       :: Label -> repr (StateType repr) -> repr (Variable repr)
+  listOf       :: Label -> repr (Type repr) -> repr (Variable repr)
   -- Use for iterator variables, i.e. in a forEach loop.
-  iterVar      :: Label -> repr (StateType repr) -> repr (Variable repr)
+  iterVar      :: Label -> repr (Type repr) -> repr (Variable repr)
 
   ($->) :: repr (Variable repr) -> repr (Variable repr) -> repr (Variable repr)
   infixl 9 $->
 
   variableBind :: repr (Variable repr) -> Binding
   variableName :: repr (Variable repr) -> String
-  variableType :: repr (Variable repr) -> repr (StateType repr)
+  variableType :: repr (Variable repr) -> repr (Type repr)
   variableDoc  :: repr (Variable repr) -> Doc
 
-  varFromData :: Binding -> String -> repr (StateType repr) -> Doc -> 
+  varFromData :: Binding -> String -> repr (Type repr) -> Doc -> 
     repr (Variable repr)
 
 class (VariableSym repr) => ValueSym repr where
@@ -199,7 +199,7 @@ class (VariableSym repr) => ValueSym repr where
 
   argsList  :: repr (Value repr)
 
-  valueType :: repr (Value repr) -> repr (StateType repr)
+  valueType :: repr (Value repr) -> repr (Type repr)
   valueDoc :: repr (Value repr) -> Doc
 
 class (ValueSym repr, UnaryOpSym repr, BinaryOpSym repr) => 
@@ -269,17 +269,17 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
   ValueExpression repr where -- for values that can include expressions
   inlineIf     :: repr (Value repr) -> repr (Value repr) -> repr (Value repr) ->
     repr (Value repr)
-  funcApp      :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
+  funcApp      :: Label -> repr (Type repr) -> [repr (Value repr)] -> 
     repr (Value repr)
-  selfFuncApp  :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
+  selfFuncApp  :: Label -> repr (Type repr) -> [repr (Value repr)] -> 
     repr (Value repr)
-  extFuncApp   :: Library -> Label -> repr (StateType repr) -> 
+  extFuncApp   :: Library -> Label -> repr (Type repr) -> 
     [repr (Value repr)] -> repr (Value repr)
-  stateObj     :: repr (StateType repr) -> [repr (Value repr)] -> 
+  stateObj     :: repr (Type repr) -> [repr (Value repr)] -> 
     repr (Value repr)
-  extStateObj  :: Library -> repr (StateType repr) -> [repr (Value repr)] -> 
+  extStateObj  :: Library -> repr (Type repr) -> [repr (Value repr)] -> 
     repr (Value repr)
-  listStateObj :: repr (StateType repr) -> [repr (Value repr)] -> 
+  listStateObj :: repr (Type repr) -> [repr (Value repr)] -> 
     repr (Value repr)
 
   exists  :: repr (Value repr) -> repr (Value repr)
@@ -292,7 +292,7 @@ class (ValueExpression repr) => InternalValue repr where
   printFileFunc   :: repr (Value repr) -> repr (Value repr)
   printFileLnFunc :: repr (Value repr) -> repr (Value repr)
 
-  cast :: repr (StateType repr) -> repr (Value repr) -> repr (Value repr)
+  cast :: repr (Type repr) -> repr (Value repr) -> repr (Value repr)
 
 -- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,
 -- but really one might want one of these values as part of an expression, so the
@@ -306,9 +306,9 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
   ($.)      :: repr (Value repr) -> repr (Function repr) -> repr (Value repr)
   infixl 9 $.
 
-  objMethodCall     :: repr (StateType repr) -> repr (Value repr) -> Label -> 
+  objMethodCall     :: repr (Type repr) -> repr (Value repr) -> Label -> 
     [repr (Value repr)] -> repr (Value repr)
-  objMethodCallNoParams :: repr (StateType repr) -> repr (Value repr) -> Label
+  objMethodCallNoParams :: repr (Type repr) -> repr (Value repr) -> Label
     -> repr (Value repr)
 
   selfAccess :: Label -> repr (Function repr) -> repr (Value repr)
@@ -320,7 +320,7 @@ class (FunctionSym repr, ValueSym repr, ValueExpression repr) =>
 
 class (ValueSym repr, ValueExpression repr) => FunctionSym repr where
   type Function repr
-  func           :: Label -> repr (StateType repr) -> [repr (Value repr)] -> 
+  func           :: Label -> repr (Type repr) -> [repr (Value repr)] -> 
     repr (Function repr)
 
   get :: repr (Value repr) -> repr (Variable repr) -> repr (Value repr)
@@ -344,7 +344,7 @@ class (ValueSym repr, InternalValue repr, FunctionSym repr, Selector repr) =>
 
 class (ValueSym repr, InternalValue repr) => InternalFunction repr where
   getFunc        :: repr (Variable repr) -> repr (Function repr)
-  setFunc        :: repr (StateType repr) -> repr (Variable repr) -> 
+  setFunc        :: repr (Type repr) -> repr (Variable repr) -> 
     repr (Value repr) -> repr (Function repr)
 
   listSizeFunc       :: repr (Function repr)
@@ -352,15 +352,15 @@ class (ValueSym repr, InternalValue repr) => InternalFunction repr where
     repr (Value repr) -> repr (Function repr)
   listAppendFunc         :: repr (Value repr) -> repr (Function repr)
 
-  iterBeginFunc :: repr (StateType repr) -> repr (Function repr)
-  iterEndFunc   :: repr (StateType repr) -> repr (Function repr)
+  iterBeginFunc :: repr (Type repr) -> repr (Function repr)
+  iterEndFunc   :: repr (Type repr) -> repr (Function repr)
 
-  listAccessFunc :: repr (StateType repr) -> repr (Value repr) -> 
+  listAccessFunc :: repr (Type repr) -> repr (Value repr) -> 
     repr (Function repr)
   listSetFunc    :: repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Function repr)
 
-  atFunc :: repr (StateType repr) -> Label -> repr (Function repr)
+  atFunc :: repr (Type repr) -> Label -> repr (Function repr)
 
 class (Selector repr) => InternalStatement repr where
   -- newLn, printFunc, value to print, maybe a file to print to 
@@ -462,7 +462,7 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
   initState   :: Label -> Label -> repr (Statement repr)
   changeState :: Label -> Label -> repr (Statement repr)
 
-  initObserverList :: repr (StateType repr) -> [repr (Value repr)] -> 
+  initObserverList :: repr (Type repr) -> [repr (Value repr)] -> 
     repr (Statement repr)
   addObserver      :: repr (Value repr) -> repr (Statement repr)
 
@@ -498,7 +498,7 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
 
   checkState      :: Label -> [(repr (Value repr), repr (Body repr))] -> 
     repr (Body repr) -> repr (Statement repr)
-  notifyObservers :: repr (Function repr) -> repr (StateType repr) -> 
+  notifyObservers :: repr (Function repr) -> repr (Type repr) -> 
     repr (Statement repr)
 
   getFileInputAll  :: repr (Value repr) -> repr (Variable repr) -> 
@@ -514,7 +514,7 @@ class (ScopeSym repr) => InternalScope repr where
 
 class MethodTypeSym repr where
   type MethodType repr
-  mType    :: repr (StateType repr) -> repr (MethodType repr)
+  mType    :: repr (Type repr) -> repr (MethodType repr)
   construct :: Label -> repr (MethodType repr)
 
 class ParameterSym repr where
@@ -524,20 +524,20 @@ class ParameterSym repr where
   pointerParam :: repr (Variable repr) -> repr (Parameter repr)
 
   parameterName :: repr (Parameter repr) -> String
-  parameterType :: repr (Parameter repr) -> repr (StateType repr)
+  parameterType :: repr (Parameter repr) -> repr (Type repr)
 
 class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   BodySym repr, InternalMethod repr) => MethodSym repr where
   type Method repr
   -- Second label is class name
   method      :: Label -> Label -> repr (Scope repr) -> 
-    repr (Permanence repr) -> repr (StateType repr) -> 
+    repr (Permanence repr) -> repr (Type repr) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
   getMethod   :: Label -> repr (Variable repr) -> repr (Method repr)
   setMethod   :: Label -> repr (Variable repr) -> repr (Method repr) 
-  privMethod  :: Label -> Label -> repr (StateType repr) -> 
+  privMethod  :: Label -> Label -> repr (Type repr) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
-  pubMethod   :: Label -> Label -> repr (StateType repr) -> 
+  pubMethod   :: Label -> Label -> repr (Type repr) -> 
     [repr (Parameter repr)] -> repr (Body repr) -> repr (Method repr)
   constructor :: Label -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr)
@@ -546,7 +546,7 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
   docMain :: repr (Body repr) -> repr (Method repr)
 
   function :: Label -> repr (Scope repr) -> repr (Permanence repr) -> 
-    repr (StateType repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
+    repr (Type repr) -> [repr (Parameter repr)] -> repr (Body repr) -> 
     repr (Method repr) 
   mainFunction  :: repr (Body repr) -> repr (Method repr)
   -- Parameters are: function description, parameter descriptions, 
@@ -577,7 +577,7 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
     repr (Method repr)
   
 
-class (ScopeSym repr, InternalScope repr, PermanenceSym repr, StateTypeSym repr,
+class (ScopeSym repr, InternalScope repr, PermanenceSym repr, TypeSym repr,
   StatementSym repr) => StateVarSym repr where
   type StateVar repr
   stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->

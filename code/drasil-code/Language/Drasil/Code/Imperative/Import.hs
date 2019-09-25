@@ -27,7 +27,7 @@ import Language.Drasil.Code.DataDesc (DataItem, LinePattern(Repeat, Straight),
   getPatternInputs)
 
 import GOOL.Drasil (Label, RenderSym(..), PermanenceSym(..), BodySym(..), 
-  BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..), 
+  BlockSym(..), TypeSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
   ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
@@ -43,7 +43,7 @@ import Control.Monad (liftM2,liftM3)
 import Control.Monad.Reader (Reader, ask)
 import Control.Lens ((^.))
 
-value :: (RenderSym repr) => UID -> String -> repr (StateType repr) -> 
+value :: (RenderSym repr) => UID -> String -> repr (Type repr) -> 
   Reader State (repr (Value repr))
 value u s t = do
   g <- ask
@@ -54,7 +54,7 @@ value u s t = do
   maybe (do { v <- variable s t; return $ valueOf v }) 
     (convExpr . codeEquat) (Map.lookup u mm >>= maybeInline (conStruct g))
 
-variable :: (RenderSym repr) => String -> repr (StateType repr) -> 
+variable :: (RenderSym repr) => String -> repr (Type repr) -> 
   Reader State (repr (Variable repr))
 variable s t = do
   g <- ask
@@ -99,7 +99,7 @@ mkVar :: (RenderSym repr, HasCodeType c, CodeIdea c) => c ->
 mkVar v = variable (codeName v) (convType $ codeType v)
 
 publicMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  repr (StateType repr) -> Label -> String -> [c] -> Maybe String -> 
+  repr (Type repr) -> Label -> String -> [c] -> Maybe String -> 
   [repr (Block repr)] -> Reader State (repr (Method repr))
 publicMethod t n = genMethod (function n public static_ t) n
 

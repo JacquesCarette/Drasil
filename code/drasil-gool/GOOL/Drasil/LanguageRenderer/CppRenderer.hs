@@ -14,7 +14,7 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label,
   ProgramSym(..), RenderSym(..), InternalFile(..),
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
@@ -141,8 +141,8 @@ instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   type Block (p CppSrcCode CppHdrCode) = Doc
   block sts = pair (block $ map pfst sts) (block $ map psnd sts)
 
-instance (Pair p) => StateTypeSym (p CppSrcCode CppHdrCode) where
-  type StateType (p CppSrcCode CppHdrCode) = TypeData
+instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
+  type Type (p CppSrcCode CppHdrCode) = TypeData
   bool = pair bool bool
   int = pair int int
   float = pair float float
@@ -710,8 +710,8 @@ instance BlockSym CppSrcCode where
   type Block CppSrcCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
-instance StateTypeSym CppSrcCode where
-  type StateType CppSrcCode = TypeData
+instance TypeSym CppSrcCode where
+  type Type CppSrcCode = TypeData
   bool = return cppBoolTypeDoc
   int = return intTypeDocD
   float = return cppFloatTypeDoc
@@ -1302,8 +1302,8 @@ instance BlockSym CppHdrCode where
   type Block CppHdrCode = Doc
   block _ = return empty
 
-instance StateTypeSym CppHdrCode where
-  type StateType CppHdrCode = TypeData
+instance TypeSym CppHdrCode where
+  type Type CppHdrCode = TypeData
   bool = return cppBoolTypeDoc
   int = return intTypeDocD
   float = return cppFloatTypeDoc
@@ -1821,7 +1821,7 @@ cppClassVar c v = c <> text "::" <> v
 cppStateObjDoc :: TypeData -> Doc -> Doc
 cppStateObjDoc t ps = typeDoc t <> parens ps
 
-cppCast :: CppSrcCode (StateType CppSrcCode) -> 
+cppCast :: CppSrcCode (Type CppSrcCode) -> 
   CppSrcCode (Value CppSrcCode) -> CppSrcCode (Value CppSrcCode)
 cppCast t v = cppCast' (getType t) (getType $ valueType v)
   where cppCast' Float String = funcApp "std::stod" float [v]
@@ -1954,7 +1954,7 @@ cppModuleDoc ls blnk1 fs blnk2 cs = vcat [
   blnk2,
   fs]
 
-cppInOutCall :: (Label -> CppSrcCode (StateType CppSrcCode) -> 
+cppInOutCall :: (Label -> CppSrcCode (Type CppSrcCode) -> 
   [CppSrcCode (Value CppSrcCode)] -> CppSrcCode (Value CppSrcCode)) -> Label -> 
   [CppSrcCode (Value CppSrcCode)] -> [CppSrcCode (Variable CppSrcCode)] -> 
   [CppSrcCode (Variable CppSrcCode)] -> CppSrcCode (Statement CppSrcCode)

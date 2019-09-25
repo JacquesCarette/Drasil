@@ -44,12 +44,12 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library,
   RenderSym(..), BodySym(..), 
-  StateTypeSym(StateType, getType, getTypeString, getTypeDoc, listInnerType), 
+  TypeSym(Type, getType, getTypeString, getTypeDoc, listInnerType), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
-import qualified GOOL.Drasil.Symantics as S (StateTypeSym(int))
+import qualified GOOL.Drasil.Symantics as S (TypeSym(int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), 
   fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
   od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
@@ -703,7 +703,7 @@ classVarCheckStatic v = classVarCS (variableBind v)
           "classVar can only be used to access static variables"
         classVarCS Static = v
 
-classVarD :: (VariableSym repr) => repr (StateType repr) -> 
+classVarD :: (VariableSym repr) => repr (Type repr) -> 
   repr (Variable repr) -> (Doc -> Doc -> Doc) -> repr (Variable repr)
 classVarD c v f = varFromData (variableBind v) 
   (getTypeString c ++ "." ++ variableName v) 

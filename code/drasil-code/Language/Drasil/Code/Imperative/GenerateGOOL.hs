@@ -8,7 +8,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..), 
   Name)
   
-import GOOL.Drasil (Label, RenderSym(..), StateTypeSym(..), 
+import GOOL.Drasil (Label, RenderSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   CodeType(..), ProgData)
@@ -52,7 +52,7 @@ publicClass desc n l vs ms = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-fApp :: (RenderSym repr) => String -> String -> repr (StateType repr) -> 
+fApp :: (RenderSym repr) => String -> String -> repr (Type repr) -> 
   [repr (Value repr)] -> Reader State (repr (Value repr))
 fApp m s t vl = do
   g <- ask

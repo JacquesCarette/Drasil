@@ -1,7 +1,7 @@
 module Test.Observer (observer) where
 
 import GOOL.Drasil.Symantics (
-  RenderSym(..), PermanenceSym(..), BodySym(..), StateTypeSym(..), 
+  RenderSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), ScopeSym(..), 
   MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)

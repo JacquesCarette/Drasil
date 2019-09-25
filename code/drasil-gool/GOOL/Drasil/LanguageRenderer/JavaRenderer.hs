@@ -13,7 +13,7 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label,
   ProgramSym(..), RenderSym(..), InternalFile(..), 
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
@@ -139,8 +139,8 @@ instance BlockSym JavaCode where
   type Block JavaCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst .state) sts)
 
-instance StateTypeSym JavaCode where
-  type StateType JavaCode = TypeData
+instance TypeSym JavaCode where
+  type Type JavaCode = TypeData
   bool = return boolTypeDocD
   int = return intTypeDocD
   float = return jFloatTypeDocD
@@ -666,7 +666,7 @@ jListType (TD Float _ _) lst = td (List Float) (render lst ++ "<Double>")
   (lst <> angles (text "Double"))
 jListType t lst = listTypeDocD t lst
 
-jArrayType :: JavaCode (StateType JavaCode)
+jArrayType :: JavaCode (Type JavaCode)
 jArrayType = return $ td (List $ Object "Object") "Object" (text "Object[]")
 
 jEquality :: JavaCode (Value JavaCode) -> JavaCode (Value JavaCode) -> 
@@ -675,7 +675,7 @@ jEquality v1 v2 = jEquality' (getType $ valueType v2)
   where jEquality' String = objAccess v1 (func "equals" bool [v2])
         jEquality' _ = liftA4 typeBinExpr equalOp bool v1 v2
 
-jCast :: JavaCode (StateType JavaCode) -> JavaCode (Value JavaCode) -> 
+jCast :: JavaCode (Type JavaCode) -> JavaCode (Value JavaCode) -> 
   JavaCode (Value JavaCode)
 jCast t v = jCast' (getType t) (getType $ valueType v)
   where jCast' Float String = funcApp "Double.parseDouble" float [v]
@@ -745,7 +745,7 @@ jAssignFromArray c (v:vs) = (v &= cast (variableType v)
   (valueOf (var ("outputs[" ++ show c ++ "]") (variableType v))))
   : jAssignFromArray (c+1) vs
 
-jInOutCall :: (Label -> JavaCode (StateType JavaCode) -> 
+jInOutCall :: (Label -> JavaCode (Type JavaCode) -> 
   [JavaCode (Value JavaCode)] -> JavaCode (Value JavaCode)) -> Label -> 
   [JavaCode (Value JavaCode)] -> [JavaCode (Variable JavaCode)] -> 
   [JavaCode (Variable JavaCode)] -> JavaCode (Statement JavaCode)

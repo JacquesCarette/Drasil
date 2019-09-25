@@ -1,7 +1,7 @@
 module Test.Helper (helper) where
 
 import GOOL.Drasil.Symantics (
-  RenderSym(..), PermanenceSym(..), BodySym(..), StateTypeSym(..), 
+  RenderSym(..), PermanenceSym(..), BodySym(..), TypeSym(..), 
   StatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..), 
   ScopeSym(..), ParameterSym(..), MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)

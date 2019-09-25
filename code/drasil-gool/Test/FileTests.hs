@@ -1,7 +1,7 @@
 module Test.FileTests (fileTests) where
 
 import GOOL.Drasil (ProgramSym(..), RenderSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)

@@ -331,11 +331,11 @@ forDocD bStart bEnd sInit vGuard sUpdate b = vcat [
   indent b,
   bEnd]
 
-forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> TypeData -> ValData -> Doc 
-  -> Doc
-forEachDocD l bStart bEnd forEachLabel inLabel t v b =
-  vcat [forEachLabel <+> parens (typeDoc t <+> text l <+> inLabel <+> valDoc v) 
-    <+> bStart,
+forEachDocD :: VarData -> Doc -> Doc -> Doc -> Doc -> TypeData -> ValData -> 
+  Doc -> Doc
+forEachDocD e bStart bEnd forEachLabel inLabel t v b =
+  vcat [forEachLabel <+> parens (typeDoc t <+> varDoc e <+> inLabel <+> 
+    valDoc v) <+> bStart,
   indent b,
   bEnd]
 
@@ -450,15 +450,15 @@ stringListLists' lsts sl = checkList (getType $ valueType sl)
         listVals (List _:vs) = listVals vs
         listVals _ = error 
           "All values passed to stringListLists must have list types"
-        loop = forRange l_i (litInt 0) (listSize sl #/ numLists) (litInt 1)
+        loop = forRange var_i (litInt 0) (listSize sl #/ numLists) (litInt 1)
           (bodyStatements $ appendLists (map valueOf lsts) 0)
         appendLists [] _ = []
         appendLists (v:vs) n = valState (listAppend v (cast (listInnerType $ 
           valueType v) (listAccess sl ((v_i #* numLists) #+ litInt n)))) 
           : appendLists vs (n+1)
         numLists = litInt (toInteger $ length lsts)
-        l_i = "stringlist_i"
-        v_i = valueOf $ var l_i S.int
+        var_i = var "stringlist_i" S.int
+        v_i = valueOf var_i
         
 
 -- Unary Operators --

@@ -340,7 +340,7 @@ class (ValueSym repr, InternalValue repr, FunctionSym repr, Selector repr) =>
   listAccess :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   listSet    :: repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Value repr)
-  at         :: repr (Value repr) -> Label -> repr (Value repr)
+  at         :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
 class (ValueSym repr, InternalValue repr) => InternalFunction repr where
   getFunc        :: repr (Variable repr) -> repr (Function repr)
@@ -359,8 +359,6 @@ class (ValueSym repr, InternalValue repr) => InternalFunction repr where
     repr (Function repr)
   listSetFunc    :: repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Function repr)
-
-  atFunc :: repr (StateType repr) -> Label -> repr (Function repr)
 
 class (Selector repr) => InternalStatement repr where
   -- newLn, printFunc, value to print, maybe a file to print to 
@@ -488,9 +486,9 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
 
   for      :: repr (Statement repr) -> repr (Value repr) -> 
     repr (Statement repr) -> repr (Body repr) -> repr (Statement repr)
-  forRange :: Label -> repr (Value repr) -> repr (Value repr) -> 
+  forRange :: repr (Variable repr) -> repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Body repr) -> repr (Statement repr)
-  forEach  :: Label -> repr (Value repr) -> repr (Body repr) -> 
+  forEach  :: repr (Variable repr) -> repr (Value repr) -> repr (Body repr) -> 
     repr (Statement repr)
   while    :: repr (Value repr) -> repr (Body repr) -> repr (Statement repr) 
 

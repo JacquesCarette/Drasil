@@ -127,7 +127,7 @@ $\mathbf{\hat{j}}$ & Unit Vector: A vector that has a magnitude of one. & --
 \\
 ${K_{\text{c}}}$ & Seismic Coefficient: The proportionality factor of force that weight pushes outwards; caused by seismic earth movements. & --
 \\
-$M$ & Moment: A measure of the tendency of a body to rotate about a specific point or axis. & Nm
+$\mathbf{M}$ & Moment: A measure of the tendency of a body to rotate about a specific point or axis. & Nm
 \\
 $m$ & Mass: The quantity of matter in a body. & kg
 \\
@@ -505,13 +505,13 @@ Label & Equilibrium
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \displaystyle\sum{{F_{\text{x}}}}=\displaystyle\sum{{F_{\text{y}}}}=\displaystyle\sum{M}=0
+           \displaystyle\sum{{F_{\text{x}}}}=\displaystyle\sum{{F_{\text{y}}}}=\displaystyle\sum{\mathbf{M}}=0
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{${F_{\text{x}}}$ is the $x$-coordinate of the force (N)}
               \item{${F_{\text{y}}}$ is the $y$-coordinate of the force (N)}
-              \item{$M$ is the moment (Nm)}
+              \item{$\mathbf{M}$ is the moment (Nm)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & For a body in static equilibrium, the net forces and moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the $x$-coordinate of the force ${F_{\text{x}}}$ and $y$-coordinate of the force ${F_{\text{y}}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
@@ -1025,7 +1025,7 @@ Moment is equal to torque, so the equation from \hyperref[DD:torque]{DD: torque}
 Considering one dimension, with moments in the clockwise direction as positive and moments in the counterclockwise direction as negative, and replacing the torque symbol with the moment symbol, the equation simplifies to:
 
 \begin{displaymath}
-M={F_{\text{rot}}} r
+\mathbf{M}={F_{\text{rot}}} r
 \end{displaymath}
 where ${F_{\text{rot}}}$ is the force causing rotation and $r$ is the length of the moment arm, or the distance between the force and the axis about which the rotation acts. To represent the moment equilibrium, the moments from each force acting on a slice must be considered and added together. The forces acting on a slice are all shown in \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram}. The midpoint of the base of a slice is considered as the axis of rotation, from which the length of the moment arm is measured. Considering first the interslice normal force acting on slice interface $i$, the moment is negative because the force tends to rotate the slice in a counterclockwise direction, and the length of the moment arm is the height of the force plus the difference in height between the base at slice interface $i$ and the base at the midpoint of slice $i$. Thus, the moment is expressed as:
 

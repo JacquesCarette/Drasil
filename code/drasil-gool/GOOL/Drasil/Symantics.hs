@@ -51,7 +51,6 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   inherit :: repr (Keyword repr)
 
   list     :: repr (Permanence repr) -> repr (Keyword repr)
-  listObj  :: repr (Keyword repr)
 
   blockStart :: repr (Keyword repr)
   blockEnd   :: repr (Keyword repr)
@@ -275,11 +274,8 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
     repr (Value repr)
   extFuncApp   :: Library -> Label -> repr (Type repr) -> 
     [repr (Value repr)] -> repr (Value repr)
-  stateObj     :: repr (Type repr) -> [repr (Value repr)] -> 
-    repr (Value repr)
-  extStateObj  :: Library -> repr (Type repr) -> [repr (Value repr)] -> 
-    repr (Value repr)
-  listStateObj :: repr (Type repr) -> [repr (Value repr)] -> 
+  newObj     :: repr (Type repr) -> [repr (Value repr)] -> repr (Value repr)
+  extNewObj  :: Library -> repr (Type repr) -> [repr (Value repr)] -> 
     repr (Value repr)
 
   exists  :: repr (Value repr) -> repr (Value repr)
@@ -340,7 +336,7 @@ class (ValueSym repr, InternalValue repr, FunctionSym repr, Selector repr) =>
   listAccess :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
   listSet    :: repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Value repr)
-  at         :: repr (Value repr) -> Label -> repr (Value repr)
+  at         :: repr (Value repr) -> repr (Value repr) -> repr (Value repr)
 
 class (ValueSym repr, InternalValue repr) => InternalFunction repr where
   getFunc        :: repr (Variable repr) -> repr (Function repr)
@@ -359,8 +355,6 @@ class (ValueSym repr, InternalValue repr) => InternalFunction repr where
     repr (Function repr)
   listSetFunc    :: repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Function repr)
-
-  atFunc :: repr (Type repr) -> Label -> repr (Function repr)
 
 class (Selector repr) => InternalStatement repr where
   -- newLn, printFunc, value to print, maybe a file to print to 
@@ -403,8 +397,8 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
     repr (Statement repr)
   extObjDecNew     :: Library -> repr (Variable repr) -> 
     [repr (Value repr)] -> repr (Statement repr)
-  objDecNewVoid    :: repr (Variable repr) -> repr (Statement repr)
-  extObjDecNewVoid :: Library -> repr (Variable repr) -> repr (Statement repr)
+  objDecNewNoParams    :: repr (Variable repr) -> repr (Statement repr)
+  extObjDecNewNoParams :: Library -> repr (Variable repr) -> repr (Statement repr)
   constDecDef      :: repr (Variable repr) -> repr (Value repr) -> 
     repr (Statement repr)
 
@@ -488,9 +482,9 @@ class (StatementSym repr, BodySym repr) => ControlStatementSym repr where
 
   for      :: repr (Statement repr) -> repr (Value repr) -> 
     repr (Statement repr) -> repr (Body repr) -> repr (Statement repr)
-  forRange :: Label -> repr (Value repr) -> repr (Value repr) -> 
+  forRange :: repr (Variable repr) -> repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Body repr) -> repr (Statement repr)
-  forEach  :: Label -> repr (Value repr) -> repr (Body repr) -> 
+  forEach  :: repr (Variable repr) -> repr (Value repr) -> repr (Body repr) -> 
     repr (Statement repr)
   while    :: repr (Value repr) -> repr (Body repr) -> repr (Statement repr) 
 

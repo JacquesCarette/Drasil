@@ -36,21 +36,20 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
   argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD, 
-  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
-  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
-  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
-  doubleSlash, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
-  docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
-  setMainMethod, setEmpty, intValue, filterOutObjs)
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, newObjDocD, notNullDocD, 
+  funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
+  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
+  moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
+  setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Terminator(..), 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
   ProgData(..), progD, TypeData(..), td, ValData(..), 
   VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
-  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
+  liftA4, liftA5, liftA6, liftA8, liftList, lift1List, lift3Pair, 
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -105,7 +104,6 @@ instance KeywordSym JavaCode where
   inherit = return $ text "extends"
 
   list _ = return $ text "ArrayList"
-  listObj = return new
 
   blockStart = return lbrace
   blockEnd = return rbrace
@@ -152,7 +150,7 @@ instance TypeSym JavaCode where
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
-  iterator _ = error "Iterator-type variables do not exist in Java"
+  iterator t = t
   void = return voidDocD
 
   getType = cType . unJC
@@ -307,10 +305,8 @@ instance ValueExpression JavaCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t (liftList valList vs))
-  extStateObj _ = stateObj
-  listStateObj t vs = liftA2 mkVal t (liftA3 listStateObjDocD listObj t 
-    (liftList valList vs))
+  newObj t vs = liftA2 mkVal t (liftA2 newObjDocD t (liftList valList vs))
+  extNewObj _ = newObj
 
   exists = notNull
   notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf (var 
@@ -358,7 +354,7 @@ instance FunctionSym JavaCode where
 instance SelectorFunction JavaCode where
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (valueOf $ var l int)
+  at = listAccess
 
 instance InternalFunction JavaCode where
   getFunc v = func (getterName $ variableName v) (variableType v) []
@@ -373,8 +369,6 @@ instance InternalFunction JavaCode where
   
   listAccessFunc t i = func "get" t [intValue i]
   listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
-
-  atFunc t l = listAccessFunc t (valueOf $ var l int)
 
 instance InternalStatement JavaCode where
   printSt _ p v _ = mkSt <$> liftA2 printDoc p v
@@ -400,12 +394,12 @@ instance StatementSym JavaCode where
   listDecDef v vs = mkSt <$> liftA4 jListDecDef v (liftList valList vs) static_ 
     dynamic_ 
   objDecDef v def = mkSt <$> liftA4 objDecDefDocD v def static_ dynamic_ 
-  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
     vs) static_ dynamic_ 
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+  objDecNewNoParams v = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
     []) static_ dynamic_ 
-  extObjDecNewVoid _ = objDecNewVoid
+  extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
 
   print v = outDoc False printFunc v Nothing
@@ -477,9 +471,9 @@ instance ControlStatementSym JavaCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
-    (valueOf (var i int) ?< finalv) (var i int &+= stepv)
-  forEach l v b = mkStNoEnd <$> liftA7 (forEachDocD l) blockStart blockEnd
+  forRange i initv finalv stepv = for (varDecDef i initv) 
+    (valueOf i ?< finalv) (i &+= stepv)
+  forEach e v b = mkStNoEnd <$> liftA8 forEachDocD e blockStart blockEnd
     iterForEachLabel iterInLabel (listInnerType $ valueType v) v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
@@ -488,12 +482,11 @@ instance ControlStatementSym JavaCode where
   checkState l = switch (valueOf $ var l string)
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (var_index &++) notify
-    where obsList = valueOf $ observerListName `listOf` t
-          index = "observerIndex"
-          var_index = var index int
+    where obsList = valueOf $ observerListName `listOf` t 
+          var_index = var "observerIndex" int
           v_index = valueOf var_index
           initv = varDecDef var_index $ litInt 0
-          notify = oneLiner $ valState $ at obsList index $. f
+          notify = oneLiner $ valState $ at obsList v_index $. f
 
   getFileInputAll f v = while (f $. func "hasNextLine" bool [])
     (oneLiner $ valState $ listAppend (valueOf v) (f $. func "nextLine" string []))

@@ -44,8 +44,8 @@ import GOOL.Drasil.Data (Terminator(..),
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
   VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, 
-  emptyIfEmpty, liftA4, liftA5, liftList, lift1List, lift2Lists, lift4Pair, 
-  liftPair, liftPairFst, getInnerType, convType, checkParams)
+  emptyIfEmpty, liftA4, liftA5, liftA6, liftList, lift1List, lift2Lists, 
+  lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -99,7 +99,6 @@ instance KeywordSym PythonCode where
   inherit = return empty
 
   list _ = return empty
-  listObj = return empty
 
   blockStart = return colon
   blockEnd = return empty
@@ -146,7 +145,7 @@ instance TypeSym PythonCode where
   listInnerType t = fmap (getInnerType . cType) t >>= convType
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
-  iterator _ = error "Iterator-type variables do not exist in Python"
+  iterator t = t
   void = return $ td Void "NoneType" (text "NoneType")
 
   getType = cType . unPC
@@ -292,10 +291,9 @@ instance ValueExpression PythonCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 pyStateObj t (liftList valList vs))
-  extStateObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
+  newObj t vs = liftA2 mkVal t (liftA2 pyStateObj t (liftList valList vs))
+  extNewObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
     valList vs))
-  listStateObj t _ = liftA2 mkVal t (fmap typeDoc t)
 
   exists v = v ?!= valueOf (var "None" void)
   notNull = exists
@@ -341,7 +339,7 @@ instance FunctionSym PythonCode where
 instance SelectorFunction PythonCode where
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (valueOf $ var l int)
+  at = listAccess
 
 instance InternalFunction PythonCode where
   getFunc v = func (getterName $ variableName v) (variableType v) []
@@ -357,8 +355,6 @@ instance InternalFunction PythonCode where
   listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD i toVal)
-
-  atFunc t l = listAccessFunc t (valueOf $ var l int)
 
 instance InternalStatement PythonCode where
   printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
@@ -384,10 +380,10 @@ instance StatementSym PythonCode where
   listDec _ v = mkStNoEnd <$> fmap pyListDec v
   listDecDef v vs = mkStNoEnd <$> liftA2 pyListDecDef v (liftList valList vs)
   objDecDef = varDecDef
-  objDecNew v vs = varDecDef v (stateObj (variableType v) vs)
-  extObjDecNew lib v vs = varDecDef v (extStateObj lib (variableType v) vs)
-  objDecNewVoid v = varDecDef v (stateObj (variableType v) [])
-  extObjDecNewVoid lib v = varDecDef v (extStateObj lib (variableType v) [])
+  objDecNew v vs = varDecDef v (newObj (variableType v) vs)
+  extObjDecNew lib v vs = varDecDef v (extNewObj lib (variableType v) vs)
+  objDecNewNoParams v = varDecDef v (newObj (variableType v) [])
+  extObjDecNewNoParams lib v = varDecDef v (extNewObj lib (variableType v) [])
   constDecDef = varDecDef
 
   print v = pyOut False printFunc v Nothing
@@ -459,9 +455,9 @@ instance ControlStatementSym PythonCode where
 
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
-  forRange i initv finalv stepv b = mkStNoEnd <$> liftA5 (pyForRange i) 
+  forRange i initv finalv stepv b = mkStNoEnd <$> liftA6 pyForRange i
     iterInLabel initv finalv stepv b
-  forEach l v b = mkStNoEnd <$> liftA4 (pyForEach l) iterForEachLabel 
+  forEach e v b = mkStNoEnd <$> liftA5 pyForEach e iterForEachLabel 
     iterInLabel v b
   while v b = mkStNoEnd <$> liftA2 pyWhile v b
 
@@ -471,9 +467,9 @@ instance ControlStatementSym PythonCode where
   notifyObservers f t = forRange index initv (listSize obsList) 
     (litInt 1) notify
     where obsList = valueOf $ observerListName `listOf` t
-          index = "observerIndex"
+          index = var "observerIndex" int
           initv = litInt 0
-          notify = oneLiner $ valState $ at obsList index $. f
+          notify = oneLiner $ valState $ at obsList (valueOf index) $. f
 
   getFileInputAll f v = v &= objMethodCall (listType static_ string) f
     "readlines" []
@@ -652,16 +648,16 @@ pyInput inSrc v = v &= pyInput' (getType $ variableType v)
 pyThrow ::  ValData -> Doc
 pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valDoc errMsg)
 
-pyForRange :: Label -> Doc ->  ValData ->  ValData ->
+pyForRange :: VarData -> Doc ->  ValData ->  ValData ->
   ValData -> Doc -> Doc
 pyForRange i inLabel initv finalv stepv b = vcat [
-  forLabel <+> text i <+> inLabel <+> text "range" <> parens (valDoc initv <> 
+  forLabel <+> varDoc i <+> inLabel <+> text "range" <> parens (valDoc initv <> 
     text ", " <> valDoc finalv <> text ", " <> valDoc stepv) <> colon,
   indent b]
 
-pyForEach :: Label -> Doc -> Doc ->  ValData -> Doc -> Doc
+pyForEach :: VarData -> Doc -> Doc ->  ValData -> Doc -> Doc
 pyForEach i forEachLabel inLabel lstVar b = vcat [
-  forEachLabel <+> text i <+> inLabel <+> valDoc lstVar <> colon,
+  forEachLabel <+> varDoc i <+> inLabel <+> valDoc lstVar <> colon,
   indent b]
 
 pyWhile ::  ValData -> Doc -> Doc

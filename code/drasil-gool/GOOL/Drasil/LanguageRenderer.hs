@@ -29,14 +29,14 @@ module GOOL.Drasil.LanguageRenderer (
   binExpr, binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, 
   litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
   selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD,
-  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
-  listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
-  listIndexExistsDocD, funcDocD, castDocD, sizeDocD, listAccessFuncDocD, 
-  listSetFuncDocD, objAccessDocD, castObjDocD, includeD, breakDocD, 
-  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
-  docFuncRepr, valList, prependToBody, appendToBody, surroundBody, getterName, 
-  setterName, setMainMethod, setEmpty, intValue, filterOutObjs
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, newObjDocD, 
+  objDecDefDocD, constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, 
+  castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
+  castObjDocD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
+  privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
+  prependToBody, appendToBody, surroundBody, getterName, setterName, 
+  setMainMethod, setEmpty, intValue, filterOutObjs
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -331,11 +331,11 @@ forDocD bStart bEnd sInit vGuard sUpdate b = vcat [
   indent b,
   bEnd]
 
-forEachDocD :: Label -> Doc -> Doc -> Doc -> Doc -> TypeData -> ValData -> Doc 
-  -> Doc
-forEachDocD l bStart bEnd forEachLabel inLabel t v b =
-  vcat [forEachLabel <+> parens (typeDoc t <+> text l <+> inLabel <+> valDoc v) 
-    <+> bStart,
+forEachDocD :: VarData -> Doc -> Doc -> Doc -> Doc -> TypeData -> ValData -> 
+  Doc -> Doc
+forEachDocD e bStart bEnd forEachLabel inLabel t v b =
+  vcat [forEachLabel <+> parens (typeDoc t <+> varDoc e <+> inLabel <+> 
+    valDoc v) <+> bStart,
   indent b,
   bEnd]
 
@@ -450,15 +450,15 @@ stringListLists' lsts sl = checkList (getType $ valueType sl)
         listVals (List _:vs) = listVals vs
         listVals _ = error 
           "All values passed to stringListLists must have list types"
-        loop = forRange l_i (litInt 0) (listSize sl #/ numLists) (litInt 1)
+        loop = forRange var_i (litInt 0) (listSize sl #/ numLists) (litInt 1)
           (bodyStatements $ appendLists (map valueOf lsts) 0)
         appendLists [] _ = []
         appendLists (v:vs) n = valState (listAppend v (cast (listInnerType $ 
           valueType v) (listAccess sl ((v_i #* numLists) #+ litInt n)))) 
           : appendLists vs (n+1)
         numLists = litInt (toInteger $ length lsts)
-        l_i = "stringlist_i"
-        v_i = valueOf $ var l_i S.int
+        var_i = var "stringlist_i" S.int
+        v_i = valueOf var_i
         
 
 -- Unary Operators --
@@ -726,11 +726,8 @@ funcAppDocD n vs = text n <> parens (valList vs)
 extFuncAppDocD :: Library -> Label -> [ValData] -> Doc
 extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
 
-stateObjDocD :: TypeData -> Doc -> Doc
-stateObjDocD st vs = new <+> typeDoc st <> parens vs
-
-listStateObjDocD :: Doc -> TypeData -> Doc -> Doc
-listStateObjDocD lstObj st vs = lstObj <+> typeDoc st <> parens vs
+newObjDocD :: TypeData -> Doc -> Doc
+newObjDocD st vs = new <+> typeDoc st <> parens vs
 
 notNullDocD :: OpData -> ValData -> ValData -> Doc
 notNullDocD op v1 v2 = binOpDocD (opDoc op) (valDoc v1) (valDoc v2)

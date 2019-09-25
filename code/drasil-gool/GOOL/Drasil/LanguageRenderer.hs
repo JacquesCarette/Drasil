@@ -29,14 +29,14 @@ module GOOL.Drasil.LanguageRenderer (
   binExpr, binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, 
   litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
   selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD,
-  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
-  listStateObjDocD, objDecDefDocD, constDecDefDocD, notNullDocD, 
-  listIndexExistsDocD, funcDocD, castDocD, sizeDocD, listAccessFuncDocD, 
-  listSetFuncDocD, objAccessDocD, castObjDocD, includeD, breakDocD, 
-  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
-  docFuncRepr, valList, prependToBody, appendToBody, surroundBody, getterName, 
-  setterName, setMainMethod, setEmpty, intValue, filterOutObjs
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, newObjDocD, 
+  objDecDefDocD, constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, 
+  castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
+  castObjDocD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
+  privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
+  addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
+  prependToBody, appendToBody, surroundBody, getterName, setterName, 
+  setMainMethod, setEmpty, intValue, filterOutObjs
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -726,11 +726,8 @@ funcAppDocD n vs = text n <> parens (valList vs)
 extFuncAppDocD :: Library -> Label -> [ValData] -> Doc
 extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
 
-stateObjDocD :: TypeData -> Doc -> Doc
-stateObjDocD st vs = new <+> typeDoc st <> parens vs
-
-listStateObjDocD :: Doc -> TypeData -> Doc -> Doc
-listStateObjDocD lstObj st vs = lstObj <+> typeDoc st <> parens vs
+newObjDocD :: TypeData -> Doc -> Doc
+newObjDocD st vs = new <+> typeDoc st <> parens vs
 
 notNullDocD :: OpData -> ValData -> ValData -> Doc
 notNullDocD op v1 v2 = binOpDocD (opDoc op) (valDoc v1) (valDoc v2)

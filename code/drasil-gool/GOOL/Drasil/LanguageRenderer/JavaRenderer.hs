@@ -36,14 +36,13 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
   argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD, 
-  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, stateObjDocD, 
-  listStateObjDocD, notNullDocD, funcDocD, castDocD, objAccessDocD, castObjDocD,
-  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  dot, new, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName,
-  doubleSlash, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
-  docFuncRepr, valList, appendToBody, surroundBody, getterName, setterName, 
-  setMainMethod, setEmpty, intValue, filterOutObjs)
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, newObjDocD, notNullDocD, 
+  funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
+  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
+  moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
+  setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Terminator(..), 
   FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
   updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
@@ -105,7 +104,6 @@ instance KeywordSym JavaCode where
   inherit = return $ text "extends"
 
   list _ = return $ text "ArrayList"
-  listObj = return new
 
   blockStart = return lbrace
   blockEnd = return rbrace
@@ -307,10 +305,8 @@ instance ValueExpression JavaCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  stateObj t vs = liftA2 mkVal t (liftA2 stateObjDocD t (liftList valList vs))
-  extStateObj _ = stateObj
-  listStateObj t vs = liftA2 mkVal t (liftA3 listStateObjDocD listObj t 
-    (liftList valList vs))
+  newObj t vs = liftA2 mkVal t (liftA2 newObjDocD t (liftList valList vs))
+  extNewObj _ = newObj
 
   exists = notNull
   notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf (var 
@@ -398,12 +394,12 @@ instance StatementSym JavaCode where
   listDecDef v vs = mkSt <$> liftA4 jListDecDef v (liftList valList vs) static_ 
     dynamic_ 
   objDecDef v def = mkSt <$> liftA4 objDecDefDocD v def static_ dynamic_ 
-  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
     vs) static_ dynamic_ 
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+  objDecNewNoParams v = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
     []) static_ dynamic_ 
-  extObjDecNewVoid _ = objDecNewVoid
+  extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
 
   print v = outDoc False printFunc v Nothing

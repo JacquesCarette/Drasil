@@ -51,7 +51,6 @@ class (ValueSym repr, PermanenceSym repr) => KeywordSym repr where
   inherit :: repr (Keyword repr)
 
   list     :: repr (Permanence repr) -> repr (Keyword repr)
-  listObj  :: repr (Keyword repr)
 
   blockStart :: repr (Keyword repr)
   blockEnd   :: repr (Keyword repr)
@@ -275,11 +274,9 @@ class (ValueSym repr, NumericExpression repr, BooleanExpression repr) =>
     repr (Value repr)
   extFuncApp   :: Library -> Label -> repr (StateType repr) -> 
     [repr (Value repr)] -> repr (Value repr)
-  stateObj     :: repr (StateType repr) -> [repr (Value repr)] -> 
+  newObj     :: repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Value repr)
-  extStateObj  :: Library -> repr (StateType repr) -> [repr (Value repr)] -> 
-    repr (Value repr)
-  listStateObj :: repr (StateType repr) -> [repr (Value repr)] -> 
+  extNewObj  :: Library -> repr (StateType repr) -> [repr (Value repr)] -> 
     repr (Value repr)
 
   exists  :: repr (Value repr) -> repr (Value repr)
@@ -401,8 +398,8 @@ class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
     repr (Statement repr)
   extObjDecNew     :: Library -> repr (Variable repr) -> 
     [repr (Value repr)] -> repr (Statement repr)
-  objDecNewVoid    :: repr (Variable repr) -> repr (Statement repr)
-  extObjDecNewVoid :: Library -> repr (Variable repr) -> repr (Statement repr)
+  objDecNewNoParams    :: repr (Variable repr) -> repr (Statement repr)
+  extObjDecNewNoParams :: Library -> repr (Variable repr) -> repr (Statement repr)
   constDecDef      :: repr (Variable repr) -> repr (Value repr) -> 
     repr (Statement repr)
 

@@ -50,7 +50,7 @@ import GOOL.Drasil.Data (Terminator(..),
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
   ValData(..), updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
-  liftA5, liftA6, liftA8, liftList, lift1List, lift3Pair, lift4Pair,
+  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -474,8 +474,8 @@ instance ControlStatementSym CSharpCode where
     (loopState sInit) vGuard (loopState sUpdate) b
   forRange i initv finalv stepv = for (varDecDef i initv) 
     (valueOf i ?< finalv) (i &+= stepv)
-  forEach e v b = mkStNoEnd <$> liftA8 forEachDocD e blockStart blockEnd 
-    iterForEachLabel iterInLabel (listInnerType $ valueType v) v b
+  forEach e v b = mkStNoEnd <$> liftA7 forEachDocD e blockStart blockEnd 
+    iterForEachLabel iterInLabel v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 csTryCatch tb cb

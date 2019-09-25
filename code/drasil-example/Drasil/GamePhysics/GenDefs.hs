@@ -9,13 +9,11 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  displacement, fOfGravity)
 import Drasil.GamePhysics.Unitals (mLarger, dispNorm, dispUnit, massA, massB,
   momtInertA, momtInertB, normalLen, normalVect, perpLenA, perpLenB, initRelVel,
-  dispUnit, iVect, jVect, dispUnit, mass_1, mass_2, sqrDist)
+  dispUnit, dispUnit, mass_1, mass_2, sqrDist)
 import Drasil.GamePhysics.DataDefs (collisionAssump, rightHandAssump,
   rigidTwoDAssump)
 import Data.Drasil.Concepts.Math as CM (line, cartesian)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
---import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, perpVect, unitVect, euclidNormX, euclidNormY)
---import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 import Drasil.GamePhysics.TMods (newtonLUG)
 
 ----- General Models -----
@@ -127,7 +125,7 @@ accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst * (sy mass_1 * 
                         sy sqrDist) * sy dispUnit 
 
 accelGravityDerivEqn2 :: Expr
-accelGravityDerivEqn2 = sy dispUnit $= (sy QP.displacement/ sy dispNorm) $= (sy jVect * sy iVect)
+accelGravityDerivEqn2 = sy dispUnit $= (sy QP.displacement/ sy dispNorm)
 
 accelGravityDerivEqn3 :: Expr
 accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst *

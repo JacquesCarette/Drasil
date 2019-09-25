@@ -130,7 +130,7 @@ accelGravityDerivEqn2 :: Expr
 accelGravityDerivEqn2 = sy dispUnit $= (sy QP.displacement/ sy dispNorm) $= (sy jVect * sy iVect)
 
 accelGravityDerivEqn3 :: Expr
-accelGravityDerivEqn3 = sy QP.fOfGravity $= (sy QP.gravitationalConst) *
+accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst *
                          (sy mLarger * sy QPP.mass / sy sqrDist) * sy dispUnit
                          $= sy QPP.mass * sy QP.gravitationalAccel
 

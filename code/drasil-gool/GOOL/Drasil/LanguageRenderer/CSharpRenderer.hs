@@ -510,7 +510,7 @@ instance InternalScope CSharpCode where
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
-  mState t = t
+  mType t = t
   construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym CSharpCode where
@@ -524,7 +524,7 @@ instance ParameterSym CSharpCode where
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
   method n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
-    (liftA5 (methodDocD n) s p (mState t) (liftList paramListDocD ps) b)
+    (liftA5 (methodDocD n) s p (mType t) (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
@@ -540,7 +540,7 @@ instance MethodSym CSharpCode where
     "Controls the flow of the program" 
     [("args", "List of command-line arguments")] []) (mainFunction b)
  
-  function n s p t = intFunc n s p (mState t)
+  function n s p t = intFunc n s p (mType t)
   mainFunction b = setMainMethod <$> function "Main" public static_ void 
     [liftA2 pd (var "args" (listType static_ string)) 
     (return $ text "string[] args")] b

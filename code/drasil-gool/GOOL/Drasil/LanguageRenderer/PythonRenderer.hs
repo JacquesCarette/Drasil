@@ -488,7 +488,7 @@ instance InternalScope PythonCode where
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData
-  mState t = t
+  mType t = t
   construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym PythonCode where
@@ -501,7 +501,7 @@ instance ParameterSym PythonCode where
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
-  method n c s p t = intMethod n c s p (mState t)
+  method n c s p t = intMethod n c s p (mType t)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
@@ -515,7 +515,7 @@ instance MethodSym PythonCode where
 
   docMain = mainFunction
 
-  function n s p t = intFunc n s p (mState t)
+  function n s p t = intFunc n s p (mType t)
   mainFunction = fmap (mthd True [])
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)

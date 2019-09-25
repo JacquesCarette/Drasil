@@ -514,7 +514,7 @@ class (ScopeSym repr) => InternalScope repr where
 
 class MethodTypeSym repr where
   type MethodType repr
-  mState    :: repr (StateType repr) -> repr (MethodType repr)
+  mType    :: repr (StateType repr) -> repr (MethodType repr)
   construct :: Label -> repr (MethodType repr)
 
 class ParameterSym repr where

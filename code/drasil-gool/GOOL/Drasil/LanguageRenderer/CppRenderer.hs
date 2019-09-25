@@ -534,7 +534,7 @@ instance (Pair p) => InternalScope (p CppSrcCode CppHdrCode) where
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
   type MethodType (p CppSrcCode CppHdrCode) = TypeData
-  mState t = pair (mState $ pfst t) (mState $ psnd t)
+  mType t = pair (mType $ pfst t) (mType $ psnd t)
   construct n = pair (construct n) (construct n)
 
 instance (Pair p) => ParameterSym (p CppSrcCode CppHdrCode) where
@@ -1101,7 +1101,7 @@ instance InternalScope CppSrcCode where
 
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
-  mState t = t
+  mType t = t
   construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym CppSrcCode where
@@ -1114,7 +1114,7 @@ instance ParameterSym CppSrcCode where
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
-  method n c s p t = intMethod n c s p (mState t)
+  method n c s p t = intMethod n c s p (mType t)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
@@ -1138,7 +1138,7 @@ instance MethodSym CppSrcCode where
     [("argc", "Number of command-line arguments"),
     ("argv", "List of command-line arguments")] ["exit code"]) (mainFunction b)
 
-  function n s p t = intFunc n s p (mState t)
+  function n s p t = intFunc n s p (mType t)
   mainFunction b = setMainMethod <$> function "main" public static_ int 
     [param $ var "argc" int, 
     liftA2 pd (var "argv" (listType static_ string)) 
@@ -1626,7 +1626,7 @@ instance InternalScope CppHdrCode where
 
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData
-  mState t = t
+  mType t = t
   construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym CppHdrCode where
@@ -1639,7 +1639,7 @@ instance ParameterSym CppHdrCode where
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
-  method n c s p t = intMethod n c s p (mState t)
+  method n c s p t = intMethod n c s p (mType t)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] (return empty)
   setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
@@ -1651,7 +1651,7 @@ instance MethodSym CppHdrCode where
 
   docMain = mainFunction
 
-  function n s p t = intFunc n s p (mState t)
+  function n s p t = intFunc n s p (mType t)
   mainFunction _ = return (mthd True Pub [] empty)
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)

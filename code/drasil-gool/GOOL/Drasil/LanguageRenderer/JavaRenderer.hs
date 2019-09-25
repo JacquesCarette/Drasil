@@ -508,7 +508,7 @@ instance InternalScope JavaCode where
 
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
-  mState t = t
+  mType t = t
   construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym JavaCode where
@@ -521,7 +521,7 @@ instance ParameterSym JavaCode where
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
-  method n l s p t = intMethod n l s p (mState t)
+  method n l s p t = intMethod n l s p (mType t)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
     (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
@@ -537,7 +537,7 @@ instance MethodSym JavaCode where
     "Controls the flow of the program" 
     [("args", "List of command-line arguments")] []) (mainFunction b)
 
-  function n s p t = intFunc n s p (mState t)
+  function n s p t = intFunc n s p (mType t)
   mainFunction b = setMainMethod <$> function "main" public static_ void 
     [liftA2 pd (var "args" (listType static_ string)) 
     (return $ text "String[] args")] b

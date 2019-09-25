@@ -294,6 +294,89 @@ future improvements in Section \ref{future}, and conclusions in Section
 \ref{conclusions}.
 
 \section{Requirements} \label{sec:req}
+
+One might not expect a DSL to prioritize generation of human-readable, 
+idiomatic, or documented code. After all, the main purpose of a DSL is to allow 
+the user of the DSL --- who is probably a domain expert but not a programming 
+expert --- to avoid having to write GPL code, so why would they want to look at 
+the generated GPL code? For programs written in most DSLs, the generated code 
+is not itself the goal. The goal is to do something, and the form of the 
+generated code is unimportant, as long as running it achieves that goal. In 
+this respect, GOOL differs from most DSLs. Since the domain of GOOL is OO 
+programming, the user of GOOL is expected to have some programming expertise. 
+In a sense, GOOL is both a GPL and a DSL. GOOL's main purpose, rather than 
+allowing the user to not have to write GPL code, is to allow the user to not 
+have to write GPL code in multiple languages. As with other DSLs, completing 
+some required task will certainly be a goal of a program written in GOOL. But 
+since GOOL is general-purpose, we cannot assume that the generated code will 
+not be an additional goal unto itself. For example, if it is to be integrated 
+into an existing system, other programmers working on the system may need to 
+look at and understand the code and how it impacts their own tasks. Or perhaps 
+the generated code is a library, intended to be used by any project who sees a 
+need for it.
+
+In light of cases like these, the importance of our requirements for GOOL to 
+generate human-readable, idiomatic, and documented code should be clear. These 
+all contribute to understandability of the generated code. Documentation can 
+explain code such that those using a program or library can do so quickly, 
+without even having to look at the code. Documentation may take the form of 
+comments added ad-hoc throughout the code, or more formal, structured comments 
+that can be compiled into PDF or HTML documents using a tool like Doxygen. 
+Documentation cannot be guaranteed to provide all of the information a user of 
+the generated code may need, however, which is why generating human-readable 
+code is still important. 
+
+Details not revealed by the documentation should be 
+discernible by examining and understanding the code. Readable code is also 
+important when it comes to debugging. Being unable to understand parts of a 
+system would make diagnosing bugs very difficult. Pretty-printing and reducing 
+complexity are effective ways to enhance code readability 
+\cite{buse2009learning}. Some DSLs complicate generated code by generating it 
+into a custom framework, but GOOL must avoid this to retain readability. 
+
+It should be noted that our requirements for the generated code to be 
+documented and readable only hold if the code written in GOOL is documented and 
+readable. Inevitably, a user will be able to write undocumented or overly 
+complex code if they choose to do so. Our requirement is that GOOL at least 
+offers a way to document the code, does not strip away code comments, 
+pretty-prints the generated code, and does not introduce more complexity than 
+required to meet the GOOL specification.
+
+The importance of generating idiomatic code is perhaps not as obvious as 
+readable and documented code. Consider a project written entirely in one 
+language. If it uses generated code from GOOL and the code is non-idiomatic, it 
+will be inconsistent with the rest of the code base and less understandable, 
+both because it would be more complicated than it needs to be and because it 
+would not be expressed naturally in the target language, not using the idioms 
+with which the developers would be most familiar.
+
+Our last requirement is altogether different from the others, but is 
+typical of DSLs: GOOL should abstract over common OO patterns, allowing them to 
+be expressed naturally. The patterns in question could abstract over 
+small-scale idioms or could be larger-scale OO design patterns. While the 
+motivation for this requirement is partly to make it even more efficient to 
+write code in GOOL than in any of its target languages, there is more to it 
+than that. This requirement is also necessary to make GOOL truly 
+language-agnostic and to generate idiomatic code. This fact will be 
+demonstrated with the examples of patterns shown in Section \ref{patterns}, but 
+to understand why abstractions over patterns are needed, consider Python's 
+ability to return multiple values with a single return statement. Other OO 
+languages do not allow this, so either GOOL could also disallow it or GOOL 
+could provide syntax for it but throw an error if it was used when targeting 
+one of the languages that does not support it. In the first case, if a user of
+GOOL wanted to return multiple values and target Python, they would have to 
+work around the lack of a multiple-value return statement and the generated 
+code would therefore be non-idiomatic. But in the second case, if the user 
+wanted to target both Python and a language that does not support 
+multiple-value return statements, the GOOL code would have to be different when 
+targeting Python than when targeting the other language, so GOOL would not be 
+truly language-agnostic. The higher-level pattern that would require a 
+multiple-value return statement is a function with multiple outputs. If GOOL
+abstracted over that pattern and provided syntax for defining multiple-output 
+functions, the code generator can generate a multiple-value return statement in 
+Python and something different in the other language. In this way, the same 
+GOOL code can truly be compiled into idiomatic code in any target language.
+
 \section{GOOL Syntax} \label{syntax}
 
 GOOL's syntax was designed to be similar to OO languages while also providing 
@@ -453,12 +536,12 @@ name, scope, either static or dynamic binding, type, list of parameters, and
 body. Methods are defined similarly, using the \verb|method| keyword, with the 
 only other difference from functions being that the name of the class 
 containing the method must be specified. Parameters are built from variables, 
-using \verb|stateParam| or \verb|pointerParam|. The ``add'' function called in 
+using \verb|param| or \verb|pointerParam|. The ``add'' function called in 
 an earlier example can thus be defined like so, assuming variables ``num1'' and 
 ``num2'' have been defined:
 \begin{lstlisting}
 function "add" public dynamic_ int 
-  [stateParam num1, stateParam num2] 
+  [param num1, param num2] 
   (oneLiner (returnState (num1 #+ num2)))
 \end{lstlisting}
 The  \verb|pubMethod| and \verb|privMethod| shortcuts can be used for public 

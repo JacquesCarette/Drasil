@@ -30,8 +30,8 @@ import GOOL.Drasil (Label, RenderSym(..), PermanenceSym(..), BodySym(..),
   BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   FunctionSym(..), SelectorFunction(..), StatementSym(..), 
-  ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), ParameterSym(..),
-  MethodSym(..), convType) 
+  ControlStatementSym(..), ScopeSym(..), ParameterSym(..), MethodSym(..), 
+  convType) 
 import qualified GOOL.Drasil as C (CodeType(List))
 
 import Prelude hiding (sin, cos, tan, log, exp)
@@ -99,7 +99,7 @@ mkVar :: (RenderSym repr, HasCodeType c, CodeIdea c) => c ->
 mkVar v = variable (codeName v) (convType $ codeType v)
 
 publicMethod :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => 
-  repr (MethodType repr) -> Label -> String -> [c] -> Maybe String -> 
+  repr (StateType repr) -> Label -> String -> [c] -> Maybe String -> 
   [repr (Block repr)] -> Reader State (repr (Method repr))
 publicMethod t n = genMethod (function n public static_ t) n
 
@@ -251,7 +251,7 @@ genCalcFunc cdef = do
   blck <- genCalcBlock CalcReturn cdef (codeEquat cdef)
   desc <- returnComment $ cdef ^. uid
   publicMethod
-    (mState tp)
+    tp
     nm
     ("Calculates " ++ desc)
     parms
@@ -292,8 +292,7 @@ genFunc (FDef (FuncDef n desc parms o rd s)) = do
   g <- ask
   stmts <- mapM convStmt s
   vars <- mapM mkVar (fstdecl (sysinfodb $ csi $ codeSpec g) s \\ parms)
-  publicMethod (mState $ convType o) n desc parms rd [block $ map varDec 
-    vars ++ stmts]
+  publicMethod (convType o) n desc parms rd [block $ map varDec vars ++ stmts]
 genFunc (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 genFunc (FCD cd) = genCalcFunc cd
 
@@ -347,8 +346,7 @@ genDataFunc :: (RenderSym repr) => Name -> String -> DataDesc ->
 genDataFunc nameTitle desc ddef = do
   let parms = getInputs ddef
   bod <- readData ddef
-  publicMethod (mState void) nameTitle desc (codevar inFileName : parms) 
-    Nothing bod
+  publicMethod void nameTitle desc (codevar inFileName : parms) Nothing bod
 
 -- this is really ugly!!
 readData :: (RenderSym repr) => DataDesc -> Reader State

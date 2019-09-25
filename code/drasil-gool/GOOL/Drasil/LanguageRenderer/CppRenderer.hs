@@ -19,8 +19,8 @@ import GOOL.Drasil.Symantics (Label,
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt,
   fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDoc,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
@@ -578,10 +578,16 @@ instance (Pair p) => MethodSym (p CppSrcCode CppHdrCode) where
     pfst) bs) (pfst b)) (docInOutFunc n (psnd s) (psnd p) desc (map (mapPairSnd 
     psnd) is) (map (mapPairSnd psnd) os) (map (mapPairSnd psnd) bs) (psnd b))
 
+  parameters m = pairList (parameters $ pfst m) (parameters $ psnd m)
+
+instance (Pair p) => InternalMethod (p CppSrcCode CppHdrCode) where
+  intMethod n c s p t ps b = pair (intMethod n c (pfst s) (pfst p) (pfst t) 
+    (map pfst ps) (pfst b)) (intMethod n c (psnd s) (psnd p) (psnd t) 
+    (map psnd ps) (psnd b))
+  intFunc n s p t ps b = pair (intFunc n (pfst s) (pfst p) (pfst t) (map pfst
+    ps) (pfst b)) (intFunc n (psnd s) (psnd p) (psnd t) (map psnd ps) (psnd b))
   commentedFunc cmt fn = pair (commentedFunc (pfst cmt) (pfst fn)) 
     (commentedFunc (psnd cmt) (psnd fn)) 
-
-  parameters m = pairList (parameters $ pfst m) (parameters $ psnd m)
 
 instance (Pair p) => StateVarSym (p CppSrcCode CppHdrCode) where
   type StateVar (p CppSrcCode CppHdrCode) = StateVarData
@@ -1108,18 +1114,16 @@ instance ParameterSym CppSrcCode where
 
 instance MethodSym CppSrcCode where
   type Method CppSrcCode = MethodData
-  method n c s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n <$> 
-    sequence ps) (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b 
-    blockStart blockEnd)
+  method n c s p t = intMethod n c s p (mState t)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (mState $ variableType v) [] getBody
+    (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
-  setMethod c v = method (setterName $ variableName v) c public dynamic_ 
-    (mState void) [param v] setBody
+  setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
+    [param v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
-  constructor n = method n n public dynamic_ (construct n)
+  constructor n = intMethod n n public dynamic_ (construct n)
   destructor n vs = 
     let i = var "i" int
         deleteStatements = map (fmap destructSts) vs
@@ -1134,9 +1138,7 @@ instance MethodSym CppSrcCode where
     [("argc", "Number of command-line arguments"),
     ("argv", "List of command-line arguments")] ["exit code"]) (mainFunction b)
 
-  function n s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n <$> 
-    sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
-    blockStart blockEnd)
+  function n s p t = intFunc n s p (mState t)
   mainFunction b = setMainMethod <$> function "main" public static_ int 
     [param $ var "argc" int, 
     liftA2 pd (var "argv" (listType static_ string)) 
@@ -1145,15 +1147,15 @@ instance MethodSym CppSrcCode where
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
-  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v)
+  inOutFunc n s p ins [v] [] b = function n s p (variableType v)
     (map (fmap getParam) ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
   inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then mState void else mState $ variableType v) (map (fmap getParam) $ v : 
+    then void else variableType v) (map (fmap getParam) $ v : 
     ins) (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
     (returnState $ valueOf v))
-  inOutFunc n s p ins outs both b = function n s p (mState void) (map
-    pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
+  inOutFunc n s p ins outs both b = function n s p void (map pointerParam both 
+    ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
   docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
     (inOutFunc n s p (map snd is) [snd o] [] b)
@@ -1163,11 +1165,18 @@ instance MethodSym CppSrcCode where
   docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ 
     os) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
 
+  parameters m = map return $ (mthdParams . unCPPSC) m
+
+instance InternalMethod CppSrcCode where
+  intMethod n c s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n 
+    <$> sequence ps) (liftA5 (cppsMethod n c) t (liftList paramListDocD ps) b 
+    blockStart blockEnd)
+  intFunc n s _ t ps b = liftA3 (mthd False) (fmap snd s) (checkParams n <$> 
+    sequence ps) (liftA5 (cppsFunction n) t (liftList paramListDocD ps) b 
+    blockStart blockEnd)
   commentedFunc cmt fn = if isMainMthd (unCPPSC fn) then 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn)) else fn
-
-  parameters m = map return $ (mthdParams . unCPPSC) m
 
 instance StateVarSym CppSrcCode where
   type StateVar CppSrcCode = StateVarData
@@ -1630,45 +1639,48 @@ instance ParameterSym CppHdrCode where
 
 instance MethodSym CppHdrCode where
   type Method CppHdrCode = MethodData
-  method n _ s _ t ps _ = liftA3 (mthd False) (fmap snd s) (checkParams n <$>
-    sequence ps) (liftA3 (cpphMethod n) t (liftList paramListDocD ps) 
-    endStatement)
+  method n c s p t = intMethod n c s p (mState t)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (mState $ variableType v) [] (return empty)
-  setMethod c v = method (setterName $ variableName v) c public dynamic_ 
-    (mState void) [param v] (return empty)
+    (variableType v) [] (return empty)
+  setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
+    [param v] (return empty)
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
-  constructor n = method n n public dynamic_ (construct n)
+  constructor n = intMethod n n public dynamic_ (construct n)
   destructor n _ = pubMethod ('~':n) n void [] (return empty)
 
   docMain = mainFunction
 
-  function n = method n ""
+  function n s p t = intFunc n s p (mState t)
   mainFunction _ = return (mthd True Pub [] empty)
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
-  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
+  inOutFunc n s p ins [v] [] b = function n s p (variableType v) 
     (map (fmap getParam) ins) b
   inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then mState void else mState $ variableType v) 
-    (map (fmap getParam) $ v : ins) b
-  inOutFunc n s p ins outs both b = function n s p (mState void) (map 
-    pointerParam both ++ map (fmap getParam) ins ++ map pointerParam outs) b
+    then void else variableType v) (map (fmap getParam) $ v : ins) b
+  inOutFunc n s p ins outs both b = function n s p void (map pointerParam both 
+    ++ map (fmap getParam) ins ++ map pointerParam outs) b
 
   docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
     (inOutFunc n s p (map snd is) [snd o] [] b)
   docInOutFunc n s p desc is [] [both] b = docFuncRepr desc (map fst $ both : 
-    is) [fst both | not ((isObject . getType . variableType . snd) both)] (inOutFunc n s p (map snd is) [] [snd both] b)
+    is) [fst both | not ((isObject . getType . variableType . snd) both)] 
+    (inOutFunc n s p (map snd is) [] [snd both] b)
   docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst $ bs ++ is ++ 
     os) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
+    
+  parameters m = map return $ (mthdParams . unCPPHC) m
 
+instance InternalMethod CppHdrCode where
+  intMethod n _ s _ t ps _ = liftA3 (mthd False) (fmap snd s) (checkParams n <$>
+    sequence ps) (liftA3 (cpphMethod n) t (liftList paramListDocD ps) 
+    endStatement)
+  intFunc n = intMethod n ""
   commentedFunc cmt fn = if isMainMthd (unCPPHC fn) then fn else 
     liftA4 mthd (fmap isMainMthd fn) (fmap getMthdScp fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
-    
-  parameters m = map return $ (mthdParams . unCPPHC) m
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData

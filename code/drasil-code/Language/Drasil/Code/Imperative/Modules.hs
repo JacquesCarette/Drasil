@@ -33,8 +33,8 @@ import Language.Drasil.Printers (Linearity(Linear), exprDoc)
 
 import GOOL.Drasil (RenderSym(..), BodySym(..), BlockSym(..), PermanenceSym(..),
   StateTypeSym(..), VariableSym(..), ValueSym(..), BooleanExpression(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
-  MethodSym(..), StateVarSym(..), ClassSym(..), convType)
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodSym(..), 
+  StateVarSym(..), ClassSym(..), convType)
 
 import Prelude hiding (print)
 import Data.List (intersperse, intercalate, partition)
@@ -223,7 +223,7 @@ genInputConstraints = do
         sf <- sfwrCBody sfwrCs
         hw <- physCBody physCs
         desc <- inConsFuncDesc
-        mthd <- publicMethod (mState void) "input_constraints" desc parms 
+        mthd <- publicMethod void "input_constraints" desc parms 
           Nothing [block sf, block hw]
         return $ Just mthd
   genConstraints $ Map.lookup "input_constraints" (eMap $ codeSpec g)
@@ -397,7 +397,7 @@ genOutputFormat = do
                    printFileLn v_outfile v
                  ] ) (outputs $ csi $ codeSpec g)
         desc <- woFuncDesc
-        mthd <- publicMethod (mState void) "write_output" desc parms Nothing 
+        mthd <- publicMethod void "write_output" desc parms Nothing 
           [block $ [
           varDec var_outfile,
           openFileW var_outfile (litString "output.txt") ] ++

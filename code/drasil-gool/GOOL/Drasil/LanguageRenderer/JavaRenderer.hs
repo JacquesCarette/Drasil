@@ -18,8 +18,8 @@ import GOOL.Drasil.Symantics (Label,
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt,
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
@@ -521,42 +521,40 @@ instance ParameterSym JavaCode where
 
 instance MethodSym JavaCode where
   type Method JavaCode = MethodData
-  method n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
-    (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b)
+  method n l s p t = intMethod n l s p (mState t)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (mState $ variableType v) [] getBody
+    (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
-  setMethod c v = method (setterName $ variableName v) c public dynamic_ 
-    (mState void) [param v] setBody
+  setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
+    [param v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
-  constructor n = method n n public dynamic_ (construct n)
+  constructor n = intMethod n n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Java"
 
   docMain b = commentedFunc (docComment $ functionDoc 
     "Controls the flow of the program" 
     [("args", "List of command-line arguments")] []) (mainFunction b)
 
-  function n = method n ""
-  mainFunction b = setMainMethod <$> function "main" public static_ 
-    (mState void) [liftA2 pd (var "args" (listType static_ string)) 
+  function n s p t = intFunc n s p (mState t)
+  mainFunction b = setMainMethod <$> function "main" public static_ void 
+    [liftA2 pd (var "args" (listType static_ string)) 
     (return $ text "String[] args")] b
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
-  inOutFunc n s p ins [] [] b = function n s p (mState void) (map param 
-    ins) b
-  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
+  inOutFunc n s p ins [] [] b = function n s p void (map param ins) b
+  inOutFunc n s p ins [v] [] b = function n s p (variableType v) 
     (map param ins) (liftA3 surroundBody (varDec v) b (returnState $ 
     valueOf v))
   inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then mState void else mState $ variableType v) (map param $ v : ins) 
+    then void else variableType v) (map param $ v : ins) 
     (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
     (returnState $ valueOf v))
   inOutFunc n s p ins outs both b = function n s p (returnTp rets)
     (map param $ both ++ ins) (liftA3 surroundBody decls b (returnSt rets))
-    where returnTp [x] = mState $ variableType x
+    where returnTp [x] = variableType x
           returnTp _ = jArrayType
           returnSt [x] = returnState $ valueOf x
           returnSt _ = multi (varDecDef outputs (valueOf (var 
@@ -586,11 +584,15 @@ instance MethodSym JavaCode where
             variableType . snd) bs))
           bRets' [x] = [x]
           bRets' xs = "array containing the following values:" : xs
-            
-  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
-    (liftA2 commentedItem cmt (fmap mthdDoc fn))
     
   parameters m = map return $ (mthdParams . unJC) m
+
+instance InternalMethod JavaCode where
+  intMethod n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps)
+    (liftA5 (jMethod n) s p t (liftList paramListDocD ps) b)
+  intFunc n = intMethod n ""
+  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn) 
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc

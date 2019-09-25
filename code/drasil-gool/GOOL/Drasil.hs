@@ -4,8 +4,8 @@ module GOOL.Drasil (Label, ProgramSym(..), RenderSym(..), PermanenceSym(..),
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), FunctionSym(..), SelectorFunction(..), ScopeSym(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
+  BlockCommentSym(..), 
   ProgData(..), FileData(..), isSource, isHeader, ModData(..),
   CodeType(..),
   convType, liftList,
@@ -17,8 +17,8 @@ import GOOL.Drasil.Symantics (Label, ProgramSym(..), RenderSym(..),
   StateTypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..), 
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  ScopeSym(..), MethodTypeSym(..), ParameterSym(..), MethodSym(..), 
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  ScopeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), 
+  ModuleSym(..), BlockCommentSym(..))
 
 import GOOL.Drasil.Data (FileData(..), ModData(..), ProgData(..), 
   isHeader, isSource)

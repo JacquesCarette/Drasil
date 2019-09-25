@@ -110,7 +110,6 @@ instance (Pair p) => KeywordSym (p CppSrcCode CppHdrCode) where
   inherit = pair inherit inherit
 
   list p = pair (list $ pfst p) (list $ psnd p)
-  listObj = pair listObj listObj
 
   blockStart = pair blockStart blockStart
   blockEnd = pair blockEnd blockEnd
@@ -303,12 +302,10 @@ instance (Pair p) => ValueExpression (p CppSrcCode CppHdrCode) where
     (selfFuncApp n (psnd t) (map psnd vs))
   extFuncApp l n t vs = pair (extFuncApp l n (pfst t) (map pfst vs)) 
     (extFuncApp l n (psnd t) (map psnd vs))
-  stateObj t vs = pair (stateObj (pfst t) (map pfst vs)) (stateObj (psnd t) 
+  newObj t vs = pair (newObj (pfst t) (map pfst vs)) (newObj (psnd t) 
     (map psnd vs))
-  extStateObj l t vs = pair (extStateObj l (pfst t) (map pfst vs)) 
-    (extStateObj l (psnd t) (map psnd vs))
-  listStateObj t vs = pair (listStateObj (pfst t) (map pfst vs)) 
-    (listStateObj (psnd t) (map psnd vs))
+  extNewObj l t vs = pair (extNewObj l (pfst t) (map pfst vs)) 
+    (extNewObj l (psnd t) (map psnd vs))
 
   exists v = pair (exists $ pfst v) (exists $ psnd v)
   notNull v = pair (notNull $ pfst v) (notNull $ psnd v)
@@ -362,7 +359,7 @@ instance (Pair p) => SelectorFunction (p CppSrcCode CppHdrCode) where
     (listAccess (psnd v) (psnd i))
   listSet v i toVal = pair (listSet (pfst v) (pfst i) (pfst toVal)) 
     (listSet (psnd v) (psnd i) (psnd toVal))
-  at v l = pair (at (pfst v) l) (at (psnd v) l)
+  at v i = pair (at (pfst v) (pfst i)) (at (psnd v) (psnd i))
 
 instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where  
   getFunc v = pair (getFunc $ pfst v) (getFunc $ psnd v)
@@ -381,8 +378,6 @@ instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where
     (psnd t) (psnd v))
   listSetFunc v i toVal = pair (listSetFunc (pfst v) (pfst i) (pfst toVal)) 
     (listSetFunc (psnd v) (psnd i) (psnd toVal))
-
-  atFunc t l = pair (atFunc (pfst t) l) (atFunc (psnd t) l)
 
 instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
   printSt nl p v f = pair (printSt nl (pfst p) (pfst v) (fmap pfst f)) 
@@ -416,9 +411,9 @@ instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
     (psnd v) (map psnd vs))
   extObjDecNew lib v vs = pair (extObjDecNew lib (pfst v) (map pfst vs)) 
     (extObjDecNew lib (psnd v) (map psnd vs))
-  objDecNewVoid v = pair (objDecNewVoid $ pfst v) (objDecNewVoid $ psnd v)
-  extObjDecNewVoid lib v = pair (extObjDecNewVoid lib $ pfst v) 
-    (extObjDecNewVoid lib $ psnd v)
+  objDecNewNoParams v = pair (objDecNewNoParams $ pfst v) (objDecNewNoParams $ psnd v)
+  extObjDecNewNoParams lib v = pair (extObjDecNewNoParams lib $ pfst v) 
+    (extObjDecNewNoParams lib $ psnd v)
   constDecDef v def = pair (constDecDef (pfst v) (pfst def)) (constDecDef 
     (psnd v) (psnd def))
 
@@ -509,11 +504,11 @@ instance (Pair p) => ControlStatementSym (p CppSrcCode CppHdrCode) where
 
   for sInit vGuard sUpdate b = pair (for (pfst sInit) (pfst vGuard) (pfst 
     sUpdate) (pfst b)) (for (psnd sInit) (psnd vGuard) (psnd sUpdate) (psnd b))
-  forRange i initv finalv stepv b = pair (forRange i (pfst initv) (pfst finalv) 
-    (pfst stepv) (pfst b)) (forRange i (psnd initv) (psnd finalv) (psnd stepv) 
-    (psnd b))
-  forEach l v b = pair (forEach l (pfst v) (pfst b)) (forEach l (psnd v) 
-    (psnd b))
+  forRange i initv finalv stepv b = pair (forRange (pfst i) (pfst initv) 
+    (pfst finalv) (pfst stepv) (pfst b)) (forRange (psnd i) (psnd initv) 
+    (psnd finalv) (psnd stepv) (psnd b))
+  forEach i v b = pair (forEach (pfst i) (pfst v) (pfst b)) (forEach (psnd i) 
+    (psnd v) (psnd b))
   while v b = pair (while (pfst v) (pfst b)) (while (psnd v) (psnd b))
 
   tryCatch tb cb = pair (tryCatch (pfst tb) (pfst cb)) (tryCatch (psnd tb) 
@@ -674,7 +669,6 @@ instance KeywordSym CppSrcCode where
   inherit = return colon
 
   list _ = return $ text "vector"
-  listObj = return empty
 
   blockStart = return lbrace
   blockEnd = return rbrace
@@ -879,9 +873,8 @@ instance ValueExpression CppSrcCode where
   funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
   selfFuncApp = funcApp
   extFuncApp _ = funcApp
-  stateObj t vs = liftA2 mkVal t (liftA2 cppStateObjDoc t (liftList valList vs))
-  extStateObj _ = stateObj
-  listStateObj = stateObj
+  newObj t vs = liftA2 mkVal t (liftA2 cppStateObjDoc t (liftList valList vs))
+  extNewObj _ = newObj
 
   exists = notNull
   notNull = cast bool
@@ -927,7 +920,7 @@ instance FunctionSym CppSrcCode where
 instance SelectorFunction CppSrcCode where
   listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
   listSet v i toVal = v $. listSetFunc v i toVal
-  at v l = listAccess v (valueOf $ var l int)
+  at = listAccess
 
 instance InternalFunction CppSrcCode where
   getFunc v = func (getterName $ variableName v) (variableType v) []
@@ -944,8 +937,6 @@ instance InternalFunction CppSrcCode where
   listAccessFunc t v = func "at" t [intValue v]
   listSetFunc v i toVal = liftA2 typeToFunc (valueType v) 
     (liftA2 cppListSetDoc (intValue i) toVal)
-
-  atFunc t l = listAccessFunc t (valueOf $ var l int) 
 
 instance InternalStatement CppSrcCode where
   printSt nl p v _ = mkSt <$> liftA2 (cppPrint nl) p v
@@ -974,12 +965,12 @@ instance StatementSym CppSrcCode where
     (bindDoc <$> static_) (bindDoc <$> dynamic_) 
   objDecDef v def = mkSt <$> liftA4 objDecDefDocD v def (bindDoc <$> static_) 
     (bindDoc <$> dynamic_) 
-  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+  objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
     vs) (bindDoc <$> static_) (bindDoc <$> dynamic_) 
   extObjDecNew _ = objDecNew
-  objDecNewVoid v = mkSt <$> liftA4 objDecDefDocD v (stateObj (variableType v) 
+  objDecNewNoParams v = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
     []) (bindDoc <$> static_) (bindDoc <$> dynamic_) 
-  extObjDecNewVoid _ = objDecNewVoid
+  extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
   print v = outDoc False printFunc v Nothing
@@ -1063,11 +1054,11 @@ instance ControlStatementSym CppSrcCode where
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef (var i int) initv) 
-    (valueOf (var i int) ?< finalv) (var i int &+= stepv)
-  forEach l v = for (varDecDef (var l (iterator t)) (iterBegin v)) 
-    (valueOf (var l (iterator t)) ?!= iterEnd v) (var l (iterator t) &++)
-    where t = listInnerType $ valueType v
+  forRange i initv finalv stepv = for (varDecDef i initv) 
+    (valueOf i ?< finalv) (i &+= stepv)
+  forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
+    (e &++)
+    where e = toBasicVar i
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 cppTryCatch tb cb
@@ -1077,11 +1068,10 @@ instance ControlStatementSym CppSrcCode where
   notifyObservers f t = for initv (v_index ?< listSize obsList) 
     (var_index &++) notify
     where obsList = valueOf $ observerListName `listOf` t
-          index = "observerIndex"
-          var_index = var index int
+          var_index = var "observerIndex" int
           v_index = valueOf var_index
           initv = varDecDef var_index $ litInt 0
-          notify = oneLiner $ valState $ at obsList index $. f
+          notify = oneLiner $ valState $ at obsList v_index $. f
 
   getFileInputAll f v = let l_line = "nextLine"
                             var_line = var l_line string
@@ -1264,7 +1254,6 @@ instance KeywordSym CppHdrCode where
   inherit = return colon
 
   list _ = return $ text "vector"
-  listObj = return empty
 
   blockStart = return lbrace
   blockEnd = return rbrace
@@ -1446,9 +1435,8 @@ instance ValueExpression CppHdrCode where
   funcApp _ t _ = liftA2 mkVal t (return empty)
   selfFuncApp _ t _ = liftA2 mkVal t (return empty)
   extFuncApp _ _ t _ = liftA2 mkVal t (return empty)
-  stateObj _ _ = liftA2 mkVal void (return empty)
-  extStateObj _ _ _ = liftA2 mkVal void (return empty)
-  listStateObj _ _ = liftA2 mkVal void (return empty)
+  newObj _ _ = liftA2 mkVal void (return empty)
+  extNewObj _ _ _ = liftA2 mkVal void (return empty)
 
   exists _ = liftA2 mkVal bool (return empty)
   notNull _ = liftA2 mkVal bool (return empty)
@@ -1509,8 +1497,6 @@ instance InternalFunction CppHdrCode where
   listAccessFunc t _ = liftA2 typeToFunc t (return empty)
   listSetFunc _ _ _ = liftA2 typeToFunc void (return empty)
 
-  atFunc t _ = liftA2 typeToFunc t (return empty)
-
 instance InternalStatement CppHdrCode where
   printSt _ _ _ _ = return (mkStNoEnd empty)
 
@@ -1536,8 +1522,8 @@ instance StatementSym CppHdrCode where
   objDecDef _ _ = return (mkStNoEnd empty)
   objDecNew _ _ = return (mkStNoEnd empty)
   extObjDecNew _ _ _ = return (mkStNoEnd empty)
-  objDecNewVoid _ = return (mkStNoEnd empty)
-  extObjDecNewVoid _ _ = return (mkStNoEnd empty)
+  objDecNewNoParams _ = return (mkStNoEnd empty)
+  extObjDecNewNoParams _ _ = return (mkStNoEnd empty)
   constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
 
   print _ = return (mkStNoEnd empty)
@@ -1730,6 +1716,10 @@ instance BlockCommentSym CppHdrCode where
   docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
 
 -- helpers
+toBasicVar :: CppSrcCode (Variable CppSrcCode a) -> 
+  CppSrcCode (Variable CppSrcCode a)
+toBasicVar v = var (variableName v) (variableType v)
+
 isDtor :: Label -> Bool
 isDtor ('~':_) = True
 isDtor _ = False
@@ -1899,11 +1889,10 @@ cppDestruct v = cppDestruct' v
   where cppDestruct' :: CppSrcCode (Variable CppSrcCode a) -> CppSrcCode (Statement CppSrcCode)
         cppDestruct' vr@(CPPSC (OVr (VarD _ _ (TD (List _) _ _) _))) = for initv (v_i ?< listSize (valueOf vr)) (var_i &++) (loopBody vr)
         cppDestruct' _ = free v
-        i = "i"
         var_i :: CppSrcCode (Variable CppSrcCode Other)
-        var_i = var i int
+        var_i = var "i" int
         v_i = valueOf var_i
-        listelem vr = at (valueOf vr) i
+        listelem vr = at (valueOf vr) v_i
         loopBody vr = oneLiner $ free (liftA2 (mkVar "") (valueType (listelem 
           vr)) (return $ valueDoc (listelem vr)))
         initv = var_i &= litInt 0

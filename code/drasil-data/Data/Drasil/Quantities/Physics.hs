@@ -9,7 +9,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, potEnergy,
   pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel,
-  yDist,  yPos, yVel, momentum)
+  yDist,  yPos, yVel, momentum, moment)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
@@ -27,7 +27,7 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position,
   potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
   weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel, momentum]
+  yPos, yVel, momentum, moment]
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
@@ -35,7 +35,7 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy, linearAccel, linearDisplacement,
   linearVelocity, momentOfInertia, position, potEnergy, pressure, scalarAccel,
   scalarPos, speed, time, torque, velocity, weight, xAccel, xConstAccel, xDist,
-  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum :: UnitalChunk
+  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment :: UnitalChunk
 
 acceleration         = uc CP.acceleration (vec lA) accelU
 angularAccel         = uc CP.angAccel lAlpha angAccelU
@@ -58,6 +58,7 @@ linearDisplacement   = uc CP.linDisp  (Concat [vec lR, Label "(", lT, Label ")"]
 linearVelocity       = uc CP.linVelo  (Concat [vec lV, Label "(", lT, Label ")"]) velU
 momentOfInertia      = uc CP.momentOfInertia (vec cI) momtInertU
 momentum             = uc CP.momentum (vec cP) impulseU
+moment               = uc CP.moment   (vec cM) torqueU
 position             = uc CP.position (vec lP) metre
 potEnergy            = uc CP.potEnergy (Concat [cP, cE]) joule
 pressure             = uc CP.pressure lP pascal

@@ -305,8 +305,9 @@ convStmt (FAsg v e) = do
   return $ multi $ assign v' e' : l
 convStmt (FFor v e st) = do
   stmts <- mapM convStmt st
+  vari <- mkVar v
   e' <- convExpr $ getUpperBound e
-  return $ forRange (codeName v) (litInt 0) e' (litInt 1) (bodyStatements stmts)
+  return $ forRange vari (litInt 0) e' (litInt 1) (bodyStatements stmts)
 convStmt (FWhile e st) = do
   stmts <- mapM convStmt st
   e' <- convExpr e
@@ -378,10 +379,10 @@ readData ddef = do
           lnV <- lineData (Just "_temp") lp
           logs <- getEntryVarLogs lp
           let readLines Nothing = [getFileInputAll v_infile var_lines,
-                forRange l_i (litInt 0) (listSize v_lines) (litInt 1)
+                forRange var_i (litInt 0) (listSize v_lines) (litInt 1)
                   (bodyStatements $ stringSplit d var_linetokens (
                   listAccess v_lines v_i) : lnV)]
-              readLines (Just numLines) = [forRange l_i (litInt 0) 
+              readLines (Just numLines) = [forRange var_i (litInt 0) 
                 (litInt numLines) (litInt 1)
                 (bodyStatements $
                   [getFileInputLine v_infile var_line,
@@ -421,7 +422,7 @@ readData ddef = do
           (valueOf $ var (codeName v ++ sfx) (convType $ codeType v))
         ---------------
         l_line, l_lines, l_linetokens, l_infile, l_i :: Label
-        var_line, var_lines, var_linetokens, var_infile :: 
+        var_line, var_lines, var_linetokens, var_infile, var_i :: 
           (RenderSym repr) => repr (Variable repr)
         v_line, v_lines, v_linetokens, v_infile, v_i ::
           (RenderSym repr) => repr (Value repr Other)
@@ -438,7 +439,8 @@ readData ddef = do
         var_infile = var l_infile infile
         v_infile = valueOf var_infile
         l_i = "i"
-        v_i = valueOf $ var l_i int
+        var_i = var l_i int
+        v_i = valueOf var_i
 
 getEntryVars :: (RenderSym repr) => Maybe String -> LinePattern -> 
   Reader State [repr (Variable repr)]

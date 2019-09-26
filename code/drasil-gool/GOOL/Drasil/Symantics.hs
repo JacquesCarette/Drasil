@@ -10,9 +10,9 @@ module GOOL.Drasil.Symantics (
   ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..)
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..)
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
@@ -503,9 +503,6 @@ class ScopeSym repr where
   private :: repr (Scope repr)
   public  :: repr (Scope repr)
 
-class (ScopeSym repr) => InternalScope repr where
-  includeScope :: repr (Scope repr) -> repr (Scope repr)
-
 class MethodTypeSym repr where
   type MethodType repr
   mType    :: repr (Type repr) -> repr (MethodType repr)
@@ -571,8 +568,8 @@ class (ScopeSym repr, MethodTypeSym repr, ParameterSym repr, StateVarSym repr,
     repr (Method repr)
   
 
-class (ScopeSym repr, InternalScope repr, PermanenceSym repr, TypeSym repr,
-  StatementSym repr) => StateVarSym repr where
+class (ScopeSym repr, PermanenceSym repr, TypeSym repr, StatementSym repr) => 
+  StateVarSym repr where
   type StateVar repr
   stateVar :: Int -> repr (Scope repr) -> repr (Permanence repr) ->
     repr (Variable repr) -> repr (StateVar repr)

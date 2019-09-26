@@ -17,9 +17,9 @@ import GOOL.Drasil.Symantics (Label,
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt,
   fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, multiStateDocD,
   blockDocD, bodyDocD, printDoc, outDoc, printFileDocD, boolTypeDocD, 
@@ -498,9 +498,6 @@ instance ScopeSym CSharpCode where
   private = return privateDocD
   public = return publicDocD
 
-instance InternalScope CSharpCode where
-  includeScope s = s
-
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypeData
   mType t = t
@@ -569,10 +566,10 @@ instance InternalMethod CSharpCode where
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
-  stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
-  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD (includeScope s) p (fst <$>
+  stateVar _ s p v = liftA4 stateVarDocD s p v endStatement
+  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD s p (fst <$>
     state (varDecDef vr vl))
-  constVar _ _ s vr vl = liftA3 stateVarDefDocD (includeScope s) (return empty) 
+  constVar _ _ s vr vl = liftA3 stateVarDefDocD s (return empty) 
     (fst <$> state (constDecDef vr vl))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_

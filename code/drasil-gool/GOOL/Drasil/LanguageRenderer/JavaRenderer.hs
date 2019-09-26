@@ -17,9 +17,9 @@ import GOOL.Drasil.Symantics (Label,
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt,
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
   multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
@@ -496,9 +496,6 @@ instance ScopeSym JavaCode where
   private = return privateDocD
   public = return publicDocD
 
-instance InternalScope JavaCode where
-  includeScope s = s
-
 instance MethodTypeSym JavaCode where
   type MethodType JavaCode = TypeData
   mType t = t
@@ -589,10 +586,10 @@ instance InternalMethod JavaCode where
 
 instance StateVarSym JavaCode where
   type StateVar JavaCode = Doc
-  stateVar _ s p v = liftA4 stateVarDocD (includeScope s) p v endStatement
-  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD (includeScope s) p (fst <$>
+  stateVar _ s p v = liftA4 stateVarDocD s p v endStatement
+  stateVarDef _ _ s p vr vl = liftA3 stateVarDefDocD s p (fst <$>
     state (varDecDef vr vl))
-  constVar _ _ s vr vl = liftA3 stateVarDefDocD (includeScope s) static_ (fst 
+  constVar _ _ s vr vl = liftA3 stateVarDefDocD s static_ (fst 
     <$> state (constDecDef vr vl))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_

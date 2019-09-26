@@ -18,9 +18,9 @@ import GOOL.Drasil.Symantics (Label,
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt,
   fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDoc,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
@@ -523,9 +523,6 @@ instance (Pair p) => ScopeSym (p CppSrcCode CppHdrCode) where
   type Scope (p CppSrcCode CppHdrCode) = (Doc, ScopeTag)
   private = pair private private
   public = pair public public
-
-instance (Pair p) => InternalScope (p CppSrcCode CppHdrCode) where
-  includeScope s = pair (includeScope $ pfst s) (includeScope $ psnd s)
 
 instance (Pair p) => MethodTypeSym (p CppSrcCode CppHdrCode) where
   type MethodType (p CppSrcCode CppHdrCode) = TypeData
@@ -1086,9 +1083,6 @@ instance ScopeSym CppSrcCode where
   private = return (privateDocD, Priv)
   public = return (publicDocD, Pub)
 
-instance InternalScope CppSrcCode where
-  includeScope _ = return (empty, Priv)
-
 instance MethodTypeSym CppSrcCode where
   type MethodType CppSrcCode = TypeData
   mType t = t
@@ -1607,9 +1601,6 @@ instance ScopeSym CppHdrCode where
   private = return (privateDocD, Priv)
   public = return (publicDocD, Pub)
 
-instance InternalScope CppHdrCode where
-  includeScope _ = return (empty, Priv)
-
 instance MethodTypeSym CppHdrCode where
   type MethodType CppHdrCode = TypeData
   mType t = t
@@ -1670,15 +1661,13 @@ instance InternalMethod CppHdrCode where
 
 instance StateVarSym CppHdrCode where
   type StateVar CppHdrCode = StateVarData
-  stateVar _ s p v = liftA3 svd (fmap snd s) (liftA4 stateVarDocD 
-    (fst <$> includeScope s) (bindDoc <$> p) v endStatement) 
+  stateVar _ s p v = liftA3 svd (fmap snd s) (liftA3 (stateVarDocD empty) 
+    (bindDoc <$> p) v endStatement) (return (mkStNoEnd empty))
+  stateVarDef _ _ s p vr vl = liftA3 svd (fmap snd s) (liftA4 (cpphStateVarDef 
+    empty) p vr (fst <$> state (varDecDef vr vl)) endStatement) 
     (return (mkStNoEnd empty))
-  stateVarDef _ _ s p vr vl = liftA3 svd (fmap snd s) (liftA5 cpphStateVarDef 
-    (fst <$> includeScope s) p vr (fst <$> state (varDecDef vr vl)) 
-    endStatement) (return (mkStNoEnd empty))
-  constVar _ _ s v _ = liftA3 svd (fmap snd s) (liftA4 constVarDocD 
-    (fst <$> includeScope s) (bindDoc <$> static_) v endStatement) 
-    (return (mkStNoEnd empty))
+  constVar _ _ s v _ = liftA3 svd (fmap snd s) (liftA3 (constVarDocD empty) 
+    (bindDoc <$> static_) v endStatement) (return (mkStNoEnd empty))
   privMVar del = stateVar del private dynamic_
   pubMVar del = stateVar del public dynamic_
   pubGVar del = stateVar del public static_

@@ -19,7 +19,7 @@ import Data.Drasil.Quantities.Math (area, pi_, unitVectj)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, specWeight, 
   vol)
 import Data.Drasil.Quantities.Physics (acceleration, displacement, distance,
-  force,  gravitationalAccel, height, moment, pressure, subX, subY, subZ, 
+  force,  gravitationalAccel, height, moment2D, pressure, subX, subY, subZ, 
   supMax, supMin, torque, weight)
 
 
@@ -36,7 +36,7 @@ SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 genericF = force
 genericA = area
-genericM = moment
+genericM = moment2D
 
 -- FIXME: These need to be imported here because they are used in generic TMs/GDs that SSP also imports. Automate this?
 genericV = vol

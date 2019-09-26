@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.CodeSpec (CodeSpec(..))
 
-import GOOL.Drasil (RenderSym(..), StateTypeSym(..), ValueSym(..), 
+import GOOL.Drasil (RenderSym(..), TypeSym(..), ValueSym(..), 
   StatementSym(..), convType)
 
 import Data.List ((\\), intersect)
@@ -54,7 +54,7 @@ getOutputCall = do
   return $ fmap valState val
 
 getFuncCall :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => String 
-  -> repr (StateType repr Other) -> Reader State [c] -> 
+  -> repr (Type repr Other) -> Reader State [c] -> 
   Reader State (Maybe (repr (Value repr Other)))
 getFuncCall n t funcPs = do
   g <- ask

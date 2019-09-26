@@ -12,13 +12,13 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label,
   ProgramSym(..), RenderSym(..), InternalFile(..),
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
@@ -133,8 +133,8 @@ instance BlockSym PythonCode where
   type Block PythonCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
-instance StateTypeSym PythonCode where
-  type StateType PythonCode = TypedType
+instance TypeSym PythonCode where
+  type Type PythonCode = TypedType
   bool = return $ btd Boolean "" empty
   int = return intTypeDocD
   float = return floatTypeDocD
@@ -486,43 +486,40 @@ instance InternalScope PythonCode where
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypedType
-  mState t = t
+  mType t = t
   construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym PythonCode where
   type Parameter PythonCode = ParamData
-  stateParam = fmap (mkParam varDoc)
-  pointerParam = stateParam
+  param = fmap (mkParam varDoc)
+  pointerParam = param
 
   parameterName = variableName . fmap (otherVar . paramVar)
 
 instance MethodSym PythonCode where
   type Method PythonCode = MethodData
-  method n l _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
-    (liftA3 (pyMethod n) (self l) (liftList paramListDocD ps) b)
+  method n c s p t = intMethod n c s p (mType t)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (mState $ variableType v) [] getBody
+    (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
-  setMethod c v = method (setterName $ variableName v) c public dynamic_
-    (mState void) [stateParam v] setBody
+  setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
+    [param v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
-  mainMethod _ = fmap (mthd True [])
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
-  constructor n = method initName n public dynamic_ (construct n)
+  constructor n = intMethod initName n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Python"
 
-  docMain = mainMethod
+  docMain = mainFunction
 
-  function n _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
-    (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
+  function n s p t = intFunc n s p (mType t)
+  mainFunction = fmap (mthd True [])
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
-  inOutFunc n s p ins [] [] b = function n s p (mState void) (map stateParam 
-    ins) b
-  inOutFunc n s p ins outs both b = function n s p (mState void) (map 
-    stateParam $ both ++ ins) (if null rets then b else liftA3 surroundBody 
+  inOutFunc n s p ins [] [] b = function n s p void (map param ins) b
+  inOutFunc n s p ins outs both b = function n s p void (map 
+    param $ both ++ ins) (if null rets then b else liftA3 surroundBody 
     (multi $ map varDec outs) b (multiReturn $ map valueOf rets))
     where rets = filterOutObjs both ++ outs
 
@@ -531,10 +528,15 @@ instance MethodSym PythonCode where
     bs) b)
     where bRets = filter (not . isObject . getType . variableType . snd) bs
 
+  parameters m = map return $ (mthdParams . unPC) m
+
+instance InternalMethod PythonCode where
+  intMethod n l _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps)
+    (liftA3 (pyMethod n) (self l) (liftList paramListDocD ps) b)
+  intFunc n _ _ _ ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
+    (liftA2 (pyFunction n) (liftList paramListDocD ps) b)
   commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
     (liftA2 commentedItem cmt (fmap mthdDoc fn))
-
-  parameters m = map return $ (mthdParams . unPC) m
 
 instance StateVarSym PythonCode where
   type StateVar PythonCode = Doc
@@ -719,7 +721,7 @@ pyModule ls fs cs =
   where libs = emptyIfEmpty ls $ ls $+$ blank
         funcs = emptyIfEmpty fs $ fs $+$ blank
 
-pyInOutCall :: (Label -> PythonCode (StateType PythonCode Other) -> 
+pyInOutCall :: (Label -> PythonCode (Type PythonCode Other) -> 
   [PythonCode (Value PythonCode Other)] -> PythonCode (Value PythonCode Other)) -> 
   Label -> [PythonCode (Value PythonCode Other)] -> 
   [PythonCode (Variable PythonCode Other)] -> [PythonCode (Variable PythonCode Other)] -> 

@@ -13,18 +13,18 @@ import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label,
   ProgramSym(..), RenderSym(..), InternalFile(..),
   KeywordSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), StateTypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
+  ControlBlockSym(..), TypeSym(..), UnaryOpSym(..), BinaryOpSym(..), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
   StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), StateVarSym(..), 
-  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
+  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt,
   fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, multiStateDocD,
   blockDocD, bodyDocD, printDoc, outDoc, printFileDocD, boolTypeDocD, 
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, voidDocD, constructDocD, stateParamDocD, paramListDocD, mkParam,
+  listTypeDocD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam,
   methodDocD, methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, 
   ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, 
   assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
@@ -53,7 +53,7 @@ import GOOL.Drasil.Data (Boolean, Other, Terminator(..),
   valDoc, toOtherVal, Binding(..), TypedVar(..), getVarData, otherVar, varBind, varName, 
   varDoc, typeToFunc, typeToVar, funcToType, valToType, varToType)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
-  liftA5, liftA6, liftA8, liftList, lift1List, lift3Pair, lift4Pair,
+  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
   liftPair, liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
@@ -141,8 +141,8 @@ instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
-instance StateTypeSym CSharpCode where
-  type StateType CSharpCode = TypedType
+instance TypeSym CSharpCode where
+  type Type CSharpCode = TypedType
   bool = return boolTypeDocD
   int = return intTypeDocD
   float = return csFloatTypeDoc
@@ -478,8 +478,8 @@ instance ControlStatementSym CSharpCode where
     (loopState sInit) vGuard (loopState sUpdate) b
   forRange i initv finalv stepv = for (varDecDef i initv) 
     (valueOf i ?< finalv) (i &+= stepv)
-  forEach e v b = mkStNoEnd <$> liftA8 forEachDocD e blockStart blockEnd 
-    iterForEachLabel iterInLabel (listInnerType $ valueType v) v b
+  forEach e v b = mkStNoEnd <$> liftA7 forEachDocD e blockStart blockEnd 
+    iterForEachLabel iterInLabel v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
   tryCatch tb cb = mkStNoEnd <$> liftA2 csTryCatch tb cb
@@ -507,52 +507,51 @@ instance InternalScope CSharpCode where
 
 instance MethodTypeSym CSharpCode where
   type MethodType CSharpCode = TypedType
-  mState t = t
+  mType t = t
   construct n = return $ td (Object n) n (constructDocD n)
 
 instance ParameterSym CSharpCode where
   type Parameter CSharpCode = ParamData
-  stateParam = fmap (mkParam stateParamDocD)
-  pointerParam = stateParam
+  param = fmap (mkParam paramDocD)
+  pointerParam = param
 
   parameterName = variableName . fmap (otherVar . paramVar)
 
 instance MethodSym CSharpCode where
   type Method CSharpCode = MethodData
   method n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps) 
-    (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
+    (liftA5 (methodDocD n) s p (mType t) (liftList paramListDocD ps) b)
   getMethod c v = method (getterName $ variableName v) c public dynamic_ 
-    (mState $ variableType v) [] getBody
+    (variableType v) [] getBody
     where getBody = oneLiner $ returnState (valueOf $ self c $-> v)
-  setMethod c v = method (setterName $ variableName v) c public dynamic_ 
-    (mState void) [stateParam v] setBody
+  setMethod c v = method (setterName $ variableName v) c public dynamic_ void 
+    [param v] setBody
     where setBody = oneLiner $ (self c $-> v) &= valueOf v
-  mainMethod c b = setMainMethod <$> method "Main" c public static_ 
-    (mState void) [liftA2 pd (getVarData <$> var "args" (listType static_ string)) 
-    (return $ text "string[] args")] b
   privMethod n c = method n c private dynamic_
   pubMethod n c = method n c public dynamic_
-  constructor n = method n n public dynamic_ (construct n)
+  constructor n = intMethod n n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in C#"
 
-  docMain c b = commentedFunc (docComment $ functionDoc 
+  docMain b = commentedFunc (docComment $ functionDoc 
     "Controls the flow of the program" 
-    [("args", "List of command-line arguments")] []) (mainMethod c b)
-
-  function n = method n ""
+    [("args", "List of command-line arguments")] []) (mainFunction b)
+ 
+  function n s p t = intFunc n s p (mType t)
+  mainFunction b = setMainMethod <$> function "Main" public static_ void 
+    [liftA2 pd (getVarData <$> var "args" (listType static_ string)) 
+    (return $ text "string[] args")] b
 
   docFunc desc pComms rComm = docFuncRepr desc pComms (maybeToList rComm)
 
-  inOutFunc n s p ins [v] [] b = function n s p (mState $ variableType v) 
-    (map stateParam ins) (liftA3 surroundBody (varDec v) b (returnState $ 
-    valueOf v))
+  inOutFunc n s p ins [v] [] b = function n s p (variableType v) (map param ins)
+   (liftA3 surroundBody (varDec v) b (returnState $ valueOf v))
   inOutFunc n s p ins [] [v] b = function n s p (if null (filterOutObjs [v]) 
-    then mState void else mState $ variableType v) (map stateParam $ v : ins) 
+    then void else variableType v) (map param $ v : ins) 
     (if null (filterOutObjs [v]) then b else liftA2 appendToBody b 
     (returnState $ valueOf v))
-  inOutFunc n s p ins outs both b = function n s p (mState void) (map (fmap 
-    (updateParamDoc csRef) . stateParam) both ++ map stateParam ins ++ 
-    map (fmap (updateParamDoc csOut) . stateParam) outs) b
+  inOutFunc n s p ins outs both b = function n s p void (map (fmap 
+    (updateParamDoc csRef) . param) both ++ map param ins ++ 
+    map (fmap (updateParamDoc csOut) . param) outs) b
 
   docInOutFunc n s p desc is [o] [] b = docFuncRepr desc (map fst is) [fst o] 
     (inOutFunc n s p (map snd is) [snd o] [] b)
@@ -561,11 +560,15 @@ instance MethodSym CSharpCode where
     (inOutFunc n s p (map snd is) [] [snd both] b)
   docInOutFunc n s p desc is os bs b = docFuncRepr desc (map fst (is ++ os ++ 
     bs)) [] (inOutFunc n s p (map snd is) (map snd os) (map snd bs) b)
-
-  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
-    (liftA2 commentedItem cmt (fmap mthdDoc fn))
   
   parameters m = map return $ (mthdParams . unCSC) m
+
+instance InternalMethod CSharpCode where
+  intMethod n _ s p t ps b = liftA2 (mthd False) (checkParams n <$> sequence ps)
+    (liftA5 (methodDocD n) s p t (liftList paramListDocD ps) b)
+  intFunc n = intMethod n ""
+  commentedFunc cmt fn = liftA3 mthd (fmap isMainMthd fn) (fmap mthdParams fn)
+    (liftA2 commentedItem cmt (fmap mthdDoc fn))
 
 instance StateVarSym CSharpCode where
   type StateVar CSharpCode = Doc
@@ -623,7 +626,7 @@ csInfileTypeDoc = td File "StreamReader" (text "StreamReader")
 csOutfileTypeDoc :: TypedType Other
 csOutfileTypeDoc = td File "StreamWriter" (text "StreamWriter")
 
-csCast :: CSharpCode (StateType CSharpCode a) -> CSharpCode (Value CSharpCode b)
+csCast :: CSharpCode (Type CSharpCode a) -> CSharpCode (Value CSharpCode b)
   -> CSharpCode (Value CSharpCode a)
 csCast t v = csCast' (unCSC t) (getType $ valueType v)
   where csCast' (OT (TD Float _ _)) String = funcApp "Double.Parse" float 
@@ -674,7 +677,7 @@ csRef p = text "ref" <+> p
 csOut :: Doc -> Doc
 csOut p = text "out" <+> p
 
-csInOutCall :: (Label -> CSharpCode (StateType CSharpCode Other) -> 
+csInOutCall :: (Label -> CSharpCode (Type CSharpCode Other) -> 
   [CSharpCode (Value CSharpCode Other)] -> CSharpCode (Value CSharpCode Other)) -> Label -> 
   [CSharpCode (Value CSharpCode Other)] -> [CSharpCode (Variable CSharpCode Other)] -> 
   [CSharpCode (Variable CSharpCode Other)] -> CSharpCode (Statement CSharpCode)

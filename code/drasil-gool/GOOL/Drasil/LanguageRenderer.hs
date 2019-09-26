@@ -11,7 +11,7 @@ module GOOL.Drasil.LanguageRenderer (
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
   stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, voidDocD, 
-  constructDocD, stateParamDocD, paramListDocD, mkParam, methodDocD, 
+  constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, stateVarListDocD,
   alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
   tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
@@ -44,13 +44,13 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library,
   RenderSym(..), BodySym(..), 
-  StateTypeSym(StateType, getTypedType, getType, getTypeString, getTypeDoc, 
+  TypeSym(Type, getTypedType, getType, getTypeString, getTypeDoc, 
     listInnerType), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ParameterSym(..), MethodSym(..), BlockCommentSym(..))
-import qualified GOOL.Drasil.Symantics as S (StateTypeSym(int))
+  ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
+import qualified GOOL.Drasil.Symantics as S (TypeSym(int))
 import GOOL.Drasil.Data (Boolean, Other, Terminator(..), FileData(..), 
   fileD, TypedFunc(..), funcDoc, ModData(..), updateModDoc, MethodData(..), OpData(..), 
   od, ParamData(..), pd, TypeData(..), td, btd, TypedType(..), cType, 
@@ -245,8 +245,8 @@ constructDocD _ = empty
 
 -- Parameters --
 
-stateParamDocD :: TypedVar a -> Doc
-stateParamDocD v = tpDoc (varType v) <+> varDoc v
+paramDocD :: TypedVar a -> Doc
+paramDocD v = tpDoc (varType v) <+> varDoc v
 
 paramListDocD :: [ParamData] -> Doc
 paramListDocD = hicat (text ", ") . map paramDoc
@@ -336,11 +336,11 @@ forDocD bStart bEnd sInit vGuard sUpdate b = vcat [
   indent b,
   bEnd]
 
-forEachDocD :: TypedVar Other -> Doc -> Doc -> Doc -> Doc -> TypedType a -> 
-  TypedValue Other -> Doc -> Doc
-forEachDocD e bStart bEnd forEachLabel inLabel t v b =
-  vcat [forEachLabel <+> parens (typeDoc t <+> varDoc e <+> inLabel <+> 
-    valDoc v) <+> bStart,
+forEachDocD :: TypedVar Other -> Doc -> Doc -> Doc -> Doc -> TypedValue Other 
+  -> Doc -> Doc
+forEachDocD e bStart bEnd forEachLabel inLabel v b =
+  vcat [forEachLabel <+> parens (tpDoc (varType e) <+> varDoc e <+> inLabel 
+    <+> valDoc v) <+> bStart,
   indent b,
   bEnd]
 
@@ -706,7 +706,7 @@ classVarCheckStatic v = classVarCS (variableBind v)
           "classVar can only be used to access static variables"
         classVarCS Static = v
 
-classVarD :: (VariableSym repr) => repr (StateType repr Other) -> 
+classVarD :: (VariableSym repr) => repr (Type repr Other) -> 
   repr (Variable repr a) -> (Doc -> Doc -> Doc) -> repr (Variable repr a)
 classVarD c v f = varFromData (variableBind v) 
   (getTypeString c ++ "." ++ variableName v) 

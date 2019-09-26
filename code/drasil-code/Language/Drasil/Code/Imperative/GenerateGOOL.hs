@@ -8,7 +8,7 @@ import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..), 
   Name)
   
-import GOOL.Drasil (Label, RenderSym(..), StateTypeSym(..), 
+import GOOL.Drasil (Label, RenderSym(..), TypeSym(..), 
   VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
   ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
   CodeType(..), Other, ProgData)
@@ -52,7 +52,7 @@ publicClass desc n l vs ms = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-fApp :: (RenderSym repr) => String -> String -> repr (StateType repr Other) -> 
+fApp :: (RenderSym repr) => String -> String -> repr (Type repr Other) -> 
   [repr (Value repr Other)] -> Reader State (repr (Value repr Other))
 fApp m s t vl = do
   g <- ask
@@ -70,4 +70,4 @@ mkParam :: (RenderSym repr) => repr (Variable repr) -> repr (Parameter repr)
 mkParam v = paramFunc (getType $ variableType v) v
   where paramFunc (List _) = pointerParam
         paramFunc (Object _) = pointerParam
-        paramFunc _ = stateParam
+        paramFunc _ = param

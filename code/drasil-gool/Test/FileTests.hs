@@ -1,7 +1,7 @@
 module Test.FileTests (fileTests) where
 
 import GOOL.Drasil (ProgramSym(..), RenderSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), StateTypeSym(..), 
+  PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), 
   StatementSym(..), ControlStatementSym(..), VariableSym(..), ValueSym(..), 
   MethodSym(..), ModuleSym(..))
 import Prelude hiding (return,print,log,exp,sin,cos,tan)
@@ -10,8 +10,7 @@ fileTests :: (ProgramSym repr) => repr (Program repr)
 fileTests = prog "FileTests" [fileDoc (buildModule "FileTests" [] [fileTestMethod] [])]
 
 fileTestMethod :: (RenderSym repr) => repr (Method repr)
-fileTestMethod = mainMethod "FileTests" (body [writeStory, block [readStory], 
-  goodBye])
+fileTestMethod = mainFunction (body [writeStory, block [readStory], goodBye])
 
 writeStory :: (RenderSym repr) => repr (Block repr)
 writeStory = block [

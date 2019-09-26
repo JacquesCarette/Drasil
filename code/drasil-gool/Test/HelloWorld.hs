@@ -4,7 +4,7 @@ module Test.HelloWorld (helloWorld) where
 
 import GOOL.Drasil (
   ProgramSym(..), RenderSym(..), PermanenceSym(..),
-  BodySym(..), BlockSym(..), ControlBlockSym(..), StateTypeSym(..), 
+  BodySym(..), BlockSym(..), ControlBlockSym(..), TypeSym(..), 
   StatementSym(..), ControlStatementSym(..),  VariableSym(..), ValueSym(..), 
   NumericExpression(..), BooleanExpression(..), ValueExpression(..), 
   Selector(..), FunctionSym(..), SelectorFunction(..), MethodSym(..), 
@@ -21,7 +21,7 @@ description :: String
 description = "Tests various GOOL functions. It should run without errors."
 
 helloWorldMain :: (RenderSym repr) => repr (Method repr)
-helloWorldMain = mainMethod "HelloWorld" (body [ helloInitVariables, 
+helloWorldMain = mainFunction (body [ helloInitVariables, 
     helloListSlice,
     block [ifCond [(valueOf (var "b" int) ?>= litInt 6, bodyStatements [varDecDef (var "dummy" string) (litString "dummy")]),
       (valueOf (var "b" int) ?== litInt 5, helloIfBody)] helloElseBody, helloIfExists,

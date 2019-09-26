@@ -11,7 +11,7 @@ module GOOL.Drasil.LanguageRenderer (
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
   stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, voidDocD, 
-  constructDocD, stateParamDocD, paramListDocD, mkParam, methodDocD, 
+  constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, stateVarListDocD,
   alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
   tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
@@ -44,12 +44,12 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library,
   RenderSym(..), BodySym(..), 
-  StateTypeSym(StateType, getType, getTypeString, getTypeDoc, listInnerType), 
+  TypeSym(Type, getType, getTypeString, getTypeDoc, listInnerType), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ParameterSym(..), MethodSym(..), BlockCommentSym(..))
-import qualified GOOL.Drasil.Symantics as S (StateTypeSym(int))
+  ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
+import qualified GOOL.Drasil.Symantics as S (TypeSym(int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), 
   fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
   od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
@@ -240,8 +240,8 @@ constructDocD _ = empty
 
 -- Parameters --
 
-stateParamDocD :: VarData -> Doc
-stateParamDocD v = typeDoc (varType v) <+> varDoc v
+paramDocD :: VarData -> Doc
+paramDocD v = typeDoc (varType v) <+> varDoc v
 
 paramListDocD :: [ParamData] -> Doc
 paramListDocD = hicat (text ", ") . map paramDoc
@@ -703,7 +703,7 @@ classVarCheckStatic v = classVarCS (variableBind v)
           "classVar can only be used to access static variables"
         classVarCS Static = v
 
-classVarD :: (VariableSym repr) => repr (StateType repr) -> 
+classVarD :: (VariableSym repr) => repr (Type repr) -> 
   repr (Variable repr) -> (Doc -> Doc -> Doc) -> repr (Variable repr)
 classVarD c v f = varFromData (variableBind v) 
   (getTypeString c ++ "." ++ variableName v) 

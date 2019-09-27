@@ -185,9 +185,9 @@ $α$ & Angular Acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
 $θ$ & Angular Displacement & rad
 \\
-$τ$ & Torque & Nm
+$\mathbf{τ}$ & Torque & Nm
 \\
-${τ_{i}}$ & Torque applied to the i-th body & Nm
+${\mathbf{τ}_{i}}$ & Torque applied to the i-th body & Nm
 \\
 $ω$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
@@ -470,16 +470,16 @@ Label & Newton's second law for rotational motion
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           τ=\mathbf{I} α
+           \mathbf{τ}=\mathbf{I} α
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$τ$ is the torque (Nm)}
+              \item{$\mathbf{τ}$ is the torque (Nm)}
               \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The net torque $τ$ on a rigid body is proportional to its angular acceleration $α$, where $\mathbf{I}$ denotes the moment of inertia of the rigid body as the constant of proportionality.
+Notes & The net torque $\mathbf{τ}$ on a rigid body is proportional to its angular acceleration $α$, where $\mathbf{I}$ denotes the moment of inertia of the rigid body as the constant of proportionality.
         
         We also assume that all rigid bodies involved are two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
@@ -912,18 +912,18 @@ RefBy &
 Label & Torque
         
 \\ \midrule \\
-Symbol & $τ$
+Symbol & $\mathbf{τ}$
          
 \\ \midrule \\
 Units & Nm
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           τ=\mathbf{r}\times\mathbf{F}
+           \mathbf{τ}=\mathbf{r}\times\mathbf{F}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$τ$ is the torque (Nm)}
+              \item{$\mathbf{τ}$ is the torque (Nm)}
               \item{$\mathbf{r}$ is the displacement (m)}
               \item{$\mathbf{F}$ is the force (N)}
               \end{symbDescription}
@@ -1281,7 +1281,7 @@ RefBy &
 Label & Force on the rotational motion of a set of 2D rigid body
         
 \\ \midrule \\
-Input & $ω$, $t$, ${τ_{i}}$, $\mathbf{I}$
+Input & $ω$, $t$, ${\mathbf{τ}_{i}}$, $\mathbf{I}$
         
 \\ \midrule \\
 Output & $α$
@@ -1294,7 +1294,7 @@ Input Constraints & \begin{displaymath}
                     t\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {τ_{i}}\gt{}0
+                    {\mathbf{τ}_{i}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     \mathbf{I}\gt{}0
@@ -1305,14 +1305,14 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{τ_{i}}\left(t\right)}{\mathbf{I}}
+           α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{\mathbf{τ}_{i}}\left(t\right)}{\mathbf{I}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \item{$t$ is the time (s)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${τ_{i}}$ is the torque applied to the i-th body (Nm)}
+              \item{${\mathbf{τ}_{i}}$ is the torque applied to the i-th body (Nm)}
               \item{$\mathbf{I}$ is the moment of inertia (kg$\text{m}^{2}$)}
               \end{symbDescription}
 \\ \midrule \\
@@ -1428,7 +1428,7 @@ $\mathbf{p}$ & -- & $0.412$ m & 10$\%$
 \\
 $\mathbf{v}$ & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
-$τ$ & -- & $200.0$ Nm & 10$\%$
+$\mathbf{τ}$ & -- & $200.0$ Nm & 10$\%$
 \\
 $ω$ & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10$\%$
 \\

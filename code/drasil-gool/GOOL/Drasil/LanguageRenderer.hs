@@ -17,7 +17,7 @@ module GOOL.Drasil.LanguageRenderer (
   tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
   plusPlusDocD, plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, 
   listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, 
-  mkSt, mkStNoEnd, stringListVals', stringListLists', stratDocD, unOpPrec, 
+  mkSt, mkStNoEnd, stringListVals', stringListLists', stratDocD, runStrategyD, unOpPrec, 
   notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
   absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
   sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
@@ -43,7 +43,7 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library,
-  RenderSym(..), BodySym(..), 
+  RenderSym(..), BodySym(..), BlockSym(..),
   TypeSym(Type, getType, getTypeString, getTypeDoc, listInnerType), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
@@ -59,7 +59,8 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap,
 
 import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
-import Prelude hiding (break,print,return,last,mod,(<>))
+import Data.Map as Map (lookup, fromList)
+import Prelude hiding (break,print,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
   integer, semi, equals, braces, int, comma, colon, hcat)
@@ -361,10 +362,23 @@ tryCatchDocD tb cb = vcat [
   indent cb,
   rbrace]
 
-stratDocD :: Doc -> (Doc, Terminator) -> Doc
+stratDocD :: Doc -> Doc -> Doc
 stratDocD b resultState = vcat [
   b,
-  fst resultState]
+  resultState]
+
+runStrategyD :: (RenderSym repr) => String -> [(Label, repr (Body repr))] -> 
+  Maybe (repr (Value repr)) -> Maybe (repr (Variable repr)) -> 
+  repr (Block repr)
+runStrategyD l strats rv av = docBlock $ maybe
+  (strError l "RunStrategy called on non-existent strategy") 
+  (flip stratDocD (statementDoc $ state resultState) . bodyDoc) 
+  (Map.lookup l (Map.fromList strats))
+  where resultState = maybe emptyState asgState av
+        asgState v = maybe (strError l 
+          "Attempt to assign null return to a Value") (assign v) rv
+        strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
+
 
 -- Statements --
 

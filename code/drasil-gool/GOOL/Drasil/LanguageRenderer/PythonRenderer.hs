@@ -22,7 +22,7 @@ import GOOL.Drasil.Symantics (Label,
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, constructDocD, paramListDocD, mkParam,
-  methodListDocD, stateVarListDocD, ifCondDocD, stratDocD, assignDocD, 
+  methodListDocD, stateVarListDocD, ifCondDocD, stratDocD, runStrategyD, assignDocD, 
   multiAssignDoc, plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, 
   commentDocD, mkStNoEnd, stringListVals', stringListLists', unOpPrec, 
   notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', 
@@ -126,9 +126,13 @@ instance BodySym PythonCode where
 
   addComments s = liftA2 (addCommentsDocD s) commentStart
 
+  bodyDoc = unPC
+
 instance BlockSym PythonCode where
   type Block PythonCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
+
+  docBlock d = return d
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData
@@ -151,14 +155,7 @@ instance TypeSym PythonCode where
   getTypeDoc = typeDoc . unPC
 
 instance ControlBlockSym PythonCode where
-  runStrategy l strats rv av = maybe
-    (strError l "RunStrategy called on non-existent strategy") 
-    (liftA2 (flip stratDocD) (state resultState)) 
-    (Map.lookup l (Map.fromList strats))
-    where resultState = maybe (return (mkStNoEnd empty)) asgState av
-          asgState v = maybe (strError l 
-            "Attempt to assign null return to a Value") (assign v) rv
-          strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
+  runStrategy = runStrategyD
 
   listSlice vnew vold b e s = liftA5 pyListSlice vnew vold (getVal b) 
     (getVal e) (getVal s)
@@ -359,7 +356,10 @@ instance InternalStatement PythonCode where
     (fromMaybe (liftA2 mkVal void (return empty)) f)
 
   state = fmap statementDocD
-  loopState = fmap statementDocD 
+  loopState = fmap statementDocD
+  
+  emptyState = return $ mkStNoEnd empty
+  statementDoc = fst . unPC
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end

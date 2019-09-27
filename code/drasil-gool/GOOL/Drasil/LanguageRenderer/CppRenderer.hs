@@ -26,7 +26,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
   listTypeDocD, listInnerTypeD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam,
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, alwaysDel, 
-  ifCondDocD, switchDocD, forDocD, whileDocD, stratDocD, assignDocD, 
+  ifCondDocD, switchDocD, forDocD, whileDocD, stratDocD, runStrategyD, assignDocD, 
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, objDecDefDocD, 
   constDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, mkSt, 
   mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD, 
@@ -135,9 +135,13 @@ instance (Pair p) => BodySym (p CppSrcCode CppHdrCode) where
 
   addComments s b = pair (addComments s $ pfst b) (addComments s $ psnd b)
 
+  bodyDoc b = bodyDoc $ pfst b
+
 instance (Pair p) => BlockSym (p CppSrcCode CppHdrCode) where
   type Block (p CppSrcCode CppHdrCode) = Doc
   block sts = pair (block $ map pfst sts) (block $ map psnd sts)
+
+  docBlock d = pair (docBlock d) (docBlock d)
 
 instance (Pair p) => TypeSym (p CppSrcCode CppHdrCode) where
   type Type (p CppSrcCode CppHdrCode) = TypeData
@@ -379,6 +383,9 @@ instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
     
   state s = pair (state $ pfst s) (state $ psnd s)
   loopState s = pair (loopState $ pfst s) (loopState $ psnd s)
+
+  emptyState = pair emptyState emptyState
+  statementDoc s = statementDoc $ pfst s
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -698,9 +705,13 @@ instance BodySym CppSrcCode where
 
   addComments s = liftA2 (addCommentsDocD s) commentStart
 
+  bodyDoc = unCPPSC
+
 instance BlockSym CppSrcCode where
   type Block CppSrcCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
+
+  docBlock d = return d
 
 instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
@@ -723,14 +734,7 @@ instance TypeSym CppSrcCode where
   getTypeDoc = typeDoc . unCPPSC
 
 instance ControlBlockSym CppSrcCode where
-  runStrategy l strats rv av = maybe
-    (strError l "RunStrategy called on non-existent strategy") 
-    (liftA2 (flip stratDocD) (state resultState)) 
-    (Map.lookup l (Map.fromList strats))
-    where resultState = maybe (return (mkStNoEnd empty)) asgState av
-          asgState v = maybe (strError l 
-            "Attempt to assign null return to a Value") (assign v) rv
-          strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
+  runStrategy = runStrategyD
 
   listSlice vnew vold b e s = 
     let l_temp = "temp"
@@ -941,6 +945,9 @@ instance InternalStatement CppSrcCode where
 
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
+
+  emptyState = return $ mkStNoEnd empty
+  statementDoc = fst . unCPPSC
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
@@ -1284,9 +1291,13 @@ instance BodySym CppHdrCode where
 
   addComments _ _ = return empty
 
+  bodyDoc = unCPPHC
+
 instance BlockSym CppHdrCode where
   type Block CppHdrCode = Doc
   block _ = return empty
+
+  docBlock d = return d
 
 instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData
@@ -1502,6 +1513,9 @@ instance InternalStatement CppHdrCode where
 
   state = fmap statementDocD
   loopState _ = return (mkStNoEnd empty)
+
+  emptyState = return $ mkStNoEnd empty
+  statementDoc = fst . unCPPHC
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)

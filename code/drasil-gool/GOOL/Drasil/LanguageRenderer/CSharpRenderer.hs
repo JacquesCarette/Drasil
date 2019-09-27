@@ -27,7 +27,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   listTypeDocD, listInnerTypeD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam,
   methodDocD, methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, 
   ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, 
-  assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
+  runStrategyD, assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
   listDecDocD, listDecDefDocD, objDecDefDocD, constDecDefDocD, statementDocD, 
   returnDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', commentDocD, 
   unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, 
@@ -133,9 +133,13 @@ instance BodySym CSharpCode where
 
   addComments s = liftA2 (addCommentsDocD s) commentStart
 
+  bodyDoc = unCSC
+
 instance BlockSym CSharpCode where
   type Block CSharpCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
+
+  docBlock d = return d
 
 instance TypeSym CSharpCode where
   type Type CSharpCode = TypeData
@@ -158,14 +162,7 @@ instance TypeSym CSharpCode where
   getTypeDoc = typeDoc . unCSC
 
 instance ControlBlockSym CSharpCode where
-  runStrategy l strats rv av = maybe
-    (strError l "RunStrategy called on non-existent strategy") 
-    (liftA2 (flip stratDocD) (state resultState)) 
-    (Map.lookup l (Map.fromList strats))
-    where resultState = maybe (return (mkStNoEnd empty)) asgState av
-          asgState v = maybe (strError l 
-            "Attempt to assign null return to a Value") (assign v) rv
-          strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
+  runStrategy = runStrategyD
 
   listSlice vnew vold b e s = 
     let l_temp = "temp"
@@ -374,6 +371,9 @@ instance InternalStatement CSharpCode where
   
   state = fmap statementDocD
   loopState = fmap (statementDocD . setEmpty)
+
+  emptyState = return $ mkStNoEnd empty
+  statementDoc = fst . unCSC
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)

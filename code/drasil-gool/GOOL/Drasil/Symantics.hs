@@ -80,9 +80,13 @@ class (BlockSym repr) => BodySym repr where
 
   addComments :: Label -> repr (Body repr) -> repr (Body repr)
 
+  bodyDoc :: repr (Body repr) -> Doc
+
 class (StatementSym repr) => BlockSym repr where
   type Block repr
   block   :: [repr (Statement repr)] -> repr (Block repr)
+
+  docBlock :: Doc -> repr (Block repr)
 
 class (PermanenceSym repr) => TypeSym repr where
   type Type repr
@@ -363,6 +367,9 @@ class (Selector repr) => InternalStatement repr where
 
   state     :: repr (Statement repr) -> repr (Statement repr)
   loopState :: repr (Statement repr) -> repr (Statement repr)
+
+  emptyState   :: repr (Statement repr)
+  statementDoc :: repr (Statement repr) -> Doc
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
   InternalFunction repr, InternalStatement repr) => StatementSym repr where

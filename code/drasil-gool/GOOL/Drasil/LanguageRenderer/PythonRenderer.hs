@@ -132,7 +132,7 @@ instance BlockSym PythonCode where
   type Block PythonCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
-  docBlock d = return d
+  docBlock = return
 
 instance TypeSym PythonCode where
   type Type PythonCode = TypeData

@@ -17,7 +17,7 @@ module GOOL.Drasil.LanguageRenderer (
   tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
   plusPlusDocD, plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, 
   listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, 
-  mkSt, mkStNoEnd, stringListVals', stringListLists', stratDocD, runStrategyD, unOpPrec, 
+  mkSt, mkStNoEnd, stringListVals', stringListLists', stratDocD, runStrategyD, listSliceD, unOpPrec, 
   notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
   absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
   sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
@@ -60,6 +60,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap,
 import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
 import Data.Map as Map (lookup, fromList)
+import Data.Maybe (fromMaybe)
 import Prelude hiding (break,print,last,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   brackets, parens, isEmpty, rbrace, lbrace, vcat, char, double, quotes, 
@@ -379,6 +380,23 @@ runStrategyD l strats rv av = docBlock $ maybe
           "Attempt to assign null return to a Value") (assign v) rv
         strError n s = error $ "Strategy '" ++ n ++ "': " ++ s ++ "."
 
+listSliceD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+  Maybe (repr (Value repr)) -> Maybe (repr (Value repr)) ->
+  Maybe (repr (Value repr)) -> repr (Block repr)
+listSliceD vnew vold b e s = 
+  let l_temp = "temp"
+      var_temp = var l_temp (variableType vnew)
+      v_temp = valueOf var_temp
+      l_i = "i_temp"
+      var_i = var l_i S.int
+      v_i = valueOf var_i
+  in
+    block [
+      listDec 0 var_temp,
+      for (varDecDef var_i (fromMaybe (litInt 0) b)) 
+        (v_i ?< fromMaybe (listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
+        (oneLiner $ valState $ listAppend v_temp (listAccess vold v_i)),
+      vnew &= v_temp]
 
 -- Statements --
 

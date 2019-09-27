@@ -26,7 +26,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
   listTypeDocD, listInnerTypeD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam,
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, alwaysDel, 
-  ifCondDocD, switchDocD, forDocD, whileDocD, stratDocD, runStrategyD, assignDocD, 
+  ifCondDocD, switchDocD, forDocD, whileDocD, stratDocD, runStrategyD, listSliceD, assignDocD, 
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, objDecDefDocD, 
   constDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, mkSt, 
   mkStNoEnd, stringListVals', stringListLists', unOpPrec, notOpDocD, 
@@ -711,7 +711,7 @@ instance BlockSym CppSrcCode where
   type Block CppSrcCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst . state) sts)
 
-  docBlock d = return d
+  docBlock = return
 
 instance TypeSym CppSrcCode where
   type Type CppSrcCode = TypeData
@@ -736,20 +736,7 @@ instance TypeSym CppSrcCode where
 instance ControlBlockSym CppSrcCode where
   runStrategy = runStrategyD
 
-  listSlice vnew vold b e s = 
-    let l_temp = "temp"
-        var_temp = var l_temp (variableType vnew)
-        v_temp = valueOf var_temp
-        l_i = "i_temp"
-        var_i = var l_i int
-        v_i = valueOf var_i
-    in
-      block [
-        listDec 0 var_temp,
-        for (varDecDef var_i (fromMaybe (litInt 0) b)) 
-          (v_i ?< fromMaybe (listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
-          (oneLiner $ valState $ listAppend v_temp (listAccess vold v_i)),
-        vnew &= v_temp]
+  listSlice = listSliceD
 
 instance UnaryOpSym CppSrcCode where
   type UnaryOp CppSrcCode = OpData
@@ -1297,7 +1284,7 @@ instance BlockSym CppHdrCode where
   type Block CppHdrCode = Doc
   block _ = return empty
 
-  docBlock d = return d
+  docBlock = return
 
 instance TypeSym CppHdrCode where
   type Type CppHdrCode = TypeData

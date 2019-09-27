@@ -26,7 +26,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
   listInnerTypeD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, 
   methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, 
-  switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, runStrategyD, assignDocD, 
+  switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, runStrategyD, listSliceD, assignDocD, 
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, 
   objDecDefDocD, statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, 
   stringListVals', stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, 
@@ -138,7 +138,7 @@ instance BlockSym JavaCode where
   type Block JavaCode = Doc
   block sts = lift1List blockDocD endStatement (map (fmap fst .state) sts)
 
-  docBlock d = return d
+  docBlock = return
 
 instance TypeSym JavaCode where
   type Type JavaCode = TypeData
@@ -163,20 +163,7 @@ instance TypeSym JavaCode where
 instance ControlBlockSym JavaCode where
   runStrategy = runStrategyD
 
-  listSlice vnew vold b e s = 
-    let l_temp = "temp"
-        var_temp = var l_temp (variableType vnew)
-        v_temp = valueOf var_temp
-        l_i = "i_temp"
-        var_i = var l_i int
-        v_i = valueOf var_i
-    in
-      block [
-        listDec 0 var_temp,
-        for (varDecDef var_i (fromMaybe (litInt 0) b)) 
-          (v_i ?< fromMaybe (listSize vold) e) (maybe (var_i &++) (var_i &+=) s)
-          (oneLiner $ valState $ listAppend v_temp (listAccess vold v_i)),
-        vnew &= v_temp]
+  listSlice = listSliceD
 
 instance UnaryOpSym JavaCode where
   type UnaryOp JavaCode = OpData

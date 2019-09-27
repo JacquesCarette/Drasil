@@ -37,7 +37,8 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   mkVar, mkStaticVar, litTrueD, litFalseD, litCharD, litFloatD, litIntD, 
   litStringD, varDocD, extVarDocD, selfDocD, argDocD, enumElemDocD, 
   classVarCheckStatic, classVarD, classVarDocD, objVarDocD, inlineIfD, 
-  funcAppDocD, extFuncAppDocD, newObjDocD, notNullDocD, funcDocD, castDocD, 
+  funcAppDocD, extFuncAppDocD, newObjDocD, notNullDocD, varD, staticVarD, extVarD, selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
+  funcDocD, castDocD, 
   listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
   continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
@@ -203,19 +204,18 @@ instance BinaryOpSym CSharpCode where
 
 instance VariableSym CSharpCode where
   type Variable CSharpCode = VarData
-  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
-  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
+  var = varD
+  staticVar = staticVarD
   const = var
-  extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
-  self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
-  enumVar e en = var e (enumType en)
-  classVar c v = classVarCheckStatic (classVarD c v classVarDocD)
+  extVar = extVarD
+  self = selfD
+  enumVar = enumVarD
+  classVar = classVarD classVarDocD
   objVar = liftA2 csObjVar
-  objVarSelf l n t = liftA2 (mkVar $ "this." ++ n) t (liftA2 objVarDocD (self l)
-    (var n t))
-  listVar n p t = var n (listType p t)
-  n `listOf` t = listVar n static_ t
-  iterVar n t = var n (iterator t)
+  objVarSelf = objVarSelfD
+  listVar  = listVarD
+  listOf = listOfD 
+  iterVar = iterVarD
 
   ($->) = objVar
 
@@ -680,4 +680,4 @@ csObjVar o v = csObjVar' (varBind v)
   where csObjVar' Static = error 
           "Cannot use objVar to access static variables through an object in C#"
         csObjVar' Dynamic = mkVar (varName o ++ "." ++ varName v) 
-          (varType v) (objVarDocD o v)
+          (varType v) (objVarDocD (varDoc o) (varDoc v))

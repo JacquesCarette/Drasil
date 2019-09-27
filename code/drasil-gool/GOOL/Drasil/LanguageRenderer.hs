@@ -28,9 +28,10 @@ module GOOL.Drasil.LanguageRenderer (
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binOpDocD, binOpDocD', 
   binExpr, binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, 
   litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
-  selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD,
+  selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarDocD,
   objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, newObjDocD, 
-  objDecDefDocD, constDecDefDocD, notNullDocD, listIndexExistsDocD, funcDocD, 
+  objDecDefDocD, constDecDefDocD, notNullDocD, listIndexExistsDocD, varD, 
+  staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, funcDocD, 
   castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
   castObjDocD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
   privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
@@ -43,8 +44,9 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library,
-  RenderSym(..), BodySym(..), BlockSym(..),
-  TypeSym(Type, getType, getTypeString, getTypeDoc, listInnerType), 
+  RenderSym(..), BodySym(..), BlockSym(..), PermanenceSym(..),
+  TypeSym(Type, getType, getTypeString, getTypeDoc, listType, listInnerType, 
+    obj, enumType, iterator), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
@@ -742,17 +744,11 @@ classVarCheckStatic v = classVarCS (variableBind v)
           "classVar can only be used to access static variables"
         classVarCS Static = v
 
-classVarD :: (VariableSym repr) => repr (Type repr) -> 
-  repr (Variable repr) -> (Doc -> Doc -> Doc) -> repr (Variable repr)
-classVarD c v f = varFromData (variableBind v) 
-  (getTypeString c ++ "." ++ variableName v) 
-  (variableType v) (f (getTypeDoc c) (variableDoc v))
-
 classVarDocD :: Doc -> Doc -> Doc
 classVarDocD c v = c <> dot <> v
 
-objVarDocD :: VarData -> VarData ->  Doc
-objVarDocD n1 n2 = varDoc n1 <> dot <> varDoc n2
+objVarDocD :: Doc -> Doc ->  Doc
+objVarDocD n1 n2 = n1 <> dot <> n2
 
 inlineIfD :: ValData -> ValData -> ValData -> ValData
 inlineIfD c v1 v2 = vd prec (valType v1) (valDoc c <+> text "?" <+> 
@@ -774,6 +770,49 @@ notNullDocD op v1 v2 = binOpDocD (opDoc op) (valDoc v1) (valDoc v2)
 listIndexExistsDocD :: OpData -> ValData -> ValData -> Doc
 listIndexExistsDocD greater lst index = parens (valDoc lst <> 
   text ".Length" <+> opDoc greater <+> valDoc index) 
+
+varD :: (RenderSym repr) => Label -> repr (Type repr) -> repr (Variable repr)
+varD n t = varFromData Dynamic n t (varDocD n)
+
+staticVarD :: (RenderSym repr) => Label -> repr (Type repr) -> 
+  repr (Variable repr)
+staticVarD n t = varFromData Static n t (varDocD n)
+
+extVarD :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
+  repr (Variable repr)
+extVarD l n t = varFromData Dynamic (l ++ "." ++ n) t (extVarDocD l n)
+
+selfD :: (RenderSym repr) => Label -> repr (Variable repr)
+selfD l = varFromData Dynamic "this" (obj l) selfDocD
+
+enumVarD :: (RenderSym repr) => Label -> Label -> repr (Variable repr)
+enumVarD e en = var e (enumType en)
+
+classVarD :: (RenderSym repr) => (Doc -> Doc -> Doc) -> repr (Type repr) -> 
+  repr (Variable repr) -> repr (Variable repr)
+classVarD f c v = classVarCheckStatic $ varFromData (variableBind v) 
+  (getTypeString c ++ "." ++ variableName v) 
+  (variableType v) (f (getTypeDoc c) (variableDoc v))
+
+objVarD :: (RenderSym repr) => repr (Variable repr) -> repr (Variable repr) -> 
+  repr (Variable repr)
+objVarD o v = varFromData Dynamic (variableName o ++ "." ++ variableName v) 
+  (variableType v) (objVarDocD (variableDoc o) (variableDoc v))
+
+objVarSelfD :: (RenderSym repr) => Label -> Label -> repr (Type repr) -> 
+  repr (Variable repr)
+objVarSelfD l n t = objVar (self l) (var n t)
+
+listVarD :: (RenderSym repr) => Label -> repr (Permanence repr) -> 
+  repr (Type repr) -> repr (Variable repr)
+listVarD n p t = var n (listType p t)
+
+listOfD :: (RenderSym repr) => Label -> repr (Type repr) -> repr (Variable repr)
+listOfD n = listVar n static_
+
+iterVarD :: (RenderSym repr) => Label -> repr (Type repr) -> 
+  repr (Variable repr)
+iterVarD n t = var n (iterator t)
 
 -- Functions --
 

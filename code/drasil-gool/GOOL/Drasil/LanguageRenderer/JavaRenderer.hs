@@ -36,7 +36,8 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
   argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD, 
-  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, newObjDocD, notNullDocD, 
+  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, newObjDocD, notNullDocD,
+  varD, staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, listVarD, listOfD, iterVarD,
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, elseIfLabel, 
   forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName, 
@@ -202,19 +203,18 @@ instance BinaryOpSym JavaCode where
 
 instance VariableSym JavaCode where
   type Variable JavaCode = VarData
-  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
-  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
+  var = varD
+  staticVar = staticVarD
   const = var
-  extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
-  self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
-  enumVar e en = var e (enumType en)
-  classVar c v = classVarCheckStatic (classVarD c v classVarDocD)
-  objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
-    (variableType v) (liftA2 objVarDocD o v)
+  extVar = extVarD
+  self = selfD
+  enumVar = enumVarD
+  classVar = classVarD classVarDocD
+  objVar = objVarD
   objVarSelf _ = var
-  listVar n p t = var n (listType p t)
-  n `listOf` t = listVar n static_ t
-  iterVar n t = var n (iterator t)
+  listVar = listVarD
+  listOf = listOfD
+  iterVar = iterVarD
 
   ($->) = objVar
 

@@ -32,8 +32,8 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, mkStaticVar, litCharD, 
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
-  classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, extFuncAppDocD, 
-  funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
+  classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, extFuncAppDocD, varD,
+  staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
   breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, inLabel,
   observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
   commentedModD, docFuncRepr, valList, surroundBody, getterName, setterName, 
@@ -198,20 +198,18 @@ instance BinaryOpSym PythonCode where
 
 instance VariableSym PythonCode where
   type Variable PythonCode = VarData
-  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
-  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
+  var = varD
+  staticVar = staticVarD
   const = var
-  extVar l n t = liftA2 (mkVar $ l ++ "." ++ n) t (return $ extVarDocD l n)
+  extVar = extVarD
   self l = liftA2 (mkVar "self") (obj l) (return $ text "self")
-  enumVar e en = var e (enumType en)
-  classVar c v = classVarCheckStatic (classVarD c v pyClassVar)
-  objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
-    (variableType v) (liftA2 objVarDocD o v)
-  objVarSelf l n t = liftA2 (mkVar $ "self." ++ n) t (liftA2 objVarDocD
-    (self l) (var n t))
-  listVar n p t = var n (listType p t)
-  n `listOf` t = listVar n static_ t
-  iterVar n t = var n (iterator t)
+  enumVar = enumVarD
+  classVar = classVarD pyClassVar
+  objVar = objVarD
+  objVarSelf = objVarSelfD
+  listVar = listVarD
+  listOf = listOfD
+  iterVar = iterVarD
 
   ($->) = objVar
 

@@ -37,7 +37,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
   typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, litCharD, 
   litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, 
-  classVarCheckStatic, objVarDocD, inlineIfD, funcAppDocD, funcDocD, castDocD, 
+  classVarCheckStatic, objVarDocD, inlineIfD, varD, staticVarD, selfD, enumVarD,objVarD, listVarD, listOfD,funcAppDocD, funcDocD, castDocD, 
   objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD,
   privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, observerListName, doubleSlash, elseIfLabel, blockCmtDoc, 
@@ -775,20 +775,19 @@ instance BinaryOpSym CppSrcCode where
 
 instance VariableSym CppSrcCode where
   type Variable CppSrcCode = VarData
-  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
-  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
+  var = varD
+  staticVar = staticVarD
   const = var
   extVar _ = var
-  self l = liftA2 (mkVar "this") (obj l) (return selfDocD)
-  enumVar e en = var e (enumType en)
+  self = selfD
+  enumVar = enumVarD
   classVar c v = classVarCheckStatic (varFromData (variableBind v) 
     (getTypeString c ++ "::" ++ variableName v) (variableType v) 
     (cppClassVar (getTypeDoc c) (variableDoc v)))
-  objVar o v = liftA2 (mkVar $ variableName o ++ "." ++ variableName v)
-    (variableType v) (liftA2 objVarDocD o v)
+  objVar = objVarD
   objVarSelf _ = var
-  listVar n p t = var n (listType p t)
-  n `listOf` t = listVar n static_ t
+  listVar = listVarD
+  listOf = listOfD
   iterVar l t = liftA2 (mkVar l) (iterator t) (return $ text $ "(*" ++ l ++ ")")
 
   ($->) = objVar
@@ -1348,8 +1347,8 @@ instance BinaryOpSym CppHdrCode where
 
 instance VariableSym CppHdrCode where
   type Variable CppHdrCode = VarData
-  var n t = liftA2 (mkVar n) t (return $ varDocD n) 
-  staticVar n t = liftA2 (mkStaticVar n) t (return $ varDocD n)
+  var = varD 
+  staticVar = staticVarD
   const _ _ = liftA2 (mkVar "") void (return empty)
   extVar _ _ _ = liftA2 (mkVar "") void (return empty)
   self _ = liftA2 (mkVar "") void (return empty)

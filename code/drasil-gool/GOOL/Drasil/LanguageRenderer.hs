@@ -34,8 +34,8 @@ module GOOL.Drasil.LanguageRenderer (
   castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
   castObjDocD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
   privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDoc, classDoc, moduleDoc, docFuncRepr, valList, 
-  prependToBody, appendToBody, surroundBody, getterName, setterName, 
+  addCommentsDocD, functionDoc, classDoc, moduleDoc, commentedModD, docFuncRepr,
+  valList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
   setMainMethod, setEmpty, intValue, filterOutObjs
 ) where
 
@@ -50,9 +50,9 @@ import GOOL.Drasil.Symantics (Label, Library,
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(int))
-import GOOL.Drasil.Data (Terminator(..), FileData(..), 
-  fileD, FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), 
-  od, ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
+import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
+  FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), od, 
+  ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
   VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, 
   doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
@@ -835,6 +835,10 @@ moduleDoc desc as date m = (doxFile ++ m) :
   [doxAuthor ++ stringList as | not (null as)] ++
   [doxDate ++ date | not (null date)] ++ 
   [doxBrief ++ desc | not (null desc)]
+
+commentedModD :: Doc -> FileData -> FileData
+commentedModD cmt m = updateFileMod (updateModDoc (commentedItem cmt 
+  ((modDoc . fileMod) m)) (fileMod m)) m
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
   repr (Method repr) -> repr (Method repr)

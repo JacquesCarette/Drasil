@@ -41,13 +41,12 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
   blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
-  setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
-import GOOL.Drasil.Data (Terminator(..), 
-  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), ParamData(..), pd, 
-  ProgData(..), progD, TypeData(..), td, ValData(..), 
-  VarData(..), vard)
+  moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
+  getterName, setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
+import GOOL.Drasil.Data (Terminator(..), FileData(..), file, updateFileMod, 
+  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
+  OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), td, 
+  ValData(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -88,8 +87,7 @@ instance RenderSym JavaCode where
   docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
     (unJC m)) m
 
-  commentedMod cmt m = liftA2 updateFileMod (liftA2 updateModDoc
-    (liftA2 commentedItem cmt (fmap (modDoc . fileMod) m)) (fmap fileMod m)) m
+  commentedMod = liftA2 commentedModD
 
 instance InternalFile JavaCode where
   top _ = liftA3 jtop endStatement (include "") (list static_)

@@ -42,14 +42,14 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, observerListName, 
   doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, docFuncRepr, valList, appendToBody, 
-  surroundBody, getterName, setterName, setEmpty, intValue, filterOutObjs)
-import GOOL.Drasil.Data (Pair(..), pairList, 
-  Terminator(..), ScopeTag(..), Binding(..),
-  BindData(..), bd, FileData(..), srcFile, hdrFile, updateFileMod, FuncData(..),
-  fd, ModData(..), md, updateModDoc, OpData(..), od,
-  ParamData(..), pd, ProgData(..), progD, emptyProg, 
-  StateVarData(..), svd, TypeData(..), td, ValData(..), VarData(..), vard)
+  functionDoc, classDoc, moduleDoc, commentedModD, docFuncRepr, valList, 
+  appendToBody, surroundBody, getterName, setterName, setEmpty, intValue, 
+  filterOutObjs)
+import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
+  Binding(..), BindData(..), bd, FileData(..), srcFile, hdrFile, FuncData(..),
+  fd, ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, 
+  ProgData(..), progD, emptyProg, StateVarData(..), svd, TypeData(..), td, 
+  ValData(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
@@ -655,8 +655,7 @@ instance RenderSym CppSrcCode where
     (unCPPSC m)) m
 
   commentedMod cmt m = if (isMainMod . fileMod . unCPPSC) m then liftA2 
-    updateFileMod (liftA2 updateModDoc (liftA2 commentedItem cmt (fmap (modDoc 
-    . fileMod) m)) (fmap fileMod m)) m else m 
+    commentedModD cmt m else m 
 
 instance InternalFile CppSrcCode where
   top m = liftA3 cppstop m (list dynamic_) endStatement
@@ -1242,8 +1241,7 @@ instance RenderSym CppHdrCode where
     (unCPPHC m)) m
 
   commentedMod cmt m = if (isMainMod . fileMod . unCPPHC) m then m else liftA2 
-    updateFileMod (liftA2 updateModDoc (liftA2 commentedItem cmt (fmap (modDoc 
-    . fileMod) m)) (fmap fileMod m)) m
+    commentedModD cmt m
 
 instance InternalFile CppHdrCode where
   top m = liftA3 cpphtop m (list dynamic_) endStatement

@@ -35,12 +35,11 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, extFuncAppDocD, 
   funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
   breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, 
-  observerListName, commentedItem,
-  addCommentsDocD, classDoc, moduleDoc, docFuncRepr, valList, surroundBody, 
-  getterName, setterName, filterOutObjs)
-import GOOL.Drasil.Data (Terminator(..),
-  FileData(..), file, updateFileMod, FuncData(..), fd, ModData(..), md, 
-  updateModDoc, MethodData(..), mthd, OpData(..), 
+  observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
+  commentedModD, docFuncRepr, valList, surroundBody, getterName, setterName, 
+  filterOutObjs)
+import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
+  ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), ProgData(..), progD, TypeData(..), td, ValData(..), vd,
   VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, 
@@ -83,8 +82,7 @@ instance RenderSym PythonCode where
   docMod d a dt m = commentedMod (docComment $ moduleDoc d a dt $ filePath 
     (unPC m)) m
 
-  commentedMod cmt m = liftA2 updateFileMod (liftA2 updateModDoc
-    (liftA2 commentedItem cmt (fmap (modDoc . fileMod) m)) (fmap fileMod m)) m
+  commentedMod = liftA2 commentedModD
 
 instance InternalFile PythonCode where
   top _ = return pytop

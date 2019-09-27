@@ -34,7 +34,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
   classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, extFuncAppDocD, 
   funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
-  breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, 
+  breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, inLabel,
   observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
   commentedModD, docFuncRepr, valList, surroundBody, getterName, setterName, 
   filterOutObjs)
@@ -105,7 +105,7 @@ instance KeywordSym PythonCode where
   elseIf = return $ text "elif"
   
   iterForEachLabel = return forLabel
-  iterInLabel = return $ text "in"
+  iterInLabel = return inLabel
 
   commentStart = return $ text "#"
   blockCommentStart = return empty
@@ -648,14 +648,14 @@ pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valDoc errMsg)
 
 pyForRange :: VarData -> Doc ->  ValData ->  ValData ->
   ValData -> Doc -> Doc
-pyForRange i inLabel initv finalv stepv b = vcat [
-  forLabel <+> varDoc i <+> inLabel <+> text "range" <> parens (valDoc initv <> 
+pyForRange i inLbl initv finalv stepv b = vcat [
+  forLabel <+> varDoc i <+> inLbl <+> text "range" <> parens (valDoc initv <> 
     text ", " <> valDoc finalv <> text ", " <> valDoc stepv) <> colon,
   indent b]
 
 pyForEach :: VarData -> Doc -> Doc ->  ValData -> Doc -> Doc
-pyForEach i forEachLabel inLabel lstVar b = vcat [
-  forEachLabel <+> varDoc i <+> inLabel <+> valDoc lstVar <> colon,
+pyForEach i forEachLabel inLbl lstVar b = vcat [
+  forEachLabel <+> varDoc i <+> inLbl <+> valDoc lstVar <> colon,
   indent b]
 
 pyWhile ::  ValData -> Doc -> Doc

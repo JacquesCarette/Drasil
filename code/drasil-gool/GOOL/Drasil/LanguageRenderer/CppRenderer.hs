@@ -40,11 +40,10 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   classVarCheckStatic, objVarDocD, inlineIfD, funcAppDocD, funcDocD, castDocD, 
   objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD,
   privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
-  docCmtStart, observerListName, 
-  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, commentedModD, docFuncRepr, valList, 
-  appendToBody, surroundBody, getterName, setterName, setEmpty, intValue, 
-  filterOutObjs)
+  docCmtStart, observerListName, doubleSlash, elseIfLabel, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
+  commentedModD, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
+  setterName, setEmpty, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
   Binding(..), BindData(..), bd, FileData(..), srcFile, hdrFile, FuncData(..),
   fd, ModData(..), md, updateModDoc, OpData(..), od, ParamData(..), pd, 
@@ -675,7 +674,7 @@ instance KeywordSym CppSrcCode where
   blockEnd = return rbrace
 
   ifBodyStart = blockStart
-  elseIf = return $ text "else if"
+  elseIf = return elseIfLabel
   
   iterForEachLabel = return empty
   iterInLabel = return empty

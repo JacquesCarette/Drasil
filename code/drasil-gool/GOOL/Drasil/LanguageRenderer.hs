@@ -3,8 +3,8 @@
 -- | The structure for a class of renderers is defined here.
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
-  classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
-  docCmtStart, observerListName, addExt,
+  classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, 
+  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, addExt,
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
@@ -68,12 +68,14 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 -- Syntax common to several renderers --
 ----------------------------------------
 
-classDec, dot, doubleSlash, forLabel, new, blockCmtStart, blockCmtEnd,
-  docCmtStart :: Doc
+classDec, dot, doubleSlash, elseIfLabel, forLabel, inLabel, new, blockCmtStart, 
+  blockCmtEnd, docCmtStart :: Doc
 classDec = text "class"
 dot = text "."
 doubleSlash = text "//"
+elseIfLabel = text "else if"
 forLabel = text "for"
+inLabel = text "in"
 new = text "new"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
@@ -332,8 +334,8 @@ forDocD bStart bEnd sInit vGuard sUpdate b = vcat [
   bEnd]
 
 forEachDocD :: VarData -> Doc -> Doc -> Doc -> Doc -> ValData -> Doc -> Doc
-forEachDocD e bStart bEnd forEachLabel inLabel v b =
-  vcat [forEachLabel <+> parens (typeDoc (varType e) <+> varDoc e <+> inLabel 
+forEachDocD e bStart bEnd forEachLabel inLbl v b =
+  vcat [forEachLabel <+> parens (typeDoc (varType e) <+> varDoc e <+> inLbl 
     <+> valDoc v) <+> bStart,
   indent b,
   bEnd]

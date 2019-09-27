@@ -38,15 +38,16 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD, 
   objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, newObjDocD, notNullDocD, 
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
-  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, forLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
-  getterName, setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
-import GOOL.Drasil.Data (Terminator(..), FileData(..), file, updateFileMod, 
-  FuncData(..), fd, ModData(..), md, updateModDoc, MethodData(..), mthd, 
-  OpData(..), ParamData(..), pd, ProgData(..), progD, TypeData(..), td, 
-  ValData(..), VarData(..), vard)
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, elseIfLabel, 
+  forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName, 
+  doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, commentedModD, docFuncRepr, valList, 
+  appendToBody, surroundBody, getterName, setterName, setMainMethod, setEmpty, 
+  intValue, filterOutObjs)
+import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
+  ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
+  ParamData(..), pd, ProgData(..), progD, TypeData(..), td, ValData(..), 
+  VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
@@ -107,7 +108,7 @@ instance KeywordSym JavaCode where
   blockEnd = return rbrace
 
   ifBodyStart = blockStart
-  elseIf = return $ text "else if"
+  elseIf = return elseIfLabel
   
   iterForEachLabel = return forLabel
   iterInLabel = return colon

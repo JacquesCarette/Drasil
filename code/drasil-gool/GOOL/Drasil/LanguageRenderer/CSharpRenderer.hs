@@ -41,9 +41,10 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
   continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
-  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc,
-  moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
-  getterName, setterName, setMainMethod, setEmpty, intValue, filterOutObjs)
+  elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
+  functionDoc, classDoc, moduleDoc, commentedModD, docFuncRepr, valList, 
+  appendToBody, surroundBody, getterName, setterName, setMainMethod, setEmpty, 
+  intValue, filterOutObjs)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
@@ -108,10 +109,10 @@ instance KeywordSym CSharpCode where
   blockEnd = return rbrace
 
   ifBodyStart = blockStart
-  elseIf = return $ text "else if"
+  elseIf = return elseIfLabel
   
   iterForEachLabel = return $ text "foreach"
-  iterInLabel = return $ text "in"
+  iterInLabel = return inLabel
 
   commentStart = return doubleSlash
   blockCommentStart = return blockCmtStart

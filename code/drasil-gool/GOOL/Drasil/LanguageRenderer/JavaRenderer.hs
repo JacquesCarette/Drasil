@@ -36,8 +36,8 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, 
   litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
   argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD, 
-  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, newObjDocD, notNullDocD,
-  varD, staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, listVarD, listOfD, iterVarD,
+  objVarDocD, inlineIfD, funcAppDocD, newObjDocD,
+  varD, staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD,
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, elseIfLabel, 
   forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName, 
@@ -47,7 +47,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   intValue, filterOutObjs)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
-  ParamData(..), pd, ProgData(..), progD, TypeData(..), td, ValData(..), 
+  ParamData(..), pd, ProgData(..), progD, TypeData(..), td, ValData(..), vd,
   VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
@@ -227,20 +227,20 @@ instance VariableSym JavaCode where
 
 instance ValueSym JavaCode where
   type Value JavaCode = ValData
-  litTrue = liftA2 mkVal bool (return litTrueD)
-  litFalse = liftA2 mkVal bool (return litFalseD)
-  litChar c = liftA2 mkVal char (return $ litCharD c)
-  litFloat v = liftA2 mkVal float (return $ litFloatD v)
-  litInt v = liftA2 mkVal int (return $ litIntD v)
-  litString s = liftA2 mkVal string (return $ litStringD s)
+  litTrue = litTrueD
+  litFalse = litFalseD
+  litChar = litCharD
+  litFloat = litFloatD
+  litInt = litIntD
+  litString = litStringD
 
   ($:) = enumElement
 
-  valueOf v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
-  arg n = liftA2 mkVal string (liftA2 argDocD (litInt n) argsList)
-  enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
-  
-  argsList = liftA2 mkVal (listType static_ string) (return $ text "args")
+  valueOf = valueOfD
+  arg n = argD (litInt n) argsList
+  enumElement = enumElementD
+
+  argsList = argsListD "args"
 
   valueType = fmap valType
   valueDoc = valDoc . unJC
@@ -285,15 +285,14 @@ instance BooleanExpression JavaCode where
   
 instance ValueExpression JavaCode where
   inlineIf = liftA3 inlineIfD
-  funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
+  funcApp = funcAppD
   selfFuncApp = funcApp
-  extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  newObj t vs = liftA2 mkVal t (liftA2 newObjDocD t (liftList valList vs))
+  extFuncApp = extFuncAppD
+  newObj = newObjD newObjDocD
   extNewObj _ = newObj
 
   exists = notNull
-  notNull v = liftA2 mkVal bool (liftA3 notNullDocD notEqualOp v (valueOf (var 
-    "null" (fmap valType v))))
+  notNull = notNullD
 
 instance InternalValue JavaCode where
   inputFunc = liftA2 mkVal (obj "Scanner") (return $ parens (
@@ -304,6 +303,8 @@ instance InternalValue JavaCode where
   printFileLnFunc f = liftA2 mkVal void (fmap (printFileDocD "println") f)
   
   cast = jCast
+  
+  valFromData p t d = liftA2 (vd p) t (return d)
 
 instance Selector JavaCode where
   objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)

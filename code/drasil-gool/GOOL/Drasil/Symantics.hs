@@ -294,6 +294,8 @@ class (ValueExpression repr) => InternalValue repr where
 
   cast :: repr (Type repr) -> repr (Value repr) -> repr (Value repr)
 
+  valFromData :: Maybe Int -> repr (Type repr) -> Doc -> repr (Value repr)
+
 -- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,
 -- but really one might want one of these values as part of an expression, so the
 -- constraint would have to go both ways. I'm not sure what the solution is for

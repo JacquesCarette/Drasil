@@ -29,9 +29,10 @@ module GOOL.Drasil.LanguageRenderer (
   binExpr, binExpr', typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, 
   litFalseD, litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, 
   selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarDocD,
-  objVarDocD, inlineIfD, funcAppDocD, extFuncAppDocD, newObjDocD, 
-  objDecDefDocD, constDecDefDocD, notNullDocD, listIndexExistsDocD, varD, 
-  staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, funcDocD, 
+  objVarDocD, inlineIfD, funcAppDocD, newObjDocD, newObjDocD',
+  objDecDefDocD, constDecDefDocD, listIndexExistsDocD, varD, 
+  staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD,
+  funcDocD, 
   castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
   castObjDocD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
   privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
@@ -45,13 +46,13 @@ import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
 import GOOL.Drasil.CodeType (CodeType(..), isObject)
 import GOOL.Drasil.Symantics (Label, Library,
   RenderSym(..), BodySym(..), BlockSym(..), PermanenceSym(..),
-  TypeSym(Type, getType, getTypeString, getTypeDoc, listType, listInnerType, 
-    obj, enumType, iterator), 
+  TypeSym(Type, getType, getTypeString, getTypeDoc, bool, float, string, 
+    listType, listInnerType, obj, enumType, iterator), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   InternalValue(..), FunctionSym(..), SelectorFunction(..), 
   InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
   ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
-import qualified GOOL.Drasil.Symantics as S (TypeSym(int))
+import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
   FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), od, 
   ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
@@ -702,23 +703,23 @@ mkExpr p = vd (Just p)
 
 -- Literals --
 
-litTrueD :: Doc
-litTrueD = text "true"
+litTrueD :: (RenderSym repr) => repr (Value repr)
+litTrueD = valFromData Nothing bool (text "true")
 
-litFalseD :: Doc
-litFalseD = text "false"
+litFalseD :: (RenderSym repr) => repr (Value repr)
+litFalseD = valFromData Nothing bool (text "false")
 
-litCharD :: Char -> Doc
-litCharD c = quotes $ char c
+litCharD :: (RenderSym repr) => Char -> repr (Value repr)
+litCharD c = valFromData Nothing S.char (quotes $ char c)
 
-litFloatD :: Double -> Doc
-litFloatD = double
+litFloatD :: (RenderSym repr) => Double -> repr (Value repr)
+litFloatD f = valFromData Nothing float (double f)
 
-litIntD :: Integer -> Doc
-litIntD = integer
+litIntD :: (RenderSym repr) => Integer -> repr (Value repr)
+litIntD i = valFromData Nothing S.int (integer i)
 
-litStringD :: String -> Doc
-litStringD = doubleQuotedText
+litStringD :: (RenderSym repr) => String -> repr (Value repr)
+litStringD s = valFromData Nothing string (doubleQuotedText s)
 
 -- Value Printers --
 
@@ -731,8 +732,8 @@ extVarDocD l n = text l <> dot <> text n
 selfDocD :: Doc
 selfDocD = text "this"
 
-argDocD :: ValData -> ValData -> Doc
-argDocD n args = valDoc args <> brackets (valDoc n)
+argDocD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> Doc
+argDocD n args = valueDoc args <> brackets (valueDoc n)
 
 enumElemDocD :: Label -> Label -> Doc
 enumElemDocD en e = text en <> dot <> text e
@@ -755,17 +756,14 @@ inlineIfD c v1 v2 = vd prec (valType v1) (valDoc c <+> text "?" <+>
   valDoc v1 <+> text ":" <+> valDoc v2)
   where prec = valPrec c <|> Just 0
 
-funcAppDocD :: Label -> [ValData] -> Doc
-funcAppDocD n vs = text n <> parens (valList vs)
+funcAppDocD :: (RenderSym repr) => Label -> [repr (Value repr)] -> Doc
+funcAppDocD n vs = text n <> parens (valueList vs)
 
-extFuncAppDocD :: Library -> Label -> [ValData] -> Doc
-extFuncAppDocD l n = funcAppDocD (l ++ "." ++ n)
+newObjDocD :: (RenderSym repr) => repr (Type repr) -> Doc -> Doc
+newObjDocD st vs = new <+> newObjDocD' st vs
 
-newObjDocD :: TypeData -> Doc -> Doc
-newObjDocD st vs = new <+> typeDoc st <> parens vs
-
-notNullDocD :: OpData -> ValData -> ValData -> Doc
-notNullDocD op v1 v2 = binOpDocD (opDoc op) (valDoc v1) (valDoc v2)
+newObjDocD' :: (RenderSym repr) => repr (Type repr) -> Doc -> Doc
+newObjDocD' st vs = getTypeDoc st <> parens vs
 
 listIndexExistsDocD :: OpData -> ValData -> ValData -> Doc
 listIndexExistsDocD greater lst index = parens (valDoc lst <> 
@@ -813,6 +811,34 @@ listOfD n = listVar n static_
 iterVarD :: (RenderSym repr) => Label -> repr (Type repr) -> 
   repr (Variable repr)
 iterVarD n t = var n (iterator t)
+
+valueOfD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr)
+valueOfD v = valFromData Nothing (variableType v) (variableDoc v)
+
+argD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) ->
+  repr (Value repr)
+argD n args = valFromData Nothing string (argDocD n args)
+
+enumElementD :: (RenderSym repr) => Label -> Label -> repr (Value repr)
+enumElementD en e = valFromData Nothing (enumType en) (enumElemDocD en e)
+
+argsListD :: (RenderSym repr) => String -> repr (Value repr)
+argsListD l = valFromData Nothing (listType static_ string) (text l)
+ 
+funcAppD :: (RenderSym repr) => Label -> repr (Type repr) -> [repr (Value repr)]
+  -> repr (Value repr)
+funcAppD n t vs = valFromData Nothing t (funcAppDocD n vs)
+
+extFuncAppD :: (RenderSym repr) => Library -> Label -> repr (Type repr) -> 
+  [repr (Value repr)] -> repr (Value repr)
+extFuncAppD l n = funcAppD (l ++ "." ++ n)
+
+newObjD :: (RenderSym repr) => (repr (Type repr) -> Doc -> Doc) -> 
+  repr (Type repr) -> [repr (Value repr)] -> repr (Value repr)
+newObjD f t vs = valFromData Nothing t (f t (valueList vs))
+
+notNullD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
+notNullD v = v ?!= valueOf (var "null" (valueType v))
 
 -- Functions --
 
@@ -928,6 +954,9 @@ docFuncRepr desc pComms rComms f = commentedFunc (docComment $ functionDoc desc
 
 valList :: [ValData] -> Doc
 valList vs = hcat (intersperse (text ", ") (map valDoc vs))
+
+valueList :: (RenderSym repr) => [repr (Value repr)] -> Doc
+valueList vs = hcat (intersperse (text ", ") (map valueDoc vs))
 
 varList :: [VarData] -> Doc
 varList vs = hcat (intersperse (text ", ") (map varDoc vs))

@@ -32,8 +32,8 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
   moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, mkStaticVar, litCharD, 
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
-  classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, extFuncAppDocD, varD,
-  staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
+  classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, newObjDocD', varD,
+  staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
   breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, inLabel,
   observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
   commentedModD, docFuncRepr, valList, surroundBody, getterName, setterName, 
@@ -224,17 +224,17 @@ instance ValueSym PythonCode where
   type Value PythonCode = ValData
   litTrue = liftA2 mkVal bool (return $ text "True")
   litFalse = liftA2 mkVal bool (return $ text "False")
-  litChar c = liftA2 mkVal char (return $ litCharD c)
-  litFloat v = liftA2 mkVal float (return $ litFloatD v)
-  litInt v = liftA2 mkVal int (return $ litIntD v)
-  litString s = liftA2 mkVal string (return $ litStringD s)
+  litChar = litCharD
+  litFloat = litFloatD
+  litInt = litIntD
+  litString = litStringD
 
   ($:) = enumElement
 
-  valueOf v = liftA2 mkVal (variableType v) (return $ variableDoc v) 
-  arg n = liftA2 mkVal string (liftA2 argDocD (litInt (n + 1)) argsList)
-  enumElement en e = liftA2 mkVal (enumType en) (return $ enumElemDocD en e)
-  argsList = liftA2 mkVal (listType static_ string) (return $ text "sys.argv")
+  valueOf = valueOfD
+  arg n = argD (litInt $ n+1) argsList
+  enumElement = enumElementD
+  argsList = argsListD "sys.argv"
 
   valueType = fmap valType
   valueDoc = valDoc . unPC
@@ -281,10 +281,10 @@ instance BooleanExpression PythonCode where
 
 instance ValueExpression PythonCode where
   inlineIf = liftA3 pyInlineIf
-  funcApp n t vs = liftA2 mkVal t (liftList (funcAppDocD n) vs)
+  funcApp = funcAppD
   selfFuncApp = funcApp
-  extFuncApp l n t vs = liftA2 mkVal t (liftList (extFuncAppDocD l n) vs)
-  newObj t vs = liftA2 mkVal t (liftA2 pyStateObj t (liftList valList vs))
+  extFuncApp = extFuncAppD
+  newObj = newObjD newObjDocD'
   extNewObj l t vs = liftA2 mkVal t (liftA2 (pyExtStateObj l) t (liftList 
     valList vs))
 
@@ -299,6 +299,8 @@ instance InternalValue PythonCode where
   printFileLnFunc _ = liftA2 mkVal void (return empty)
   
   cast t v = liftA2 mkVal t $ liftA2 castObjDocD (fmap typeDoc t) v
+
+  valFromData p t d = liftA2 (vd p) t (return d)
 
 instance Selector PythonCode where
   objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
@@ -597,9 +599,6 @@ pyLnOp = unOpPrec "math.log"
 
 pyClassVar :: Doc -> Doc -> Doc
 pyClassVar c v = c <> dot <> c <> dot <> v
-
-pyStateObj :: TypeData -> Doc -> Doc
-pyStateObj t vs = typeDoc t <> parens vs
 
 pyExtStateObj :: Label -> TypeData -> Doc -> Doc
 pyExtStateObj l t vs = text l <> dot <> typeDoc t <> parens vs

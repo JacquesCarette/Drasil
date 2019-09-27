@@ -274,7 +274,7 @@ sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+
     phrase simulation +:+ S "state satisfy the required" +:+
-    (phrase physical `sAnd` plural systemConstraint) +:+. S "(FIXME REF)",
+    (phrase physical `sAnd` plural systemConstraint) +:+. sParen(makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
     phrase simulation +:+. S "step",

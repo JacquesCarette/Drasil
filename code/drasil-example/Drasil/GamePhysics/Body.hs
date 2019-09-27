@@ -75,7 +75,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
         , Goals [S "the kinematic" +:+ plural property :+: S ", and" +:+ plural QP.force +:+
-                 S "including any" +:+ sParen (phrase CP.collision +:+ plural QP.force) +:+
+                 sParen (S "including any" +:+ phrase CP.collision +:+ plural QP.force) +:+
                  S "applied on a set of" +:+ plural CP.rigidBody]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions

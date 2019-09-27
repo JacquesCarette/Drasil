@@ -8,9 +8,9 @@ module GOOL.Drasil.LanguageRenderer (
   
   -- * Default Functions available for use in renderers
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
-  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc,
+  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, printDoc,
   printFileDocD, boolTypeDocD, intTypeDocD, floatTypeDocD, charTypeDocD, 
-  stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, voidDocD, 
+  stringTypeDocD, fileTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, 
   constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, stateVarListDocD,
   alwaysDel, ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, 
@@ -54,8 +54,8 @@ import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod,
   FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), od, 
   ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
   VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, 
-  doubleQuotedText, hicat,vibcat,vmap, emptyIfEmpty, emptyIfNull, getNestDegree)
+import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
+  emptyIfEmpty, emptyIfNull, getInnerType, getNestDegree, convType)
 
 import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
@@ -165,6 +165,9 @@ bodyDocD bs = vibcat blocks
   where blocks = filter notNullBlock bs
         notNullBlock b = not $ isEmpty b
 
+oneLinerD :: (RenderSym repr) => repr (Statement repr) -> repr (Body repr)
+oneLinerD s = bodyStatements [s]
+
 -- IO --
 
 printDoc :: ValData -> ValData -> Doc
@@ -231,6 +234,9 @@ enumTypeDocD t = td (Enum t) t (text t)
 listTypeDocD :: TypeData -> Doc -> TypeData
 listTypeDocD t lst = td (List (cType t)) 
   (render lst ++ "<" ++ typeString t ++ ">") (lst <> angles (typeDoc t))
+
+listInnerTypeD :: (RenderSym repr) => repr (Type repr) -> repr (Type repr)
+listInnerTypeD = convType . getInnerType . getType
 
 -- Method Types --
 

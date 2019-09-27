@@ -22,9 +22,9 @@ import GOOL.Drasil.Symantics (Label,
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt,
   packageDocD, fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, 
-  multiStateDocD, blockDocD, bodyDocD, outDoc, printDoc, printFileDocD, 
+  multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, printDoc, printFileDocD, 
   boolTypeDocD, intTypeDocD, charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD,
-  voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, 
+  listInnerTypeD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, 
   methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, 
   switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, assignDocD, 
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, 
@@ -50,7 +50,7 @@ import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd,
   VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
   liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
-  lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
+  lift4Pair, liftPair, liftPairFst, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -128,7 +128,7 @@ instance BodySym JavaCode where
   type Body JavaCode = Doc
   body = liftList bodyDocD
   bodyStatements = block
-  oneLiner s = bodyStatements [s]
+  oneLiner = oneLinerD
 
   addComments s = liftA2 (addCommentsDocD s) commentStart
 
@@ -146,7 +146,7 @@ instance TypeSym JavaCode where
   infile = return jInfileTypeDoc
   outfile = return jOutfileTypeDoc
   listType p st = liftA2 jListType st (list p)
-  listInnerType t = fmap (getInnerType . cType) t >>= convType
+  listInnerType = listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator t = t

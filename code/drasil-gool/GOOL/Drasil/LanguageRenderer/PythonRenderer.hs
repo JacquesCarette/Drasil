@@ -20,8 +20,8 @@ import GOOL.Drasil.Symantics (Label,
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', 
-  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
-  floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
+  enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
+  floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, constructDocD, paramListDocD, mkParam,
   methodListDocD, stateVarListDocD, ifCondDocD, stratDocD, assignDocD, 
   multiAssignDoc, plusEqualsDocD', plusPlusDocD', statementDocD, returnDocD, 
   commentDocD, mkStNoEnd, stringListVals', stringListLists', unOpPrec, 
@@ -44,7 +44,7 @@ import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd,
   VarData(..), vard)
 import GOOL.Drasil.Helpers (vibcat, 
   emptyIfEmpty, liftA4, liftA5, liftA6, liftList, lift1List, lift2Lists, 
-  lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
+  lift4Pair, liftPair, liftPairFst, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import qualified Data.Map as Map (fromList,lookup)
@@ -122,7 +122,7 @@ instance BodySym PythonCode where
   type Body PythonCode = Doc
   body = liftList bodyDocD
   bodyStatements = block
-  oneLiner s = bodyStatements [s]
+  oneLiner = oneLinerD
 
   addComments s = liftA2 (addCommentsDocD s) commentStart
 
@@ -140,7 +140,7 @@ instance TypeSym PythonCode where
   infile = return $ td File "" empty
   outfile = return $ td File "" empty
   listType _ t = return $ td (List (getType t)) "[]" (brackets empty)
-  listInnerType t = fmap (getInnerType . cType) t >>= convType
+  listInnerType = listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator t = t

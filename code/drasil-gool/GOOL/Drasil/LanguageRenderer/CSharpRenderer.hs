@@ -22,9 +22,9 @@ import GOOL.Drasil.Symantics (Label,
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt,
   fileDoc', moduleDocD, classDocD, enumDocD, enumElementsDocD, multiStateDocD,
-  blockDocD, bodyDocD, printDoc, outDoc, printFileDocD, boolTypeDocD, 
+  blockDocD, bodyDocD, oneLinerD, printDoc, outDoc, printFileDocD, boolTypeDocD, 
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam,
+  listTypeDocD, listInnerTypeD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam,
   methodDocD, methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, 
   ifCondDocD, switchDocD, forDocD, forEachDocD, whileDocD, stratDocD, 
   assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
@@ -51,7 +51,7 @@ import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd,
   ValData(..), updateValDoc, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
   liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
-  liftPair, liftPairFst, getInnerType, convType, checkParams)
+  liftPair, liftPairFst, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Data.Map as Map (fromList,lookup)
@@ -129,7 +129,7 @@ instance BodySym CSharpCode where
   type Body CSharpCode = Doc
   body = liftList bodyDocD
   bodyStatements = block
-  oneLiner s = bodyStatements [s]
+  oneLiner = oneLinerD
 
   addComments s = liftA2 (addCommentsDocD s) commentStart
 
@@ -147,7 +147,7 @@ instance TypeSym CSharpCode where
   infile = return csInfileTypeDoc
   outfile = return csOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
-  listInnerType t = fmap (getInnerType . cType) t >>= convType
+  listInnerType = listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator t = t

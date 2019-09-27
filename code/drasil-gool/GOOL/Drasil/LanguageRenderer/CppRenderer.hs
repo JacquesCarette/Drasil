@@ -22,9 +22,9 @@ import GOOL.Drasil.Symantics (Label,
   MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
   StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt,
-  fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, outDoc,
+  fileDoc', enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc,
   intTypeDocD, charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, 
-  listTypeDocD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam,
+  listTypeDocD, listInnerTypeD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam,
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, alwaysDel, 
   ifCondDocD, switchDocD, forDocD, whileDocD, stratDocD, assignDocD, 
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, objDecDefDocD, 
@@ -52,7 +52,7 @@ import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..),
 import GOOL.Drasil.Helpers (angles, doubleQuotedText,
   emptyIfEmpty, mapPairFst, mapPairSnd, vibcat, liftA4, liftA5, liftA6, liftA8,
   liftList, lift2Lists, lift1List, lift3Pair, lift4Pair, liftPair, liftPairFst, 
-  getInnerType, convType, checkParams)
+  checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import qualified Data.Map as Map (fromList,lookup)
@@ -694,7 +694,7 @@ instance BodySym CppSrcCode where
   type Body CppSrcCode = Doc
   body = liftList bodyDocD
   bodyStatements = block
-  oneLiner s = bodyStatements [s]
+  oneLiner = oneLinerD
 
   addComments s = liftA2 (addCommentsDocD s) commentStart
 
@@ -712,7 +712,7 @@ instance TypeSym CppSrcCode where
   infile = return cppInfileTypeDoc
   outfile = return cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
-  listInnerType t = fmap (getInnerType . cType) t >>= convType
+  listInnerType = listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)
@@ -1298,7 +1298,7 @@ instance TypeSym CppHdrCode where
   infile = return cppInfileTypeDoc
   outfile = return cppOutfileTypeDoc
   listType p st = liftA2 listTypeDocD st (list p)
-  listInnerType t = fmap (getInnerType . cType) t >>= convType
+  listInnerType = listInnerTypeD
   obj t = return $ typeDocD t
   enumType t = return $ enumTypeDocD t
   iterator t = fmap cppIterTypeDoc (listType dynamic_ t)

@@ -16,9 +16,9 @@ import GOOL.Drasil.Symantics (Label,
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
   ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
   SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
-  StatementSym(..), ControlStatementSym(..), ScopeSym(..), InternalScope(..), 
-  MethodTypeSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..),
-  StateVarSym(..), ClassSym(..), ModuleSym(..), BlockCommentSym(..))
+  StatementSym(..), ControlStatementSym(..), ScopeSym(..), MethodTypeSym(..), 
+  ParameterSym(..), MethodSym(..), InternalMethod(..), StateVarSym(..), 
+  ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', 
   enumElementsDocD', multiStateDocD, blockDocD, bodyDocD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, constructDocD, paramListDocD, mkParam,
@@ -478,9 +478,6 @@ instance ScopeSym PythonCode where
   type Scope PythonCode = Doc
   private = return empty
   public = return empty
-
-instance InternalScope PythonCode where
-  includeScope s = s
 
 instance MethodTypeSym PythonCode where
   type MethodType PythonCode = TypeData

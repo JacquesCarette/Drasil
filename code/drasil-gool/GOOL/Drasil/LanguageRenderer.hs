@@ -55,9 +55,8 @@ import GOOL.Drasil.Symantics (Label, Library,
   InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
-  FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), od, 
-  ParamData(..), pd, TypeData(..), td, ValData(..), vd, Binding(..), 
-  VarData(..), vard)
+  ModData(..), updateModDoc, MethodData(..), OpData(..), od, ParamData(..), pd, 
+  TypeData(..), td, ValData(..), vd, Binding(..), VarData(..), vard)
 import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap, 
   emptyIfEmpty, emptyIfNull, getInnerType, getNestDegree, convType)
 

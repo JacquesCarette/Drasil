@@ -29,7 +29,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD,
   switchDocD, forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, 
   assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
   listDecDocD, listDecDefDocD, objDecDefDocD, constDecDefDocD, statementDocD, 
-  returnDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', commentDocD, 
+  returnDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD, openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, commentDocD, 
   unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
@@ -362,24 +362,27 @@ instance InternalFunction CSharpCode where
   funcFromData t d = liftA2 fd t (return d)
 
 instance InternalStatement CSharpCode where
-  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
-  
-  state = fmap statementDocD
-  loopState = fmap (statementDocD . setEmpty)
+  printSt _ p v _ = printStD p v
 
-  emptyState = return $ mkStNoEnd empty
+  state = stateD
+  loopState = loopStateD
+
+  emptyState = emptyStateD
   statementDoc = fst . unCSC
+  statementTerm = snd . unCSC
+  
+  stateFromData d t = return (d, t)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
-  assign vr vl = mkSt <$> liftA2 assignDocD vr vl
-  assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
-  multiAssign _ _ = error "No multiple assignment statements in C#"
+  assign = assignD Semi
+  assignToListIndex = assignToListIndexD
+  multiAssign _ _ = error $ multiAssignError csName
   (&=) = assign
-  (&-=) vr vl = vr &= (valueOf vr #- vl)
-  (&+=) vr vl = mkSt <$> liftA2 plusEqualsDocD vr vl
-  (&++) v = mkSt <$> fmap plusPlusDocD v
-  (&~-) v = v &= (valueOf v #- litInt 1)
+  (&-=) = decrementD
+  (&+=) = incrementD
+  (&++) = increment1D
+  (&~-) = decrement1D
 
   varDec v = csVarDec (variableBind v) $ mkSt <$> liftA3 varDecDocD v static_ 
     dynamic_ 
@@ -397,7 +400,7 @@ instance StatementSym CSharpCode where
   objDecNewNoParams v = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
     (newObj (variableType v) []) static_ dynamic_ 
   extObjDecNewNoParams _ = objDecNewNoParams
-  constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
+  constDecDef = constDecDefD
 
   print v = outDoc False printFunc v Nothing
   printLn v = outDoc True printLnFunc v Nothing
@@ -410,17 +413,17 @@ instance StatementSym CSharpCode where
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = v &= liftA2 csInput (variableType v) inputFunc
-  discardInput = mkSt <$> fmap csDiscardInput inputFunc
+  discardInput = discardInputD csDiscardInput
   getFileInput f v = v &= liftA2 csInput (variableType v) (fmap csFileInput f)
   discardFileInput f = valState $ fmap csFileInput f
 
-  openFileR f n = f &= liftA2 csOpenFileR n infile
-  openFileW f n = f &= liftA3 csOpenFileWorA n outfile litFalse
-  openFileA f n = f &= liftA3 csOpenFileWorA n outfile litTrue
-  closeFile f = valState $ objMethodCall void f "Close" []
+  openFileR = openFileRD csOpenFileR
+  openFileW = openFileWD csOpenFileWorA
+  openFileA = openFileAD csOpenFileWorA
+  closeFile = closeFileD "Close"
 
   getFileInputLine = getFileInput
-  discardFileLine f = valState $ fmap csFileInput f
+  discardFileLine = discardFileLineD "ReadLine"
   stringSplit d vnew s = assign vnew $ newObj (listType dynamic_ string) 
     [s $. func "Split" (listType static_ string) [litChar d]]
 
@@ -636,8 +639,11 @@ csTryCatch tb cb= vcat [
   indent cb,
   rbrace]
 
-csDiscardInput :: ValData -> Doc
-csDiscardInput = valDoc
+csDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
+csDiscardInput = valueDoc
+
+csFileInput :: ValData -> ValData
+csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
 
 csInput :: TypeData -> ValData -> ValData
 csInput t inFn = mkVal t $ text (csInput' (cType t)) <> 
@@ -649,16 +655,15 @@ csInput t inFn = mkVal t $ text (csInput' (cType t)) <>
         csInput' Char = "Char.Parse"
         csInput' _ = error "Attempt to read value of unreadable type"
 
-csFileInput :: ValData -> ValData
-csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
+csOpenFileR :: (RenderSym repr) => repr (Value repr) -> repr (Type repr) -> 
+  repr (Value repr)
+csOpenFileR n r = valFromData Nothing r $ new <+> getTypeDoc r <> 
+  parens (valueDoc n)
 
-csOpenFileR :: ValData -> TypeData -> ValData
-csOpenFileR n r = mkVal r $ new <+> typeDoc r <> 
-  parens (valDoc n)
-
-csOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
-csOpenFileWorA n w a = mkVal w $ new <+> typeDoc w <> 
-  parens (valDoc n <> comma <+> valDoc a)
+csOpenFileWorA :: (RenderSym repr) => repr (Value repr) -> repr (Type repr) -> 
+  repr (Value repr) -> repr (Value repr)
+csOpenFileWorA n w a = valFromData Nothing w $ new <+> getTypeDoc w <> 
+  parens (valueDoc n <> comma <+> valueDoc a)
 
 csRef :: Doc -> Doc
 csRef p = text "ref" <+> p

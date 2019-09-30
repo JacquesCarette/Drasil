@@ -29,7 +29,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   ifCondDocD, switchDocD, forDocD, whileDocD, runStrategyD, listSliceD, 
   assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
   objDecDefDocD, constDecDefDocD, statementDocD, returnDocD, commentDocD, 
-  freeDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', unOpPrec, 
+  freeDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD, discardFileInputD, closeFileD, unOpPrec, 
   notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, 
   cosOpDocD, tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, unExpr', 
   typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
@@ -397,6 +397,9 @@ instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
 
   emptyState = pair emptyState emptyState
   statementDoc s = statementDoc $ pfst s
+  statementTerm s = statementTerm $ pfst s
+  
+  stateFromData d t = pair (stateFromData d t) (stateFromData d t)
 
 instance (Pair p) => StatementSym (p CppSrcCode CppHdrCode) where
   type Statement (p CppSrcCode CppHdrCode) = (Doc, Terminator)
@@ -943,22 +946,25 @@ instance InternalFunction CppSrcCode where
 instance InternalStatement CppSrcCode where
   printSt nl p v _ = mkSt <$> liftA2 (cppPrint nl) p v
 
-  state = fmap statementDocD
-  loopState = fmap (statementDocD . setEmpty)
+  state = stateD
+  loopState = loopStateD
 
-  emptyState = return $ mkStNoEnd empty
+  emptyState = emptyStateD
   statementDoc = fst . unCPPSC
+  statementTerm = snd . unCPPSC
+  
+  stateFromData d t = return (d, t)
 
 instance StatementSym CppSrcCode where
   type Statement CppSrcCode = (Doc, Terminator)
-  assign vr vl = mkSt <$> liftA2 assignDocD vr vl
-  assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
-  multiAssign _ _ = error "No multiple assignment statements in C++"
+  assign = assignD Semi
+  assignToListIndex = assignToListIndexD
+  multiAssign _ _ = error $ multiAssignError cppName
   (&=) = assign
-  (&-=) vr vl = vr &= (valueOf vr #- vl)
-  (&+=) vr vl = mkSt <$> liftA2 plusEqualsDocD vr vl
-  (&++) v = mkSt <$> fmap plusPlusDocD v
-  (&~-) v = v &= (valueOf v #- litInt 1)
+  (&-=) = decrementD
+  (&+=) = incrementD
+  (&++) = increment1D
+  (&~-) = decrement1D
 
   varDec v = mkSt <$> liftA3 varDecDocD v (bindDoc <$> static_) 
     (bindDoc <$> dynamic_) 
@@ -976,7 +982,7 @@ instance StatementSym CppSrcCode where
   objDecNewNoParams v = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
     []) (bindDoc <$> static_) (bindDoc <$> dynamic_) 
   extObjDecNewNoParams _ = objDecNewNoParams
-  constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
+  constDecDef = constDecDefD
 
   print v = outDoc False printFunc v Nothing
   printLn v = outDoc True printLnFunc v Nothing
@@ -989,17 +995,17 @@ instance StatementSym CppSrcCode where
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = mkSt <$> liftA3 cppInput v inputFunc endStatement
-  discardInput = mkSt <$> fmap (cppDiscardInput "\\n") inputFunc
+  discardInput = discardInputD (cppDiscardInput "\\n")
   getFileInput f v = mkSt <$> liftA3 cppInput v f endStatement
-  discardFileInput f = mkSt <$> fmap (cppDiscardInput " ") f
+  discardFileInput = discardFileInputD (cppDiscardInput " ")
 
   openFileR f n = mkSt <$> liftA2 (cppOpenFile "std::fstream::in") f n
   openFileW f n = mkSt <$> liftA2 (cppOpenFile "std::fstream::out") f n
   openFileA f n = mkSt <$> liftA2 (cppOpenFile "std::fstream::app") f n
-  closeFile f = valState $ objMethodCall void f "close" []
+  closeFile = closeFileD "close"
 
   getFileInputLine f v = valState $ funcApp "std::getline" string [f, valueOf v]
-  discardFileLine f = mkSt <$> fmap (cppDiscardInput "\\n") f
+  discardFileLine f = mkSt <$> return (cppDiscardInput "\\n" f)
   stringSplit d vnew s = let l_ss = "ss"
                              var_ss = var l_ss (obj "std::stringstream")
                              v_ss = valueOf var_ss
@@ -1515,11 +1521,14 @@ instance InternalFunction CppHdrCode where
 instance InternalStatement CppHdrCode where
   printSt _ _ _ _ = return (mkStNoEnd empty)
 
-  state = fmap statementDocD
+  state = stateD
   loopState _ = return (mkStNoEnd empty)
 
   emptyState = return $ mkStNoEnd empty
   statementDoc = fst . unCPPHC
+  statementTerm = snd . unCPPHC
+  
+  stateFromData d t = return (d, t)
 
 instance StatementSym CppHdrCode where
   type Statement CppHdrCode = (Doc, Terminator)
@@ -1542,7 +1551,7 @@ instance StatementSym CppHdrCode where
   extObjDecNew _ _ _ = return (mkStNoEnd empty)
   objDecNewNoParams _ = return (mkStNoEnd empty)
   extObjDecNewNoParams _ _ = return (mkStNoEnd empty)
-  constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
+  constDecDef = constDecDefD
 
   print _ = return (mkStNoEnd empty)
   printLn _ = return (mkStNoEnd empty)
@@ -1757,6 +1766,9 @@ setMainMethod :: MethodData -> MethodData
 setMainMethod (MthD _ s ps d) = MthD True s ps d
 
 -- convenience
+cppName :: String
+cppName = "C++" 
+
 enumsEqualInts :: Bool
 enumsEqualInts = False
 
@@ -1850,8 +1862,8 @@ cppTryCatch tb cb = vcat [
   indent cb,
   rbrace]
 
-cppDiscardInput :: Label -> ValData -> Doc
-cppDiscardInput sep inFn = valDoc inFn <> dot <> text "ignore" <> parens 
+cppDiscardInput :: (RenderSym repr) => Label -> repr (Value repr) -> Doc
+cppDiscardInput sep inFn = valueDoc inFn <> dot <> text "ignore" <> parens 
   (text "std::numeric_limits<std::streamsize>::max()" <> comma <+>
   quotes (text sep))
 

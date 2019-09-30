@@ -16,7 +16,7 @@ module GOOL.Drasil.Symantics (
 ) where
 
 import GOOL.Drasil.CodeType (CodeType)
-import GOOL.Drasil.Data (Binding)
+import GOOL.Drasil.Data (Binding, Terminator)
 import Text.PrettyPrint.HughesPJ (Doc)
 
 type Label = String
@@ -377,6 +377,9 @@ class (Selector repr) => InternalStatement repr where
 
   emptyState   :: repr (Statement repr)
   statementDoc :: repr (Statement repr) -> Doc
+  statementTerm :: repr (Statement repr) -> Terminator
+
+  stateFromData :: Doc -> Terminator -> repr (Statement repr)
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
   InternalFunction repr, InternalStatement repr) => StatementSym repr where

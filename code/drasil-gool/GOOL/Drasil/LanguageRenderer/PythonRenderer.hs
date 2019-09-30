@@ -25,7 +25,8 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD',
   paramListDocD, mkParam, methodListDocD, stateVarListDocD, ifCondDocD, 
   runStrategyD, assignDocD, multiAssignDoc, plusEqualsDocD', plusPlusDocD', 
   statementDocD, returnDocD, commentDocD, mkStNoEnd, stringListVals', 
-  stringListLists', unOpPrec, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD',
+  stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, decrementD, decrement1D, closeFileD, discardFileLineD,unOpPrec, notOpDocD', 
+  negateOpDocD, sqrtOpDocD', absOpDocD',
   expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', 
   atanOpDocD', unExpr, unExpr', typeUnExpr, powerPrec, multPrec, andPrec, 
   orPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
@@ -363,23 +364,26 @@ instance InternalStatement PythonCode where
   printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
     (fromMaybe (liftA2 mkVal void (return empty)) f)
 
-  state = fmap statementDocD
-  loopState = fmap statementDocD
+  state = stateD
+  loopState = loopStateD
   
-  emptyState = return $ mkStNoEnd empty
+  emptyState = emptyStateD
   statementDoc = fst . unPC
+  statementTerm = snd . unPC
+
+  stateFromData d t = return (d, t)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
-  assign vr vl = mkStNoEnd <$> liftA2 assignDocD vr vl
-  assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
+  assign = assignD Empty
+  assignToListIndex = assignToListIndexD
   multiAssign vrs vls = mkStNoEnd <$> lift2Lists multiAssignDoc vrs vls
   (&=) = assign
-  (&-=) vr vl = vr &= (valueOf vr #- vl)
+  (&-=) = decrementD
   (&+=) vr vl = mkStNoEnd <$> liftA3 plusEqualsDocD' vr plusOp vl
   (&++) v = mkStNoEnd <$> liftA2 plusPlusDocD' v plusOp
-  (&~-) v = v &= (valueOf v #- litInt 1)
+  (&~-) = decrement1D
 
   varDec _ = return (mkStNoEnd empty)
   varDecDef = assign
@@ -410,10 +414,10 @@ instance StatementSym PythonCode where
   openFileR f n = f &= funcApp "open" infile [n, litString "r"]
   openFileW f n = f &= funcApp "open" outfile [n, litString "w"]
   openFileA f n = f &= funcApp "open" outfile [n, litString "a"]
-  closeFile f = valState $ objMethodCall void f "close" []
+  closeFile = closeFileD "close"
 
   getFileInputLine = getFileInput
-  discardFileLine f = valState $ objMethodCall string f "readline" []
+  discardFileLine = discardFileLineD "readline"
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
     (listType static_ string) [litString [d]]))  
 

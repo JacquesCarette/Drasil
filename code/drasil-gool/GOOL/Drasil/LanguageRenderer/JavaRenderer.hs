@@ -29,7 +29,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
   forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, assignDocD, 
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, 
   objDecDefDocD, statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, 
-  stringListVals', stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, 
+  stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, increment1D, discardInputD, discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, unOpPrec, notOpDocD, negateOpDocD, unExpr, 
   unExpr', typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
@@ -362,25 +362,28 @@ instance InternalFunction JavaCode where
   funcFromData t d = liftA2 fd t (return d)
 
 instance InternalStatement JavaCode where
-  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
+  printSt _ p v _ = printStD p v
 
-  state = fmap statementDocD
-  loopState = fmap (statementDocD . setEmpty)
+  state = stateD
+  loopState = loopStateD
 
-  emptyState = return $ mkStNoEnd empty
+  emptyState = emptyStateD
   statementDoc = fst . unJC
+  statementTerm = snd . unJC
+  
+  stateFromData d t = return (d, t)
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
-  assign vr vl = mkSt <$> liftA2 assignDocD vr vl
-  assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
-  multiAssign _ _ = error "No multiple assignment statements in Java"
+  assign = assignD Semi
+  assignToListIndex = assignToListIndexD
+  multiAssign _ _ = error $ multiAssignError jName
   (&=) = assign
-  (&-=) vr vl = vr &= (valueOf vr #- vl)
-  (&+=) vr vl = mkSt <$> liftA2 plusEqualsDocD vr vl
-  (&++) v = mkSt <$> fmap plusPlusDocD v
-  (&~-) v = v &= (valueOf v #- litInt 1)
+  (&-=) = decrementD
+  (&+=) = incrementD
+  (&++) = increment1D
+  (&~-) = decrement1D
 
   varDec v = mkSt <$> liftA3 varDecDocD v static_ dynamic_
   varDecDef v def = mkSt <$> liftA4 varDecDefDocD v def static_ dynamic_
@@ -391,7 +394,7 @@ instance StatementSym JavaCode where
   objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
     vs) static_ dynamic_ 
   extObjDecNew _ = objDecNew
-  objDecNewNoParams v = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
+  objDecNewNoParams v = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v)
     []) static_ dynamic_ 
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
@@ -407,17 +410,17 @@ instance StatementSym JavaCode where
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = v &= liftA2 jInput (variableType v) inputFunc
-  discardInput = mkSt <$> fmap jDiscardInput inputFunc
+  discardInput = discardInputD jDiscardInput
   getFileInput f v = v &= liftA2 jInput (variableType v) f
-  discardFileInput f = mkSt <$> fmap jDiscardInput f
+  discardFileInput = discardFileInputD jDiscardInput
 
-  openFileR f n = f &= liftA2 jOpenFileR n infile
-  openFileW f n = f &= liftA3 jOpenFileWorA n outfile litFalse
-  openFileA f n = f &= liftA3 jOpenFileWorA n outfile litTrue 
-  closeFile f = valState $ objMethodCall void f "close" []
+  openFileR = openFileRD jOpenFileR
+  openFileW = openFileWD jOpenFileWorA
+  openFileA = openFileAD jOpenFileWorA
+  closeFile = closeFileD "close"
 
   getFileInputLine f v = v &= f $. func "nextLine" string []
-  discardFileLine f = valState $ f $. func "nextLine" string []
+  discardFileLine = discardFileLineD "nextLine"
   stringSplit d vnew s = mkSt <$> liftA2 jStringSplit vnew 
     (funcApp "Arrays.asList" (listType static_ string) 
     [s $. func "split" (listType static_ string) [litString [d]]])
@@ -691,8 +694,8 @@ jTryCatch tb cb = vcat [
   indent cb,
   rbrace]
 
-jDiscardInput :: ValData -> Doc
-jDiscardInput inFn = valDoc inFn <> dot <> text "next()"
+jDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
+jDiscardInput inFn = valueDoc inFn <> dot <> text "next()"
 
 jInput :: TypeData -> ValData -> ValData
 jInput t inFn = mkVal t $ jInput' (cType t) 
@@ -705,14 +708,16 @@ jInput t inFn = mkVal t $ jInput' (cType t)
         jInput' Char = valDoc inFn <> dot <> text "next().charAt(0)"
         jInput' _ = error "Attempt to read value of unreadable type"
 
-jOpenFileR :: ValData -> TypeData -> ValData
-jOpenFileR n t = mkVal t $ new <+> text "Scanner" <> parens 
-  (new <+> text "File" <> parens (valDoc n))
+jOpenFileR :: (RenderSym repr) => repr (Value repr) -> repr (Type repr) -> 
+  repr (Value repr)
+jOpenFileR n t = valFromData Nothing t $ new <+> text "Scanner" <> parens 
+  (new <+> text "File" <> parens (valueDoc n))
 
-jOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
-jOpenFileWorA n t wa = mkVal t $ new <+> text "PrintWriter" <> 
+jOpenFileWorA :: (RenderSym repr) => repr (Value repr) -> repr (Type repr) -> 
+  repr (Value repr) -> repr (Value repr)
+jOpenFileWorA n t wa = valFromData Nothing t $ new <+> text "PrintWriter" <> 
   parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> 
-  parens (valDoc n) <> comma <+> valDoc wa))
+  parens (valueDoc n) <> comma <+> valueDoc wa))
 
 jStringSplit :: VarData -> ValData -> Doc
 jStringSplit vnew s = varDoc vnew <+> equals <+> new <+> typeDoc (varType vnew)

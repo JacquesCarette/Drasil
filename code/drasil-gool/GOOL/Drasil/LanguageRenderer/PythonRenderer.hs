@@ -33,7 +33,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, mkStaticVar, litCharD, 
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
   classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, newObjDocD', varD,
-  staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
+  staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, extFuncAppD, newObjD, funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
   breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, inLabel,
   observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
   commentedModD, docFuncRepr, valList, surroundBody, getterName, setterName, 
@@ -303,18 +303,18 @@ instance InternalValue PythonCode where
   valFromData p t d = liftA2 (vd p) t (return d)
 
 instance Selector PythonCode where
-  objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
+  objAccess = objAccessD
   ($.) = objAccess 
 
-  objMethodCall t o f ps = objAccess o (func f t ps)
-  objMethodCallNoParams t o f = objMethodCall t o f []
+  objMethodCall = objMethodCallD
+  objMethodCallNoParams = objMethodCallNoParamsD
 
-  selfAccess l = objAccess (valueOf $ self l)
+  selfAccess = selfAccessD
 
-  listIndexExists lst index = listSize lst ?> index
+  listIndexExists = listIndexExistsD
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
-  indexOf l v = objAccess l (func "index" int [v])
+  indexOf = indexOfD "index"
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
@@ -350,6 +350,9 @@ instance InternalFunction PythonCode where
   listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 listSetFuncDocD i toVal)
+
+  functionType = fmap funcType
+  functionDoc = funcDoc . unPC
 
 instance InternalStatement PythonCode where
   printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 

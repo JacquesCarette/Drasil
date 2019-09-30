@@ -37,12 +37,12 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   litCharD, litFloatD, litIntD, litStringD, varDocD, extVarDocD, selfDocD, 
   argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD, 
   objVarDocD, inlineIfD, funcAppDocD, newObjDocD,
-  varD, staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD,
+  varD, staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, extFuncAppD, newObjD, notNullD,
   funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, elseIfLabel, 
   forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName, 
   doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
-  functionDoc, classDoc, moduleDoc, commentedModD, docFuncRepr, valList, 
+  functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr, valList, 
   appendToBody, surroundBody, getterName, setterName, setMainMethod, setEmpty, 
   intValue, filterOutObjs)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
@@ -307,19 +307,18 @@ instance InternalValue JavaCode where
   valFromData p t d = liftA2 (vd p) t (return d)
 
 instance Selector JavaCode where
-  objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
+  objAccess = objAccessD
   ($.) = objAccess
 
-  objMethodCall t o f ps = objAccess o (func f t ps)
-  objMethodCallNoParams t o f = objMethodCall t o f []
+  objMethodCall = objMethodCallD
+  objMethodCallNoParams = objMethodCallNoParamsD
 
-  selfAccess l = objAccess (valueOf $ self l)
+  selfAccess = selfAccessD
 
-  listIndexExists l i = listSize l ?> i 
-
+  listIndexExists = listIndexExistsD
   argExists i = listAccess argsList (litInt $ fromIntegral i)
-
-  indexOf l v = objAccess l (func "indexOf" int [v])
+  
+  indexOf = indexOfD "indexOf"
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
@@ -353,6 +352,9 @@ instance InternalFunction JavaCode where
   
   listAccessFunc t i = func "get" t [intValue i]
   listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
+
+  functionType = fmap funcType
+  functionDoc = funcDoc . unJC
 
 instance InternalStatement JavaCode where
   printSt _ p v _ = mkSt <$> liftA2 printDoc p v
@@ -513,7 +515,7 @@ instance MethodSym JavaCode where
   constructor n = intMethod n n public dynamic_ (construct n)
   destructor _ _ = error "Destructors not allowed in Java"
 
-  docMain b = commentedFunc (docComment $ functionDoc 
+  docMain b = commentedFunc (docComment $ functionDox 
     "Controls the flow of the program" 
     [("args", "List of command-line arguments")] []) (mainFunction b)
 

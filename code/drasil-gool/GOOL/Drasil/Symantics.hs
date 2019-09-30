@@ -362,6 +362,9 @@ class (ValueSym repr, InternalValue repr) => InternalFunction repr where
   listSetFunc    :: repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Function repr)
 
+  functionType :: repr (Function repr) -> repr (Type repr)
+  functionDoc :: repr (Function repr) -> Doc
+
 class (Selector repr) => InternalStatement repr where
   -- newLn, printFunc, value to print, maybe a file to print to 
   printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> 

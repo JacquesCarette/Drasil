@@ -37,11 +37,12 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   moduloOpDocD, powerOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', 
   typeBinExpr, mkVal, mkVar, mkStaticVar, litTrueD, litFalseD, litCharD, 
   litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, 
-  classVarCheckStatic, objVarDocD, inlineIfD, varD, staticVarD, selfD, enumVarD,objVarD, listVarD, listOfD, valueOfD, argD, argsListD, funcAppD, newObjD, funcAppDocD, newObjDocD', funcDocD, castDocD,
+  classVarCheckStatic, objVarDocD, inlineIfD, varD, staticVarD, selfD, enumVarD,objVarD, listVarD, listOfD, valueOfD, argD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
+  funcAppD, newObjD, funcAppDocD, newObjDocD', funcDocD, castDocD,
   objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD,
   privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, observerListName, doubleSlash, elseIfLabel, blockCmtDoc, 
-  docCmtDoc, commentedItem, addCommentsDocD, functionDoc, classDoc, moduleDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc, moduleDoc, 
   commentedModD, docFuncRepr, valList, appendToBody, surroundBody, getterName, 
   setterName, setEmpty, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Pair(..), pairList, Terminator(..), ScopeTag(..), 
@@ -378,6 +379,9 @@ instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where
     (psnd t) (psnd v))
   listSetFunc v i toVal = pair (listSetFunc (pfst v) (pfst i) (pfst toVal)) 
     (listSetFunc (psnd v) (psnd i) (psnd toVal))
+
+  functionType f = pair (functionType $ pfst f) (functionType $ psnd f)
+  functionDoc f = functionDoc $ pfst f
 
 instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
   printSt nl p v f = pair (printSt nl (pfst p) (pfst v) (fmap pfst f)) 
@@ -882,15 +886,15 @@ instance InternalValue CppSrcCode where
   valFromData p t d = liftA2 (vd p) t (return d)
 
 instance Selector CppSrcCode where
-  objAccess v f = liftA2 mkVal (fmap funcType f) (liftA2 objAccessDocD v f)
+  objAccess = objAccessD
   ($.) = objAccess
 
-  objMethodCall t o f ps = objAccess o (func f t ps)
-  objMethodCallNoParams t o f = objMethodCall t o f []
+  objMethodCall = objMethodCallD
+  objMethodCallNoParams = objMethodCallNoParamsD
 
-  selfAccess l = objAccess (valueOf $ self l)
+  selfAccess = selfAccessD
 
-  listIndexExists v i = listSize v ?> i
+  listIndexExists = listIndexExistsD
   argExists i = listAccess argsList (litInt $ fromIntegral i)
   
   indexOf l v = funcApp "find" int [iterBegin l, iterEnd l, v] #- iterBegin l
@@ -929,6 +933,9 @@ instance InternalFunction CppSrcCode where
   listAccessFunc t v = func "at" t [intValue v]
   listSetFunc v i toVal = liftA2 fd (valueType v) 
     (liftA2 cppListSetDoc (intValue i) toVal)
+
+  functionType = fmap funcType
+  functionDoc = funcDoc . unCPPSC
 
 instance InternalStatement CppSrcCode where
   printSt nl p v _ = mkSt <$> liftA2 (cppPrint nl) p v
@@ -1118,7 +1125,7 @@ instance MethodSym CppSrcCode where
           bodyStatements $ loopIndexDec : deleteStatements
     in pubMethod ('~':n) n void [] dbody
 
-  docMain b = commentedFunc (docComment $ functionDoc 
+  docMain b = commentedFunc (docComment $ functionDox 
     "Controls the flow of the program" 
     [("argc", "Number of command-line arguments"),
     ("argv", "List of command-line arguments")] ["exit code"]) (mainFunction b)
@@ -1499,6 +1506,9 @@ instance InternalFunction CppHdrCode where
 
   listAccessFunc _ _ = liftA2 fd void (return empty)
   listSetFunc _ _ _ = liftA2 fd void (return empty)
+  
+  functionType = fmap funcType
+  functionDoc = funcDoc . unCPPHC
 
 instance InternalStatement CppHdrCode where
   printSt _ _ _ _ = return (mkStNoEnd empty)

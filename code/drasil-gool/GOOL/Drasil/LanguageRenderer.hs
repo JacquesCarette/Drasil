@@ -31,12 +31,12 @@ module GOOL.Drasil.LanguageRenderer (
   selfDocD, argDocD, enumElemDocD, classVarCheckStatic, classVarDocD,
   objVarDocD, inlineIfD, funcAppDocD, newObjDocD, newObjDocD',
   objDecDefDocD, constDecDefDocD, listIndexExistsDocD, varD, 
-  staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD,
+  staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD,
   funcDocD, 
   castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
   castObjDocD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
   privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDoc, classDoc, moduleDoc, commentedModD, docFuncRepr,
+  addCommentsDocD, functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr,
   valList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
   setMainMethod, setEmpty, intValue, filterOutObjs
 ) where
@@ -49,9 +49,10 @@ import GOOL.Drasil.Symantics (Label, Library,
   TypeSym(Type, getType, getTypeString, getTypeDoc, bool, float, string, 
     listType, listInnerType, obj, enumType, iterator), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  InternalValue(..), FunctionSym(..), SelectorFunction(..), 
-  InternalStatement(..), StatementSym(..), ControlStatementSym(..), 
-  ParameterSym(..), MethodSym(..), InternalMethod(..), BlockCommentSym(..))
+  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
+  InternalFunction(..), InternalStatement(..), StatementSym(..), 
+  ControlStatementSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
+  BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
   FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), od, 
@@ -840,6 +841,31 @@ newObjD f t vs = valFromData Nothing t (f t (valueList vs))
 notNullD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
 notNullD v = v ?!= valueOf (var "null" (valueType v))
 
+objAccessD :: (RenderSym repr) => repr (Value repr) -> repr (Function repr) -> 
+  repr (Value repr)
+objAccessD v f = valFromData Nothing (functionType f) (objAccessDocD 
+  (valueDoc v) (functionDoc f))
+
+objMethodCallD :: (RenderSym repr) => repr (Type repr) -> repr (Value repr) -> 
+  Label -> [repr (Value repr)] -> repr (Value repr)
+objMethodCallD t o f ps = objAccess o (func f t ps)
+
+objMethodCallNoParamsD :: (RenderSym repr) => repr (Type repr) -> 
+  repr (Value repr) -> Label -> repr (Value repr)
+objMethodCallNoParamsD t o f = objMethodCall t o f []
+
+selfAccessD :: (RenderSym repr) => Label -> repr (Function repr) -> 
+  repr (Value repr)
+selfAccessD l = objAccess (valueOf $ self l)
+
+listIndexExistsD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) 
+  -> repr (Value repr)
+listIndexExistsD lst index = listSize lst ?> index
+
+indexOfD :: (RenderSym repr) => Label -> repr (Value repr) -> repr (Value repr) 
+  -> repr (Value repr)
+indexOfD f l v = objAccess l (func f S.int [v])
+
 -- Functions --
 
 funcDocD :: ValData -> Doc
@@ -857,8 +883,8 @@ listAccessFuncDocD v = brackets $ valDoc v
 listSetFuncDocD :: ValData -> ValData -> Doc
 listSetFuncDocD i v = brackets (valDoc i) <+> equals <+> valDoc v
 
-objAccessDocD :: ValData -> FuncData -> Doc
-objAccessDocD v f = valDoc v <> funcDoc f
+objAccessDocD :: Doc -> Doc -> Doc
+objAccessDocD v f = v <> f
 
 castObjDocD :: Doc -> ValData -> Doc
 castObjDocD t v = t <> parens (valDoc v)
@@ -927,8 +953,8 @@ endCommentDelimit c = commentDelimit (endCommentLabel ++ " " ++ c)
 dashes :: String -> Int -> String
 dashes s l = replicate (l - length s) '-'
 
-functionDoc :: String -> [(String, String)] -> [String] -> [String]
-functionDoc desc params returns = [doxBrief ++ desc | not (null desc)]
+functionDox :: String -> [(String, String)] -> [String] -> [String]
+functionDox desc params returns = [doxBrief ++ desc | not (null desc)]
   ++ map (\(v, vDesc) -> doxParam ++ v ++ " " ++ vDesc) params
   ++ map (doxReturn ++) returns
 
@@ -947,7 +973,7 @@ commentedModD cmt m = updateFileMod (updateModDoc (commentedItem cmt
 
 docFuncRepr :: (MethodSym repr) => String -> [String] -> [String] -> 
   repr (Method repr) -> repr (Method repr)
-docFuncRepr desc pComms rComms f = commentedFunc (docComment $ functionDoc desc
+docFuncRepr desc pComms rComms f = commentedFunc (docComment $ functionDox desc
   (zip (map parameterName (parameters f)) pComms) rComms) f
 
 -- Helper Functions --

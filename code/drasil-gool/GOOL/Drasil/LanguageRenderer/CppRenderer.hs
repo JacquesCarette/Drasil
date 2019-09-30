@@ -39,7 +39,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   litFloatD, litIntD, litStringD, varDocD, selfDocD, argDocD, 
   classVarCheckStatic, objVarDocD, inlineIfD, varD, staticVarD, selfD, enumVarD,objVarD, listVarD, listOfD, valueOfD, argD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
   funcAppD, newObjD, funcAppDocD, newObjDocD', funcDocD, castDocD,
-  objAccessDocD, castObjDocD, breakDocD, continueDocD, staticDocD, dynamicDocD,
+  objAccessDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, listAccessFuncD', listSetFuncD, breakDocD, continueDocD, staticDocD, dynamicDocD,
   privateDocD, publicDocD, classDec, dot, blockCmtStart, blockCmtEnd, 
   docCmtStart, observerListName, doubleSlash, elseIfLabel, blockCmtDoc, 
   docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc, moduleDoc, 
@@ -382,6 +382,8 @@ instance (Pair p) => InternalFunction (p CppSrcCode CppHdrCode) where
 
   functionType f = pair (functionType $ pfst f) (functionType $ psnd f)
   functionDoc f = functionDoc $ pfst f
+  
+  funcFromData t d = pair (funcFromData (pfst t) d) (funcFromData (psnd t) d)
 
 instance (Pair p) => InternalStatement (p CppSrcCode CppHdrCode) where
   printSt nl p v f = pair (printSt nl (pfst p) (pfst v) (fmap pfst f)) 
@@ -901,41 +903,42 @@ instance Selector CppSrcCode where
 
 instance FunctionSym CppSrcCode where
   type Function CppSrcCode = FuncData
-  func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
+  func = funcD
 
-  get v vToGet = v $. getFunc vToGet
-  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+  get = getD
+  set = setD
 
-  listSize v = cast int (v $. listSizeFunc)
-  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
-  listAppend v vToApp = v $. listAppendFunc vToApp
+  listSize v = cast int (listSizeD v)
+  listAdd = listAddD
+  listAppend = listAppendD
 
-  iterBegin v = v $. iterBeginFunc (listInnerType $ valueType v)
-  iterEnd v = v $. iterEndFunc (listInnerType $ valueType v)
+  iterBegin = iterBeginD
+  iterEnd = iterEndD
 
 instance SelectorFunction CppSrcCode where
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
+  listAccess = listAccessD
+  listSet = listSetD
   at = listAccess
 
 instance InternalFunction CppSrcCode where
-  getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+  getFunc = getFuncD
+  setFunc = setFuncD
 
-  listSizeFunc = func "size" int []
+  listSizeFunc = listSizeFuncD
   listAddFunc l i v = func "insert" (listType static_ $ fmap valType v) 
     [iterBegin l #+ i, v]
-  listAppendFunc v = func "push_back" (listType static_ $ fmap valType v) [v]
+  listAppendFunc = listAppendFuncD "push_back"
 
   iterBeginFunc t = func "begin" (iterator t) []
   iterEndFunc t = func "end" (iterator t) []
 
-  listAccessFunc t v = func "at" t [intValue v]
-  listSetFunc v i toVal = liftA2 fd (valueType v) 
-    (liftA2 cppListSetDoc (intValue i) toVal)
+  listAccessFunc = listAccessFuncD' "at"
+  listSetFunc = listSetFuncD cppListSetDoc
 
   functionType = fmap funcType
   functionDoc = funcDoc . unCPPSC
+  
+  funcFromData t d = liftA2 fd t (return d)
 
 instance InternalStatement CppSrcCode where
   printSt nl p v _ = mkSt <$> liftA2 (cppPrint nl) p v
@@ -1509,6 +1512,8 @@ instance InternalFunction CppHdrCode where
   
   functionType = fmap funcType
   functionDoc = funcDoc . unCPPHC
+  
+  funcFromData t d = liftA2 fd t (return d)
 
 instance InternalStatement CppHdrCode where
   printSt _ _ _ _ = return (mkStNoEnd empty)
@@ -1827,8 +1832,8 @@ cppCast t v = cppCast' (getType t) (getType $ valueType v)
   where cppCast' Float String = funcApp "std::stod" float [v]
         cppCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
-cppListSetDoc :: ValData -> ValData -> Doc
-cppListSetDoc i v = dot <> text "at" <> parens (valDoc i) <+> equals <+> valDoc v
+cppListSetDoc :: Doc -> Doc -> Doc
+cppListSetDoc i v = dot <> text "at" <> parens i <+> equals <+> v
 
 cppListDecDoc :: VarData -> ValData -> Doc -> Doc -> Doc
 cppListDecDoc v n s d = varDecDocD v s d <> parens (valDoc n)

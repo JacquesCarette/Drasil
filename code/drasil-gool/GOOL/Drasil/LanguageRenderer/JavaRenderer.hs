@@ -38,7 +38,8 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   argDocD, enumElemDocD, classVarCheckStatic, classVarD, classVarDocD, 
   objVarDocD, inlineIfD, funcAppDocD, newObjDocD,
   varD, staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, extFuncAppD, newObjD, notNullD,
-  funcDocD, castDocD, objAccessDocD, castObjDocD, breakDocD, continueDocD, 
+  funcDocD, castDocD, objAccessDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD', listSetFuncD, breakDocD,
+  continueDocD, 
   staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, elseIfLabel, 
   forLabel, blockCmtStart, blockCmtEnd, docCmtStart, observerListName, 
   doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
@@ -322,39 +323,41 @@ instance Selector JavaCode where
 
 instance FunctionSym JavaCode where
   type Function JavaCode = FuncData
-  func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
+  func = funcD
 
-  get v vToGet = v $. getFunc vToGet
-  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+  get = getD
+  set = setD
 
-  listSize v = v $. listSizeFunc
-  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
-  listAppend v vToApp = v $. listAppendFunc vToApp
-  
-  iterBegin v = v $. iterBeginFunc (valueType v)
-  iterEnd v = v $. iterEndFunc (valueType v)
+  listSize = listSizeD
+  listAdd = listAddD
+  listAppend = listAppendD
+
+  iterBegin = iterBeginD
+  iterEnd = iterEndD
 
 instance SelectorFunction JavaCode where
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
+  listAccess = listAccessD
+  listSet = listSetD
   at = listAccess
 
 instance InternalFunction JavaCode where
-  getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+  getFunc = getFuncD
+  setFunc = setFuncD
 
-  listSizeFunc = func "size" int []
-  listAddFunc _ i v = func "add" (listType static_ $ fmap valType v) [i, v]
-  listAppendFunc v = func "add" (listType static_ $ fmap valType v) [v]
+  listSizeFunc = listSizeFuncD
+  listAddFunc _ = listAddFuncD "add"
+  listAppendFunc = listAppendFuncD "add"
 
-  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Java, but Java has no iterators"
-  iterEndFunc _ = error "Attempt to use iterEndFunc in Java, but Java has no iterators"
+  iterBeginFunc _ = error $ iterBeginError jName
+  iterEndFunc _ = error $ iterEndError jName
   
-  listAccessFunc t i = func "get" t [intValue i]
+  listAccessFunc = listAccessFuncD' "get"
   listSetFunc v i toVal = func "set" (valueType v) [intValue i, toVal]
 
   functionType = fmap funcType
   functionDoc = funcDoc . unJC
+
+  funcFromData t d = liftA2 fd t (return d)
 
 instance InternalStatement JavaCode where
   printSt _ p v _ = mkSt <$> liftA2 printDoc p v
@@ -615,6 +618,9 @@ instance BlockCommentSym JavaCode where
   type BlockComment JavaCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
   docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd 
+
+jName :: String
+jName = "Java"
 
 enumsEqualInts :: Bool
 enumsEqualInts = False

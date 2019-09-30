@@ -365,6 +365,8 @@ class (ValueSym repr, InternalValue repr) => InternalFunction repr where
   functionType :: repr (Function repr) -> repr (Type repr)
   functionDoc :: repr (Function repr) -> Doc
 
+  funcFromData :: repr (Type repr) -> Doc -> repr (Function repr)
+
 class (Selector repr) => InternalStatement repr where
   -- newLn, printFunc, value to print, maybe a file to print to 
   printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> 

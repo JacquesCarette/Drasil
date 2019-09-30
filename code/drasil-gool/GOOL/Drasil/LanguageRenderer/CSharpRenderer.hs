@@ -39,7 +39,7 @@ import GOOL.Drasil.LanguageRenderer (addExt,
   classVarCheckStatic, classVarD, classVarDocD, objVarDocD, inlineIfD, 
   funcAppDocD, newObjDocD, varD, staticVarD, extVarD, selfD, enumVarD, classVarD, objVarSelfD, listVarD, listOfD, iterVarD,
   valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, extFuncAppD, newObjD,notNullD, funcDocD, castDocD, 
-  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, breakDocD, 
+  listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, breakDocD, 
   continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
   blockCmtStart, blockCmtEnd, docCmtStart, observerListName, doubleSlash, 
   elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, 
@@ -322,40 +322,41 @@ instance Selector CSharpCode where
 
 instance FunctionSym CSharpCode where
   type Function CSharpCode = FuncData
-  func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
+  func = funcD
 
-  get v vToGet = v $. getFunc vToGet
-  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+  get = getD
+  set = setD
 
-  listSize v = v $. listSizeFunc
-  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
-  listAppend v vToApp = v $. listAppendFunc vToApp
-  
-  iterBegin v = v $. iterBeginFunc (valueType v)
-  iterEnd v = v $. iterEndFunc (valueType v)
+  listSize = listSizeD
+  listAdd = listAddD
+  listAppend = listAppendD
+
+  iterBegin = iterBeginD
+  iterEnd = iterEndD
 
 instance SelectorFunction CSharpCode where
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
+  listAccess = listAccessD
+  listSet = listSetD
   at = listAccess
 
 instance InternalFunction CSharpCode where
-  getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+  getFunc = getFuncD
+  setFunc = setFuncD
 
-  listSizeFunc = liftA2 fd int (fmap funcDocD (valueOf (var "Count" int)))
-  listAddFunc _ i v = func "Insert" (fmap valType v) [i, v]
-  listAppendFunc v = func "Add" (fmap valType v) [v]
+  listSizeFunc = liftA2 fd int (return $ funcDocD (text "Count"))
+  listAddFunc _ = listAddFuncD "Insert"
+  listAppendFunc = listAppendFuncD "Add"
 
-  iterBeginFunc _ = error "Attempt to use iterBeginFunc in C#, but C# has no iterators"
-  iterEndFunc _ = error "Attempt to use iterEndFunc in C#, but C# has no iterators"
+  iterBeginFunc _ = error $ iterBeginError csName
+  iterEndFunc _ = error $ iterEndError csName
 
-  listAccessFunc t v = liftA2 fd t (listAccessFuncDocD <$> intValue v)
-  listSetFunc v i toVal = liftA2 fd (valueType v) 
-    (liftA2 listSetFuncDocD (intValue i) toVal)
+  listAccessFunc = listAccessFuncD
+  listSetFunc = listSetFuncD listSetFuncDocD 
     
   functionType = fmap funcType
   functionDoc = funcDoc . unCSC
+
+  funcFromData t d = liftA2 fd t (return d)
 
 instance InternalStatement CSharpCode where
   printSt _ p v _ = mkSt <$> liftA2 printDoc p v
@@ -596,6 +597,9 @@ instance BlockCommentSym CSharpCode where
   type BlockComment CSharpCode = Doc
   blockComment lns = liftA2 (blockCmtDoc lns) blockCommentStart blockCommentEnd
   docComment lns = liftA2 (docCmtDoc lns) docCommentStart docCommentEnd
+
+csName :: String
+csName = "C#"
 
 cstop :: Doc -> Doc -> Doc
 cstop end inc = vcat [

@@ -33,7 +33,7 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc',
   moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, mkStaticVar, litCharD, 
   litFloatD, litIntD, litStringD, varDocD, extVarDocD, argDocD, enumElemDocD, 
   classVarCheckStatic, classVarD, objVarDocD, funcAppDocD, newObjDocD', varD,
-  staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, extFuncAppD, newObjD, funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, 
+  staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, extFuncAppD, newObjD, funcDocD, listSetFuncDocD, listAccessFuncDocD, objAccessDocD, castObjDocD, funcD, getD, setD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listSetFuncD,
   breakDocD, continueDocD, dynamicDocD, classDec, dot, forLabel, inLabel,
   observerListName, commentedItem, addCommentsDocD, classDoc, moduleDoc, 
   commentedModD, docFuncRepr, valList, surroundBody, getterName, setterName, 
@@ -318,41 +318,42 @@ instance Selector PythonCode where
 
 instance FunctionSym PythonCode where
   type Function PythonCode = FuncData
-  func l t vs = liftA2 fd t (fmap funcDocD (funcApp l t vs))
+  func = funcD
 
-  get v vToGet = v $. getFunc vToGet
-  set v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+  get = getD
+  set = setD
 
   listSize v = liftA2 mkVal (fmap funcType listSizeFunc) 
     (liftA2 pyListSize v listSizeFunc)
-  listAdd v i vToAdd = v $. listAddFunc v i vToAdd
-  listAppend v vToApp = v $. listAppendFunc vToApp
+  listAdd = listAddD
+  listAppend = listAppendD
 
-  iterBegin v = v $. iterBeginFunc (valueType v)
-  iterEnd v = v $. iterEndFunc (valueType v)
+  iterBegin = iterBeginD
+  iterEnd = iterEndD
 
 instance SelectorFunction PythonCode where
-  listAccess v i = v $. listAccessFunc (listInnerType $ valueType v) i
-  listSet v i toVal = v $. listSetFunc v i toVal
+  listAccess = listAccessD
+  listSet = listSetD
   at = listAccess
 
 instance InternalFunction PythonCode where
-  getFunc v = func (getterName $ variableName v) (variableType v) []
-  setFunc t v toVal = func (setterName $ variableName v) t [toVal]
+  getFunc = getFuncD
+  setFunc = setFuncD
 
   listSizeFunc = liftA2 fd int (return $ text "len")
-  listAddFunc _ i v = func "insert" (listType static_ $ fmap valType v) [i, v]
-  listAppendFunc v = func "append" (listType static_ $ fmap valType v) [v]
+  listAddFunc _ = listAddFuncD "insert"
+  listAppendFunc = listAppendFuncD "append"
 
-  iterBeginFunc _ = error "Attempt to use iterBeginFunc in Python, but Python has no iterators"
-  iterEndFunc _ = error "Attempt to use iterEndFunc in Python, but Python has no iterators"
+  iterBeginFunc _ = error $ iterBeginError pyName
+  iterEndFunc _ = error $ iterEndError pyName
 
-  listAccessFunc t v = liftA2 fd t (fmap listAccessFuncDocD v)
-  listSetFunc v i toVal = liftA2 fd (valueType v) 
-    (liftA2 listSetFuncDocD i toVal)
+  listAccessFunc = listAccessFuncD 
+  listSetFunc = listSetFuncD listSetFuncDocD
 
   functionType = fmap funcType
   functionDoc = funcDoc . unPC
+
+  funcFromData t d = liftA2 fd t (return d)
 
 instance InternalStatement PythonCode where
   printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
@@ -584,6 +585,9 @@ imp, incl, initName :: Label
 imp = "import"
 incl = "from"
 initName = "__init__"
+
+pyName :: String
+pyName = "Python"
 
 pytop :: Doc 
 pytop = vcat [   -- There are also imports from the libraries supplied by module. These will be handled by module.

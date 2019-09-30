@@ -34,7 +34,7 @@ module GOOL.Drasil.LanguageRenderer (
   staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, funcAppD, extFuncAppD, newObjD, notNullD, objAccessD, objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD,
   funcDocD, 
   castDocD, sizeDocD, listAccessFuncDocD, listSetFuncDocD, objAccessDocD, 
-  castObjDocD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
+  castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listAccessFuncD', listSetFuncD, includeD, breakDocD, continueDocD, staticDocD, dynamicDocD, 
   privateDocD, publicDocD, blockCmtDoc, docCmtDoc, commentedItem, 
   addCommentsDocD, functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr,
   valList, prependToBody, appendToBody, surroundBody, getterName, setterName, 
@@ -49,10 +49,10 @@ import GOOL.Drasil.Symantics (Label, Library,
   TypeSym(Type, getType, getTypeString, getTypeDoc, bool, float, string, 
     listType, listInnerType, obj, enumType, iterator), 
   VariableSym(..), ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  InternalValue(..), Selector(..), FunctionSym(..), SelectorFunction(..), 
-  InternalFunction(..), InternalStatement(..), StatementSym(..), 
-  ControlStatementSym(..), ParameterSym(..), MethodSym(..), InternalMethod(..), 
-  BlockCommentSym(..))
+  ValueExpression(..), InternalValue(..), Selector(..), FunctionSym(..), 
+  SelectorFunction(..), InternalFunction(..), InternalStatement(..), 
+  StatementSym(..), ControlStatementSym(..), ParameterSym(..), MethodSym(..), 
+  InternalMethod(..), BlockCommentSym(..))
 import qualified GOOL.Drasil.Symantics as S (TypeSym(char, int))
 import GOOL.Drasil.Data (Terminator(..), FileData(..), fileD, updateFileMod, 
   FuncData(..), ModData(..), updateModDoc, MethodData(..), OpData(..), od, 
@@ -868,8 +868,8 @@ indexOfD f l v = objAccess l (func f S.int [v])
 
 -- Functions --
 
-funcDocD :: ValData -> Doc
-funcDocD fnApp = dot <> valDoc fnApp
+funcDocD :: Doc -> Doc
+funcDocD fnApp = dot <> fnApp
 
 castDocD :: TypeData -> Doc
 castDocD t = parens $ typeDoc t
@@ -877,17 +877,93 @@ castDocD t = parens $ typeDoc t
 sizeDocD :: Doc
 sizeDocD = dot <> text "Count"
 
-listAccessFuncDocD :: ValData -> Doc
-listAccessFuncDocD v = brackets $ valDoc v
+listAccessFuncDocD :: (RenderSym repr) => repr (Value repr) -> Doc
+listAccessFuncDocD v = brackets $ valueDoc v
 
-listSetFuncDocD :: ValData -> ValData -> Doc
-listSetFuncDocD i v = brackets (valDoc i) <+> equals <+> valDoc v
+listSetFuncDocD :: Doc -> Doc -> Doc
+listSetFuncDocD i v = brackets i <+> equals <+> v
 
 objAccessDocD :: Doc -> Doc -> Doc
 objAccessDocD v f = v <> f
 
 castObjDocD :: Doc -> ValData -> Doc
 castObjDocD t v = t <> parens (valDoc v)
+
+funcD :: (RenderSym repr) => Label -> repr (Type repr) -> [repr (Value repr)] 
+  -> repr (Function repr)
+funcD l t vs = funcFromData t (funcDocD (valueDoc $ funcApp l t vs))
+
+getD :: (RenderSym repr) => repr (Value repr) -> repr (Variable repr) -> 
+  repr (Value repr)
+getD v vToGet = v $. getFunc vToGet
+
+setD :: (RenderSym repr) => repr (Value repr) -> repr (Variable repr) -> 
+  repr (Value repr) -> repr (Value repr)
+setD v vToSet toVal = v $. setFunc (valueType v) vToSet toVal
+
+listSizeD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
+listSizeD v = v $. listSizeFunc
+
+listAddD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr)
+listAddD v i vToAdd = v $. listAddFunc v i vToAdd
+
+listAppendD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> 
+  repr (Value repr)
+listAppendD v vToApp = v $. listAppendFunc vToApp
+
+iterBeginD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
+iterBeginD v = v $. iterBeginFunc (listInnerType $ valueType v)
+
+iterEndD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr)
+iterEndD v = v $. iterEndFunc (listInnerType $ valueType v)
+
+listAccessD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> 
+  repr (Value repr)
+listAccessD v i = v $. listAccessFunc (listInnerType $ valueType v) i
+
+listSetD :: (RenderSym repr) => repr (Value repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr)
+listSetD v i toVal = v $. listSetFunc v i toVal
+
+getFuncD :: (RenderSym repr) => repr (Variable repr) -> repr (Function repr)
+getFuncD v = func (getterName $ variableName v) (variableType v) []
+
+setFuncD :: (RenderSym repr) => repr (Type repr) -> repr (Variable repr) -> 
+  repr (Value repr) -> repr (Function repr)
+setFuncD t v toVal = func (setterName $ variableName v) t [toVal]
+
+listSizeFuncD :: (RenderSym repr) => repr (Function repr)
+listSizeFuncD = func "size" S.int []
+
+listAddFuncD :: (RenderSym repr) => Label -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Function repr)
+listAddFuncD f i v = func f (listType static_ $ valueType v) [i, v]
+
+listAppendFuncD :: (RenderSym repr) => Label -> repr (Value repr) -> 
+  repr (Function repr)
+listAppendFuncD f v = func f (listType static_ $ valueType v) [v]
+
+iterBeginError :: String -> String
+iterBeginError l = "Attempt to use iterBeginFunc in " ++ l ++ ", but " ++ l ++ 
+  " has no iterators"
+
+iterEndError :: String -> String
+iterEndError l = "Attempt to use iterEndFunc in " ++ l ++ ", but " ++ l ++ 
+  " has no iterators"
+
+listAccessFuncD :: (RenderSym repr) => repr (Type repr) -> repr (Value repr) ->
+  repr (Function repr)
+listAccessFuncD t i = funcFromData t (listAccessFuncDocD $ intValue i)
+
+listAccessFuncD' :: (RenderSym repr) => Label -> repr (Type repr) -> 
+  repr (Value repr) -> repr (Function repr)
+listAccessFuncD' f t i = func f t [intValue i]
+
+listSetFuncD :: (RenderSym repr) => (Doc -> Doc -> Doc) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr) -> repr (Function repr)
+listSetFuncD f v i toVal = funcFromData (valueType v) (f (valueDoc $ intValue i)
+  (valueDoc toVal))
 
 -- Keywords --
 

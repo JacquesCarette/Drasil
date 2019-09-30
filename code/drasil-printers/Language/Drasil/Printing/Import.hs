@@ -13,6 +13,7 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
   PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
 
+import Data.Bifunctor (bimap, second)
 import Data.List (intersperse)
 import Data.Maybe (fromMaybe)
 import Data.Tuple (fst, snd)
@@ -359,12 +360,12 @@ layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure
   (P.S $ getRefAdd x)
   (spec sm c) f wp
 layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
-  (map (\(y,z) -> (spec sm y, spec sm z)) ps) w h (spec sm t)
+  (map (bimap (spec sm) (spec sm)) ps) w h (spec sm t)
   (P.S $ getRefAdd x)
 layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition 
   dtyp (layPairs pairs) 
   (P.S $ getRefAdd x)
-  where layPairs = map (\(x',y) -> (x', map (lay sm) y))
+  where layPairs = map (second (map (lay sm)))
 layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
 layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
@@ -384,10 +385,10 @@ layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
   where ref = P.S "nolabel1"
 layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)  = T.Figure (P.S "nolabel2") (spec sm c) f wp
-layUnlabelled sm (Graph ps w h t) = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+layUnlabelled sm (Graph ps w h t) = T.Graph (map (bimap (spec sm) (spec sm)) ps)
                                w h (spec sm t) (P.S "nolabel6")
 layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
-  where layPairs = map (\(x,y) -> (x, map temp y ))
+  where layPairs = map (second (map temp))
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
 
@@ -421,8 +422,8 @@ layField (HowPublished (Verb v)) = P.HowPublished (P.Verb $ P.S v)
 
 -- | Translates lists
 makeL :: PrintingInformation -> ListType -> P.ListType
-makeL sm (Bullet bs)      = P.Unordered   $ map (\(x,y) -> (item sm x, fmap P.S y)) bs
-makeL sm (Numeric ns)     = P.Ordered     $ map (\(x,y) -> (item sm x, fmap P.S y)) ns
+makeL sm (Bullet bs)      = P.Unordered   $ map (bimap (item sm) (fmap P.S)) bs
+makeL sm (Numeric ns)     = P.Ordered     $ map (bimap (item sm) (fmap P.S)) ns
 makeL sm (Simple ps)      = P.Simple      $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
 makeL sm (Desc ps)        = P.Desc        $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
 makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps

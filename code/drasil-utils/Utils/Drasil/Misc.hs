@@ -62,7 +62,7 @@ definedIn'' q =  S "defined" `sIn` makeRef2S q
 -- t - the title of the list
 -- l - the list to be enumerated
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-mkEnumAbbrevList s t l = zip [t :+: (S $ show x) | x <- [s..]] $ map Flat l
+mkEnumAbbrevList s t l = zip [t :+: S (show x) | x <- [s..]] $ map Flat l
 
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount

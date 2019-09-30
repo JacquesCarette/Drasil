@@ -60,7 +60,7 @@ timeDerivSent3 = foldlSentCol [S "Dividing by", ch flightDur,
   S "gives us"]
 timeDerivSent4 = S "Solving for" +:+ ch flightDur +: S "gives us"
 timeDerivSent5 = foldlSentCol [S "From", makeRef2S speedIY,
-  sParen (S "with" +:+ (E $ sy iSpeed $= sy launSpeed)), S "we can replace", ch iyVel]
+  sParen (S "with" +:+ E (sy iSpeed $= sy launSpeed)), S "we can replace", ch iyVel]
 
 timeDerivEqns :: [Expr]
 timeDerivEqns = [timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4, timeDerivEqn5]
@@ -103,7 +103,7 @@ landPosDerivSent2 = foldlSentCol [S "To find the", phrase landPos `sC`
   S "we want to find the", ch xPos, phrase value, sParen (ch landPos),
   S "at", phrase flightDur, sParen (S "from" +:+ makeRef2S timeIM)]
 landPosDerivSent3 = foldlSentCol [S "From", makeRef2S speedIX,
-  sParen (S "with" +:+ (E $ sy iSpeed $= sy launSpeed)), S "we can replace", ch ixVel]
+  sParen (S "with" +:+ E (sy iSpeed $= sy launSpeed)), S "we can replace", ch ixVel]
 landPosDerivSent4 = S "Rearranging this gives us the required" +: phrase equation
 
 

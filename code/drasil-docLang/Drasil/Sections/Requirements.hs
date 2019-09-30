@@ -12,6 +12,8 @@ import Data.Drasil.Concepts.Math (unit_)
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
 
+import Data.Bifunctor (bimap)
+
 -- wrapper for reqIntro
 reqF :: [Section] -> Section
 reqF = SRS.require [reqIntro]
@@ -86,4 +88,4 @@ mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> 
 mkQRTuple = map (\c -> (qw c, makeRef2S c))
 
 mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
-mkQRTupleRef qs rs = map (\(c, r) -> (qw c, makeRef2S r)) $ zip qs rs
+mkQRTupleRef qs rs = map (bimap qw makeRef2S) $ zip qs rs

@@ -26,10 +26,10 @@ import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD,
   charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, 
   constructDocD, paramDocD, paramListDocD, mkParam, methodListDocD, 
   stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, switchDocD, 
-  forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, assignDocD, 
+  forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, assignDocD, 
   plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, 
   objDecDefDocD, statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, 
-  stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, increment1D, discardInputD, discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, unOpPrec, notOpDocD, negateOpDocD, unExpr, 
+  stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, increment1D, discardInputD, discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, breakD, continueD, returnD, multiReturnError, valStateD, freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, tryCatchD, unOpPrec, notOpDocD, negateOpDocD, unExpr, 
   unExpr', typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
   greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
   multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
@@ -57,7 +57,6 @@ import GOOL.Drasil.Helpers (angles, emptyIfEmpty,
   lift4Pair, liftPair, liftPairFst, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Data.Bifunctor (first)
 import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
@@ -428,28 +427,25 @@ instance StatementSym JavaCode where
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = return (mkSt breakDocD)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
-  continue = return (mkSt continueDocD)
+  break = breakD Semi  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
+  continue = continueD Semi
 
-  returnState v = mkSt <$> liftList returnDocD [v]
-  multiReturn _ = error "Cannot return multiple values in Java"
+  returnState = returnD Semi
+  multiReturn _ = error $ multiReturnError jName
 
-  valState v = mkSt <$> fmap valDoc v
+  valState = valStateD Semi
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
-  free _ = error "Cannot free variables in Java" -- could set variable to null? Might be misleading.
+  free _ = error $ freeError jName -- could set variable to null? Might be misleading.
 
-  throw errMsg = mkSt <$> fmap jThrowDoc (litString errMsg)
+  throw = throwD jThrowDoc Semi
 
-  initState fsmName initialState = varDecDef (var fsmName string) 
-    (litString initialState)
-  changeState fsmName toState = var fsmName string &= litString toState
+  initState = initStateD
+  changeState = changeStateD
 
-  initObserverList t = listDecDef (var observerListName t)
-  addObserver o = valState $ listAdd obsList lastelem o
-    where obsList = valueOf $ observerListName `listOf` valueType o
-          lastelem = listSize obsList
+  initObserverList = initObserverListD
+  addObserver = addObserverD
 
   inOutCall = jInOutCall funcApp
   extInOutCall m = jInOutCall (extFuncApp m)
@@ -459,31 +455,23 @@ instance StatementSym JavaCode where
 instance ControlStatementSym JavaCode where
   ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b
     bs
-  ifNoElse bs = ifCond bs $ body []
-  switch v cs c = mkStNoEnd <$> lift3Pair switchDocD (state break) v c cs
-  switchAsIf v cs = ifCond cases
-    where cases = map (first (v ?==)) cs
+  ifNoElse = ifNoElseD
+  switch  = switchD
+  switchAsIf = switchAsIfD
 
-  ifExists v ifBody = ifCond [(notNull v, ifBody)]
+  ifExists = ifExistsD
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef i initv) 
-    (valueOf i ?< finalv) (i &+= stepv)
+  forRange = forRangeD 
   forEach e v b = mkStNoEnd <$> liftA7 forEachDocD e blockStart blockEnd
     iterForEachLabel iterInLabel v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
-  tryCatch tb cb = mkStNoEnd <$> liftA2 jTryCatch tb cb
+  tryCatch = tryCatchD jTryCatch
   
-  checkState l = switch (valueOf $ var l string)
-  notifyObservers f t = for initv (v_index ?< listSize obsList) 
-    (var_index &++) notify
-    where obsList = valueOf $ observerListName `listOf` t 
-          var_index = var "observerIndex" int
-          v_index = valueOf var_index
-          initv = varDecDef var_index $ litInt 0
-          notify = oneLiner $ valState $ at obsList v_index $. f
+  checkState = checkStateD
+  notifyObservers = notifyObserversD
 
   getFileInputAll f v = while (f $. func "hasNextLine" bool [])
     (oneLiner $ valState $ listAppend (valueOf v) (f $. func "nextLine" string []))
@@ -681,17 +669,17 @@ jConstDecDef :: VarData -> ValData -> Doc
 jConstDecDef v def = text "final" <+> typeDoc (varType v) <+> varDoc v <+> 
   equals <+> valDoc def
 
-jThrowDoc :: ValData -> Doc
-jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valDoc 
+jThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
+jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valueDoc 
   errMsg)
 
-jTryCatch :: Doc -> Doc -> Doc
+jTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
 jTryCatch tb cb = vcat [
   text "try" <+> lbrace,
-  indent tb,
+  indent $ bodyDoc tb,
   rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> 
     lbrace,
-  indent cb,
+  indent $ bodyDoc cb,
   rbrace]
 
 jDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc

@@ -26,10 +26,11 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD,
   charTypeDocD, stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, 
   listInnerTypeD, voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, 
   methodListDocD, stateVarDocD, stateVarDefDocD, constVarDocD, alwaysDel, 
-  ifCondDocD, switchDocD, forDocD, whileDocD, runStrategyD, listSliceD, 
+  ifCondDocD, switchDocD, forDocD, whileDocD, runStrategyD, listSliceD, notifyObserversD, 
   assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
   objDecDefDocD, constDecDefDocD, statementDocD, returnDocD, commentDocD, 
-  freeDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD, discardFileInputD, closeFileD, unOpPrec, 
+  freeDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD, discardFileInputD, closeFileD, breakD, continueD,
+  returnD, multiReturnError, valStateD, throwD, initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD, switchAsIfD, forRangeD, tryCatchD, unOpPrec, 
   notOpDocD, negateOpDocD, sqrtOpDocD, absOpDocD, expOpDocD, sinOpDocD, 
   cosOpDocD, tanOpDocD, asinOpDocD, acosOpDocD, atanOpDocD, unExpr, unExpr', 
   typeUnExpr, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
@@ -59,7 +60,6 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText,
   checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
-import Data.Bifunctor (first)
 import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), braces, parens, comma,
@@ -1025,28 +1025,25 @@ instance StatementSym CppSrcCode where
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = return (mkSt breakDocD)
-  continue = return (mkSt continueDocD)
+  break = breakD Semi
+  continue = continueD Semi
 
-  returnState v = mkSt <$> liftList returnDocD [v]
-  multiReturn _ = error "Cannot return multiple values in C++"
+  returnState = returnD Semi
+  multiReturn _ = error $ multiReturnError cppName
 
-  valState v = mkSt <$> fmap valDoc v
+  valState = valStateD Semi
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
   free v = mkSt <$> fmap freeDocD v
 
-  throw errMsg = mkSt <$> fmap cppThrowDoc (litString errMsg)
+  throw = throwD cppThrowDoc Semi
 
-  initState fsmName initialState = varDecDef (var fsmName string)
-    (litString initialState)
-  changeState fsmName toState = var fsmName string &= litString toState
+  initState = initStateD
+  changeState = changeStateD
 
-  initObserverList t = listDecDef (var observerListName t)
-  addObserver o = valState $ listAdd obsList lastelem o
-    where obsList = valueOf $ observerListName `listOf` valueType o
-          lastelem = listSize obsList
+  initObserverList = initObserverListD
+  addObserver = addObserverD
 
   inOutCall = cppInOutCall funcApp
   extInOutCall m = cppInOutCall (extFuncApp m)
@@ -1056,33 +1053,24 @@ instance StatementSym CppSrcCode where
 instance ControlStatementSym CppSrcCode where
   ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b 
     bs
-  ifNoElse bs = ifCond bs $ body []
-  switch v cs c = mkStNoEnd <$> lift3Pair switchDocD (state break) v c cs
-  switchAsIf v cs = ifCond cases
-    where cases = map (first (v ?==)) cs
+  ifNoElse = ifNoElseD
+  switch = switchD
+  switchAsIf = switchAsIfD
 
   ifExists _ ifBody _ = mkStNoEnd <$> ifBody -- All variables are initialized in C++
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef i initv) 
-    (valueOf i ?< finalv) (i &+= stepv)
+  forRange = forRangeD
   forEach i v = for (varDecDef e (iterBegin v)) (valueOf e ?!= iterEnd v) 
     (e &++)
     where e = toBasicVar i
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
-  tryCatch tb cb = mkStNoEnd <$> liftA2 cppTryCatch tb cb
+  tryCatch = tryCatchD cppTryCatch
 
   checkState l = switchAsIf (valueOf $ var l string) 
-
-  notifyObservers f t = for initv (v_index ?< listSize obsList) 
-    (var_index &++) notify
-    where obsList = valueOf $ observerListName `listOf` t
-          var_index = var "observerIndex" int
-          v_index = valueOf var_index
-          initv = varDecDef var_index $ litInt 0
-          notify = oneLiner $ valState $ at obsList v_index $. f
+  notifyObservers = notifyObserversD
 
   getFileInputAll f v = let l_line = "nextLine"
                             var_line = var l_line string
@@ -1851,15 +1839,15 @@ cppPrint newLn printFn v = valDoc printFn <+> text "<<" <+> val (valDoc v) <+>
   where val = if maybe False (< 9) (valPrec v) then parens else id
         end = if newLn then text "<<" <+> text "std::endl" else empty
 
-cppThrowDoc :: ValData -> Doc
-cppThrowDoc errMsg = text "throw" <> parens (valDoc errMsg)
+cppThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
+cppThrowDoc errMsg = text "throw" <> parens (valueDoc errMsg)
 
-cppTryCatch :: Doc -> Doc -> Doc
+cppTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
 cppTryCatch tb cb = vcat [
   text "try" <+> lbrace,
-  indent tb,
+  indent $ bodyDoc tb,
   rbrace <+> text "catch" <+> parens (text "...") <+> lbrace,
-  indent cb,
+  indent $ bodyDoc cb,
   rbrace]
 
 cppDiscardInput :: (RenderSym repr) => Label -> repr (Value repr) -> Doc

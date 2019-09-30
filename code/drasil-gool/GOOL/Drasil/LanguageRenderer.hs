@@ -17,7 +17,7 @@ module GOOL.Drasil.LanguageRenderer (
   tryCatchDocD, assignDocD, multiAssignDoc, plusEqualsDocD, plusEqualsDocD', 
   plusPlusDocD, plusPlusDocD', varDecDocD, varDecDefDocD, listDecDocD, 
   listDecDefDocD, statementDocD, returnDocD, commentDocD, freeDocD, throwDocD, 
-  mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, stratDocD, runStrategyD, listSliceD, unOpPrec, 
+  mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, incrementD, decrement1D, increment1D, constDecDefD, discardInputD,discardFileInputD, openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, breakD, continueD, returnD, multiReturnError, valStateD, freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, tryCatchD, stratDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, unOpPrec, 
   notOpDocD, notOpDocD', negateOpDocD, sqrtOpDocD, sqrtOpDocD', absOpDocD, 
   absOpDocD', logOpDocD, logOpDocD', lnOpDocD, lnOpDocD', expOpDocD, expOpDocD',
   sinOpDocD, sinOpDocD', cosOpDocD, cosOpDocD', tanOpDocD, tanOpDocD', 
@@ -62,6 +62,7 @@ import GOOL.Drasil.Helpers (angles, doubleQuotedText, hicat, vibcat, vmap,
 
 import Control.Applicative ((<|>))
 import Data.List (intersperse, last)
+import Data.Bifunctor (first)
 import Data.Map as Map (lookup, fromList)
 import Data.Maybe (fromMaybe)
 import Prelude hiding (break,print,last,mod,(<>))
@@ -314,21 +315,21 @@ ifCondDocD ifStart elif bEnd elseBody (c:cs) =
     vmap elseIfSect cs,
     elseSect]
 
-switchDocD :: (Doc, Terminator) -> ValData -> Doc -> 
-  [(ValData, Doc)] -> Doc
+switchDocD :: (RenderSym repr) => repr (Statement repr) -> repr (Value repr) -> 
+  repr (Body repr) -> [(repr (Value repr), repr (Body repr))] -> Doc
 switchDocD breakState v defBody cs = 
   let caseDoc (l, result) = vcat [
-        text "case" <+> valDoc l <> colon,
+        text "case" <+> valueDoc l <> colon,
         indentList [
-          result,
-          fst breakState]]
+          bodyDoc result,
+          statementDoc breakState]]
       defaultSection = vcat [
         text "default" <> colon,
         indentList [
-          defBody,
-          fst breakState]]
+          bodyDoc defBody,
+          statementDoc breakState]]
   in vcat [
-      text "switch" <> parens (valDoc v) <+> lbrace,
+      text "switch" <> parens (valueDoc v) <+> lbrace,
       indentList [
         vmap caseDoc cs,
         defaultSection],
@@ -401,6 +402,20 @@ listSliceD vnew vold b e s =
         (oneLiner $ valState $ listAppend v_temp (listAccess vold v_i)),
       vnew &= v_temp]
 
+checkStateD :: (RenderSym repr) => Label -> [(repr (Value repr), 
+  repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
+checkStateD l = switch (valueOf $ var l string)
+
+notifyObserversD :: (RenderSym repr) => repr (Function repr) -> repr (Type repr)
+  -> repr (Statement repr)
+notifyObserversD f t = for initv (v_index ?< listSize obsList) 
+  (var_index &++) notify
+  where obsList = valueOf $ observerListName `listOf` t 
+        var_index = var "observerIndex" S.int
+        v_index = valueOf var_index
+        initv = varDecDef var_index $ litInt 0
+        notify = oneLiner $ valState $ at obsList v_index $. f
+
 -- Statements --
 
 assignDocD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
@@ -449,8 +464,8 @@ constDecDefDocD :: (RenderSym repr) => repr (Variable repr) ->
 constDecDefDocD v def = text "const" <+> getTypeDoc (variableType v) <+> 
   variableDoc v <+> equals <+> valueDoc def
 
-returnDocD :: [ValData] -> Doc
-returnDocD vs = text "return" <+> valList vs
+returnDocD :: (RenderSym repr) => [repr (Value repr)] -> Doc
+returnDocD vs = text "return" <+> valueList vs
 
 commentDocD :: Label -> Doc -> Doc
 commentDocD cmt cStart = cStart <+> text cmt
@@ -578,6 +593,75 @@ closeFileD n f = valState $ objMethodCallNoParams void f n
 discardFileLineD :: (RenderSym repr) => Label -> repr (Value repr) -> 
   repr (Statement repr)
 discardFileLineD n f = valState $ objMethodCallNoParams string f n 
+
+breakD :: (RenderSym repr) => Terminator -> repr (Statement repr)
+breakD = stateFromData breakDocD
+
+continueD :: (RenderSym repr) => Terminator -> repr (Statement repr)
+continueD = stateFromData continueDocD
+
+returnD :: (RenderSym repr) => Terminator -> repr (Value repr) -> 
+  repr (Statement repr)
+returnD t v = stateFromData (returnDocD [v]) t
+
+multiReturnError :: String -> String
+multiReturnError l = "Cannot return multiple values in " ++ l
+
+valStateD :: (RenderSym repr) => Terminator -> repr (Value repr) ->
+  repr (Statement repr)
+valStateD t v = stateFromData (valueDoc v) t
+
+freeError :: String -> String
+freeError l = "Cannot free variables in " ++ l
+
+throwD :: (RenderSym repr) => (repr (Value repr) -> Doc) -> Terminator -> Label 
+  -> repr (Statement repr)
+throwD f t l = stateFromData (f (litString l)) t
+
+initStateD :: (RenderSym repr) => Label -> Label -> repr (Statement repr)
+initStateD fsmName initialState = varDecDef (var fsmName string) 
+  (litString initialState)
+
+changeStateD :: (RenderSym repr) => Label -> Label -> repr (Statement repr)
+changeStateD fsmName toState = var fsmName string &= litString toState
+
+initObserverListD :: (RenderSym repr) => repr (Type repr) -> 
+  [repr (Value repr)] -> repr (Statement repr)
+initObserverListD t = listDecDef (var observerListName t)
+
+addObserverD :: (RenderSym repr) => repr (Value repr) -> repr (Statement repr)
+addObserverD o = valState $ listAdd obsList lastelem o
+  where obsList = valueOf $ observerListName `listOf` valueType o
+        lastelem = listSize obsList
+
+ifNoElseD :: (RenderSym repr) => [(repr (Value repr), repr (Body repr))] -> 
+  repr (Statement repr)
+ifNoElseD bs = ifCond bs $ body []
+
+switchD :: (RenderSym repr) => repr (Value repr) -> [(repr (Value repr), 
+  repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
+switchD v cs c = stateFromData (switchDocD (state break) v c cs) Semi
+
+switchAsIfD :: (RenderSym repr) => repr (Value repr) -> [(repr (Value repr), 
+  repr (Body repr))] -> repr (Body repr) -> repr (Statement repr)
+switchAsIfD v cs = ifCond cases
+  where cases = map (first (v ?==)) cs
+
+ifExistsD :: (RenderSym repr) => repr (Value repr) -> repr (Body repr) -> 
+  repr (Body repr) -> repr (Statement repr)
+ifExistsD v ifBody = ifCond [(notNull v, ifBody)]
+
+forRangeD :: (RenderSym repr) => repr (Variable repr) -> repr (Value repr) -> 
+  repr (Value repr) -> repr (Value repr) -> repr (Body repr) -> 
+  repr (Statement repr)
+forRangeD i initv finalv stepv = for (varDecDef i initv) (valueOf i ?< finalv) 
+  (i &+= stepv)
+
+tryCatchD :: (RenderSym repr) => (repr (Body repr) -> repr (Body repr) -> 
+  Doc) -> repr (Body repr) -> repr (Body repr) -> 
+  repr (Statement repr)
+tryCatchD f tb cb = stateFromData (f tb cb) Empty
+
 
 -- Unary Operators --
 

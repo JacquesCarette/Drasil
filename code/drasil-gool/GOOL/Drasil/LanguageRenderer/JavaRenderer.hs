@@ -22,42 +22,44 @@ import GOOL.Drasil.Symantics (Label,
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, packageDocD, fileDoc', moduleDocD, 
   classDocD, enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, 
-  oneLinerD, outDoc, printDoc, printFileDocD, boolTypeDocD, intTypeDocD, 
-  charTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, 
-  constructDocD, paramDocD, paramListDocD, mkParam, methodListDocD, 
-  stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, switchDocD, 
-  forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, assignDocD, 
-  plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, listDecDocD, 
-  objDecDefDocD, statementDocD, returnDocD, commentDocD, mkSt, mkStNoEnd, 
-  stringListVals', stringListLists', unOpPrec, notOpDocD, negateOpDocD, unExpr, 
-  unExpr', typeUnExpr, powerPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
-  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
-  multOpDocD, divideOpDocD, moduloOpDocD, andOpDocD, orOpDocD, binExpr, 
-  binExpr', typeBinExpr, mkVal, litTrueD, litFalseD, litCharD, litFloatD, 
-  litIntD, litStringD, classVarD, classVarDocD, inlineIfD, newObjDocD,
-  varD, staticVarD, extVarD, selfD, enumVarD, classVarD, objVarD, listVarD, 
-  listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, 
-  objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
-  indexOfD, funcAppD, extFuncAppD, newObjD, notNullD, castDocD, castObjDocD, 
-  funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, iterEndD, 
-  listAccessD, listSetD, getFuncD, setFuncD, listSizeFuncD, listAddFuncD, 
-  listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD', breakDocD,
-  continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
-  elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, 
-  observerListName, doubleSlash, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr,
-  valList, appendToBody, surroundBody, getterName, setterName, setMainMethod, 
-  setEmpty, intValue, filterOutObjs)
+  oneLinerD, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
+  typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, voidDocD, constructDocD,
+  paramDocD, paramListDocD, mkParam, methodListDocD, stateVarDocD, 
+  stateVarDefDocD, stateVarListDocD, ifCondDocD, forDocD, forEachDocD, 
+  whileDocD, runStrategyD, listSliceD, checkStateD, notifyObserversD, 
+  varDecDocD, varDecDefDocD, listDecDocD, objDecDefDocD, commentDocD, mkSt, 
+  mkStNoEnd, stringListVals', stringListLists', printStD, stateD, loopStateD, 
+  emptyStateD, assignD, assignToListIndexD, multiAssignError, decrementD, 
+  incrementD, decrement1D, increment1D, discardInputD, discardFileInputD, 
+  openFileRD, openFileWD, openFileAD, closeFileD, discardFileLineD, breakD, 
+  continueD, returnD, multiReturnError, valStateD, freeError, throwD, 
+  initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, switchD,
+  switchAsIfD, ifExistsD, forRangeD, tryCatchD, unOpPrec, notOpDocD,
+  negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, equalOpDocD, 
+  notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
+  lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
+  moduloOpDocD, andOpDocD, orOpDocD, binExpr, binExpr', typeBinExpr, mkVal, 
+  litTrueD, litFalseD, litCharD, litFloatD, litIntD, litStringD, classVarD, 
+  classVarDocD, inlineIfD, newObjDocD, varD, staticVarD, extVarD, selfD, 
+  enumVarD, classVarD, objVarD, listVarD, listOfD, iterVarD, valueOfD, argD, 
+  enumElementD, argsListD, objAccessD, objMethodCallD, objMethodCallNoParamsD, 
+  selfAccessD, listIndexExistsD, indexOfD, funcAppD, extFuncAppD, newObjD, 
+  notNullD, castDocD, castObjDocD, funcD, getD, setD, listSizeD, listAddD, 
+  listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, setFuncD, 
+  listSizeFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
+  listAccessFuncD', staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, 
+  elseIfLabel, forLabel, blockCmtStart, blockCmtEnd, docCmtStart, doubleSlash, 
+  blockCmtDoc, docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc,
+  moduleDoc, commentedModD, docFuncRepr, valList, appendToBody, surroundBody, 
+  getterName, setterName, setMainMethod, intValue, filterOutObjs)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), pd, ProgData(..), progD, TypeData(..), td, ValData(..), vd,
   VarData(..), vard)
-import GOOL.Drasil.Helpers (angles, emptyIfEmpty, 
-  liftA4, liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, 
-  lift4Pair, liftPair, liftPairFst, checkParams)
+import GOOL.Drasil.Helpers (angles, emptyIfEmpty, liftA4, liftA5, liftA6, 
+  liftA7, liftList, lift1List, lift4Pair, liftPair, liftPairFst, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Data.Bifunctor (first)
 import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
@@ -362,25 +364,28 @@ instance InternalFunction JavaCode where
   funcFromData t d = liftA2 fd t (return d)
 
 instance InternalStatement JavaCode where
-  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
+  printSt _ p v _ = printStD p v
 
-  state = fmap statementDocD
-  loopState = fmap (statementDocD . setEmpty)
+  state = stateD
+  loopState = loopStateD
 
-  emptyState = return $ mkStNoEnd empty
+  emptyState = emptyStateD
   statementDoc = fst . unJC
+  statementTerm = snd . unJC
+  
+  stateFromData d t = return (d, t)
 
 instance StatementSym JavaCode where
   -- Terminator determines how statements end
   type Statement JavaCode = (Doc, Terminator)
-  assign vr vl = mkSt <$> liftA2 assignDocD vr vl
-  assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
-  multiAssign _ _ = error "No multiple assignment statements in Java"
+  assign = assignD Semi
+  assignToListIndex = assignToListIndexD
+  multiAssign _ _ = error $ multiAssignError jName
   (&=) = assign
-  (&-=) vr vl = vr &= (valueOf vr #- vl)
-  (&+=) vr vl = mkSt <$> liftA2 plusEqualsDocD vr vl
-  (&++) v = mkSt <$> fmap plusPlusDocD v
-  (&~-) v = v &= (valueOf v #- litInt 1)
+  (&-=) = decrementD
+  (&+=) = incrementD
+  (&++) = increment1D
+  (&~-) = decrement1D
 
   varDec v = mkSt <$> liftA3 varDecDocD v static_ dynamic_
   varDecDef v def = mkSt <$> liftA4 varDecDefDocD v def static_ dynamic_
@@ -391,7 +396,7 @@ instance StatementSym JavaCode where
   objDecNew v vs = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
     vs) static_ dynamic_ 
   extObjDecNew _ = objDecNew
-  objDecNewNoParams v = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v) 
+  objDecNewNoParams v = mkSt <$> liftA4 objDecDefDocD v (newObj (variableType v)
     []) static_ dynamic_ 
   extObjDecNewNoParams _ = objDecNewNoParams
   constDecDef v def = mkSt <$> liftA2 jConstDecDef v def
@@ -407,17 +412,17 @@ instance StatementSym JavaCode where
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = v &= liftA2 jInput (variableType v) inputFunc
-  discardInput = mkSt <$> fmap jDiscardInput inputFunc
+  discardInput = discardInputD jDiscardInput
   getFileInput f v = v &= liftA2 jInput (variableType v) f
-  discardFileInput f = mkSt <$> fmap jDiscardInput f
+  discardFileInput = discardFileInputD jDiscardInput
 
-  openFileR f n = f &= liftA2 jOpenFileR n infile
-  openFileW f n = f &= liftA3 jOpenFileWorA n outfile litFalse
-  openFileA f n = f &= liftA3 jOpenFileWorA n outfile litTrue 
-  closeFile f = valState $ objMethodCall void f "close" []
+  openFileR = openFileRD jOpenFileR
+  openFileW = openFileWD jOpenFileWorA
+  openFileA = openFileAD jOpenFileWorA
+  closeFile = closeFileD "close"
 
   getFileInputLine f v = v &= f $. func "nextLine" string []
-  discardFileLine f = valState $ f $. func "nextLine" string []
+  discardFileLine = discardFileLineD "nextLine"
   stringSplit d vnew s = mkSt <$> liftA2 jStringSplit vnew 
     (funcApp "Arrays.asList" (listType static_ string) 
     [s $. func "split" (listType static_ string) [litString [d]]])
@@ -425,28 +430,25 @@ instance StatementSym JavaCode where
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = return (mkSt breakDocD)  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
-  continue = return (mkSt continueDocD)
+  break = breakD Semi  -- I could have a JumpSym class with functions for "return $ text "break" and then reference those functions here?
+  continue = continueD Semi
 
-  returnState v = mkSt <$> liftList returnDocD [v]
-  multiReturn _ = error "Cannot return multiple values in Java"
+  returnState = returnD Semi
+  multiReturn _ = error $ multiReturnError jName
 
-  valState v = mkSt <$> fmap valDoc v
+  valState = valStateD Semi
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
-  free _ = error "Cannot free variables in Java" -- could set variable to null? Might be misleading.
+  free _ = error $ freeError jName -- could set variable to null? Might be misleading.
 
-  throw errMsg = mkSt <$> fmap jThrowDoc (litString errMsg)
+  throw = throwD jThrowDoc Semi
 
-  initState fsmName initialState = varDecDef (var fsmName string) 
-    (litString initialState)
-  changeState fsmName toState = var fsmName string &= litString toState
+  initState = initStateD
+  changeState = changeStateD
 
-  initObserverList t = listDecDef (var observerListName t)
-  addObserver o = valState $ listAdd obsList lastelem o
-    where obsList = valueOf $ observerListName `listOf` valueType o
-          lastelem = listSize obsList
+  initObserverList = initObserverListD
+  addObserver = addObserverD
 
   inOutCall = jInOutCall funcApp
   extInOutCall m = jInOutCall (extFuncApp m)
@@ -456,31 +458,23 @@ instance StatementSym JavaCode where
 instance ControlStatementSym JavaCode where
   ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b
     bs
-  ifNoElse bs = ifCond bs $ body []
-  switch v cs c = mkStNoEnd <$> lift3Pair switchDocD (state break) v c cs
-  switchAsIf v cs = ifCond cases
-    where cases = map (first (v ?==)) cs
+  ifNoElse = ifNoElseD
+  switch  = switchD
+  switchAsIf = switchAsIfD
 
-  ifExists v ifBody = ifCond [(notNull v, ifBody)]
+  ifExists = ifExistsD
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef i initv) 
-    (valueOf i ?< finalv) (i &+= stepv)
+  forRange = forRangeD 
   forEach e v b = mkStNoEnd <$> liftA7 forEachDocD e blockStart blockEnd
     iterForEachLabel iterInLabel v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
-  tryCatch tb cb = mkStNoEnd <$> liftA2 jTryCatch tb cb
+  tryCatch = tryCatchD jTryCatch
   
-  checkState l = switch (valueOf $ var l string)
-  notifyObservers f t = for initv (v_index ?< listSize obsList) 
-    (var_index &++) notify
-    where obsList = valueOf $ observerListName `listOf` t 
-          var_index = var "observerIndex" int
-          v_index = valueOf var_index
-          initv = varDecDef var_index $ litInt 0
-          notify = oneLiner $ valState $ at obsList v_index $. f
+  checkState = checkStateD
+  notifyObservers = notifyObserversD
 
   getFileInputAll f v = while (f $. func "hasNextLine" bool [])
     (oneLiner $ valState $ listAppend (valueOf v) (f $. func "nextLine" string []))
@@ -678,21 +672,21 @@ jConstDecDef :: VarData -> ValData -> Doc
 jConstDecDef v def = text "final" <+> typeDoc (varType v) <+> varDoc v <+> 
   equals <+> valDoc def
 
-jThrowDoc :: ValData -> Doc
-jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valDoc 
+jThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
+jThrowDoc errMsg = text "throw new" <+> text "Exception" <> parens (valueDoc 
   errMsg)
 
-jTryCatch :: Doc -> Doc -> Doc
+jTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
 jTryCatch tb cb = vcat [
   text "try" <+> lbrace,
-  indent tb,
+  indent $ bodyDoc tb,
   rbrace <+> text "catch" <+> parens (text "Exception" <+> text "exc") <+> 
     lbrace,
-  indent cb,
+  indent $ bodyDoc cb,
   rbrace]
 
-jDiscardInput :: ValData -> Doc
-jDiscardInput inFn = valDoc inFn <> dot <> text "next()"
+jDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
+jDiscardInput inFn = valueDoc inFn <> dot <> text "next()"
 
 jInput :: TypeData -> ValData -> ValData
 jInput t inFn = mkVal t $ jInput' (cType t) 
@@ -705,14 +699,16 @@ jInput t inFn = mkVal t $ jInput' (cType t)
         jInput' Char = valDoc inFn <> dot <> text "next().charAt(0)"
         jInput' _ = error "Attempt to read value of unreadable type"
 
-jOpenFileR :: ValData -> TypeData -> ValData
-jOpenFileR n t = mkVal t $ new <+> text "Scanner" <> parens 
-  (new <+> text "File" <> parens (valDoc n))
+jOpenFileR :: (RenderSym repr) => repr (Value repr) -> repr (Type repr) -> 
+  repr (Value repr)
+jOpenFileR n t = valFromData Nothing t $ new <+> text "Scanner" <> parens 
+  (new <+> text "File" <> parens (valueDoc n))
 
-jOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
-jOpenFileWorA n t wa = mkVal t $ new <+> text "PrintWriter" <> 
+jOpenFileWorA :: (RenderSym repr) => repr (Value repr) -> repr (Type repr) -> 
+  repr (Value repr) -> repr (Value repr)
+jOpenFileWorA n t wa = valFromData Nothing t $ new <+> text "PrintWriter" <> 
   parens (new <+> text "FileWriter" <> parens (new <+> text "File" <> 
-  parens (valDoc n) <> comma <+> valDoc wa))
+  parens (valueDoc n) <> comma <+> valueDoc wa))
 
 jStringSplit :: VarData -> ValData -> Doc
 jStringSplit vnew s = varDoc vnew <+> equals <+> new <+> typeDoc (varType vnew)

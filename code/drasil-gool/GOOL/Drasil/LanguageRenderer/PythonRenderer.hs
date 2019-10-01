@@ -23,22 +23,25 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', enumElementsDocD',
   multiStateDocD, blockDocD, bodyDocD, oneLinerD, outDoc, intTypeDocD, 
   floatTypeDocD, typeDocD, enumTypeDocD, listInnerTypeD, constructDocD, 
   paramListDocD, mkParam, methodListDocD, stateVarListDocD, ifCondDocD, 
-  runStrategyD, assignDocD, multiAssignDoc, plusEqualsDocD', plusPlusDocD', 
-  statementDocD, returnDocD, commentDocD, mkStNoEnd, stringListVals', 
-  stringListLists', unOpPrec, notOpDocD', negateOpDocD, sqrtOpDocD', absOpDocD',
-  expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', asinOpDocD', acosOpDocD', 
-  atanOpDocD', unExpr, unExpr', typeUnExpr, powerPrec, multPrec, andPrec, 
-  orPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, 
-  lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, 
-  divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, litCharD, 
-  litFloatD, litIntD, litStringD, classVarD, newObjDocD', varD, staticVarD, 
-  extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, listOfD, 
-  iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, objMethodCallD,
-  objMethodCallNoParamsD, selfAccessD, listIndexExistsD, indexOfD, funcAppD, 
-  extFuncAppD, newObjD, listSetFuncDocD, castObjDocD, funcD, getD, setD, 
-  listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, listSetD, getFuncD, 
-  setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, iterEndError, 
-  listAccessFuncD, listSetFuncD, breakDocD, continueDocD, dynamicDocD, classDec,
+  runStrategyD, checkStateD, multiAssignDoc, plusEqualsDocD', plusPlusDocD', 
+  returnDocD, commentDocD, mkStNoEnd, stringListVals', stringListLists', stateD,
+  loopStateD, emptyStateD, assignD, assignToListIndexD, decrementD, decrement1D,
+  closeFileD, discardFileLineD,breakD, continueD, returnD, valStateD, throwD, 
+  initStateD, changeStateD, initObserverListD, addObserverD, ifNoElseD, 
+  switchAsIfD, ifExistsD, tryCatchD, unOpPrec, notOpDocD', negateOpDocD, 
+  sqrtOpDocD', absOpDocD', expOpDocD', sinOpDocD', cosOpDocD', tanOpDocD', 
+  asinOpDocD', acosOpDocD', atanOpDocD', unExpr, unExpr', typeUnExpr, powerPrec,
+  multPrec, andPrec, orPrec, equalOpDocD, notEqualOpDocD, greaterOpDocD, 
+  greaterEqualOpDocD, lessOpDocD, lessEqualOpDocD, plusOpDocD, minusOpDocD, 
+  multOpDocD, divideOpDocD, moduloOpDocD, binExpr, typeBinExpr, mkVal, mkVar, 
+  litCharD, litFloatD, litIntD, litStringD, classVarD, newObjDocD', varD, 
+  staticVarD, extVarD, enumVarD, classVarD, objVarD, objVarSelfD, listVarD, 
+  listOfD, iterVarD, valueOfD, argD, enumElementD, argsListD, objAccessD, 
+  objMethodCallD, objMethodCallNoParamsD, selfAccessD, listIndexExistsD, 
+  indexOfD, funcAppD, extFuncAppD, newObjD, listSetFuncDocD, castObjDocD, funcD,
+  getD, setD, listAddD, listAppendD, iterBeginD, iterEndD, listAccessD, 
+  listSetD, getFuncD, setFuncD, listAddFuncD, listAppendFuncD, iterBeginError, 
+  iterEndError, listAccessFuncD, listSetFuncD, dynamicDocD, classDec,
   dot, forLabel, inLabel, observerListName, commentedItem, addCommentsDocD, 
   classDoc, moduleDoc, commentedModD, docFuncRepr, valList, surroundBody, 
   getterName, setterName, filterOutObjs)
@@ -51,7 +54,6 @@ import GOOL.Drasil.Helpers (vibcat,
   lift4Pair, liftPair, liftPairFst, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
-import Data.Bifunctor (first)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), ($+$), parens, empty,
@@ -363,23 +365,26 @@ instance InternalStatement PythonCode where
   printSt nl p v f = mkStNoEnd <$> liftA3 (pyPrint nl) p v 
     (fromMaybe (liftA2 mkVal void (return empty)) f)
 
-  state = fmap statementDocD
-  loopState = fmap statementDocD
+  state = stateD
+  loopState = loopStateD
   
-  emptyState = return $ mkStNoEnd empty
+  emptyState = emptyStateD
   statementDoc = fst . unPC
+  statementTerm = snd . unPC
+
+  stateFromData d t = return (d, t)
 
 instance StatementSym PythonCode where
   -- Terminator determines how statements end
   type Statement PythonCode = (Doc, Terminator)
-  assign vr vl = mkStNoEnd <$> liftA2 assignDocD vr vl
-  assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
+  assign = assignD Empty
+  assignToListIndex = assignToListIndexD
   multiAssign vrs vls = mkStNoEnd <$> lift2Lists multiAssignDoc vrs vls
   (&=) = assign
-  (&-=) vr vl = vr &= (valueOf vr #- vl)
+  (&-=) = decrementD
   (&+=) vr vl = mkStNoEnd <$> liftA3 plusEqualsDocD' vr plusOp vl
   (&++) v = mkStNoEnd <$> liftA2 plusPlusDocD' v plusOp
-  (&~-) v = v &= (valueOf v #- litInt 1)
+  (&~-) = decrement1D
 
   varDec _ = return (mkStNoEnd empty)
   varDecDef = assign
@@ -410,39 +415,36 @@ instance StatementSym PythonCode where
   openFileR f n = f &= funcApp "open" infile [n, litString "r"]
   openFileW f n = f &= funcApp "open" outfile [n, litString "w"]
   openFileA f n = f &= funcApp "open" outfile [n, litString "a"]
-  closeFile f = valState $ objMethodCall void f "close" []
+  closeFile = closeFileD "close"
 
   getFileInputLine = getFileInput
-  discardFileLine f = valState $ objMethodCall string f "readline" []
+  discardFileLine = discardFileLineD "readline"
   stringSplit d vnew s = assign vnew (objAccess s (func "split" 
     (listType static_ string) [litString [d]]))  
 
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = return (mkStNoEnd breakDocD)
-  continue = return (mkStNoEnd continueDocD)
+  break = breakD Empty
+  continue = continueD Empty
 
-  returnState v = mkStNoEnd <$> liftList returnDocD [v]
+  returnState = returnD Empty
   multiReturn [] = error "Attempt to write return statement with no return variables"
-  multiReturn vs = mkStNoEnd <$> liftList returnDocD vs
+  multiReturn vs = return $ mkStNoEnd $ returnDocD vs
 
-  valState v = mkStNoEnd <$> fmap valDoc v
+  valState = valStateD Empty
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
   free v = v &= valueOf (var "None" void)
 
-  throw errMsg = mkStNoEnd <$> fmap pyThrow (litString errMsg)
+  throw = throwD pyThrow Empty
 
-  initState fsmName initialState = varDecDef (var fsmName string) 
-    (litString initialState)
-  changeState fsmName toState = var fsmName string &= litString toState
+  initState = initStateD
+  changeState = changeStateD
 
-  initObserverList t = listDecDef (var observerListName t)
-  addObserver o = valState $ listAdd obsList lastelem o
-    where obsList = valueOf $ observerListName `listOf` valueType o
-          lastelem = listSize obsList
+  initObserverList = initObserverListD
+  addObserver = addObserverD
 
   inOutCall = pyInOutCall funcApp
   extInOutCall m = pyInOutCall (extFuncApp m)
@@ -452,12 +454,11 @@ instance StatementSym PythonCode where
 instance ControlStatementSym PythonCode where
   ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd
     b bs
-  ifNoElse bs = ifCond bs $ body []
+  ifNoElse = ifNoElseD
   switch = switchAsIf
-  switchAsIf v cs = ifCond cases
-    where cases = map (first (v ?==)) cs
+  switchAsIf = switchAsIfD
 
-  ifExists v ifBody = ifCond [(notNull v, ifBody)]
+  ifExists = ifExistsD
 
   for _ _ _ _ = error $ "Classic for loops not available in Python, please " ++
     "use forRange, forEach, or while instead"
@@ -467,9 +468,9 @@ instance ControlStatementSym PythonCode where
     iterInLabel v b
   while v b = mkStNoEnd <$> liftA2 pyWhile v b
 
-  tryCatch tb cb = mkStNoEnd <$> liftA2 pyTryCatch tb cb
+  tryCatch = tryCatchD pyTryCatch
 
-  checkState l = switch (valueOf $ var l string)
+  checkState = checkStateD
   notifyObservers f t = forRange index initv (listSize obsList) 
     (litInt 1) notify
     where obsList = valueOf $ observerListName `listOf` t
@@ -648,8 +649,8 @@ pyInput inSrc v = v &= pyInput' (getType $ variableType v)
         pyInput' Char = inSrc
         pyInput' _ = error "Attempt to read a value of unreadable type"
 
-pyThrow ::  ValData -> Doc
-pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valDoc errMsg)
+pyThrow :: (RenderSym repr) => repr (Value repr) -> Doc
+pyThrow errMsg = text "raise" <+> text "Exception" <> parens (valueDoc errMsg)
 
 pyForRange :: VarData -> Doc ->  ValData ->  ValData ->
   ValData -> Doc -> Doc
@@ -668,12 +669,12 @@ pyWhile v b = vcat [
   text "while" <+> valDoc v <> colon,
   indent b]
 
-pyTryCatch :: Doc -> Doc -> Doc
+pyTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
 pyTryCatch tryB catchB = vcat [
   text "try" <+> colon,
-  indent tryB,
+  indent $ bodyDoc tryB,
   text "except" <+> text "Exception" <+> colon,
-  indent catchB]
+  indent $ bodyDoc catchB]
 
 pyListSlice :: VarData -> ValData -> 
   ValData -> ValData -> ValData -> Doc

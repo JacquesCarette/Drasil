@@ -22,14 +22,19 @@ import GOOL.Drasil.Symantics (Label,
   ClassSym(..), ModuleSym(..), BlockCommentSym(..))
 import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD, 
   enumDocD, enumElementsDocD, multiStateDocD, blockDocD, bodyDocD, oneLinerD, 
-  printDoc, outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
+  outDoc, printFileDocD, boolTypeDocD, intTypeDocD, charTypeDocD, 
   stringTypeDocD, typeDocD, enumTypeDocD, listTypeDocD, listInnerTypeD, 
   voidDocD, constructDocD, paramDocD, paramListDocD, mkParam, methodDocD, 
   methodListDocD, stateVarDocD, stateVarDefDocD, stateVarListDocD, ifCondDocD, 
-  switchDocD, forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, 
-  assignDocD, plusEqualsDocD, plusPlusDocD, varDecDocD, varDecDefDocD, 
-  listDecDocD, listDecDefDocD, objDecDefDocD, constDecDefDocD, statementDocD, 
-  returnDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', commentDocD, 
+  forDocD, forEachDocD, whileDocD, runStrategyD, listSliceD, checkStateD, 
+  notifyObserversD, varDecDocD, varDecDefDocD, listDecDocD, listDecDefDocD, 
+  objDecDefDocD, mkSt, mkStNoEnd, stringListVals', stringListLists', printStD, 
+  stateD, loopStateD, emptyStateD, assignD, assignToListIndexD, 
+  multiAssignError, decrementD, incrementD, decrement1D, increment1D, 
+  constDecDefD, discardInputD, openFileRD, openFileWD, openFileAD, closeFileD, 
+  discardFileLineD, breakD, continueD, returnD, multiReturnError, valStateD, 
+  freeError, throwD, initStateD, changeStateD, initObserverListD, addObserverD, 
+  ifNoElseD, switchD, switchAsIfD, ifExistsD, forRangeD, tryCatchD, commentDocD,
   unOpPrec, notOpDocD, negateOpDocD, unExpr, unExpr', typeUnExpr, powerPrec, 
   equalOpDocD, notEqualOpDocD, greaterOpDocD, greaterEqualOpDocD, lessOpDocD, 
   lessEqualOpDocD, plusOpDocD, minusOpDocD, multOpDocD, divideOpDocD, 
@@ -43,22 +48,19 @@ import GOOL.Drasil.LanguageRenderer (addExt, fileDoc', moduleDocD, classDocD,
   castObjDocD, funcD, getD, setD, listSizeD, listAddD, listAppendD, iterBeginD, 
   iterEndD, listAccessD, listSetD, getFuncD, setFuncD, listAddFuncD, 
   listAppendFuncD, iterBeginError, iterEndError, listAccessFuncD, listSetFuncD, 
-  breakDocD, continueDocD, staticDocD, dynamicDocD, privateDocD, publicDocD, 
-  dot, new, blockCmtStart, blockCmtEnd, docCmtStart, observerListName, 
-  doubleSlash, elseIfLabel, inLabel, blockCmtDoc, docCmtDoc, commentedItem, 
-  addCommentsDocD, functionDox, classDoc, moduleDoc, commentedModD, docFuncRepr,
-  appendToBody, surroundBody, getterName, setterName, setMainMethod, setEmpty, 
-  filterOutObjs)
+  staticDocD, dynamicDocD, privateDocD, publicDocD, dot, new, blockCmtStart, 
+  blockCmtEnd, docCmtStart, doubleSlash, elseIfLabel, inLabel, blockCmtDoc, 
+  docCmtDoc, commentedItem, addCommentsDocD, functionDox, classDoc, moduleDoc, 
+  commentedModD, docFuncRepr, appendToBody, surroundBody, getterName, 
+  setterName, setMainMethod, filterOutObjs)
 import GOOL.Drasil.Data (Terminator(..), FileData(..), file, FuncData(..), fd, 
   ModData(..), md, updateModDoc, MethodData(..), mthd, OpData(..), 
   ParamData(..), pd, updateParamDoc, ProgData(..), progD, TypeData(..), td, 
   ValData(..), vd, updateValDoc, Binding(..), VarData(..), vard)
-import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, 
-  liftA5, liftA6, liftA7, liftList, lift1List, lift3Pair, lift4Pair,
-  liftPair, liftPairFst, checkParams)
+import GOOL.Drasil.Helpers (emptyIfEmpty, liftA4, liftA5, liftA6, liftA7, 
+  liftList, lift1List, lift4Pair, liftPair, liftPairFst, checkParams)
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
-import Data.Bifunctor (first)
 import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, comma, empty,
@@ -362,24 +364,27 @@ instance InternalFunction CSharpCode where
   funcFromData t d = liftA2 fd t (return d)
 
 instance InternalStatement CSharpCode where
-  printSt _ p v _ = mkSt <$> liftA2 printDoc p v
-  
-  state = fmap statementDocD
-  loopState = fmap (statementDocD . setEmpty)
+  printSt _ p v _ = printStD p v
 
-  emptyState = return $ mkStNoEnd empty
+  state = stateD
+  loopState = loopStateD
+
+  emptyState = emptyStateD
   statementDoc = fst . unCSC
+  statementTerm = snd . unCSC
+  
+  stateFromData d t = return (d, t)
 
 instance StatementSym CSharpCode where
   type Statement CSharpCode = (Doc, Terminator)
-  assign vr vl = mkSt <$> liftA2 assignDocD vr vl
-  assignToListIndex lst index v = valState $ listSet (valueOf lst) index v
-  multiAssign _ _ = error "No multiple assignment statements in C#"
+  assign = assignD Semi
+  assignToListIndex = assignToListIndexD
+  multiAssign _ _ = error $ multiAssignError csName
   (&=) = assign
-  (&-=) vr vl = vr &= (valueOf vr #- vl)
-  (&+=) vr vl = mkSt <$> liftA2 plusEqualsDocD vr vl
-  (&++) v = mkSt <$> fmap plusPlusDocD v
-  (&~-) v = v &= (valueOf v #- litInt 1)
+  (&-=) = decrementD
+  (&+=) = incrementD
+  (&++) = increment1D
+  (&~-) = decrement1D
 
   varDec v = csVarDec (variableBind v) $ mkSt <$> liftA3 varDecDocD v static_ 
     dynamic_ 
@@ -397,7 +402,7 @@ instance StatementSym CSharpCode where
   objDecNewNoParams v = csVarDec (variableBind v) $ mkSt <$> liftA4 objDecDefDocD v 
     (newObj (variableType v) []) static_ dynamic_ 
   extObjDecNewNoParams _ = objDecNewNoParams
-  constDecDef v def = mkSt <$> liftA2 constDecDefDocD v def
+  constDecDef = constDecDefD
 
   print v = outDoc False printFunc v Nothing
   printLn v = outDoc True printLnFunc v Nothing
@@ -410,44 +415,42 @@ instance StatementSym CSharpCode where
   printFileStrLn f s = outDoc True (printFileLnFunc f) (litString s) (Just f)
 
   getInput v = v &= liftA2 csInput (variableType v) inputFunc
-  discardInput = mkSt <$> fmap csDiscardInput inputFunc
+  discardInput = discardInputD csDiscardInput
   getFileInput f v = v &= liftA2 csInput (variableType v) (fmap csFileInput f)
   discardFileInput f = valState $ fmap csFileInput f
 
-  openFileR f n = f &= liftA2 csOpenFileR n infile
-  openFileW f n = f &= liftA3 csOpenFileWorA n outfile litFalse
-  openFileA f n = f &= liftA3 csOpenFileWorA n outfile litTrue
-  closeFile f = valState $ objMethodCall void f "Close" []
+  openFileR = openFileRD csOpenFileR
+  openFileW = openFileWD csOpenFileWorA
+  openFileA = openFileAD csOpenFileWorA
+  closeFile = closeFileD "Close"
 
   getFileInputLine = getFileInput
-  discardFileLine f = valState $ fmap csFileInput f
+  discardFileLine = discardFileLineD "ReadLine"
   stringSplit d vnew s = assign vnew $ newObj (listType dynamic_ string) 
     [s $. func "Split" (listType static_ string) [litChar d]]
 
   stringListVals = stringListVals'
   stringListLists = stringListLists'
 
-  break = return (mkSt breakDocD)
-  continue = return (mkSt continueDocD)
+  break = breakD Semi
+  continue = continueD Semi
 
-  returnState v = mkSt <$> liftList returnDocD [v]
-  multiReturn _ = error "Cannot return multiple values in C#"
+  returnState = returnD Semi
+  multiReturn _ = error $ multiReturnError csName 
 
-  valState v = mkSt <$> fmap valDoc v
+  valState = valStateD Semi
 
   comment cmt = mkStNoEnd <$> fmap (commentDocD cmt) commentStart
 
-  free _ = error "Cannot free variables in C#" -- could set variable to null? Might be misleading.
+  free _ = error $ freeError csName -- could set variable to null? Might be misleading.
 
-  throw errMsg = mkSt <$> fmap csThrowDoc (litString errMsg)
+  throw = throwD csThrowDoc Semi
 
-  initState fsmName initialState = varDecDef (var fsmName string) (litString initialState)
-  changeState fsmName toState = var fsmName string &= litString toState
+  initState = initStateD
+  changeState = changeStateD
 
-  initObserverList t = listDecDef (var observerListName t)
-  addObserver o = valState $ listAdd obsList lastelem o
-    where obsList = valueOf $ observerListName `listOf` valueType o
-          lastelem = listSize obsList
+  initObserverList = initObserverListD
+  addObserver = addObserverD
 
   inOutCall = csInOutCall funcApp
   extInOutCall m = csInOutCall (extFuncApp m)
@@ -457,31 +460,23 @@ instance StatementSym CSharpCode where
 instance ControlStatementSym CSharpCode where
   ifCond bs b = mkStNoEnd <$> lift4Pair ifCondDocD ifBodyStart elseIf blockEnd b
     bs
-  ifNoElse bs = ifCond bs $ body []
-  switch v cs c = mkStNoEnd <$> lift3Pair switchDocD (state break) v c cs
-  switchAsIf v cs = ifCond cases
-    where cases = map (first (v ?==)) cs
+  ifNoElse = ifNoElseD
+  switch = switchD
+  switchAsIf = switchAsIfD
 
-  ifExists v ifBody = ifCond [(notNull v, ifBody)]
+  ifExists = ifExistsD
 
   for sInit vGuard sUpdate b = mkStNoEnd <$> liftA6 forDocD blockStart blockEnd 
     (loopState sInit) vGuard (loopState sUpdate) b
-  forRange i initv finalv stepv = for (varDecDef i initv) 
-    (valueOf i ?< finalv) (i &+= stepv)
+  forRange = forRangeD
   forEach e v b = mkStNoEnd <$> liftA7 forEachDocD e blockStart blockEnd 
     iterForEachLabel iterInLabel v b
   while v b = mkStNoEnd <$> liftA4 whileDocD blockStart blockEnd v b
 
-  tryCatch tb cb = mkStNoEnd <$> liftA2 csTryCatch tb cb
+  tryCatch = tryCatchD csTryCatch
 
-  checkState l = switch (valueOf $ var l string)
-  notifyObservers f t = for initv (v_index ?< listSize obsList) 
-    (var_index &++) notify
-    where obsList = valueOf $ observerListName `listOf` t
-          var_index = var "observerIndex" int
-          v_index = valueOf var_index
-          initv = varDecDef var_index $ litInt 0
-          notify = oneLiner $ valState $ at obsList v_index $. f
+  checkState = checkStateD
+  notifyObservers = notifyObserversD
 
   getFileInputAll f v = while ((f $. liftA2 fd bool (return $ text 
     ".EndOfStream")) ?!) (oneLiner $ valState $ listAppend (valueOf v) (fmap 
@@ -623,21 +618,24 @@ csCast t v = csCast' (getType t) (getType $ valueType v)
   where csCast' Float String = funcApp "Double.Parse" float [v]
         csCast' _ _ = liftA2 mkVal t $ liftA2 castObjDocD (fmap castDocD t) v
 
-csThrowDoc :: ValData -> Doc
+csThrowDoc :: (RenderSym repr) => repr (Value repr) -> Doc
 csThrowDoc errMsg = text "throw new" <+> text "Exception" <> 
-  parens (valDoc errMsg)
+  parens (valueDoc errMsg)
 
-csTryCatch :: Doc -> Doc -> Doc
-csTryCatch tb cb= vcat [
+csTryCatch :: (RenderSym repr) => repr (Body repr) -> repr (Body repr) -> Doc
+csTryCatch tb cb = vcat [
   text "try" <+> lbrace,
-  indent tb,
+  indent $ bodyDoc tb,
   rbrace <+> text "catch" <+> 
     lbrace,
-  indent cb,
+  indent $ bodyDoc cb,
   rbrace]
 
-csDiscardInput :: ValData -> Doc
-csDiscardInput = valDoc
+csDiscardInput :: (RenderSym repr) => repr (Value repr) -> Doc
+csDiscardInput = valueDoc
+
+csFileInput :: ValData -> ValData
+csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
 
 csInput :: TypeData -> ValData -> ValData
 csInput t inFn = mkVal t $ text (csInput' (cType t)) <> 
@@ -649,16 +647,15 @@ csInput t inFn = mkVal t $ text (csInput' (cType t)) <>
         csInput' Char = "Char.Parse"
         csInput' _ = error "Attempt to read value of unreadable type"
 
-csFileInput :: ValData -> ValData
-csFileInput f = mkVal (valType f) (valDoc f <> dot <> text "ReadLine()")
+csOpenFileR :: (RenderSym repr) => repr (Value repr) -> repr (Type repr) -> 
+  repr (Value repr)
+csOpenFileR n r = valFromData Nothing r $ new <+> getTypeDoc r <> 
+  parens (valueDoc n)
 
-csOpenFileR :: ValData -> TypeData -> ValData
-csOpenFileR n r = mkVal r $ new <+> typeDoc r <> 
-  parens (valDoc n)
-
-csOpenFileWorA :: ValData -> TypeData -> ValData -> ValData
-csOpenFileWorA n w a = mkVal w $ new <+> typeDoc w <> 
-  parens (valDoc n <> comma <+> valDoc a)
+csOpenFileWorA :: (RenderSym repr) => repr (Value repr) -> repr (Type repr) -> 
+  repr (Value repr) -> repr (Value repr)
+csOpenFileWorA n w a = valFromData Nothing w $ new <+> getTypeDoc w <> 
+  parens (valueDoc n <> comma <+> valueDoc a)
 
 csRef :: Doc -> Doc
 csRef p = text "ref" <+> p

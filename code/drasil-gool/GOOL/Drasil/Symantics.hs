@@ -80,9 +80,13 @@ class (BlockSym repr) => BodySym repr where
 
   addComments :: Label -> repr (Body repr) -> repr (Body repr)
 
+  bodyDoc :: repr (Body repr) -> Doc
+
 class (StatementSym repr) => BlockSym repr where
   type Block repr
   block   :: [repr (Statement repr)] -> repr (Block repr)
+
+  docBlock :: Doc -> repr (Block repr)
 
 class (PermanenceSym repr) => TypeSym repr where
   type Type repr
@@ -290,6 +294,8 @@ class (ValueExpression repr) => InternalValue repr where
 
   cast :: repr (Type repr) -> repr (Value repr) -> repr (Value repr)
 
+  valFromData :: Maybe Int -> repr (Type repr) -> Doc -> repr (Value repr)
+
 -- The cyclic constraints issue arises here too. I've constrained this by ValueExpression,
 -- but really one might want one of these values as part of an expression, so the
 -- constraint would have to go both ways. I'm not sure what the solution is for
@@ -356,6 +362,11 @@ class (ValueSym repr, InternalValue repr) => InternalFunction repr where
   listSetFunc    :: repr (Value repr) -> repr (Value repr) -> 
     repr (Value repr) -> repr (Function repr)
 
+  functionType :: repr (Function repr) -> repr (Type repr)
+  functionDoc :: repr (Function repr) -> Doc
+
+  funcFromData :: repr (Type repr) -> Doc -> repr (Function repr)
+
 class (Selector repr) => InternalStatement repr where
   -- newLn, printFunc, value to print, maybe a file to print to 
   printSt :: Bool -> repr (Value repr) -> repr (Value repr) -> 
@@ -363,6 +374,9 @@ class (Selector repr) => InternalStatement repr where
 
   state     :: repr (Statement repr) -> repr (Statement repr)
   loopState :: repr (Statement repr) -> repr (Statement repr)
+
+  emptyState   :: repr (Statement repr)
+  statementDoc :: repr (Statement repr) -> Doc
 
 class (ValueSym repr, Selector repr, SelectorFunction repr, FunctionSym repr,
   InternalFunction repr, InternalStatement repr) => StatementSym repr where

@@ -632,10 +632,11 @@ represented, not the types of the values in the target languages, though adding
 value-types to GOOL's type system is planned for the future, discussed further 
 in Section \ref{future}. Examples of internal types in GOOL, then, are 
 \verb|Variable|, \verb|Value|, \verb|Type|, \verb|Scope|, \verb|Statement|, 
-\verb|Method|, \verb|Class|, and \verb|Module|. A \verb|Statement| in GOOL, for 
-example, is a representation of a piece of code that is a statement. Below is 
-an excerpt of GOOL's definition for the \verb|VariableSym| type class; that is, 
-the type class containing functions for defining variables in GOOL.
+\verb|Method|, \verb|Class|, \verb|Module|, and \verb|Program|. A 
+\verb|Statement| in GOOL, for example, is a representation of a piece of code 
+that is a statement. Below is an excerpt of GOOL's definition for the 
+\verb|VariableSym| type class; that is, the type class containing functions for 
+defining variables in GOOL.
 \begin{lstlisting}
 class (TypeSym repr) 
   => VariableSym repr where
@@ -676,6 +677,73 @@ This should not be surprising given how we used \verb|var| to define variables
 like \verb|var| \verb|"foo"| \verb|int| in Section \ref{syntax}. \verb|Label| 
 is simply a Haskell type synonym for \verb|String|. 
 
+Shown below is the instance of the type class excerpt shown above for 
+generating Java code. 
+\begin{lstlisting}
+instance VariableSym JavaCode where
+  type Variable JavaCode = VarData
+  var = varD
+\end{lstlisting}
+We have instantiated \verb|repr| as \verb|JavaCode|, which is a monad defined 
+as:
+\begin{lstlisting}
+newtype JavaCode a = JC {unJC :: a}
+\end{lstlisting}
+\verb|unJC| extracts the underlying value from a value wrapped in 
+\verb|JavaCode|. Calling \verb|unJC| on a program written in GOOL allows 
+Haskell to infer that the \verb|repr| in the GOOL program should be concretized 
+as \verb|JavaCode| and to resolve the functions using the definitions from the 
+\verb|JavaCode| instances of the type classes, thereby generating Java code.
+
+The second line of the instance states that the underlying type for 
+\verb|Variable|s in Java is \verb|VarData|, which is a record that holds data 
+about the variable to be used later. The definition of \verb|VarData| is shown 
+below.
+\begin{lstlisting}
+data VarData = VarD {
+  varBind :: Binding, 
+  varName :: String, 
+  varType :: TypeData, 
+  varDoc :: Doc}
+\end{lstlisting}
+Stored in the \verb|VarData| structure is a variable's binding, either 
+\verb|Static| or \verb|Dynamic|, the name of the variable as a \verb|String|, 
+the type as a \verb|TypeData| structure, which is the underlying type for 
+\verb|Type|s in GOOL for Java, and how the variable should appear in the 
+generated code, represented as a \verb|Doc|. \verb|Doc| comes from the 
+\verb|Text.PrettyPrint.HughesPJ| Haskell package and represents formatted text. 
+In common between all of GOOL's underlying data structures is that they each 
+contain a \verb|Doc|. For some types, like a \verb|Block|, the underlying type 
+is in fact nothing more than a \verb|Doc|. The \verb|Program|-level \verb|Doc|s 
+are ultimately what will be printed to files to generate code. Keeping in mind 
+that a \verb|VarData| structure will usually be wrapped in a \verb|repr|, such 
+as \verb|JavaCode|, the pieces of the wrapped \verb|VarData| can be accessed in 
+one of two ways. The first way is to use Haskell's \verb|fmap| in combination 
+with the built-in accessor functions for \verb|VarData|. For example, 
+\verb|fmap| \verb|varDoc| will take a \verb|VarData| and return a 
+\verb|JavaCode| \verb|Doc|. Functions on \verb|Doc|s can then be lifted to work 
+on \verb|JavaCode| \verb|Doc|s using Haskell's \verb|liftA| family of 
+functions. This method only works if the \verb|Variable| \verb|repr| is known 
+to be equivalent to \verb|VarData|, though. That is, it works in the context of 
+\verb|JavaCode| but not in a generic \verb|repr| context. For when one needs to 
+access a piece of \verb|VarData| while in a generic \verb|repr| context, GOOL 
+offers its own ``symantic'' accessor functions. For example, \verb|variableDoc| 
+is part of the \verb|VariableSym| type class, with signature:
+\begin{lstlisting}
+variableDoc :: repr (Variable repr) 
+                 -> Doc
+\end{lstlisting}
+and definition for the \verb|JavaCode| instance:
+\begin{lstlisting}
+variableDoc = varDoc . unJC
+\end{lstlisting}
+Since \verb|variableDoc| is part of the type class, it can be used in a generic 
+\verb|repr| context, and since its definition is in an instance of the type 
+class where \verb|Variable| \verb|repr| is known to resolve to \verb|VarData|, 
+it can be defined simply by calling the \verb|varDoc| accessor on the unwrapped 
+\verb|VarData|. GOOL offers many functions similar to \verb|variableDoc|, for 
+accessing the other pieces of \verb|VarData| and for accessing the pieces of 
+the underlying data structures for other internal GOOL types.
 \section{Higher-level GOOL functions} \label{patterns}
 - simple examples: log, sin, etc.  , args \\
 - bigger examples: print, listAppend, listSize \\

@@ -599,7 +599,83 @@ will compile the Doxygen documentation with the generated Doxygen configuration
 file.
 
 Syntax for higher-level patterns will be discussed in Section \ref{patterns}.
+
 \section{GOOL Implementation} \label{implementation}
+
+GOOL is embedded in Haskell in the finally-tagless style originally described 
+in \cite{carette2009finally}. In finally-tagless style, the internal 
+representation of an embedded DSL is a group of functions defined in the host 
+language, rather than the more traditional use of data constructors to build an 
+interpretable abstract syntax tree (AST) for the DSL. Whereas an AST of data 
+constructors must have a separately-defined interpreter, the functions 
+themselves in finally-tagless compose to form the interpreter; the definitions 
+of the functions describe how each is interpreted. Thus, the GOOL ``keywords'' 
+referred to in the previous section were really Haskell functions that, when 
+resolved, yield representations of the code to be generated. 
+
+Finally-tagless facilitates development of a family of interpreters for a DSL 
+by having the functions act on representations, where a type class in Haskell 
+is used to abstract over the representation. The authors of 
+\cite{carette2009finally} coined the term ``symantic'' to describe such a type 
+class, because the interface of the type class defines the syntax of the DSL 
+and the instances of the type class define the semantics. A separate type class 
+instance is written for each representation, each corresponding to one member 
+in the family of interpreters. This suits GOOL's needs nicely, for GOOL 
+requires multiple interpreters (one for each target language) of the same 
+language (GOOL).
+
+GOOL is a collection of these "symantic" type classes and instances. For 
+organizational purposes, the functions comprising GOOL's syntax are split 
+across many type classes, roughly based on the internal types upon which the 
+functions act. GOOL's internal types correspond to the types of code being 
+represented, not the types of the values in the target languages, though adding 
+value-types to GOOL's type system is planned for the future, discussed further 
+in Section \ref{future}. Examples of internal types in GOOL, then, are 
+\verb|Variable|, \verb|Value|, \verb|Type|, \verb|Scope|, \verb|Statement|, 
+\verb|Method|, \verb|Class|, and \verb|Module|. A \verb|Statement| in GOOL, for 
+example, is a representation of a piece of code that is a statement. Below is 
+an excerpt of GOOL's definition for the \verb|VariableSym| type class; that is, 
+the type class containing functions for defining variables in GOOL.
+\begin{lstlisting}
+class (TypeSym repr) 
+  => VariableSym repr where
+    type Variable repr
+    var :: Label -> repr (Type repr) 
+             -> repr (Variable repr)
+\end{lstlisting}
+Since variables have types, a type for representing variables must also know 
+how to represent types, thus we constrain our \verb|repr| type variable to be 
+an instance of \verb|TypeSym|, the symantic type class containing functions for 
+representing types, like the \verb|int|, \verb|float|, \verb|string|, and 
+\verb|listType| functions described in Section \ref{syntax}. 
+
+The types used in the signatures of GOOL's functions have the general form 
+\verb|repr| \verb|(X repr)| for some type \verb|X|, examples of which can be 
+seen in the type signature for \verb|var|. To understand these types, first 
+remember that we will write different instances of this type class for each 
+different language GOOL targets. That means the \verb|repr| type variable will 
+be instantiated with a type that represents code in a specific target language. 
+In the \verb|repr| \verb|(X repr)| types, the type variable \verb|repr| appears 
+twice because there are two layers of abstraction: abstraction over the target 
+language, handled by the outer \verb|repr|, and abstraction over the underlying 
+types to which GOOL's types map, handled by the inner \verb|repr|.
+
+This abstraction over the underlying types that GOOL's types represent happens 
+because \verb|X repr| is a type family. The first line of the body of the 
+\verb|VariableSym| typeclass is \verb|type| \verb|Variable| \verb|repr|. This 
+line declares the type family \verb|Variable| \verb|repr|. Since the type is 
+parameterized by \verb|repr|, each instance we write of this typeclass can 
+define the \verb|Variable| family member differently. Usually different 
+renderers will use the same underlying type for a given GOOL type, but the 
+ability to change it on a per-target-language basis is useful for when a 
+language requires storing more or less information than others.
+
+The type signature for the \verb|var| function says that \verb|var| takes a 
+label and a representation of a type and yields a representation of a variable. 
+This should not be surprising given how we used \verb|var| to define variables 
+like \verb|var| \verb|"foo"| \verb|int| in Section \ref{syntax}. \verb|Label| 
+is simply a Haskell type synonym for \verb|String|. 
+
 \section{Higher-level GOOL functions} \label{patterns}
 - simple examples: log, sin, etc.  , args \\
 - bigger examples: print, listAppend, listSize \\

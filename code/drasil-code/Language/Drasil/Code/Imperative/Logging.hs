@@ -3,10 +3,10 @@ module Language.Drasil.Code.Imperative.Logging (
 ) where
 
 import Language.Drasil.Code.Imperative.State (State(..))
-import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, RenderSym(..),
-  BodySym(..), BlockSym(..), StateTypeSym(..), VariableSym(..), ValueSym(..),
-  StatementSym(..))
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
+
+import GOOL.Drasil (Label, RenderSym(..), BodySym(..), BlockSym(..), 
+  TypeSym(..), VariableSym(..), ValueSym(..), StatementSym(..))
 
 import Data.Maybe (maybeToList)
 import Control.Applicative ((<$>))

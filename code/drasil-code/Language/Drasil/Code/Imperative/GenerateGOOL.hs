@@ -3,14 +3,15 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (
 ) where
 
 import Language.Drasil
-import Language.Drasil.Code.Code as C (CodeType(List, Object))
 import Language.Drasil.Code.Imperative.State (State(..))
-import Language.Drasil.Code.Imperative.GOOL.Symantics (Label, ProgramSym(..), 
-  RenderSym(..), AuxiliarySym(..), StateTypeSym(..), VariableSym(..), 
-  ValueSym(..), ValueExpression(..), StatementSym(..), ParameterSym(..),
-  MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..))
+import Language.Drasil.Code.Imperative.GOOL.Symantics (AuxiliarySym(..))
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Comments(..), 
   Name)
+  
+import GOOL.Drasil (Label, RenderSym(..), TypeSym(..), 
+  VariableSym(..), ValueSym(..), ValueExpression(..), StatementSym(..), 
+  ParameterSym(..), MethodSym(..), StateVarSym(..), ClassSym(..), ModuleSym(..),
+  CodeType(..), ProgData)
 
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (fromMaybe, maybe)
@@ -35,7 +36,7 @@ genModule n desc maybeMs maybeCs = do
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n ls ms cs
 
-genDoxConfig :: (AuxiliarySym repr) => String -> repr (Program repr) ->
+genDoxConfig :: (AuxiliarySym repr) => String -> ProgData ->
   Reader State [repr (Auxiliary repr)]
 genDoxConfig n p = do
   g <- ask
@@ -51,7 +52,7 @@ publicClass desc n l vs ms = do
     then docClass desc (pubClass n l vs ms) 
     else pubClass n l vs ms
 
-fApp :: (RenderSym repr) => String -> String -> repr (StateType repr) -> 
+fApp :: (RenderSym repr) => String -> String -> repr (Type repr) -> 
   [repr (Value repr)] -> Reader State (repr (Value repr))
 fApp m s t vl = do
   g <- ask
@@ -67,6 +68,6 @@ fAppInOut m n ins outs both = do
 
 mkParam :: (RenderSym repr) => repr (Variable repr) -> repr (Parameter repr)
 mkParam v = paramFunc (getType $ variableType v) v
-  where paramFunc (C.List _) = pointerParam
-        paramFunc (C.Object _) = pointerParam
-        paramFunc _ = stateParam
+  where paramFunc (List _) = pointerParam
+        paramFunc (Object _) = pointerParam
+        paramFunc _ = param

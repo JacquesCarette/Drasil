@@ -38,6 +38,7 @@ resolver: lts-12.25
 packages:
 - drasil-lang/
 - drasil-utils/
+- drasil-gool/
 - drasil-build/
 - drasil-code/
 - drasil-theory/

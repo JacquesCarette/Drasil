@@ -1,11 +1,13 @@
 module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
-  assumptions, constAccel, launchOrigin, pointMass, posXDirection, targetXAxis,
-  timeStartZero, twoDMotion, yAxisGravity) where
+  assumptions, constAccel, gravAccelValue, launchOrigin, pointMass, 
+  posXDirection, targetXAxis, timeStartZero, twoDMotion, yAxisGravity) where
 
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (assumpDom)
+import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
+
+import Data.Drasil.Concepts.Documentation (assumpDom, value)
 import Data.Drasil.Concepts.Math (cartesian, xAxis, xDir, yAxis, yDir)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (acceleration, collision, distance, gravity, time, twoD)
@@ -13,13 +15,14 @@ import Data.Drasil.Concepts.Physics (acceleration, collision, distance, gravity,
 import Drasil.Projectile.Concepts (launcher, projectile, target)
 
 assumptions :: [ConceptInstance]
-assumptions = [twoDMotion, cartSyst, yAxisGravity, launchOrigin,
-  targetXAxis, posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag,
-  pointMass, freeFlight, neglectCurv, timeStartZero]
+assumptions = [twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis, 
+  posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, pointMass, 
+  freeFlight, neglectCurv, timeStartZero, gravAccelValue]
 
 twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis,
   posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag,
-  pointMass, freeFlight, neglectCurv, timeStartZero :: ConceptInstance
+  pointMass, freeFlight, neglectCurv, timeStartZero, 
+  gravAccelValue :: ConceptInstance
 twoDMotion      = cic "twoDMotion"      twoDMotionDesc      "twoDMotion"      assumpDom
 cartSyst        = cic "cartSyst"        cartSystDesc        "cartSyst"        assumpDom
 yAxisGravity    = cic "yAxisGravity"    yAxisGravityDesc    "yAxisGravity"    assumpDom
@@ -34,6 +37,7 @@ pointMass       = cic "pointMass"       pointMassDesc       "pointMass"       as
 freeFlight      = cic "freeFlight"      freeFlightDesc      "freeFlight"      assumpDom
 neglectCurv     = cic "neglectCurv"     neglectCurvDesc     "neglectCurv"     assumpDom
 timeStartZero   = cic "timeStartZero"   timeStartZeroDesc   "timeStartZero"   assumpDom
+gravAccelValue  = cic "gravAccelValue"  gravAccelValueDesc  "gravAccelValue" assumpDom
 
 twoDMotionDesc :: Sentence
 twoDMotionDesc = S "The" +:+ phrase projectile +:+ S "motion" `sIs` phrase twoD +:+. sParen (getAcc twoD)
@@ -81,3 +85,9 @@ neglectCurvDesc = S "The" +:+ phrase distance `sIs` S "small enough that" +:+.
 
 timeStartZeroDesc :: Sentence
 timeStartZeroDesc = atStart time +:+. S "starts at zero"
+
+gravAccelValueDesc :: Sentence
+gravAccelValueDesc = S "The" +:+ phrase acceleration +:+ S "due to" +:+
+  phrase gravity +:+ S "is assumed to have the" +:+ phrase value +:+ 
+  S "provided in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) 
+  ([]::[Section]))

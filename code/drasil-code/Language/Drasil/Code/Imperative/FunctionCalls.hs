@@ -10,13 +10,13 @@ import Language.Drasil.Code.Imperative.Parameters (getCalcParams,
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
   getInputFormatOuts, getOutputParams)
 import Language.Drasil.Code.Imperative.State (State(..))
-import Language.Drasil.Code.Imperative.GOOL.Symantics (RenderSym(..),
-  StateTypeSym(..), ValueSym(..), StatementSym(..))
-import Language.Drasil.Code.Imperative.GOOL.Helpers (convType)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), codeType)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Chunk.CodeQuantity (HasCodeType)
 import Language.Drasil.CodeSpec (CodeSpec(..))
+
+import GOOL.Drasil (RenderSym(..), TypeSym(..), ValueSym(..), 
+  StatementSym(..), convType)
 
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
@@ -54,7 +54,7 @@ getOutputCall = do
   return $ fmap valState val
 
 getFuncCall :: (RenderSym repr, HasUID c, HasCodeType c, CodeIdea c) => String 
-  -> repr (StateType repr) -> Reader State [c] -> 
+  -> repr (Type repr) -> Reader State [c] -> 
   Reader State (Maybe (repr (Value repr)))
 getFuncCall n t funcPs = do
   g <- ask

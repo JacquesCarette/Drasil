@@ -114,6 +114,9 @@ Updating Haddock index for local packages in
 
 **drasil-gen**
   - Contains the generation file(s) for actually generating code
+
+**drasil-gool**
+  - Contains GOOL, a Generic Object-Oriented Language
   
 **drasil-lang**
   - Contains the base for the Drasil language

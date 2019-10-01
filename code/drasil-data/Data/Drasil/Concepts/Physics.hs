@@ -6,8 +6,10 @@ import Utils.Drasil
 
 import Data.Drasil.IdeaDicts (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
-import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir)
+import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point)
 import Control.Lens((^.)) --need for parametrization hack
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
+import Data.Drasil.Citations (dampingSource)
 
 physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
@@ -19,7 +21,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
   rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
-  yAccel, yConstAccel, yDist, yPos, yVel]
+  yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
@@ -33,7 +35,7 @@ acceleration, angAccel, angDisp, angVelo, angular, chgInVelocity, cohesion,
   pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
   space, speed, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
-  yPos, yVel :: ConceptChunk
+  yPos, yVel, momentum, moment :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -52,8 +54,9 @@ cohesion = dccWDS "cohesion" (cn "cohesion")
   (S "an attractive" +:+ phrase force +:+ S "between adjacent particles that holds the matter together")
 compression = dccWDS "compression" (cn' "compression")
   (S "a" +:+ phrase stress +:+ S "that causes displacement of the body towards its center")
-damping = dcc "damping" (cn' "damping")
-  "an effect that tends to reduce the amplitude of vibrations"
+damping = dccWDS "damping" (pn' "damping")
+  $ S "an influence within or upon an oscillatory system that has the effect of reducing," +:+
+  S "restricting or preventing its oscillations" +:+ sParen (S "from" +:+ makeRef2S dampingSource)
 displacement = dccWDS "displacement" (cn' "displacement")
   (S "the change in" +:+ (position ^. defn))
 distance = dcc "distance" (cn' "distance")
@@ -88,6 +91,11 @@ linear = dcc "linear" (cn' "linear")
   "arranged in or extending along a straight or nearly straight line"
 mechEnergy = dcc "mechEnergy" (cn "mechanical energy")
   "the energy that comes from motion and position"
+momentum = dccWDS "momentum" (cn "momentum")
+  ( S "the quantity of motion" `sOf` S "a moving body, measured as a product" `sOf` phrase QPP.mass `sAnd`
+   phrase velocity)
+moment = dccWDS "moment" (cn' "moment")
+  (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `sOr` S "axis")
 position = dcc "position" (cn' "position")
   "an object's location relative to a reference point"
 potEnergy = dccWDS "potEnergy" (cn "potential energy")

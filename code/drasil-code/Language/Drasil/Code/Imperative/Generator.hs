@@ -9,12 +9,14 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstMod,
   genMain, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.State (State(..))
 import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
-  ProgramSym(..), RenderSym(..), AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ProgData(..))
+  AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code (programName)
 import Language.Drasil.CodeSpec (CodeSpec(..), CodeSystInfo(..), Choices(..), 
   Lang(..), Visibility(..))
+
+import GOOL.Drasil (ProgramSym(..), RenderSym(..), ProgData(..))
 
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, getCurrentDirectory)
 import Control.Monad.Reader (Reader, ask, runReader)
@@ -43,27 +45,31 @@ generator dt sd chs spec = State {
   where showDate Show = dt
         showDate Hide = ""
 
-generateCode :: (PackageSym repr) => Lang -> (repr (Package repr) -> PackData) 
-  -> State -> IO ()
-generateCode l unRepr g = do 
+generateCode :: (ProgramSym progRepr, PackageSym packRepr) => Lang -> 
+  (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 
+  PackData) -> State -> IO ()
+generateCode l unReprProg unReprPack g = do 
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
   createCodeFiles code
   setCurrentDirectory workingDir
-  where pckg = runReader genPackage g
-        code = makeCode (progMods $ packProg $ unRepr pckg) (packAux $ unRepr 
-          pckg)
+  where pckg = runReader (genPackage unReprProg) g 
+        code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
+          unReprPack pckg)
 
-genPackage :: (PackageSym repr) => Reader State (repr (Package repr))
-genPackage = do
+genPackage :: (ProgramSym progRepr, PackageSym packRepr) => 
+  (progRepr (Program progRepr) -> ProgData) -> 
+  Reader State (packRepr (Package packRepr))
+genPackage unRepr = do
   g <- ask
   p <- genProgram
-  let n = case codeSpec g of CodeSpec {program = pr} -> programName pr
-      m = makefile (commented g) p
+  let pd = unRepr p
+      n = case codeSpec g of CodeSpec {program = pr} -> programName pr
+      m = makefile (commented g) pd
   i <- genSampleInput
-  d <- genDoxConfig n p
-  return $ package p (m:i++d)
+  d <- genDoxConfig n pd
+  return $ package pd (m:i++d)
 
 genProgram :: (ProgramSym repr) => Reader State (repr (Program repr))
 genProgram = do

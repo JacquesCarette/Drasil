@@ -10,15 +10,9 @@ module Language.Drasil.Code (
   asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, funcDef, 
   packmod, relToQD,
   junkLine, multiLine, repeated, singleLine, singleton,
-  PackageSym(..), ProgramSym(..), RenderSym(..), 
-  PermanenceSym(..), BodySym(..), BlockSym(..), ControlBlockSym(..), 
-  StateTypeSym(..), StatementSym(..), ControlStatementSym(..), VariableSym(..),
-  ValueSym(..), NumericExpression(..), BooleanExpression(..), 
-  ValueExpression(..), Selector(..), FunctionSym(..), SelectorFunction(..),
-  MethodSym(..), ModuleSym(..), BlockCommentSym(..), ModData(..),
-  JavaCode(..), PythonCode(..), CSharpCode(..), CppSrcCode(..), CppHdrCode(..),
-  unCPPC,
-  quantvar
+  PackageSym(..),
+  quantvar,
+  unPP, unJP, unCSP, unCPPP
 ) where
 
 import Prelude hiding (break, print, return, log, exp)
@@ -38,26 +32,13 @@ import Language.Drasil.CodeSpec (($:=), Choices(..), CodeSpec(..),
   ImplementationType(..), Lang(..), Logging(..), Mod(Mod), Structure(..), 
   ConstantStructure(..), ConstantRepr(..), InputModule(..), AuxFile(..), 
   Visibility(..), asExpr, asExpr', asVC, asVC', codeSpec, fdec, ffor, funcData, 
-  funcDef, packmod, relToQD,
-  )
+  funcDef, packmod, relToQD)
 
-import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..), 
-  ProgramSym(..), RenderSym(..), PermanenceSym(..), BodySym(..), BlockSym(..), 
-  ControlBlockSym(..), StateTypeSym(..), StatementSym(..), 
-  ControlStatementSym(..), VariableSym(..), ValueSym(..), NumericExpression(..),
-  BooleanExpression(..), ValueExpression(..), Selector(..), FunctionSym(..), 
-  SelectorFunction(..), MethodSym(..), ModuleSym(..), BlockCommentSym(..))
-
-import Language.Drasil.Code.Imperative.GOOL.Data (ModData(..))
-
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer 
-  (JavaCode (..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer 
-  (PythonCode(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer 
-  (CSharpCode(..))
-import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer 
-  (CppSrcCode(..), CppHdrCode(..), unCPPC)
+import Language.Drasil.Code.Imperative.GOOL.Symantics (PackageSym(..))
 
 import Language.Drasil.Chunk.Code (quantvar)
 
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (unPP)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (unJP)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (unCSP)
+import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CppRenderer (unCPPP)

@@ -34,7 +34,7 @@ import Data.Drasil.SI_Units (metre, kilogram, second, newton, radian,
 import Data.Drasil.Software.Products (openSource, prodtcon, sciCompS, videoGame)
 
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, dimension)
-import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision)
+import qualified Data.Drasil.Concepts.Physics as CP (elasticity, physicCon, rigidBody, collision, damping)
 import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon, mathcon', rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
@@ -75,7 +75,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
         , Goals [S "the kinematic" +:+ plural property :+: S ", and" +:+ plural QP.force +:+
-                 S "including any" +:+ sParen (phrase CP.collision +:+ plural QP.force) +:+
+                 sParen (S "including any" +:+ phrase CP.collision +:+ plural QP.force) +:+
                  S "applied on a set of" +:+ plural CP.rigidBody]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
@@ -261,19 +261,20 @@ sysCtxDesc = foldlSPCol [S "The interaction between the", phrase product_,
 
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
-    phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
-    plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
-    S "applied to them",
+  phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
+  plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
+  S "applied to them",
   S "Ensure application programming" +:+ phrase interface +:+
-    S "use complies with the" +:+ phrase user +:+. phrase guide,
+  S "use complies with the" +:+ phrase user +:+. phrase guide,
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-    S "(FIXME REF)" +:+ S "are appropriate for any particular" +:+
-    phrase problem +:+ S "the" +:+ phrase software +:+. S "addresses"]
+  sParen (makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ 
+  S "are appropriate for any particular" +:+
+  phrase problem +:+ S "the" +:+ phrase software +:+. S "addresses"]
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+
     phrase simulation +:+ S "state satisfy the required" +:+
-    (phrase physical `sAnd` plural systemConstraint) +:+. S "(FIXME REF)",
+    (phrase physical `sAnd` plural systemConstraint) +:+. sParen(makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
     phrase simulation +:+. S "step",
@@ -335,7 +336,7 @@ probDescIntro = foldlSent_
 -----------------------------------------
 
 terms :: [ConceptChunk]
-terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand, CM.line, CM.point]
+terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CM.cartesian, CM.rightHand, CM.line, CM.point, CP.damping]
 
 -----------------------------
 -- 4.1.2 : Goal Statements --

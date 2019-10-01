@@ -7,8 +7,9 @@ module Language.Drasil.Code.CodeGeneration (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), FileData(..), 
-  ModData(modDoc))
+import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..)) 
+
+import GOOL.Drasil (FileData(..), ModData(modDoc))
 
 import Text.PrettyPrint.HughesPJ (Doc,render)
 import System.Directory (createDirectoryIfMissing)

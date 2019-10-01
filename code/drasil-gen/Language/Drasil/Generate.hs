@@ -14,8 +14,10 @@ import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec),
   DocType(SRS, MG, MIS, Website), Filename, makeCSS, genHTML,
   genTeX, PrintingInformation)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
-  CodeSystInfo(..), Lang(..), readWithDataDesc, sampleInputDD, unJC, unPC, 
-  unCSC, unCPPC)
+  CodeSystInfo(..), Lang(..), readWithDataDesc, sampleInputDD, unPP, unJP, 
+  unCSP, unCPPP)
+
+import GOOL.Drasil (unJC, unPC, unCSC, unCPPC)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -71,11 +73,11 @@ genCode chs spec = do
   sampData <- readWithDataDesc (smplData $ csi spec) $ sampleInputDD (extInputs $ csi spec)
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
-  let genLangCode Java = genCall Java unJC
-      genLangCode Python = genCall Python unPC
-      genLangCode CSharp = genCall CSharp unCSC
-      genLangCode Cpp = genCall Cpp unCPPC
-      genCall lng unRepr = generateCode lng unRepr $ generator (showGregorian 
-        $ utctDay time) sampData chs spec
+  let genLangCode Java = genCall Java unJC unJP
+      genLangCode Python = genCall Python unPC unPP
+      genLangCode CSharp = genCall CSharp unCSC unCSP
+      genLangCode Cpp = genCall Cpp unCPPC unCPPP
+      genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr 
+        unPackRepr $ generator (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)
   setCurrentDirectory workingDir

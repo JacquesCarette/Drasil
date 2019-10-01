@@ -67,6 +67,7 @@
                   <td>second</td>
                 </tr>
               </table>
+              <p class="caption">Table of Units</p>
             </div>
           </div>
         </div>
@@ -74,7 +75,7 @@
           <div class="subsection">
             <h2>Table of Symbols</h2>
             <p class="paragraph">
-              The symbols used in this document are summarized in <a href=#Table:ToS>Tab: ToS</a> along with their units. Throughout the document, values with a subscript <em>i</em> implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass. For vector quantities, the units shown are for each component of the vector.
+              The symbols used in this document are summarized in <a href=#Table:ToS>Tab: ToS</a> along with their units. Throughout the document, a subscript <em>i</em> indicates that the value will be taken at, and analyzed at, a slice or slice interface composing the total slip mass. For vector quantities, the units shown are for each component of the vector.
             </p>
             <div id="Table:ToS">
               <table class="table">
@@ -206,7 +207,7 @@
                   <td>N/m</td>
                 </tr>
                 <tr>
-                  <td><em>g</em></td>
+                  <td><em><b>g</b></em></td>
                   <td>
                     Gravitational Acceleration: The approximate acceleration due to gravity on Earth at sea level.
                   </td>
@@ -701,6 +702,7 @@
                   <td>m</td>
                 </tr>
               </table>
+              <p class="caption">Table of Symbols</p>
             </div>
           </div>
         </div>
@@ -774,6 +776,7 @@
                   <td>Typical Uncertainty</td>
                 </tr>
               </table>
+              <p class="caption">Abbreviations and Acronyms</p>
             </div>
           </div>
         </div>
@@ -786,7 +789,7 @@
           A slope of geological mass, composed of soil and rock and sometimes water, is subject to the influence of gravity on the mass. This can cause instability in the form of soil or rock movement. The effects of soil or rock movement can range from inconvenient to seriously hazardous, resulting in significant life and economic losses. Slope stability is of interest both when analysing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
         </p>
         <p class="paragraph">
-          The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (SSP). This section explains the purpose of this document, the scope of the system, the characteristics of the intended reader, and the organization of the document.
+          The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability analysis Program (SSP). This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
         <div id="Sec:DocPurpose">
           <div class="subsection">
@@ -1578,7 +1581,7 @@
                   <div class="subsubsubsection">
                     <h4></h4>
                     <p class="paragraph">
-                      Derived by substituting <a href=#DD:stress>DD: stress</a> into the Mohr-Coulomb shear strength, <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a>, and multiplying both sides of the equation by the area of the slice in the shear-<em>z</em> plane. Since the slope is assumed to extend infinitely in the <em>z</em>-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the <em>z</em>-direction. The effective angle of friction <em>φ&prime;</em> and the effective cohesion <em>c&prime;</em> are not indexed by <em>i</em> becaused they are assumed to be isotropic (<a href=#assumpSLI>A: Soil-Layers-Isotropic</a>) and the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>, <a href=#assumpSP>A: Soil-Properties</a>).
+                      Derived by substituting <a href=#DD:stress>DD: stress</a> into the Mohr-Coulomb shear strength, <a href=#TM:mcShrStrgth>TM: mcShrStrgth</a>, and multiplying both sides of the equation by the area of the slice in the shear-<em>z</em> plane. Since the slope is assumed to extend infinitely in the <em>z</em>-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the <em>z</em>-direction. The effective angle of friction <em>φ&prime;</em> and the effective cohesion <em>c&prime;</em> are not indexed by <em>i</em> because they are assumed to be isotropic (<a href=#assumpSLI>A: Soil-Layers-Isotropic</a>) and the soil is assumed to be homogeneous, with constant soil properties throughout (<a href=#assumpSLH>A: Soil-Layer-Homogeneous</a>, <a href=#assumpSP>A: Soil-Properties</a>).
                     </p>
                   </div>
                 </div>
@@ -2109,16 +2112,16 @@
                     </p>
                     \[\mathbf{a}=\begin{bmatrix}
                                  0\\
-                                 g \mathbf{\hat{j}}
+                                 \mathbf{g} \mathbf{\hat{j}}
                                  \end{bmatrix}\]
                     <p class="paragraph">
                       Since there is only one non-zero vector component, the scalar value <em>W</em> will be used for the weight. In this scenario, Newton's second law of motion from <a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a> can be expressed as:
                     </p>
-                    \[W=m g\]
+                    \[W=m \mathbf{g}\]
                     <p class="paragraph">
                       Mass can be expressed as density multiplied by volume, resulting in:
                     </p>
-                    \[W=ρ V g\]
+                    \[W=ρ V \mathbf{g}\]
                     <p class="paragraph">
                       Substituting specific weight as the product of density and gravitational acceleration yields:
                     </p>
@@ -3625,7 +3628,7 @@
                     </p>
                     \[-\left(\frac{{F_{\text{S}}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}}{{\mathbf{Ψ}}_{n-1}}\right)={\mathbf{Ψ}}_{n-2} \left({\mathbf{Ψ}}_{n-3} \left({\mathbf{Ψ}}_{1} \left({F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{F_{\text{S}}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{F_{\text{S}}} {\mathbf{T}}_{n-2}-{\mathbf{R}}_{n-2}\right)+{F_{\text{S}}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}\]
                     <p class="paragraph">
-                      This can be rearranged by multiplying boths sides by <em><b>Ψ</b><sub>n&minus;1</sub></em> and then distributing the multiplication of each <em><b>Ψ</b></em> over addition to obtain:
+                      This can be rearranged by multiplying both sides by <em><b>Ψ</b><sub>n&minus;1</sub></em> and then distributing the multiplication of each <em><b>Ψ</b></em> over addition to obtain:
                     </p>
                     \[-\left({F_{\text{S}}} {\mathbf{T}}_{n}-{\mathbf{R}}_{n}\right)={\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{1} \left({F_{\text{S}}} {\mathbf{T}}_{1}-{\mathbf{R}}_{1}\right)+{\mathbf{Ψ}}_{n-1} {\mathbf{Ψ}}_{n-2} {\mathbf{Ψ}}_{2} \left({F_{\text{S}}} {\mathbf{T}}_{2}-{\mathbf{R}}_{2}\right)+{\mathbf{Ψ}}_{n-1} \left({F_{\text{S}}} {\mathbf{T}}_{n-1}-{\mathbf{R}}_{n-1}\right)\]
                     <p class="paragraph">

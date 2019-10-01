@@ -69,7 +69,7 @@ speed                = uc CP.speed lV velU
 scalarAccel          = uc CP.scalarAccel lA accelU
 scalarPos            = uc CP.scalarPos lP metre
 time                 = uc CP.time lT second
-torque               = uc CP.torque lTau torqueU
+torque               = uc CP.torque (vec lTau) torqueU
 velocity             = uc CP.velocity (vec lV) velU
 weight               = uc CP.weight cW newton
 

@@ -48,6 +48,7 @@ import GOOL.Drasil.Helpers (vibcat,
   lift4Pair, liftPair, liftPairFst, getInnerType, convType, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import Data.Bifunctor (first)
 import qualified Data.Map as Map (fromList,lookup)
 import Data.Maybe (fromMaybe, maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
@@ -449,7 +450,7 @@ instance ControlStatementSym PythonCode where
   ifNoElse bs = ifCond bs $ body []
   switch = switchAsIf
   switchAsIf v cs = ifCond cases
-    where cases = map (\(l, b) -> (v ?== l, b)) cs
+    where cases = map (first (v ?==)) cs
 
   ifExists v ifBody = ifCond [(notNull v, ifBody)]
 

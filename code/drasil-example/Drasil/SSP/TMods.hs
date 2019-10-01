@@ -83,7 +83,7 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
   getTandS shrStress, S "is proportional to the product of the",
   phrase effNormStress, ch effNormStress, S "on the plane", 
   S "with its static", phrase friction, S "in the angular form" +:+.
-  (E $ tan (sy fricAngle)),
+  E (tan $ sy fricAngle),
   S "The", ch shrStress, S "versus", ch effNormStress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the", phrase nrmFSubWat, 

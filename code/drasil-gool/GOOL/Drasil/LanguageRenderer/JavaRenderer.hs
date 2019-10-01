@@ -57,6 +57,7 @@ import GOOL.Drasil.Helpers (angles, emptyIfEmpty,
   lift4Pair, liftPair, liftPairFst, checkParams)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
+import Data.Bifunctor (first)
 import Data.Maybe (maybeToList)
 import Control.Applicative (Applicative, liftA2, liftA3)
 import Text.PrettyPrint.HughesPJ (Doc, text, (<>), (<+>), parens, empty, equals,
@@ -458,7 +459,7 @@ instance ControlStatementSym JavaCode where
   ifNoElse bs = ifCond bs $ body []
   switch v cs c = mkStNoEnd <$> lift3Pair switchDocD (state break) v c cs
   switchAsIf v cs = ifCond cases
-    where cases = map (\(l, b) -> (v ?== l, b)) cs
+    where cases = map (first (v ?==)) cs
 
   ifExists v ifBody = ifCond [(notNull v, ifBody)]
 

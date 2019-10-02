@@ -496,7 +496,7 @@ more organized, readable generated code. For example, the generator can choose
 to insert a blank line between blocks so lines of code related to the same task 
 are visually grouped together. However, for the case where there is no need for 
 distinct blocks in a body, the body can be made directly from a list of 
-statements with \verb|bodyFromStatements| or even from a single statement with 
+statements with \verb|bodyStatements| or even from a single statement with 
 \verb|oneLiner|. 
  
 As alluded to before, bodies can be used in more complex statements like 
@@ -920,11 +920,236 @@ transformed back into a \verb|String|s using the \verb|render| function, and
 then written to files using standard Haskell IO.
 
 \section{Higher-level GOOL functions} \label{patterns}
-- simple examples: log, sin, etc.  , args \\
-- bigger examples: print, listAppend, listSize \\
-- even bigger examples: listSlice, inOutFunc, inOutCall, getMethod, setMethod \\
+GOOL provides many high-level functions that abstract over common OO patterns, 
+allowing one to write a small amount of GOOL code to generate a large amount 
+code in the target language, conforming to the target language's idioms, which 
+may be very different between languages. This section shows examples of these 
+high-level functions, starting with those that abstract simple patterns on the 
+scale of values, and working up to those that abstract more complex patterns on 
+the scale of entire blocks of code or functions.
+
+One of the simplest examples of a high-level function in GOOL is \verb|sin|, 
+the function for applying the trigonometric sine function to a value. Most OO 
+languages do offer this function, though usually as part of a library and not 
+built in to the language itself. If a GOOL user wanted to apply a sine function 
+and GOOL did not offer a function for doing this, the user would have to use 
+\verb|extFuncApp| and pass it the library name and function name. But the 
+library and function names are likely to be different between target languages, 
+so if they want to target multiple languages, they will have to change the GOOL 
+code for each. A high-level \verb|sin| function eliminates this problem. Each 
+language renderer can define \verb|sin| by calling the specific library and 
+function for that language, but all the GOOL user needs to do is write 
+\verb|sin| \verb|foo| for some declared variable \verb|foo|, and this will 
+yield \verb|math.sin(foo)| in Python, \verb|Math.sin(foo)| in Java, 
+\verb|Math.Sin(foo)| in C\#, and \verb|sin(foo)| in C++. In addition to 
+\verb|sin|, GOOL offers functions for the remaining trigonometric functions and 
+other common functions in mathematics: \verb|log|, \verb|ln|, \verb|exp|, 
+\verb|floor|, and \verb|ceil|ing.
+
+Another simple pattern GOOL abstracts is accessing arguments passed to a main 
+function through the command line. The name given to the variable holding the 
+list of arguments is different depending on the target language, so GOOL offers 
+the \verb|argsList| function whcih represents the value of that variable. GOOL 
+also has functions for certain actions commonly taken with that list, such as 
+\verb|arg| which, when passed an integer index, represents the value of the 
+argument at that index, and \verb|argExists| which represents a Boolean value 
+for whether an argument exists at a given index.
+
+Lists are a very common data structure in OO code, so GOOL provides a suite of 
+functions for working with lists. For example, \verb|listAccess| can be passed 
+a list and index value and will return the value of the element of the list at 
+the given index. The GOOL code \verb|listAccess| \verb|(valueOf ages)| 
+\verb|(litInt 1)| for the \verb|ages| variable defined in Section \ref{syntax} 
+will generate \verb|ages[1]| in Python and C\#, \verb|ages.get(1)| in Java, and 
+\verb|ages.at(1)| in C++. Other functions for working with lists offered by 
+GOOL are \verb|listSize| for getting the size of a list, \verb|listAppend| for 
+appending a value to a list, \verb|listAdd| for adding a value to a list at a 
+given index, \verb|listSet| for changing the value of a list at a given 
+index to a given value, \verb|listIndexExists| for checking if a list has a 
+value at a given index, and \verb|indexOf| for getting the index of a given 
+value in a given list. Slicing a list can be done with \verb|listSlice| by 
+passing it a variable to assign the sliced list to, a list to slice, and three 
+values representing the starting and ending indices for the slice and the step 
+size. The values are wrapped in Haskell's \verb|Maybe| monad and default to the 
+start of the list, the end of the list, and a step size of one if 
+\verb|Nothing| is passed. So to take elements from index 1 to index 3 of 
+\verb|ages| and assign them to a new list, \verb|someAges|, the GOOL code looks 
+like:
+\begin{lstlisting}
+listSlice someAges (valueOf ages) 
+  (Just $ litInt 1) (Just $ litInt 3) 
+  Nothing
+\end{lstlisting} 
+List slicing is of particular note because this action is much easier to do in 
+Python than the other languages GOOL generates. The generated Python code for 
+the above list slice is:
+\begin{lstlisting}
+someAges = ages[1:3:]
+\end{lstlisting}
+While the generated Java code is shown below. Throughout this section, 
+backslashes in a generated code snippets indicate manually inserted line 
+breaks, added so the code fits between the margins.
+\begin{lstlisting}
+ArrayList<Double> temp = \
+  new ArrayList<Double>(0);
+for (int i_temp = 1; i_temp < 3; \
+  i_temp++) {
+    temp.add(ages.get(i_temp));
+}
+someAges = temp;
+\end{lstlisting}
+And the generated C\# and C++ code blocks are similar in structure to the Java 
+code. This example demonstrates GOOL's idiomatic code generation. It would have 
+been easy to generate Python code with the same structure as the other 
+languages, and the code would even be correct. However, since list slicing is 
+available as a high-level function in GOOL, the renderers have the freedom to 
+define that function in a way best-suited to the target language, and an 
+idiomatic, more readable version was generated in Python as a result.
+
+GOOL also offers high-level functions for printing. \verb|print| prints a 
+value, \verb|printLn| prints a value followed by a new line character, and 
+\verb|printFile| and \verb|printFileLn| are the same for printing to a file. 
+There are also variations that are shortcuts for when the value to print is 
+just a literal string, such as \verb|printFileStrLn|. Unlike print functions in 
+many of the target languages, these print functions can be used on lists. So 
+the GOOL code \verb|printLn| \verb|ages| generates \verb|print(ages)| in 
+Python, but in the other languages it generates code to loop through the list 
+and print each element, like the Java code shown below.
+\begin{lstlisting}
+System.out.print("[");
+for (int list_i1 = 0; \
+  list_i1 < ages.size() - 1; \
+  list_i1++) {
+    System.out.print(ages.get(list_i1));
+    System.out.print(", ");
+}
+if (ages.size() > 0) {
+    System.out.print(ages.get( \
+      ages.size() - 1));
+}
+System.out.println("]");
+\end{lstlisting}
+This is another example where the renderers are clearly conforming to the 
+idioms of a language. In addition to its functions for printing output, GOOL 
+also offers functions for reading input, like \verb|getInput| and 
+\verb|getFileInput|. 
+
+Moving to larger-scale patterns, GOOL's \verb|inOutFunc| generates a function  
+based on three lists of variables: one of inputs, one of outputs, and one of 
+variables that are both inputs and outputs. Consider a function 
+\verb|applyDiscount| that takes a price and a discount, subtracts the discount 
+from the price, and returns both the new price and a Boolean for whether the 
+price is below 20. It can be written in GOOL using \verb|inOutFunc|, assuming 
+variables \verb|price|, \verb|discount|, and \verb|isAffordable| have been 
+defined:
+\begin{lstlisting}
+inOutFunc "applyDiscount" public static_
+  [discount] [isAffordable] [price]
+  (bodyStatements [
+    price &-= valueOf discount,
+    isAffordable &= 
+      valueOf price ?< litInt 20])
+\end{lstlisting}
+The \verb|price| is both an input and output, so it is in the third list. The 
+\verb|discount| is an input only and \verb|isAffordable| is an output only, so 
+they go in the first and second lists, respectively. This function has multiple 
+outputs---\verb|price| and \verb|isAffordable|---and each of GOOL's target 
+languages handles functions with multiple outputs differently. In Python, 
+return statement can be used on multiple values:
+\begin{lstlisting}
+def applyDiscount(price, discount):
+    price = price - discount
+    isAffordable = price < 20
+
+    return price, isAffordable
+\end{lstlisting}
+In Java, the outputs can be returned in an array of objects:
+\begin{lstlisting}
+public static Object[] applyDiscount( \
+  int price, int discount) \
+  throws Exception {
+    Boolean isAffordable;
+
+    price = price - discount;
+    isAffordable = price < 20;
+
+    Object[] outputs = new Object[2];
+    outputs[0] = price;
+    outputs[1] = isAffordable;
+    return outputs;
+}
+\end{lstlisting}
+In C\#, the outputs can be passed as parameters, using the \verb|out| keyword 
+if it is only an output or the \verb|ref| keyword if it is both an input and 
+output:
+\begin{lstlisting}
+public static void applyDiscount( \
+  ref int price, int discount, \
+  out Boolean isAffordable) {
+    price = price - discount;
+    isAffordable = price < 20;
+}
+\end{lstlisting}
+And in C++, the outputs can be passed as pointer parameters:
+\begin{lstlisting}
+void applyDiscount(int &price, \
+  int discount, bool &isAffordable) {
+    price = price - discount;
+    isAffordable = price < 20;
+}
+\end{lstlisting}
+The structure of the function in each language is different, from the 
+parameters to the function body to the return type. But each uses the 
+language's most natural way of defining a function with multiple outputs. GOOL 
+generates any needed variable declarations and return statements automatically, 
+so the GOOL user does not need to type these lines out manually. Functions 
+defined with \verb|inOutFunc| can be called with \verb|inOutCall|, which again 
+accepts the three lists of inputs, outputs, and those that are both. Through 
+\verb|inOutCall|, GOOL will again automatically generate any needed variable 
+declarations and assignments, such as declaring the \verb|outputs| array 
+variable and then assigning each output to the appropriate variable in Java.
+
+In OO programming, it is common to write getter and setter methods in a class, 
+so GOOL abstracts over these patterns as well. \verb|getMethod| can be used to 
+define a getter, and \verb|setMethod| for a setter. Each needs only be provided 
+the name of the class to which the method will belong, and the variable to be 
+get or set. So, assuming the class \verb|FooClass| has a variable \verb|foo|, a 
+getter for \verb|foo| is simply \verb|getMethod "FooClass" foo| and a setter is 
+simply \verb|setMethod "FooClass" foo|. The generated set method in Python 
+looks like:
+\begin{lstlisting}
+def setFoo(self, foo):
+    self.foo = foo
+\end{lstlisting}
+In Java:
+\begin{lstlisting}
+public void setFoo(int foo) \
+  throws Exception {
+    this.foo = foo;
+}
+\end{lstlisting}
+In C\#:
+\begin{lstlisting}
+public void setFoo(int foo) {
+    this.foo = foo;
+}
+\end{lstlisting}
+And in C++:
+\begin{lstlisting}
+void FooClass::setFoo(int foo) {
+    this->foo = foo;
+}
+\end{lstlisting}
+We show this example not only to demonstrate how a single, small line of GOOL 
+code can generate much more code in the target language, but also to visualize 
+some of the idiosyncracies present in the target languages. Even for such a 
+simple function, there are subtle differences in each language that would be 
+difficult to keep track of if someone were trying to write these programs 
+manually, and GOOL saves the programmer from this tedium. For calling methods 
+defined with \verb|getMethod| or \verb|setMethod|, GOOL also provides 
+\verb|get| and \verb|set| functions.
+
 - design patterns: runStrategy, checkState, addObserver, initObserverList \\
-- auxiliary files
 \section{Related Work} \label{related}
 
 We divide the Related Work into the following categories

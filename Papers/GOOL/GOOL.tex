@@ -577,7 +577,7 @@ Functions and classes can be grouped together into a GOOL module using
 \verb|buildModule|, followed by the module name, a list of libraries to import, 
 the list of functions, and the list of classes. Passing a module to 
 \verb|fileDoc| will put the finishing touches on the generated file, such as 
-imports of standard libraries and preprocessor guards for C++ header files. 
+imports of standard libraries and preprocessor guards for C++ header files.
 \begin{lstlisting}
 fileDoc $ buildModule "mod1" ["library1"] 
   [func1, func2] [class1, class2] 
@@ -611,7 +611,9 @@ constructors must have a separately-defined interpreter, the functions
 themselves in finally-tagless compose to form the interpreter; the definitions 
 of the functions describe how each is interpreted. Thus, the GOOL ``keywords'' 
 referred to in the previous section were really Haskell functions that, when 
-resolved, yield representations of the code to be generated. 
+resolved, yield representations of the code to be generated. The 
+finally-tagless style grants us more flexibility in the code we can generate 
+and better extensibility since we do not need to pattern-match on AST nodes.
 
 Finally-tagless facilitates development of a family of interpreters for a DSL 
 by having the functions act on representations, where a type class in Haskell 
@@ -632,7 +634,7 @@ represented, not the types of the values in the target languages, though adding
 value-types to GOOL's type system is planned for the future, discussed further 
 in Section \ref{future}. Examples of internal types in GOOL, then, are 
 \verb|Variable|, \verb|Value|, \verb|Type|, \verb|Scope|, \verb|Statement|, 
-\verb|Method|, \verb|Class|, \verb|Module|, and \verb|Program|. A 
+\verb|Method|, \verb|Class|, \verb|Module|, and \verb|Package|. A 
 \verb|Statement| in GOOL, for example, is a representation of a piece of code 
 that is a statement. Below is an excerpt of GOOL's definition for the 
 \verb|VariableSym| type class; that is, the type class containing functions for 
@@ -663,9 +665,9 @@ types to which GOOL's types map, handled by the inner \verb|repr|.
 
 This abstraction over the underlying types that GOOL's types represent happens 
 because \verb|X repr| is a type family. The first line of the body of the 
-\verb|VariableSym| typeclass is \verb|type| \verb|Variable| \verb|repr|. This 
+\verb|VariableSym| type class is \verb|type| \verb|Variable| \verb|repr|. This 
 line declares the type family \verb|Variable| \verb|repr|. Since the type is 
-parameterized by \verb|repr|, each instance we write of this typeclass can 
+parameterized by \verb|repr|, each instance we write of this type class can 
 define the \verb|Variable| family member differently. Usually different 
 renderers will use the same underlying type for a given GOOL type, but the 
 ability to change it on a per-target-language basis is useful for when a 
@@ -689,11 +691,14 @@ as:
 \begin{lstlisting}
 newtype JavaCode a = JC {unJC :: a}
 \end{lstlisting}
-\verb|unJC| extracts the underlying value from a value wrapped in 
-\verb|JavaCode|. Calling \verb|unJC| on a program written in GOOL allows 
-Haskell to infer that the \verb|repr| in the GOOL program should be concretized 
-as \verb|JavaCode| and to resolve the functions using the definitions from the 
-\verb|JavaCode| instances of the type classes, thereby generating Java code.
+This may look like we are tagging our values with \verb|JC|, in contradiction 
+of the finally-tagless style, but Haskell's compiler does not actually treat 
+types defined with \verb|newtype| as tags, so this is valid. \verb|unJC| 
+extracts the underlying value from a value wrapped in \verb|JavaCode|. Calling 
+\verb|unJC| on a program written in GOOL allows Haskell to infer that the 
+\verb|repr| in the GOOL program should be concretized as \verb|JavaCode| and to 
+resolve the functions using the definitions from the \verb|JavaCode| instances 
+of the type classes, thereby generating Java code.
 
 The second line of the instance states that the underlying type for 
 \verb|Variable|s in Java is \verb|VarData|, which is a record that holds data 
@@ -712,9 +717,10 @@ the type as a \verb|TypeData| structure, which is the underlying type for
 \verb|Type|s in GOOL for Java, and how the variable should appear in the 
 generated code, represented as a \verb|Doc|. \verb|Doc| comes from the 
 \verb|Text.PrettyPrint.HughesPJ| Haskell package and represents formatted text. 
+We use it to pretty-print our generated code, making it more readable.
 In common between all of GOOL's underlying data structures is that they each 
 contain a \verb|Doc|. For some types, like a \verb|Block|, the underlying type 
-is in fact nothing more than a \verb|Doc|. The \verb|Program|-level \verb|Doc|s 
+is in fact nothing more than a \verb|Doc|. The \verb|Package|-level \verb|Doc|s 
 are ultimately what will be printed to files to generate code. Keeping in mind 
 that a \verb|VarData| structure will usually be wrapped in a \verb|repr|, such 
 as \verb|JavaCode|, the pieces of the wrapped \verb|VarData| can be accessed in 
@@ -744,6 +750,175 @@ it can be defined simply by calling the \verb|varDoc| accessor on the unwrapped
 \verb|VarData|. GOOL offers many functions similar to \verb|variableDoc|, for 
 accessing the other pieces of \verb|VarData| and for accessing the pieces of 
 the underlying data structures for other internal GOOL types.
+
+The underlying data types for different GOOL types each store specific 
+information related to the type in question. Some examples are that the 
+underlying type for \verb|Statement|s stores a \verb|Terminator| which 
+determines whether the statement should end in a semi-colon, the underlying 
+type for \verb|Method|s stores a Boolean for whether it is the main method, and 
+the underlying types for \verb|Value|s, \verb|UnaryOp|s, and \verb|BinaryOp|s 
+store precedence information so expressions can be printed without superfluous 
+parentheses, leading to more readable code.
+
+The third line of the \verb|VariableSym| \verb|JavaCode| instance defines the 
+\verb|var| function by dispatching to the \verb|varD| function, defined as:
+\begin{lstlisting}
+varD :: (RenderSym repr) => Label -> 
+  repr (Type repr) -> 
+  repr (Variable repr)
+varD n t = varFromData Dynamic n t 
+  (varDocD n)
+
+varDocD :: Label -> Doc
+varDocD = text
+\end{lstlisting}
+\verb|varD| constructs the variable using a function called \verb|varFromData|, 
+which is a GOOL function for constructing a variable in the generic \verb|repr| 
+context by explicity passing the pieces needed to create a \verb|varData|, as 
+can be seen by its type signature:
+\begin{lstlisting}
+varFromData :: Binding -> String -> 
+  repr (Type repr) -> Doc -> 
+  repr (Variable repr)
+\end{lstlisting}
+This function resides in a GOOL type class called \verb|InternalVariable|. GOOL 
+has a number of these ``internal'' type classes, none of which are exported as 
+part of GOOL's user-facing interface. They contain functions that are useful 
+for GOOL's various language renderers, but not to users. A user would not want 
+to define a \verb|Variable| by explicitly passing in the \verb|Doc|, for 
+example, which is why \verb|varFromData| is not exposed. The \verb|Doc| 
+representation for the generated code is entirely internal to GOOL, not exposed 
+in any of GOOL's user-facing functions. Examples of other GOOL functions that 
+are only available internally are \verb|printSt| for generating a low-level 
+print statement, because it is superseded by higher-level functions for 
+printing, and \verb|cast| for casting between types, because any required 
+type-casting is handled by higher-level functions.
+
+In the definition for \verb|varD|, the \verb|Doc| for the variable is 
+constructed simply by passing the variable name to \verb|text|, which is a 
+function from the \verb|HughesPJ| package for converting a \verb|String| to a 
+\verb|Doc| of that \verb|String|. This should make sense because you can refer 
+to a variable in Java simply by typing the variable's name. In fact, this is 
+true of most OO languages, and this is why the functionality for \verb|var| is 
+defined in a generic \verb|varD| function instead of defining it directly in 
+the \verb|VariableSym| \verb|JavaCode| instance: the \verb|varD| function can 
+be re-used between language renderers. In the \verb|VariableSym| instances for 
+the other languages GOOL targets, the \verb|var| function is defined as a 
+dispatch to the \verb|varD| function, exactly as it is for the Java instance. 
+By writing generic functions for generating code that is common between target 
+languages, we maximize code re-use and minimize effort required to write a 
+renderer for a different language. The more similarities a language has to 
+those that GOOL already targets, the less needs to be done to write the new 
+renderer. GOOL's Java and C\# renderers demonstrate this fact well. Out of 307 
+functions across all of GOOL's type classes, the instances of 216 of them are 
+shared between the Java and C\# renderers, in that they are just calls to the 
+same common function. A further 20 are partially shared, for example they call 
+the same common function but with different parameters. 137 functions are 
+actually the same between all 4 languages GOOL currently targets, which might 
+mean that some of them need not be included in the type class mechanism at all, 
+and can instead be defined globally for all renderers, though this requires 
+further investigation.
+
+Examples from the Python and C\# renderers are not shown here because they both 
+work very similarly to the Java renderer. There are \verb|PythonCode| and 
+\verb|CSharpCode| analogs to \verb|JavaCode|, the underlying types are all the 
+same, and the functions are defined by calling common functions where possible 
+or by constructing the GOOL value directly in the instance definition, if the 
+definition is unique to that language.
+
+C++ is different, however, because most modules are split between a source and 
+header file. One module written in GOOL essentially needs to be traversed 
+twice, once to generate the source file and a second time to generate the 
+header file corresponding to the same module. To accomplish this, two instances 
+of the GOOL type classes were written for C++ for two different types defined 
+similarly to \verb|JavaCode|: \verb|CppSrcCode| for source code and 
+\verb|CppHdrCode| for header code. Since a main function does not require a 
+header file, the \verb|CppHdrCode| instance for a module containing only a main 
+function is empty. The renderer is written such that an empty module or file 
+does not actually get generated, and this is true of all GOOL's current 
+renderers. 
+
+Since C++ source and header code should always be generated together, we needed 
+to tie the \verb|CppSrcCode| and \verb|CppHdrCode| types together. To do this, 
+a third type, \verb|CppCode|, was created to pair the source and header types, 
+defined as:
+\begin{lstlisting}
+data CppCode x y a = 
+  CPPC {src :: x a, hdr :: y a}
+\end{lstlisting}
+The type variables \verb|x| and \verb|y| are intended to be instantiated with 
+\verb|CppSrcCode| and \verb|CppHdrCode|, but they are left generic for now 
+because we need to make an instance of a \verb|Pair| type class for 
+\verb|CppCode|, as follows:
+\begin{lstlisting}
+class Pair p where
+  pfst :: p x y a -> x a
+  psnd :: p x y b -> y b
+  pair :: x a -> y a -> p x y a
+  
+instance Pair CppCode where
+  pfst (CPPC xa _) = xa
+  psnd (CPPC _ yb) = yb
+  pair = CPPC
+\end{lstlisting}
+In summary, the \verb|Pair| instance allows us to access the source code piece 
+of the pair with \verb|pfst|, the header code piece with \verb|psnd|, or to 
+combine a source and header piece to form a pair with \verb|pair|. We then need 
+to make \verb|CppCode| instances of the GOOL type classes. The instance of 
+\verb|VariableSym| for the excerpt of the type class we have used as an example 
+throughout this section is shown below.
+\begin{lstlisting}
+instance (Pair p) => VariableSym 
+  (p CppSrcCode CppHdrCode) where
+    type Variable (p 
+      CppSrcCode CppHdrCode) = VarData
+    var n t = pair (var n $ pfst t) 
+      (var n $ psnd t)
+\end{lstlisting}
+Rather than write the instance specifically for \verb|CppCode|, we wrote it for 
+any \verb|Pair| to make this code more re-usable. Unfortunately, the types 
+making up the \verb|Pair| had to be concretized as \verb|CppSrcCode| and 
+\verb|CppHdrCode| so that the Haskell compiler could be sure that the 
+\verb|VarData| underlying type declared for the \verb|Pair| matched the 
+underlying types for each piece of the pair. The compiler knows that 
+\verb|Variable| \verb|CppSrcCode| and \verb|Variable| \verb|CppHdrCode| are 
+equivalent to \verb|VarData|, but it cannot be sure that any generic 
+\verb|Variable| \verb|repr| will be. The actual function definitions for these 
+instances are trivial. The definition for \verb|var| simply calls \verb|var| in 
+the context of \verb|CppSrcCode|, calls it again in the context of 
+\verb|CppHdrCode|, and combines the results in a new \verb|pair|. This same 
+pattern is used for all of the function definitions for the \verb|Pair| 
+instances, so to write a new renderer for another language that requires two 
+files per module, these \verb|Pair| instances can be re-used just by changing 
+the \verb|CppSrcCode| and \verb|CppHdrCode| types to the corresponding types 
+for the new language renderer, and changing any underlying types that are 
+different. This same technique can be used to write a renderer for a language 
+that has even more than two files per module by writing an analog to the 
+\verb|Pair| type class that combines the appropriate number of constiuents.
+
+The last component of the C++ renderer is a function analogous to 
+\verb|JavaCode|'s \verb|unJC|, a function that can be called on a GOOL program 
+to tell the Haskell compiler to concretize the \verb|repr| as \verb|CppCode| 
+and therefore generate C++ code. The function is \verb|unCPPC|, defined as:
+\begin{lstlisting}
+unCPPC :: 
+  CppCode CppSrcCode CppHdrCode a -> a
+unCPPC (CPPC (CPPSC a) _) = a
+\end{lstlisting}
+At the level of a \verb|Program|, it no longer makes sense to consider source 
+and header files independently, so the \verb|Pair| instance of the \verb|prog| 
+function combines the source and header files together in the \verb|CppSrcCode| 
+piece of the \verb|Pair|. This is why \verb|unCPPC| simply extracts the 
+\verb|CppSrcCode| portion of the \verb|Pair|---at that point, that portion 
+contains both the source and header files. Note that the choice to combine them 
+in the \verb|CppSrcCode| half instead of the \verb|CppHdrCode| half of the 
+\verb|Pair| was arbitrary.
+
+After an \verb|unRepr| function, like \verb|unJC| or \verb|unCPPC|, has been 
+called on a GOOL program, the resulting pretty-printed \verb|Doc|s are 
+transformed back into a \verb|String|s using the \verb|render| function, and 
+then written to files using standard Haskell IO.
+
 \section{Higher-level GOOL functions} \label{patterns}
 - simple examples: log, sin, etc.  , args \\
 - bigger examples: print, listAppend, listSize \\
